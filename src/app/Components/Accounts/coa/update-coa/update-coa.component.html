@@ -1,0 +1,23 @@
+<div class="p-5">
+       
+    <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Select Party</mat-label>
+        <mat-select [(ngModel)]="noteID" [disabled]="coaTypeID == 2 || this.coaTypeID == 3 || transactionAllowed == false">
+            <mat-option  *ngFor="let item of notesList " [value]="item.noteID">{{item.noteTitle}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Coa Title</mat-label>
+        <input matInput type="text" [(ngModel)]="coaTitle" >
+
+    </mat-form-field>
+
+
+    <div class="text-center" >
+        <button  class="btn btn-primary btn-save me-2" (click)="UpdateChartofAccount()">Update</button>
+        <button  class="btn btn-danger btn-reset" (click)="closeDialogue()">Close</button>
+    </div>
+
+</div>
+

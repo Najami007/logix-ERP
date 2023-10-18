@@ -1,0 +1,247 @@
+<div class="container-fluid p-2 ">
+    <div class="d-flex bg-white p-2 border-bottom" >
+
+
+        <mat-form-field class="w-50" appearance="outline">
+            <mat-label>To Date</mat-label>
+            <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
+            <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+            <mat-datepicker #eDate></mat-datepicker>
+        </mat-form-field>
+
+
+        <div class="w-50  text-center" >
+            <button class=" btn btn-success btn-rpt w-25  me-1" (click)="getBalanceSheet()">
+               Get Report
+            </button>
+
+            <button class=" btn  btn-primary btn-rpt    me-1  " (click)="Summary1()">
+                Summary 1
+            </button>
+
+            <button class=" btn  btn-primary btn-rpt  me-1 " (click)="summary2()" >
+                Summary 2
+            </button>
+
+            <button class=" btn  btn-primary btn-rpt w-25   me-1 " (click)="PrintTable()">
+                Print
+            </button>
+        </div>
+    </div>
+
+    <div id="printRpt">
+
+
+        <!-------------------------    Top Logo Section -------------------->
+        <div class="hide">
+            <div class=" text-center border-bottom d-flex justify-content-between">
+                <span>
+                    <img src="{{logo}}" height="100" width="100">
+                </span>
+                <span >
+
+
+                    <h1 class="companyName">{{CompanyName}}</h1>
+                    <p style="margin-top: -15px;" class="companyName2">{{CompanyName2}}</p>
+
+                    <p class="rptTitle" style="margin-top:-25px">Balance Sheet</p>
+                    <p style="margin-top:-20px"><b>AS On:</b> {{toDate |date:'yyyy-MM-dd'}}</p>
+
+                </span>
+                <span>
+                    <img src="{{logo1}}" height="100" width="100">
+                </span>
+
+
+            </div>
+        </div>
+
+
+        <!----------------------------             Summary 1 Section ----------------->
+
+        <table class="table mt-3"  id="balanceSheet1">
+            <thead>
+                <th>S#</th>
+                <th>Asset</th>
+                <th> Note</th>
+                <th class="text-end"> Amount</th>
+            </thead>
+            <tbody class="h-50">
+                <tr *ngFor="let item of assetList;index as index">
+                    <td>{{index+1}}</td>
+                    <td>{{item.noteTitle}}</td>
+                    <td> {{item.noteID}}</td>
+                    <td class="text-end"> {{item.nTotal | number}}</td>
+                </tr>
+                
+                <tr>
+                    <td colspan="3"></td>
+                    <th class="text-end text-danger"><h1><u>{{assetTotal |number}}</u></h1></th>
+                </tr>
+                
+           
+
+
+            <tr>
+                <th>S#</th>
+                <th>Capital + Liability</th>
+                <th> Note</th>
+                <th class="text-end"> Amount</th>
+            </tr>
+
+         
+                <tr *ngFor="let item of liabilityList; index as index">
+                    <td>{{index+1}}</td>
+                    <td>{{item.noteTitle}}</td>
+                    <td>{{item.noteID}}</td>
+                    <td class="text-end"> {{item.nTotal |number}}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="3"></td>
+                    <th class="text-end">{{liabilityTotal |number}}</th>
+                </tr>
+
+                <tr *ngFor="let item of capitalList; index as index">
+                    <td>{{index+1}}</td>
+                    <td>{{item.noteTitle}}</td>
+                    <td>{{item.noteID}}</td>
+                    <td class="text-end"> {{item.nTotal |number}}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="3"></td>
+                    <th class="text-end">{{capitalTotal |number}}</th>
+                </tr>
+               
+                <tr>
+                    <td></td>
+                    <td>Accumulated Profit/Lose</td>
+                    <td></td>
+                    <td class="text-end">{{accumulatedTotal |number}}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="3"></td>
+                    <th class="text-end">{{accumulatedTotal |number}}</th>
+                </tr>
+
+                <tr>
+                    <td colspan="3"></td>
+                    <th class="text-end text-danger"><h1><u>{{capitalTotal + liabilityTotal + accumulatedTotal | number}}</u></h1></th>
+                </tr>
+
+               
+       
+            </tbody>
+        </table>
+
+
+        
+
+
+         <!----------------------------             Year Wise Summary Section ----------------->
+
+         <table class="table mt-3" id="balanceSheet2">
+            
+            <thead>
+                <tr>
+                    <th colspan="3"></th>
+                    <th class="text-end"><h2>{{previousYear}}</h2></th>
+                <th class="text-end"> <h2>{{currentYear}}</h2></th>
+                </tr>
+                <tr>
+                    <th>S#</th>
+                <th>Asset</th>
+                <th> Note</th>
+                <th class="text-end">Amount</th>
+                <th class="text-end"> Amount</th>
+                </tr>
+            </thead>
+            <tbody class="h-50">
+                <tr *ngFor="let item of assetList;index as index">
+                    <td>{{index+1}}</td>
+                    <td>{{item.noteTitle}}</td>
+                    <td> {{item.noteID}}</td>
+                    <td class="text-end"> {{item.oTotal | number}}</td>
+                    <td class="text-end"> {{item.nTotal | number}}</td>
+                </tr>
+                
+                <tr>
+                    <td colspan="3"></td>
+                    <th class="text-end text-danger"><h1><u>{{oAssetTotal |number}}</u></h1></th>
+                    <th class="text-end text-danger"><h1><u>{{assetTotal |number}}</u></h1></th>
+                </tr>
+                
+           
+
+
+            <tr>
+                <th>S#</th>
+                <th>Capital + Liability</th>
+                <th> Note</th>
+                <th class="text-end"> Amount</th>
+                <th class="text-end"> Amount</th>
+            </tr>
+
+         
+                <tr *ngFor="let item of liabilityList; index as index">
+                    <td>{{index+1}}</td>
+                    <td>{{item.noteTitle}}</td>
+                    <td>{{item.noteID}}</td>
+                    <td class="text-end"> {{item.oTotal |number}}</td>
+                    <td class="text-end"> {{item.nTotal |number}}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="3"></td>
+                    <th class="text-end">{{oLiabilityTotal |number}}</th>
+                    <th class="text-end">{{liabilityTotal |number}}</th>
+                </tr>
+
+                <tr *ngFor="let item of capitalList; index as index">
+                    <td>{{index+1}}</td>
+                    <td>{{item.noteTitle}}</td>
+                    <td>{{item.noteID}}</td>
+                    <td class="text-end"> {{item.oTotal |number}}</td>
+                    <td class="text-end"> {{item.nTotal |number}}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="3"></td>
+                    <th class="text-end">{{oCapitalTotal |number}}</th>
+                    <th class="text-end">{{capitalTotal |number}}</th>
+                </tr>
+               
+                <tr>
+                    <td></td>
+                    <td>Accumulated Profit/Lose</td>
+                    <td></td>
+                    <td class="text-end">{{oAccumulatedTotal |number}}</td>
+                    <td class="text-end">{{accumulatedTotal |number}}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="3"></td>
+                    <td class="text-end">{{oAccumulatedTotal |number}}</td>
+                    <th class="text-end">{{accumulatedTotal |number}}</th>
+                </tr>
+
+                <tr>
+                    <td colspan="3"></td>
+                    <th class="text-end text-danger"><h1><u>{{oCapitalTotal + oLiabilityTotal + oAccumulatedTotal | number}}</u></h1></th>
+                    <th class="text-end text-danger"><h1><u>{{capitalTotal + liabilityTotal + accumulatedTotal | number}}</u></h1></th>
+                </tr>
+
+               
+       
+            </tbody>
+        </table>
+
+
+    </div>
+
+
+
+
+</div>

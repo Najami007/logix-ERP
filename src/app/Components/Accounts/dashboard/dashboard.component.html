@@ -1,0 +1,141 @@
+
+<div >
+
+    <div class=" container-fluid row" *ngFor="let item of cardsData">
+        <div class=" col-lg-3 p-4" >
+            <mat-card class="shadow rounded card-height" style="background-color: rgb(255, 253, 251); border-bottom: 3px solid rgb(167, 43, 163); ">
+                <div class="mt-2 text-center">
+                    <h3 class=" fw-bold" style="color: rgb(167, 43, 163);"> TOTAL ROOMS</h3>
+                </div>
+                <div class="d-flex justify-content-around ">
+                    <span  >
+                       
+                            <mat-icon style="color: rgb(167, 43, 163);" >meeting_room</mat-icon>
+                          
+                        
+                    </span>
+                    <span class="mt-2" >
+                        <h1 style="color: rgb(167, 43, 163);" class="  digitalFont border-dark">{{item.totalRooms}}</h1>
+                    </span>
+                </div>
+
+            </mat-card>
+        </div>
+
+
+
+        <div class=" col-lg-3 p-4" >
+            <mat-card class="shadow rounded card-height" style="background-color: rgb(255, 255, 255); border-bottom: 3px solid rgb(255, 128, 1);">
+                <div class="mt-2 text-center">
+                    <h3 class=" fw-bold" style="color: rgba(255, 128, 0, 0.893);">CHECKED IN ROOMS </h3>
+                </div>
+                <div class="d-flex justify-content-around ">
+                    <span >
+                        <mat-icon style="color: rgba(255, 128, 0, 0.893);" >hotel</mat-icon>
+                    </span>
+                    <span  class="mt-2">
+                        <h1 style="color: rgb(255, 128, 1);" class="digitalFont  border-dark">{{item.mappedRooms}}</h1>
+                    </span>
+                </div>
+
+            </mat-card>
+        </div>
+
+
+
+        <div class=" col-lg-3 p-4" >
+            <mat-card class="shadow rounded card-height" style="background-color: rgb(255, 255, 255); border-bottom: 3px solid rgb(11, 160, 234); ">
+                <div class="mt-2 text-center">
+                    <h3 class=" fw-bold" style="color: rgb(11, 160, 234);"> TOTAL EXPENSE</h3>
+                </div>
+                <div class="d-flex justify-content-around">
+                    <span class=" ">
+                        <mat-icon style="color: rgb(11, 160, 234);">money_off</mat-icon>
+                    </span>
+                    <span class="mt-2" >
+                        <h1 style="color: rgb(11, 160, 234);" class=" digitalFont  border-dark">{{item.totalExpense |number}}</h1>
+                    </span>
+                </div>
+
+            </mat-card>
+        </div>
+
+
+
+
+        <div class=" col-lg-3 p-4" >
+            <mat-card class="shadow rounded card-height" style="background-color: rgb(247, 247, 247); border-bottom: 3px solid rgb(12, 193, 12);">
+                <div class="mt-2 text-center">
+                    <h3 class=" fw-bold" style="color: rgb(12, 193, 12);" > TOTAL INCOME</h3>
+                </div>
+                <div class="d-flex justify-content-around ">
+                    <span >
+                        
+                            <mat-icon style="color: rgb(12, 193, 12);" > attach_money</mat-icon>
+                    </span>
+                    <span class="mt-2" >
+                        <h1 style="color: rgb(12, 193, 12);"  class="digitalFont border-dark">{{item.totalIncome |number}}</h1>
+                    </span>
+                </div>
+
+            </mat-card>
+        </div>
+
+
+
+
+
+           
+
+    </div>
+
+
+
+
+  
+    
+
+
+<div class="row container-fluid p-4">
+
+    <!-- <div class="col-md-12 mb-2">
+        <div class="mt-2">
+            <div class="mat-elevation-z2" [chart]="room_Booking_Chart"></div>
+          </div>
+
+    </div> -->
+
+    <div class="col-md-8 ">
+       
+            <div class="mb-1 mat-elevation-z2" [chart]="income_expense_chart"></div>
+          
+    </div>
+    
+    <div class="col-md-4">
+       
+            <div class="mat-elevation-z2" [chart]="prvious_Income_Detail_Chart"></div>
+          
+
+    </div>
+    <div class="col-md-8 mt-2">
+        
+            <div class="mat-elevation-z2" [chart]="budget_Chart"></div>
+         
+
+    </div>
+    <div class="col-md-4 mt-2">
+       
+            <div class="mat-elevation-z2" [chart]="Income_Detail_Chart"></div>       
+
+    </div>
+
+
+ 
+
+
+    
+    
+</div>
+
+
+</div>

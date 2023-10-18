@@ -1,0 +1,77 @@
+
+<div class="container">
+    <div class="d-flex bg-white p-2 border-bottom">
+
+
+        <mat-form-field class="w-50" appearance="outline">
+            <mat-label>To Date</mat-label>
+            <input matInput type="text" readonly="true" [(ngModel)]="budgetMonth" [matDatepicker]="eDate">
+            <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+            <mat-datepicker #eDate></mat-datepicker>
+        </mat-form-field>
+
+
+        <div class="w-50  text-center">
+            <button class=" btn btn-success btn-rpt w-25 me-2       " (click)="getReport()">Get Report</button>
+            <button class=" btn  btn-primary btn-rpt " (click)="PrintTable()">Print</button>
+        </div>
+    </div>
+
+
+    <div id="printDiv">
+
+        <!-----------------    logo Section ---------------->
+        <div class="hide">
+            <div class="text-center  d-flex justify-content-between">
+                <span>
+                    <img src="{{logo}}" style="color: black;" alt="" srcset="" height="100" width="100">
+                </span>
+                <span >
+                    
+    
+                    <h1 class="companyName" >{{CompanyName}}</h1>
+                    <p style="margin-top: -15px;" class="companyName2">{{CompanyName2}}</p>
+    
+                    <p class="rptTitle" style="margin-top:-25px">Monthly Budget Report</p>
+                    <p style="margin-top:-20px"><b>For Month:</b> {{budgetMonth | date:'yyyy-MM'}} </p>
+                  
+                </span>
+                <span>
+                    <img src="{{logo1}}" style="color: black;" alt="" srcset="" height="100"width="100">
+                </span>
+        
+        
+            </div>
+           </div>
+           <hr>
+
+           <!---------------- Table Area ---------------->
+        <div class="bg-white">
+            <table class="table logix-Table">
+                <thead class="border-bottom">
+                    <th>S#</th>
+                    <th>Particular</th>
+                    <th class="text-end">Budget Amount</th>
+                    <th class="text-end">Consumed Amount</th>
+                    <th class="text-end">Balance</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor=" let item of reportData;index as index">
+                        <td>{{index +1}}</td>
+                        <td class="fw-bold">{{item.coaTitle}}</td>
+                        <td class="text-end">{{item.budgetAmount |number}}</td>
+                        <td class="text-end">{{item.consumedAmount |number}}</td>
+                        <td class="text-end">{{item.budgetAmount - item.consumedAmount |number}}</td>
+                    </tr>
+                    <tr *ngIf="TotalAmount != 0">
+                        <th colspan="2" class="text-center">Total</th>
+                        <th class="text-end">{{TotalAmount |number}}</th>
+                        <th class="text-end">{{totalConsumedAmount |number}}</th>
+                        <th class="text-end"> {{ TotalAmount - totalConsumedAmount |number}}</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

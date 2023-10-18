@@ -1,0 +1,133 @@
+.rptTable {
+    width: 100%;
+    /* margin-left: 15px; */
+    background-color: rgb(252, 242, 242);
+  }
+
+
+  .rptTable th {
+    border: 1px solid black;
+    font-size: 15px;
+    font-weight: bold;
+
+  }
+
+  .rptTable td {
+    border: 1px solid black;
+    font-size: 12px;
+  }
+
+
+  /* .col-lg-2 {
+    color: red !important;
+  } */
+
+  *{
+    color: black !important;
+    border-color: black !important  ;
+    font-family: Arial, Helvetica, sans-serif;
+
+    
+    
+  }
+ 
+
+
+/*# sourceMappingURL=bootstrap.css.map */
+
+ /****  logix Table Design****/
+
+
+
+ .attTable {
+    width: 100%;
+
+ 
+ }
+
+ .attTable > thead >tr  > th{
+  border: 1px solid black;
+    text-align: center;
+    width: 30px;
+ }
+
+ .attTable > tbody > tr > td{
+  
+
+    border: 1px solid black;
+    text-align: center;
+    
+ 
+ }
+
+ .presentIcon {
+  /* color: green !important; */
+  font-size: 30px;
+}
+
+.absentIcon {
+  /* color: red; */
+  font-size: 30px;
+}
+
+
+
+
+.table-logix{
+  background-color: #fff; 
+  border: 1px solid black;
+}
+
+.table-logix > thead {
+  border:1px solid black;
+}
+
+/*********** Table Stripped *******/
+.table-logix > thead > tr{
+  border: 1px solid black;    
+}
+.table-logix > thead > tr > th {
+  /*background-color:#D2101B;*/
+  /*color:#fff;*/  
+  font-weight: bold;  
+  text-align: center;
+  border:1px solid black;
+}
+
+.table-logix > thead > tr > td {
+  /*background-color:#D2101B;*/
+  /*color:#fff;*/  
+  text-align: left;
+  border:1px solid black;
+}
+
+.table-logix > tbody > tr {
+  border: 1px solid #000 !important;
+}
+
+.table-logix > tbody > tr > td {
+  border: 1px solid #000 !important;
+}
+
+
+
+
+/* .table{
+  border: 1px solid #000 !important;
+} */
+
+.companyName{
+  font-size: 25px !important;
+}
+
+.companyName2{
+  font-size: 15px;
+  
+}
+
+.rptTitle{
+  font-size: 30px !important;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+

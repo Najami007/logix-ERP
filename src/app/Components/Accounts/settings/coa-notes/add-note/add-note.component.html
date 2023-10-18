@@ -1,0 +1,29 @@
+<div >
+
+    <div class="text-center  mt-3 d-flex justify-content-between p-3"><p class="dialogueTitle">ADD NOTE</p><mat-icon class="cursorPointer" (click)="closeDialogue('')">cancel</mat-icon></div>
+
+    <div class="text-center container-fluid " >
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Select COA Type</mat-label>
+            <mat-select  [(ngModel)]="CoaTypeID">
+                <mat-option [disabled]="item.coaTypeID == 2 || item.coaTypeID == 3" *ngFor="let item of coaTypesList" [value]="item.coaTypeID">{{item.coaTypeTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Enter Note Title</mat-label>
+            <input matInput type="text" [(ngModel)]="noteTitle">
+            </mat-form-field>
+
+        
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Enter Note</mat-label>
+            <input matInput type="number" min="1" [(ngModel)]="note">
+            </mat-form-field>
+
+        
+    </div>
+    <div class="justify-content-center d-flex" >
+        <button class="btn btn-success btn-save m-1" (click)="Save()"><mat-icon class="pt-1" >save</mat-icon> {{actionbtn}} </button>
+        <button class="btn btn-danger btn-reset m-1 " (click)="reset()"><mat-icon class="pt-1">cached</mat-icon> Reset </button>
+    </div>
+</div>

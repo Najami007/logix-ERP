@@ -1,0 +1,26 @@
+.loaderDark{
+    border:0px solid red;
+    width:100%;
+    height: 100%;
+    background-color:#000;
+    position: fixed;
+    top:0;
+    display: none;
+    z-index: 10000;
+    opacity: 0.8;
+    padding-top:21%;
+  }
+  
+  
+  .loaderLight{
+    border:0px solid red;
+    width:100%;
+    height: 100%;    
+    position: fixed;
+    top:0;
+    display: none;
+    z-index: 10000;
+    opacity: 0.8;
+    background-color:red;
+  }
+  

@@ -1,0 +1,42 @@
+<div class="container-fluid h-100 body "  >
+    <div class="box">
+        <span class="borderline"></span>
+    
+        <form class="shadow">
+                <h1 class="text-center text-dark">SIGN-IN</h1>
+                
+                <h4 class="text-center text-muted">Welcome</h4>
+                <div class="mt-5">
+                    <mat-form-field class="input-width">
+                        <mat-label>Login ID</mat-label>
+                        <input type="text" autofocus class="input-full-width" matInput name="UserId"  [(ngModel)]="userEmail">
+                    </mat-form-field>
+                    
+                </div>
+                <div class="mt-3"> 
+                    <mat-form-field class="input-width">
+                        <mat-label>Password</mat-label>
+                        <input type="password" class="input-full-width" matInput name="password"  [(ngModel)]="userPassword">
+                    </mat-form-field>
+                    
+                </div>
+                <div class="text-center">
+                    <button (click)="login()" class="btn btn-success">Log in</button>
+                </div>
+               <hr class="mt-4 ">
+                <div class="text-center d-flex mt-1 logix " >
+                    <span class="text-muted me-2 pe-2 fw-bold border-end">
+                        <p class="mt-2">Software By:</p> </span>
+                    <!-- <span class="fw-bold text-muted">Logix Solutionz</span> -->
+                   
+                    <span>
+                        <img src="../../../../assets/Images/logo-logix.png" height="30" width="120"  >
+                    </span>
+                    
+                   
+                </div>
+                
+    </form>
+    
+    </div>
+</div>

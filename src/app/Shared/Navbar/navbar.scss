@@ -1,0 +1,70 @@
+mat-nav-list{
+    background-color: rgb(26, 26, 26);
+}
+.navHeader {
+    text-align: center;
+   
+    
+}
+.navHeader img {
+    height: 80px;
+}
+
+
+.mat-divider {
+   
+   
+    border: 1px dashed white !important;
+}
+
+.list-item {
+    color: #ffffff !important;
+    font-size: 0.8rem;
+    height: 44px !important;
+    margin-bottom: 4px ;
+    text-decoration: none;
+    padding-top:6px;
+    padding-left: 4px;
+    
+    border: 1px dotted;
+    border-top:none;
+    border-right:none ;
+    border-left: none;
+    
+    
+
+    
+   
+    /*
+    &:hover {
+        background-color: #000000 !important;
+        border-radius: 4px;
+        color: white !important;
+        
+    }
+
+    */
+}
+.list-item :hover {
+        background-color: #978e8e !important;
+        border-radius: 4px;
+        color: rgb(255, 255, 255) !important;
+        
+    }
+.list-item .sideicon {
+    vertical-align: bottom;
+    margin-right: 1rem;
+}
+
+
+.list-item-active {
+    color: rgb(255, 255, 255) !important;
+    background-color: rgb(255, 80, 36);
+    /*
+    ::ng-deep {
+
+        &:hover {
+            background: #242424 !important;
+        }
+    }*/
+}

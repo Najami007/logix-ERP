@@ -1,0 +1,234 @@
+<div class="bckgrnd bg-grey">
+    <div class="container-fluid p-2">
+            <div class="selRow  ">
+                <div class="row ">
+                    
+
+              
+                        <mat-form-field class="col-lg-4">
+                            <mat-label>From Date</mat-label>
+                            <input matInput type="text" [(ngModel)]="fromDate" [matDatepicker]="startDate">
+                            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                            <mat-datepicker #startDate></mat-datepicker>
+                        </mat-form-field>
+
+                    
+                        <mat-form-field class="col-lg-4">
+                            <mat-label>To Date</mat-label>
+                            <input matInput type="text" [(ngModel)]="toDate" [matDatepicker]="EndDate">
+                            <mat-datepicker-toggle matSuffix [for]="EndDate"></mat-datepicker-toggle>
+                            <mat-datepicker #EndDate></mat-datepicker>
+                        </mat-form-field>
+                
+
+                    <div class="col-lg-1  mt-4 text-end" >
+                        <button class="fw-bold" (click)="getTrialBalance()">
+                            <mat-icon class="text-success" >insert_drive_file</mat-icon>Summary 1
+                        </button>
+                        
+                    </div>
+                    <div class="col-lg-1  mt-4 text-end" >
+                        <button class="fw-bold" (click)="getSummary2()">
+                            <mat-icon class="text-success" >insert_drive_file</mat-icon>Summary 2
+                        </button>
+                        
+                    </div>
+                    <div class="col-lg-1  mt-4 ">
+                        <button class="fw-bold" (click)="PrintTable()">
+                            <mat-icon class="text-primary">print</mat-icon>Print
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+    
+        <div id="printReport" class="printReport" >
+
+
+            <!-------------------------    Top Logo Section -------------------->
+        <div class="hide">
+            <div class="text-center border-bottom d-flex justify-content-between">
+                <span>
+                    <img src="{{logo}}"  srcset="" height="100"
+                        width="100">
+                </span>
+                <span >
+                    
+
+                    <h1 class="companyName">{{CompanyName}}</h1>
+                    <p style="margin-top: -15px;" class="companyName2">{{CompanyName2}}</p>
+
+                    <p class="rptTitle"  style="margin-top: -25px;">Trial Balance Report</p>
+                    <p  style="margin-top: -20px;"><b>From:</b> {{fromDate | date:'yyyy-MM-dd'}} <b>To:</b> {{toDate | date:'yyyy-MM-dd'}}</p>
+                  
+                </span>
+                <span>
+                    <img src="{{logo1}}" style="color: black;" alt="" srcset="" height="100"
+                        width="100">
+                </span>
+        
+        
+            </div>
+
+            
+
+        </div>
+    
+         <!-----------------  Summary 1 Seciton Table-->
+         <div id="summary1">
+            <table class="table">
+
+                <thead>
+                 <tr class="text-start">
+                     <th class="col-lg-1 col-md-1 col-sm-1 col-xs-1" rowspan="2">S#</th>
+                     <th class="col-lg-2 col-md-2 col-sm-2 col-xs-2" rowspan="2">Account Code</th>
+                     <th class="col-lg-3 col-md-3 col-sm-3 col-xs-3" rowspan="2">Account Title</th>
+                     <th class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center" colspan="2">Opening</th>
+                     <th class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center" colspan="2">Periodic</th>
+                     <th class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center" colspan="2">Closing</th>
+
+                 </tr>
+                 <tr class="text-end">
+                     
+                     <th class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Debit</th>
+                     <th class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Credit</th>
+                     <th class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Debit</th>
+                     <th class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Credit</th>
+                     <th class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Debit</th>
+                     <th class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Credit</th>
+
+                 </tr>
+                </thead>
+           
+             <tbody>
+                 <tr class="" *ngFor="let item of TrialBalanceData;index as index">
+                     <td class=" ps-2 ">{{index+1}}</td>
+                     <td class=" ps-2 ">{{item.accountCode}}</td>
+                     <td class=" fw-bold ps-2 ">{{item.coaTitle}}</td>
+                     <td class=" text-end" >{{item.oDebit |number}}</td>
+                     <td class=" text-end">{{item.oCredit |number}}</td>
+                     <td class=" text-end">{{item.debit |number}}</td>
+                     <td class=" text-end" >{{item.credit |number}}</td>
+                     <td class=" text-end">{{item.cDebit |number}}</td>
+                     <td class=" text-end">{{item.cCredit |number}}</td>
+
+                 </tr>
+                 <br>
+                 <tr class="fw-bold">
+                     <td  colspan="3">Total</td>
+                     <td class=" text-end">{{oDebitTotal|number}}</td>
+                     <td class=" text-end">{{oCreditTotal |number}}</td>
+                     <td class=" text-end">{{debitTotal |number}}</td>
+                     <td class="  text-end">{{creditTotal |number}}</td>
+                     <td class=" text-end">{{cDebitTotal |number}}</td>
+                     <td class=" text-end">{{cCreditTotal |number}}</td>
+
+                 </tr>
+
+
+             </tbody>
+             
+            </table>
+        </div>
+
+
+
+
+        <!-----------------  Summary 2 Seciton Table-->
+        <div id="summary2">
+           
+            <table class="table table-logix " *ngFor="let row of notesList; index as index">
+                
+                <thead>
+                    <tr class="text-start">
+                        <th class="col-lg-2 " rowspan="2">Account Code</th>
+                        <th class="col-lg-3 " rowspan="2">Account Title</th>
+                        <th class="col-lg-2 text-center" colspan="2">Opening</th>
+                        <th class="col-lg-2  text-center" colspan="2">Periodic</th>
+                        <th class="col-lg-2  text-center" colspan="2">Closing</th>
+   
+                    </tr>
+                    <tr >
+                        
+                        <th class="col-lg-1 ">Debit</th>
+                        <th class="col-lg-1 ">Credit</th>
+                        <th class="col-lg-1 ">Debit</th>
+                        <th class="col-lg-1 ">Credit</th>
+                        <th class="col-lg-1 ">Debit</th>
+                        <th class="col-lg-1 ">Credit</th>
+   
+                    </tr>
+   
+                    <!-- <tr class="text-center" *ngFor="let row of notesList; index as index">
+                       <th colspan="8" class="col-lg-1 col-md-1 col-sm-1 col-xs-1">{{row.noteTitle}}</th>
+                   </tr> -->
+   
+   
+                   </thead>
+
+                <thead > 
+                    <tr class="text-center">
+                        <th colspan="8" class="col-lg-1 col-md-1 col-sm-1 col-xs-1">{{row.noteTitle}}</th>
+                        <!-- <th colspan="1" class="col-lg-1 col-md-1 col-sm-1 col-xs-1">{{row.debitTotal | number}}</th>
+                        <th colspan="1" class="col-lg-1 col-md-1 col-sm-1 col-xs-1">{{row.creditTotal | number}}</th> -->
+                    </tr>
+                </thead>
+            
+                <tbody *ngFor="let item of TrialBalanceData;index as index">
+                        <tr *ngIf="row.noteID == item.noteID" >
+
+                            <td class=" ps-2 col-lg-2">{{item.accountCode}}</td>
+                            <td class=" fw-bold ps-2 col-lg-2 ">{{item.coaTitle}}</td>
+                            <td class=" text-end col-lg-1 " >{{item.oDebit |number}}</td>
+                            <td class=" text-end col-lg-1 ">{{item.oCredit |number}}</td>
+                            <td class=" text-end col-lg-1 ">{{item.debit |number}}</td>
+                            <td class=" text-end col-lg-1 " >{{item.credit |number}}</td>
+                            <td class=" text-end col-lg-1 ">{{item.cDebit |number}}</td>
+                            <td class=" text-end col-lg-1 ">{{item.cCredit |number}}</td>
+                        </tr>
+
+
+                    
+                </tbody>
+                    
+
+                <tbody >
+
+                    <tr>
+                        <td colspan="6" class=" ps-2 text-center "><b> TOTAL </b></td>
+                        <td class=" text-end"><b>{{row.debitTotal |number}}</b></td>
+                        <td class=" text-end"><b>{{row.creditTotal |number}}</b></td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+
+
+            <table class="table-logix table">
+                <tr class="fw-bold">
+                    <td  colspan="3">Total</td>
+                    <td class="col-lg-1 ">{{oDebitTotal|number}}</td>
+                    <td class="col-lg-1 ">{{oCreditTotal |number}}</td>
+                    <td class="col-lg-1 ">{{debitTotal |number}}</td>
+                    <td class="col-lg-1  ">{{creditTotal |number}}</td>
+                    <td class="col-lg-1 ">{{cDebitTotal |number}}</td>
+                    <td class="col-lg-1 ">{{cCreditTotal |number}}</td>
+
+                </tr>
+            </table>
+            
+        </div>
+
+           
+        </div>
+
+        
+
+        
+
+
+    </div>
+</div>
+
+
