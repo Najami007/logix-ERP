@@ -22,6 +22,11 @@ export class HeaderComponent implements OnInit {
    title = 'Title';
    UserName = '';
 
+   menuList:any = [{title:'Accounts', icon:'account_balance', path:'acc'},
+   {title:'Restaurant Core', icon:'home', path:'core'},
+   {title:'WareHouse', icon:'store', path:'wr'},
+   {title:'Human Resourse (HR)', icon:'person_pin', path:'hr'},   ]
+
   ngOnInit() {   
     this.globalData.header_title$.subscribe((Response:string)=>{this.title = Response;alert()});
     // this.UserName = this.globalData.getUserName().toUpperCase();

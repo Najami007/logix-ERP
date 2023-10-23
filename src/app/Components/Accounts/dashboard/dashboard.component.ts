@@ -332,7 +332,7 @@ export class DashboardComponent implements OnInit{
         },
         (Error)=>{
           
-       
+          this.IncomeDetailPieChart();
         }
       )
   }
@@ -416,7 +416,7 @@ export class DashboardComponent implements OnInit{
 
         },
         (Error)=>{
-       
+          this.previousIncomeDetailPieChart();
         }
       )
   }
