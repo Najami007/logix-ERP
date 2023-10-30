@@ -320,8 +320,8 @@
                         <td>{{item.partyName}}</td>
                         <td>{{item.amount |number}}</td>
                         <td class="text-start">{{item.invoiceRemarks}}</td>
-                        <td ><mat-icon class="text-success" data-bs-toggle="modal" data-bs-target="#invoiceDetailModel" 
-                            (click)="getInvoiceDetail(item.invoiceNo)" >receipt</mat-icon></td>
+                        <td ><mat-icon class="text-success"  
+                            (click)="VoucherDetails(item)" >receipt</mat-icon></td>
                         <td ><mat-icon class="text-success" *ngIf="item.approvedStatus == false && RoleID == 1" (click)="approveBill(item)">check</mat-icon>
                         <mat-icon *ngIf="item.approvedStatus == true" aria-label="Approved" class="text-success" >done_all</mat-icon>
                         <mat-icon class="text-danger" *ngIf="RoleID == 1" (click)="DeleteVoucher(item)">delete</mat-icon>

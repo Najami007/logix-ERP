@@ -1,0 +1,143 @@
+<div class="container">
+
+    <!-----------           Date Selection Section ------------------>
+    
+        <div class=" container-fluid  p-3 border-bottom">
+            <div class="selrow row text-center">
+     
+                    <mat-form-field class="w-25 " appearance="outline">
+                        <mat-label>From Date</mat-label>
+                        <input matInput type="text"  readonly="true" [(ngModel)]="fromDate" [matDatepicker]="startDate">
+                        <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                        <mat-datepicker #startDate></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-25" appearance="outline">
+                        <mat-label>To Date</mat-label>
+                        <input matInput type="text" readonly="true" [(ngModel)]="toDate"  [matDatepicker]="EndDate">
+                        <mat-datepicker-toggle matSuffix [for]="EndDate"></mat-datepicker-toggle>
+                        <mat-datepicker #EndDate></mat-datepicker>
+                    </mat-form-field>
+                
+
+                <div class="w-50  ">
+                    <button class="btn btn-primary w-25 btn-rpt me-2" (click)="getReport()" >
+                       Get Report
+                    </button>   
+                   
+                
+                    <button class=" btn btn-primary w-25 btn-rpt" (click)="PrintTable()">
+                       Print
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!------------------  Table Section ------------------->
+
+
+        <div id="printRpt">
+
+             <!-------------------------    Top Logo Section -------------------->
+           <div class="hide">
+            <div class="text-center border-bottom d-flex justify-content-between">
+                <span>
+                    <img src="{{logo}}" style="color: black;" alt="" srcset="" height="100" width="100">
+                </span>
+                <span >
+                    
+
+                    <h1 class="companyName">{{CompanyName}}</h1>
+                    <p style="margin-top: -15px;" class="companyName2">{{CompanyName2}}</p>
+
+                    <p class="rptTitle" style="margin-top:-25px">Transaction Report</p>
+                    <p style="margin-top:-20px"><b>From:</b> {{fromDate | date:'yyyy-MM-dd'}} <b>To:</b> {{toDate | date:'yyyy-MM-dd'}}</p>
+                  
+                </span>
+                <span>
+                    <img src="{{logo1}}" style="color: black;" alt="" srcset="" height="100" width="100">
+                </span>
+        
+        
+            </div>
+           </div>
+
+           <div>
+            <table class="table table-logix">
+                <thead>
+                   <tr>
+                    <th>S#</th>
+                    <th>Invoice No</th>
+                    <th>Date</th>
+                    <th>Narration</th>
+                    <th >Amount</th>
+                   </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of reportData;index as index">
+                        <td class="text-center">{{index+1}}</td>
+                        <td class="cursorPointer" data-bs-toggle="modal" data-bs-target="#invoiceDetailModel" 
+                        (click)="getInvoiceDetail(item.invoiceNo)"><span style="color: blue;border-bottom: 1px solid blue;">{{item.invoiceNo}}</span></td>
+                        <td>{{item.invoiceDate |date:'yyyy-MM-dd'}}</td>
+                        <td class="col-lg-4">{{item.invoiceRemarks}}</td>
+                        <td class="text-end">{{item.amount |number:'1.0-0'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+           </div>
+
+
+        </div>
+
+
+
+         <!--------------------------  Modal Window to check invoice Details ----------------------->
+
+
+ <div class="modal fade h-100 bg-light " id="invoiceDetailModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="exampleModalLabel">Voucher Details</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+       <!----------------------- Table Area --------------------->
+
+       <div>
+        <table class="table">
+            <thead class="border-bottom ">
+                
+                <th>S#</th>
+                <th>Description</th>
+                <th>Debit</th>
+                <th>Credit</th>
+            
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of invoiceDetails; index as index">
+                    <td>{{index+1}}</td>
+                    <td>{{item.coaTitle}} ({{item.accountCode}})</td>
+                    <td>{{item.debit |number:'1.0-0'}}</td>
+                    <td>{{item.credit |number:'1.0-0'}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>Total</b></td>
+                    <td><b>{{lblDebitTotal |number:'1.0-0'}}</b></td>
+                    <td><b>{{lblCreditTotal |number:'1.0-0'}}</b></td>
+                </tr>
+            </tbody>
+        </table>
+       </div>
+           
+
+
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+    </div>
+

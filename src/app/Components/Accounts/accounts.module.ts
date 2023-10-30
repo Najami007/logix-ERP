@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import {RouterModule, Routes} from '@angular/router';
+import {RouterModule, Route} from '@angular/router';
 import { COAComponent } from './coa/coa.component';
 import { VoucherComponent } from './voucher/voucher.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -29,19 +29,22 @@ import { BalanceSheetComponent } from './AccountReports/balance-sheet/balance-sh
 import { CashbookComponent } from './AccountReports/cashbook/cashbook.component';
 import { PLStatComponent } from './AccountReports/plstat/plstat.component';
 import { TrialBalanceComponent } from './AccountReports/trial-balance/trial-balance.component';
+import { DayTransactionComponent } from './day-transaction/day-transaction.component';
+import { VoucherDetailsComponent } from './voucher/voucher-details/voucher-details.component';
 
 
 
 
 
 
-export const accountRountes: Routes = [
+export const accountRountes: Route[] = [
   
     {path:'dashboard', component:DashboardComponent,  },
     {path:'coa', component:COAComponent,  },
     {path:'voucher', component:VoucherComponent,  },
     {path:'bdgtng', component:BudgettingComponent,  },
     {path:'settings', component:SettingsComponent,  },
+    {path:'dtran', component:DayTransactionComponent,  },
     {path:'spvn', component:VoucherSupervisionComponent,  },
     {path:'ldgrrpt', component:LedgerComponent,  },
     {path:'bdgrpt', component:BudgetReportComponent,  },
@@ -70,6 +73,8 @@ export const accountRountes: Routes = [
     CashbookComponent,
     PLStatComponent,
     TrialBalanceComponent,
+    DayTransactionComponent,
+    VoucherDetailsComponent,
 
     
   ],

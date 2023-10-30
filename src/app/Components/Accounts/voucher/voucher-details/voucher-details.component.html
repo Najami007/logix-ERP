@@ -1,0 +1,31 @@
+<div class="container">
+
+    <div class="text-center  mt-3 d-flex justify-content-between p-3"><p class="dialogueTitle">ADD NOTE</p><mat-icon class="cursorPointer" (click)="closeDialogue()">cancel</mat-icon></div>
+
+
+
+    <table class="table">
+        <thead class="border-bottom ">
+            
+            <th>S#</th>
+            <th>Description</th>
+            <th>Debit</th>
+            <th>Credit</th>
+        
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of invoiceDetails; index as index">
+                <td>{{index+1}}</td>
+                <td>{{item.coaTitle}} ({{item.accountCode}})</td>
+                <td>{{item.debit |number:'1.0-0'}}</td>
+                <td>{{item.credit |number:'1.0-0'}}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><b>Total</b></td>
+                <td><b>{{lblDebitTotal |number:'1.0-0'}}</b></td>
+                <td><b>{{lblCreditTotal |number:'1.0-0'}}</b></td>
+            </tr>
+        </tbody>
+    </table>
+   </div>

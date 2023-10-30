@@ -6,6 +6,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 import { AppComponent } from 'src/app/app.component';
+import { MatDialog } from '@angular/material/dialog';
+import { VoucherDetailsComponent } from './voucher-details/voucher-details.component';
 
 @Component({
   selector: 'app-voucher',
@@ -47,6 +49,7 @@ export class VoucherComponent implements OnInit{
     private globalData:GlobalDataModule,
     private http:HttpClient,
     private app:AppComponent,
+    private dialogue:MatDialog
     ) { }
 
   ngOnInit(): void {
@@ -507,6 +510,17 @@ export class VoucherComponent implements OnInit{
         this.msg.WarnNotify('Error Occured While Printing');
       }
     )
+  }
+
+
+
+  VoucherDetails(row:any){
+    this.dialogue.open(VoucherDetailsComponent,{
+      width:"40%",
+      data:row,
+    }).afterClosed().subscribe(val=>{
+      
+    })
   }
 
 

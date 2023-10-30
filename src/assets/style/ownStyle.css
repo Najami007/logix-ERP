@@ -73,6 +73,7 @@
 
 
 
+
 .table-logix{
   background-color: #fff; 
   border: 1px solid black;
@@ -87,6 +88,14 @@
   border: 1px solid black;    
 }
 .table-logix > thead > tr > th {
+  /*background-color:#D2101B;*/
+  /*color:#fff;*/  
+  font-weight: bold;  
+  text-align: center;
+  border:1px solid black;
+}
+
+.table-logix > thead  > th {
   /*background-color:#D2101B;*/
   /*color:#fff;*/  
   font-weight: bold;  
@@ -109,6 +118,13 @@
   border: 1px solid #000 !important;
 }
 
+.table-logix > tbody > tr > th {
+  border: 1px solid #000 !important;
+  font-weight: bold;  
+  text-align: center;
+}
+
+
 
 
 
@@ -128,6 +144,15 @@
 .rptTitle{
   font-size: 30px !important;
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+
+
+
+
+
+.wide{
+  width: 120px;
 }
 
 

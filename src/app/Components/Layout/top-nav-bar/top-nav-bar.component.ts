@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { environment } from 'src/environments/environment.development';
@@ -14,6 +15,7 @@ export class TopNavBarComponent implements OnInit{
   constructor(private globalData:GlobalDataModule,
     private msg:NotificationService,
     private http:HttpClient,
+    private route:Router
     ){
   
   }
@@ -21,7 +23,7 @@ export class TopNavBarComponent implements OnInit{
     ngOnInit(): void {
       // this.getMenu();
     }
-  
+    UserName:any = 'Name';
   
       menuList:any;
     
@@ -67,6 +69,20 @@ export class TopNavBarComponent implements OnInit{
         }
       )
     }
+
+
+
+
+    setSidebarMenu(module: any) {
+
+      this.route.navigate([module]);
+    }
+  
+    
+    logout(){
+      this.globalData.logout();
+    }
+  
   
   
   }

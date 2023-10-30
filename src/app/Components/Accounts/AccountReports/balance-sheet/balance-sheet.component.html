@@ -34,7 +34,7 @@
 
         <!-------------------------    Top Logo Section -------------------->
         <div class="hide">
-            <div class=" text-center border-bottom d-flex justify-content-between">
+            <div class=" text-center d-flex justify-content-between">
                 <span>
                     <img src="{{logo}}" height="100" width="100">
                 </span>
@@ -56,79 +56,80 @@
             </div>
         </div>
 
-
+<hr>
         <!----------------------------             Summary 1 Section ----------------->
 
-        <table class="table mt-3"  id="balanceSheet1">
+        <table class="table mt-3 table-logix "  id="balanceSheet1">
             <thead>
-                <th>S#</th>
+               <tr> 
                 <th>Asset</th>
                 <th> Note</th>
-                <th class="text-end"> Amount</th>
+                <th> Amount</th>
+            </tr>
             </thead>
             <tbody class="h-50">
                 <tr *ngFor="let item of assetList;index as index">
-                    <td>{{index+1}}</td>
+                    
                     <td>{{item.noteTitle}}</td>
                     <td> {{item.noteID}}</td>
-                    <td class="text-end"> {{item.nTotal | number}}</td>
+                    <td class="text-end"> {{item.nTotal | number:'1.0-0'}}</td>
                 </tr>
                 
                 <tr>
-                    <td colspan="3"></td>
-                    <th class="text-end text-danger"><h1><u>{{assetTotal |number}}</u></h1></th>
+                    <td colspan="2"></td>
+                    <th class="text-end text-danger"><h4>{{assetTotal |number:'1.0-0'}}</h4></th>
                 </tr>
                 
            
 
 
             <tr>
-                <th>S#</th>
+            
                 <th>Capital + Liability</th>
                 <th> Note</th>
-                <th class="text-end"> Amount</th>
+                <th > Amount</th>
             </tr>
 
          
                 <tr *ngFor="let item of liabilityList; index as index">
-                    <td>{{index+1}}</td>
+                  
                     <td>{{item.noteTitle}}</td>
                     <td>{{item.noteID}}</td>
-                    <td class="text-end"> {{item.nTotal |number}}</td>
+                    <td class="text-end"> {{item.nTotal |number:'1.0-0'}}</td>
                 </tr>
 
                 <tr>
-                    <td colspan="3"></td>
-                    <th class="text-end">{{liabilityTotal |number}}</th>
+                    <td colspan="2"></td>
+                    <th class="text-end">{{liabilityTotal |number:'1.0-0'}}</th>
                 </tr>
 
                 <tr *ngFor="let item of capitalList; index as index">
-                    <td>{{index+1}}</td>
+                    
                     <td>{{item.noteTitle}}</td>
                     <td>{{item.noteID}}</td>
-                    <td class="text-end"> {{item.nTotal |number}}</td>
+                    <td class="text-end"> {{item.nTotal |number:'1.0-0'}}</td>
                 </tr>
 
                 <tr>
-                    <td colspan="3"></td>
-                    <th class="text-end">{{capitalTotal |number}}</th>
+                    <td colspan="2"></td>
+                    <th class="text-end">{{capitalTotal |number:'1.0-0'}}</th>
                 </tr>
                
                 <tr>
-                    <td></td>
+                
                     <td>Accumulated Profit/Lose</td>
                     <td></td>
-                    <td class="text-end">{{accumulatedTotal |number}}</td>
+                    <td class="text-end">{{accumulatedTotal |number:'1.0-0'}}</td>
                 </tr>
 
                 <tr>
-                    <td colspan="3"></td>
-                    <th class="text-end">{{accumulatedTotal |number}}</th>
+                    <td colspan="2"></td>
+                    <th class="text-end">{{accumulatedTotal |number:'1.0-0'}}</th>
                 </tr>
 
                 <tr>
-                    <td colspan="3"></td>
-                    <th class="text-end text-danger"><h1><u>{{capitalTotal + liabilityTotal + accumulatedTotal | number}}</u></h1></th>
+                    <td colspan="2"></td>
+                    <th class="text-end text-danger"><h4>{{capitalTotal + liabilityTotal + accumulatedTotal | number:'1.0-0'}}</h4></th>
                 </tr>
 
                
@@ -142,20 +143,20 @@
 
          <!----------------------------             Year Wise Summary Section ----------------->
 
-         <table class="table mt-3" id="balanceSheet2">
+         <table class="table table-logix mt-3" id="balanceSheet2">
             
             <thead>
                 <tr>
                     <th colspan="3"></th>
-                    <th class="text-end"><h2>{{previousYear}}</h2></th>
-                <th class="text-end"> <h2>{{currentYear}}</h2></th>
+                    <th ><h2>{{previousYear}}</h2></th>
+                <th > <h2>{{currentYear}}</h2></th>
                 </tr>
                 <tr>
                     <th>S#</th>
                 <th>Asset</th>
                 <th> Note</th>
-                <th class="text-end">Amount</th>
-                <th class="text-end"> Amount</th>
+                <th >Amount</th>
+                <th > Amount</th>
                 </tr>
             </thead>
             <tbody class="h-50">
@@ -163,14 +164,14 @@
                     <td>{{index+1}}</td>
                     <td>{{item.noteTitle}}</td>
                     <td> {{item.noteID}}</td>
-                    <td class="text-end"> {{item.oTotal | number}}</td>
-                    <td class="text-end"> {{item.nTotal | number}}</td>
+                    <td class="text-end"> {{item.oTotal | number:'1.0-0'}}</td>
+                    <td class="text-end"> {{item.nTotal | number:'1.0-0'}}</td>
                 </tr>
                 
                 <tr>
                     <td colspan="3"></td>
-                    <th class="text-end text-danger"><h1><u>{{oAssetTotal |number}}</u></h1></th>
-                    <th class="text-end text-danger"><h1><u>{{assetTotal |number}}</u></h1></th>
+                    <th class="text-end text-danger"><h1><u>{{oAssetTotal |number:'1.0-0'}}</u></h1></th>
+                    <th class="text-end text-danger"><h1><u>{{assetTotal |number:'1.0-0'}}</u></h1></th>
                 </tr>
                 
            
@@ -180,57 +181,57 @@
                 <th>S#</th>
                 <th>Capital + Liability</th>
                 <th> Note</th>
-                <th class="text-end"> Amount</th>
-                <th class="text-end"> Amount</th>
+                <th > Amount</th>
+                <th > Amount</th>
             </tr>
 
          
                 <tr *ngFor="let item of liabilityList; index as index">
-                    <td>{{index+1}}</td>
+                    <td class="text-center">{{index+1}}</td>
                     <td>{{item.noteTitle}}</td>
                     <td>{{item.noteID}}</td>
-                    <td class="text-end"> {{item.oTotal |number}}</td>
-                    <td class="text-end"> {{item.nTotal |number}}</td>
+                    <td class="text-end"> {{item.oTotal |number:'1.0-0'}}</td>
+                    <td class="text-end"> {{item.nTotal |number:'1.0-0'}}</td>
                 </tr>
 
                 <tr>
                     <td colspan="3"></td>
-                    <th class="text-end">{{oLiabilityTotal |number}}</th>
-                    <th class="text-end">{{liabilityTotal |number}}</th>
+                    <th class="text-end">{{oLiabilityTotal |number:'1.0-0'}}</th>
+                    <th class="text-end">{{liabilityTotal |number:'1.0-0'}}</th>
                 </tr>
 
                 <tr *ngFor="let item of capitalList; index as index">
-                    <td>{{index+1}}</td>
+                    <td class="text-center">{{index+1}}</td>
                     <td>{{item.noteTitle}}</td>
                     <td>{{item.noteID}}</td>
-                    <td class="text-end"> {{item.oTotal |number}}</td>
-                    <td class="text-end"> {{item.nTotal |number}}</td>
+                    <td class="text-end"> {{item.oTotal |number:'1.0-0'}}</td>
+                    <td class="text-end"> {{item.nTotal |number:'1.0-0'}}</td>
                 </tr>
 
                 <tr>
                     <td colspan="3"></td>
-                    <th class="text-end">{{oCapitalTotal |number}}</th>
-                    <th class="text-end">{{capitalTotal |number}}</th>
+                    <th class="text-end">{{oCapitalTotal |number:'1.0-0'}}</th>
+                    <th class="text-end">{{capitalTotal |number:'1.0-0'}}</th>
                 </tr>
                
                 <tr>
                     <td></td>
                     <td>Accumulated Profit/Lose</td>
                     <td></td>
-                    <td class="text-end">{{oAccumulatedTotal |number}}</td>
-                    <td class="text-end">{{accumulatedTotal |number}}</td>
+                    <td class="text-end">{{oAccumulatedTotal |number:'1.0-0'}}</td>
+                    <td class="text-end">{{accumulatedTotal |number:'1.0-0'}}</td>
                 </tr>
 
                 <tr>
                     <td colspan="3"></td>
-                    <td class="text-end">{{oAccumulatedTotal |number}}</td>
-                    <th class="text-end">{{accumulatedTotal |number}}</th>
+                    <td class="text-end">{{oAccumulatedTotal |number:'1.0-0'}}</td>
+                    <th class="text-end">{{accumulatedTotal |number:'1.0-0'}}</th>
                 </tr>
 
                 <tr>
                     <td colspan="3"></td>
-                    <th class="text-end text-danger"><h1><u>{{oCapitalTotal + oLiabilityTotal + oAccumulatedTotal | number}}</u></h1></th>
-                    <th class="text-end text-danger"><h1><u>{{capitalTotal + liabilityTotal + accumulatedTotal | number}}</u></h1></th>
+                    <th class="text-end text-danger"><h1><u>{{oCapitalTotal + oLiabilityTotal + oAccumulatedTotal | number:'1.0-0'}}</u></h1></th>
+                    <th class="text-end text-danger"><h1><u>{{capitalTotal + liabilityTotal + accumulatedTotal | number:'1.0-0'}}</u></h1></th>
                 </tr>
 
                
