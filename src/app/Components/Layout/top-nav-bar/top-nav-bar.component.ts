@@ -23,7 +23,7 @@ export class TopNavBarComponent implements OnInit{
     ngOnInit(): void {
       // this.getMenu();
     }
-    UserName:any = 'Name';
+    UserName:any = 'Najam';
   
       menuList:any;
     

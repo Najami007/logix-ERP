@@ -12,7 +12,8 @@ export const environment = {
      //AccountsApiUrl: 'http://159.69.174.21:2005/', ///// live Server
 
 
-      mainApi: 'http://159.69.174.21:2005/',
-    //mainApi: 'http://192.168.10.100:1001/',
+      //mainApi: 'http://159.69.174.21:2005/',  ////////// 
+      //mainApi: 'http://192.168.10.100:1002/',
+      mainApi: 'http://192.168.10.100:1003/',    ////////// Local Server
     
 };

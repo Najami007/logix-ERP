@@ -57,7 +57,9 @@
 
      
         
-        <div class="d-flex bg-white shadow justify-content-end" style="min-width: 120px;max-width: 500px; height: 40px; font-size: 15px; font-family: Arial, Helvetica, sans-serif; border-radius: 20px;" >
+        <div class="d-flex bg-white shadow justify-content-between" style="min-width: 120px;max-width: 500px; height: 40px; font-size: 15px; font-family: Arial, Helvetica, sans-serif; border-radius: 20px;" >
+          <p> </p>
+
           <p class="mt-1 pe-1 ps-1" >
               {{ UserName }}
           </p>
@@ -69,7 +71,16 @@
               <button mat-menu-item (click)="logout()">
                   <mat-icon>exit_to_app</mat-icon>
                   <span>Log out</span>
-              </button> </mat-menu>
+              </button> 
+              <button mat-menu-item >
+                <mat-icon>lock</mat-icon>
+                <span>Change Password</span>
+            </button>
+            <button mat-menu-item >
+              <mat-icon>vpn_key</mat-icon>
+              <span>Change Pin</span>
+          </button></mat-menu>
+              
         </div>
    
 

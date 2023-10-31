@@ -1,1 +1,90 @@
-<p>add-user works!</p>
+<div class="row">
+    <div class="col-lg-3 bg-white border p-3" style="position: fixed;">
+
+        <h1>User Credentials</h1>
+       
+            
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>User Name</mat-label>
+            <input matInput type="text"  [(ngModel)]="UserName">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Login Name</mat-label>
+            <input matInput type="text" [(ngModel)]="loginName">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Mobile No</mat-label>
+            <input matInput type="text" [maxLength]="12" [(ngModel)]="mobileNo">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>User Role</mat-label>
+            <mat-select type="text" [(ngModel)]="RoleID">
+                <mat-option *ngFor="let item of rolesList" [value]="item.roleID">{{item.roleTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Password</mat-label>
+            <input [disabled]="btnType == 'Update'" matInput type="password" [(ngModel)]="password">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Confirm Password</mat-label>
+            <input [disabled]="btnType == 'Update'" matInput type="password" [(ngModel)]="confirmPassword">
+        </mat-form-field>
+
+
+       <div class="text-center">
+         
+        <button mat-raised-button class="bg-success text-white me-2 " (click)="save()">{{btnType}}</button>
+        <button mat-raised-button color="warn" (click)="reset()">Reset</button>
+       </div>
+       
+        
+        
+
+        
+
+    </div>
+    <div class="col-lg-9 p-4 border h-100" style="position: absolute;overflow: scroll;left: 25%;">
+        <h1>Saved Record</h1>
+        
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Search.....</mat-label>
+            <input [(ngModel)]="txtSearch"  matInput type="text" #input >
+            <mat-icon matSuffix class="text-secondary">search</mat-icon>
+        </mat-form-field>
+
+
+        <table  class="table table-brdr cursorPointer">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Login Name</th>
+                    <th>Role</th>
+                    <th>Mobile</th>
+                    <th>Edit</th>
+                    <th>Reset</th>
+                    <th>Block</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of userList">
+                    <td>{{item.userName}}</td>
+                    <td>{{item.loginName}}</td>
+                    <td>{{item.roleTitle}}</td>
+                    <td>{{item.mobileNo}}</td>
+                    <td><mat-icon class="text-success" (click)="editUser(item)">edit</mat-icon></td>
+                    <td><mat-icon class="text-primary" (click)="resetPin(item)">vpn_key</mat-icon></td>
+                    <td><mat-icon class="text-warning" (click)="blockUser(item)">block</mat-icon></td>
+                    <td><mat-icon class="text-danger" (click)="deleteUser(item)">delete</mat-icon></td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+</div>
