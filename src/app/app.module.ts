@@ -31,7 +31,7 @@ import { COAComponent } from './Components/Accounts/coa/coa.component';
 import { MainComponent } from './Components/Layout/main/main.component';
 import { TopNavBarComponent } from './Components/Layout/top-nav-bar/top-nav-bar.component';
 import { HeaderComponent } from './Components/Layout/header/header.component';
-import { AddUserComponent } from './Components/User/add-user/add-user.component';
+
 
 
 
@@ -52,7 +52,6 @@ import { AddUserComponent } from './Components/User/add-user/add-user.component'
     MainComponent,
     TopNavBarComponent,
     HeaderComponent,
-    AddUserComponent,
 
 
     // FilterPipe,
