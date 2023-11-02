@@ -21,7 +21,7 @@ import { UserRoleComponent } from './user-role/user-role.component';
 
 export const userRoutes: Route[] = [
   
-  {path:'addUser', component:AddUserComponent,  },
+  {path:'adduser', component:AddUserComponent,  },
   {path:'usrl', component:UserRoleComponent,  },
 
   {path:'**', redirectTo:'home',pathMatch:'full'}

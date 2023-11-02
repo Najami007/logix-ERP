@@ -86,6 +86,14 @@ export class GlobalDataModule  implements OnInit {
   }
 
 
+  getModuleID(){
+    var moduleID = JSON.parse(localStorage.getItem('mid') || '{}');
+
+    return  moduleID;
+ 
+  }
+
+
   //////////////////////// will provide logged in userID
   getUserID(){
      var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
@@ -158,55 +166,35 @@ getHours(date1:any, Time1:any, date2:any, Time2:any) {
   login(Email:String,password:string){
     $('.loaderDark').show();
 
-    // this.http.post(environment.mainApi+'_userLogin',{
-    //   LoginName: Email,
-    //   Password: password,
-    // }).subscribe({
-    //   next:(value:any)=>{
+    this.http.post(environment.mainApi+'user/_userLogin',{
+      LoginName: Email,
+      Password: password,
+    }).subscribe({
+      next:(value:any)=>{
 
-    //     var userID = value._culId;
-    //     localStorage.setItem('curVal',JSON.stringify({value}));
+        var userID = value._culId;
+        localStorage.setItem('curVal',JSON.stringify({value}));
 
-    //    if(value.msg == 'Logged in Successfully' ){
-    //     Swal.fire({
-    //       title:'',
-    //       text:"Login Successful",
-    //       position:'center',
-    //       icon:'success',
-    //       showConfirmButton:true,
-    //       confirmButtonText:'OK',
-    //       confirmButtonColor:'Green',
-    //       timer:2000,
-    //       timerProgressBar:true,
-
-    //     }).then((value)=>{
-
-    //       // this.http.get(environment.mainApi+'getusermenu?userid='+atob(atob(userID))).subscribe(
-    //       //   (Response:any)=>{             
-    //       //     this.rout.navigate(["main/"+Response[0].pageLink]);            
-    //       //     $('.loaderDark').fadeOut(500);
-    //       //   }
-    //       // )
-   
-    //       this.rout.navigate(["main"]);
-    //       $('.loaderDark').fadeOut(500);
-    //     })
+       if(value.msg == 'Logged in Successfully' ){
+      
+        this.rout.navigate(["home"]);
+          $('.loaderDark').fadeOut(500);
         
        
-    //    }else{
-    //     this.msg.WarnNotify('Error Occurred While Login Process');
-    //     $('.loaderDark').fadeOut(500);
-    //    }
-    //   },
-    //   error:error=>{
+       }else{
+        this.msg.WarnNotify(value.msg);
+        $('.loaderDark').fadeOut(500);
+       }
+      },
+      error:error=>{
        
-    //     this.msg.WarnNotify('Error Occurred While Login Process')
-    //     $('.loaderDark').fadeOut(500);
-    //   }
-    // })
+        this.msg.WarnNotify('Error Occurred While Login Process')
+        $('.loaderDark').fadeOut(500);
+      }
+    })
 
-    this.rout.navigate(["home"]);
-    $('.loaderDark').fadeOut(500);
+    // this.rout.navigate(["home"]);
+    // $('.loaderDark').fadeOut(500);
 
     
   }
@@ -217,16 +205,34 @@ getHours(date1:any, Time1:any, date2:any, Time2:any) {
 ///////////////////////////////////////////////////////////
   
 
-
-logout(){
-  $('.loaderDark').show();
-
-    localStorage.removeItem('curVal');
-    // localStorage.removeItem('cmpnyVal');
-     this.rout.navigate(['login']);
-     $('.loaderDark').fadeOut(500);
-    
-  }
+  logout(){
+    $('.loaderDark').show();
+      this.http.post(environment.mainApi+'user/_userLogout',{
+        UserID: this.getUserID(),
+      }).subscribe(
+        (Response:any)=>{
+          if(Response.msg = 'Logged Out Successfully'){
+            // this.msg.SuccessNotify(Response.msg);
+  
+            
+            localStorage.removeItem('curVal');
+            localStorage.removeItem('mid');
+            // localStorage.removeItem('cmpnyVal');
+             this.rout.navigate(['login']);
+             $('.loaderDark').fadeOut(500);
+          }else{
+            this.msg.WarnNotify(Response.msg);
+            $('.loaderDark').fadeOut(500);
+          }
+         
+        },
+        (Error)=>{
+          this.msg.WarnNotify('Error Occured Check Connection!');
+          $('.loaderDark').fadeOut(500);
+        }
+      )
+      
+    }
 
 
 

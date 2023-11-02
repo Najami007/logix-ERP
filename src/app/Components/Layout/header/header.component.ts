@@ -1,7 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { AppComponent } from 'src/app/app.component';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-header',
@@ -15,12 +17,15 @@ export class HeaderComponent implements OnInit {
   constructor(private app:AppComponent,
   
     private globalData : GlobalDataModule,
-    private route:Router
+    private route:Router,
+    private http:HttpClient,
+    
     ) { 
     
   }
    title = 'Title';
    UserName = '';
+   moduleList:any;
 
    menuList:any = [{title:'User Module', icon:'person', path:'user'},
     {title:'Accounts Module', icon:'account_balance', path:'acc'},
@@ -30,33 +35,33 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {   
     this.globalData.header_title$.subscribe((Response:string)=>{this.title = Response;alert()});
+    this.getModules();
+    // alert(this.globalData.getUserID())
     // this.UserName = this.globalData.getUserName().toUpperCase();
   }
-
-  reload(){
-    location.reload();
-  }
- 
   
   Menu = "menu";
 
-  toggleSideBar(){
-    this.toggleMySideBar.emit(); 
-    this.log();
-  }
+  
 
-  log(){
 
-    // if(this.m.sideBarOpen == true){
-    //   this.Menu = "menu_open";
-    // }else{
-    //   this.Menu = "menu";
-    // }
-  }
+  
+ /////////////////////////////////////////////////////////////////////////
 
-  setSidebarMenu(module: any) {
+ getModules(){
+  this.http.get(environment.mainApi+'user/getusermodule?userid='+this.globalData.getUserID()).subscribe(
+    (Response)=>{
+      this.moduleList = Response;
+      // console.log(Response);
+    }
+  )
+}
 
-    this.route.navigate([module]);
+  setMenu(moduleID: any) {
+
+    this.route.navigate(['home']);
+    localStorage.setItem('mid',JSON.stringify(moduleID));
+
   }
 
   

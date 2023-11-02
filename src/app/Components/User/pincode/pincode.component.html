@@ -5,9 +5,11 @@
 
     <mat-form-field class="w-100" appearance="outline"> 
         <mat-label>Enter Pincode</mat-label>
-        <input matInput type="text" [(ngModel)]="pinCode">
+        <input matInput type="password" [(ngModel)]="pinCode">
     </mat-form-field>
 
+   <div class="text-center">
     <button mat-raised-button class="bg-success text-white" (click)="save()">Save</button>
+   </div>
 
 </div>

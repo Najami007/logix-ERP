@@ -1,4 +1,4 @@
-<div class="pb-5 ps-2 pe-3"  style="height: 40px;">
+<div class="pb-5 ps-2 pe-3 bg-white shadow "  style="height: 40px;">
     <span class="justify-content-between d-flex">
        
             <!-- <button class="button" mat-icon-button (click)="toggleSideBar()"><mat-icon>{{Menu}}</mat-icon> </button> -->
@@ -24,54 +24,17 @@
            
         </div>
 
-            <!-- <h1 class="title">Logix solution</h1> -->
-
-<!-- 
-          <div class="d-flex">
-            <span class="mt-2" >
-                {{ UserName }} Name
-            </span>
-            <button mat-icon-button  [matMenuTriggerFor]="userMenu"
-                aria-label="">
-                <mat-icon>person</mat-icon>
-            </button>
-            <mat-menu #userMenu="matMenu">
-                <button mat-menu-item (click)="logout()">
-                    <mat-icon>exit_to_app</mat-icon>
-                    <span>Log out</span> 
-                </button> </mat-menu>
-          </div> -->
-      
-        <!-- <div class="d-flex pt-3">
-        <h3>Welcome Mr.  <mat-icon class="pt-1" >person</mat-icon> {{UserName}}</h3>
-    </div> -->
-        <!--     
-        <div class="justify-content-around">
-            <ul class="d-flex pt-3 ml stylnone">
-            
-                <li >
-                    
-                    <div mat-icon-button style="cursor: pointer;font-size: 15px; border-bottom: 1px Solid rgb(196, 196, 196);box-shadow: 12px 2px 5px 2px rgb(198, 198, 199);" class="d-flex" (click)="logout()">
-
-                        LOGOUT <mat-icon  class="">power_settings_new</mat-icon>
-                    </div>
-                </li>
-                
-            </ul>  
-        </div> -->
-
-
-        <div>
+        <div class="mt-1">
             <button mat-mini-fab class="example-icon" aria-label="Example icon-button with share icon"
             [matMenuTriggerFor]="menu">
             <mat-icon>apps</mat-icon>
         </button>
 
         <mat-menu #menu="matMenu" >
-            <div *ngFor="let item of menuList">
-                <button mat-menu-item (click)="setSidebarMenu(item.path)">
+            <div *ngFor="let item of moduleList">
+                <button mat-menu-item (click)="setMenu(item.moduleID)">
                     <mat-icon>{{item.icon}}</mat-icon>
-                    <span>{{item.title}}</span>
+                    <span>{{item.moduleTitle}}</span>
                 </button>
             </div>
             

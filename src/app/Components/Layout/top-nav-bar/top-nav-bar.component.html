@@ -1,7 +1,7 @@
 <mat-toolbar class="w-100 " >
 
 
-  <mat-toolbar-row class="bg-white justify-content-between">
+  <!-- <mat-toolbar-row class="bg-white justify-content-between">
 
     <div>
     <a class="list-itm" routerLink="./dashboard" routerLinkActive="active">DashBoard</a>
@@ -84,42 +84,72 @@
         </div>
    
 
-  </mat-toolbar-row>
+  </mat-toolbar-row> -->
 
 
-  <!-- <mat-toolbar-row >
+ <mat-toolbar-row class="bg-white justify-content-between" >
         
-        <span *ngFor="let item of menuList; let i = index">
-          <a *ngIf="item.haveSubMenu == 'No'" class="list-itm" routerLink="./{{item.pageLink}}" routerLinkActive="active">
-            {{ item.menuTitle }}
-          </a>
+        <div>
+          <span *ngFor="let item of menuList; let i = index">
+            <a  *ngIf="item.isParentMenu == false" class="list-itm" routerLink="/{{item.moduleLink}}/{{item.menuLink}}" routerLinkActive="active">
+              {{ item.menuTitle }}
+            </a>
+          </span>
+    
+          
+    
+         
+    
+    
+    
+    
+          <span *ngFor="let item of menuList; let i = index">
+            <div *ngIf="item.isParentMenu == true" class="dropdown cursorPointer ">
+    
+              <a class="list-itm" >{{ item.menuTitle }}<mat-icon class="sideicon mb-1">arrow_drop_down</mat-icon></a>
+    
+              <div class="dropdown-content" >
+    
+                <span *ngFor="let row of menuList; let i = index">
+                  <a *ngIf="item.menuTitle == row.subMenuHead  " class="list-itm" routerLink="/{{item.moduleLink}}/{{item.menuLink}}" routerLinkActive="active">{{row.menuTitle}}</a>
+                </span>
+         
+              </div>
+          </div>
         </span>
   
-        
-  
-       
-  
-  
-  
-  
-        <span *ngFor="let item of menuList; let i = index">
-          <div *ngIf="item.haveSubMenu == 'Yes'" class="dropdown cursorPointer ">
-  
-            <a class="list-itm" >{{ item.menuTitle }}<mat-icon class="sideicon mb-1">arrow_drop_down</mat-icon></a>
-  
-            <div class="dropdown-content" >
-  
-              <span *ngFor="let row of menuList; let i = index">
-                <a *ngIf="item.menuTitle == row.subMenuHead  " class="list-itm" routerLink="./{{row.pageLink}}" routerLinkActive="active">{{row.subMenuTitle}}</a>
-              </span>
-       
-            </div>
         </div>
-      </span>
+
+          <div class="d-flex bg-white shadow justify-content-between" style="min-width: 120px;max-width: 500px; height: 40px; font-size: 15px; font-family: Arial, Helvetica, sans-serif; border-radius: 20px;" >
+          <p> </p>
+
+          <p class="mt-1 pe-1 ps-1" >
+              {{ UserName }}
+          </p>
+          <button mat-mini-fab class="bg-success"  [matMenuTriggerFor]="userMenu"
+              aria-label="">
+              <mat-icon>person</mat-icon>
+          </button>
+          <mat-menu #userMenu="matMenu">
+              <button mat-menu-item (click)="logout()">
+                  <mat-icon>exit_to_app</mat-icon>
+                  <span>Log out</span>
+              </button> 
+              <button mat-menu-item  (click)="changePassword()">
+                <mat-icon>lock</mat-icon>
+                <span>Change Password</span>
+            </button>
+            <button mat-menu-item (click)="changePin()">
+              <mat-icon>vpn_key</mat-icon>
+              <span>Change Pin</span>
+          </button></mat-menu>
+              
+        </div>
+   
   
   
       
   
-      </mat-toolbar-row>  -->
+      </mat-toolbar-row>  
 
 </mat-toolbar>

@@ -42,7 +42,7 @@ export class ChangePasswordComponent implements OnInit{
       this.http.post(environment.mainApi+'user/changepassword',{
         Password:this.password,
         PinCode: this.pinCode,
-        UserID: 1
+        UserID: this.global.getUserID()
       }).subscribe(
         (Response:any)=>{
           if(Response.msg == 'Data Updated Successfully'){

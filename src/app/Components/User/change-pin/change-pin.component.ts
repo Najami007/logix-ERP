@@ -44,7 +44,7 @@ export class ChangePINComponent implements OnInit {
       this.http.post(environment.mainApi+'user/updatepin',{
         OldPin: this.oldPin,
         PinCode: this.newPin,
-        UserID: 1
+        UserID: this.global.getUserID()
       }).subscribe(
         (Response:any)=>{
           if(Response.msg == 'Data Updated Successfully'){

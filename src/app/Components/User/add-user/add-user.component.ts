@@ -117,8 +117,10 @@ export class AddUserComponent implements OnInit {
 
         this.dialogue.open(PincodeComponent,{
           width:"30%",
-        }).afterClosed().subscribe(val=>{         
-            this.updateUser(val);  
+        }).afterClosed().subscribe(pin=>{         
+            if(pin != ''){
+              this.updateUser(pin);  
+            }
           
         })
         
@@ -138,7 +140,7 @@ export class AddUserComponent implements OnInit {
       LoginName: this.loginName,
       Password: this.password,
       RoleID: this.RoleID,
-      UserID: 1
+      UserID: this.global.getUserID()
     }).subscribe(
       (Response:any)=>{
         if(Response.msg == 'Data Saved Successfully'){
@@ -170,7 +172,7 @@ export class AddUserComponent implements OnInit {
       LoginName: this.loginName,
       RoleID: this.RoleID,
       
-      reqUserID: 1
+      reqUserID: this.global.getUserID()
     }).subscribe(
       (Response:any)=>{
         if(Response.msg == 'Data Updated Successfully'){
@@ -231,7 +233,7 @@ export class AddUserComponent implements OnInit {
         this.http.post(environment.mainApi+'user/deleteuser',{
         PinCode: pin,
         UserID: row.userID,
-        reqUserID: 1 , // this.global.getUserID()
+        reqUserID: this.global.getUserID()
         }).subscribe(
           (Response:any)=>{
             if(Response.msg == 'Data Deleted Successfully'){
@@ -270,7 +272,7 @@ export class AddUserComponent implements OnInit {
         this.http.post(environment.mainApi+'user/blockuser',{
           PinCode: pin,
           TempBlock:status,
-          reqUserID: 1, //this.global.getUserID(),
+          reqUserID: this.global.getUserID(),
           UserID: row.userID,
         }).subscribe(
           (Response:any)=>{
@@ -320,7 +322,7 @@ export class AddUserComponent implements OnInit {
             this.app.startLoaderDark();
           this.http.post(environment.mainApi+'user/resetpin',{
             PinCode: pin,
-            reqUserID:1 , // this.global.getUserID(),
+            reqUserID:this.global.getUserID(),
             UserID: row.userID,
           }).subscribe(
             (Response:any)=>{
