@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
+import { TopNavBarComponent } from '../top-nav-bar/top-nav-bar.component';
 
 @Component({
   selector: 'app-header',
@@ -19,6 +20,7 @@ export class HeaderComponent implements OnInit {
     private globalData : GlobalDataModule,
     private route:Router,
     private http:HttpClient,
+  
     
     ) { 
     
@@ -50,17 +52,20 @@ export class HeaderComponent implements OnInit {
 
  getModules(){
   this.http.get(environment.mainApi+'user/getusermodule?userid='+this.globalData.getUserID()).subscribe(
-    (Response)=>{
+    (Response:any)=>{
       this.moduleList = Response;
-      // console.log(Response);
+     
     }
   )
 }
 
-  setMenu(moduleID: any) {
+  setMenu(item: any) {
 
     this.route.navigate(['home']);
-    localStorage.setItem('mid',JSON.stringify(moduleID));
+    localStorage.setItem('mid',JSON.stringify(item.moduleID));
+    this.globalData.setMenuItem(item.moduleID);
+    // window.location.reload();
+    
 
   }
 

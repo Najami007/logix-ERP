@@ -7,6 +7,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { environment } from 'src/environments/environment.development';
 import { ChangePasswordComponent } from '../../User/change-password/change-password.component';
 import { ChangePINComponent } from '../../User/change-pin/change-pin.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-top-nav-bar',
@@ -14,6 +15,10 @@ import { ChangePINComponent } from '../../User/change-pin/change-pin.component';
   styleUrls: ['./top-nav-bar.component.scss']
 })
 export class TopNavBarComponent implements OnInit{
+  clickEventSubscription: Subscription;
+
+    public  menuList?:any = [];
+    moduleID?: string | null;  
 
   constructor(private globalData:GlobalDataModule,
     private msg:NotificationService,
@@ -21,27 +26,46 @@ export class TopNavBarComponent implements OnInit{
     private route:Router,
     private dialogue:MatDialog
     ){
+
+      this.clickEventSubscription = this.globalData
+      .getMenuItem()
+      .subscribe((value: any) => {
+        this.moduleID = value;
+        this.getMenu();
+       
+      });
   
   }
   
     ngOnInit(): void {
-      this.getMenu();
+      this.moduleID = localStorage.getItem('mid');
       this.UserName = this.globalData.getUserName();
+      this.getMenu();
 
     }
     UserName:any = 'abc';
   
-      menuList:any;
+ 
     
    
   
     getMenu(){
-      this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
-        (Response:any)=>{
-         this.menuList = Response;
-         console.log(Response);
-        }
-      )
+
+      if (
+        this.moduleID != null &&
+        (typeof this.moduleID == 'string' || typeof this.moduleID == 'number')
+      ){
+
+        this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.moduleID).subscribe(
+          (Response:any)=>{
+           this.menuList = Response;
+          //  console.log(Response);
+          }
+        )
+
+      }
+
+      
     }
 
 

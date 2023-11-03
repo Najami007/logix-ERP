@@ -25,11 +25,15 @@ import * as b64 from 'base64-js/index.js';
 export class GlobalDataModule  implements OnInit {
 
 
+  private subject = new Subject<any>();
+
+
 
   paginationDefaultTalbeSize = 50;
   paginationTableSizes : any = [10,25,50,100];
 
-  public Logo = '..';
+  
+  public Logo = '../assets/Images/logo.png';
   public Logo1 = '..';
 
   public CompanyName = 'Garison Engineer';
@@ -93,6 +97,14 @@ export class GlobalDataModule  implements OnInit {
  
   }
 
+
+  setMenuItem(item:any){
+    this.subject.next(item);
+  }
+
+  getMenuItem(): Observable<any>{
+    return this.subject.asObservable();
+  }
 
   //////////////////////// will provide logged in userID
   getUserID(){
@@ -176,9 +188,22 @@ getHours(date1:any, Time1:any, date2:any, Time2:any) {
         localStorage.setItem('curVal',JSON.stringify({value}));
 
        if(value.msg == 'Logged in Successfully' ){
+
+
+
+        
+          this.http.get(environment.mainApi+'user/getusermodule?userid='+parseInt(atob(atob(value._culId)))).subscribe(
+            (Response:any)=>{
+             
+              localStorage.setItem('mid',JSON.stringify(Response[0].moduleID));
+              this.setMenuItem(Response[0].moduleID);
+              // console.log(Response);
+            }
+          )
+      
       
         this.rout.navigate(["home"]);
-          $('.loaderDark').fadeOut(500);
+        $('.loaderDark').fadeOut(500);
         
        
        }else{

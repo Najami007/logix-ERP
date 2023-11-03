@@ -25,6 +25,12 @@ loadChildren:()=>
 import('./Components/User/user.module').then((m)=>m.UserModule),
 
 },
+{path:'cmp', 
+component:MainComponent,
+loadChildren:()=> 
+import('./Components/Company/company.module').then((m)=>m.CompanyModule),
+
+},
 { path: '**', redirectTo: 'login', pathMatch: 'full' },
  
 
