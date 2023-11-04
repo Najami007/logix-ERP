@@ -1,0 +1,108 @@
+<div  class="d-flex bg-gray h-100">
+
+    <div class="col-lg-4 bg-white p-5 ">
+        <h2 class="border-bottom">Section Detail's</h2>
+        
+
+        <mat-form-field class="w-100 pe-1" appearance="outline">
+            <mat-label>Country</mat-label>
+          <mat-select [(ngModel)]="countryID">
+            <mat-option><ngx-mat-select-search [(ngModel)]="countrySearch"
+                [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                name="search"></ngx-mat-select-search></mat-option>
+            <mat-option *ngFor="let item of countryList |filter:countrySearch" [value]="item.countryID">{{item.countryName}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>City Name</mat-label>
+            <input matInput type="text" [(ngModel)]="cityName" >
+        </mat-form-field>
+
+
+    
+
+        <div class="row justify-content-around">
+            <button class="btn btn-success w-25" (click)="addCity()">{{btnType}}</button>
+            <button class="btn btn-danger w-25" (click)="reset()">Reset</button>
+        </div>
+        
+
+    </div>
+
+    <div class="col-lg-8 p-4">
+
+
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label class="ps-5">Search.....</mat-label>
+            <input [(ngModel)]="txtSearch" matInput type="search" class="text-secondary">
+            <mat-icon matPrefix class="text-secondary">search</mat-icon>
+        </mat-form-field>
+
+
+        <div>
+            <table class="table-logix2">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Title</th>
+                        <th>Country</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of citiesData | filter:txtSearch index as index">
+                        <td>{{index+1}}</td>
+                        <td>{{item.cityName}}</td>
+                        <td>{{item.countryName}}</td>
+                        <td ><button mat-mini-fab class="bg-success text-white" (click)="editCity(item)"><mat-icon>edit</mat-icon></button></td>
+                        <td ><button mat-mini-fab color="warn" (click)="deleteCity(item)"><mat-icon>delete</mat-icon></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- <div class="bg-white p-5">
+    
+    <div class="text-center border w-50  bg-light container-fluid pt-5">
+        <div class="text-end " ><button style="background: transparent;border: none;" class=" border-bottom" (click)="OpenDialogue()"><mat-icon class="pt-1">
+            location_city</mat-icon>  ADD NEW City</button></div>
+            <br>
+        <table class="table table-hover h-100"> 
+            <thead>
+                <th>S#</th>
+                <th>City Name</th>
+                <th>Country Name</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </thead>
+            <tbody >
+                <tr *ngFor="let item of citiesData index as index" >
+                    <td>{{index+1}}</td>
+                    <td>{{item.cityName}}</td>
+                    <td>{{item.countryName}}</td>
+                    <td><mat-icon class="text-success cursorPointer" (click)="updateCity(item)">edit</mat-icon></td>
+                    <td><mat-icon class="text-danger cursorPointer" (click)="deleteCity(item)">delete</mat-icon></td>
+                </tr>
+            </tbody>
+        </table>
+    
+    </div>
+
+</div>
+ -->

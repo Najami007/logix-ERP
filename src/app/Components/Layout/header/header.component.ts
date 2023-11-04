@@ -54,7 +54,7 @@ export class HeaderComponent implements OnInit {
   this.http.get(environment.mainApi+'user/getusermodule?userid='+this.globalData.getUserID()).subscribe(
     (Response:any)=>{
       this.moduleList = Response;
-     
+    //  console.log(Response);
     }
   )
 }

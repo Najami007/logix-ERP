@@ -10,12 +10,27 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { ChartModule } from 'angular-highcharts';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { TextMaskModule } from 'angular2-text-mask';
+import { PartnersComponent } from './partners/partners.component';
+import { CityComponent } from './settings/city/city.component';
+import { SettingsComponent } from './settings/settings.component';
+import { AddcityComponent } from './settings/city/addcity/addcity.component';
+import { CountryComponent } from './settings/country/country.component';
+import { AddCountryComponent } from './settings/country/add-country/add-country.component';
+import { DepartmentComponent } from './department/department.component';
+import { SectionComponent } from './section/section.component';
+import { AddDepartmentComponent } from './department/add-department/add-department.component';
+
 
 
 
 export const companyRoutes: Route[] = [
 
   {path:'cmpprof', component:CompanyProfileComponent,  },
+  {path:'prtnr', component:PartnersComponent,  },
+  {path:'city', component:CityComponent,  },
+  {path:'cntry', component:CountryComponent,  },
+  {path:'adep', component:DepartmentComponent,  },
+  {path:'asec', component:SectionComponent,  },
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
 
@@ -25,7 +40,17 @@ export const companyRoutes: Route[] = [
 
 @NgModule({
   declarations: [
-    CompanyProfileComponent
+    CompanyProfileComponent,
+    PartnersComponent,
+    CityComponent,
+    SettingsComponent,
+    AddcityComponent,
+    CountryComponent,
+    AddCountryComponent,
+    DepartmentComponent,
+    SectionComponent,
+    AddDepartmentComponent,
+  
   ],
   imports: [
     CommonModule,

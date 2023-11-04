@@ -33,7 +33,7 @@
         <mat-menu #menu="matMenu" >
             <div *ngFor="let item of moduleList">
                 <button mat-menu-item (click)="setMenu(item)">
-                    <mat-icon>{{item.icon}}</mat-icon>
+                    <mat-icon>{{item.moduleIcon}}</mat-icon>
                     <span>{{item.moduleTitle}}</span>
                 </button>
             </div>

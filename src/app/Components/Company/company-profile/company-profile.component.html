@@ -1,5 +1,8 @@
 <div class="d-flex">
 
+
+  <!----------- Column 1 Company Info Area-->
+
   <div class="col-lg-4 p-4 border bg-white" style="min-height: 600px;">
     <h2 class="border-bottom">Company INFO</h2>
     <mat-form-field class="col-lg-6 p-1" appearance="outline">
@@ -60,27 +63,36 @@
 
 
 
-    <div class="text-center">
+    <div class="d-flex justify-content-around">
       <button class="w-25 text-white bg-success" (click)="save()" mat-raised-button>{{btnType}}</button>
+      <button class="w-25 text-white bg-danger" (click)="reset()" mat-raised-button>Reset</button>
     </div>
 
   </div>
 
+
+  <!----------- Column 2 LOGO Section ------------->
   <div class="col-lg-4 border p-4" style="background-color: rgb(202, 238, 240); min-height: 600px;">
     <h2 class="border-bottom">LOGO's</h2>
 
+     <!----------- First Logo ------------->
 
     <span class="w-100 row p-2 d-flex justify-content-center">
+      <!----------- Logo Box ------------->
       <div class="avatar-upload col-lg-8 justify-content-center">
         <div class="avatar-edit">
           <input type="file" id="logo1" accept=".png" #fileInput1 (change)="onLogo1Selected($event)" />
           <label for="logo1"><mat-icon class=" mt-1">edit</mat-icon></label>
+        </div>
+        <div class="avatar-del">
+          <label  (click)="CompanyLogo1 = ''" ><mat-icon class=" mt-1">delete</mat-icon></label>
         </div>
         <div class="avatar-preview">
           <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + CompanyLogo1 + ')' }"></div>
         </div>
       </div>
 
+      <!----------- Height And Width Area ------------->
       <div class="row col-lg-4">
 
         <mat-form-field class="w-100 p-2">
@@ -97,16 +109,22 @@
     </span>
 
     <span class="w-100 row p-2 d-flex justify-content-center">
+       <!----------- Logo Box ------------->
       <div class="avatar-upload col-lg-8 justify-content-center">
         <div class="avatar-edit">
           <input type="file" id="logo2" accept=".png" #fileInput2 (change)="onLogo2Selected($event)" />
           <label for="logo2"><mat-icon class=" mt-1">edit</mat-icon></label>
         </div>
+        <div class="avatar-del">
+          <label  (click)="CompanyLogo2 = ''" ><mat-icon class=" mt-1">delete</mat-icon></label>
+        </div>
         <div class="avatar-preview">
           <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + CompanyLogo2 + ')' }"></div>
         </div>
+        
       </div>
-
+   
+      <!----------- Height And Width Area ------------->
       <div class="row col-lg-4">
 
         <mat-form-field class="w-100 p-2">
@@ -123,16 +141,21 @@
     </span>
 
     <span class="w-100 row p-2 d-flex justify-content-center">
+          <!----------- Logo Box ------------->
       <div class="avatar-upload col-lg-8 justify-content-center">
         <div class="avatar-edit">
           <input type="file" id="logo3" accept=".png" #fileInput3 (change)="onLogo3Selected($event)" />
           <label for="logo3"><mat-icon class=" mt-1">edit</mat-icon></label>
+        </div>
+        <div class="avatar-del">
+          <label  (click)="CompanyLogo3 = ''" ><mat-icon class=" mt-1">delete</mat-icon></label>
         </div>
         <div class="avatar-preview">
           <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + CompanyLogo3 + ')' }"></div>
         </div>
       </div>
 
+      <!----------- Height And Width Area ------------->
       <div class="row col-lg-4">
 
         <mat-form-field class="w-100 p-2">
@@ -152,30 +175,43 @@
 
   </div>
 
+
+   <!----------- Column 3 Saved Data Section ------------->
+
   <div class="col-lg-4 row border p-4 justify-content-center"
     style="background-color: rgb(243, 248, 248); min-height: 600px;">
 
 
     <!------------  Third Colomn Saved Company LOGO Area-->
-    <div class="d-flex justify-content-center">
-      <div class="avatar-upload w-25">
+    <div class="d-flex justify-content-start">
+      <div class="avatar-upload col-lg-4">
 
         <div class="avatar-preview">
           <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + logo1  + ')' }"></div>
         </div>
+        <div class="text-center">
+          <mat-label >H: {{companyProfile[0].logo1Height || 0}} W: {{companyProfile[0].logo1Width || 0}}</mat-label>
+        </div>
       </div>
 
-      <div class="avatar-upload w-25">
+
+      <div class="avatar-upload col-lg-4">
 
         <div class="avatar-preview">
           <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + logo2 +  ')' }"></div>
         </div>
+        <div class="text-center">
+          <mat-label >H: {{companyProfile[0].logo2Height || 0}} W: {{companyProfile[0].logo2Width || 0}}</mat-label>
+        </div>
       </div>
 
-      <div class="avatar-upload w-25">
+      <div class="avatar-upload col-lg-4">
 
         <div class="avatar-preview">
           <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' +logo3  + ')' }"></div>
+        </div>
+        <div class="text-center">
+          <mat-label >H: {{companyProfile[0].logo3Height || 0}} W: {{companyProfile[0].logo3Width || 0}}</mat-label>
         </div>
       </div>
 
@@ -224,14 +260,48 @@
               <td>{{item.companyPhone || "057-0000000"}}</td>
             </tr>
 
+
+            <tr>
+              <td><strong>NTN No.</strong></td>
+              <td>{{item.ntn }}</td>
+            </tr>
+
+            <tr>
+              <td><strong>STRN No.</strong></td>
+              <td>{{item.strn }}</td>
+            </tr>
+            
+            <tr>
+              <td><strong>Registration Date</strong></td>
+              <td>{{item.registrationDate |date:'dd-MM-yyyy' }}</td>
+            </tr>
+
+            <tr>
+              <td><strong>Registration No</strong></td>
+              <td>{{item.registrationNo }}</td>
+            </tr>
+
+            <tr>
+              <td><strong>Registration Doc</strong></td>
+              <!-- <td class="">{{item.registrationDoc}}</td> -->
+              <td  class="cursorPointer text-primary">
+              <a *ngIf="item.registrationDoc != null  " (click)="downloadRegDoc(item.registrationDoc)">Download</a>
+            </td>
+            </tr>
+
           </tbody>
         </table>
       </mat-card-content>
     </mat-card>
 
-    <div class="text-center p-2">
+
+    <!------------  Third Colomn Saved Company Buttons ----->
+
+    <div class="pt-2 row justify-content-between">
       <button mat-raised-button (click)="editProfile(companyProfile[0])"
-        class="bg-success text-white w-25">Edit</button>
+        class="bg-success text-white col-lg-4">Edit</button>
+        <button mat-raised-button (click)="deleteProfile(companyProfile[0])"
+        class="bg-danger text-white  col-lg-4 ">Delete</button>
     </div>
 
   </div>

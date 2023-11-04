@@ -1,0 +1,93 @@
+<div  class="d-flex bg-gray h-100">
+
+    <div class="col-lg-4 bg-white p-5 ">
+        <h2 class="border-bottom">Partner's Detail</h2>
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Partner Name</mat-label>
+            <input matInput type="text" [(ngModel)]="partnerName" >
+        </mat-form-field>
+
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>CNIC</mat-label>
+            <input matInput type="text" [(ngModel)]="partnerCNIC" [textMask]="{mask:cnicMask}" >
+        </mat-form-field>
+
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Mobile No</mat-label>
+            <input matInput type="text" [(ngModel)]="partnerMobile" [textMask]="{mask:mobileMask}" >
+        </mat-form-field>
+
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Email Address</mat-label>
+            <input matInput type="text" [(ngModel)]="partnerEmail"  >
+        </mat-form-field>
+
+        <mat-form-field class="col-lg-8 pe-1" appearance="outline">
+            <mat-label>City</mat-label>
+          <mat-select [(ngModel)]="cityID">
+            <mat-option><ngx-mat-select-search [(ngModel)]="citySearch"
+                [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                name="search"></ngx-mat-select-search></mat-option>
+            <mat-option *ngFor="let item of citiesList |filter:citySearch" [value]="item.cityID">{{item.cityName}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        
+        <button mat-raised-button color="primary" class="col-lg-4 "  style="height: 55px;" (click)="addCity()"><mat-icon>add</mat-icon></button>
+
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Address</mat-label>
+            <textarea matInput type="text" [(ngModel)]="partnerAddress"  ></textarea>
+        </mat-form-field>
+
+        <div class="row justify-content-around">
+            <button class="btn btn-success w-25" (click)="save()">{{btnType}}</button>
+            <button class="btn btn-danger w-25" (click)="reset()">Reset</button>
+        </div>
+        
+
+    </div>
+
+    <div class="col-lg-8 p-4">
+
+
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label class="ps-5">Search.....</mat-label>
+            <input [(ngModel)]="txtSearch" matInput type="search" class="text-secondary">
+            <mat-icon matPrefix class="text-secondary">search</mat-icon>
+        </mat-form-field>
+
+
+        <div>
+            <table class="table-logix2">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Name</th>
+                        <th>CNIC</th>
+                        <th>Mobile</th>
+                        <th>Address</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of partnersList | filter:txtSearch index as index">
+                        <td>{{index+1}}</td>
+                        <td>{{item.partnerName}}</td>
+                        <td>{{item.partnerCNIC}}</td>
+                        <td>{{item.partnerMobileNo}}</td>
+                        <td>{{item.partnerAddress}}</td>
+                        <td ><button mat-mini-fab class="bg-success text-white" (click)="editPartner(item)"><mat-icon>edit</mat-icon></button></td>
+                        <td ><button mat-mini-fab color="warn" (click)="deletePartner(item)"><mat-icon>delete</mat-icon></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    
+
+
+    </div>
+
+
+</div>

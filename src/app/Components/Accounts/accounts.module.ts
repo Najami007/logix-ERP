@@ -43,7 +43,7 @@ export const accountRountes: Route[] = [
     {path:'coa', component:COAComponent,  },
     {path:'voucher', component:VoucherComponent,  },
     {path:'bdgtng', component:BudgettingComponent,  },
-    {path:'settings', component:SettingsComponent,  },
+    {path:'setting', component:SettingsComponent,  },
     {path:'dtran', component:DayTransactionComponent,  },
     {path:'spvn', component:VoucherSupervisionComponent,  },
     {path:'ldgrrpt', component:LedgerComponent,  },

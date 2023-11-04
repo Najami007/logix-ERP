@@ -161,8 +161,49 @@ getHours(date1:any, Time1:any, date2:any, Time2:any) {
 }
 
 
+/////////////////////////////////////////////////////
+
+  deleteConfirmation(api:any):any{
+    Swal.fire({
+      title:'Alert!',
+      text:'Confirm to Delete the Data',
+      position:'center',
+      icon:'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirm',
+    }).then((result)=>{
+      
+      if(result.isConfirmed){
+        api;
+      }
+    });
+  }
 
 
+  /////////////////////////////////////////////////////////////////////////////////
+
+
+  isSeparator = (value: string): boolean => value === '/'|| value === '\\' || value === ':';
+ getExtension = (path: string): string => {
+  for (let i = path.length - 1; i > -1; --i) {
+      const value = path[i];
+      if (value === '.') {
+          if (i > 1) {
+              if (this.isSeparator(path[i - 1])) {
+                  return '';
+              }
+              return path.substring(i + 1);
+          }
+          return '';
+      }
+      if (this.isSeparator(value)) {
+          return '';
+      }
+  }
+  return '';
+};
 
 
 

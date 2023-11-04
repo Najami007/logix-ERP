@@ -19,12 +19,15 @@
   .avatar-upload .avatar-edit {
     position: absolute;
     // right: 12px;
+    left: 0;
     z-index: 1;
-    top: 10px;
+    top: 2px;
   }
   .avatar-upload .avatar-edit input {
     display: none;
   }
+
+ 
   .avatar-upload .avatar-edit input + label {
     display: inline-block;
     width: 34px;
@@ -49,6 +52,47 @@
     border-color: #d6d6d6;
   }
   .avatar-upload .avatar-edit input + label:after {
+    // content: "\f040";
+    font-family: 'FontAwesome';
+    color: #757575;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    margin: auto;
+  }
+  .avatar-upload .avatar-del {
+    position: absolute;
+    right: 20px;
+    z-index: 1;
+    // top: 10px;
+    bottom: 30px;
+  }
+  .avatar-upload .avatar-del  label {
+    display: inline-block;
+    width: 34px;
+    height: 34px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0;
+    border-radius: 100%;
+    background: #FFFFFF;
+    border: 1px solid transparent;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    font-weight: normal;
+    transition: all 0.2s ease-in-out;
+    mat-icon{
+      color: rgb(254, 3, 3);
+    }
+  }
+  .avatar-upload .avatar-del  label:hover {
+    background: #f1f1f1;
+    border-color: #d6d6d6;
+  }
+  .avatar-upload .avatar-del  label:after {
     // content: "\f040";
     font-family: 'FontAwesome';
     color: #757575;
