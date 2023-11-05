@@ -9,6 +9,8 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { formatDate } from '@angular/common';
 import { CircleProgressOptions } from 'ng-circle-progress';
 import { AppComponent } from 'src/app/app.component';
+import { Subscription } from 'rxjs';
+import { TopNavBarComponent } from 'src/app/Components/Layout/top-nav-bar/top-nav-bar.component';
 
 @Component({
   selector: 'app-ledger',
@@ -17,13 +19,14 @@ import { AppComponent } from 'src/app/app.component';
 })
 export class LedgerComponent {
 
+
   date = new FormControl(new Date());
 
   CoaList:any;
 
   logo:any;
   logo1:any;
-  CompanyName:any;
+  CompanyName:any = 'abc';
   CompanyName2:any;
    companyAddress :any;
    companyPhone :any;
@@ -34,24 +37,42 @@ export class LedgerComponent {
   constructor( private globalData: GlobalDataModule,
     private http:HttpClient,
     private msg:NotificationService,
-    private app:AppComponent
+    private app:AppComponent,
+    
 
-    ) { }
+    ) {
+      
+        this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+          (Response:any)=>{
+            this.companyProfile = Response;
+            //console.log(Response)  
+            
+          }
+        )
+      
+    
+    }
 
   ngOnInit(): void {
     // this.getTotal();
     this.app.startLoaderDark();
     this.globalData.setHeaderTitle('Ledger');
-    this.logo = this.globalData.Logo;
-    this.logo1 = this.globalData.Logo1;
-    this.CompanyName = this.globalData.CompanyName;
-    this.CompanyName2 = this.globalData.CompanyName2;
-    this.companyAddress = this.globalData.Address;
-    this.companyPhone = this.globalData.Phone;
-    this.companyMobileno = this.globalData.mobileNo;
-    this.companyEmail = this.globalData.Email;
+    // this.logo = this.globalData.Logo;
+    // this.logo1 = this.globalData.Logo1;
+    // this.CompanyName = this.globalData.CompanyName;
+    // this.CompanyName2 = this.globalData.CompanyName2;
+    // this.companyAddress = this.globalData.Address;
+    // this.companyPhone = this.globalData.Phone;
+    // this.companyMobileno = this.globalData.mobileNo;
+    // this.companyEmail = this.globalData.Email;
+
+    
+   
     this.getCoa();
+
+   
   }
+  companyProfile:any = [];
 
   coaID:any;
   startDate = new Date();

@@ -2,9 +2,9 @@
 
     <div class="text-center  mt-3 d-flex justify-content-between p-3"><p class="dialogueTitle">ADD CITY NAME</p><mat-icon class="cursorPointer" (click)="closeDialogue()">cancel</mat-icon></div>
 
-    <div class="text-center container-fluid " >
+    <div class="text-center row container-fluid " >
 
-        <mat-form-field class="col-lg-10" appearance="outline">
+        <mat-form-field class="col-lg-10 pe-1" appearance="outline">
             <mat-label>Select Country</mat-label>
             <mat-select [(ngModel)]="countryID">
                 <mat-option><ngx-mat-select-search [(ngModel)]="countrySearch"
@@ -15,7 +15,7 @@
            
             </mat-form-field>
          
-            <button class="ms-1 col-lg-4 btn btn-primary btn-rpt" (click)="addCountry()"><mat-icon>add</mat-icon></button>
+            <button class="col-lg-2 btn btn-primary" style="height: 55px;" (click)="addCountry()"><mat-icon>add</mat-icon></button>
 
 
         <mat-form-field class="w-100" appearance="outline">

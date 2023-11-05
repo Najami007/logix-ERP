@@ -74,7 +74,12 @@
   color: rgb(6, 6, 6) !important;
   /*background-color: rgb(255, 80, 36);
   border-radius: 25px;*/
-  border-bottom: 1px solid rgb(204, 202, 202);
+  
+  border-bottom: 1px solid rgb(204, 202, 202) ;
+  border-bottom: 1px dotted;
+  // border-radius: 10px;
+  // background-color: rgb(255, 254, 254) !important;
+  // box-shadow: 1px 1px 2px rgb(221, 212, 212),;
   font-weight: bold;
   /*
   ::ng-deep {

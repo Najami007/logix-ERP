@@ -288,7 +288,7 @@ export class UserRoleComponent implements OnInit {
 
 
   editRole(row:any){
-    this.getMenuList();
+    // this.getMenuList();
     this.selectedModuleMenuList = [];
     this.TempModuleList = [];
 

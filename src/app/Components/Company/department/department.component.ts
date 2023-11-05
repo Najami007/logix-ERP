@@ -172,9 +172,19 @@ export class DepartmentComponent implements OnInit{
     }).afterClosed().subscribe(pin=>{
       if(pin != ''){
 
-        this.app.startLoaderDark();
 
-        this.globaldata.deleteConfirmation(
+        Swal.fire({
+          title:'Alert!',
+          text:'Confirm to Delete the Data',
+          position:'center',
+          icon:'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Confirm',
+        }).then((result)=>{
+          if(result.isConfirmed){
+        this.app.startLoaderDark();    
           this.http.post(environment.mainApi+'cmp/deletedepartment',{
             PinCode:pin,
             DepartmentID:row.departmentID,
@@ -192,7 +202,9 @@ export class DepartmentComponent implements OnInit{
               }
             }
           )
-        )
+
+          }})
+        
 
         
       }

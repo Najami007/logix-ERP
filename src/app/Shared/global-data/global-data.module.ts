@@ -1,12 +1,12 @@
 import { NgModule, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { Subject } from 'rxjs/internal/Subject';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.development';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { NotificationService } from '../service/notification.service';
 import { userInterface } from '../Interfaces/login-user-interface';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, retry } from 'rxjs';
 import Swal from 'sweetalert2';
 import * as $ from 'jquery';
 import * as b64 from 'base64-js/index.js';
@@ -25,7 +25,8 @@ import * as b64 from 'base64-js/index.js';
 export class GlobalDataModule  implements OnInit {
 
 
-  private subject = new Subject<any>();
+  public subject = new Subject<any>();
+  public comapnayProfile = new Subject<any>();
 
 
 
@@ -33,15 +34,22 @@ export class GlobalDataModule  implements OnInit {
   paginationTableSizes : any = [10,25,50,100];
 
   
-  public Logo = '../assets/Images/logo.png';
-  public Logo1 = '..';
+  public Logo = '';
+  public Logo1 = '';
+  public logo1Height = '';
+  public logo1Width = '';
+  public logo2height = '';
+  public logo2Width = '';
 
-  public CompanyName = 'Garison Engineer';
+
+  public CompanyName = '';
   public CompanyName2 =  '';
   public Address = '';
   public Phone = '';
   public mobileNo = '';
   public Email = ''
+  public NTN = '';
+  public STRN ='';  
 
   // public  CompanyName = '';
   // public CompanyName2 =  '';
@@ -72,6 +80,8 @@ export class GlobalDataModule  implements OnInit {
 
 
   ngOnInit(): void {
+    this.getCompany();
+
    
   }
 
@@ -82,12 +92,6 @@ export class GlobalDataModule  implements OnInit {
     user_Name$ = this._userNameSource.asObservable();
  
 
-
-  public get currentUserValue(): userInterface {
-
-    
-    return this.currentUserSubject.value;
-  }
 
 
   getModuleID(){
@@ -104,6 +108,15 @@ export class GlobalDataModule  implements OnInit {
 
   getMenuItem(): Observable<any>{
     return this.subject.asObservable();
+  }
+
+
+  setCompanyProfile(item:any){
+    this.comapnayProfile.next(item);
+  }
+
+  getCompanyProfile(): Observable<any>{
+    return this.comapnayProfile.asObservable();
   }
 
   //////////////////////// will provide logged in userID
@@ -161,25 +174,6 @@ getHours(date1:any, Time1:any, date2:any, Time2:any) {
 }
 
 
-/////////////////////////////////////////////////////
-
-  deleteConfirmation(api:any):any{
-    Swal.fire({
-      title:'Alert!',
-      text:'Confirm to Delete the Data',
-      position:'center',
-      icon:'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Confirm',
-    }).then((result)=>{
-      
-      if(result.isConfirmed){
-        api;
-      }
-    });
-  }
 
 
   /////////////////////////////////////////////////////////////////////////////////
@@ -207,6 +201,33 @@ getHours(date1:any, Time1:any, date2:any, Time2:any) {
 
 
 
+/////////////////////////////////////////////////////
+
+getCompany():any{
+  this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+    (Response:any)=>{
+
+      // return Response;
+      console.log(Response[0]);
+     this.Logo = Response[0].companyLogo1;
+     this.Logo1 = Response[0].companyLogo2;
+     this.CompanyName = Response[0].companyName;
+     this.Address = Response[0].companyAddress;
+     this.mobileNo = Response[0].companyMobile;
+     this.Phone = Response[0].companyPhone;
+     this.logo1Height = Response[0].logo1Height;
+     this.logo1Width  = Response[0].logo1Width;
+     this.logo2height  = Response[0].logo2Height;
+     this.logo2Width = Response[0].logo2Width;
+     
+
+
+
+      
+      
+    }
+  )
+}
 
 
 ///////////////////////////////////////////////////////////
@@ -241,6 +262,7 @@ getHours(date1:any, Time1:any, date2:any, Time2:any) {
               // console.log(Response);
             }
           )
+          this.getCompany();
       
       
         this.rout.navigate(["home"]);

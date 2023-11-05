@@ -197,9 +197,22 @@ export class PartnersComponent implements OnInit {
 
     }).afterClosed().subscribe(pin=>{
       if(pin != ''){
+
+
+        Swal.fire({
+          title:'Alert!',
+          text:'Confirm to Delete the Data',
+          position:'center',
+          icon:'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Confirm',
+        }).then((result)=>{
+          if(result.isConfirmed){
        
     this.app.startLoaderDark();
-    this.global.deleteConfirmation(
+    
   
     this.http.post(environment.mainApi+'cmp/deletepartner',{
       PartnerID:row.partnerID ,
@@ -219,8 +232,11 @@ export class PartnersComponent implements OnInit {
       (error:any)=>{
         this.app.stopLoaderDark();
       }
-    )
+    
    );
+
+
+    }})
   
 
 

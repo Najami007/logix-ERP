@@ -139,7 +139,7 @@ export class CityComponent implements OnInit{
       next:value=>{
     
         this.citiesData = value;
-        console.log(value);
+        //console.log(value);
       },
       error:error=>{
         console.log(error);

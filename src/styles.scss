@@ -22,6 +22,10 @@ body {
   // font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+.body{
+  padding-bottom: 25px;
+}
+
 
 
 
@@ -469,11 +473,19 @@ mat-toolbar {
 
 
 .h30px{
-  height: 30px;
+  height: 30px !important;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  mat-icon{
+    font-size: 15px;
+    margin-top: 8px;
+   
+  }
 }
 
 .w30px{
-  width: 30px;
+  width: 30px !important;
 }
 
 

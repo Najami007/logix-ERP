@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment.development';
   templateUrl: './trial-balance.component.html',
   styleUrls: ['./trial-balance.component.scss']
 })
-export class TrialBalanceComponent {
+export class TrialBalanceComponent implements OnInit {
 
 
   logo:any;
@@ -33,6 +33,7 @@ export class TrialBalanceComponent {
     ) { }
 
   ngOnInit(): void {
+    this.globalData.getCompany();
     this.globalData.setHeaderTitle('Trial Balance');
     this.logo = this.globalData.Logo;
     this.logo1 = this.globalData.Logo1;
@@ -174,6 +175,14 @@ this.TrialBalanceData = [];
 
 
   PrintTable() {
+    this.logo = this.globalData.Logo;
+    this.logo1 = this.globalData.Logo1;
+    this.CompanyName = this.globalData.CompanyName;
+    this.CompanyName2 = this.globalData.CompanyName2;
+    this.companyAddress = this.globalData.Address;
+    this.companyPhone = this.globalData.Phone;
+    this.companyMobileno = this.globalData.mobileNo;
+    this.companyEmail = this.globalData.Email;
   
     this.globalData.printData('#printReport');
   

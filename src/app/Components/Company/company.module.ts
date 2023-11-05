@@ -19,6 +19,7 @@ import { AddCountryComponent } from './settings/country/add-country/add-country.
 import { DepartmentComponent } from './department/department.component';
 import { SectionComponent } from './section/section.component';
 import { AddDepartmentComponent } from './department/add-department/add-department.component';
+import { ProjectComponent } from './project/project.component';
 
 
 
@@ -31,6 +32,7 @@ export const companyRoutes: Route[] = [
   {path:'cntry', component:CountryComponent,  },
   {path:'adep', component:DepartmentComponent,  },
   {path:'asec', component:SectionComponent,  },
+  {path:'proj', component:ProjectComponent,  },
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
 
@@ -50,6 +52,7 @@ export const companyRoutes: Route[] = [
     DepartmentComponent,
     SectionComponent,
     AddDepartmentComponent,
+    ProjectComponent,
   
   ],
   imports: [

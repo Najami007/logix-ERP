@@ -1,4 +1,4 @@
-<div class="bckgrnd bg-grey">
+<div class="bckgrnd bg-grey body">
     <div class="container-fluid p-2">
             <div class=" bg-grey container-fluid ">
 
@@ -44,22 +44,22 @@
 
             <!-------------------------    Top Logo Section -------------------->
            <div class="hide">
-            <div class="text-center  d-flex justify-content-between">
-                <span>
-                    <img src="{{logo}}" style="color: black;" alt="" srcset="" height="100" width="100">
+            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
                 </span>
                 <span >
                     
 
-                    <h1 class="companyName">{{CompanyName}}</h1>
+                    <h1 class="companyName">{{item.companyName}}</h1>
                     <p style="margin-top: -15px;" class="companyName2">{{CompanyName2}}</p>
 
                     <p class="rptTitle" style="margin-top:-25px">Ledger Report {{curCOATitle}}</p>
                     <p style="margin-top:-20px"><b>From:</b> {{startDate | date:'yyyy-MM-dd'}} <b>To:</b> {{EndDate | date:'yyyy-MM-dd'}}</p>
                   
                 </span>
-                <span>
-                    <img src="{{logo1}}" style="color: black;" alt="" srcset="" height="100" width="100">
+                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
                 </span>
         
         

@@ -41,9 +41,26 @@ export class TopNavBarComponent implements OnInit{
       this.moduleID = localStorage.getItem('mid');
       this.UserName = this.globalData.getUserName();
       this.getMenu();
+      this.getCompany();
 
     }
     UserName:any = 'abc';
+    companyProfile:any;
+    logo1:any;
+
+    ////////////////////////////////////////////////////////////////////////
+  getCompany(){
+    this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+      (Response:any)=>{
+        this.companyProfile = Response;
+        this.logo1 = this.companyProfile[0].companyLogo1; 
+        //console.log(Response);  
+        this.globalData.setCompanyProfile(Response[0]);    
+        
+      }
+    )
+  }
+
   
  
     
@@ -59,7 +76,7 @@ export class TopNavBarComponent implements OnInit{
         this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.moduleID).subscribe(
           (Response:any)=>{
            this.menuList = Response;
-          //  console.log(Response);
+           //console.log(Response);
           }
         )
 

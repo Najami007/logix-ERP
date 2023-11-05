@@ -7,6 +7,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-section',
@@ -171,8 +172,20 @@ export class SectionComponent implements OnInit {
     }).afterClosed().subscribe(pin=>{
       if(pin!= ''){
        
+        Swal.fire({
+          title:'Alert!',
+          text:'Confirm to Delete the Data',
+          position:'center',
+          icon:'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Confirm',
+        }).then((result)=>{
+          if(result.isConfirmed){
+
         this.app.startLoaderDark();
-        this.globaldata.deleteConfirmation(
+        
           this.http.post(environment.mainApi+'cmp/deletesection',{
             SectionID: row.sectionID,
            PinCode:pin,
@@ -192,7 +205,8 @@ export class SectionComponent implements OnInit {
               this.app.stopLoaderDark();
             }
           )
-        )
+          }})
+        
 
 
       }
