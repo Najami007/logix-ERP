@@ -1,13 +1,17 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
+import { GlobalDataModule } from '../global-data/global-data.module';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
 
-  constructor(private toastr :ToastrService ) { }
+  constructor(private toastr :ToastrService,private http:HttpClient,private route:Router ) { }
 
   success(message :any,title:any){
     this.toastr.success(message,title)
@@ -88,7 +92,7 @@ export class NotificationService {
   })
 
 
-////////////////////////////////////////////
+
 
 
 }

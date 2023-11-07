@@ -22,6 +22,7 @@ constructor( private route:Router,private global:GlobalDataModule){
 
   ngOnInit(){
     
+    this.global.getCompany();
     // if(localStorage.getItem('curVal') == null || localStorage.getItem('curVal') == '' ){
     //   this.route.navigate(['']);
     // }
@@ -47,6 +48,10 @@ constructor( private route:Router,private global:GlobalDataModule){
     //$(".btnLoader").hide(1000);
   }
 
+  appMenuList:any = [];
+
+  tstUserName: any = "Adnan";
   
+  public glbMenulist:any = [];
 
 }

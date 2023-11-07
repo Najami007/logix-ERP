@@ -11,6 +11,8 @@ import { CircleProgressOptions } from 'ng-circle-progress';
 import { AppComponent } from 'src/app/app.component';
 import { Subscription } from 'rxjs';
 import { TopNavBarComponent } from 'src/app/Components/Layout/top-nav-bar/top-nav-bar.component';
+import { MatDialog } from '@angular/material/dialog';
+import { VoucherDetailsComponent } from '../../voucher/voucher-details/voucher-details.component';
 
 @Component({
   selector: 'app-ledger',
@@ -38,6 +40,7 @@ export class LedgerComponent {
     private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
+    private dialogue:MatDialog
     
 
     ) {
@@ -54,27 +57,19 @@ export class LedgerComponent {
     }
 
   ngOnInit(): void {
-    // this.getTotal();
-    this.app.startLoaderDark();
-    this.globalData.setHeaderTitle('Ledger');
-    // this.logo = this.globalData.Logo;
-    // this.logo1 = this.globalData.Logo1;
-    // this.CompanyName = this.globalData.CompanyName;
-    // this.CompanyName2 = this.globalData.CompanyName2;
-    // this.companyAddress = this.globalData.Address;
-    // this.companyPhone = this.globalData.Phone;
-    // this.companyMobileno = this.globalData.mobileNo;
-    // this.companyEmail = this.globalData.Email;
-
-    
    
+    this.globalData.setHeaderTitle('Ledger');
+    this.getProject();
+    
     this.getCoa();
 
    
   }
-  companyProfile:any = [];
 
+  companyProfile:any = [];
+  projectSearch:any;
   coaID:any;
+  projectID:number = 0;
   startDate = new Date();
   EndDate = new Date();
   debitTotal=0;
@@ -105,6 +100,20 @@ export class LedgerComponent {
  lblVoucherPrintDate = new Date();
  invoiceDetails:any;
 
+ projectList:any = [];
+
+
+
+
+ 
+ getProject(){
+   this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+     (Response:any)=>{
+       this.projectList = Response;
+     }
+   )
+ }
+
 
  ////////////////////////getting total of debit and credit Sides///////////
  
@@ -129,7 +138,8 @@ export class LedgerComponent {
   /////////////////////////////////////////////
 
   getCoa(){
-    this.http.get(environment.mainApi+'GetVoucherCOA').subscribe(
+    this.app.startLoaderDark();
+    this.http.get(environment.mainApi+'acc/GetVoucherCOA').subscribe(
       (Response)=>{
         // console.log(Response);
         this.CoaList = Response;
@@ -141,12 +151,19 @@ export class LedgerComponent {
 
   ///////////////////////////////////////////////////////
 
-  getLedgerReport(){
+  getLedgerReport(param:any){
 
     if(this.coaID == '' || this.coaID == undefined){
       this.msg.WarnNotify('Select Chart Of Account Title')
-    }else{
+    }else if((this.projectID == 0 || this.projectID == undefined) && param == 'project'){
+      this.msg.WarnNotify('Select Project')
+    } else{
       this.app.startLoaderDark();
+
+      if(param.value == 'all'){
+        alert();
+        this.projectID = 0;
+      }
       
       /////////////////// finding the coaTitle from coalist by coaID////////
       var curRow = this.CoaList.find((e:any)=> e.coaID == this.coaID);
@@ -155,8 +172,8 @@ export class LedgerComponent {
       /////////////////////////////////////////////////
 
      
-      this.http.get(environment.mainApi+'GetLedgerRpt?coaid='+this.coaID +'&fromdate='
-      +this.globalData.dateFormater(this.startDate,'-') +'&todate='+this.globalData.dateFormater(this.EndDate,'-')).subscribe(
+      this.http.get(environment.mainApi+'acc/GetLedgerRpt?coaid='+this.coaID +'&fromdate='
+      +this.globalData.dateFormater(this.startDate,'-') +'&todate='+this.globalData.dateFormater(this.EndDate,'-')+'&projectID='+this.projectID).subscribe(
         (Response)=>{
           // console.log(Response);
           this.tableData = Response;
@@ -177,6 +194,7 @@ export class LedgerComponent {
    ///////////////////////////////////////////////////
 
    printBill(row:any){
+    // this.companyProfile = this.globalData.comapnayProfile;
 
     this.lblInvoiceNo = row.invoiceNo;
     this.lblInvoiceDate = row.invoiceDate;
@@ -207,7 +225,7 @@ export class LedgerComponent {
     this.invoiceDetails = [];
 
     
-    this.http.get(environment.mainApi+'GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
+    this.http.get(environment.mainApi+'acc/GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
       (Response:any)=>{
         // console.log(Response);
         this.invoiceDetails = Response;
@@ -224,6 +242,16 @@ export class LedgerComponent {
         this.msg.WarnNotify('Error Occured While Printing');
       }
     )
+  }
+
+
+  VoucherDetails(row:any){
+    this.dialogue.open(VoucherDetailsComponent,{
+      width:"40%",
+      data:row,
+    }).afterClosed().subscribe(val=>{
+      
+    })
   }
 
 

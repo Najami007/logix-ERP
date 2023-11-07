@@ -5,14 +5,27 @@
 
                 <!----------------           Date Section ------------------------------->
                 <div class="row ">
+
+                   
+
                     
-                        <mat-form-field class="col-lg-4 col-md-6 col-sm-6 col-xs-6">
-                            <mat-label>Select Account Head</mat-label>
+                        <mat-form-field class="col-lg-3 ">
+                            <mat-label>Account Head</mat-label>
                             <mat-select [(ngModel)]="coaID">
                                 <mat-option><ngx-mat-select-search [(ngModel)]="txtSearch"
                                     [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
                                     name="search"></ngx-mat-select-search></mat-option>
                                 <mat-option *ngFor="let item of CoaList | filter:txtSearch; " value="{{item.coaID}}">{{item.coaTitle}}- ({{item.accountCode}})</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="col-lg-2 " >
+                            <mat-label>Project </mat-label>
+                            <mat-select [(ngModel)]="projectID" >
+                                <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch"
+                                    [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                                    name="search"></ngx-mat-select-search></mat-option>
+                                <mat-option *ngFor="let item of projectList|filter:projectSearch " value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
                             </mat-select>
                         </mat-form-field>
          
@@ -31,10 +44,12 @@
                         </mat-form-field>
                     
 
-                    <div class="col-lg-4 text-start">
-                        <button class=" w-50 btn btn-success btn-rpt me-2" (click)="getLedgerReport()"> Get Rpt</button>   
+                    <div class="col-lg-3 text-start">
+                        <button class=" col-lg-4 btn btn-success btn-rpt me-1" (click)="getLedgerReport('project')">ProjectWise</button>   
+
+                        <button class=" col-lg-4 btn btn-success btn-rpt me-1" (click)="getLedgerReport('all')">All Report</button> 
     
-                        <button class="btn btn-primary  btn-rpt" (click)="PrintTable()"> Print</button>
+                        <button class=" col-lg-4 btn btn-primary  btn-rpt" (click)="PrintTable()"> Print</button>
                     </div>
                 </div>
             </div>      
@@ -86,7 +101,7 @@
                         <td class="text-center" >{{i+1}}</td>
                         <td >{{item.invoiceDate | date:'yyyy-MM-dd'}}</td>
                         <td class="  cursorPointer text-primary " data-bs-toggle="modal" data-bs-target="#invoiceDetailModel" 
-                        (click)="getInvoiceDetail(item.invoiceNo)"><span class="border-bottom">{{item.invoiceNo}}</span></td>
+                        (click)="VoucherDetails(item)"><span class="border-bottom">{{item.invoiceNo}}</span></td>
                         <td >{{item.particular}}</td>
                         <td >{{item.invoiceRemarks}}</td>
                         <td class=" text-end">{{item.debit |number:'1.0-0'}}</td>

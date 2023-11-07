@@ -63,7 +63,7 @@ export class DayTransactionComponent implements OnInit{
     getReport(){
   
       this.app.startLoaderDark();
-      this.http.get(environment.mainApi+'GetDayTransaction?FromDate='+this.global.dateFormater(this.fromDate,'-')+
+      this.http.get(environment.mainApi+'acc/GetDayTransaction?FromDate='+this.global.dateFormater(this.fromDate,'-')+
       '&ToDate='+this.global.dateFormater(this.toDate,'-')).subscribe(
         (Response)=>{
           this.reportData = Response;
@@ -86,7 +86,7 @@ export class DayTransactionComponent implements OnInit{
       this.invoiceDetails = [];
   
       
-      this.http.get(environment.mainApi+'GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
+      this.http.get(environment.mainApi+'acc/GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
         (Response:any)=>{
           // console.log(Response);
           this.invoiceDetails = Response;

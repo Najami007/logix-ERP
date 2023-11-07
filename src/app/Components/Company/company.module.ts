@@ -20,19 +20,20 @@ import { DepartmentComponent } from './department/department.component';
 import { SectionComponent } from './section/section.component';
 import { AddDepartmentComponent } from './department/add-department/add-department.component';
 import { ProjectComponent } from './project/project.component';
+import { AuthGuard } from 'src/app/auth.guard';
 
 
 
 
 export const companyRoutes: Route[] = [
 
-  {path:'cmpprof', component:CompanyProfileComponent,  },
-  {path:'prtnr', component:PartnersComponent,  },
-  {path:'city', component:CityComponent,  },
-  {path:'cntry', component:CountryComponent,  },
-  {path:'adep', component:DepartmentComponent,  },
-  {path:'asec', component:SectionComponent,  },
-  {path:'proj', component:ProjectComponent,  },
+  {path:'cmpprof', component:CompanyProfileComponent, canActivate:[AuthGuard] },
+  {path:'prtnr', component:PartnersComponent,  canActivate:[AuthGuard]},
+  {path:'city', component:CityComponent,canActivate:[AuthGuard]  },
+  {path:'cntry', component:CountryComponent, canActivate:[AuthGuard] },
+  {path:'adep', component:DepartmentComponent,canActivate:[AuthGuard]  },
+  {path:'asec', component:SectionComponent,canActivate:[AuthGuard]  },
+  {path:'proj', component:ProjectComponent,canActivate:[AuthGuard]  },
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
 

@@ -8,6 +8,9 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { UpdateCoaComponent } from './update-coa/update-coa.component';
 import Swal from 'sweetalert2';
+import { PincodeComponent } from '../../User/pincode/pincode.component';
+import { Route, Router } from '@angular/router';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
   selector: 'app-coa',
@@ -16,28 +19,42 @@ import Swal from 'sweetalert2';
 })
 export class COAComponent  implements OnInit {
 
+
   constructor(private msg:NotificationService,
     private app:AppComponent,
+    private route:Router,
     private formBuilder: FormBuilder,
     private globalData: GlobalDataModule,
     private http:HttpClient,
     private dialogue:MatDialog
-    ) { }
+    ) { 
+   
+    
+
+    }
 
   ngOnInit(): void {
     this.globalData.setHeaderTitle('Charts Of Accounts');
+    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
+      (Response:any)=>{
+        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      }
+    ) 
     this.getCoaType();
     this.GetChartOfAccount();
     this.globalData.numberOnly();
     this.getNotes();
-  
-   
+
   }
+
+
+
 
   numberOnly(val:any){
     this.globalData.avoidMinus(val);
   }
 
+  crudList:any = [];
   error: any;
   coaSearch:any;
   actionbtn='Save';
@@ -172,11 +189,13 @@ onlevel3Change(){
   //////////////////////////// will get the coa main five types///////////////////
 
   getCoaType(){
-    this.http.get(environment.mainApi+'getcoatype').subscribe(
+    this.http.get(environment.mainApi+'acc/getcoatype').subscribe(
       {
         next:value=>{
           // console.log(value);
           this.coaTypesList = value;
+         
+          
         },
         error:error=>{
           console.log(error);
@@ -190,7 +209,7 @@ onlevel3Change(){
   ///////////////////////////// will get the notes list
   
   getNotes(){
-    this.http.get(environment.mainApi+'GetNote').subscribe(
+    this.http.get(environment.mainApi+'acc/GetNote').subscribe(
       (Response )=>{
         this.notesList = Response;
 
@@ -203,7 +222,7 @@ onlevel3Change(){
 
   //////////////////////////////////////////////////////////
   GetChartOfAccount(){
-    this.http.get(environment.mainApi+'GetChartOfAccount').subscribe(
+    this.http.get(environment.mainApi+'acc/GetChartOfAccount').subscribe(
       {
         next:value=>{
     
@@ -220,7 +239,7 @@ onlevel3Change(){
   ///////////////////////////////////////
 
   getLevel1(){
-    this.http.get(environment.mainApi+'getlevel1?level0='+this.CoaType).subscribe(
+    this.http.get(environment.mainApi+'acc/getlevel1?level0='+this.CoaType).subscribe(
       {
         next:value=>{
           // console.log(value);
@@ -236,7 +255,7 @@ onlevel3Change(){
   /////////////////////////////////////////////////
 
   getLevel2(){
-    this.http.get(environment.mainApi+'getlevel2?level0='+this.CoaType+'&level1='+this.level1).subscribe(
+    this.http.get(environment.mainApi+'acc/getlevel2?level0='+this.CoaType+'&level1='+this.level1).subscribe(
       {
         next:value=>{
           // console.log(value);
@@ -252,7 +271,7 @@ onlevel3Change(){
 
   ////////////////////////////////////
   getLevel3(){
-    this.http.get(environment.mainApi+'getlevel3?level0='+this.CoaType+'&level1='+this.level1+'&level2='+this.level2).subscribe(
+    this.http.get(environment.mainApi+'acc/getlevel3?level0='+this.CoaType+'&level1='+this.level1+'&level2='+this.level2).subscribe(
       {
         next:value=>{
           // console.log(value);
@@ -268,7 +287,7 @@ onlevel3Change(){
 
   //////////////////////////////
   getLevel4(){
-    this.http.get(environment.mainApi+'getlevel4?level0='+this.CoaType+'&level1='+this.level1+'&level2='+this.level2+'&level3='+this.level3).subscribe(
+    this.http.get(environment.mainApi+'acc/getlevel4?level0='+this.CoaType+'&level1='+this.level1+'&level2='+this.level2+'&level3='+this.level3).subscribe(
       {
         next:value=>{
           // console.log(value);
@@ -334,7 +353,7 @@ onlevel3Change(){
     }
     else{
       this.app.startLoaderDark();
-      this.http.post(environment.mainApi+'InsertChartOfAccount',{
+      this.http.post(environment.mainApi+'acc/InsertChartOfAccount',{
     CoaTitle: this.CoaTitle,
     CoaTypeID: this.CoaType,
     Level1: this.level1.toString(),
@@ -370,16 +389,22 @@ onlevel3Change(){
 
 
   updateCoa(row:any){
-    this.dialogue.open(UpdateCoaComponent,{
-      width:"40%",
-      data:row,
-
-    }).afterClosed().subscribe(val=>{
+    if(this.crudList.u == false){
+      this.msg.WarnNotify('Not Allowed to Edit')
+    }else{
       
-      if(val == 'Update'){
-        this.GetChartOfAccount();
-      }
-    })
+      this.dialogue.open(UpdateCoaComponent,{
+        width:"40%",
+        data:row,
+  
+      }).afterClosed().subscribe(val=>{
+        
+        if(val == 'Update'){
+          this.GetChartOfAccount();
+        }
+      })
+    }
+    
   }
 
 
@@ -393,6 +418,10 @@ onlevel3Change(){
 
 ///////////////////////////////////////////////////////////////////////////////
   deleteCoa(row:any){
+ this.dialogue.open(PincodeComponent,{
+  width:'30%',
+ }).afterClosed().subscribe(pin=>{
+  if(pin != ''){
     Swal.fire({
       title:'Alert!',
       text:'Confirm to Delete the Data',
@@ -406,8 +435,9 @@ onlevel3Change(){
       if(result.isConfirmed){
 
         //////on confirm button mainApi the api will run
-        this.http.post(environment.mainApi+'DeleteChartOfAccount',{
+        this.http.post(environment.mainApi+'acc/DeleteChartOfAccount',{
           CoaID: row.coaID,
+          PinCode:pin,
           AccountCode:row.accountCode,
           UserID: this.globalData.getUserID(),
             }).subscribe(
@@ -427,6 +457,8 @@ onlevel3Change(){
             )
       }
     });
+  }
+ })
     
   }
  //////////////////////////////////////////////////////////////////////////////////////////////

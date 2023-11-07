@@ -8,6 +8,8 @@ import Swal from 'sweetalert2';
 import { AppComponent } from 'src/app/app.component';
 import { MatDialog } from '@angular/material/dialog';
 import { VoucherDetailsComponent } from './voucher-details/voucher-details.component';
+import { PincodeComponent } from '../../User/pincode/pincode.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-voucher',
@@ -38,27 +40,32 @@ export class VoucherComponent implements OnInit{
   }
 
 
-
-
-
-
-
   RoleID:any;
+  crudList:any = [];
 
   constructor(private msg: NotificationService,
     private globalData:GlobalDataModule,
     private http:HttpClient,
     private app:AppComponent,
-    private dialogue:MatDialog
-    ) { }
+    private dialogue:MatDialog,
+    private route:Router
+    ) { 
+
+      this.app.tstUserName = "Najam";
+    }
 
   ngOnInit(): void {
 
     this.globalData.setHeaderTitle('Voucher');
+    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
+      (Response:any)=>{
+        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      }
+    ) 
   
     
     this.getSavedVoucher();
-   
+  
     this.logo = this.globalData.Logo;
     this.logo1 = this.globalData.Logo1;
     this.CompanyName = this.globalData.CompanyName;
@@ -97,6 +104,7 @@ export class VoucherComponent implements OnInit{
    companyPhone :any;
    companyMobileno:any;
    companyEmail:any;
+   
   
 
   /////////////////declared Variables//////////////////////
@@ -108,6 +116,7 @@ export class VoucherComponent implements OnInit{
   transactionType: any = 'Cash';
   invoiceDate:Date = new Date();
   refrenceCOA: any ;
+  projectID:any;
   partyID: any ;
   COATitleID: any ;
   DebitAmount: any = 0 ;
@@ -128,6 +137,7 @@ export class VoucherComponent implements OnInit{
  lblInvoiceDate:any;
  lblRemarks:any;
  lblVoucherType:any;
+ lblProjectName:any;
  lblVoucherTable:any;
  lblDebitTotal:any;
  lblCreditTotal:any;
@@ -140,6 +150,8 @@ export class VoucherComponent implements OnInit{
   partyList:any;
   CoaList:any;
   refCoaList:any;
+  projectList:any = [];
+
 
   
   
@@ -147,7 +159,13 @@ export class VoucherComponent implements OnInit{
 
 
  
- 
+  getProject(){
+    this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+      (Response:any)=>{
+        this.projectList = Response;
+      }
+    )
+  }
  
 
   //////////////////////////////////////////////////////////////////////////////////////////////
@@ -223,9 +241,9 @@ export class VoucherComponent implements OnInit{
 
   getSavedVoucher(){
    
-    this.http.get(environment.mainApi+'GetSavedVoucherDetail').subscribe(
+    this.http.get(environment.mainApi+'acc/GetSavedVoucherDetail').subscribe(
       (Response:any)=>{
-        // console.log(Response);
+        //console.log(Response);
         this.SavedVoucherData = Response;
         this.loadingBar = 'stop';
        
@@ -246,7 +264,7 @@ export class VoucherComponent implements OnInit{
   ///////////////////////////////////////////////////////////
 
   getParty(){
-    this.http.get(environment.mainApi+'GetVoucherParty').subscribe(
+    this.http.get(environment.mainApi+'acc/GetVoucherParty').subscribe(
       (Response)=>{
         // console.log(Response);
         this.partyList = Response;
@@ -262,9 +280,9 @@ export class VoucherComponent implements OnInit{
 
 
   getCoa(){
-    this.http.get(environment.mainApi+'GetVoucherCOA').subscribe(
+    this.http.get(environment.mainApi+'acc/GetVoucherCOA').subscribe(
       (Response)=>{
-        // console.log(Response);
+        console.log(Response);
         this.CoaList = Response;
       }
     )
@@ -273,7 +291,7 @@ export class VoucherComponent implements OnInit{
   ////////////////////////////////////////////
 
   getRefCoa(){
-    this.http.get(environment.mainApi+'GetVoucherCBCOA?type='+this.vType).subscribe(
+    this.http.get(environment.mainApi+'acc/GetVoucherCBCOA?type='+this.vType).subscribe(
       (Response)=>{
         this.refCoaList = Response;
       },
@@ -296,7 +314,9 @@ export class VoucherComponent implements OnInit{
       this.msg.WarnNotify('Select Refrence Chart of Account')
     } else if(this.vType == 'JV' && this.creditTotal != this.debittotal){
       this.msg.WarnNotify('Debit And Credit Total Side Must Be Equal')
-    } 
+    } else if(this.projectID == ''|| this.projectID == undefined){
+      this.msg.WarnNotify('Select Project')
+    }
     else{
 
         
@@ -309,11 +329,12 @@ export class VoucherComponent implements OnInit{
    
 
       this.app.startLoaderDark();  ///////////// will start the loader
-      this.http.post(environment.mainApi+'InsertVoucher',{
+      this.http.post(environment.mainApi+'acc/InsertVoucher',{
         InvoiceDate: this.globalData.dateFormater(this.invoiceDate,'-'),
         RefCOAID: this.refrenceCOA,
         Type: this.vType,
         InvoiceRemarks: this.narration,
+        ProjectID:this.projectID,
         BankReceiptNo: this.bankReceiptNo,
         InvoiceDetail: JSON.stringify(this.VoucherData),
         UserID: this.globalData.getUserID(),
@@ -352,6 +373,11 @@ export class VoucherComponent implements OnInit{
 
   DeleteVoucher(row:any){
 
+
+    this.dialogue.open(PincodeComponent,{
+      width:'30%',
+    }).afterClosed().subscribe(pin=>{
+      if(pin!= ''){
     Swal.fire({
       title:'Alert!',
       text:'Confirm to Delete the Data',
@@ -365,8 +391,9 @@ export class VoucherComponent implements OnInit{
       if(result.isConfirmed){
 
         //////on confirm button pressed the api will run
-        this.http.post(environment.mainApi+'DeleteVoucher',{
+        this.http.post(environment.mainApi+'acc/DeleteVoucher',{
           InvoiceNo: row.invoiceNo,
+          PinCode:pin,
           UserID: this.globalData.getUserID(),
         }).subscribe(
           (Response:any)=>{
@@ -381,6 +408,8 @@ export class VoucherComponent implements OnInit{
       }
     });
 
+  }})
+
    
   }
 
@@ -389,36 +418,43 @@ export class VoucherComponent implements OnInit{
 
   approveBill(row:any){
 
-    Swal.fire({
-      title:'Alert!',
-      text:'Confirm To Approve Invoice',
-      position:'center',
-      icon:'success',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Confirm',
-    }).then((result)=>{
-      if(result.isConfirmed){
-
-        //////on confirm button pressed the api will run
-        this.http.post(environment.mainApi+'ApproveVoucher',{
-          InvoiceNo: row.invoiceNo,
-        UserID: this.globalData.getUserID(),
-        }).subscribe(
-          (Response:any)=>{
-            // console.log(Response.msg);
-            if(Response.msg == 'Voucher Approved Successfully'){
-              this.msg.SuccessNotify(Response.msg);
-              this.getSavedVoucher();
-            }else{
-              this.msg.WarnNotify(Response.msg);
-            }
-            
+    this.dialogue.open(PincodeComponent,{
+      width:'30%',
+    }).afterClosed().subscribe(pin=>{
+      if(pin!= ''){
+        Swal.fire({
+          title:'Alert!',
+          text:'Confirm To Approve Invoice',
+          position:'center',
+          icon:'success',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Confirm',
+        }).then((result)=>{
+          if(result.isConfirmed){
+    
+            //////on confirm button pressed the api will run
+            this.http.post(environment.mainApi+'acc/ApproveVoucher',{
+              InvoiceNo: row.invoiceNo,
+              PinCode:pin,
+            UserID: this.globalData.getUserID(),
+            }).subscribe(
+              (Response:any)=>{
+                // console.log(Response.msg);
+                if(Response.msg == 'Voucher Approved Successfully'){
+                  this.msg.SuccessNotify(Response.msg);
+                  this.getSavedVoucher();
+                }else{
+                  this.msg.WarnNotify(Response.msg);
+                }
+                
+              }
+            )
           }
-        )
+        });
       }
-    });
+    })
 
 
    
@@ -435,7 +471,7 @@ export class VoucherComponent implements OnInit{
     this.lblInvoiceDate = row.invoiceDate;
     this.lblRemarks = row.invoiceRemarks;
     this.lblVoucherType = row.type;
-
+    this.lblProjectName = row.projectTitle;
     this.getInvoiceDetail(row.invoiceNo);
     
 
@@ -493,7 +529,7 @@ export class VoucherComponent implements OnInit{
     this.invoiceDetails = [];
 
     
-    this.http.get(environment.mainApi+'GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
+    this.http.get(environment.mainApi+'acc/GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
       (Response:any)=>{
         // console.log(Response);
         this.invoiceDetails = Response;

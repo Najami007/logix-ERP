@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { COAComponent } from '../coa.component';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { environment } from 'src/environments/environment.development';
+import { PincodeComponent } from 'src/app/Components/User/pincode/pincode.component';
 
 @Component({
   selector: 'app-update-coa',
@@ -19,7 +20,8 @@ export class UpdateCoaComponent implements OnInit{
     @Inject(MAT_DIALOG_DATA) public editData : any,
     private dialogRef: MatDialogRef<COAComponent>,
     private global:GlobalDataModule,
-    private msg:NotificationService
+    private msg:NotificationService,
+    private dialogue:MatDialog
   ){}
 
   ngOnInit(): void {
@@ -43,7 +45,7 @@ export class UpdateCoaComponent implements OnInit{
   transactionAllowed:any;
 
   getNotes(){
-    this.http.get(environment.mainApi+'GetNote').subscribe(
+    this.http.get(environment.mainApi+'acc/GetNote').subscribe(
       (Response )=>{
         this.notesList = Response;
       }
@@ -58,26 +60,35 @@ export class UpdateCoaComponent implements OnInit{
       this.msg.WarnNotify('Enter Cao Title')
     }else{
 
-      $('.loaderDark').show();
+
+      this.dialogue.open(PincodeComponent,{
+        width:'30%'
+      }).afterClosed().subscribe(pin=>{
+        if(pin != ''){
+          $('.loaderDark').show();
       
-      this.http.post(environment.mainApi+'UpdateChartofAccount',{
-        CoaID: this.editData.coaID,
-        CoaTitle: this.coaTitle,
-        NoteID:this.noteID,
-        UserID: this.global.getUserID()
-      }).subscribe(
-        (Response:any)=>{
-          if(Response.msg == 'Data Updated Successfully'){
-            this.msg.SuccessNotify(Response.msg);
-            this.dialogRef.close('Update');
-            $('.loaderDark').fadeOut(500);
-  
-          }else{
-            this.msg.WarnNotify(Response.msg);
-            $('.loaderDark').fadeOut(500);
-          }
+          this.http.post(environment.mainApi+'acc/UpdateChartofAccount',{
+            CoaID: this.editData.coaID,
+            CoaTitle: this.coaTitle,
+            NoteID:this.noteID,
+            pinCode:pin,
+            UserID: this.global.getUserID()
+          }).subscribe(
+            (Response:any)=>{
+              if(Response.msg == 'Data Updated Successfully'){
+                this.msg.SuccessNotify(Response.msg);
+                this.dialogRef.close('Update');
+                $('.loaderDark').fadeOut(500);
+      
+              }else{
+                this.msg.WarnNotify(Response.msg);
+                $('.loaderDark').fadeOut(500);
+              }
+            }
+          )
         }
-      )
+      })
+     
     }
    
   }

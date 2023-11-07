@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit {
    {title:'HR Module', icon:'person_pin', path:'hr'},   ]
 
   ngOnInit() {   
-    this.globalData.header_title$.subscribe((Response:string)=>{this.title = Response;alert()});
+    this.globalData.header_title$.subscribe((Response:string)=>{this.title = Response});
     this.getModules();
     // alert(this.globalData.getUserID())
     // this.UserName = this.globalData.getUserName().toUpperCase();

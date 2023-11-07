@@ -30,10 +30,19 @@ export class TrialBalanceComponent implements OnInit {
     private msg:NotificationService,
     private app:AppComponent
 
-    ) { }
+    ) {
+      this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+        (Response:any)=>{
+          this.companyProfile = Response;
+          //console.log(Response)  
+          
+        }
+      )
+     }
 
   ngOnInit(): void {
     this.globalData.getCompany();
+    this.getProject();
     this.globalData.setHeaderTitle('Trial Balance');
     this.logo = this.globalData.Logo;
     this.logo1 = this.globalData.Logo1;
@@ -48,7 +57,7 @@ export class TrialBalanceComponent implements OnInit {
     $('#summary2').hide();
   }
 
-
+  companyProfile:any = [];
   fromDate:any = new Date();
   toDate:any =  new Date();
   TrialBalanceData :any=[];
@@ -62,18 +71,39 @@ export class TrialBalanceComponent implements OnInit {
 
   notesList:any =[];
 
+  projectSearch:any;
 
-  
+  projectID:number = 0;
+  projectList:any = [];
 
 
-  getTrialBalance(){
+
+
+ 
+  getProject(){
+    this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+      (Response:any)=>{
+        this.projectList = Response;
+      }
+    )
+  }
+ 
+
+
+  getTrialBalance(param:any){
+  if(this.projectID == 0 && param == 'project'){
+    this.msg.WarnNotify('Select Project')
+  }else{
+    if(param == 'all'){
+      this.projectID = 0;
+    }
     $('#summary2').hide();
     $('#summary1').show();
 this.TrialBalanceData = [];
     this.app.startLoaderDark();
 
-    this.http.get(environment.mainApi+'GetTrailBalanceRpt?fromdate='
-    +this.globalData.dateFormater(this.fromDate,'-')+'&todate='+this.globalData.dateFormater(this.toDate,'-')).subscribe(
+    this.http.get(environment.mainApi+'acc/GetTrailBalanceRpt?fromdate='
+    +this.globalData.dateFormater(this.fromDate,'-')+'&todate='+this.globalData.dateFormater(this.toDate,'-')+'&projectID='+this.projectID).subscribe(
       (Response)=>{
       
         this.TrialBalanceData = Response;
@@ -123,14 +153,21 @@ this.TrialBalanceData = [];
       }
     )
   
+  }
    
     
 
   }
 
-  getSummary2(){
-    $('#summary1').hide();
-    $('#summary2').show();
+  getSummary2(param:any){
+    if(param == 'sm1'){
+      $('#summary1').show();
+      $('#summary2').hide();
+    }else if(param == 'sm2'){
+      $('#summary1').hide();
+      $('#summary2').show();
+    }
+   
   }
 
   getTotal(note:any){
@@ -154,7 +191,7 @@ this.TrialBalanceData = [];
   
   getNotes(){
     this.notesList = [];
-    this.http.get(environment.mainApi+'GetNote').subscribe(
+    this.http.get(environment.mainApi+'acc/GetNote').subscribe(
       (Response:any )=>{
         // console.log(Response);
 
@@ -175,14 +212,6 @@ this.TrialBalanceData = [];
 
 
   PrintTable() {
-    this.logo = this.globalData.Logo;
-    this.logo1 = this.globalData.Logo1;
-    this.CompanyName = this.globalData.CompanyName;
-    this.CompanyName2 = this.globalData.CompanyName2;
-    this.companyAddress = this.globalData.Address;
-    this.companyPhone = this.globalData.Phone;
-    this.companyMobileno = this.globalData.mobileNo;
-    this.companyEmail = this.globalData.Email;
   
     this.globalData.printData('#printReport');
   

@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment.development';
 import { ChangePasswordComponent } from '../../User/change-password/change-password.component';
 import { ChangePINComponent } from '../../User/change-pin/change-pin.component';
 import { Subscription } from 'rxjs';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-top-nav-bar',
@@ -18,13 +19,17 @@ export class TopNavBarComponent implements OnInit{
   clickEventSubscription: Subscription;
 
     public  menuList?:any = [];
-    moduleID?: string | null;  
+    moduleID?: string | null;
+    
+    
+    tstUN:any = "";
 
   constructor(private globalData:GlobalDataModule,
     private msg:NotificationService,
     private http:HttpClient,
     private route:Router,
-    private dialogue:MatDialog
+    private dialogue:MatDialog,
+    private app:AppComponent
     ){
 
       this.clickEventSubscription = this.globalData
@@ -34,7 +39,9 @@ export class TopNavBarComponent implements OnInit{
         this.getMenu();
        
       });
-  
+      
+
+
   }
   
     ngOnInit(): void {
@@ -42,6 +49,8 @@ export class TopNavBarComponent implements OnInit{
       this.UserName = this.globalData.getUserName();
       this.getMenu();
       this.getCompany();
+      // this.globalData.getCrud();
+      // console.log(this.globalData.getCrud())
 
     }
     UserName:any = 'abc';
@@ -55,7 +64,7 @@ export class TopNavBarComponent implements OnInit{
         this.companyProfile = Response;
         this.logo1 = this.companyProfile[0].companyLogo1; 
         //console.log(Response);  
-        this.globalData.setCompanyProfile(Response[0]);    
+        this.globalData.comapnayProfile = Response[0];    
         
       }
     )
@@ -73,10 +82,16 @@ export class TopNavBarComponent implements OnInit{
         (typeof this.moduleID == 'string' || typeof this.moduleID == 'number')
       ){
 
+  
+
         this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.moduleID).subscribe(
           (Response:any)=>{
            this.menuList = Response;
-           //console.log(Response);
+          this.globalData.glbMenulist = Response;
+          //console.log(Response);
+
+          //  this.globalData.setMenuList(Response);
+           
           }
         )
 
@@ -92,6 +107,11 @@ export class TopNavBarComponent implements OnInit{
 
       this.route.navigate([module]);
     }
+
+    // setMenuID(item:any){
+    //   this.globalData.setMenuList(item);
+
+    // }
   
     
     logout(){

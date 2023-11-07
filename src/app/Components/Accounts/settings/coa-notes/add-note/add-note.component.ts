@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { CoaNotesComponent } from '../coa-notes.component';
 import { environment } from 'src/environments/environment.development';
+import { PincodeComponent } from 'src/app/Components/User/pincode/pincode.component';
 @Component({
   selector: 'app-add-note',
   templateUrl: './add-note.component.html',
@@ -27,7 +28,8 @@ export class AddNoteComponent implements OnInit{
     @Inject(MAT_DIALOG_DATA) public editData : any,
     private dialogRef: MatDialogRef<CoaNotesComponent>,
     private global:GlobalDataModule,
-    private msg:NotificationService
+    private msg:NotificationService,
+    private dialogue:MatDialog
   ){}
 
 
@@ -48,7 +50,7 @@ export class AddNoteComponent implements OnInit{
   //////////////////////////////////////////////////////////
 
   getCoaType(){
-    this.http.get(environment.mainApi+'getcoatype').subscribe(
+    this.http.get(environment.mainApi+'acc/getcoatype').subscribe(
       {
         next:value=>{
           // console.log(value);
@@ -75,7 +77,14 @@ export class AddNoteComponent implements OnInit{
       if(this.actionbtn == 'Save'){
        this.insertNote();
       }else if(this.actionbtn == 'Update'){
-        this.UpdateNote();
+        this.dialogue.open(PincodeComponent,{
+          width:'30%',
+        }).afterClosed().subscribe(pin=>{
+          if(pin != ''){
+            this.UpdateNote(pin);
+          }
+        })
+        
       }
 
     }
@@ -86,7 +95,7 @@ export class AddNoteComponent implements OnInit{
 
   insertNote(){
    
-    this.http.post(environment.mainApi+'InsertNote',{
+    this.http.post(environment.mainApi+'acc/InsertNote',{
     NoteID: this.note,
     CoaTypeID: this.CoaTypeID,
     NoteTitle: this.noteTitle,
@@ -112,13 +121,14 @@ export class AddNoteComponent implements OnInit{
 
   /////////////////////////////////////////////////////
 
-  UpdateNote(){
+  UpdateNote(pin:any){
  
-    this.http.post(environment.mainApi+'UpdateNote',{
+    this.http.post(environment.mainApi+'acc/UpdateNote',{
       AutoID: this.editData.autoID,
       NoteID: this.note,
       CoaTypeID: this.CoaTypeID,
       NoteTitle: this.noteTitle,
+      pinCode:pin,
       UserID: this.global.getUserID(),
       }).subscribe(
         (Response:any)=>{

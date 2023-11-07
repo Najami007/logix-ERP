@@ -32,14 +32,15 @@ export class PLStatComponent implements OnInit {
     ){}
   ngOnInit(): void {
     this.globalData.setHeaderTitle('Profit & Loss Statement');
-    this.logo = this.globalData.Logo;
-    this.logo1 = this.globalData.Logo1;
-    this.CompanyName = this.globalData.CompanyName;
-    this.CompanyName2 = this.globalData.CompanyName2;
-    this.companyAddress = this.globalData.Address;
-    this.companyPhone = this.globalData.Phone;
-    this.companyMobileno = this.globalData.mobileNo;
-    this.companyEmail = this.globalData.Email;
+    this.globalData.getCompany();
+    // this.logo = this.globalData.Logo;
+    // this.logo1 = this.globalData.Logo1;
+    // this.CompanyName = this.globalData.CompanyName;
+    // this.CompanyName2 = this.globalData.CompanyName2;
+    // this.companyAddress = this.globalData.Address;
+    // this.companyPhone = this.globalData.Phone;
+    // this.companyMobileno = this.globalData.mobileNo;
+    // this.companyEmail = this.globalData.Email;
 
     $('#printDiv').hide();
   }
@@ -154,6 +155,16 @@ export class PLStatComponent implements OnInit {
   
 
   PrintTable() {
+    this.logo = this.globalData.Logo;
+    this.logo1 = this.globalData.Logo1;
+    this.CompanyName = this.globalData.CompanyName;
+    this.CompanyName2 = this.globalData.CompanyName2;
+    this.companyAddress = this.globalData.Address;
+    this.companyPhone = this.globalData.Phone;
+    this.companyMobileno = this.globalData.mobileNo;
+    this.companyEmail = this.globalData.Email;
+   setTimeout(() => {
     this.globalData.printData('#printDiv');
+   }, 200);
   }
 }

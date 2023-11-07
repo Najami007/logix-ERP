@@ -31,6 +31,7 @@ import { PLStatComponent } from './AccountReports/plstat/plstat.component';
 import { TrialBalanceComponent } from './AccountReports/trial-balance/trial-balance.component';
 import { DayTransactionComponent } from './day-transaction/day-transaction.component';
 import { VoucherDetailsComponent } from './voucher/voucher-details/voucher-details.component';
+import { AuthGuard } from 'src/app/auth.guard';
 
 
 
@@ -39,19 +40,19 @@ import { VoucherDetailsComponent } from './voucher/voucher-details/voucher-detai
 
 export const accountRountes: Route[] = [
   
-    {path:'dashboard', component:DashboardComponent,  },
-    {path:'coa', component:COAComponent,  },
-    {path:'voucher', component:VoucherComponent,  },
-    {path:'bdgtng', component:BudgettingComponent,  },
-    {path:'setting', component:SettingsComponent,  },
-    {path:'dtran', component:DayTransactionComponent,  },
-    {path:'spvn', component:VoucherSupervisionComponent,  },
-    {path:'ldgrrpt', component:LedgerComponent,  },
-    {path:'bdgrpt', component:BudgetReportComponent,  },
-    {path:'bsrpt', component:BalanceSheetComponent,  },
-    {path:'cbrpt', component:CashbookComponent,  },
-    {path:'plrpt', component:PLStatComponent,  },
-    {path:'tbrpt', component:TrialBalanceComponent,  },
+    {path:'dashboard', component:DashboardComponent,  canActivate:[AuthGuard]},
+    {path:'coa', component:COAComponent,  canActivate:[AuthGuard]},
+    {path:'voucher', component:VoucherComponent,canActivate:[AuthGuard]  },
+    {path:'bdgtng', component:BudgettingComponent, canActivate:[AuthGuard] },
+    {path:'setting', component:SettingsComponent, canActivate:[AuthGuard] },
+    {path:'dtran', component:DayTransactionComponent, canActivate:[AuthGuard] },
+    {path:'spvn', component:VoucherSupervisionComponent,canActivate:[AuthGuard]  },
+    {path:'ldgrrpt', component:LedgerComponent, canActivate:[AuthGuard] },
+    {path:'bdgrpt', component:BudgetReportComponent, canActivate:[AuthGuard] },
+    {path:'bsrpt', component:BalanceSheetComponent, canActivate:[AuthGuard] },
+    {path:'cbrpt', component:CashbookComponent, canActivate:[AuthGuard] },
+    {path:'plrpt', component:PLStatComponent, canActivate:[AuthGuard] },
+    {path:'tbrpt', component:TrialBalanceComponent, canActivate:[AuthGuard] },
     {path:'**', redirectTo:'home',pathMatch:'full'}
   
  

@@ -1,4 +1,4 @@
-<mat-tab-group class="body">
+<mat-tab-group class="body pb-5">
     <mat-tab label="Voucher Form " >
         <div class="container mt-2 Voucher">
 
@@ -13,10 +13,10 @@
                     <!-- --------------------voucher Type selected here-------------- -->
 
                     <mat-form-field class="col-lg-6 col-md-6 col-sm-6 col-xs-6" appearance="outline">
-                        <mat-label>Select Voucher Type </mat-label>
+                        <mat-label>Voucher Type </mat-label>
                         <mat-select [(ngModel)]="vType" name="vType"  [disabled]="VoucherData != ''"
                             (selectionChange)="getCoa();
-                            getRefCoa();">
+                            getRefCoa();getProject()">
                             <mat-option *ngFor="let item of voucherTypes "
                                 value="{{item.value}}">{{item.type}}</mat-option>
 
@@ -32,7 +32,7 @@
 
 
                     <mat-form-field class="col-lg-6 col-md-6 col-sm-6 col-xs-6" appearance="outline">
-                        <mat-label>Select Voucher Date</mat-label>
+                        <mat-label>Voucher Date</mat-label>
                         <input readonly="true" matInput   [(ngModel)]="invoiceDate"
                             [matDatepicker]="picker" >
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -45,16 +45,25 @@
 
                 </div>
                 <hr>
+               
+             
 
                 <!-- --------------------Second Row-------------- -->
 
                 <div class="pform row col-lg-12 col-md-12 col-sm-12 col-xs-12" style="align-items: center;">
 
+                    <mat-form-field class="col-lg-5 col-md-5 col-sm-5 col-xs-5  " appearance="outline">
+                        <mat-label>Project </mat-label>
+                        <mat-select [(ngModel)]="projectID" >
+                            <mat-option *ngFor="let item of projectList " value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
                     <!-- --------------------Bank Select Area-------------- -->
 
 
                     <mat-form-field class="col-lg-5 col-md-5 col-sm-5 col-xs-5" appearance="outline">
-                        <mat-label>Select Refrence COA </mat-label>
+                        <mat-label>Refrence COA </mat-label>
                         <mat-select [(ngModel)]="refrenceCOA" [disabled]="vType == 'JV'">
                             <mat-option *ngFor="let item of refCoaList " value="{{item.coaID}}">{{item.coaTitle}}</mat-option>
                         </mat-select>
@@ -86,7 +95,7 @@
 
 
                         <mat-form-field class="col-lg-5 col-md-5 col-sm-5 col-xs-5 " appearance="outline">
-                            <mat-label>Select COA Title </mat-label>
+                            <mat-label>COA Title </mat-label>
                             <mat-select id="cTitle" class="cTitle" [(ngModel)]="COATitleID" name="coaTitle"
                                 accesskey="c">
                                 <mat-option><ngx-mat-select-search [(ngModel)]="coaSearch"
@@ -172,7 +181,7 @@
                     </mat-form-field>
                 </div>
                 <div class="text-center " >
-                    <button  class="btn btn-success btn-save  col-lg-3 me-2" (click)="insertVoucher()"> Save</button>
+                    <button  class="btn btn-success btn-save  col-lg-3 me-2" *ngIf="crudList.c" (click)="insertVoucher()"> Save</button>
                         <button   class="btn btn-danger btn-reset  col-lg-3 "  (click)="reset()"> Reset</button>
                 </div>
             </div>
@@ -214,7 +223,8 @@
                 <div class="row mt-5"  >
 
                     <b class="row">
-                    <h6>Invoice No:</h6>
+                     <h6>Narration:</h6>
+                     <h6>Project:</h6>
                     <h6>Invoice Date:</h6>
                     <h6>Narration:</h6>
                     </b>
@@ -223,6 +233,7 @@
                 <div class="row mt-5" >
 
                     <p>{{lblInvoiceNo}}</p>
+                    <p>{{lblProjectName}}</p>
                     <p>{{lblInvoiceDate | date:'yyyy-MM-dd'}}</p>
                     <p>{{lblRemarks}}</p>
                     
@@ -293,7 +304,7 @@
 
 
             <mat-progress-bar mode="indeterminate" *ngIf="loadingBar == 'start'"></mat-progress-bar>
-            <table class="col-lg-12  table table-hover bg-light">
+            <table class="col-lg-12  table table-hover bg-light" *ngIf="crudList.r">
 
                 <thead>
                     <tr class="col-lg-12">
@@ -301,11 +312,11 @@
                         <th class="col-lg-1">Inv.#</th>
                         <th class="col-lg-1">Date</th>
 
-                        <th class="col-lg-1">Party</th>
+                        <th class="col-lg-2">Project</th>
                         <th class="col-lg-1">Amount</th>
                         <th class="col-lg-3">Narration</th>
                         <th class="col-lg-1">Detail</th>
-                        <th class="col-lg-1">Actions</th>
+                        <th class="col-lg-1" *ngIf="crudList.d || crudList.u || crudList.r">Actions</th>
                    
 
                     </tr>
@@ -317,15 +328,16 @@
                         <td>{{index+1}}</td>
                         <td> {{item.invoiceNo}}</td>
                         <td>{{item.invoiceDate | date:'yyyy-MM-dd'}}</td>
-                        <td>{{item.partyName}}</td>
+                        <td>{{item.projectTitle}}</td>
                         <td>{{item.amount |number}}</td>
                         <td class="text-start">{{item.invoiceRemarks}}</td>
                         <td ><mat-icon class="text-success"  
                             (click)="VoucherDetails(item)" >receipt</mat-icon></td>
-                        <td ><mat-icon class="text-success" *ngIf="item.approvedStatus == false && RoleID == 1" (click)="approveBill(item)">check</mat-icon>
-                        <mat-icon *ngIf="item.approvedStatus == true" aria-label="Approved" class="text-success" >done_all</mat-icon>
-                        <mat-icon class="text-danger" *ngIf="RoleID == 1" (click)="DeleteVoucher(item)">delete</mat-icon>
-                        <mat-icon class="text-primary" (click)="printBill(item)">print</mat-icon></td>
+                        <td *ngIf="crudList.r || crudList.d   || crudList.u  ">
+                            <!-- <mat-icon class="text-success"  (click)="approveBill(item)">check</mat-icon> -->
+                        <mat-icon *ngIf="crudList.u"  aria-label="Approved" class="text-success" >{{item.approvedStatus ? 'done_all' : 'check'}}</mat-icon>
+                        <mat-icon class="text-danger" *ngIf="crudList.d" (click)="DeleteVoucher(item)">delete</mat-icon>
+                        <mat-icon class="text-primary" *ngIf="crudList.r" (click)="printBill(item)">print</mat-icon></td>
 
                     </tr>
                 </tbody>
@@ -333,7 +345,7 @@
             </table>
 
             <div class="d-flex" >
-                <mat-hint class="me-1 text-secondary">Total Rows : ({{SavedVoucherData.length}})    </mat-hint>
+                <mat-hint class="me-1 text-secondary">Total Rows : ({{SavedVoucherData.length || 0}})    </mat-hint>
                 <pagination-controls
                 previousLabel="Prev"
                 nextLabel="Next"
@@ -352,54 +364,7 @@
 
 
 
-        <!--------------------------  Modal Window to check invoice Details ----------------------->
-
-
-        <div class="modal fade h-100 bg-light " id="invoiceDetailModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">
-            <div class="modal-dialog modal-xl modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h2 class="modal-title" id="exampleModalLabel">Voucher Details</h2>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-               <!----------------------- Table Area --------------------->
-
-               <div>
-                <table class="table">
-                    <thead class="border-bottom">
-                        
-                        <th>S#</th>
-                        <th>Description</th>
-                        <th>Debit</th>
-                        <th>Credit</th>
-                    
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of invoiceDetails; index as index">
-                            <td>{{index+1}}</td>
-                            <td>{{item.coaTitle}} ({{item.accountCode}})</td>
-                            <td>{{item.debit |number}}</td>
-                            <td>{{item.credit |number}}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><b>Total</b></td>
-                            <td><b>{{lblDebitTotal |number}}</b></td>
-                            <td><b>{{lblCreditTotal |number}}</b></td>
-                        </tr>
-                    </tbody>
-                </table>
-               </div>
-                   
-        
-        
-                </div>
-                
-              </div>
-            </div>
-          </div>
-
+      
 
         <!-------------------     Invoice Print Section ------------------------->
 
@@ -435,6 +400,7 @@
 
                     <b class="row">
                     <h6>Invoice No:</h6>
+                    <h6>Project:</h6>
                     <h6>Invoice Date:</h6>
                     <h6>Narration:</h6>
                     </b>
@@ -443,6 +409,7 @@
                 <div class="row mt-5" >
 
                     <p>{{lblInvoiceNo}}</p>
+                    <p>{{lblProjectName}}</p>
                     <p>{{lblInvoiceDate | date:'yyyy-MM-dd'}}</p>
                     <p>{{lblRemarks}}</p>
                     

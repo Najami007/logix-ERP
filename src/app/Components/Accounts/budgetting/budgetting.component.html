@@ -1,5 +1,6 @@
 
-<mat-tab-group [selectedIndex]="TabIndex"  (selectedTabChange)="TabIndex = ''" class="body">
+<mat-tab-group [selectedIndex]="TabIndex"
+(selectedIndexChange)="changeTabHeader($event)" class="body">
     <mat-tab label="BudgetForm">
         <div>
             

@@ -16,13 +16,14 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import { ChangePINComponent } from './change-pin/change-pin.component';
 import { TextMaskModule } from 'angular2-text-mask';
 import { UserRoleComponent } from './user-role/user-role.component';
+import { AuthGuard } from 'src/app/auth.guard';
 
 
 
 export const userRoutes: Route[] = [
   
-  {path:'adduser', component:AddUserComponent,  },
-  {path:'usrl', component:UserRoleComponent,  },
+  {path:'adduser', component:AddUserComponent,canActivate:[AuthGuard]  },
+  {path:'usrl', component:UserRoleComponent,canActivate:[AuthGuard]  },
 
   {path:'**', redirectTo:'home',pathMatch:'full'}
 

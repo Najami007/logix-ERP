@@ -93,7 +93,7 @@ export class DashboardComponent implements OnInit{
   //////////////////////////////////
   getCardsData(){
 
-    this.http.get(environment.mainApi+'GetTotals').subscribe(
+    this.http.get(environment.mainApi+'acc/GetTotals').subscribe(
       (Response)=>{
         this.cardsData = Response;
         // console.log(Response);
@@ -108,7 +108,7 @@ export class DashboardComponent implements OnInit{
   ////////////////////////////////////////////////
 
   GetIncExp(){
-    this.http.get(environment.mainApi+'GetIncExp').subscribe(
+    this.http.get(environment.mainApi+'acc/GetIncExp').subscribe(
       (Response:any)=>{
        
         Response.forEach((e:any) => {
@@ -198,7 +198,7 @@ export class DashboardComponent implements OnInit{
   getBudget(){
     
 
-    this.http.get(environment.mainApi+'GetMonthlyBudget?BudgetDate='+this.globalData.dateFormater(this.budgetMonth,'-')).subscribe(
+    this.http.get(environment.mainApi+'acc/GetMonthlyBudget?BudgetDate='+this.globalData.dateFormater(this.budgetMonth,'-')).subscribe(
       (Response:any)=>{
         this.budgetData = Response;
         
@@ -292,7 +292,7 @@ export class DashboardComponent implements OnInit{
     this.IncomeHeadsAmountList = [];
   
 
-    this.http.get(environment.mainApi+'GetProfitDetailRpt?fromdate='+this.globalData.dateFormater(this.firstDay,'-')+'&todate='
+    this.http.get(environment.mainApi+'acc/GetProfitDetailRpt?fromdate='+this.globalData.dateFormater(this.firstDay,'-')+'&todate='
       +this.globalData.dateFormater(this.lastDay,'-')).subscribe(
         (Response:any)=>{
 
@@ -379,7 +379,7 @@ export class DashboardComponent implements OnInit{
     
 
 
-    this.http.get(environment.mainApi+'GetProfitDetailRpt?fromdate='+this.globalData.dateFormater(this.priviousMonthFirstDay,'-')+'&todate='
+    this.http.get(environment.mainApi+'acc/GetProfitDetailRpt?fromdate='+this.globalData.dateFormater(this.priviousMonthFirstDay,'-')+'&todate='
       +this.globalData.dateFormater(this.priviousMonthLastDay,'-')).subscribe(
         (Response:any)=>{
 
@@ -694,7 +694,7 @@ export class DashboardComponent implements OnInit{
   BookingsList:any = [];
 
   getBookings(){
-    this.http.get(environment.mainApi+'getbooking').subscribe(
+    this.http.get(environment.mainApi+'acc/agetbooking').subscribe(
     (Response:any)=>{
       
 

@@ -3,9 +3,17 @@
         
                 <div class="row ">
                     
-
+                    <mat-form-field class="col-lg-3 " >
+                        <mat-label>Project </mat-label>
+                        <mat-select [(ngModel)]="projectID" >
+                            <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch"
+                                [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                                name="search"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of projectList|filter:projectSearch " value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
               
-                        <mat-form-field class="col-lg-4">
+                        <mat-form-field class="col-lg-2">
                             <mat-label>From Date</mat-label>
                             <input matInput type="text" [(ngModel)]="fromDate" [matDatepicker]="startDate">
                             <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
@@ -13,7 +21,7 @@
                         </mat-form-field>
 
                     
-                        <mat-form-field class="col-lg-4">
+                        <mat-form-field class="col-lg-2">
                             <mat-label>To Date</mat-label>
                             <input matInput type="text" [(ngModel)]="toDate" [matDatepicker]="EndDate">
                             <mat-datepicker-toggle matSuffix [for]="EndDate"></mat-datepicker-toggle>
@@ -21,17 +29,23 @@
                         </mat-form-field>
                 
 
-                    <div class="col-lg-4 " >
-                        <button class="w-25 btn btn-success btn-rpt me-1 " (click)="getTrialBalance()">
+                    <div class="col-lg-5 " >
+                        <button class="btn btn-success btn-rpt me-1 " (click)="getTrialBalance('project')">
+                            ProjectWise
+                         </button>
+                         <button class="btn btn-success btn-rpt me-1 " (click)="getTrialBalance('all')">
+                            Get All
+                         </button>
+                        <button class="btn btn-success btn-rpt me-1 " (click)="getSummary2('sm1')">
                            Summary 1
                         </button>
                    
-                        <button class=" w-25 btn btn-success btn-rpt me-1" (click)="getSummary2()">
+                        <button class=" btn btn-success btn-rpt me-1" (click)="getSummary2('sm2')">
                            Summary 2
                         </button>
                         
                    
-                        <button class="w-25 btn btn-primary btn-rpt" (click)="PrintTable()">
+                        <button class=" btn btn-primary btn-rpt" (click)="PrintTable()">
                             Print
                         </button>
                     </div>
@@ -41,33 +55,31 @@
 
 
             <!-------------------------    Top Logo Section -------------------->
-        <div class="hide">
-            <div class="text-center border-bottom d-flex justify-content-between">
-                <span>
-                    <img src="{{logo}}"  srcset="" height="100"
-                        width="100">
+
+               <!-------------------------    Top Logo Section -------------------->
+           <div class="hide">
+            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
                 </span>
                 <span >
                     
 
-                    <h1 class="companyName">{{CompanyName}}</h1>
+                    <h1 class="companyName">{{item.companyName}}</h1>
                     <p style="margin-top: -15px;" class="companyName2">{{CompanyName2}}</p>
 
-                    <p class="rptTitle"  style="margin-top: -25px;">Trial Balance Report</p>
-                    <p  style="margin-top: -20px;"><b>From:</b> {{fromDate | date:'yyyy-MM-dd'}} <b>To:</b> {{toDate | date:'yyyy-MM-dd'}}</p>
+                    <p class="rptTitle" style="margin-top:-25px">Trial Balance Report </p>
+                    <p style="margin-top:-20px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}} <b>To:</b> {{toDate | date:'dd-MM-yyyy'}}</p>
                   
                 </span>
-                <span>
-                    <img src="{{logo1}}" style="color: black;" alt="" srcset="" height="100"
-                        width="100">
+                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
                 </span>
         
         
             </div>
-
-            
-
-        </div>
+           </div>
+     
     <hr>
          <!-----------------  Summary 1 Seciton Table-->
          <div id="summary1">

@@ -147,7 +147,7 @@
         <!-- Save And Reset Button -->
         <br><br>
         <div class=" text-center">
-            <button class="btn btn-success col-md-1 ml-10" (click)="Save()">{{actionbtn}}</button>
+            <button class="btn btn-success col-md-1 ml-10" *ngIf="crudList.c"  (click)="Save()">{{actionbtn}}</button>
 
 
             <button class="btn btn-danger col-md-1 ml-10" (click)="reset()" >Reset</button>
@@ -158,7 +158,7 @@
         </mat-tab>
 
                    <!-- -------------------------Saved Record Tab------------------------ -->
-        <mat-tab label="Saved Record" class="h-100">
+        <mat-tab label="Saved Record" class="h-100"  >
             <div class="pt-4 container ">
 
                 <mat-form-field class="w-100" appearance="outline">
@@ -167,9 +167,9 @@
                     <mat-icon matPrefix class="text-secondary">search</mat-icon>
                 </mat-form-field>
             
-                <table class="text-center table table-hover bg-light">
+                <table class="text-center table table-hover bg-light" *ngIf="crudList.r">
                     <thead>
-                        <tr>
+                        <tr >
                             <th>Sr.</th>
                             <th>Account Code</th>
                             <th>Account Title</th>
@@ -178,7 +178,7 @@
                             <th>
                                 Transaction Allowed
                             </th>
-                            <th>Action</th>
+                            <th *ngIf="crudList.d" >Action</th>
     
                         </tr>
                     </thead>
@@ -195,7 +195,7 @@
                             <td *ngIf="item.transactionAllowed == false"><mat-icon class="text-danger" >remove_circle</mat-icon></td>   
                             <td >
                                 <!-- <button class="btnTransparent text-success"><mat-icon >edit</mat-icon></button> -->
-                                <button class="btnTransparent text-danger" (click)="deleteCoa(item)"><mat-icon >delete</mat-icon></button>
+                                <button class="btnTransparent text-danger" *ngIf="crudList.d"  (click)="deleteCoa(item)"><mat-icon >delete</mat-icon></button>
                             </td>
                          
     

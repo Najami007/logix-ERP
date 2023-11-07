@@ -6,10 +6,11 @@ import { environment } from 'src/environments/environment.development';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { NotificationService } from '../service/notification.service';
 import { userInterface } from '../Interfaces/login-user-interface';
-import { BehaviorSubject, Observable, retry } from 'rxjs';
+import { BehaviorSubject, Observable, Observer } from 'rxjs';
 import Swal from 'sweetalert2';
 import * as $ from 'jquery';
 import * as b64 from 'base64-js/index.js';
+import { AppComponent } from 'src/app/app.component';
 
 
 
@@ -23,10 +24,19 @@ import * as b64 from 'base64-js/index.js';
 
 
 export class GlobalDataModule  implements OnInit {
+  
+  glbMenulist:any = [];
+  // glbMenulist:any = new Subject<any>();
+  // glb_menuList$ = this.glbMenulist.asObservable();
 
+  // setMenuList(item:any){
+  //   this.glbMenulist.next(item);
+  //  }
+
+  
 
   public subject = new Subject<any>();
-  public comapnayProfile = new Subject<any>();
+  public comapnayProfile = [];
 
 
 
@@ -67,7 +77,9 @@ export class GlobalDataModule  implements OnInit {
   constructor(
     private http:HttpClient,
     private rout : Router,
-    private msg : NotificationService
+    private msg : NotificationService,
+    // public app: AppComponent,
+   
     ){
       
       
@@ -84,14 +96,42 @@ export class GlobalDataModule  implements OnInit {
 
    
   }
+  
 
     private _headerTitleSource = new Subject<string>();
     header_title$ = this._headerTitleSource.asObservable();
- 
-    private _userNameSource = new Subject<string>();
-    user_Name$ = this._userNameSource.asObservable();
+
+    
+  //////////////sets the header title ////////////////////////
+  setHeaderTitle(title: string) {
+    this._headerTitleSource.next(title.toUpperCase());
+
+  }
+
+  
  
 
+    getCrud(){
+
+      
+        var list:any = [];
+        this.http.get(environment.mainApi+'user/getusermenu?userid='+this.getUserID()+'&moduleid='+this.getModuleID()).subscribe(
+          (Response:any)=>{
+            list = Response;
+
+   
+          ;
+          }
+        ) 
+
+          
+  
+      return list.find((e:any)=>e.menuLink == this.rout.url.split("/").pop());
+
+       
+
+
+    }
 
 
   getModuleID(){
@@ -111,13 +151,13 @@ export class GlobalDataModule  implements OnInit {
   }
 
 
-  setCompanyProfile(item:any){
-    this.comapnayProfile.next(item);
-  }
+  // setCompanyProfile(item:any){
+  //   this.comapnayProfile.next(item);
+  // }
 
-  getCompanyProfile(): Observable<any>{
-    return this.comapnayProfile.asObservable();
-  }
+  // getCompanyProfile(): Observable<any>{
+  //   return this.comapnayProfile.asObservable();
+  // }
 
   //////////////////////// will provide logged in userID
   getUserID(){
@@ -204,21 +244,23 @@ getHours(date1:any, Time1:any, date2:any, Time2:any) {
 /////////////////////////////////////////////////////
 
 getCompany():any{
+
   this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
     (Response:any)=>{
+      this.comapnayProfile = Response;
 
       // return Response;
-      console.log(Response[0]);
-     this.Logo = Response[0].companyLogo1;
-     this.Logo1 = Response[0].companyLogo2;
-     this.CompanyName = Response[0].companyName;
-     this.Address = Response[0].companyAddress;
-     this.mobileNo = Response[0].companyMobile;
-     this.Phone = Response[0].companyPhone;
-     this.logo1Height = Response[0].logo1Height;
-     this.logo1Width  = Response[0].logo1Width;
-     this.logo2height  = Response[0].logo2Height;
-     this.logo2Width = Response[0].logo2Width;
+    //   console.log(Response[0]);
+    //  this.Logo = Response[0].companyLogo1;
+    //  this.Logo1 = Response[0].companyLogo2;
+    //  this.CompanyName = Response[0].companyName;
+    //  this.Address = Response[0].companyAddress;
+    //  this.mobileNo = Response[0].companyMobile;
+    //  this.Phone = Response[0].companyPhone;
+    //  this.logo1Height = Response[0].logo1Height;
+    //  this.logo1Width  = Response[0].logo1Width;
+    //  this.logo2height  = Response[0].logo2Height;
+    //  this.logo2Width = Response[0].logo2Width;
      
 
 
@@ -327,13 +369,8 @@ getCompany():any{
 
 
 
-  //////////////sets the header title ////////////////////////
-  setHeaderTitle(title: string) {
-    this._headerTitleSource.next(title.toUpperCase());
-  }
 
-  
-
+ 
 
 
 
