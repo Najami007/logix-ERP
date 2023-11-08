@@ -84,9 +84,10 @@
 
                 <div class="container-fluid py-2 col-lg-12 col-md-12 col-sm-12 col-xs-12 bg-light border ">
                     <div class="col-lg-12 row fw-bold mt-4">
-                        <span class="col-lg-5 ">Account Title</span>
-                        <span class="col-lg-3 text-end">Debit</span>
-                        <span class="col-lg-3 text-end">Credit</span>
+                        <span class="col-lg-3 ">Account Title</span>
+                        <span class="col-lg-4">Narration</span>
+                        <span class="col-lg-2 text-end">Debit</span>
+                        <span class="col-lg-2 text-end">Credit</span>
                     </div>
                     <!-- --------------------Third row-------------- -->
                     <div class=" row col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -94,7 +95,7 @@
 
 
 
-                        <mat-form-field class="col-lg-5 col-md-5 col-sm-5 col-xs-5 " appearance="outline">
+                        <mat-form-field class="col-lg-3  " appearance="outline">
                             <mat-label>COA Title </mat-label>
                             <mat-select id="cTitle" class="cTitle" [(ngModel)]="COATitleID" name="coaTitle"
                                 accesskey="c">
@@ -107,9 +108,17 @@
                         </mat-form-field>
 
 
+                        <!-- -------------------Narration Enter Area-------------- -->
+
+                        <mat-form-field class=" col-lg-4 " appearance="outline">
+
+                            <textarea  rows="1" matInput [(ngModel)]="detailNarration"  type="text"  ></textarea>
+                        </mat-form-field>
+
+
                         <!-- -------------------Debit amount Enter Area-------------- -->
 
-                        <mat-form-field class=" col-lg-3 col-md-3 col-sm-3 col-xs-3" appearance="outline">
+                        <mat-form-field class=" col-lg-2 " appearance="outline">
 
                             <input class="text-end" matInput [(ngModel)]="DebitAmount" (keydown)="changeValue($event)" [defaultValue]="0"
                                 type="number" min="0" [disabled]="vType == 'CRV' || vType == 'BRV'">
@@ -117,7 +126,7 @@
                         <!-- -------------------Credit amount Enter Area-------------- -->
 
 
-                        <mat-form-field class=" col-lg-3 col-md-3 col-sm-3 col-xs-3 " appearance="outline">
+                        <mat-form-field class=" col-lg-2 " appearance="outline">
 
                             <input class="text-end" matInput [(ngModel)]="CreditAmount" [defaultValue]="0"
                                 (keydown)="changeValue($event)" type="number" min="0" [disabled]="vType == 'CPV' || vType == 'BPV'">
@@ -137,11 +146,12 @@
 
                             <thead>
                                 <tr class="col-lg-12 font-size">
-                                    <th class="col-lg-1 col-md-1 col-sm-1 col-xs-1">S#</th>
-                                    <th class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Title</th>
-                                    <th class="col-lg-3 col-md-3 col-sm-3 col-xs-3">Debit Amont</th>
-                                    <th class="col-lg-3 col-md-3 col-sm-3 col-xs-3">Credit Amount</th>
-                                    <th class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Action</th>
+                                    <th class="col-lg-1 ">S#</th>
+                                    <th class="col-lg-3 ">Title</th>
+                                    <th class="col-lg-4 ">Narration</th>
+                                    <th class="col-lg-2 ">Debit Amont</th>
+                                    <th class="col-lg-2 ">Credit Amount</th>
+                                    <th class="col-lg-1 ">Action</th>
 
                                 </tr>
                             </thead>
@@ -153,6 +163,7 @@
                                 <tr *ngFor="let item of VoucherData, ;index as index ">
                                     <td class="">{{index+1}}</td>
                                     <td class="">{{item.title}}</td>
+                                    <td class="">{{item.DetailNarration}}</td>
                                     <td class="">{{item.Debit |number}}</td>
                                     <td class="">{{item.Credit |number}}</td>
                                     <td class=" "><mat-icon class=" text-danger "
@@ -162,6 +173,7 @@
                                 <tr *ngIf="VoucherData != ''" class="fw-bold bg-light">
                                     <td></td>
                                     <td> Total</td>
+                                    <td></td>
                                     <td>{{debittotal |number}}</td>
                                     <td>{{creditTotal |number}}</td>
                                     <td></td>
@@ -196,27 +208,24 @@
             <div >
                 
                 <!-------------------------    Top Logo Section -------------------->
-                <div class="text-center border-bottom d-flex justify-content-between">
-                    <span>
-                        <img src="{{logo}}" style="color: black;" alt="" srcset="" height="100"
-                            width="100">
+                <div class="text-center border-bottom d-flex justify-content-between" *ngFor="let item of companyProfile">
+                    <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
+    
                     </span>
-                    <span >
-                        <h3>{{CompanyName}}</h3>
-                            <p class="text-end w-75" style="margin-top: -15;">{{CompanyName2}}</p>
-                        <p style="margin-top: -20;">{{companyAddress}}</p>
-                        <p style="margin-top: -15;">{{companyPhone}}  {{companyMobileno}}</p>
-                        <p style="margin-top: -15;">{{companyEmail}}</p>
+                    <span class="mt-3">
+                        <h3 class="companyName">{{item.companyName}}</h3>
+                        <p style="margin-top: -15px;">{{item.companyAddress}}</p>
+                        <p style="margin-top: -20px;">{{item.companyMobile}}  {{item.companyPhone}}</p>
+                        <p style="margin-top: -20px;">{{item.companyEmail}}</p>
                     </span>
-                    <span>
-                        <img src="{{logo1}}" style="color: black;" alt="" srcset="" height="100"
-                            width="100">
+                    <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" [height]="item.logo2Height" [width]="item.logo2Width">
+    
                     </span>
             
             
                 </div>
-        
-        
 
                 <!-------------------------- Headers Area   ----------------------->
                <div class="d-flex">
@@ -345,7 +354,7 @@
             </table>
 
             <div class="d-flex" >
-                <mat-hint class="me-1 text-secondary">Total Rows : ({{SavedVoucherData.length || 0}})    </mat-hint>
+                <!-- <mat-hint class="me-1 text-secondary">Total Rows : ({{SavedVoucherData.length || 0}})    </mat-hint> -->
                 <pagination-controls
                 previousLabel="Prev"
                 nextLabel="Next"
@@ -373,21 +382,20 @@
             <div class="mt-2">
                 
                 <!-------------------------    Top Logo Section -------------------->
-                <div class="text-center border-bottom d-flex justify-content-between">
-                    <span>
-                        <img src="{{logo}}" style="color: black;" alt="" srcset="" height="100"
-                            width="100">
+                <div class="text-center border-bottom d-flex justify-content-between" *ngFor="let item of companyProfile">
+                    <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
+    
                     </span>
-                    <span >
-                        <h3 class="companyName">{{CompanyName}}</h3>
-                            <p class="companyName2" style="margin-top: -15;">{{CompanyName2}}</p>
-                        <p style="margin-top: -20;">{{companyAddress}}</p>
-                        <p style="margin-top: -15;">{{companyPhone}}  {{companyMobileno}}</p>
-                        <p style="margin-top: -15;">{{companyEmail}}</p>
+                    <span class="mt-3">
+                        <h3 class="companyName">{{item.companyName}}</h3>
+                        <p style="margin-top: -15px;">{{item.companyAddress}}</p>
+                        <p style="margin-top: -20px;">{{item.companyMobile}}  {{item.companyPhone}}</p>
+                        <p style="margin-top: -20px;">{{item.companyEmail}}</p>
                     </span>
-                    <span>
-                        <img src="{{logo1}}" style="color: black;" alt="" srcset="" height="100"
-                            width="100">
+                    <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" [height]="item.logo2Height" [width]="item.logo2Width">
+    
                     </span>
             
             

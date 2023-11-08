@@ -33,6 +33,7 @@ export class PLStatComponent implements OnInit {
   ngOnInit(): void {
     this.globalData.setHeaderTitle('Profit & Loss Statement');
     this.globalData.getCompany();
+    this.getProject();
     // this.logo = this.globalData.Logo;
     // this.logo1 = this.globalData.Logo1;
     // this.CompanyName = this.globalData.CompanyName;
@@ -57,32 +58,64 @@ export class PLStatComponent implements OnInit {
 
   expDebitTotal = 0;
   expCreditTotal = 0;
+  projectSearch:any;
+  projectID:number = 0;
+  projectList:any = [];
+
+  ////////////////////////////////////////////////////////////////
 
 
-  getIncomeTotal(){
-    this.incDebitTotal = 0;
-    this.incCreditTotal = 0;
-    this.IncomeData.forEach((e:any) => {
-      this.incDebitTotal += e.debit;
-      this.incCreditTotal += e.credit;
 
-    });
+
+
+
+
+ 
+  getProject(){
+    this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+      (Response:any)=>{
+        this.projectList = Response;
+      }
+    )
+  }
+ 
+
+
+  // getIncomeTotal(){
+  //   this.incDebitTotal = 0;
+  //   this.incCreditTotal = 0;
+  //   this.IncomeData.forEach((e:any) => {
+  //     this.incDebitTotal += e.debit;
+  //     this.incCreditTotal += e.credit;
+
+  //   });
 
    
-  }
-  getExpenseTotal(){
-    this.expDebitTotal = 0;
-    this.expCreditTotal = 0;
-    this.ExpenseData.forEach((e:any) => {
-      this.expDebitTotal += e.debit;
-      this.expCreditTotal += e.credit;
+  // }
+  // getExpenseTotal(){
+  //   this.expDebitTotal = 0;
+  //   this.expCreditTotal = 0;
+  //   this.ExpenseData.forEach((e:any) => {
+  //     this.expDebitTotal += e.debit;
+  //     this.expCreditTotal += e.credit;
 
-    });
-  }
+  //   });
+  // }
 
 
-  getReport(reqFunc:any){
-  
+  getReport(reqFunc:any,param:any){
+
+    if(this.projectID == 0 && param == 'project'){
+      this.msg.WarnNotify('Select Project');
+
+    }else{
+
+
+      if(param == 'all'){
+        this.projectID = 0;
+      }
+
+      
     this.incDebitTotal = 0;
     this.incCreditTotal = 0;
     this.expDebitTotal = 0;
@@ -94,14 +127,24 @@ export class PLStatComponent implements OnInit {
 
 
     if(reqFunc == 'R1'){
-      this.http.get(environment.mainApi+'GetProfitRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+'&todate='
-      +this.globalData.dateFormater(this.toDate,'-')).subscribe(
+      this.http.get(environment.mainApi+'acc/GetProfitRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+'&todate='
+      +this.globalData.dateFormater(this.toDate,'-')+'&projectid='+this.projectID).subscribe(
         (Response)=>{
          
           $('#printDiv').show();
+         
           
           this.IncomeData = Response;
-          this.getIncomeTotal();
+
+          this.incDebitTotal = 0;
+          this.incCreditTotal = 0;
+          this.IncomeData.forEach((e:any) => {
+            this.incDebitTotal += e.debit;
+            this.incCreditTotal += e.credit;
+      
+          });
+      
+
           this.app.stopLoaderDark();
           
   
@@ -114,15 +157,21 @@ export class PLStatComponent implements OnInit {
     }
 
     if(reqFunc == 'R2'){
-      this.http.get(environment.mainApi+'GetProfitDetailRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+'&todate='
-      +this.globalData.dateFormater(this.toDate,'-')).subscribe(
+      this.http.get(environment.mainApi+'acc/GetProfitDetailRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+'&todate='
+      +this.globalData.dateFormater(this.toDate,'-')+'&projectid='+this.projectID).subscribe(
         (Response)=>{
         
          
           $('#printDiv').show();
         
           this.IncomeData = Response;
-          this.getIncomeTotal();
+          this.incDebitTotal = 0;
+          this.incCreditTotal = 0;
+          this.IncomeData.forEach((e:any) => {
+            this.incDebitTotal += e.debit;
+            this.incCreditTotal += e.credit;
+      
+          });
           this.app.stopLoaderDark();
           
   
@@ -135,12 +184,22 @@ export class PLStatComponent implements OnInit {
     }
 
     
-    this.http.get(environment.mainApi+'GetLossRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+'&todate='
-    +this.globalData.dateFormater(this.toDate,'-')).subscribe(
+    this.http.get(environment.mainApi+'acc/GetLossRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+'&todate='
+    +this.globalData.dateFormater(this.toDate,'-')+'&projectid='+this.projectID).subscribe(
       (Response)=>{
 
         this.ExpenseData = Response;
-        this.getExpenseTotal();
+     
+
+        this.expDebitTotal = 0;
+        this.expCreditTotal = 0;
+        this.ExpenseData.forEach((e:any) => {
+          this.expDebitTotal += e.debit;
+          this.expCreditTotal += e.credit;
+    
+        });
+
+
         this.app.stopLoaderDark();
         $('#printDiv').show();
       },
@@ -149,6 +208,10 @@ export class PLStatComponent implements OnInit {
         this.app.stopLoaderDark();
       }
     )
+
+
+    }
+  
   }
   
 

@@ -55,16 +55,18 @@ export class TopNavBarComponent implements OnInit{
     }
     UserName:any = 'abc';
     companyProfile:any;
-    logo1:any;
+    logo1:any = '../../../../assets/Images/logo.png';
 
     ////////////////////////////////////////////////////////////////////////
   getCompany(){
     this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
       (Response:any)=>{
-        this.companyProfile = Response;
+        if(Response != ''){
+          this.companyProfile = Response;
         this.logo1 = this.companyProfile[0].companyLogo1; 
         //console.log(Response);  
-        this.globalData.comapnayProfile = Response[0];    
+        this.globalData.comapnayProfile = Response[0];      
+        }
         
       }
     )

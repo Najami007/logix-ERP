@@ -189,8 +189,8 @@
         <div class="avatar-preview">
           <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + logo1  + ')' }"></div>
         </div>
-        <div class="text-center">
-          <mat-label >H: {{companyProfile[0].logo1Height || 0}} W: {{companyProfile[0].logo1Width || 0}}</mat-label>
+        <div class="text-center" *ngIf=" companyProfile != '' ">
+          <mat-label >H: {{0 || companyProfile[0].logo1Height}} W: {{companyProfile[0].logo1Width || 0}}</mat-label>
         </div>
       </div>
 
@@ -200,7 +200,7 @@
         <div class="avatar-preview">
           <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + logo2 +  ')' }"></div>
         </div>
-        <div class="text-center">
+        <div class="text-center" *ngIf=" companyProfile != '' ">
           <mat-label >H: {{companyProfile[0].logo2Height || 0}} W: {{companyProfile[0].logo2Width || 0}}</mat-label>
         </div>
       </div>
@@ -210,7 +210,7 @@
         <div class="avatar-preview">
           <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' +logo3  + ')' }"></div>
         </div>
-        <div class="text-center">
+        <div class="text-center" *ngIf=" companyProfile != '' ">
           <mat-label >H: {{companyProfile[0].logo3Height || 0}} W: {{companyProfile[0].logo3Width || 0}}</mat-label>
         </div>
       </div>

@@ -1,9 +1,19 @@
 
 <div class="container body">
-    <div class="d-flex bg-white p-2 border-bottom">
+    <div class="row bg-white p-2">
 
 
-        <mat-form-field class="w-50" appearance="outline">
+        <mat-form-field class="col-lg-4 " appearance="outline" >
+            <mat-label>Project </mat-label>
+            <mat-select [(ngModel)]="projectID" >
+                <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch"
+                    [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                    name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of projectList|filter:projectSearch " value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="col-lg-4" appearance="outline">
             <mat-label>To Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="budgetMonth" [matDatepicker]="eDate">
             <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
@@ -11,8 +21,9 @@
         </mat-form-field>
 
 
-        <div class="w-50  text-center">
-            <button class=" btn btn-success btn-rpt w-25 me-2       " (click)="getReport()">Get Report</button>
+        <div class="col-lg-4  text-center">
+            <button class=" btn btn-success btn-rpt  col-lg-4 me-1       " (click)="getReport('project')">Projectwise</button>
+            <button class=" btn btn-success btn-rpt col-lg-4 me-1       " (click)="getReport('all')">Get Report</button>
             <button class=" btn  btn-primary btn-rpt " (click)="PrintTable()">Print</button>
         </div>
     </div>
@@ -22,27 +33,29 @@
 
         <!-----------------    logo Section ---------------->
         <div class="hide">
-            <div class="text-center  d-flex justify-content-between">
-                <span>
-                    <img src="{{logo}}" style="color: black;" alt="" srcset="" height="100" width="100">
+            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
                 </span>
                 <span >
                     
-    
-                    <h1 class="companyName" >{{CompanyName}}</h1>
-                    <p style="margin-top: -15px;" class="companyName2">{{CompanyName2}}</p>
-    
-                    <p class="rptTitle" style="margin-top:-25px">Monthly Budget Report</p>
-                    <p style="margin-top:-20px"><b>For Month:</b> {{budgetMonth | date:'yyyy-MM'}} </p>
+
+                    <h1 class="companyName">{{item.companyName}}</h1>
+                    
+
+                    <p class="rptTitle" style="margin-top:-20px">Monthly Budget Report </p>
+                    <h4 class="projtitl" *ngIf="projectName != ''" style="margin-top:-20px;"><b >Project:</b> {{projectName}}</h4>
+                    <p style="margin-top:-10px"><b>For Month:</b> {{budgetMonth | date:'yyyy-MM'}} </p>
                   
                 </span>
-                <span>
-                    <img src="{{logo1}}" style="color: black;" alt="" srcset="" height="100"width="100">
+                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
                 </span>
         
         
             </div>
            </div>
+ 
            <hr>
 
            <!---------------- Table Area ---------------->

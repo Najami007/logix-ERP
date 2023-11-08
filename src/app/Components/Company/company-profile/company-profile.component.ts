@@ -163,7 +163,9 @@ export class CompanyProfileComponent implements OnInit {
   getCompany(){
     this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
       (Response:any)=>{
+       if(Response != ''){
         this.companyProfile = Response;
+       }
         console.log(Response);
         
          

@@ -6,6 +6,8 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 
 import * as $ from 'jquery';
+import { MatDialog } from '@angular/material/dialog';
+import { VoucherDetailsComponent } from '../../voucher/voucher-details/voucher-details.component';
 
 @Component({
   selector: 'app-cashbook',
@@ -29,12 +31,22 @@ export class CashbookComponent implements OnInit{
     private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
-    private globalData:GlobalDataModule
-  ){}
+    private globalData:GlobalDataModule,
+    private dialogue:MatDialog
+  ){
+    this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+      (Response:any)=>{
+        this.companyProfile = Response;
+        //console.log(Response)  
+        
+      }
+    )
+  }
 
 
   ngOnInit(): void {
     $('.cashSummary').hide();
+    this.getProject();
     this.logo = this.globalData.Logo;
     this.logo1 = this.globalData.Logo1;
     this.CompanyName = this.globalData.CompanyName;
@@ -47,7 +59,7 @@ export class CashbookComponent implements OnInit{
   }
 
 
-
+  companyProfile:any;
   fromDate:Date = new Date();
   toDate:Date = new Date();
 
@@ -71,8 +83,22 @@ export class CashbookComponent implements OnInit{
  lblVoucherPrintDate = new Date();
  invoiceDetails:any;
  
+ projectSearch:any;
+ projectName:any;
+  projectID:number = 0;
+ projectList:any = [];
 
 
+
+
+ 
+ getProject(){
+   this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+     (Response:any)=>{
+       this.projectList = Response;
+     }
+   )
+ }
 
 
  getTotal(){
@@ -91,27 +117,45 @@ export class CashbookComponent implements OnInit{
  }
 
 /////////////////////////////////////////////////////////////////
-  getDetailReport(){
-    this.tableData = [];
-    this.app.startLoaderDark();
+  getDetailReport(param:any){
 
-    $('#CashBookDetail').show();
-    $('.cashSummary').hide();
-
-    this.http.get(environment.mainApi+'GetCashBookDetailRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+
-    '&todate='+this.globalData.dateFormater(this.toDate,'-')).subscribe(
-      (Response:any)=>{
-        
-        this.tableData = Response;
-        this.getTotal();
-        this.app.stopLoaderDark();
-    
-      },
-      (Error)=>{
-        this.msg.WarnNotify('Error Occured While Loading Report')
-        this.app.stopLoaderDark();
+    if(this.projectID == 0 && param == 'project'){
+      this.msg.WarnNotify('Select Project')
+    }else{
+      this.tableData = [];
+      this.app.startLoaderDark();
+      this.projectName = '';
+      if(param == 'all'){
+      
+        this.projectID = 0;
       }
-    )
+      if(this.projectID != 0){
+        this.projectName = this.projectList.find((e:any)=> e.projectID == this.projectID).projectTitle;
+      }
+      
+  
+    
+  
+      $('#CashBookDetail').show();
+      $('.cashSummary').hide();
+  
+      this.http.get(environment.mainApi+'acc/GetCashBookDetailRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+
+      '&todate='+this.globalData.dateFormater(this.toDate,'-')+'&projectid='+this.projectID).subscribe(
+        (Response:any)=>{
+          
+          this.tableData = Response;
+          this.getTotal();
+          this.app.stopLoaderDark();
+      
+        },
+        (Error)=>{
+          this.msg.WarnNotify('Error Occured While Loading Report')
+          this.app.stopLoaderDark();
+        }
+      )
+    }
+
+
   }
 
 
@@ -123,8 +167,8 @@ export class CashbookComponent implements OnInit{
     $('#CashBookDetail').hide();
     $('.cashSummary').show();
 
-    this.http.get(environment.mainApi+'GetCashBookSummaryRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+
-    '&todate='+this.globalData.dateFormater(this.toDate,'-')).subscribe(
+    this.http.get(environment.mainApi+'acc/GetCashBookSummaryRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+
+    '&todate='+this.globalData.dateFormater(this.toDate,'-')+'&projectid='+this.projectID).subscribe(
       (Response)=>{
         this.cashSummary = Response;
         this.app.stopLoaderDark();
@@ -146,29 +190,14 @@ export class CashbookComponent implements OnInit{
 
   /////////////////////////////////////////////
 
-  getInvoiceDetail(invoiceNo:any){
+ 
 
-    this.lblDebitTotal = 0;
-    this.lblCreditTotal = 0;
-    this.invoiceDetails = [];   
-    
-    this.http.get(environment.mainApi+'GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
-      (Response:any)=>{
-        // console.log(Response);
-        this.invoiceDetails = Response;
-        if(Response != ''){
-         
-          Response.forEach((e:any) => {
-            this.lblDebitTotal += e.debit;
-            this.lblCreditTotal += e.credit;
-          });
-        }
-      },
-      (error:any)=>{
-        console.log(error);
-        this.msg.WarnNotify('Error Occured While Printing');
-      }
-    )
+  VoucherDetails(row:any){
+    this.dialogue.open(VoucherDetailsComponent,{
+      width:"40%",
+      data:row,
+    }).afterClosed().subscribe(val=>{
+      
+    })
   }
-
 }

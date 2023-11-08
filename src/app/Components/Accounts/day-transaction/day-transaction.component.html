@@ -3,16 +3,25 @@
     <!-----------           Date Selection Section ------------------>
     
         <div class=" container-fluid  p-3 border-bottom">
-            <div class="selrow row text-center">
+            <div class="selrow row ">
+                <mat-form-field class="col-lg-4 "  appearance="outline">
+                    <mat-label>Project </mat-label>
+                    <mat-select [(ngModel)]="projectID" >
+                        <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch"
+                            [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                            name="search"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of projectList|filter:projectSearch " value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
      
-                    <mat-form-field class="w-25 " appearance="outline">
+                    <mat-form-field class="col-lg-2 " appearance="outline">
                         <mat-label>From Date</mat-label>
                         <input matInput type="text"  readonly="true" [(ngModel)]="fromDate" [matDatepicker]="startDate">
                         <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
                         <mat-datepicker #startDate></mat-datepicker>
                     </mat-form-field>
 
-                    <mat-form-field class="w-25" appearance="outline">
+                    <mat-form-field class="col-lg-2" appearance="outline">
                         <mat-label>To Date</mat-label>
                         <input matInput type="text" readonly="true" [(ngModel)]="toDate"  [matDatepicker]="EndDate">
                         <mat-datepicker-toggle matSuffix [for]="EndDate"></mat-datepicker-toggle>
@@ -20,13 +29,16 @@
                     </mat-form-field>
                 
 
-                <div class="w-50  ">
-                    <button class="btn btn-primary w-25 btn-rpt me-2" (click)="getReport()" >
-                       Get Report
+                <div class="col-lg-4  ">
+                    <button class="btn btn-success col-lg-4 btn-rpt me-1" (click)="getReport('project')" >
+                        ProjectWise
+                     </button>  
+                    <button class="btn btn-success col-lg-4 btn-rpt me-1" (click)="getReport('all')" >
+                       Get ALL
                     </button>   
                    
                 
-                    <button class=" btn btn-primary w-25 btn-rpt" (click)="PrintTable()">
+                    <button class=" btn btn-primary col-lg-3 btn-rpt" (click)="PrintTable()">
                        Print
                     </button>
                 </div>
@@ -39,28 +51,29 @@
         <div id="printRpt">
 
              <!-------------------------    Top Logo Section -------------------->
-           <div class="hide">
-            <div class="text-center border-bottom d-flex justify-content-between">
-                <span>
-                    <img src="{{logo}}" style="color: black;" alt="" srcset="" height="100" width="100">
-                </span>
-                <span >
-                    
-
-                    <h1 class="companyName">{{CompanyName}}</h1>
-                    <p style="margin-top: -15px;" class="companyName2">{{CompanyName2}}</p>
-
-                    <p class="rptTitle" style="margin-top:-25px">Transaction Report</p>
-                    <p style="margin-top:-20px"><b>From:</b> {{fromDate | date:'yyyy-MM-dd'}} <b>To:</b> {{toDate | date:'yyyy-MM-dd'}}</p>
-                  
-                </span>
-                <span>
-                    <img src="{{logo1}}" style="color: black;" alt="" srcset="" height="100" width="100">
-                </span>
-        
-        
-            </div>
-           </div>
+             <div class="hide border-bottom">
+                <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                    <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
+                    </span>
+                    <span >
+                        
+    
+                        <h1 class="companyName">{{item.companyName}}</h1>
+                        
+    
+                        <p class="rptTitle" style="margin-top:-20px">Transaction Report</p>
+                        <h4 class="projtitl" *ngIf="projectName != ''" style="margin-top:-20px;"><b >Project:</b> {{projectName}}</h4>
+                        <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}} <b>To:</b> {{toDate | date:'dd-MM-yyyy'}}</p>
+                      
+                    </span>
+                    <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                    </span>
+            
+            
+                </div>
+               </div>
 
            <div>
             <table class="table table-logix">
@@ -76,8 +89,8 @@
                 <tbody>
                     <tr *ngFor="let item of reportData;index as index">
                         <td class="text-center">{{index+1}}</td>
-                        <td class="cursorPointer" data-bs-toggle="modal" data-bs-target="#invoiceDetailModel" 
-                        (click)="getInvoiceDetail(item.invoiceNo)"><span style="color: blue;border-bottom: 1px solid blue;">{{item.invoiceNo}}</span></td>
+                        <td class="cursorPointer" 
+                        (click)="VoucherDetails(item)"><span style="color: blue;border-bottom: 1px solid blue;">{{item.invoiceNo}}</span></td>
                         <td>{{item.invoiceDate |date:'yyyy-MM-dd'}}</td>
                         <td class="col-lg-4">{{item.invoiceRemarks}}</td>
                         <td class="text-end">{{item.amount |number:'1.0-0'}}</td>
@@ -91,53 +104,7 @@
 
 
 
-         <!--------------------------  Modal Window to check invoice Details ----------------------->
-
-
- <div class="modal fade h-100 bg-light " id="invoiceDetailModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title" id="exampleModalLabel">Voucher Details</h2>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-       <!----------------------- Table Area --------------------->
-
-       <div>
-        <table class="table">
-            <thead class="border-bottom ">
-                
-                <th>S#</th>
-                <th>Description</th>
-                <th>Debit</th>
-                <th>Credit</th>
-            
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of invoiceDetails; index as index">
-                    <td>{{index+1}}</td>
-                    <td>{{item.coaTitle}} ({{item.accountCode}})</td>
-                    <td>{{item.debit |number:'1.0-0'}}</td>
-                    <td>{{item.credit |number:'1.0-0'}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Total</b></td>
-                    <td><b>{{lblDebitTotal |number:'1.0-0'}}</b></td>
-                    <td><b>{{lblCreditTotal |number:'1.0-0'}}</b></td>
-                </tr>
-            </tbody>
-        </table>
-       </div>
-           
-
-
-        </div>
-        
-      </div>
-    </div>
-  </div>
+ 
 
     </div>
 

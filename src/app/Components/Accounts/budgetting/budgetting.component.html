@@ -7,17 +7,26 @@
            <!----------------           Date Section ------------------------------->
                     <div class=" container-fluid p-3 border-bottom row justify-content-center">
 
+                        <mat-form-field class="col-lg-2 " appearance="outline" >
+                            <mat-label>Project </mat-label>
+                            <mat-select [(ngModel)]="projectID" >
+                                <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch"
+                                    [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                                    name="search"></ngx-mat-select-search></mat-option>
+                                <mat-option *ngFor="let item of projectList|filter:projectSearch " [value]="item.projectID">{{item.projectTitle}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
                       
 
                         <mat-form-field class="col-lg-2" appearance="outline">
                             <mat-label>Date</mat-label>
                             <input  matInput   [(ngModel)]="BudgetMonth"
-                                [matDatepicker]="picker" disabled="{{budgetData != ''}}"   readonly="true" >
+                                [matDatepicker]="picker"  readonly="true" >
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                         </mat-form-field>
                         
-                            <mat-form-field class="col-lg-6 " appearance="outline">
+                            <mat-form-field class="col-lg-4 " appearance="outline">
                                 <mat-label>Select Account Head</mat-label>
                                 <mat-select [(ngModel)]="CoaID">
                                     <mat-option><ngx-mat-select-search [(ngModel)]="coaSearch"
@@ -63,6 +72,7 @@
                                 <tr *ngFor="let item of budgetData;index as index">
                                     <td>{{index+1}}</td>
                                     <td>{{item.coaTitle}}</td>
+                                    
                                     <td>{{item.budgetAmount |number}}</td>
                                     <td (click)="delRow(item)" class="text-danger cursorPointer"><mat-icon>delete</mat-icon></td>
                                 </tr>
@@ -106,6 +116,7 @@
                     <thead>
                         <th>S#</th>
                         <th>Date</th>
+                        <th>Project</th>
                         <th>Description</th>
                         <th>Amount</th>
                         <th>Action</th>
@@ -114,6 +125,7 @@
                         <tr *ngFor="let item of savedData ; index as index">
                             <td>{{index+1}}</td>
                             <td>{{item.budgetDate |date:'yyyy-MM'}}</td>
+                            <td>{{item.projectTitle}}</td>
                             <td>{{item.description}}</td>
                             <td>{{item.budgetAmount |number}}</td>
                            
@@ -133,26 +145,30 @@
 
             <div class="d-none" id="PrintDiv">
                 <!-------------------------    Top Logo Section -------------------->
-                <div class="text-center border-bottom d-flex justify-content-between">
-                    <span>
-                        <img src="{{logo}}" style="color: black;" alt="" srcset="" height="150"
-                            width="150">
-                    </span>
-                    <span class="mt-3">
-                        <h3>{{CompanyName}}</h3>
-                            <p class="" style="margin-top: -15;">{{CompanyName2}}</p>
-                        <p style="margin-top: -20;">{{companyAddress}}</p>
-                        <p style="margin-top: -15;">{{companyPhone}}</p>
-                        <h2>Monthly Budget</h2>
-                        <p>For the Month : {{lblBudgetDate | date:'yyyy-MM'}}</p>
-                    </span>
-                    <span>
-                        <img src="{{logo1}}" style="color: black;" alt="" srcset="" height="150"
-                            width="150">
-                    </span>
-            
-            
-                </div>
+                <div class="hide">
+                    <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                        <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                            <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
+                        </span>
+                        <span >
+                            
+        
+                            <h1 class="companyName">{{item.companyName}}</h1>
+                            
+        
+                            <p class="rptTitle" style="margin-top:-20px">Monthly Budget </p>
+                            <h4 class="projtitl" *ngIf="projectName != ''" style="margin-top:-20px;"><b >Project:</b> {{projectName}}</h4>
+                            <p style="margin-top:-10px">For the Month : {{lblBudgetDate | date:'yyyy-MM'}}</p>
+                          
+                        </span>
+                        <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                            <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                        </span>
+                
+                
+                    </div>
+                   </div>
+           
 
 
                 <!--------------- Header Section ------------------>

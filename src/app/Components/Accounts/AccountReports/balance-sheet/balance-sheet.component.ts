@@ -4,6 +4,7 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import * as $ from 'jquery';
+import { NotificationService } from 'src/app/Shared/service/notification.service';
 
 @Component({
   selector: 'app-balance-sheet',
@@ -13,31 +14,27 @@ import * as $ from 'jquery';
 export class BalanceSheetComponent implements OnInit {
 
 
-  logo:any;
-  logo1:any;
-  CompanyName:any;
-  CompanyName2:any;
-   companyAddress :any;
-   companyPhone :any;
-   companyMobileno:any;
-   companyEmail:any;
 
 
+   companyProfile:any;
   constructor(private globalData: GlobalDataModule,
     private http:HttpClient,
     private app:AppComponent,
+    private msg:NotificationService
     ){
+
+      this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+        (Response:any)=>{
+          this.companyProfile = Response;
+          //console.log(Response)  
+          
+        }
+      )
 
   }
   ngOnInit(): void {
-    this.logo = this.globalData.Logo;
-    this.logo1 = this.globalData.Logo1;
-    this.CompanyName = this.globalData.CompanyName;
-    this.CompanyName2 = this.globalData.CompanyName2;
-    this.companyAddress = this.globalData.Address;
-    this.companyPhone = this.globalData.Phone;
-    this.companyMobileno = this.globalData.mobileNo;
-    this.companyEmail = this.globalData.Email;
+    this.getProject();
+  
     this.globalData.setHeaderTitle('Balance Sheet');
     $('#printRpt').hide();
     $('#balanceSheet2').hide();
@@ -65,71 +62,108 @@ export class BalanceSheetComponent implements OnInit {
   oLiabilityTotal:any = 0;
   oCapitalTotal:any = 0;
   oAccumulatedTotal:any = 0;
+
+
+  ////////////////////////////////////////////////////////////////////
+
+  projectSearch:any;
+  projectID:number = 0;
+  projectName:any ;
+  projectList:any = [];
+
+
+
+
+ 
+  getProject(){
+    this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+      (Response:any)=>{
+        this.projectList = Response;
+      }
+    )
+  }
+ 
   
 
   PrintTable(){
     this.globalData.printData('#printRpt');
   }
 
-  getBalanceSheet(){
+  getBalanceSheet(param:any){
 
-    this.currentYear = this.getYear();
-   
-    this.previousYear = this.currentYear-1
+    if(this.projectID == 0 && param == 'project'){
+      this.msg.WarnNotify('Select Project')
+    }else{
+      this.projectName = '';
 
-    this.http.get(environment.mainApi+'GetMainBalanceSheet?todate='+this.globalData.dateFormater(this.toDate,'-')).subscribe(
-      (Response:any)=>{
-        this.assetList = [];
-        this.liabilityList = [];
-        this.capitalList = [];
-        this.accumulatedPL = [];
-        this.assetTotal =0;
-        this.liabilityTotal = 0;
-        this.capitalTotal = 0;
-        this.accumulatedTotal=0;
-        this.oAssetTotal = 0;
-        this.oLiabilityTotal = 0;
-        this.oCapitalTotal= 0;
-        this.oAccumulatedTotal = 0;
-
-        $('#printRpt').show();
-
-        Response.forEach((e:any) => {
-      
-          if(e.coaTypeID == 1){
-            this.assetList.push(e);
-
-          this.assetTotal += e.nTotal;
-          this.oAssetTotal += e.oTotal;
-          }
-    
-          if(e.coaTypeID == 4){
-            this.liabilityList.push(e);
-            this.liabilityTotal += e.nTotal;
-            this.oLiabilityTotal += e.oTotal;
-          }
-          if(e.coaTypeID == 5){
-            this.capitalList.push(e);
-            this.capitalTotal += e.nTotal;
-            this.oCapitalTotal += e.oTotal;
-          }
-
-          if(e.noteID == 0.2){
-            this.accumulatedTotal -= e.nTotal;
-            this.oAccumulatedTotal -= e.oTotal;
-          }
-
-          if(e.noteID == 0.3){
-            this.accumulatedTotal += e.nTotal;
-            this.oAccumulatedTotal += e.oTotal;
-          }
-
-      
+      if(param == 'all'){
+        this.projectID = 0;
       }
-    )
-  }
-    
-    )
+      if(this.projectID != 0){
+        this.projectName = this.projectList.find((e:any)=> e.projectID == this.projectID).projectTitle;
+      }
+      
+
+      this.currentYear = this.getYear();
+   
+      this.previousYear = this.currentYear-1
+  
+      this.http.get(environment.mainApi+'acc/GetMainBalanceSheet?todate='+this.globalData.dateFormater(this.toDate,'-')+'&projectid='+this.projectID).subscribe(
+        (Response:any)=>{
+          this.assetList = [];
+          this.liabilityList = [];
+          this.capitalList = [];
+          this.accumulatedPL = [];
+          this.assetTotal =0;
+          this.liabilityTotal = 0;
+          this.capitalTotal = 0;
+          this.accumulatedTotal=0;
+          this.oAssetTotal = 0;
+          this.oLiabilityTotal = 0;
+          this.oCapitalTotal= 0;
+          this.oAccumulatedTotal = 0;
+  
+          $('#printRpt').show();
+  
+          Response.forEach((e:any) => {
+        
+            if(e.coaTypeID == 1){
+              this.assetList.push(e);
+  
+            this.assetTotal += e.nTotal;
+            this.oAssetTotal += e.oTotal;
+            }
+      
+            if(e.coaTypeID == 4){
+              this.liabilityList.push(e);
+              this.liabilityTotal += e.nTotal;
+              this.oLiabilityTotal += e.oTotal;
+            }
+            if(e.coaTypeID == 5){
+              this.capitalList.push(e);
+              this.capitalTotal += e.nTotal;
+              this.oCapitalTotal += e.oTotal;
+            }
+  
+            if(e.noteID == 0.2){
+              this.accumulatedTotal -= e.nTotal;
+              this.oAccumulatedTotal -= e.oTotal;
+            }
+  
+            if(e.noteID == 0.3){
+              this.accumulatedTotal += e.nTotal;
+              this.oAccumulatedTotal += e.oTotal;
+            }
+  
+        
+        }
+      )
+    }
+      
+      )
+    }
+
+  
   
   }
 

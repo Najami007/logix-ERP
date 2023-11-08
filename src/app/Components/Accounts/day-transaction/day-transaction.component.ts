@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
+import { VoucherDetailsComponent } from '../voucher/voucher-details/voucher-details.component';
 
 
 @Component({
@@ -17,19 +19,20 @@ export class DayTransactionComponent implements OnInit{
     private http:HttpClient,
     private global:GlobalDataModule,
     private app:AppComponent,
-    private msg:NotificationService
+    private msg:NotificationService,
+    private dialogue:MatDialog
   ){
+    this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+      (Response:any)=>{
+        this.companyProfile = Response;
+        //console.log(Response)  
+        
+      }
+    )
   
   }
   
-  logo:any;
-  logo1:any;
-  CompanyName:any;
-  CompanyName2:any;
-     companyAddress :any;
-     companyPhone :any;
-     companyMobileno:any;
-     companyEmail:any;
+
    
   
   
@@ -37,14 +40,8 @@ export class DayTransactionComponent implements OnInit{
     ngOnInit(): void {
   
       this.global.setHeaderTitle('Transaction Report');
-      this.logo = this.global.Logo;
-      this.logo1 =  this.global.Logo1;
-      this.CompanyName = this.global.CompanyName;
-      this.CompanyName2 = this.global.CompanyName2;
-      this.companyAddress = this.global.Address;
-      this.companyPhone = this.global.Phone;
-      this.companyMobileno = this.global.mobileNo;
-      this.companyEmail = this.global.Email;
+      this.getProject();
+     
   
   
   
@@ -52,58 +49,69 @@ export class DayTransactionComponent implements OnInit{
   
     fromDate:Date = new Date();
     toDate:Date = new Date();
-  
+    companyProfile:any = [];
+    projectSearch:any;
+    coaID:any;
+    projectID:number = 0;
+    projectName:any;
   
     lblDebitTotal:any;
     lblCreditTotal:any;
     invoiceDetails:any;
     reportData:any;
   
-  
-    getReport(){
-  
-      this.app.startLoaderDark();
-      this.http.get(environment.mainApi+'acc/GetDayTransaction?FromDate='+this.global.dateFormater(this.fromDate,'-')+
-      '&ToDate='+this.global.dateFormater(this.toDate,'-')).subscribe(
-        (Response)=>{
-          this.reportData = Response;
-          this.app.stopLoaderDark();
-        },
-        (Error:any)=>{
-          this.msg.WarnNotify('Error Occured');
-          this.app.stopLoaderDark();
+
+
+    projectList:any = [];
+
+
+
+
+ 
+    getProject(){
+      this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+        (Response:any)=>{
+          this.projectList = Response;
         }
       )
+    }
+  
+    getReport(param:any){
+      if(this.projectID == 0 && param == 'project'){
+        this.msg.WarnNotify('Select Project')
+      }else{
+
+
+        this.projectName = '';
+        if(this.projectID != 0 && param == 'project' ){
+          this.projectName = this.projectList.find((e:any)=> e.projectID == this.projectID).projectTitle;
+        }
+
+        this.app.startLoaderDark();
+        this.http.get(environment.mainApi+'acc/GetDayTransaction?FromDate='+this.global.dateFormater(this.fromDate,'-')+
+        '&ToDate='+this.global.dateFormater(this.toDate,'-')).subscribe(
+          (Response:any)=>{
+            //console.log(Response);
+            if(param == 'all'){
+              this.reportData = Response;
+            }
+
+            if(param == 'project'){
+              this.reportData = Response.filter((e:any)=>e.projectID == this.projectID);
+            }
+
+            this.app.stopLoaderDark();
+          },
+          (Error:any)=>{
+            this.msg.WarnNotify('Error Occured');
+            this.app.stopLoaderDark();
+          }
+        )
+      }
+  
     }
     
   
-    /////////////////////////////////////////////
-  
-    getInvoiceDetail(invoiceNo:any){
-  
-      this.lblDebitTotal = 0;
-      this.lblCreditTotal = 0;
-      this.invoiceDetails = [];
-  
-      
-      this.http.get(environment.mainApi+'acc/GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
-        (Response:any)=>{
-          // console.log(Response);
-          this.invoiceDetails = Response;
-          if(Response != ''){
-           
-            Response.forEach((e:any) => {
-              this.lblDebitTotal += e.debit;
-              this.lblCreditTotal += e.credit;
-            });
-          }
-        },
-        (error:any)=>{
-          console.log(error);
-          this.msg.WarnNotify('Error Occured While Printing');
-        }
-      )
-    }
   
   
     ///////////////////////////////////////////////////
@@ -111,6 +119,17 @@ export class DayTransactionComponent implements OnInit{
     PrintTable(){
       this.global.printData('#printRpt');
       
+    }
+
+
+
+    VoucherDetails(row:any){
+      this.dialogue.open(VoucherDetailsComponent,{
+        width:"40%",
+        data:row,
+      }).afterClosed().subscribe(val=>{
+        
+      })
     }
   
   

@@ -13,6 +13,8 @@ import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
 import * as moment_1 from 'moment';
 import Swal from 'sweetalert2';
+import { MatDialog } from '@angular/material/dialog';
+import { PincodeComponent } from '../../User/pincode/pincode.component';
 @Component({
   selector: 'app-budgetting',
   templateUrl: './budgetting.component.html',
@@ -20,34 +22,32 @@ import Swal from 'sweetalert2';
 })
 export class BudgettingComponent implements OnInit {
   
+  companyProfile:any = [];
 
-
-  logo:any;
-  logo1:any;
-  CompanyName :any;
-  CompanyName2:any;
-  companyAddress :any;
-  companyPhone :any;
   constructor (
     private http:HttpClient,
     private msg:NotificationService,
     private globalData:GlobalDataModule,
     private app:AppComponent,
+    private dialogue:MatDialog
 
   ){
 
+    this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+      (Response:any)=>{
+        this.companyProfile = Response;
+        //console.log(Response)  
+        
+      }
+    )
   }
 
   ngOnInit(): void {
     this.globalData.setHeaderTitle('Budgetting');
+    this.getProject();
     this.GetChartOfAccount();
     this.getSaved();
-    this.logo = this.globalData.Logo;
-    this.logo1 = this.globalData.Logo1;
-    this.CompanyName = this.globalData.CompanyName;
-    this.CompanyName2 = this.globalData.CompanyName2;
-    this.companyAddress = this.globalData.Address;
-    this.companyPhone = this.globalData.Phone;
+
   
   }
 
@@ -59,9 +59,11 @@ export class BudgettingComponent implements OnInit {
   TotalAmount = 0;
   description:any;
   budgetID:any;
-
+  projectName:any;
   
-
+  projectSearch:any;
+  coaID:any;
+  projectID:number = 0;
   BudgetMonth:Date = new Date();
 
   ExpenseList:any = [];
@@ -82,6 +84,20 @@ export class BudgettingComponent implements OnInit {
 
 
   ////////////////////////////////
+  projectList:any = [];
+
+
+
+
+ 
+  getProject(){
+    this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+      (Response:any)=>{
+        this.projectList = Response;
+      }
+    )
+  }
+ 
 
 
 
@@ -118,6 +134,7 @@ export class BudgettingComponent implements OnInit {
       (Response:any)=>{
       
         this.savedData = Response;
+        //console.log(Response);
       }
     )
   }
@@ -129,7 +146,7 @@ export class BudgettingComponent implements OnInit {
 
   save(){
     if(this.CoaID == "" || this.CoaID == undefined){
-      this.msg.WarnNotify('Select Charts')
+      this.msg.WarnNotify('Select Expense Head')
     }else if(this.amount == '' || this.amount == undefined){
       this.msg.WarnNotify('Enter The Amount')
     }else{
@@ -184,7 +201,10 @@ export class BudgettingComponent implements OnInit {
   SaveBudget(){
     if(this.budgetData == ''){
       this.msg.WarnNotify('Table is Empty')
-    }else{
+    }else if(this.projectID == 0){
+      this.msg.WarnNotify('Select Project')
+    }
+    else{
 
       if(this.description == '' || this.description == undefined){
         this.description = '-';
@@ -193,7 +213,14 @@ export class BudgettingComponent implements OnInit {
       if(this.btnText == 'Save'){
         this.insertBudget();
       }else if(this.btnText == 'Update'){
-        this.updateBudget();
+        this.dialogue.open(PincodeComponent,{
+          width:'30%'
+        }).afterClosed().subscribe(pin=>{
+          if(pin != ''){
+            this.updateBudget(pin);
+          }
+        })
+        
       }
     }
   }
@@ -203,8 +230,12 @@ export class BudgettingComponent implements OnInit {
 
   editBudget(row:any){
 
-   
-  
+    this.projectID = row.projectID; 
+    this.budgetID = row.budgetID;
+    this.BudgetMonth = new Date(row.budgetDate);
+    this.description = row.description;
+
+
 
     this.http.get(environment.mainApi+'acc/getbudgetdetail?budgetID='+row.budgetID).subscribe(
       (Response)=>{
@@ -213,10 +244,6 @@ export class BudgettingComponent implements OnInit {
       }
     )
 
-    this.budgetID = row.budgetID;
-    this.BudgetMonth = row.budgetDate;
-    
-    this.description = row.description;
     this.TotalAmount = row.budgetAmount;
     this.TabIndex = 0;
    
@@ -235,6 +262,7 @@ export class BudgettingComponent implements OnInit {
       BudgetDate: this.globalData.dateFormater(this.BudgetMonth,'-'),
       Description: this.description,
       BudgetDetail: JSON.stringify(this.budgetData) ,
+      ProjectID:this.projectID,
       UserID: this.globalData.getUserID(),
     }).subscribe(
       (Response:any)=>{
@@ -254,13 +282,15 @@ export class BudgettingComponent implements OnInit {
 
   /////////////////////////////////////////////
 
-  updateBudget(){
+  updateBudget(pin:any){
     
     this.app.startLoaderDark();
     this.http.post(environment.mainApi+'acc/updateBudget',{
       BudgetID: this.budgetID,
-      BudgetDate: this.BudgetMonth,
+      BudgetDate:this.globalData.dateFormater(this.BudgetMonth,'-'),
       Description: this.description,
+      ProjectID:this.projectID,
+      PinCode:pin,
       BudgetDetail: JSON.stringify(this.budgetData) ,
       UserID: this.globalData.getUserID(),
     }).subscribe(
@@ -282,37 +312,46 @@ export class BudgettingComponent implements OnInit {
   ///////////////////////////////////////////
   deleteBudget(row:any){
 
-    Swal.fire({
-      title:'Alert!',
-      text:'Confirm to Delete the Data',
-      position:'center',
-      icon:'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Confirm',
-    }).then((result)=>{
-      if(result.isConfirmed){
-
-        //////on confirm button pressed the api will run
-        this.app.startLoaderDark();
-        this.http.post(environment.mainApi+'acc/DeleteBudget',{
-          BudgetID: row.budgetID,
-        UserID: this.globalData.getUserID(),
-        }).subscribe(
-          (Response:any)=>{
-            if(Response.msg == 'Data Deleted Successfully'){
-              this.msg.SuccessNotify(Response.msg);
-              this.getSaved();
-              this.app.stopLoaderDark();
-            }else{
-              this.msg.WarnNotify(Response.msg);
-              this.app.stopLoaderDark();
-            }
+    this.dialogue.open(PincodeComponent,{
+      width:'30%'
+    }).afterClosed().subscribe(pin=>{
+      if(pin != ''){
+        Swal.fire({
+          title:'Alert!',
+          text:'Confirm to Delete the Data',
+          position:'center',
+          icon:'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Confirm',
+        }).then((result)=>{
+          if(result.isConfirmed){
+    
+            //////on confirm button pressed the api will run
+            this.app.startLoaderDark();
+            this.http.post(environment.mainApi+'acc/DeleteBudget',{
+              BudgetID: row.budgetID,
+              PinCode:pin,
+            UserID: this.globalData.getUserID(),
+            }).subscribe(
+              (Response:any)=>{
+                if(Response.msg == 'Data Deleted Successfully'){
+                  this.msg.SuccessNotify(Response.msg);
+                  this.getSaved();
+                  this.app.stopLoaderDark();
+                }else{
+                  this.msg.WarnNotify(Response.msg);
+                  this.app.stopLoaderDark();
+                }
+              }
+            )
           }
-        )
+        });
       }
-    });
+    })
+
+  
    
   }
 
@@ -321,40 +360,48 @@ export class BudgettingComponent implements OnInit {
 
   approveBudget(row:any){
 
-
-    Swal.fire({
-      title:'Alert!',
-      text:'Confirm to Approve Budget',
-      position:'center',
-      icon:'success',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Confirm',
-    }).then((result)=>{
-      if(result.isConfirmed){
-
-        //////on confirm button pressed the api will run
-        this.app.startLoaderDark();
-        this.http.post(environment.mainApi+'acc/ApproveBudget',{
-          BudgetID: row.budgetID,
-        UserID: this.globalData.getUserID(),
-        }).subscribe(
-          (Response:any)=>{
-            if(Response.msg =='Voucher Approved Successfully'){
-              this.msg.SuccessNotify(Response.msg);
-              this.getSaved();
-              this.app.stopLoaderDark();
-            }else{
-              this.msg.WarnNotify(Response.msg);
-              this.amount.stopLoaderDark();
-            }
-            
-            
+    this.dialogue.open(PincodeComponent,{
+      width:'30%'
+    }).afterClosed().subscribe(pin=>{
+      if(pin != ''){
+        Swal.fire({
+          title:'Alert!',
+          text:'Confirm to Approve Budget',
+          position:'center',
+          icon:'success',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Confirm',
+        }).then((result)=>{
+          if(result.isConfirmed){
+    
+            //////on confirm button pressed the api will run
+            this.app.startLoaderDark();
+            this.http.post(environment.mainApi+'acc/ApproveBudget',{
+              BudgetID: row.budgetID,
+              PinCode:pin,
+            UserID: this.globalData.getUserID(),
+            }).subscribe(
+              (Response:any)=>{
+                if(Response.msg =='Budget Approved Successfully'){
+                  this.msg.SuccessNotify(Response.msg);
+                  this.getSaved();
+                  this.app.stopLoaderDark();
+                }else{
+                  this.msg.WarnNotify(Response.msg);
+                  this.amount.stopLoaderDark();
+                }
+                
+                
+              }
+            )
           }
-        )
+        });
       }
-    });
+    })
+
+   
 
 
     
@@ -367,6 +414,7 @@ export class BudgettingComponent implements OnInit {
   printBudget(row:any){
     this.app.startLoaderDark();
     this.lblBudgetTotal = 0;
+    this.projectName = row.projectTitle;
 
 
     this.lblBudgetDate = row.budgetDate;
@@ -407,6 +455,7 @@ export class BudgettingComponent implements OnInit {
     this.TotalAmount = 0;
     this.budgetID = 0;
     this.TabIndex = '';
+    this.projectID = 0;
     
   }
 

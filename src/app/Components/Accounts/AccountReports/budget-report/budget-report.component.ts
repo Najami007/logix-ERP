@@ -17,12 +17,22 @@ export class BudgetReportComponent implements OnInit{
     private msg:NotificationService,
     private app:AppComponent,
     private global:GlobalDataModule,
-  ){}
+  ){
+    
+    this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+      (Response:any)=>{
+        this.companyProfile = Response;
+        //console.log(Response)  
+        
+      }
+    )
+  }
 
 
   ngOnInit(): void {
    
     this.global.setHeaderTitle('Budget Report');
+    this.getProject();
     this.logo = this.global.Logo;
     this.logo1 = this.global.Logo1;
     this.CompanyName = this.global.CompanyName;
@@ -49,15 +59,47 @@ export class BudgetReportComponent implements OnInit{
   reportData:any;
   TotalAmount:any = 0;
   totalConsumedAmount:any = 0;
+  companyProfile:any = [];
+  projectSearch:any;
+  projectID:number = 0;
+  projectName:any;
+
+  
+ projectList:any = [];
+
+ 
+ getProject(){
+   this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+     (Response:any)=>{
+       this.projectList = Response;
+     }
+   )
+ }
 
 
   ////////////////////////////////////////////
 
-  getReport(){
+  getReport(param:any){
+
+    if(this.projectID == 0 && param == 'project'){
+      this.msg.WarnNotify('Select Project')
+    }else{
+
+
+      this.projectName = '';
+      if(param == 'all'){
+      
+        this.projectID = 0;
+      }
+      if(this.projectID != 0){
+        this.projectName = this.projectList.find((e:any)=> e.projectID == this.projectID).projectTitle;
+      }
+
+      
     this.TotalAmount = 0;
     this.totalConsumedAmount = 0;
 
-    this.http.get(environment.mainApi+'GetMonthlyBudget?BudgetDate='+this.global.dateFormater(this.budgetMonth,'-')).subscribe(
+    this.http.get(environment.mainApi+'acc/GetMonthlyBudget?BudgetDate='+this.global.dateFormater(this.budgetMonth,'-')+'&projectid='+this.projectID).subscribe(
       (Response:any)=>{
         this.reportData = Response;
 
@@ -68,6 +110,9 @@ export class BudgetReportComponent implements OnInit{
         });
       }
     )
+
+    }
+
 
   }
 

@@ -6,6 +6,8 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
+import { VoucherDetailsComponent } from '../voucher/voucher-details/voucher-details.component';
+import { PincodeComponent } from '../../User/pincode/pincode.component';
 
 @Component({
   selector: 'app-voucher-supervision',
@@ -32,6 +34,8 @@ export class VoucherSupervisionComponent {
    companyMobileno:any;
    companyEmail:any;
 
+   companyProfile:any;
+
   constructor(
     private http:HttpClient,
     private globalData:GlobalDataModule,
@@ -39,11 +43,20 @@ export class VoucherSupervisionComponent {
     private dialogue:MatDialog,
     private app:AppComponent
     
-  ){}
+  ){
+    this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+      (Response:any)=>{
+        this.companyProfile = Response;
+        //console.log(Response)  
+        
+      }
+    )
+  }
 
 
   ngOnInit(): void {
     this.globalData.setHeaderTitle('Voucher Supervision');
+    this.getProject();
     this.logo = this.globalData.Logo;
     this.logo1 = this.globalData.Logo1;
     this.CompanyName = this.globalData.CompanyName;
@@ -70,23 +83,72 @@ export class VoucherSupervisionComponent {
   lblInvoiceNo:any;
   lblInvoiceDate:any;
   lblRemarks:any
+  lblProjectName:any;
+
+
+
+
+  projectSearch:any;
+  coaID:any;
+  projectID:number = 0;
+  projectName:any;
+
+
+  projectList:any = [];
+
+
+
+
+ 
+  getProject(){
+    this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+      (Response:any)=>{
+        this.projectList = Response;
+      }
+    )
+  }
 
   /////////////////////////////////////
 
-  getVouchers(){
-    this.voucherList = [];
+  getVouchers(param:any){
+
+    if(this.projectID == 0 && param == 'project'){
+      this.msg.WarnNotify('Select Project')
+    }else{
+
+
+      this.projectName = '';
+      if(this.projectID != 0){
+        this.projectName = this.projectList.find((e:any)=> e.projectID == this.projectID).projectTitle;
+      }
+
+
+
+      this.voucherList = [];
     this.app.startLoaderDark();
-      this.http.get(environment.mainApi+'GetSavedVoucherDetailDateWise?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+
+      this.http.get(environment.mainApi+'acc/GetSavedVoucherDetailDateWise?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+
       '&todate='+this.globalData.dateFormater(this.toDate,'-')).subscribe(
         (Response:any)=>{
-        
-          this.voucherList = Response;
+          
+          if(param == 'all'){
+            this.voucherList = Response;
+
+          }
+
+          if(param == 'project'){
+            this.voucherList = Response.filter((e:any)=>e.projectID == this.projectID);
+          }
           this.app.stopLoaderDark();
         },
         (Error:any)=>{
           this.app.stopLoaderDark();
         }
       )
+
+    }
+
+
+    
   }
 
   
@@ -103,7 +165,7 @@ export class VoucherSupervisionComponent {
     this.invoiceDetails = [];
 
     
-    this.http.get(environment.mainApi+'GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
+    this.http.get(environment.mainApi+'acc/GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
       (Response:any)=>{
         // console.log(Response);
         this.invoiceDetails = Response;
@@ -135,38 +197,45 @@ export class VoucherSupervisionComponent {
 
    ////////////////////////////////////////////////
 
-  approveBill(row:any){
+   approveBill(row:any){
 
-    Swal.fire({
-      title:'Alert!',
-      text:'Confirm To Approve Invoice',
-      position:'center',
-      icon:'success',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Confirm',
-    }).then((result)=>{
-      if(result.isConfirmed){
-
-        //////on confirm button pressed the api will run
-        this.http.post(environment.mainApi+'ApproveVoucher',{
-          InvoiceNo: row.invoiceNo,
-        UserID: this.globalData.getUserID(),
-        }).subscribe(
-          (Response:any)=>{
-            // console.log(Response.msg);
-            if(Response.msg == 'Voucher Approved Successfully'){
-              this.msg.SuccessNotify(Response.msg);
-              this.delRow(row);
-            }else{
-              this.msg.WarnNotify(Response.msg);
-            }
-            
+    this.dialogue.open(PincodeComponent,{
+      width:'30%',
+    }).afterClosed().subscribe(pin=>{
+      if(pin!= ''){
+        Swal.fire({
+          title:'Alert!',
+          text:'Confirm To Approve Invoice',
+          position:'center',
+          icon:'success',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Confirm',
+        }).then((result)=>{
+          if(result.isConfirmed){
+    
+            //////on confirm button pressed the api will run
+            this.http.post(environment.mainApi+'acc/ApproveVoucher',{
+              InvoiceNo: row.invoiceNo,
+              PinCode:pin,
+            UserID: this.globalData.getUserID(),
+            }).subscribe(
+              (Response:any)=>{
+                // console.log(Response.msg);
+                if(Response.msg == 'Voucher Approved Successfully'){
+                  this.msg.SuccessNotify(Response.msg);
+                  this.delRow(row);
+                }else{
+                  this.msg.WarnNotify(Response.msg);
+                }
+                
+              }
+            )
           }
-        )
+        });
       }
-    });
+    })
 
 
    
@@ -177,6 +246,11 @@ export class VoucherSupervisionComponent {
 
   DeleteVoucher(row:any){
 
+
+    this.dialogue.open(PincodeComponent,{
+      width:'30%',
+    }).afterClosed().subscribe(pin=>{
+      if(pin!= ''){
     Swal.fire({
       title:'Alert!',
       text:'Confirm to Delete the Data',
@@ -190,8 +264,9 @@ export class VoucherSupervisionComponent {
       if(result.isConfirmed){
 
         //////on confirm button pressed the api will run
-        this.http.post(environment.mainApi+'DeleteVoucher',{
+        this.http.post(environment.mainApi+'acc/DeleteVoucher',{
           InvoiceNo: row.invoiceNo,
+          PinCode:pin,
           UserID: this.globalData.getUserID(),
         }).subscribe(
           (Response:any)=>{
@@ -206,6 +281,8 @@ export class VoucherSupervisionComponent {
       }
     });
 
+  }})
+
    
   }
 
@@ -218,6 +295,7 @@ export class VoucherSupervisionComponent {
     this.lblInvoiceNo = row.invoiceNo;
     this.lblInvoiceDate = row.invoiceDate;
     this.lblRemarks = row.invoiceRemarks;
+    this.lblProjectName = this.projectList.find((e:any)=>e.projectID == row.projectID).projectTitle;
 
     this.getInvoiceDetail(row.invoiceNo);
     
@@ -236,6 +314,19 @@ export class VoucherSupervisionComponent {
 
     
   }
+
+
+
+
+  VoucherDetails(row:any){
+    this.dialogue.open(VoucherDetailsComponent,{
+      width:"40%",
+      data:row,
+    }).afterClosed().subscribe(val=>{
+      
+    })
+  }
+
 
  
 

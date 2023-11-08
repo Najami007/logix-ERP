@@ -42,6 +42,7 @@ export class VoucherComponent implements OnInit{
 
   RoleID:any;
   crudList:any = [];
+  companyProfile:any;
 
   constructor(private msg: NotificationService,
     private globalData:GlobalDataModule,
@@ -51,7 +52,15 @@ export class VoucherComponent implements OnInit{
     private route:Router
     ) { 
 
-      this.app.tstUserName = "Najam";
+      
+      this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+        (Response:any)=>{
+          this.companyProfile = Response;
+          //console.log(Response)  
+          
+        }
+      )
+    
     }
 
   ngOnInit(): void {
@@ -121,6 +130,7 @@ export class VoucherComponent implements OnInit{
   COATitleID: any ;
   DebitAmount: any = 0 ;
   CreditAmount: any = 0 ;
+  detailNarration:any;
   VoucherData: any = [];
   bankReceiptNo:any = '';
   invoiceDetails:any = [];
@@ -200,8 +210,11 @@ export class VoucherComponent implements OnInit{
 
     // finding the value of coatitle in voucherdata array here
     const findValue = this.VoucherData.find((obj : any) => obj.COAID === this.COATitleID);
-    
-    if(findValue != undefined){
+    if(this.COATitleID == '' || this.COATitleID == undefined){
+      this.msg.WarnNotify('Select COA Head')
+    }else if(this.detailNarration == '' || this.detailNarration == undefined){
+      this.msg.WarnNotify('Enter the Head Narration')
+    }else if(findValue != undefined){
       if(findValue.COAID == this.COATitleID){
         this.msg.WarnNotify('Title Already Exists!');
       } 
@@ -214,13 +227,14 @@ export class VoucherComponent implements OnInit{
       this.msg.WarnNotify('One Side Must Be Entered')
     }
     else {
-      this.VoucherData.push({ COAID: this.COATitleID ,title:titleRow.coaTitle, Debit:this.DebitAmount, Credit: this.CreditAmount }); 
+      this.VoucherData.push({ COAID: this.COATitleID ,title:titleRow.coaTitle, Debit:this.DebitAmount, Credit: this.CreditAmount,DetailNarration:this.detailNarration }); 
       this.getTotal();
       $('#cTitle').trigger('focus');
       this.COATitleID = '';
       titleRow = '';
       this.DebitAmount = 0;
-      this.CreditAmount = 0   
+      this.CreditAmount = 0;
+      this.detailNarration = '';   
     }
    
   }

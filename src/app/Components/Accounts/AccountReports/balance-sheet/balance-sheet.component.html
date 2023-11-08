@@ -1,8 +1,17 @@
 <div class="container-fluid p-2 body">
-    <div class="d-flex bg-white p-2 border-bottom" >
+    <div class="row bg-white border-bottom" >
 
+        <mat-form-field class="col-lg-4 " appearance="outline" >
+            <mat-label>Project </mat-label>
+            <mat-select [(ngModel)]="projectID" >
+                <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch"
+                    [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                    name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of projectList|filter:projectSearch " value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
 
-        <mat-form-field class="w-50" appearance="outline">
+        <mat-form-field class="col-lg-2" appearance="outline">
             <mat-label>To Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
             <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
@@ -10,52 +19,56 @@
         </mat-form-field>
 
 
-        <div class="w-50  text-center" >
-            <button class=" btn btn-success btn-rpt w-25  me-1" (click)="getBalanceSheet()">
+        <div class="col-lg-6 " >
+            <button class=" btn btn-success btn-rpt col-lg-3  me-1" (click)="getBalanceSheet('project')">
+                ProjectWise
+             </button>
+            <button class=" btn btn-success btn-rpt col-lg-2  me-1" (click)="getBalanceSheet('all')">
                Get Report
             </button>
 
-            <button class=" btn  btn-primary btn-rpt    me-1  " (click)="Summary1()">
+            <button class=" btn  btn-primary btn-rpt col-lg-2   me-1  " (click)="Summary1()">
                 Summary 1
             </button>
 
-            <button class=" btn  btn-primary btn-rpt  me-1 " (click)="summary2()" >
+            <button class=" btn  btn-primary btn-rpt col-lg-2 me-1 " (click)="summary2()" >
                 Summary 2
             </button>
 
-            <button class=" btn  btn-primary btn-rpt w-25   me-1 " (click)="PrintTable()">
+            <button class=" btn  btn-primary btn-rpt  col-lg-2  me-1 " (click)="PrintTable()">
                 Print
             </button>
         </div>
     </div>
 
-    <div id="printRpt">
+    <div id="printRpt" class="container">
 
 
         <!-------------------------    Top Logo Section -------------------->
+
         <div class="hide">
-            <div class=" text-center d-flex justify-content-between">
-                <span>
-                    <img src="{{logo}}" height="100" width="100">
+            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
                 </span>
                 <span >
+                    
 
-
-                    <h1 class="companyName">{{CompanyName}}</h1>
-                    <p style="margin-top: -15px;" class="companyName2">{{CompanyName2}}</p>
-
-                    <p class="rptTitle" style="margin-top:-25px">Balance Sheet</p>
-                    <p style="margin-top:-20px"><b>AS On:</b> {{toDate |date:'yyyy-MM-dd'}}</p>
-
+                    <h1 class="companyName">{{item.companyName}}</h1>
+                    
+                    <p class="rptTitle" style="margin-top:-20px">Balance Sheet</p>
+                    <h4 class="projtitl" *ngIf="projectName != ''" style="margin-top:-20px;"><b >Project:</b> {{projectName}}</h4>
+                    <p style="margin-top:-15px"><b>AS On:</b> {{toDate |date:'dd-MM-yyyy'}}</p>
+                  
                 </span>
-                <span>
-                    <img src="{{logo1}}" height="100" width="100">
+                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
                 </span>
-
-
+        
+        
             </div>
-        </div>
-
+           </div>
+      
 <hr>
         <!----------------------------             Summary 1 Section ----------------->
 

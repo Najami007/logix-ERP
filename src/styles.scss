@@ -464,24 +464,30 @@ mat-toolbar {
 /////////////////////////////
 
 
-
+.projtitl{
+  font-size: 60px !important;
+}
 
 .btn-rpt {
+  min-height: 55px;
+  min-width: 100px;
+}
+
+.h55px{
   height: 55px;
-  width: 100px;
+
 }
 
 
 .h30px{
   height: 30px !important;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  mat-icon{
-    font-size: 15px;
-    margin-top: 8px;
-   
-  }
+  
+}
+
+.h30px > mat-icon{
+  font-size: 15px;
+  margin-top: 8px;
+ 
 }
 
 .w30px{

@@ -70,6 +70,7 @@ export class LedgerComponent {
   projectSearch:any;
   coaID:any;
   projectID:number = 0;
+  projectName:any;
   startDate = new Date();
   EndDate = new Date();
   debitTotal=0;
@@ -159,10 +160,13 @@ export class LedgerComponent {
       this.msg.WarnNotify('Select Project')
     } else{
       this.app.startLoaderDark();
-
-      if(param.value == 'all'){
-        alert();
+      this.projectName = '';
+      if(param == 'all'){
+      
         this.projectID = 0;
+      }
+      if(this.projectID != 0){
+        this.projectName = this.projectList.find((e:any)=> e.projectID == this.projectID).projectTitle;
       }
       
       /////////////////// finding the coaTitle from coalist by coaID////////
@@ -193,56 +197,12 @@ export class LedgerComponent {
 
    ///////////////////////////////////////////////////
 
-   printBill(row:any){
-    // this.companyProfile = this.globalData.comapnayProfile;
-
-    this.lblInvoiceNo = row.invoiceNo;
-    this.lblInvoiceDate = row.invoiceDate;
-    this.lblRemarks = row.invoiceRemarks;
-
-    this.getInvoiceDetail(row.invoiceNo);
-    
-
-    
-      setTimeout(() => {
-        this.globalData.printData('#InvociePrint');
-      }, 500);
-
-    
-  
-
-    
-  }
 
 
 
   /////////////////////////////////////////////
 
-  getInvoiceDetail(invoiceNo:any){
-
-    this.lblDebitTotal = 0;
-    this.lblCreditTotal = 0;
-    this.invoiceDetails = [];
-
-    
-    this.http.get(environment.mainApi+'acc/GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
-      (Response:any)=>{
-        // console.log(Response);
-        this.invoiceDetails = Response;
-        if(Response != ''){
-         
-          Response.forEach((e:any) => {
-            this.lblDebitTotal += e.debit;
-            this.lblCreditTotal += e.credit;
-          });
-        }
-      },
-      (error:any)=>{
-        console.log(error);
-        this.msg.WarnNotify('Error Occured While Printing');
-      }
-    )
-  }
+ 
 
 
   VoucherDetails(row:any){

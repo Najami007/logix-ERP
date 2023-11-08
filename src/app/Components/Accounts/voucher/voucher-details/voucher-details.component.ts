@@ -24,9 +24,13 @@ constructor(
 
 
 ngOnInit(): void {
+  this.getProject();
 
   this.getInvoiceDetail(this.editData.invoiceNo);
-  this.lblProjectName = this.editData.projectTitle;
+//  if(this.editData.projectTitle != '-'){
+//   this.lblProjectName = this.editData.projectTitle;
+//  }
+ this.projectID = this.editData.projectID;
 
 
   
@@ -40,6 +44,20 @@ lblDebitTotal:any = 0;
 lblCreditTotal:any = 0;
 
 lblProjectName :any;
+projectID :any;
+
+
+
+
+ 
+getProject(){
+  this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+    (Response:any)=>{
+      this.lblProjectName = Response.find((e:any)=>e.projectID == this.projectID).projectTitle;
+    }
+  )
+}
+
 
 
 getInvoiceDetail(invoiceNo:any){

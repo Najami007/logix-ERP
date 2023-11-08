@@ -2,16 +2,25 @@
     <div class="container-fluid p-3">
   
             <div class=" container-fluid ">
-                <div class="selrow row text-center">
+                <div class="row">
+                    <mat-form-field class="col-lg-4 " appearance="outline" >
+                        <mat-label>Project </mat-label>
+                        <mat-select [(ngModel)]="projectID" >
+                            <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch"
+                                [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                                name="search"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of projectList|filter:projectSearch " value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
          
-                        <mat-form-field class="col-lg-4" appearance="outline" >
+                        <mat-form-field class="col-lg-2" appearance="outline" >
                             <mat-label>From Date</mat-label>
                             <input matInput type="text"  readonly="true" [(ngModel)]="fromDate" [matDatepicker]="startDate">
                             <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
                             <mat-datepicker #startDate></mat-datepicker>
                         </mat-form-field>
 
-                        <mat-form-field class="col-lg-4" appearance="outline">
+                        <mat-form-field class="col-lg-2" appearance="outline">
                             <mat-label>To Date</mat-label>
                             <input matInput type="text" readonly="true" [(ngModel)]="toDate"  [matDatepicker]="EndDate">
                             <mat-datepicker-toggle matSuffix [for]="EndDate"></mat-datepicker-toggle>
@@ -19,15 +28,18 @@
                         </mat-form-field>
                     
 
-                    <div class="col-lg-3">
-                        <button class="btn btn-success w-50 btn-rpt me-1" (click)="getReport('R1')" >
-                            Get Report
+                    <div class="col-lg-4">
+                        <button class="btn btn-success w-25  btn-rpt me-1" (click)="getReport('R1','project')" >
+                            ProjectWise
+                        </button>  
+                        <button class="btn btn-success w-25 btn-rpt me-1" (click)="getReport('R1','all')" >
+                            All Report
                         </button>   
-                        <!-- <button class=" btn btn-primary w-25 btn-rpt me-2" (click)="getReport('R2')" >
+                        <!-- <button class=" btn btn-primary w-25 btn-rpt me-2" (click)="getReport('R2','')" >
                             Summary 2
                         </button>    -->
                     
-                        <button class=" btn btn-primary w-25 btn-rpt" (click)="PrintTable()">
+                        <button class=" btn btn-primary  btn-rpt" (click)="PrintTable()">
                            Print
                         </button>
                     </div>
@@ -71,9 +83,9 @@
                <thead>
                 <tr>
                 
-                <th >Title</th>
-                <th >Debit</th>
-                <th >Credit</th>
+                <th>Title</th>
+                <th>Debit</th>
+                <th>Credit</th>
                 </tr>
                </thead>
                <tbody >
