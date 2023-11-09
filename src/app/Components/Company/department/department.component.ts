@@ -10,6 +10,7 @@ import { AppComponent } from 'src/app/app.component';
 
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { AddDepartmentComponent } from './add-department/add-department.component';
+import { Router } from '@angular/router';
 // import { AddDepartmentComponent } from './add-department/add-department.component';
 
 @Component({
@@ -19,14 +20,18 @@ import { AddDepartmentComponent } from './add-department/add-department.componen
 })
 export class DepartmentComponent implements OnInit{
 
+  crudList:any= [];
+
   constructor(private http:HttpClient,
     private msg:NotificationService,
     private dialogue: MatDialog,
     private globaldata:GlobalDataModule,
     private app:AppComponent,
+    private route:Router
     
     ){}
   ngOnInit(): void {
+    this.getCrud();
     
     this.getDepartment();
   }
@@ -40,6 +45,16 @@ export class DepartmentComponent implements OnInit{
   txtSearch:any;
 
   departmentList:any = [];
+
+
+
+  getCrud(){
+    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globaldata.getUserID()+'&moduleid='+this.globaldata.getModuleID()).subscribe(
+      (Response:any)=>{
+        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      }
+    )
+  }
 
 
   OpenDialogue(){

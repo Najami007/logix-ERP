@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 import { VoucherDetailsComponent } from '../voucher/voucher-details/voucher-details.component';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-voucher-supervision',
@@ -25,23 +26,17 @@ export class VoucherSupervisionComponent {
   tableData: any;
 
 
-  logo:any;
-  logo1:any;
-  CompanyName :any;
-   CompanyName2:any;
-   companyAddress :any;
-   companyPhone :any;
-   companyMobileno:any;
-   companyEmail:any;
 
    companyProfile:any;
+   crudList:any = [];
 
   constructor(
     private http:HttpClient,
     private globalData:GlobalDataModule,
     private msg:NotificationService,
     private dialogue:MatDialog,
-    private app:AppComponent
+    private app:AppComponent,
+    private route:Router
     
   ){
     this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
@@ -56,15 +51,9 @@ export class VoucherSupervisionComponent {
 
   ngOnInit(): void {
     this.globalData.setHeaderTitle('Voucher Supervision');
+    this.getCrud();
     this.getProject();
-    this.logo = this.globalData.Logo;
-    this.logo1 = this.globalData.Logo1;
-    this.CompanyName = this.globalData.CompanyName;
-    this.CompanyName2 = this.globalData.CompanyName2;
-    this.companyAddress = this.globalData.Address;
-    this.companyPhone = this.globalData.Phone;
-    this.companyMobileno = this.globalData.mobileNo;
-    this.companyEmail = this.globalData.Email;
+
   
   }
 
@@ -96,6 +85,15 @@ export class VoucherSupervisionComponent {
 
   projectList:any = [];
 
+
+
+  getCrud(){
+    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
+      (Response:any)=>{
+        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      }
+    )
+  }
 
 
 

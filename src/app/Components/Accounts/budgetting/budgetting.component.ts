@@ -15,6 +15,7 @@ import * as moment_1 from 'moment';
 import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-budgetting',
   templateUrl: './budgetting.component.html',
@@ -23,13 +24,15 @@ import { PincodeComponent } from '../../User/pincode/pincode.component';
 export class BudgettingComponent implements OnInit {
   
   companyProfile:any = [];
+  crudList:any;
 
   constructor (
     private http:HttpClient,
     private msg:NotificationService,
     private globalData:GlobalDataModule,
     private app:AppComponent,
-    private dialogue:MatDialog
+    private dialogue:MatDialog,
+    private route:Router
 
   ){
 
@@ -44,6 +47,7 @@ export class BudgettingComponent implements OnInit {
 
   ngOnInit(): void {
     this.globalData.setHeaderTitle('Budgetting');
+    this.getCrud();
     this.getProject();
     this.GetChartOfAccount();
     this.getSaved();
@@ -87,6 +91,17 @@ export class BudgettingComponent implements OnInit {
   projectList:any = [];
 
 
+
+
+
+    
+  getCrud(){
+    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
+      (Response:any)=>{
+        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      }
+    )
+  }
 
 
  

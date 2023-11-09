@@ -8,6 +8,7 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 import { PincodeComponent } from '../pincode/pincode.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-user',
@@ -20,19 +21,23 @@ export class AddUserComponent implements OnInit {
  mobileMask = this.global.mobileMask;
 
 
+ crudList:any = [];
+
   constructor(
     private http:HttpClient,
 
     private msg:NotificationService,
     private app:AppComponent,
     private global:GlobalDataModule,
-    private dialogue:MatDialog
+    private dialogue:MatDialog,
+    private route:Router
   ){
 
   }
 
 
   ngOnInit(): void {
+    this.getCrud();
     this.getUsers();
     this.getRoles();
   }
@@ -52,6 +57,16 @@ export class AddUserComponent implements OnInit {
 
   rolesList:any = [];
   userList:any = [];
+
+
+
+  getCrud(){
+    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
+      (Response:any)=>{
+        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      }
+    )
+  }
 
 
 

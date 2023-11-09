@@ -15,8 +15,10 @@
                 </mat-form-field>
 
                 <div class="col-lg-2 p-2">
+                  <button mat-raised-button class="bg-success text-white col-lg-6 me-1" style="height: 55px;"
+                      *ngIf="crudList.u && btnType == 'Update'"   (click)="save()">{{btnType}}</button>
                     <button mat-raised-button class="bg-success text-white col-lg-6 me-1" style="height: 55px;"
-                        (click)="save()">{{btnType}}</button>
+                      *ngIf="crudList.c && btnType == 'Save'"   (click)="save()">{{btnType}}</button>
                     <button mat-raised-button class="bg-danger text-white col-lg-5" style="height: 55px;"
                         (click)="reset()"> Reset</button>
                 </div>
@@ -36,7 +38,7 @@
                         </mat-select>
                     </mat-form-field>
 
-                    <table class="table-logix2">
+                    <table class="table-logix2"  >
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -132,14 +134,14 @@
             </mat-form-field>
 
 
-            <table class="table-logix2 cursorPointer">
+            <table class="table-logix2 cursorPointer" *ngIf="crudList.r" >
                 <thead>
                     <tr>
                         <th>S#</th>
                         <th>Role Title</th>
                         <th>Role Description</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
+                        <th *ngIf="crudList.u" >Edit</th>
+                        <th *ngIf="crudList.d" >Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -147,8 +149,8 @@
                         <td>{{i + 1}}</td>
                         <td>{{item.roleTitle}}</td>
                         <td>{{item.roleDescription}}</td>
-                        <td><mat-icon class="text-success" (click)="editRole(item)">edit</mat-icon></td>
-                        <td> <mat-icon class="text-danger" (click)="deleteRole(item)">delete</mat-icon></td>
+                        <td *ngIf="crudList.u" ><button mat-mini-fab class="text-white bg-success h30px w30px" ><mat-icon  (click)="editRole(item)">edit</mat-icon></button></td>
+                        <td *ngIf="crudList.d" > <button mat-mini-fab class="text-white bg-danger h30px w30px"><mat-icon  (click)="deleteRole(item)">delete</mat-icon></button></td>
                     </tr>
                 </tbody>
             </table>

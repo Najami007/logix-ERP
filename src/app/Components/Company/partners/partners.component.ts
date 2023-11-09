@@ -9,6 +9,7 @@ import { AddcityComponent } from '../settings/city/addcity/addcity.component';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import Swal from 'sweetalert2';
 import { error } from 'jquery';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-partners',
@@ -21,15 +22,19 @@ export class PartnersComponent implements OnInit {
   cnicMask = this.global.cnicMask;
   mobileMask = this.global.mobileMask;
 
+  crudList:any = [];
+
   constructor(
     private http:HttpClient,
     private msg:NotificationService,
     private global:GlobalDataModule,
     private app:AppComponent,
-    private dialogue:MatDialog
+    private dialogue:MatDialog,
+    private route:Router
   ){}
 
   ngOnInit(): void {
+    this.getCrud();
     this.getCity();
     this.getPartners();
    
@@ -50,6 +55,17 @@ export class PartnersComponent implements OnInit {
 
   citiesList:any = [];
   partnersList:any = [];
+
+
+
+
+  getCrud(){
+    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
+      (Response:any)=>{
+        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      }
+    )
+  }
 
 
 
@@ -253,6 +269,7 @@ export class PartnersComponent implements OnInit {
 
 
   reset(){
+    this.btnType = 'Save'
     this.partnerName = '';
     this.partnerCNIC = '';
     this.partnerMobile = '';

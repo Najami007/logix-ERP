@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { TopNavBarComponent } from 'src/app/Components/Layout/top-nav-bar/top-nav-bar.component';
 import { MatDialog } from '@angular/material/dialog';
 import { VoucherDetailsComponent } from '../../voucher/voucher-details/voucher-details.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ledger',
@@ -25,22 +26,18 @@ export class LedgerComponent {
   date = new FormControl(new Date());
 
   CoaList:any;
+  crudList:any = [];
+  companyProfile:any = [];
 
-  logo:any;
-  logo1:any;
-  CompanyName:any = 'abc';
-  CompanyName2:any;
-   companyAddress :any;
-   companyPhone :any;
-   companyMobileno:any;
-   companyEmail:any;
+ 
   
 
   constructor( private globalData: GlobalDataModule,
     private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
-    private dialogue:MatDialog
+    private dialogue:MatDialog,
+    private route:Router
     
 
     ) {
@@ -66,7 +63,6 @@ export class LedgerComponent {
    
   }
 
-  companyProfile:any = [];
   projectSearch:any;
   coaID:any;
   projectID:number = 0;
@@ -103,6 +99,15 @@ export class LedgerComponent {
 
  projectList:any = [];
 
+
+
+ getCrud(){
+  this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
+    (Response:any)=>{
+      this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    }
+  )
+}
 
 
 

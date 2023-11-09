@@ -7,6 +7,7 @@ import { AddCountryComponent } from './add-country/add-country.component';
 import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 import { AppComponent } from 'src/app/app.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-country',
@@ -15,14 +16,18 @@ import { AppComponent } from 'src/app/app.component';
 })
 export class CountryComponent implements OnInit{
 
+  crudList:any =[];
+
   constructor(private http:HttpClient,
     private msg:NotificationService,
     private dialogue: MatDialog,
     private globaldata:GlobalDataModule,
     private app:AppComponent,
+    private route:Router
     
     ){}
   ngOnInit(): void {
+    this.getCrud();
     
     this.getCountry();
   }
@@ -35,6 +40,17 @@ export class CountryComponent implements OnInit{
   countryID:any;
 
   countryList:any = [];
+
+
+
+  getCrud(){
+    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globaldata.getUserID()+'&moduleid='+this.globaldata.getModuleID()).subscribe(
+      (Response:any)=>{
+        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      }
+    )
+  }
+
 
 
   OpenDialogue(){

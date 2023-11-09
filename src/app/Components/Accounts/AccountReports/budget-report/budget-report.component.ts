@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
@@ -12,11 +13,19 @@ import { environment } from 'src/environments/environment.development';
 })
 export class BudgetReportComponent implements OnInit{
 
+
+    
+ projectList:any = [];
+ crudList:any = [];
+
+
+
   constructor(
     private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
     private global:GlobalDataModule,
+    private route:Router
   ){
     
     this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
@@ -33,26 +42,10 @@ export class BudgetReportComponent implements OnInit{
    
     this.global.setHeaderTitle('Budget Report');
     this.getProject();
-    this.logo = this.global.Logo;
-    this.logo1 = this.global.Logo1;
-    this.CompanyName = this.global.CompanyName;
-    this.CompanyName2 = this.global.CompanyName2;
-    this.companyAddress = this.global.Address;
-    this.companyPhone = this.global.Phone;
-    this.companyMobileno = this.global.mobileNo;
-    this.companyEmail = this.global.Email;
+ 
 
   }
 
-  logo:any;
-  logo1:any;
-  CompanyName:any;
-  CompanyName2:any;
-   companyAddress :any;
-   companyPhone :any;
-   companyMobileno:any;
-   companyEmail:any;
-   
 
   budgetMonth :any = new Date();
 
@@ -61,11 +54,20 @@ export class BudgetReportComponent implements OnInit{
   totalConsumedAmount:any = 0;
   companyProfile:any = [];
   projectSearch:any;
-  projectID:number = 0;
+  projectID:number = 0; 
   projectName:any;
-
   
- projectList:any = [];
+  
+  getCrud(){
+    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
+      (Response:any)=>{
+        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      }
+    )
+  }
+ 
+
+
 
  
  getProject(){

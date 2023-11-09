@@ -111,7 +111,7 @@ export class GlobalDataModule  implements OnInit {
   
  
 
-    getCrud(){
+    getCrud(array:any){
 
       
         var list:any = [];
@@ -126,7 +126,7 @@ export class GlobalDataModule  implements OnInit {
 
           
   
-      return list.find((e:any)=>e.menuLink == this.rout.url.split("/").pop());
+      array = list.find((e:any)=>e.menuLink == this.rout.url.split("/").pop());
 
        
 

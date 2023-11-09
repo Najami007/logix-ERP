@@ -28,7 +28,7 @@
         </mat-form-field>
 
 
-    <div class="col-lg-4" >
+    <div class="col-lg-4" *ngIf="crudList.r">
         
         <button class=" btn btn-success w-25   me-1 btn-rpt" (click)="getDetailReport('project')">ProjectWise </button>
         <button class=" btn btn-success w-25   me-1 btn-rpt" (click)="getDetailReport('all')"> Get All </button>

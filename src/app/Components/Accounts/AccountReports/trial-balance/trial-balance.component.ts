@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import * as $ from 'jquery';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
@@ -14,21 +15,18 @@ import { environment } from 'src/environments/environment.development';
 export class TrialBalanceComponent implements OnInit {
 
 
-  logo:any;
-  logo1:any;
-  CompanyName:any;
-  CompanyName2:any;
-   companyAddress :any;
-   companyPhone :any;
-   companyMobileno:any;
-   companyEmail:any;
  
+   crudList:any = [];
+
+   companyProfile:any = [];
 
 
+   
   constructor(private globalData: GlobalDataModule,
     private http:HttpClient,
     private msg:NotificationService,
-    private app:AppComponent
+    private app:AppComponent,
+    private route:Router
 
     ) {
       this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
@@ -42,22 +40,15 @@ export class TrialBalanceComponent implements OnInit {
 
   ngOnInit(): void {
     this.globalData.getCompany();
+    this.getCrud();
     this.getProject();
     this.globalData.setHeaderTitle('Trial Balance');
-    this.logo = this.globalData.Logo;
-    this.logo1 = this.globalData.Logo1;
-    this.CompanyName = this.globalData.CompanyName;
-    this.CompanyName2 = this.globalData.CompanyName2;
-    this.companyAddress = this.globalData.Address;
-    this.companyPhone = this.globalData.Phone;
-    this.companyMobileno = this.globalData.mobileNo;
-    this.companyEmail = this.globalData.Email;
+    
     this.getNotes();
 
     $('#summary2').hide();
   }
 
-  companyProfile:any = [];
   fromDate:any = new Date();
   toDate:any =  new Date();
   TrialBalanceData :any=[];
@@ -74,10 +65,21 @@ export class TrialBalanceComponent implements OnInit {
   projectSearch:any;
 
   projectID:number = 0;
+  projectName:any;
   projectList:any = [];
 
 
 
+  
+ getCrud(){
+  this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
+    (Response:any)=>{
+      this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    }
+  )
+}
+
+  
 
  
   getProject(){
@@ -94,9 +96,18 @@ export class TrialBalanceComponent implements OnInit {
   if(this.projectID == 0 && param == 'project'){
     this.msg.WarnNotify('Select Project')
   }else{
+
+    this.projectName = '';
+
     if(param == 'all'){
       this.projectID = 0;
     }
+
+
+    if(this.projectID != 0){
+      this.projectName = this.projectList.find((e:any)=> e.projectID == this.projectID).projectTitle;
+    }
+    
     $('#summary2').hide();
     $('#summary1').show();
 this.TrialBalanceData = [];

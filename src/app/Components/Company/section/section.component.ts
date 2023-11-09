@@ -8,6 +8,7 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-section',
@@ -16,15 +17,17 @@ import Swal from 'sweetalert2';
 })
 export class SectionComponent implements OnInit {
 
-
+  crudList:any = [];
   constructor(private http:HttpClient,
     private msg:NotificationService,
     private dialogue: MatDialog,
     private globaldata:GlobalDataModule,
     private app:AppComponent,
+    private route:Router
     
     ){}
   ngOnInit(): void {
+    this.getCrud();
     this.getDepartment();
     this.getSection();;
   }
@@ -44,6 +47,18 @@ export class SectionComponent implements OnInit {
   
   departmentList:any = [];
   sectionList:any = [];
+
+
+
+  getCrud(){
+    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globaldata.getUserID()+'&moduleid='+this.globaldata.getModuleID()).subscribe(
+      (Response:any)=>{
+        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      }
+    )
+  }
+
+
 
 
   getDepartment(){

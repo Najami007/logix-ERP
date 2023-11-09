@@ -8,6 +8,7 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-project',
@@ -16,17 +17,20 @@ import Swal from 'sweetalert2';
 })
 export class ProjectComponent implements OnInit {
 
+  crudList:any = [];
 
   constructor(
     private http:HttpClient,
     private msg:NotificationService,
     private global:GlobalDataModule,
     private app:AppComponent,
-    private dialogue:MatDialog
+    private dialogue:MatDialog,
+    private route:Router
 
   ){}
 
   ngOnInit(): void {
+    this.getCrud();
     this.getProject();
     
   }
@@ -42,6 +46,15 @@ export class ProjectComponent implements OnInit {
 
 
 
+  getCrud(){
+    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
+      (Response:any)=>{
+        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      }
+    )
+  }
+
+
 
   getProject(){
     this.http.get(environment.mainApi+'cmp/getproject').subscribe(
@@ -52,8 +65,7 @@ export class ProjectComponent implements OnInit {
   }
 
 
-  save()
-{
+  save(){
 
   if(this.projectTitle == '' || this.projectTitle == undefined){
     this.msg.WarnNotify('Enter Project Title')

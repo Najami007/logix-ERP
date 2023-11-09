@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { error } from 'jquery';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-company-profile',
@@ -18,13 +19,15 @@ export class CompanyProfileComponent implements OnInit {
 
   mobilemask = this.global.mobileMask;
   phonemask = this.global.phoneMask;
+  crudList:any = [];
 
   constructor(
     private http:HttpClient,
     private global:GlobalDataModule,
     private msg:NotificationService,
     private app:AppComponent,
-    private dialogue:MatDialog
+    private dialogue:MatDialog,
+    private route:Router
 
   ){
 
@@ -65,11 +68,25 @@ export class CompanyProfileComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.getCrud();
     this.getCompany();
    
   }
 
   companyProfile:any = [];
+
+
+
+
+
+  getCrud(){
+    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
+      (Response:any)=>{
+        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      }
+    )
+  }
+  
 
 ////////////////////////////////////////////////////////////////////////
 

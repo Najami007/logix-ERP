@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../pincode/pincode.component';
 import { error } from 'jquery';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-role',
@@ -15,18 +16,20 @@ import Swal from 'sweetalert2';
   styleUrls: ['./user-role.component.scss']
 })
 export class UserRoleComponent implements OnInit {
-
+  crudList:any = [];
 
   constructor(
     private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
     private global:GlobalDataModule,
-    private dialogue:MatDialog
+    private dialogue:MatDialog,
+    private route:Router
   ){}
 
 
   ngOnInit(): void {
+    this.getCrud();
 
     this.getModules();
     this.getMenuList();
@@ -51,6 +54,16 @@ export class UserRoleComponent implements OnInit {
 
   selectedModuleMenuList:any = [];
   TempModuleList:any = [];
+
+
+  getCrud(){
+    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
+      (Response:any)=>{
+        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      }
+    )
+  }
+
 
 
    /////////////////////////////////////////////////////////////////////////
@@ -303,25 +316,34 @@ export class UserRoleComponent implements OnInit {
         
         Response.forEach((e:any) => {
 
+          //// will replace the menu list crud fields by comparing with response //////////
+
           var index = this.menuList.findIndex((obj:any)=>obj.menuID == e.menuID);
           this.menuList[index].c = e.c;
           this.menuList[index].r = e.r;
           this.menuList[index].u = e.u;
           this.menuList[index].d = e.d;
-          if(e.c = true && e.r == true && e.u == true && e.d == true){
+          if(e.c  && e.r  && e.u  && e.d ){
             this.menuList[index].a = true;
           }
+
+          //////////////// will push the data to allowedRolesList for Temporary Use ///////////
 
           AllowedRolesList.push(this.menuList.find((j:any)=>j.menuID == e.menuID));
 
         });
 
 
+        //////////////////// will push the allowedRolesList data to TempModuleList /////////////////
+
         AllowedRolesList.forEach((e:any) => {
          
     
+          ////////////// will Search Whether the menu Module Already Present in tempModuleList or not //////////////
           if(this.TempModuleList.filter((tmd:any)=>tmd.moduleID == e.moduleID).length == 0){
             
+            ////////  if module already not present then push the data to tempModule List
+
             this.TempModuleList.push({
               moduleID : e.moduleID,
               moduleTitle: this.moduleList[this.moduleList.findIndex((mod:any)=>mod.moduleID == e.moduleID)].moduleTitle,
@@ -329,8 +351,12 @@ export class UserRoleComponent implements OnInit {
             })
     
           }else{
+
+            ///// if Module already present in TempModuleList Array then will find the index of module//////
     
             var moduleIndex = this.TempModuleList.findIndex((md:any)=>md.moduleID == e.moduleID);
+
+            //////////// will push the data to the tempModule List by moduleIndex
     
             this.TempModuleList[moduleIndex].tempMenuList.push({
               menuID:e.menuID,
@@ -430,6 +456,7 @@ export class UserRoleComponent implements OnInit {
   ////////////////////////////////////////////////////
 
   reset(){
+    this.btnType = 'Save';
     this.roleTitle = '';
     this.roleDescription = '';
     this.getMenuList();

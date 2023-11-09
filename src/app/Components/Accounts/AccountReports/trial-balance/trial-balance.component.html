@@ -29,18 +29,18 @@
                         </mat-form-field>
                 
 
-                    <div class="col-lg-5 " >
+                    <div class="col-lg-5 " *ngIf="crudList.r" >
                         <button class="btn btn-success w-25 btn-rpt me-1 " (click)="getTrialBalance('project')">
                             ProjectWise
                          </button>
                          <button class="btn btn-success btn-rpt me-1 " (click)="getTrialBalance('all')">
                             Get All
                          </button>
-                        <button class="btn btn-success btn-rpt me-1 " (click)="getSummary2('sm1')">
+                        <button class="btn btn-primary btn-rpt me-1 " (click)="getSummary2('sm1')">
                            Summary 1
                         </button>
                    
-                        <button class=" btn btn-success btn-rpt me-1" (click)="getSummary2('sm2')">
+                        <button class=" btn btn-primary btn-rpt me-1" (click)="getSummary2('sm2')">
                            Summary 2
                         </button>
                         
@@ -57,28 +57,32 @@
             <!-------------------------    Top Logo Section -------------------->
 
                <!-------------------------    Top Logo Section -------------------->
-           <div class="hide">
-            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
-                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
-                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
-                </span>
-                <span >
-                    
 
-                    <h1 class="companyName">{{item.companyName}}</h1>
-                    <p style="margin-top: -15px;" class="companyName2">{{CompanyName2}}</p>
 
-                    <p class="rptTitle" style="margin-top:-25px">Trial Balance Report </p>
-                    <p style="margin-top:-20px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}} <b>To:</b> {{toDate | date:'dd-MM-yyyy'}}</p>
-                  
-                </span>
-                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
-                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
-                </span>
-        
-        
-            </div>
-           </div>
+               <div class="hide">
+                <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                    <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
+                    </span>
+                    <span >
+                        
+    
+                        <h1 class="companyName">{{item.companyName}}</h1>
+                        
+    
+                        <p class="rptTitle" style="margin-top:-20px">Trial Balance Report </p>
+                        <h4 class="projtitl" *ngIf="projectName != ''" style="margin-top:-20px;"><b >Project:</b> {{projectName}}</h4>
+                        <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}} <b>To:</b> {{toDate | date:'dd-MM-yyyy'}}</p>
+                      
+                    </span>
+                    <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" [height]="item.logo2Height" [width]="item.logo2Width">
+                    </span>
+            
+            
+                </div>
+               </div>
+           
      
     <hr>
          <!-----------------  Summary 1 Seciton Table-->

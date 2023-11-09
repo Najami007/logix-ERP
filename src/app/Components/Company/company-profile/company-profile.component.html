@@ -64,7 +64,8 @@
 
 
     <div class="d-flex justify-content-around">
-      <button class="w-25 text-white bg-success" (click)="save()" mat-raised-button>{{btnType}}</button>
+      <button class="w-25 text-white bg-success" *ngIf="crudList.u && btnType == 'Update'" (click)="save()" mat-raised-button>{{btnType}}</button>
+      <button class="w-25 text-white bg-success" *ngIf="crudList.c && btnType == 'Save'" (click)="save()" mat-raised-button>{{btnType}}</button>
       <button class="w-25 text-white bg-danger" (click)="reset()" mat-raised-button>Reset</button>
     </div>
 
@@ -178,7 +179,7 @@
 
    <!----------- Column 3 Saved Data Section ------------->
 
-  <div class="col-lg-4 row border p-1 justify-content-center"
+  <div class="col-lg-4 row border p-1 justify-content-center" *ngIf="crudList.r"
     style="background-color: rgb(243, 248, 248); min-height: 600px;">
 
 
@@ -298,9 +299,9 @@
     <!------------  Third Colomn Saved Company Buttons ----->
 
     <div class="pt-2 row justify-content-between">
-      <button mat-raised-button (click)="editProfile(companyProfile[0])"
+      <button *ngIf="crudList.u" mat-raised-button (click)="editProfile(companyProfile[0])"
         class="bg-success text-white col-lg-4">Edit</button>
-        <button mat-raised-button (click)="deleteProfile(companyProfile[0])"
+        <button mat-raised-button *ngIf="crudList.d" (click)="deleteProfile(companyProfile[0])"
         class="bg-danger text-white  col-lg-4 ">Delete</button>
     </div>
 

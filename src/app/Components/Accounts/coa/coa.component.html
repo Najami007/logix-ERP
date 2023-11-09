@@ -193,9 +193,9 @@
 
                             <td *ngIf="item.transactionAllowed == true"><mat-icon class="text-success" >remove_circle</mat-icon></td>   
                             <td *ngIf="item.transactionAllowed == false"><mat-icon class="text-danger" >remove_circle</mat-icon></td>   
-                            <td >
+                            <td *ngIf="crudList.d">
                                 <!-- <button class="btnTransparent text-success"><mat-icon >edit</mat-icon></button> -->
-                                <button class="btnTransparent text-danger" *ngIf="crudList.d"  (click)="deleteCoa(item)"><mat-icon >delete</mat-icon></button>
+                                <button class="btnTransparent text-danger"   (click)="deleteCoa(item)"><mat-icon >delete</mat-icon></button>
                             </td>
                          
     

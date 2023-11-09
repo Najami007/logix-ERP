@@ -6,6 +6,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { VoucherDetailsComponent } from '../voucher/voucher-details/voucher-details.component';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -14,13 +15,16 @@ import { VoucherDetailsComponent } from '../voucher/voucher-details/voucher-deta
   styleUrls: ['./day-transaction.component.scss']
 })
 export class DayTransactionComponent implements OnInit{
+  companyProfile:any = [];
+  crudList:any = [];
 
   constructor(
     private http:HttpClient,
     private global:GlobalDataModule,
     private app:AppComponent,
     private msg:NotificationService,
-    private dialogue:MatDialog
+    private dialogue:MatDialog,
+    private route:Router
   ){
     this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
       (Response:any)=>{
@@ -40,6 +44,7 @@ export class DayTransactionComponent implements OnInit{
     ngOnInit(): void {
   
       this.global.setHeaderTitle('Transaction Report');
+      this.getCrud();
       this.getProject();
      
   
@@ -49,7 +54,7 @@ export class DayTransactionComponent implements OnInit{
   
     fromDate:Date = new Date();
     toDate:Date = new Date();
-    companyProfile:any = [];
+   
     projectSearch:any;
     coaID:any;
     projectID:number = 0;
@@ -65,7 +70,14 @@ export class DayTransactionComponent implements OnInit{
     projectList:any = [];
 
 
-
+    getCrud(){
+      this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
+        (Response:any)=>{
+          this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+        }
+      )
+    }
+  
 
  
     getProject(){

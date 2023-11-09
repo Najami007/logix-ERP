@@ -19,7 +19,8 @@
     
 
         <div class="row justify-content-around">
-            <button class="btn btn-success w-25" (click)="save()">{{actionbtn}}</button>
+            <button class="btn btn-success w-25" *ngIf="crudList.u && actionbtn == 'Update'" (click)="save()">{{actionbtn}}</button>
+            <button class="btn btn-success w-25" *ngIf="crudList.c && actionbtn == 'Save'" (click)="save()">{{actionbtn}}</button>
             <button class="btn btn-danger w-25" (click)="reset()">Reset</button>
         </div>
         
@@ -37,21 +38,21 @@
 
 
         <div>
-            <table class="table-logix2">
+            <table class="table-logix2" *ngIf="crudList.r">
                 <thead>
                     <tr>
                         <th>S#</th>
                         <th>Title</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
+                        <th *ngIf="crudList.u">Edit</th>
+                        <th *ngIf="crudList.d">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of projectList | filter:txtSearch index as index">
                         <td>{{index+1}}</td>
                         <td>{{item.projectTitle}}</td>
-                        <td ><button mat-mini-fab class="bg-success text-white h30px w30px" (click)="edit(item)"><mat-icon >edit</mat-icon></button></td>
-                        <td ><button mat-mini-fab color="warn" class="h30px w30px" (click)="delete(item)"><mat-icon>delete</mat-icon></button></td>
+                        <td *ngIf="crudList.u"><button mat-mini-fab  class="bg-success text-white h30px w30px" (click)="edit(item)"><mat-icon >edit</mat-icon></button></td>
+                        <td *ngIf="crudList.d"><button mat-mini-fab  color="warn" class="h30px w30px" (click)="delete(item)"><mat-icon>delete</mat-icon></button></td>
                     </tr>
                 </tbody>
             </table>

@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { AppComponent } from 'src/app/app.component';
 import { AddcityComponent } from './addcity/addcity.component';
 import { AddCountryComponent } from '../country/add-country/add-country.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-city',
@@ -17,15 +18,19 @@ import { AddCountryComponent } from '../country/add-country/add-country.componen
 })
 export class CityComponent implements OnInit{
 
+  crudList:any = [];
+
   constructor(private http:HttpClient,
     private msg:NotificationService,
     private dialogue: MatDialog,
     private globaldata:GlobalDataModule,
-    private app:AppComponent
+    private app:AppComponent,
+    private route:Router
     
     ){}
 
   ngOnInit(): void {
+    this.getCrud();
     this.getCity();
     this.getCountry();
    
@@ -42,6 +47,16 @@ export class CityComponent implements OnInit{
   cityID:any;
 
   countryList:any;
+
+
+  getCrud(){
+    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globaldata.getUserID()+'&moduleid='+this.globaldata.getModuleID()).subscribe(
+      (Response:any)=>{
+        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      }
+    )
+  }
+
 
 
 

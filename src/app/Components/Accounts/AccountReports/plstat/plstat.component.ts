@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { environment } from 'src/environments/environment.development';
 import { AppComponent } from 'src/app/app.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-plstat',
@@ -13,35 +14,34 @@ import { AppComponent } from 'src/app/app.component';
 })
 export class PLStatComponent implements OnInit {
 
-  logo:any;
-  logo1:any;
-  CompanyName:any;
-  CompanyName2:any;
-   companyAddress :any;
-   companyPhone :any;
-   companyMobileno:any;
-   companyEmail:any;
-   
+
+
+   crudList:any = [];
+   companyProfile:any = [];
 
 
   constructor(private globalData: GlobalDataModule,
     private http:HttpClient,
     private msg:NotificationService,
-    private app:AppComponent
+    private app:AppComponent,
+    private route:Router
     
-    ){}
+    ){
+      this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+        (Response:any)=>{
+          this.companyProfile = Response;
+          //console.log(Response)  
+          
+        }
+      )
+    
+    }
   ngOnInit(): void {
     this.globalData.setHeaderTitle('Profit & Loss Statement');
+    this.getCrud();
     this.globalData.getCompany();
     this.getProject();
-    // this.logo = this.globalData.Logo;
-    // this.logo1 = this.globalData.Logo1;
-    // this.CompanyName = this.globalData.CompanyName;
-    // this.CompanyName2 = this.globalData.CompanyName2;
-    // this.companyAddress = this.globalData.Address;
-    // this.companyPhone = this.globalData.Phone;
-    // this.companyMobileno = this.globalData.mobileNo;
-    // this.companyEmail = this.globalData.Email;
+   
 
     $('#printDiv').hide();
   }
@@ -60,10 +60,23 @@ export class PLStatComponent implements OnInit {
   expCreditTotal = 0;
   projectSearch:any;
   projectID:number = 0;
+  projectName:any;
   projectList:any = [];
 
   ////////////////////////////////////////////////////////////////
 
+
+
+
+
+  
+ getCrud(){
+  this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
+    (Response:any)=>{
+      this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    }
+  )
+}
 
 
 
@@ -109,11 +122,17 @@ export class PLStatComponent implements OnInit {
       this.msg.WarnNotify('Select Project');
 
     }else{
-
+      this.projectName = '';
 
       if(param == 'all'){
         this.projectID = 0;
       }
+
+
+      if(this.projectID != 0){
+        this.projectName = this.projectList.find((e:any)=> e.projectID == this.projectID).projectTitle;
+      }
+      
 
       
     this.incDebitTotal = 0;
@@ -218,14 +237,7 @@ export class PLStatComponent implements OnInit {
   
 
   PrintTable() {
-    this.logo = this.globalData.Logo;
-    this.logo1 = this.globalData.Logo1;
-    this.CompanyName = this.globalData.CompanyName;
-    this.CompanyName2 = this.globalData.CompanyName2;
-    this.companyAddress = this.globalData.Address;
-    this.companyPhone = this.globalData.Phone;
-    this.companyMobileno = this.globalData.mobileNo;
-    this.companyEmail = this.globalData.Email;
+ 
    setTimeout(() => {
     this.globalData.printData('#printDiv');
    }, 200);

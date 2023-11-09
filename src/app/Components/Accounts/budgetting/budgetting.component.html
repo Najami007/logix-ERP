@@ -94,8 +94,8 @@
                             <textarea matInput type="number" [(ngModel)]="description"></textarea>
 
                         </mat-form-field>
-
-                          <button class="btn btn-success btn-save mt-4" (click)="SaveBudget()">{{btnText}}</button>
+                        <button class="btn btn-success btn-save mt-4" *ngIf="crudList.u && btnText == 'Update'" (click)="SaveBudget()">{{btnText}}</button>
+                          <button class="btn btn-success btn-save mt-4" *ngIf="crudList.c && btnText == 'Save'" (click)="SaveBudget()">{{btnText}}</button>
                           <button class="btn btn-danger btn-reset mt-4" (click)="reset()">Reset</button>
 
                     </mat-card>
@@ -112,7 +112,7 @@
             </mat-form-field>
             <hr>
             <div class="text-center">
-                <table class="table table-hover">
+                <table class="table table-hover" *ngIf="crudList.r">
                     <thead>
                         <th>S#</th>
                         <th>Date</th>
@@ -130,10 +130,10 @@
                             <td>{{item.budgetAmount |number}}</td>
                            
                             <td class="cursorPointer">
-                                <mat-icon class="text-danger" *ngIf="item.approvedStatus == false" (click)="approveBudget(item)">check</mat-icon>
-                                <mat-icon *ngIf="item.approvedStatus == true" aria-label="Approved" class="text-success" >done_all</mat-icon>
-                                <mat-icon class="text-success" *ngIf="item.approvedStatus == false" (click)="editBudget(item)">edit</mat-icon>
-                                <mat-icon class="text-danger" *ngIf="item.approvedStatus == false" (click)="deleteBudget(item)">delete</mat-icon>
+                                <mat-icon class="text-danger" *ngIf="item.approvedStatus == false && crudList.u" (click)="approveBudget(item)">check</mat-icon>
+                                <mat-icon *ngIf="item.approvedStatus == true " aria-label="Approved" class="text-success" >done_all</mat-icon>
+                                <mat-icon class="text-success" *ngIf="item.approvedStatus == false && crudList.u" (click)="editBudget(item)">edit</mat-icon>
+                                <mat-icon class="text-danger" *ngIf="item.approvedStatus == false && crudList.d" (click)="deleteBudget(item)">delete</mat-icon>
                                 <mat-icon class="text-primary" (click)="printBudget(item)">print</mat-icon>
                             </td>
                             
@@ -146,7 +146,7 @@
             <div class="d-none" id="PrintDiv">
                 <!-------------------------    Top Logo Section -------------------->
                 <div class="hide">
-                    <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                    <div class="text-center  d-flex justify-content-between border-bottom" *ngFor="let item of companyProfile">
                         <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
                             <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
                         </span>
@@ -195,7 +195,7 @@
 
                 <!-----------------  Table Area ------------------>
                 <div>
-                    <table class="table">
+                    <table class="table table-logix">
                         <thead>
                             <th>S#</th>
                             <th>Particular</th>
@@ -206,12 +206,12 @@
                             <tr *ngFor="let item of lblBudgetData;index as index">
                                 <td>{{index+1}}</td>
                                 <td>{{item.coaTitle}}</td>
-                                <td>{{item.budgetAmount|number}}</td>
+                                <td class="text-end">{{item.budgetAmount|number}}</td>
                             </tr>
 
                             <tr>
-                                <th colspan="2" class="text-center">Total</th>
-                                <th>{{lblBudgetTotal |number}}</th>
+                                <td colspan="2" class="fw-bold text-center">Total</td>
+                                <td class="text-end">{{lblBudgetTotal |number}}</td>
                             </tr>
                         </tbody>
                     </table>

@@ -5,6 +5,7 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import * as $ from 'jquery';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-balance-sheet',
@@ -16,11 +17,15 @@ export class BalanceSheetComponent implements OnInit {
 
 
 
-   companyProfile:any;
+   companyProfile:any = [];
+   crudList:any = [];
+
+
   constructor(private globalData: GlobalDataModule,
     private http:HttpClient,
     private app:AppComponent,
-    private msg:NotificationService
+    private msg:NotificationService,
+    private route:Router
     ){
 
       this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
@@ -33,9 +38,10 @@ export class BalanceSheetComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.getProject();
-  
+
     this.globalData.setHeaderTitle('Balance Sheet');
+    this.getCrud();
+    this.getProject();
     $('#printRpt').hide();
     $('#balanceSheet2').hide();
   }
@@ -71,7 +77,13 @@ export class BalanceSheetComponent implements OnInit {
   projectName:any ;
   projectList:any = [];
 
-
+  getCrud(){
+    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
+      (Response:any)=>{
+        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      }
+    )
+  }
 
 
  

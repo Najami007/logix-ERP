@@ -2,17 +2,17 @@
 <div class="bg-white p-5">
     
     <div class="text-center border w-50  bg-light container-fluid pt-5">
-        <div class="text-end " ><button style="background: transparent;border: none;" class=" border-bottom" (click)="OpenDialogue()"><mat-icon class="pt-1">
+        <div class="text-end " ><button *ngIf="crudList.c" style="background: transparent;border: none;" class=" border-bottom" (click)="OpenDialogue()"><mat-icon class="pt-1">
             add</mat-icon>  ADD New Note</button></div>
             <br>
-        <table class="table table-hover h-100"> 
+        <table class="table table-hover h-100 " *ngIf="crudList.r"> 
             <thead>
                 <th>S#</th>
                 <th>Title</th>
                 <th>Note</th>
                 <th>Coa Type</th>
-                <th>Edit</th>
-                <th>Delete</th>
+                <th  *ngIf="crudList.u">Edit</th>
+                <th  *ngIf="crudList.d">Delete</th>
             </thead>
             <tbody >
                 <tr *ngFor="let item of notesData index as index">
@@ -20,8 +20,8 @@
                     <td>{{item.noteTitle}}</td>
                     <td>{{item.noteID}}</td>
                     <td>{{item.CoaTypeTitle}}</td>
-                    <td><mat-icon class="text-success cursorPointer" (click)="editNote(item)">edit</mat-icon></td>
-                    <td><mat-icon class="text-danger cursorPointer" (click)="deleteNote(item)">delete</mat-icon></td>
+                    <td  *ngIf="crudList.u"><mat-icon class="text-success cursorPointer" (click)="editNote(item)">edit</mat-icon></td>
+                    <td  *ngIf="crudList.d"><mat-icon class="text-danger cursorPointer" (click)="deleteNote(item)">delete</mat-icon></td>
                 </tr>
             </tbody>
         </table>

@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment.development';
 import * as $ from 'jquery';
 import { MatDialog } from '@angular/material/dialog';
 import { VoucherDetailsComponent } from '../../voucher/voucher-details/voucher-details.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cashbook',
@@ -15,24 +16,16 @@ import { VoucherDetailsComponent } from '../../voucher/voucher-details/voucher-d
   styleUrls: ['./cashbook.component.scss']
 })
 export class CashbookComponent implements OnInit{
-
-
-  logo:any;
-  logo1:any;
-  CompanyName:any;
-  CompanyName2:any;
-   companyAddress :any;
-   companyPhone :any;
-   companyMobileno:any;
-   companyEmail:any;
-  
+  companyProfile:any= [];
+  crudList:any = [];
 
   constructor(
     private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
     private globalData:GlobalDataModule,
-    private dialogue:MatDialog
+    private dialogue:MatDialog,
+    private route:Router
   ){
     this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
       (Response:any)=>{
@@ -46,20 +39,12 @@ export class CashbookComponent implements OnInit{
 
   ngOnInit(): void {
     $('.cashSummary').hide();
-    this.getProject();
-    this.logo = this.globalData.Logo;
-    this.logo1 = this.globalData.Logo1;
-    this.CompanyName = this.globalData.CompanyName;
-    this.CompanyName2 = this.globalData.CompanyName2;
-    this.companyAddress = this.globalData.Address;
-    this.companyPhone = this.globalData.Phone;
-    this.companyMobileno = this.globalData.mobileNo;
-    this.companyEmail = this.globalData.Email;
+   
     this.globalData.setHeaderTitle('cash Book');
   }
 
 
-  companyProfile:any;
+
   fromDate:Date = new Date();
   toDate:Date = new Date();
 
@@ -90,6 +75,15 @@ export class CashbookComponent implements OnInit{
 
 
 
+
+
+ getCrud(){
+  this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
+    (Response:any)=>{
+      this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    }
+  )
+}
 
  
  getProject(){

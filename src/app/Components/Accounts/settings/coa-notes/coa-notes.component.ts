@@ -8,13 +8,14 @@ import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 import { AppComponent } from 'src/app/app.component';
 import { PincodeComponent } from 'src/app/Components/User/pincode/pincode.component';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-coa-notes',
   templateUrl: './coa-notes.component.html',
   styleUrls: ['./coa-notes.component.scss']
 })
 export class CoaNotesComponent implements OnInit{
-
+  crudList:any = [];
 
   constructor(
     private dialogue:MatDialog,
@@ -22,17 +23,31 @@ export class CoaNotesComponent implements OnInit{
     private http:HttpClient,
     private globalData:GlobalDataModule,
     private app:AppComponent,
+    private route:Router
     
   ){}
 
 
   ngOnInit(): void {
-   
+    this.getCrud();
     this.getNotes();
+    
   }
 
 
   notesData:any;
+
+
+  
+  getCrud(){
+    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
+      (Response:any)=>{
+        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      }
+    )
+  }
+
+
 
 
 

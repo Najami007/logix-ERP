@@ -343,8 +343,8 @@
                         <td ><mat-icon class="text-success"  
                             (click)="VoucherDetails(item)" >receipt</mat-icon></td>
                         <td *ngIf="crudList.r || crudList.d   || crudList.u  ">
-                            <!-- <mat-icon class="text-success"  (click)="approveBill(item)">check</mat-icon> -->
-                        <mat-icon *ngIf="crudList.u"  aria-label="Approved" class="text-success" >{{item.approvedStatus ? 'done_all' : 'check'}}</mat-icon>
+                            <mat-icon class="text-success"*ngIf="item.approvedStatus == false && crudList.u"   (click)="approveBill(item)">check</mat-icon>
+                        <mat-icon *ngIf="item.approvedStatus"  aria-label="Approved" class="text-success" >done_all</mat-icon>
                         <mat-icon class="text-danger" *ngIf="crudList.d" (click)="DeleteVoucher(item)">delete</mat-icon>
                         <mat-icon class="text-primary" *ngIf="crudList.r" (click)="printBill(item)">print</mat-icon></td>
 

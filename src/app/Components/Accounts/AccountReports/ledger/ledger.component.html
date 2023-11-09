@@ -44,7 +44,7 @@
                         </mat-form-field>
                     
 
-                    <div class="col-lg-3 text-start">
+                    <div class="col-lg-3 text-start" *ngIf="crudList.r">
                         <button class=" col-lg-5 btn btn-success h55px me-1"  (click)="getLedgerReport('project')">ProjectWise</button>   
 
                         <button class=" col-lg-4 btn btn-success h55px me-1" (click)="getLedgerReport('all')">All Report</button> 
