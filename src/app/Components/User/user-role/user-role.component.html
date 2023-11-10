@@ -149,8 +149,8 @@
                         <td>{{i + 1}}</td>
                         <td>{{item.roleTitle}}</td>
                         <td>{{item.roleDescription}}</td>
-                        <td *ngIf="crudList.u" ><button mat-mini-fab class="text-white bg-success h30px w30px" ><mat-icon  (click)="editRole(item)">edit</mat-icon></button></td>
-                        <td *ngIf="crudList.d" > <button mat-mini-fab class="text-white bg-danger h30px w30px"><mat-icon  (click)="deleteRole(item)">delete</mat-icon></button></td>
+                        <td *ngIf="crudList.u" ><button mat-mini-fab class="text-white bg-success h30px w30px" (click)="editRole(item)" ><mat-icon  >edit</mat-icon></button></td>
+                        <td *ngIf="crudList.d" > <button mat-mini-fab class="text-white bg-danger h30px w30px"   (click)="deleteRole(item)"><mat-icon>delete</mat-icon></button></td>
                     </tr>
                 </tbody>
             </table>

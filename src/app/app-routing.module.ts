@@ -31,6 +31,12 @@ loadChildren:()=>
 import('./Components/Company/company.module').then((m)=>m.CompanyModule),
 
 },
+{path:'inv', 
+component:MainComponent,
+loadChildren:()=> 
+import('./Components/Inventory/inventory.module').then((m)=>m.InventoryModule),
+
+},
 { path: '**', redirectTo: 'login', pathMatch: 'full' },
  
 
