@@ -10,6 +10,15 @@
             <input matInput type="text" [(ngModel)]="brandTitle" >
         </mat-form-field>
 
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Code</mat-label>
+            <input matInput type="text" [(ngModel)]="brandCode" >
+        </mat-form-field>
+
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea matInput type="text" [(ngModel)]="description" ></textarea>
+        </mat-form-field>
 
     
 
@@ -38,14 +47,16 @@
                     <tr>
                         <th>S#</th>
                         <th>Title</th>
+                        <th>Code</th>
                         <th *ngIf="crudList.u">Edit</th>
                         <th *ngIf="crudList.d">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of categoryList | filter:txtSearch index as index">
+                    <tr *ngFor="let item of BrandList | filter:txtSearch index as index">
                         <td>{{index+1}}</td>
-                        <td>{{item.countryName}}</td>
+                        <td>{{item.brandTitle}}</td>
+                        <td>{{item.brandCode}}</td>
                         <td *ngIf="crudList.u"><button mat-mini-fab  class="bg-success text-white h30px w30px" (click)="edit(item)"><mat-icon >edit</mat-icon></button></td>
                         <td *ngIf="crudList.d"><button mat-mini-fab  color="warn" class="h30px w30px" (click)="delete(item)"><mat-icon>delete</mat-icon></button></td>
                     </tr>

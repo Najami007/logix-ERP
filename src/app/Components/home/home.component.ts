@@ -8,6 +8,6 @@ import { Component } from '@angular/core';
 export class HomeComponent {
 
 
-  logoUrl:any = '../../../assets/Images/logixLogo1.png';
+  logoUrl:any = '../../../assets/Images/logix2.gif';
 
 }

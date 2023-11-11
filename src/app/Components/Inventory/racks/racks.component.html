@@ -10,6 +10,11 @@
             <input matInput type="text" [(ngModel)]="rackTitle" >
         </mat-form-field>
 
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea matInput type="text" [(ngModel)]="description" ></textarea>
+        </mat-form-field>
+
 
     
 
@@ -31,6 +36,8 @@
             <mat-icon matPrefix class="text-secondary">search</mat-icon>
         </mat-form-field>
 
+        
+
 
         <div>
             <table class="table-logix2" *ngIf="crudList.r">
@@ -43,9 +50,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of categoryList | filter:txtSearch index as index">
+                    <tr *ngFor="let item of RacksList | filter:txtSearch index as index">
                         <td>{{index+1}}</td>
-                        <td>{{item.countryName}}</td>
+                        <td>{{item.rackTitle}}</td>
                         <td *ngIf="crudList.u"><button mat-mini-fab  class="bg-success text-white h30px w30px" (click)="edit(item)"><mat-icon >edit</mat-icon></button></td>
                         <td *ngIf="crudList.d"><button mat-mini-fab  color="warn" class="h30px w30px" (click)="delete(item)"><mat-icon>delete</mat-icon></button></td>
                     </tr>

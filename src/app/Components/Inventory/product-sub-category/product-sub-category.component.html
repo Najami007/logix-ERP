@@ -10,14 +10,19 @@
             <mat-option><ngx-mat-select-search [(ngModel)]="categorySearch"
                 [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
                 name="search"></ngx-mat-select-search></mat-option>
-            <mat-option *ngFor="let item of categoryList |filter:categorySearch" [value]="item.categoryID">{{item.categoryName}}</mat-option>
+            <mat-option *ngFor="let item of categoryList |filter:categorySearch" [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
           </mat-select>
         </mat-form-field>
 
 
         <mat-form-field class="w-100" appearance="outline">
             <mat-label>Sub Category Name</mat-label>
-            <input matInput type="text" [(ngModel)]="subCategoryID" >
+            <input matInput type="text" [(ngModel)]="subCategoryTitle" >
+        </mat-form-field>
+
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea matInput type="text" [(ngModel)]="description" ></textarea>
         </mat-form-field>
 
 
@@ -56,8 +61,8 @@
                 <tbody>
                     <tr *ngFor="let item of subCategoryList | filter:txtSearch index as index">
                         <td>{{index+1}}</td>
-                        <td>{{item.cityName}}</td>
-                        <td>{{item.countryName}}</td>
+                        <td>{{item.subCategoryTitle}}</td>
+                        <td>{{item.categoryTitle}}</td>
                         <td *ngIf="crudList.u"><button mat-mini-fab  class="bg-success text-white h30px w30px" (click)="edit(item)"><mat-icon>edit</mat-icon></button></td>
                         <td *ngIf="crudList.d"><button mat-mini-fab  color="warn" class="h30px w30px" (click)="delete(item)"><mat-icon>delete</mat-icon></button></td>
                     </tr>
