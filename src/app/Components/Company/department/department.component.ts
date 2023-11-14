@@ -31,6 +31,7 @@ export class DepartmentComponent implements OnInit{
     
     ){}
   ngOnInit(): void {
+    this.globaldata.setHeaderTitle('Department');
     this.getCrud();
     
     this.getDepartment();

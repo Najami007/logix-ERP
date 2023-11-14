@@ -30,6 +30,7 @@ export class CityComponent implements OnInit{
     ){}
 
   ngOnInit(): void {
+    this.globaldata.setHeaderTitle('City');
     this.getCrud();
     this.getCity();
     this.getCountry();

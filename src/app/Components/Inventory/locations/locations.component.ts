@@ -27,6 +27,7 @@ export class LocationsComponent implements OnInit{
     
     ){}
   ngOnInit(): void {
+    this.globaldata.setHeaderTitle('Location')
     this.getCrud();
     this.getLocation();
    

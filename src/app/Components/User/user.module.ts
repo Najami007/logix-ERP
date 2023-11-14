@@ -59,7 +59,7 @@ export const userRoutes: Route[] = [
   
     
   ],
-  providers: [{ provide: HIGHCHARTS_MODULES, useFactory: () => [  ] }, NotificationService,GlobalDataModule],
+  
 
 })
 export class UserModule { }

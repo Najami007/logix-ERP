@@ -33,6 +33,7 @@ export class ProductSubCategoryComponent implements OnInit {
 
     
   ngOnInit(): void {
+    this.globaldata.setHeaderTitle('Sub Category')
     this.getCrud();
     this.getCategory();
     this.getSubCategory();

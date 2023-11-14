@@ -29,6 +29,7 @@ export class UserRoleComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.global.setHeaderTitle('USER Roles');
     this.getCrud();
 
     this.getModules();

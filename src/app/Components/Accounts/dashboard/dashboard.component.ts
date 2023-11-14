@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit{
     this.getIncome();
     this.getPrviousMonthIncome();
     this.getBookings();
-    this.globalData.setHeaderTitle('DashBoard');
+    this.globalData.setHeaderTitle('Finance DashBoard');
   
 
   

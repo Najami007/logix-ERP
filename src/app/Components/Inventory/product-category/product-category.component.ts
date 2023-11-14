@@ -28,6 +28,7 @@ export class ProductCategoryComponent implements OnInit{
     
     ){}
   ngOnInit(): void {
+    this.globaldata.setHeaderTitle('Product Category');
     this.getCrud();
     this.getCategory();
    

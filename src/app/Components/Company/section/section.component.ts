@@ -27,6 +27,7 @@ export class SectionComponent implements OnInit {
     
     ){}
   ngOnInit(): void {
+    this.globaldata.setHeaderTitle('Section');
     this.getCrud();
     this.getDepartment();
     this.getSection();;

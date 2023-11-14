@@ -30,6 +30,7 @@ export class ProjectComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
+    this.global.setHeaderTitle('Project');
     this.getCrud();
     this.getProject();
     

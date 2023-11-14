@@ -1,0 +1,108 @@
+<mat-tab-group mat-align-tabs="center" class="h-100 body bg-gray" [selectedIndex]="tabIndex"
+    (selectedIndexChange)="changeTab($event)">
+    <mat-tab label="ADD PRODUCT">
+        <div class="card mb-3 container-fluid text-center w-75 border bg-light pt-5 mt-5">
+        
+
+              <div >
+                <mat-form-field appearance="outline" class="w-50 pe-5 ">
+                    <mat-label>Select Category</mat-label>
+                    <mat-select [(ngModel)]="CategoryID" (selectionChange)="getSubCategory()" name="pCategory">
+                        <mat-option  *ngFor="let item of CategoriesList" [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
+                        
+                    </mat-select>
+                    <mat-hint>Select Product Category</mat-hint>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-50 ">
+                    <mat-label>Select Sub Category</mat-label>
+                    <mat-select [(ngModel)]="SubCategoryID" name="pSubCategory">
+                        <mat-option *ngFor="let item of SubCategoriesList" [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
+                    </mat-select>
+                    <mat-hint>Select Product Sub-Category</mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="pt-5">
+                <mat-form-field appearance="outline" class="w-50 pe-5">
+                    <mat-label>Product Name</mat-label>
+                   <input matInput [(ngModel)]="ProductName" name="ProductName" type="text">
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-50 ">
+                    <mat-label>Barcode Type</mat-label>
+                    <mat-select [(ngModel)]="BarcodeType"  name="pType" >
+                        <mat-option [value]="'auto'">Auto</mat-option>
+                        <mat-option [value]="'manual'">Manual</mat-option>
+                    </mat-select>
+                </mat-form-field>
+              
+                <mat-form-field appearance="outline" class="w-50 pe-5">
+                    <mat-label>Product Barcode</mat-label>
+                   <input matInput type="text" [(ngModel)]="Barcode" name="pBarcode" [disabled]="BarcodeType == 'auto'">
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-50 ">
+                    <mat-label>Barcode 1</mat-label>
+                    <input matInput type="text" [(ngModel)]="Barcode1" name="pBarcode1" [disabled]="BarcodeType == 'auto'">
+                </mat-form-field>              
+              
+                <mat-form-field appearance="outline" class="w-50 pe-5 ">
+                    <mat-label>Cost Price</mat-label>
+                    <input matInput type="text" [(ngModel)]="CostPrice" name="pcost">
+                </mat-form-field>
+              
+                <mat-form-field appearance="outline" class="w-50 ">
+                    <mat-label>Sale Price</mat-label>
+                    <input matInput type="text" [(ngModel)]="SalePrice" name="pSale">
+                </mat-form-field>
+              
+               
+                <div class="p-5 ">
+                    <button #toggleBtn  class="btn btn-success me-5 w-25" accesskey="s"  (click)="save() ">{{btnType}}</button>
+                    <button class="btn btn-danger w-25" (click)="reset()">Reset</button>
+                </div>
+              
+            </div>
+
+
+            
+
+        </div>
+
+
+
+
+
+    </mat-tab>
+
+    <mat-tab label="SAVED PRODUCTS" class="h-100">
+
+        <div class="container-fluid bg-light ">
+            <mat-form-field appearance="outline" class="w-100 pt-2">
+                <mat-label>Search.....</mat-label>
+                <input type="text" matInput>
+            </mat-form-field>
+            <hr>
+            <table class="table table-hover">
+                <thead>
+                    <th>S#</th>
+                    <th>Product Name</th>
+                    <th>Product Barcode</th>
+                    <th>Cost Price</th>
+                    <th>Sale Price</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of ProductsData index as index">
+                        <td>{{index +1}}</td>
+                        <td> {{item.productName}}</td>
+                        <td>{{item.pBarcode}}</td>
+                        <td>{{item.costPrice}}</td>
+                        <td>{{item.salePrice}}</td>
+                        <td><mat-icon class="text-success cursorPointer" (click)="edit(item)">edit</mat-icon>
+                            <mat-icon class="text-danger cursorPointer" (click)="delete(item.productID)">delete</mat-icon></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+    </mat-tab>
+</mat-tab-group>

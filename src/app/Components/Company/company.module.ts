@@ -64,7 +64,6 @@ export const companyRoutes: Route[] = [
     ReactiveFormsModule,
     Ng2SearchPipeModule,
     MatFormFieldModule,
-    GlobalDataModule,
     ChartModule,
     NgxMatSelectSearchModule,
     TextMaskModule

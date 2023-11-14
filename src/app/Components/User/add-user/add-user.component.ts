@@ -37,6 +37,7 @@ export class AddUserComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.global.setHeaderTitle('Add User');
     this.getCrud();
     this.getUsers();
     this.getRoles();

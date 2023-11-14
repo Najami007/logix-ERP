@@ -26,6 +26,7 @@ export class BrandComponent implements OnInit{
     
     ){}
   ngOnInit(): void {
+    this.globaldata.setHeaderTitle('Brand');
     this.getCrud();
     this.getBrandList()
    

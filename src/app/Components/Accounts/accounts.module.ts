@@ -87,7 +87,6 @@ export const accountRountes: Route[] = [
     ReactiveFormsModule,
     Ng2SearchPipeModule,
     MatFormFieldModule,
-    GlobalDataModule,
     ChartModule,
     NgxMatSelectSearchModule
     
@@ -95,10 +94,11 @@ export const accountRountes: Route[] = [
     
   ],
   exports:[
-    RouterModule
+    RouterModule,
+    
     
   ],
-  providers: [{ provide: HIGHCHARTS_MODULES, useFactory: () => [  ] }, NotificationService,GlobalDataModule],
+  providers: [{ provide: HIGHCHARTS_MODULES, useFactory: () => [  ] }, NotificationService],
 
 })
 export class AccountsModule { }

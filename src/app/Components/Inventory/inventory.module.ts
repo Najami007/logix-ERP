@@ -14,6 +14,8 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { LocationsComponent } from './locations/locations.component';
 import { RacksComponent } from './racks/racks.component';
 import { UnitOfMeasurementComponent } from './unit-of-measurement/unit-of-measurement.component';
+import { ProductComponent } from './product/product.component';
+import { PurchaseComponent } from './purchase/purchase.component';
 
 
 
@@ -27,6 +29,8 @@ export const inventoryRoutes: Route[] = [
   {path:'prac', component:RacksComponent, canActivate:[AuthGuard] },
   {path:'ploc', component:LocationsComponent, canActivate:[AuthGuard] },
   {path:'uom', component:UnitOfMeasurementComponent, canActivate:[AuthGuard] },
+  {path:'prod', component:ProductComponent, canActivate:[AuthGuard] },
+  {path:'pur', component:PurchaseComponent, canActivate:[AuthGuard] },
 
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
@@ -41,7 +45,9 @@ export const inventoryRoutes: Route[] = [
     BrandComponent,
     LocationsComponent,
     RacksComponent,
-    UnitOfMeasurementComponent
+    UnitOfMeasurementComponent,
+    ProductComponent,
+    PurchaseComponent
   ],
   imports: [
     CommonModule,

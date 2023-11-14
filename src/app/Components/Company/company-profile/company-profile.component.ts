@@ -68,6 +68,7 @@ export class CompanyProfileComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.global.setHeaderTitle('Company Profile');
     this.getCrud();
     this.getCompany();
    

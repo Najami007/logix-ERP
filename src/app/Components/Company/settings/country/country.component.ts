@@ -27,6 +27,7 @@ export class CountryComponent implements OnInit{
     
     ){}
   ngOnInit(): void {
+    this.globaldata.setHeaderTitle('Country');
     this.getCrud();
     
     this.getCountry();
