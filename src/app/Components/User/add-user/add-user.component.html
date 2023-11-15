@@ -65,7 +65,8 @@
                     <th>Login Name</th>
                     <th>Mobile</th>
                     <th *ngIf="crudList.u">Edit</th>
-                    <th *ngIf="crudList.u">Reset</th>
+                    <th *ngIf="crudList.u">Reset PIN</th>
+                    <th *ngIf="crudList.u">Password</th>
                     <th *ngIf="crudList.u">Block</th>
                     <th *ngIf="crudList.d">Delete</th>
                 </tr>
@@ -77,6 +78,7 @@
                     <td>{{item.mobileNo}}</td>
                     <td *ngIf="crudList.u"><button mat-mini-fab class="bg-success h30px w30px"  (click)="editUser(item)"><mat-icon  >edit</mat-icon></button></td>
                     <td *ngIf="crudList.u"><button mat-mini-fab class="bg-primary h30px w30px " (click)="resetPin(item)"   ><mat-icon >vpn_key</mat-icon></button></td>
+                    <td *ngIf="crudList.u"><button mat-mini-fab class="h30px w30px " style="background-color: rgb(57, 154, 183);" (click)="ChangePassword(item.userID)"   ><mat-icon >lock</mat-icon></button></td>
                     <td *ngIf="crudList.u"><button mat-mini-fab  class="bg-warning h30px w30px"  *ngIf="item.tempBlock == false "   (click)="blockUser(item,true)"  ><mat-icon>block</mat-icon></button>
                        <button mat-mini-fab *ngIf="item.tempBlock == true " (click)="blockUser(item,false)"  class="bg-white text-dark h30px w30px"> <mat-icon  >block</mat-icon></button></td>
                     <td *ngIf="crudList.d"><button mat-mini-fab  class="bg-danger h30px w30px"  (click)="deleteUser(item)"><mat-icon>delete</mat-icon></button></td>

@@ -48,6 +48,7 @@ export class ProductComponent implements OnInit {
   Barcode1:any;
   CostPrice:any;
   SalePrice:any;
+  productType:any;
   
   
   getCrud(){

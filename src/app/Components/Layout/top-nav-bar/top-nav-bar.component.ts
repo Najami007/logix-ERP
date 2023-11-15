@@ -121,10 +121,10 @@ export class TopNavBarComponent implements OnInit{
     }
 
 
-    changePassword(){
-        
+    changePassword(){    
     this.dialogue.open(ChangePasswordComponent,{
       width:"30%",
+      data:this.globalData.getUserID()
     }).afterClosed().subscribe(val=>{  
 
 

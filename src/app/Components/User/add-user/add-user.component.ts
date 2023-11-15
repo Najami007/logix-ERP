@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 import { PincodeComponent } from '../pincode/pincode.component';
 import { Router } from '@angular/router';
+import { ChangePasswordComponent } from '../change-password/change-password.component';
 
 @Component({
   selector: 'app-add-user',
@@ -357,6 +358,19 @@ export class AddUserComponent implements OnInit {
       }})
     
    
+  }
+
+  //////////////////////////////////////////////////////////
+
+
+  ChangePassword(userID:any){
+    this.dialogue.open(ChangePasswordComponent,{
+      width:'30%',
+      data:userID
+
+    }).afterClosed().subscribe(val=>{
+
+    })
   }
 
 

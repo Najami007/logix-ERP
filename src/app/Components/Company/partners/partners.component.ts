@@ -34,7 +34,7 @@ export class PartnersComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
-    this.global.setHeaderTitle('Partner')
+    this.global.setHeaderTitle('Partner Profile')
     this.getCrud();
     this.getCity();
     this.getPartners();

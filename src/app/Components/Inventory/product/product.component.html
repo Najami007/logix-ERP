@@ -39,9 +39,12 @@
                    <input matInput type="text" [(ngModel)]="Barcode" name="pBarcode" [disabled]="BarcodeType == 'auto'">
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="w-50 ">
-                    <mat-label>Barcode 1</mat-label>
-                    <input matInput type="text" [(ngModel)]="Barcode1" name="pBarcode1" [disabled]="BarcodeType == 'auto'">
-                </mat-form-field>              
+                    <mat-label>Product Type</mat-label>
+                    <mat-select [(ngModel)]="productType"  name="pType" >
+                        <mat-option [value]="'menu'">Menu</mat-option>
+                        <mat-option [value]="'inv'">Inventory</mat-option>
+                    </mat-select>
+                </mat-form-field>           
               
                 <mat-form-field appearance="outline" class="w-50 pe-5 ">
                     <mat-label>Cost Price</mat-label>

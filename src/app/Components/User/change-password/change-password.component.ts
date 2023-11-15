@@ -15,19 +15,22 @@ export class ChangePasswordComponent implements OnInit{
 
   constructor(
     private http:HttpClient,
-    @Inject(MAT_DIALOG_DATA) public editData : any,
+    @Inject(MAT_DIALOG_DATA) public UserID : any,
     private dialogRef: MatDialogRef<ChangePasswordComponent>,
     private global:GlobalDataModule,
     private msg:NotificationService,
     private dialogue:MatDialog
   ){}
   ngOnInit(): void {
-    
+    if(this.UserID){
+      this.userID = this.UserID;
+    }
   }
 
 
   password:any;
   pinCode:any;
+  userID:any;
 
   changePassword(){
     if(this.password == '' || this.password == undefined){
@@ -42,7 +45,7 @@ export class ChangePasswordComponent implements OnInit{
       this.http.post(environment.mainApi+'user/changepassword',{
         Password:this.password,
         PinCode: this.pinCode,
-        UserID: this.global.getUserID()
+        UserID: this.userID,
       }).subscribe(
         (Response:any)=>{
           if(Response.msg == 'Data Updated Successfully'){
