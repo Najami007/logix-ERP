@@ -31,6 +31,11 @@ export class CompanyProfileComponent implements OnInit {
 
   ){
 
+    this.global.getMenuList().subscribe((data)=>{
+      this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    })
+
+
   }
 
     profileID:any;
@@ -69,7 +74,6 @@ export class CompanyProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.global.setHeaderTitle('Company Profile');
-    this.getCrud();
     this.getCompany();
    
   }
@@ -80,13 +84,13 @@ export class CompanyProfileComponent implements OnInit {
 
 
 
-  getCrud(){
-    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
-      (Response:any)=>{
-        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      }
-    )
-  }
+  // getCrud(){
+  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
+  //     (Response:any)=>{
+  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+  //     }
+  //   )
+  // }
   
 
 ////////////////////////////////////////////////////////////////////////

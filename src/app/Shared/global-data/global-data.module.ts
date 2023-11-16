@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment.development';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { NotificationService } from '../service/notification.service';
 import { userInterface } from '../Interfaces/login-user-interface';
-import { BehaviorSubject, Observable, Observer } from 'rxjs';
+import { BehaviorSubject, Observable, Observer, retry } from 'rxjs';
 import Swal from 'sweetalert2';
 import * as $ from 'jquery';
 import * as b64 from 'base64-js/index.js';
@@ -92,7 +92,7 @@ export class GlobalDataModule  implements OnInit {
 
 
   ngOnInit(): void {
-    this.getCompany();
+  
 
    
   }
@@ -111,27 +111,7 @@ export class GlobalDataModule  implements OnInit {
   
  
 
-    getCrud(array:any){
 
-      
-        var list:any = [];
-        this.http.get(environment.mainApi+'user/getusermenu?userid='+this.getUserID()+'&moduleid='+this.getModuleID()).subscribe(
-          (Response:any)=>{
-            list = Response;
-
-   
-          ;
-          }
-        ) 
-
-          
-  
-      array = list.find((e:any)=>e.menuLink == this.rout.url.split("/").pop());
-
-       
-
-
-    }
 
 
   getModuleID(){
@@ -243,33 +223,20 @@ getHours(date1:any, Time1:any, date2:any, Time2:any) {
 
 /////////////////////////////////////////////////////
 
-getCompany():any{
+public getCompany():Observable<any>{
 
-  this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
-    (Response:any)=>{
-      this.comapnayProfile = Response;
-
-      // return Response;
-    //   console.log(Response[0]);
-    //  this.Logo = Response[0].companyLogo1;
-    //  this.Logo1 = Response[0].companyLogo2;
-    //  this.CompanyName = Response[0].companyName;
-    //  this.Address = Response[0].companyAddress;
-    //  this.mobileNo = Response[0].companyMobile;
-    //  this.Phone = Response[0].companyPhone;
-    //  this.logo1Height = Response[0].logo1Height;
-    //  this.logo1Width  = Response[0].logo1Width;
-    //  this.logo2height  = Response[0].logo2Height;
-    //  this.logo2Width = Response[0].logo2Width;
-     
-
-
-
-      
-      
-    }
-  )
+  return  this.http.get(environment.mainApi+'cmp/getcompanyprofile').pipe(retry(3));
 }
+
+
+
+
+public getMenuList():Observable<any>{
+  return this.http.get(environment.mainApi+'user/getusermenu?userid='+this.getUserID()+'&moduleid='+this.getModuleID()).pipe(retry(2));
+}
+
+
+
 
 
 ///////////////////////////////////////////////////////////

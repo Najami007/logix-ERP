@@ -13,7 +13,7 @@ import { AppComponent } from 'src/app/app.component';
 })
 export class PurchaseComponent implements OnInit{
 
-
+  crudList:any = [];
   constructor(
     private http:HttpClient,
     private msg:NotificationService,
@@ -21,7 +21,12 @@ export class PurchaseComponent implements OnInit{
     private dialogue:MatDialog,
     private app:AppComponent,
     private route:Router
-  ){}
+  ){
+    this.global.getMenuList().subscribe((data)=>{
+      this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    })
+
+  }
 
   
   ngOnInit(): void {

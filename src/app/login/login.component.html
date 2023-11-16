@@ -3,10 +3,13 @@
         <span class="borderline"></span>
     
         <form class="shadow">
-                <h1 class="text-center text-dark">SIGN-IN</h1>
                 
-                <h4 class="text-center text-muted">Welcome</h4>
-                <div class="mt-5">
+
+                <div class="text-center" *ngIf="companyProfile[0].companyLogo1">
+                    <img  [src]="companyProfile[0].companyLogo1" height="80" width="80" alt="" srcset="">
+                </div>
+                <h1 class="text-center text-dark">SIGN-IN</h1>
+                <div class="">
                     <mat-form-field class="input-width">
                         <mat-label>Login ID</mat-label>
                         <input type="text" autofocus class="input-full-width" matInput name="UserId"  [(ngModel)]="userEmail">

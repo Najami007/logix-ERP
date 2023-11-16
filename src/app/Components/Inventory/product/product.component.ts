@@ -23,7 +23,13 @@ export class ProductComponent implements OnInit {
     private dialogue:MatDialog,
     private app:AppComponent,
     private route:Router
-  ){}
+  ){
+
+    this.global.getMenuList().subscribe((data)=>{
+      this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    })
+
+  }
 
 
 
@@ -51,13 +57,13 @@ export class ProductComponent implements OnInit {
   productType:any;
   
   
-  getCrud(){
-    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
-      (Response:any)=>{
-        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      }
-    )
-  }
+  // getCrud(){
+  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
+  //     (Response:any)=>{
+  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+  //     }
+  //   )
+  // }
 
 
 

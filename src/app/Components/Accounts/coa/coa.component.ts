@@ -28,18 +28,17 @@ export class COAComponent  implements OnInit {
     private http:HttpClient,
     private dialogue:MatDialog
     ) { 
-   
+
+      this.globalData.getMenuList().subscribe((data)=>{
+        this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      })
+
     
 
     }
 
   ngOnInit(): void {
     this.globalData.setHeaderTitle('Charts Of Accounts');
-    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
-      (Response:any)=>{
-        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      }
-    ) 
     this.getCoaType();
     this.GetChartOfAccount();
     this.globalData.numberOnly();

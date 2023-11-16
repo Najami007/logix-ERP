@@ -26,11 +26,12 @@ export class PincodeComponent implements OnInit{
 
 
 
-  pinCode:any;
+  pinCode:any = '';
 
   save(){
 
-    if(this.pinCode == '' || this.pinCode == undefined){
+    // alert(this.pinCode);
+    if(this.pinCode == "" || this.pinCode == undefined){
       this.msg.WarnNotify('Enter PinCode')
     }else{
       this.dialogRef.close(this.pinCode);

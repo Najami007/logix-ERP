@@ -26,10 +26,14 @@ export class ProductCategoryComponent implements OnInit{
     private app:AppComponent,
     private route:Router
     
-    ){}
+    ){
+      this.globaldata.getMenuList().subscribe((data)=>{
+        this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      })
+
+    }
   ngOnInit(): void {
     this.globaldata.setHeaderTitle('Product Category');
-    this.getCrud();
     this.getCategory();
    
   }
@@ -54,13 +58,13 @@ export class ProductCategoryComponent implements OnInit{
   }
 
 
-  getCrud(){
-    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globaldata.getUserID()+'&moduleid='+this.globaldata.getModuleID()).subscribe(
-      (Response:any)=>{
-        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      }
-    )
-  }
+  // getCrud(){
+  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globaldata.getUserID()+'&moduleid='+this.globaldata.getModuleID()).subscribe(
+  //     (Response:any)=>{
+  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+  //     }
+  //   )
+  // }
 
 
 

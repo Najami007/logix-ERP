@@ -26,13 +26,18 @@ export class DayTransactionComponent implements OnInit{
     private dialogue:MatDialog,
     private route:Router
   ){
-    this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
-      (Response:any)=>{
-        this.companyProfile = Response;
-        //console.log(Response)  
-        
-      }
-    )
+    // this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+    //   (Response:any)=>{this.companyProfile = Response;})
+
+
+    this.global.getCompany().subscribe((data)=>{
+      this.companyProfile = data;
+    });
+
+    this.global.getMenuList().subscribe((data)=>{
+      this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    })
+
   
   }
   
@@ -44,7 +49,6 @@ export class DayTransactionComponent implements OnInit{
     ngOnInit(): void {
   
       this.global.setHeaderTitle('Transaction Report');
-      this.getCrud();
       this.getProject();
      
   
@@ -70,13 +74,13 @@ export class DayTransactionComponent implements OnInit{
     projectList:any = [];
 
 
-    getCrud(){
-      this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
-        (Response:any)=>{
-          this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-        }
-      )
-    }
+    // getCrud(){
+    //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
+    //     (Response:any)=>{
+    //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    //     }
+    //   )
+    // }
   
 
  

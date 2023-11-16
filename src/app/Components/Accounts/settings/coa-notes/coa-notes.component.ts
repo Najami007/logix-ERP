@@ -25,11 +25,16 @@ export class CoaNotesComponent implements OnInit{
     private app:AppComponent,
     private route:Router
     
-  ){}
+  ){
+
+    this.globalData.getMenuList().subscribe((data)=>{
+      this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    })
+
+  }
 
 
   ngOnInit(): void {
-    this.getCrud();
     this.getNotes();
     
   }
@@ -39,13 +44,13 @@ export class CoaNotesComponent implements OnInit{
 
 
   
-  getCrud(){
-    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
-      (Response:any)=>{
-        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      }
-    )
-  }
+  // getCrud(){
+  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
+  //     (Response:any)=>{
+  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+  //     }
+  //   )
+  // }
 
 
 

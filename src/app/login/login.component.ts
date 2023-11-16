@@ -13,17 +13,23 @@ import { GlobalDataModule } from '../Shared/global-data/global-data.module';
 export class LoginComponent implements OnInit {
 
 
-
+companyProfile:any = [];
 
   constructor(private msg:NotificationService,
                private rout : Router,
                private http : HttpClient,
                private globalData:GlobalDataModule
-    ){}
+    ){
+
+      this.globalData.getCompany().subscribe((data)=>{
+        this.companyProfile = data;
+      });
+    }
 
 
 
   ngOnInit(): void {
+   
   
 
 

@@ -28,13 +28,22 @@ export class BudgetReportComponent implements OnInit{
     private route:Router
   ){
     
-    this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
-      (Response:any)=>{
-        this.companyProfile = Response;
-        //console.log(Response)  
+    // this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+    //   (Response:any)=>{
+    //     this.companyProfile = Response;
+    //     //console.log(Response)  
         
-      }
-    )
+    //   }
+    // )
+
+    this.global.getCompany().subscribe((data)=>{
+      this.companyProfile = data;
+    });
+
+    this.global.getMenuList().subscribe((data)=>{
+      this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    })
+
   }
 
 
@@ -58,13 +67,13 @@ export class BudgetReportComponent implements OnInit{
   projectName:any;
   
   
-  getCrud(){
-    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
-      (Response:any)=>{
-        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      }
-    )
-  }
+  // getCrud(){
+  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
+  //     (Response:any)=>{
+  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+  //     }
+  //   )
+  // }
  
 
 

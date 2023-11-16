@@ -27,18 +27,24 @@ export class PLStatComponent implements OnInit {
     private route:Router
     
     ){
-      this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
-        (Response:any)=>{
-          this.companyProfile = Response;
-          //console.log(Response)  
-          
-        }
-      )
+      // this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+      //   (Response:any)=>{
+      //     this.companyProfile = Response;
+      //   }
+      // )
+
+      this.globalData.getCompany().subscribe((data)=>{
+        this.companyProfile = data;
+      });
+
+      this.globalData.getMenuList().subscribe((data)=>{
+        this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      })
+
     
     }
   ngOnInit(): void {
     this.globalData.setHeaderTitle('Profit & Loss Statement');
-    this.getCrud();
     this.globalData.getCompany();
     this.getProject();
    
@@ -70,13 +76,13 @@ export class PLStatComponent implements OnInit {
 
 
   
- getCrud(){
-  this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
-    (Response:any)=>{
-      this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-    }
-  )
-}
+//  getCrud(){
+//   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
+//     (Response:any)=>{
+//       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+//     }
+//   )
+// }
 
 
 

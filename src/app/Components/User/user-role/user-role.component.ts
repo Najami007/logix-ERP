@@ -25,13 +25,16 @@ export class UserRoleComponent implements OnInit {
     private global:GlobalDataModule,
     private dialogue:MatDialog,
     private route:Router
-  ){}
+  ){
+    this.global.getMenuList().subscribe((data)=>{
+      this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    })
+
+  }
 
 
   ngOnInit(): void {
     this.global.setHeaderTitle('USER Roles');
-    this.getCrud();
-
     this.getModules();
     this.getMenuList();
     this.getSavedRoles();
@@ -57,13 +60,13 @@ export class UserRoleComponent implements OnInit {
   TempModuleList:any = [];
 
 
-  getCrud(){
-    this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
-      (Response:any)=>{
-        this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      }
-    )
-  }
+  // getCrud(){
+  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
+  //     (Response:any)=>{
+  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+  //     }
+  //   )
+  // }
 
 
 
