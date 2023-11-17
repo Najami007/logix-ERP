@@ -14,7 +14,7 @@
 
         <div *ngFor="let item of categoriesList|filter:searchCat">
 
-            <button (change)="onCatSelected(item.id)" (click)="onCatSelected(item.id)" mat-raised-button class="border text-center m-1 p-1" style="min-height: 55px; min-width: 80px;border-radius: 10px ;">{{item.name}}</button>
+            <button  (click)="onCatSelected(item.id)" [ngClass]="categoryID == item.id ? 'bg-blue' : ''" mat-raised-button class="border text-center m-1 p-1" style="min-height: 55px; min-width: 80px;border-radius: 10px ;">{{item.name}}</button>
             
         </div>
       </div>

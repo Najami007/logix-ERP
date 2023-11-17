@@ -104,6 +104,7 @@ export class SaleComponent implements OnInit {
   categoryID:any = 0;
 
   onCatSelected(id:any){
+    this.categoryID = id;
    this.ProductList =  this.tempProductList.filter((e:any)=>e.catID == id);
 
   }
