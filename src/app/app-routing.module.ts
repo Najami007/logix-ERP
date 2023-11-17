@@ -37,6 +37,12 @@ loadChildren:()=>
 import('./Components/Inventory/inventory.module').then((m)=>m.InventoryModule),
 
 },
+{path:'core', 
+component:MainComponent,
+loadChildren:()=> 
+import('./Components/Restaurant-Core/restaurant-core.module').then((m)=>m.RestaurantCoreModule),
+
+},
 { path: '**', redirectTo: 'login', pathMatch: 'full' },
  
 

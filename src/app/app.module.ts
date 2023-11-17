@@ -44,6 +44,8 @@ import { HeaderComponent } from './Components/Layout/header/header.component';
 
 
 
+
+
 @NgModule({
   declarations: [   
     AppComponent, 
@@ -54,9 +56,6 @@ import { HeaderComponent } from './Components/Layout/header/header.component';
     TopNavBarComponent,
     HeaderComponent,
 
-
-    // FilterPipe,
-    
   ],
   imports: [
     ChartModule,  

@@ -1,0 +1,117 @@
+
+<div class="container-fluid d-flex body">
+
+    <div class="col-lg-9 bg-gray" style="min-height: 650px;">
+
+      <div class="d-flex category border-bottom" >
+        <mat-form-field class="w-25 m-1" appearance="outline" style="min-height: 55px; min-width: 150px;border-radius: 10px ;" >
+            <mat-label >Search.....</mat-label>
+            <input [(ngModel)]="searchCat"  matInput type="search" class="text-secondary" >
+            <mat-icon matPrefix class="text-secondary">search</mat-icon>
+        </mat-form-field>
+
+        
+
+        <div *ngFor="let item of categoriesList|filter:searchCat">
+
+            <button (change)="onCatSelected(item.id)" (click)="onCatSelected(item.id)" mat-raised-button class="border text-center m-1 p-1" style="min-height: 55px; min-width: 80px;border-radius: 10px ;">{{item.name}}</button>
+            
+        </div>
+      </div>
+
+  <div class="row cursorPointer">
+    <div *ngFor="let item of ProductList"  style="width: 150px;"  >
+        <mat-card  style="width:120px; height: 130px;" class="m-1" (click)="productSelected(item)">
+          
+                <img *ngIf="item.img" [src]="item.img" alt="" height="80px" width="120px">
+        
+            <mat-card-footer class="text-center" style="font-size: x-small;">{{item.pName}}</mat-card-footer>
+            <mat-card-footer class="text-center text-success">{{item.pSale}}</mat-card-footer>
+        </mat-card>
+      </div>
+  </div>
+
+
+
+
+    </div>
+
+
+    <div class="col-lg-3 border " style="left: 74.6%; height: 630px;">
+
+        <div class=" d-flex ">
+            <span class="col-lg-2 p-2  border">
+                <p  class="text-center p-2 " style="height: 40px;width: 40px;background-color: rgb(219, 249, 223);color: #088203; border-radius: 100%;">F3</p>
+
+            </span>
+            <span class="col-lg-4 p-1  border">
+              <!-- <button mat-raised-button class="w-100">Table</button> -->
+              <select class="w-100 h-100 border-0 bg-gray" >
+                <option *ngFor="let item of TablesList" [value]="item.id">{{item.name}}</option>
+                </select>
+
+            </span>
+            <span class="col-lg-6 p-1 border">
+               <!-- <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Order Type</mat-label>
+                <mat-select [(ngModel)]="orderTypeID">
+                    <mat-option *ngFor="let item of orderTypes" [value]="item.id">{{item.title}}</mat-option>
+                </mat-select>
+               </mat-form-field> -->
+
+               <select class="w-100 h-100 border-0 bg-gray" >
+                <option *ngFor="let item of orderTypes" [value]="item.id">{{item.title}}</option>
+                </select>
+  
+              </span>
+        </div>
+
+        <div style="min-height: 400px;" class="p-2" >
+            <div class="billTable" style="height: 350px;">
+
+                <table class="table" >
+                    <tbody>
+                        <tr *ngFor="let item of tableData index as index">
+                        <td>{{item.name}}</td>
+                        <td>{{item.price |number}}</td>
+                        <td class="d-flex"><mat-icon (click)="changeQty('add',index)" class="text-success">add_circle</mat-icon>
+                            <p>{{item.qty}}</p><mat-icon (click)="changeQty('minus',index)">remove_circle</mat-icon></td>
+                            <td>{{item.price * item.qty |number}}</td>
+                            <td><mat-icon class="text-danger" (click)="deleteRow(index)">delete</mat-icon></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+            </div>
+
+            <div class="p-4 bg-white">
+
+                <span class="d-flex border-bottom border-dark justify-content-between">
+                    <p>Sub Total</p>
+                    <p>100</p>
+                </span>
+                <span class="d-flex border-bottom border-dark justify-content-between">
+                    <p>Total</p>
+                    <p>100</p>
+                </span>
+                <span class="p-1 d-flex">
+                    <button mat-raised-button class="m-1 text-white bg-secondary w-50">HOLD</button>
+                    <button mat-raised-button  class="m-1 text-white bg-success w-50">Save</button>
+                </span>
+                
+
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+</div>
+
