@@ -36,6 +36,8 @@ export class ProductComponent implements OnInit {
   ngOnInit(): void {
     this.global.setHeaderTitle('Product');
    this.getCategory();
+   this.getBrandList();
+   this.getRacksList();
   }
 
 
@@ -55,17 +57,36 @@ export class ProductComponent implements OnInit {
   CostPrice:any;
   SalePrice:any;
   productType:any;
-  
-  
-  // getCrud(){
-  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
-  //     (Response:any)=>{
-  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-  //     }
-  //   )
-  // }
+
+  BrandID:any;
+  rackID:any;
+
+  productNameOthLanguage:any;
+  productCode:any;
+  BrandList:any = [];
+  RacksList:any = [];
+ 
 
 
+
+  
+  getRacksList(){
+    this.http.get(environment.mainApi+'inv/getrack').subscribe(
+      (Response:any)=>{
+        this.RacksList = Response;
+      }
+    )
+  }
+
+
+    
+  getBrandList(){
+    this.http.get(environment.mainApi+'inv/GetBrand').subscribe(
+      (Response:any)=>{
+        this.BrandList = Response;
+      }
+    )
+  }
 
   
   getSubCategory(){
@@ -90,6 +111,36 @@ export class ProductComponent implements OnInit {
 
 
   save(){}
+
+
+  insert(){
+    this.http.post(environment.mainApi+'inv/InsertProduct',{
+      CategoryID: this.CategoryID,
+      SubCategoryID: this.SubCategoryID,
+      BrandID: 3,
+      RackID: 4,
+      ProductTitle: this.ProductName,
+      ProductCode: this.productCode,
+      ProductTitleOtherLang: this.productNameOthLanguage,
+      ProductDescription: "Product Desc Insert",
+      MinRol: 5,
+      MaxRol: 9.5,
+      GST: 17,
+      ET: 1,
+      PCTCode: "-",
+      AllowMinus: false,
+      CostPrice: 55,
+      SalePrice: 62,
+      DiscPercentage: 0,
+      DiscRupees: 0,
+      UomID: 1,
+      Barcode: "12345",
+      BarcodeType: "Basic",
+  
+  
+      UserID: 1
+    })
+  }
 
   reset(){}
 

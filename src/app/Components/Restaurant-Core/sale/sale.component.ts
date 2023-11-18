@@ -14,6 +14,17 @@ import { AppComponent } from 'src/app/app.component';
 export class SaleComponent implements OnInit {
 
 
+ draggingCat(){
+  const catBox:any = document.querySelector(".catBox");
+
+  const dragging:any = (e:any)=>{
+    console.log("Dragging");
+    catBox.scrollLeft -= e.movementX;
+   }
+
+  catBox.addEventListener("mousemove",dragging);
+ }
+
   crudList:any = [];
   companyProfile:any = [];
 
@@ -36,6 +47,7 @@ export class SaleComponent implements OnInit {
 
   
   ngOnInit(): void {
+   
     
   }
 
@@ -65,22 +77,22 @@ export class SaleComponent implements OnInit {
     {id:2,catID:6,pName:'Pepsi',pSale:120,img:'../../../../assets/Images/pepsi.jfif'},
     {id:3,catID:1,pName:'Chicken Fajiat Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
     {id:4,catID:2,pName:'Burger',pSale:500,img:'../../../../assets/Images/Burger.jpg'},
-    {id:4,catID:2,pName:'Pasta',pSale:750,img:'../../../../assets/Images/pasta.jfif'},
+    {id:5,catID:2,pName:'Pasta',pSale:750,img:'../../../../assets/Images/pasta.jfif'},
     {id:6,catID:1,pName:'Vegetable Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
     {id:7,catID:2,pName:'Cheese Burger',pSale:500,img:'../../../../assets/Images/Burger.jpg'},
     {id:8,catID:2,pName:'Fruid Salad',pSale:750,img:'../../../../assets/Images/FruitSalad.jfif'},
     {id:9,catID:1,pName:'Crust Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
     {id:10,catID:5,pName:'Prawns',pSale:500,img:'../../../../assets/Images/Prawns.jfif'},
     {id:11,catID:6,pName:'Pasta',pSale:750,img:'../../../../assets/Images/pasta.jfif'},
-    {id:3,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:3,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:3,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:3,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:3,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:3,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:3,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:3,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:3,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
+    {id:12,catID:1,pName:' Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
+    {id:13,catID:1,pName:' Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
+    {id:14,catID:1,pName:' Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
+    {id:15,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
+    {id:16,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
+    {id:17,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
+    {id:18,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
+    {id:19,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
+    {id:20,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
   
   ]
 
@@ -97,12 +109,20 @@ export class SaleComponent implements OnInit {
     
   ]
 
+
+  tempQty:any;
+  tempIndex:any;
+
   searchCat:any;
   tableData:any = [];
   ProductList:any = [];
   orderTypeID:any = 1;
   categoryID:any = 0;
+  subTotal:number = 0;
+  netTotal:number = 0;
 
+
+  ///////////////////////////////////////////////////////////////
   onCatSelected(id:any){
     this.categoryID = id;
    this.ProductList =  this.tempProductList.filter((e:any)=>e.catID == id);
@@ -110,34 +130,45 @@ export class SaleComponent implements OnInit {
   }
 
 
- 
+ ///////////////////////////////////////////////////////////////
+  getTotal(){
+    this.subTotal = 0;
+     this.tableData.forEach((e:any) => {
+      this.subTotal += e.price * e.qty;
+    });
+  }
 
+
+  ///////////////////////////////////////////////////////////////
 
   productSelected(item:any){
 
+    var index = this.tableData.findIndex((e:any)=>e.id == item.id); 
+    // console.log(index);
+    if(index != -1){
+      this.tableData[index].qty += 1; 
+    }else{
+      this.tableData.push({id:item.id,name:item.pName,qty:1,price:item.pSale});
 
-    // var row = this.tableData.find((e:any)=>e.name = item.name);
-    // console.log(row);
-    
-
-    
-      this.tableData.push({name:item.pName,qty:1,price:item.pSale});
-   
-    // else {
-    //   alert()
-    //   this.tableData[this.tableData.find((obj:any)=>obj.name == item.name).indexOf()].qty += 1;
-    // }
-
-    
-
+    }
+    this.getTotal();
   }
+
+  ///////////////////////////////////////////////////////////////
 
   deleteRow(index:any){
     this.tableData.splice(index,1);
+    this.getTotal();
   }
 
+
+  ///////////////////////////////////////////////////////////////
+
   changeQty(type:any,index:any){
+    this.tempIndex = index;
+  
     if(type == 'add'){
+
       this.tableData[index].qty += 1;
 
     }
@@ -148,9 +179,46 @@ export class SaleComponent implements OnInit {
       
 
     }
+    if(type == 'modal'){
+      var qty:any = 0;
+       qty = $('#pQty').val();
+        if(qty > 1){
+          this.tableData[index].qty = parseFloat(qty);  
+        }else{
+          this.tableData[index].qty = 1;  
+        }
+        
+    }
 
-    
+   
 
+    this.getTotal();
   }
 
+  qtyChange(event:any,index:any){
+    
+      var qty:any = 0;
+       qty = $('#pQty').val();
+        if(qty > 1){
+          this.tableData[this.tempIndex].qty = event.target.value;  
+        }else{
+          this.tableData[this.tempIndex].qty = 1;  
+        }
+  }
+
+
+///////////////////////////////////////////////////////////////
+
+  reset(){
+    this.tempIndex ='';
+    this.tempProductList = [];
+    this.tempQty = '';
+    this.ProductList = [];
+  }
+
+
+
+  save(){
+    console.log(this.tableData);
+  }
 }
