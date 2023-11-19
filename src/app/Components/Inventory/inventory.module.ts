@@ -16,6 +16,12 @@ import { RacksComponent } from './racks/racks.component';
 import { UnitOfMeasurementComponent } from './unit-of-measurement/unit-of-measurement.component';
 import { ProductComponent } from './product/product.component';
 import { PurchaseComponent } from './purchase/purchase.component';
+import { AddBrandComponent } from './brand/add-brand/add-brand.component';
+import { AddRackComponent } from './racks/add-rack/add-rack.component';
+import { AddUOMComponent } from './unit-of-measurement/add-uom/add-uom.component';
+import { AddCategoryComponent } from './product-category/add-category/add-category.component';
+import { AddProdSubCategoryComponent } from './product-sub-category/add-prod-sub-category/add-prod-sub-category.component';
+
 
 
 
@@ -47,7 +53,13 @@ export const inventoryRoutes: Route[] = [
     RacksComponent,
     UnitOfMeasurementComponent,
     ProductComponent,
-    PurchaseComponent
+    PurchaseComponent,
+    AddBrandComponent,
+    AddRackComponent,
+    AddUOMComponent,
+    AddCategoryComponent,
+    AddProdSubCategoryComponent,
+  
   ],
   imports: [
     CommonModule,

@@ -49,6 +49,8 @@ export class BrandComponent implements OnInit{
 
 
 
+
+
   // getCrud(){
   //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globaldata.getUserID()+'&moduleid='+this.globaldata.getModuleID()).subscribe(
   //     (Response:any)=>{

@@ -1,0 +1,29 @@
+<div class="p-5 ">
+    <div class="text-center  mt-3 d-flex justify-content-between p-3"><p class="dialogueTitle">Brand Detail's</p><mat-icon class="cursorPointer" (click)="closeDialogue()">cancel</mat-icon></div>
+
+
+
+    <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Brand Title</mat-label>
+        <input matInput type="text" [(ngModel)]="brandTitle" >
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Code</mat-label>
+        <input matInput type="text" [(ngModel)]="brandCode" >
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput type="text" [(ngModel)]="description" ></textarea>
+    </mat-form-field>
+
+
+
+    <div class="row justify-content-around">
+       
+        <button class="btn btn-success w-25" (click)="save()">Save</button>
+    </div>
+    
+
+</div>

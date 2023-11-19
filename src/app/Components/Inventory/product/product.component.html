@@ -5,41 +5,48 @@
         
 
               <div >
-                <mat-form-field appearance="outline" class="w-50 pe-5 ">
+                <mat-form-field appearance="outline" class="col-lg-6 pe-5 ">
                     <mat-label>Select Category</mat-label>
                     <mat-select [(ngModel)]="CategoryID" (selectionChange)="getSubCategory()" name="pCategory">
                         <mat-option  *ngFor="let item of CategoriesList" [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
                         
                     </mat-select>
+                    <mat-icon class="cursorPointer" (click)="addCategory()" matSuffix>add</mat-icon>
+
                     <mat-hint>Select Product Category</mat-hint>
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="w-50 ">
+                <mat-form-field appearance="outline" class="col-lg-6 ">
                     <mat-label>Select Sub Category</mat-label>
                     <mat-select [(ngModel)]="SubCategoryID" name="pSubCategory">
                         <mat-option *ngFor="let item of SubCategoriesList" [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
                     </mat-select>
+                    <mat-icon class="cursorPointer" (click)="addSubCategory()" matSuffix>add</mat-icon>
+
                     <mat-hint>Select Product Sub-Category</mat-hint>
                 </mat-form-field>
               </div>
 
 
               <div class="pt-5">
-                <mat-form-field appearance="outline" class="w-50 pe-5">
+                <mat-form-field appearance="outline" class="col-lg-6 pe-5">
                     <mat-label>Product Title</mat-label>
-                   <input matInput [(ngModel)]="ProductName" name="ProductName" type="text">
+                   <input matInput [(ngModel)]="ProductName"  type="text">
+                   <mat-hint>Enter Product Name</mat-hint>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="w-50 ">
+                <mat-form-field appearance="outline" class="col-lg-6 ">
                     <mat-label>Product Title 2 </mat-label>
-                   <input matInput [(ngModel)]="productNameOthLanguage" name="ProductName" type="text">
+                   <input matInput [(ngModel)]="productNameOthLanguage"  type="text">
+                   <mat-hint>Product Name in Other Language</mat-hint>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="w-50 pe-5">
+                <mat-form-field appearance="outline" class="col-lg-6 pe-5">
                     <mat-label>Code</mat-label>
-                   <input matInput [(ngModel)]="productCode" name="ProductName" type="text">
+                   <input matInput [(ngModel)]="productCode"  type="text">
+                   <mat-hint>Product Identity Code</mat-hint>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="w-50 ">
+                <mat-form-field appearance="outline" class="col-lg-2 pe-2 ">
                     <mat-label>Barcode Type</mat-label>
                     <mat-select [(ngModel)]="BarcodeType"  name="pType" >
                         <mat-option [value]="'auto'">Auto</mat-option>
@@ -47,43 +54,118 @@
                     </mat-select>
                 </mat-form-field>
               
-                <mat-form-field appearance="outline" class="w-50 pe-5">
+                <mat-form-field appearance="outline" class="col-lg-4 ">
                     <mat-label>Product Barcode</mat-label>
-                   <input matInput type="text" [(ngModel)]="Barcode" name="pBarcode" [disabled]="BarcodeType == 'auto'">
+                   <input matInput type="text" [(ngModel)]="Barcode"  [disabled]="BarcodeType == 'auto'">
                 </mat-form-field>
 
                 
-                <mat-form-field appearance="outline" class="w-50 ">
+                <mat-form-field appearance="outline" class="col-lg-3 pe-2">
                     <mat-label>Brand</mat-label>
-                    <mat-select [(ngModel)]="BrandID" name="pSubCategory">
+                    <mat-select [(ngModel)]="BrandID" >
                         <mat-option><ngx-mat-select-search #brand
                             [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
                                 ></ngx-mat-select-search></mat-option>
                         <mat-option *ngFor="let item of BrandList | filter:brand.value" [value]="item.brandID">{{item.brandTitle}}</mat-option>
                     </mat-select>
+                    <mat-icon class="cursorPointer" (click)="addBrand()" matSuffix>add</mat-icon>
             
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="w-50 ">
+              
+
+                <mat-form-field appearance="outline" class="col-lg-3 pe-5">
                     <mat-label>Rack</mat-label>
-                    <mat-select [(ngModel)]="rackID" name="pSubCategory">
+                    <mat-select [(ngModel)]="rackID" >
                         <mat-option><ngx-mat-select-search #rack
                             [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
                                 ></ngx-mat-select-search></mat-option>
                         <mat-option *ngFor="let item of RacksList |filter:rack.value" [value]="item.rackID">{{item.rackTitle}}</mat-option>
                     </mat-select>
+                    <mat-icon class="cursorPointer" (click)="addRack()" matSuffix>add</mat-icon>
+                  
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="col-lg-6  ">
+                    <mat-label>UOM</mat-label>
+                    <mat-select [(ngModel)]="UOMID" >
+                        <mat-option><ngx-mat-select-search #uom
+                            [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                                ></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of UOMList |filter:uom.value" [value]="item.uomID">{{item.uomTitle}}</mat-option>
+                    </mat-select>
+                    <mat-icon class="cursorPointer" (click)="addUOM()" matSuffix>add</mat-icon>
                   
                 </mat-form-field>
               
-                <mat-form-field appearance="outline" class="w-50 pe-5 ">
+                <mat-form-field appearance="outline" class="col-lg-3 pe-2  ">
                     <mat-label>Cost Price</mat-label>
-                    <input matInput type="text" [(ngModel)]="CostPrice" name="pcost">
+                    <input matInput type="number" [(ngModel)]="CostPrice" >
                 </mat-form-field>
               
-                <mat-form-field appearance="outline" class="w-50 ">
+                <mat-form-field appearance="outline" class="col-lg-3  pe-5">
                     <mat-label>Sale Price</mat-label>
-                    <input matInput type="text" [(ngModel)]="SalePrice" name="pSale">
+                    <input matInput type="number" [(ngModel)]="SalePrice" >
                 </mat-form-field>
+
+                <mat-form-field appearance="outline" class="col-lg-3 pe-2  ">
+                    <mat-label>Discount Percentage</mat-label>
+                    <input matInput type="number" [(ngModel)]="DiscPercent" >
+                </mat-form-field>
+              
+                <mat-form-field appearance="outline" class="col-lg-3  ">
+                    <mat-label>Discount Rupees</mat-label>
+                    <input matInput type="number" [(ngModel)]="DiscRupee" >
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="col-lg-3 pe-2 ">
+                    <mat-label>Min ROL</mat-label>
+                    <input matInput type="number" [(ngModel)]="minRol" >
+                </mat-form-field>
+              
+                <mat-form-field appearance="outline" class="col-lg-3  pe-5">
+                    <mat-label>Max ROL</mat-label>
+                    <input matInput type="number" [(ngModel)]="maxRol" >
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="col-lg-3 pe-2 ">
+                    <mat-label>GST</mat-label>
+                    <input matInput type="number" [(ngModel)]="gst" >
+                </mat-form-field>
+              
+                <mat-form-field appearance="outline" class="col-lg-3">
+                    <mat-label>ET</mat-label>
+                    <input matInput type="number" [(ngModel)]="Et" >
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="col-lg-6 pe-5">
+                    <mat-label>PCT Code</mat-label>
+                    <input matInput type="text" [(ngModel)]="pctCode" >
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="col-lg-3 pe-2 ">
+                    <mat-label>Allow Minus</mat-label>
+                    <mat-select [(ngModel)]="allowMinus">
+                        <mat-option [value]="true">True</mat-option>
+                        <mat-option [value]="false">False</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="col-lg-3  ">
+                    <mat-label>Barcode Type</mat-label>
+                    <mat-select [(ngModel)]="barcodeType">
+                        <mat-option value="Basic">Basic</mat-option>
+                        <mat-option value="Special">Special</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="col-lg-12 ">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput type="text"  [(ngModel)]="Description" ></textarea>
+                </mat-form-field>
+
+                
+              
               
                
                 <div class="p-5 ">
@@ -119,17 +201,20 @@
                     <th>Product Barcode</th>
                     <th>Cost Price</th>
                     <th>Sale Price</th>
-                    <th>Action</th>
+                    <th>Edit</th>
+                    <th>Active Status</th>
+                    <!-- <th>Del</th> -->
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of ProductsData index as index">
+                    <tr *ngFor="let item of productList index as index">
                         <td>{{index +1}}</td>
-                        <td> {{item.productName}}</td>
-                        <td>{{item.pBarcode}}</td>
+                        <td> {{item.productTitle}}</td>
+                        <td>{{item.barcode}}</td>
                         <td>{{item.costPrice}}</td>
                         <td>{{item.salePrice}}</td>
-                        <td><mat-icon class="text-success cursorPointer" (click)="edit(item)">edit</mat-icon>
-                            <mat-icon class="text-danger cursorPointer" (click)="delete(item.productID)">delete</mat-icon></td>
+                        <td><mat-icon class="text-success cursorPointer" (click)="edit(item)">edit</mat-icon></td>
+                        <td><mat-icon class="text-success cursorPointer" [ngClass]="item.activeStatus ? 'text-success' :'text-danger'" (click)="activeProduct(item)">{{item.activeStatus ? 'remove_circle' : 'remove_circle'}}</mat-icon></td>
+                      <!-- <td><mat-icon class="text-danger cursorPointer" (click)="delete(item.productID)">delete</mat-icon></td> -->
                     </tr>
                 </tbody>
             </table>
