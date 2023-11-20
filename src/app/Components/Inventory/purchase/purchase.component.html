@@ -2,25 +2,24 @@
 
     <!-- ////////////////////////// first row////////////////// -->
     <div class="mt-2">
-        <mat-card class="d-flex mb-2 ps-3 pe-3">
+        <mat-card class="d-flex mb-2 ps-3 pe-3" style="background-color:rgb(225, 250, 250);">
 
             <mat-card-content class="d-flex justify-content-between p-3">
                 <div class="w-50  d-flex flex-column">
-                    <input type="text" name="searchProduct" id="searchProduct"
+                    <input type="text" style="background-color:rgb(225, 250, 250);" [(ngModel)]="PBarcode" name="searchProduct" id="searchProduct"
                         class="border-0 p-1 mb-2 border-bottom border-success" placeholder="Search Barcode / Name"
                         autofocus>
 
-                    <!-- <div class="w-100 d-flex flex-column SearchConatiner cursorPointer"
+                    <div class="w-100 d-flex flex-column SearchConatiner cursorPointer" 
                         *ngIf="PBarcode != '' && PBarcode != undefined">
-                        <mat-card>
-                            <a *ngFor="let item of productsData| filter:PBarcode" (click)="holdDataFunction(item)" >{{item.productName}} (
-                                <b>{{item.pBarcode}}</b> )</a>
-                        </mat-card>
-                    </div> -->
+                        <div class="card " *ngFor="let item of productList| filter:PBarcode" (click)="holdDataFunction(item)" >
+                            <button style="background: none;border: none;text-align: left;">{{item.productTitle}} (<b>{{item.barcode}}</b> )</button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class=" w-50 text-end ">
-                    <button class=" w-25 btn btn-success">Save</button>
+                    <button class=" w-25 btn btn-success btn-rpt">Save</button>
                 </div>
             </mat-card-content>
 
@@ -32,22 +31,33 @@
 
     <!-- ////////////////////////// Table Row////////////////// -->
 
-    <div class="border rounded card" style="min-height: 250px;">
+    <div class="border rounded card shadow p-2" style="min-height: 350px;">
 
-        <table class="table ">
-            <thead class="text-center ">
+        <table class="table table-hover">
+            <thead  >
                 <th>S#</th>
                 <th>Barcode</th>
                 <th>Product Name</th>
                 <th>Cost Price</th>
-                <th>Retail Price</th>
+                <th>Sale Price</th>
                 <th>Quantity</th>
                 <th>Total</th>
                 <th>Action</th>
 
             </thead>
 
-            <tbody style="height: 30px;" class="text-center">
+            <tbody style="height: 30px;" >
+                <tr *ngFor="let item of holdDataList.reverse() index as index">
+                    <td>{{index+1}}</td>
+                    <td>{{item.barcode}}</td>
+                    <td>{{item.productTitle}}</td>
+                    <td >{{item.costPrice |number}}</td>
+                    <td >{{item.salePrice |number}}</td>
+                    <td ><input type="number" [(ngModel)]="item.quantity" min="0" (change)="getTotal()" class="text-center" style="width: 80px;"></td>
+                    <td >{{item.costPrice * item.quantity |number}}</td>
+                    <td class="text-danger cursorPointer"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
+
+                </tr>
 
 
 
@@ -67,10 +77,10 @@
 
 
         <!-- //////////////////////first Column/////////////////////// -->
-        <mat-card class=" me-2 col-lg-4 p-2" style="background-color: rgb(173, 232, 212);">
+        <mat-card class=" me-2 col-lg-4 p-2" style="background-color: rgb(226, 247, 240);">
 
-      <mat-card-content class="d-flex flex-column">
-        <mat-form-field appearance="outline" class="w-50">
+      <mat-card-content class="">
+        <mat-form-field appearance="outline" class="w-50 p-1">
             <mat-label>Select Invoice Date</mat-label>
             <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
                 [matDatepicker]="voucherDate">
@@ -78,11 +88,11 @@
             <mat-datepicker #voucherDate></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-50">
+        <mat-form-field appearance="outline" class="w-50 p-1">
             <mat-label>Reference Invoice No.</mat-label>
             <input matInput type="text" name="refInvNo">
         </mat-form-field>
-        <mat-form-field appearance="outline" class="w-50">
+        <mat-form-field appearance="outline" class="w-50 p-1">
             <mat-label>Remarks.</mat-label>
             <input matInput type="text" name="refInvNo">
         </mat-form-field>
@@ -125,13 +135,13 @@
 
 
         <!-- //////////////////////Third Column/////////////////////// -->
-        <mat-card class=" col-lg-4 me-2 p-2  " style="background-color: rgb(173, 232, 212);">
+        <mat-card class=" col-lg-4 me-2 p-2  " style="background-color: rgb(236, 245, 236);">
 
 
          <mat-card-content class="d-flex flex-column">
             <div class="p-2 pt-3  text-center">
                 <h2 class="text-secondary display-2">Total</h2>
-                <h1 style="font-size: 80px;" class=" text-danger">{{mySubtoatal}}</h1>
+                <h1 style="font-size: 80px;" class=" text-danger">{{mySubtoatal |number}}</h1>
             </div>
          </mat-card-content>
 

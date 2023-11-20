@@ -48,7 +48,7 @@
 
                 <mat-form-field appearance="outline" class="col-lg-2 pe-2 ">
                     <mat-label>Barcode Type</mat-label>
-                    <mat-select [(ngModel)]="BarcodeType"  name="pType" >
+                    <mat-select [(ngModel)]="prodBarcodeType"  name="pType" >
                         <mat-option [value]="'auto'">Auto</mat-option>
                         <mat-option [value]="'manual'">Manual</mat-option>
                     </mat-select>
@@ -56,7 +56,7 @@
               
                 <mat-form-field appearance="outline" class="col-lg-4 ">
                     <mat-label>Product Barcode</mat-label>
-                   <input matInput type="text" [(ngModel)]="Barcode"  [disabled]="BarcodeType == 'auto'">
+                   <input matInput type="text" [(ngModel)]="Barcode"  [disabled]="prodBarcodeType == 'auto'">
                 </mat-form-field>
 
                 
@@ -100,42 +100,46 @@
               
                 <mat-form-field appearance="outline" class="col-lg-3 pe-2  ">
                     <mat-label>Cost Price</mat-label>
-                    <input matInput type="number" [(ngModel)]="CostPrice" >
+                    <input matInput type="number" [(ngModel)]="CostPrice" (change)="global.avoidMinus($event)">
                 </mat-form-field>
               
                 <mat-form-field appearance="outline" class="col-lg-3  pe-5">
                     <mat-label>Sale Price</mat-label>
-                    <input matInput type="number" [(ngModel)]="SalePrice" >
+                    <input matInput type="number" [(ngModel)]="SalePrice" (change)="global.avoidMinus($event)">
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-lg-3 pe-2  ">
                     <mat-label>Discount Percentage</mat-label>
-                    <input matInput type="number" [(ngModel)]="DiscPercent" >
+                    <input matInput type="number" [(ngModel)]="DiscPercent" (change)="global.avoidMinus($event)">
                 </mat-form-field>
               
                 <mat-form-field appearance="outline" class="col-lg-3  ">
                     <mat-label>Discount Rupees</mat-label>
-                    <input matInput type="number" [(ngModel)]="DiscRupee" >
+                    <input matInput type="number" [(ngModel)]="DiscRupee" (change)="global.avoidMinus($event)">
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-lg-3 pe-2 ">
                     <mat-label>Min ROL</mat-label>
-                    <input matInput type="number" [(ngModel)]="minRol" >
+                    <input matInput type="number" [(ngModel)]="minRol" (change)="global.avoidMinus($event)">
+                    <mat-hint>Minimum Reorder Level</mat-hint>
                 </mat-form-field>
               
                 <mat-form-field appearance="outline" class="col-lg-3  pe-5">
                     <mat-label>Max ROL</mat-label>
-                    <input matInput type="number" [(ngModel)]="maxRol" >
+                    <input matInput type="number" [(ngModel)]="maxRol" (change)="global.avoidMinus($event)">
+                    <mat-hint>Maximum Reorder Level</mat-hint>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-lg-3 pe-2 ">
                     <mat-label>GST</mat-label>
-                    <input matInput type="number" [(ngModel)]="gst" >
+                    <input matInput type="number" [(ngModel)]="gst"  (change)="global.avoidMinus($event)">
+                    <mat-hint>General Sales Tax</mat-hint>
                 </mat-form-field>
               
                 <mat-form-field appearance="outline" class="col-lg-3">
                     <mat-label>ET</mat-label>
-                    <input matInput type="number" [(ngModel)]="Et" >
+                    <input matInput type="number" [(ngModel)]="Et" (change)="global.avoidMinus($event)">
+                    <mat-hint>Extra Tax</mat-hint>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-lg-6 pe-5">
@@ -199,22 +203,30 @@
                     <th>S#</th>
                     <th>Product Name</th>
                     <th>Product Barcode</th>
+                    <th>Brand</th>
+                    <!-- <th>Rack</th> -->
                     <th>Cost Price</th>
                     <th>Sale Price</th>
+                    <th>GST</th>
+                    <th>Entered By</th>
                     <th>Edit</th>
                     <th>Active Status</th>
-                    <!-- <th>Del</th> -->
+                    <th>Del</th>
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of productList index as index">
                         <td>{{index +1}}</td>
                         <td> {{item.productTitle}}</td>
                         <td>{{item.barcode}}</td>
+                        <td>{{item.brandTitle}}</td>
+                        <!-- <td>{{item.rackName}}</td> -->
                         <td>{{item.costPrice}}</td>
                         <td>{{item.salePrice}}</td>
+                        <td>{{item.gst}}%</td>
+                        <td>{{item.entryUser}}</td>
                         <td><mat-icon class="text-success cursorPointer" (click)="edit(item)">edit</mat-icon></td>
                         <td><mat-icon class="text-success cursorPointer" [ngClass]="item.activeStatus ? 'text-success' :'text-danger'" (click)="activeProduct(item)">{{item.activeStatus ? 'remove_circle' : 'remove_circle'}}</mat-icon></td>
-                      <!-- <td><mat-icon class="text-danger cursorPointer" (click)="delete(item.productID)">delete</mat-icon></td> -->
+                      <td><mat-icon class="text-danger cursorPointer" (click)="delete(item.productID)">delete</mat-icon></td>
                     </tr>
                 </tbody>
             </table>

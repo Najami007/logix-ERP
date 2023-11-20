@@ -179,32 +179,14 @@ export class SaleComponent implements OnInit {
       
 
     }
-    if(type == 'modal'){
-      var qty:any = 0;
-       qty = $('#pQty').val();
-        if(qty > 1){
-          this.tableData[index].qty = parseFloat(qty);  
-        }else{
-          this.tableData[index].qty = 1;  
-        }
-        
-    }
+  
 
    
 
     this.getTotal();
   }
 
-  qtyChange(event:any,index:any){
-    
-      var qty:any = 0;
-       qty = $('#pQty').val();
-        if(qty > 1){
-          this.tableData[this.tempIndex].qty = event.target.value;  
-        }else{
-          this.tableData[this.tempIndex].qty = 1;  
-        }
-  }
+
 
 
 ///////////////////////////////////////////////////////////////

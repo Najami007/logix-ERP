@@ -91,8 +91,7 @@
                         <td>{{item.name}}</td>
                         <td>{{item.price |number}}</td>
                         <td class="d-flex"><mat-icon (click)="changeQty('add',index)" class="text-success">add_circle</mat-icon>
-                            <!-- <p data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="changeQty('',index)">{{item.qty}}</p> -->
-                            <input id="pQty" style="width: 50px;text-align: center;"  [(ngModel)]="item.qty" >
+                            <input id="pQty" type="number" style="width: 50px;text-align: center;"  [(ngModel)]="item.qty" >
                             <mat-icon (click)="changeQty('minus',index)">remove_circle</mat-icon></td>
                             <td>{{item.price * item.qty |number}}</td>
                             <td><mat-icon class="text-danger" (click)="deleteRow(index)">delete</mat-icon></td>

@@ -1,0 +1,52 @@
+input:focus{
+  
+    outline: none;
+}
+
+#searchProduct{
+    height: 60px;
+}
+
+.SearchConatiner{
+// border: 0px solid rgb(180, 180, 180);
+// background-color: rgb(249, 249, 249);
+margin-top: 50px;
+width: 100%;
+z-index:1000;
+position: absolute;
+max-height: 250px;
+overflow-y: scroll;
+max-width: 500px;
+
+
+.SearchConatiner , .card{
+    background-color: rgb(247, 242, 242);
+    padding: 10px;
+    margin: 1px;
+    
+    
+}
+
+
+
+.SearchConatiner, p{
+    padding: 10px;
+    text-decoration: none;
+    // color:rgb(255, 253, 253);
+    height: 30px;
+    display: block;
+    // border-bottom: 1px solid rgb(174, 174, 174);
+ }
+
+}
+
+.table-Card{
+    height: 340px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+.tableHead{
+    background-color: rgb(244, 207, 140);
+    height: 40px;
+}

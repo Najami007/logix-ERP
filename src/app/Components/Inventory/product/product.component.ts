@@ -26,7 +26,7 @@ export class ProductComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private msg: NotificationService,
-    private global: GlobalDataModule,
+    public global: GlobalDataModule,
     private dialogue: MatDialog,
     private app: AppComponent,
     private route: Router
@@ -61,7 +61,7 @@ export class ProductComponent implements OnInit {
   CategoryID: any;
   SubCategoryID: any;
   ProductName: any;
-  BarcodeType = 'auto';
+  prodBarcodeType = 'auto';
   Barcode: any;
   CostPrice: any;
   SalePrice: any;
@@ -158,6 +158,28 @@ export class ProductComponent implements OnInit {
 
 
   save() {
+    // console.log(  this.ProductID ,
+    //   this.CategoryID ,
+    //   this.SubCategoryID ,
+    //   this.BrandID ,
+    //   this.rackID ,
+    //   this.ProductName ,
+    //   this.productCode ,
+    //   this.productNameOthLanguage ,
+    //     this.Description ,
+    //   this.minRol ,
+    //   this.maxRol ,
+    //   this.gst ,
+    //   this.Et ,
+    //   this.pctCode ,
+    //   this.allowMinus ,
+    //   this.CostPrice ,
+    //   this.SalePrice ,
+    //   this.DiscPercent ,
+    //   this.DiscRupee ,
+    //   this.UOMID ,
+    //   this.Barcode ,
+    //   this.barcodeType ,)
 
     if(this.CategoryID == '' || this.CategoryID == undefined){
       this.msg.WarnNotify('Select Category')
@@ -169,7 +191,7 @@ export class ProductComponent implements OnInit {
       this.msg.WarnNotify('Enter Product Name In Other Language')
     }else if(this.productCode == '' || this.productCode == undefined){
       this.msg.WarnNotify('Enter Product Code')
-    }else if(this.BarcodeType == 'manual' && (this.Barcode == '' || this.Barcode == undefined)){
+    }else if(this.prodBarcodeType == 'manual' && (this.Barcode == '' || this.Barcode == undefined)){
       this.msg.WarnNotify('Enter Barcode')
     }else if(this.BrandID == '' || this.BrandID == undefined){
       this.msg.WarnNotify('Select Brand')
@@ -177,21 +199,21 @@ export class ProductComponent implements OnInit {
       this.msg.WarnNotify('Select Rack ')
     }else if(this.UOMID == '' || this.UOMID == undefined){
       this.msg.WarnNotify('Select Unit of Measurement')
-    }else if(this.CostPrice == '' || this.CostPrice == undefined){
+    }else if(this.CostPrice == '' || this.CostPrice <= 0 || this.CostPrice == undefined){
       this.msg.WarnNotify('Enter Cost Price')
-    } else if(this.SalePrice == '' || this.SalePrice == undefined){
+    } else if(this.SalePrice == '' || this.SalePrice <= 0 || this.SalePrice == undefined){
       this.msg.WarnNotify('Enter Sale Price')
-    }else if(this.DiscPercent == '' || this.DiscPercent == undefined){
+    }else if(this.DiscPercent == null || this.DiscPercent < 0 || this.DiscPercent == undefined){
       this.msg.WarnNotify('Enter Discount In Percentage')
-    }else if(this.DiscRupee == '' || this.DiscRupee == undefined){
+    }else if(this.DiscRupee == null || this.DiscRupee < 0 || this.DiscRupee == undefined){
       this.msg.WarnNotify('Enter Discount In Rupees')
-    }else if(this.minRol == '' || this.minRol == undefined){
+    }else if(this.minRol == null || this.minRol < 0 || this.minRol == undefined){
       this.msg.WarnNotify('Enter Minimun Reorder Level')
-    }else if(this.maxRol == '' || this.maxRol == undefined){
+    }else if(this.maxRol == null || this.maxRol < 0 || this.maxRol == undefined){
       this.msg.WarnNotify('Enter Maximum Reorder Level')
-    }else if(this.gst == '' || this.gst == undefined){
+    }else if(this.gst == null || this.gst < 0 || this.gst == undefined){
       this.msg.WarnNotify('Enter General Sales Tax')
-    }else if(this.Et == '' || this.Et == undefined){
+    }else if(this.Et == null || this.Et < 0 || this.Et == undefined){
       this.msg.WarnNotify('Enter Extra Tax')
     }else if(this.pctCode == '' || this.pctCode == undefined){
       this.msg.WarnNotify('Enter PCT Code')
@@ -200,13 +222,16 @@ export class ProductComponent implements OnInit {
       this.msg.WarnNotify('Select Allow Minus True or False')
     }else if( this.barcodeType == undefined){
       this.msg.WarnNotify('Select Barcode Type')
-    }else {
+    }else if(this.SalePrice < this.CostPrice){
+      this.msg.WarnNotify('Sale Price Is less Than Cost Price')
+    }
+    else {
 
       if(this.Description == '' || this.Description == undefined){
         this.Description = '-';
       }
 
-      if(this.barcodeType == 'auto' && this.Barcode == ''){
+      if(this.prodBarcodeType == 'auto' && ( this.Barcode == '' || this.Barcode == undefined || this.Barcode == null)){
         this.Barcode = '-';
       }
 
@@ -223,28 +248,34 @@ export class ProductComponent implements OnInit {
 
   insert() {
     this.app.startLoaderDark();
-    console.log(  this.ProductID ,
-    this.CategoryID ,
-    this.SubCategoryID ,
-    this.BrandID ,
-    this.rackID ,
-    this.ProductName ,
-    this.productCode ,
-    this.productNameOthLanguage ,
-      this.Description ,
-    this.minRol ,
-    this.maxRol ,
-    this.gst ,
-    this.Et ,
-    this.pctCode ,
-    this.allowMinus ,
-    this.CostPrice ,
-    this.SalePrice ,
-    this.DiscPercent ,
-    this.DiscRupee ,
-    this.UOMID ,
-    this.Barcode ,
-    this.barcodeType ,)
+    // console.log(  this.ProductID ,
+    // this.CategoryID ,
+    // this.SubCategoryID ,
+    // this.BrandID ,
+    // this.rackID ,
+    // this.ProductName ,
+    // this.productCode ,
+    // this.productNameOthLanguage ,
+    //   this.Description ,
+    // this.minRol ,
+    // this.maxRol ,
+    // this.gst ,
+    // this.Et ,
+    // this.pctCode ,
+    // this.allowMinus ,
+    // this.CostPrice ,
+    // this.SalePrice ,
+    // this.DiscPercent ,
+    // this.DiscRupee ,
+    // this.UOMID ,
+    // this.Barcode ,
+    // this.barcodeType ,)
+
+    // if(this.BarcodeType == 'auto' ){
+    //   alert();
+    //   this.Barcode = '-';
+    // }
+
     this.http.post(environment.mainApi + 'inv/InsertProduct', {
       CategoryID: this.CategoryID,
       SubCategoryID: this.SubCategoryID,
@@ -356,15 +387,15 @@ export class ProductComponent implements OnInit {
     this.gst = '';
     this.Et = '';
     this.pctCode = '';
-    this.allowMinus = '';
+    this.allowMinus = false;
     this.CostPrice = '';
     this.SalePrice = '';
     this.DiscPercent = '';
     this.DiscRupee = '';
     this.UOMID = '';
     this.Barcode = '';
-    this.barcodeType = 'auto'
-    this.barcodeType = '';
+    this.prodBarcodeType = 'auto'
+    this.barcodeType = 'Basic';
     this.btnType = 'Save';
 
   }
