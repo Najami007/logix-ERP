@@ -66,7 +66,7 @@ export class ProductComponent implements OnInit {
   CostPrice: any;
   SalePrice: any;
   productType: any;
-
+  productImg:any;
 
   BrandID: any;
   rackID: any;
@@ -298,6 +298,7 @@ export class ProductComponent implements OnInit {
       UomID: this.UOMID,
       Barcode: this.Barcode,
       BarcodeType: this.barcodeType,
+      ProductImage:this.productImg,
 
 
       UserID: this.global.getUserID(),
@@ -350,6 +351,7 @@ export class ProductComponent implements OnInit {
           Barcode: this.Barcode,
           BarcodeType: this.barcodeType,
           PinCode: pin,
+          ProductImage:this.productImg,
 
           UserID: this.global.getUserID()
         }).subscribe(
@@ -397,6 +399,8 @@ export class ProductComponent implements OnInit {
     this.prodBarcodeType = 'auto'
     this.barcodeType = 'Basic';
     this.btnType = 'Save';
+    this.productImg= '';
+
 
   }
 
@@ -425,8 +429,10 @@ export class ProductComponent implements OnInit {
     this.allowMinus = row.allowMinus;
     this.barcodeType = row.barcodeType;
     this.Description = row.productDescription;
+    this.productImg = row.productImage;
     this.tabIndex = 0;
     this.btnType = 'Update';
+    
 
 
    }
@@ -529,6 +535,27 @@ export class ProductComponent implements OnInit {
 
   }
 
+
+
+
+  onImgSelected(event:any) {
+
+
+    let targetEvent = event.target;
+
+    let file:File = targetEvent.files[0];
+
+    let fileReader:FileReader = new FileReader();
+
+
+    fileReader.onload =(e)=>{
+      this.productImg = fileReader.result;
+    }
+
+    fileReader.readAsDataURL(file);
+
+    //console.log(this.imageFile);
+  }
 
 
 }

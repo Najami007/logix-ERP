@@ -38,6 +38,7 @@ import { AuthGuard } from 'src/app/auth.guard';
 
 
 
+
 export const accountRountes: Route[] = [
   
     {path:'dashboard', component:DashboardComponent,  canActivate:[AuthGuard]},
@@ -76,6 +77,7 @@ export const accountRountes: Route[] = [
     TrialBalanceComponent,
     DayTransactionComponent,
     VoucherDetailsComponent,
+  
 
     
   ],

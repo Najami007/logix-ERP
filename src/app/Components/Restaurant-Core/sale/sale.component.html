@@ -91,7 +91,7 @@
                         <td>{{item.name}}</td>
                         <td>{{item.price |number}}</td>
                         <td class="d-flex"><mat-icon (click)="changeQty('add',index)" class="text-success">add_circle</mat-icon>
-                            <input id="pQty" type="number" style="width: 50px;text-align: center;"  [(ngModel)]="item.qty" >
+                            <input id="pQty" type="number" style="width: 50px;text-align: center;" (change)="getTotal()"  [(ngModel)]="item.qty" >
                             <mat-icon (click)="changeQty('minus',index)">remove_circle</mat-icon></td>
                             <td>{{item.price * item.qty |number}}</td>
                             <td><mat-icon class="text-danger" (click)="deleteRow(index)">delete</mat-icon></td>
@@ -124,7 +124,7 @@
 
 
             <!-----------   Bill Total Amount Section ------------------->
-            <div class="p-4 bg-white">
+            <div class="p-4 bg-white border-top">
 
                 <span class="d-flex border-bottom border-dark justify-content-between">
                     <p>Sub Total</p>

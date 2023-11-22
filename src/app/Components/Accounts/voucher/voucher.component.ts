@@ -116,7 +116,7 @@ export class VoucherComponent implements OnInit{
   cash = 'Cash';
   coaSearch = '';
   txtSearch: string = '';
-
+  invoiceNo:any;
   vType: any;
   transactionType: any = 'Cash';
   invoiceDate:Date = new Date();
@@ -130,6 +130,7 @@ export class VoucherComponent implements OnInit{
   VoucherData: any = [];
   bankReceiptNo:any = '';
   invoiceDetails:any = [];
+  VoucherDocument :any;
 
   
   debittotal :number = 0;
@@ -260,7 +261,7 @@ export class VoucherComponent implements OnInit{
    
     this.http.get(environment.mainApi+'acc/GetSavedVoucherDetail').subscribe(
       (Response:any)=>{
-        //console.log(Response);
+        // console.log(Response);
         this.SavedVoucherData = Response;
         this.loadingBar = 'stop';
        
@@ -341,6 +342,9 @@ export class VoucherComponent implements OnInit{
         this.narration = '-';
       }
 
+      if(this.VoucherDocument == '' || this.VoucherDocument == undefined){
+        this.VoucherDocument = '-';
+      }
 
       
    
@@ -353,6 +357,7 @@ export class VoucherComponent implements OnInit{
         InvoiceRemarks: this.narration,
         ProjectID:this.projectID,
         BankReceiptNo: this.bankReceiptNo,
+        VoucherDocument :this.VoucherDocument,
         InvoiceDetail: JSON.stringify(this.VoucherData),
         UserID: this.globalData.getUserID(),
       }).subscribe(
@@ -384,6 +389,94 @@ export class VoucherComponent implements OnInit{
     }
     
   }
+
+
+
+
+  insertDocument(row:any){
+    this.invoiceNo = row.invoiceNo;
+    
+  }
+
+  insertVoucherDocument(){
+  this.dialogue.open(PincodeComponent,{
+    width:'30%'
+  }).afterClosed().subscribe(pin=>{
+    if(pin != ''){
+      this.http.post(environment.mainApi+'acc/AddVoucherDocument',{
+     
+        InvoiceNo: this.invoiceNo,
+        VoucherDocument:this.VoucherDocument,
+        PinCode: pin,
+         UserID: this.globalData.getUserID(),
+        
+    }).subscribe(
+      (Response:any)=>{
+        if(Response.msg == 'Data Updated Successfully'){
+          this.msg.SuccessNotify(Response.msg);
+          this.reset();
+        }else{
+          this.msg.WarnNotify(Response.msg);
+        }
+      }
+    )
+    }
+  })
+  }
+
+
+  onDocSelected(event:any) {
+
+  
+
+    let targetEvent = event.target;
+
+    let file:File = targetEvent.files[0];
+
+    let fileReader:FileReader = new FileReader();
+
+
+    fileReader.onload =(e)=>{
+      this.VoucherDocument = fileReader.result;
+    }
+
+    fileReader.readAsDataURL(file);
+
+    if(this.globalData.getExtension(this.VoucherDocument) != 'pdf'){
+      this.msg.WarnNotify('File Must Be pdf Only');
+      event.target.value = '';
+      this.VoucherDocument = '';
+    }
+  
+
+
+  //console.log(this.imageFile);
+}
+
+
+downloadVoucher(row:any){
+    
+  var newImage = row.replace('data:application/pdf;base64,','');
+
+   const byteArray = new Uint8Array(atob(newImage).split('').map(char=> char.charCodeAt(0)));
+
+   const file = new Blob([byteArray], {type:'application/pdf'});
+
+   const fileURl = URL.createObjectURL(file);
+
+   let fileName =  row.docTitle;
+   let link = document.createElement('a');
+   link.download = fileName;
+   link.target = '_blank';
+   link.href = fileURl;
+   
+   document.body.appendChild(link);
+   link.click();
+   document.body.removeChild(link);
+
+
+
+ }
 
 
   //////////////////////////////////////////////
@@ -591,6 +684,13 @@ export class VoucherComponent implements OnInit{
     this.debittotal = 0;
     this.creditTotal = 0;
     this.narration = '';
+    this.invoiceNo = '';
+    this.VoucherDocument = '';
+    $('#vDoc').val('');
   }
+
+
+
+
 
 }

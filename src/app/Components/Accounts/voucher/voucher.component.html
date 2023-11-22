@@ -186,11 +186,18 @@
 
                 </div>
                 <br>
-                <div class="bg-light">
-                    <mat-form-field class="w-100 h-25 p-3 " appearance="outline">
+                <div class="bg-light d-flex">
+                    <mat-form-field class="col-lg-8 h-25 p-3 " appearance="outline">
                         <mat-label>Narration</mat-label>
-                        <textarea matInput [(ngModel)]="narration" name="Narration" placeholder="Narration"></textarea>
+                        <textarea matInput rows="1" [(ngModel)]="narration" name="Narration" placeholder="Narration"></textarea>
                     </mat-form-field>
+
+                    <span class="col-lg-4 row p-2">
+                        <button type="button" mat-raised-button (click)="vDoc.click()">Choose File</button>
+                        <input hidden accept=".pdf"  (change)="onDocSelected($event)"  #vDoc type="file" id="vDoc"  class="border border-dark">
+                        <p class="text-center text-secondary mt-1 border-bottom">{{vDoc.value}}</p>
+                        <mat-hint class="text-danger">File Must be PDF Only</mat-hint>
+                    </span>
                 </div>
                 <div class="text-center " >
                     <button  class="btn btn-success btn-save  col-lg-3 me-2" *ngIf="crudList.c" (click)="insertVoucher()"> Save</button>
@@ -325,6 +332,7 @@
                         <th class="col-lg-1">Amount</th>
                         <th class="col-lg-3">Narration</th>
                         <th class="col-lg-1">Detail</th>
+                        <th>Document</th>
                         <th class="col-lg-1" *ngIf="crudList.d || crudList.u || crudList.r">Actions</th>
                    
 
@@ -342,6 +350,10 @@
                         <td class="text-start">{{item.invoiceRemarks}}</td>
                         <td ><mat-icon class="text-success"  
                             (click)="VoucherDetails(item)" >receipt</mat-icon></td>
+                            <td>
+                                <mat-icon *ngIf="item.voucherDocument == '-'" (click)="insertDocument(item)" data-toggle="modal" data-target="#exampleModal">add</mat-icon>
+                                <mat-icon *ngIf="item.voucherDocument != '-'" (click)="downloadVoucher(item.voucherDocument)">remove_red_eye</mat-icon>
+                            </td>
                         <td *ngIf="crudList.r || crudList.d   || crudList.u  ">
                             <mat-icon class="text-success"*ngIf="item.approvedStatus == false && crudList.u"   (click)="approveBill(item)">check</mat-icon>
                         <mat-icon *ngIf="item.approvedStatus"  aria-label="Approved" class="text-success" >done_all</mat-icon>
@@ -466,6 +478,34 @@
         
             </div>
         </div>
+
+
+
+        <!-- Modal for Add Document-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <span class="col-lg-12 d-flex row p-2">
+                <button type="button" mat-raised-button (click)="vDoc.click()">Choose File</button>
+                <input hidden accept=".pdf"  (change)="onDocSelected($event)" #vDoc type="file" id="regDoc"  class="border border-dark">
+                <p class="text-center text-secondary mt-1 border-bottom">{{vDoc.value}}</p>
+                <mat-hint class="text-danger">File Must be PDF Only</mat-hint>
+            </span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="insertVoucherDocument()" >Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
     </mat-tab>
 </mat-tab-group>
