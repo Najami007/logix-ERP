@@ -151,7 +151,7 @@ export class ProductComponent implements OnInit {
     this.http.get(environment.mainApi+'inv/GetProduct').subscribe(
       (Response)=>{
         this.productList = Response;
-        console.log(Response);
+        //console.log(Response);
       }
     )
   }
@@ -224,6 +224,8 @@ export class ProductComponent implements OnInit {
       this.msg.WarnNotify('Select Barcode Type')
     }else if(this.SalePrice < this.CostPrice){
       this.msg.WarnNotify('Sale Price Is less Than Cost Price')
+    }else if(this.productImg == '' || this.productImg == undefined){
+      this.msg.WarnNotify('Select The Product Image');
     }
     else {
 
@@ -248,34 +250,6 @@ export class ProductComponent implements OnInit {
 
   insert() {
     this.app.startLoaderDark();
-    // console.log(  this.ProductID ,
-    // this.CategoryID ,
-    // this.SubCategoryID ,
-    // this.BrandID ,
-    // this.rackID ,
-    // this.ProductName ,
-    // this.productCode ,
-    // this.productNameOthLanguage ,
-    //   this.Description ,
-    // this.minRol ,
-    // this.maxRol ,
-    // this.gst ,
-    // this.Et ,
-    // this.pctCode ,
-    // this.allowMinus ,
-    // this.CostPrice ,
-    // this.SalePrice ,
-    // this.DiscPercent ,
-    // this.DiscRupee ,
-    // this.UOMID ,
-    // this.Barcode ,
-    // this.barcodeType ,)
-
-    // if(this.BarcodeType == 'auto' ){
-    //   alert();
-    //   this.Barcode = '-';
-    // }
-
     this.http.post(environment.mainApi + 'inv/InsertProduct', {
       CategoryID: this.CategoryID,
       SubCategoryID: this.SubCategoryID,
@@ -540,21 +514,42 @@ export class ProductComponent implements OnInit {
 
   onImgSelected(event:any) {
 
+  
+    var imgSize = event.target.files[0].size ;
+    var isConvert:number = parseFloat((imgSize / 1048576).toFixed(2));
 
-    let targetEvent = event.target;
-
-    let file:File = targetEvent.files[0];
-
-    let fileReader:FileReader = new FileReader();
-
-
-    fileReader.onload =(e)=>{
-      this.productImg = fileReader.result;
+    if(isConvert > 2){
+      
+       this.msg.WarnNotify('File Size is more than 2MB');
     }
+    else{
 
-    fileReader.readAsDataURL(file);
+    ////////////// will check the file type ////////////////
+      if(this.global.getExtension(event.target.value) != 'pdf'){   
+        let targetEvent = event.target;
 
-    //console.log(this.imageFile);
+    /////////// assign the targeted file to file variable
+        let file:File = targetEvent.files[0];   
+    
+        let fileReader:FileReader = new FileReader();
+    
+     //////////////// if the file is other than pdf eill assign to product img varialb
+        fileReader.onload =(e)=>{
+          this.productImg = fileReader.result;          
+        }
+    
+        fileReader.readAsDataURL(file);
+    
+      }else{
+    
+          this.msg.WarnNotify('File Must Be in jpg or png formate');
+          event.target.value = '';
+          this.productImg = '';
+        }
+
+    }
+ 
+    
   }
 
 

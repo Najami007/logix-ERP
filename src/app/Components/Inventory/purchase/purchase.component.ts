@@ -36,7 +36,7 @@ export class PurchaseComponent implements OnInit{
 
   }
 
-
+  productImage:any;
 
   PBarcode:any;   /// for Search barcode field
   productsData:any;   //// for showing the products
@@ -72,6 +72,7 @@ export class PurchaseComponent implements OnInit{
     this.http.get(environment.mainApi+'inv/GetActiveProduct').subscribe(
       (Response)=>{
         this.productList = Response;
+        console.log(Response);
  
       }
     )
@@ -81,6 +82,9 @@ export class PurchaseComponent implements OnInit{
 
 
   holdDataFunction(data:any){
+
+   
+
     var condition = this.holdDataList.find(
       (x: any) => x.productID == data.productID
     );
@@ -94,6 +98,7 @@ export class PurchaseComponent implements OnInit{
       productID:data.productID,
       productTitle:data.productTitle,
       barcode:data.barcode,
+      productImage:data.productImage,
       quantity:1,
       costPrice:data.costPrice,
       salePrice:data.salePrice,
@@ -101,15 +106,19 @@ export class PurchaseComponent implements OnInit{
       disRupee:data.discRupees,
 
     })
+
+    this.productImage = data.productImage;
     this.getTotal();
     this.PBarcode = '';
     $('#searchProduct').trigger('focus');
   }else {
     this.holdDataList[index].quantity += 1;
+    this.productImage = this.holdDataList[index].productImage;
     this.getTotal();
     this.PBarcode = '';
     $('#searchProduct').trigger('focus');
   }
+  
 
     this.PBarcode = '';
   }
@@ -135,6 +144,11 @@ export class PurchaseComponent implements OnInit{
     
   }
 
+
+  onRowClick(item:any){
+    var index = this.holdDataList.findIndex((e:any)=> e.productID == item.productID);
+    this.productImage = this.holdDataList[index].productImage;
+  }
 
 
 

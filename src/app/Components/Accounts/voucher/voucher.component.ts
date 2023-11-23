@@ -261,7 +261,7 @@ export class VoucherComponent implements OnInit{
    
     this.http.get(environment.mainApi+'acc/GetSavedVoucherDetail').subscribe(
       (Response:any)=>{
-        // console.log(Response);
+        console.log(Response);
         this.SavedVoucherData = Response;
         this.loadingBar = 'stop';
        
@@ -392,6 +392,8 @@ export class VoucherComponent implements OnInit{
 
 
 
+  //////////////////////////////////////////////////////////
+
 
   insertDocument(row:any){
     this.invoiceNo = row.invoiceNo;
@@ -428,7 +430,7 @@ export class VoucherComponent implements OnInit{
   onDocSelected(event:any) {
 
   
-
+    if(this.globalData.getExtension(event.target.value) == 'pdf'){
     let targetEvent = event.target;
 
     let file:File = targetEvent.files[0];
@@ -442,7 +444,7 @@ export class VoucherComponent implements OnInit{
 
     fileReader.readAsDataURL(file);
 
-    if(this.globalData.getExtension(this.VoucherDocument) != 'pdf'){
+    }else{
       this.msg.WarnNotify('File Must Be pdf Only');
       event.target.value = '';
       this.VoucherDocument = '';
@@ -454,9 +456,11 @@ export class VoucherComponent implements OnInit{
 }
 
 
-downloadVoucher(row:any){
+downloadVoucherDocument(row:any){
+  var vdoc = row.voucherDocument;
+  // console.log(vdoc);
     
-  var newImage = row.replace('data:application/pdf;base64,','');
+  var newImage = vdoc.replace('data:application/pdf;base64,','');
 
    const byteArray = new Uint8Array(atob(newImage).split('').map(char=> char.charCodeAt(0)));
 
@@ -464,7 +468,7 @@ downloadVoucher(row:any){
 
    const fileURl = URL.createObjectURL(file);
 
-   let fileName =  row.docTitle;
+   let fileName =  row.invoiceNo;
    let link = document.createElement('a');
    link.download = fileName;
    link.target = '_blank';
@@ -615,6 +619,7 @@ downloadVoucher(row:any){
     this.lblInvoiceDate = curRow.invoiceDate;
     this.lblRemarks = curRow.invoiceRemarks;
     this.lblVoucherType = curRow.type;
+    this.lblProjectName = curRow.projectTitle;
 
     this.getInvoiceDetail(invoiceNo);
 

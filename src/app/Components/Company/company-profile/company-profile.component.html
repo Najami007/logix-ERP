@@ -48,11 +48,19 @@
       <input matInput type="text"  [(ngModel)]="RegistrationNo">
   </mat-form-field>
 
-  <span class="w-100 row p-2">
+  <!-- <span class="w-100 row p-2">
     <button type="button" mat-raised-button (click)="regDoc.click()">Choose File</button>
     <input hidden accept=".pdf"  (change)="onRegDocSelected($event)" #regDoc type="file" id="regDoc"  class="border border-dark">
     <p class="text-center text-secondary mt-1 border-bottom">{{regDoc.value}}</p>
     <mat-hint class="text-danger">File Must be PDF Only</mat-hint>
+</span> -->
+
+<span class="w-100 row p-2">
+  <strong>Scanned Document</strong>
+  <!-- <button type="button" mat-raised-button (click)="regDoc.click()">Choose File</button> -->
+  <input  accept=".pdf"   (change)="onRegDocSelected($event)" #regDoc type="file" id="regDoc" class="p-2" >
+  <!-- <p class="text-center text-secondary mt-1 border-bottom">{{regDoc.value}}</p> -->
+  <mat-hint class="text-danger">File Must be PDF Only</mat-hint>
 </span>
 
   
@@ -89,7 +97,7 @@
           <label  (click)="CompanyLogo1 = ''" ><mat-icon class=" mt-1">delete</mat-icon></label>
         </div>
         <div class="avatar-preview">
-          <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + CompanyLogo1 + ')' }"></div>
+          <div id="lg1" [ngStyle]="{ 'background-image': 'url(' + CompanyLogo1 + ')' }"></div>
         </div>
       </div>
 
@@ -120,7 +128,7 @@
           <label  (click)="CompanyLogo2 = ''" ><mat-icon class=" mt-1">delete</mat-icon></label>
         </div>
         <div class="avatar-preview">
-          <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + CompanyLogo2 + ')' }"></div>
+          <div id="lg2" [ngStyle]="{ 'background-image': 'url(' + CompanyLogo2 + ')' }"></div>
         </div>
         
       </div>
@@ -152,7 +160,7 @@
           <label  (click)="CompanyLogo3 = ''" ><mat-icon class=" mt-1">delete</mat-icon></label>
         </div>
         <div class="avatar-preview">
-          <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + CompanyLogo3 + ')' }"></div>
+          <div id="lg3" [ngStyle]="{ 'background-image': 'url(' + CompanyLogo3 + ')' }"></div>
         </div>
       </div>
 

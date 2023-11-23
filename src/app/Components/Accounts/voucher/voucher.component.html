@@ -351,13 +351,13 @@
                         <td ><mat-icon class="text-success"  
                             (click)="VoucherDetails(item)" >receipt</mat-icon></td>
                             <td>
-                                <mat-icon *ngIf="item.voucherDocument == '-'" (click)="insertDocument(item)" data-toggle="modal" data-target="#exampleModal">add</mat-icon>
-                                <mat-icon *ngIf="item.voucherDocument != '-'" (click)="downloadVoucher(item.voucherDocument)">remove_red_eye</mat-icon>
+                                <mat-icon *ngIf="item.voucherDocument == '-'" (click)="insertDocument(item)" data-bs-toggle="modal" data-bs-target="#voucherDocument">add</mat-icon>
+                                <mat-icon *ngIf="item.voucherDocument != '-'" (click)="downloadVoucherDocument(item)">remove_red_eye</mat-icon>
                             </td>
                         <td *ngIf="crudList.r || crudList.d   || crudList.u  ">
                             <mat-icon class="text-success"*ngIf="item.approvedStatus == false && crudList.u"   (click)="approveBill(item)">check</mat-icon>
                         <mat-icon *ngIf="item.approvedStatus"  aria-label="Approved" class="text-success" >done_all</mat-icon>
-                        <mat-icon class="text-danger" *ngIf="crudList.d" (click)="DeleteVoucher(item)">delete</mat-icon>
+                        <mat-icon class="text-danger" *ngIf="crudList.d && item.approvedStatus == false" (click)="DeleteVoucher(item)">delete</mat-icon>
                         <mat-icon class="text-primary" *ngIf="crudList.r" (click)="printBill(item)">print</mat-icon></td>
 
                     </tr>
@@ -482,30 +482,28 @@
 
 
         <!-- Modal for Add Document-->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <span class="col-lg-12 d-flex row p-2">
-                <button type="button" mat-raised-button (click)="vDoc.click()">Choose File</button>
-                <input hidden accept=".pdf"  (change)="onDocSelected($event)" #vDoc type="file" id="regDoc"  class="border border-dark">
-                <p class="text-center text-secondary mt-1 border-bottom">{{vDoc.value}}</p>
-                <mat-hint class="text-danger">File Must be PDF Only</mat-hint>
-            </span>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" (click)="insertVoucherDocument()" >Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
+        <div class="modal fade" id="voucherDocument" tabindex="-1" aria-labelledby="voucherDocumentLabel" aria-hidden="true" data-bs-backdrop="false">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="voucherDocumentLabel">Select PDF File</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <span class="col-lg-12 d-flex row p-2">
+                        <button type="button" mat-raised-button (click)="vDoc.click()">Choose File</button>
+                        <input hidden accept=".pdf"  (change)="onDocSelected($event)" #vDoc type="file" id="regDoc"  class="border border-dark">
+                        <p class="text-center text-secondary mt-1 border-bottom">{{vDoc.value}}</p>
+                        <mat-hint class="text-danger">File Must be PDF Only</mat-hint>
+                    </span>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" (click)="insertVoucherDocument()">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
     </mat-tab>
 </mat-tab-group>

@@ -1,10 +1,10 @@
 <div class="container-fluid body">
 
     <!-- ////////////////////////// first row////////////////// -->
-    <div class="mt-2">
-        <mat-card class="d-flex mb-2 ps-3 pe-3" style="background-color:rgb(225, 250, 250);">
+    <div class="mt-2  d-flex">
+        <mat-card class="d-flex col-lg-11 mb-2 ps-3 pe-3" style="background-color:rgb(225, 250, 250);">
 
-            <mat-card-content class="d-flex justify-content-between p-3">
+            <mat-card-content class="d-flex justify-content-between">
                 <div class="w-50  d-flex flex-column">
                     <input type="text" style="background-color:rgb(225, 250, 250);" [(ngModel)]="PBarcode" name="searchProduct" id="searchProduct"
                         class="border-0 p-1 mb-2 border-bottom border-success" placeholder="Search Barcode / Name"
@@ -18,12 +18,20 @@
                     </div>
                 </div>
 
+               
+
                 <div class=" w-50 text-end ">
                     <button class=" w-25 btn btn-success btn-rpt">Save</button>
                 </div>
             </mat-card-content>
 
 
+        </mat-card>
+
+        <mat-card class="mb-2" style="height: 120px;width: 120px;">
+            <div class="p-1 col-lg-1" *ngIf="holdDataList != ''">
+                <img [src]="productImage" alt="" height="110" width="110">
+            </div>
         </mat-card>
     </div>
 
@@ -47,7 +55,7 @@
             </thead>
 
             <tbody style="height: 30px;" >
-                <tr *ngFor="let item of holdDataList.reverse() index as index">
+                <tr *ngFor="let item of holdDataList.reverse() index as index" (click)="onRowClick(item)">
                     <td>{{index+1}}</td>
                     <td>{{item.barcode}}</td>
                     <td>{{item.productTitle}}</td>

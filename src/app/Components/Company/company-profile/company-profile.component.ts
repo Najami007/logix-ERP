@@ -98,7 +98,7 @@ export class CompanyProfileComponent implements OnInit {
 
   onLogo1Selected(event:any) {
 
-
+  if(this.global.getExtension(event.target.value) == 'png'){
     let targetEvent = event.target;
 
     let file:File = targetEvent.files[0];
@@ -106,18 +106,25 @@ export class CompanyProfileComponent implements OnInit {
     let fileReader:FileReader = new FileReader();
 
 
-    fileReader.onload =(e)=>{
-      this.CompanyLogo1 = fileReader.result;
+  
+  fileReader.onload =(e)=>{
+    this.CompanyLogo1 = fileReader.result;
+  }
+
+  fileReader.readAsDataURL(file);
+
+  }else{
+    
+      event.target.value = '';
+      this.CompanyLogo1 = '';
+      this.msg.WarnNotify('File Must Be in png formate Only');
+   
     }
-
-    fileReader.readAsDataURL(file);
-
-    //console.log(this.imageFile);
   }
 
   onLogo2Selected(event:any) {
 
-
+    if(this.global.getExtension(event.target.value) == 'png'){
     let targetEvent = event.target;
 
     let file:File = targetEvent.files[0];
@@ -130,13 +137,17 @@ export class CompanyProfileComponent implements OnInit {
     }
 
     fileReader.readAsDataURL(file);
+  }else{
 
-    //console.log(this.imageFile);
+      this.msg.WarnNotify('File Must Be in png formate Only');
+      event.target.value = '';
+      this.CompanyLogo2 = '';
+    }
   }
 
   onLogo3Selected(event:any) {
 
-
+    if(this.global.getExtension(event.target.value) == 'png'){
     let targetEvent = event.target;
 
     let file:File = targetEvent.files[0];
@@ -150,13 +161,18 @@ export class CompanyProfileComponent implements OnInit {
 
     fileReader.readAsDataURL(file);
 
-    //console.log(this.imageFile);
+  }else{
+
+      this.msg.WarnNotify('File Must Be in png formate Only');
+      event.target.value = '';
+      this.CompanyLogo3 = '';
+    }
   }
 
   onRegDocSelected(event:any) {
 
   
-
+    if(this.global.getExtension(event.target.value) == 'pdf'){
       let targetEvent = event.target;
 
       let file:File = targetEvent.files[0];
@@ -169,8 +185,9 @@ export class CompanyProfileComponent implements OnInit {
       }
   
       fileReader.readAsDataURL(file);
-  
-      if(this.global.getExtension(this.RegistrationDoc) != 'pdf'){
+
+    }else {
+    
         this.msg.WarnNotify('File Must Be pdf Only');
         event.target.value = '';
         this.RegistrationDoc = '';
