@@ -15,8 +15,7 @@
                     <mat-form-field class="col-lg-6 col-md-6 col-sm-6 col-xs-6" appearance="outline">
                         <mat-label>Voucher Type </mat-label>
                         <mat-select [(ngModel)]="vType" name="vType"  [disabled]="VoucherData != ''"
-                            (selectionChange)="getCoa();
-                            getRefCoa();getProject()">
+                            (selectionChange)=" getRefCoa()">
                             <mat-option *ngFor="let item of voucherTypes "
                                 value="{{item.value}}">{{item.type}}</mat-option>
 

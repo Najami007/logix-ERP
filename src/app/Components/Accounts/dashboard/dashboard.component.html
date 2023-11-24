@@ -15,7 +15,7 @@
                         
                     </span>
                     <span class="mt-2" >
-                        <h1 style="color: rgb(167, 43, 163);" class="  digitalFont border-dark">{{item.totalRooms}}</h1>
+                        <h1 style="color: rgb(167, 43, 163);" class="  digitalFont border-dark">{{item.totalRooms || 0}}</h1>
                     </span>
                 </div>
 
@@ -34,7 +34,7 @@
                         <mat-icon style="color: rgba(255, 128, 0, 0.893);" >hotel</mat-icon>
                     </span>
                     <span  class="mt-2">
-                        <h1 style="color: rgb(255, 128, 1);" class="digitalFont  border-dark">{{item.mappedRooms}}</h1>
+                        <h1 style="color: rgb(255, 128, 1);" class="digitalFont  border-dark">{{item.mappedRooms || 0}}</h1>
                     </span>
                 </div>
 
@@ -53,7 +53,7 @@
                         <mat-icon style="color: rgb(11, 160, 234);">money_off</mat-icon>
                     </span>
                     <span class="mt-2" >
-                        <h1 style="color: rgb(11, 160, 234);" class=" digitalFont  border-dark">{{item.totalExpense |number}}</h1>
+                        <h1 style="color: rgb(11, 160, 234);" class=" digitalFont  border-dark">{{item.totalExpense || 0 |number}}</h1>
                     </span>
                 </div>
 
@@ -74,7 +74,7 @@
                             <mat-icon style="color: rgb(12, 193, 12);" > attach_money</mat-icon>
                     </span>
                     <span class="mt-2" >
-                        <h1 style="color: rgb(12, 193, 12);"  class="digitalFont border-dark">{{item.totalIncome |number}}</h1>
+                        <h1 style="color: rgb(12, 193, 12);"  class="digitalFont border-dark">{{item.totalIncome || 0 |number}}</h1>
                     </span>
                 </div>
 

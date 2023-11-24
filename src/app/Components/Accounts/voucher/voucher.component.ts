@@ -70,15 +70,17 @@ export class VoucherComponent implements OnInit{
 
     this.globalData.setHeaderTitle('Voucher'); 
     this.getSavedVoucher();
+    this.getProject();
+    this.getCoa();
   
-    this.logo = this.globalData.Logo;
-    this.logo1 = this.globalData.Logo1;
-    this.CompanyName = this.globalData.CompanyName;
-    this.CompanyName2 = this.globalData.CompanyName2;
-    this.companyAddress = this.globalData.Address;
-    this.companyPhone = this.globalData.Phone;
-    this.companyMobileno = this.globalData.mobileNo;
-    this.companyEmail = this.globalData.Email;
+    // this.logo = this.globalData.Logo;
+    // this.logo1 = this.globalData.Logo1;
+    // this.CompanyName = this.globalData.CompanyName;
+    // this.CompanyName2 = this.globalData.CompanyName2;
+    // this.companyAddress = this.globalData.Address;
+    // this.companyPhone = this.globalData.Phone;
+    // this.companyMobileno = this.globalData.mobileNo;
+    // this.companyEmail = this.globalData.Email;
 
     this.tableSize = this.globalData.paginationDefaultTalbeSize;
     this.tableSizes = this.globalData.paginationTableSizes;
@@ -177,6 +179,8 @@ export class VoucherComponent implements OnInit{
     this.http.get(environment.mainApi+'cmp/getproject').subscribe(
       (Response:any)=>{
         this.projectList = Response;
+       // console.log(Response);
+      
       }
     )
   }
@@ -261,7 +265,7 @@ export class VoucherComponent implements OnInit{
    
     this.http.get(environment.mainApi+'acc/GetSavedVoucherDetail').subscribe(
       (Response:any)=>{
-        console.log(Response);
+       // console.log(Response);
         this.SavedVoucherData = Response;
         this.loadingBar = 'stop';
        
@@ -300,7 +304,7 @@ export class VoucherComponent implements OnInit{
   getCoa(){
     this.http.get(environment.mainApi+'acc/GetVoucherCOA').subscribe(
       (Response)=>{
-        console.log(Response);
+        // console.log(Response);
         this.CoaList = Response;
       }
     )
@@ -314,7 +318,7 @@ export class VoucherComponent implements OnInit{
         this.refCoaList = Response;
       },
       (Error)=>{
-        console.log(Error);
+        //console.log(Error);
       }
     )
   }

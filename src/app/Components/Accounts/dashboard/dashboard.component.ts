@@ -96,7 +96,7 @@ export class DashboardComponent implements OnInit{
     this.http.get(environment.mainApi+'acc/GetTotals').subscribe(
       (Response)=>{
         this.cardsData = Response;
-        // console.log(Response);
+        //console.log(Response);
 
       }
     )

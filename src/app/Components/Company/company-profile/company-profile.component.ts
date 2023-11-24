@@ -46,15 +46,15 @@ export class CompanyProfileComponent implements OnInit {
     CompanyPhone:any;
     CompanyEmail:any;
     CompanyURL = '-';
-    CompanyLogo1:any = '';
+    CompanyLogo1:any ;
     logo1Name:any
     Logo1Width:any;
     Logo1Height:any;
-    CompanyLogo2:any = '';
+    CompanyLogo2:any;
     logo2Name:any;
     Logo2Width:any;
     Logo2Height:any;
-    CompanyLogo3:any = '';
+    CompanyLogo3:any;
     Logo3Name:any;
     Logo3Width:any;
     Logo3Height:any;
@@ -205,7 +205,7 @@ export class CompanyProfileComponent implements OnInit {
        if(Response != ''){
         this.companyProfile = Response;
        }
-        console.log(Response);
+       // console.log(Response);
         
          
           if(Response != '' && (Response[0].companyLogo1 != '' || Response[0].companyLogo1 != null || Response[0].companyLogo1 == '-')){
@@ -255,14 +255,23 @@ export class CompanyProfileComponent implements OnInit {
       this.msg.WarnNotify('Enter Registration Date')
     }else if(this.RegistrationNo == '' || this.RegistrationNo == undefined){
       this.msg.WarnNotify('Enter Registration No.')
-    }else if(this.CompanyLogo3 !== '' && (this.CompanyLogo2 == '' || this.CompanyLogo2 == '-')){
+    }else if(this.CompanyLogo3 !== '-' && (this.CompanyLogo2 == '' || this.CompanyLogo2 == '-')){
       this.msg.WarnNotify('Select Logo 2 First')
-    }else if(this.CompanyLogo2 !== "" && (this.Logo2Height == '' || this.Logo2Height == 0 || this.Logo2Width == 0 || this.Logo2Width == '') ){
-        this.msg.WarnNotify('Enter Logo 2 Height & Width');
-    }else if(this.CompanyLogo3 !== "" && (this.Logo3Height == '' ||this.Logo3Height == 0 || this.Logo3Width == 0 || this.Logo3Width == '')){
+    }else if((this.CompanyLogo2 !== '-') && (this.Logo2Height == '' || this.Logo2Height == 0 || this.Logo2Width == 0 || this.Logo2Width == '') ){
+      //  alert(this.CompanyLogo2);
+      this.msg.WarnNotify('Enter Logo 2 Height & Width');
+    }else if(this.CompanyLogo3 !== '-' && (this.Logo3Height == '' ||this.Logo3Height == 0 || this.Logo3Width == 0 || this.Logo3Width == '')){
         this.msg.WarnNotify('Enter Logo 3 Height  & Width'); 
     }
     else{
+
+      if(this.CompanyLogo2 == '' || this.CompanyLogo2 == undefined){
+        this.CompanyLogo2 = '-';
+      }
+      if(this.CompanyLogo3 == '' || this.CompanyLogo3 == undefined){
+        this.CompanyLogo3 = '-';
+      }
+
 
    
 
