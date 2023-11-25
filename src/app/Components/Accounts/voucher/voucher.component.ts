@@ -122,7 +122,7 @@ export class VoucherComponent implements OnInit{
   vType: any;
   transactionType: any = 'Cash';
   invoiceDate:Date = new Date();
-  refrenceCOA: any ;
+  refrenceCOA: any = '';
   projectID:any;
   partyID: any ;
   COATitleID: any ;
