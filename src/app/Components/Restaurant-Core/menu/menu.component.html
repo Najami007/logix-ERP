@@ -1,0 +1,39 @@
+<div class="bg-gray h-100 p-4">
+    <div class="container body p-2  min-600 " >
+
+
+       <div>
+        <button mat-fab class="col-lg-1 me-2" (click)="addMenu()"><mat-icon>add</mat-icon></button>
+
+        <mat-form-field class="col-lg-11" appearance="outline">
+            <mat-label class="ps-5">Search.....</mat-label>
+            <input [(ngModel)]="menuSearch" matInput type="search" class="text-secondary">
+            <mat-icon matPrefix class="text-secondary">search</mat-icon>
+        </mat-form-field>
+       </div>
+
+
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Menu Title</th>
+                    <th>Category</th>
+                    <th>Sale Price</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            
+        </table>
+    
+    
+    
+    
+    
+    
+    
+    
+    </div>
+</div>

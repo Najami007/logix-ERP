@@ -7,8 +7,8 @@ export const environment = {
 
 
 
-      mainApi: 'http://159.69.174.21:2006/',  ////////// live Server Link
+      //mainApi: 'http://159.69.174.21:2006/',  ////////// live Server Link
       //mainApi: 'http://192.168.10.100:1002/',
-      //mainApi: 'http://192.168.10.100:1003/',    ////////// Local Server
+      mainApi: 'http://192.168.10.100:1003/',    ////////// Local Server
     
 };

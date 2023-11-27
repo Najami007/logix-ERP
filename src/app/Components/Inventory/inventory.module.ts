@@ -21,6 +21,7 @@ import { AddRackComponent } from './racks/add-rack/add-rack.component';
 import { AddUOMComponent } from './unit-of-measurement/add-uom/add-uom.component';
 import { AddCategoryComponent } from './product-category/add-category/add-category.component';
 import { AddProdSubCategoryComponent } from './product-sub-category/add-prod-sub-category/add-prod-sub-category.component';
+import { IssuanceComponent } from './issuance/issuance.component';
 
 
 
@@ -37,6 +38,7 @@ export const inventoryRoutes: Route[] = [
   {path:'uom', component:UnitOfMeasurementComponent, canActivate:[AuthGuard] },
   {path:'prod', component:ProductComponent, canActivate:[AuthGuard] },
   {path:'pur', component:PurchaseComponent, canActivate:[AuthGuard] },
+  {path:'isnc', component:IssuanceComponent, canActivate:[AuthGuard] },
 
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
@@ -59,6 +61,7 @@ export const inventoryRoutes: Route[] = [
     AddUOMComponent,
     AddCategoryComponent,
     AddProdSubCategoryComponent,
+    IssuanceComponent,
   
   ],
   imports: [

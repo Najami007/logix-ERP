@@ -10,12 +10,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ChartModule } from 'angular-highcharts';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { TextMaskModule } from 'angular2-text-mask';
+import { MenuComponent } from './menu/menu.component';
+import { RecipeComponent } from './recipe/recipe.component';
+import { AddMenuComponent } from './menu/add-menu/add-menu.component';
 
 
 
 export const restCore: Route[] = [
 
   {path:'sale', component:SaleComponent, canActivate:[AuthGuard] },
+  {path:'menu', component:MenuComponent, canActivate:[AuthGuard] },
+  {path:'rcp', component:RecipeComponent, canActivate:[AuthGuard] },
 
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
@@ -27,6 +32,9 @@ export const restCore: Route[] = [
 @NgModule({
   declarations: [
     SaleComponent,
+    MenuComponent,
+    RecipeComponent,
+    AddMenuComponent,
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,41 @@
+<div class="ps-4 pe-4 pt-1 pb-1 h-100">
+
+    <div class="text-center border-bottom mb-3  mt-3 d-flex justify-content-between"><p class="dialogueTitle">ADD Menu</p><mat-icon class="cursorPointer" (click)="closeDialogue()">cancel</mat-icon></div>
+
+
+    <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select>
+            <mat-option></mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Menu Title</mat-label>
+        <input type="text" matInput>
+    </mat-form-field>
+
+
+    <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Price</mat-label>
+        <input type="number" matInput>
+    </mat-form-field>
+
+
+    
+    <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select>
+            <mat-option value="active">Active</mat-option>
+            <mat-option value="inactive">InActive</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+
+    <div class="row justify-content-around">
+        <button class="w-25 bg-success text-white" mat-stroked-button>Save</button>
+        <button class="w-25 bg-danger text-white" mat-stroked-button>Reset</button>
+    </div>
+
+
+</div>
