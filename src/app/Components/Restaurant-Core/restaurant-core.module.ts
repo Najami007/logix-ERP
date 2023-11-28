@@ -13,6 +13,9 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { MenuComponent } from './menu/menu.component';
 import { RecipeComponent } from './recipe/recipe.component';
 import { AddMenuComponent } from './menu/add-menu/add-menu.component';
+import { MenuCategoryComponent } from './menu-category/menu-category.component';
+import { AddMenuCategoryComponent } from './menu-category/add-menu-category/add-menu-category.component';
+
 
 
 
@@ -21,6 +24,7 @@ export const restCore: Route[] = [
   {path:'sale', component:SaleComponent, canActivate:[AuthGuard] },
   {path:'menu', component:MenuComponent, canActivate:[AuthGuard] },
   {path:'rcp', component:RecipeComponent, canActivate:[AuthGuard] },
+  {path:'mcat', component:MenuCategoryComponent, canActivate:[AuthGuard] },
 
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
@@ -35,6 +39,8 @@ export const restCore: Route[] = [
     MenuComponent,
     RecipeComponent,
     AddMenuComponent,
+    MenuCategoryComponent,
+    AddMenuCategoryComponent,
   ],
   imports: [
     CommonModule,

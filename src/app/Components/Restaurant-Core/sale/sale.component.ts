@@ -14,16 +14,7 @@ import { AppComponent } from 'src/app/app.component';
 export class SaleComponent implements OnInit {
 
 
- draggingCat(){
-  const catBox:any = document.querySelector(".catBox");
 
-  const dragging:any = (e:any)=>{
-    console.log("Dragging");
-    catBox.scrollLeft -= e.movementX;
-   }
-
-  catBox.addEventListener("mousemove",dragging);
- }
 
   crudList:any = [];
   companyProfile:any = [];
@@ -47,6 +38,8 @@ export class SaleComponent implements OnInit {
 
   
   ngOnInit(): void {
+    this.categoryID = this.categoriesList[0].id;
+    this.ProductList =  this.tempProductList.filter((e:any)=>e.catID == this.categoryID);
    
     
   }

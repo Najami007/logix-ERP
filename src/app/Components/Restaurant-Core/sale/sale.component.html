@@ -1,7 +1,7 @@
 
 <div class="container-fluid d-flex body">
 
-    <div class="col-lg-9 bg-gray" style="min-height: 650px;">
+    <div class="col-lg-8 bg-gray" style="min-height: 650px;">
 
 
         <!-----------   categories Row ------------------->
@@ -46,7 +46,7 @@
     </div>
 
 
-    <div class="col-lg-3 border " style="left: 74.6%; height: 630px;">
+    <div class="col-lg-4 border " style="left: 74.6%; height: 630px;">
 
          <!-----------   Table Side First Row ------------------->
 
@@ -76,10 +76,10 @@
              <!-----------   Bill Area ------------------->
             <div class="billTable" style="height: 350px;">
 
-                <table class="table cursorPointer" >
+                <table class="table-logix2 cursorPointer" >
                     <thead>
                         <tr>
-                            <th>Desc</th>
+                            <th class="col-lg-4">Desc</th>
                             <th>Price</th>
                             <th>Qty</th>
                             <th>total</th>
@@ -90,38 +90,20 @@
                         <tr *ngFor="let item of tableData index as index">
                         <td>{{item.name}}</td>
                         <td>{{item.price |number}}</td>
-                        <td class="d-flex"><mat-icon (click)="changeQty('add',index)" class="text-success">add_circle</mat-icon>
+                        <td class="d-flex text-center pb-2">
+                          <mat-icon (click)="changeQty('add',index)" class="text-success">add_circle</mat-icon>
                             <input id="pQty" type="number" style="width: 50px;text-align: center;" (change)="getTotal()"  [(ngModel)]="item.qty" >
-                            <mat-icon (click)="changeQty('minus',index)">remove_circle</mat-icon></td>
-                            <td>{{item.price * item.qty |number}}</td>
-                            <td><mat-icon class="text-danger" (click)="deleteRow(index)">delete</mat-icon></td>
+                            <mat-icon (click)="changeQty('minus',index)" >remove_circle</mat-icon>
+                          </td>
+                        <td>{{item.price * item.qty |number}}</td>
+                        <td><mat-icon class="text-danger" (click)="deleteRow(index)">delete</mat-icon></td>
                         </tr>
                     </tbody>
                 </table>
                 
             </div>
 
-            <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Enter Quantity</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <mat-form-field>
-                        <mat-label>Quantity</mat-label>
-                        <input matInput [(ngModel)]="tempQty" >
-                      </mat-form-field>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary" (click)="changeQty('modal',tempIndex);">Save changes</button>
-                    </div>
-                  </div>
-                </div>
-              </div> -->
-
+         
 
             <!-----------   Bill Total Amount Section ------------------->
             <div class="p-4 bg-white border-top">

@@ -1,0 +1,29 @@
+
+<div class=" bg-white">
+    <h2 class="border-bottom">Menu Category Detail's</h2>
+    
+
+
+    <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Category Title</mat-label>
+        <input matInput type="text" [(ngModel)]="categoryTitle" >
+    </mat-form-field>
+
+    
+    <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput type="text" [(ngModel)]="description" ></textarea>
+    </mat-form-field>
+
+
+
+
+    <div class="row justify-content-around">
+        <button class="btn btn-success w-25" *ngIf="crudList.u && btnType == 'Update'" (click)="save()">{{btnType}}</button>
+        <button class="btn btn-success w-25" *ngIf="crudList.c && btnType == 'Save'" (click)="save()">{{btnType}}</button>
+
+        <button class="btn btn-danger w-25" (click)="reset()">Reset</button>
+    </div>
+    
+
+</div>

@@ -32,6 +32,8 @@ export class RecipeComponent implements OnInit{
 
   recipeSearch:any ;
 
+  totalCost:number = 0;
+
 
   productList:any = [];
 
@@ -49,15 +51,40 @@ export class RecipeComponent implements OnInit{
 
   onProdSelect(row:any){
 
-    this.menuProdList.push({
-      productID : row.productID,
-      productTitle:row.productTitle,
-      quantity :1,
-      costPrice:row.costPrice,
-    
-    })
+    if(this.menuProdList.find((e:any)=> e.productID == row.productID)){
+    this.msg.WarnNotify('Item Already Exist')    
+    }else{
+
+      this.menuProdList.push({
+        productID : row.productID,
+        productTitle:row.productTitle,
+        quantity :1,
+        costPrice:row.costPrice,
+      
+      })
+    }
+
+    this.getTotal();
+
 
   }
 
+
+  getTotal(){
+    this.totalCost = 0;
+
+    this.menuProdList.forEach((e:any) => {
+      this.totalCost += e.costPrice * e.quantity;
+    });
+    
+  }
+
+
+
+  delRow(row:any){
+    var index = this.menuProdList.indexOf(row);
+    this.menuProdList.splice(index,1);
+    this.getTotal();
+  }
 
 }

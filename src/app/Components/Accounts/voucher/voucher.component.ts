@@ -122,7 +122,7 @@ export class VoucherComponent implements OnInit{
   vType: any;
   transactionType: any = 'Cash';
   invoiceDate:Date = new Date();
-  refrenceCOA: any = '';
+  refrenceCOA: any = 0;
   projectID:any;
   partyID: any ;
   COATitleID: any ;
@@ -332,7 +332,7 @@ export class VoucherComponent implements OnInit{
       this.msg.WarnNotify('Select Voucher Type')
     }else if(this.VoucherData == ''){
       this.msg.WarnNotify('Data Table is Empty');
-    }else if(this.refrenceCOA == '' && (this.vType == 'CPV' || this.vType == 'CRV'  || this.vType == 'BPV' || this.vType == 'BRV')){
+    }else if(this.refrenceCOA == 0 && (this.vType == 'CPV' || this.vType == 'CRV'  || this.vType == 'BPV' || this.vType == 'BRV')){
       this.msg.WarnNotify('Select Refrence Chart of Account')
     } else if(this.vType == 'JV' && this.creditTotal != this.debittotal){
       this.msg.WarnNotify('Debit And Credit Total Side Must Be Equal')
