@@ -1,0 +1,60 @@
+
+
+// .category{
+//     overflow: hidden;
+    
+// }
+
+// .category:hover{
+//     overflow-x: hidden;
+   
+// }
+
+
+
+.billTable{
+    overflow-y: scroll;
+
+}
+
+.bg-blue{
+    background-color: rgb(68, 68, 177) !important;
+    color: white !important;
+}
+
+
+.scrollContainer{
+    max-height: 80px;
+    // border: 1px solid black;
+    display: flex;
+    overflow-x: auto;
+}
+.scrollContainer:hover::-webkit-scrollbar-thumb{
+    background: #d0d0d0;
+}
+
+.scrollContainer::-webkit-scrollbar {
+    height: 5px !important;  
+}
+
+.scrollContainer::-webkit-scrollbar-thumb {
+    background: #f5f5f5;
+    border-radius: 20px;
+  }
+
+.scrollContainer::-webkit-scrollbar-track {
+    background: #f5f5f5;
+  }
+
+.scrollContainer .item{
+    height: 55px;
+     min-width: 150px;
+    //  line-height: 55px;
+     border-radius: 10px ;
+}
+
+
+.swingCard:hover{
+    transform: rotate(5deg) !important;
+    border: 2px solid black;
+}

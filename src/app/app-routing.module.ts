@@ -43,6 +43,13 @@ loadChildren:()=>
 import('./Components/Restaurant-Core/restaurant-core.module').then((m)=>m.RestaurantCoreModule),
 
 },
+
+{path:'park', 
+component:MainComponent,
+loadChildren:()=> 
+import('./Components/park-module/park-module.module').then((m)=>m.ParkModuleModule),
+
+},
 { path: '**', redirectTo: 'login', pathMatch: 'full' },
  
 

@@ -1,0 +1,90 @@
+<div class="d-flex " style="min-height: 700px;">
+
+    <div class="col-lg-4 p-1">
+
+        <h1 class="border-bottom p-2">Add Swing Detail's</h1>
+
+
+        <div class=" d-flex">
+
+
+
+
+            <div class="col-lg-8">
+                <mat-form-field appearance="outline" class="w-100 ">
+                    <mat-label>Swing Title</mat-label>
+                    <input matInput [(ngModel)]="swingTitle" type="text">
+                </mat-form-field>
+
+
+                <mat-form-field appearance="outline" class="w-100 ">
+                    <mat-label>Code</mat-label>
+                    <input matInput [(ngModel)]="swingCode" type="text">
+                </mat-form-field>
+
+            </div>
+
+            <div class="avatar-upload ms-2 col-lg-4   ">
+                <div class="avatar-edit">
+                    <input type="file" id="prodimg" accept="" #prodimg (change)="onImgSelected($event)" />
+                    <label for="prodimg"><mat-icon class=" mt-1">edit</mat-icon></label>
+                </div>
+                <div class="avatar-del">
+                    <label (click)="productImg = ''"><mat-icon class=" mt-1">delete</mat-icon></label>
+                </div>
+                <div class="avatar-preview">
+                    <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + productImg + ')' }"></div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <mat-form-field appearance="outline" class="w-100  ">
+            <mat-label>Ticket Price</mat-label>
+            <input matInput type="number" [(ngModel)]="ticketPrice" (change)="global.avoidMinus($event)">
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Description</mat-label>
+            <textarea matInput type="text" [(ngModel)]="Description"></textarea>
+        </mat-form-field>
+
+
+        <div class="p-5 ">
+            <button #toggleBtn class="btn btn-success me-5 w-25" accesskey="s"
+                (click)="save() ">{{btnType}}</button>
+            <button class="btn btn-danger w-25" (click)="reset()">Reset</button>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+    <div class="col-lg-8 container-fluid bg-light ">
+        <mat-form-field appearance="outline" class="w-100 pt-2">
+            <mat-label>Search.....</mat-label>
+            <input type="text" matInput>
+        </mat-form-field>
+        <hr>
+        <table class="table table-hover">
+            <thead>
+                <th>S#</th>
+                <th>Title</th>
+                <th>Ticket</th>
+                <th>Sale Price</th>
+                <th>Entered By</th>
+                <th>Edit</th>
+                <th>Del</th>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</div>

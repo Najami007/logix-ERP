@@ -10,7 +10,7 @@
 
         
 
-        <mat-form-field class="w-25 m-1" appearance="outline" style="min-height: 55px; min-width: 150px;border-radius: 10px ;" >
+        <mat-form-field class="w-100 m-1" appearance="outline" style="min-height: 55px; min-width: 150px;border-radius: 10px ;" >
             <mat-label >Search.....</mat-label>
             <input [(ngModel)]="searchCat"  matInput type="search" class="text-secondary" >
             <mat-icon matPrefix class="text-secondary">search</mat-icon>
@@ -18,21 +18,21 @@
 
         
 
-       <div class="scrollContainer">
+       <!-- <div class="scrollContainer">
 
             <button  *ngFor="let item of categoriesList|filter:searchCat"
              (click)="onCatSelected(item.id);searchCat = ''"
              [ngClass]="categoryID == item.id ? 'bg-blue' : ''"  class="border item text-center m-1 p-1">{{item.name}}</button>
-       </div>
+       </div> -->
       </div>
 
 
        <!-----------   Products Area ------------------->
   <div class="row cursorPointer">
-    <div *ngFor="let item of ProductList"  style="width: 150px;"  >
-        <mat-card  style="width:120px; height: 130px;" class="m-1" (click)="productSelected(item)">
+    <div *ngFor="let item of tempProductList"  style="width: 200px;"  >
+        <mat-card  style="width:180px; height: 200px;" class="m-1 p-1 swingCard" (click)="productSelected(item)">
           
-                <img *ngIf="item.img" [src]="item.img" alt="" height="80px" width="120px">
+                <img *ngIf="item.img" [src]="item.img" alt="" height="150px" width="170px">
         
             <mat-card-footer class="text-center" style="font-size: x-small;">{{item.pName}}</mat-card-footer>
             <mat-card-footer class="text-center text-success">{{item.pSale}}</mat-card-footer>
@@ -49,27 +49,6 @@
     <div class="col-lg-4 border " style="left: 74.6%; height: 630px;">
 
          <!-----------   Table Side First Row ------------------->
-
-        <div class=" d-flex ">
-            <span class="col-lg-2 p-2  border">
-                <p  class="text-center p-2 " style="height: 40px;width: 40px;background-color: rgb(219, 249, 223);color: #088203; border-radius: 100%;">F3</p>
-
-            </span>
-            <span class="col-lg-4 p-1  border">
-            
-              <select class="w-100 h-100 border-0 bg-gray" >
-                <option *ngFor="let item of TablesList" [value]="item.id">{{item.name}}</option>
-                </select>
-
-            </span>
-            <span class="col-lg-6 p-1 border">
-             
-               <select class="w-100 h-100 border-0 bg-gray" >
-                <option *ngFor="let item of orderTypes" [value]="item.id">{{item.title}}</option>
-                </select>
-  
-              </span>
-        </div>
 
         <div style="min-height: 400px;" class="p-2" >
 
@@ -138,4 +117,5 @@
 
 
 </div>
+
 

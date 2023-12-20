@@ -1,0 +1,56 @@
+<div class="container p-2 bg-gray" >
+
+    <div class="row justify-content-around" >
+      
+
+        <mat-form-field class="col-lg-4" appearance="outline">
+            <mat-label>From Date</mat-label>
+            <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="eDate">
+            <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+            <mat-datepicker #eDate></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="col-lg-4" appearance="outline">
+            <mat-label>To Date</mat-label>
+            <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
+            <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+            <mat-datepicker #eDate></mat-datepicker>
+        </mat-form-field>
+
+        <div class="col-lg-4">
+            <button class="btn btn-success btn-rpt col-lg-4 me-1 ">Get Report</button>
+            <button class="btn btn-primary btn-rpt col-lg-2">Print</button>
+        </div>
+
+        <div>
+            <table class="table-logix">
+                <thead>
+                    <tr>
+                        <th >S#</th>
+                        <th >Title</th>
+                        <th >Price</th>
+                        <th >Quantity</th>
+                        <th>Total</th>
+
+                    </tr>
+                
+          
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+
+
+    </div>
+
+   
+
+</div>

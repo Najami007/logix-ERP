@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -7,12 +7,12 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-sale',
-  templateUrl: './sale.component.html',
-  styleUrls: ['./sale.component.scss']
+  selector: 'app-park-sale',
+  templateUrl: './park-sale.component.html',
+  styleUrls: ['./park-sale.component.scss']
 })
-export class SaleComponent implements OnInit {
-
+export class ParkSaleComponent {
+  
 
 
 
@@ -27,13 +27,13 @@ export class SaleComponent implements OnInit {
     private dialogue:MatDialog,
     private route:Router
   ){
-    this.global.getCompany().subscribe((data)=>{
-      this.companyProfile = data;
-    });
+    // this.global.getCompany().subscribe((data)=>{
+    //   this.companyProfile = data;
+    // });
 
-    this.global.getMenuList().subscribe((data)=>{
-      this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-    })
+    // this.global.getMenuList().subscribe((data)=>{
+    //   this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    // })
   }
 
   
@@ -67,27 +67,11 @@ export class SaleComponent implements OnInit {
 
 
   tempProductList = [
-    {id:1,catID:6, pName:'Coke',pSale:150,img:'../../../../assets/Images/pepsi.jfif'},
-    {id:2,catID:6,pName:'Pepsi',pSale:120,img:'../../../../assets/Images/pepsi.jfif'},
-    {id:3,catID:1,pName:'Chicken Fajiat Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:4,catID:2,pName:'Burger',pSale:500,img:'../../../../assets/Images/Burger.jpg'},
-    {id:5,catID:2,pName:'Pasta',pSale:750,img:'../../../../assets/Images/pasta.jfif'},
-    {id:6,catID:1,pName:'Vegetable Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:7,catID:2,pName:'Cheese Burger',pSale:500,img:'../../../../assets/Images/Burger.jpg'},
-    {id:8,catID:2,pName:'Fruid Salad',pSale:750,img:'../../../../assets/Images/FruitSalad.jfif'},
-    {id:9,catID:1,pName:'Crust Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:10,catID:5,pName:'Prawns',pSale:500,img:'../../../../assets/Images/Prawns.jfif'},
-    {id:11,catID:6,pName:'Pasta',pSale:750,img:'../../../../assets/Images/pasta.jfif'},
-    {id:12,catID:1,pName:' Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:13,catID:1,pName:' Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:14,catID:1,pName:' Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:15,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:16,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:17,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:18,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:19,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-    {id:20,catID:1,pName:'BBQ Pizza',pSale:1050,img:'../../../../assets/Images/pizza.jfif'},
-  
+    {id:1,catID:6, pName:'Swing',pSale:200,img:'../../../../assets/Images/swing.jpg'},
+    {id:2,catID:6,pName:'Jhoolay Lal',pSale:120,img:'../../../../assets/Images/swing2.jpg'},
+    {id:3,catID:1,pName:'Adult swing',pSale:1050,img:'../../../../assets/Images/adultSwing.jpg'},
+    {id:4,catID:2,pName:'Chair',pSale:500,img:'../../../../assets/Images/electricChair.jpg'},
+   
   ]
 
   TablesList:any = [
@@ -197,4 +181,5 @@ export class SaleComponent implements OnInit {
   save(){
     console.log(this.tableData);
   }
+
 }

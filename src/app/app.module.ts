@@ -47,6 +47,7 @@ import { HeaderComponent } from './Components/Layout/header/header.component';
 
 
 
+
 @NgModule({
   declarations: [   
     AppComponent, 
@@ -55,7 +56,7 @@ import { HeaderComponent } from './Components/Layout/header/header.component';
     COAComponent,
     MainComponent,
     TopNavBarComponent,
-    HeaderComponent,
+    HeaderComponent,  
  
 
   ],
