@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment.development';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { NotificationService } from '../service/notification.service';
 import { userInterface } from '../Interfaces/login-user-interface';
-import { BehaviorSubject, Observable, Observer, retry } from 'rxjs';
+import { BehaviorSubject, Observable, Observer, from, retry } from 'rxjs';
 import Swal from 'sweetalert2';
 import * as $ from 'jquery';
 import * as b64 from 'base64-js/index.js';
@@ -395,6 +395,64 @@ public getMenuList():Observable<any>{
     }, 500);
   
   }
+
+  autoPrint(printSection: string) {    
+    var contents = $(printSection).html();
+
+    var frame1:any = $('<iframe />');
+    frame1[0].name = 'frame1';
+    frame1.css({ position: 'absolute', top: '-1000000px' });
+    $('body').append(frame1);
+    var frameDoc = frame1[0].contentWindow
+      ? frame1[0].contentWindow
+      : frame1[0].contentDocument.document
+      ? frame1[0].contentDocument.document
+      : frame1[0].contentDocument;
+    frameDoc.document.open();
+
+    //Create a new HTML document.
+    // frameDoc.document.write(
+    //   "<html><head><title>DIV Contents</title>" +
+    //     "<style>" +
+    //     printCss +
+    //     "</style>"
+    // );
+
+    //Append the external CSS file. <link rel="stylesheet" href="../../../styles.scss" /> <link rel="stylesheet" href="../../../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    // frameDoc.document.write(
+    //   '<style type="text/css" media="print">{ variant: "non-conform" }</style>'
+    //  );
+   
+    frameDoc.document.write(
+      
+      '<link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>'
+      +'<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'
+      //+'<style type="text/css" media="print">/*@page { size: landscape; }*/</style>'
+      // '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css.map" type="text/css" />'+
+     
+      // '<link rel="stylesheet" href="../css/bootstrap.css" type="text/css"  media="print"/>'
+    );
+    frameDoc.document.write('</head><body>');
+
+    //Append the DIV contents.
+    frameDoc.document.write(contents);
+    frameDoc.document.write('</body></html>');
+
+    frameDoc.document.close();
+    
+      
+
+    setTimeout(function () {
+      window.frames[0].focus();
+      window.frames[0].print();
+    
+    
+      frame1.remove();
+    }, 500);
+   
+  
+  }
+
 
 
   //////////////////////////////////////////////////////////////////////

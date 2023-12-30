@@ -1,7 +1,7 @@
 
 <div class="container-fluid d-flex body">
 
-    <div class="col-lg-8 bg-gray" style="min-height: 650px;">
+    <div class="col-lg-12 bg-gray" style="min-height: 650px;">
 
 
         <!-----------   categories Row ------------------->
@@ -12,7 +12,7 @@
 
         <mat-form-field class="w-100 m-1" appearance="outline" style="min-height: 55px; min-width: 150px;border-radius: 10px ;" >
             <mat-label >Search.....</mat-label>
-            <input [(ngModel)]="searchCat"  matInput type="search" class="text-secondary" >
+            <input [(ngModel)]="searchSwing"  matInput type="search" class="text-secondary" >
             <mat-icon matPrefix class="text-secondary">search</mat-icon>
         </mat-form-field>
 
@@ -29,13 +29,15 @@
 
        <!-----------   Products Area ------------------->
   <div class="row cursorPointer">
-    <div *ngFor="let item of tempProductList"  style="width: 200px;"  >
-        <mat-card  style="width:180px; height: 200px;" class="m-1 p-1 swingCard" (click)="productSelected(item)">
+    <div *ngFor="let item of swingsList | filter:searchSwing"  style="width: 200px;"  >
+        <mat-card  style="width:180px; height: 200px;" class="m-1 p-1 swingCard" (click)="onSwingSelected(item)" data-bs-toggle="modal" data-bs-target="#swingModal">
           
-                <img *ngIf="item.img" [src]="item.img" alt="" height="150px" width="170px">
+                <!-- <img *ngIf="item.img" [src]="item.swingImage" alt="" height="150px" width="170px"> -->
+                <div style="height: 150px;width: 170px;background-size: cover;" [ngStyle]="{ 'background-image': 'url(' + item.swingImage + ')' }"></div>
+
         
-            <mat-card-footer class="text-center" style="font-size: x-small;">{{item.pName}}</mat-card-footer>
-            <mat-card-footer class="text-center text-success">{{item.pSale}}</mat-card-footer>
+            <mat-card-footer class="text-center" style="font-size: x-small;">{{item.swingTitle}}</mat-card-footer>
+            <mat-card-footer class="text-center text-success">{{item.ticketPrice}}</mat-card-footer>
         </mat-card>
       </div>
   </div>
@@ -46,13 +48,12 @@
     </div>
 
 
-    <div class="col-lg-4 border " style="left: 74.6%; height: 630px;">
+    <!-- <div class="col-lg-4 border " style="left: 74.6%; height: 630px;">
 
-         <!-----------   Table Side First Row ------------------->
 
         <div style="min-height: 400px;" class="p-2" >
 
-             <!-----------   Bill Area ------------------->
+          
             <div class="billTable" style="height: 350px;">
 
                 <table class="table-logix cursorPointer" >
@@ -86,7 +87,7 @@
 
          
 
-            <!-----------   Bill Total Amount Section ------------------->
+       
             <div class="p-4 bg-white border-top">
 
                 <span class="d-flex border-bottom border-dark justify-content-between">
@@ -98,7 +99,7 @@
                     <p>100</p>
                 </span>
                 <span class="p-1 d-flex">
-                    <button mat-raised-button class="m-1 text-white bg-secondary w-50">HOLD</button>
+                    <button mat-raised-button class="m-1 text-white bg-secondary w-50" (click)="printMultiple()">HOLD</button>
                     <button mat-raised-button  class="m-1 text-white bg-success w-50" (click)="save()">Save</button>
                 </span>
                 
@@ -110,8 +111,152 @@
         </div>
 
 
+    </div> -->
+
+
+   
+
+
+    <div class="modal fade" id="swingModal" tabindex="-1" aria-labelledby="swingModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="swingModalLabel">Enter Number of Person</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+            </div>
+            <div class="modal-body">
+
+               <div>
+                <mat-label class="ms-5">Enter Quantity</mat-label>
+                <div class="d-flex text-center pb-2" *ngFor="let item of TicketDetails">
+                    <mat-icon (click)="changeQty('add',0)" class="text-success cursorPointer" style="font-size: 40px;height: 50px;width: 50px;">add_circle</mat-icon>
+                    <input id="pQty" type="number" style="width: 100%;height: 40px; text-align: center;" (keypress)="global.avoidMinus($event)" [(ngModel)]="item.TicketQuantity" >
+                    <mat-icon (click)="changeQty('minus',0)" class="cursorPointer" style="font-size: 40px;height: 50px;width: 50px;" >remove_circle</mat-icon>
+                </div>
+               </div>
+        
+               <mat-label class="ms-5">Enter Remarks</mat-label>
+                 <div class="text-center">
+                    
+                    <textarea rows="4" [(ngModel)]="ticketRemarks" style="width: 82%;text-align: center;"></textarea>
+                 </div>
+        
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="save()">Save & Print</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+       <!----------    Ticket Print Area --------------->
+
+
+    <div id="ticketPrint" class="d-none" >
+        <div *ngFor="let item of printDetails" class="p-1 w-100">
+            <div class="text-center">
+                <img src="../../../../assets/Images/playtorium.png" height="50" width="250">
+                <p>Mehria Mall & Residencia, Attock</p>
+                <!-- <h2>Playtorium</h2> -->
+            </div>
+    
+        
+                <table class="table table-logix2 text-center" style="font-size: 15px;" >
+                    <thead>
+                        <tr>
+                            <th class="col-lg-3">Ticket #</th>
+                            <th class="col-lg-3">Counter </th>
+                            <th class="col-lg-3">Date </th>
+                            <th class="col-lg-3">Time</th>
+                          
+                        </tr>
+                       
+                    </thead>
+                    <tbody >
+                        <tr class="text-center">
+                            <td>{{item.ticketNo}}</td>
+                            <td>{{item.entryUser}}</td>
+                            <td>{{item.entryDateTime | date:'dd-MMM-yyyy'}}</td>
+                            <td>{{item.entryDateTime | date:'hh:mm:ss:a'}}</td>
+                        </tr>
+                        <hr>
+                  
+                    </tbody>
+    
+                    
+                </table>
+               <table>
+             
+               </table>
+    
+
+     
+            <!-- <div class="text-center p-2">
+               <table class="table table-logix" *ngFor="let item of printDetails">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Person</th>
+                        <th>Amount</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{item.swingTitle}}</td>
+                        <td class="text-center">{{item.ticketQuantity |number}}</td>
+                        <td class="text-end">{{item.ticketPrice |number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.ticketQuantity * item.ticketPrice |number:'1.0-0'}}</td>
+                    </tr>
+                </tbody>
+               </table>
+    
+               <small>Ticket is not Refundable</small>
+            </div> -->
+    
+            <!-- <div class="text-center">
+                <span style="height: 50px;font-size: 40px;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">{{item.swingTitle}}</span>
+            </div> -->
+             <div class="d-flex">
+                <div class=" col-lg-4 text-center justify-content-center">
+                    <div  style=" font-size: 35px;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" class="text-center">{{item.swingTitle | uppercase}}</div>
+                </div>
+                 <div class=" col-lg-8 text-center m-2">
+                    <div  style="height: 100px !important;width: 100px !important; font-size: 60px;border: 3px solid black;border-radius: 50%;">{{item.ticketQuantity |number}}</div>
+                 </div>
+                
+             </div>
+                <table class="w-100 table table-logix mt-2">
+               
+                 <tbody>
+            
+                     <tr >
+                        <th>Total</th>
+                         <td class="text-end">{{item.ticketPrice |number:'1.0-0'}} x {{item.ticketQuantity |number}}</td> 
+                        <td class="text-end">{{item.ticketQuantity * item.ticketPrice |number:'1.0-0'}}</td>
+                     </tr>
+                 </tbody>
+                </table>
+                <tr>
+                    <td><strong>Remarks:</strong></td>
+                    <td class="ps-2">{{item.ticketRemarks}}</td>
+                </tr>
+                <hr>
+                <div style="text-transform: uppercase;" class="text-center">
+                    <small>Ticket is not Refundable</small>
+                </div>
+          
+     
+        </div>
+
+
     </div>
 
+    <!-- <button (click)="printTicket(8)"></button> -->
 
 
 

@@ -54,7 +54,9 @@
 
         <div class="p-5 ">
             <button #toggleBtn class="btn btn-success me-5 w-25" accesskey="s"
-                (click)="save() ">{{btnType}}</button>
+                (click)="save() " *ngIf="crudList.c && btnType == 'Save'">{{btnType}}</button>
+                <button #toggleBtn class="btn btn-success me-5 w-25" accesskey="s"
+                (click)="save() " *ngIf="crudList.u && btnType == 'Update'">{{btnType}}</button>
             <button class="btn btn-danger w-25" (click)="reset()">Reset</button>
         </div>
 
@@ -72,19 +74,48 @@
             <input type="text" matInput>
         </mat-form-field>
         <hr>
-        <table class="table table-hover">
+        <table class="table table-hover" *ngIf="crudList.r">
             <thead>
                 <th>S#</th>
                 <th>Title</th>
                 <th>Ticket</th>
-                <th>Sale Price</th>
+                <th>Img</th>
                 <th>Entered By</th>
                 <th>Edit</th>
+                <th>Status</th>
                 <th>Del</th>
             </thead>
             <tbody>
 
+                <tr *ngFor="let item of swingsList index as index">
+                    <td>{{index+1}}</td>
+                    <td>{{item.swingTitle}}</td>
+                    <td>{{item.ticketPrice}}</td>
+                    <td><div style="height: 40px;width: 40px;background-size: cover;" [ngStyle]="{ 'background-image': 'url(' + item.swingImage + ')' }"></div></td>
+                    <td>{{item.entryUser}}</td>
+                    <td *ngIf="crudList.u"><button mat-mini-fab class="bg-success h30px w30px"  (click)="editswing(item)"><mat-icon  >edit</mat-icon></button></td>
+                    <td *ngIf="crudList.u"><button mat-mini-fab  class="bg-warning h30px w30px"  *ngIf="item.activeStatus == false "   (click)="changeStatus(item)"  ><mat-icon>block</mat-icon></button>
+                       <button mat-mini-fab *ngIf="item.activeStatus == true " (click)="changeStatus(item)"  class="bg-white text-dark h30px w30px"> <mat-icon  >block</mat-icon></button></td>
+                    <td *ngIf="crudList.d"><button mat-mini-fab  class="bg-danger h30px w30px"  (click)="delete(item)"><mat-icon>delete</mat-icon></button></td>
+                </tr>
+
             </tbody>
         </table>
+
+        <div class="d-flex" >
+            <!-- <mat-hint class="me-1 text-secondary">Total Rows : ({{SavedVoucherData.length || 0}})    </mat-hint> -->
+            <pagination-controls
+            previousLabel="Prev"
+            nextLabel="Next"
+            (pageChange)="onTableDataChange($event)"
+            ></pagination-controls>
+            
+
+            <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+            <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);" (change)="onTableSizeChange($event)">
+                <option *ngFor=" let item of tableSizes">{{item}}</option>
+            </select>
+            
+        </div>
     </div>
 </div>

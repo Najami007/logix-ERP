@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SwingFormComponent } from './swing-form.component';
+import { SalerptdaywiseComponent } from './salerptdaywise.component';
 
-describe('SwingFormComponent', () => {
-  let component: SwingFormComponent;
-  let fixture: ComponentFixture<SwingFormComponent>;
+describe('SalerptdaywiseComponent', () => {
+  let component: SalerptdaywiseComponent;
+  let fixture: ComponentFixture<SalerptdaywiseComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SwingFormComponent ]
+      declarations: [ SalerptdaywiseComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SwingFormComponent);
+    fixture = TestBed.createComponent(SalerptdaywiseComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

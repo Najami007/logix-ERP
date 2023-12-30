@@ -265,7 +265,7 @@ export class VoucherComponent implements OnInit{
    
     this.http.get(environment.mainApi+'acc/GetSavedVoucherDetail').subscribe(
       (Response:any)=>{
-       // console.log(Response);
+      //  console.log(Response);
         this.SavedVoucherData = Response;
         this.loadingBar = 'stop';
        

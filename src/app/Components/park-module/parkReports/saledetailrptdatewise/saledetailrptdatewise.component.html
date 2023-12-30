@@ -1,24 +1,16 @@
 <div class="container p-2 bg-gray" >
 
     <div class="row justify-content-around" >
-        <mat-form-field appearance="outline" class="col-lg-4">
-            <mat-label >Swing</mat-label>
-            <mat-select [(ngModel)]="swingID" >
-                <mat-option><ngx-mat-select-search [(ngModel)]="searchSwing"
-                    [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
-                    name="search"></ngx-mat-select-search></mat-option>
-                <mat-option *ngFor="let item of swingsList | filter:searchSwing" [value]="item.swingID">{{item.swingTitle}}</mat-option>
-            </mat-select>
-        </mat-form-field>
+      
 
-        <mat-form-field class="col-lg-2" appearance="outline">
+        <mat-form-field class="col-lg-4" appearance="outline">
             <mat-label>From Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
             <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
             <mat-datepicker #sDate></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field class="col-lg-2" appearance="outline">
+        <mat-form-field class="col-lg-4" appearance="outline">
             <mat-label>To Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
             <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
@@ -26,7 +18,8 @@
         </mat-form-field>
 
         <div class="col-lg-4">
-            <button class="btn btn-success btn-rpt col-lg-4 me-1 " (click)="getReport()">Get Report</button>
+            <button class="btn btn-success btn-rpt col-lg-4 me-1 " (click)="getReport('detail')">Detail</button>
+            <button class="btn btn-success btn-rpt col-lg-4 me-1 " (click)="getReport('summary')">Summary</button>
             <button class="btn btn-primary btn-rpt col-lg-2" (click)="print()">Print</button>
         </div>
 
@@ -58,7 +51,7 @@
             </div>
            </div>
       
-            <table class="table table-logix">
+            <table class="table table-logix" id="detailTable">
                 <thead>
                     <tr>
                         <th >S#</th>
@@ -67,7 +60,7 @@
                         <th >Title</th>
                         <th>Price</th>
                         <th >Quantity</th>
-                        <th>Amount</th>
+                        <th>Total</th>
 
                     </tr>
                 
@@ -87,6 +80,37 @@
                     <td colspan="5" class="text-center"><strong>Total</strong></td>
                     <td class="text-center"><strong>{{totalQty | number}}</strong></td>
                     <td class="text-end"><strong>{{totalAmount | number:'1.0-0'}}</strong></td>
+                </tr>
+            </tbody>
+            </table>
+
+            <table class="table table-logix" id="summaryTable">
+                <thead>
+                    <tr>
+                        <th >S#</th>
+                        <th>Ticket #</th>
+                        <th>Date</th>
+                        <th >Title</th>
+                        <th >Quantity</th>
+                        <th>Amount</th>
+
+                    </tr>
+                
+          
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of dataList index as index">
+                    <td>{{index+1}}</td>
+                    <td class="text-center">{{item.ticketNo}}</td>
+                    <td>{{item.entryDateTime | date:'dd-MM-yyyy hh:mm:ss:a '}}</td>
+                    <td>{{item.swingTitle}}</td>
+                    <td class="text-center">{{item.ticketQuantity | number:'1.0-0'}}</td>
+                    <td  class="text-end"> {{item.ticketTotal | number:'1.0-0'}}</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-center"><strong>Total</strong></td>
+                    <td class="text-center"><strong>{{totalQty | number:'1.0-0'}}</strong></td>
+                    <td class="text-end"><strong>{{summaryTotalAmount | number:'1.0-0'}}</strong></td>
                 </tr>
             </tbody>
             </table>

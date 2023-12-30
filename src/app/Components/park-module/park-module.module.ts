@@ -9,9 +9,12 @@ import { MaterialModule } from 'src/app/Shared/material/material.module';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { TextMaskModule } from 'angular2-text-mask';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
-import { SwingFormComponent } from './add-swing/swing-form/swing-form.component';
+
 import { ParkClosingSheetComponent } from './parkReports/park-closing-sheet/park-closing-sheet.component';
 import { SaleRptswingWiseComponent } from './parkReports/sale-rptswing-wise/sale-rptswing-wise.component';
+import { SalerptdaywiseComponent } from './parkReports/salerptdaywise/salerptdaywise.component';
+import { SaledetailrptdatewiseComponent } from './parkReports/saledetailrptdatewise/saledetailrptdatewise.component';
+import { SalesummarydateuserwiseComponent } from './parkReports/salesummarydateuserwise/salesummarydateuserwise.component';
 
 
 
@@ -21,6 +24,9 @@ export const parkRoutes: Route[] = [
   {path:'psale', component:ParkSaleComponent },
   {path:'pcs', component:ParkClosingSheetComponent },
   {path:'srptsw', component:SaleRptswingWiseComponent },
+  {path:'srptdw', component:SalerptdaywiseComponent },
+  {path:'sdrptdq', component:SaledetailrptdatewiseComponent },
+  {path:'ssrptduw', component:SalesummarydateuserwiseComponent },
 
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
@@ -33,9 +39,11 @@ export const parkRoutes: Route[] = [
   declarations: [
     AddSwingComponent,
     ParkSaleComponent,
-    SwingFormComponent,
     ParkClosingSheetComponent,
-    SaleRptswingWiseComponent
+    SaleRptswingWiseComponent,
+    SalerptdaywiseComponent,
+    SaledetailrptdatewiseComponent,
+    SalesummarydateuserwiseComponent
   ],
   imports: [
     CommonModule,
