@@ -26,7 +26,7 @@
             <mat-datepicker #eDate></mat-datepicker>
         </mat-form-field>
 
-        <div class="col-lg-4">
+        <div class="col-lg-4" *ngIf="crudList.r">
             <button class="btn btn-success btn-rpt col-lg-4 me-1 " (click)="getReport('summary')">Summary</button>
             <button class="btn btn-success btn-rpt col-lg-4 me-1 " (click)="getReport('detail')">Detail</button>
             <button class="btn btn-primary btn-rpt col-lg-2" (click)="print()">Print</button>

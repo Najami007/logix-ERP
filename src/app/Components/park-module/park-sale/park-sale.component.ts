@@ -58,7 +58,7 @@ export class ParkSaleComponent {
 
 
   TicketQty:any;
-  ticketRemarks:any;
+  ticketRemarks:any = '-';
   TicketDetails:any = [];
 
   swingsList:any = [];

@@ -29,9 +29,9 @@ export class SalerptdaywiseComponent {
       this.companyProfile = data;
     });
 
-    // this.global.getMenuList().subscribe((data)=>{
-    //   this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-    // })
+    this.global.getMenuList().subscribe((data)=>{
+      this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    })
   }
 
 
@@ -39,6 +39,7 @@ export class SalerptdaywiseComponent {
 
 
   ngOnInit(): void {
+    this.global.setHeaderTitle('Sale Report Daywise');
 
   }
 

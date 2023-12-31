@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
@@ -13,7 +13,7 @@ import * as $ from 'jquery';
   templateUrl: './salesummarydateuserwise.component.html',
   styleUrls: ['./salesummarydateuserwise.component.scss']
 })
-export class SalesummarydateuserwiseComponent {
+export class SalesummarydateuserwiseComponent implements OnInit {
 
   
   
@@ -33,9 +33,9 @@ export class SalesummarydateuserwiseComponent {
       this.companyProfile = data;
     });
 
-    // this.global.getMenuList().subscribe((data)=>{
-    //   this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-    // })
+    this.global.getMenuList().subscribe((data)=>{
+      this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    })
   }
 
 
@@ -43,9 +43,11 @@ export class SalesummarydateuserwiseComponent {
 
 
   ngOnInit(): void {
+    $('#summaryTable').hide();
+    $('#detailTable').show();
     this.getUsers();
     this.global.setHeaderTitle('Sale Summary Date & Userwise');
-    $('#summaryTable').hide();
+   
 
   }
   searchUser:any;

@@ -28,9 +28,9 @@ export class SaleRptswingWiseComponent implements OnInit {
       this.companyProfile = data;
     });
 
-    // this.global.getMenuList().subscribe((data)=>{
-    //   this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-    // })
+    this.global.getMenuList().subscribe((data)=>{
+      this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    })
   }
 
 

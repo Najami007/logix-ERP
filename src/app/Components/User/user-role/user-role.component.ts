@@ -314,7 +314,7 @@ export class UserRoleComponent implements OnInit {
     this.roleID = row.roleID;
 
     this.http.get(environment.mainApi+'user/getrolemenu?roleid='+row.roleID).subscribe((Response:any)=>{
-        //console.log(Response);
+        // console.log(Response);
 
         var AllowedRolesList:any = [];
         

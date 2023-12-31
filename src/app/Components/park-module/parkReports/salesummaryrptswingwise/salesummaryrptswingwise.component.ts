@@ -6,14 +6,12 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 
-import * as $ from 'jquery';
-
 @Component({
-  selector: 'app-saledetailrptdatewise',
-  templateUrl: './saledetailrptdatewise.component.html',
-  styleUrls: ['./saledetailrptdatewise.component.scss']
+  selector: 'app-salesummaryrptswingwise',
+  templateUrl: './salesummaryrptswingwise.component.html',
+  styleUrls: ['./salesummaryrptswingwise.component.scss']
 })
-export class SaledetailrptdatewiseComponent implements OnInit {
+export class SalesummaryrptswingwiseComponent implements OnInit {
 
   
   
@@ -42,7 +40,7 @@ export class SaledetailrptdatewiseComponent implements OnInit {
 
 
   ngOnInit(): void {
-    $('#summaryTable').hide();
+
     this.global.setHeaderTitle('Sale Report Datewise');
   
     
@@ -59,45 +57,26 @@ export class SaledetailrptdatewiseComponent implements OnInit {
 
 
 
-  getReport(type:any){
+  getReport(){
     this.app.startLoaderDark();
-    if(type == 'detail'){
-      $('#summaryTable').hide();
-      $('#detailTable').show();
-      this.http.get(environment.mainApi+'park/GetSaleDetailBetweenDate?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
+ 
+      this.http.get(environment.mainApi+'park/GetSaleSummaryBetweenDateSwingWise?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
     '&ToDate='+this.global.dateFormater(this.toDate,'-')).subscribe(
       (Response:any)=>{
-       // console.log(Response);
+       console.log(Response);
         this.dataList = Response;
         this.totalAmount = 0;
         this.totalQty = 0;
         Response.forEach((e:any) => {
           
-          this.totalAmount += e.ticketQuantity * e.ticketPrice;
+          this.totalAmount += e.ticketTotal;
           this.totalQty += e.ticketQuantity;
 
         });
         this.app.stopLoaderDark();
       }
     )
-    }else if(type == 'summary'){
-      $('#summaryTable').show();
-      $('#detailTable').hide();
-      this.http.get(environment.mainApi+'park/GetSaleSummaryBetweenDate?fromdate='+this.global.dateFormater(this.fromDate,'-')+
-      '&todate='+this.global.dateFormater(this.toDate,'-')).subscribe(
-        (Response:any)=>{
-        //  console.log(Response);
-          this.dataList = Response;
-          this.totalAmount = 0;
-          Response.forEach((e:any) => {
-            
-            this.summaryTotalAmount += e.ticketTotal;
-  
-          });
-          this.app.stopLoaderDark();
-        }
-      )
-    }
+    
   }
 
 

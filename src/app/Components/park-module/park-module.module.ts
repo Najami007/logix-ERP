@@ -15,18 +15,21 @@ import { SaleRptswingWiseComponent } from './parkReports/sale-rptswing-wise/sale
 import { SalerptdaywiseComponent } from './parkReports/salerptdaywise/salerptdaywise.component';
 import { SaledetailrptdatewiseComponent } from './parkReports/saledetailrptdatewise/saledetailrptdatewise.component';
 import { SalesummarydateuserwiseComponent } from './parkReports/salesummarydateuserwise/salesummarydateuserwise.component';
+import { AuthGuard } from 'src/app/auth.guard';
+import { SalesummaryrptswingwiseComponent } from './parkReports/salesummaryrptswingwise/salesummaryrptswingwise.component';
 
 
 
 export const parkRoutes: Route[] = [
 
-  {path:'addswng', component:AddSwingComponent },
-  {path:'psale', component:ParkSaleComponent },
-  {path:'pcs', component:ParkClosingSheetComponent },
-  {path:'srptsw', component:SaleRptswingWiseComponent },
-  {path:'srptdw', component:SalerptdaywiseComponent },
-  {path:'sdrptdq', component:SaledetailrptdatewiseComponent },
-  {path:'ssrptduw', component:SalesummarydateuserwiseComponent },
+  {path:'addswng', component:AddSwingComponent,canActivate:[AuthGuard] },
+  {path:'psale', component:ParkSaleComponent,canActivate:[AuthGuard] },
+  {path:'pcs', component:ParkClosingSheetComponent,canActivate:[AuthGuard] },
+  {path:'srptsw', component:SaleRptswingWiseComponent,canActivate:[AuthGuard] },
+  {path:'srptdw', component:SalerptdaywiseComponent,canActivate:[AuthGuard] },
+  {path:'sdrptdw', component:SaledetailrptdatewiseComponent,canActivate:[AuthGuard] },
+  {path:'ssrptduw', component:SalesummarydateuserwiseComponent,canActivate:[AuthGuard] },
+  {path:'ssrptdsw', component:SalesummaryrptswingwiseComponent,canActivate:[AuthGuard] },
 
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
@@ -43,7 +46,8 @@ export const parkRoutes: Route[] = [
     SaleRptswingWiseComponent,
     SalerptdaywiseComponent,
     SaledetailrptdatewiseComponent,
-    SalesummarydateuserwiseComponent
+    SalesummarydateuserwiseComponent,
+    SalesummaryrptswingwiseComponent
   ],
   imports: [
     CommonModule,
