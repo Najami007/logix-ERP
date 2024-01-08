@@ -44,7 +44,9 @@ export class SaleRptswingWiseComponent implements OnInit {
   }
 
   fromDate:any = new Date();
+  fromTime:any = '00:00';
   toDate:any = new Date();
+  toTime:any = '23:59';
   totalAmount:any= 0;
   searchSwing:any;
   dataList:any = [];
@@ -70,7 +72,7 @@ export class SaleRptswingWiseComponent implements OnInit {
    }else {
     this.app.startLoaderDark();
     this.http.get(environment.mainApi+'park/GetSaleDetailBetweenDateSwingWise?FromDate='+this.global.dateFormater(this.fromDate,'-')+
-    '&todate='+this.global.dateFormater(this.toDate,'-')+'&SwingID='+this.swingID).subscribe(
+    '&todate='+this.global.dateFormater(this.toDate,'-')+'&SwingID='+this.swingID+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
       (Response:any)=>{
        // console.log(Response);
         this.dataList = Response;

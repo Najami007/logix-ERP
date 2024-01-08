@@ -52,7 +52,9 @@ export class SalesummarydateuserwiseComponent implements OnInit {
   }
   searchUser:any;
   fromDate:any = new Date();
+  fromTime:any = '00:00';
   toDate:any = new Date();
+  toTime:any = '23:59';
   totalAmount:any= 0;
   totalQty:any = 0;
   userID:number = 0;
@@ -97,7 +99,7 @@ export class SalesummarydateuserwiseComponent implements OnInit {
     $('#summaryTable').show();
     
     this.http.get(environment.mainApi+'park/GetSaleSummaryBetweenDateUserWise?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
-    '&ToDate='+this.global.dateFormater(this.toDate,'-')+'&UserID='+this.userID).subscribe(
+    '&ToDate='+this.global.dateFormater(this.toDate,'-')+'&UserID='+this.userID+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
       (Response:any)=>{
      //   console.log(Response);
         this.dataList = Response;
@@ -117,7 +119,7 @@ export class SalesummarydateuserwiseComponent implements OnInit {
     $('#summaryTable').hide();
     
     this.http.get(environment.mainApi+'park/GetSaleDetailBetweenDateUserWise?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
-    '&ToDate='+this.global.dateFormater(this.toDate,'-')+'&UserID='+this.userID).subscribe(
+    '&ToDate='+this.global.dateFormater(this.toDate,'-')+'&UserID='+this.userID+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
       (Response:any)=>{
      //   console.log(Response);
         this.dataList = Response;

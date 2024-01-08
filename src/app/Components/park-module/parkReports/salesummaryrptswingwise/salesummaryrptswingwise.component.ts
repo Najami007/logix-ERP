@@ -41,14 +41,15 @@ export class SalesummaryrptswingwiseComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.global.setHeaderTitle('Sale Report Datewise');
-  
+    this.global.setHeaderTitle('Swing Sale Summary');
+
     
 
   }
-
   fromDate:any = new Date();
+  fromTime:any = '00:00';
   toDate:any = new Date();
+  toTime:any = '23:59';
   totalAmount:any= 0;
   totalQty:any = 0;
 
@@ -61,9 +62,9 @@ export class SalesummaryrptswingwiseComponent implements OnInit {
     this.app.startLoaderDark();
  
       this.http.get(environment.mainApi+'park/GetSaleSummaryBetweenDateSwingWise?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
-    '&ToDate='+this.global.dateFormater(this.toDate,'-')).subscribe(
+    '&ToDate='+this.global.dateFormater(this.toDate,'-')+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
       (Response:any)=>{
-       console.log(Response);
+       //console.log(Response);
         this.dataList = Response;
         this.totalAmount = 0;
         this.totalQty = 0;

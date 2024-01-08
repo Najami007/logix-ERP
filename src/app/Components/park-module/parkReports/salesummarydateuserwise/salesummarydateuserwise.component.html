@@ -1,15 +1,15 @@
-<div class="container p-2 bg-gray" >
+<div class="container p-2 bg-gray body">
 
-    <div class="row justify-content-around" >
-      
+    <div class="row justify-content-around">
+
 
         <mat-form-field appearance="outline" class="col-lg-4">
-            <mat-label >User</mat-label>
+            <mat-label>User</mat-label>
             <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
-                <mat-option><ngx-mat-select-search [(ngModel)]="searchUser"
-                    [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
-                    name="search"></ngx-mat-select-search></mat-option>
-                <mat-option *ngFor="let item of userList | filter:searchUser" [value]="item.userID">{{item.userName}}</mat-option>
+                <mat-option><ngx-mat-select-search [(ngModel)]="searchUser" [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of userList | filter:searchUser"
+                    [value]="item.userID">{{item.userName}}</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field class="col-lg-2" appearance="outline">
@@ -18,6 +18,16 @@
             <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
             <mat-datepicker #sDate></mat-datepicker>
         </mat-form-field>
+        <mat-form-field class="col-lg-2 " appearance="outline">
+            <mat-label>From Time</mat-label>    
+        <div class="toggle-example d-flex">
+            <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+            <ngx-material-timepicker-toggle [for]="fTime"></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #fTime></ngx-material-timepicker>
+        </div>
+
+        </mat-form-field>
+
 
         <mat-form-field class="col-lg-2" appearance="outline">
             <mat-label>To Date</mat-label>
@@ -25,54 +35,70 @@
             <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
             <mat-datepicker #eDate></mat-datepicker>
         </mat-form-field>
+        <mat-form-field class="col-lg-2" appearance="outline">
+            <mat-label>To Time</mat-label>
+            <div class="toggle-example d-flex">
+                <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+                <ngx-material-timepicker-toggle [for]="tTime"></ngx-material-timepicker-toggle>
+                <ngx-material-timepicker #tTime></ngx-material-timepicker>
+            </div>
+        </mat-form-field>
 
-        <div class="col-lg-4" *ngIf="crudList.r">
-            <button class="btn btn-success btn-rpt col-lg-4 me-1 " (click)="getReport('summary')">Summary</button>
-            <button class="btn btn-success btn-rpt col-lg-4 me-1 " (click)="getReport('detail')">Detail</button>
-            <button class="btn btn-primary btn-rpt col-lg-2" (click)="print()">Print</button>
+    </div>
+    <div class="row justify-content-around">
+        <div class="col-lg-4 pb-2" *ngIf="crudList.r">
+            <button class="btn btn-success btn-rpt col-lg-4  me-1" (click)="getReport('summary')">Summary</button>
+            <button class="btn btn-success btn-rpt col-lg-4 me-1" (click)="getReport('detail')">Detail</button>
+            <button class="btn btn-primary btn-rpt col-lg-2" (click)="print()"><mat-icon>print</mat-icon></button>
         </div>
+    </div>
 
-        <div id="PrintDiv" >
 
-               <!-------------------------    Top Logo Section -------------------->
+
+    <div id="PrintDiv">
+
+        <!-------------------------    Top Logo Section -------------------->
 
         <div class="hide">
             <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
                 <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
-                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
+                        [width]="item.logo1Width">
                 </span>
-                <span >
-                    
+                <span>
+
 
                     <h1 class="companyName">{{item.companyName}}</h1>
-                    
-                    <p class="rptTitle" style="margin-top:-20px">Swing Sale Summary ({{userName}})</p>
-                    <h4 class="projtitl"  style="margin-top:-20px;"><b >Project:</b> Playtorium</h4>
-                    <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}} <b>To:</b> {{toDate | date:'dd-MM-yyyy'}}</p>
 
-                  
+                    <p class="rptTitle" style="margin-top:-20px">Swing Sale Summary ({{userName}})</p>
+                    <h4 class="projtitl" style="margin-top:-20px;"><b>Project:</b> Playtorium</h4>
+                    <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                        {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
+
+
                 </span>
                 <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
-                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                        height="{{item.logo2Height}}" width="{{item.logo2Width}}">
                 </span>
-        
-        
-            </div>
-           </div>
-      
-            <table class="table table-logix" id="summaryTable">
-                <thead>
-                    <tr>
-                        <th >S#</th>
-                        <th>Ticket #</th>
-                        <th>Date</th>
-                        <th >Title</th>
-                        <th >Quantity</th>
-                        <th>Amount</th>
 
-                    </tr>
-                
-          
+
+            </div>
+        </div>
+
+        <table class="table table-logix" id="summaryTable">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Ticket #</th>
+                    <th>Date</th>
+                    <th>Title</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
+
+                </tr>
+
+
             </thead>
             <tbody>
                 <tr *ngFor="let item of dataList index as index">
@@ -81,7 +107,7 @@
                     <td>{{item.entryDateTime | date:'dd-MM-yyyy hh:mm:ss:a '}}</td>
                     <td>{{item.swingTitle}}</td>
                     <td class="text-center">{{item.ticketQuantity | number:'1.0-0'}}</td>
-                    <td  class="text-end"> {{item.ticketTotal | number:'1.0-0'}}</td>
+                    <td class="text-end"> {{item.ticketTotal | number:'1.0-0'}}</td>
                 </tr>
                 <tr>
                     <td colspan="4" class="text-center"><strong>Total</strong></td>
@@ -89,23 +115,23 @@
                     <td class="text-end"><strong>{{totalAmount | number:'1.0-0'}}</strong></td>
                 </tr>
             </tbody>
-            </table>
+        </table>
 
 
-            <table class="table table-logix" id="detailTable">
-                <thead>
-                    <tr>
-                        <th >S#</th>
-                        <th>Ticket #</th>
-                        <th>Date</th>
-                        <th >Title</th>
-                        <th>Price</th>
-                        <th >Quantity</th>
-                        <th>Amount</th>
+        <table class="table table-logix" id="detailTable">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Ticket #</th>
+                    <th>Date</th>
+                    <th>Title</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
 
-                    </tr>
-                
-          
+                </tr>
+
+
             </thead>
             <tbody>
                 <tr *ngFor="let item of dataList index as index">
@@ -115,7 +141,7 @@
                     <td>{{item.swingTitle}}</td>
                     <td class="text-end">{{item.ticketPrice | number:'1.0-0'}}</td>
                     <td class="text-center">{{item.ticketQuantity | number:'1.0-0'}}</td>
-                    <td  class="text-end"> {{item.ticketQuantity *item.ticketPrice | number:'1.0-0'}}</td>
+                    <td class="text-end"> {{item.ticketQuantity *item.ticketPrice | number:'1.0-0'}}</td>
                 </tr>
                 <tr>
                     <td colspan="5" class="text-center"><strong>Total</strong></td>
@@ -123,12 +149,11 @@
                     <td class="text-end"><strong>{{detailTotalAmount | number:'1.0-0'}}</strong></td>
                 </tr>
             </tbody>
-            </table>
-        </div>
-
-
+        </table>
     </div>
 
-   
 
 </div>
+
+
+

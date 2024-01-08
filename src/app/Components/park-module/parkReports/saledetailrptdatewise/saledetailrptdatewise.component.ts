@@ -50,7 +50,9 @@ export class SaledetailrptdatewiseComponent implements OnInit {
   }
 
   fromDate:any = new Date();
+  fromTime:any = '00:00';
   toDate:any = new Date();
+  toTime:any = '23:59';
   totalAmount:any= 0;
   totalQty:any = 0;
 
@@ -65,7 +67,7 @@ export class SaledetailrptdatewiseComponent implements OnInit {
       $('#summaryTable').hide();
       $('#detailTable').show();
       this.http.get(environment.mainApi+'park/GetSaleDetailBetweenDate?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
-    '&ToDate='+this.global.dateFormater(this.toDate,'-')).subscribe(
+    '&ToDate='+this.global.dateFormater(this.toDate,'-')+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
       (Response:any)=>{
        // console.log(Response);
         this.dataList = Response;
@@ -84,7 +86,7 @@ export class SaledetailrptdatewiseComponent implements OnInit {
       $('#summaryTable').show();
       $('#detailTable').hide();
       this.http.get(environment.mainApi+'park/GetSaleSummaryBetweenDate?fromdate='+this.global.dateFormater(this.fromDate,'-')+
-      '&todate='+this.global.dateFormater(this.toDate,'-')).subscribe(
+      '&todate='+this.global.dateFormater(this.toDate,'-')+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
         (Response:any)=>{
         //  console.log(Response);
           this.dataList = Response;

@@ -17,6 +17,8 @@ import { SaledetailrptdatewiseComponent } from './parkReports/saledetailrptdatew
 import { SalesummarydateuserwiseComponent } from './parkReports/salesummarydateuserwise/salesummarydateuserwise.component';
 import { AuthGuard } from 'src/app/auth.guard';
 import { SalesummaryrptswingwiseComponent } from './parkReports/salesummaryrptswingwise/salesummaryrptswingwise.component';
+import { NgxMaterialTimepicker24HoursFaceComponent } from 'ngx-material-timepicker/src/app/material-timepicker/components/timepicker-24-hours-face/ngx-material-timepicker-24-hours-face.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 
 
@@ -59,6 +61,7 @@ export const parkRoutes: Route[] = [
     NgxMatSelectSearchModule,
     TextMaskModule,
     Ng2SearchPipeModule,
+    NgxMaterialTimepickerModule
   ],
   exports: [
     RouterModule
