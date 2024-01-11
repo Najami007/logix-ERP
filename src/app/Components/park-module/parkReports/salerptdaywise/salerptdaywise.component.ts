@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
+import { TicketDetailComponent } from '../../park-sale/ticket-detail/ticket-detail.component';
 
 @Component({
   selector: 'app-salerptdaywise',
@@ -21,7 +23,8 @@ export class SalerptdaywiseComponent {
     private msg:NotificationService,
     private app:AppComponent,
     private global:GlobalDataModule,
-    private route:Router
+    private route:Router,
+    private dialogue:MatDialog
     
   ){
 
@@ -46,6 +49,10 @@ export class SalerptdaywiseComponent {
   fromDate:any = new Date();
   toDate:any = new Date();
   totalAmount:any= 0;
+  saleTotalAmount:any = 0;
+  returnTotalAmount:any = 0;
+  SaleList:any = [];
+  returnList:any = [];
 
   dataList:any = [];
 
@@ -56,11 +63,22 @@ export class SalerptdaywiseComponent {
     this.http.get(environment.mainApi+'park/GetTicketSummarySingleDate?ToDate='+this.global.dateFormater(this.toDate,'-')).subscribe(
       (Response:any)=>{
       //  console.log(Response);
-        this.dataList = Response;
-        this.totalAmount = 0;
+      this.SaleList = [];
+      this.returnList = [];
+       this.saleTotalAmount = 0;
+       this.returnTotalAmount  = 0;
         Response.forEach((e:any) => {
+
+          if(e.type == 'S'){
+            this.SaleList.push(e);
+            this.saleTotalAmount += e.ticketTotal;
+
+          }
+          if(e.type == 'SR'){
+            this.returnList.push(e);
+            this.returnTotalAmount += e.ticketTotal;
+          }
           
-          this.totalAmount += e.ticketTotal;
 
         });
         this.app.stopLoaderDark();
@@ -74,22 +92,18 @@ export class SalerptdaywiseComponent {
   }
 
 
-  printDetails:any =[];
 
-  printTicket(ticketNo:any){
 
-    this.http.get(environment.mainApi+'park/PrintTicket?ticketno='+ticketNo).subscribe(
-      (Response:any)=>{
-       this.printDetails = Response;
-      //  console.log(Response);
+  getTktDetail(row:any){
+    
+    this.dialogue.open(TicketDetailComponent,{
+      data:row,
+      width:'40%'
+    }).afterClosed().subscribe()
 
-       setTimeout(() => {
-        this.global.printData('#ticketPrint');
-       }, 100);
-      }
-    )
 
   }
+
 
 
   

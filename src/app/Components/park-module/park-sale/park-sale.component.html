@@ -1,20 +1,24 @@
 
-<div class="container-fluid d-flex body">
+<div class="container-fluid d-flex body bg-gray">
 
-    <div class="col-lg-12 bg-gray" style="min-height: 650px;">
+    <div class="col-lg-12 " style="min-height: 650px;">
 
 
         <!-----------   categories Row ------------------->
 
-      <div class="d-flex border-bottom"  >
+      <div class="d-flex border-bottom mt-1 "  >
 
         
 
-        <mat-form-field class="w-100 m-1" appearance="outline" style="min-height: 55px; min-width: 150px;border-radius: 10px ;" >
+        <mat-form-field class="col-lg-10 " appearance="outline" style="min-height: 55px; min-width: 150px;border-radius: 10px ;" >
             <mat-label >Search.....</mat-label>
             <input [(ngModel)]="searchSwing"  matInput type="search" class="text-secondary" >
             <mat-icon matPrefix class="text-secondary">search</mat-icon>
         </mat-form-field>
+
+        <button  mat-raised-button class="ms-1 col-lg-2 btn-rpt bg-primary text-white" data-bs-toggle="modal" data-bs-target="#rtnModel">Find Ticket</button>
+
+
 
         
 
@@ -113,20 +117,120 @@
 
     </div> -->
 
-
-   
-
-
-    <div class="modal fade" id="swingModal" tabindex="-1" aria-labelledby="swingModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="rtnModel" tabindex="-1" aria-labelledby="rtnModelLabel" >
+        <div class="modal-dialog  modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="swingModalLabel">Enter Number of Person</h5>
+              <h2 class="modal-title" id="rtnModelLabel">Ticket Return</h2>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
             </div>
             <div class="modal-body">
 
-               <div>
+                <div class="d-flex justify-content-between">
+                    <mat-form-field class="col-lg-4" appearance="outline">
+                        <mat-label>Date</mat-label>
+                        <input matInput type="text" readonly="true" [(ngModel)]="TicketDate" [matDatepicker]="date">
+                        <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+                        <mat-datepicker #date ></mat-datepicker>
+                    </mat-form-field>
+             
+
+                    <button mat-raised-button *ngIf="crudList.r" class="btn-rpt col-lg-2" (click)="findTickets()" >Search</button>
+
+                   <mat-form-field class="col-lg-4" appearance="outline">
+                    <mat-label>Search.......</mat-label>
+                    <input matInput type="text" class="col-lg-4" [(ngModel)]="billSearch">
+                   </mat-form-field>
+
+                </div>
+
+                <table class="table table-logix">
+                    <thead>
+                        <tr>
+                            <th>S#</th>
+                            <th>Ticket #</th>
+                            <th>Date</th>
+                            <th>Title</th>
+                            <th>Amount</th>
+                            <th>User</th>
+                            <th *ngIf="crudList.r">Action</th>
+                            <th *ngIf="crudList.u">Return</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of TicketsList  | filter:billSearch index as index">
+                            <td>{{index+1}}</td>
+                            <td>{{item.ticketNo}}</td>
+                            <td>{{item.entryDateTime | date:'dd-MM-yyyy hh:mm:ss:a '}}</td>
+                            <td>{{item.swingTitle}}</td>
+                            <td>{{item.ticketTotal | number:'1.0-0'}}</td>
+                            <td>{{item.entryUser}}</td>
+                            <td class="cursorPointer text-center">
+                                <mat-icon *ngIf="crudList.r" class="text-primary" (click)="printTicket(item.ticketNo,'duplicate')">print</mat-icon>
+                               
+                               
+                            </td>
+                            <td class="cursorPointer text-center">
+                                <mat-icon *ngIf="crudList.u == true && item.type == 'S'"  class="text-success" (click)="verifyRtn(item)">assignment_return</mat-icon>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Ticket #</th>
+                            <th>Prev Qty</th>
+                            <th>Rtn Qty</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th>Return</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of billDetail"> 
+                            <td>{{item.ticketNo}}</td>  
+                            <td>{{item.ticketQuantity}}</td>
+                            <td>{{item.rtnQuantity}}</td>
+                            <td>{{item.ticketQuantity - item.rtnQuantity}}</td>
+                            <td>{{item.ticketPrice}}</td>
+                            <td>{{item.ticketQuantity * item.ticketPrice}}</td>
+                            <td><mat-icon data-bs-toggle="modal" data-bs-target="#swingModal">save</mat-icon></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+               
+        
+            </div>
+        
+          </div>
+        </div>
+      </div>
+
+
+<!----------    Modal Screen for swing Sale --------------->
+
+    <div class="modal fade" #swingModal1 id="swingModal" tabindex="1" aria-labelledby="swingModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="swingModalLabel">Enter Number of Person</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="reset()"></button>
+            </div>
+            <div class="modal-body">
+
+               <div *ngFor="let item of TicketDetails">
+                <h4 class="text-danger text-center" *ngIf="billType =='SaleReturn'" >Ticket Return</h4>
+               <div class="d-flex justify-content-around">
+                <h3 class="text-center fw-bold text-danger">{{item.swingTitle}} </h3>
+                <p class="text-center fw-bold">Total: <span *ngIf="billType =='SaleReturn'" >-</span>{{item.TicketQuantity * item.TicketPrice}} </p>
+               </div>
+                
                 <mat-label class="ms-5">Enter Quantity</mat-label>
                 <div class="d-flex text-center pb-2" *ngFor="let item of TicketDetails">
                     <mat-icon (click)="changeQty('add',0)" class="text-success cursorPointer" style="font-size: 40px;height: 50px;width: 50px;">add_circle</mat-icon>
@@ -138,13 +242,13 @@
                <mat-label class="ms-5">Enter Remarks</mat-label>
                  <div class="text-center">
                     
-                    <textarea rows="4" [(ngModel)]="ticketRemarks" style="width: 82%;text-align: center;"></textarea>
+                    <textarea rows="2" [(ngModel)]="ticketRemarks" style="width: 82%;text-align: center;"></textarea>
                  </div>
         
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="save()">Save & Print</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="reset()">Close</button>
+              <button *ngIf="crudList.c" type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="save()">Save & Print</button>
             </div>
           </div>
         </div>
@@ -190,43 +294,17 @@
                     
                 </table>
                <table>
+                <h4 class="border border-dark text-center" *ngIf="printType == 'duplicate'"><strong>Duplicate</strong></h4>
+                <h4 class="border border-dark text-center" *ngIf="item.type == 'SR'"><strong>Ticket Return</strong></h4>
              
                </table>
     
-
-     
-            <!-- <div class="text-center p-2">
-               <table class="table table-logix" *ngFor="let item of printDetails">
-                <thead>
-                    <tr>
-                        <th>Description</th>
-                        <th>Person</th>
-                        <th>Amount</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{item.swingTitle}}</td>
-                        <td class="text-center">{{item.ticketQuantity |number}}</td>
-                        <td class="text-end">{{item.ticketPrice |number:'1.0-0'}}</td>
-                        <td class="text-end">{{item.ticketQuantity * item.ticketPrice |number:'1.0-0'}}</td>
-                    </tr>
-                </tbody>
-               </table>
-    
-               <small>Ticket is not Refundable</small>
-            </div> -->
-    
-            <!-- <div class="text-center">
-                <span style="height: 50px;font-size: 40px;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">{{item.swingTitle}}</span>
-            </div> -->
              <div class="d-flex">
                 <div class=" col-lg-4 text-center justify-content-center">
                     <div  style=" font-size: 35px;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" class="text-center">{{item.swingTitle | uppercase}}</div>
                 </div>
                  <div class=" col-lg-8 text-center m-2">
-                    <div  style="height: 100px !important;width: 100px !important; font-size: 60px;border: 3px solid black;border-radius: 50%;">{{item.ticketQuantity |number}}</div>
+                    <div  style="height: 100px !important;width: 100px !important; font-size: 60px;border: 3px solid black;border-radius: 50%;">{{item.ticketQuantity - item.rtnQuantity |number}}</div>
                  </div>
                 
              </div>
@@ -236,8 +314,8 @@
             
                      <tr >
                         <th>Total</th>
-                         <td class="text-end">{{item.ticketPrice |number:'1.0-0'}} x {{item.ticketQuantity |number}}</td> 
-                        <td class="text-end">{{item.ticketQuantity * item.ticketPrice |number:'1.0-0'}}</td>
+                         <td class="text-end">{{item.ticketPrice |number:'1.0-0'}} x {{item.ticketQuantity - item.rtnQuantity |number}}</td> 
+                        <td class="text-end">{{(item.ticketQuantity- item.rtnQuantity) * item.ticketPrice |number:'1.0-0'}}</td>
                      </tr>
                  </tbody>
                 </table>
@@ -256,7 +334,9 @@
 
     </div>
 
-    <!-- <button (click)="printTicket(8)"></button> -->
+  
+
+
 
 
 

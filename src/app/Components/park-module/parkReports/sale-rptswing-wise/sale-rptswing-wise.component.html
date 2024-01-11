@@ -90,8 +90,10 @@
                 
           
             </thead>
+            
             <tbody>
-                <tr *ngFor="let item of dataList index as index">
+                <th colspan="8" class="text-center fw-bold border border-dark w-100">SALE</th>
+                <tr *ngFor="let item of SaleList index as index" >
                     <td>{{index+1}}</td>
                     <td class="text-center">{{item.ticketNo}}</td>
                     <td>{{item.entryDateTime | date:'dd-MM-yyyy hh:mm:ss:a '}}</td>
@@ -102,8 +104,34 @@
                 </tr>
                 <tr>
                     <td colspan="5" class="text-center"><strong>Total</strong></td>
-                    <td class="text-center"><strong>{{totalQty | number}}</strong></td>
-                    <td class="text-end"><strong>{{totalAmount | number:'1.0-0'}}</strong></td>
+                    <td class="text-center"><strong>{{saleTotalQty | number}}</strong></td>
+                    <td class="text-end"><strong>{{saleTotalAmount | number:'1.0-0'}}</strong></td>
+                </tr>
+            </tbody>
+          
+            <tbody>
+                <th colspan="8" class="text-center fw-bold border border-dark w-100">SALE RETURN</th>
+                <tr *ngFor="let item of returnList index as index" >
+                    <td>{{index+1}}</td>
+                    <td class="text-center">{{item.ticketNo}}</td>
+                    <td>{{item.entryDateTime | date:'dd-MM-yyyy hh:mm:ss:a '}}</td>
+                    <td>{{item.swingTitle}}</td>
+                    <td class="text-end">{{item.ticketPrice}}</td>
+                    <td class="text-center">{{item.ticketQuantity | number:'1.0-0'}}</td>
+                    <td  class="text-end"> {{item.ticketPrice * item.ticketQuantity | number:'1.0-0'}}</td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="text-center"><strong>Total</strong></td>
+                    <td class="text-center"><strong>{{returnTotalQty | number}}</strong></td>
+                    <td class="text-end"><strong>{{returnTotalAmount | number:'1.0-0'}}</strong></td>
+                </tr>
+            </tbody>
+            <tbody>
+                
+                <tr>
+                    <td colspan="5" class="text-center"><strong>Net Total</strong></td>
+                    <td class="text-center"><strong>{{saleTotalQty - returnTotalQty | number}}</strong></td>
+                    <td class="text-end"><strong>{{saleTotalAmount - returnTotalAmount | number:'1.0-0'}}</strong></td>
                 </tr>
             </tbody>
             </table>

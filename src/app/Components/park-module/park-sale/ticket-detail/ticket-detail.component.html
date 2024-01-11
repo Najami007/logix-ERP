@@ -1,0 +1,75 @@
+
+
+ <div id="ticketPrint" class="d-none" >
+    <div *ngFor="let item of printDetails" class="p-1 w-100">
+        <div class="text-center">
+            <img src="../../../../assets/Images/playtorium.png" height="50" width="250">
+            <p>Mehria Mall & Residencia, Attock</p>
+           
+        </div>
+
+    
+            <table class="table table-logix2 text-center" style="font-size: 15px;" >
+                <thead>
+                    <tr>
+                        <th class="col-lg-3">Ticket #</th>
+                        <th class="col-lg-3">Counter </th>
+                        <th class="col-lg-3">Date </th>
+                        <th class="col-lg-3">Time</th>
+                      
+                    </tr>
+                   
+                </thead>
+                <tbody >
+                    <tr class="text-center">
+                        <td>{{item.ticketNo}}</td>
+                        <td>{{item.entryUser}}</td>
+                        <td>{{item.entryDateTime | date:'dd-MMM-yyyy'}}</td>
+                        <td>{{item.entryDateTime | date:'hh:mm:ss:a'}}</td>
+                    </tr>
+                    <hr>
+              
+                </tbody>
+
+                
+            </table>
+           <table>
+            <h4 class="border border-dark text-center" ><strong>Duplicate</strong></h4>
+         
+           </table>
+
+
+         <div class="d-flex">
+            <div class=" col-lg-4 text-center justify-content-center">
+                <div  style=" font-size: 35px;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" class="text-center">{{item.swingTitle | uppercase}}</div>
+            </div>
+             <div class=" col-lg-8 text-center m-2">
+                <div  style="height: 100px !important;width: 100px !important; font-size: 60px;border: 3px solid black;border-radius: 50%;">{{item.ticketQuantity |number}}</div>
+             </div>
+            
+         </div>
+            <table class="w-100 table table-logix mt-2">
+           
+             <tbody>
+        
+                 <tr >
+                    <th>Total</th>
+                     <td class="text-end">{{item.ticketPrice |number:'1.0-0'}} x {{item.ticketQuantity |number}}</td> 
+                    <td class="text-end">{{item.ticketQuantity * item.ticketPrice |number:'1.0-0'}}</td>
+                 </tr>
+             </tbody>
+            </table>
+            <tr>
+                <td><strong>Remarks:</strong></td>
+                <td class="ps-2">{{item.ticketRemarks}}</td>
+            </tr>
+            <hr>
+            <div style="text-transform: uppercase;" class="text-center">
+                <small>Ticket is not Refundable</small>
+            </div>
+      
+ 
+    </div>
+
+
+</div> 

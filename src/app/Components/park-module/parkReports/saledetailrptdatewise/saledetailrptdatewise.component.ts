@@ -55,6 +55,12 @@ export class SaledetailrptdatewiseComponent implements OnInit {
   toTime:any = '23:59';
   totalAmount:any= 0;
   totalQty:any = 0;
+  saleTotalAmount:any = 0;
+  saleTotalQty:any = 0;
+  returnTotalAmount:any = 0;
+  returnTotalQty:any = 0;
+  SaleList:any = [];
+  returnList:any = [];
 
   dataList:any = [];
   summaryTotalAmount:any = 0;
@@ -64,19 +70,31 @@ export class SaledetailrptdatewiseComponent implements OnInit {
   getReport(type:any){
     this.app.startLoaderDark();
     if(type == 'detail'){
+  
       $('#summaryTable').hide();
       $('#detailTable').show();
       this.http.get(environment.mainApi+'park/GetSaleDetailBetweenDate?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
     '&ToDate='+this.global.dateFormater(this.toDate,'-')+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
       (Response:any)=>{
-       // console.log(Response);
-        this.dataList = Response;
-        this.totalAmount = 0;
-        this.totalQty = 0;
+       //console.log(Response);
+         this.SaleList = [];
+         this.returnList = [];
+         this.saleTotalAmount = 0;
+         this.saleTotalQty = 0;
+         this.returnTotalAmount  = 0;
+         this.returnTotalQty = 0;
         Response.forEach((e:any) => {
           
-          this.totalAmount += e.ticketQuantity * e.ticketPrice;
-          this.totalQty += e.ticketQuantity;
+          if(e.type == 'S'){
+            this.SaleList.push(e);
+            this.saleTotalAmount += e.ticketQuantity * e.ticketPrice;
+            this.saleTotalQty += e.ticketQuantity;
+          }
+          if(e.type == 'SR'){
+            this.returnList.push(e);
+            this.returnTotalAmount +=  e.ticketQuantity * e.ticketPrice;
+            this.returnTotalQty += e.ticketQuantity;
+          }
 
         });
         this.app.stopLoaderDark();
@@ -88,14 +106,26 @@ export class SaledetailrptdatewiseComponent implements OnInit {
       this.http.get(environment.mainApi+'park/GetSaleSummaryBetweenDate?fromdate='+this.global.dateFormater(this.fromDate,'-')+
       '&todate='+this.global.dateFormater(this.toDate,'-')+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
         (Response:any)=>{
-        //  console.log(Response);
-          this.dataList = Response;
-          this.totalAmount = 0;
-          Response.forEach((e:any) => {
-            
-            this.summaryTotalAmount += e.ticketTotal;
-  
-          });
+           // console.log(Response);
+           this.SaleList = [];
+           this.returnList = [];
+            this.saleTotalAmount = 0;
+            this.saleTotalQty = 0;
+            this.returnTotalAmount  = 0;
+            this.returnTotalQty = 0;
+           Response.forEach((e:any) => {
+             
+             if(e.type == 'S'){
+               this.SaleList.push(e);
+               this.saleTotalAmount +=e.ticketTotal;
+               this.saleTotalQty += e.ticketQuantity;
+             }
+             if(e.type == 'SR'){
+               this.returnList.push(e);
+               this.returnTotalAmount += e.ticketTotal;
+               this.returnTotalQty += e.ticketQuantity;
+             }
+            });
           this.app.stopLoaderDark();
         }
       )

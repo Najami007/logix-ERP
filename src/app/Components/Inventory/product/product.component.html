@@ -200,7 +200,8 @@
                 <div class="p-5 ">
                     <button #toggleBtn class="btn btn-success me-5 w-25" accesskey="s"
                         (click)="save() ">{{btnType}}</button>
-                    <button class="btn btn-danger w-25" (click)="reset()">Reset</button>
+                    <button class="btn btn-danger w-25" (click)="reset('btn')">Reset</button>
+                    <mat-checkbox [(ngModel)]="autoEmpty">Auto Empty</mat-checkbox>
                 </div>
 
             </div>

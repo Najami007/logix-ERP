@@ -31,6 +31,7 @@ import { COAComponent } from './Components/Accounts/coa/coa.component';
 import { MainComponent } from './Components/Layout/main/main.component';
 import { TopNavBarComponent } from './Components/Layout/top-nav-bar/top-nav-bar.component';
 import { HeaderComponent } from './Components/Layout/header/header.component';
+import { NumberInputComponent } from './Components/Common/number-input/number-input.component';
 
 
 
@@ -56,7 +57,8 @@ import { HeaderComponent } from './Components/Layout/header/header.component';
     COAComponent,
     MainComponent,
     TopNavBarComponent,
-    HeaderComponent,  
+    HeaderComponent,
+    NumberInputComponent,  
  
 
   ],

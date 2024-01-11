@@ -56,6 +56,13 @@ export class SalesummaryrptswingwiseComponent implements OnInit {
   dataList:any = [];
   summaryTotalAmount:any = 0;
 
+  saleTotalAmount:any = 0;
+  saleTotalQty:any = 0;
+  returnTotalAmount:any = 0;
+  returnTotalQty:any = 0;
+  SaleList:any = [];
+  returnList:any = [];
+
 
 
   getReport(){
@@ -65,13 +72,25 @@ export class SalesummaryrptswingwiseComponent implements OnInit {
     '&ToDate='+this.global.dateFormater(this.toDate,'-')+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
       (Response:any)=>{
        //console.log(Response);
-        this.dataList = Response;
-        this.totalAmount = 0;
-        this.totalQty = 0;
+       this.SaleList = [];
+       this.returnList = [];
+        this.saleTotalAmount = 0;
+        this.saleTotalQty = 0;
+        this.returnTotalAmount  = 0;
+        this.returnTotalQty = 0;
         Response.forEach((e:any) => {
           
-          this.totalAmount += e.ticketTotal;
-          this.totalQty += e.ticketQuantity;
+          if(e.type == 'S'){
+            this.SaleList.push(e);
+            this.saleTotalAmount += e.ticketTotal;
+            this.saleTotalQty += e.ticketQuantity;
+          }
+          if(e.type == 'SR'){
+            this.returnList.push(e);
+            this.returnTotalAmount += e.ticketTotal;
+            this.returnTotalQty += e.ticketQuantity;
+          }
+       
 
         });
         this.app.stopLoaderDark();

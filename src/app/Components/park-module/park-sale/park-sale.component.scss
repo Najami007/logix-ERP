@@ -62,3 +62,10 @@
 .tblbrdr> tr > td{
     border: 2px solid black;
 }
+
+
+
+
+::ng-deep .cdk-overlay-container{
+    z-index:2000;
+  }

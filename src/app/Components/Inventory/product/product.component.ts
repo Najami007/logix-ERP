@@ -54,6 +54,7 @@ export class ProductComponent implements OnInit {
   tabIndex: any;
   Validation = true;
   btnType = 'Save';
+  autoEmpty = false;
   
   CategoriesList: any;
   SubCategoriesList: any;
@@ -238,6 +239,7 @@ export class ProductComponent implements OnInit {
       }
 
       if(this.btnType == 'Save'){
+      
         this.insert();
       }else if(this.btnType == 'Update'){
         this.update();
@@ -281,7 +283,7 @@ export class ProductComponent implements OnInit {
         if (Response.msg == 'Data Saved Successfully') {
           this.msg.SuccessNotify(Response.msg);
           this.getProductList();
-          this.reset();
+          this.reset('');
           this.app.stopLoaderDark();
         } else {
           this.msg.WarnNotify(Response.msg);
@@ -333,7 +335,7 @@ export class ProductComponent implements OnInit {
             if (Response.msg == 'Data Updated Successfully') {
               this.msg.SuccessNotify(Response.msg);
               this.getProductList();
-              this.reset();
+              this.reset('');
               this.app.stopLoaderDark();
             } else {
               this.msg.WarnNotify(Response.msg);
@@ -348,8 +350,10 @@ export class ProductComponent implements OnInit {
     })
   }
 
-  reset() {
+  reset(type:any) {
     this.ProductID = '';
+    this.Barcode = '';
+   if(this.autoEmpty == true || type == 'btn'){
     this.CategoryID = '';
     this.SubCategoryID = '';
     this.BrandID = '';
@@ -369,11 +373,12 @@ export class ProductComponent implements OnInit {
     this.DiscPercent = '';
     this.DiscRupee = '';
     this.UOMID = '';
-    this.Barcode = '';
+    // this.Barcode = '';
     this.prodBarcodeType = 'auto'
     this.barcodeType = 'Basic';
     this.btnType = 'Save';
     this.productImg= '';
+   }
 
 
   }

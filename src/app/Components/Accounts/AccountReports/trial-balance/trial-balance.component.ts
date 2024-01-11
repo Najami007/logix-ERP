@@ -102,7 +102,7 @@ export class TrialBalanceComponent implements OnInit {
   if(this.projectID == 0 && param == 'project'){
     this.msg.WarnNotify('Select Project')
   }else{
-
+    this.getNotes();
     this.projectName = '';
 
     if(param == 'all'){
@@ -118,6 +118,7 @@ export class TrialBalanceComponent implements OnInit {
     $('#summary1').show();
 this.TrialBalanceData = [];
     this.app.startLoaderDark();
+    
 
     this.http.get(environment.mainApi+'acc/GetTrailBalanceRpt?fromdate='
     +this.globalData.dateFormater(this.fromDate,'-')+'&todate='+this.globalData.dateFormater(this.toDate,'-')+'&projectID='+this.projectID).subscribe(
@@ -132,7 +133,11 @@ this.TrialBalanceData = [];
         this.creditTotal = 0;
         this.cDebitTotal = 0;
         this.cCreditTotal = 0;
-
+          
+        
+        
+       
+       
 
          for(var i=0;i<this.TrialBalanceData.length;i++){
 
@@ -163,6 +168,7 @@ this.TrialBalanceData = [];
          }
         }
          this.app.stopLoaderDark();
+         console.log(this.notesList);
       },
       (Error)=>{
         this.app.stopLoaderDark();

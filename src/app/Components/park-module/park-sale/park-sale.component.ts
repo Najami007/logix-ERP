@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -8,6 +8,9 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 
 import * as $ from 'jquery';
+import { TicketDetailComponent } from './ticket-detail/ticket-detail.component';
+import { PincodeComponent } from '../../User/pincode/pincode.component';
+import { NumberInputComponent } from '../../Common/number-input/number-input.component';
 
 @Component({
   selector: 'app-park-sale',
@@ -28,15 +31,16 @@ export class ParkSaleComponent {
     private app:AppComponent,
     public global:GlobalDataModule,
     private dialogue:MatDialog,
-    private route:Router
+    private route:Router,
+   
   ){
     // this.global.getCompany().subscribe((data)=>{
     //   this.companyProfile = data;
     // });
 
-    // this.global.getMenuList().subscribe((data)=>{
-    //   this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-    // })
+    this.global.getMenuList().subscribe((data)=>{
+      this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    })
   }
 
   
@@ -48,11 +52,11 @@ export class ParkSaleComponent {
    
     
   }
-
-
-
+  tempTicketNo:number = 0;
+  billType:any = 'Sale';
+  billSearch:any;
   curDateTime = new Date();
-
+  TicketDate:any = new Date();
   searchSwing:any;
   tableData:any = [];
 
@@ -63,7 +67,9 @@ export class ParkSaleComponent {
 
   swingsList:any = [];
   printDetails:any = [];
-
+  TicketsList:any = [];
+  printType:any;
+  billDetail:any;
 
   ///////////////////////////////////////////////////////////////
 
@@ -85,13 +91,14 @@ export class ParkSaleComponent {
   ///////////////////////////////////////////////////////////////
 
   onSwingSelected(item:any){
-      if(this.TicketDetails == ""){
-        this.TicketDetails.push({swingID:item.swingID,TicketQuantity:1,TicketPrice:item.ticketPrice});
-      }else{
-        this.TicketDetails = [];
-        this.TicketDetails.push({swingID:item.swingID,TicketQuantity:1,TicketPrice:item.ticketPrice});
-      }
- 
+    this.printDetails = [];
+    this.printType = '';
+    this.tempTicketNo = 0;
+    this.TicketDetails = [];
+    this.billType = 'Sale';
+    this.billDetail = [];
+    this.TicketDetails.push({swingID:item.swingID,swingTitle:item.swingTitle,TicketQuantity:1,TicketPrice:item.ticketPrice});
+
   }
 
 
@@ -120,20 +127,34 @@ export class ParkSaleComponent {
 
 ///////////////////////////////////////////////////////////////
 
-
+findTickets(){
+  this.app.startLoaderDark();
+  this.http.get(environment.mainApi+'park/GetTicketSummarySingleDate?ToDate='+this.global.dateFormater(this.TicketDate,'-')).subscribe(
+    (Response:any)=>{
+     console.log(Response);
+      this.TicketsList = Response;
+      this.app.stopLoaderDark();
+    }
+  )
+}
 
 
 
 
   save(){
-    // if(this.TicketQty == '' || this.TicketQty == undefined || this.TicketQty == 0){
-    //   this.msg.WarnNotify('Enter Ticket Qty')
-    // }else 
+  
+  
+    
     if(this.ticketRemarks == '' || this.ticketRemarks == undefined){
       this.msg.WarnNotify('Enter Ticket Remarks')
-    }else {
+    }else if(this.tempTicketNo == 0 && this.billType == 'SaleReturn'){
+      this.msg.WarnNotify('Ticket No is Empty');
+    } 
+    else {
       this.app.startLoaderDark();
 
+    if(this.billType == 'Sale'){
+  
       this.http.post(environment.mainApi+'park/InsertTicket',{
         TicketDate: this.curDateTime,
         Type: "S",
@@ -145,8 +166,9 @@ export class ParkSaleComponent {
         (Response:any)=>{
           if(Response.msg == 'Data Saved Successfully'){
             this.msg.SuccessNotify('Ticket Saved')
-            this.printTicket(Response.tktNo);
-            // console.log(Response);
+            this.printTicket(Response.tktNo,'save');
+            console.log(Response);
+            this.reset();
             this.app.stopLoaderDark();
           }else {
             this.msg.WarnNotify(Response.msg)
@@ -154,28 +176,113 @@ export class ParkSaleComponent {
         
         }
       )
+    }else if(this.billType == 'SaleReturn'){
+     
+      if(this.TicketDetails[0].TicketQuantity > (this.billDetail[0].ticketQuantity - this.billDetail[0].rtnQuantity)){
+        this.msg.WarnNotify('Entered Quantity is more than bill Quantity');
+        this.app.stopLoaderDark();
+      }else{
+    
+        this.http.post(environment.mainApi+'park/InsertReturnTicket',{
+          TicketNo:this.tempTicketNo,
+          TicketDate: this.curDateTime,
+          Type: "SR",
+          TicketRemarks: this.ticketRemarks,
+          ProjectID: 6,
+          TicketDetail: JSON.stringify(this.TicketDetails),
+          UserID: this.global.getUserID()
+        }).subscribe(
+          (Response:any)=>{
+            if(Response.msg == 'Data Saved Successfully'){
+              this.msg.SuccessNotify('Return Ticket Saved')
+             setTimeout(() => {
+              this.printTicket(Response.tktNo,'save');
+             }, 100);
+              setTimeout(() => {
+                this.printTicket(Response.rtnTktNo,'SaleReturn');
+              }, 200);
+              console.log(Response);
+              this.reset();
+              this.app.stopLoaderDark();
+              
+            }else {
+              this.msg.WarnNotify(Response.msg)
+            }
+          
+          }
+        )
+      }
+      
+      
+    }
     }
 
   
   }
 
 
-  printTicket(ticketNo:any){
+  printTicket(ticketNo:any,type:any){
+    this.billDetail =[];
+    this.printDetails = [];
+      this.printType = type;
+
 
     this.http.get(environment.mainApi+'park/PrintTicket?ticketno='+ticketNo).subscribe(
       (Response:any)=>{
-       this.printDetails = Response;
+       
+       if(type == 'detail'){
+        this.billDetail = Response;
+       }else{
+        this.printDetails = Response;
+       }
       //  console.log(Response);
 
-       setTimeout(() => {
-        this.global.printData('#ticketPrint');
-       }, 100);
+      if(type != 'detail'){
+        setTimeout(() => {
+          this.global.printData('#ticketPrint');
+         }, 100);
       }
+      }
+      
     )
+
+    
 
   }
 
 
+
+  verifyRtn(row:any){
+    this.TicketDetails= [];
+   
+    this.http.get(environment.mainApi+'park/VerifyRtnQty?ticketno='+row.ticketNo+'&SwingID='+row.swingID).subscribe(
+      (Response:any)=>{
+        this.billDetail = Response;
+        this.TicketDetails.push({swingID:row.swingID,swingTitle:row.swingTitle,TicketQuantity:1,TicketPrice:Response[0].ticketPrice});
+        this.billType = 'SaleReturn';
+        this.tempTicketNo = Response[0].ticketNo;
+        // console.log(Response);
+      }
+    )
+  }
+ 
+
+  insertReturn(){
+   
+  }
+
+
+
+reset(){
+  this.printDetails = [];
+  this.printType = '';
+  this.tempTicketNo = 0;
+  this.TicketDetails = [];
+  this.billType = 'Sale';
+  this.billDetail = [];
+
+
+}
 
 
 

@@ -30,18 +30,54 @@ import { IssuanceComponent } from './issuance/issuance.component';
 
 export const inventoryRoutes: Route[] = [
 
-  {path:'pcat', component:ProductCategoryComponent, canActivate:[AuthGuard] },
-  {path:'pscat', component:ProductSubCategoryComponent, canActivate:[AuthGuard] },
-  {path:'pbrnd', component:BrandComponent, canActivate:[AuthGuard] },
-  {path:'prac', component:RacksComponent, canActivate:[AuthGuard] },
-  {path:'ploc', component:LocationsComponent, canActivate:[AuthGuard] },
-  {path:'uom', component:UnitOfMeasurementComponent, canActivate:[AuthGuard] },
-  {path:'prod', component:ProductComponent, canActivate:[AuthGuard] },
-  {path:'pur', component:PurchaseComponent, canActivate:[AuthGuard] },
-  {path:'isnc', component:IssuanceComponent, canActivate:[AuthGuard] },
+  {
+    path: 'pcat',
+    component: ProductCategoryComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'pscat',
+    component: ProductSubCategoryComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'pbrnd',
+    component: BrandComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'prac',
+    component: RacksComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'ploc',
+    component: LocationsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'uom',
+    component: UnitOfMeasurementComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'prod',
+    component: ProductComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'pur',
+    component: PurchaseComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'isnc',
+    component: IssuanceComponent,
+    canActivate: [AuthGuard]
+  },
 
-  
-  {path:'**', redirectTo:'home',pathMatch:'full'}
+
+  { path: '**', redirectTo: 'home', pathMatch: 'full' }
 
 
 ];
@@ -62,7 +98,7 @@ export const inventoryRoutes: Route[] = [
     AddCategoryComponent,
     AddProdSubCategoryComponent,
     IssuanceComponent,
-  
+
   ],
   imports: [
     CommonModule,
