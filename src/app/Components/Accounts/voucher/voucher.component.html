@@ -1,5 +1,5 @@
-<mat-tab-group class="body pb-5">
-    <mat-tab label="Voucher Form " >
+<mat-tab-group class="body ">
+    <mat-tab label="Voucher Form "  >
         <div class="container mt-2 Voucher">
 
 
@@ -307,7 +307,7 @@
 
     <!----------------------         Saved Record Section ---------------->
 
-    <mat-tab label="Saved Record">
+    <mat-tab label="Saved Record" >
 
         <div class="container-fluid text-center p-2">
 
@@ -341,7 +341,11 @@
                 </thead>
                 <tbody>
 
-                    <tr class="cursorPointer" *ngFor="let item of SavedVoucherData |filter:txtSearch |paginate:{ id:'voucherData', itemsPerPage : tableSize,currentPage : page, totalItems : count, }  ; index as index">
+                    <tr class="cursorPointer" *ngFor="let item of SavedVoucherData |filter:txtSearch |paginate:{
+                        itemsPerPage : tableSize,
+                        currentPage : page,
+                        totalItems :    count,
+                    }  ; index as index">
 
                         <td>{{index+1}}</td>
                         <td> {{item.invoiceNo}}</td>

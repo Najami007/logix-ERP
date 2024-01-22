@@ -1,0 +1,164 @@
+<div class="d-flex container-fluid  bg-light h-100">
+
+
+    <!-- Left Side of the page  -->
+    <div class="col-lg-6 mt-2 border-end">
+        <div class="border-bottom">
+            <h2>Party Information</h2>
+        </div>
+        <div class="d-flex m-3">
+            <div class="col-lg-12 mt-1">
+                <mat-form-field class="col-lg-5 me-5" appearance="outline">
+                    <mat-label>Party Type</mat-label>
+                    <mat-select [(ngModel)]="partyType">
+                        <mat-option value="Customer">Customer</mat-option>
+                        <mat-option value="Supplier">Supplier</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col-lg-5 me-5" appearance="outline">
+                    <mat-label>Party Name</mat-label>
+                    <input [(ngModel)]="partyName"  matInput type="text">
+                </mat-form-field>
+                
+                
+                <mat-form-field class="col-lg-5 me-5" appearance="outline">
+                    <mat-label>Party CNIC</mat-label>
+                    <input [(ngModel)]="partyCNIC" [textMask]="{mask:cnicMask}"    matInput type="text">
+                </mat-form-field>
+                
+                <mat-form-field class="col-lg-5 me-5" appearance="outline">
+                    <mat-label>Passport no.</mat-label>
+                    <input [(ngModel)]="passportNo"   matInput type="text">
+                </mat-form-field>
+                <mat-form-field class="col-lg-5 me-5" appearance="outline">
+                    <mat-label>Mobile no.</mat-label>
+                    <input [(ngModel)]="partyMobileno" [textMask]="{mask:mobileMask}"  matInput type="text">
+                </mat-form-field>
+                <mat-form-field class="col-lg-5 me-5" appearance="outline">
+                    <mat-label>Telephone no.</mat-label>
+                    <input  [(ngModel)]="partyTelephoneno" [textMask]="{mask:telephoneMask}"  matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="col-lg-5 me-5" appearance="outline">
+                    <mat-label>Bank Name</mat-label>
+                    <input  [(ngModel)]="bankName"   matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="col-lg-5 me-5" appearance="outline">
+                    <mat-label>Account Title</mat-label>
+                    <input  [(ngModel)]="accountTitle"   matInput type="text">
+                </mat-form-field>
+
+                <mat-form-field class="col-lg-5 me-5" appearance="outline">
+                    <mat-label>Account No.</mat-label>
+                    <input  [(ngModel)]="accountNo"   matInput type="text">
+                </mat-form-field>
+             
+                
+                    <button class=" btn btn-primary me-1" style="height: 55px;width: 60px;" (click)="addCity()"><mat-icon>add</mat-icon></button>
+                    <mat-form-field  class="col-lg-4 me-5" appearance="outline"> 
+                        <mat-label>City</mat-label>
+                        <mat-select [(ngModel)]="City">
+                            <mat-option><ngx-mat-select-search #citySearch
+                                [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                                name="search"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of CitiesNames |filter:citySearch.value" value="{{item.cityID}}">{{item.cityName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    
+            
+               
+                
+                <mat-form-field class="col-lg-5 me-5" appearance="outline">
+                    <mat-label>Address</mat-label>
+                    <textarea [(ngModel)]="partyAddress" matInput type="text"></textarea>
+                </mat-form-field>
+                
+                <mat-form-field class="col-lg-5 me-5" appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <textarea [(ngModel)]="description" matInput type="text"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
+
+       <div class="d-flex justify-content-center">
+        <Button class="btn btn-success btn-save m-2 w-25" (click)="saveParty()">{{btnType}}</Button>
+        <Button class="btn btn-danger btn-reset m-2 w-25" (click)="reset()">Reset</Button>
+       </div>
+    </div>
+
+
+    <!-- Saved Record Side of the page  -->
+    <div class="mt-2 col-lg-6 border-start">
+        <div class="border-bottom ">
+            <h2 style="margin-left:10px;">Saved Record </h2>
+        </div>
+        <div class="m-3">
+       <div>
+        <mat-form-field class="col-md-8 me-1" appearance="outline">
+            <mat-label>Search</mat-label>
+            <input [(ngModel)]="searchtxt" matInput type="search" class="text-secondary">
+            <mat-icon matPrefix class="text-secondary">search</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Search</mat-label>
+            <mat-select [(ngModel)]="srPartyType" (selectionChange)="getParty()">
+                <mat-option value="Customer">Customer</mat-option>
+                <mat-option value="Supplier">Supplier</mat-option>
+            </mat-select>
+        </mat-form-field>
+       </div>
+
+        <mat-progress-bar mode="indeterminate" *ngIf="loadingBar == 'start'"></mat-progress-bar>
+            <table class="table">
+                <thead>
+                    <th >S.#</th>
+                    <th >Party Name</th>
+                    <th >Type</th>
+                <th >CNIC</th>
+                <th >Mobile</th>
+                <th >City</th>
+                <!-- <th >Address</th> -->
+                <th  colspan="2 ">Action</th>
+                </thead>
+                <tbody>
+                    <tr  *ngFor="let item of partyData |filter : searchtxt |paginate:{ id:'voucherData', itemsPerPage : tableSize,currentPage : page, totalItems : count, } index as index">
+                        <td>{{index+1}}</td>
+                        <td>{{item.partyName}}  </td>
+                        <td >{{item.partyType}}</td>
+                        <td>{{item.partyCNIC}}</td>
+                        <td>{{item.partyMobileNo}}</td>
+                        <td>{{item.cityName}}</td>
+                        <!-- <td>{{item.partyAddress}}</td> -->
+                        <td >
+                            <div >
+                                <mat-icon class="text-success cursorPointer"(click)="editParty(item)">edit</mat-icon>
+                            <mat-icon class="text-danger cursorPointer" (click)="DeleteParty(item)"> delete</mat-icon>
+                            </div>
+                        </td>
+                     
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="d-flex" >
+                <mat-hint class="me-1 text-secondary">Total Rows : ({{partyData.length}})    </mat-hint>
+                <pagination-controls
+                previousLabel="Prev"
+                nextLabel="Next"
+                (pageChange)="onTableDataChange($event)"
+                ></pagination-controls>
+                
+
+                <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+                <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);" (change)="onTableSizeChange($event)">
+                    <option *ngFor=" let item of tableSizes">{{item}}</option>
+                </select>
+                
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

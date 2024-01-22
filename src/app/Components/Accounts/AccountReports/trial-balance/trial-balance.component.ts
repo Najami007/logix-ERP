@@ -157,7 +157,7 @@ this.TrialBalanceData = [];
            
 
            this.notesList.forEach((n:any) => {
-            
+          
             if(n.noteID == this.TrialBalanceData[i].noteID){
               n.debitTotal += this.TrialBalanceData[i].cDebit;
               n.creditTotal += this.TrialBalanceData[i].cCredit;
@@ -168,7 +168,7 @@ this.TrialBalanceData = [];
          }
         }
          this.app.stopLoaderDark();
-         console.log(this.notesList);
+        // console.log(this.notesList);
       },
       (Error)=>{
         this.app.stopLoaderDark();

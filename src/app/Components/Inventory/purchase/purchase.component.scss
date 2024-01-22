@@ -50,3 +50,10 @@ max-width: 500px;
     background-color: rgb(244, 207, 140);
     height: 40px;
 }
+
+
+
+
+::ng-deep .cdk-overlay-container{
+    z-index:2000;
+  }

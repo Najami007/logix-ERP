@@ -93,7 +93,7 @@ export class GlobalDataModule  implements OnInit {
 
   ngOnInit(): void {
   
-
+    
    
   }
   
@@ -564,9 +564,9 @@ public getMenuList():Observable<any>{
   avoidMinus(val: any) {
     // alert(val.target.value);
     if (val.target.value < '0') {
-      val.target.value = '';
+      val.target.value = 0;
     }else if(val.target.value == ''){
-      val.target.value = '';
+      val.target.value = 0;
     }
   }
 

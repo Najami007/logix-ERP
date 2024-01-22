@@ -131,7 +131,7 @@ findTickets(){
   this.app.startLoaderDark();
   this.http.get(environment.mainApi+'park/GetTicketSummarySingleDate?ToDate='+this.global.dateFormater(this.TicketDate,'-')).subscribe(
     (Response:any)=>{
-     console.log(Response);
+    // console.log(Response);
       this.TicketsList = Response;
       this.app.stopLoaderDark();
     }
@@ -167,7 +167,7 @@ findTickets(){
           if(Response.msg == 'Data Saved Successfully'){
             this.msg.SuccessNotify('Ticket Saved')
             this.printTicket(Response.tktNo,'save');
-            console.log(Response);
+           // console.log(Response);
             this.reset();
             this.app.stopLoaderDark();
           }else {
@@ -201,7 +201,7 @@ findTickets(){
               setTimeout(() => {
                 this.printTicket(Response.rtnTktNo,'SaleReturn');
               }, 200);
-              console.log(Response);
+             // console.log(Response);
               this.reset();
               this.app.stopLoaderDark();
               

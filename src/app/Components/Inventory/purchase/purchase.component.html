@@ -1,167 +1,308 @@
-<div class="container-fluid body">
 
-    <!-- ////////////////////////// first row////////////////// -->
-    <div class="mt-2  d-flex">
-        <mat-card class="d-flex col-lg-11 mb-2 ps-3 pe-3" style="background-color:rgb(225, 250, 250);">
+        <div class="container-fluid body">
 
-            <mat-card-content class="d-flex justify-content-between">
-                <div class="w-50  d-flex flex-column">
-                    <input type="text" style="background-color:rgb(225, 250, 250);" [(ngModel)]="PBarcode" name="searchProduct" id="searchProduct"
-                        class="border-0 p-1 mb-2 border-bottom border-success" placeholder="Search Barcode / Name"
-                        autofocus>
-
-                    <div class="w-100 d-flex flex-column SearchConatiner cursorPointer" 
-                        *ngIf="PBarcode != '' && PBarcode != undefined">
-                        <div class="card " *ngFor="let item of productList| filter:PBarcode" (click)="holdDataFunction(item)" >
-                            <button style="background: none;border: none;text-align: left;">{{item.productTitle}} (<b>{{item.barcode}}</b> )</button>
+            <!-- ////////////////////////// first row////////////////// -->
+            <div class="mt-2  d-flex">
+                <mat-card class="d-flex col-lg-11 mb-2 ps-3 pe-3" style="background-color:rgb(225, 250, 250);">
+        
+                    <mat-card-content class="d-flex justify-content-between">
+                        <div class="w-50  d-flex flex-column">
+                            <input type="text" style="background-color:rgb(225, 250, 250);" [(ngModel)]="PBarcode" (keydown)="this.focusToQty($event)" name="searchProduct" id="searchProduct"
+                                class="border-0 p-1 mb-2 border-bottom border-success searchProduct" placeholder="Search Barcode / Name"
+                                autofocus autocomplete="off">
+        
+                            <div class="w-100 d-flex flex-column SearchConatiner cursorPointer" 
+                                *ngIf="PBarcode != '' && PBarcode != undefined">
+                                <div class="card " *ngFor="let item of productList| filter: PBarcode " (click)="holdDataFunction(item)" >
+                                    <button style="background: none;border: none;text-align: left;">{{item.productTitle}} (<b>{{item.barcode}}</b> )</button>
+                                </div>
+                            </div>
                         </div>
+        
+                       
+        
+                        <div class=" w-50 text-end ">
+                          
+                            <button class=" w-25 text-danger border-0 border-bottom bg-transparent btn-rpt" data-bs-toggle="modal" data-bs-target="#holdModal">Retrive</button>
+                            <button class=" w-25 btn btn-primary me-1  btn-rpt" (click)="SaveBill('hold')">{{holdBtnType}}</button>
+                            <button class=" w-25 btn btn-success btn-rpt" (click)="SaveBill('purchase')">Save</button>
+                        </div>
+                    </mat-card-content>
+
+
+                           <!---------------     Modal Window for Retreiving Hold Bills --------------->
+            
+            
+            <div class="modal fade" id="holdModal" tabindex="-1" aria-labelledby="holdModalLabel" >
+                <div class="modal-dialog  modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h2 class="modal-title" id="holdModalLabel">Bill Details</h2>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
                     </div>
+                    <div class="modal-body">
+        
+                        <div class="d-flex justify-content-between">
+                            <mat-form-field class="col-lg-4" appearance="outline">
+                                <mat-label>Date</mat-label>
+                                <input matInput type="text" readonly="true" [(ngModel)]="Date" [matDatepicker]="hbDate">
+                                <mat-datepicker-toggle matSuffix [for]="hbDate"></mat-datepicker-toggle>
+                                <mat-datepicker #hbDate ></mat-datepicker>
+                            </mat-form-field>
+                     
+        
+                            <button mat-raised-button *ngIf="crudList.r" class="btn-rpt col-lg-2" (click)="findHoldBills()" >Search</button>
+        
+                           <mat-form-field class="col-lg-4" appearance="outline">
+                            <mat-label>Search.......</mat-label>
+                            <input matInput #holdSearch type="text" class="col-lg-4" >
+                           </mat-form-field>
+        
+                        </div>
+        
+                        <table class="table table-logix">
+                            <thead>
+                                <tr>
+                                    <th>S#</th>
+                                    <th>Inv No.</th>
+                                    <th>Date</th>
+                                    <th>Party</th>
+                                    <th>Amount</th>
+                                    <th>User</th>
+                                    <th *ngIf="crudList.r">Action</th>
+                                    <th *ngIf="crudList.u">Retrive</th>
+                                </tr>
+        
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of holdBillList  | filter:holdSearch.value index as index">
+                                    <td>{{index+1}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                       
+                
+                    </div>
+                
+                  </div>
                 </div>
+              </div>
+        
+        
+        
+                </mat-card>
+        
+                <mat-card class="mb-2" style="height: 120px;width: 120px;">
+                    <div class="p-1 col-lg-1" *ngIf="tableDataList != ''"  data-bs-toggle="modal" data-bs-target="#picModal">
+                        <img [src]="productImage" alt="" height="110" width="110">
+                    </div>
+                </mat-card>
+        
+        
+                <!---------------------    Modal Window for Bigger Picture --------------->
+        
+                <div class="modal fade" #picModal id="picModal" tabindex="-1" aria-labelledby="picModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                         
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="p-1 col-lg-1" *ngIf="tableDataList != ''"  >
+                                <img [src]="productImage" alt="" height="400" width="400">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+                     
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            
+            </div>
+        
+        
+        
+            <!-- ////////////////////////// Table Row////////////////// -->
+        
+            <div class="border rounded card shadow p-2" style="max-height: 350px;min-height: 350px;overflow-y: scroll;">
+        
+                <table class="table table-hover table-logix">
+                    <thead  >
+                        <th >S#</th>
+                        <th class="col-lg-2">Barcode</th>
+                        <th class="col-lg-2">Product Name</th>
+                        <th class="col-lg-2">Expiry</th>
+                        <th class="col-lg-1">Quantity</th>
+                        <th class="col-lg-1">Cost Price</th>
+                        <th class="col-lg-1">Sale Price</th>
+                      
+                        <th class="col-lg-1">Total</th>
+                        <th class="col-lg-1">Action</th>
+        
+                    </thead>
+        
+                    <tbody style="height: 30px;" >
+                        <tr *ngFor="let item of tableDataList.reverse() index as index" (click)="onRowClick(item)">
+                            <td class="text-center">{{index+1}}</td>
+                            <td>{{item.barcode}}</td>
+                            <td>{{item.ProductTitle}}</td>
+                            <td><input type="date" [(ngModel)]="item.ExpiryDate" (change)="change()" style="height: 25px; width: 300px;" ></td>
+                            <td class="text-center"><input type="text"  [(ngModel)]="item.Quantity" min="0"
+                                (keydown)="this.handleNumKeys(item,$event)"
+                                (keyup)="getTotal(); this.global.avoidMinus($event);onRowClick(item)"
+                                 class="qty{{index}} text-center" style="width: 80px;"></td>
+                            <td class="text-center"><input type="text"  [(ngModel)]="item.CostPrice" min="0" (keydown)="this.handleNumKeys(item,$event)"
+                                (keyup)="getTotal(); this.global.avoidMinus($event);onRowClick(item)"
+                                 class=" text-center" style="width: 80px;">
+                            </td>
+                            <td class="text-center"><input type="text"  [(ngModel)]="item.SalePrice" min="0" (keydown)="this.handleNumKeys(item,$event)"
+                                (keyup)="this.global.avoidMinus($event);onRowClick(item)"
+                                 class="text-center" style="width: 80px;">
+                            </td>
+                            
+                            <td class="text-end">{{item.CostPrice * item.Quantity |number}}</td>
+                            <td class="text-danger text-center cursorPointer"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
+        
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                            <td class="text-center">{{myTotalQty}}</td>
+                        </tr>
+        
+        
+        
+        
+                    </tbody>
+                </table>
+        
+            </div>
+        
+        
+            <!-- //////////////////////////Row 3////////////////// -->
+        
+        
+            <div class="mt-2 pe-3 d-flex flex-inline">
+        
+        
+        
+        
+                <!-- //////////////////////first Column/////////////////////// -->
+                <mat-card class=" me-2 col-lg-8 p-2" style="background-color: rgb(226, 247, 240);">
+        
+              <mat-card-content class="">
+                <mat-form-field appearance="outline" class="col-lg-3 p-1">
+                    <mat-label>Select Invoice Date</mat-label>
+                    <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
+                        [matDatepicker]="voucherDate">
+                    <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
+                    <mat-datepicker #voucherDate></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="col-lg-3 p-1">
+                    <mat-label>WareHouse Location</mat-label>
+                    <mat-select [(ngModel)]="locationID" name="location">
+                        <mat-option><ngx-mat-select-search #locationSearch
+                            [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                            name="search"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of locationList | filter:locationSearch.value" [value]="item.locationID">{{item.locationTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+        
+                <mat-form-field appearance="outline" class="col-lg-2 p-1">
+                    <mat-label>Ref Inv No.</mat-label>
+                    <input matInput [(ngModel)]="refInvNo" type="text" name="refInvNo">
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-lg-2 p-1">
+                    <mat-label>Discount</mat-label>
+                    <input matInput [(ngModel)]="discount" type="text" name="dicount">
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-lg-2 p-1">
+                    <mat-label>OverHead</mat-label>
+                    <input matInput (keydown)="distributeOverHead($event)" [(ngModel)]="overheadAmount" type="text" name="refInvNo">
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-100 p-1">
+                    <mat-label>Remarks</mat-label>
+                    <textarea matInput  rows="2" [(ngModel)]="invRemarks" type="text" name="remarks"></textarea>
+                </mat-form-field>
 
                
-
-                <div class=" w-50 text-end ">
-                    <button class=" w-25 btn btn-success btn-rpt">Save</button>
-                </div>
-            </mat-card-content>
-
-
-        </mat-card>
-
-        <mat-card class="mb-2" style="height: 120px;width: 120px;">
-            <div class="p-1 col-lg-1" *ngIf="holdDataList != ''">
-                <img [src]="productImage" alt="" height="110" width="110">
+        
+              </mat-card-content>
+        
+                </mat-card>
+        
+                <!-- //////////////////////Second Column/////////////////////// -->
+                <mat-card class="col-lg-2 me-2 p-2" >
+        
+                   <mat-card-content class="d-flex flex-column">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Select Party</mat-label>
+                        <mat-select [(ngModel)]="partyID" (selectionChange)="onPartySelected()" name="customer">
+                            <mat-option><ngx-mat-select-search #partySearch
+                                [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                                name="search"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of suppliersList | filter:partySearch.value" [value]="item.partyID">{{item.partyName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+        
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex flex-column ">
+                            <label class="pt-2">Address:</label>
+                            <label class="pt-2">City:</label>
+                            <label class="pt-2">Mobile No:</label>
+                            <label class="pt-2">CNIC:</label>
+        
+                        </div>
+                        <div class="d-flex flex-column ">
+                         
+                            <label class="pt-2">{{supplierDetail.partyAddress}}</label>
+                            <label class="pt-2">{{supplierDetail.cityName}}</label>
+                            <label class="pt-2">{{supplierDetail.partyMobileNo}}</label>
+                            <label class="pt-2">{{supplierDetail.partyCNIC}}</label>
+                        </div>
+                    </div>
+                   </mat-card-content>
+        
+        
+        
+                </mat-card>
+        
+        
+                <!-- //////////////////////Third Column/////////////////////// -->
+                <mat-card class=" col-lg-2 me-2 p-2  " style="background-color: rgb(236, 245, 236);">
+        
+        
+                 <mat-card-content class="d-flex flex-column">
+                    <div class=" pt-3 d-flex justify-content-between text-center">
+                        <h2 class="text-secondary ">Total:</h2>
+                        <h1 style="font-size: 25px;" class="">{{mySubtotal |number}}</h1>
+                    </div>
+                    <div class=" d-flex justify-content-between text-center">
+                        <h2 class="text-secondary">Discount:</h2>
+                        <h1 style="font-size: 25px;" class=" text-danger">{{discount || 0 |number}}</h1>
+                    </div>
+                    <div class="d-flex justify-content-between text-center">
+                        <h2 class="text-secondary">Net Total:</h2>
+                        <h1 style="font-size: 25px;" class="">{{mySubtotal - discount |number}}</h1>
+                    </div>
+                 </mat-card-content>
+        
+                </mat-card>
             </div>
-        </mat-card>
-    </div>
+        
+        
+        
+ 
+        
+        
+        
+        
+        
+        
+        
+        </div>
 
-
-
-    <!-- ////////////////////////// Table Row////////////////// -->
-
-    <div class="border rounded card shadow p-2" style="max-height: 350px;min-height: 350px;overflow-y: scroll;">
-
-        <table class="table table-hover">
-            <thead  >
-                <th>S#</th>
-                <th>Barcode</th>
-                <th>Product Name</th>
-                <th>Cost Price</th>
-                <th>Sale Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-                <th>Action</th>
-
-            </thead>
-
-            <tbody style="height: 30px;" >
-                <tr *ngFor="let item of holdDataList.reverse() index as index" (click)="onRowClick(item)">
-                    <td>{{index+1}}</td>
-                    <td>{{item.barcode}}</td>
-                    <td>{{item.productTitle}}</td>
-                    <td >{{item.costPrice |number}}</td>
-                    <td >{{item.salePrice |number}}</td>
-                    <td ><input type="number" [(ngModel)]="item.quantity" min="0" (change)="getTotal()" class="text-center" style="width: 80px;"></td>
-                    <td >{{item.costPrice * item.quantity |number}}</td>
-                    <td class="text-danger cursorPointer"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
-
-                </tr>
-
-
-
-
-            </tbody>
-        </table>
-
-    </div>
-
-
-    <!-- //////////////////////////Row 3////////////////// -->
-
-
-    <div class="mt-2 pe-3 d-flex flex-inline">
-
-
-
-
-        <!-- //////////////////////first Column/////////////////////// -->
-        <mat-card class=" me-2 col-lg-4 p-2" style="background-color: rgb(226, 247, 240);">
-
-      <mat-card-content class="">
-        <mat-form-field appearance="outline" class="w-50 p-1">
-            <mat-label>Select Invoice Date</mat-label>
-            <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
-                [matDatepicker]="voucherDate">
-            <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
-            <mat-datepicker #voucherDate></mat-datepicker>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="w-50 p-1">
-            <mat-label>Reference Invoice No.</mat-label>
-            <input matInput type="text" name="refInvNo">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="w-50 p-1">
-            <mat-label>Remarks.</mat-label>
-            <input matInput type="text" name="refInvNo">
-        </mat-form-field>
-
-      </mat-card-content>
-
-        </mat-card>
-
-        <!-- //////////////////////Second Column/////////////////////// -->
-        <mat-card class="col-lg-4 me-2 p-2" >
-
-           <mat-card-content class="d-flex flex-column">
-            <mat-form-field appearance="outline">
-                <mat-label>Select Party</mat-label>
-                <mat-select [(ngModel)]="partyID" name="customer">
-                    <mat-option></mat-option>
-                </mat-select>
-            </mat-form-field>
-
-            <div class="d-flex justify-content-between">
-                <div class="d-flex flex-column ">
-                    <label class="pt-2">Address :</label>
-                    <label class="pt-2">City :</label>
-                    <label class="pt-2">Mobile No. :</label>
-                    <label class="pt-2">CNIC :</label>
-
-                </div>
-                <div class="d-flex flex-column ">
-
-
-
-
-                </div>
-            </div>
-           </mat-card-content>
-
-
-
-        </mat-card>
-
-
-        <!-- //////////////////////Third Column/////////////////////// -->
-        <mat-card class=" col-lg-4 me-2 p-2  " style="background-color: rgb(236, 245, 236);">
-
-
-         <mat-card-content class="d-flex flex-column">
-            <div class="p-2 pt-3  text-center">
-                <h2 class="text-secondary display-2">Total</h2>
-                <h1 style="font-size: 80px;" class=" text-danger">{{mySubtoatal |number}}</h1>
-            </div>
-         </mat-card-content>
-
-        </mat-card>
-    </div>
-
-
-
-
-
-
-
-
-
-</div>
+ 

@@ -83,6 +83,7 @@ export class SaleRptswingWiseComponent implements OnInit {
        //console.log(Response);
        this.SaleList = [];
        this.returnList = [];//unt = 0;
+       this.saleTotalAmount= 0;
         this.saleTotalQty = 0;
         this.returnTotalAmount  = 0;
         this.returnTotalQty = 0;

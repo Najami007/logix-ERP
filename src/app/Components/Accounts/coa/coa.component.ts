@@ -142,10 +142,10 @@ onCoaLevelChange(){
   this.level3 = '';
   this.level4 = '';
   
-  
-  this.coaLevel2List = '';
-  this.coaLevel3List = '';
-  this.coaLevel4List = '';
+
+  this.coaLevel2List = [];
+  this.coaLevel3List = [];
+  this.coaLevel4List = [];
 }
 
 

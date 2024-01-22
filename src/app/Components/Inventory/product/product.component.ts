@@ -13,6 +13,8 @@ import { AddRackComponent } from '../racks/add-rack/add-rack.component';
 import { AddUOMComponent } from '../unit-of-measurement/add-uom/add-uom.component';
 import { AddCategoryComponent } from '../product-category/add-category/add-category.component';
 import { AddProdSubCategoryComponent } from '../product-sub-category/add-prod-sub-category/add-prod-sub-category.component';
+import { retry } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-product',
@@ -22,6 +24,27 @@ import { AddProdSubCategoryComponent } from '../product-sub-category/add-prod-su
 export class ProductComponent implements OnInit {
 
   crudList: any = [];
+
+  loadingBar = 'start';
+
+
+  page:number = 1;
+  count: number = 0;
+ 
+  tableSize: number = 0;
+  tableSizes : any = [];
+
+  onTableDataChange(event:any){
+
+    this.page = event;
+    this.getProductList();
+  }
+
+  onTableSizeChange(event:any):void{
+    this.tableSize = event.target.value;
+    this.page =1;
+    this.getProductList();
+  }
 
   constructor(
     private http: HttpClient,
@@ -36,6 +59,8 @@ export class ProductComponent implements OnInit {
       this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
     })
 
+    
+
   }
 
 
@@ -46,8 +71,11 @@ export class ProductComponent implements OnInit {
     this.getSubCategory();
     this.getBrandList();
     this.getRacksList();
+    this.getProductTypes();
     this.getUOMList();
     this.getProductList();
+    this.tableSize = this.global.paginationDefaultTalbeSize;
+    this.tableSizes = this.global.paginationTableSizes;
   }
 
 
@@ -55,7 +83,7 @@ export class ProductComponent implements OnInit {
   Validation = true;
   btnType = 'Save';
   autoEmpty = false;
-  
+  searchProduct:any;
   CategoriesList: any;
   SubCategoriesList: any;
   ProductID: any;
@@ -82,6 +110,7 @@ export class ProductComponent implements OnInit {
   Description: any;
   pctCode: any;
   UOMID: any;
+  prodTypeID:any;
 
 
 
@@ -91,9 +120,20 @@ export class ProductComponent implements OnInit {
   productCode: any;
   BrandList: any = [];
   RacksList: any = [];
+  ProductTypeList:any = [];
   UOMList: any = [];
   productList:any = [];
   allowMinusList:any = [{value:true,title:'True'},{value:false,title:'false'},]
+
+
+  getProductTypes(){
+    this.http.get(environment.mainApi + 'inv/GetProductType').subscribe(
+      (Response: any) => {
+        this.ProductTypeList = Response;
+     
+      }
+    )
+  }
 
 
 
@@ -152,7 +192,7 @@ export class ProductComponent implements OnInit {
     this.http.get(environment.mainApi+'inv/GetProduct').subscribe(
       (Response)=>{
         this.productList = Response;
-        //console.log(Response);
+       // console.log(Response);
       }
     )
   }
@@ -275,6 +315,7 @@ export class ProductComponent implements OnInit {
       Barcode: this.Barcode,
       BarcodeType: this.barcodeType,
       ProductImage:this.productImg,
+      ProductTypeID:this.prodTypeID,
 
 
       UserID: this.global.getUserID(),
@@ -328,6 +369,7 @@ export class ProductComponent implements OnInit {
           BarcodeType: this.barcodeType,
           PinCode: pin,
           ProductImage:this.productImg,
+          ProductTypeID:this.prodTypeID,
 
           UserID: this.global.getUserID()
         }).subscribe(
@@ -353,6 +395,8 @@ export class ProductComponent implements OnInit {
   reset(type:any) {
     this.ProductID = '';
     this.Barcode = '';
+    this.productImg = '';
+    this.btnType = 'Save';
    if(this.autoEmpty == true || type == 'btn'){
     this.CategoryID = '';
     this.SubCategoryID = '';
@@ -376,8 +420,9 @@ export class ProductComponent implements OnInit {
     // this.Barcode = '';
     this.prodBarcodeType = 'auto'
     this.barcodeType = 'Basic';
-    this.btnType = 'Save';
-    this.productImg= '';
+    this.prodTypeID = '';
+    //this.btnType = 'Save';
+    // this.productImg= '';
    }
 
 
@@ -409,6 +454,7 @@ export class ProductComponent implements OnInit {
     this.barcodeType = row.barcodeType;
     this.Description = row.productDescription;
     this.productImg = row.productImage;
+    this.prodTypeID = row.productTypeID;
     this.tabIndex = 0;
     this.btnType = 'Update';
     
@@ -417,7 +463,61 @@ export class ProductComponent implements OnInit {
    }
 
 
-  delete(row: any) { }
+  deleteProd(row: any) { 
+
+    this.dialogue.open(PincodeComponent,{
+      width:'30%'
+    }).afterClosed().subscribe(pin=>{
+
+     if(pin != ''){
+
+
+      Swal.fire({
+        title:'Alert!',
+        text:'Confirm to Delete the Data',
+        position:'center',
+        icon:'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Confirm',
+      }).then((result)=>{
+
+        if(result.isConfirmed){
+      this.app.startLoaderDark();
+
+      this.http.post(environment.mainApi+'inv/deleteProduct',{
+        ProductID: row.productID,
+        PinCode:pin,
+        UserID: this.global.getUserID()
+
+      }).subscribe(
+        (Response:any)=>{
+          if(Response.msg == 'Data Deleted Successfully'){
+            this.msg.SuccessNotify(Response.msg);
+            this.getProductList();
+            this.app.stopLoaderDark();
+          
+            
+          }else{
+            this.msg.WarnNotify(Response.msg);
+            this.app.stopLoaderDark();
+          }
+        },
+        (error:any)=>{
+          this.app.stopLoaderDark();
+        }
+      )
+
+      }
+     }
+     )
+
+
+     }})
+
+
+  }
 
   activeProduct(row:any){
    
@@ -451,6 +551,7 @@ export class ProductComponent implements OnInit {
   }
 
 
+  /////// to change the tab on edit
 
   changeTab(tabNum: any) {
     this.tabIndex = tabNum;

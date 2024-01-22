@@ -21,6 +21,7 @@ import { SectionComponent } from './section/section.component';
 import { AddDepartmentComponent } from './department/add-department/add-department.component';
 import { ProjectComponent } from './project/project.component';
 import { AuthGuard } from 'src/app/auth.guard';
+import { PartyComponent } from './party/party.component';
 
 
 
@@ -34,6 +35,7 @@ export const companyRoutes: Route[] = [
   {path:'adep', component:DepartmentComponent,canActivate:[AuthGuard]  },
   {path:'asec', component:SectionComponent,canActivate:[AuthGuard]  },
   {path:'proj', component:ProjectComponent,canActivate:[AuthGuard]  },
+  {path:'party', component:PartyComponent,canActivate:[AuthGuard]  },
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
 
@@ -54,6 +56,7 @@ export const companyRoutes: Route[] = [
     SectionComponent,
     AddDepartmentComponent,
     ProjectComponent,
+    PartyComponent,
   
   ],
   imports: [
