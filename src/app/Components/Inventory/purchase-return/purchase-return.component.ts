@@ -12,11 +12,11 @@ import { PincodeComponent } from '../../User/pincode/pincode.component';
 import * as $ from 'jquery';
 
 @Component({
-  selector: 'app-purchase',
-  templateUrl: './purchase.component.html',
-  styleUrls: ['./purchase.component.scss']
+  selector: 'app-purchase-return',
+  templateUrl: './purchase-return.component.html',
+  styleUrls: ['./purchase-return.component.scss']
 })
-export class PurchaseComponent implements OnInit{
+export class PurchaseReturnComponent implements OnInit{
   companyProfile:any = [];
   crudList:any = [];
   constructor(
@@ -40,7 +40,7 @@ export class PurchaseComponent implements OnInit{
 
   
   ngOnInit(): void {
-    this.global.setHeaderTitle('Purchase');
+    this.global.setHeaderTitle('Purchase Return');
     this.getProducts();
     this.getBooker();
     this.getLocation();
@@ -453,7 +453,7 @@ export class PurchaseComponent implements OnInit{
           if(this.holdBtnType == 'Hold'){
            this.app.startLoaderDark();
            this.http.post(environment.mainApi+'inv/InsertPurchase',{
-           InvType: "HP",
+           InvType: "HPR",
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
            RefInvoiceNo: this.refInvNo,
            PartyID: this.partyID,
@@ -528,7 +528,7 @@ export class PurchaseComponent implements OnInit{
          }else if(type == 'purchase'){
            this.app.startLoaderDark();
            this.http.post(environment.mainApi+'inv/InsertPurchase',{
-           InvType: "P",
+           InvType: "PR",
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
            RefInvoiceNo: this.refInvNo,
            PartyID: this.partyID,
@@ -611,8 +611,7 @@ export class PurchaseComponent implements OnInit{
   myTableDataList:any = [];
   myBillTotalQty = 0;
   mywohCPTotal = 0;
-  myCPTotal = 0;
-  mySPTotal = 0;
+  myWCPTotal = 0;
 
 
   printBill(item:any){
@@ -635,8 +634,7 @@ export class PurchaseComponent implements OnInit{
         var overhead = 0
         this.myBillTotalQty = 0;
         this.mywohCPTotal = 0;
-        this.myCPTotal = 0;
-        this.mySPTotal = 0;
+        this.myWCPTotal = 0;
        
         this.productImage = Response[Response.length - 1].productImage;
 
@@ -652,9 +650,8 @@ export class PurchaseComponent implements OnInit{
 
           Response.forEach((e:any) => {
             this.myBillTotalQty += e.quantity;
-            this.mywohCPTotal += (e.costPrice - overhead)* e.quantity;
-            this.myCPTotal += e.costPrice * e.quantity;
-            this.mySPTotal += e.salePrice * e.quantity
+            this.mywohCPTotal += (e.costPrice - overhead);
+            this.myWCPTotal += e.costPrice;
 
             this.myTableDataList.push({
               ProductID:e.productID,
@@ -754,11 +751,11 @@ export class PurchaseComponent implements OnInit{
 
 
   findHoldBills(type:any){
-    if(type == 'hp'){
+    if(type == 'hpr'){
       $('#edit').show();
     }
 
-    if(type == 'p'){
+    if(type == 'pr'){
       $('#edit').hide()
     }
 

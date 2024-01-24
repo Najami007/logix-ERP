@@ -23,6 +23,7 @@ companyProfile:any = [];
 
       this.globalData.getCompany().subscribe((data)=>{
         this.companyProfile = data;
+        // console.log(data);
       });
     }
 

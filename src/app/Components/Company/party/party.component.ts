@@ -359,7 +359,7 @@ addCity(){
             
                 this.http.post(environment.mainApi+'cmp/deleteparty',{
                   PartyID:row.partyID,
-                  deletedBy:this.globalData.getUserID(),
+                  UserID:this.globalData.getUserID(),
                   PinCode:pin,
                 }).subscribe(
                  (Response:any)=>{

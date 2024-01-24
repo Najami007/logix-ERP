@@ -177,3 +177,31 @@
 }
 
 
+
+
+
+
+
+.table-purchase{
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  width: 100%;
+  background-color: #fff; 
+  border: 1px solid black;
+  padding-bottom: 40px !important;
+}
+
+.table-purchase > thead {
+  border:1px solid black !important;
+}
+
+/*********** Table Stripped *******/
+.table-purchase > thead > tr{
+  border: 1px solid black !important;    
+}
+
+
+.table-purchase > tbody > tr {
+  border: 1px solid #000 !important ;
+}
+
+

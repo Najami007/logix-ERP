@@ -566,7 +566,7 @@ public getMenuList():Observable<any>{
     if (val.target.value < '0') {
       val.target.value = 0;
     }else if(val.target.value == ''){
-      val.target.value = 0;
+      val.target.value = 0
     }
   }
 

@@ -22,6 +22,7 @@ import { AddUOMComponent } from './unit-of-measurement/add-uom/add-uom.component
 import { AddCategoryComponent } from './product-category/add-category/add-category.component';
 import { AddProdSubCategoryComponent } from './product-sub-category/add-prod-sub-category/add-prod-sub-category.component';
 import { IssuanceComponent } from './issuance/issuance.component';
+import { PurchaseReturnComponent } from './purchase-return/purchase-return.component';
 
 
 
@@ -71,6 +72,11 @@ export const inventoryRoutes: Route[] = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'purtn',
+    component: PurchaseReturnComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'isnc',
     component: IssuanceComponent,
     canActivate: [AuthGuard]
@@ -98,6 +104,7 @@ export const inventoryRoutes: Route[] = [
     AddCategoryComponent,
     AddProdSubCategoryComponent,
     IssuanceComponent,
+    PurchaseReturnComponent,
 
   ],
   imports: [

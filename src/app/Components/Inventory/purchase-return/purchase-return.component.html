@@ -1,0 +1,464 @@
+
+<div class="container-fluid body">
+
+    <!-- ////////////////////////// first row////////////////// -->
+    <div class="mt-2  d-flex">
+        <mat-card class="d-flex col-lg-11 mb-2 ps-3 pe-3" style="background-color:rgb(245, 208, 240);">
+
+            <mat-card-content class="d-flex justify-content-between">
+                <div class="w-50  d-flex flex-column">
+                    <input type="text" style="background-color:rgb(245, 208, 240);" #pbarcode [(ngModel)]="PBarcode" (keydown)="this.focusToQty($event);searchByCode($event)"  id="searchProduct"
+                        class="border-0 p-1 mb-2 border-bottom border-success searchProduct" placeholder="Search Barcode / Name"
+                        autofocus autocomplete="off" [disabled]="productList == ''" accesskey="s">
+
+                    <div class="w-100 d-flex flex-column SearchConatiner cursorPointer" 
+                        *ngIf="PBarcode != '' && PBarcode != undefined">
+                        <div class="card " *ngFor="let item of productList| filter:PBarcode" (click)="holdDataFunction(item)" >
+                            <button style="background: none;border: none;text-align: left;">{{item.productTitle}} (<b>{{item.barcode}}</b> )</button>
+                        </div>
+                    </div>
+                </div>
+
+               
+
+                <div class=" w-50 text-end ">
+                  
+                    <button class=" w-25 text-danger border-0 border-bottom bg-transparent btn-rpt" data-bs-toggle="modal" data-bs-target="#holdModal">Retrive</button>
+                    <button class=" w-25 btn btn-primary me-1  btn-rpt" (click)="SaveBill('hold')">{{holdBtnType}}</button>
+                    <button class=" w-25 btn btn-success btn-rpt" (click)="SaveBill('purchase')">Save</button>
+                </div>
+            </mat-card-content>
+
+
+                   <!---------------     Modal Window for Retreiving Hold Bills --------------->
+    
+    
+    <div class="modal fade" id="holdModal" tabindex="-1" aria-labelledby="holdModalLabel" >
+        <div class="modal-dialog  modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title" id="holdModalLabel">Bill Details</h2>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="d-flex justify-content-between">
+                    <mat-form-field class="col-lg-4" appearance="outline">
+                        <mat-label>Date</mat-label>
+                        <input matInput type="text" readonly="true" [(ngModel)]="Date" [matDatepicker]="hbDate">
+                        <mat-datepicker-toggle matSuffix [for]="hbDate"></mat-datepicker-toggle>
+                        <mat-datepicker #hbDate ></mat-datepicker>
+                    </mat-form-field>
+             
+
+                    <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 bg-primary text-white btn-rpt" (click)="findHoldBills('hpr')" >Hold Bill</button>
+                    <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt" (click)="findHoldBills('pr')" >Pusrchase Bill</button>
+
+                   <mat-form-field class="col-lg-3" appearance="outline">
+                    <mat-label>Search.......</mat-label>
+                    <input matInput #holdSearch type="text" class="col-lg-4" >
+                   </mat-form-field>
+
+                </div>
+
+                <table class="table table-logix">
+                    <thead>
+                        <tr>
+                            <th>S#</th>
+                            <th>Inv No.</th>
+                            <th>Date</th>
+                            <th>Party</th>
+                            <th>Amount</th>
+                            <th>User</th>
+                            <th *ngIf="crudList.r">Action</th>
+                            <th *ngIf="crudList.u" id="edit">Retrive</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of holdBillList  | filter:holdSearch.value index as index">
+                            <td>{{index+1}}</td>
+                            <td>{{item.invBillNo}}</td>
+                            <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
+                            <td>{{item.partyName}}</td>
+                            <td>{{item.netTotal | number:'1.0-0'}}</td>
+                            <td>{{item.entryUser}}</td>
+                            <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary" (click)="printBill(item)" >print</mat-icon></td>
+                            <td class="text-center cursorPointer" *ngIf=" item.invType == 'HP' && crudList.u"><mat-icon data-bs-dismiss="modal"  (click)="retriveBill(item)">edit</mat-icon></td>
+
+                        </tr>
+                    </tbody>
+                </table>
+               
+        
+            </div>
+        
+          </div>
+        </div>
+      </div>
+
+
+      <!----------- Print Area For Bill Print --------------------->
+
+
+      <div id="printDiv" class="d-none" >
+            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
+                </span>
+                <span class="mt-3">
+                    <h3 class="companyName">{{item.companyName}}</h3>
+                    <p style="margin-top: -15px;">{{item.companyAddress}}</p>
+                    <!-- <p style="margin-top: -20px;">{{item.companyMobile}}  {{item.companyPhone}}</p>
+                    <p style="margin-top: -20px;">{{item.companyEmail}}</p> -->
+                </span>
+                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                </span>
+        
+        
+            </div>
+       
+           <hr>
+        <h3 class="border border-dark w-100 text-center">Good Receive Note</h3>
+        <div class="d-flex mb-1">
+
+          <div class="d-flex border border-dark p-2 me-1 w-50">
+            <div class="row">
+                <label class="fw-bold" >Date</label>
+                <label class="fw-bold" >Inv No</label>
+                <label class="fw-bold" >Booker</label>
+             
+            </div>
+            <div class="row">
+                <label >{{myInvoiceDate | date:'dd-MM-yyyy'}}</label>
+                <label >{{myInvoiceNo}}</label>
+                <label >{{myBookerName}}</label>
+                
+            </div>
+          </div>
+           <div class="d-flex border border-dark p-2 w-50">
+            <div class="row">
+            
+                <label class="fw-bold" >Party</label>
+                <label class="fw-bold" >Remarks</label>
+            </div>
+            <div class="row">
+              
+                <label >{{myPartyName}}</label>
+                <label >{{myInvRemarks}}</label>
+            </div>
+           </div>
+
+        </div>
+
+        <table class="table table-purchase" >
+            <thead>
+                <tr>
+                    <th >S#</th>
+                <!-- <th class="col-lg-2">Barcode</th> -->
+                <th class="col-lg-2">Product Name</th>
+                <th style="width: 100px;">Expiry</th>
+                <th class="text-center">Quantity</th>
+                <th class="text-center ">WOH CP</th>
+                <th class=" text-center">Cost Price</th>
+                <th class=" text-center">Sale Price</th>
+                <th class=" text-center">Cost Total</th>
+                <th class=" text-center">Sale Total</th>
+                <th class=" text-center">WOh Cost Total</th>
+                </tr>
+            </thead>
+            <tbody style="height: 30px;" >
+                <tr *ngFor="let item of myTableDataList index as index" >
+                    <td class="text-center">{{index+1}}</td>
+                    <!-- <td class="col-lg-2">{{item.barcode}}</td> -->
+                    <td >{{item.ProductTitle}} ({{item.barcode}})</td>
+                    <td s>{{item.ExpiryDate}}</td>
+                    <td class="text-center ">{{item.Quantity |number}}</td>
+                    <td class="text-end">{{item.wohCP | number: '1.0-1'}}</td>
+                    <td class="text-end ">{{item.CostPrice |number: '1.0-1'}}</td>
+                    <td class="text-end ">{{item.SalePrice |number: '1.0-1'}}</td>   
+                    <td class="text-end ">{{item.CostPrice * item.Quantity |number: '1.0-1'}}</td>
+                    <td class="text-end ">{{item.SalePrice * item.Quantity |number: '1.0-1'}}</td>
+                    <td class="text-end ">{{item.wohCP * item.Quantity |number: '1.0-1'}}</td>
+
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td class="text-center">{{myBillTotalQty}}</td>
+                    <td class="text-end">{{mywohCPTotal}}</td>
+                    <td  class="text-end">{{myWCPTotal}}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="d-flex text-end" style="text-align: end;">
+
+            <div class="row">
+                <label class="fw-bold" >Total</label>
+                <!-- <label class="fw-bold" >OverHead</label> -->
+                <!-- <label class="fw-bold" >Discount</label> -->
+                <label class="fw-bold" >Net Total</label>
+            </div>
+            <div class="row">
+                <label >{{mySubTotal}}</label>
+                <!-- <label >{{myOverHeadAmount}}</label>
+                <label >{{mydiscount}}</label> -->
+                <label >{{(mySubTotal + myOverHeadAmount)-mydiscount}}</label>
+            </div>
+
+        </div>
+
+
+      </div>
+
+
+        </mat-card>
+
+        <mat-card class="mb-2" style="height: 120px;width: 120px;">
+            <div class="p-1 col-lg-1" *ngIf="tableDataList != ''"  data-bs-toggle="modal" data-bs-target="#picModal">
+                <img [src]="productImage" alt="" height="110" width="110">
+            </div>
+        </mat-card>
+
+
+        <!---------------------    Modal Window for Bigger Picture --------------->
+
+        <div class="modal fade" #picModal id="picModal" tabindex="-1" aria-labelledby="picModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                 
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="p-1 col-lg-1" *ngIf="tableDataList != ''"  >
+                        <img [src]="productImage" alt="" height="400" width="400">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+             
+                </div>
+              </div>
+            </div>
+          </div>
+    
+    </div>
+
+
+
+    <!-- ////////////////////////// Table Row////////////////// -->
+
+    <div class="border rounded card shadow p-2" style="max-height: 350px;min-height: 350px;overflow-y: scroll;">
+
+        <table class="table table-hover table-logix">
+            <thead  >
+                <th >S#</th>
+                <th class="col-lg-2">Barcode</th>
+                <th class="col-lg-2">Product Name</th>
+                <th class="col-lg-2">Expiry</th>
+                <th class="col-lg-1">Quantity</th>
+                <th class="col-lg-1">WOH CP</th>
+                <th class="col-lg-1">Cost Price</th>
+                <th class="col-lg-1">Sale Price</th>
+              
+                <th class="col-lg-1">Total</th>
+                <th class="col-lg-1">Action</th>
+
+            </thead>
+
+            <tbody style="height: 30px;" >
+                <tr *ngFor="let item of tableDataList.reverse() index as index" (click)="showImg(item)">
+                    <td class="text-center">{{index+1}}</td>
+                    <td>{{item.barcode}}</td>
+                    <td>{{item.ProductTitle}}</td>
+                    <td><input type="date" class="expDate{{index}}" [(ngModel)]="item.ExpiryDate" (change)="change()"
+                         style="height: 25px; width: 300px;" ></td>
+
+
+                    <td class="text-center"><input type="text"   [(ngModel)]="item.Quantity" min="0"
+                        (keydown)="this.handleNumKeys(item,$event,'.qty');getTotal();changeValue(item);distributeOverHead();"
+                        (keyup)="changeValue(item);getTotal();showImg(item);distributeOverHead();"
+                         class="qty{{index}} text-center" style="width: 80px;" ></td>
+
+
+                    <td class="text-end"><input type="text"  [(ngModel)]="item.wohCP" min="0"
+                        (keydown)="changeValue(item);this.handleNumKeys(item,$event,'.cp');getTotal();distributeOverHead();"
+                        (keyup)="changeValue(item);getTotal();showImg(item);distributeOverHead();"
+                         class="cp{{index}} text-center" style="width: 80px;"></td>
+
+                         <td class="text-center">{{item.CostPrice |number}}</td>
+
+                    <!-- <td class="text-center">
+                        <input type="text"  [(ngModel)]="item.CostPrice" min="0"
+                         (keydown)="this.handleNumKeys(item,$event,'.cp');getTotal();changeWoHCP(item)"
+                        (keyup)="getTotal();changeWoHCP(item);this.handleNumKeys(item,$event,'.cp');
+                         showImg(item)"
+                         class="cpo{{index}} text-center" style="width: 80px;" disabled="true">
+                    </td> -->
+                    <td class="text-center"><input type="text"  [(ngModel)]="item.SalePrice" min="0"
+                         (keydown)="changeValue(item);this.handleNumKeys(item,$event,'.sp');"
+                        (keyup)="changeValue(item);showImg(item);"
+                         class="sp{{index}} text-center" style="width: 80px;">
+                    </td>
+                    
+                    <td class="text-end">{{item.CostPrice * item.Quantity |number}}</td>
+                    <td class="text-danger text-center cursorPointer"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
+
+                </tr>
+                <tr>
+                    <td colspan="4"></td>
+                    <td class="text-center">{{myTotalQty }}</td>
+                    <td colspan="4"></td>
+                </tr>
+
+
+
+
+            </tbody>
+        </table>
+
+    </div>
+
+
+    <!-- //////////////////////////Row 3////////////////// -->
+
+
+    <div class="mt-2  d-flex flex-inline">
+
+
+
+
+        <!-- //////////////////////first Column/////////////////////// -->
+        <mat-card class=" me-1 col-lg-7" style="background-color: rgb(247, 226, 230);">
+
+      <mat-card-content class="">
+        <mat-form-field appearance="outline" class="col-lg-3 p-1">
+            <mat-label>Select Invoice Date</mat-label>
+            <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
+                [matDatepicker]="voucherDate">
+            <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
+            <mat-datepicker #voucherDate></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-lg-3 p-1">
+            <mat-label>Location</mat-label>
+            <mat-select [(ngModel)]="locationID" name="location">
+                <mat-option><ngx-mat-select-search #locationSearch
+                    [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                    name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of locationList | filter:locationSearch.value" [value]="item.locationID">{{item.locationTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-lg-3 p-1">
+            <mat-label>Booker</mat-label>
+            <mat-select [(ngModel)]="bookerID" name="location">
+                <mat-option><ngx-mat-select-search #bookerSearch
+                    [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                    name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of BookerList | filter:bookerSearch.value" [value]="item.bookerID">{{item.bookerName}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-lg-3 p-1">
+            <mat-label>Ref Inv No.</mat-label>
+            <input matInput [(ngModel)]="refInvNo" type="text" name="refInvNo">
+        </mat-form-field>
+        <!-- <mat-form-field appearance="outline" class="col-lg-3 p-1">
+            <mat-label>Discount</mat-label>
+            <input matInput [(ngModel)]="discount" (keyup)="this.global.avoidMinus($event);" type="number" name="dicount">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-lg-3 p-1">
+            <mat-label>OverHead</mat-label>
+            <input matInput (keyup)="distributeOverHead();this.global.avoidMinus($event);" [(ngModel)]="overHead" type="number" name="refInvNo">
+        </mat-form-field> -->
+        <mat-form-field appearance="outline" class="col-lg-6 p-1">
+            <mat-label>Remarks</mat-label>
+            <textarea matInput  rows="1" [(ngModel)]="invRemarks" type="text" name="remarks"></textarea>
+        </mat-form-field>
+
+       
+
+      </mat-card-content>
+
+        </mat-card>
+
+        <!-- //////////////////////Second Column/////////////////////// -->
+        <mat-card class="col-lg-3 me-1" >
+
+           <mat-card-content class="d-flex flex-column">
+            <mat-form-field appearance="outline">
+                <mat-label>Select Party</mat-label>
+                <mat-select [(ngModel)]="partyID" (selectionChange)="onPartySelected()" name="customer">
+                    <mat-option><ngx-mat-select-search #partySearch
+                        [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                        name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of suppliersList | filter:partySearch.value" [value]="item.partyID">{{item.partyName}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <div class="d-flex justify-content-between">
+                <div class="d-flex flex-column text-secondary ">
+                    <label class="pt-2">Address:</label>
+                    <label class="pt-2">City:</label>
+                    <label class="pt-2">Mobile No:</label>
+                    <label class="pt-2">CNIC:</label>
+
+                </div>
+                <div class="d-flex flex-column ">
+                 
+                    <label class="pt-2">{{supplierDetail.partyAddress}}</label>
+                    <label class="pt-2">{{supplierDetail.cityName}}</label>
+                    <label class="pt-2">{{supplierDetail.partyMobileNo}}</label>
+                    <label class="pt-2">{{supplierDetail.partyCNIC}}</label>
+                </div>
+            </div>
+           </mat-card-content>
+
+
+
+        </mat-card>
+
+
+        <!-- //////////////////////Third Column/////////////////////// -->
+        <mat-card class=" col-lg-2" style="background-color: rgb(245, 240, 236);">
+
+
+         <mat-card-content class="d-flex flex-column">
+            <div class=" pt-3 d-flex justify-content-between text-center">
+                <h2 class="text-secondary ">Total:</h2>
+                <h1 style="font-size: 25px;" class="">{{subTotal || 0 |number}}</h1>
+            </div>
+            <!-- <div class=" pt-3 d-flex justify-content-between text-center">
+                <h2 class="text-secondary ">OverHead</h2>
+                <h1 style="font-size: 25px;" class="">{{overHead || 0 |number}}</h1>
+            </div> -->
+            <!-- <div class=" d-flex justify-content-between text-center">
+                <h2 class="text-secondary">Discount:</h2>
+                <h1 style="font-size: 25px;" class=" text-danger">{{discount || 0 |number}}</h1>
+            </div> -->
+            <div class="d-flex justify-content-between text-center">
+                <h2 class="text-secondary">Net Total:</h2>
+                <h1 style="font-size: 25px;" class="">{{(subTotal + overHead ) - discount || 0 |number}}</h1>
+            </div>
+         </mat-card-content>
+
+        </mat-card>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+

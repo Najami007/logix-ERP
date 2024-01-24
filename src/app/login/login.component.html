@@ -5,7 +5,7 @@
         <form class="shadow">
                 
 
-                <div class="text-center" *ngIf="companyProfile[0].companyLogo1">
+                <div class="text-center" *ngIf="companyProfile[0].companyLogo1 && companyProfile != ''">
                     <img  [src]="companyProfile[0].companyLogo1" height="80" width="80" alt="" srcset="">
                 </div>
                 <h1 class="text-center text-dark">SIGN-IN</h1>
