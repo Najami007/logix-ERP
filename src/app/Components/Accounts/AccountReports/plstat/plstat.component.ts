@@ -91,7 +91,7 @@ export class PLStatComponent implements OnInit {
 
  
   getProject(){
-    this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+    this.http.get(environment.mainApi+this.globalData.companyLink+'getproject').subscribe(
       (Response:any)=>{
         this.projectList = Response;
       }
@@ -152,7 +152,7 @@ export class PLStatComponent implements OnInit {
 
 
     if(reqFunc == 'R1'){
-      this.http.get(environment.mainApi+'acc/GetProfitRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+'&todate='
+      this.http.get(environment.mainApi+this.globalData.accountLink+'GetProfitRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+'&todate='
       +this.globalData.dateFormater(this.toDate,'-')+'&projectid='+this.projectID).subscribe(
         (Response)=>{
          
@@ -182,7 +182,7 @@ export class PLStatComponent implements OnInit {
     }
 
     if(reqFunc == 'R2'){
-      this.http.get(environment.mainApi+'acc/GetProfitDetailRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+'&todate='
+      this.http.get(environment.mainApi+this.globalData.accountLink+'GetProfitDetailRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+'&todate='
       +this.globalData.dateFormater(this.toDate,'-')+'&projectid='+this.projectID).subscribe(
         (Response)=>{
         
@@ -209,7 +209,7 @@ export class PLStatComponent implements OnInit {
     }
 
     
-    this.http.get(environment.mainApi+'acc/GetLossRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+'&todate='
+    this.http.get(environment.mainApi+this.globalData.accountLink+'GetLossRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+'&todate='
     +this.globalData.dateFormater(this.toDate,'-')+'&projectid='+this.projectID).subscribe(
       (Response)=>{
 

@@ -1,32 +1,33 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { Observable, retry } from 'rxjs';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
-
-import * as $ from 'jquery';
+import { Router } from '@angular/router';
+import { Observable, retry } from 'rxjs';
 
 @Component({
-  selector: 'app-purchase-return',
-  templateUrl: './purchase-return.component.html',
-  styleUrls: ['./purchase-return.component.scss']
+  selector: 'app-issue-stock-rerturn',
+  templateUrl: './issue-stock-rerturn.component.html',
+  styleUrls: ['./issue-stock-rerturn.component.scss']
 })
-export class PurchaseReturnComponent implements OnInit{
+export class IssueStockRerturnComponent implements OnInit {
+
+  crudList:any =[];
   companyProfile:any = [];
-  crudList:any = [];
+
   constructor(
     private http:HttpClient,
     private msg:NotificationService,
-    public global:GlobalDataModule,
-    private dialogue:MatDialog,
     private app:AppComponent,
+    private global:GlobalDataModule,
+    private dialog:MatDialog,
     private route:Router
   ){
+
     this.global.getMenuList().subscribe((data)=>{
       this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
       // console.log(this.crudList);
@@ -35,81 +36,52 @@ export class PurchaseReturnComponent implements OnInit{
     this.global.getCompany().subscribe((data)=>{
       this.companyProfile = data;
     });
-
   }
 
-  
+
+
   ngOnInit(): void {
-    this.global.setHeaderTitle('Purchase Return');
-    this.getProducts();
-    this.getBooker();
-    this.getLocation();
-    this.getSuppliers();
+   this.global.setHeaderTitle('Issuance');
+   this.getLocation();
+   this.getProducts();
+
   }
 
-  holdBtnType:any ='Hold';
-  tabIndex:any;
-  Date:Date = new Date()
-  productImage:any;
-
-  PBarcode:string = '';   /// for Search barcode field
-  productsData:any;   //// for showing the products
-  tableDataList: any = [];          //////will hold data temporarily
-  suppliersList:any;      //////  will shows the supplier list
-  supplierDetail:any = [];
-
-  myTotalQty:any = 0;
-  subTotal= 0;
-
-  myDue:any;
-  holdBillList:any =[];
-
-  refInvNo:any;
-  invRemarks:any;
-  locationID:any;
-  overHead:any = 0;
-  discount:any= 0;
-  holdInvNo:any = '-';
-  bookerID:any = 0;
-
-
-  change(){
-    //console.log(this.tableDataList);
-  }
-
-
- 
-  currentPartyAddress:any;  /////////// will shows the current party address on page
-  currentPartyCity:any;      /////////// will shows the current party City on page
-  currentPartyMobile:any;   /////////// will shows the current party Mobile on page
-  currentPartyCNIC:any;     /////////// will shows the current party CNIC on page
-
-
-  partyID:any;               /////// will get the party id for Api
-  invoiceDate = new Date;    //////////// invoice date for api
-
-
-
-  productList:any = [];
+  Date:Date = new Date();
+  holdInvNo = '-';
+  holdBtnType = 'Hold';
+  invoiceDate:Date = new Date();
+  locationID  = 0;
+  locationTitle = '';
   locationList:any = [];
-  BookerList:any = [];
+  locationTwoID = 0;
+  locationTwoTitle= '';
+  invRemarks:any;
+  PBarcode:any;
+  productList:any = [];
+  tableDataList:any = [];
 
-
-   /////// to change the tab on edit
-
-   changeTab(tabNum: any) {
-    this.tabIndex = tabNum;
-
-  }
-
-  getBooker(){
-    this.http.get(environment.mainApi+'inv/GetBooker').subscribe(
-      (Response:any)=>{
-        this.BookerList = Response;
-      }
-    )
-  }
+  productImage:any;
+  subTotal:number = 0;
+  totalQty:number = 0;
+  IssueType:any;
+  IssueBillList:any = [];
   
+  onLocationSelected(type:any){
+ 
+    if(type == 'l1'){
+      var row =   this.locationList.find((e:any)=>e.locationID == this.locationID);
+      this.locationTitle = row.locationTitle;
+    
+    }
+    if(type == 'l2'){
+      var lRow =   this.locationList.find((e:any)=>e.locationID == this.locationTwoID);
+      this.locationTwoTitle = lRow.locationTitle;
+
+    }
+  }
+
+
   getLocation(){
     this.http.get(environment.mainApi+'inv/getlocation').subscribe(
       (Response:any)=>{
@@ -117,6 +89,7 @@ export class PurchaseReturnComponent implements OnInit{
       }
     )
   }
+
 
 
   getProducts(){
@@ -130,20 +103,6 @@ export class PurchaseReturnComponent implements OnInit{
   }
 
 
-  getSuppliers(){
-    this.http.get(environment.mainApi+'cmp/getsupplier').subscribe(
-      {
-        next:value =>{
-          this.suppliersList = value;
-        },
-        error: error=>{
-          this.msg.WarnNotify('Error Occured While Loading Data')  
-        }         
-      }
-      )
-  }
-
-
   searchByCode(e:any){
 
     if(this.PBarcode !== ''){
@@ -154,7 +113,7 @@ export class PurchaseReturnComponent implements OnInit{
         /////// check already present in the table or not
         if(row !== undefined){
           var condition = this.tableDataList.find(
-            (x: any) => x.ProductID == row.productID
+            (x: any) => x.productID == row.productID
           );
       
           var index = this.tableDataList.indexOf(condition);
@@ -164,32 +123,32 @@ export class PurchaseReturnComponent implements OnInit{
       
           //console.log(data);
           this.tableDataList.push({
-            ProductID:row.productID,
-            ProductTitle:row.productTitle,
+            productID:row.productID,
+            productTitle:row.productTitle,
             barcode:row.barcode,
             productImage:row.productImage,
-            Quantity:1,
-            wohCP:row.costPrice,
-            CostPrice:row.costPrice,
-            SalePrice:row.salePrice,
-            ExpiryDate:this.global.dateFormater(new Date(),'-'),
-            BatchNo:'-',
-            BatchStatus:'-',
-            UomID:row.uomID,
-            Packing:1,
+            quantity:1,
+            avgCostPrice:row.avgCostPrice,
+            costPrice:row.costPrice,
+            salePrice:row.salePrice,
+            expiryDate:this.global.dateFormater(new Date(),'-'),
+            batchNo:'-',
+            batchStatus:'-',
+            uomID:row.uomID,
+            packing:1,
             discInP:0,
             discInR:0,
       
           })
       
           this.productImage = row.productImage;
-          this.getTotal();
+        
           this.PBarcode = '';
           $('#searchProduct').trigger('focus');
         }else {
-          this.tableDataList[index].Quantity += 1;
+          this.tableDataList[index].quantity += 1;
           this.productImage = this.tableDataList[index].productImage;
-          this.getTotal();
+       
           this.PBarcode = '';
           $('#searchProduct').trigger('focus');
         }
@@ -197,9 +156,7 @@ export class PurchaseReturnComponent implements OnInit{
           this.msg.WarnNotify('Product Not Found')
         }
      
-        if(this.overHead > 0){
-          this.distributeOverHead();
-        }
+       
        this.PBarcode = '';
    
        }
@@ -209,12 +166,8 @@ export class PurchaseReturnComponent implements OnInit{
   }
 
   holdDataFunction(data:any){
-    //console.log(data);
-
-    
-
-    var condition = this.tableDataList.find(
-      (x: any) => x.ProductID == data.productID
+  var condition = this.tableDataList.find(
+      (x: any) => x.productID == data.productID
     );
 
     var index = this.tableDataList.indexOf(condition);
@@ -223,19 +176,19 @@ export class PurchaseReturnComponent implements OnInit{
 
     //console.log(data);
     this.tableDataList.push({
-      ProductID:data.productID,
-      ProductTitle:data.productTitle,
+      productID:data.productID,
+      productTitle:data.productTitle,
       barcode:data.barcode,
       productImage:data.productImage,
-      Quantity:1,
-      wohCP:data.costPrice,
-      CostPrice:data.costPrice,
-      SalePrice:data.salePrice,
-      ExpiryDate:this.global.dateFormater(new Date(),'-'),
-      BatchNo:'-',
-      BatchStatus:'-',
-      UomID:data.uomID,
-      Packing:1,
+      quantity:1,
+      avgCostPrice:data.avgCostPrice,
+      costPrice:data.costPrice,
+      salePrice:data.salePrice,
+      expiryDate:this.global.dateFormater(new Date(),'-'),
+      batchNo:'-',
+      batchStatus:'-',
+      uomID:data.uomID,
+      packing:1,
       discInP:0,
       discInR:0,
      
@@ -245,33 +198,37 @@ export class PurchaseReturnComponent implements OnInit{
     // console.log(this.tableDataList);
 
     this.productImage = data.productImage;
-    this.getTotal();
+    
     this.PBarcode = '';
     $('#searchProduct').trigger('focus');
   }else {
-    this.tableDataList[index].Quantity += 1;
+    this.tableDataList[index].quantity += 1;
     this.productImage = this.tableDataList[index].productImage;
-    this.getTotal();
+    
     this.PBarcode = '';
     $('#searchProduct').trigger('focus');
   }
-  
-  if(this.overHead > 0){
-    this.distributeOverHead();
-  }
 
+  this.getTotal();
     this.PBarcode = '';
     return false;
   }
 
 
+  showImg(item:any){
+    
+    var index = this.tableDataList.findIndex((e:any)=> e.productID == item.productID);
+    this.productImage = this.tableDataList[index].productImage;
+  
+  }
+
   getTotal() {
     this.subTotal = 0;
-    this.myTotalQty = 0;
+    this.totalQty = 0;
     for (var i = 0; i < this.tableDataList.length; i++) {
    
-      this.subTotal += (parseFloat(this.tableDataList[i].Quantity) * parseFloat(this.tableDataList[i].CostPrice));
-      this.myTotalQty += parseFloat(this.tableDataList[i].Quantity);
+      this.subTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].costPrice));
+      this.totalQty += parseFloat(this.tableDataList[i].quantity);
       // this.myTotal = this.mySubtoatal - this.myDiscount;
       // this.myDue = this.myPaid - this.myTotal;\
     
@@ -280,51 +237,10 @@ export class PurchaseReturnComponent implements OnInit{
     }
   }
 
-
-  delRow(item: any) {
-    var index = this.tableDataList.findIndex((e:any)=> e.productID == item.productID);
-    this.tableDataList.splice(index, 1);
-    this.getTotal();
-    
-  }
-
-
-  showImg(item:any){
-    var index = this.tableDataList.findIndex((e:any)=> e.ProductID == item.ProductID);
-    this.productImage = this.tableDataList[index].productImage;
-  }
-
-   rowFocused = 0;
-
-   focusToQty(e:any){
-    if(e.keyCode == 40){
-      
-      if(this.tableDataList.length >= 1 ){  
-         $('.qty0').trigger('focus');
-
-      }
-     }
-   }
-
-   changeValue(item:any){
-    var myIndex = this.tableDataList.indexOf(item);
-   // console.log(this.tableDataList[myIndex]);
-    var myQty = this.tableDataList[myIndex].Quantity;
-    var mywCP = this.tableDataList[myIndex].wohCP;
-    var mySP = this.tableDataList[myIndex].SalePrice;
-    if(mywCP == null || mywCP == '' || mywCP == undefined){
-     
-      this.tableDataList[myIndex].wohCP = 0;
-    }else if(myQty == null || myQty == '' || myQty == undefined){
-      this.tableDataList[myIndex].Quantity = 0;
-    }else if(mySP == null || mySP == '' || mySP == undefined){
-      this.tableDataList[myIndex].SalePrice = 0;
-    }
-   }
-
+  rowFocused = 0;
   handleNumKeys(item:any ,e:any,cls:string){
 
-  
+   
 
     // if (e.target.value < '0') {
     //   e.target.value = 0;
@@ -385,63 +301,56 @@ export class PurchaseReturnComponent implements OnInit{
 
   }
 
-  
+  focusToQty(e:any){
+    if(e.keyCode == 40){
+      
+      if(this.tableDataList.length >= 1 ){  
+         $('.qty0').trigger('focus');
 
+      }
+     }
+   }
 
-  onPartySelected(){
-    this.supplierDetail = this.suppliersList.find((e:any)=>e.partyID == this.partyID);
- 
+  delRow(item: any) {
+    var index = this.tableDataList.findIndex((e:any)=> e.productID == item.productID);
+    this.tableDataList.splice(index, 1);
+    this.getTotal();
+    
   }
 
+  changeValue(item:any){
+    var myIndex = this.tableDataList.indexOf(item);
+   // console.log(this.tableDataList[myIndex]);
+    var myQty = this.tableDataList[myIndex].quantity;
+    var myCP = this.tableDataList[myIndex].costPrice;
+    var mySP = this.tableDataList[myIndex].salePrice;
+    if(myCP == null || myCP == '' || myCP == undefined){
+     
+      this.tableDataList[myIndex].costPrice = 0;
+    }else if(myQty == null || myQty == '' || myQty == undefined){
+      this.tableDataList[myIndex].quantity = 0;
+    }else if(mySP == null || mySP == '' || mySP == undefined){
+      this.tableDataList[myIndex].salePrice = 0;
+    }
+   }
 
-
-
-
+   
   SaveBill(type:any){
     var isValidFlag = true;
-  this.tableDataList.forEach((p:any) => {
-        
-      if(p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined ){
-        this.msg.WarnNotify('('+p.ProductTitle+') Cost Price is not Valid');
-         isValidFlag = false;
-        //  console.log(p)
-         return;
-      }
-
-      if(p.Quanity == 0 || p.Quantity == '0' ){
-        this.msg.WarnNotify('('+p.ProductTitle+') Quantity is not Valid');
-         isValidFlag = false;
-        //  console.log(p)
-        //  console.log(this.tableDataList)
-         return;
-      }
-      
-     
-   
-    });
-
-
-
        
     if(this.tableDataList == ''){
       this.msg.WarnNotify('Atleast One Product Must Be Selected')
-    }else if(this.locationID == '' || this.locationID == undefined || this.locationID == 0){
+    }else if( this.locationID == undefined || this.locationID == 0){
       this.msg.WarnNotify('Select Warehouse Location')
-    }else if(this.refInvNo == '' || this.refInvNo == undefined){
-      this.msg.WarnNotify('Enter Reference Invoice No')
-    }else if(this.partyID == '' || this.partyID == 0 || this.partyID == undefined){
-      this.msg.WarnNotify('Select Supplier Party')
-    }else if(this.bookerID == 0 || this.bookerID == undefined){
-      this.msg.WarnNotify("Select Booker")
-    }else {
+    }else if(this.locationTwoID == 0 || this.locationTwoID == undefined){
+      this.msg.WarnNotify('Select Department')
+    }else if(this.IssueType == '' || this.IssueType == undefined){
+      this.msg.WarnNotify('Select Issuance Type')
+    }
+    else {
 
     
-      if(this.discount == '' || this.discount == undefined){
-        this.discount = 0;
-      }
-      if(this.overHead == '' || this.overHead == undefined){
-        this.overHead = 0;
-      }
+    
       if(this.invRemarks == '' || this.invRemarks == undefined){
         this.invRemarks = '-';
       }
@@ -450,20 +359,20 @@ export class PurchaseReturnComponent implements OnInit{
         if(type == 'hold'){
           if(this.holdBtnType == 'Hold'){
            this.app.startLoaderDark();
-           this.http.post(environment.mainApi+'inv/InsertPurchase',{
-           InvType: "HPR",
+           this.http.post(environment.mainApi+'inv/InsertIssueStock',{
+           InvType: "HIR",
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
-           RefInvoiceNo: this.refInvNo,
-           PartyID: this.partyID,
            LocationID: this.locationID,
+           LocationTitle:this.locationTitle,
            ProjectID: 1,
-           BookerID: this.bookerID,
+           IssueType:this.IssueType,
+           IssueStatus:'A',
            BillTotal: this.subTotal,
-           BillDiscount: this.discount,
-           OverHeadAmount: this.overHead,
-           NetTotal: this.subTotal - this.discount,
+           NetTotal: this.subTotal ,
            Remarks: this.invRemarks,
            InvoiceDocument: "-",
+           LocationTwoID:this.locationTwoID,
+           LocationTwoTitle:this.locationTwoTitle,
        
            InvDetail: JSON.stringify(this.tableDataList),
        
@@ -482,26 +391,26 @@ export class PurchaseReturnComponent implements OnInit{
              }
            )
           }else if(this.holdBtnType == 'ReHold'){
-           this.dialogue.open(PincodeComponent,{
+           this.dialog.open(PincodeComponent,{
              width:"30%"
            }).afterClosed().subscribe(pin=>{
              if(pin != ''){
                this.app.startLoaderDark();
           
-           this.http.post(environment.mainApi+'inv/UpdateHoldInvoice',{
+           this.http.post(environment.mainApi+'inv/UpdateHoldedIssueInvoice',{
            InvBillNo: this.holdInvNo,
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
-           RefInvoiceNo: this.refInvNo,
-           PartyID: this.partyID,
            LocationID: this.locationID,
+           LocationTitle:this.locationTitle,
            ProjectID: 1,
-           BookerID: this.bookerID,
+           IssueType:this.IssueType,
+           IssueStatus:'A',
            BillTotal: this.subTotal,
-           BillDiscount: this.discount,
-           OverHeadAmount: this.overHead,
-           NetTotal: this.subTotal - this.discount,
+           NetTotal: this.subTotal ,
            Remarks: this.invRemarks,
            InvoiceDocument: "-",
+           LocationTwoID:this.locationTwoID,
+           LocationTwoTitle:this.locationTwoTitle,
            PinCode:pin,
            InvDetail: JSON.stringify(this.tableDataList),
        
@@ -523,27 +432,27 @@ export class PurchaseReturnComponent implements OnInit{
            })
           }
      
-         }else if(type == 'purchase'){
+         }else if(type == 'issue'){
            this.app.startLoaderDark();
-           this.http.post(environment.mainApi+'inv/InsertPurchase',{
-           InvType: "PR",
-           InvDate: this.global.dateFormater(this.invoiceDate,'-'),
-           RefInvoiceNo: this.refInvNo,
-           PartyID: this.partyID,
-           LocationID: this.locationID,
-           ProjectID: 1,
-           BookerID: this.bookerID,
-           BillTotal: this.subTotal,
-           BillDiscount: this.discount,
-           OverHeadAmount: this.overHead,
-           NetTotal: this.subTotal - this.discount,
-           Remarks: this.invRemarks,
-           InvoiceDocument: "-",
-           HoldInvNo:this.holdInvNo,
-       
-           InvDetail: JSON.stringify(this.tableDataList),
-       
-           UserID: this.global.getUserID()
+           this.http.post(environment.mainApi+'inv/InsertIssueStock',{
+            InvType: "IR",
+            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
+            LocationID: this.locationID,
+            LocationTitle:this.locationTitle,
+            ProjectID: 1,
+            IssueType:this.IssueType,
+            IssueStatus:'A',
+            BillTotal: this.subTotal,
+            NetTotal: this.subTotal ,
+            Remarks: this.invRemarks,
+            InvoiceDocument: "-",
+            LocationTwoID:this.locationTwoID,
+            LocationTwoTitle:this.locationTwoTitle,
+        
+            InvDetail: JSON.stringify(this.tableDataList),
+        
+            UserID: this.global.getUserID(),
+            HoldInvNo:this.holdInvNo,
            }).subscribe(
              (Response:any)=>{
                if(Response.msg == 'Data Saved Successfully'){
@@ -571,50 +480,55 @@ export class PurchaseReturnComponent implements OnInit{
 
 
   reset(){
-    this.PBarcode = '';
     this.invoiceDate = new Date();
-    this.tableDataList = [];
     this.locationID = 0;
-    this.refInvNo = '';
-    this.discount = 0;
-    this.overHead = 0;
+    this.locationTitle = '';
+    this.locationTwoID = 0;
+    this.locationTwoTitle = '';
     this.invRemarks = '';
+    this.tableDataList = [];
+    this.totalQty = 0;
     this.subTotal = 0;
-    this.productImage = '';
-    this.partyID = 0;
-    this.myTotalQty = 0;
-    this.holdInvNo = '-';
-    this.bookerID = 0;
-    this.invRemarks = '';
     this.holdBtnType = 'Hold';
-    this.holdBillList = [];
-
-
+    this.productImage = '';
+    this.holdInvNo = '-';
+    this.IssueBillList = [];
+    this.IssueType = '';
 
   }
 
 
-  distributeOverHead(){
-    // console.log(this.subTotal,this.overHead,this.discount)
-    var amount = this.overHead / this.myTotalQty;
-    for(var i=0; i<this.tableDataList.length;i++){this.tableDataList[i].CostPrice = parseFloat(this.tableDataList[i].wohCP) + amount}    
-    this.getTotal();
+  
+  findHoldBills(type:any){
+    if(type == 'HIR'){
+      $('#edit').show();
+    }
+
+    if(type == 'IR'){
+      $('#edit').hide()
+    }
+
+    this.http.get(environment.mainApi+'inv/GetIssueInventoryBillSingleDate?Type='+type+'&creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
+      (Response:any)=>{
+        this.IssueBillList = Response;
+         console.log(this.IssueBillList);
+      }
+    )
   }
 
+
+
+  
   myInvoiceNo:any;
   myInvoiceDate:any;
   myLocation:any;
-  myRefInvNo:any;
-  mydiscount:any;
-  myOverHeadAmount:any;
+  myLocationTitle:any;
+  myLocationTwoTitle:any;
   myInvRemarks:any;
-  myBookerName:any;
-  myPartyName:any;
+  myIssueType:any;
   mySubTotal:any;
   myTableDataList:any = [];
   myBillTotalQty = 0;
-  mywohCPTotal = 0;
-  myWCPTotal = 0;
   myCPTotal = 0;
   mySPTotal = 0;
   myBillStatus = false;
@@ -625,41 +539,26 @@ export class PurchaseReturnComponent implements OnInit{
     this.myInvoiceNo = item.invBillNo;
     this.myInvoiceDate = new Date(item.invDate);
     this.myLocation = item.locationID;
-    this.myRefInvNo = item.refInvoiceNo;
-    this.mydiscount = item.billDiscount;
-    this.myOverHeadAmount = item.overHeadAmount;
+    this.myLocationTitle = item.locationTitle;
+    this.myLocationTwoTitle = item.locationTwoTitle;
+    this.myIssueType = item.issueType;
     this.myInvRemarks = item.remarks;
-    this.myBookerName = item.bookerName;
-    this.myPartyName = item.partyName;
     this.mySubTotal = item.billTotal;
     this.myBillStatus = item.approvedStatus;
 
 
     this.getBillDetail(item.invBillNo).subscribe(
       (Response:any)=>{
-        var totalQty = 0 ;
-        var overhead = 0
+
         this.myBillTotalQty = 0;
-        this.mywohCPTotal = 0;
-        this.myWCPTotal = 0;
         this.myCPTotal = 0;
         this.mySPTotal = 0;
        
         this.productImage = Response[Response.length - 1].productImage;
 
-       if(item.overHeadAmount > 0){
-        Response.forEach((j:any) => {
-          totalQty += j.quantity
-        });
-     
-         overhead = item.overHeadAmount / totalQty;
-        // console.log(item.overHeadAmount,totalQty,overhead);
- 
-       }
 
           Response.forEach((e:any) => {
             this.myBillTotalQty += e.quantity;
-            this.mywohCPTotal += (e.costPrice - overhead)* e.quantity;
             this.myCPTotal += e.costPrice * e.quantity;
             this.mySPTotal += e.salePrice * e.quantity;
 
@@ -669,7 +568,7 @@ export class PurchaseReturnComponent implements OnInit{
               barcode:e.barcode,
               productImage:e.productImage,
               Quantity:e.quantity,
-              wohCP:(e.costPrice - overhead) ,
+              avgCostPrice:e.avgCostPrice,
               CostPrice:e.costPrice,
               SalePrice:e.salePrice,
               ExpiryDate:this.global.dateFormater(new Date(e.expiryDate),'-'),
@@ -701,47 +600,37 @@ export class PurchaseReturnComponent implements OnInit{
     this.holdBtnType = 'ReHold'
     this.invoiceDate = new Date(item.invDate);
     this.locationID = item.locationID;
-    this.refInvNo = item.refInvoiceNo;
-    this.discount = item.billDiscount;
-    this.overHead = item.overHeadAmount;
+    this.locationTitle = item.locationTitle;
+    this.locationTwoTitle = item.locationTwoTitle;
+    this.locationTwoID = item.locationTwoID;
+    this.IssueType = item.issueType;
     this.invRemarks = item.remarks;
     this.holdInvNo = item.invBillNo;
-    this.bookerID = item.bookerID;
-    this.partyID = item.partyID;
     this.subTotal = item.billTotal;
 
     this.getBillDetail(item.invBillNo).subscribe(
       (Response:any)=>{
-        var totalQty = 0 ;
-        var overhead = 0;
-        this.myTotalQty = 0;
+        console.log(Response);
+        this.totalQty = 0;
         this.productImage = Response[Response.length - 1].productImage;
 
-       if(item.overHeadAmount > 0){
-        Response.forEach((j:any) => {
-          totalQty += j.quantity
-        });
-     
-         overhead = item.overHeadAmount / totalQty;
- 
-       }
 
           Response.forEach((e:any) => {
-            this.myTotalQty += e.quantity;
+            this.totalQty += e.quantity;
             this.tableDataList.push({
-              ProductID:e.productID,
-              ProductTitle:e.productTitle,
+              productID:e.productID,
+              productTitle:e.productTitle,
               barcode:e.barcode,
               productImage:e.productImage,
-              Quantity:e.quantity,
-              wohCP:(e.costPrice - overhead) ,
-              CostPrice:e.costPrice,
-              SalePrice:e.salePrice,
-              ExpiryDate:this.global.dateFormater(new Date(e.expiryDate),'-'),
-              BatchNo:e.batchNo,
-              BatchStatus:e.batchStatus,
-              UomID:e.uomID,
-              Packing:e.packing,
+              quantity:e.quantity,
+              avgCostPrice:e.avgCostPrice,
+              costPrice:e.costPrice,
+              salePrice:e.salePrice,
+              expiryDate:this.global.dateFormater(new Date(e.expiryDate),'-'),
+              batchNo:e.batchNo,
+              batchStatus:e.batchStatus,
+              uomID:e.uomID,
+              packing:e.packing,
               discInP:e.discInP,
               discInR:e.discInR,
             })
@@ -751,31 +640,16 @@ export class PurchaseReturnComponent implements OnInit{
       }
     )
 
+    // console.log(this.locationTitle,this.locationTwoTitle)
+
   }
 
 
   public getBillDetail(billNo:any):Observable<any>{
-   return this.http.get(environment.mainApi+'inv/GetSingleBillDetail?reqInvBillNo='+billNo).pipe(retry(3));
-  }
+    return this.http.get(environment.mainApi+'inv/GetIssueSingleBillDetail?reqInvBillNo='+billNo).pipe(retry(3));
+   }
+ 
 
-
-
-  findHoldBills(type:any){
-    if(type == 'hpr'){
-      $('#edit').show();
-    }
-
-    if(type == 'pr'){
-      $('#edit').hide()
-    }
-
-    this.http.get(environment.mainApi+'inv/GetInventoryBillSingleDate?Type='+type+'&creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
-      (Response:any)=>{
-        this.holdBillList = Response;
-        // console.log(this.holdBillList);
-      }
-    )
-  }
 
 
 

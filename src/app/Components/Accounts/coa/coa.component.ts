@@ -19,6 +19,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 })
 export class COAComponent  implements OnInit {
 
+  modUrl = this.route.url.split("/")[1];
 
   constructor(private msg:NotificationService,
     private app:AppComponent,
@@ -28,7 +29,7 @@ export class COAComponent  implements OnInit {
     private http:HttpClient,
     private dialogue:MatDialog
     ) { 
-
+    
       this.globalData.getMenuList().subscribe((data)=>{
         this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
       })
@@ -36,6 +37,12 @@ export class COAComponent  implements OnInit {
     
 
     }
+
+
+
+
+      
+  
 
   ngOnInit(): void {
     this.globalData.setHeaderTitle('Charts Of Accounts');
@@ -188,7 +195,7 @@ onlevel3Change(){
   //////////////////////////// will get the coa main five types///////////////////
 
   getCoaType(){
-    this.http.get(environment.mainApi+'acc/getcoatype').subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'getcoatype').subscribe(
       {
         next:value=>{
           // console.log(value);
@@ -208,7 +215,7 @@ onlevel3Change(){
   ///////////////////////////// will get the notes list
   
   getNotes(){
-    this.http.get(environment.mainApi+'acc/GetNote').subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'GetNote').subscribe(
       (Response )=>{
         this.notesList = Response;
 
@@ -221,7 +228,7 @@ onlevel3Change(){
 
   //////////////////////////////////////////////////////////
   GetChartOfAccount(){
-    this.http.get(environment.mainApi+'acc/GetChartOfAccount').subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'GetChartOfAccount').subscribe(
       {
         next:value=>{
     
@@ -238,7 +245,7 @@ onlevel3Change(){
   ///////////////////////////////////////
 
   getLevel1(){
-    this.http.get(environment.mainApi+'acc/getlevel1?level0='+this.CoaType).subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'getlevel1?level0='+this.CoaType).subscribe(
       {
         next:value=>{
           // console.log(value);
@@ -254,7 +261,7 @@ onlevel3Change(){
   /////////////////////////////////////////////////
 
   getLevel2(){
-    this.http.get(environment.mainApi+'acc/getlevel2?level0='+this.CoaType+'&level1='+this.level1).subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'getlevel2?level0='+this.CoaType+'&level1='+this.level1).subscribe(
       {
         next:value=>{
           // console.log(value);
@@ -270,7 +277,7 @@ onlevel3Change(){
 
   ////////////////////////////////////
   getLevel3(){
-    this.http.get(environment.mainApi+'acc/getlevel3?level0='+this.CoaType+'&level1='+this.level1+'&level2='+this.level2).subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'getlevel3?level0='+this.CoaType+'&level1='+this.level1+'&level2='+this.level2).subscribe(
       {
         next:value=>{
           // console.log(value);
@@ -286,7 +293,7 @@ onlevel3Change(){
 
   //////////////////////////////
   getLevel4(){
-    this.http.get(environment.mainApi+'acc/getlevel4?level0='+this.CoaType+'&level1='+this.level1+'&level2='+this.level2+'&level3='+this.level3).subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'getlevel4?level0='+this.CoaType+'&level1='+this.level1+'&level2='+this.level2+'&level3='+this.level3).subscribe(
       {
         next:value=>{
           // console.log(value);
@@ -352,7 +359,7 @@ onlevel3Change(){
     }
     else{
       this.app.startLoaderDark();
-      this.http.post(environment.mainApi+'acc/InsertChartOfAccount',{
+      this.http.post(environment.mainApi+this.globalData.accountLink+'InsertChartOfAccount',{
     CoaTitle: this.CoaTitle,
     CoaTypeID: this.CoaType,
     Level1: this.level1.toString(),
@@ -434,7 +441,7 @@ onlevel3Change(){
       if(result.isConfirmed){
 
         //////on confirm button mainApi the api will run
-        this.http.post(environment.mainApi+'acc/DeleteChartOfAccount',{
+        this.http.post(environment.mainApi+this.globalData.accountLink+'DeleteChartOfAccount',{
           CoaID: row.coaID,
           PinCode:pin,
           AccountCode:row.accountCode,

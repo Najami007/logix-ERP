@@ -96,7 +96,7 @@ export class BalanceSheetComponent implements OnInit {
 
  
   getProject(){
-    this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+    this.http.get(environment.mainApi+this.globalData.companyLink+'getproject').subscribe(
       (Response:any)=>{
         this.projectList = Response;
       }
@@ -128,7 +128,7 @@ export class BalanceSheetComponent implements OnInit {
    
       this.previousYear = this.currentYear-1
   
-      this.http.get(environment.mainApi+'acc/GetMainBalanceSheet?todate='+this.globalData.dateFormater(this.toDate,'-')+'&projectid='+this.projectID).subscribe(
+      this.http.get(environment.mainApi+this.globalData.accountLink+'GetMainBalanceSheet?todate='+this.globalData.dateFormater(this.toDate,'-')+'&projectid='+this.projectID).subscribe(
         (Response:any)=>{
           this.assetList = [];
           this.liabilityList = [];

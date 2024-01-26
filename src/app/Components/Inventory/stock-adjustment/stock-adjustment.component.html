@@ -13,7 +13,7 @@
 
             <mat-form-field appearance="outline" class="col-lg-2 ">
                 <mat-label>Location</mat-label>
-                <mat-select [(ngModel)]="locationID" name="location" (selectionChange)="onLocationSelected('l1')">
+                <mat-select [(ngModel)]="locationID" name="location" >
                     <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
                             [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                     <mat-option *ngFor="let item of locationList | filter:locationSearch.value" 
@@ -23,19 +23,12 @@
 
 
             <mat-form-field appearance="outline" class="col-lg-2">
-                <mat-label>Department</mat-label>
-                <mat-select [(ngModel)]="locationTwoID" name="location" (selectionChange)="onLocationSelected('l2')">
-                    <mat-option><ngx-mat-select-search #depSearch [placeholderLabel]="'Search...'"
-                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                    <mat-option *ngFor="let item of locationList | filter:depSearch.value"
-                        [value]="item.locationID">{{item.locationTitle}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="col-lg-2">
-                <mat-label>Issue Type</mat-label>
-                <mat-select [(ngModel)]="IssueType" name="location" (selectionChange)="onLocationSelected('l2')">
-                    <mat-option value="Stock Transfer">Stock Transfer</mat-option>
-                    <mat-option value="Expense">Expense</mat-option>
+                <mat-label>Adjustment Type</mat-label>
+                <mat-select [(ngModel)]="adjustmentType" name="location" >
+                    <mat-option value="AI">Stock In</mat-option>
+                    <mat-option value="AO">Stock Out</mat-option>
+                    <mat-option value="DL">Damage Loss</mat-option>
+                    <mat-option value="E">Expiry</mat-option>
                 </mat-select>
             </mat-form-field>
 
@@ -163,12 +156,12 @@
 
 
        <div class="mt-4 d-flex justify-content-around">
-        <button mat-raised-button class="bg-primary text-white w-25" (click)="SaveBill('hold')">{{holdBtnType}}</button>
-        <button mat-raised-button class="bg-success text-white w-25" (click)="SaveBill('issue')">Save</button>
+        <!-- <button mat-raised-button class="bg-primary text-white w-25" (click)="SaveBill('hold')">{{holdBtnType}}</button> -->
+        <button mat-raised-button class="bg-success text-white w-50" (click)="SaveBill('issue')">Save</button>
         
        </div>
        <div class="mt-4 d-flex justify-content-around">
-        <button mat-raised-button class="bg-transparent text-danger " data-bs-toggle="modal" data-bs-target="#holdModal">Retrive</button>
+        <button mat-raised-button class="bg-transparent text-danger w-50" data-bs-toggle="modal" data-bs-target="#holdModal">Retrive</button>
 
 
                    <!---------------     Modal Window for Retreiving Hold Bills --------------->
@@ -190,8 +183,7 @@
                         </mat-form-field>
                  
     
-                        <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 bg-primary text-white btn-rpt" (click)="findHoldBills('HI')" >Hold Bill</button>
-                        <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt" (click)="findHoldBills('I')" >Pur Retrun Bill</button>
+                        <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt" (click)="FindSavedBills('ai')" >Get Invoices</button>
     
                        <mat-form-field class="col-lg-3" appearance="outline">
                         <mat-label>Search.......</mat-label>
@@ -207,11 +199,11 @@
                                 <th>Inv No.</th>
                                 <th>Date</th>
                                 <th>Type</th>
-                                <th>Department</th>
+                                <th>Location</th>
                                 <th>Amount</th>
                                 <th>User</th>
                                 <th *ngIf="crudList.r">Action</th>
-                                <th *ngIf="crudList.u" id="edit">Retrive</th>
+                                <!-- <th *ngIf="crudList.u" id="edit">Retrive</th> -->
                             </tr>
     
                         </thead>
@@ -220,12 +212,12 @@
                                 <td>{{index+1}}</td>
                                 <td>{{item.invBillNo}}</td>
                                 <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
-                                <td>{{item.issueType}}</td>
-                                <td>{{item.locationTwoTitle}}</td>
-                                <td>{{item.netTotal | number:'1.0-0'}}</td>
+                                <td>{{item.invType}}</td>
+                                <td>{{item.locationTitle}}</td>
+                                <td class="text-end">{{item.netTotal | number:'1.0-0'}}</td>
                                 <td>{{item.entryUser}}</td>
                                 <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary" (click)="printBill(item)" >print</mat-icon></td>
-                                <td class="text-center cursorPointer" *ngIf=" item.invType == 'HI' && crudList.u"><mat-icon data-bs-dismiss="modal"  (click)="retriveBill(item)">edit</mat-icon></td>
+                                <!-- <td class="text-center cursorPointer" *ngIf=" item.invType == 'HI' && crudList.u"><mat-icon data-bs-dismiss="modal"  (click)="retriveBill(item)">edit</mat-icon></td> -->
     
                             </tr>
                         </tbody>
@@ -260,7 +252,7 @@
             </div>
        
            <hr>
-           <h3 class="border border-dark w-100 text-center">Stock Issue Note  
+           <h3 class="border border-dark w-100 text-center">Stock Adjustment Note  
             <span class="badge text-danger" *ngIf="myBillStatus == false">UnApproved</span> 
             <span class="badge text-success " *ngIf="myBillStatus == true">Approved</span> </h3>
         <div class="d-flex mb-1">
@@ -269,22 +261,18 @@
             <div class="row">
                 <label class="fw-bold" >Date:</label>
                 <label class="fw-bold" >Inv No:</label>
-                <label class="fw-bold" >Issued To:</label>
-                <label class="fw-bold" >Issued Type:</label>
-             
+      
             </div>
             <div class="row">
                 <label >{{myInvoiceDate | date:'dd-MM-yyyy'}}</label>
                 <label >{{myInvoiceNo}}</label>
-                <label >{{myLocationTwoTitle}}</label>
-                <label >{{myIssueType}}</label>
-                
+
             </div>
           </div>
            <div class="d-flex border border-dark p-2 w-50">
             <div class="row">
             
-                <label class="fw-bold" >Issued From:</label>
+                <label class="fw-bold" >Location</label>
                 <label class="fw-bold" >Remarks:</label>
             </div>
             <div class="row">
@@ -302,11 +290,11 @@
                     <th class="col-lg-3">Product Name</th>
                     <th class="text-center">Quantity</th>
                     <th class=" text-center">Cost Price</th>
-                    <th class=" text-center">Avg Cost</th>
-                    <!-- <th class=" text-center">Sale Price</th> -->
+                    <th class=" text-center">Average Cost</th>
+                    <th class=" text-center">Sale Price</th>
                     <th class=" text-center">Cost Total</th>
                     <th class=" text-center">Avg Cost Total</th>
-                    <!-- <th class=" text-center">Sale Total</th> -->
+                    <th class=" text-center">Sale Total</th>
 
                 </tr>
             </thead>
@@ -322,10 +310,10 @@
                     <td class="text-center ">{{item.Quantity |number}}</td>
                     <td class="text-end ">{{item.CostPrice |number: '1.0-1'}}</td>
                     <td class="text-end ">{{item.avgCostPrice |number: '1.0-1'}}</td>
-                    <!-- <td class="text-end ">{{item.SalePrice |number: '1.0-1'}}</td> -->
+                    <td class="text-end ">{{item.SalePrice |number: '1.0-1'}}</td>
                     <td class="text-end ">{{item.CostPrice * item.Quantity |number: '1.0-1'}}</td>
                     <td class="text-end ">{{item.avgCostPrice * item.Quantity |number: '1.0-1'}}</td>
-                    <!-- <td class="text-end ">{{item.SalePrice * item.Quantity |number: '1.0-1'}}</td> -->
+                    <td class="text-end ">{{item.SalePrice * item.Quantity |number: '1.0-1'}}</td>
 
                 </tr>
                 <tr>
@@ -333,13 +321,12 @@
                     <th class="text-center">{{myBillTotalQty}}</th>
                     <th></th>
                     <th></th>
+                    <th></th>
                     <th class="text-end">{{myCPTotal | number:'1.0-1'}}</th>
                     <th class="text-end">{{myAvgCPTotal | number:'1.0-1'}}</th>
-                    <!-- <th class="text-end">{{mySPTotal | number:'1.0-1'}}</th> -->
-                   
-                    <!-- <th class="text-end">{{mywohCPTotal | number:'1.0-1'}}</th> -->
-                    <!-- <th></th>
-                    <th></th> -->
+                    <th class="text-end">{{mySPTotal | number:'1.0-1'}}</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </tbody>
         </table>
@@ -374,3 +361,4 @@
     </div>
 
 </div>
+

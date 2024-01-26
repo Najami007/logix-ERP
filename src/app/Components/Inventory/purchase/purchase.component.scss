@@ -4,13 +4,16 @@ input:focus{
 }
 
 #searchProduct{
+    font-size: 18px;
+    font-weight: 400;
     height: 60px;
 }
 
 .SearchConatiner{
 // border: 0px solid rgb(180, 180, 180);
 // background-color: rgb(249, 249, 249);
-margin-top: 50px;
+
+margin-top: 55px;
 width: 100%;
 z-index:1000;
 position: absolute;

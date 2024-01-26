@@ -80,7 +80,7 @@ export class BudgetReportComponent implements OnInit{
 
  
  getProject(){
-   this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+   this.http.get(environment.mainApi+this.global.companyLink+'getproject').subscribe(
      (Response:any)=>{
        this.projectList = Response;
      }
@@ -110,7 +110,7 @@ export class BudgetReportComponent implements OnInit{
     this.TotalAmount = 0;
     this.totalConsumedAmount = 0;
 
-    this.http.get(environment.mainApi+'acc/GetMonthlyBudget?BudgetDate='+this.global.dateFormater(this.budgetMonth,'-')+'&projectid='+this.projectID).subscribe(
+    this.http.get(environment.mainApi+this.global.accountLink+'GetMonthlyBudget?BudgetDate='+this.global.dateFormater(this.budgetMonth,'-')+'&projectid='+this.projectID).subscribe(
       (Response:any)=>{
         this.reportData = Response;
 

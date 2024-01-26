@@ -51,6 +51,7 @@ export class CashbookComponent implements OnInit{
     $('.cashSummary').hide();
    
     this.globalData.setHeaderTitle('cash Book');
+    this.getProject();
   }
 
 
@@ -97,7 +98,7 @@ export class CashbookComponent implements OnInit{
 
  
  getProject(){
-   this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+   this.http.get(environment.mainApi+this.globalData.companyLink+'getproject').subscribe(
      (Response:any)=>{
        this.projectList = Response;
      }
@@ -143,7 +144,7 @@ export class CashbookComponent implements OnInit{
       $('#CashBookDetail').show();
       $('.cashSummary').hide();
   
-      this.http.get(environment.mainApi+'acc/GetCashBookDetailRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+
+      this.http.get(environment.mainApi+this.globalData.accountLink+'GetCashBookDetailRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+
       '&todate='+this.globalData.dateFormater(this.toDate,'-')+'&projectid='+this.projectID).subscribe(
         (Response:any)=>{
           
@@ -171,7 +172,7 @@ export class CashbookComponent implements OnInit{
     $('#CashBookDetail').hide();
     $('.cashSummary').show();
 
-    this.http.get(environment.mainApi+'acc/GetCashBookSummaryRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+
+    this.http.get(environment.mainApi+this.globalData.accountLink+'GetCashBookSummaryRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+
     '&todate='+this.globalData.dateFormater(this.toDate,'-')+'&projectid='+this.projectID).subscribe(
       (Response)=>{
         this.cashSummary = Response;

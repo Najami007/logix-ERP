@@ -57,7 +57,7 @@ export class CoaNotesComponent implements OnInit{
 
 
   getNotes(){
-    this.http.get(environment.mainApi+'acc/GetNote').subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'GetNote').subscribe(
       (Response )=>{
         this.notesData = Response;
 
@@ -105,7 +105,7 @@ export class CoaNotesComponent implements OnInit{
     
           //////on confirm button pressed the api will run
           this.app.startLoaderDark();
-          this.http.post(environment.mainApi+'acc/DeleteNote',{
+          this.http.post(environment.mainApi+this.globalData.accountLink+'DeleteNote',{
             AutoID: row.autoID,
            NoteID: row.noteID,
            PinCode:pin,

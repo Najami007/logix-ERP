@@ -114,7 +114,7 @@ export class BudgettingComponent implements OnInit {
 
  
   getProject(){
-    this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+    this.http.get(environment.mainApi+this.globalData.companyLink+'getproject').subscribe(
       (Response:any)=>{
         this.projectList = Response;
       }
@@ -128,7 +128,7 @@ export class BudgettingComponent implements OnInit {
    GetChartOfAccount(){
     this.ExpenseList = [];
     this.app.startLoaderDark();
-    this.http.get(environment.mainApi+'acc/GetChartOfAccount').subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'GetChartOfAccount').subscribe(
       
         (Response:any)=>{
 
@@ -153,7 +153,7 @@ export class BudgettingComponent implements OnInit {
 //////////////////////////////////////////////////
 
   getSaved(){
-    this.http.get(environment.mainApi+'acc/GetBudget').subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'GetBudget').subscribe(
       (Response:any)=>{
       
         this.savedData = Response;
@@ -260,7 +260,7 @@ export class BudgettingComponent implements OnInit {
 
 
 
-    this.http.get(environment.mainApi+'acc/getbudgetdetail?budgetID='+row.budgetID).subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'getbudgetdetail?budgetID='+row.budgetID).subscribe(
       (Response)=>{
         this.budgetData = Response;
      
@@ -281,7 +281,7 @@ export class BudgettingComponent implements OnInit {
   
   insertBudget(){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'acc/InsertBudget',{
+    this.http.post(environment.mainApi+this.globalData.accountLink+'InsertBudget',{
       BudgetDate: this.globalData.dateFormater(this.BudgetMonth,'-'),
       Description: this.description,
       BudgetDetail: JSON.stringify(this.budgetData) ,
@@ -308,7 +308,7 @@ export class BudgettingComponent implements OnInit {
   updateBudget(pin:any){
     
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'acc/updateBudget',{
+    this.http.post(environment.mainApi+this.globalData.accountLink+'updateBudget',{
       BudgetID: this.budgetID,
       BudgetDate:this.globalData.dateFormater(this.BudgetMonth,'-'),
       Description: this.description,
@@ -353,7 +353,7 @@ export class BudgettingComponent implements OnInit {
     
             //////on confirm button pressed the api will run
             this.app.startLoaderDark();
-            this.http.post(environment.mainApi+'acc/DeleteBudget',{
+            this.http.post(environment.mainApi+this.globalData.accountLink+'DeleteBudget',{
               BudgetID: row.budgetID,
               PinCode:pin,
             UserID: this.globalData.getUserID(),
@@ -401,7 +401,7 @@ export class BudgettingComponent implements OnInit {
     
             //////on confirm button pressed the api will run
             this.app.startLoaderDark();
-            this.http.post(environment.mainApi+'acc/ApproveBudget',{
+            this.http.post(environment.mainApi+this.globalData.accountLink+'ApproveBudget',{
               BudgetID: row.budgetID,
               PinCode:pin,
             UserID: this.globalData.getUserID(),
@@ -443,7 +443,7 @@ export class BudgettingComponent implements OnInit {
     this.lblBudgetDate = row.budgetDate;
     this.lblBudgetID = row.budgetID;
 
-    this.http.get(environment.mainApi+'acc/getbudgetdetail?budgetID='+row.budgetID).subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'getbudgetdetail?budgetID='+row.budgetID).subscribe(
       (Response:any)=>{
         this.lblBudgetData = Response;
 

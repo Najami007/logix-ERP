@@ -15,6 +15,9 @@ import { RecipeComponent } from './recipe/recipe.component';
 import { AddMenuComponent } from './menu/add-menu/add-menu.component';
 import { MenuCategoryComponent } from './menu-category/menu-category.component';
 import { AddMenuCategoryComponent } from './menu-category/add-menu-category/add-menu-category.component';
+import { RecipeCategoryComponent } from './recipe-category/recipe-category.component';
+import { AddrecipeCategoryComponent } from './recipe-category/addrecipe-category/addrecipe-category.component';
+
 
 
 
@@ -24,7 +27,7 @@ export const restCore: Route[] = [
   {path:'sale', component:SaleComponent, canActivate:[AuthGuard] },
   {path:'menu', component:MenuComponent, canActivate:[AuthGuard] },
   {path:'rcp', component:RecipeComponent, canActivate:[AuthGuard] },
-  {path:'mcat', component:MenuCategoryComponent, canActivate:[AuthGuard] },
+  {path:'recCat', component:RecipeCategoryComponent, canActivate:[AuthGuard] },
 
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
@@ -41,6 +44,9 @@ export const restCore: Route[] = [
     AddMenuComponent,
     MenuCategoryComponent,
     AddMenuCategoryComponent,
+    RecipeCategoryComponent,
+    AddrecipeCategoryComponent,
+
   ],
   imports: [
     CommonModule,

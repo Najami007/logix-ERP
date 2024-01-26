@@ -11,7 +11,10 @@
 //   src: url(assets/fonts/Prospekt\ Press.otf);
 // }
 
+
 /* You can add global styles to this file, and also import other style files */
+
+
 html ,body {
     margin: 0;
     height: 100%;
@@ -25,6 +28,20 @@ html ,body {
   min-height: 100%;
   
 }
+
+.font-digit{
+  font-family: 'digital';
+}
+
+.fs-40{
+  font-size: 40px;
+}
+
+.fs-50{
+  font-size: 50px;
+}
+
+
 
 
 

@@ -122,7 +122,7 @@ export class LedgerComponent {
 
  
  getProject(){
-   this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+   this.http.get(environment.mainApi+this.globalData.companyLink+'getproject').subscribe(
      (Response:any)=>{
        this.projectList = Response;
      }
@@ -154,7 +154,7 @@ export class LedgerComponent {
 
   getCoa(){
     this.app.startLoaderDark();
-    this.http.get(environment.mainApi+'acc/GetVoucherCOA').subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'GetVoucherCOA').subscribe(
       (Response)=>{
         // console.log(Response);
         this.CoaList = Response;
@@ -190,7 +190,7 @@ export class LedgerComponent {
       /////////////////////////////////////////////////
 
      
-      this.http.get(environment.mainApi+'acc/GetLedgerRpt?coaid='+this.coaID +'&fromdate='
+      this.http.get(environment.mainApi+this.globalData.accountLink+'GetLedgerRpt?coaid='+this.coaID +'&fromdate='
       +this.globalData.dateFormater(this.startDate,'-') +'&todate='+this.globalData.dateFormater(this.EndDate,'-')+'&projectID='+this.projectID).subscribe(
         (Response)=>{
           // console.log(Response);

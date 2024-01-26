@@ -85,7 +85,7 @@ export class DayTransactionComponent implements OnInit{
 
  
     getProject(){
-      this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+      this.http.get(environment.mainApi+this.global.companyLink+'getproject').subscribe(
         (Response:any)=>{
           this.projectList = Response;
         }
@@ -104,7 +104,7 @@ export class DayTransactionComponent implements OnInit{
         }
 
         this.app.startLoaderDark();
-        this.http.get(environment.mainApi+'acc/GetDayTransaction?FromDate='+this.global.dateFormater(this.fromDate,'-')+
+        this.http.get(environment.mainApi+this.global.accountLink+'GetDayTransaction?FromDate='+this.global.dateFormater(this.fromDate,'-')+
         '&ToDate='+this.global.dateFormater(this.toDate,'-')).subscribe(
           (Response:any)=>{
             //console.log(Response);

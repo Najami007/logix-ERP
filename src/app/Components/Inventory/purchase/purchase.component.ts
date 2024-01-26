@@ -385,9 +385,6 @@ export class PurchaseComponent implements OnInit{
 
   }
 
-  changeWoHCP(item:any){
-    item.wohCP = parseFloat(item.CostPrice);
-  }
 
 
   onPartySelected(){
@@ -583,9 +580,13 @@ export class PurchaseComponent implements OnInit{
     this.invRemarks = '';
     this.subTotal = 0;
     this.productImage = '';
-    this.partyID = '';
+    this.partyID = 0;
     this.myTotalQty = 0;
     this.holdInvNo = '-';
+    this.bookerID = 0;
+    this.invRemarks = '';
+    this.holdBtnType = 'Hold';
+    this.holdBillList = [];
 
 
   }
@@ -613,6 +614,7 @@ export class PurchaseComponent implements OnInit{
   mywohCPTotal = 0;
   myCPTotal = 0;
   mySPTotal = 0;
+  myBillStatus = false;
 
 
   printBill(item:any){
@@ -627,7 +629,7 @@ export class PurchaseComponent implements OnInit{
     this.myBookerName = item.bookerName;
     this.myPartyName = item.partyName;
     this.mySubTotal = item.billTotal;
-
+    this.myBillStatus = item.approvedStatus;
 
     this.getBillDetail(item.invBillNo).subscribe(
       (Response:any)=>{
@@ -642,7 +644,7 @@ export class PurchaseComponent implements OnInit{
 
        if(item.overHeadAmount > 0){
         Response.forEach((j:any) => {
-          totalQty += j.quantity
+          totalQty += j.quantity;
         });
      
          overhead = item.overHeadAmount / totalQty;
@@ -654,7 +656,7 @@ export class PurchaseComponent implements OnInit{
             this.myBillTotalQty += e.quantity;
             this.mywohCPTotal += (e.costPrice - overhead)* e.quantity;
             this.myCPTotal += e.costPrice * e.quantity;
-            this.mySPTotal += e.salePrice * e.quantity
+            this.mySPTotal += e.salePrice * e.quantity;
 
             this.myTableDataList.push({
               ProductID:e.productID,

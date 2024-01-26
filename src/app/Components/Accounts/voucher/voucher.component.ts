@@ -263,7 +263,7 @@ export class VoucherComponent implements OnInit{
 
   getSavedVoucher(){
    
-    this.http.get(environment.mainApi+'acc/GetSavedVoucherDetail').subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'GetSavedVoucherDetail').subscribe(
       (Response:any)=>{
       //  console.log(Response);
         this.SavedVoucherData = Response;
@@ -286,7 +286,7 @@ export class VoucherComponent implements OnInit{
   ///////////////////////////////////////////////////////////
 
   getParty(){
-    this.http.get(environment.mainApi+'acc/GetVoucherParty').subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'GetVoucherParty').subscribe(
       (Response)=>{
         // console.log(Response);
         this.partyList = Response;
@@ -302,7 +302,7 @@ export class VoucherComponent implements OnInit{
 
 
   getCoa(){
-    this.http.get(environment.mainApi+'acc/GetVoucherCOA').subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'GetVoucherCOA').subscribe(
       (Response)=>{
         // console.log(Response);
         this.CoaList = Response;
@@ -354,7 +354,7 @@ export class VoucherComponent implements OnInit{
    
 
       this.app.startLoaderDark();  ///////////// will start the loader
-      this.http.post(environment.mainApi+'acc/InsertVoucher',{
+      this.http.post(environment.mainApi+this.globalData.accountLink+'InsertVoucher',{
         InvoiceDate: this.globalData.dateFormater(this.invoiceDate,'-'),
         RefCOAID: this.refrenceCOA,
         Type: this.vType,
@@ -409,7 +409,7 @@ export class VoucherComponent implements OnInit{
     width:'30%'
   }).afterClosed().subscribe(pin=>{
     if(pin != ''){
-      this.http.post(environment.mainApi+'acc/AddVoucherDocument',{
+      this.http.post(environment.mainApi+this.globalData.accountLink+'AddVoucherDocument',{
      
         InvoiceNo: this.invoiceNo,
         VoucherDocument:this.VoucherDocument,
@@ -509,7 +509,7 @@ downloadVoucherDocument(row:any){
       if(result.isConfirmed){
 
         //////on confirm button pressed the api will run
-        this.http.post(environment.mainApi+'acc/DeleteVoucher',{
+        this.http.post(environment.mainApi+this.globalData.accountLink+'DeleteVoucher',{
           InvoiceNo: row.invoiceNo,
           PinCode:pin,
           UserID: this.globalData.getUserID(),
@@ -553,7 +553,7 @@ downloadVoucherDocument(row:any){
           if(result.isConfirmed){
     
             //////on confirm button pressed the api will run
-            this.http.post(environment.mainApi+'acc/ApproveVoucher',{
+            this.http.post(environment.mainApi+this.globalData.accountLink+'ApproveVoucher',{
               InvoiceNo: row.invoiceNo,
               PinCode:pin,
             UserID: this.globalData.getUserID(),
@@ -648,7 +648,7 @@ downloadVoucherDocument(row:any){
     this.invoiceDetails = [];
 
     
-    this.http.get(environment.mainApi+'acc/GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
       (Response:any)=>{
         // console.log(Response);
         this.invoiceDetails = Response;

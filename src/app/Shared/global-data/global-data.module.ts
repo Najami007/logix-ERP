@@ -24,14 +24,17 @@ import { AppComponent } from 'src/app/app.component';
 
 
 export class GlobalDataModule  implements OnInit {
+
+  
+  inventoryLink = 'inv/';
+  userLink = 'user/';
+  accountLink = 'acc/';
+  companyLink = 'cmp/';
+  coreLink = 'core/'
+
   
   glbMenulist:any = [];
-  // glbMenulist:any = new Subject<any>();
-  // glb_menuList$ = this.glbMenulist.asObservable();
-
-  // setMenuList(item:any){
-  //   this.glbMenulist.next(item);
-  //  }
+ 
 
   
 
@@ -42,31 +45,6 @@ export class GlobalDataModule  implements OnInit {
 
   paginationDefaultTalbeSize = 50;
   paginationTableSizes : any = [10,25,50,100];
-
-  
-  public Logo = '';
-  public Logo1 = '';
-  public logo1Height = '';
-  public logo1Width = '';
-  public logo2height = '';
-  public logo2Width = '';
-
-
-  public CompanyName = '';
-  public CompanyName2 =  '';
-  public Address = '';
-  public Phone = '';
-  public mobileNo = '';
-  public Email = ''
-  public NTN = '';
-  public STRN ='';  
-
-  // public  CompanyName = '';
-  // public CompanyName2 =  '';
-  // public Address = '';
-  // public Phone = '';
-  // public mobileNo = '';
-  // public Email = ''
 
    
    public currentUserSubject:BehaviorSubject<userInterface>;

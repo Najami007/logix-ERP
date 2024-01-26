@@ -3,13 +3,13 @@
 
     <!-- ////////////////////////// first row////////////////// -->
     <div class="mt-2  d-flex">
-        <mat-card class="d-flex col-lg-11 mb-2 ps-3 pe-3" style="background-color:rgb(245, 208, 240);">
+        <mat-card class="d-flex col-lg-11 mb-2 ps-3 pe-3" style="background-color:rgb(213, 241, 220);">
 
             <mat-card-content class="d-flex justify-content-between">
                 <div class="w-50  d-flex flex-column">
-                    <input type="text" style="background-color:rgb(245, 208, 240);" #pbarcode [(ngModel)]="PBarcode" (keydown)="this.focusToQty($event);searchByCode($event)"  id="searchProduct"
+                    <input type="text" style="background-color:rgb(213, 241, 220);" #pbarcode [(ngModel)]="PBarcode" (keydown)="this.focusToQty($event);searchByCode($event)"  id="searchProduct"
                         class="border-0 p-1 mb-2 border-bottom border-success searchProduct" placeholder="Search Barcode / Name"
-                        autofocus autocomplete="off" [disabled]="productList == ''" accesskey="s">
+                        autofocus autocomplete="off" accesskey="s">
 
                     <div class="w-100 d-flex flex-column SearchConatiner cursorPointer" 
                         *ngIf="PBarcode != '' && PBarcode != undefined">
@@ -52,7 +52,7 @@
              
 
                     <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 bg-primary text-white btn-rpt" (click)="findHoldBills('hpr')" >Hold Bill</button>
-                    <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt" (click)="findHoldBills('pr')" >Pusrchase Bill</button>
+                    <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt" (click)="findHoldBills('pr')" >Pur Retrun Bill</button>
 
                    <mat-form-field class="col-lg-3" appearance="outline">
                     <mat-label>Search.......</mat-label>
@@ -84,7 +84,7 @@
                             <td>{{item.netTotal | number:'1.0-0'}}</td>
                             <td>{{item.entryUser}}</td>
                             <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary" (click)="printBill(item)" >print</mat-icon></td>
-                            <td class="text-center cursorPointer" *ngIf=" item.invType == 'HP' && crudList.u"><mat-icon data-bs-dismiss="modal"  (click)="retriveBill(item)">edit</mat-icon></td>
+                            <td class="text-center cursorPointer" *ngIf=" item.invType == 'HPR' && crudList.u"><mat-icon data-bs-dismiss="modal"  (click)="retriveBill(item)">edit</mat-icon></td>
 
                         </tr>
                     </tbody>
@@ -120,7 +120,9 @@
             </div>
        
            <hr>
-        <h3 class="border border-dark w-100 text-center">Good Receive Note</h3>
+           <h3 class="border border-dark w-100 text-center">Goods Receive Note  
+            <span class="badge text-danger" *ngIf="myBillStatus == false">UnApproved</span> 
+            <span class="badge text-success " *ngIf="myBillStatus == true">Approved</span> </h3>
         <div class="d-flex mb-1">
 
           <div class="d-flex border border-dark p-2 me-1 w-50">
@@ -151,69 +153,80 @@
            </div>
 
         </div>
-
-        <table class="table table-purchase" >
+        <table class="table table-purchase">
             <thead>
                 <tr>
-                    <th >S#</th>
-                <!-- <th class="col-lg-2">Barcode</th> -->
-                <th class="col-lg-2">Product Name</th>
-                <th style="width: 100px;">Expiry</th>
-                <th class="text-center">Quantity</th>
-                <th class="text-center ">WOH CP</th>
-                <th class=" text-center">Cost Price</th>
-                <th class=" text-center">Sale Price</th>
-                <th class=" text-center">Cost Total</th>
-                <th class=" text-center">Sale Total</th>
-                <th class=" text-center">WOh Cost Total</th>
+                    <th>S#</th>
+                    <!-- <th class="col-lg-2">Barcode</th> -->
+                    <th class="col-lg-3">Product Name</th>
+                    <!-- <th style="width: 100px;">Expiry</th> -->
+                    <th class="text-center">Quantity</th>
+                    <!-- <th class="text-center ">WOH CP</th> -->
+                    <th class=" text-center">Cost Price</th>
+                    <th class=" text-center">Sale Price</th>
+                    <th class=" text-center">Cost Total</th>
+                    <th class=" text-center">Sale Total</th>
+                    <!-- <th class=" text-center">WOh Cost Total</th> -->
                 </tr>
             </thead>
-            <tbody style="height: 30px;" >
-                <tr *ngFor="let item of myTableDataList index as index" >
+            <tbody style="height: 30px;">
+                <tr *ngFor="let item of myTableDataList index as index">
                     <td class="text-center">{{index+1}}</td>
                     <!-- <td class="col-lg-2">{{item.barcode}}</td> -->
-                    <td >{{item.ProductTitle}} ({{item.barcode}})</td>
-                    <td s>{{item.ExpiryDate}}</td>
+                    <td><div class="d-flex">
+                            <span style="width: 100px;">{{item.ProductTitle}}</span> 
+                            <span style="width: 150px;">({{item.barcode}})</span>
+                            <span style="width: 100px;">({{item.ExpiryDate}})</span>
+                        </div></td>
+                    <!-- <td s></td> -->
                     <td class="text-center ">{{item.Quantity |number}}</td>
-                    <td class="text-end">{{item.wohCP | number: '1.0-1'}}</td>
+                    <!-- <td class="text-end">{{item.wohCP | number: '1.0-1'}}</td> -->
                     <td class="text-end ">{{item.CostPrice |number: '1.0-1'}}</td>
-                    <td class="text-end ">{{item.SalePrice |number: '1.0-1'}}</td>   
+                    <td class="text-end ">{{item.SalePrice |number: '1.0-1'}}</td>
                     <td class="text-end ">{{item.CostPrice * item.Quantity |number: '1.0-1'}}</td>
                     <td class="text-end ">{{item.SalePrice * item.Quantity |number: '1.0-1'}}</td>
-                    <td class="text-end ">{{item.wohCP * item.Quantity |number: '1.0-1'}}</td>
+                    <!-- <td class="text-end ">{{item.wohCP * item.Quantity |number: '1.0-1'}}</td> -->
 
                 </tr>
                 <tr>
-                    <td colspan="3"></td>
-                    <td class="text-center">{{myBillTotalQty}}</td>
-                    <td class="text-end">{{mywohCPTotal}}</td>
-                    <td  class="text-end">{{myWCPTotal}}</td>
-                    <td></td>
-                    <td></td>
+                    <th colspan="2"></th>
+                    <th class="text-center">{{myBillTotalQty}}</th>
+                    <th></th>
+                    <th></th>
+                    <th class="text-end">{{myCPTotal | number:'1.0-1'}}</th>
+                    <th class="text-end">{{mySPTotal | number:'1.0-1'}}</th>
+                   
+                    <!-- <th class="text-end">{{mywohCPTotal | number:'1.0-1'}}</th> -->
+                    <!-- <th></th>
+                    <th></th> -->
                 </tr>
             </tbody>
         </table>
-        <div class="d-flex text-end" style="text-align: end;">
+        <div class="d-flex text-end border border-dark" style="text-align: end;">
 
-            <div class="row">
-                <label class="fw-bold" >Total</label>
-                <!-- <label class="fw-bold" >OverHead</label> -->
-                <!-- <label class="fw-bold" >Discount</label> -->
-                <label class="fw-bold" >Net Total</label>
+            <div class="row w-75">
+                <label class="fw-bold">Total</label>
+                <!-- <label class="fw-bold">OverHead</label>
+                <label class="fw-bold">Discount</label>
+                <label class="fw-bold">Net Total</label> -->
             </div>
-            <div class="row">
-                <label >{{mySubTotal}}</label>
-                <!-- <label >{{myOverHeadAmount}}</label>
-                <label >{{mydiscount}}</label> -->
-                <label >{{(mySubTotal + myOverHeadAmount)-mydiscount}}</label>
+            <div class="row w-25">
+                <label class="fw-bold">{{mySubTotal |number}}</label>
+                <!-- <label class="fw-bold">{{myOverHeadAmount}}</label>
+                <label class="fw-bold" >{{mydiscount}}</label>
+                <label class="fw-bold">{{(mySubTotal + myOverHeadAmount)-mydiscount}}</label> -->
             </div>
 
         </div>
 
-
+        <div class="d-flex justify-content-around mt-5">
+            <label class="border-0 border-top border-dark fw-bold">Created By</label>
+            <label class="border-0 border-top border-dark fw-bold" >Checked By</label>
+            <label class="border-0 border-top border-dark fw-bold">Approved By</label>
+        </div>
       </div>
 
-
+      <!----------------------------------------------------------->
         </mat-card>
 
         <mat-card class="mb-2" style="height: 120px;width: 120px;">
@@ -260,7 +273,7 @@
                 <th class="col-lg-2">Product Name</th>
                 <th class="col-lg-2">Expiry</th>
                 <th class="col-lg-1">Quantity</th>
-                <th class="col-lg-1">WOH CP</th>
+                <!-- <th class="col-lg-1">WOH CP</th> -->
                 <th class="col-lg-1">Cost Price</th>
                 <th class="col-lg-1">Sale Price</th>
               
@@ -279,25 +292,19 @@
 
 
                     <td class="text-center"><input type="text"   [(ngModel)]="item.Quantity" min="0"
-                        (keydown)="this.handleNumKeys(item,$event,'.qty');getTotal();changeValue(item);distributeOverHead();"
-                        (keyup)="changeValue(item);getTotal();showImg(item);distributeOverHead();"
+                        (keydown)="this.handleNumKeys(item,$event,'.qty');getTotal();changeValue(item);"
+                        (keyup)="changeValue(item);getTotal();"
                          class="qty{{index}} text-center" style="width: 80px;" ></td>
 
 
-                    <td class="text-end"><input type="text"  [(ngModel)]="item.wohCP" min="0"
-                        (keydown)="changeValue(item);this.handleNumKeys(item,$event,'.cp');getTotal();distributeOverHead();"
-                        (keyup)="changeValue(item);getTotal();showImg(item);distributeOverHead();"
+                    <td class="text-end"><input type="text"  [(ngModel)]="item.CostPrice" min="0"
+                        (keydown)="changeValue(item);this.handleNumKeys(item,$event,'.cp');getTotal();"
+                        (keyup)="changeValue(item);getTotal();"
                          class="cp{{index}} text-center" style="width: 80px;"></td>
 
-                         <td class="text-center">{{item.CostPrice |number}}</td>
+                         <!-- <td class="text-center">{{item.CostPrice |number}}</td> -->
 
-                    <!-- <td class="text-center">
-                        <input type="text"  [(ngModel)]="item.CostPrice" min="0"
-                         (keydown)="this.handleNumKeys(item,$event,'.cp');getTotal();changeWoHCP(item)"
-                        (keyup)="getTotal();changeWoHCP(item);this.handleNumKeys(item,$event,'.cp');
-                         showImg(item)"
-                         class="cpo{{index}} text-center" style="width: 80px;" disabled="true">
-                    </td> -->
+                
                     <td class="text-center"><input type="text"  [(ngModel)]="item.SalePrice" min="0"
                          (keydown)="changeValue(item);this.handleNumKeys(item,$event,'.sp');"
                         (keyup)="changeValue(item);showImg(item);"
@@ -332,7 +339,7 @@
 
 
         <!-- //////////////////////first Column/////////////////////// -->
-        <mat-card class=" me-1 col-lg-7" style="background-color: rgb(247, 226, 230);">
+        <mat-card class=" me-1 col-lg-7" style="background-color: rgb(248, 237, 217);">
 
       <mat-card-content class="">
         <mat-form-field appearance="outline" class="col-lg-3 p-1">
@@ -374,7 +381,7 @@
             <mat-label>OverHead</mat-label>
             <input matInput (keyup)="distributeOverHead();this.global.avoidMinus($event);" [(ngModel)]="overHead" type="number" name="refInvNo">
         </mat-form-field> -->
-        <mat-form-field appearance="outline" class="col-lg-6 p-1">
+        <mat-form-field appearance="outline" class="col-lg-12 p-1">
             <mat-label>Remarks</mat-label>
             <textarea matInput  rows="1" [(ngModel)]="invRemarks" type="text" name="remarks"></textarea>
         </mat-form-field>
@@ -427,22 +434,11 @@
 
 
          <mat-card-content class="d-flex flex-column">
-            <div class=" pt-3 d-flex justify-content-between text-center">
-                <h2 class="text-secondary ">Total:</h2>
-                <h1 style="font-size: 25px;" class="">{{subTotal || 0 |number}}</h1>
+            <div class=" pt-3  text-center">
+                <h2 class="text-secondary ">TOTAL</h2>
+                <h1 style="font-size: 50px;" class="text-danger">{{subTotal || 0 |number}}</h1>
             </div>
-            <!-- <div class=" pt-3 d-flex justify-content-between text-center">
-                <h2 class="text-secondary ">OverHead</h2>
-                <h1 style="font-size: 25px;" class="">{{overHead || 0 |number}}</h1>
-            </div> -->
-            <!-- <div class=" d-flex justify-content-between text-center">
-                <h2 class="text-secondary">Discount:</h2>
-                <h1 style="font-size: 25px;" class=" text-danger">{{discount || 0 |number}}</h1>
-            </div> -->
-            <div class="d-flex justify-content-between text-center">
-                <h2 class="text-secondary">Net Total:</h2>
-                <h1 style="font-size: 25px;" class="">{{(subTotal + overHead ) - discount || 0 |number}}</h1>
-            </div>
+        
          </mat-card-content>
 
         </mat-card>

@@ -101,7 +101,7 @@ export class VoucherSupervisionComponent {
 
  
   getProject(){
-    this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+    this.http.get(environment.mainApi+this.globalData.companyLink+'getproject').subscribe(
       (Response:any)=>{
         this.projectList = Response;
       }
@@ -126,7 +126,7 @@ export class VoucherSupervisionComponent {
 
       this.voucherList = [];
     this.app.startLoaderDark();
-      this.http.get(environment.mainApi+'acc/GetSavedVoucherDetailDateWise?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+
+      this.http.get(environment.mainApi+this.globalData.accountLink+'GetSavedVoucherDetailDateWise?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+
       '&todate='+this.globalData.dateFormater(this.toDate,'-')).subscribe(
         (Response:any)=>{
           
@@ -165,7 +165,7 @@ export class VoucherSupervisionComponent {
     this.invoiceDetails = [];
 
     
-    this.http.get(environment.mainApi+'acc/GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
       (Response:any)=>{
         // console.log(Response);
         this.invoiceDetails = Response;
@@ -216,7 +216,7 @@ export class VoucherSupervisionComponent {
           if(result.isConfirmed){
     
             //////on confirm button pressed the api will run
-            this.http.post(environment.mainApi+'acc/ApproveVoucher',{
+            this.http.post(environment.mainApi+this.globalData.accountLink+'ApproveVoucher',{
               InvoiceNo: row.invoiceNo,
               PinCode:pin,
             UserID: this.globalData.getUserID(),
@@ -264,7 +264,7 @@ export class VoucherSupervisionComponent {
       if(result.isConfirmed){
 
         //////on confirm button pressed the api will run
-        this.http.post(environment.mainApi+'acc/DeleteVoucher',{
+        this.http.post(environment.mainApi+this.globalData.accountLink+'DeleteVoucher',{
           InvoiceNo: row.invoiceNo,
           PinCode:pin,
           UserID: this.globalData.getUserID(),

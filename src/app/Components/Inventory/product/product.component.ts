@@ -430,6 +430,7 @@ export class ProductComponent implements OnInit {
 
 
   edit(row: any) {
+    this.SubCategoryID = 0;
     this.ProductID = row.productID;
     this.CategoryID = row.categoryID;
     this.getSubCategory();

@@ -89,7 +89,7 @@ export class TrialBalanceComponent implements OnInit {
 
  
   getProject(){
-    this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+    this.http.get(environment.mainApi+this.globalData.companyLink+'getproject').subscribe(
       (Response:any)=>{
         this.projectList = Response;
       }
@@ -120,7 +120,7 @@ this.TrialBalanceData = [];
     this.app.startLoaderDark();
     
 
-    this.http.get(environment.mainApi+'acc/GetTrailBalanceRpt?fromdate='
+    this.http.get(environment.mainApi+this.globalData.accountLink+'GetTrailBalanceRpt?fromdate='
     +this.globalData.dateFormater(this.fromDate,'-')+'&todate='+this.globalData.dateFormater(this.toDate,'-')+'&projectID='+this.projectID).subscribe(
       (Response)=>{
       
@@ -214,7 +214,7 @@ this.TrialBalanceData = [];
   
   getNotes(){
     this.notesList = [];
-    this.http.get(environment.mainApi+'acc/GetNote').subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'GetNote').subscribe(
       (Response:any )=>{
         // console.log(Response);
 

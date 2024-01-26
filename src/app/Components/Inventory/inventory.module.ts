@@ -23,6 +23,9 @@ import { AddCategoryComponent } from './product-category/add-category/add-catego
 import { AddProdSubCategoryComponent } from './product-sub-category/add-prod-sub-category/add-prod-sub-category.component';
 import { IssuanceComponent } from './issuance/issuance.component';
 import { PurchaseReturnComponent } from './purchase-return/purchase-return.component';
+import { IssueStockRerturnComponent } from './issue-stock-rerturn/issue-stock-rerturn.component';
+import { StockAdjustmentComponent } from './stock-adjustment/stock-adjustment.component';
+import { OpeningStockComponent } from './opening-stock/opening-stock.component';
 
 
 
@@ -81,6 +84,21 @@ export const inventoryRoutes: Route[] = [
     component: IssuanceComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'isrtn',
+    component: IssueStockRerturnComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'stkadj',
+    component: StockAdjustmentComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'opnstk',
+    component: OpeningStockComponent,
+    canActivate: [AuthGuard]
+  },
 
 
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
@@ -105,6 +123,9 @@ export const inventoryRoutes: Route[] = [
     AddProdSubCategoryComponent,
     IssuanceComponent,
     PurchaseReturnComponent,
+    IssueStockRerturnComponent,
+    StockAdjustmentComponent,
+    OpeningStockComponent,
 
   ],
   imports: [

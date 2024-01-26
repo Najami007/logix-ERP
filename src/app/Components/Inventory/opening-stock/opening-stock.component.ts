@@ -8,13 +8,12 @@ import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { Router } from '@angular/router';
 import { Observable, retry } from 'rxjs';
-
 @Component({
-  selector: 'app-issuance',
-  templateUrl: './issuance.component.html',
-  styleUrls: ['./issuance.component.scss']
+  selector: 'app-opening-stock',
+  templateUrl: './opening-stock.component.html',
+  styleUrls: ['./opening-stock.component.scss']
 })
-export class IssuanceComponent implements OnInit {
+export class OpeningStockComponent implements OnInit {
 
   crudList:any =[];
   companyProfile:any = [];
@@ -41,7 +40,7 @@ export class IssuanceComponent implements OnInit {
 
 
   ngOnInit(): void {
-   this.global.setHeaderTitle('Issuance');
+   this.global.setHeaderTitle('Opening Stock');
    this.getLocation();
    this.getProducts();
 
@@ -52,10 +51,7 @@ export class IssuanceComponent implements OnInit {
   holdBtnType = 'Hold';
   invoiceDate:Date = new Date();
   locationID  = 0;
-  locationTitle = '';
   locationList:any = [];
-  locationTwoID = 0;
-  locationTwoTitle= '';
   invRemarks:any;
   PBarcode:any;
   productList:any = [];
@@ -64,22 +60,9 @@ export class IssuanceComponent implements OnInit {
   productImage:any;
   subTotal:number = 0;
   totalQty:number = 0;
-  IssueType:any;
+  adjustmentType = 'OS';
   IssueBillList:any = [];
   
-  onLocationSelected(type:any){
- 
-    if(type == 'l1'){
-      var row =   this.locationList.find((e:any)=>e.locationID == this.locationID);
-      this.locationTitle = row.locationTitle;
-    
-    }
-    if(type == 'l2'){
-      var lRow =   this.locationList.find((e:any)=>e.locationID == this.locationTwoID);
-      this.locationTwoTitle = lRow.locationTitle;
-
-    }
-  }
 
 
   getLocation(){
@@ -342,12 +325,7 @@ export class IssuanceComponent implements OnInit {
       this.msg.WarnNotify('Atleast One Product Must Be Selected')
     }else if( this.locationID == undefined || this.locationID == 0){
       this.msg.WarnNotify('Select Warehouse Location')
-    }else if(this.locationTwoID == 0 || this.locationTwoID == undefined){
-      this.msg.WarnNotify('Select Department')
-    }else if(this.IssueType == '' || this.IssueType == undefined){
-      this.msg.WarnNotify('Select Issuance Type')
-    }
-    else {
+    }else {
 
     
     
@@ -356,101 +334,18 @@ export class IssuanceComponent implements OnInit {
       }
 
       if(isValidFlag == true){
-        if(type == 'hold'){
-          if(this.holdBtnType == 'Hold'){
+        
            this.app.startLoaderDark();
            this.http.post(environment.mainApi+'inv/InsertIssueStock',{
-           InvType: "HI",
-           InvDate: this.global.dateFormater(this.invoiceDate,'-'),
-           LocationID: this.locationID,
-           LocationTitle:this.locationTitle,
-           ProjectID: 1,
-           IssueType:this.IssueType,
-           IssueStatus:'A',
-           BillTotal: this.subTotal,
-           NetTotal: this.subTotal ,
-           Remarks: this.invRemarks,
-           InvoiceDocument: "-",
-           LocationTwoID:this.locationTwoID,
-           LocationTwoTitle:this.locationTwoTitle,
-       
-           InvDetail: JSON.stringify(this.tableDataList),
-       
-           UserID: this.global.getUserID()
-           }).subscribe(
-             (Response:any)=>{
-               if(Response.msg == 'Data Saved Successfully'){
-                 this.msg.SuccessNotify(Response.msg);
-                 this.reset(); 
-                 this.app.stopLoaderDark();
-                
-               }else{
-                 this.msg.WarnNotify(Response.msg);
-                 this.app.stopLoaderDark();
-               }
-             }
-           )
-          }else if(this.holdBtnType == 'ReHold'){
-           this.dialog.open(PincodeComponent,{
-             width:"30%"
-           }).afterClosed().subscribe(pin=>{
-             if(pin != ''){
-               this.app.startLoaderDark();
-          
-           this.http.post(environment.mainApi+'inv/UpdateHoldedIssueInvoice',{
-           InvBillNo: this.holdInvNo,
-           InvDate: this.global.dateFormater(this.invoiceDate,'-'),
-           LocationID: this.locationID,
-           LocationTitle:this.locationTitle,
-           ProjectID: 1,
-           IssueType:this.IssueType,
-           IssueStatus:'A',
-           BillTotal: this.subTotal,
-           NetTotal: this.subTotal ,
-           Remarks: this.invRemarks,
-           InvoiceDocument: "-",
-           LocationTwoID:this.locationTwoID,
-           LocationTwoTitle:this.locationTwoTitle,
-           PinCode:pin,
-           InvDetail: JSON.stringify(this.tableDataList),
-       
-           UserID: this.global.getUserID()
-           }).subscribe(
-             (Response:any)=>{
-               if(Response.msg == 'Data Updated Successfully'){
-                 this.msg.SuccessNotify(Response.msg);
-                 this.reset(); 
-                 this.app.stopLoaderDark();
-                
-               }else{
-                 this.msg.WarnNotify(Response.msg);
-                 this.app.stopLoaderDark();
-               }
-             }
-           )
-             }
-           })
-          }
-     
-         }else if(type == 'issue'){
-           this.app.startLoaderDark();
-           this.http.post(environment.mainApi+'inv/InsertIssueStock',{
-            InvType: "I",
+            InvType: this.adjustmentType,
             InvDate: this.global.dateFormater(this.invoiceDate,'-'),
             LocationID: this.locationID,
-            LocationTitle:this.locationTitle,
             ProjectID: 1,
-            IssueType:this.IssueType,
-            IssueStatus:'A',
             BillTotal: this.subTotal,
             NetTotal: this.subTotal ,
             Remarks: this.invRemarks,
             InvoiceDocument: "-",
-            LocationTwoID:this.locationTwoID,
-            LocationTwoTitle:this.locationTwoTitle,
-        
-            InvDetail: JSON.stringify(this.tableDataList),
-        
+            InvDetail: JSON.stringify(this.tableDataList),    
             UserID: this.global.getUserID(),
             HoldInvNo:this.holdInvNo,
            }).subscribe(
@@ -466,7 +361,7 @@ export class IssuanceComponent implements OnInit {
                }
              }
            )
-         }
+         
      
       }
     
@@ -482,9 +377,6 @@ export class IssuanceComponent implements OnInit {
   reset(){
     this.invoiceDate = new Date();
     this.locationID = 0;
-    this.locationTitle = '';
-    this.locationTwoID = 0;
-    this.locationTwoTitle = '';
     this.invRemarks = '';
     this.tableDataList = [];
     this.totalQty = 0;
@@ -493,22 +385,22 @@ export class IssuanceComponent implements OnInit {
     this.productImage = '';
     this.holdInvNo = '-';
     this.IssueBillList = [];
-    this.IssueType = '';
+    this.adjustmentType = '';
 
   }
 
 
   
-  findHoldBills(type:any){
-    if(type == 'HI'){
-      $('#edit').show();
-    }
+  FindSavedBills(type:any){
+    // if(type == 'HIR'){
+    //   $('#edit').show();
+    // }
 
-    if(type == 'I'){
-      $('#edit').hide()
-    }
+    // if(type == 'IR'){
+    //   $('#edit').hide()
+    // }
 
-    this.http.get(environment.mainApi+'inv/GetIssueInventoryBillSingleDate?Type='+type+'&creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
+    this.http.get(environment.mainApi+'inv/GetStockAdjustmentInvBillSingleDate?creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
       (Response:any)=>{
         this.IssueBillList = Response;
          console.log(this.IssueBillList);
@@ -550,11 +442,10 @@ export class IssuanceComponent implements OnInit {
 
     this.getBillDetail(item.invBillNo).subscribe(
       (Response:any)=>{
-
+        this.myAvgCPTotal = 0;
         this.myBillTotalQty = 0;
         this.myCPTotal = 0;
         this.mySPTotal = 0;
-        this.myAvgCPTotal = 0;
        
         this.productImage = Response[Response.length - 1].productImage;
 
@@ -564,7 +455,6 @@ export class IssuanceComponent implements OnInit {
             this.myCPTotal += e.costPrice * e.quantity;
             this.myAvgCPTotal += e.avgCostPrice * e.quantity;
             this.mySPTotal += e.salePrice * e.quantity;
-
 
             this.myTableDataList.push({
               ProductID:e.productID,
@@ -604,10 +494,6 @@ export class IssuanceComponent implements OnInit {
     this.holdBtnType = 'ReHold'
     this.invoiceDate = new Date(item.invDate);
     this.locationID = item.locationID;
-    this.locationTitle = item.locationTitle;
-    this.locationTwoTitle = item.locationTwoTitle;
-    this.locationTwoID = item.locationTwoID;
-    this.IssueType = item.issueType;
     this.invRemarks = item.remarks;
     this.holdInvNo = item.invBillNo;
     this.subTotal = item.billTotal;
