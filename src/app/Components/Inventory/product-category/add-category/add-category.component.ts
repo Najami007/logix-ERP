@@ -40,7 +40,7 @@ export class AddCategoryComponent implements OnInit{
         this.description = '-';
       }
       $('.loaderDark').show();
-      this.http.post(environment.mainApi+'inv/insertcategory',{  
+      this.http.post(environment.mainApi+this.global.inventoryLink+'insertcategory',{  
       CategoryTitle: this.categoryTitle,
       CategoryDescription: this.description,
       UserID: this.global.getUserID()

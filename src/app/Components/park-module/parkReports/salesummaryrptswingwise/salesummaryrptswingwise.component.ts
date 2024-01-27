@@ -68,7 +68,7 @@ export class SalesummaryrptswingwiseComponent implements OnInit {
   getReport(){
     this.app.startLoaderDark();
  
-      this.http.get(environment.mainApi+'park/GetSaleSummaryBetweenDateSwingWise?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
+      this.http.get(environment.mainApi+this.global.parkLink+'GetSaleSummaryBetweenDateSwingWise?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
     '&ToDate='+this.global.dateFormater(this.toDate,'-')+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
       (Response:any)=>{
        //console.log(Response);

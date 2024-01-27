@@ -51,20 +51,8 @@ export class RacksComponent implements OnInit{
 
 
 
-  // getCrud(){
-  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globaldata.getUserID()+'&moduleid='+this.globaldata.getModuleID()).subscribe(
-  //     (Response:any)=>{
-  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-  //     }
-  //   )
-  // }
-
-
-
-
-
   getRacksList(){
-    this.http.get(environment.mainApi+'inv/getrack').subscribe(
+    this.http.get(environment.mainApi+this.globaldata.inventoryLink+'getrack').subscribe(
       (Response:any)=>{
         this.RacksList = Response;
       }
@@ -98,7 +86,7 @@ export class RacksComponent implements OnInit{
 
   insert(){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'inv/insertRack',{  
+    this.http.post(environment.mainApi+this.globaldata.inventoryLink+'insertRack',{  
       RackTitle: this.rackTitle,
       RackDescription: this.description,
       UserID: this.globaldata.getUserID()
@@ -131,7 +119,7 @@ export class RacksComponent implements OnInit{
 
       
       this.app.startLoaderDark();
-      this.http.post(environment.mainApi+'inv/updateRack',{
+      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'updateRack',{
         RackID:this.rackID,  
         RackTitle: this.rackTitle,
         RackDescription: this.description,
@@ -199,7 +187,7 @@ export class RacksComponent implements OnInit{
         if(result.isConfirmed){
       this.app.startLoaderDark();
 
-      this.http.post(environment.mainApi+'inv/deleteRack',{
+      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'deleteRack',{
         RackID: row.rackID,
         PinCode:pin,
         UserID: this.globaldata.getUserID()

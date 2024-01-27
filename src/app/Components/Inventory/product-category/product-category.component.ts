@@ -50,7 +50,7 @@ export class ProductCategoryComponent implements OnInit{
 
 
   getCategory(){
-    this.http.get(environment.mainApi+'inv/GetCategory').subscribe(
+    this.http.get(environment.mainApi+this.globaldata.inventoryLink+'GetCategory').subscribe(
       (Response:any)=>{
         this.categoryList = Response;
       }
@@ -92,7 +92,7 @@ export class ProductCategoryComponent implements OnInit{
 
   insert(){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'inv/insertcategory',{  
+    this.http.post(environment.mainApi+this.globaldata.inventoryLink+'insertcategory',{  
     CategoryTitle: this.categoryTitle,
     CategoryDescription: this.description,
     UserID: this.globaldata.getUserID()
@@ -122,7 +122,7 @@ export class ProductCategoryComponent implements OnInit{
 
      if(pin != ''){
       this.app.startLoaderDark();
-      this.http.post(environment.mainApi+'inv/updatecategory',{  
+      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'updatecategory',{  
         CategoryID:this.categoryID,
       CategoryTitle: this.categoryTitle,
       CategoryDescription: this.description,
@@ -190,7 +190,7 @@ export class ProductCategoryComponent implements OnInit{
 
       this.app.startLoaderDark();
 
-      this.http.post(environment.mainApi+'inv/deletecategory',{
+      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'deletecategory',{
         CategoryID: row.categoryID,
         PinCode:pin,
         UserID: this.globaldata.getUserID()

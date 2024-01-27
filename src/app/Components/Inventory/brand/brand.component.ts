@@ -48,22 +48,9 @@ export class BrandComponent implements OnInit{
 
 
 
-
-
-
-  // getCrud(){
-  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globaldata.getUserID()+'&moduleid='+this.globaldata.getModuleID()).subscribe(
-  //     (Response:any)=>{
-  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-  //     }
-  //   )
-  // }
-
-
-
   
   getBrandList(){
-    this.http.get(environment.mainApi+'inv/GetBrand').subscribe(
+    this.http.get(environment.mainApi+this.globaldata.inventoryLink+'GetBrand').subscribe(
       (Response:any)=>{
         this.BrandList = Response;
       }
@@ -99,7 +86,7 @@ export class BrandComponent implements OnInit{
 
   insert(){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'inv/insertbrand',{  
+    this.http.post(environment.mainApi+this.globaldata.inventoryLink+'insertbrand',{  
       BrandTitle: this.brandTitle,
       BrandCode: this.brandCode,
       BrandDescription: this.description,
@@ -133,7 +120,7 @@ export class BrandComponent implements OnInit{
 
       
       this.app.startLoaderDark();
-      this.http.post(environment.mainApi+'inv/updateBrand',{  
+      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'updateBrand',{  
         BrandID: this.brandID,
         BrandTitle: this.brandTitle,
         BrandCode: this.brandCode,
@@ -205,7 +192,7 @@ export class BrandComponent implements OnInit{
         if(result.isConfirmed){
       this.app.startLoaderDark();
 
-      this.http.post(environment.mainApi+'inv/deletebrand',{
+      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'deletebrand',{
         BrandID: row.brandID,
         PinCode:pin,
         UserID: this.globaldata.getUserID()

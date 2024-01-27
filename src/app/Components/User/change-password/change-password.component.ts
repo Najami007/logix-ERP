@@ -42,7 +42,7 @@ export class ChangePasswordComponent implements OnInit{
 
       $('.loaderDark').show();
 
-      this.http.post(environment.mainApi+'user/changepassword',{
+      this.http.post(environment.mainApi+this.global.userLink+'changepassword',{
         Password:this.password,
         PinCode: this.pinCode,
         UserID: this.userID,

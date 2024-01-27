@@ -47,7 +47,7 @@ export class AddRackComponent {
       }
 
       $('.loaderDark').show();
-      this.http.post(environment.mainApi+'inv/insertRack',{  
+      this.http.post(environment.mainApi+this.global.inventoryLink+'insertRack',{  
         RackTitle: this.rackTitle,
         RackDescription: this.description,
         UserID: this.global.getUserID()

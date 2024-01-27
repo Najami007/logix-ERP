@@ -73,7 +73,7 @@ export class SaledetailrptdatewiseComponent implements OnInit {
   
       $('#summaryTable').hide();
       $('#detailTable').show();
-      this.http.get(environment.mainApi+'park/GetSaleDetailBetweenDate?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
+      this.http.get(environment.mainApi+this.global.parkLink+'GetSaleDetailBetweenDate?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
     '&ToDate='+this.global.dateFormater(this.toDate,'-')+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
       (Response:any)=>{
        //console.log(Response);
@@ -103,7 +103,7 @@ export class SaledetailrptdatewiseComponent implements OnInit {
     }else if(type == 'summary'){
       $('#summaryTable').show();
       $('#detailTable').hide();
-      this.http.get(environment.mainApi+'park/GetSaleSummaryBetweenDate?fromdate='+this.global.dateFormater(this.fromDate,'-')+
+      this.http.get(environment.mainApi+this.global.parkLink+'GetSaleSummaryBetweenDate?fromdate='+this.global.dateFormater(this.fromDate,'-')+
       '&todate='+this.global.dateFormater(this.toDate,'-')+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
         (Response:any)=>{
            // console.log(Response);

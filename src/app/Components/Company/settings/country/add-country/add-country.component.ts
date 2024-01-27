@@ -55,7 +55,7 @@ export class AddCountryComponent implements OnInit{
 
   insert(){
     $(".loaderDark").show()
-    this.http.post(environment.mainApi+'cmp/insertcountry',{
+    this.http.post(environment.mainApi+this.global.companyLink+'insertcountry',{
       CountryName: this.countryName,
       UserID: this.global.getUserID()
     }).subscribe(
@@ -77,7 +77,7 @@ export class AddCountryComponent implements OnInit{
   
   update(){
     $(".loaderDark").show()
-    this.http.post(environment.mainApi+'cmp/updatecountry',{
+    this.http.post(environment.mainApi+this.global.companyLink+'updatecountry',{
       CountryID: this.editData.countryID,
       CountryName: this.countryName,
       UserID: this.global.getUserID()

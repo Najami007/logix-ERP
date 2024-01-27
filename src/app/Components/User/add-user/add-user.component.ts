@@ -64,21 +64,11 @@ export class AddUserComponent implements OnInit {
 
 
 
-  // getCrud(){
-  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
-  //     (Response:any)=>{
-  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-  //     }
-  //   )
-  // }
-
-
-
   //////////////////////////////////////////////////////////////
 
   getRoles(){
 
-    this.http.get(environment.mainApi+'user/getrole').subscribe(
+    this.http.get(environment.mainApi+this.global.userLink+'getrole').subscribe(
       (Response)=>{
 
         this.rolesList = Response;
@@ -93,7 +83,7 @@ export class AddUserComponent implements OnInit {
 
   getUsers(){
     this.app.startLoaderDark()
-    this.http.get(environment.mainApi+'user/getuser').subscribe(
+    this.http.get(environment.mainApi+this.global.userLink+'getuser').subscribe(
       (Response)=>{
         this.userList = Response;
         // console.log(Response);
@@ -153,7 +143,7 @@ export class AddUserComponent implements OnInit {
 
   inserUser(){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'user/insertuser',{
+    this.http.post(environment.mainApi+this.global.userLink+'insertuser',{
       UserName: this.UserName,
       MobileNo: this.mobileNo,
       LoginName: this.loginName,
@@ -183,7 +173,7 @@ export class AddUserComponent implements OnInit {
 
   updateUser(pinCode:any){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'user/updateuser',{
+    this.http.post(environment.mainApi+this.global.userLink+'updateuser',{
       UserID:this.userID,
       PinCode: pinCode,
       UserName: this.UserName,
@@ -249,7 +239,7 @@ export class AddUserComponent implements OnInit {
             //////on confirm button pressed the api will run
            
         this.app.startLoaderDark();
-        this.http.post(environment.mainApi+'user/deleteuser',{
+        this.http.post(environment.mainApi+this.global.userLink+'deleteuser',{
         PinCode: pin,
         UserID: row.userID,
         reqUserID: this.global.getUserID()
@@ -288,7 +278,7 @@ export class AddUserComponent implements OnInit {
       if(pin !== ''){
         
         this.app.startLoaderDark();
-        this.http.post(environment.mainApi+'user/blockuser',{
+        this.http.post(environment.mainApi+this.global.userLink+'blockuser',{
           PinCode: pin,
           TempBlock:status,
           reqUserID: this.global.getUserID(),
@@ -339,7 +329,7 @@ export class AddUserComponent implements OnInit {
     
             //////on confirm button pressed the api will run
             this.app.startLoaderDark();
-          this.http.post(environment.mainApi+'user/resetpin',{
+          this.http.post(environment.mainApi+this.global.userLink+'resetpin',{
             PinCode: pin,
             reqUserID:this.global.getUserID(),
             UserID: row.userID,

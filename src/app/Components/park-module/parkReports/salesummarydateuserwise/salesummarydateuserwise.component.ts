@@ -78,7 +78,7 @@ export class SalesummarydateuserwiseComponent implements OnInit {
   getUsers(){
  
     this.app.startLoaderDark()
-    this.http.get(environment.mainApi+'user/getuser').subscribe(
+    this.http.get(environment.mainApi+this.global.userLink+'getuser').subscribe(
       (Response)=>{
         this.userList = Response;
         // console.log(Response);
@@ -104,7 +104,7 @@ export class SalesummarydateuserwiseComponent implements OnInit {
     $('#detailTable').hide();
     $('#summaryTable').show();
     
-    this.http.get(environment.mainApi+'park/GetSaleSummaryBetweenDateUserWise?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
+    this.http.get(environment.mainApi+this.global.parkLink+'GetSaleSummaryBetweenDateUserWise?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
     '&ToDate='+this.global.dateFormater(this.toDate,'-')+'&UserID='+this.userID+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
       (Response:any)=>{
      //   console.log(Response);
@@ -136,7 +136,7 @@ export class SalesummarydateuserwiseComponent implements OnInit {
     $('#detailTable').show();
     $('#summaryTable').hide();
     
-    this.http.get(environment.mainApi+'park/GetSaleDetailBetweenDateUserWise?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
+    this.http.get(environment.mainApi+this.global.parkLink+'GetSaleDetailBetweenDateUserWise?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
     '&ToDate='+this.global.dateFormater(this.toDate,'-')+'&UserID='+this.userID+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
       (Response:any)=>{
      //   console.log(Response);

@@ -39,7 +39,7 @@ export class AddProdSubCategoryComponent {
 
 
   getCategory(){
-    this.http.get(environment.mainApi+'inv/GetCategory').subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetCategory').subscribe(
       (Response:any)=>{
         this.categoryList = Response;
       }
@@ -60,7 +60,7 @@ export class AddProdSubCategoryComponent {
       }
       
       $('.loaderDark').show();
-      this.http.post(environment.mainApi+'inv/InsertSubCategory',{  
+      this.http.post(environment.mainApi+this.global.inventoryLink+'InsertSubCategory',{  
         CategoryID: this.categoryID,
         SubCategoryTitle: this.subCategoryTitle,
         SubCategoryDescription: this.description,

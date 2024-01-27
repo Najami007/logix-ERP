@@ -63,20 +63,9 @@ export class PartnersComponent implements OnInit {
 
 
 
-
-  // getCrud(){
-  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
-  //     (Response:any)=>{
-  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-  //     }
-  //   )
-  // }
-
-
-
   
   getCity(){
-    this.http.get(environment.mainApi+'cmp/getcity').subscribe({
+    this.http.get(environment.mainApi+this.global.companyLink+'getcity').subscribe({
       next:value=>{
     
         this.citiesList = value;
@@ -99,7 +88,7 @@ export class PartnersComponent implements OnInit {
   }
 
   getPartners(){
-    this.http.get(environment.mainApi+'cmp/getpartner').subscribe(
+    this.http.get(environment.mainApi+this.global.companyLink+'getpartner').subscribe(
       (Response)=>{
         this.partnersList = Response;
       }
@@ -141,7 +130,7 @@ export class PartnersComponent implements OnInit {
 
   insertPartner(){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'cmp/insertpartner',{
+    this.http.post(environment.mainApi+this.global.companyLink+'insertpartner',{
     PartnerName: this.partnerName,
     PartnerCNIC: this.partnerCNIC,
     PartnerAddress: this.partnerAddress,
@@ -170,7 +159,7 @@ export class PartnersComponent implements OnInit {
 
   updatePartner(pin:any){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'cmp/updatepartner',{
+    this.http.post(environment.mainApi+this.global.companyLink+'updatepartner',{
       PartnerID: this.partnerID,
     PartnerName: this.partnerName,
     PartnerCNIC: this.partnerCNIC,
@@ -235,7 +224,7 @@ export class PartnersComponent implements OnInit {
     this.app.startLoaderDark();
     
   
-    this.http.post(environment.mainApi+'cmp/deletepartner',{
+    this.http.post(environment.mainApi+this.global.companyLink+'deletepartner',{
       PartnerID:row.partnerID ,
       PinCode:pin,
       UserID: this.global.getUserID()

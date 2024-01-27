@@ -59,23 +59,10 @@ export class ProductSubCategoryComponent implements OnInit {
 
 
 
-
-
-
-/////////////////////////////////////////////////////////////
-
-  // getCrud(){
-  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globaldata.getUserID()+'&moduleid='+this.globaldata.getModuleID()).subscribe(
-  //     (Response:any)=>{
-  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-  //     }
-  //   )
-  // }
-
   ///////////////////////////////////////////////////////////
 
   getCategory(){
-    this.http.get(environment.mainApi+'inv/GetCategory').subscribe(
+    this.http.get(environment.mainApi+this.globaldata.inventoryLink+'GetCategory').subscribe(
       (Response:any)=>{
         this.categoryList = Response;
       }
@@ -86,7 +73,7 @@ export class ProductSubCategoryComponent implements OnInit {
   /////////////////////////////////////////////////////////////////////
 
   getSubCategory(){
-    this.http.get(environment.mainApi+'inv/GetSubCategory').subscribe(
+    this.http.get(environment.mainApi+this.globaldata.inventoryLink+'GetSubCategory').subscribe(
       (Response:any)=>{
         this.subCategoryList = Response;
       }
@@ -125,7 +112,7 @@ export class ProductSubCategoryComponent implements OnInit {
   
   insert(){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'inv/InsertSubCategory',{  
+    this.http.post(environment.mainApi+this.globaldata.inventoryLink+'InsertSubCategory',{  
       CategoryID: this.categoryID,
       SubCategoryTitle: this.subCategoryTitle,
       SubCategoryDescription: this.description,
@@ -156,7 +143,7 @@ export class ProductSubCategoryComponent implements OnInit {
 
      if(pin != ''){
       this.app.startLoaderDark();
-      this.http.post(environment.mainApi+'inv/UpdateSubCategory',{
+      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'UpdateSubCategory',{
         SubCategoryID:this.subCategoryID,  
         CategoryID:this.categoryID,
         SubCategoryTitle: this.subCategoryTitle,
@@ -226,7 +213,7 @@ export class ProductSubCategoryComponent implements OnInit {
         if(result.isConfirmed){
       this.app.startLoaderDark();
 
-      this.http.post(environment.mainApi+'inv/DeleteSubCategory',{
+      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'DeleteSubCategory',{
         SubCategoryID: row.subCategoryID,
         PinCode:pin,
         UserID: this.globaldata.getUserID()

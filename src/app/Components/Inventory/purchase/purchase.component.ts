@@ -103,7 +103,7 @@ export class PurchaseComponent implements OnInit{
   }
 
   getBooker(){
-    this.http.get(environment.mainApi+'inv/GetBooker').subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetBooker').subscribe(
       (Response:any)=>{
         this.BookerList = Response;
       }
@@ -111,7 +111,7 @@ export class PurchaseComponent implements OnInit{
   }
   
   getLocation(){
-    this.http.get(environment.mainApi+'inv/getlocation').subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'getlocation').subscribe(
       (Response:any)=>{
         this.locationList = Response;
       }
@@ -120,7 +120,7 @@ export class PurchaseComponent implements OnInit{
 
 
   getProducts(){
-    this.http.get(environment.mainApi+'inv/GetActiveProduct').subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetActiveProduct').subscribe(
       (Response)=>{
         this.productList = Response;
        // console.log(Response);
@@ -131,7 +131,7 @@ export class PurchaseComponent implements OnInit{
 
 
   getSuppliers(){
-    this.http.get(environment.mainApi+'cmp/getsupplier').subscribe(
+    this.http.get(environment.mainApi+this.global.companyLink+'getsupplier').subscribe(
       {
         next:value =>{
           this.suppliersList = value;
@@ -272,11 +272,7 @@ export class PurchaseComponent implements OnInit{
    
       this.subTotal += (parseFloat(this.tableDataList[i].Quantity) * parseFloat(this.tableDataList[i].wohCP));
       this.myTotalQty += parseFloat(this.tableDataList[i].Quantity);
-      // this.myTotal = this.mySubtoatal - this.myDiscount;
-      // this.myDue = this.myPaid - this.myTotal;\
-    
-
-     // console.log(this.tableDataList)
+     
     }
   }
 
@@ -323,15 +319,6 @@ export class PurchaseComponent implements OnInit{
    }
 
   handleNumKeys(item:any ,e:any,cls:string){
-
-   
-
-    // if (e.target.value < '0') {
-    //   e.target.value = 0;
-    // }else if(e.target.value == ''){
-    //   e.target.value = 0
-    // }
-
 
 
     if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
@@ -449,7 +436,7 @@ export class PurchaseComponent implements OnInit{
         if(type == 'hold'){
           if(this.holdBtnType == 'Hold'){
            this.app.startLoaderDark();
-           this.http.post(environment.mainApi+'inv/InsertPurchase',{
+           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertPurchase',{
            InvType: "HP",
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
            RefInvoiceNo: this.refInvNo,
@@ -487,7 +474,7 @@ export class PurchaseComponent implements OnInit{
              if(pin != ''){
                this.app.startLoaderDark();
           
-           this.http.post(environment.mainApi+'inv/UpdateHoldInvoice',{
+           this.http.post(environment.mainApi+this.global.inventoryLink+'UpdateHoldInvoice',{
            InvBillNo: this.holdInvNo,
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
            RefInvoiceNo: this.refInvNo,
@@ -524,7 +511,7 @@ export class PurchaseComponent implements OnInit{
      
          }else if(type == 'purchase'){
            this.app.startLoaderDark();
-           this.http.post(environment.mainApi+'inv/InsertPurchase',{
+           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertPurchase',{
            InvType: "P",
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
            RefInvoiceNo: this.refInvNo,
@@ -690,6 +677,7 @@ export class PurchaseComponent implements OnInit{
   }
 
   retriveBill(item:any){
+
     //console.log(item);
     this.tableDataList = [];
     this.holdBtnType = 'ReHold'
@@ -703,6 +691,7 @@ export class PurchaseComponent implements OnInit{
     this.bookerID = item.bookerID;
     this.partyID = item.partyID;
     this.subTotal = item.billTotal;
+    this.onPartySelected();
 
     this.getBillDetail(item.invBillNo).subscribe(
       (Response:any)=>{
@@ -717,7 +706,7 @@ export class PurchaseComponent implements OnInit{
         });
      
          overhead = item.overHeadAmount / totalQty;
-         this.myTotalQty = totalQty;
+       
  
        }
 
@@ -741,7 +730,7 @@ export class PurchaseComponent implements OnInit{
               discInR:e.discInR,
             })
           });
-          // this.getTotal();
+          this.getTotal();
         
       }
     )
@@ -750,7 +739,7 @@ export class PurchaseComponent implements OnInit{
 
 
   public getBillDetail(billNo:any):Observable<any>{
-   return this.http.get(environment.mainApi+'inv/GetSingleBillDetail?reqInvBillNo='+billNo).pipe(retry(3));
+   return this.http.get(environment.mainApi+this.global.inventoryLink+'GetSingleBillDetail?reqInvBillNo='+billNo).pipe(retry(3));
   }
 
 
@@ -764,7 +753,7 @@ export class PurchaseComponent implements OnInit{
       $('#edit').hide()
     }
 
-    this.http.get(environment.mainApi+'inv/GetInventoryBillSingleDate?Type='+type+'&creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryBillSingleDate?Type='+type+'&creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
       (Response:any)=>{
         this.holdBillList = Response;
         // console.log(this.holdBillList);

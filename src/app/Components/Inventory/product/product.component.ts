@@ -127,7 +127,7 @@ export class ProductComponent implements OnInit {
 
 
   getProductTypes(){
-    this.http.get(environment.mainApi + 'inv/GetProductType').subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink+'GetProductType').subscribe(
       (Response: any) => {
         this.ProductTypeList = Response;
      
@@ -138,7 +138,7 @@ export class ProductComponent implements OnInit {
 
 
   getUOMList() {
-    this.http.get(environment.mainApi + 'inv/GetUOM').subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink+'GetUOM').subscribe(
       (Response: any) => {
         this.UOMList = Response;
      
@@ -149,7 +149,7 @@ export class ProductComponent implements OnInit {
 
 
   getRacksList() {
-    this.http.get(environment.mainApi + 'inv/getrack').subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink+'getrack').subscribe(
       (Response: any) => {
         this.RacksList = Response;
       }
@@ -159,7 +159,7 @@ export class ProductComponent implements OnInit {
 
 
   getBrandList() {
-    this.http.get(environment.mainApi + 'inv/GetBrand').subscribe(
+    this.http.get(environment.mainApi +this.global.inventoryLink+'GetBrand').subscribe(
       (Response: any) => {
         this.BrandList = Response;
       }
@@ -168,7 +168,7 @@ export class ProductComponent implements OnInit {
 
 
   getSubCategory() {
-    this.http.get(environment.mainApi + 'inv/GetSubCategory').subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink+'GetSubCategory').subscribe(
       (Response: any) => {
         this.SubCategoriesList = Response.filter((e: any) => e.categoryID == this.CategoryID);
 
@@ -180,7 +180,7 @@ export class ProductComponent implements OnInit {
 
 
   getCategory() {
-    this.http.get(environment.mainApi + 'inv/GetCategory').subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink+'GetCategory').subscribe(
       (Response: any) => {
         this.CategoriesList = Response;
       }
@@ -189,7 +189,7 @@ export class ProductComponent implements OnInit {
 
 
   getProductList(){
-    this.http.get(environment.mainApi+'inv/GetProduct').subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetProduct').subscribe(
       (Response)=>{
         this.productList = Response;
        // console.log(Response);
@@ -292,7 +292,7 @@ export class ProductComponent implements OnInit {
 
   insert() {
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi + 'inv/InsertProduct', {
+    this.http.post(environment.mainApi + this.global.inventoryLink+'InsertProduct', {
       CategoryID: this.CategoryID,
       SubCategoryID: this.SubCategoryID,
       BrandID: this.BrandID,
@@ -344,7 +344,7 @@ export class ProductComponent implements OnInit {
     }).afterClosed().subscribe(pin => {
       if (pin != '') {
         this.app.startLoaderDark();
-        this.http.post(environment.mainApi + 'inv/UpdateProduct', {
+        this.http.post(environment.mainApi + this.global.inventoryLink+'UpdateProduct', {
           ProductID: this.ProductID,
           CategoryID: this.CategoryID,
           SubCategoryID: this.SubCategoryID,
@@ -487,7 +487,7 @@ export class ProductComponent implements OnInit {
         if(result.isConfirmed){
       this.app.startLoaderDark();
 
-      this.http.post(environment.mainApi+'inv/deleteProduct',{
+      this.http.post(environment.mainApi+this.global.inventoryLink+'deleteProduct',{
         ProductID: row.productID,
         PinCode:pin,
         UserID: this.global.getUserID()
@@ -527,7 +527,7 @@ export class ProductComponent implements OnInit {
     }).afterClosed().subscribe(pin=>{
       if(pin != ''){
         this.app.startLoaderDark();
-        this.http.post(environment.mainApi+'inv/ActiveProduct',{
+        this.http.post(environment.mainApi+this.global.inventoryLink+'ActiveProduct',{
           ProductID: row.productID,
           ActiveStatus:!row.activeStatus,
           PinCode: pin,

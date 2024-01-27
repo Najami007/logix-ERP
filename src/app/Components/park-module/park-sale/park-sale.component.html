@@ -1,7 +1,7 @@
 
-<div class="container-fluid d-flex body bg-gray">
+<div class="container-fluid d-flex body bg-gray h-100">
 
-    <div class="col-lg-12 " style="min-height: 650px;">
+    <div class="col-lg-8 pe-2" style="min-height: 600px;">
 
 
         <!-----------   categories Row ------------------->
@@ -34,7 +34,7 @@
        <!-----------   Products Area ------------------->
   <div class="row cursorPointer">
     <div *ngFor="let item of swingsList | filter:searchSwing"  style="width: 200px;"  >
-        <mat-card  style="width:180px; height: 200px;" class="m-1 p-1 swingCard" (click)="onSwingSelected(item)" data-bs-toggle="modal" data-bs-target="#swingModal">
+        <mat-card  style="width:180px; height: 200px;" class="m-1 p-1 swingCard" (click)="onSwingSelected(item)" >
           
                 <!-- <img *ngIf="item.img" [src]="item.swingImage" alt="" height="150px" width="170px"> -->
                 <div style="height: 150px;width: 170px;background-size: cover;" [ngStyle]="{ 'background-image': 'url(' + item.swingImage + ')' }"></div>
@@ -50,9 +50,7 @@
 
 
     </div>
-
-
-    <!-- <div class="col-lg-4 border " style="left: 74.6%; height: 630px;">
+    <div class="col-lg-4 border " style="left: 74.6%; height: 600px;">
 
 
         <div style="min-height: 400px;" class="p-2" >
@@ -60,28 +58,28 @@
           
             <div class="billTable" style="height: 350px;">
 
-                <table class="table-logix cursorPointer" >
+                <table class="table cursorPointer" >
                     <thead>
                         <tr>
-                            <th class="col-lg-4">Desc</th>
+                            <th class="col-lg-4">Title</th>
                             <th>Price</th>
                             <th>Qty</th>
-                            <th>total</th>
+                            <th>Total</th>
                             <th>Del</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of tableData index as index">
-                        <td>{{item.name}}</td>
-                        <td>{{item.price |number}}</td>
+                        <tr *ngFor="let item of TicketDetails index as index">
+                        <td>{{item.swingTitle}}</td>
+                        <td>{{item.TicketPrice |number}}</td>
                         <td class="text-center">
                         <div class="d-flex text-center pb-2">
                             <mat-icon (click)="changeQty('add',index)" class="text-success">add_circle</mat-icon>
-                            <input id="pQty" type="number" style="width: 50px;text-align: center;" (change)="getTotal()"  [(ngModel)]="item.qty" >
+                            <input id="pQty" type="number" style="width: 50px;text-align: center;" (change)="getTotal()"  [(ngModel)]="item.TicketQuantity" >
                             <mat-icon (click)="changeQty('minus',index)" >remove_circle</mat-icon>
                         </div>
                           </td>
-                        <td>{{item.price * item.qty |number}}</td>
+                        <td>{{item.TicketPrice * item.TicketQuantity |number:'1.0-0'}}</td>
                         <td><mat-icon class="text-danger" (click)="deleteRow(index)">delete</mat-icon></td>
                         </tr>
                     </tbody>
@@ -95,15 +93,15 @@
             <div class="p-4 bg-white border-top">
 
                 <span class="d-flex border-bottom border-dark justify-content-between">
-                    <p>Sub Total</p>
-                    <p>{{subTotal |number}}</p>
-                </span>
-                <span class="d-flex border-bottom border-dark justify-content-between">
                     <p>Total</p>
-                    <p>100</p>
+                    <p class="font-digit" style="font-size: 30px;">{{subTotal |number:'1.0-0'}}</p>
                 </span>
+                <mat-form-field appearance="outline" class="w-100 mt-2">
+                    <mat-label>Remarks</mat-label>
+                    <textarea matInput rows="1" [(ngModel)]="ticketRemarks" ></textarea>
+                </mat-form-field>
                 <span class="p-1 d-flex">
-                    <button mat-raised-button class="m-1 text-white bg-secondary w-50" (click)="printMultiple()">HOLD</button>
+                    <!-- <button mat-raised-button class="m-1 text-white bg-secondary w-50" >HOLD</button> -->
                     <button mat-raised-button  class="m-1 text-white bg-success w-50" (click)="save()">Save</button>
                 </span>
                 
@@ -115,7 +113,12 @@
         </div>
 
 
-    </div> -->
+    </div> 
+
+
+
+
+   
 
     <div class="modal fade" id="rtnModel" tabindex="-1" aria-labelledby="rtnModelLabel" >
         <div class="modal-dialog  modal-lg">
@@ -167,7 +170,7 @@
                             <td>{{item.ticketTotal | number:'1.0-0'}}</td>
                             <td>{{item.entryUser}}</td>
                             <td class="cursorPointer text-center">
-                                <mat-icon *ngIf="crudList.r" class="text-primary" (click)="printTicket(item.ticketNo,'duplicate')">print</mat-icon>
+                                <mat-icon *ngIf="crudList.r" class="text-primary" (click)="printTicket(item.ticketNo,'duplicate','')">print</mat-icon>
                                
                                
                             </td>
@@ -323,8 +326,13 @@
                     <td><strong>Remarks:</strong></td>
                     <td class="ps-2">{{item.ticketRemarks}}</td>
                 </tr>
+                <br>
+            
+                <small>Ticket is Valid only for ({{item.swingDuration}}) Minutes</small>
+            
                 <hr>
                 <div style="text-transform: uppercase;" class="text-center">
+                   
                     <small>Ticket is not Refundable</small>
                 </div>
           

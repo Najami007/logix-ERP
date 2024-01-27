@@ -70,7 +70,7 @@ export class AddDepartmentComponent implements OnInit{
 
   insert(){
     $(".loaderDark").show()
-    this.http.post(environment.mainApi+'cmp/insertdepartment',{
+    this.http.post(environment.mainApi+this.global.companyLink+'insertdepartment',{
       DepartmentTitle: this.departmentName,
       DepartmentDescription:this.description,
       UserID: this.global.getUserID()
@@ -93,7 +93,7 @@ export class AddDepartmentComponent implements OnInit{
   
   update(pin:any){
     $(".loaderDark").show()
-    this.http.post(environment.mainApi+'cmp/updatedepartment',{
+    this.http.post(environment.mainApi+this.global.companyLink+'updatedepartment',{
       PinCode:pin,
       DepartmentID: this.editData.departmentID,
       DepartmentTitle: this.departmentName,

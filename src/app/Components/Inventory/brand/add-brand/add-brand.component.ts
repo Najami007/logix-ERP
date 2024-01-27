@@ -47,7 +47,7 @@ export class AddBrandComponent implements OnInit {
       }
 
       $('.loaderDark').show();
-      this.http.post(environment.mainApi+'inv/insertbrand',{  
+      this.http.post(environment.mainApi+this.global.inventoryLink+'insertbrand',{  
         BrandTitle: this.brandTitle,
         BrandCode: this.brandCode,
         BrandDescription: this.description,

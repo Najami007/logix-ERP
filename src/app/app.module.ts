@@ -93,7 +93,7 @@ import { NumberInputComponent } from './Components/Common/number-input/number-in
   
 
   ],
-  providers: [{ provide: HIGHCHARTS_MODULES, useFactory: () => [ more, exporting ] }, NotificationService,GlobalDataModule],
+  // providers: [{ provide: HIGHCHARTS_MODULES, useFactory: () => [ more, exporting ] }, NotificationService,GlobalDataModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { 

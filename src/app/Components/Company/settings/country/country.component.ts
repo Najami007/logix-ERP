@@ -47,16 +47,6 @@ export class CountryComponent implements OnInit{
 
 
 
-  // getCrud(){
-  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globaldata.getUserID()+'&moduleid='+this.globaldata.getModuleID()).subscribe(
-  //     (Response:any)=>{
-  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-  //     }
-  //   )
-  // }
-
-
-
   OpenDialogue(){
     this.dialogue.open(AddCountryComponent,{
       width:"40%",
@@ -89,7 +79,7 @@ export class CountryComponent implements OnInit{
 
   insert(){
     $(".loaderDark").show()
-    this.http.post(environment.mainApi+'cmp/insertcountry',{
+    this.http.post(environment.mainApi+this.globaldata.companyLink+'insertcountry',{
       CountryName: this.countryName,
       UserID: this.globaldata.getUserID()
     }).subscribe(
@@ -111,7 +101,7 @@ export class CountryComponent implements OnInit{
   
   update(){
     $(".loaderDark").show()
-    this.http.post(environment.mainApi+'cmp/updatecountry',{
+    this.http.post(environment.mainApi+this.globaldata.companyLink+'updatecountry',{
       CountryID: this.countryID,
       CountryName: this.countryName,
       UserID: this.globaldata.getUserID()
@@ -143,7 +133,7 @@ export class CountryComponent implements OnInit{
 
 
   getCountry(){
-    this.http.get(environment.mainApi+'cmp/getcountry').subscribe(
+    this.http.get(environment.mainApi+this.globaldata.companyLink+'getcountry').subscribe(
       (Response)=>{
         this.countryList = Response;
       },
@@ -176,7 +166,7 @@ export class CountryComponent implements OnInit{
         this.app.startLoaderDark();
 
         //////on confirm button pressed the api will run
-        this.http.post(environment.mainApi+'cmp/deletecountry',{
+        this.http.post(environment.mainApi+this.globaldata.companyLink+'deletecountry',{
           CountryID:row.countryID,
           UserID:this.globaldata.getUserID(),
         }).subscribe(

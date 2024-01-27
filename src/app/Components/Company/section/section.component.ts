@@ -55,19 +55,9 @@ export class SectionComponent implements OnInit {
 
 
 
-  // getCrud(){
-  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globaldata.getUserID()+'&moduleid='+this.globaldata.getModuleID()).subscribe(
-  //     (Response:any)=>{
-  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-  //     }
-  //   )
-  // }
-
-
-
 
   getDepartment(){
-    this.http.get(environment.mainApi+'cmp/getdepartment').subscribe(
+    this.http.get(environment.mainApi+this.globaldata.companyLink+'getdepartment').subscribe(
       (Response)=>{
         this.departmentList = Response;
       },
@@ -79,7 +69,7 @@ export class SectionComponent implements OnInit {
 
 
   getSection(){
-    this.http.get(environment.mainApi+'cmp/getsection').subscribe(
+    this.http.get(environment.mainApi+this.globaldata.companyLink+'getsection').subscribe(
       (Response)=>{
         this.sectionList = Response;
         //console.log(Response);
@@ -122,7 +112,7 @@ export class SectionComponent implements OnInit {
 
   insert(){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'cmp/insertsection',{
+    this.http.post(environment.mainApi+this.globaldata.companyLink+'insertsection',{
       DepartmentID: this.departmentID,
       SectionTitle: this.sectionTitle,
       SectionDescription: this.sectionDescription,
@@ -149,7 +139,7 @@ export class SectionComponent implements OnInit {
   update(pin:any){
     // alert(this.sectionID);
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'cmp/updatesection',{
+    this.http.post(environment.mainApi+this.globaldata.companyLink+'updatesection',{
       SectionID:this.sectionID,
       DepartmentID: this.departmentID,
       SectionTitle: this.sectionTitle,
@@ -206,7 +196,7 @@ export class SectionComponent implements OnInit {
 
         this.app.startLoaderDark();
         
-          this.http.post(environment.mainApi+'cmp/deletesection',{
+          this.http.post(environment.mainApi+this.globaldata.companyLink+'deletesection',{
             SectionID: row.sectionID,
            PinCode:pin,
            UserID: this.globaldata.getUserID()

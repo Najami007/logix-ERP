@@ -69,7 +69,7 @@ export class PartyComponent implements OnInit{
   CitiesNames : any = []
 
   getCityNames(){
-    this.http.get(environment.mainApi+'cmp/getcity').subscribe(
+    this.http.get(environment.mainApi+this.globalData.companyLink+'getcity').subscribe(
       {
         next : value =>{
           this.CitiesNames = value;
@@ -137,7 +137,7 @@ addCity(){
 
   getParty(){
    if(this.srPartyType == 'Customer'){
-    this.http.get(environment.mainApi+'cmp/getcustomer').subscribe(
+    this.http.get(environment.mainApi+this.globalData.companyLink+'getcustomer').subscribe(
       {
         next:value =>{
           this.partyData = value;
@@ -150,7 +150,7 @@ addCity(){
       }
       )
    }else if(this.srPartyType == 'Supplier'){
-    this.http.get(environment.mainApi+'cmp/getsupplier').subscribe(
+    this.http.get(environment.mainApi+this.globalData.companyLink+'getsupplier').subscribe(
       {
         next:value =>{
           this.partyData = value;
@@ -210,7 +210,7 @@ addCity(){
     if(this.btnType == "Save"){
       this.app.startLoaderDark();
 
-      this.http.post(environment.mainApi+'cmp/insertparty',{
+      this.http.post(environment.mainApi+this.globalData.companyLink+'insertparty',{
         PartyType:this.partyType,
         PartyName:this.partyName,
         PartyAddress:this.partyAddress,
@@ -247,7 +247,7 @@ addCity(){
       }).afterClosed().subscribe(pin=>{
         if(pin != ''){
           this.app.startLoaderDark();
-          this.http.post(environment.mainApi+'cmp/updateparty',{
+          this.http.post(environment.mainApi+this.globalData.companyLink+'updateparty',{
   
             PartyID:this.curPartyId,
             PartyType:this.partyType,
@@ -357,7 +357,7 @@ addCity(){
     
             //////on confirm button pressed the api will run
             
-                this.http.post(environment.mainApi+'cmp/deleteparty',{
+                this.http.post(environment.mainApi+this.globalData.companyLink+'deleteparty',{
                   PartyID:row.partyID,
                   UserID:this.globalData.getUserID(),
                   PinCode:pin,

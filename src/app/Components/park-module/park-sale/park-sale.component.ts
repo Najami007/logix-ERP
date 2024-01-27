@@ -71,11 +71,15 @@ export class ParkSaleComponent {
   printType:any;
   billDetail:any;
 
+
+
+  subTotal = 0;
+
   ///////////////////////////////////////////////////////////////
 
 
   getSwing(){
-    this.http.get(environment.mainApi+'park/GetActiveSwing').subscribe(
+    this.http.get(environment.mainApi+this.global.parkLink+'GetActiveSwing').subscribe(
       (Response)=>{
 
         this.swingsList = Response;
@@ -94,10 +98,22 @@ export class ParkSaleComponent {
     this.printDetails = [];
     this.printType = '';
     this.tempTicketNo = 0;
-    this.TicketDetails = [];
+    // this.TicketDetails = [];
     this.billType = 'Sale';
     this.billDetail = [];
-    this.TicketDetails.push({swingID:item.swingID,swingTitle:item.swingTitle,TicketQuantity:1,TicketPrice:item.ticketPrice});
+
+    var myIndex = this.TicketDetails.findIndex((e:any)=> e.swingID == item.swingID);
+    // alert(myIndex)
+
+    if(myIndex !== -1){
+      // alert('alert')
+      this.TicketDetails[myIndex].TicketQuantity += 1;
+    }else{
+
+      this.TicketDetails.push({swingID:item.swingID,swingTitle:item.swingTitle,TicketQuantity:1,TicketPrice:item.ticketPrice,SwingDuration:item.swingDuration});
+    }
+
+    this.getTotal();
 
   }
 
@@ -118,7 +134,7 @@ export class ParkSaleComponent {
       }
     }
   
-
+    this.getTotal();
   }
 
 
@@ -129,13 +145,28 @@ export class ParkSaleComponent {
 
 findTickets(){
   this.app.startLoaderDark();
-  this.http.get(environment.mainApi+'park/GetTicketSummarySingleDate?ToDate='+this.global.dateFormater(this.TicketDate,'-')).subscribe(
+  this.http.get(environment.mainApi+this.global.parkLink+'GetTicketSummarySingleDate?ToDate='+this.global.dateFormater(this.TicketDate,'-')).subscribe(
     (Response:any)=>{
     // console.log(Response);
       this.TicketsList = Response;
       this.app.stopLoaderDark();
     }
   )
+}
+
+
+getTotal(){
+
+  this.subTotal = 0;
+  this.TicketDetails.forEach((e:any) => {
+    this.subTotal += e.TicketPrice * e.TicketQuantity;
+  });
+
+}
+
+
+deleteRow(index:any){
+this.TicketDetails.splice(index,1);
 }
 
 
@@ -155,7 +186,7 @@ findTickets(){
 
     if(this.billType == 'Sale'){
   
-      this.http.post(environment.mainApi+'park/InsertTicket',{
+      this.http.post(environment.mainApi+this.global.parkLink+'InsertTicket',{
         TicketDate: this.curDateTime,
         Type: "S",
         TicketRemarks: this.ticketRemarks,
@@ -164,14 +195,24 @@ findTickets(){
         UserID: this.global.getUserID()
       }).subscribe(
         (Response:any)=>{
+
           if(Response.msg == 'Data Saved Successfully'){
             this.msg.SuccessNotify('Ticket Saved')
-            this.printTicket(Response.tktNo,'save');
-           // console.log(Response);
+            //this.printTicket(Response.tktNo,'save');
+            console.log(Response);
             this.reset();
-            this.app.stopLoaderDark();
+           this.app.stopLoaderDark();
+           this.printTicket('','save',Response.tktList);   
+          //   Response.tktList.forEach((e:any) => {           
+          //    setTimeout(() => {
+          //     this.printTicket(e.ticketNo,'save',Response.tktList);   
+          //    }, 200);
+          //     alert(e.ticketNo);       
+          // });
+
           }else {
-            this.msg.WarnNotify(Response.msg)
+            this.msg.WarnNotify(Response.msg);
+            this.app.stopLoaderDark();
           }
         
         }
@@ -183,7 +224,7 @@ findTickets(){
         this.app.stopLoaderDark();
       }else{
     
-        this.http.post(environment.mainApi+'park/InsertReturnTicket',{
+        this.http.post(environment.mainApi+this.global.parkLink+'InsertReturnTicket',{
           TicketNo:this.tempTicketNo,
           TicketDate: this.curDateTime,
           Type: "SR",
@@ -196,17 +237,18 @@ findTickets(){
             if(Response.msg == 'Data Saved Successfully'){
               this.msg.SuccessNotify('Return Ticket Saved')
              setTimeout(() => {
-              this.printTicket(Response.tktNo,'save');
+              this.printTicket(Response.tktNo,'save','');
              }, 100);
               setTimeout(() => {
-                this.printTicket(Response.rtnTktNo,'SaleReturn');
+                this.printTicket(Response.rtnTktNo,'SaleReturn','');
               }, 200);
              // console.log(Response);
               this.reset();
               this.app.stopLoaderDark();
               
             }else {
-              this.msg.WarnNotify(Response.msg)
+              this.msg.WarnNotify(Response.msg);
+              this.app.stopLoaderDark();
             }
           
           }
@@ -221,31 +263,54 @@ findTickets(){
   }
 
 
-  printTicket(ticketNo:any,type:any){
+  printTicket(ticketNo:any,type:any,tktList:any){
     this.billDetail =[];
     this.printDetails = [];
       this.printType = type;
 
+      if(tktList == ''){
+        this.http.get(environment.mainApi+this.global.parkLink+'PrintTicket?ticketno='+ticketNo).subscribe(
+          (Response:any)=>{
+         if(type == 'detail'){
+            this.billDetail = Response;
+           }else{
+            this.printDetails = Response;
+           }
+          //  console.log(Response);
+    
+          if(type != 'detail'){
+              this.global.printData('#ticketPrint');   
+    
+          }
+          }
+          
+        )
+    
+      }else{
+     
+        tktList.forEach((e:any) => { 
+         
+         setTimeout(() => {
+          alert(e.ticketNo);
+            this.http.get(environment.mainApi+this.global.parkLink+'PrintTicket?ticketno='+e.ticketNo).subscribe(
+              (Response:any)=>{
+               
+                this.printDetails = Response;
+  
+               
+                  this.global.printData('#ticketPrint'); 
+                 
+              }  
+            )
+         }, 2000);
+        
+        });
 
-    this.http.get(environment.mainApi+'park/PrintTicket?ticketno='+ticketNo).subscribe(
-      (Response:any)=>{
-       
-       if(type == 'detail'){
-        this.billDetail = Response;
-       }else{
-        this.printDetails = Response;
-       }
-      //  console.log(Response);
-
-      if(type != 'detail'){
-        setTimeout(() => {
-          this.global.printData('#ticketPrint');
-         }, 100);
-      }
-      }
       
-    )
+      }
 
+
+ 
     
 
   }
@@ -255,7 +320,7 @@ findTickets(){
   verifyRtn(row:any){
     this.TicketDetails= [];
    
-    this.http.get(environment.mainApi+'park/VerifyRtnQty?ticketno='+row.ticketNo+'&SwingID='+row.swingID).subscribe(
+    this.http.get(environment.mainApi+this.global.parkLink+'VerifyRtnQty?ticketno='+row.ticketNo+'&SwingID='+row.swingID).subscribe(
       (Response:any)=>{
         this.billDetail = Response;
         this.TicketDetails.push({swingID:row.swingID,swingTitle:row.swingTitle,TicketQuantity:1,TicketPrice:Response[0].ticketPrice});

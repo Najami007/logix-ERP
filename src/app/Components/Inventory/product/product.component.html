@@ -6,25 +6,22 @@
 
             <div>
                 <mat-form-field appearance="outline" class="col-lg-6 pe-5 ">
-                    <mat-label>Select Category</mat-label>
+                    <mat-label>Category</mat-label>
                     <mat-select [(ngModel)]="CategoryID" (selectionChange)="getSubCategory()" name="pCategory">
                         <mat-option *ngFor="let item of CategoriesList"
                             [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
 
                     </mat-select>
                     <mat-icon class="cursorPointer" (click)="addCategory()" matSuffix>add</mat-icon>
-
-                    <mat-hint>Select Product Category</mat-hint>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="col-lg-6 ">
-                    <mat-label>Select Sub Category</mat-label>
+                    <mat-label>Sub Category</mat-label>
                     <mat-select [(ngModel)]="SubCategoryID" name="pSubCategory">
                         <mat-option *ngFor="let item of SubCategoriesList"
                             [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
                     </mat-select>
                     <mat-icon class="cursorPointer" (click)="addSubCategory()" matSuffix>add</mat-icon>
 
-                    <mat-hint>Select Product Sub-Category</mat-hint>
                 </mat-form-field>
             </div>
 
@@ -34,19 +31,19 @@
                 <mat-form-field appearance="outline" class="col-lg-6 pe-5">
                     <mat-label>Product Title</mat-label>
                     <input matInput [(ngModel)]="ProductName" accesskey="n" type="text">
-                    <mat-hint>Enter Product Name</mat-hint>
+
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-lg-6 ">
                     <mat-label>Product Title 2 </mat-label>
                     <input matInput [(ngModel)]="productNameOthLanguage" type="text">
-                    <mat-hint>Product Name in Other Language</mat-hint>
+ 
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-lg-6 pe-5">
                     <mat-label>Code</mat-label>
                     <input matInput [(ngModel)]="productCode" type="text">
-                    <mat-hint>Product Identity Code</mat-hint>
+
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-lg-2 pe-2 ">
@@ -133,25 +130,21 @@
                 <mat-form-field appearance="outline" class="col-lg-3 pe-2 ">
                     <mat-label>Min ROL</mat-label>
                     <input matInput type="number" [(ngModel)]="minRol" (change)="global.avoidMinus($event)">
-                    <mat-hint>Minimum Reorder Level</mat-hint>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-lg-3  pe-5">
                     <mat-label>Max ROL</mat-label>
                     <input matInput type="number" [(ngModel)]="maxRol" (change)="global.avoidMinus($event)">
-                    <mat-hint>Maximum Reorder Level</mat-hint>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-lg-3 pe-2 ">
-                    <mat-label>GST</mat-label>
+                    <mat-label>GST(General Sales Tax)</mat-label>
                     <input matInput type="number" [(ngModel)]="gst" (change)="global.avoidMinus($event)">
-                    <mat-hint>General Sales Tax</mat-hint>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-lg-3">
-                    <mat-label>ET</mat-label>
+                    <mat-label>ET(Extra Tax)</mat-label>
                     <input matInput type="number" [(ngModel)]="Et" (change)="global.avoidMinus($event)">
-                    <mat-hint>Extra Tax</mat-hint>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-lg-6 pe-5">

@@ -73,12 +73,13 @@ export class AddSwingComponent implements OnInit {
   ticketPrice:any;
   productImg:any;
   Description:any;
+  swingDuration:any;
 
   swingsList:any = [];
 
 
   getSwing(){
-    this.http.get(environment.mainApi+'park/GetSwing').subscribe(
+    this.http.get(environment.mainApi+this.global.parkLink+'GetSwing').subscribe(
       (Response:any)=>{
         this.swingsList = Response;
       //  console.log(Response);
@@ -141,7 +142,10 @@ export class AddSwingComponent implements OnInit {
       this.msg.WarnNotify('Enter Swing Code')
     }else if(this.productImg == '' || this.productImg == undefined){
       this.msg.WarnNotify('Select Image')
-    }else {
+    }else if(this.swingDuration == '' || this.swingDuration == undefined){
+      this.msg.WarnNotify('Enter Swing Time Duration')
+    }
+    else {
       if(this.btnType == 'Save'){
         this.insert();
       }else if(this.btnType == 'Update'){
@@ -153,10 +157,11 @@ export class AddSwingComponent implements OnInit {
 
   insert(){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'park/InsertSwing',{
+    this.http.post(environment.mainApi+this.global.parkLink+'InsertSwing',{
       SwingTitle:this.swingTitle,
       SwingCode: this.swingCode,
       TicketPrice:this.ticketPrice,
+      swingDuration:this.swingDuration,
       SwingDescription: this.Description,
       SwingImage:this.productImg,
   
@@ -187,11 +192,12 @@ export class AddSwingComponent implements OnInit {
 
     if(pin != ''){
       this.app.startLoaderDark();
-      this.http.post(environment.mainApi+'park/UpdateSwing',{
+      this.http.post(environment.mainApi+this.global.parkLink+'UpdateSwing',{
         SwingID:this.swingID,
         SwingTitle:this.swingTitle,
         SwingCode: this.swingCode,
         TicketPrice:this.ticketPrice,
+        swingDuration:this.swingDuration,
         SwingDescription: this.Description,
         SwingImage:this.productImg,
         PinCode:pin,
@@ -222,6 +228,7 @@ export class AddSwingComponent implements OnInit {
 
   reset(){
     this.swingID = 0;
+    this.swingDuration = "";
     this.Description = '';
     this.ticketPrice = '';
     this.swingCode = '';
@@ -253,7 +260,7 @@ export class AddSwingComponent implements OnInit {
 
         //////on confirm button pressed the api will run
         this.app.startLoaderDark();
-        this.http.post(environment.mainApi+'park/DeleteSwing',{
+        this.http.post(environment.mainApi+this.global.parkLink+'DeleteSwing',{
       
           SwingID: row.swingID,
           PinCode:pin,
@@ -282,6 +289,7 @@ export class AddSwingComponent implements OnInit {
 
   editswing(row:any){
     this.swingID = row.swingID;
+    this.swingDuration = row.swingDuration;
     this.swingTitle = row.swingTitle;
     this.swingCode = row.swingCode;
     this.productImg = row.swingImage;
@@ -303,7 +311,7 @@ export class AddSwingComponent implements OnInit {
       if(pin !== ''){
         
         this.app.startLoaderDark();
-      this.http.post(environment.mainApi+'park/ActiveSwing',{
+      this.http.post(environment.mainApi+this.global.parkLink+'ActiveSwing',{
         SwingID: row.swingID,
         ActiveStatus:!row.activeStatus,
         PinCode: pin,

@@ -51,18 +51,9 @@ export class ProjectComponent implements OnInit {
 
 
 
-  // getCrud(){
-  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
-  //     (Response:any)=>{
-  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-  //     }
-  //   )
-  // }
-
-
 
   getProject(){
-    this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+    this.http.get(environment.mainApi+this.global.companyLink+'getproject').subscribe(
       (Response:any)=>{
         this.projectList = Response;
       }
@@ -99,7 +90,7 @@ export class ProjectComponent implements OnInit {
 
 insert(){
   this.app.startLoaderDark();
-  this.http.post(environment.mainApi+'cmp/insertproject',{
+  this.http.post(environment.mainApi+this.global.companyLink+'insertproject',{
     ProjectTitle: this.projectTitle,
     ProjectDescription: this.description,
     UserID: this.global.getUserID()
@@ -124,7 +115,7 @@ insert(){
 
 update(pin:any){
   this.app.startLoaderDark();
-  this.http.post(environment.mainApi+'cmp/updateproject',{
+  this.http.post(environment.mainApi+this.global.companyLink+'updateproject',{
     ProjectID:this.projectID,
     ProjectTitle: this.projectTitle,
     ProjectDescription: this.description,
@@ -187,7 +178,7 @@ delete(row:any){
       }).then((result)=>{
         if(result.isConfirmed){
     
-    this.http.post(environment.mainApi+'cmp/deleteproject',{
+    this.http.post(environment.mainApi+this.global.companyLink+'deleteproject',{
       ProjectID: row.projectID,
       PinCode:pin,
       UserID: this.global.getUserID()

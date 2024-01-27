@@ -41,7 +41,7 @@ export class ChangePINComponent implements OnInit {
 
       $('.loaderDark').show();
 
-      this.http.post(environment.mainApi+'user/updatepin',{
+      this.http.post(environment.mainApi+this.global.userLink+'updatepin',{
         OldPin: this.oldPin,
         PinCode: this.newPin,
         UserID: this.global.getUserID()

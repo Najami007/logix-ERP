@@ -15,7 +15,7 @@
                         *ngIf="PBarcode != '' && PBarcode != undefined">
                         <div class="card " *ngFor="let item of productList| filter:PBarcode"
                             (click)="holdDataFunction(item)">
-                            <button style="background: none;border: none;text-align: left;">{{item.productTitle}}
+                            <button style="background: none;border: none;text-align: left;" class="prodBtn">{{item.productTitle}}
                                 (<b>{{item.barcode}}</b> )</button>
                         </div>
                     </div>
@@ -26,7 +26,7 @@
                 <div class=" w-50 text-end ">
 
                     <button class=" w-25 text-danger border-0 border-bottom bg-transparent btn-rpt"
-                        data-bs-toggle="modal" data-bs-target="#holdModal">Retrive</button>
+                        data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>
                     <button class=" w-25 btn btn-primary me-1  btn-rpt"
                         (click)="SaveBill('hold')">{{holdBtnType}}</button>
                     <button class=" w-25 btn btn-success btn-rpt" (click)="SaveBill('purchase')">Save</button>
@@ -85,7 +85,7 @@
                                 </thead>
                                 <tbody>
                                     <tr
-                                        *ngFor="let item of holdBillList.reverse()  | filter:holdSearch.value index as index">
+                                        *ngFor="let item of holdBillList | filter:holdSearch.value index as index">
                                         <td>{{index+1}}</td>
                                         <td>{{item.invBillNo}}</td>
                                         <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
@@ -284,7 +284,7 @@
 
     <!-- ////////////////////////// Table Row////////////////// -->
 
-    <div class="border rounded card shadow p-2" style="max-height: 350px;min-height: 350px;overflow-y: scroll;">
+    <div class="border rounded card shadow p-2" style="height: 45vh; overflow-y: scroll;">
 
         <table class="table table-hover table-logix">
             <thead>
@@ -303,7 +303,7 @@
             </thead>
 
             <tbody style="height: 30px;">
-                <tr *ngFor="let item of tableDataList.reverse() index as index" (click)="showImg(item)">
+                <tr *ngFor="let item of tableDataList index as index" (click)="showImg(item)">
                     <td class="text-center">{{index+1}}</td>
                     <td>{{item.barcode}}</td>
                     <td>{{item.ProductTitle}}</td>
@@ -363,7 +363,7 @@
 
             <mat-card-content class="">
                 <mat-form-field appearance="outline" class="col-lg-3 p-1">
-                    <mat-label>Select Invoice Date</mat-label>
+                    <mat-label>Invoice Date</mat-label>
                     <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
                         [matDatepicker]="voucherDate">
                     <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
@@ -380,7 +380,7 @@
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="col-lg-3 p-1">
-                    <mat-label>Booker</mat-label>
+                    <mat-label>Purchaser</mat-label>
                     <mat-select [(ngModel)]="bookerID" name="location">
                         <mat-option><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
@@ -419,7 +419,7 @@
 
             <mat-card-content class="d-flex flex-column">
                 <mat-form-field appearance="outline">
-                    <mat-label>Select Party</mat-label>
+                    <mat-label>Supplier</mat-label>
                     <mat-select [(ngModel)]="partyID" (selectionChange)="onPartySelected()" name="customer">
                         <mat-option><ngx-mat-select-search #partySearch [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>

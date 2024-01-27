@@ -46,20 +46,8 @@ export class LocationsComponent implements OnInit{
 
 
 
-
-
-  // getCrud(){
-  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globaldata.getUserID()+'&moduleid='+this.globaldata.getModuleID()).subscribe(
-  //     (Response:any)=>{
-  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-  //     }
-  //   )
-  // }
-
-
-
   getLocation(){
-    this.http.get(environment.mainApi+'inv/getlocation').subscribe(
+    this.http.get(environment.mainApi+this.globaldata.inventoryLink+'getlocation').subscribe(
       (Response:any)=>{
         this.locationList = Response;
       }
@@ -92,7 +80,7 @@ export class LocationsComponent implements OnInit{
 
   insert(){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'inv/insertlocation',{  
+    this.http.post(environment.mainApi+this.globaldata.inventoryLink+'insertlocation',{  
       LocationTitle: this.locationTitle,
       LocationDescription: this.description,
       UserID: this.globaldata.getUserID()
@@ -125,7 +113,7 @@ export class LocationsComponent implements OnInit{
 
       
       this.app.startLoaderDark();
-      this.http.post(environment.mainApi+'inv/updatelocation',{
+      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'updatelocation',{
         LocationID:this.locationID,  
         LocationTitle: this.locationTitle,
         LocationDescription: this.description,
@@ -194,7 +182,7 @@ export class LocationsComponent implements OnInit{
         if(result.isConfirmed){
       this.app.startLoaderDark();
 
-      this.http.post(environment.mainApi+'inv/deletelocation',{
+      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'deletelocation',{
         LocationID: row.locationID,
         PinCode:pin,
         UserID: this.globaldata.getUserID()

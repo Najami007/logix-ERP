@@ -200,7 +200,7 @@ export class CompanyProfileComponent implements OnInit {
 
 ////////////////////////////////////////////////////////////////////////
   getCompany(){
-    this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+    this.http.get(environment.mainApi+this.global.companyLink+'getcompanyprofile').subscribe(
       (Response:any)=>{
        if(Response != ''){
         this.companyProfile = Response;
@@ -255,21 +255,21 @@ export class CompanyProfileComponent implements OnInit {
       this.msg.WarnNotify('Enter Registration Date')
     }else if(this.RegistrationNo == '' || this.RegistrationNo == undefined){
       this.msg.WarnNotify('Enter Registration No.')
-    }else if(this.CompanyLogo3 !== '-' && (this.CompanyLogo2 == '' || this.CompanyLogo2 == '-')){
+    }else if(this.CompanyLogo3 !== '' && (this.CompanyLogo2 == '' )){
       this.msg.WarnNotify('Select Logo 2 First')
-    }else if((this.CompanyLogo2 !== '-') && (this.Logo2Height == '' || this.Logo2Height == 0 || this.Logo2Width == 0 || this.Logo2Width == '') ){
+    }else if((this.CompanyLogo2 !== '') && (this.Logo2Height == '' || this.Logo2Height == 0 || this.Logo2Width == 0 || this.Logo2Width == '') ){
       //  alert(this.CompanyLogo2);
       this.msg.WarnNotify('Enter Logo 2 Height & Width');
-    }else if(this.CompanyLogo3 !== '-' && (this.Logo3Height == '' ||this.Logo3Height == 0 || this.Logo3Width == 0 || this.Logo3Width == '')){
+    }else if( this.CompanyLogo3 !== '' && (this.Logo3Height == '' ||this.Logo3Height == 0 || this.Logo3Width == 0 || this.Logo3Width == '')){
         this.msg.WarnNotify('Enter Logo 3 Height  & Width'); 
     }
     else{
 
       if(this.CompanyLogo2 == '' || this.CompanyLogo2 == undefined){
-        this.CompanyLogo2 = '-';
+        this.CompanyLogo2 = '';
       }
       if(this.CompanyLogo3 == '' || this.CompanyLogo3 == undefined){
-        this.CompanyLogo3 = '-';
+        this.CompanyLogo3 = '';
       }
 
 
@@ -295,7 +295,7 @@ export class CompanyProfileComponent implements OnInit {
 
   insertCompany(){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'cmp/insertcp',{
+    this.http.post(environment.mainApi+this.global.companyLink+'insertcp',{
       CompanyName:this.CompanyName,
       CompanyAlias:'Insert',
       CompanyAddress:this.CompanyAddress,
@@ -341,7 +341,7 @@ export class CompanyProfileComponent implements OnInit {
 
   updateCompany(pin:any){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'cmp/updatecp',{
+    this.http.post(environment.mainApi+this.global.companyLink+'updatecp',{
       PinCode:pin,
       CompanyProfileID: this.profileID,
       CompanyName:this.CompanyName,
@@ -389,6 +389,7 @@ export class CompanyProfileComponent implements OnInit {
 ////////////////////////////////////////////////////////////////////////
 
   editProfile(row:any){
+    console.log(row);
     this.btnType = 'Update';
     this.profileID = row.companyProfileID;
     this.CompanyName = row.companyName;
@@ -467,7 +468,7 @@ export class CompanyProfileComponent implements OnInit {
 
         //////on confirm button pressed the api will run
         this.app.startLoaderDark();
-        this.http.post(environment.mainApi+'cmp/deletecp',{
+        this.http.post(environment.mainApi+this.global.companyLink+'deletecp',{
           PinCode:pin,
           CompanyProfileID: item.companyProfileID,
           UserID: this.global.getUserID()

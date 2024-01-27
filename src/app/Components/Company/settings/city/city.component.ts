@@ -54,23 +54,10 @@ export class CityComponent implements OnInit{
   countryList:any;
 
 
-  // getCrud(){
-  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globaldata.getUserID()+'&moduleid='+this.globaldata.getModuleID()).subscribe(
-  //     (Response:any)=>{
-  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-  //     }
-  //   )
-  // }
-
-
-
-
-
-
    /////////////////////////////////////////////////////////////////////
 
   getCountry(){
-    this.http.get(environment.mainApi+'cmp/getcountry').subscribe(
+    this.http.get(environment.mainApi+this.globaldata.companyLink+'getcountry').subscribe(
       (Response)=>{
         this.countryList = Response;
       },
@@ -101,7 +88,7 @@ export class CityComponent implements OnInit{
 
   insert(){
     $('.loaderDark').show();
-    this.http.post(environment.mainApi+'cmp/insertcity',{
+    this.http.post(environment.mainApi+this.globaldata.companyLink+'insertcity',{
       CountryID:this.countryID,
       CityName:this.cityName,
       UserID:this.globaldata.getUserID(),
@@ -124,7 +111,7 @@ export class CityComponent implements OnInit{
 
   update(){
     $('.loaderDark').show();
-    this.http.post(environment.mainApi+'cmp/updatecity',{
+    this.http.post(environment.mainApi+this.globaldata.companyLink+'updatecity',{
       
       CityID:this.cityID,
       CountryID:this.countryID,
@@ -155,7 +142,7 @@ export class CityComponent implements OnInit{
  /////////////////////////////////////////////////////////////////////
 
   getCity(){
-    this.http.get(environment.mainApi+'cmp/getcity').subscribe({
+    this.http.get(environment.mainApi+this.globaldata.companyLink+'getcity').subscribe({
       next:value=>{
     
         this.citiesData = value;
@@ -197,7 +184,7 @@ export class CityComponent implements OnInit{
 
         this.app.startLoaderDark();
         //////on confirm button pressed the api will run
-        this.http.post(environment.mainApi+'cmp/deletecity',{
+        this.http.post(environment.mainApi+this.globaldata.companyLink+'deletecity',{
           CityID:row.cityID,
           UserID:this.globaldata.getUserID(),
         }).subscribe(

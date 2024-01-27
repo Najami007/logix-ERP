@@ -53,15 +53,6 @@ export class DepartmentComponent implements OnInit{
 
 
 
-  // getCrud(){
-  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globaldata.getUserID()+'&moduleid='+this.globaldata.getModuleID()).subscribe(
-  //     (Response:any)=>{
-  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-  //     }
-  //   )
-  // }
-
-
   OpenDialogue(){
     this.dialogue.open(AddDepartmentComponent,{
       width:"40%",
@@ -107,7 +98,7 @@ export class DepartmentComponent implements OnInit{
 
   insert(){
     $(".loaderDark").show()
-    this.http.post(environment.mainApi+'cmp/insertdepartment',{
+    this.http.post(environment.mainApi+this.globaldata.companyLink+'insertdepartment',{
       DepartmentTitle: this.departmentName,
       DepartmentDescription:this.description,
       UserID: this.globaldata.getUserID()
@@ -130,7 +121,7 @@ export class DepartmentComponent implements OnInit{
   
   update(pin:any){
     $(".loaderDark").show()
-    this.http.post(environment.mainApi+'cmp/updatedepartment',{
+    this.http.post(environment.mainApi+this.globaldata.companyLink+'updatedepartment',{
       PinCode:pin,
       DepartmentID: this.departmentID,
       DepartmentTitle: this.departmentName,
@@ -165,7 +156,7 @@ export class DepartmentComponent implements OnInit{
 
 
   getDepartment(){
-    this.http.get(environment.mainApi+'cmp/getdepartment').subscribe(
+    this.http.get(environment.mainApi+this.globaldata.companyLink+'getdepartment').subscribe(
       (Response)=>{
         this.departmentList = Response;
       },
@@ -205,7 +196,7 @@ export class DepartmentComponent implements OnInit{
         }).then((result)=>{
           if(result.isConfirmed){
         this.app.startLoaderDark();    
-          this.http.post(environment.mainApi+'cmp/deletedepartment',{
+          this.http.post(environment.mainApi+this.globaldata.companyLink+'deletedepartment',{
             PinCode:pin,
             DepartmentID:row.departmentID,
             UserID:this.globaldata.getUserID(),

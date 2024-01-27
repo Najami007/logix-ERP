@@ -103,7 +103,7 @@ export class PurchaseReturnComponent implements OnInit{
   }
 
   getBooker(){
-    this.http.get(environment.mainApi+'inv/GetBooker').subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetBooker').subscribe(
       (Response:any)=>{
         this.BookerList = Response;
       }
@@ -111,7 +111,7 @@ export class PurchaseReturnComponent implements OnInit{
   }
   
   getLocation(){
-    this.http.get(environment.mainApi+'inv/getlocation').subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'getlocation').subscribe(
       (Response:any)=>{
         this.locationList = Response;
       }
@@ -120,7 +120,7 @@ export class PurchaseReturnComponent implements OnInit{
 
 
   getProducts(){
-    this.http.get(environment.mainApi+'inv/GetActiveProduct').subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetActiveProduct').subscribe(
       (Response)=>{
         this.productList = Response;
        // console.log(Response);
@@ -131,7 +131,7 @@ export class PurchaseReturnComponent implements OnInit{
 
 
   getSuppliers(){
-    this.http.get(environment.mainApi+'cmp/getsupplier').subscribe(
+    this.http.get(environment.mainApi+this.global.companyLink+'getsupplier').subscribe(
       {
         next:value =>{
           this.suppliersList = value;
@@ -450,7 +450,7 @@ export class PurchaseReturnComponent implements OnInit{
         if(type == 'hold'){
           if(this.holdBtnType == 'Hold'){
            this.app.startLoaderDark();
-           this.http.post(environment.mainApi+'inv/InsertPurchase',{
+           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertPurchase',{
            InvType: "HPR",
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
            RefInvoiceNo: this.refInvNo,
@@ -488,7 +488,7 @@ export class PurchaseReturnComponent implements OnInit{
              if(pin != ''){
                this.app.startLoaderDark();
           
-           this.http.post(environment.mainApi+'inv/UpdateHoldInvoice',{
+           this.http.post(environment.mainApi+this.global.inventoryLink+'UpdateHoldInvoice',{
            InvBillNo: this.holdInvNo,
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
            RefInvoiceNo: this.refInvNo,
@@ -525,7 +525,7 @@ export class PurchaseReturnComponent implements OnInit{
      
          }else if(type == 'purchase'){
            this.app.startLoaderDark();
-           this.http.post(environment.mainApi+'inv/InsertPurchase',{
+           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertPurchase',{
            InvType: "PR",
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
            RefInvoiceNo: this.refInvNo,
@@ -755,7 +755,7 @@ export class PurchaseReturnComponent implements OnInit{
 
 
   public getBillDetail(billNo:any):Observable<any>{
-   return this.http.get(environment.mainApi+'inv/GetSingleBillDetail?reqInvBillNo='+billNo).pipe(retry(3));
+   return this.http.get(environment.mainApi+this.global.inventoryLink+'GetSingleBillDetail?reqInvBillNo='+billNo).pipe(retry(3));
   }
 
 
@@ -769,7 +769,7 @@ export class PurchaseReturnComponent implements OnInit{
       $('#edit').hide()
     }
 
-    this.http.get(environment.mainApi+'inv/GetInventoryBillSingleDate?Type='+type+'&creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryBillSingleDate?Type='+type+'&creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
       (Response:any)=>{
         this.holdBillList = Response;
         // console.log(this.holdBillList);

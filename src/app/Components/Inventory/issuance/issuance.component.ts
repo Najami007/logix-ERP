@@ -83,7 +83,7 @@ export class IssuanceComponent implements OnInit {
 
 
   getLocation(){
-    this.http.get(environment.mainApi+'inv/getlocation').subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'getlocation').subscribe(
       (Response:any)=>{
         this.locationList = Response;
       }
@@ -93,7 +93,7 @@ export class IssuanceComponent implements OnInit {
 
 
   getProducts(){
-    this.http.get(environment.mainApi+'inv/GetActiveProduct').subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetActiveProduct').subscribe(
       (Response)=>{
         this.productList = Response;
        // console.log(Response);
@@ -359,7 +359,7 @@ export class IssuanceComponent implements OnInit {
         if(type == 'hold'){
           if(this.holdBtnType == 'Hold'){
            this.app.startLoaderDark();
-           this.http.post(environment.mainApi+'inv/InsertIssueStock',{
+           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertIssueStock',{
            InvType: "HI",
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
            LocationID: this.locationID,
@@ -397,7 +397,7 @@ export class IssuanceComponent implements OnInit {
              if(pin != ''){
                this.app.startLoaderDark();
           
-           this.http.post(environment.mainApi+'inv/UpdateHoldedIssueInvoice',{
+           this.http.post(environment.mainApi+this.global.inventoryLink+'UpdateHoldedIssueInvoice',{
            InvBillNo: this.holdInvNo,
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
            LocationID: this.locationID,
@@ -434,7 +434,7 @@ export class IssuanceComponent implements OnInit {
      
          }else if(type == 'issue'){
            this.app.startLoaderDark();
-           this.http.post(environment.mainApi+'inv/InsertIssueStock',{
+           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertIssueStock',{
             InvType: "I",
             InvDate: this.global.dateFormater(this.invoiceDate,'-'),
             LocationID: this.locationID,
@@ -508,7 +508,7 @@ export class IssuanceComponent implements OnInit {
       $('#edit').hide()
     }
 
-    this.http.get(environment.mainApi+'inv/GetIssueInventoryBillSingleDate?Type='+type+'&creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetIssueInventoryBillSingleDate?Type='+type+'&creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
       (Response:any)=>{
         this.IssueBillList = Response;
          console.log(this.IssueBillList);
@@ -650,7 +650,7 @@ export class IssuanceComponent implements OnInit {
 
 
   public getBillDetail(billNo:any):Observable<any>{
-    return this.http.get(environment.mainApi+'inv/GetIssueSingleBillDetail?reqInvBillNo='+billNo).pipe(retry(3));
+    return this.http.get(environment.mainApi+this.global.inventoryLink+'GetIssueSingleBillDetail?reqInvBillNo='+billNo).pipe(retry(3));
    }
  
 

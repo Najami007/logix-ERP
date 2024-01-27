@@ -60,21 +60,12 @@ export class UserRoleComponent implements OnInit {
   TempModuleList:any = [];
 
 
-  // getCrud(){
-  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.global.getUserID()+'&moduleid='+this.global.getModuleID()).subscribe(
-  //     (Response:any)=>{
-  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-  //     }
-  //   )
-  // }
-
-
 
    /////////////////////////////////////////////////////////////////////////
 
 
   getSavedRoles(){
-    this.http.get(environment.mainApi+'user/GetRole ').subscribe(
+    this.http.get(environment.mainApi+this.global.userLink+'GetRole').subscribe(
 
       (Response:any)=>{
         this.rolesList = Response;
@@ -87,7 +78,7 @@ export class UserRoleComponent implements OnInit {
  /////////////////////////////////////////////////////////////////////////
 
   getModules(){
-    this.http.get(environment.mainApi+'user/GetModule').subscribe(
+    this.http.get(environment.mainApi+this.global.userLink+'GetModule').subscribe(
       (Response)=>{
         this.moduleList = Response;
       }
@@ -99,7 +90,7 @@ export class UserRoleComponent implements OnInit {
 
 
   getMenuList(){
-    this.http.get(environment.mainApi+'user/getmenu').subscribe(
+    this.http.get(environment.mainApi+this.global.userLink+'getmenu').subscribe(
       (Response)=>{
         this.menuList = Response;
         // console.log(Response);
@@ -157,7 +148,7 @@ export class UserRoleComponent implements OnInit {
 
   insertRole(){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'user/insertrole',{
+    this.http.post(environment.mainApi+this.global.userLink+'insertrole',{
       RoleTitle: this.roleTitle,
       RoleDescription: this.roleDescription,
       RoleDetail:  JSON.stringify(this.menuList),
@@ -186,7 +177,7 @@ export class UserRoleComponent implements OnInit {
 
   updateRole(pin:any){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'user/updaterole',{
+    this.http.post(environment.mainApi+this.global.userLink+'updaterole',{
       PinCode:pin,
       RoleID: this.roleID,
       RoleTitle: this.roleTitle,
@@ -313,7 +304,7 @@ export class UserRoleComponent implements OnInit {
     this.roleDescription = row.roleDescription;
     this.roleID = row.roleID;
 
-    this.http.get(environment.mainApi+'user/getrolemenu?roleid='+row.roleID).subscribe((Response:any)=>{
+    this.http.get(environment.mainApi+this.global.userLink+'getrolemenu?roleid='+row.roleID).subscribe((Response:any)=>{
         // console.log(Response);
 
         var AllowedRolesList:any = [];
@@ -419,7 +410,7 @@ export class UserRoleComponent implements OnInit {
             //////on confirm button pressed the api will run
            
         this.app.startLoaderDark();
-        this.http.post(environment.mainApi+'user/deleterole',{
+        this.http.post(environment.mainApi+this.global.userLink+'deleterole',{
           PinCode: pin,
           RoleID:row.roleID,
           UserID:this.global.getUserID()

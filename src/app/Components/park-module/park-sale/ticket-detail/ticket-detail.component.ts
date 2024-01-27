@@ -2,6 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { environment } from 'src/environments/environment.development';
 
@@ -18,6 +19,7 @@ export class TicketDetailComponent{
     private msg:NotificationService,
     @Inject(MAT_DIALOG_DATA) public editData : any,
     private dialogRef:MatDialogRef<TicketDetailComponent>,
+    private global:GlobalDataModule,
 
 
   ){
@@ -25,7 +27,7 @@ export class TicketDetailComponent{
 
     
 
-  this.http.get(environment.mainApi+'park/PrintTicket?ticketno='+this.editData.ticketNo).subscribe(
+  this.http.get(environment.mainApi+this.global.parkLink+'PrintTicket?ticketno='+this.editData.ticketNo).subscribe(
     (Response:any)=>{
      this.printDetails = Response;
     //  console.log(Response);

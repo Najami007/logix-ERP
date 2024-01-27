@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/Shared/material/material.module';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-import { TextMaskModule } from 'angular2-text-mask';
+// import { TextMaskModule } from 'angular2-text-mask';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 import { ParkClosingSheetComponent } from './parkReports/park-closing-sheet/park-closing-sheet.component';
@@ -61,7 +61,7 @@ export const parkRoutes: Route[] = [
     ReactiveFormsModule,
     MaterialModule,
     NgxMatSelectSearchModule,
-    TextMaskModule,
+    // TextMaskModule,
     Ng2SearchPipeModule,
     NgxMaterialTimepickerModule
   ],

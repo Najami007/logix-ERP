@@ -67,7 +67,7 @@ export class StockAdjustmentComponent implements OnInit {
 
 
   getLocation(){
-    this.http.get(environment.mainApi+'inv/getlocation').subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'getlocation').subscribe(
       (Response:any)=>{
         this.locationList = Response;
       }
@@ -77,7 +77,7 @@ export class StockAdjustmentComponent implements OnInit {
 
 
   getProducts(){
-    this.http.get(environment.mainApi+'inv/GetActiveProduct').subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetActiveProduct').subscribe(
       (Response)=>{
         this.productList = Response;
        // console.log(Response);
@@ -340,7 +340,7 @@ export class StockAdjustmentComponent implements OnInit {
       if(isValidFlag == true){
         
            this.app.startLoaderDark();
-           this.http.post(environment.mainApi+'inv/InsertIssueStock',{
+           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertIssueStock',{
             InvType: this.adjustmentType,
             InvDate: this.global.dateFormater(this.invoiceDate,'-'),
             LocationID: this.locationID,
@@ -404,7 +404,7 @@ export class StockAdjustmentComponent implements OnInit {
     //   $('#edit').hide()
     // }
 
-    this.http.get(environment.mainApi+'inv/GetStockAdjustmentInvBillSingleDate?creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetStockAdjustmentInvBillSingleDate?creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
       (Response:any)=>{
         this.IssueBillList = Response;
          console.log(this.IssueBillList);
@@ -540,7 +540,7 @@ export class StockAdjustmentComponent implements OnInit {
 
 
   public getBillDetail(billNo:any):Observable<any>{
-    return this.http.get(environment.mainApi+'inv/GetIssueSingleBillDetail?reqInvBillNo='+billNo).pipe(retry(3));
+    return this.http.get(environment.mainApi+this.global.inventoryLink+'GetIssueSingleBillDetail?reqInvBillNo='+billNo).pipe(retry(3));
    }
  
 

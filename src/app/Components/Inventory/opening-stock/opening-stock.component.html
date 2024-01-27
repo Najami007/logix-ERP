@@ -1,8 +1,39 @@
-<div class="d-flex h-100 body" style="background-color: gainsboro;">
+<div class="d-flex body h-100" style="background-color: gainsboro;">
 
     <div class="col-lg-9 bg-white " >
+        <mat-card class="shadow ms-1 me-1 " style="background-color: azure;">
+            <mat-card-content>
+                <div class="d-flex justify-content-around ">
+                    <mat-form-field appearance="outline" class="col-lg-3">
+                        <mat-label>Invoice Date</mat-label>
+                        <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="invDate"
+                            [matDatepicker]="iDate">
+                        <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
+                        <mat-datepicker #iDate></mat-datepicker>
+                    </mat-form-field>
+        
+                    <mat-form-field appearance="outline" class="col-lg-3 ">
+                        <mat-label>Location</mat-label>
+                        <mat-select [(ngModel)]="locationID" name="location" >
+                            <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of locationList | filter:locationSearch.value" 
+                                [value]="item.locationID">{{item.locationTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+        
+        
+                    
+        
+                    <mat-form-field appearance="outline" class="col-lg-4">
+                        <mat-label>Remarks</mat-label>
+                        <input matInput type="text" [(ngModel)]="invRemarks">
+                    </mat-form-field>
+                </div>
+            </mat-card-content>
+           </mat-card>
 
-        <div class="ps-1 d-flex mt-1">
+        <div class="ps-1 d-flex pt-1">
            
             <div class="col-lg-9  d-flex flex-column">
                 <mat-label class="text-primary">Search Barcode / Product</mat-label> 
@@ -27,7 +58,7 @@
         </div>
 
 
-        <div style="max-height: 500px;overflow-y:scroll ;height: 450px;">
+        <div style="max-height: 70%;overflow-y:scroll ;">
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -42,7 +73,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of tableDataList.reverse() index as index" (click)="showImg(item)">
+                    <tr *ngFor="let item of tableDataList index as index" (click)="showImg(item)">
                       <td>{{index+1}}</td>
                       <td>{{item.barcode}}</td>
                       <td>{{item.productTitle}}</td>
@@ -72,37 +103,7 @@
 
 
         
-       <mat-card class="shadow ms-1 me-1 " style="background-color: azure;">
-        <mat-card-content>
-            <div class="d-flex justify-content-around p-1">
-                <mat-form-field appearance="outline" class="col-lg-3">
-                    <mat-label>Select Invoice Date</mat-label>
-                    <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="invDate"
-                        [matDatepicker]="iDate">
-                    <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
-                    <mat-datepicker #iDate></mat-datepicker>
-                </mat-form-field>
-    
-                <mat-form-field appearance="outline" class="col-lg-3 ">
-                    <mat-label>Location</mat-label>
-                    <mat-select [(ngModel)]="locationID" name="location" >
-                        <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
-                                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                        <mat-option *ngFor="let item of locationList | filter:locationSearch.value" 
-                            [value]="item.locationID">{{item.locationTitle}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-    
-    
-                
-    
-                <mat-form-field appearance="outline" class="col-lg-4">
-                    <mat-label>Remarks</mat-label>
-                    <input matInput type="text" [(ngModel)]="invRemarks">
-                </mat-form-field>
-            </div>
-        </mat-card-content>
-       </mat-card>
+   
           
 
     </div>
@@ -160,7 +161,7 @@
         
        </div>
        <div class="mt-4 d-flex justify-content-around">
-        <button mat-raised-button class="bg-transparent text-danger w-50" data-bs-toggle="modal" data-bs-target="#holdModal">Retrive</button>
+        <button mat-raised-button class="bg-transparent text-danger w-50" data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>
 
 
                    <!---------------     Modal Window for Retreiving Hold Bills --------------->

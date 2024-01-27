@@ -48,21 +48,8 @@ export class UnitOfMeasurementComponent implements OnInit{
 
 
 
-
-  // getCrud(){
-  //   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globaldata.getUserID()+'&moduleid='+this.globaldata.getModuleID()).subscribe(
-  //     (Response:any)=>{
-  //       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-  //     }
-  //   )
-  // }
-
-
-
-
-
   getUOMList(){
-    this.http.get(environment.mainApi+'inv/GetUOM').subscribe(
+    this.http.get(environment.mainApi+this.globaldata.inventoryLink+'GetUOM').subscribe(
       (Response:any)=>{
         this.UOMList = Response;
       }
@@ -94,7 +81,7 @@ export class UnitOfMeasurementComponent implements OnInit{
 
   insert(){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+'inv/insertUOM',{  
+    this.http.post(environment.mainApi+this.globaldata.inventoryLink+'insertUOM',{  
       UomTitle: this.uomTitle,
       UserID: this.globaldata.getUserID()
     }).subscribe(
@@ -126,7 +113,7 @@ export class UnitOfMeasurementComponent implements OnInit{
 
       
       this.app.startLoaderDark();
-      this.http.post(environment.mainApi+'inv/updateUOM',{
+      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'updateUOM',{
         UomID:this.uomID,  
         UomTitle: this.uomTitle,
         PinCode:pin,
@@ -191,7 +178,7 @@ export class UnitOfMeasurementComponent implements OnInit{
         if(result.isConfirmed){
       this.app.startLoaderDark();
 
-      this.http.post(environment.mainApi+'inv/deleteUOM',{
+      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'deleteUOM',{
         UOMID: row.uomID,
         PinCode:pin,
         UserID: this.globaldata.getUserID()

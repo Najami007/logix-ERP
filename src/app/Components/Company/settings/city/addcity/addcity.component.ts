@@ -59,7 +59,7 @@ export class AddcityComponent implements OnInit{
 
 
   getCountry(){
-    this.http.get(environment.mainApi+'cmp/getcountry').subscribe(
+    this.http.get(environment.mainApi+this.global.companyLink+'getcountry').subscribe(
       (Response)=>{
         this.countryList = Response;
       },
@@ -85,7 +85,7 @@ export class AddcityComponent implements OnInit{
 
   insert(){
     $('.loaderDark').show();
-    this.http.post(environment.mainApi+'cmp/insertcity',{
+    this.http.post(environment.mainApi+this.global.companyLink+'insertcity',{
       CountryID:this.countryID,
       CityName:this.cityName,
       UserID:this.global.getUserID(),
@@ -106,7 +106,7 @@ export class AddcityComponent implements OnInit{
 
   update(){
     $('.loaderDark').show();
-    this.http.post(environment.mainApi+'cmp/updatecity',{
+    this.http.post(environment.mainApi+this.global.companyLink+'updatecity',{
       
       CityID:this.editData.cityID,
       CountryID:this.countryID,

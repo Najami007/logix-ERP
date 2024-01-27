@@ -39,7 +39,7 @@ export class AddUOMComponent {
     }else{
 
       $('.loaderDark').show();
-      this.http.post(environment.mainApi+'inv/insertUOM',{  
+      this.http.post(environment.mainApi+this.global.inventoryLink+'insertUOM',{  
         UomTitle: this.uomTitle,
         UserID: this.global.getUserID()
       }).subscribe(

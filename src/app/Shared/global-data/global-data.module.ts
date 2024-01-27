@@ -30,7 +30,8 @@ export class GlobalDataModule  implements OnInit {
   userLink = 'user/';
   accountLink = 'acc/';
   companyLink = 'cmp/';
-  coreLink = 'core/'
+  coreLink = 'core/';
+  parkLink = 'park/'
 
   
   glbMenulist:any = [];

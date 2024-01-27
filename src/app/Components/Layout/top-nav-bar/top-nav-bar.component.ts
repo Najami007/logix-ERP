@@ -59,7 +59,7 @@ export class TopNavBarComponent implements OnInit{
 
     ////////////////////////////////////////////////////////////////////////
   getCompany(){
-    this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+    this.http.get(environment.mainApi+this.globalData.companyLink+'getcompanyprofile').subscribe(
       (Response:any)=>{
         if(Response != ''){
           this.companyProfile = Response;
@@ -86,7 +86,7 @@ export class TopNavBarComponent implements OnInit{
 
   
 
-        this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.moduleID).subscribe(
+        this.http.get(environment.mainApi+this.globalData.userLink+'getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.moduleID).subscribe(
           (Response:any)=>{
            this.menuList = Response;
           this.globalData.glbMenulist = Response;
