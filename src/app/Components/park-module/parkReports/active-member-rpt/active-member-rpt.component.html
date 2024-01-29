@@ -1,0 +1,67 @@
+<div class="bg-gray h-100">
+    
+<div class="container pt-5">
+    <button mat-mini-fab color="primary" (click)="print()"><mat-icon>print</mat-icon></button>
+</div>
+
+<div id="PrintDiv" class="container p-5">
+
+ 
+
+    <!-------------------------    Top Logo Section -------------------->
+
+<div class="hide">
+ <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+     <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+         <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
+     </span>
+     <span >
+         
+
+         <h1 class="companyName">{{item.companyName}}</h1>
+         
+         <p class="rptTitle" style="margin-top:-20px">Active Members List</p>
+         <h4 class="projtitl"  style="margin-top:-20px;"><b >Project:</b> Playtorium</h4>
+         
+
+       
+     </span>
+     <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+         <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+     </span>
+
+
+ </div>
+</div>
+
+<br>
+
+    <table class="table table-logix ">
+        <thead>
+            <tr>
+                <th>S#</th>
+                <th>Title</th>
+                <th>Persons</th>
+                <th>Duration</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of activeMemberList index as index">
+                <td class="text-center">{{index + 1}}</td>
+                <td> {{item.swingTitle}}</td>
+                <td class="text-center">{{item.ticketQuantity}}</td>
+                <td>{{item.swingDuration}} mnt</td>
+                <td>{{item.lastTicketStartTime |date:'hh:mm a'}}</td>
+                <td>{{item.lastTicketEndTime |date:'hh:mm a'}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+
+
+
+    
+

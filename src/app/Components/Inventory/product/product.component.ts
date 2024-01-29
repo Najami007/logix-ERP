@@ -265,10 +265,11 @@ export class ProductComponent implements OnInit {
       this.msg.WarnNotify('Select Barcode Type')
     }else if(this.SalePrice < this.CostPrice){
       this.msg.WarnNotify('Sale Price Is less Than Cost Price')
-    }else if(this.productImg == '' || this.productImg == undefined){
-      this.msg.WarnNotify('Select The Product Image');
     }
     else {
+       if(this.productImg == '' || this.productImg == undefined){
+        this.productImg = '-'
+      }
 
       if(this.Description == '' || this.Description == undefined){
         this.Description = '-';

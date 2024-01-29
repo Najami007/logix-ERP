@@ -8,11 +8,11 @@
 
 .body {
     display: flex;
-    justify-content: center;
+    justify-content: end;
     align-items: center;
     // min-height: 100vh;
-    background-size:100px;
-     background-image: url(../../assets/Images/attendance.jpeg);
+    background-size:100%;
+     background-image: url(../../assets/Images/bckgrnd.jpg);
    
      
     
@@ -21,7 +21,7 @@
     background-position:bottom;
     
     background-repeat:no-repeat;
-    background-size:cover ;
+    // background-size:cover ;
     
     
   

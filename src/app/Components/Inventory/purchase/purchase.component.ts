@@ -41,12 +41,19 @@ export class PurchaseComponent implements OnInit{
   
   ngOnInit(): void {
     this.global.setHeaderTitle('Purchase');
-    this.getProducts();
+    // this.getProducts();
     this.getBooker();
     this.getLocation();
     this.getSuppliers();
+
+     this.global.getProducts().subscribe(
+      (data:any)=>{
+        this.productList = data;
+      }
+    )
   }
 
+  projectID = this.global.InvProjectID;
   holdBtnType:any ='Hold';
   tabIndex:any;
   Date:Date = new Date()
@@ -119,15 +126,15 @@ export class PurchaseComponent implements OnInit{
   }
 
 
-  getProducts(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetActiveProduct').subscribe(
-      (Response)=>{
-        this.productList = Response;
-       // console.log(Response);
+  // getProducts(){
+  //   this.http.get(environment.mainApi+this.global.inventoryLink+'GetActiveProduct').subscribe(
+  //     (Response)=>{
+  //       this.productList = Response;
+  //      // console.log(Response);
  
-      }
-    )
-  }
+  //     }
+  //   )
+  // }
 
 
   getSuppliers(){
@@ -161,26 +168,39 @@ export class PurchaseComponent implements OnInit{
       
           //// push the data using index
           if (condition == undefined) {
+
+            var prodImg = '';
+            this.app.startLoaderDark();
+            this.global.getProdImage(row.productID).subscribe((response:any)=>{
+             prodImg =  response[0].productImage;
+             this.productImage = prodImg;
+             this.app.stopLoaderDark();
+      
+           });
       
           //console.log(data);
-          this.tableDataList.push({
-            ProductID:row.productID,
-            ProductTitle:row.productTitle,
-            barcode:row.barcode,
-            productImage:row.productImage,
-            Quantity:1,
-            wohCP:row.costPrice,
-            CostPrice:row.costPrice,
-            SalePrice:row.salePrice,
-            ExpiryDate:this.global.dateFormater(new Date(),'-'),
-            BatchNo:'-',
-            BatchStatus:'-',
-            UomID:row.uomID,
-            Packing:1,
-            discInP:0,
-            discInR:0,
-      
-          })
+          setTimeout(() => {
+            this.tableDataList.push({
+              ProductID:row.productID,
+              ProductTitle:row.productTitle,
+              barcode:row.barcode,
+              productImage:row.productImage,
+              Quantity:1,
+              wohCP:row.costPrice,
+              CostPrice:row.costPrice,
+              SalePrice:row.salePrice,
+              ovhPercent:0,
+              ovhAmount:0,
+              ExpiryDate:this.global.dateFormater(new Date(),'-'),
+              BatchNo:'-',
+              BatchStatus:'-',
+              UomID:row.uomID,
+              Packing:1,
+              discInP:0,
+              discInR:0,
+        
+            })
+          }, 200);
       
           this.productImage = row.productImage;
           this.getTotal();
@@ -210,7 +230,8 @@ export class PurchaseComponent implements OnInit{
 
   holdDataFunction(data:any){
     //console.log(data);
-
+   
+    // console.log(this.productImage);
     
 
     var condition = this.tableDataList.find(
@@ -219,32 +240,50 @@ export class PurchaseComponent implements OnInit{
 
     var index = this.tableDataList.indexOf(condition);
 
+
+
     if (condition == undefined) {
 
+      var prodImg = '';
+      this.app.startLoaderDark();
+      this.global.getProdImage(data.productID).subscribe((response:any)=>{
+       prodImg =  response[0].productImage;
+       this.productImage = prodImg;
+       this.app.stopLoaderDark();
+
+     });
+
+     setTimeout(() => {
+      this.tableDataList.push({
+        ProductID:data.productID,
+        ProductTitle:data.productTitle,
+        barcode:data.barcode,
+        productImage:prodImg,
+        Quantity:1,
+        wohCP:data.costPrice,
+        CostPrice:data.costPrice,
+        SalePrice:data.salePrice,
+        ovhPercent:0,
+        ovhAmount:0,
+        ExpiryDate:this.global.dateFormater(new Date(),'-'),
+        BatchNo:'-',
+        BatchStatus:'-',
+        UomID:data.uomID,
+        Packing:1,
+        discInP:0,
+        discInR:0,
+       
+  
+      })  
+     }, 100);
+
+   
+
     //console.log(data);
-    this.tableDataList.push({
-      ProductID:data.productID,
-      ProductTitle:data.productTitle,
-      barcode:data.barcode,
-      productImage:data.productImage,
-      Quantity:1,
-      wohCP:data.costPrice,
-      CostPrice:data.costPrice,
-      SalePrice:data.salePrice,
-      ExpiryDate:this.global.dateFormater(new Date(),'-'),
-      BatchNo:'-',
-      BatchStatus:'-',
-      UomID:data.uomID,
-      Packing:1,
-      discInP:0,
-      discInR:0,
-     
+    
+    console.log(this.tableDataList);
 
-    })
-
-    // console.log(this.tableDataList);
-
-    this.productImage = data.productImage;
+    this.productImage = prodImg;
     this.getTotal();
     this.PBarcode = '';
     $('#searchProduct').trigger('focus');
@@ -265,20 +304,10 @@ export class PurchaseComponent implements OnInit{
   }
 
 
-  getTotal() {
-    this.subTotal = 0;
-    this.myTotalQty = 0;
-    for (var i = 0; i < this.tableDataList.length; i++) {
-   
-      this.subTotal += (parseFloat(this.tableDataList[i].Quantity) * parseFloat(this.tableDataList[i].wohCP));
-      this.myTotalQty += parseFloat(this.tableDataList[i].Quantity);
-     
-    }
-  }
-
+ 
 
   delRow(item: any) {
-    var index = this.tableDataList.findIndex((e:any)=> e.productID == item.productID);
+    var index = this.tableDataList.indexOf(item);
     this.tableDataList.splice(index, 1);
     this.getTotal();
     
@@ -286,20 +315,80 @@ export class PurchaseComponent implements OnInit{
 
 
   showImg(item:any){
+
+    // this.global.getProdImage(item.productID).subscribe((data:any)=>{
+    //   this.productImage = data[0].productImage;
+      
+    // });
+
     var index = this.tableDataList.findIndex((e:any)=> e.ProductID == item.ProductID);
     this.productImage = this.tableDataList[index].productImage;
   }
 
    rowFocused = 0;
+  prodFocusedRow= 0;
+   changeFocus(e:any, cls:any){
 
-   focusToQty(e:any){
+  if(e.target.value == ''){
     if(e.keyCode == 40){
       
-      if(this.tableDataList.length >= 1 ){  
+      if(this.tableDataList.length >= 1 ){ 
+        this.rowFocused = 0; 
          $('.qty0').trigger('focus');
 
       }
      }
+  }else{
+    this.prodFocusedRow = 0;
+      /////move down
+      if(e.keyCode == 40){
+        if(this.productList.length >= 1 ){  
+          $('.prodRow0').trigger('focus');
+       }  
+     }}
+   }
+
+   handleFocus(item:any,e:any,cls:any){
+
+
+        /////move down
+        if(e.keyCode == 40){
+    
+     
+          if(this.productList.length > 1 ){
+           this.prodFocusedRow += 1;
+           if (this.prodFocusedRow >= this.productList.length) {      
+             this.prodFocusedRow -= 1  
+         } else {
+             var clsName = cls + this.prodFocusedRow;    
+            //  alert(clsName);
+             $(clsName).trigger('focus');    
+         }}
+       }
+     
+     
+          //Move up
+          if (e.keyCode == 38) {
+     
+           if (this.prodFocusedRow == 0) {
+               $(".searchProduct").trigger('focus');
+               this.prodFocusedRow = 0;
+      
+           }
+     
+           if (this.productList.length > 1) {
+     
+               this.prodFocusedRow -= 1;
+     
+               var clsName = cls + this.prodFocusedRow;
+              //  alert(clsName);
+               $(clsName).trigger('focus');
+               
+     
+           }
+     
+       }
+
    }
 
    changeValue(item:any){
@@ -336,7 +425,8 @@ export class PurchaseComponent implements OnInit{
       if (this.rowFocused >= this.tableDataList.length) {      
         this.rowFocused -= 1  
     } else {
-        var clsName = cls + this.rowFocused;    
+        var clsName = cls + this.rowFocused; 
+        // alert(clsName);   
         $(clsName).trigger('focus');    
     }}
   }
@@ -356,6 +446,7 @@ export class PurchaseComponent implements OnInit{
           this.rowFocused -= 1;
 
           var clsName = cls + this.rowFocused;
+          // alert(clsName);
           $(clsName).trigger('focus');
           
 
@@ -442,7 +533,7 @@ export class PurchaseComponent implements OnInit{
            RefInvoiceNo: this.refInvNo,
            PartyID: this.partyID,
            LocationID: this.locationID,
-           ProjectID: 1,
+           ProjectID: this.projectID,
            BookerID: this.bookerID,
            BillTotal: this.subTotal,
            BillDiscount: this.discount,
@@ -480,7 +571,7 @@ export class PurchaseComponent implements OnInit{
            RefInvoiceNo: this.refInvNo,
            PartyID: this.partyID,
            LocationID: this.locationID,
-           ProjectID: 1,
+           ProjectID: this.projectID,
            BookerID: this.bookerID,
            BillTotal: this.subTotal,
            BillDiscount: this.discount,
@@ -517,7 +608,7 @@ export class PurchaseComponent implements OnInit{
            RefInvoiceNo: this.refInvNo,
            PartyID: this.partyID,
            LocationID: this.locationID,
-           ProjectID: 1,
+           ProjectID: this.projectID,
            BookerID: this.bookerID,
            BillTotal: this.subTotal,
            BillDiscount: this.discount,
@@ -581,10 +672,68 @@ export class PurchaseComponent implements OnInit{
 
   distributeOverHead(){
     // console.log(this.subTotal,this.overHead,this.discount)
+    // var billTotal = 0;
+
+    // this.tableDataList.forEach((tb:any) => {
+    //   billTotal += tb.quantity * tb.wohCP;
+    // });
+    // this.tableDataList.forEach((e:any) => {
+    //   this.tableDataList[e].ovhPercent = ((e.wohCP * e.quantity) / billTotal) * 100 ;
+    // });
     var amount = this.overHead / this.myTotalQty;
-    for(var i=0; i<this.tableDataList.length;i++){this.tableDataList[i].CostPrice = parseFloat(this.tableDataList[i].wohCP) + amount}    
+   for(var i=0; i<this.tableDataList.length;i++){this.tableDataList[i].CostPrice = parseFloat(this.tableDataList[i].wohCP) + amount}    
+
+    // this.getTotal();
+
+    // this.tableDataList.forEach((e:any) => {
+    //   this.tableDataList[e].ovhPercent = ((e.wohCP * e.quantity) / this.subTotal) * 100 ;
+    //   this.tableDataList[e].ovhAmount = ((this.overHead * (e.ovhPercent / 100))/ e.Quantity )
+    //   this.tableDataList[e].ovhAmount = ((this.overHead * (e.ovhPercent / 100))/ e.Quantity ) ;
+    // });
     this.getTotal();
+    
   }
+
+  distribute(){
+    // console.log(this.subTotal,this.overHead,this.discount)
+    // var billTotal = 0;
+
+    // this.tableDataList.forEach((tb:any) => {
+    //   billTotal += tb.quantity * tb.wohCP;
+    // });
+   
+  //   var amount = this.overHead / this.myTotalQty;
+  //  for(var i=0; i<this.tableDataList.length;i++){this.tableDataList[i].CostPrice = parseFloat(this.tableDataList[i].wohCP) + amount}    
+
+    // this.getTotal();
+
+    this.tableDataList.forEach((e:any) => {
+      // this.tableDataList[e].ovhPercent = (((e.wohCP * e.quantity) / this.subTotal) * 100) ;
+      // this.tableDataList[e].ovhAmount = ((this.overHead * (e.ovhPercent / 100))/ e.Quantity )
+      var op = (((e.wohCP * e.quantity) / this.subTotal) * 100);
+      var oa =((this.overHead * (op / 100))/ e.Quantity )
+      e.CostPrice = e.wohCP +  (((this.overHead * ((((e.wohCP * e.quantity) / this.subTotal) * 100) / 100))/ e.Quantity ) );
+      console.log(op,oa)
+    });
+    this.getTotal();
+    
+  }
+
+  
+
+  getTotal() {
+    this.subTotal = 0;
+    this.myTotalQty = 0;
+    for (var i = 0; i < this.tableDataList.length; i++) {
+   
+      this.subTotal += (parseFloat(this.tableDataList[i].Quantity) * parseFloat(this.tableDataList[i].wohCP));
+      this.myTotalQty += parseFloat(this.tableDataList[i].Quantity);
+     
+    }
+
+    // console.log(this.tableDataList);
+  }
+
 
   myInvoiceNo:any;
   myInvoiceDate:any;
@@ -676,9 +825,11 @@ export class PurchaseComponent implements OnInit{
 
   }
 
+  cpTotal = 0;
+  wohCPTotal = 0;
   retriveBill(item:any){
 
-    //console.log(item);
+    console.log(item);
     this.tableDataList = [];
     this.holdBtnType = 'ReHold'
     this.invoiceDate = new Date(item.invDate);
@@ -690,7 +841,7 @@ export class PurchaseComponent implements OnInit{
     this.holdInvNo = item.invBillNo;
     this.bookerID = item.bookerID;
     this.partyID = item.partyID;
-    this.subTotal = item.billTotal;
+    // this.subTotal = item.billTotal;
     this.onPartySelected();
 
     this.getBillDetail(item.invBillNo).subscribe(
@@ -704,14 +855,11 @@ export class PurchaseComponent implements OnInit{
         Response.forEach((j:any) => {
           totalQty += j.quantity
         });
-     
-         overhead = item.overHeadAmount / totalQty;
-       
- 
+     overhead = item.overHeadAmount / totalQty;
        }
 
           Response.forEach((e:any) => {
-            
+            this.myTotalQty += e.quantity;
             this.tableDataList.push({
               ProductID:e.productID,
               ProductTitle:e.productTitle,
@@ -756,7 +904,7 @@ export class PurchaseComponent implements OnInit{
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryBillSingleDate?Type='+type+'&creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
       (Response:any)=>{
         this.holdBillList = Response;
-        // console.log(this.holdBillList);
+         console.log(this.holdBillList);
       }
     )
   }

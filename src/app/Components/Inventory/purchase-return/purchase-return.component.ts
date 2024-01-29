@@ -51,7 +51,7 @@ export class PurchaseReturnComponent implements OnInit{
   tabIndex:any;
   Date:Date = new Date()
   productImage:any;
-
+  projectID = this.global.InvProjectID;
   PBarcode:string = '';   /// for Search barcode field
   productsData:any;   //// for showing the products
   tableDataList: any = [];          //////will hold data temporarily
@@ -242,6 +242,8 @@ export class PurchaseReturnComponent implements OnInit{
 
     })
 
+   
+
     // console.log(this.tableDataList);
 
     this.productImage = data.productImage;
@@ -281,8 +283,8 @@ export class PurchaseReturnComponent implements OnInit{
   }
 
 
-  delRow(item: any) {
-    var index = this.tableDataList.findIndex((e:any)=> e.productID == item.productID);
+  delRow(item:any) {
+    var index = this.tableDataList.indexOf(item);
     this.tableDataList.splice(index, 1);
     this.getTotal();
     
@@ -294,17 +296,72 @@ export class PurchaseReturnComponent implements OnInit{
     this.productImage = this.tableDataList[index].productImage;
   }
 
-   rowFocused = 0;
+  rowFocused = 0;
+  prodFocusedRow= 0;
+   changeFocus(e:any, cls:any){
 
-   focusToQty(e:any){
+  if(e.target.value == ''){
     if(e.keyCode == 40){
       
-      if(this.tableDataList.length >= 1 ){  
+      if(this.tableDataList.length >= 1 ){ 
+        this.rowFocused = 0; 
          $('.qty0').trigger('focus');
 
       }
      }
+  }else{
+    this.prodFocusedRow = 0;
+      /////move down
+      if(e.keyCode == 40){
+        if(this.productList.length >= 1 ){  
+          $('.prodRow0').trigger('focus');
+       }  
+     }}
    }
+
+   handleFocus(item:any,e:any,cls:any){
+
+
+    /////move down
+    if(e.keyCode == 40){
+
+ 
+      if(this.productList.length > 1 ){
+       this.prodFocusedRow += 1;
+       if (this.prodFocusedRow >= this.productList.length) {      
+         this.prodFocusedRow -= 1  
+     } else {
+         var clsName = cls + this.prodFocusedRow;    
+        //  alert(clsName);
+         $(clsName).trigger('focus');    
+     }}
+   }
+ 
+ 
+      //Move up
+      if (e.keyCode == 38) {
+ 
+       if (this.prodFocusedRow == 0) {
+           $(".searchProduct").trigger('focus');
+           this.prodFocusedRow = 0;
+  
+       }
+ 
+       if (this.productList.length > 1) {
+ 
+           this.prodFocusedRow -= 1;
+ 
+           var clsName = cls + this.prodFocusedRow;
+          //  alert(clsName);
+           $(clsName).trigger('focus');
+           
+ 
+       }
+ 
+   }
+
+}
+
 
    changeValue(item:any){
     var myIndex = this.tableDataList.indexOf(item);
@@ -323,14 +380,6 @@ export class PurchaseReturnComponent implements OnInit{
    }
 
   handleNumKeys(item:any ,e:any,cls:string){
-
-  
-
-    // if (e.target.value < '0') {
-    //   e.target.value = 0;
-    // }else if(e.target.value == ''){
-    //   e.target.value = 0
-    // }
 
 
 
@@ -450,13 +499,13 @@ export class PurchaseReturnComponent implements OnInit{
         if(type == 'hold'){
           if(this.holdBtnType == 'Hold'){
            this.app.startLoaderDark();
-           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertPurchase',{
+           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertPurchaseRtn',{
            InvType: "HPR",
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
            RefInvoiceNo: this.refInvNo,
            PartyID: this.partyID,
            LocationID: this.locationID,
-           ProjectID: 1,
+           ProjectID: this.projectID,
            BookerID: this.bookerID,
            BillTotal: this.subTotal,
            BillDiscount: this.discount,
@@ -494,7 +543,7 @@ export class PurchaseReturnComponent implements OnInit{
            RefInvoiceNo: this.refInvNo,
            PartyID: this.partyID,
            LocationID: this.locationID,
-           ProjectID: 1,
+           ProjectID: this.projectID,
            BookerID: this.bookerID,
            BillTotal: this.subTotal,
            BillDiscount: this.discount,
@@ -525,13 +574,13 @@ export class PurchaseReturnComponent implements OnInit{
      
          }else if(type == 'purchase'){
            this.app.startLoaderDark();
-           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertPurchase',{
+           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertPurchaseRtn',{
            InvType: "PR",
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
            RefInvoiceNo: this.refInvNo,
            PartyID: this.partyID,
            LocationID: this.locationID,
-           ProjectID: 1,
+           ProjectID: this.projectID,
            BookerID: this.bookerID,
            BillTotal: this.subTotal,
            BillDiscount: this.discount,

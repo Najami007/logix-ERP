@@ -26,6 +26,7 @@ import { PurchaseReturnComponent } from './purchase-return/purchase-return.compo
 import { IssueStockRerturnComponent } from './issue-stock-rerturn/issue-stock-rerturn.component';
 import { StockAdjustmentComponent } from './stock-adjustment/stock-adjustment.component';
 import { OpeningStockComponent } from './opening-stock/opening-stock.component';
+import { ProductImgComponent } from './product/product-img/product-img.component';
 
 
 
@@ -126,6 +127,7 @@ export const inventoryRoutes: Route[] = [
     IssueStockRerturnComponent,
     StockAdjustmentComponent,
     OpeningStockComponent,
+    ProductImgComponent,
 
   ],
   imports: [

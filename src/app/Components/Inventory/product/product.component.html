@@ -109,7 +109,7 @@
 
                 <mat-form-field appearance="outline" class="col-lg-3 pe-2  ">
                     <mat-label>Cost Price</mat-label>
-                    <input matInput type="number" [(ngModel)]="CostPrice" (change)="global.avoidMinus($event)">
+                    <input matInput type="number" [(ngModel)]="CostPrice" (change)="global.avoidMinus($event)" [disabled]="btnType == 'Update'">
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-lg-3  pe-5">
@@ -176,14 +176,14 @@
               
                     <div class="avatar-upload col-lg-2 ">
                         <div class="avatar-edit">
-                            <input type="file" id="prodimg" accept="" #prodimg (change)="onImgSelected($event)" />
+                            <input type="file" accesskey="g" id="prodimg" accept="" #prodimg (change)="onImgSelected($event)" />
                             <label for="prodimg"><mat-icon class=" mt-1">edit</mat-icon></label>
                         </div>
                         <div class="avatar-del">
                             <label (click)="productImg = ''"><mat-icon class=" mt-1">delete</mat-icon></label>
                         </div>
                         <div class="avatar-preview">
-                            <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + productImg + ')' }"></div>
+                            <div (click)="this.global.showProductImage(productImg,0)" id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + productImg + ')' }"></div>
                         </div>
                     </div>
     
@@ -243,6 +243,7 @@
                     <th>Entered By</th>
                     <th>Edit</th>
                     <th>Active Status</th>
+                    <th>Img</th>
                     <th>Del</th>
                 </thead>
                 <tbody>
@@ -252,7 +253,7 @@
                         totalItems :    count,
                     }  ;index as index">
                         <td>{{index +1}}</td>
-                        <td> {{item.productTitle}}</td>
+                        <td > {{item.productTitle}}</td>
                         <td> {{item.productTitleOtherLang}}</td>
                         <td>{{item.barcode}}</td>
                         <td>{{item.subCategoryTitle}}</td>
@@ -267,8 +268,9 @@
                                 [ngClass]="item.activeStatus ? 'text-success' :'text-danger'"
                                 (click)="activeProduct(item)">{{item.activeStatus ? 'remove_circle' :
                                 'remove_circle'}}</mat-icon></td>
+                        <td (click)="this.global.showProductImage('',item.productID)" class="cursorPointer"><mat-icon>image</mat-icon></td>
                         <td><mat-icon class="text-danger cursorPointer"
-                                (click)="deleteProd(item.productID)">delete</mat-icon></td>
+                                (click)="deleteProd(item)">delete</mat-icon></td>
                     </tr>
                 </tbody>
               

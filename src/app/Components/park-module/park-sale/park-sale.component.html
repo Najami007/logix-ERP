@@ -37,11 +37,17 @@
         <mat-card  style="width:180px; height: 200px;" class="m-1 p-1 swingCard" (click)="onSwingSelected(item)" >
           
                 <!-- <img *ngIf="item.img" [src]="item.swingImage" alt="" height="150px" width="170px"> -->
-                <div style="height: 150px;width: 170px;background-size: cover;" [ngStyle]="{ 'background-image': 'url(' + item.swingImage + ')' }"></div>
+                <div style="height: 150px;width: 170px;background-size: cover;" [ngStyle]="{ 'background-image': 'url(' + item.swingImage + ')' }">
+                <div class=" ">
+                    <p class="text-center align-content-center mt-1 me-1"
+                     style="padding-top: 2px; font-size: 15px; float: right; border: 1px solid rgb(9, 9, 9); 
+                     background-color: white; border-radius: 50%; height: 25px; width: 25px;">{{item.swingDuration}}</p>
+                </div>
+                </div>
 
         
-            <mat-card-footer class="text-center" style="font-size: x-small;">{{item.swingTitle}}</mat-card-footer>
-            <mat-card-footer class="text-center text-success">{{item.ticketPrice}}</mat-card-footer>
+            <mat-card-footer class="text-center" style="font-size: 15px;">{{item.swingTitle}}</mat-card-footer>
+            <mat-card-footer class="text-center text-success " style="font-size: 20px;">{{item.ticketPrice}}</mat-card-footer>
         </mat-card>
       </div>
   </div>
@@ -50,13 +56,16 @@
 
 
     </div>
-    <div class="col-lg-4 border " style="left: 74.6%; height: 600px;">
 
 
-        <div style="min-height: 400px;" class="p-2" >
+    <!-------------------------       Bill Side Area -------------------->
+    <div class="col-lg-4 border " style="left: 67%; height: 100%;position: fixed;">
+
+
+        <div  class="p-2" >
 
           
-            <div class="billTable" style="height: 350px;">
+            <div class="billTable" style="min-height: 50vh; max-height: 55vh !important; overflow-y: scroll;">
 
                 <table class="table cursorPointer" >
                     <thead>
@@ -74,9 +83,9 @@
                         <td>{{item.TicketPrice |number}}</td>
                         <td class="text-center">
                         <div class="d-flex text-center pb-2">
-                            <mat-icon (click)="changeQty('add',index)" class="text-success">add_circle</mat-icon>
-                            <input id="pQty" type="number" style="width: 50px;text-align: center;" (change)="getTotal()"  [(ngModel)]="item.TicketQuantity" >
-                            <mat-icon (click)="changeQty('minus',index)" >remove_circle</mat-icon>
+                            <mat-icon (click)="changeQty('add',index,TicketDetails)" class="text-success">add_circle</mat-icon>
+                            <input id="pQty" class="numOnly" type="text" style="width: 50px;text-align: center;" (change)="getTotal();" (keyup)="getTotal();changeValue(item)"  [(ngModel)]="item.TicketQuantity" >
+                            <mat-icon (click)="changeQty('minus',index,TicketDetails)" >remove_circle</mat-icon>
                         </div>
                           </td>
                         <td>{{item.TicketPrice * item.TicketQuantity |number:'1.0-0'}}</td>
@@ -118,13 +127,13 @@
 
 
 
-   
+   <!-------------------------        Modal Window to Find Tickets ----------------->
 
     <div class="modal fade" id="rtnModel" tabindex="-1" aria-labelledby="rtnModelLabel" >
         <div class="modal-dialog  modal-lg">
           <div class="modal-content">
-            <div class="modal-header">
-              <h2 class="modal-title" id="rtnModelLabel">Ticket Return</h2>
+            <div class="d-flex  align-content-center justify-content-between border-0 border-bottom ps-2 pe-2 pt-2">
+              <h2  id="rtnModelLabel">Find Ticket</h2>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
             </div>
             <div class="modal-body">
@@ -163,14 +172,14 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of TicketsList  | filter:billSearch index as index">
-                            <td>{{index+1}}</td>
-                            <td>{{item.ticketNo}}</td>
+                            <td class="text-center">{{index+1}}</td>
+                            <td class="text-center">{{item.ticketNo}}</td>
                             <td>{{item.entryDateTime | date:'dd-MM-yyyy hh:mm:ss:a '}}</td>
                             <td>{{item.swingTitle}}</td>
-                            <td>{{item.ticketTotal | number:'1.0-0'}}</td>
+                            <td class="text-end">{{item.ticketTotal | number:'1.0-0'}}</td>
                             <td>{{item.entryUser}}</td>
-                            <td class="cursorPointer text-center">
-                                <mat-icon *ngIf="crudList.r" class="text-primary" (click)="printTicket(item.ticketNo,'duplicate','')">print</mat-icon>
+                            <td class="cursorPointer text-center" >
+                                <mat-icon *ngIf="crudList.r" class="text-primary" aria-labelledby="print"  (click)="printTicket(item.ticketNo,'duplicate','')">print</mat-icon>
                                
                                
                             </td>
@@ -216,29 +225,29 @@
       </div>
 
 
-<!----------    Modal Screen for swing Sale --------------->
+<!----------    Modal Screen for swing Return --------------->
 
     <div class="modal fade" #swingModal1 id="swingModal" tabindex="1" aria-labelledby="swingModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="swingModalLabel">Enter Number of Person</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="reset()"></button>
+              <h2  id="swingModalLabel">Ticket Return</h2>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
             </div>
             <div class="modal-body">
 
-               <div *ngFor="let item of TicketDetails">
-                <h4 class="text-danger text-center" *ngIf="billType =='SaleReturn'" >Ticket Return</h4>
+               <div *ngFor="let item of rtnTicketDetails">
+            
                <div class="d-flex justify-content-around">
                 <h3 class="text-center fw-bold text-danger">{{item.swingTitle}} </h3>
                 <p class="text-center fw-bold">Total: <span *ngIf="billType =='SaleReturn'" >-</span>{{item.TicketQuantity * item.TicketPrice}} </p>
                </div>
                 
                 <mat-label class="ms-5">Enter Quantity</mat-label>
-                <div class="d-flex text-center pb-2" *ngFor="let item of TicketDetails">
-                    <mat-icon (click)="changeQty('add',0)" class="text-success cursorPointer" style="font-size: 40px;height: 50px;width: 50px;">add_circle</mat-icon>
+                <div class="d-flex text-center pb-2" *ngFor="let item of rtnTicketDetails">
+                    <mat-icon (click)="changeQty('add',0,rtnTicketDetails)" class="text-success cursorPointer" style="font-size: 40px;height: 50px;width: 50px;">add_circle</mat-icon>
                     <input id="pQty" type="number" style="width: 100%;height: 40px; text-align: center;" (keypress)="global.avoidMinus($event)" [(ngModel)]="item.TicketQuantity" >
-                    <mat-icon (click)="changeQty('minus',0)" class="cursorPointer" style="font-size: 40px;height: 50px;width: 50px;" >remove_circle</mat-icon>
+                    <mat-icon (click)="changeQty('minus',0,rtnTicketDetails)" class="cursorPointer" style="font-size: 40px;height: 50px;width: 50px;" >remove_circle</mat-icon>
                 </div>
                </div>
         

@@ -89,6 +89,15 @@ export class ParkSaleComponent {
   }
 
 
+  changeValue(item:any){
+    var myIndex = this.TicketDetails.indexOf(item);
+   // console.log(this.tableDataList[myIndex]);
+    var myQty = this.TicketDetails[myIndex].TicketQuantity;
+     if(myQty == null || myQty == '' || myQty == undefined){
+      this.TicketDetails[myIndex].TicketQuantity = 0;
+    }
+   }
+
 
 
 
@@ -121,16 +130,16 @@ export class ParkSaleComponent {
 
   ///////////////////////////////////////////////////////////////
 
-  changeQty(type:any,index:any){
+  changeQty(type:any,index:any,list:any){
   
     if(type == 'add'){
 
-      this.TicketDetails[index].TicketQuantity += 1;
+      list[index].TicketQuantity += 1;
 
     }
     if(type == 'minus'){
-      if( this.TicketDetails[index].TicketQuantity > 1){
-        this.TicketDetails[index].TicketQuantity -= 1;
+      if( list[index].TicketQuantity > 1){
+        list[index].TicketQuantity -= 1;
       }
     }
   
@@ -199,14 +208,13 @@ this.TicketDetails.splice(index,1);
           if(Response.msg == 'Data Saved Successfully'){
             this.msg.SuccessNotify('Ticket Saved')
             //this.printTicket(Response.tktNo,'save');
-            console.log(Response);
+            //console.log(Response);
+            this.printTicket('','save',Response.tktList); 
             this.reset();
-           this.app.stopLoaderDark();
-           this.printTicket('','save',Response.tktList);   
+            this.app.stopLoaderDark();
+              
           //   Response.tktList.forEach((e:any) => {           
-          //    setTimeout(() => {
-          //     this.printTicket(e.ticketNo,'save',Response.tktList);   
-          //    }, 200);
+          //   this.printTicket(e.ticketNo,'save','');   
           //     alert(e.ticketNo);       
           // });
 
@@ -219,7 +227,7 @@ this.TicketDetails.splice(index,1);
       )
     }else if(this.billType == 'SaleReturn'){
      
-      if(this.TicketDetails[0].TicketQuantity > (this.billDetail[0].ticketQuantity - this.billDetail[0].rtnQuantity)){
+      if(this.rtnTicketDetails[0].TicketQuantity > (this.billDetail[0].ticketQuantity - this.billDetail[0].rtnQuantity)){
         this.msg.WarnNotify('Entered Quantity is more than bill Quantity');
         this.app.stopLoaderDark();
       }else{
@@ -230,7 +238,7 @@ this.TicketDetails.splice(index,1);
           Type: "SR",
           TicketRemarks: this.ticketRemarks,
           ProjectID: 6,
-          TicketDetail: JSON.stringify(this.TicketDetails),
+          TicketDetail: JSON.stringify(this.rtnTicketDetails),
           UserID: this.global.getUserID()
         }).subscribe(
           (Response:any)=>{
@@ -242,7 +250,7 @@ this.TicketDetails.splice(index,1);
               setTimeout(() => {
                 this.printTicket(Response.rtnTktNo,'SaleReturn','');
               }, 200);
-             // console.log(Response);
+              console.log(Response);
               this.reset();
               this.app.stopLoaderDark();
               
@@ -275,38 +283,38 @@ this.TicketDetails.splice(index,1);
             this.billDetail = Response;
            }else{
             this.printDetails = Response;
+            
+            setTimeout(() => {
+              this.global.printData('#ticketPrint'); 
+            }, 500);
+
            }
-          //  console.log(Response);
-    
-          if(type != 'detail'){
-              this.global.printData('#ticketPrint');   
-    
-          }
-          }
-          
-        )
+        
+          })
     
       }else{
+        this.printDetails = [];
      
         tktList.forEach((e:any) => { 
-         
-         setTimeout(() => {
-          alert(e.ticketNo);
             this.http.get(environment.mainApi+this.global.parkLink+'PrintTicket?ticketno='+e.ticketNo).subscribe(
               (Response:any)=>{
-               
-                this.printDetails = Response;
-  
-               
-                  this.global.printData('#ticketPrint'); 
-                 
+                this.printDetails.push(Response);
+                this.global.printData('#ticketPrint')
               }  
             )
-         }, 2000);
-        
-        });
+         });
 
-      
+        //  this.printDetails.forEach((p:any) => {
+        //     this.global.printData('#ticketPrint')
+        //  });
+
+        //  Details.forEach((p:any) => {
+        //   this.printDetails = p;
+        //  setTimeout(() => {
+        //   this.global.printData('#ticketPrint'); 
+        //  }, 200);
+        // });
+     
       }
 
 
@@ -316,14 +324,15 @@ this.TicketDetails.splice(index,1);
   }
 
 
+  rtnTicketDetails:any = [];
 
   verifyRtn(row:any){
-    this.TicketDetails= [];
+    this.rtnTicketDetails= [];
    
     this.http.get(environment.mainApi+this.global.parkLink+'VerifyRtnQty?ticketno='+row.ticketNo+'&SwingID='+row.swingID).subscribe(
       (Response:any)=>{
         this.billDetail = Response;
-        this.TicketDetails.push({swingID:row.swingID,swingTitle:row.swingTitle,TicketQuantity:1,TicketPrice:Response[0].ticketPrice});
+        this.rtnTicketDetails.push({swingID:row.swingID,swingTitle:row.swingTitle,TicketQuantity:1,TicketPrice:Response[0].ticketPrice});
         this.billType = 'SaleReturn';
         this.tempTicketNo = Response[0].ticketNo;
         // console.log(Response);
@@ -332,9 +341,6 @@ this.TicketDetails.splice(index,1);
   }
  
 
-  insertReturn(){
-   
-  }
 
 
 
@@ -345,6 +351,9 @@ reset(){
   this.TicketDetails = [];
   this.billType = 'Sale';
   this.billDetail = [];
+  this.rtnTicketDetails = [];
+  this.subTotal = 0;
+  
 
 
 }

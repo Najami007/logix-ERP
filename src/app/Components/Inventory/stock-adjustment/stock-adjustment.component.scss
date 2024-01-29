@@ -11,6 +11,14 @@
     border-bottom: 1px solid gray;
 }
 
+.prodBtn:focus{
+    outline: none;
+    color: rgb(255, 255, 255) !important;
+    background-color: black !important;
+    zoom: 1;
+   
+}
+
 .SearchConatiner{
 // border: 0px solid rgb(180, 180, 180);
 // background-color: rgb(249, 249, 249);
@@ -26,8 +34,8 @@ max-width: 500px;
 
 .SearchConatiner , .card{
     background-color: rgb(247, 242, 242);
-    padding: 10px;
-    margin: 1px;
+    // padding: 10px;
+    // margin: 1px;
   
 }
 

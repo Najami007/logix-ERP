@@ -20,6 +20,9 @@ import { SalesummaryrptswingwiseComponent } from './parkReports/salesummaryrptsw
 import { NgxMaterialTimepicker24HoursFaceComponent } from 'ngx-material-timepicker/src/app/material-timepicker/components/timepicker-24-hours-face/ngx-material-timepicker-24-hours-face.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { TicketDetailComponent } from './park-sale/ticket-detail/ticket-detail.component';
+import { ParkDashBoardComponent } from './park-dash-board/park-dash-board.component';
+import { ChartModule,HIGHCHARTS_MODULES } from 'angular-highcharts';
+import { ActiveMemberRptComponent } from './parkReports/active-member-rpt/active-member-rpt.component';
 
 
 
@@ -33,6 +36,8 @@ export const parkRoutes: Route[] = [
   {path:'sdrptdw', component:SaledetailrptdatewiseComponent,canActivate:[AuthGuard] },
   {path:'ssrptduw', component:SalesummarydateuserwiseComponent,canActivate:[AuthGuard] },
   {path:'ssrptdsw', component:SalesummaryrptswingwiseComponent,canActivate:[AuthGuard] },
+  {path:'prkdshbrd', component:ParkDashBoardComponent,canActivate:[AuthGuard] },
+  {path:'amrpt', component:ActiveMemberRptComponent,canActivate:[AuthGuard] },
 
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
@@ -51,7 +56,9 @@ export const parkRoutes: Route[] = [
     SaledetailrptdatewiseComponent,
     SalesummarydateuserwiseComponent,
     SalesummaryrptswingwiseComponent,
-    TicketDetailComponent
+    TicketDetailComponent,
+    ParkDashBoardComponent,
+    ActiveMemberRptComponent
   ],
   imports: [
     CommonModule,
@@ -63,10 +70,12 @@ export const parkRoutes: Route[] = [
     NgxMatSelectSearchModule,
     // TextMaskModule,
     Ng2SearchPipeModule,
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    ChartModule
   ],
   exports: [
     RouterModule
-  ]
+  ],
+  providers: [{ provide: HIGHCHARTS_MODULES, useFactory: () => [  ] }],
 })
 export class ParkModuleModule { }

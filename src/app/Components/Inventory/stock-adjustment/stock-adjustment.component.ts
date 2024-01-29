@@ -63,7 +63,8 @@ export class StockAdjustmentComponent implements OnInit {
   totalQty:number = 0;
   adjustmentType:any;
   IssueBillList:any = [];
-  
+  avgCostTotal = 0;
+  CostTotal = 0;
 
 
   getLocation(){
@@ -126,13 +127,13 @@ export class StockAdjustmentComponent implements OnInit {
           })
       
           this.productImage = row.productImage;
-        
+          
           this.PBarcode = '';
           $('#searchProduct').trigger('focus');
         }else {
           this.tableDataList[index].quantity += 1;
           this.productImage = this.tableDataList[index].productImage;
-       
+    
           this.PBarcode = '';
           $('#searchProduct').trigger('focus');
         }
@@ -142,6 +143,7 @@ export class StockAdjustmentComponent implements OnInit {
      
        
        this.PBarcode = '';
+       this.getTotal();
    
        }
     }
@@ -209,10 +211,14 @@ export class StockAdjustmentComponent implements OnInit {
   getTotal() {
     this.subTotal = 0;
     this.totalQty = 0;
+    this.CostTotal = 0;
+    this.avgCostTotal = 0;
     for (var i = 0; i < this.tableDataList.length; i++) {
    
       this.subTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].costPrice));
       this.totalQty += parseFloat(this.tableDataList[i].quantity);
+      this.CostTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].costPrice));
+      this.avgCostTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].avgCostPrice))
       // this.myTotal = this.mySubtoatal - this.myDiscount;
       // this.myDue = this.myPaid - this.myTotal;\
     
@@ -222,6 +228,70 @@ export class StockAdjustmentComponent implements OnInit {
   }
 
   rowFocused = 0;
+  prodFocusedRow= 0;
+   changeFocus(e:any, cls:any){
+
+  if(e.target.value == ''){
+    if(e.keyCode == 40){
+      
+      if(this.tableDataList.length >= 1 ){ 
+        this.rowFocused = 0; 
+         $('.qty0').trigger('focus');
+
+      }
+     }
+  }else{
+    this.prodFocusedRow = 0;
+      /////move down
+      if(e.keyCode == 40){
+        if(this.productList.length >= 1 ){  
+          $('.prodRow0').trigger('focus');
+       }  
+     }}
+   }
+
+   handleFocus(item:any,e:any,cls:any){
+
+
+    /////move down
+    if(e.keyCode == 40){
+
+ 
+      if(this.productList.length > 1 ){
+       this.prodFocusedRow += 1;
+       if (this.prodFocusedRow >= this.productList.length) {      
+         this.prodFocusedRow -= 1  
+     } else {
+         var clsName = cls + this.prodFocusedRow;    
+        //  alert(clsName);
+         $(clsName).trigger('focus');    
+     }}
+   }
+ 
+ 
+      //Move up
+      if (e.keyCode == 38) {
+ 
+       if (this.prodFocusedRow == 0) {
+           $(".searchProduct").trigger('focus');
+           this.prodFocusedRow = 0;
+  
+       }
+ 
+       if (this.productList.length > 1) {
+ 
+           this.prodFocusedRow -= 1;
+ 
+           var clsName = cls + this.prodFocusedRow;
+          //  alert(clsName);
+           $(clsName).trigger('focus');
+           
+ 
+       }
+ 
+   }
+
+  }
   handleNumKeys(item:any ,e:any,cls:string){
 
    
@@ -285,18 +355,10 @@ export class StockAdjustmentComponent implements OnInit {
 
   }
 
-  focusToQty(e:any){
-    if(e.keyCode == 40){
-      
-      if(this.tableDataList.length >= 1 ){  
-         $('.qty0').trigger('focus');
-
-      }
-     }
-   }
+ 
 
   delRow(item: any) {
-    var index = this.tableDataList.findIndex((e:any)=> e.productID == item.productID);
+    var index = this.tableDataList.indexOf(item);
     this.tableDataList.splice(index, 1);
     this.getTotal();
     
@@ -340,7 +402,7 @@ export class StockAdjustmentComponent implements OnInit {
       if(isValidFlag == true){
         
            this.app.startLoaderDark();
-           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertIssueStock',{
+           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertStockAdjustment',{
             InvType: this.adjustmentType,
             InvDate: this.global.dateFormater(this.invoiceDate,'-'),
             LocationID: this.locationID,

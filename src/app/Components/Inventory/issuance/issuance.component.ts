@@ -47,6 +47,7 @@ export class IssuanceComponent implements OnInit {
 
   }
 
+  projectID = this.global.InvProjectID;
   Date:Date = new Date();
   holdInvNo = '-';
   holdBtnType = 'Hold';
@@ -66,6 +67,9 @@ export class IssuanceComponent implements OnInit {
   totalQty:number = 0;
   IssueType:any;
   IssueBillList:any = [];
+
+  avgCostTotal = 0;
+  CostTotal = 0;
   
   onLocationSelected(type:any){
  
@@ -158,6 +162,7 @@ export class IssuanceComponent implements OnInit {
      
        
        this.PBarcode = '';
+       this.getTotal();
    
        }
     }
@@ -225,10 +230,14 @@ export class IssuanceComponent implements OnInit {
   getTotal() {
     this.subTotal = 0;
     this.totalQty = 0;
+    this.CostTotal = 0;
+    this.avgCostTotal = 0;
     for (var i = 0; i < this.tableDataList.length; i++) {
    
       this.subTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].costPrice));
       this.totalQty += parseFloat(this.tableDataList[i].quantity);
+      this.CostTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].costPrice));
+      this.avgCostTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].avgCostPrice))
       // this.myTotal = this.mySubtoatal - this.myDiscount;
       // this.myDue = this.myPaid - this.myTotal;\
     
@@ -238,6 +247,71 @@ export class IssuanceComponent implements OnInit {
   }
 
   rowFocused = 0;
+  prodFocusedRow= 0;
+   changeFocus(e:any, cls:any){
+
+  if(e.target.value == ''){
+    if(e.keyCode == 40){
+      
+      if(this.tableDataList.length >= 1 ){ 
+        this.rowFocused = 0; 
+         $('.qty0').trigger('focus');
+
+      }
+     }
+  }else{
+    this.prodFocusedRow = 0;
+      /////move down
+      if(e.keyCode == 40){
+        if(this.productList.length >= 1 ){  
+          $('.prodRow0').trigger('focus');
+       }  
+     }}
+   }
+
+   handleFocus(item:any,e:any,cls:any){
+
+
+    /////move down
+    if(e.keyCode == 40){
+
+ 
+      if(this.productList.length > 1 ){
+       this.prodFocusedRow += 1;
+       if (this.prodFocusedRow >= this.productList.length) {      
+         this.prodFocusedRow -= 1  
+     } else {
+         var clsName = cls + this.prodFocusedRow;    
+        //  alert(clsName);
+         $(clsName).trigger('focus');    
+     }}
+   }
+ 
+ 
+      //Move up
+      if (e.keyCode == 38) {
+ 
+       if (this.prodFocusedRow == 0) {
+           $(".searchProduct").trigger('focus');
+           this.prodFocusedRow = 0;
+  
+       }
+ 
+       if (this.productList.length > 1) {
+ 
+           this.prodFocusedRow -= 1;
+ 
+           var clsName = cls + this.prodFocusedRow;
+          //  alert(clsName);
+           $(clsName).trigger('focus');
+           
+ 
+       }
+ 
+   }
+
+}
+
   handleNumKeys(item:any ,e:any,cls:string){
 
    
@@ -301,18 +375,9 @@ export class IssuanceComponent implements OnInit {
 
   }
 
-  focusToQty(e:any){
-    if(e.keyCode == 40){
-      
-      if(this.tableDataList.length >= 1 ){  
-         $('.qty0').trigger('focus');
-
-      }
-     }
-   }
 
   delRow(item: any) {
-    var index = this.tableDataList.findIndex((e:any)=> e.productID == item.productID);
+    var index = this.tableDataList.indexOf(item);
     this.tableDataList.splice(index, 1);
     this.getTotal();
     
@@ -337,6 +402,15 @@ export class IssuanceComponent implements OnInit {
    
   SaveBill(type:any){
     var isValidFlag = true;
+    this.tableDataList.forEach((p:any) => {       
+        if(p.quanity == 0 || p.quantity == '0' ){
+          this.msg.WarnNotify('('+p.productTitle+') Quantity is not Valid');
+           isValidFlag = false;
+          //  console.log(p)
+          //  console.log(this.tableDataList)
+           return;
+        }
+      });
        
     if(this.tableDataList == ''){
       this.msg.WarnNotify('Atleast One Product Must Be Selected')
@@ -364,7 +438,7 @@ export class IssuanceComponent implements OnInit {
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
            LocationID: this.locationID,
            LocationTitle:this.locationTitle,
-           ProjectID: 1,
+           ProjectID: this.projectID,
            IssueType:this.IssueType,
            IssueStatus:'A',
            BillTotal: this.subTotal,
@@ -402,7 +476,7 @@ export class IssuanceComponent implements OnInit {
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
            LocationID: this.locationID,
            LocationTitle:this.locationTitle,
-           ProjectID: 1,
+           ProjectID: this.projectID,
            IssueType:this.IssueType,
            IssueStatus:'A',
            BillTotal: this.subTotal,
@@ -439,7 +513,7 @@ export class IssuanceComponent implements OnInit {
             InvDate: this.global.dateFormater(this.invoiceDate,'-'),
             LocationID: this.locationID,
             LocationTitle:this.locationTitle,
-            ProjectID: 1,
+            ProjectID: this.projectID,
             IssueType:this.IssueType,
             IssueStatus:'A',
             BillTotal: this.subTotal,
@@ -616,11 +690,15 @@ export class IssuanceComponent implements OnInit {
       (Response:any)=>{
         console.log(Response);
         this.totalQty = 0;
+        this.CostTotal = 0;
+        this.avgCostTotal = 0;
         this.productImage = Response[Response.length - 1].productImage;
 
 
           Response.forEach((e:any) => {
             this.totalQty += e.quantity;
+            this.CostTotal += e.quantity * e.costPrice;
+            this.avgCostTotal += e.quantity * e.avgCostPrice;
             this.tableDataList.push({
               productID:e.productID,
               productTitle:e.productTitle,
