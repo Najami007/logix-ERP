@@ -36,16 +36,28 @@ export class PurchaseReturnComponent implements OnInit{
       this.companyProfile = data;
     });
 
+
+    this.global.getProducts().subscribe(
+      (data:any)=>{
+        this.productList = data;
+      }
+    )
+
   }
 
   
   ngOnInit(): void {
     this.global.setHeaderTitle('Purchase Return');
-    this.getProducts();
     this.getBooker();
     this.getLocation();
     this.getSuppliers();
+
+
+   
   }
+
+  hideTotalFlag = true;
+  productName = '';
 
   holdBtnType:any ='Hold';
   tabIndex:any;
@@ -119,15 +131,7 @@ export class PurchaseReturnComponent implements OnInit{
   }
 
 
-  getProducts(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetActiveProduct').subscribe(
-      (Response)=>{
-        this.productList = Response;
-       // console.log(Response);
- 
-      }
-    )
-  }
+
 
 
   getSuppliers(){
@@ -161,46 +165,54 @@ export class PurchaseReturnComponent implements OnInit{
       
           //// push the data using index
           if (condition == undefined) {
-      
-          //console.log(data);
-          this.tableDataList.push({
-            ProductID:row.productID,
-            ProductTitle:row.productTitle,
-            barcode:row.barcode,
-            productImage:row.productImage,
-            Quantity:1,
-            wohCP:row.costPrice,
-            CostPrice:row.costPrice,
-            SalePrice:row.salePrice,
-            ExpiryDate:this.global.dateFormater(new Date(),'-'),
-            BatchNo:'-',
-            BatchStatus:'-',
-            UomID:row.uomID,
-            Packing:1,
-            discInP:0,
-            discInR:0,
-      
-          })
-      
-          this.productImage = row.productImage;
-          this.getTotal();
-          this.PBarcode = '';
-          $('#searchProduct').trigger('focus');
+
+         
+            // this.app.startLoaderDark();
+            this.global.getProdDetail(0,this.PBarcode).subscribe(
+              (Response:any)=>{
+                //console.log(Response)
+                  this.tableDataList.push({
+                    ProductID:Response[0].productID,
+                    ProductTitle:Response[0].productTitle,
+                    barcode:Response[0].barcode,
+                    productImage:Response[0].productImage,
+                    Quantity:1,
+                    wohCP:Response[0].costPrice,
+                    CostPrice:Response[0].costPrice,
+                    SalePrice:Response[0].salePrice,
+                    ovhPercent:0,
+                    ovhAmount:0,
+                    ExpiryDate:this.global.dateFormater(new Date(),'-'),
+                    BatchNo:'-',
+                    BatchStatus:'-',
+                    UomID:Response[0].uomID,
+                    Packing:1,
+                    discInP:0,
+                    discInR:0,
+                    AQ:Response[0].aq,
+              
+                  });
+                  this.getTotal();
+            
+
+                this.productImage = Response[0].productImage;
+              }
+            )
+            
+
+         
         }else {
           this.tableDataList[index].Quantity += 1;
           this.productImage = this.tableDataList[index].productImage;
-          this.getTotal();
-          this.PBarcode = '';
-          $('#searchProduct').trigger('focus');
         }
         }else{
           this.msg.WarnNotify('Product Not Found')
         }
      
-        if(this.overHead > 0){
-          this.distributeOverHead();
-        }
+
        this.PBarcode = '';
+       this.getTotal();
+       $('#searchProduct').trigger('focus');
    
        }
     }
@@ -210,7 +222,8 @@ export class PurchaseReturnComponent implements OnInit{
 
   holdDataFunction(data:any){
     //console.log(data);
-
+   
+    // console.log(this.productImage);
     
 
     var condition = this.tableDataList.find(
@@ -219,50 +232,53 @@ export class PurchaseReturnComponent implements OnInit{
 
     var index = this.tableDataList.indexOf(condition);
 
+
+
     if (condition == undefined) {
 
-    //console.log(data);
-    this.tableDataList.push({
-      ProductID:data.productID,
-      ProductTitle:data.productTitle,
-      barcode:data.barcode,
-      productImage:data.productImage,
-      Quantity:1,
-      wohCP:data.costPrice,
-      CostPrice:data.costPrice,
-      SalePrice:data.salePrice,
-      ExpiryDate:this.global.dateFormater(new Date(),'-'),
-      BatchNo:'-',
-      BatchStatus:'-',
-      UomID:data.uomID,
-      Packing:1,
-      discInP:0,
-      discInR:0,
-     
+      this.app.startLoaderDark();
 
-    })
+      this.global.getProdDetail(data.productID,'').subscribe(
+        (Response:any)=>{
+          // console.log(Response);
 
-   
+          
+            this.tableDataList.push({
+              ProductID:Response[0].productID,
+              ProductTitle:Response[0].productTitle,
+              barcode:Response[0].barcode,
+              productImage:Response[0].productImage,
+              Quantity:1,
+              wohCP:Response[0].costPrice,
+              CostPrice:Response[0].costPrice,
+              SalePrice:Response[0].salePrice,
+              ovhPercent:0,
+              ovhAmount:0,
+              ExpiryDate:this.global.dateFormater(new Date(),'-'),
+              BatchNo:'-',
+              BatchStatus:'-',
+              UomID:Response[0].uomID,
+              Packing:1,
+              discInP:0,
+              discInR:0,
+              AQ:Response[0].aq,
+        
+            })
+            this.getTotal();
 
-    // console.log(this.tableDataList);
-
-    this.productImage = data.productImage;
-    this.getTotal();
-    this.PBarcode = '';
-    $('#searchProduct').trigger('focus');
+          
+         this.productImage = Response[0].productImage;
+        }
+      )
   }else {
     this.tableDataList[index].Quantity += 1;
     this.productImage = this.tableDataList[index].productImage;
-    this.getTotal();
-    this.PBarcode = '';
     $('#searchProduct').trigger('focus');
   }
-  
-  if(this.overHead > 0){
-    this.distributeOverHead();
-  }
+  this.app.stopLoaderDark();
 
-    this.PBarcode = '';
+    this.productName = '';
+    this.getTotal();
     return false;
   }
 
@@ -762,18 +778,7 @@ export class PurchaseReturnComponent implements OnInit{
     this.getBillDetail(item.invBillNo).subscribe(
       (Response:any)=>{
         var totalQty = 0 ;
-        var overhead = 0;
-        this.myTotalQty = 0;
         this.productImage = Response[Response.length - 1].productImage;
-
-       if(item.overHeadAmount > 0){
-        Response.forEach((j:any) => {
-          totalQty += j.quantity
-        });
-     
-         overhead = item.overHeadAmount / totalQty;
- 
-       }
 
           Response.forEach((e:any) => {
             this.myTotalQty += e.quantity;
@@ -783,7 +788,7 @@ export class PurchaseReturnComponent implements OnInit{
               barcode:e.barcode,
               productImage:e.productImage,
               Quantity:e.quantity,
-              wohCP:(e.costPrice - overhead) ,
+              wohCP:e.costPrice  ,
               CostPrice:e.costPrice,
               SalePrice:e.salePrice,
               ExpiryDate:this.global.dateFormater(new Date(e.expiryDate),'-'),
@@ -793,6 +798,7 @@ export class PurchaseReturnComponent implements OnInit{
               Packing:e.packing,
               discInP:e.discInP,
               discInR:e.discInR,
+              AQ:e.aq,
             })
           });
           // this.getTotal();

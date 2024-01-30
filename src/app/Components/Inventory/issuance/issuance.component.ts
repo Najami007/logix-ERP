@@ -36,6 +36,11 @@ export class IssuanceComponent implements OnInit {
     this.global.getCompany().subscribe((data)=>{
       this.companyProfile = data;
     });
+
+
+    
+    this.global.getProducts().subscribe(
+      (data:any)=>{this.productList = data;})
   }
 
 
@@ -43,8 +48,7 @@ export class IssuanceComponent implements OnInit {
   ngOnInit(): void {
    this.global.setHeaderTitle('Issuance');
    this.getLocation();
-   this.getProducts();
-
+  
   }
 
   projectID = this.global.InvProjectID;
@@ -96,15 +100,6 @@ export class IssuanceComponent implements OnInit {
 
 
 
-  getProducts(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetActiveProduct').subscribe(
-      (Response)=>{
-        this.productList = Response;
-       // console.log(Response);
- 
-      }
-    )
-  }
 
 
   searchByCode(e:any){
@@ -124,29 +119,41 @@ export class IssuanceComponent implements OnInit {
       
           //// push the data using index
           if (condition == undefined) {
+
+
+            this.global.getProdDetail(0,this.PBarcode).subscribe(
+              (Response:any)=>{
+                //console.log(Response)
+                  this.tableDataList.push({
+                    productID:Response[0].productID,
+                    productTitle:Response[0].productTitle,
+                    barcode:Response[0].barcode,
+                    productImage:Response[0].productImage,
+                    quantity:1,
+                    wohCP:Response[0].costPrice,
+                    avgCostPrice:Response[0].avgCostPrice,
+                    costPrice:Response[0].costPrice,
+                    salePrice:Response[0].salePrice,
+                    ovhPercent:0,
+                    ovhAmount:0,
+                    expiryDate:this.global.dateFormater(new Date(),'-'),
+                    batchNo:'-',
+                    batchStatus:'-',
+                    uomID:Response[0].uomID,
+                    packing:1,
+                    discInP:0,
+                    discInR:0,
+                    aq:Response[0].aq,
+              
+                  });
+                  this.getTotal();
+            
+
+                this.productImage = Response[0].productImage;
+              }
+            )
       
-          //console.log(data);
-          this.tableDataList.push({
-            productID:row.productID,
-            productTitle:row.productTitle,
-            barcode:row.barcode,
-            productImage:row.productImage,
-            quantity:1,
-            avgCostPrice:row.avgCostPrice,
-            costPrice:row.costPrice,
-            salePrice:row.salePrice,
-            expiryDate:this.global.dateFormater(new Date(),'-'),
-            batchNo:'-',
-            batchStatus:'-',
-            uomID:row.uomID,
-            packing:1,
-            discInP:0,
-            discInR:0,
-      
-          })
-      
-          this.productImage = row.productImage;
-        
+
           this.PBarcode = '';
           $('#searchProduct').trigger('focus');
         }else {
@@ -179,31 +186,43 @@ export class IssuanceComponent implements OnInit {
 
     if (condition == undefined) {
 
+
+      this.global.getProdDetail(data.productID,'').subscribe(
+        (Response:any)=>{
+          //  console.log(Response);
+
+          
+            this.tableDataList.push({
+              productID:Response[0].productID,
+              productTitle:Response[0].productTitle,
+              barcode:Response[0].barcode,
+              productImage:Response[0].productImage,
+              quantity:1,
+              wohCP:Response[0].costPrice,
+              costPrice:Response[0].costPrice,
+              avgCostPrice:Response[0].avgCostPrice,
+              salePrice:Response[0].salePrice,
+              ovhPercent:0,
+              ovhAmount:0,
+              expiryDate:this.global.dateFormater(new Date(),'-'),
+              batchNo:'-',
+              batchStatus:'-',
+              uomID:Response[0].uomID,
+              packing:1,
+              discInP:0,
+              discInR:0,
+              aq:Response[0].aq,
+        
+            })
+            this.getTotal();
+           
+          
+         this.productImage = Response[0].productImage;
+        }
+      )
+
     //console.log(data);
-    this.tableDataList.push({
-      productID:data.productID,
-      productTitle:data.productTitle,
-      barcode:data.barcode,
-      productImage:data.productImage,
-      quantity:1,
-      avgCostPrice:data.avgCostPrice,
-      costPrice:data.costPrice,
-      salePrice:data.salePrice,
-      expiryDate:this.global.dateFormater(new Date(),'-'),
-      batchNo:'-',
-      batchStatus:'-',
-      uomID:data.uomID,
-      packing:1,
-      discInP:0,
-      discInR:0,
-     
-
-    })
-
-    // console.log(this.tableDataList);
-
-    this.productImage = data.productImage;
-    
+  
     this.PBarcode = '';
     $('#searchProduct').trigger('focus');
   }else {
@@ -218,6 +237,9 @@ export class IssuanceComponent implements OnInit {
     this.PBarcode = '';
     return false;
   }
+
+
+  
 
 
   showImg(item:any){
@@ -715,6 +737,7 @@ export class IssuanceComponent implements OnInit {
               packing:e.packing,
               discInP:e.discInP,
               discInR:e.discInR,
+              aq:e.aq,
             })
           });
           // this.getTotal();

@@ -640,7 +640,7 @@ export class GlobalDataModule implements OnInit {
 
       this.http.get(environment.mainApi+this.inventoryLink+'GetProductImage?ProductID='+prodID).subscribe(
         (Response:any)=>{
-          console.log(Response);
+          // console.log(Response);
           this.dialog.open(ProductImgComponent, {
             width: '30%',
             data: Response[0].productImage
@@ -680,6 +680,12 @@ export class GlobalDataModule implements OnInit {
 
  public getProducts(): Observable<any>{
   return  this.http.get(environment.mainApi+this.inventoryLink+'GetActiveProduct').pipe(retry(3));
+  }
+
+
+ public getProdDetail(id:any, barcode:any): Observable<any>{
+  
+   return this.http.get(environment.mainApi+this.inventoryLink+'GetSingleProductDetail?ProductID='+id+'&Barcode='+barcode).pipe(retry(3));
   }
 
 

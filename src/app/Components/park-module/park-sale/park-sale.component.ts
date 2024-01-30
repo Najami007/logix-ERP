@@ -112,10 +112,10 @@ export class ParkSaleComponent {
     this.billDetail = [];
 
     var myIndex = this.TicketDetails.findIndex((e:any)=> e.swingID == item.swingID);
-    // alert(myIndex)
+
 
     if(myIndex !== -1){
-      // alert('alert')
+     
       this.TicketDetails[myIndex].TicketQuantity += 1;
     }else{
 
@@ -180,9 +180,11 @@ this.TicketDetails.splice(index,1);
 
 
 
+ticketArray:any = [];
+
 
   save(){
-  
+  this.ticketArray = [];
   
     
     if(this.ticketRemarks == '' || this.ticketRemarks == undefined){
@@ -207,16 +209,14 @@ this.TicketDetails.splice(index,1);
 
           if(Response.msg == 'Data Saved Successfully'){
             this.msg.SuccessNotify('Ticket Saved')
-            //this.printTicket(Response.tktNo,'save');
-            //console.log(Response);
-            this.printTicket('','save',Response.tktList); 
+           
+             
+            Response.tktList.forEach((e:any)=>{
+              this.ticketArray.push(e.ticketNo);
+            })          
+            this.printTicketList();
+            this.app.stopLoaderDark(); 
             this.reset();
-            this.app.stopLoaderDark();
-              
-          //   Response.tktList.forEach((e:any) => {           
-          //   this.printTicket(e.ticketNo,'save','');   
-          //     alert(e.ticketNo);       
-          // });
 
           }else {
             this.msg.WarnNotify(Response.msg);
@@ -249,8 +249,8 @@ this.TicketDetails.splice(index,1);
              }, 100);
               setTimeout(() => {
                 this.printTicket(Response.rtnTktNo,'SaleReturn','');
-              }, 200);
-              console.log(Response);
+              }, 2000);
+              //console.log(Response);
               this.reset();
               this.app.stopLoaderDark();
               
@@ -276,52 +276,54 @@ this.TicketDetails.splice(index,1);
     this.printDetails = [];
       this.printType = type;
 
-      if(tktList == ''){
-        this.http.get(environment.mainApi+this.global.parkLink+'PrintTicket?ticketno='+ticketNo).subscribe(
-          (Response:any)=>{
-         if(type == 'detail'){
-            this.billDetail = Response;
-           }else{
-            this.printDetails = Response;
-            
-            setTimeout(() => {
-              this.global.printData('#ticketPrint'); 
-            }, 500);
+      this.http.get(environment.mainApi+this.global.parkLink+'PrintTicket?ticketno='+ticketNo).subscribe(
+        (Response:any)=>{
+       if(type == 'detail'){
+          this.billDetail = Response;
+         }else{
+          this.printDetails = Response;
+           setTimeout(() => {
+            this.global.printData('#ticketPrint'); 
+          }, 200);
+         }
+      
+        })
 
-           }
-        
-          })
     
-      }else{
-        this.printDetails = [];
-     
-        tktList.forEach((e:any) => { 
-            this.http.get(environment.mainApi+this.global.parkLink+'PrintTicket?ticketno='+e.ticketNo).subscribe(
-              (Response:any)=>{
-                this.printDetails.push(Response);
-                this.global.printData('#ticketPrint')
-              }  
-            )
-         });
-
-        //  this.printDetails.forEach((p:any) => {
-        //     this.global.printData('#ticketPrint')
-        //  });
-
-        //  Details.forEach((p:any) => {
-        //   this.printDetails = p;
-        //  setTimeout(() => {
-        //   this.global.printData('#ticketPrint'); 
-        //  }, 200);
-        // });
-     
-      }
-
-
- 
     
 
   }
+
+
+
+  ticketsList:any = [];
+
+  printTicketList(){
+    this.billDetail =[];
+    this.printDetails = [];
+    
+
+      this.http.get(environment.mainApi+this.global.parkLink+'PrintTicketMulty?TicketDetail='+this.ticketArray).subscribe(
+        (Response:any)=>{
+         
+            this.printDetails = Response;
+            
+          
+              setTimeout(() => {
+           
+                this.global.printData('#ticketPrint');
+              }, 200);
+          
+     
+
+        })
+
+      
+    
+    
+
+  }
+
 
 
   rtnTicketDetails:any = [];

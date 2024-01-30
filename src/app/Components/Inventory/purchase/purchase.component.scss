@@ -16,20 +16,22 @@ input:focus{
 #searchProduct{
     font-size: 18px;
     font-weight: 400;
-    height: 60px;
+    height: 50px;
 }
 
 .SearchConatiner{
 // border: 0px solid rgb(180, 180, 180);
 // background-color: rgb(249, 249, 249);
 
-margin-top: 55px;
+// margin-top: 55px;
 width: 100%;
-z-index:1000;
-position: absolute;
-max-height: 250px;
+// z-index:1000;
+// position: absolute;
+top: 0;
+height: 45vh;
 overflow-y: scroll;
-max-width: 500px;
+
+// max-width: 470px;
 
 
 .SearchConatiner , .card{
@@ -70,3 +72,5 @@ max-width: 500px;
 ::ng-deep .cdk-overlay-container{
     z-index:2000;
   }
+
+

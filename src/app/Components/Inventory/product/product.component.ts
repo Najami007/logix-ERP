@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -15,6 +15,9 @@ import { AddCategoryComponent } from '../product-category/add-category/add-categ
 import { AddProdSubCategoryComponent } from '../product-sub-category/add-prod-sub-category/add-prod-sub-category.component';
 import { retry } from 'rxjs';
 import Swal from 'sweetalert2';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-product',
@@ -24,6 +27,22 @@ import Swal from 'sweetalert2';
 export class ProductComponent implements OnInit {
 
   crudList: any = [];
+
+  dataSource!: MatTableDataSource<any>;
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
 
   loadingBar = 'start';
 
@@ -126,6 +145,22 @@ export class ProductComponent implements OnInit {
   allowMinusList:any = [{value:true,title:'True'},{value:false,title:'false'},]
 
 
+  displayedColumns = ['Product Title', 'Product Title 2', 'Product Barcode', 'Sub Category', 
+  'Brand', 'Cost Price', 'Average Cost' ,'Sale Price','GST', 'Entered By','Active Status','Image','Edit','Delete' ]
+  
+  getProductList(){
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetProduct').subscribe(
+      (Response:any)=>{
+        // this.productList = Response;
+        this.dataSource = new MatTableDataSource(Response);
+         this.dataSource.paginator = this.paginator;
+         this.dataSource.sort = this.sort;  
+       // console.log(Response);
+      }
+    )
+  }
+
+
   getProductTypes(){
     this.http.get(environment.mainApi + this.global.inventoryLink+'GetProductType').subscribe(
       (Response: any) => {
@@ -187,15 +222,6 @@ export class ProductComponent implements OnInit {
     )
   }
 
-
-  getProductList(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetProduct').subscribe(
-      (Response)=>{
-        this.productList = Response;
-       // console.log(Response);
-      }
-    )
-  }
 
 
   save() {
@@ -455,10 +481,16 @@ export class ProductComponent implements OnInit {
     this.allowMinus = row.allowMinus;
     this.barcodeType = row.barcodeType;
     this.Description = row.productDescription;
-    this.productImg = row.productImage;
+    
     this.prodTypeID = row.productTypeID;
     this.tabIndex = 0;
     this.btnType = 'Update';
+
+    this.global.getProdImage( row.productID).subscribe(
+      (Response:any)=>{
+        this.productImg = Response[0].productImage;
+      }
+    )
     
 
 

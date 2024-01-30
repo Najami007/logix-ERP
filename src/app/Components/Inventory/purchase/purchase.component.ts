@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 
 import * as $ from 'jquery';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-purchase',
@@ -36,6 +37,10 @@ export class PurchaseComponent implements OnInit{
       this.companyProfile = data;
     });
 
+
+    this.global.getProducts().subscribe(
+      (data:any)=>{this.productList = data;})
+
   }
 
   
@@ -46,19 +51,18 @@ export class PurchaseComponent implements OnInit{
     this.getLocation();
     this.getSuppliers();
 
-     this.global.getProducts().subscribe(
-      (data:any)=>{
-        this.productList = data;
-      }
-    )
+    
   }
+
+
+  hideTotalFlag = true;
 
   projectID = this.global.InvProjectID;
   holdBtnType:any ='Hold';
   tabIndex:any;
   Date:Date = new Date()
   productImage:any;
-
+  productName = '';
   PBarcode:string = '';   /// for Search barcode field
   productsData:any;   //// for showing the products
   tableDataList: any = [];          //////will hold data temporarily
@@ -126,15 +130,6 @@ export class PurchaseComponent implements OnInit{
   }
 
 
-  // getProducts(){
-  //   this.http.get(environment.mainApi+this.global.inventoryLink+'GetActiveProduct').subscribe(
-  //     (Response)=>{
-  //       this.productList = Response;
-  //      // console.log(Response);
- 
-  //     }
-  //   )
-  // }
 
 
   getSuppliers(){
@@ -150,6 +145,30 @@ export class PurchaseComponent implements OnInit{
       )
   }
 
+
+  focusto(cls:any,e:any){ 
+
+   setTimeout(() => {
+    $(cls).trigger('focus');
+   }, 1500);
+
+   if(cls == 'ovhd' && e.keyCode == 13 ){
+    if(e.target.value == ''){
+      $('#ovhd').trigger('focus')
+    }
+   }
+
+   if(cls == 'disc' && e.keyCode == 13){
+    $('#disc').trigger('focus');
+   }
+
+   if(cls == 'savebtn' && e.keyCode == 13  ){
+    $('#savebtn').trigger('focus');
+   }
+
+   
+
+  }
 
   searchByCode(e:any){
 
@@ -169,58 +188,53 @@ export class PurchaseComponent implements OnInit{
           //// push the data using index
           if (condition == undefined) {
 
-            var prodImg = '';
-            this.app.startLoaderDark();
-            this.global.getProdImage(row.productID).subscribe((response:any)=>{
-             prodImg =  response[0].productImage;
-             this.productImage = prodImg;
-             this.app.stopLoaderDark();
-      
-           });
-      
-          //console.log(data);
-          setTimeout(() => {
-            this.tableDataList.push({
-              ProductID:row.productID,
-              ProductTitle:row.productTitle,
-              barcode:row.barcode,
-              productImage:row.productImage,
-              Quantity:1,
-              wohCP:row.costPrice,
-              CostPrice:row.costPrice,
-              SalePrice:row.salePrice,
-              ovhPercent:0,
-              ovhAmount:0,
-              ExpiryDate:this.global.dateFormater(new Date(),'-'),
-              BatchNo:'-',
-              BatchStatus:'-',
-              UomID:row.uomID,
-              Packing:1,
-              discInP:0,
-              discInR:0,
-        
-            })
-          }, 200);
-      
-          this.productImage = row.productImage;
-          this.getTotal();
-          this.PBarcode = '';
-          $('#searchProduct').trigger('focus');
+         
+            // this.app.startLoaderDark();
+            this.global.getProdDetail(0,this.PBarcode).subscribe(
+              (Response:any)=>{
+                //console.log(Response)
+                  this.tableDataList.push({
+                    ProductID:Response[0].productID,
+                    ProductTitle:Response[0].productTitle,
+                    barcode:Response[0].barcode,
+                    productImage:Response[0].productImage,
+                    Quantity:1,
+                    wohCP:Response[0].costPrice,
+                    CostPrice:Response[0].costPrice,
+                    SalePrice:Response[0].salePrice,
+                    ovhPercent:0,
+                    ovhAmount:0,
+                    ExpiryDate:this.global.dateFormater(new Date(),'-'),
+                    BatchNo:'-',
+                    BatchStatus:'-',
+                    UomID:Response[0].uomID,
+                    Packing:1,
+                    discInP:0,
+                    discInR:0,
+                    AQ:Response[0].aq,
+              
+                  });
+                  this.getTotal();
+            
+
+                this.productImage = Response[0].productImage;
+              }
+            )
+            
+
+         
         }else {
           this.tableDataList[index].Quantity += 1;
           this.productImage = this.tableDataList[index].productImage;
-          this.getTotal();
-          this.PBarcode = '';
-          $('#searchProduct').trigger('focus');
         }
         }else{
           this.msg.WarnNotify('Product Not Found')
         }
      
-        if(this.overHead > 0){
-          this.distributeOverHead();
-        }
+
        this.PBarcode = '';
+       this.getTotal();
+       $('#searchProduct').trigger('focus');
    
        }
     }
@@ -229,10 +243,7 @@ export class PurchaseComponent implements OnInit{
   }
 
   holdDataFunction(data:any){
-    //console.log(data);
-   
-    // console.log(this.productImage);
-    
+ 
 
     var condition = this.tableDataList.find(
       (x: any) => x.ProductID == data.productID
@@ -244,72 +255,80 @@ export class PurchaseComponent implements OnInit{
 
     if (condition == undefined) {
 
-      var prodImg = '';
       this.app.startLoaderDark();
-      this.global.getProdImage(data.productID).subscribe((response:any)=>{
-       prodImg =  response[0].productImage;
-       this.productImage = prodImg;
-       this.app.stopLoaderDark();
 
-     });
+      this.global.getProdDetail(data.productID,'').subscribe(
+        (Response:any)=>{
+          //  console.log(Response);
 
-     setTimeout(() => {
-      this.tableDataList.push({
-        ProductID:data.productID,
-        ProductTitle:data.productTitle,
-        barcode:data.barcode,
-        productImage:prodImg,
-        Quantity:1,
-        wohCP:data.costPrice,
-        CostPrice:data.costPrice,
-        SalePrice:data.salePrice,
-        ovhPercent:0,
-        ovhAmount:0,
-        ExpiryDate:this.global.dateFormater(new Date(),'-'),
-        BatchNo:'-',
-        BatchStatus:'-',
-        UomID:data.uomID,
-        Packing:1,
-        discInP:0,
-        discInR:0,
-       
-  
-      })  
-     }, 100);
-
-   
-
-    //console.log(data);
-    
-    console.log(this.tableDataList);
-
-    this.productImage = prodImg;
-    this.getTotal();
-    this.PBarcode = '';
-    $('#searchProduct').trigger('focus');
+          
+            this.tableDataList.push({
+              ProductID:Response[0].productID,
+              ProductTitle:Response[0].productTitle,
+              barcode:Response[0].barcode,
+              productImage:Response[0].productImage,
+              Quantity:1,
+              wohCP:Response[0].costPrice,
+              CostPrice:Response[0].costPrice,
+              SalePrice:Response[0].salePrice,
+              ovhPercent:0,
+              ovhAmount:0,
+              ExpiryDate:this.global.dateFormater(new Date(),'-'),
+              BatchNo:'-',
+              BatchStatus:'-',
+              UomID:Response[0].uomID,
+              Packing:1,
+              discInP:0,
+              discInR:0,
+              AQ:Response[0].aq,
+        
+            })
+            this.getTotal();
+           
+          
+         this.productImage = Response[0].productImage;
+        }
+      )
   }else {
     this.tableDataList[index].Quantity += 1;
     this.productImage = this.tableDataList[index].productImage;
+  }
+  this.app.stopLoaderDark();
+    this.productName = '';
     this.getTotal();
-    this.PBarcode = '';
+   setTimeout(() => {
     $('#searchProduct').trigger('focus');
-  }
-  
-  if(this.overHead > 0){
-    this.distributeOverHead();
-  }
+   }, 500);
 
-    this.PBarcode = '';
-    return false;
   }
 
 
  
 
   delRow(item: any) {
+    Swal.fire({
+      title:'Alert!',
+      text:'Confirm to Delete Product',
+      position:'center',
+      icon:'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirm',
+    }).then((result)=>{
+
+      if(result.isConfirmed){
+   
     var index = this.tableDataList.indexOf(item);
     this.tableDataList.splice(index, 1);
     this.getTotal();
+  
+
+    }
+   }
+   )
+    
+  
     
   }
 
@@ -323,7 +342,10 @@ export class PurchaseComponent implements OnInit{
 
     var index = this.tableDataList.findIndex((e:any)=> e.ProductID == item.ProductID);
     this.productImage = this.tableDataList[index].productImage;
+
   }
+
+ 
 
    rowFocused = 0;
   prodFocusedRow= 0;
@@ -362,7 +384,13 @@ export class PurchaseComponent implements OnInit{
          } else {
              var clsName = cls + this.prodFocusedRow;    
             //  alert(clsName);
-             $(clsName).trigger('focus');    
+          
+            $(clsName).trigger('focus');
+           
+            
+             e.which = 9;   
+             $(clsName).trigger(e)  
+            
          }}
        }
      
@@ -371,7 +399,7 @@ export class PurchaseComponent implements OnInit{
           if (e.keyCode == 38) {
      
            if (this.prodFocusedRow == 0) {
-               $(".searchProduct").trigger('focus');
+               $(".fintProd").trigger('focus');
                this.prodFocusedRow = 0;
       
            }
@@ -478,14 +506,21 @@ export class PurchaseComponent implements OnInit{
     var isValidFlag = true;
   this.tableDataList.forEach((p:any) => {
         
-      if(p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined ){
+      if(p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null ){
         this.msg.WarnNotify('('+p.ProductTitle+') Cost Price is not Valid');
          isValidFlag = false;
         //  console.log(p)
          return;
       }
 
-      if(p.Quanity == 0 || p.Quantity == '0' ){
+      if( p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null ){
+        this.msg.WarnNotify('('+p.ProductTitle+') Sale Price is not Valid');
+         isValidFlag = false;
+        //  console.log(p)
+         return;
+      }
+
+      if(p.Quanity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == ''){
         this.msg.WarnNotify('('+p.ProductTitle+') Quantity is not Valid');
          isValidFlag = false;
         //  console.log(p)
@@ -601,39 +636,61 @@ export class PurchaseComponent implements OnInit{
           }
      
          }else if(type == 'purchase'){
-           this.app.startLoaderDark();
-           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertPurchase',{
-           InvType: "P",
-           InvDate: this.global.dateFormater(this.invoiceDate,'-'),
-           RefInvoiceNo: this.refInvNo,
-           PartyID: this.partyID,
-           LocationID: this.locationID,
-           ProjectID: this.projectID,
-           BookerID: this.bookerID,
-           BillTotal: this.subTotal,
-           BillDiscount: this.discount,
-           OverHeadAmount: this.overHead,
-           NetTotal: this.subTotal - this.discount,
-           Remarks: this.invRemarks,
-           InvoiceDocument: "-",
-           HoldInvNo:this.holdInvNo,
-       
-           InvDetail: JSON.stringify(this.tableDataList),
-       
-           UserID: this.global.getUserID()
-           }).subscribe(
-             (Response:any)=>{
-               if(Response.msg == 'Data Saved Successfully'){
-                 this.msg.SuccessNotify(Response.msg);
-                 this.reset(); 
-                 this.app.stopLoaderDark();
-                
-               }else{
-                 this.msg.WarnNotify(Response.msg);
-                 this.app.stopLoaderDark();
-               }
-             }
-           )
+
+          Swal.fire({
+            title:'Alert!',
+            text:'Confirm to Delete Product',
+            position:'center',
+            icon:'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Confirm',
+          }).then((result)=>{
+      
+            if(result.isConfirmed){
+   
+              this.app.startLoaderDark();
+              this.http.post(environment.mainApi+this.global.inventoryLink+'InsertPurchase',{
+              InvType: "P",
+              InvDate: this.global.dateFormater(this.invoiceDate,'-'),
+              RefInvoiceNo: this.refInvNo,
+              PartyID: this.partyID,
+              LocationID: this.locationID,
+              ProjectID: this.projectID,
+              BookerID: this.bookerID,
+              BillTotal: this.subTotal,
+              BillDiscount: this.discount,
+              OverHeadAmount: this.overHead,
+              NetTotal: this.subTotal - this.discount,
+              Remarks: this.invRemarks,
+              InvoiceDocument: "-",
+              HoldInvNo:this.holdInvNo,
+          
+              InvDetail: JSON.stringify(this.tableDataList),
+          
+              UserID: this.global.getUserID()
+              }).subscribe(
+                (Response:any)=>{
+                  if(Response.msg == 'Data Saved Successfully'){
+                    this.msg.SuccessNotify(Response.msg);
+                    this.reset(); 
+                    this.app.stopLoaderDark();
+                   
+                  }else{
+                    this.msg.WarnNotify(Response.msg);
+                    this.app.stopLoaderDark();
+                  }
+                }
+              )
+      
+          }
+         }
+         )
+          
+
+          
+        
          }
      
       }
@@ -665,73 +722,32 @@ export class PurchaseComponent implements OnInit{
     this.invRemarks = '';
     this.holdBtnType = 'Hold';
     this.holdBillList = [];
-
-
-  }
-
-
-  distributeOverHead(){
-    // console.log(this.subTotal,this.overHead,this.discount)
-    // var billTotal = 0;
-
-    // this.tableDataList.forEach((tb:any) => {
-    //   billTotal += tb.quantity * tb.wohCP;
-    // });
-    // this.tableDataList.forEach((e:any) => {
-    //   this.tableDataList[e].ovhPercent = ((e.wohCP * e.quantity) / billTotal) * 100 ;
-    // });
-    var amount = this.overHead / this.myTotalQty;
-   for(var i=0; i<this.tableDataList.length;i++){this.tableDataList[i].CostPrice = parseFloat(this.tableDataList[i].wohCP) + amount}    
-
-    // this.getTotal();
-
-    // this.tableDataList.forEach((e:any) => {
-    //   this.tableDataList[e].ovhPercent = ((e.wohCP * e.quantity) / this.subTotal) * 100 ;
-    //   this.tableDataList[e].ovhAmount = ((this.overHead * (e.ovhPercent / 100))/ e.Quantity )
-    //   this.tableDataList[e].ovhAmount = ((this.overHead * (e.ovhPercent / 100))/ e.Quantity ) ;
-    // });
-    this.getTotal();
+    this.netTotal = 0;
     
+
+
   }
 
-  distribute(){
-    // console.log(this.subTotal,this.overHead,this.discount)
-    // var billTotal = 0;
 
-    // this.tableDataList.forEach((tb:any) => {
-    //   billTotal += tb.quantity * tb.wohCP;
-    // });
-   
-  //   var amount = this.overHead / this.myTotalQty;
-  //  for(var i=0; i<this.tableDataList.length;i++){this.tableDataList[i].CostPrice = parseFloat(this.tableDataList[i].wohCP) + amount}    
-
-    // this.getTotal();
-
-    this.tableDataList.forEach((e:any) => {
-      // this.tableDataList[e].ovhPercent = (((e.wohCP * e.quantity) / this.subTotal) * 100) ;
-      // this.tableDataList[e].ovhAmount = ((this.overHead * (e.ovhPercent / 100))/ e.Quantity )
-      var op = (((e.wohCP * e.quantity) / this.subTotal) * 100);
-      var oa =((this.overHead * (op / 100))/ e.Quantity )
-      e.CostPrice = e.wohCP +  (((this.overHead * ((((e.wohCP * e.quantity) / this.subTotal) * 100) / 100))/ e.Quantity ) );
-      console.log(op,oa)
-    });
-    this.getTotal();
-    
-  }
-
-  
+  netTotal = 0;
 
   getTotal() {
+   
     this.subTotal = 0;
     this.myTotalQty = 0;
+    this.netTotal = 0;
+  
+
     for (var i = 0; i < this.tableDataList.length; i++) {
    
-      this.subTotal += (parseFloat(this.tableDataList[i].Quantity) * parseFloat(this.tableDataList[i].wohCP));
+      this.subTotal += (parseFloat(this.tableDataList[i].Quantity) * parseFloat(this.tableDataList[i].CostPrice));
       this.myTotalQty += parseFloat(this.tableDataList[i].Quantity);
+    
      
     }
-
-    // console.log(this.tableDataList);
+    this.netTotal =( this.subTotal + parseFloat(this.overHead)) - parseFloat(this.discount)
+  
+   
   }
 
 
@@ -829,7 +845,7 @@ export class PurchaseComponent implements OnInit{
   wohCPTotal = 0;
   retriveBill(item:any){
 
-    console.log(item);
+    //console.log(item);
     this.tableDataList = [];
     this.holdBtnType = 'ReHold'
     this.invoiceDate = new Date(item.invDate);
@@ -841,22 +857,13 @@ export class PurchaseComponent implements OnInit{
     this.holdInvNo = item.invBillNo;
     this.bookerID = item.bookerID;
     this.partyID = item.partyID;
-    // this.subTotal = item.billTotal;
     this.onPartySelected();
 
     this.getBillDetail(item.invBillNo).subscribe(
       (Response:any)=>{
-        var totalQty = 0 ;
-        var overhead = 0;
+       
         this.myTotalQty = 0;
         this.productImage = Response[Response.length - 1].productImage;
-
-       if(item.overHeadAmount > 0){
-        Response.forEach((j:any) => {
-          totalQty += j.quantity
-        });
-     overhead = item.overHeadAmount / totalQty;
-       }
 
           Response.forEach((e:any) => {
             this.myTotalQty += e.quantity;
@@ -866,7 +873,7 @@ export class PurchaseComponent implements OnInit{
               barcode:e.barcode,
               productImage:e.productImage,
               Quantity:e.quantity,
-              wohCP:(e.costPrice - overhead) ,
+              wohCP:e.costPrice  ,
               CostPrice:e.costPrice,
               SalePrice:e.salePrice,
               ExpiryDate:this.global.dateFormater(new Date(e.expiryDate),'-'),
@@ -876,9 +883,11 @@ export class PurchaseComponent implements OnInit{
               Packing:e.packing,
               discInP:e.discInP,
               discInR:e.discInR,
+              AQ:e.aq,
             })
           });
           this.getTotal();
+
         
       }
     )
