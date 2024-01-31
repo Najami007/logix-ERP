@@ -104,7 +104,7 @@ export class InvreportcatwiseComponent implements OnInit {
     }
 
     if(this.reportType == 'scw'){
-      idType = '&cid='+this.categoryID+'&scid'+this.subCategoryID;
+      idType = '&cid='+this.categoryID+'&scid='+this.subCategoryID;
     }
 
     if(this.reportType == 'bw'){
@@ -133,11 +133,16 @@ export class InvreportcatwiseComponent implements OnInit {
       this.msg.WarnNotify('Select Type')
     }else{
       this.app.startLoaderDark();
+      alert(this.reportType+idType);
         this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryRpt?rptType='+this.reportType+idType).subscribe(
           (Response:any)=>{
             this.inventoryList = Response;
             // console.log(Response);
             this.app.stopLoaderDark();
+            this.costTotal = 0;
+            this.avgCostTotal = 0;
+            this.saleTotal = 0;
+            this.balanceQtyTotal = 0;
 
             Response.forEach((e:any) => {
               this.costTotal += e.costPrice * (e.qtyIn - e.qtyOut);
