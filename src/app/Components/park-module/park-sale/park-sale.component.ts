@@ -176,6 +176,7 @@ getTotal(){
 
 deleteRow(index:any){
 this.TicketDetails.splice(index,1);
+this.getTotal();
 }
 
 

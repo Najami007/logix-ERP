@@ -11,6 +11,7 @@ import { PincodeComponent } from '../../User/pincode/pincode.component';
 
 import * as $ from 'jquery';
 import Swal from 'sweetalert2';
+import { AddpartyComponent } from '../../Company/party/addparty/addparty.component';
 
 @Component({
   selector: 'app-purchase',
@@ -374,7 +375,7 @@ export class PurchaseComponent implements OnInit{
 
 
         /////move down
-        if(e.keyCode == 40){
+        if(e.keyCode == 40 || e.keyCode == 9){
     
      
           if(this.productList.length > 1 ){
@@ -411,6 +412,8 @@ export class PurchaseComponent implements OnInit{
                var clsName = cls + this.prodFocusedRow;
               //  alert(clsName);
                $(clsName).trigger('focus');
+               e.which = e.shift + 9;   
+               $(clsName).trigger(e) ; 
                
      
            }
@@ -498,6 +501,16 @@ export class PurchaseComponent implements OnInit{
  
   }
 
+
+  addParty(){
+    this.dialogue.open(AddpartyComponent,{
+      width:"50%"
+    }).afterClosed().subscribe(value=>{
+      if(value == 'Update'){
+        this.getSuppliers();
+      }
+    });
+  }
 
 
 
@@ -639,9 +652,9 @@ export class PurchaseComponent implements OnInit{
 
           Swal.fire({
             title:'Alert!',
-            text:'Confirm to Delete Product',
+            text:'Confirm to Save ',
             position:'center',
-            icon:'warning',
+            icon:'success',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',

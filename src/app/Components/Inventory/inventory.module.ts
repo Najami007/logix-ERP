@@ -27,6 +27,10 @@ import { IssueStockRerturnComponent } from './issue-stock-rerturn/issue-stock-re
 import { StockAdjustmentComponent } from './stock-adjustment/stock-adjustment.component';
 import { OpeningStockComponent } from './opening-stock/opening-stock.component';
 import { ProductImgComponent } from './product/product-img/product-img.component';
+import { LimittoPipe } from 'src/app/Shared/pipes/limitto.pipe';
+import { InvreportcatwiseComponent } from './InventoryReports/invreportcatwise/invreportcatwise.component';
+
+
 
 
 
@@ -101,6 +105,12 @@ export const inventoryRoutes: Route[] = [
     canActivate: [AuthGuard]
   },
 
+  {
+    path: 'invrpt',
+    component: InvreportcatwiseComponent,
+    canActivate: [AuthGuard]
+  },
+
 
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 
@@ -128,6 +138,10 @@ export const inventoryRoutes: Route[] = [
     StockAdjustmentComponent,
     OpeningStockComponent,
     ProductImgComponent,
+    LimittoPipe,
+    InvreportcatwiseComponent,
+    
+ 
 
   ],
   imports: [
@@ -140,8 +154,6 @@ export const inventoryRoutes: Route[] = [
     NgxMatSelectSearchModule,
     TextMaskModule,
     Ng2SearchPipeModule,
-
-
 
 
   ],

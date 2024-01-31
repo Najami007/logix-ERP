@@ -146,7 +146,7 @@ export class ProductComponent implements OnInit {
 
 
   displayedColumns = ['Product Title', 'Product Title 2', 'Product Barcode', 'Sub Category', 
-  'Brand', 'Cost Price', 'Average Cost' ,'Sale Price','GST', 'Entered By','Active Status','Image','Edit','Delete' ]
+  'Brand','UOM','Type', 'Cost Price', 'Average Cost' , 'Sale Price','GST', 'Entered By','Active Status','Image','Edit','Delete' ]
   
   getProductList(){
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetProduct').subscribe(

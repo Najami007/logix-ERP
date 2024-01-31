@@ -323,6 +323,18 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Brand </th>
                     <td mat-cell *matCellDef="let row"> {{row.brandTitle }} </td>
                   </ng-container>
+
+                  <ng-container matColumnDef="UOM">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> UOM </th>
+                    <td mat-cell *matCellDef="let row"> {{row.uomTitle }} </td>
+                  </ng-container>
+          
+
+                  <ng-container matColumnDef="Type">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+                    <td mat-cell *matCellDef="let row"> {{row.productTypeTitle }} </td>
+                  </ng-container>
+          
           
                   <ng-container matColumnDef="Cost Price">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Cost Price </th>

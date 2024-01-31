@@ -1,53 +1,42 @@
-<div class="container-fluid body">
+<div class="body">
 
     <!-- ////////////////////////// first row////////////////// -->
-    <div class="mt-2  d-flex">
-        <mat-card class="d-flex col-lg-11 mb-2 ps-3 pe-3" style="background-color:rgb(213, 241, 220);">
+    <div class="mb-2  d-flex" style=" box-shadow: 0px 0px 10px 0px rgb(192, 209, 235);background-color:rgb(213, 241, 220);height: 130px;" >
+        <div class="d-flex just col-lg-11 mb-2 ps-3 pe-3" >
+    
+            <div class="d-flex pt-4 justify-content-between col-lg-11  ps-3 pe-3">
+                <div class="col-lg-9 d-flex ">
+                    <input type="text" style="background-color:transparent;border: 1px solid rgb(13, 110, 253);border-radius: 5px 0px 0px 5px;"
+                        #pbarcode [(ngModel)]="PBarcode"
+                        (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event);"
+                        id="searchProduct" class="searchProduct col-lg-10" placeholder="Scan Barcode (Alt + s)"
+                        autofocus autocomplete="off" accesskey="s">
 
-            <mat-card-content class="d-flex justify-content-between">
-                <div class="w-50  d-flex flex-column">
-                    <input type="text" style="background-color:rgb(213, 241, 220);" #pbarcode [(ngModel)]="PBarcode"
-                        (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event)" id="searchProduct"
-                        class="border-0 p-1 mb-2 border-bottom border-success searchProduct"
-                        placeholder="Search Barcode" autofocus autocomplete="off" accesskey="s">
-
-                    <!-- <div class="w-100 d-flex flex-column SearchConatiner cursorPointer" 
-                        *ngIf="PBarcode != '' && PBarcode != undefined">
-                        <mat-card class="card " *ngFor="let item of productList| filter:PBarcode index as index" (click)="holdDataFunction(item)" >
-                            <button style="height: 40px;background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn" (keydown)="handleFocus(item,$event,'.prodRow')">{{item.productTitle}} (<b>{{item.barcode}}</b> )</button>
-                        </mat-card>
-                    </div> -->
+                    <button accesskey="n" class="bg-primary text-white col-lg-2" data-bs-toggle="modal"
+                        data-bs-target="#prodModal" matTooltip="Search Product By Name (Alt + n)"
+                        style="height: 50px;width: 50px;border: 1px solid rgb(13, 110, 253);border-radius: 0px 5px 5px 0px;"
+                        (click)="focusto('#prodName',$event)"><mat-icon>search</mat-icon></button>
                 </div>
 
 
-                <div><button accesskey="n" class="bg-primary border-0 text-white" data-bs-toggle="modal"
-                        data-bs-target="#prodModal"
-                        style="height: 59px;width: 59px;"><mat-icon>search</mat-icon></button></div>
+                <div class="col-lg-3 text-end ">
 
-
-
-
-
-                <div class=" w-50 text-end ">
-
-                    <button class=" w-25 text-danger border-0 border-bottom bg-transparent btn-rpt"
+                    <button class="w-25 btn btn-danger me-1"
                         data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>
-                    <button class=" w-25 btn btn-primary me-1  btn-rpt"
+                    <button class=" w-25 btn btn-primary me-1  "
                         (click)="SaveBill('hold')">{{holdBtnType}}</button>
-                    <button class=" w-25 btn btn-success btn-rpt" (click)="SaveBill('purchase')">Save</button>
+                    <button class=" w-25 btn btn-success " (click)="SaveBill('purchase')">Save</button>
                 </div>
-            </mat-card-content>
+            </div>
 
+        </div>
 
-
-        </mat-card>
-
-        <mat-card class="mb-2" style="height: 120px;width: 120px;">
-            <div class="p-1 col-lg-1" *ngIf="tableDataList != ''"
+        <div class="mb-2 col-lg-1 text-center border border-primary" >
+            <div class="p-1 " *ngIf="tableDataList != ''"
                 (click)="this.global.showProductImage(this.productImage,0)">
                 <img [src]="productImage" alt="" height="110" width="110">
             </div>
-        </mat-card>
+        </div>
 
 
 
@@ -63,7 +52,8 @@
 
         <table class="table table-hover table-logix">
             <thead>
-                <th>S#</th>
+                <tr>
+                    <th>S#</th>
                 <th class="col-lg-2">Barcode</th>
                 <th class="col-lg-3">Product Name</th>
                 <th class="col-lg-1">Expiry</th>
@@ -72,7 +62,9 @@
                 <th class="col-lg-1">Cost Price</th>
                 <th class="col-lg-1">Sale Price</th>
                 <th class="col-lg-1">Total</th>
+                <th>AQ</th>
                 <th class="col-lg-1">Action</th>
+                </tr>
 
             </thead>
 
@@ -106,6 +98,7 @@
                     </td>
 
                     <td class="text-end">{{item.CostPrice * item.Quantity |number}}</td>
+                    <td class="text-center">{{item.aq}}</td>
                     <td class="text-danger text-center cursorPointer"><mat-icon (click)="delRow(item)">delete</mat-icon>
                     </td>
 
@@ -113,7 +106,7 @@
                 <tr>
                     <td colspan="4"></td>
                     <td class="text-center fw-bold">{{myTotalQty }}</td>
-                    <td colspan="3"></td>
+                    <td colspan="4"></td>
                     <td class="text-center"><mat-icon class="cursorPointer " (click)="reset()">delete</mat-icon></td>
                 </tr>
 
@@ -129,11 +122,11 @@
     <!-- //////////////////////////Row 3////////////////// -->
 
 
-    <div class="pe-4 w-100 d-flex flex-inline" style="position: fixed;z-index:50;bottom: 6%;" id="totalRow"
-        *ngIf="hideTotalFlag == true">
+    <div class="w-100 d-flex flex-inline bg-white" *ngIf="hideTotalFlag" style="position: fixed;z-index:50;bottom: 6%;" id="totalRow"
+        >
 
         <!-- //////////////////////first Column/////////////////////// -->
-        <mat-card class=" me-1 col-lg-7" style="background-color: rgb(248, 237, 217);">
+        <mat-card class=" col-lg-7" style="background-color: rgb(248, 237, 217);">
 
             <mat-card-content class="">
                 <mat-form-field appearance="outline" class="col-lg-3 p-1">
@@ -187,7 +180,7 @@
         </mat-card>
 
         <!-- //////////////////////Second Column/////////////////////// -->
-        <mat-card class="col-lg-3 me-1">
+        <mat-card class="col-lg-3">
 
             <mat-card-content class="d-flex flex-column">
                 <mat-form-field appearance="outline">
@@ -198,6 +191,7 @@
                         <mat-option *ngFor="let item of suppliersList | filter:partySearch.value"
                             [value]="item.partyID">{{item.partyName}}</mat-option>
                     </mat-select>
+                    <mat-icon class="cursorPointer" (click)="addParty()" matSuffix>add</mat-icon>
                 </mat-form-field>
 
                 <div class="d-flex justify-content-between">
@@ -227,8 +221,8 @@
         <mat-card class=" col-lg-2" style="background-color: rgb(245, 240, 236);">
 
             <div class="text-end">
-                <button color="primary" matTooltip="Hide Total" (click)=" this.hideTotalFlag = !this.hideTotalFlag;"
-                    style="height: 25px;width: 25px;" mat-mini-fab><mat-icon
+                <button  id="hideBtn" class="text-danger" matTooltip="Hide Total" (click)="hide('hide')"
+                     mat-icon-button><mat-icon
                         style="font-size: 20px;">arrow_downward</mat-icon></button>
             </div>
 
@@ -236,7 +230,7 @@
             <mat-card-content class="d-flex flex-column">
                 <div class=" pt-3  text-center">
                     <h2 class="text-secondary ">TOTAL</h2>
-                    <h1 style="font-size: 50px;" class="text-danger">{{subTotal || 0 |number}}</h1>
+                    <h1 style="font-size: 50px;" class="text-danger">{{subTotal || 0 |number:'1.0-2'}}</h1>
                 </div>
 
             </mat-card-content>
@@ -245,10 +239,13 @@
     </div>
 
 
-    <div class="text-end" style="position: fixed;right: 0%;z-index: 100;bottom: 6.5%;">
-        <button *ngIf="hideTotalFlag == false" color="primary" matTooltip="Hide Total"
-            (click)=" this.hideTotalFlag = !this.hideTotalFlag;" style="height: 25px;width: 25px;"
-            mat-mini-fab><mat-icon style="font-size: 20px;">arrow_upward</mat-icon></button>
+    <!-- //////////////////////////// Button for unhide Total Row ////////////////////// -->
+
+
+    <div class="text-end" style="position: fixed;right: 1%;z-index: 100;bottom: 6.5%;">
+        <button class="text-success"  *ngIf="hideTotalFlag == false" matTooltip="Unhide Total" id="unhideBtn"
+            (click)=" hide('unhide')" 
+            mat-icon-button><mat-icon style="font-size: 20px;">arrow_upward</mat-icon></button>
     </div>
 
 
@@ -272,8 +269,8 @@
                 <div class="modal-body" style="height: 60vh;">
                     <div class="d-flex flex-column">
                         <mat-form-field appearance="outline" class="w-100">
-                            <input type="text" matInput #pName [(ngModel)]="productName"
-                                (keydown)="this.changeFocus($event,'.fintProd')" placeholder="Alt + A" class="fintProd"
+                            <input type="text" matInput #pName [(ngModel)]="productName" id="prodName"
+                                (keydown)="this.changeFocus($event,'.fintProd')" placeholder="Barcode / Name (Alt + a)" class="fintProd prodName"
                                 autofocus autocomplete="off" accesskey="a">
 
                         </mat-form-field>
@@ -284,8 +281,8 @@
                             <mat-card class="card" *ngFor="let item of productList | filter:productName index as index"
                                 (click)="holdDataFunction(item)">
                                 <button data-bs-dismiss="modal"
-                                    style="height: 40px; background: none;border: none;text-align: left;"
-                                    class="prodRow{{index}} prodBtn " (keydown)="handleFocus(item,$event,'.prodRow')">
+                                    style="height: 40px; background: none;;text-align: left;"
+                                    class="prodRow{{index}} prodBtn border-0 border-bottom border-dark" (keydown)="this.global.handleProdFocus(item,$event,'.prodRow','.prodName',productList)">
                                     <div class="justify-content-between d-flex">
                                         <div> {{item.productTitle}}</div>
                                         <div><b>({{item.barcode}})</b></div>

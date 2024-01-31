@@ -22,6 +22,7 @@ import { AddDepartmentComponent } from './department/add-department/add-departme
 import { ProjectComponent } from './project/project.component';
 import { AuthGuard } from 'src/app/auth.guard';
 import { PartyComponent } from './party/party.component';
+import { AddpartyComponent } from './party/addparty/addparty.component';
 
 
 
@@ -57,6 +58,7 @@ export const companyRoutes: Route[] = [
     AddDepartmentComponent,
     ProjectComponent,
     PartyComponent,
+    AddpartyComponent,
   
   ],
   imports: [

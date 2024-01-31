@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { Router } from '@angular/router';
 import { Observable, retry } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-issuance',
@@ -23,7 +24,7 @@ export class IssuanceComponent implements OnInit {
     private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
-    private global:GlobalDataModule,
+    public global:GlobalDataModule,
     private dialog:MatDialog,
     private route:Router
   ){
@@ -295,7 +296,7 @@ export class IssuanceComponent implements OnInit {
 
 
     /////move down
-    if(e.keyCode == 40){
+    if(e.keyCode == 40 || e.keyCode == 9){
 
  
       if(this.productList.length > 1 ){
@@ -305,13 +306,16 @@ export class IssuanceComponent implements OnInit {
      } else {
          var clsName = cls + this.prodFocusedRow;    
         //  alert(clsName);
-         $(clsName).trigger('focus');    
+         $(clsName).trigger('focus');
+          
+         e.which = 9;   
+         $(clsName).trigger(e)      
      }}
    }
  
  
       //Move up
-      if (e.keyCode == 38) {
+      if (e.keyCode == 38 && e.keyCode == e.shift + 9) {
  
        if (this.prodFocusedRow == 0) {
            $(".searchProduct").trigger('focus');
@@ -326,6 +330,8 @@ export class IssuanceComponent implements OnInit {
            var clsName = cls + this.prodFocusedRow;
           //  alert(clsName);
            $(clsName).trigger('focus');
+           e.which = e.shift + 9;   
+           $(clsName).trigger(e) ; 
            
  
        }
@@ -397,13 +403,32 @@ export class IssuanceComponent implements OnInit {
 
   }
 
-
   delRow(item: any) {
-    var index = this.tableDataList.indexOf(item);
-    this.tableDataList.splice(index, 1);
-    this.getTotal();
+    Swal.fire({
+      title:'Alert!',
+      text:'Confirm to Delete Product',
+      position:'center',
+      icon:'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirm',
+    }).then((result)=>{
+
+      if(result.isConfirmed){
+   
+        var index = this.tableDataList.indexOf(item);
+        this.tableDataList.splice(index, 1);
+        this.getTotal();
+
+    }
+   }
+   )
+    
+  
     
   }
+
 
   changeValue(item:any){
     var myIndex = this.tableDataList.indexOf(item);
@@ -425,7 +450,7 @@ export class IssuanceComponent implements OnInit {
   SaveBill(type:any){
     var isValidFlag = true;
     this.tableDataList.forEach((p:any) => {       
-        if(p.quanity == 0 || p.quantity == '0' ){
+        if(p.quanity == 0 || p.quantity == '0' || p.quanity == '' || p.quanity == undefined || p.quanity == null){
           this.msg.WarnNotify('('+p.productTitle+') Quantity is not Valid');
            isValidFlag = false;
           //  console.log(p)
@@ -529,7 +554,21 @@ export class IssuanceComponent implements OnInit {
           }
      
          }else if(type == 'issue'){
-           this.app.startLoaderDark();
+
+          Swal.fire({
+            title:'Alert!',
+            text:'Confirm to Save',
+            position:'center',
+            icon:'success',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Confirm',
+          }).then((result)=>{
+      
+            if(result.isConfirmed){
+         
+              this.app.startLoaderDark();
            this.http.post(environment.mainApi+this.global.inventoryLink+'InsertIssueStock',{
             InvType: "I",
             InvDate: this.global.dateFormater(this.invoiceDate,'-'),
@@ -562,6 +601,10 @@ export class IssuanceComponent implements OnInit {
                }
              }
            )
+          }
+         }
+         )
+         
          }
      
       }
@@ -590,6 +633,8 @@ export class IssuanceComponent implements OnInit {
     this.holdInvNo = '-';
     this.IssueBillList = [];
     this.IssueType = '';
+    this.avgCostTotal = 0;
+    this.CostTotal = 0;
 
   }
 

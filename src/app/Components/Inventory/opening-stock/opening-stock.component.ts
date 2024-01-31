@@ -22,7 +22,7 @@ export class OpeningStockComponent implements OnInit {
     private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
-    private global:GlobalDataModule,
+    public global:GlobalDataModule,
     private dialog:MatDialog,
     private route:Router
   ){
@@ -35,6 +35,9 @@ export class OpeningStockComponent implements OnInit {
     this.global.getCompany().subscribe((data)=>{
       this.companyProfile = data;
     });
+
+    this.global.getProducts().subscribe(
+      (data:any)=>{this.productList = data;})
   }
 
 
@@ -42,7 +45,6 @@ export class OpeningStockComponent implements OnInit {
   ngOnInit(): void {
    this.global.setHeaderTitle('Opening Stock');
    this.getLocation();
-   this.getProducts();
 
   }
 
@@ -76,16 +78,6 @@ export class OpeningStockComponent implements OnInit {
 
 
 
-  getProducts(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetActiveProduct').subscribe(
-      (Response)=>{
-        this.productList = Response;
-       // console.log(Response);
- 
-      }
-    )
-  }
-
 
   searchByCode(e:any){
 
@@ -104,35 +96,45 @@ export class OpeningStockComponent implements OnInit {
       
           //// push the data using index
           if (condition == undefined) {
+
+            this.global.getProdDetail(0,this.PBarcode).subscribe(
+              (Response:any)=>{
+                //  console.log(Response);
       
-          //console.log(data);
-          this.tableDataList.push({
-            productID:row.productID,
-            productTitle:row.productTitle,
-            barcode:row.barcode,
-            productImage:row.productImage,
-            quantity:1,
-            avgCostPrice:row.avgCostPrice,
-            costPrice:row.costPrice,
-            salePrice:row.salePrice,
-            expiryDate:this.global.dateFormater(new Date(),'-'),
-            batchNo:'-',
-            batchStatus:'-',
-            uomID:row.uomID,
-            packing:1,
-            discInP:0,
-            discInR:0,
-      
-          })
-      
-          this.productImage = row.productImage;
-        
+                
+                  this.tableDataList.push({
+                    productID:Response[0].productID,
+                    productTitle:Response[0].productTitle,
+                    barcode:Response[0].barcode,
+                    productImage:Response[0].productImage,
+                    quantity:1,
+                    costPrice:Response[0].costPrice,
+                    avgCostPrice:Response[0].avgCostPrice,
+                    salePrice:Response[0].salePrice,
+                    expiryDate:this.global.dateFormater(new Date(),'-'),
+                    batchNo:'-',
+                    batchStatus:'-',
+                    uomID:Response[0].uomID,
+                    packing:1,
+                    discInP:0,
+                    discInR:0,
+                    aq:Response[0].aq,
+              
+                  })
+                  this.getTotal();
+                 
+                
+               this.productImage = Response[0].productImage;
+              }
+            )
+
+          
           this.PBarcode = '';
           $('#searchProduct').trigger('focus');
         }else {
           this.tableDataList[index].quantity += 1;
           this.productImage = this.tableDataList[index].productImage;
-       
+    
           this.PBarcode = '';
           $('#searchProduct').trigger('focus');
         }
@@ -159,31 +161,37 @@ export class OpeningStockComponent implements OnInit {
 
     if (condition == undefined) {
 
-    //console.log(data);
-    this.tableDataList.push({
-      productID:data.productID,
-      productTitle:data.productTitle,
-      barcode:data.barcode,
-      productImage:data.productImage,
-      quantity:1,
-      avgCostPrice:data.avgCostPrice,
-      costPrice:data.costPrice,
-      salePrice:data.salePrice,
-      expiryDate:this.global.dateFormater(new Date(),'-'),
-      batchNo:'-',
-      batchStatus:'-',
-      uomID:data.uomID,
-      packing:1,
-      discInP:0,
-      discInR:0,
-     
+      this.global.getProdDetail(data.productID,'').subscribe(
+        (Response:any)=>{
+          //  console.log(Response);
 
-    })
+          
+            this.tableDataList.push({
+              productID:Response[0].productID,
+              productTitle:Response[0].productTitle,
+              barcode:Response[0].barcode,
+              productImage:Response[0].productImage,
+              quantity:1,
+              costPrice:Response[0].costPrice,
+              avgCostPrice:Response[0].avgCostPrice,
+              salePrice:Response[0].salePrice,
+              expiryDate:this.global.dateFormater(new Date(),'-'),
+              batchNo:'-',
+              batchStatus:'-',
+              uomID:Response[0].uomID,
+              packing:1,
+              discInP:0,
+              discInR:0,
+              aq:Response[0].aq,
+        
+            })
+            this.getTotal();
+           
+          
+         this.productImage = Response[0].productImage;
+        }
+      )
 
-    // console.log(this.tableDataList);
-
-    this.productImage = data.productImage;
-    
     this.PBarcode = '';
     $('#searchProduct').trigger('focus');
   }else {
@@ -380,6 +388,16 @@ export class OpeningStockComponent implements OnInit {
    
   SaveBill(type:any){
     var isValidFlag = true;
+    this.tableDataList.forEach((p:any) => {       
+        if(p.quanity == 0 || p.quantity == '0' || p.quanity == '' || p.quanity == undefined || p.quanity == null){
+          this.msg.WarnNotify('('+p.productTitle+') Quantity is not Valid');
+           isValidFlag = false;
+          //  console.log(p)
+          //  console.log(this.tableDataList)
+           return;
+        }
+      });
+       
        
     if(this.tableDataList == ''){
       this.msg.WarnNotify('Atleast One Product Must Be Selected')

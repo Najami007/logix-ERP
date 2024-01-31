@@ -7,6 +7,7 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
+import { AddcityComponent } from '../settings/city/addcity/addcity.component';
 
 @Component({
   selector: 'app-party',
@@ -86,14 +87,14 @@ export class PartyComponent implements OnInit{
 
 
 addCity(){
-  // this.dialogue.open(AddcityformComponent,{
-  //   width:"40%",
+  this.dialogue.open(AddcityComponent,{
+    width:"40%",
 
-  // }).afterClosed().subscribe(val=>{
-  //   if(val == 'Update'){
-  //     this.getCityNames();
-  //   }
-  // })
+  }).afterClosed().subscribe(val=>{
+    if(val == 'Update'){
+      this.getCityNames();
+    }
+  })
 }
 
 

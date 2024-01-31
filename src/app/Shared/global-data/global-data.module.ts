@@ -676,6 +676,52 @@ export class GlobalDataModule implements OnInit {
 
   }
 
+  prodFocusedRow = 0;
+  handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[]){
+
+
+    /////move down
+    if(e.keyCode == 40|| e.keyCode == 9){
+
+ 
+      if(prodList.length > 1 ){
+       this.prodFocusedRow += 1;
+       if (this.prodFocusedRow >= prodList.length) {      
+         this.prodFocusedRow -= 1  
+     } else {
+         var clsName = cls + this.prodFocusedRow;    
+        //  alert(clsName);
+         $(clsName).trigger('focus');
+         e.which = 9;   
+         $(clsName).trigger(e)       
+     }}
+   }
+ 
+ 
+      //Move up
+      if (e.keyCode == 38) {
+ 
+       if (this.prodFocusedRow == 0) {
+           $(endFocus).trigger('focus');
+           this.prodFocusedRow = 0;
+  
+       }
+ 
+       if (prodList.length > 1) {
+ 
+           this.prodFocusedRow -= 1;
+ 
+           var clsName = cls + this.prodFocusedRow;
+          //  alert(clsName);
+           $(clsName).trigger('focus');
+           
+ 
+       }
+ 
+   }
+
+  }
+
 
 
  public getProducts(): Observable<any>{

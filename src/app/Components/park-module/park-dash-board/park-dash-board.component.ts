@@ -46,7 +46,7 @@ export class ParkDashBoardComponent {
     this.http.get(environment.mainApi+this.globalData.parkLink+'GetTotals').subscribe(
       (Response:any)=>{
         this.cardDataList = Response;
-        // console.log(Response);  
+         console.log(Response);  
       }
     )
   }
@@ -183,7 +183,7 @@ export class ParkDashBoardComponent {
     this.http.get(environment.mainApi+this.globalData.parkLink+'GetActiveSwingQtyTotal').subscribe(
       (Response:any) =>{
         this.activeMemberList = Response;
-        console.log(Response);
+        //console.log(Response);
       }
     )
   }

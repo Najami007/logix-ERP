@@ -1,0 +1,248 @@
+<div class="body">
+
+
+    <div class="d-flex text-center justify-content-around pt-2 ps-1 pe-1">
+
+        <button mat-raised-button class="col-lg-1 " color="primary" data-bs-toggle="modal" data-bs-target="#credential" (click)="reportType = 'cw'">CategoryWise</button>
+        <button mat-raised-button class="col-lg-2 " color="primary" data-bs-toggle="modal" data-bs-target="#credential" (click)="reportType = 'scw'">Sub-CategoryWise</button>
+        <button mat-raised-button class="col-lg-1 " color="primary" data-bs-toggle="modal" data-bs-target="#credential" (click)="reportType = 'bw'">BrandWise</button>
+        <button mat-raised-button class="col-lg-2 me-1" color="primary" data-bs-toggle="modal" data-bs-target="#credential" (click)="reportType = 'lw'">Locationwise</button>
+        <button mat-raised-button class="col-lg-1 me-1" color="primary" data-bs-toggle="modal" data-bs-target="#credential" (click)="reportType = 'tw'">Typewise</button>
+        <button mat-raised-button class="col-lg-2 "  color="primary" (click)="reportType = 'full'">Get Full</button>
+
+
+
+        <div class="modal fade" id="credential" tabindex="-1" aria-labelledby="credentialLabel" >
+            <div class="modal-dialog  modal-l">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h2 class="modal-title" id="credentialLabel">Select Credentials</h2>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+                </div>
+                <div class="modal-body">
+                    <mat-form-field appearance="outline" *ngIf="reportType == 'cw'|| reportType == 'scw'" class="w-100">
+                        <mat-label>Category</mat-label>
+                        <mat-select [(ngModel)]="categoryID">
+                            <mat-option><ngx-mat-select-search #cat [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of CategoriesList |filter:cat.value" [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
+                        </mat-select>
+                     </mat-form-field>
+
+                     <mat-form-field appearance="outline" *ngIf="reportType == 'scw' " class="w-100">
+                        <mat-label>Sub Category</mat-label>
+                        <mat-select [(ngModel)]="subCategoryID">
+                            <mat-option><ngx-mat-select-search #subcat [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of SubCategoriesList |filter:subcat.value" [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
+                        </mat-select>
+                     </mat-form-field>
+                     <mat-form-field appearance="outline" class="w-100" *ngIf="reportType == 'bw'">
+                        <mat-label>Brand</mat-label>
+                        <mat-select [(ngModel)]="brandID">
+                            <mat-option><ngx-mat-select-search #brand [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of BrandList |filter:brand.value" [value]="item.brandID">{{item.brandTitle}}</mat-option>
+                        </mat-select>
+                     </mat-form-field>
+                     <mat-form-field appearance="outline" class="w-100" *ngIf="reportType == 'tw'"> 
+                        <mat-label>Type</mat-label>
+                        <mat-select [(ngModel)]="typeID">
+                            <mat-option><ngx-mat-select-search #type [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of ProductTypeList |filter:type.value" [value]="item.productTypeID">{{item.productTypeTitle}}</mat-option>
+                        </mat-select>
+                     </mat-form-field>
+    
+                 <mat-form-field appearance="outline" class="w-100" *ngIf="reportType == 'lw'">
+                    <mat-label>Location</mat-label>
+                    <mat-select [(ngModel)]="locationID">
+                        <mat-option><ngx-mat-select-search #location [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of locationList |filter:location.value" [value]="item.locationID">{{item.locationTitle}}</mat-option>
+                    </mat-select>
+                 </mat-form-field>
+                   
+            
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-success" data-bs-dismiss="modal" (click)="getReport()">Get Report</button>
+                    <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal"  >Close </button>
+                  </div>
+                
+            
+              </div>
+            </div>
+          </div>
+
+    </div>
+
+    
+
+        <div >
+            <hr>
+
+            <div class="pt-2 d-flex m-1 justify-content-between">
+                <mat-form-field class="col-lg-11" appearance="outline">
+                    <input matInput #InvSearch />
+                </mat-form-field>
+                <button mat-fab class="col-lg-1" color="primary" (click)="print()"><mat-icon>print</mat-icon></button>
+            </div>
+              <!------------------- Print Area ---------------------- -->
+              <div id="printRpt" class=" printDiv p-3" >
+
+
+                <!-------------------------    Top Logo Section -------------------->
+               <div class="hide">
+                <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                    <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
+                    </span>
+                    <span >
+                        
+    
+                        <h1 class="companyName">{{item.companyName}}</h1>
+                        
+    
+                        <p class="rptTitle" style="margin-top:-20px">Inventory Report </p>
+                        <h4 class="projtitl"  style="margin-top:-20px;">Project:</h4>
+                      
+                    </span>
+                    <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                    </span>
+            
+            
+                </div>
+               </div>
+               <hr class="hide">
+                <table class="table table-logix hide">
+    
+                    <thead >
+                        <tr class="text-center">
+                            <th>S#</th>
+                            <th >Product Title</th>
+                            <th >Barcode</th>
+                            <th >Cost Price</th>
+                            <th>Avg Cost Price</th>
+                            <th >Sale Price</th>
+                            <th >In</th>
+                            <th >Out</th>
+                            <th >Balance</th>
+                            <th>Cost Total</th>
+                            <th>Avg Cost Total</th>
+                            <th>Sale Total  </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of inventoryList index as index">
+                            <td class="text-center">{{index+1}}</td>
+                            <td>{{item.productTitle}}</td>
+                            <td>{{item.barcode}}</td>
+                            <td class="text-end">{{item.costPrice |number:'1.0-2'}}</td>
+                            <td class="text-end">{{item.avgCostPrice|number:'1.0-2'}}</td>
+                            <td class="text-end">{{item.salePrice|number:'1.0-2'}}</td>
+                            <td class="text-center">{{item.qtyIn}}</td>
+                            <td class="text-center">{{item.qtyOut}}</td>
+                            <td class="text-center">{{item.qtyIn - item.qtyOut|number:'1.0-2'}}</td>
+                            <td class="text-end">{{item.costPrice * (item.qtyIn - item.qtyOut)|number:'1.0-2'}}</td>
+                            <td class="text-end">{{item.avgCostPrice * (item.qtyIn - item.qtyOut)|number:'1.0-2'}}</td>
+                            <td class="text-end">{{item.salePrice * (item.qtyIn - item.qtyOut)|number:'1.0-2'}}</td>
+                        </tr>
+                        <tr>
+                            <th colspan="8"></th>
+                            <th>{{balanceQtyTotal |number:'1.0-2'}}</th>
+                            <th>{{costTotal |number:'1.0-2'}}</th>
+                            <th>{{avgCostTotal |number:'1.0-2'}}</th>
+                            <th>{{saleTotal |number:'1.0-2'}}</th>
+                        </tr>
+                      
+                      
+    
+    
+                    </tbody>
+                    
+                </table>
+
+            </div>
+
+
+
+         <div class="container-fluid">
+            <table class="table table-logix">
+    
+                <thead >
+                    <tr class="text-center">
+                        <th>S#</th>
+                        <th >Product Title</th>
+                        <th >Barcode</th>
+                        <th >Cost Price</th>
+                        <th>Avg Cost Price</th>
+                        <th >Sale Price</th>
+                        <th >In</th>
+                        <th >Out</th>
+                        <th >Balance</th>
+                        <th>Cost Total</th>
+                        <th>Avg Cost Total</th>
+                        <th>Sale Total  </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of inventoryList |filter:InvSearch.value |paginate:{
+                        itemsPerPage : tableSize,
+                        currentPage : page,
+                        totalItems :    count,
+                    }  ; index as index">
+                        <td class="text-center">{{index+1}}</td>
+                        <td>{{item.productTitle}}</td>
+                        <td>{{item.barcode}}</td>
+                        <td class="text-end">{{item.costPrice |number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.avgCostPrice|number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.salePrice|number:'1.0-2'}}</td>
+                        <td class="text-center">{{item.qtyIn}}</td>
+                        <td class="text-center">{{item.qtyOut}}</td>
+                        <td class="text-center">{{item.qtyIn - item.qtyOut|number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.costPrice * (item.qtyIn - item.qtyOut)|number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.avgCostPrice * (item.qtyIn - item.qtyOut)|number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.salePrice * (item.qtyIn - item.qtyOut)|number:'1.0-2'}}</td>
+                    </tr>
+
+                    <tr>
+                        <th colspan="8"></th>
+                        <th>{{balanceQtyTotal |number:'1.0-2'}}</th>
+                        <th>{{costTotal |number:'1.0-2'}}</th>
+                        <th>{{avgCostTotal |number:'1.0-2'}}</th>
+                        <th>{{saleTotal |number:'1.0-2'}}</th>
+                    </tr>
+                  
+
+
+                </tbody>
+                
+            </table>
+
+            <div class="d-flex" >
+                <!-- <mat-hint class="me-1 text-secondary">Total Rows : ({{SavedVoucherData.length || 0}})    </mat-hint> -->
+                <pagination-controls
+                previousLabel="Prev"
+                nextLabel="Next"
+                (pageChange)="onTableDataChange($event)"
+                ></pagination-controls>
+                
+
+                <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+                <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);" (change)="onTableSizeChange($event)">
+                    <option *ngFor=" let item of tableSizes">{{item}}</option>
+                </select>
+                
+            </div>
+         </div>
+    
+        </div>
+
+
+
+
+
+</div>

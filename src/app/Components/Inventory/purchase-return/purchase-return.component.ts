@@ -10,6 +10,8 @@ import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 
 import * as $ from 'jquery';
+import Swal from 'sweetalert2';
+import { AddpartyComponent } from '../../Company/party/addparty/addparty.component';
 
 @Component({
   selector: 'app-purchase-return',
@@ -131,6 +133,26 @@ export class PurchaseReturnComponent implements OnInit{
   }
 
 
+  hide(type:any){
+
+    if(type == 'hide'){
+      $('#totalRow').hide(500);
+      setTimeout(() => {
+        this.hideTotalFlag = false;
+      }, 400);
+
+    }
+
+    if(type == 'unhide'){
+      $('#totalRow').show(500);
+        setTimeout(() => {
+          this.hideTotalFlag = true;
+        }, 500);
+    }
+      
+   
+   
+  }
 
 
 
@@ -273,13 +295,15 @@ export class PurchaseReturnComponent implements OnInit{
   }else {
     this.tableDataList[index].Quantity += 1;
     this.productImage = this.tableDataList[index].productImage;
-    $('#searchProduct').trigger('focus');
   }
   this.app.stopLoaderDark();
 
     this.productName = '';
     this.getTotal();
-    return false;
+    setTimeout(() => {
+      $('#searchProduct').trigger('focus');
+     }, 500);
+  
   }
 
 
@@ -298,19 +322,66 @@ export class PurchaseReturnComponent implements OnInit{
     }
   }
 
+  delRow(item: any) {
+    Swal.fire({
+      title:'Alert!',
+      text:'Confirm to Delete Product',
+      position:'center',
+      icon:'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirm',
+    }).then((result)=>{
 
-  delRow(item:any) {
-    var index = this.tableDataList.indexOf(item);
-    this.tableDataList.splice(index, 1);
-    this.getTotal();
+      if(result.isConfirmed){
+   
+        var index = this.tableDataList.indexOf(item);
+        this.tableDataList.splice(index, 1);
+        this.getTotal();
+  
+
+    }
+   }
+   )
+    
+  
     
   }
+
+
 
 
   showImg(item:any){
     var index = this.tableDataList.findIndex((e:any)=> e.ProductID == item.ProductID);
     this.productImage = this.tableDataList[index].productImage;
   }
+
+
+  focusto(cls:any,e:any){ 
+
+    setTimeout(() => {
+     $(cls).trigger('focus');
+    }, 1500);
+ 
+    if(cls == 'ovhd' && e.keyCode == 13 ){
+     if(e.target.value == ''){
+       $('#ovhd').trigger('focus')
+     }
+    }
+ 
+    if(cls == 'disc' && e.keyCode == 13){
+     $('#disc').trigger('focus');
+    }
+ 
+    if(cls == 'savebtn' && e.keyCode == 13  ){
+     $('#savebtn').trigger('focus');
+    }
+ 
+    
+ 
+   }
+
 
   rowFocused = 0;
   prodFocusedRow= 0;
@@ -322,6 +393,8 @@ export class PurchaseReturnComponent implements OnInit{
       if(this.tableDataList.length >= 1 ){ 
         this.rowFocused = 0; 
          $('.qty0').trigger('focus');
+         e.which = 9;   
+         $('.qty0').trigger(e) ; 
 
       }
      }
@@ -339,17 +412,23 @@ export class PurchaseReturnComponent implements OnInit{
 
 
     /////move down
-    if(e.keyCode == 40){
+    if(e.keyCode == 40 || e.keyCode == 9){
 
- 
+     
       if(this.productList.length > 1 ){
        this.prodFocusedRow += 1;
        if (this.prodFocusedRow >= this.productList.length) {      
          this.prodFocusedRow -= 1  
      } else {
          var clsName = cls + this.prodFocusedRow;    
-        //  alert(clsName);
-         $(clsName).trigger('focus');    
+         e.preventDefault();
+          if(this.prodFocusedRow > 0){
+            $(clsName).trigger('focus');
+          }
+          e.which = 9;   
+          $(clsName).trigger(e) ; 
+         
+        
      }}
    }
  
@@ -358,7 +437,7 @@ export class PurchaseReturnComponent implements OnInit{
       if (e.keyCode == 38) {
  
        if (this.prodFocusedRow == 0) {
-           $(".searchProduct").trigger('focus');
+           $("#prodName").trigger('focus');
            this.prodFocusedRow = 0;
   
        }
@@ -370,6 +449,8 @@ export class PurchaseReturnComponent implements OnInit{
            var clsName = cls + this.prodFocusedRow;
           //  alert(clsName);
            $(clsName).trigger('focus');
+           e.which = e.shift + 9;   
+           $(clsName).trigger(e) ; 
            
  
        }
@@ -415,7 +496,9 @@ export class PurchaseReturnComponent implements OnInit{
         this.rowFocused -= 1  
     } else {
         var clsName = cls + this.rowFocused;    
-        $(clsName).trigger('focus');    
+        $(clsName).focus();
+        // e.when = 9;
+        // $(clsName).trigger(e)    ;
     }}
   }
 
@@ -458,6 +541,16 @@ export class PurchaseReturnComponent implements OnInit{
  
   }
 
+  addParty(){
+    this.dialogue.open(AddpartyComponent,{
+      width:"50%"
+    }).afterClosed().subscribe(value=>{
+      if(value == 'Update'){
+        this.getSuppliers();
+      }
+    });
+  }
+
 
 
 
@@ -466,21 +559,28 @@ export class PurchaseReturnComponent implements OnInit{
     var isValidFlag = true;
   this.tableDataList.forEach((p:any) => {
         
-      if(p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined ){
-        this.msg.WarnNotify('('+p.ProductTitle+') Cost Price is not Valid');
-         isValidFlag = false;
-        //  console.log(p)
-         return;
-      }
+    if(p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null ){
+      this.msg.WarnNotify('('+p.ProductTitle+') Cost Price is not Valid');
+       isValidFlag = false;
+      //  console.log(p)
+       return;
+    }
 
-      if(p.Quanity == 0 || p.Quantity == '0' ){
-        this.msg.WarnNotify('('+p.ProductTitle+') Quantity is not Valid');
-         isValidFlag = false;
-        //  console.log(p)
-        //  console.log(this.tableDataList)
-         return;
-      }
-      
+    if( p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null ){
+      this.msg.WarnNotify('('+p.ProductTitle+') Sale Price is not Valid');
+       isValidFlag = false;
+      //  console.log(p)
+       return;
+    }
+
+    if(p.Quanity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == ''){
+      this.msg.WarnNotify('('+p.ProductTitle+') Quantity is not Valid');
+       isValidFlag = false;
+      //  console.log(p)
+      //  console.log(this.tableDataList)
+       return;
+    }
+    
      
    
     });
@@ -653,6 +753,7 @@ export class PurchaseReturnComponent implements OnInit{
     this.invRemarks = '';
     this.holdBtnType = 'Hold';
     this.holdBillList = [];
+    this.supplierDetail = [];
 
 
 
@@ -774,6 +875,7 @@ export class PurchaseReturnComponent implements OnInit{
     this.bookerID = item.bookerID;
     this.partyID = item.partyID;
     this.subTotal = item.billTotal;
+    this.onPartySelected();
 
     this.getBillDetail(item.invBillNo).subscribe(
       (Response:any)=>{

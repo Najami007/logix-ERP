@@ -34,7 +34,9 @@
                                 [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                         <mat-option *ngFor="let item of suppliersList | filter:partySearch.value"
                             [value]="item.partyID">{{item.partyName}}</mat-option>
+                        
                     </mat-select>
+                    <mat-icon class="cursorPointer" (click)="addParty()" matSuffix>add</mat-icon>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="col-lg-2 p-1">
                     <mat-label>Location</mat-label>
@@ -82,7 +84,7 @@
         <div class="col-lg-1 border border-primary">
             <div class="text-center" *ngIf="tableDataList != ''"
                 (click)="this.global.showProductImage(this.productImage,0)">
-                <img [src]="productImage" alt="" height="110" width="110">
+                <img [src]="productImage" alt="" height="140" width="140">
             </div>
         </div>
 
@@ -182,7 +184,7 @@
             <div class="d-flex pb-2 flex-column border-bottom">
                 <div class=" pt-3   ">
                     <p style="font-size: 15px;color: gainsboro;">TOTAL</p>
-                    <p style="font-size: 70px;color: rgb(255, 0, 0);" class="font-digit text-end">{{subTotal |number}}
+                    <p style="font-size: 70px;color: rgb(255, 0, 0);" class="font-digit text-end">{{subTotal |number:'1.0-2'}}
                     </p>
                 </div>
                 <div class="pt-3 ">
@@ -200,7 +202,7 @@
                 <div class="">
                     <p style="font-size: 15px;color: gainsboro">NET TOTAL</p>
                     <p style="font-size: 70px;color: rgb(55, 255, 0);" class="font-digit pt-1 text-end">{{netTotal || 0
-                        |number}}</p>
+                        |number:'1.0-2'}}</p>
                 </div>
             </div>
 
@@ -226,8 +228,8 @@
                     <div class="d-flex flex-column">
                         <mat-form-field appearance="outline" class="w-100">
                             <input type="text" matInput #pName [(ngModel)]="productName" id="prodName"
-                                (keydown)="this.changeFocus($event,'.fintProd')"
-                                placeholder="Search Barcode / Name (Alt + a)" class="fintProd" autocomplete="off"
+                                (keydown)="this.changeFocus($event,'.fintProd')" 
+                                placeholder="Search Barcode / Name (Alt + a)" class="fintProd prodName" autocomplete="off"
                                 accesskey="a">
 
                         </mat-form-field>
@@ -235,11 +237,11 @@
 
                         <div class="SearchConatiner cursorPointer"
                             *ngIf="productName != '' && productName != undefined">
-                            <mat-card class="card" *ngFor="let item of productList | filter:productName index as index"
+                            <mat-card class="card" *ngFor="let item of productList | filter:productName     index as index"
                                 (click)="holdDataFunction(item)">
                                 <button data-bs-dismiss="modal"
-                                    style="height: 40px; background: none;border: none;text-align: left;"
-                                    class="prodRow{{index}} prodBtn " (keydown)="handleFocus(item,$event,'.prodRow')">
+                                    style="height: 40px; background: none;text-align: left;"
+                                    class="prodRow{{index}} prodBtn border-0 border-bottom border-dark" (keydown)="this.global.handleProdFocus(item,$event,'.prodRow','.prodName',productList)">
                                     <div class="justify-content-between d-flex">
                                         <div> {{item.productTitle}}</div>
                                         <div><b>({{item.barcode}})</b></div>

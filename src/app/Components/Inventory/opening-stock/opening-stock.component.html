@@ -46,7 +46,7 @@
                     *ngIf="PBarcode != '' && PBarcode != undefined">
                     <div class="card " *ngFor="let item of productList| filter:PBarcode index as index"
                         (click)="holdDataFunction(item)">
-                        <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn" (keydown)="handleFocus(item,$event,'.prodRow')">{{item.productTitle}}
+                        <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn" (keydown)="this.global.handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">{{item.productTitle}}
                             (<b>{{item.barcode}}</b> )</button>
                     </div>
                 </div>
@@ -68,7 +68,9 @@
                         <th>Quantity</th>
                         <th>Avg Cost</th>
                         <th>Cost</th>
-                        <th>Total</th>
+                        <th>Avg Total</th>
+                        <th>Cost Total</th>
+                        <th>AQ</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -90,6 +92,7 @@
                               <td>{{item.costPrice | number:'1.0-2'}}</td>
                           <td>{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
                         <td>{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
+                        <td class="text-center">{{item.aq}}</td>
                         <td class="cursorPointer"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
                       </tr>
                       <tr>
@@ -98,6 +101,8 @@
                           <th colspan="2"></th>
                           <th>{{CostTotal |number:'1.0-2'}}</th>
                           <th>{{avgCostTotal |number:'1.0-2'}}</th>
+                          <th></th>
+                          
                           <td class="text-center"><mat-icon class="cursorPointer " (click)="reset()">delete</mat-icon></td>
                       </tr>
                 </tbody>
@@ -117,33 +122,12 @@
 
        <div class="p-1">
         <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
-            <div class="text-center" *ngIf="tableDataList != ''" data-bs-toggle="modal" data-bs-target="#picModal">
-                <img [src]="productImage" alt="" height="190" width="200">
+            <div class="text-center" *ngIf="tableDataList != ''" >
+                <img [src]="productImage" alt="" height="190" width="200" (click)="this.global.showProductImage(this.productImage,0)">
             </div>
         </mat-card>
 
 
-        <!---------------------  Bigger Picture Modal ---------------->
-        
-        <div class="modal fade" #picModal id="picModal" tabindex="-1" aria-labelledby="picModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                 
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
-                </div>
-                <div class="modal-body">
-                    <div class="p-1 col-lg-1" *ngIf="tableDataList != ''"  >
-                        <img [src]="productImage" alt="" height="400" width="400">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
-             
-                </div>
-              </div>
-            </div>
-          </div>
        </div>
 
        <div class="p-1">
@@ -151,7 +135,7 @@
            <mat-card-content>
             <div class="justify-content-around d-flex" >
                 <p class="fs-40">Total</p>
-                <p class="font-digit fs-50" >{{subTotal |number:'1.0-0'}}</p>
+                <p class="font-digit fs-50" >{{subTotal |number:'1.0-2'}}</p>
             </div>
            </mat-card-content>
         </mat-card>

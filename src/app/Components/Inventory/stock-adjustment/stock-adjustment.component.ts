@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { Router } from '@angular/router';
 import { Observable, retry } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-stock-adjustment',
@@ -23,7 +24,7 @@ export class StockAdjustmentComponent implements OnInit {
     private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
-    private global:GlobalDataModule,
+    public global:GlobalDataModule,
     private dialog:MatDialog,
     private route:Router
   ){
@@ -36,6 +37,9 @@ export class StockAdjustmentComponent implements OnInit {
     this.global.getCompany().subscribe((data)=>{
       this.companyProfile = data;
     });
+
+    this.global.getProducts().subscribe(
+      (data:any)=>{this.productList = data;})
   }
 
 
@@ -43,7 +47,6 @@ export class StockAdjustmentComponent implements OnInit {
   ngOnInit(): void {
    this.global.setHeaderTitle('Stock Adjustment');
    this.getLocation();
-   this.getProducts();
 
   }
 
@@ -77,17 +80,6 @@ export class StockAdjustmentComponent implements OnInit {
 
 
 
-  getProducts(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetActiveProduct').subscribe(
-      (Response)=>{
-        this.productList = Response;
-       // console.log(Response);
- 
-      }
-    )
-  }
-
-
   searchByCode(e:any){
 
     if(this.PBarcode !== ''){
@@ -105,28 +97,36 @@ export class StockAdjustmentComponent implements OnInit {
       
           //// push the data using index
           if (condition == undefined) {
-      
-          //console.log(data);
-          this.tableDataList.push({
-            productID:row.productID,
-            productTitle:row.productTitle,
-            barcode:row.barcode,
-            productImage:row.productImage,
-            quantity:1,
-            avgCostPrice:row.avgCostPrice,
-            costPrice:row.costPrice,
-            salePrice:row.salePrice,
-            expiryDate:this.global.dateFormater(new Date(),'-'),
-            batchNo:'-',
-            batchStatus:'-',
-            uomID:row.uomID,
-            packing:1,
-            discInP:0,
-            discInR:0,
-      
-          })
-      
-          this.productImage = row.productImage;
+
+            this.global.getProdDetail(0,this.PBarcode).subscribe(
+              (Response:any)=>{
+  
+                  this.tableDataList.push({
+                    productID:Response[0].productID,
+                    productTitle:Response[0].productTitle,
+                    barcode:Response[0].barcode,
+                    productImage:Response[0].productImage,
+                    quantity:1,
+                    costPrice:Response[0].costPrice,
+                    avgCostPrice:Response[0].avgCostPrice,
+                    salePrice:Response[0].salePrice,
+                    expiryDate:this.global.dateFormater(new Date(),'-'),
+                    batchNo:'-',
+                    batchStatus:'-',
+                    uomID:Response[0].uomID,
+                    packing:1,
+                    discInP:0,
+                    discInR:0,
+                    aq:Response[0].aq,
+              
+                  })
+                  this.getTotal();
+                 
+                
+               this.productImage = Response[0].productImage;
+              }
+            )
+
           
           this.PBarcode = '';
           $('#searchProduct').trigger('focus');
@@ -160,31 +160,37 @@ export class StockAdjustmentComponent implements OnInit {
 
     if (condition == undefined) {
 
-    //console.log(data);
-    this.tableDataList.push({
-      productID:data.productID,
-      productTitle:data.productTitle,
-      barcode:data.barcode,
-      productImage:data.productImage,
-      quantity:1,
-      avgCostPrice:data.avgCostPrice,
-      costPrice:data.costPrice,
-      salePrice:data.salePrice,
-      expiryDate:this.global.dateFormater(new Date(),'-'),
-      batchNo:'-',
-      batchStatus:'-',
-      uomID:data.uomID,
-      packing:1,
-      discInP:0,
-      discInR:0,
-     
+      this.global.getProdDetail(data.productID,'').subscribe(
+        (Response:any)=>{
+          //  console.log(Response);
 
-    })
+          
+            this.tableDataList.push({
+              productID:Response[0].productID,
+              productTitle:Response[0].productTitle,
+              barcode:Response[0].barcode,
+              productImage:Response[0].productImage,
+              quantity:1,
+              costPrice:Response[0].costPrice,
+              avgCostPrice:Response[0].avgCostPrice,
+              salePrice:Response[0].salePrice,
+              expiryDate:this.global.dateFormater(new Date(),'-'),
+              batchNo:'-',
+              batchStatus:'-',
+              uomID:Response[0].uomID,
+              packing:1,
+              discInP:0,
+              discInR:0,
+              aq:Response[0].aq,
+        
+            })
+            this.getTotal();
+           
+          
+         this.productImage = Response[0].productImage;
+        }
+      )
 
-    // console.log(this.tableDataList);
-
-    this.productImage = data.productImage;
-    
     this.PBarcode = '';
     $('#searchProduct').trigger('focus');
   }else {
@@ -254,7 +260,7 @@ export class StockAdjustmentComponent implements OnInit {
 
 
     /////move down
-    if(e.keyCode == 40){
+    if(e.keyCode == 40|| e.keyCode == 9){
 
  
       if(this.productList.length > 1 ){
@@ -264,7 +270,9 @@ export class StockAdjustmentComponent implements OnInit {
      } else {
          var clsName = cls + this.prodFocusedRow;    
         //  alert(clsName);
-         $(clsName).trigger('focus');    
+         $(clsName).trigger('focus');
+         e.which = 9;   
+         $(clsName).trigger(e)       
      }}
    }
  
@@ -356,13 +364,32 @@ export class StockAdjustmentComponent implements OnInit {
   }
 
  
-
   delRow(item: any) {
-    var index = this.tableDataList.indexOf(item);
-    this.tableDataList.splice(index, 1);
-    this.getTotal();
+    Swal.fire({
+      title:'Alert!',
+      text:'Confirm to Delete Product',
+      position:'center',
+      icon:'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirm',
+    }).then((result)=>{
+
+      if(result.isConfirmed){
+   
+        var index = this.tableDataList.indexOf(item);
+        this.tableDataList.splice(index, 1);
+        this.getTotal();
+
+    }
+   }
+   )
+    
+  
     
   }
+
 
   changeValue(item:any){
     var myIndex = this.tableDataList.indexOf(item);
@@ -383,6 +410,16 @@ export class StockAdjustmentComponent implements OnInit {
    
   SaveBill(type:any){
     var isValidFlag = true;
+    this.tableDataList.forEach((p:any) => {       
+        if(p.quanity == 0 || p.quantity == '0' || p.quanity == '' || p.quanity == undefined || p.quanity == null){
+          this.msg.WarnNotify('('+p.productTitle+') Quantity is not Valid');
+           isValidFlag = false;
+          //  console.log(p)
+          //  console.log(this.tableDataList)
+           return;
+        }
+      });
+       
        
     if(this.tableDataList == ''){
       this.msg.WarnNotify('Atleast One Product Must Be Selected')
@@ -400,33 +437,50 @@ export class StockAdjustmentComponent implements OnInit {
       }
 
       if(isValidFlag == true){
+
+        Swal.fire({
+          title:'Alert!',
+          text:'Confirm to Save',
+          position:'center',
+          icon:'success',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Confirm',
+        }).then((result)=>{
+    
+          if(result.isConfirmed){
+            this.app.startLoaderDark();
+            this.http.post(environment.mainApi+this.global.inventoryLink+'InsertStockAdjustment',{
+             InvType: this.adjustmentType,
+             InvDate: this.global.dateFormater(this.invoiceDate,'-'),
+             LocationID: this.locationID,
+             ProjectID: 1,
+             BillTotal: this.subTotal,
+             NetTotal: this.subTotal ,
+             Remarks: this.invRemarks,
+             InvoiceDocument: "-",
+             InvDetail: JSON.stringify(this.tableDataList),    
+             UserID: this.global.getUserID(),
+             HoldInvNo:this.holdInvNo,
+            }).subscribe(
+              (Response:any)=>{
+                if(Response.msg == 'Data Saved Successfully'){
+                  this.msg.SuccessNotify(Response.msg);
+                  this.reset(); 
+                  this.app.stopLoaderDark();
+                 
+                }else{
+                  this.msg.WarnNotify(Response.msg);
+                  this.app.stopLoaderDark();
+                }
+              }
+            )
+        }
+       }
+       )
         
-           this.app.startLoaderDark();
-           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertStockAdjustment',{
-            InvType: this.adjustmentType,
-            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
-            LocationID: this.locationID,
-            ProjectID: 1,
-            BillTotal: this.subTotal,
-            NetTotal: this.subTotal ,
-            Remarks: this.invRemarks,
-            InvoiceDocument: "-",
-            InvDetail: JSON.stringify(this.tableDataList),    
-            UserID: this.global.getUserID(),
-            HoldInvNo:this.holdInvNo,
-           }).subscribe(
-             (Response:any)=>{
-               if(Response.msg == 'Data Saved Successfully'){
-                 this.msg.SuccessNotify(Response.msg);
-                 this.reset(); 
-                 this.app.stopLoaderDark();
-                
-               }else{
-                 this.msg.WarnNotify(Response.msg);
-                 this.app.stopLoaderDark();
-               }
-             }
-           )
+          
          
      
       }
@@ -589,6 +643,7 @@ export class StockAdjustmentComponent implements OnInit {
               packing:e.packing,
               discInP:e.discInP,
               discInR:e.discInR,
+              aq:e.aq,
             })
           });
           // this.getTotal();
