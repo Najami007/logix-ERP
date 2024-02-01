@@ -1,16 +1,37 @@
 <!-- <mat-drawer-container class="mat-drawer-container displayMainPage">
-     <mat-drawer mode="side" [opened]="sideBarOpen" class="mat-drawer">
-        <app-side-navbar></app-side-navbar>
-    </mat-drawer> 
-    <mat-drawer-content>
+ <mat-drawer mode="side" [opened]="sideBarOpen" class="mat-drawer">
         
-        
+    </mat-drawer>  
+ 
+        <app-top-nav-bar></app-top-nav-bar>
+        <router-outlet ></router-outlet>
+        <div class="header" >
+            <app-header></app-header>
+        </div>
        
-    </mat-drawer-content>
+
+
   </mat-drawer-container> -->
 
-  <app-top-nav-bar></app-top-nav-bar>
-  <router-outlet ></router-outlet>
+
+  <!-- <mat-drawer-container class="mat-drawer-container displayMainPage" autosize>
+    
+           <app-top-nav-bar></app-top-nav-bar>
+           <section>
+            <router-outlet ></router-outlet>
+           </section>
+        
+           <div class="header" >
+               <app-header></app-header>
+           </div>
+   
+     </mat-drawer-container> -->
+
+  <div class="h-100">
+    <app-top-nav-bar class=""></app-top-nav-bar>
   <div class="header" >
-      <app-header></app-header>
-  </div>
+    <app-header></app-header>
+</div>
+  <router-outlet ></router-outlet>
+
+  

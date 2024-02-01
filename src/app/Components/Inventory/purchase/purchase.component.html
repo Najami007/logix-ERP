@@ -1,6 +1,6 @@
 <div class="body h-100" style="background-color: rgb(245, 245, 245);">
 
-    <div class="d-flex  w-100 mb-1 shadow" style="position: fixed;z-index: 1000;background-color: rgb(245, 245, 245);">
+    <div class="d-flex  w-100 mb-1 shadow" style="position: fixed;z-index: 50;background-color: rgb(245, 245, 245);">
         <div class="row pb-3 justify-content-center col-lg-11  ps-3 pe-3">
 
             <div class="d-flex pt-1">
@@ -72,9 +72,9 @@
 
                 <div class="col-lg-3 text-end ">
 
-                    <button class=" w-25 btn btn-danger me-1" matTooltip="Retrieve Bill" data-bs-toggle="modal"
+                    <button  class=" w-25 btn btn-danger me-1" matTooltip="Retrieve Bill" data-bs-toggle="modal"
                         data-bs-target="#holdModal">Retrieve</button>
-                    <button class=" w-25 btn btn-primary " matTooltip="Hold Bill"
+                    <button *ngIf="crudList.c" class=" w-25 btn btn-primary " matTooltip="Hold Bill"
                         (click)="SaveBill('hold')">{{holdBtnType}}</button>
 
                 </div>
@@ -207,7 +207,7 @@
             </div>
 
             <div class="mt-2">
-                <button class=" w-50 btn btn-success" id="savebtn" (click)="SaveBill('purchase')">Save</button>
+                <button class=" w-50 btn btn-success" id="savebtn" *ngIf="crudList.c" (click)="SaveBill('purchase')">Save</button>
             </div>
         </div>
     </div>
@@ -217,8 +217,8 @@
     <!------------------------- Modal Window for Product Search by Name =----------------->
 
 
-    <div class="modal fade" id="prodModal" tabindex="-1" aria-labelledby="prodModalLabel">
-        <div class="modal-dialog  modal-xl">
+    <div class="modal fade" id="prodModal" tabindex="-1"  aria-labelledby="prodModalLabel">
+        <div class="modal-dialog modal-dialog-centered  modal-xl">
             <div class="modal-content">
                 <div class="modal-header align-content-center ">
                     <h2 class="modal-title" id="prodModalLabel">Search Product</h2>
@@ -268,7 +268,7 @@
 
 
     <div class="modal fade" id="holdModal" tabindex="-1" aria-labelledby="holdModalLabel">
-        <div class="modal-dialog  modal-xl">
+        <div class="modal-dialog  mt-5  modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h2 class="modal-title" id="holdModalLabel">Bill Details</h2>

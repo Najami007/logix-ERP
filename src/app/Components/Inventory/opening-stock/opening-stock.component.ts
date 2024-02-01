@@ -389,7 +389,7 @@ export class OpeningStockComponent implements OnInit {
   SaveBill(type:any){
     var isValidFlag = true;
     this.tableDataList.forEach((p:any) => {       
-        if(p.quanity == 0 || p.quantity == '0' || p.quanity == '' || p.quanity == undefined || p.quanity == null){
+        if(p.quantity == 0 || p.quantity == '0' || p.quantity == '' || p.quantity == undefined || p.quantity == null){
           this.msg.WarnNotify('('+p.productTitle+') Quantity is not Valid');
            isValidFlag = false;
           //  console.log(p)
@@ -464,6 +464,8 @@ export class OpeningStockComponent implements OnInit {
     this.holdInvNo = '-';
     this.IssueBillList = [];
     this.adjustmentType = '';
+    this.CostTotal = 0;
+    this.avgCostTotal = 0;
 
   }
 

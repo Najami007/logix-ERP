@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-sale',
@@ -39,30 +40,15 @@ export class SaleComponent implements OnInit {
   
   ngOnInit(): void {
     this.global.setHeaderTitle('Sale'); 
-    this.categoryID = this.categoriesList[0].id;
-    this.ProductList =  this.tempProductList.filter((e:any)=>e.catID == this.categoryID);
+    this.getCategories();
+    this.getAllRecipe();
+    
+    // this.RecipeList =  this.RecipeList.filter((e:any)=>e.recipeCatID == this.categoryID);
    
     
   }
 
-  categoriesList:any = [
-    {id:1,name:'Pizza'},
-    {id:2,name:'Burger'},
-    {id:3,name:'Cold Drinks'},
-    {id:4,name:'Desi Food'},
-    {id:5,name:'Continental Food'},
-    {id:6,name:'Beverages'},
-    // {id:5,name:'Continental Food'},
-    // {id:6,name:'Beverages'},
-    // {id:5,name:'Continental Food'},
-    // {id:6,name:'Beverages'},
-    // {id:5,name:'Continental Food'},
-    // {id:6,name:'Beverages'},
-    // {id:5,name:'Continental Food'},
-    // {id:6,name:'Beverages'},
-    // {id:5,name:'Continental Food'},
-    // {id:6,name:'Beverages'}
-  ]
+  categoriesList:any = [];
 
 
 
@@ -104,31 +90,52 @@ export class SaleComponent implements OnInit {
   ]
 
 
+
+
+
+
   tempQty:any;
   tempIndex:any;
 
-  searchCat:any;
   tableData:any = [];
   ProductList:any = [];
   orderTypeID:any = 1;
   categoryID:any = 0;
   subTotal:number = 0;
   netTotal:number = 0;
+  RecipeList:any = []
 
 
-  ///////////////////////////////////////////////////////////////
-  onCatSelected(id:any){
-    this.categoryID = id;
-   this.ProductList =  this.tempProductList.filter((e:any)=>e.catID == id);
-
+  getAllRecipe(){
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetAllRecipes').subscribe(
+      (Response:any)=>{
+        this.RecipeList = Response;
+        //console.log(Response);
+      }
+    )
   }
+
+
+
+  getCategories(){
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetRecipeCategories').subscribe(
+      (Response:any)=>{
+        this.categoriesList = Response;
+        this.categoryID = this.categoriesList[0].recipeCatID;
+    
+      }
+    )
+  }
+
+
+
 
 
  ///////////////////////////////////////////////////////////////
   getTotal(){
     this.subTotal = 0;
      this.tableData.forEach((e:any) => {
-      this.subTotal += e.price * e.qty;
+      this.subTotal += e.recipeSalePrice * e.quantity;
     });
   }
 
@@ -137,12 +144,13 @@ export class SaleComponent implements OnInit {
 
   productSelected(item:any){
 
-    var index = this.tableData.findIndex((e:any)=>e.id == item.id); 
+    var index = this.tableData.findIndex((e:any)=> e.recipeID == item.recipeID); 
     // console.log(index);
-    if(index != -1){
-      this.tableData[index].qty += 1; 
+    // alert( index)
+    if(index !== -1){
+      this.tableData[index].quantity = parseFloat( this.tableData[index].quantity +1 ); 
     }else{
-      this.tableData.push({id:item.id,name:item.pName,qty:1,price:item.pSale});
+      this.tableData.push({recipeID:item.recipeID,recipeTitle:item.recipeTitle,quantity:1,recipeSalePrice:item.recipeSalePrice});
 
     }
     this.getTotal();
@@ -150,7 +158,8 @@ export class SaleComponent implements OnInit {
 
   ///////////////////////////////////////////////////////////////
 
-  deleteRow(index:any){
+  deleteRow(item:any){
+    var index = this.tableData.indexOf(item);
     this.tableData.splice(index,1);
     this.getTotal();
   }
@@ -163,19 +172,16 @@ export class SaleComponent implements OnInit {
   
     if(type == 'add'){
 
-      this.tableData[index].qty += 1;
+      this.tableData[index].quantity = (parseFloat(this.tableData[index].quantity) + 1) ;
 
     }
     if(type == 'minus'){
-      if( this.tableData[index].qty > 1){
-        this.tableData[index].qty -= 1;
+      if( this.tableData[index].quantity > 1){
+        this.tableData[index].quantity = (parseFloat(this.tableData[index].quantity)- 1 );
       }
       
 
     }
-  
-
-   
 
     this.getTotal();
   }

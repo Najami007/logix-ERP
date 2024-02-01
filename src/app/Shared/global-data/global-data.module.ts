@@ -653,8 +653,9 @@ export class GlobalDataModule implements OnInit {
       }else  {
         this.dialog.open(ProductImgComponent, {
           width: '30%',
-          data: img
-        }).afterClosed().subscribe()
+          data: img,
+          disableClose:true,
+        },).afterClosed().subscribe()
       } 
     }
 

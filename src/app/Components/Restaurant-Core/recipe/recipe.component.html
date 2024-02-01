@@ -19,7 +19,9 @@
                             <mat-form-field class="w-50" appearance="outline">
                                 <mat-label>Category</mat-label>
                                 <mat-select [(ngModel)]="categoryID">
-                                    <mat-option *ngFor="let item of categoriesList" [value]="item.recipeCatID">{{item.recipeCatTitle}}</mat-option>
+                                    <mat-option><ngx-mat-select-search #catSearch [placeholderLabel]="'Search...'"
+                                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                                    <mat-option *ngFor="let item of categoriesList |filter:catSearch.value" [value]="item.recipeCatID">{{item.recipeCatTitle}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
 
@@ -80,16 +82,17 @@
                         <div class="col-lg-9  d-flex flex-column">
                             <mat-label class="text-primary">Search Barcode / Product</mat-label>
                             <input type="text" #pbarcode [(ngModel)]="PBarcode"
-                                (keydown)="searchByCode($event);this.focusToQty($event);" id="searchProduct"
+                                
+                                (keydown)="searchByCode($event);this.changeFocus($event,'.fintProd');" id="searchProduct"
                                 class="p-1 mb-2 searchProduct bg-transparent" placeholder="Alt + s" autofocus autocomplete="off"
                                 accesskey="s">
 
                             <div class="w-100 d-flex flex-column SearchConatiner cursorPointer"
                                 *ngIf="PBarcode != '' && PBarcode != undefined">
-                                <div class="card " *ngFor="let item of productList| filter:PBarcode"
+                                <div class="card " *ngFor="let item of productList| filter:PBarcode index as index"
                                     (click)="holdDataFunction(item)">
-                                    <button
-                                        style="background: none;border: none;text-align: left;">{{item.productTitle}}
+                                    <button (keydown)="this.global.handleProdFocus(item,$event,'.prodRow','.searchProduct   ',productList)"
+                                     class="prodRow{{index}}"   style="background: none;border: none;text-align: left;">{{item.productTitle}}
                                         (<b>{{item.barcode}}</b> )</button>
                                 </div>
                             </div>
@@ -131,8 +134,9 @@
                                     <td>{{item.avgCostPrice | number:'1.0-2'}}</td>
                                     <td>{{item.costPrice | number:'1.0-2'}}</td>
 
-                                    <td>{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
-                                    <td>{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
+                                    <td class="text-center">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
+                                    <td class="text-center">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
+                                    
                                     <td class="cursorPointer"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
                                 </tr>
                                 <tr>
@@ -173,6 +177,7 @@
                             <th>Cost</th>
                             <th>Sale</th>
                             <th>Edit</th>
+                            <th>Approve</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
@@ -184,6 +189,8 @@
                             <td>{{item.recipeSalePrice |number:'1.0-0'}}</td>
                             <td class="cursorPointer"><mat-icon class="text-success"
                                     (click)="edit(item)">edit</mat-icon></td>
+                            <td class="text-success"><mat-icon *ngIf="item.approvedStatus == false" (click)="approveRecipe(item)">check</mat-icon>
+                                <mat-icon *ngIf="item.approvedStatus == true">done_all</mat-icon></td>
                             <td class="cursorPointer"><mat-icon class="text-danger"
                                     (click)="delete(item)">delete</mat-icon></td>
 

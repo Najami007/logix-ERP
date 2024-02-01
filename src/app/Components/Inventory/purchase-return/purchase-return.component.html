@@ -22,10 +22,10 @@
                 <div class="col-lg-3 text-end ">
 
                     <button class="w-25 btn btn-danger me-1"
-                        data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>
-                    <button class=" w-25 btn btn-primary me-1  "
+                        data-bs-toggle="modal"  data-bs-target="#holdModal">Retrieve</button>
+                    <button class=" w-25 btn btn-primary me-1  " *ngIf="crudList.c"
                         (click)="SaveBill('hold')">{{holdBtnType}}</button>
-                    <button class=" w-25 btn btn-success " (click)="SaveBill('purchase')">Save</button>
+                    <button class=" w-25 btn btn-success " *ngIf="crudList.c" (click)="SaveBill('purchase')">Save</button>
                 </div>
             </div>
 
@@ -260,7 +260,7 @@
 
 
     <div class="modal fade" id="prodModal" tabindex="-1" aria-labelledby="prodModalLabel">
-        <div class="modal-dialog  modal-xl">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header align-content-center ">
                     <h2 class="modal-title" id="prodModalLabel">Search Product</h2>
@@ -308,7 +308,7 @@
 
 
     <div class="modal fade" id="holdModal" tabindex="-1" aria-labelledby="holdModalLabel">
-        <div class="modal-dialog  modal-xl">
+        <div class="modal-dialog mt-5  modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h2 class="modal-title" id="holdModalLabel">Bill Details</h2>

@@ -367,6 +367,8 @@ export class PurchaseComponent implements OnInit{
       if(e.keyCode == 40){
         if(this.productList.length >= 1 ){  
           $('.prodRow0').trigger('focus');
+          // e.which = 9;   
+          // $('.prodRow0').trigger(e)  ;
        }  
      }}
    }

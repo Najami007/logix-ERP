@@ -29,6 +29,7 @@ import { OpeningStockComponent } from './opening-stock/opening-stock.component';
 import { ProductImgComponent } from './product/product-img/product-img.component';
 import { LimittoPipe } from 'src/app/Shared/pipes/limitto.pipe';
 import { InvreportcatwiseComponent } from './InventoryReports/invreportcatwise/invreportcatwise.component';
+import { InvcredComponent } from './InventoryReports/invreportcatwise/invcred/invcred.component';
 
 
 
@@ -140,6 +141,7 @@ export const inventoryRoutes: Route[] = [
     ProductImgComponent,
     LimittoPipe,
     InvreportcatwiseComponent,
+    InvcredComponent,
     
  
 

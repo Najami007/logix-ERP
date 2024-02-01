@@ -203,6 +203,7 @@ export class ProductComponent implements OnInit {
 
 
   getSubCategory() {
+    this.SubCategoryID = 0;
     this.http.get(environment.mainApi + this.global.inventoryLink+'GetSubCategory').subscribe(
       (Response: any) => {
         this.SubCategoriesList = Response.filter((e: any) => e.categoryID == this.CategoryID);

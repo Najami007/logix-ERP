@@ -21,7 +21,7 @@ export class RecipeComponent implements OnInit{
     private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
-    private global:GlobalDataModule,
+    public global:GlobalDataModule,
     private dialog:MatDialog,
     private route:Router
   ){
@@ -80,6 +80,7 @@ export class RecipeComponent implements OnInit{
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetAllRecipes').subscribe(
       (Response:any)=>{
         this.RecipeList = Response;
+        //console.log(Response);
       }
     )
   }
@@ -297,6 +298,30 @@ export class RecipeComponent implements OnInit{
      }
    }
 
+   prodFocusedRow =0;
+   changeFocus(e:any, cls:any){
+
+    if(e.target.value == ''){
+      if(e.keyCode == 40){
+        
+        if(this.menuProdList.length >= 1 ){ 
+          this.rowFocused = 0; 
+           $('.qty0').trigger('focus');
+  
+        }
+       }
+    }else{
+      this.prodFocusedRow = 0;
+        /////move down
+        if(e.keyCode == 40){
+          if(this.productList.length >= 1 ){  
+            $('.prodRow0').trigger('focus');
+            // e.which = 9;   
+            // $('.prodRow0').trigger(e)  ;
+         }  
+       }}
+     }
+
 
 
   getProductList(){
@@ -398,6 +423,17 @@ export class RecipeComponent implements OnInit{
 
 
   save(){
+    var isValidFlag = true;
+    this.menuProdList.forEach((e:any) => {
+      
+      if(e.quantity == 0 || e.quantity == '0' || e.quantity == '' || e.quantity == undefined || e.quantity == null){
+        this.msg.WarnNotify('('+e.productTitle+') Quantity is not Valid');
+        isValidFlag = false;
+         return;
+      }
+
+
+    });
 
     if(this.recipeTitle == '' || this.recipeTitle == undefined){
       this.msg.WarnNotify('Enter Recipe Title')
@@ -409,6 +445,8 @@ export class RecipeComponent implements OnInit{
       this.msg.WarnNotify('Select Recipe Image')
     }else if(this.categoryID == 0 || this.categoryID == undefined){
       this.msg.WarnNotify('Select Category');
+    }else if(this.costPrice > this.salePrice ){
+      this.msg.WarnNotify('Receipe Cost is not Valid')
     }
     else {
 
@@ -417,73 +455,75 @@ export class RecipeComponent implements OnInit{
       }
       console.log(this.menuProdList);
 
-      if(this.btnType == 'Save'){
-        this.app.startLoaderDark();
-        this.http.post(environment.mainApi+this.global.inventoryLink+'InsertRecipe',{
-          RecipeTitle: this.recipeTitle,
-          RecipeDescription: this.Description,
-          RecipeCostPrice: this.costPrice,
-          RecipeSalePrice: this.salePrice,
-          RecipeCatID:this.categoryID,
-          ProjectID: 1,
-          RecipeImage: this.recipeImg,
-      
-          RecipeDetail: JSON.stringify(this.menuProdList) ,
-      
-          UserID: this.global.getUserID(),
-        }).subscribe(
-          (Response:any)=>{
-            if(Response.msg == 'Data Saved Successfully'){
-              this.msg.SuccessNotify(Response.msg);
-              this.getAllRecipe();
-              this.reset();
-              this.app.stopLoaderDark();
-            }else{
-              this.msg.WarnNotify(Response.msg);
-              this.app.stopLoaderDark();
-            }
-          }
-        )
-      }else if(this.btnType == 'Update'){
-
-        this.dialog.open(PincodeComponent,{
-          width:"30%"
-        }).afterClosed().subscribe(pin=>{
-          if(pin != ''){
-            this.app.startLoaderDark();
-            this.http.post(environment.mainApi+this.global.inventoryLink+'UpdateRecipe',{
-              RecipeID: this.recipeID,
-              RecipeTitle: this.recipeTitle,
-              RecipeDescription: this.Description,
-              RecipeCostPrice: this.costPrice,
-              RecipeSalePrice: this.salePrice,
-              RecipeCatID:this.categoryID,
-              ProjectID: 1,
-              RecipeImage: this.recipeImg,
-              PinCode:pin,
-          
-              RecipeDetail: JSON.stringify(this.menuProdList) ,
-          
-              UserID: this.global.getUserID(),
-            }).subscribe(
-              (Response:any)=>{
-                if(Response.msg == 'Data Updated Successfully'){
-                  this.msg.SuccessNotify(Response.msg);
-                  this.getAllRecipe();
-                  this.reset();
-                  this.app.stopLoaderDark();
-                }else{
-                  this.msg.WarnNotify(Response.msg);
-                  this.app.stopLoaderDark();
-                }
+      if(isValidFlag){
+        if(this.btnType == 'Save'){
+          this.app.startLoaderDark();
+          this.http.post(environment.mainApi+this.global.inventoryLink+'InsertRecipe',{
+            RecipeTitle: this.recipeTitle,
+            RecipeDescription: this.Description,
+            RecipeCostPrice: this.costPrice,
+            RecipeSalePrice: this.salePrice,
+            RecipeCatID:this.categoryID,
+            ProjectID: 1,
+            RecipeImage: this.recipeImg,
+        
+            RecipeDetail: JSON.stringify(this.menuProdList) ,
+        
+            UserID: this.global.getUserID(),
+          }).subscribe(
+            (Response:any)=>{
+              if(Response.msg == 'Data Saved Successfully'){
+                this.msg.SuccessNotify(Response.msg);
+                this.getAllRecipe();
+                this.reset();
+                this.app.stopLoaderDark();
+              }else{
+                this.msg.WarnNotify(Response.msg);
+                this.app.stopLoaderDark();
               }
-            )
-          }
-        })
-
-
-
-       
+            }
+          )
+        }else if(this.btnType == 'Update'){
+  
+          this.dialog.open(PincodeComponent,{
+            width:"30%"
+          }).afterClosed().subscribe(pin=>{
+            if(pin != ''){
+              this.app.startLoaderDark();
+              this.http.post(environment.mainApi+this.global.inventoryLink+'UpdateRecipe',{
+                RecipeID: this.recipeID,
+                RecipeTitle: this.recipeTitle,
+                RecipeDescription: this.Description,
+                RecipeCostPrice: this.costPrice,
+                RecipeSalePrice: this.salePrice,
+                RecipeCatID:this.categoryID,
+                ProjectID: 1,
+                RecipeImage: this.recipeImg,
+                PinCode:pin,
+            
+                RecipeDetail: JSON.stringify(this.menuProdList) ,
+            
+                UserID: this.global.getUserID(),
+              }).subscribe(
+                (Response:any)=>{
+                  if(Response.msg == 'Data Updated Successfully'){
+                    this.msg.SuccessNotify(Response.msg);
+                    this.getAllRecipe();
+                    this.reset();
+                    this.app.stopLoaderDark();
+                  }else{
+                    this.msg.WarnNotify(Response.msg);
+                    this.app.stopLoaderDark();
+                  }
+                }
+              )
+            }
+          })
+  
+  
+  
+         
+        }
       }
 
     }
@@ -540,6 +580,36 @@ export class RecipeComponent implements OnInit{
   }
 
 
+  approveRecipe(item:any){
+
+    this.dialog.open(PincodeComponent,{
+      width:"30%",
+    }).afterClosed().subscribe(pin=>{
+      if(pin != ''){
+        this.app.startLoaderDark();
+        this.http.post(environment.mainApi+this.global.inventoryLink+'ApproveRecipe',{
+          RecipeID: item.recipeID,
+
+          PinCode: pin,
+          UserID: this.global.getUserID(),
+        }).subscribe(
+          (Response:any)=>{
+            if(Response.msg == 'Approved Successfully'){
+              this.msg.WarnNotify(Response.msg);
+              this.getAllRecipe();
+            }else {
+              this.msg.WarnNotify(Response.msg);
+              
+            }
+            this.app.stopLoaderDark();
+          }
+        )
+      }
+    })
+
+  }
+
+
   delete(row:any){
     this.dialog.open(PincodeComponent,{
       width:'30%'
@@ -562,7 +632,7 @@ export class RecipeComponent implements OnInit{
         if(result.isConfirmed){
       this.app.startLoaderDark();
 
-      this.http.post(environment.mainApi+this.global.inventoryLink+'deleteRack',{
+      this.http.post(environment.mainApi+this.global.inventoryLink+'deleteRecipe',{
         RecipeID: row.recipeID,
         PinCode:pin,
         UserID: this.global.getUserID()
