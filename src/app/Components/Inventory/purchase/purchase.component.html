@@ -131,18 +131,18 @@
 
 
                             <td class="text-center"><input type="text" [(ngModel)]="item.Quantity" min="0"
-                                    (keydown)="this.handleNumKeys(item,$event,'.qty');getTotal();changeValue(item);"
+                                    (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
                                     (keyup)="changeValue(item);getTotal();showImg(item);"
                                     class="qty{{index}} text-center" style="width: 80px;"></td>
 
 
                             <td class="text-center"><input type="text" [(ngModel)]="item.CostPrice" min="0"
-                                    (keydown)="changeValue(item);this.handleNumKeys(item,$event,'.cp');getTotal();"
+                                    (keydown)="changeValue(item);this.handleNumKeys(item,$event,'.cp',index);getTotal();"
                                     (keyup)="changeValue(item);getTotal();showImg(item);"
                                     class="cp{{index}} text-center" style="width: 80px;"></td>
 
                             <td class="text-center"><input type="text" [(ngModel)]="item.SalePrice" min="0"
-                                    (keydown)="changeValue(item);this.handleNumKeys(item,$event,'.sp');"
+                                    (keydown)="changeValue(item);this.handleNumKeys(item,$event,'.sp',index);"
                                     (keyup)="changeValue(item);showImg(item);" class="sp{{index}} text-center"
                                     style="width: 80px;">
                             </td>

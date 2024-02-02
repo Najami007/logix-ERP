@@ -1,17 +1,4 @@
 
-
-// .category{
-//     overflow: hidden;
-    
-// }
-
-// .category:hover{
-//     overflow-x: hidden;
-   
-// }
-
-
-
 .billTable{
     overflow-y: scroll;
 
@@ -52,3 +39,35 @@
     //  line-height: 55px;
      border-radius: 10px ;
 }
+
+
+
+::ng-deep .cdk-overlay-container{
+    z-index:2000;
+  }
+
+
+  .btblbtn{
+    width: 90px;
+     height: 90px;
+    //  border-radius: 5px;
+     text-align: center;
+    //  justify-content:right;
+     font-weight: bold;
+     font-size: 15px;
+     margin: 10px;
+     border: 1px solid Black;
+     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  
+   
+   }
+
+
+   .calculator  tbody >tr >td{
+    border: 1px solid black;
+    background-color: antiquewhite;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+
+   }

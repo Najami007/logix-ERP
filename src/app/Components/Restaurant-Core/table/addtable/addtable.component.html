@@ -1,0 +1,24 @@
+<div class="ps-4 pe-4 pt-1 pb-1 h-100">
+
+    <div class="text-center border-bottom mb-3  mt-3 d-flex justify-content-between"><p class="dialogueTitle">ADD Table</p><mat-icon class="cursorPointer" (click)="closeDialogue()">cancel</mat-icon></div>
+
+
+    <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Table</mat-label >
+        <input type="text" [(ngModel)]="tableTitle" matInput name="" id="">
+
+    </mat-form-field>
+    <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput [(ngModel)]="description" ></textarea>
+    </mat-form-field>
+
+  
+
+    <div class="row justify-content-around">
+        <button class="w-25 bg-success text-white" mat-stroked-button (click)="save()">{{btntype}}</button>
+        <button class="w-25 bg-danger text-white" mat-stroked-button>Reset</button>
+    </div>
+
+
+</div>

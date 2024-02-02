@@ -1,4 +1,3 @@
-
 <div class="container-fluid h-100 d-flex bg-gray body">
 
     <div class="col-lg-8 " style="min-height: 650px;">
@@ -6,39 +5,42 @@
 
         <!-----------   categories Row ------------------->
 
-      <div class="d-flex border-bottom"  >
-
-        
-
-        <mat-form-field class="w-25 m-1" appearance="outline" style="min-height: 55px; min-width: 150px;border-radius: 10px ;" >
-            <mat-label >Search.....</mat-label>
-            <input #carSearch  matInput type="search" class="text-secondary" >
-            <mat-icon matPrefix class="text-secondary">search</mat-icon>
-        </mat-form-field>
-
-        
-
-       <div class="scrollContainer">
-
-            <button  *ngFor="let item of categoriesList|filter:carSearch.value"
-             (click)="categoryID = item.recipeCatID"
-             [ngClass]="item.recipeCatID == categoryID  ? 'bg-blue' : ''"  class="border item text-center m-1 p-1">{{item.recipeCatTitle}}</button>
-       </div>
-      </div>
+        <div class="d-flex border-bottom">
 
 
-       <!-----------   Products Area ------------------->
-  <div class="row cursorPointer">
-    <div *ngFor="let item of RecipeList"  style="width: 150px;"  >
-        <mat-card  *ngIf="item.recipeCatID == categoryID"  style="width:120px; height: 130px;" class="m-1" (click)="productSelected(item)">
-          
-                <img *ngIf="item.recipeImage" [src]="item.recipeImage" alt="" height="80px" width="120px">
-        
-            <mat-card-footer class="text-center" style="font-size: x-small;">{{item.recipeTitle}}</mat-card-footer>
-            <mat-card-footer class="text-center text-success">{{item.recipeSalePrice}}</mat-card-footer>
-        </mat-card>
-      </div>
-  </div>
+
+            <mat-form-field class="w-25 m-1" appearance="outline"
+                style="min-height: 55px; min-width: 150px;border-radius: 10px ;">
+                <mat-label>Search.....</mat-label>
+                <input #catSearch matInput type="search" class="text-secondary">
+                <mat-icon matPrefix class="text-secondary">search</mat-icon>
+            </mat-form-field>
+
+
+
+            <div class="scrollContainer">
+
+                <button *ngFor="let item of categoriesList|filter:catSearch.value"
+                    (click)="onCatSelected(item)"
+                    [ngClass]="item.recipeCatID == categoryID  ? 'bg-blue' : ''"
+                    class="border item text-center m-1 p-1">{{item.recipeCatTitle}}</button>
+            </div>
+        </div>
+
+
+        <!-----------   Products Area ------------------->
+        <div class="row cursorPointer">
+            <div *ngFor="let item of RecipeList" style="width: 150px;">
+                <mat-card style="width:120px; height: 130px;" class="m-1" (click)="productSelected(item)">
+
+                    <img *ngIf="item.recipeImage" [src]="item.recipeImage" alt="" height="80px" width="120px">
+
+                    <mat-card-footer class="text-center"
+                        style="font-size: x-small;">{{item.recipeTitle}}</mat-card-footer>
+                    <mat-card-footer class="text-center text-success">{{item.recipeSalePrice}}</mat-card-footer>
+                </mat-card>
+            </div>
+        </div>
 
 
 
@@ -46,66 +48,73 @@
     </div>
 
 
-    <div class="col-lg-4 border " style="left: 65.6%; height: 630px;position:fixed;">
+    <div class="col-lg-4  border-0 border-start" style="left: 66.6%; height: 100vh;position:fixed;overflow: scroll;">
 
-         <!-----------   Table Side First Row ------------------->
+        <!-----------   Table Side First Row ------------------->
 
         <div class=" d-flex ">
             <span class="col-lg-2 p-2  border">
-                <p  class="text-center p-2 " style="height: 40px;width: 40px;background-color: rgb(219, 249, 223);color: #088203; border-radius: 100%;">F3</p>
+                <p class="text-center p-2 "
+                    style="height: 40px;width: 40px;background-color: rgb(219, 249, 223);color: #088203; border-radius: 100%;">
+                    {{tableTitle}}</p>
 
             </span>
-            <span class="col-lg-4 p-1  border">
-            
-              <select class="w-100 h-100 border-0 bg-gray" >
-                <option *ngFor="let item of TablesList" [value]="item.id">{{item.name}}</option>
+            <!-- <span class="col-lg-4 p-1  border">
+
+                <select class="w-100 h-100 border-0 bg-gray">
+                    <option *ngFor="let item of tableList" [value]="item.id">{{item.name}}</option>
+                </select>
+
+            </span> -->
+            <span class="col-lg-10 p-1 border">
+
+                <select class="w-100 h-100 border-0 bg-gray" disabled="true" [(ngModel)]="orderType">
+                    <option *ngFor="let item of orderTypeList" [value]="item.val">{{item.title}}</option>
                 </select>
 
             </span>
-            <span class="col-lg-6 p-1 border">
-             
-               <select class="w-100 h-100 border-0 bg-gray" >
-                <option *ngFor="let item of orderTypes" [value]="item.id">{{item.title}}</option>
-                </select>
-  
-              </span>
         </div>
 
-        <div style="min-height: 400px;" class="p-2" >
+        <div style="min-height: 400px;" class="p-2">
 
-             <!-----------   Bill Area ------------------->
-            <div class="billTable" style="height: 350px;">
+            <!-----------   Bill Area ------------------->
+            <div class="billTable" style="height: 50vh;">
 
-                <table class="table-logix cursorPointer" >
+                <table class="table-logix cursorPointer">
                     <thead>
                         <tr>
-                            <th class="col-lg-4">Desc</th>
-                            <th>Price</th>
-                            <th>Qty</th>
-                            <th>total</th>
+                            <th>S#</th>
+                            <th class="col-lg-4">Title</th>
+                            <th class="col-lg-2">Price</th>
+                            <th class="col-lg-2">Qty</th>
+                            <th class="col-lg-2">Total</th>
                             <th>Del</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of tableData index as index">
-                        <td>{{item.recipeTitle}}</td>
-                        <td class="text-center">{{item.recipeSalePrice |number:'1.0-1'}}</td>
-                        <td class="text-center">
-                        <div class="d-flex text-center pb-2">
-                            <mat-icon (click)="changeQty('add',index)" class="text-success">add_circle</mat-icon>
-                            <input id="pQty" type="text" style="width: 50px;text-align: center;" (keydown)="getTotal()" (keyup)="getTotal()"  [(ngModel)]="item.quantity" >
-                            <mat-icon (click)="changeQty('minus',index)" >remove_circle</mat-icon>
-                        </div>
-                          </td>
-                        <td class="text-center">{{item.recipeSalePrice * item.quantity |number:'1.0-1'}}</td>
-                        <td class="text-center"><mat-icon class="text-danger" (click)="deleteRow(item)">delete</mat-icon></td>
+                            <td class="text-center">{{index +1}}</td>
+                            <td>{{item.recipeTitle}}</td>
+                            <td class="text-center">{{item.recipeSalePrice |number:'1.0-1'}}</td>
+                            <td class="text-center">
+                                <div class="d-flex text-center justify-content-center pb-2">
+                                    <mat-icon (click)="changeQty('add',index)"
+                                        class="text-success">add_circle</mat-icon>
+                                    <input id="pQty" type="text" class="qty{{index}}" style="width: 50px;text-align: center;" 
+                                        (keydown)="getTotal();this.global.handleNumKeys($event);handleFocus(item,$event,'.qty')" (keyup)="getTotal();handleFocus(item,$event,'.qty')" [(ngModel)]="item.quantity">
+                                    <mat-icon (click)="changeQty('minus',index)">remove_circle</mat-icon>
+                                </div>
+                            </td>
+                            <td class="text-center">{{item.recipeSalePrice * item.quantity |number:'1.0-1'}}</td>
+                            <td class="text-center"><mat-icon class="text-danger"
+                                    (click)="deleteRow(item)">delete</mat-icon></td>
                         </tr>
                     </tbody>
                 </table>
-                
+
             </div>
 
-         
+
 
             <!-----------   Bill Total Amount Section ------------------->
             <div class="p-4 bg-white border-top">
@@ -114,17 +123,28 @@
                     <p>Sub Total</p>
                     <p>{{subTotal |number}}</p>
                 </span>
-                <span class="d-flex border-bottom border-dark justify-content-between">
-                    <p>Total</p>
-                    <p>100</p>
-                </span>
                 <span class="p-1 d-flex">
                     <button mat-raised-button class="m-1 text-white bg-secondary w-50">HOLD</button>
-                    <button mat-raised-button  class="m-1 text-white bg-success w-50" (click)="save()">Save</button>
+                    <button mat-raised-button class="m-1 text-white bg-success w-50" data-bs-toggle="modal"
+                        data-bs-target="#paymentMehtod">Save</button>
+               
+                    
                 </span>
-                
+
+                <span class="p-1 d-flex">
+                    <button mat-raised-button class="m-1 text-white bg-primary w-50" data-bs-toggle="modal"
+                        data-bs-target="#retrieveBill">Retrive</button>
+                    <button mat-raised-button class="m-1 text-white bg-warning w-50" accesskey="n" matTooltip="New bill (Alt + n)"data-bs-toggle="modal"
+                    data-bs-target="#NewBill">New Bill</button>
+                    
+                </span>
+
 
             </div>
+
+
+
+
 
 
 
@@ -137,5 +157,134 @@
 
 
 
-</div>
+    <!----------------Modal Window for Payment Mehtod ---------->
 
+
+
+    <div class="modal fade" id="paymentMehtod" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="paymentMehtodLabel">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="paymentMehtodLabel">Payment Method</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Payment Type</mat-label>
+                        <mat-select [(ngModel)]="paymentType">
+                            <mat-option value="cash">Cash</mat-option>
+                            <mat-option value="credit">Credit</mat-option>
+                            <mat-option value="split">Split</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-card class=" p-2 bg-warning" *ngIf="paymentType !== ''">
+
+                        <div class="d-flex justify-content-between mb-2"
+                            *ngIf="paymentType == 'cash' || paymentType == 'split'">
+                            <mat-label style="font-size: 20px;">Cash:</mat-label>
+                            <input type="text" [(ngModel)]="cash" />
+                        </div>
+
+                        <div class="d-flex justify-content-between  "
+                            *ngIf="paymentType == 'credit' || paymentType == 'split'">
+                            <mat-label style="font-size: 20px;">Credit Card:</mat-label>
+                            <input type="text"  [(ngModel)]="creditCard" />
+                        </div>
+
+                    </mat-card>
+           
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-success" data-bs-dismiss="modal">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!---------------------------------------------------------->
+
+
+        <!----------------Modal Window for Selecteing New Bill---------->
+
+
+
+    <div class="modal fade" id="NewBill" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="NewBillLabel">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+                <div class="modal-body">
+
+
+               <div class="d-flex">
+                <div class="col-lg-10">
+                    <table>
+                        <tbody class="">
+                            <tr  style="display: inline-flex; " class="cursorPointer " *ngFor="let item of tableList ">
+                                <mat-card class="btblbtn justify-content-center" (click)="selectTable(item.tableID)">
+                                    <span>{{item.tableTitle}}</span>
+                                </mat-card>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-2 border-start">
+
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="orderType">
+                        <mat-radio-button  *ngFor="let item of orderTypeList" [value]="item.val">{{item.title}}</mat-radio-button>
+                      </mat-radio-group>
+
+                </div>
+               </div>
+
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-success" data-bs-dismiss="modal">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!---------------------------------------------------------->
+
+    
+        <!----------------Modal Window for Retrieving Saved Bills ---------->
+
+
+
+        <div class="modal fade" id="retrieveBill" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="retrieveBillLabel">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+                <div class="modal-body">
+
+
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!---------------------------------------------------------->
+
+
+
+
+
+</div>

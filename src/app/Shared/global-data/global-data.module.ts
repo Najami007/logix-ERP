@@ -38,6 +38,7 @@ export class GlobalDataModule implements OnInit {
   companyLink = 'cmp/';
   coreLink = 'core/';
   parkLink = 'park/'
+  restaurentLink = 'res/'
 
 
   glbMenulist: any = [];

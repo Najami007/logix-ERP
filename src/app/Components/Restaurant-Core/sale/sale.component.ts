@@ -24,7 +24,7 @@ export class SaleComponent implements OnInit {
     private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
-    private global:GlobalDataModule,
+    public global:GlobalDataModule,
     private dialogue:MatDialog,
     private route:Router
   ){
@@ -41,12 +41,27 @@ export class SaleComponent implements OnInit {
   ngOnInit(): void {
     this.global.setHeaderTitle('Sale'); 
     this.getCategories();
-    this.getAllRecipe();
+    // setTimeout(() => {
+    //   console.log(this.categoriesList[0]);
+    // }, 500);
+    setTimeout(() => {
+      this.onCatSelected(this.categoriesList[0]);
+    }, 200);
+    // this.getAllRecipe();
+    this.getTable();
     
     // this.RecipeList =  this.RecipeList.filter((e:any)=>e.recipeCatID == this.categoryID);
    
     
   }
+
+
+
+  orderTypeList:any = [
+    {val:'di' , title:'Dine In'},
+    {val:'ta' , title:'Take away'},
+    {val:'hd' , title:'Home Delivery'},
+  ]
 
   categoriesList:any = [];
 
@@ -76,57 +91,130 @@ export class SaleComponent implements OnInit {
   
   ]
 
-  TablesList:any = [
-    {id:1,name:'Dewan-e-Khas'},
-    {id:2,name:'Main Hal'},
-    {id:3,name:'Metting Room'},
-  ]
-
-  orderTypes = [
-    {id:1, title:'Dine In'},
-    {id:2, title:'Take Away'},
-    {id:3, title:'Home Delivery'},
-    
-  ]
 
 
+  
 
+  categoryID:any = 0;
+  orderType = 'di';
+  paymentType = '';
+  cash = 0;
+  creditCard = 0;
 
+  tableID = 0;
+  tableTitle:any = '';
+  
 
-
+  
   tempQty:any;
   tempIndex:any;
 
   tableData:any = [];
-  ProductList:any = [];
-  orderTypeID:any = 1;
-  categoryID:any = 0;
   subTotal:number = 0;
-  netTotal:number = 0;
-  RecipeList:any = []
+  tempRecipeList:any = [];
+  RecipeList:any = [];
 
 
-  getAllRecipe(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetAllRecipes').subscribe(
+  tableList:any = [];
+
+  getTable(){
+    this.http.get(environment.mainApi+this.global.restaurentLink+'GetTable').subscribe(
       (Response:any)=>{
-        this.RecipeList = Response;
+        this.tableList = Response;
         //console.log(Response);
       }
     )
   }
 
 
+  selectTable(tid:any){
+    this.tableID = tid; 
+    this.tableTitle = this.tableList.find((e:any)=>e.tableID == tid).tableTitle;  
+  }
+
+
+  // getAllRecipe(){
+  //   this.http.get(environment.mainApi+this.global.restaurentLink+'GetAllRecipes').subscribe(
+  //     (Response:any)=>{
+  //      this.tempRecipeList = Response;
+  //       this.RecipeList = this.tempRecipeList.filter((e:any)=>e.recipeCatID == this.categoryID);
+  //       //console.log(Response);
+  //     }
+  //   )
+  // }
+
+  onCatSelected(item:any){
+    this.categoryID = item.recipeCatID;
+    // alert(item.recipeCatID)
+    // alert(item.prodFlag)
+    this.http.get(environment.mainApi+this.global.restaurentLink+'GetAllRecipesCatWise?CatID='+item.recipeCatID +'&reqFlag='+item.prodFlag).subscribe(
+      (Response:any)=>{
+        console.log(Response)
+        this.RecipeList = Response;
+      }
+    )
+    // this.RecipeList = this.tempRecipeList.filter((e:any)=>e.recipeCatID == catID);
+  }
+
+
 
   getCategories(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetRecipeCategories').subscribe(
+    this.http.get(environment.mainApi+this.global.restaurentLink+'GetRecipeCategories').subscribe(
       (Response:any)=>{
         this.categoriesList = Response;
+        console.log(Response);
         this.categoryID = this.categoriesList[0].recipeCatID;
     
       }
     )
   }
 
+
+  rowFocused = 0;
+  handleFocus(item:any ,e:any,cls:string){
+
+    if(item.quantity < 0 || item.quantity == ''){
+      item.quantity = 0;
+    }
+
+  /////move down
+    if(e.keyCode == 40){
+     
+     if(this.tableData.length > 1 ){
+      this.rowFocused += 1;
+      if (this.rowFocused >= this.tableData.length) {      
+        this.rowFocused -= 1  
+    } else {
+        var clsName = cls + this.rowFocused; 
+        // alert(clsName);   
+        $(clsName).trigger('focus');    
+    }}
+  }
+
+
+     //Move up
+     if (e.keyCode == 38) {
+
+       if (this.tableData.length > 1) {
+
+          this.rowFocused -= 1;
+
+          var clsName = cls + this.rowFocused;
+          // alert(clsName);
+          $(clsName).trigger('focus');
+          
+
+      }
+
+  }
+
+    ////removeing row
+    if (e.keyCode == 46) {
+      this.deleteRow(item);
+    //  $(cls+'0').trigger('focus');   
+  }
+
+  }
 
 
 
@@ -144,16 +232,20 @@ export class SaleComponent implements OnInit {
 
   productSelected(item:any){
 
-    var index = this.tableData.findIndex((e:any)=> e.recipeID == item.recipeID); 
-    // console.log(index);
-    // alert( index)
-    if(index !== -1){
-      this.tableData[index].quantity = parseFloat( this.tableData[index].quantity +1 ); 
+    if(this.tableID == 0 && this.orderType == 'di'){
+      this.msg.WarnNotify('Table Number Must be Selected');
     }else{
-      this.tableData.push({recipeID:item.recipeID,recipeTitle:item.recipeTitle,quantity:1,recipeSalePrice:item.recipeSalePrice});
-
+      var index = this.tableData.findIndex((e:any)=> e.recipeID == item.recipeID); 
+      // console.log(index);
+      // alert( index)
+      if(index !== -1){
+        this.tableData[index].quantity = parseFloat( this.tableData[index].quantity +1 ); 
+      }else{
+        this.tableData.push({recipeID:item.recipeID,recipeTitle:item.recipeTitle,quantity:1,recipeSalePrice:item.recipeSalePrice});
+  
+      }
+      this.getTotal();
     }
-    this.getTotal();
   }
 
   ///////////////////////////////////////////////////////////////
@@ -195,7 +287,10 @@ export class SaleComponent implements OnInit {
     this.tempIndex ='';
     this.tempProductList = [];
     this.tempQty = '';
-    this.ProductList = [];
+    this.tableID = 0;
+    this.cash = 0;
+    this.creditCard = 0;
+    this.subTotal = 0;
   }
 
 

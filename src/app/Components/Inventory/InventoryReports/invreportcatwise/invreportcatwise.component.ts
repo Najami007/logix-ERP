@@ -75,7 +75,6 @@ export class InvreportcatwiseComponent implements OnInit {
     {val:'scw',title:'Sub Categorywise'},
     {val:'bw',title:'Brandwise'},
     {val:'tw',title:'Typewise'},
-    {val:'cw',title:'Categorywise'},
     {val:'lw',title:'Locationwise'},
     {val:'cbw',title:'Category & Brandwise'},
     {val:'scbw',title:'Sub-Category & Brand wise'},
@@ -239,7 +238,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.Title = this.locationTitle+ ' , ' +this.categoryTitle;
     }
 
-    if(this.reportType == 'lscs'){
+    if(this.reportType == 'lscw'){
       idType = '&lid='+this.locationID+'&cid='+this.categoryID+'&scid='+this.subCategoryID;
       this.Title = this.locationTitle+ ' , ' +this.categoryTitle+ ' , ' +this.subCategoryTitle;
     }
@@ -473,7 +472,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.subCatFlag = true;
       this.brandFlag = false;
       this.locFlag = true;
-      this.typeFlag = false;
+      this.typeFlag = true;
     }
 
     if(this.reportType == 'lctbw'){

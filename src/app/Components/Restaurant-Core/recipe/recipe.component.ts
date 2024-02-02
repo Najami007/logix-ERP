@@ -30,13 +30,17 @@ export class RecipeComponent implements OnInit{
 
       this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
     })
+
+
+    
+    this.global.getProducts().subscribe(
+      (data:any)=>{this.productList = data;})
   }
 
 
 
   ngOnInit(): void {
    this.global.setHeaderTitle('Recipe');
-   this.getProductList();
    this.getAllRecipe();
    this.getCategories();
   }
@@ -51,7 +55,8 @@ export class RecipeComponent implements OnInit{
   Description:any;
   PBarcode:any;
   productImage:any;
-
+  recipeType = '';
+  cookingTime = '';
   costTotal:number = 0;
   avgCostTotal:number = 0;
 
@@ -69,15 +74,16 @@ export class RecipeComponent implements OnInit{
 
 
   getCategories(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetRecipeCategories').subscribe(
+    this.http.get(environment.mainApi+this.global.restaurentLink+'GetRecipeCategories').subscribe(
       (Response:any)=>{
-        this.categoriesList = Response;
+        this.categoriesList = Response.filter((e:any)=>e.prodFlag == false);
+       // console.log(Response);
       }
     )
   }
 
   getAllRecipe(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetAllRecipes').subscribe(
+    this.http.get(environment.mainApi+this.global.restaurentLink+'GetAllRecipes').subscribe(
       (Response:any)=>{
         this.RecipeList = Response;
         //console.log(Response);
@@ -128,28 +134,44 @@ export class RecipeComponent implements OnInit{
       
           //// push the data using index
           if (condition == undefined) {
+
+
+            
+
+           
+            this.global.getProdDetail(0,this.PBarcode).subscribe(
+              (Response:any)=>{
+                //console.log(Response)
+                  this.menuProdList.push({
+                    productID:Response[0].productID,
+                    productTitle:Response[0].productTitle,
+                    barcode:Response[0].barcode,
+                    productImage:Response[0].productImage,
+                    quantity:1,
+                    wohCP:Response[0].costPrice,
+                    avgCostPrice:Response[0].avgCostPrice,
+                    costPrice:Response[0].costPrice,
+                    salePrice:Response[0].salePrice,
+                    ovhPercent:0,
+                    ovhAmount:0,
+                    expiryDate:this.global.dateFormater(new Date(),'-'),
+                    batchNo:'-',
+                    batchStatus:'-',
+                    uomID:Response[0].uomID,
+                    packing:1,
+                    discInP:0,
+                    discInR:0,
+                    aq:Response[0].aq,
+              
+                  });
+                  this.getTotal();
+            
+
+                this.productImage = Response[0].productImage;
+              }
+            )
       
-          //console.log(data);
-          this.menuProdList.push({
-            productID:row.productID,
-            productTitle:row.productTitle,
-            barcode:row.barcode,
-            productImage:row.productImage,
-            quantity:1,
-            avgCostPrice:row.avgCostPrice,
-            costPrice:row.costPrice,
-            salePrice:row.salePrice,
-            expiryDate:this.global.dateFormater(new Date(),'-'),
-            batchNo:'-',
-            batchStatus:'-',
-            uomID:row.uomID,
-            packing:1,
-            discInP:0,
-            discInR:0,
-      
-          })
-      
-          this.productImage = row.productImage;
+          
         
           this.PBarcode = '';
           $('#searchProduct').trigger('focus');
@@ -182,30 +204,42 @@ export class RecipeComponent implements OnInit{
 
     if (condition == undefined) {
 
-    //console.log(data);
-    this.menuProdList.push({
-      productID:data.productID,
-      productTitle:data.productTitle,
-      barcode:data.barcode,
-      productImage:data.productImage,
-      quantity:1,
-      avgCostPrice:data.avgCostPrice,
-      costPrice:data.costPrice,
-      salePrice:data.salePrice,
-      expiryDate:this.global.dateFormater(new Date(),'-'),
-      batchNo:'-',
-      batchStatus:'-',
-      uomID:data.uomID,
-      packing:1,
-      discInP:0,
-      discInR:0,
-     
+      this.global.getProdDetail(data.productID,'').subscribe(
+        (Response:any)=>{
+          //  console.log(Response);
 
-    })
+          
+            this.menuProdList.push({
+              productID:Response[0].productID,
+              productTitle:Response[0].productTitle,
+              barcode:Response[0].barcode,
+              productImage:Response[0].productImage,
+              quantity:1,
+              wohCP:Response[0].costPrice,
+              costPrice:Response[0].costPrice,
+              avgCostPrice:Response[0].avgCostPrice,
+              salePrice:Response[0].salePrice,
+              ovhPercent:0,
+              ovhAmount:0,
+              expiryDate:this.global.dateFormater(new Date(),'-'),
+              batchNo:'-',
+              batchStatus:'-',
+              uomID:Response[0].uomID,
+              packing:1,
+              discInP:0,
+              discInR:0,
+              aq:Response[0].aq,
+        
+            })
+            this.getTotal();
+           
+          
+         this.productImage = Response[0].productImage;
+        }
+      )
 
-    // console.log(this.tableDataList);
 
-    this.productImage = data.productImage;
+  
     
     this.PBarcode = '';
     $('#searchProduct').trigger('focus');
@@ -324,14 +358,14 @@ export class RecipeComponent implements OnInit{
 
 
 
-  getProductList(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetActiveProduct').subscribe(
-      (Response)=>{
-        this.productList = Response;
-        //console.log(Response);
-      }
-    )
-  }
+  // getProductList(){
+  //   this.http.get(environment.mainApi+this.global.restaurentLink+'GetActiveProduct').subscribe(
+  //     (Response)=>{
+  //       this.productList = Response;
+  //       //console.log(Response);
+  //     }
+  //   )
+  // }
 
   onProdSelect(row:any){
 
@@ -458,7 +492,7 @@ export class RecipeComponent implements OnInit{
       if(isValidFlag){
         if(this.btnType == 'Save'){
           this.app.startLoaderDark();
-          this.http.post(environment.mainApi+this.global.inventoryLink+'InsertRecipe',{
+          this.http.post(environment.mainApi+this.global.restaurentLink+'InsertRecipe',{
             RecipeTitle: this.recipeTitle,
             RecipeDescription: this.Description,
             RecipeCostPrice: this.costPrice,
@@ -490,7 +524,7 @@ export class RecipeComponent implements OnInit{
           }).afterClosed().subscribe(pin=>{
             if(pin != ''){
               this.app.startLoaderDark();
-              this.http.post(environment.mainApi+this.global.inventoryLink+'UpdateRecipe',{
+              this.http.post(environment.mainApi+this.global.restaurentLink+'UpdateRecipe',{
                 RecipeID: this.recipeID,
                 RecipeTitle: this.recipeTitle,
                 RecipeDescription: this.Description,
@@ -532,9 +566,10 @@ export class RecipeComponent implements OnInit{
 
 
   edit(item:any){
-    console.log(item)
+   // console.log(item)
     this.btnType = 'Update';
     this.tabIndex = 0;
+    this.recipeType = item.recipeType;
     this.categoryID = item.recipeCatID;
     this.recipeID = item.recipeID;
     this.recipeTitle = item.recipeTitle;
@@ -542,8 +577,58 @@ export class RecipeComponent implements OnInit{
     this.salePrice = item.recipeSalePrice;
     this.recipeImg = item.recipeImage;
     this.Description = item.recipeDescription;
+    this.cookingTime  = item.cookingTime;
 
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetSingleRecipeDetail?recipeid='+item.recipeID).subscribe(
+    this.http.get(environment.mainApi+this.global.restaurentLink+'GetSingleRecipeDetail?recipeid='+item.recipeID).subscribe(
+      (Response:any)=>{
+        console.log(Response);
+        this.menuProdList = [];
+        
+
+        Response.forEach((e:any) => {
+          this.menuProdList.push({
+            productID:e.productID,
+            productTitle:e.productTitle,
+            barcode:e.barcode,
+            productImage:e.productImage,
+            quantity:e.quantity,
+            avgCostPrice:e.avgCostPrice,
+            costPrice:e.costPrice,
+            salePrice:e.salePrice,
+            expiryDate:this.global.dateFormater(new Date(),'-'),
+            batchNo:'-',
+            batchStatus:'-',
+            uomID:e.uomID,
+            packing:1,
+            discInP:0,
+            discInR:0,
+      
+          })
+        });
+
+        this.getTotal();
+     
+
+      }
+    )
+
+
+  }
+
+
+  copyRecipe(item:any){
+    alert(item.recipeID)
+    this.tabIndex = 0;
+    this.recipeType = item.recipeType;
+    this.categoryID = item.recipeCatID;
+    this.recipeTitle = item.recipeTitle;
+    this.costPrice = item.recipeCostPrice;
+    this.salePrice = item.recipeSalePrice;
+    this.recipeImg = item.recipeImage;
+    this.Description = item.recipeDescription;
+    this.cookingTime  = item.cookingTime;
+
+    this.http.get(environment.mainApi+this.global.restaurentLink+'GetSingleRecipeDetail?recipeid='+item.recipeID).subscribe(
       (Response:any)=>{
         console.log(Response);
         this.menuProdList = [];
@@ -587,7 +672,7 @@ export class RecipeComponent implements OnInit{
     }).afterClosed().subscribe(pin=>{
       if(pin != ''){
         this.app.startLoaderDark();
-        this.http.post(environment.mainApi+this.global.inventoryLink+'ApproveRecipe',{
+        this.http.post(environment.mainApi+this.global.restaurentLink+'ApproveRecipe',{
           RecipeID: item.recipeID,
 
           PinCode: pin,
@@ -632,7 +717,7 @@ export class RecipeComponent implements OnInit{
         if(result.isConfirmed){
       this.app.startLoaderDark();
 
-      this.http.post(environment.mainApi+this.global.inventoryLink+'deleteRecipe',{
+      this.http.post(environment.mainApi+this.global.restaurentLink+'deleteRecipe',{
         RecipeID: row.recipeID,
         PinCode:pin,
         UserID: this.global.getUserID()

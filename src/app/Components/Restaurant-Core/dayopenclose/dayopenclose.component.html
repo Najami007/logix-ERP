@@ -1,0 +1,45 @@
+<div class="text-center body justify-content-center d-flex flex-column row p-5">
+
+
+    <div>
+        <button mat-raised-button data-bs-toggle="modal" data-bs-target="#doc" (click)="Type = 'Day Open'">Day Open</button>
+        <button mat-raised-button data-bs-toggle="modal" data-bs-target="#doc" (click)="Type = 'Day Close'">Day Close</button>
+    </div>
+
+
+
+
+
+
+
+    <div class="modal fade" id="doc" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="docLabel">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+                <div class="modal-body">
+                        <div class="text-center">
+                            <h1>{{Type}}</h1>
+                        </div>
+
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Date</mat-label>
+                        <input [(ngModel)]="date" disabled="true" readonly="true" matInput type="text" name="voucherDate"
+                            [matDatepicker]="voucherDate">
+                        <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
+                        <mat-datepicker #voucherDate></mat-datepicker>
+                    </mat-form-field>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-success" data-bs-dismiss="modal" (click)="save()">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+</div>

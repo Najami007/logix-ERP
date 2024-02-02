@@ -53,7 +53,7 @@ export class RecipeCategoryComponent implements OnInit{
 
 
   getCategories(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetRecipeCategories').subscribe(
+    this.http.get(environment.mainApi+this.global.restaurentLink+'GetRecipeCategories').subscribe(
       (Response:any)=>{
         this.categoriesList = Response;
       }
@@ -89,7 +89,7 @@ export class RecipeCategoryComponent implements OnInit{
         if(result.isConfirmed){
       this.app.startLoaderDark();
 
-      this.http.post(environment.mainApi+this.global.inventoryLink+'DeleteRecipeCategory',{
+      this.http.post(environment.mainApi+this.global.restaurentLink+'DeleteRecipeCategory',{
         RecipeCatID: row.recipeCatID,
         PinCode:pin,
         UserID: this.global.getUserID()

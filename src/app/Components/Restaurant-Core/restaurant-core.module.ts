@@ -17,6 +17,9 @@ import { MenuCategoryComponent } from './menu-category/menu-category.component';
 import { AddMenuCategoryComponent } from './menu-category/add-menu-category/add-menu-category.component';
 import { RecipeCategoryComponent } from './recipe-category/recipe-category.component';
 import { AddrecipeCategoryComponent } from './recipe-category/addrecipe-category/addrecipe-category.component';
+import { TableComponent } from './table/table.component';
+import { AddtableComponent } from './table/addtable/addtable.component';
+import { DayopencloseComponent } from './dayopenclose/dayopenclose.component';
 
 
 
@@ -25,9 +28,10 @@ import { AddrecipeCategoryComponent } from './recipe-category/addrecipe-category
 export const restCore: Route[] = [
 
   {path:'sale', component:SaleComponent, canActivate:[AuthGuard] },
-  {path:'menu', component:MenuComponent, canActivate:[AuthGuard] },
+  {path:'tbl', component:TableComponent, canActivate:[AuthGuard] },
   {path:'rcp', component:RecipeComponent, canActivate:[AuthGuard] },
   {path:'recCat', component:RecipeCategoryComponent, canActivate:[AuthGuard] },
+  {path:'doc', component:DayopencloseComponent, canActivate:[AuthGuard] },
 
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
@@ -46,6 +50,9 @@ export const restCore: Route[] = [
     AddMenuCategoryComponent,
     RecipeCategoryComponent,
     AddrecipeCategoryComponent,
+    TableComponent,
+    AddtableComponent,
+    DayopencloseComponent,
 
   ],
   imports: [

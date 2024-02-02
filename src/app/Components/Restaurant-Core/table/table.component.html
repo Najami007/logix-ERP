@@ -1,0 +1,48 @@
+<div class="bg-gray h-100 body ">
+    <div class="container  p-2  min-600 " >
+
+
+       <div>
+        <button mat-fab class="col-lg-1 me-2" (click)="addTable()"><mat-icon>add</mat-icon></button>
+
+        <mat-form-field class="col-lg-11" appearance="outline">
+            <mat-label class="ps-5">Search.....</mat-label>
+            <input [(ngModel)]="menuSearch" matInput type="search" class="text-secondary">
+            <mat-icon matPrefix class="text-secondary">search</mat-icon>
+        </mat-form-field>
+       </div>
+
+
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Table Title</th>
+                    <th>Description</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of tableList index as index">
+                    <td>{{index +1}}</td>
+                    <td>{{item.tableTitle}}</td>
+                    <td>{{item.tableDescription}}</td>
+                    <td class="cursorPointer text-success"><button mat-icon-button (click)="editTable(item)"><mat-icon>edit</mat-icon></button></td>
+                    <td class="cursorPointer text-danger"><button mat-icon-button (click)="delete(item)"><mat-icon>delete</mat-icon></button></td>
+                </tr>
+            </tbody>
+            
+        </table>
+    
+    
+    
+    
+    
+    
+    
+    
+    </div>
+</div>
+

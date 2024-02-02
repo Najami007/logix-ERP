@@ -56,7 +56,7 @@ export class AddrecipeCategoryComponent implements OnInit {
       if(this.btnType == 'Save'){
         this.app.startLoaderDark();
 
-        this.http.post(environment.mainApi+this.global.inventoryLink+'InsertRecipeCategory',{
+        this.http.post(environment.mainApi+this.global.restaurentLink+'InsertRecipeCategory',{
           RecipeCatTitle:this.categoryTitle,
         
             UserID: this.global.getUserID(),
@@ -83,7 +83,7 @@ export class AddrecipeCategoryComponent implements OnInit {
           if(pin != ''){
             this.app.startLoaderDark();
 
-            this.http.post(environment.mainApi+this.global.inventoryLink+'UpdateRecipeCategory',{
+            this.http.post(environment.mainApi+this.global.restaurentLink+'UpdateRecipeCategory',{
               RecipeCatID:this.RecipeCatID,
               RecipeCatTitle:this.categoryTitle,
               PinCode:pin,
