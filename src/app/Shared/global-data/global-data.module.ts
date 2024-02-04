@@ -680,7 +680,7 @@ export class GlobalDataModule implements OnInit {
 
   prodFocusedRow = 0;
   handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[]){
-
+    
 
     /////move down
     if(e.keyCode == 40|| e.keyCode == 9){
@@ -736,5 +736,12 @@ export class GlobalDataModule implements OnInit {
    return this.http.get(environment.mainApi+this.inventoryLink+'GetSingleProductDetail?ProductID='+id+'&Barcode='+barcode).pipe(retry(3));
   }
 
+
+
+  focusTo(cls:any){
+   setTimeout(() => {
+    $(cls).trigger('focus')
+   }, 500);
+  }
 
 }

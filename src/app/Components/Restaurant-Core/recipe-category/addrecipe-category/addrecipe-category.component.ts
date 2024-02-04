@@ -24,7 +24,8 @@ export class AddrecipeCategoryComponent implements OnInit {
     private global:GlobalDataModule,
     private dialog:MatDialog,
     private route:Router,
-    private app:AppComponent
+    private app:AppComponent,
+    private recipe:RecipeCategoryComponent
     // @Inject (MAT_DIALOG_DATA) public data:any,
     // private dialogRef:MatDialogRef<AddMenuCategoryComponent>
 
@@ -65,7 +66,7 @@ export class AddrecipeCategoryComponent implements OnInit {
             if(Response.msg == 'Data Saved Successfully'){
               
               this.msg.SuccessNotify(Response.msg);
-         
+              this.recipe.getCategories();
               this.categoryTitle = '';
               this.app.stopLoaderDark();
               
@@ -95,7 +96,7 @@ export class AddrecipeCategoryComponent implements OnInit {
                 if(Response.msg == 'Data Updated Successfully'){
                   
                   this.msg.SuccessNotify(Response.msg);
-           
+                  this.recipe.getCategories();
                   this.categoryTitle = '';
                   this.app.stopLoaderDark();
                   

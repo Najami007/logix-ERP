@@ -1,7 +1,7 @@
 
     <mat-tab-group mat-align-tabs="center" class="body bg-gray h-100" [selectedIndex]="tabIndex"
         (selectedIndexChange)="changeTab($event)">
-        <mat-tab label="ADD / Modify">
+        <mat-tab label="ADD / Modify" class="h-100">
             <div class="container-fluid p-1 row">
 
                 <!-------------     Column 1 Detail Area-->
@@ -59,31 +59,33 @@
                     </div>
 
                             
-                    <mat-form-field class="col-lg-5 me-1" appearance="outline">
+                    <!-- <mat-form-field class="col-lg-5 me-1" appearance="outline">
                         <mat-label>Type</mat-label>
                         <mat-select [(ngModel)]="recipeType">
                             <mat-option  value="Dine In">Dine In</mat-option>
                             <mat-option  value="Others">Others</mat-option>
                         </mat-select>
-                    </mat-form-field>
-                    <mat-form-field class="col-lg-5" appearance="outline">
+                    </mat-form-field> -->
+                    <mat-form-field class="col-lg-5 me-1" appearance="outline">
                         <mat-label>Cooking Time</mat-label>
                        <input matInput [(ngModel)]="cookingTime" />
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline" class="w-100">
+                    <mat-form-field appearance="outline" class="col-lg-6">
                         <mat-label>Description</mat-label>
                         <textarea matInput type="text" rows="1" [(ngModel)]="Description"></textarea>
                     </mat-form-field>
 
                   
 
-                    <div class="p-5 ">
-                        <button #toggleBtn class="btn btn-success me-5 w-25" accesskey="s" (click)="save() "
+                    <div class="justify-content-between d-flex">
+                        <button #toggleBtn class="btn btn-success w-25" accesskey="s" (click)="save() "
                             *ngIf="crudList.c && btnType == 'Save'">{{btnType}}</button>
-                        <button #toggleBtn class="btn btn-success me-5 w-25" accesskey="s" (click)="save() "
+                        <button #toggleBtn class="btn btn-success  w-25" accesskey="s" (click)="save() "
                             *ngIf="crudList.u && btnType == 'Update'">{{btnType}}</button>
                         <button class="btn btn-danger w-25" (click)="reset()">Reset</button>
+
+                        <button class="btn btn-warning w-25" (click)="MapProdWithCategory()">Map Product</button>
                     </div>
 
 
@@ -142,7 +144,7 @@
                                     <td>{{index+1}}</td>
                                     <td >{{item.productTitle}}</td>
                                     <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
-                                            (keydown)="this.handleNumKeys(item,$event,'.qty');getTotal();changeValue(item);"
+                                            (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
                                             (keyup)="changeValue(item);getTotal();showImg(item);"
                                             class="qty{{index}} text-center" style="width: 80px;"></td>
 
@@ -174,7 +176,7 @@
         </mat-tab>
 
 
-        <mat-tab label="Saved Record">
+        <mat-tab label="Saved Record" class="h-100">
             <div class=" border-start h-100 p-2 min-600" style="background-color: rgb(248, 253, 253);">
 
 
@@ -193,6 +195,7 @@
                             <th>Time</th>
                             <th>Cost</th>
                             <th>Sale</th>
+                            <th>Category</th>
                             <th>Edit</th>
                             <th>Approve</th>
                             <th>Copy</th>
@@ -207,11 +210,13 @@
                             <td>{{item.cookingTime}}</td>
                             <td>{{item.recipeCostPrice |number:'1.0-0'}}</td>
                             <td>{{item.recipeSalePrice |number:'1.0-0'}}</td>
+                            <td>{{item.recipeCatTitle}}</td>
                             <td class="cursorPointer"><mat-icon class="text-success"
                                     (click)="edit(item)">edit</mat-icon></td>
                             <td class="text-success"><mat-icon *ngIf="item.approvedStatus == false" (click)="approveRecipe(item)">check</mat-icon>
                                 <mat-icon *ngIf="item.approvedStatus == true">done_all</mat-icon></td>
-                                <td class="cursorPointer "><mat-icon (click)="copyRecipe(item)">save</mat-icon></td>
+                                <td class="cursorPointer "><mat-icon data-bs-toggle="modal"
+                                    data-bs-target="#otherRecipe" (click)="copyRecipe(item)">save</mat-icon></td>
                             <td class="cursorPointer"><mat-icon class="text-danger"
                                     (click)="delete(item)">delete</mat-icon></td>
 
@@ -222,5 +227,112 @@
                 </table>
 
             </div>
+
+
+
+
+ 
+
+
+
         </mat-tab>
     </mat-tab-group>
+
+    
+            <!------------------------ Modal Window for Making Other Recipe ------------------>
+
+            
+
+            <div class="modal fade" id="otherRecipe" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+            aria-labelledby="otherRecipeLabel">
+            <div class="modal-dialog modal-dialog-centered modal-xl" style="z-index: 100000;">
+                <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+                    <div class="modal-body">
+    
+                   
+    
+                            <div class="ps-1 d-flex ">
+        
+                                <div class="col-lg-9  d-flex flex-column">
+                                    <mat-label class="text-primary">Search Barcode / Product</mat-label>
+                                    <input type="text" #pbarcode [(ngModel)]="PBarcode"
+                                        
+                                        (keydown)="searchByCode($event);this.changeFocus($event,'.fintProd');" id="searchProduct"
+                                        class="p-1 mb-2 searchProduct bg-transparent" placeholder="Alt + s" autofocus autocomplete="off"
+                                        accesskey="s">
+        
+                                    <div class="w-100 d-flex flex-column SearchConatiner cursorPointer"
+                                        *ngIf="PBarcode != '' && PBarcode != undefined">
+                                        <div class="card " *ngFor="let item of productList| filter:PBarcode index as index"
+                                            (click)="holdDataFunction(item)">
+                                            <button (keydown)="this.global.handleProdFocus(item,$event,'.prodRow','.searchProduct   ',productList)"
+                                             class="prodRow{{index}}"   style="background: none;border: none;text-align: left;">{{item.productTitle}}
+                                                (<b>{{item.barcode}}</b> )</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 text-center">
+                                    <button mat-raised-button class="bg-primary text-white w-50 btn-rpt"
+                                        (click)="ngOnInit()">Load</button>
+                                </div>
+        
+                            </div>
+        
+                            <div class="card"
+                                style="max-height: 400px;height: 400px;overflow-y:scroll; background-color: rgba(225, 244, 236, 0.816);">
+        
+        
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>S#</th>
+                                            <th>Product Name</th>
+                                            <th>Quantity</th>
+                                            <th>Avg Cost</th>
+                                            <th>Cost</th>
+                                            <th>Avg Cost Total</th>
+                                            <th>Cost Total</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of menuProdList index as index" (click)="showImg(item)">
+                                            <td>{{index+1}}</td>
+                                            <td >{{item.productTitle}}</td>
+                                            <td class="text-center"><input type="text" [disabled]="item.disable" [(ngModel)]="item.quantity" min="0"
+                                                    (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
+                                                    (keyup)="changeValue(item);getTotal();showImg(item);"
+                                                    class="qty{{index}} text-center" style="width: 80px;"></td>
+        
+                                            <td>{{item.avgCostPrice | number:'1.0-2'}}</td>
+                                            <td>{{item.costPrice | number:'1.0-2'}}</td>
+        
+                                            <td class="text-center">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
+                                            <td class="text-center">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
+                                            
+                                            <td class="cursorPointer" ><mat-icon *ngIf="item.disable == false"  (click)="delRow(item)">delete</mat-icon></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"></td>
+                                            <th class="text-center">{{totalQty|number:'1.0-2'}}</th>
+                                            <th colspan="2"></th>
+                                            <th class="text-center">{{costTotal|number:'1.0-2'}}</th>
+                                            <th class="text-center">{{avgCostTotal|number:'1.0-2'}}</th>
+                                            <th></th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+        
+        
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="save()">{{btnType}}</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="reset()">Close</button>
+                        </div>
+                    </div>
+                    
+                 
+    
+                </div>
+            </div>

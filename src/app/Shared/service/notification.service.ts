@@ -33,7 +33,7 @@ export class NotificationService {
 
   WarnNotify =(Text:string)=> Swal.mixin({
     toast: true,
-    position: 'center',
+    position: 'top',
     showConfirmButton: false,
     timer: 1500,
     timerProgressBar: true,

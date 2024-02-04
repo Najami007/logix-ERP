@@ -51,7 +51,7 @@
                     *ngIf="PBarcode != '' && PBarcode != undefined">
                     <div class="card " *ngFor="let item of productList| filter:PBarcode index as index"
                         (click)="holdDataFunction(item)">
-                        <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn" (keydown)="this.global.handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">{{item.productTitle}}
+                        <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn" (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">{{item.productTitle}}
                             (<b>{{item.barcode}}</b> )</button>
                     </div>
                 </div>

@@ -256,16 +256,16 @@ export class StockAdjustmentComponent implements OnInit {
      }}
    }
 
-   handleFocus(item:any,e:any,cls:any){
-
+   handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[]){
+    
 
     /////move down
     if(e.keyCode == 40|| e.keyCode == 9){
 
  
-      if(this.productList.length > 1 ){
+      if(prodList.length > 1 ){
        this.prodFocusedRow += 1;
-       if (this.prodFocusedRow >= this.productList.length) {      
+       if (this.prodFocusedRow >= prodList.length) {      
          this.prodFocusedRow -= 1  
      } else {
          var clsName = cls + this.prodFocusedRow;    
@@ -281,12 +281,12 @@ export class StockAdjustmentComponent implements OnInit {
       if (e.keyCode == 38) {
  
        if (this.prodFocusedRow == 0) {
-           $(".searchProduct").trigger('focus');
+           $(endFocus).trigger('focus');
            this.prodFocusedRow = 0;
   
        }
  
-       if (this.productList.length > 1) {
+       if (prodList.length > 1) {
  
            this.prodFocusedRow -= 1;
  
@@ -411,6 +411,10 @@ export class StockAdjustmentComponent implements OnInit {
   SaveBill(type:any){
     var isValidFlag = true;
     this.tableDataList.forEach((p:any) => { 
+
+      p.quantity = parseFloat(p.quantity);
+      p.salePrice = parseFloat(p.salePrice);
+      p.costPrice = parseFloat(p.costPrice);
       // console.log(p)      
         if(p.quantity == 0 || p.quantity == '0' || p.quantity == '' || p.quantity == undefined || p.quantity == null){
           this.msg.WarnNotify('('+p.productTitle+') Quantity is not Valid');

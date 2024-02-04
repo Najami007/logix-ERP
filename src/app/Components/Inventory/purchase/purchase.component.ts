@@ -107,6 +107,10 @@ export class PurchaseComponent implements OnInit{
   BookerList:any = [];
 
 
+
+  dragFunc(e:any){
+    
+  }
    /////// to change the tab on edit
 
    changeTab(tabNum: any) {
@@ -155,16 +159,19 @@ export class PurchaseComponent implements OnInit{
 
    if(cls == 'ovhd' && e.keyCode == 13 ){
     if(e.target.value == ''){
-      $('#ovhd').trigger('focus')
+      $('#ovhd').trigger('focus');
+     
     }
    }
 
    if(cls == 'disc' && e.keyCode == 13){
     $('#disc').trigger('focus');
+    
    }
 
    if(cls == 'savebtn' && e.keyCode == 13  ){
     $('#savebtn').trigger('focus');
+
    }
 
    
@@ -357,7 +364,7 @@ export class PurchaseComponent implements OnInit{
       
       if(this.tableDataList.length >= 1 ){ 
         this.rowFocused = 0; 
-         $('.qty0').trigger('focus');
+         $('.qty0').focus();
 
       }
      }
@@ -366,35 +373,96 @@ export class PurchaseComponent implements OnInit{
       /////move down
       if(e.keyCode == 40){
         if(this.productList.length >= 1 ){  
-          $('.prodRow0').trigger('focus');
+          $('.prodRow0').focus();
           // e.which = 9;   
           // $('.prodRow0').trigger(e)  ;
        }  
      }}
    }
 
+  handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[]){
+    
+
+    /////move down
+    if(e.keyCode == 40|| e.keyCode == 9){
+
+ 
+      if(prodList.length > 1 ){
+       this.prodFocusedRow += 1;
+       if (this.prodFocusedRow >= prodList.length) {      
+         this.prodFocusedRow -= 1  
+     } else {
+         var clsName = cls + this.prodFocusedRow;    
+        //  alert(clsName);
+         $(clsName).trigger('focus');
+         e.which = 9;   
+         $(clsName).trigger(e)       
+     }}
+   }
+ 
+ 
+      //Move up
+      if (e.keyCode == 38) {
+ 
+       if (this.prodFocusedRow == 0) {
+           $(endFocus).trigger('focus');
+           this.prodFocusedRow = 0;
+  
+       }
+ 
+       if (prodList.length > 1) {
+ 
+           this.prodFocusedRow -= 1;
+ 
+           var clsName = cls + this.prodFocusedRow;
+          //  alert(clsName);
+           $(clsName).trigger('focus');
+           
+ 
+       }
+ 
+   }
+
+  }
+
  
    changeValue(item:any){
     var myIndex = this.tableDataList.indexOf(item);
    // console.log(this.tableDataList[myIndex]);
     var myQty = this.tableDataList[myIndex].Quantity;
-    var mywCP = this.tableDataList[myIndex].wohCP;
+    var myCP = this.tableDataList[myIndex].CostPrice;
     var mySP = this.tableDataList[myIndex].SalePrice;
-    if(mywCP == null || mywCP == '' || mywCP == undefined){
+    if(myCP == null || myCP == '' || myCP == undefined){
      
-      this.tableDataList[myIndex].wohCP = 0;
+      this.tableDataList[myIndex].CostPrice = 0;
     }else if(myQty == null || myQty == '' || myQty == undefined){
       this.tableDataList[myIndex].Quantity = 0;
     }else if(mySP == null || mySP == '' || mySP == undefined){
       this.tableDataList[myIndex].SalePrice = 0;
     }
+    
    }
 
   handleNumKeys(item:any ,e:any,cls:string,index:any){
 
     if(e.keyCode == 9){
-      this.rowFocused = index;
+      if(cls == '.sp'){
+        this.rowFocused = index + 1;
+      }else{
+        this.rowFocused = index ;
+      }
+      
     }
+
+    
+   if(e.shiftKey && e.keyCode == 9 ){
+  
+    if(cls == '.qty'){
+      this.rowFocused = index - 1;
+    }else{
+      this.rowFocused = index ;
+    }
+   }
 
     if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
       // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
@@ -413,7 +481,9 @@ export class PurchaseComponent implements OnInit{
     } else {
         var clsName = cls + this.rowFocused; 
         // alert(clsName);   
-        $(clsName).trigger('focus');    
+        // e.which = e.ctrlKey + 97;
+        $(clsName).trigger('focus');  
+        // $(clsName).trigger(e);  
     }}
   }
 
@@ -473,6 +543,9 @@ export class PurchaseComponent implements OnInit{
   SaveBill(type:any){
     var isValidFlag = true;
   this.tableDataList.forEach((p:any) => {
+    p.Quantity = parseFloat(p.Quantity);
+    p.SalePrice = parseFloat(p.SalePrice);
+    p.CostPrice = parseFloat(p.CostPrice);
         
       if(p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null ){
         this.msg.WarnNotify('('+p.ProductTitle+') Cost Price is not Valid');
@@ -701,10 +774,18 @@ export class PurchaseComponent implements OnInit{
 
   getTotal() {
    
+    // alert(this.overHead);
+    // alert(this.discount);
     this.subTotal = 0;
     this.myTotalQty = 0;
     this.netTotal = 0;
   
+    if(this.discount == '' ){
+      this.discount = 0;
+    }
+    if(this.overHead == ''){
+      this.overHead = 0;
+    }
 
     for (var i = 0; i < this.tableDataList.length; i++) {
    
@@ -741,7 +822,7 @@ export class PurchaseComponent implements OnInit{
     this.myTableDataList = [];
     this.myInvoiceNo = item.invBillNo;
     this.myInvoiceDate = new Date(item.invDate);
-    this.myLocation = item.locationID;
+    this.myLocation = item.locationTitle;
     this.myRefInvNo = item.refInvoiceNo;
     this.mydiscount = item.billDiscount;
     this.myOverHeadAmount = item.overHeadAmount;

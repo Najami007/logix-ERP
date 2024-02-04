@@ -1,6 +1,6 @@
-<div class="container-fluid h-100 d-flex bg-gray body">
+<div class="container-fluid d-flex  body">
 
-    <div class="col-lg-8 " style="min-height: 650px;">
+    <div class="col-lg-8 bg-white" style="min-height: 650px;">
 
 
         <!-----------   categories Row ------------------->
@@ -21,7 +21,7 @@
             <div class="scrollContainer">
 
                 <button *ngFor="let item of categoriesList|filter:catSearch.value"
-                    (click)="onCatSelected(item)"
+                    (click)="onCatSelected(item);catSearch.value = ''"
                     [ngClass]="item.recipeCatID == categoryID  ? 'bg-blue' : ''"
                     class="border item text-center m-1 p-1">{{item.recipeCatTitle}}</button>
             </div>
@@ -31,12 +31,15 @@
         <!-----------   Products Area ------------------->
         <div class="row cursorPointer">
             <div *ngFor="let item of RecipeList" style="width: 150px;">
-                <mat-card style="width:120px; height: 130px;" class="m-1" (click)="productSelected(item)">
+                <mat-card style="width:120px; height: 140px;" class="m-1 shadow recipecard" data-bs-toggle="modal"
+                data-bs-target="#qtyModal" (click)="tempProdRow = item;this.global.focusTo('.prodQty')">
 
-                    <img *ngIf="item.recipeImage" [src]="item.recipeImage" alt="" height="80px" width="120px">
+                    <div class="text-center">
+                        <img *ngIf="item.recipeImage" [src]="item.recipeImage" alt="" height="100px" width="100px">
+                    </div>
 
                     <mat-card-footer class="text-center"
-                        style="font-size: x-small;">{{item.recipeTitle}}</mat-card-footer>
+                        style="font-size: x-small;"><strong>{{item.recipeTitle}}</strong></mat-card-footer>
                     <mat-card-footer class="text-center text-success">{{item.recipeSalePrice}}</mat-card-footer>
                 </mat-card>
             </div>
@@ -48,7 +51,7 @@
     </div>
 
 
-    <div class="col-lg-4  border-0 border-start" style="left: 66.6%; height: 100vh;position:fixed;overflow: scroll;">
+    <div class="col-lg-4 bg-gray  border-0 border-start" style="left: 66.6%; height: 100vh;position:fixed;overflow: scroll;">
 
         <!-----------   Table Side First Row ------------------->
 
@@ -96,7 +99,7 @@
                             <td class="text-center">{{index +1}}</td>
                             <td>{{item.recipeTitle}}</td>
                             <td class="text-center">{{item.recipeSalePrice |number:'1.0-1'}}</td>
-                            <td class="text-center">
+                            <!-- <td class="text-center">
                                 <div class="d-flex text-center justify-content-center pb-2">
                                     <mat-icon (click)="changeQty('add',index)"
                                         class="text-success">add_circle</mat-icon>
@@ -104,7 +107,9 @@
                                         (keydown)="getTotal();this.global.handleNumKeys($event);handleFocus(item,$event,'.qty')" (keyup)="getTotal();handleFocus(item,$event,'.qty')" [(ngModel)]="item.quantity">
                                     <mat-icon (click)="changeQty('minus',index)">remove_circle</mat-icon>
                                 </div>
-                            </td>
+                            </td> -->
+
+                            <td class="text-center">{{item.quantity}}</td>
                             <td class="text-center">{{item.recipeSalePrice * item.quantity |number:'1.0-1'}}</td>
                             <td class="text-center"><mat-icon class="text-danger"
                                     (click)="deleteRow(item)">delete</mat-icon></td>
@@ -154,6 +159,37 @@
     </div>
 
 
+     <!----------------Modal Window for Quantity ---------->
+
+
+
+     <div class="modal fade" id="qtyModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+     aria-labelledby="qtyModalLabel">
+     <div class="modal-dialog modal-dialog-centered modal-sm">
+         <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+             <div class="modal-body">
+         <div>
+            <form method="post">
+
+               <div>
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Quantity</mat-label>
+                    <input class="prodQty" (keydown)="this.global.handleNumKeys($event)"  type="number" min="0"  matInput #prodQty />
+                </mat-form-field>
+               </div>
+
+                <div class="text-center d-flex justify-content-between">
+                    <button class="btn btn-success" data-bs-dismiss="modal" (click)="productSelected(tempProdRow,prodQty.value);prodQty.value =''" >Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </form>
+         </div>
+             </div>
+         </div>
+     </div>
+ </div>
+
+ <!---------------------------------------------------------->
 
 
 
@@ -174,9 +210,10 @@
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>Payment Type</mat-label>
                         <mat-select [(ngModel)]="paymentType">
-                            <mat-option value="cash">Cash</mat-option>
-                            <mat-option value="credit">Credit</mat-option>
-                            <mat-option value="split">Split</mat-option>
+                            <mat-option value="c">Cash</mat-option>
+                            <mat-option value="Bredit">Bank</mat-option>
+                            <mat-option value="Split">Split</mat-option>
+                            <mat-option value="Complimentary">Complimentary</mat-option>
                         </mat-select>
                     </mat-form-field>
 
@@ -228,7 +265,7 @@
                     <table>
                         <tbody class="">
                             <tr  style="display: inline-flex; " class="cursorPointer " *ngFor="let item of tableList ">
-                                <mat-card class="btblbtn justify-content-center" (click)="selectTable(item.tableID)">
+                                <mat-card class="btblbtn justify-content-center" (click)="tempTableID = item.tableID">
                                     <span>{{item.tableTitle}}</span>
                                 </mat-card>
                             </tr>
@@ -237,7 +274,7 @@
                 </div>
                 <div class="col-lg-2 border-start">
 
-                    <mat-radio-group aria-label="Select an option" [(ngModel)]="orderType">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="tempOrderType">
                         <mat-radio-button  *ngFor="let item of orderTypeList" [value]="item.val">{{item.title}}</mat-radio-button>
                       </mat-radio-group>
 
@@ -248,7 +285,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button class="btn btn-success" data-bs-dismiss="modal">Save</button>
+                    <button class="btn btn-success" data-bs-dismiss="modal" (click)="selectT()">Save</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
 

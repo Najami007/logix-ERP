@@ -5,21 +5,19 @@ import { PincodeComponent } from 'src/app/Components/User/pincode/pincode.compon
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { environment } from 'src/environments/environment.development';
-
-
 @Component({
-  selector: 'app-addtable',
-  templateUrl: './addtable.component.html',
-  styleUrls: ['./addtable.component.scss']
+  selector: 'app-add-area',
+  templateUrl: './add-area.component.html',
+  styleUrls: ['./add-area.component.scss']
 })
-export class AddtableComponent implements OnInit{
+export class AddAreaComponent implements OnInit{
 
 
   constructor(
     private http:HttpClient,
     private global:GlobalDataModule,
     private msg:NotificationService,
-    private dialogRef:MatDialogRef<AddtableComponent>,
+    private dialogRef:MatDialogRef<AddAreaComponent>,
     @Inject(MAT_DIALOG_DATA) public data:any,
     private dialog:MatDialog
   ){}
@@ -28,24 +26,23 @@ export class AddtableComponent implements OnInit{
   ngOnInit(): void {
     if(this.data){
       this.btntype = 'Update';
-      this.tableTitle = this.data.tableTitle;
-      this.description = this.data.tableDescription;
+      this.cookingAreaTitle = this.data.cookingAriaTitle;
+      this.description = this.data.cookingAriaDescription;
     }
   
   }
 
   btntype = 'Save';
 
-  tableTitle:any = '';
+  cookingAreaTitle:any = '';
   description:any = '';
   
-  autoEmpty = true;
 
 
 
   save(){
 
-    if(this.tableTitle == '' || this.tableTitle == undefined){
+    if(this.cookingAreaTitle == '' || this.cookingAreaTitle == undefined){
       this.msg.WarnNotify('Enter Table Title')
     }else {
 
@@ -56,18 +53,16 @@ export class AddtableComponent implements OnInit{
    
       if(this.btntype == 'Save'){
         $('.loaderDark').show();
-      this.http.post(environment.mainApi+this.global.restaurentLink+'inserttable',{
-        TableTitle:this.tableTitle,
-        TableDescription:this.description,
+      this.http.post(environment.mainApi+this.global.restaurentLink+'insertCookingAria',{
+        CookingAriaTitle:this.cookingAreaTitle,
+        CookingAriaDescription:this.description,
         UserID:this.global.getUserID(),
       }).subscribe(
         (Response:any)=>{
           if(Response.msg == 'Data Saved Successfully'){
             this.msg.SuccessNotify(Response.msg);
             this.reset();      
-           if(this.autoEmpty == true){
             this.dialogRef.close('Update');
-           }
           }else{
             this.msg.WarnNotify(Response.msg);
           }
@@ -82,10 +77,10 @@ export class AddtableComponent implements OnInit{
        }).afterClosed().subscribe(pin=>{
         if(pin != ''){
           $('.loaderDark').show();
-        this.http.post(environment.mainApi+this.global.restaurentLink+'updateTable',{
+        this.http.post(environment.mainApi+this.global.restaurentLink+'UpdateCookingAria',{
           TableID:this.data.tableID,
-          TableTitle:this.tableTitle,
-          TableDescription:this.description,
+          CookingAriaTitle:this.cookingAreaTitle,
+          CookingAriaDescription:this.description,
           PinCode:pin,  
           UserID:this.global.getUserID(),
         }).subscribe(
@@ -116,8 +111,9 @@ export class AddtableComponent implements OnInit{
   }
 
   reset(){
-    this.tableTitle = '';
+    this.cookingAreaTitle = '';
     this.description = '';
+    this.btntype = 'Save';
   }
 
 }

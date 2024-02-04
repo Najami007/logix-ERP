@@ -102,10 +102,12 @@ export class SaleComponent implements OnInit {
   creditCard = 0;
 
   tableID = 0;
+  tempTableID = 0;
+  tempOrderType = '';
   tableTitle:any = '';
   
 
-  
+  tempProdRow:any = [];
   tempQty:any;
   tempIndex:any;
 
@@ -127,10 +129,15 @@ export class SaleComponent implements OnInit {
   }
 
 
-  selectTable(tid:any){
-    this.tableID = tid; 
-    this.tableTitle = this.tableList.find((e:any)=>e.tableID == tid).tableTitle;  
+  selectT(){
+    this.tableID = this.tempTableID;
+    this.tableTitle = this.tableList.find((e:any)=>e.tableID == this.tableID).tableTitle;
+    this.orderType = this.tempOrderType;
+
+    
   }
+
+  
 
 
   // getAllRecipe(){
@@ -230,22 +237,26 @@ export class SaleComponent implements OnInit {
 
   ///////////////////////////////////////////////////////////////
 
-  productSelected(item:any){
-
+  productSelected(item:any,qty:any){
+    // alert(this.tempIndex);
     if(this.tableID == 0 && this.orderType == 'di'){
       this.msg.WarnNotify('Table Number Must be Selected');
+    }else if(qty <= 0){
+      this.msg.WarnNotify('Enter Valid Quantity')
     }else{
       var index = this.tableData.findIndex((e:any)=> e.recipeID == item.recipeID); 
       // console.log(index);
       // alert( index)
-      if(index !== -1){
-        this.tableData[index].quantity = parseFloat( this.tableData[index].quantity +1 ); 
-      }else{
-        this.tableData.push({recipeID:item.recipeID,recipeTitle:item.recipeTitle,quantity:1,recipeSalePrice:item.recipeSalePrice});
-  
-      }
+      //if(index !== -1){
+     //   this.tableData[index].quantity = parseFloat( this.tableData[index].quantity +1 ); 
+     // }else{
+       
+          this.tableData.push({recipeID:item.recipeID,recipeTitle:item.recipeTitle,quantity:qty,recipeSalePrice:item.recipeSalePrice});
+      
+     // }
       this.getTotal();
     }
+    this.tempProdRow = [];
   }
 
   ///////////////////////////////////////////////////////////////

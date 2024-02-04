@@ -282,7 +282,7 @@
                                 (click)="holdDataFunction(item)">
                                 <button data-bs-dismiss="modal"
                                     style="height: 40px; background: none;;text-align: left;"
-                                    class="prodRow{{index}} prodBtn border-0 border-bottom border-dark" (keydown)="this.global.handleProdFocus(item,$event,'.prodRow','.prodName',productList)">
+                                    class="prodRow{{index}} prodBtn border-0 border-bottom border-dark" (keydown)="handleProdFocus(item,$event,'.prodRow','.prodName',productList)">
                                     <div class="justify-content-between d-flex">
                                         <div> {{item.productTitle}}</div>
                                         <div><b>({{item.barcode}})</b></div>
@@ -344,6 +344,7 @@
                                 <th>Inv No.</th>
                                 <th>Date</th>
                                 <th>Party</th>
+                                <th>Location</th>
                                 <th>Amount</th>
                                 <th>User</th>
                                 <th *ngIf="crudList.r">Action</th>
@@ -357,6 +358,7 @@
                                 <td>{{item.invBillNo}}</td>
                                 <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
                                 <td>{{item.partyName}}</td>
+                                <td>{{item.locationTitle}}</td>
                                 <td>{{(item.billTotal + item.overHeadAmount) -item.billDiscount | number:'1.0-0'}}</td>
                                 <td>{{item.entryUser}}</td>
                                 <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary"
@@ -411,12 +413,14 @@
                     <label class="fw-bold">Date</label>
                     <label class="fw-bold">Inv No</label>
                     <label class="fw-bold">Booker</label>
+                    <label class="fw-bold">Location</label>
 
                 </div>
                 <div class="row">
                     <label>{{myInvoiceDate | date:'dd-MM-yyyy'}}</label>
                     <label>{{myInvoiceNo}}</label>
                     <label>{{myBookerName}}</label>
+                    <label>{{myLocation}}</label>
 
                 </div>
             </div>

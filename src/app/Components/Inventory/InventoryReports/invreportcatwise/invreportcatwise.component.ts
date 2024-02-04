@@ -327,6 +327,15 @@ export class InvreportcatwiseComponent implements OnInit {
 
   openDialog(){
 
+    
+    if(this.reportType == 'full'){
+      this.catFlag = false;
+      this.subCatFlag = false;
+      this.brandFlag = false;
+      this.locFlag = false;
+      this.typeFlag = false
+ 
+    }
 
     
     if(this.reportType == 'cw'){

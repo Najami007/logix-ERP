@@ -8,6 +8,7 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import Swal from 'sweetalert2';
+import { MapWHProductComponent } from './map-whproduct/map-whproduct.component';
 
 @Component({
   selector: 'app-recipe',
@@ -52,13 +53,15 @@ export class RecipeComponent implements OnInit{
   recipeImg:any;
   salePrice:any;
   costPrice:any;
+  recipeRefID = 0;
   Description:any;
   PBarcode:any;
   productImage:any;
-  recipeType = '';
+  recipeType = 'Dine In';
   cookingTime = '';
   costTotal:number = 0;
   avgCostTotal:number = 0;
+  projectID = this.global.InvProjectID;
 
   totalQty:any = 0;
   productList:any = [];
@@ -162,7 +165,7 @@ export class RecipeComponent implements OnInit{
                     discInP:0,
                     discInR:0,
                     aq:Response[0].aq,
-              
+                    disable:false,
                   });
                   this.getTotal();
             
@@ -229,6 +232,7 @@ export class RecipeComponent implements OnInit{
               discInP:0,
               discInR:0,
               aq:Response[0].aq,
+              disable:false,
         
             })
             this.getTotal();
@@ -259,16 +263,16 @@ export class RecipeComponent implements OnInit{
 
 
   rowFocused = 0;
-  handleNumKeys(item:any ,e:any,cls:string){
+  handleNumKeys(item:any ,e:any,cls:string,index:any){
 
-   
-
-    // if (e.target.value < '0') {
-    //   e.target.value = 0;
-    // }else if(e.target.value == ''){
-    //   e.target.value = 0
-    // }
-
+    if(e.keyCode == 9){
+      this.rowFocused = index +1;
+     }
+  
+     if(e.shiftKey && e.keyCode == 9 ){
+    
+      this.rowFocused = index - 1;
+     }
 
 
     if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
@@ -357,15 +361,6 @@ export class RecipeComponent implements OnInit{
      }
 
 
-
-  // getProductList(){
-  //   this.http.get(environment.mainApi+this.global.restaurentLink+'GetActiveProduct').subscribe(
-  //     (Response)=>{
-  //       this.productList = Response;
-  //       //console.log(Response);
-  //     }
-  //   )
-  // }
 
   onProdSelect(row:any){
 
@@ -481,13 +476,17 @@ export class RecipeComponent implements OnInit{
       this.msg.WarnNotify('Select Category');
     }else if(this.costPrice > this.salePrice ){
       this.msg.WarnNotify('Receipe Cost is not Valid')
+    }else if(this.recipeType == '' || this.recipeType == undefined){
+      this.msg.WarnNotify('Select Recipe Type');
+    }else if(this.cookingTime == '' || this.cookingTime == '0' || this.cookingTime == undefined){
+      this.msg.WarnNotify('Enter Recipe Cooking Time')
     }
     else {
 
       if(this.Description == '' || this.Description == undefined){
         this.Description = '-';
       }
-      console.log(this.menuProdList);
+      //console.log(this.menuProdList);
 
       if(isValidFlag){
         if(this.btnType == 'Save'){
@@ -498,8 +497,10 @@ export class RecipeComponent implements OnInit{
             RecipeCostPrice: this.costPrice,
             RecipeSalePrice: this.salePrice,
             RecipeCatID:this.categoryID,
-            ProjectID: 1,
+            ProjectID: this.projectID,
             RecipeImage: this.recipeImg,
+            RecipeType:this.recipeType,
+            CookingTime:this.cookingTime,
         
             RecipeDetail: JSON.stringify(this.menuProdList) ,
         
@@ -530,8 +531,11 @@ export class RecipeComponent implements OnInit{
                 RecipeDescription: this.Description,
                 RecipeCostPrice: this.costPrice,
                 RecipeSalePrice: this.salePrice,
+                RecipeType:this.recipeType,
+                RecipeRefID:this.recipeRefID,
+                CookingTime:this.cookingTime,
                 RecipeCatID:this.categoryID,
-                ProjectID: 1,
+                ProjectID: this.projectID,
                 RecipeImage: this.recipeImg,
                 PinCode:pin,
             
@@ -576,13 +580,16 @@ export class RecipeComponent implements OnInit{
     this.costPrice = item.recipeCostPrice;
     this.salePrice = item.recipeSalePrice;
     this.recipeImg = item.recipeImage;
+    this.recipeRefID = item.recipeRefID;
     this.Description = item.recipeDescription;
     this.cookingTime  = item.cookingTime;
 
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetSingleRecipeDetail?recipeid='+item.recipeID).subscribe(
       (Response:any)=>{
-        console.log(Response);
+       // console.log(Response);
         this.menuProdList = [];
+
+        
         
 
         Response.forEach((e:any) => {
@@ -602,6 +609,7 @@ export class RecipeComponent implements OnInit{
             packing:1,
             discInP:0,
             discInR:0,
+            disable:false,
       
           })
         });
@@ -617,9 +625,20 @@ export class RecipeComponent implements OnInit{
 
 
   copyRecipe(item:any){
-    alert(item.recipeID)
-    this.tabIndex = 0;
-    this.recipeType = item.recipeType;
+    // alert(item.cookingTime)
+    // this.tabIndex = 0;\
+    this.menuProdList = [];
+    var recID = 0;
+
+    if(item.recipeRefID > 0){
+      this.btnType = 'Update';
+      recID = item.recipeRefID;
+      this.recipeID = item.recipeRefID;
+    
+    }else  if(item.recipeRefID == 0){
+      recID = item.recipeID
+    }
+    this.recipeType = 'Others';
     this.categoryID = item.recipeCatID;
     this.recipeTitle = item.recipeTitle;
     this.costPrice = item.recipeCostPrice;
@@ -628,34 +647,81 @@ export class RecipeComponent implements OnInit{
     this.Description = item.recipeDescription;
     this.cookingTime  = item.cookingTime;
 
-    this.http.get(environment.mainApi+this.global.restaurentLink+'GetSingleRecipeDetail?recipeid='+item.recipeID).subscribe(
+    this.http.get(environment.mainApi+this.global.restaurentLink+'GetSingleRecipeDetail?recipeid='+recID).subscribe(
       (Response:any)=>{
-        console.log(Response);
-        this.menuProdList = [];
-        
+       // console.log(Response);
+       this.menuProdList = [];
 
-        Response.forEach((e:any) => {
-          this.menuProdList.push({
-            productID:e.productID,
-            productTitle:e.productTitle,
-            barcode:e.barcode,
-            productImage:e.productImage,
-            quantity:e.quantity,
-            avgCostPrice:e.avgCostPrice,
-            costPrice:e.costPrice,
-            salePrice:e.salePrice,
-            expiryDate:this.global.dateFormater(new Date(),'-'),
-            batchNo:'-',
-            batchStatus:'-',
-            uomID:e.uomID,
-            packing:1,
-            discInP:0,
-            discInR:0,
+     
       
-          })
-        });
+        this.http.get(environment.mainApi+this.global.restaurentLink+'GetSingleRecipeDetail?recipeid='+item.recipeID).subscribe(
+          (res:any)=>{
+            console.log(res);
+            Response.forEach((e:any) => {
 
-        this.getTotal();
+
+              res.forEach((d:any) => {
+
+                if(e.productID == d.productID){
+                  // console.log(e);
+                  this.menuProdList.push({
+                    productID:e.productID,
+                    productTitle:e.productTitle,
+                    barcode:e.barcode,
+                    productImage:e.productImage,
+                    quantity:e.quantity,
+                    avgCostPrice:e.avgCostPrice,
+                    costPrice:e.costPrice,
+                    salePrice:e.salePrice,
+                    expiryDate:this.global.dateFormater(new Date(),'-'),
+                    batchNo:'-',
+                    batchStatus:'-',
+                    uomID:e.uomID,
+                    packing:1,
+                    discInP:0,
+                    discInR:0,
+                    disable:true,
+              
+                  }) 
+                }
+              if(e.productID !== d.productID){  
+                  
+                 console.log(e.productID !== d.productID,e,d)
+                 
+                  this.menuProdList.push({
+                    productID:e.productID,
+                    productTitle:e.productTitle,
+                    barcode:e.barcode,
+                    productImage:e.productImage,
+                    quantity:e.quantity,
+                    avgCostPrice:e.avgCostPrice,
+                    costPrice:e.costPrice,
+                    salePrice:e.salePrice,
+                    expiryDate:this.global.dateFormater(new Date(),'-'),
+                    batchNo:'-',
+                    batchStatus:'-',
+                    uomID:e.uomID,
+                    packing:1,
+                    discInP:0,
+                    discInR:0,
+                    disable:false,
+              
+                  }) 
+                 
+                }
+    
+              });
+              // console.log(this.menuProdList)
+                     
+          });
+          
+          
+          }
+        )
+
+      
+  
+    
      
 
       }
@@ -679,8 +745,8 @@ export class RecipeComponent implements OnInit{
           UserID: this.global.getUserID(),
         }).subscribe(
           (Response:any)=>{
-            if(Response.msg == 'Approved Successfully'){
-              this.msg.WarnNotify(Response.msg);
+            if(Response.msg == "Approved Successfully"){
+              this.msg.SuccessNotify(Response.msg);
               this.getAllRecipe();
             }else {
               this.msg.WarnNotify(Response.msg);
@@ -719,6 +785,7 @@ export class RecipeComponent implements OnInit{
 
       this.http.post(environment.mainApi+this.global.restaurentLink+'deleteRecipe',{
         RecipeID: row.recipeID,
+        RecipeRefID:row.recipeRefID,
         PinCode:pin,
         UserID: this.global.getUserID()
 
@@ -752,6 +819,7 @@ export class RecipeComponent implements OnInit{
 
   reset(){
     this.recipeID = 0;
+    this.categoryID = 0;
     this.recipeTitle = '';
     this.costPrice = '';
     this.salePrice = '';
@@ -763,6 +831,9 @@ export class RecipeComponent implements OnInit{
     this.recipeImg = '';
     this.productImage = '';
     this.btnType = 'Save';
+    this.recipeType = 'Dine In';
+    this.cookingTime = '';
+    this.recipeRefID = 0;
 
     
 
@@ -779,5 +850,16 @@ export class RecipeComponent implements OnInit{
 
   }
 
+
+
+  MapProdWithCategory(){
+    this.dialog.open(MapWHProductComponent,{
+      width:'40%',
+    }).afterClosed().subscribe(value=>{
+      if(value == 'Update'){
+        this.getAllRecipe();
+      }
+    })
+  }
 
 }

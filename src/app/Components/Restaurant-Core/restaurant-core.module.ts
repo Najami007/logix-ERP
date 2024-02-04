@@ -20,6 +20,10 @@ import { AddrecipeCategoryComponent } from './recipe-category/addrecipe-category
 import { TableComponent } from './table/table.component';
 import { AddtableComponent } from './table/addtable/addtable.component';
 import { DayopencloseComponent } from './dayopenclose/dayopenclose.component';
+import { MapWHProductComponent } from './recipe/map-whproduct/map-whproduct.component';
+import { CookingareaComponent } from './cookingarea/cookingarea.component';
+import { AddAreaComponent } from './cookingarea/add-area/add-area.component';
+import { OrderDashboardComponent } from './order-dashboard/order-dashboard.component';
 
 
 
@@ -32,6 +36,8 @@ export const restCore: Route[] = [
   {path:'rcp', component:RecipeComponent, canActivate:[AuthGuard] },
   {path:'recCat', component:RecipeCategoryComponent, canActivate:[AuthGuard] },
   {path:'doc', component:DayopencloseComponent, canActivate:[AuthGuard] },
+  {path:'ckar', component:CookingareaComponent, canActivate:[AuthGuard] },
+  {path:'ordrdb', component:OrderDashboardComponent, canActivate:[AuthGuard] },
 
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
@@ -53,6 +59,10 @@ export const restCore: Route[] = [
     TableComponent,
     AddtableComponent,
     DayopencloseComponent,
+    MapWHProductComponent,
+    CookingareaComponent,
+    AddAreaComponent,
+    OrderDashboardComponent,
 
   ],
   imports: [

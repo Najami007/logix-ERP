@@ -1,7 +1,5 @@
-
 .billTable{
     overflow-y: scroll;
-
 }
 
 .bg-blue{
@@ -11,10 +9,11 @@
 
 
 .scrollContainer{
+  overflow-x: auto;
     max-height: 80px;
     // border: 1px solid black;
     display: flex;
-    overflow-x: auto;
+   
 }
 .scrollContainer:hover::-webkit-scrollbar-thumb{
     background: #d0d0d0;
@@ -40,6 +39,10 @@
      border-radius: 10px ;
 }
 
+.recipecard:hover{
+  zoom: 1.1 !important;
+}
+
 
 
 ::ng-deep .cdk-overlay-container{
@@ -62,12 +65,3 @@
    
    }
 
-
-   .calculator  tbody >tr >td{
-    border: 1px solid black;
-    background-color: antiquewhite;
-    height: 50px;
-    width: 50px;
-    text-align: center;
-
-   }

@@ -1,0 +1,29 @@
+<div class="p-4">
+    <div class="text-center border-bottom mb-3  mt-3 d-flex justify-content-between"><p class="dialogueTitle">Map Product With Category</p><mat-icon class="cursorPointer" (click)="closeDialogue()">cancel</mat-icon></div>
+
+    <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Products</mat-label>
+        <mat-select [(ngModel)]="productID" name="location">
+            <mat-option><ngx-mat-select-search #prod [placeholderLabel]="'Search...'"
+                    [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+            <mat-option *ngFor="let item of productList | filter:prod.value"
+                [value]="item.productID">{{item.productTitle}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    
+    
+    <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Category</mat-label>
+        <mat-select [(ngModel)]="categoryID" name="location">
+            <mat-option><ngx-mat-select-search #cat [placeholderLabel]="'Search...'"
+                    [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+            <mat-option *ngFor="let item of categoriesList | filter:cat.value"
+                [value]="item.recipeCatID">{{item.recipeCatTitle}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    
+    
+    <div class="text-center">
+        <button class="btn btn-success w-50" (click)="save()">Save</button>
+    </div>
+</div>
