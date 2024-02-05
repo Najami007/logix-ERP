@@ -1,5 +1,6 @@
-
-    <mat-tab-group mat-align-tabs="center" class="body bg-gray h-100" [selectedIndex]="tabIndex"
+<div class="body bg-gray h-100">
+    
+    <mat-tab-group mat-align-tabs="center"  [selectedIndex]="tabIndex"
         (selectedIndexChange)="changeTab($event)">
         <mat-tab label="ADD / Modify" class="h-100">
             <div class="container-fluid p-1 row">
@@ -238,6 +239,7 @@
         </mat-tab>
     </mat-tab-group>
 
+
     
             <!------------------------ Modal Window for Making Other Recipe ------------------>
 
@@ -265,7 +267,7 @@
                                         *ngIf="PBarcode != '' && PBarcode != undefined">
                                         <div class="card " *ngFor="let item of productList| filter:PBarcode index as index"
                                             (click)="holdDataFunction(item)">
-                                            <button (keydown)="this.global.handleProdFocus(item,$event,'.prodRow','.searchProduct   ',productList)"
+                                            <button (keydown)="this.global.handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)"
                                              class="prodRow{{index}}"   style="background: none;border: none;text-align: left;">{{item.productTitle}}
                                                 (<b>{{item.barcode}}</b> )</button>
                                         </div>
@@ -336,3 +338,5 @@
     
                 </div>
             </div>
+</div>
+    

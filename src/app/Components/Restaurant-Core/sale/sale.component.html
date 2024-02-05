@@ -97,8 +97,8 @@
                     <tbody>
                         <tr *ngFor="let item of tableData index as index">
                             <td class="text-center">{{index +1}}</td>
-                            <td>{{item.recipeTitle}}</td>
-                            <td class="text-center">{{item.recipeSalePrice |number:'1.0-1'}}</td>
+                            <td>{{item.productTitle}}</td>
+                            <td class="text-center">{{item.salePrice |number:'1.0-1'}}</td>
                             <!-- <td class="text-center">
                                 <div class="d-flex text-center justify-content-center pb-2">
                                     <mat-icon (click)="changeQty('add',index)"
@@ -110,7 +110,7 @@
                             </td> -->
 
                             <td class="text-center">{{item.quantity}}</td>
-                            <td class="text-center">{{item.recipeSalePrice * item.quantity |number:'1.0-1'}}</td>
+                            <td class="text-center">{{item.salePrice * item.quantity |number:'1.0-1'}}</td>
                             <td class="text-center"><mat-icon class="text-danger"
                                     (click)="deleteRow(item)">delete</mat-icon></td>
                         </tr>
@@ -122,27 +122,70 @@
 
 
             <!-----------   Bill Total Amount Section ------------------->
-            <div class="p-4 bg-white border-top">
+            <div class="d-flex bg-white border-top p-1 col-lg-4" style="position: fixed;bottom: 6%;right: 0%;">
 
-                <span class="d-flex border-bottom border-dark justify-content-between">
-                    <p>Sub Total</p>
-                    <p>{{subTotal |number}}</p>
-                </span>
-                <span class="p-1 d-flex">
-                    <button mat-raised-button class="m-1 text-white bg-secondary w-50">HOLD</button>
+                <!-- <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="col-lg-2">Discount</th>
+                            <th class="col-lg-2">Other Charges</th>
+                            <th class="col-lg-2">SubTotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>   <mat-form-field appearance="outline" >
+                                <input matInput  [(ngModel)]="billDiscount"   />
+                            </mat-form-field></td>
+                            <td>   <mat-form-field appearance="outline" >
+                                <input matInput  [(ngModel)]="OtherCharges"   />
+                            </mat-form-field></td>
+                            <td>{{subTotal |number}}</td>
+                        </tr>
+                    </tbody>
+                </table> -->
+
+              <div class="justify-content-between p-1 w-50 border-end" >
+
+                   <div class="d-flex justify-content-between w-100">
+                    <mat-label class="w-50"><strong>Discount</strong></mat-label>
+                    <input  [(ngModel)]="billDiscount"  class="w-50" (keyup)="getTotal();" (keydown)="getTotal();this.global.handleNumKeys($event)" />
+                   </div>
+
+                   <div class="d-flex justify-content-between w-100 pt-1">
+                    <mat-label class="w-50"><strong>Other Charges</strong></mat-label>
+                    <input  [(ngModel)]="OtherCharges" class="w-50" (keyup)="getTotal();"  (keydown)="getTotal();this.global.handleNumKeys($event)" />
+                   </div>
+            
+                <div class="d-flex justify-content-between w-100 pt-1">
+                    <mat-label><strong>Sub Total</strong></mat-label>
+                    <p class="text-center font-digit" style="font-size: 30px;">{{subTotal |number}}</p>
+                </div>
+                <div class="d-flex justify-content-between  w-100">
+                    <mat-label><strong>Net Total</strong></mat-label>
+                    <p class="text-center font-digit" style="font-size: 30px;">{{netTotal |number}}</p>
+                </div>
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>Remarks</mat-label>
+                    <textarea rows="1" matInput [(ngModel)]="billRemarks"></textarea>
+                </mat-form-field>
+              </div>
+
+
+
+               <div class="w-50 text-center">
+                
+                    <button mat-raised-button class="m-1 text-white bg-secondary w-50" (click)="save('hold')">HOLD</button>
                     <button mat-raised-button class="m-1 text-white bg-success w-50" data-bs-toggle="modal"
-                        data-bs-target="#paymentMehtod">Save</button>
-               
-                    
-                </span>
-
-                <span class="p-1 d-flex">
+                        data-bs-target="#paymentMehtod" (click)="save('sale')">Save</button>
+              
                     <button mat-raised-button class="m-1 text-white bg-primary w-50" data-bs-toggle="modal"
-                        data-bs-target="#retrieveBill">Retrive</button>
+                        data-bs-target="#retrieveBill">Retrieve</button>
                     <button mat-raised-button class="m-1 text-white bg-warning w-50" accesskey="n" matTooltip="New bill (Alt + n)"data-bs-toggle="modal"
-                    data-bs-target="#NewBill">New Bill</button>
+                    data-bs-target="#NewBill" [disabled]="tableData != ''" (click)="reset()">New Bill</button>
                     
-                </span>
+               
+               </div>
 
 
             </div>
@@ -227,8 +270,8 @@
 
                         <div class="d-flex justify-content-between  "
                             *ngIf="paymentType == 'credit' || paymentType == 'split'">
-                            <mat-label style="font-size: 20px;">Credit Card:</mat-label>
-                            <input type="text"  [(ngModel)]="creditCard" />
+                            <mat-label style="font-size: 20px;">Bank:</mat-label>
+                            <input type="text"  [(ngModel)]="bankCash" />
                         </div>
 
                     </mat-card>
@@ -265,18 +308,26 @@
                     <table>
                         <tbody class="">
                             <tr  style="display: inline-flex; " class="cursorPointer " *ngFor="let item of tableList ">
-                                <mat-card class="btblbtn justify-content-center" (click)="tempTableID = item.tableID">
+                                <mat-card class="btblbtn justify-content-center" *ngIf="item.tableStatus == false"  [ngClass]="item.tableID == tempTableID ? 'bg-primary text-white' : 'bg-white'" (click)="tempTableID = item.tableID">
+                                    <span>{{item.tableTitle}}</span>
+                                </mat-card>
+                                <mat-card class="btblbtn justify-content-center bg-warning text-white" *ngIf="item.tableStatus == true" >
                                     <span>{{item.tableTitle}}</span>
                                 </mat-card>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="col-lg-2 border-start">
+                <div class="col-lg-2 border-start p-1">
 
                     <mat-radio-group aria-label="Select an option" [(ngModel)]="tempOrderType">
                         <mat-radio-button  *ngFor="let item of orderTypeList" [value]="item.val">{{item.title}}</mat-radio-button>
                       </mat-radio-group>
+
+                    <mat-form-field appearance="outline" class="w-100 pt-4">
+                        <mat-label>Cover</mat-label> 
+                        <input type="text" (keydown)="this.global.handleNumKeys($event)" matInput [(ngModel)]="coverOf" />
+                    </mat-form-field>
 
                 </div>
                </div>
@@ -285,7 +336,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button class="btn btn-success" data-bs-dismiss="modal" (click)="selectT()">Save</button>
+                    <button class="btn btn-success"  (click)="selectT()">Save</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
 
@@ -306,6 +357,16 @@
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-body">
+
+                    <table>
+                        <tbody class="">
+                            <tr  style="display: inline-flex; " class="cursorPointer " *ngFor="let item of holdBillList ">
+                                <mat-card class="btblbtn justify-content-center" (click)="tempTableID = item.tableID">
+                                    <span>{{item.tableTitle}}</span>
+                                </mat-card>
+                            </tr>
+                        </tbody>
+                    </table>
 
 
                 </div>

@@ -675,6 +675,12 @@ export class GlobalDataModule implements OnInit {
       e.preventDefault();
   }
 
+  
+  if(e.target.value == '' ){
+   e.target.value = 0;
+  }
+
+
 
   }
 
