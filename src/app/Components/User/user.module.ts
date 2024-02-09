@@ -17,6 +17,7 @@ import { ChangePINComponent } from './change-pin/change-pin.component';
 import { TextMaskModule } from 'angular2-text-mask';
 import { UserRoleComponent } from './user-role/user-role.component';
 import { AuthGuard } from 'src/app/auth.guard';
+import { RestrictpwdComponent } from './restrictpwd/restrictpwd.component';
 
 
 
@@ -24,6 +25,7 @@ export const userRoutes: Route[] = [
   
   {path:'adduser', component:AddUserComponent,canActivate:[AuthGuard]  },
   {path:'usrl', component:UserRoleComponent,canActivate:[AuthGuard]  },
+  {path:'respwd', component:RestrictpwdComponent,canActivate:[AuthGuard]  },
 
   {path:'**', redirectTo:'home',pathMatch:'full'}
 
@@ -37,6 +39,7 @@ export const userRoutes: Route[] = [
     ChangePasswordComponent,
     ChangePINComponent,
     UserRoleComponent,
+    RestrictpwdComponent,
     
   ],
   imports: [

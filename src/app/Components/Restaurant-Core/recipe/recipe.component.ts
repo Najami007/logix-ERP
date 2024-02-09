@@ -248,7 +248,12 @@ export class RecipeComponent implements OnInit{
     this.PBarcode = '';
     $('#searchProduct').trigger('focus');
   }else {
-    this.menuProdList[index].quantity += 1;
+    if(this.menuProdList[index].disable == false){
+      this.menuProdList[index].quantity += 1;
+    }else{
+      this.msg.WarnNotify('Can Not Edit this Product')
+    }
+   
     this.productImage = this.menuProdList[index].productImage;
     
     this.PBarcode = '';
@@ -524,6 +529,7 @@ export class RecipeComponent implements OnInit{
             width:"30%"
           }).afterClosed().subscribe(pin=>{
             if(pin != ''){
+              alert()
               this.app.startLoaderDark();
               this.http.post(environment.mainApi+this.global.restaurentLink+'UpdateRecipe',{
                 RecipeID: this.recipeID,
@@ -646,86 +652,76 @@ export class RecipeComponent implements OnInit{
     this.recipeImg = item.recipeImage;
     this.Description = item.recipeDescription;
     this.cookingTime  = item.cookingTime;
+    
+
+
+  
+
 
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetSingleRecipeDetail?recipeid='+recID).subscribe(
       (Response:any)=>{
        // console.log(Response);
        this.menuProdList = [];
-
-     
+       var tempProdList:any = [];
+       Response.forEach((e:any) => {      
+                  
+    
+                      // console.log(e);
+          this.menuProdList.push({
+            productID:e.productID,
+            productTitle:e.productTitle,
+            barcode:e.barcode,
+            productImage:e.productImage,
+            quantity:e.quantity,
+            avgCostPrice:e.avgCostPrice,
+            costPrice:e.costPrice,
+            salePrice:e.salePrice,
+            expiryDate:this.global.dateFormater(new Date(),'-'),
+            batchNo:'-',
+            batchStatus:'-',
+            uomID:e.uomID,
+            packing:1,
+            discInP:0,
+            discInR:0,
+            disable:false,
       
+          }) 
+         
+        
+   
+    });
+       
         this.http.get(environment.mainApi+this.global.restaurentLink+'GetSingleRecipeDetail?recipeid='+item.recipeID).subscribe(
           (res:any)=>{
-            console.log(res);
-            Response.forEach((e:any) => {
-
-
+            console.log(res);   
+         
               res.forEach((d:any) => {
+               this.menuProdList.forEach((e:any) => {      
 
                 if(e.productID == d.productID){
-                  // console.log(e);
-                  this.menuProdList.push({
-                    productID:e.productID,
-                    productTitle:e.productTitle,
-                    barcode:e.barcode,
-                    productImage:e.productImage,
-                    quantity:e.quantity,
-                    avgCostPrice:e.avgCostPrice,
-                    costPrice:e.costPrice,
-                    salePrice:e.salePrice,
-                    expiryDate:this.global.dateFormater(new Date(),'-'),
-                    batchNo:'-',
-                    batchStatus:'-',
-                    uomID:e.uomID,
-                    packing:1,
-                    discInP:0,
-                    discInR:0,
-                    disable:true,
-              
-                  }) 
+                  var index = this.menuProdList.indexOf(e)
+                  this.menuProdList[index].disable = true
                 }
-              if(e.productID !== d.productID){  
                   
-                 console.log(e.productID !== d.productID,e,d)
-                 
-                  this.menuProdList.push({
-                    productID:e.productID,
-                    productTitle:e.productTitle,
-                    barcode:e.barcode,
-                    productImage:e.productImage,
-                    quantity:e.quantity,
-                    avgCostPrice:e.avgCostPrice,
-                    costPrice:e.costPrice,
-                    salePrice:e.salePrice,
-                    expiryDate:this.global.dateFormater(new Date(),'-'),
-                    batchNo:'-',
-                    batchStatus:'-',
-                    uomID:e.uomID,
-                    packing:1,
-                    discInP:0,
-                    discInR:0,
-                    disable:false,
-              
-                  }) 
-                 
-                }
-    
               });
-              // console.log(this.menuProdList)
-                     
-          });
-          
-          
+            });  
           }
-        )
+        
+          )
 
-      
+          this.getTotal()
+
+
+
+
+       
   
-    
-     
 
       }
     )
+
+      
+   
 
 
   }

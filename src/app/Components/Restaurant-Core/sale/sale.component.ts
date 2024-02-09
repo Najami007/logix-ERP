@@ -16,10 +16,14 @@ import { PincodeComponent } from '../../User/pincode/pincode.component';
 export class SaleComponent implements OnInit {
 
 
-
+  holdbtnType = 'hold';
 
   crudList:any = [];
   companyProfile:any = [];
+  companyLogo:any = '';
+  companyAddress:any = '';
+  CompanyMobile:any = '';
+  companyName:any = '';
 
   constructor(
     private http:HttpClient,
@@ -31,6 +35,10 @@ export class SaleComponent implements OnInit {
   ){
     this.global.getCompany().subscribe((data)=>{
       this.companyProfile = data;
+      this.companyLogo = data[0].companyLogo1;
+      this.CompanyMobile = data[0].companyMobile;
+      this.companyAddress = data[0].companyAddress;
+      this.companyName = data[0].companyName;
     });
 
     this.global.getMenuList().subscribe((data)=>{
@@ -50,7 +58,8 @@ export class SaleComponent implements OnInit {
     }, 200);
     // this.getAllRecipe();
     this.getTable();
-    this.findHoldBills('HS');
+    this.getHoldBills();
+    this.getBankList();
     
     // this.RecipeList =  this.RecipeList.filter((e:any)=>e.recipeCatID == this.categoryID);
    
@@ -60,9 +69,9 @@ export class SaleComponent implements OnInit {
 
 
   orderTypeList:any = [
-    {val:'di' , title:'Dine In'},
-    {val:'ta' , title:'Take away'},
-    {val:'hd' , title:'Home Delivery'},
+    {val:'Dine In' , title:'Dine In'},
+    {val:'Take Away' , title:'Take Away'},
+    {val:'Home Delivery' , title:'Home Delivery'},
   ]
 
   categoriesList:any = [];
@@ -94,7 +103,7 @@ export class SaleComponent implements OnInit {
   ]
 
 
-
+  serviceCharges = 5;
   bankCoaID = 0;
   OtherCharges:any = 0;
   billDiscount:any = 0;
@@ -103,15 +112,17 @@ export class SaleComponent implements OnInit {
   orderNo = 0;
   coverOf:any;
   billRemarks = '';
-  BookerID = 0;
+  BookerID = 1;
   ProjectID = this.global.InvProjectID;
   PartyID = 0;
   invoiceDate:Date = new Date();
   categoryID:any = 0;
-  orderType = 'di';
+  orderType = '';
   paymentType = '';
   cash = 0;
   bankCash = 0;
+  change = 0;
+  bankCoaList:any = [];
 
   tableID = 0;
   tempTableID = 0;
@@ -142,24 +153,44 @@ export class SaleComponent implements OnInit {
   }
 
 
+  onOrderTypeSelected(type:any){    
+
+    if(type !== 'Dine In'){
+      this.tempTableID = 0;
+      this.coverOf = 0;
+    }
+
+  }
+
+
   selectT(){
 
-    if(this.tempTableID == 0 || this.tempTableID == undefined){
+    if(this.tempOrderType == 'Dine In' && (this.tempTableID == 0 || this.tempTableID == undefined) ){
       this.msg.WarnNotify('Select Table')
-    }else if(this.orderType == '' || this.orderType == undefined || this.orderType == null){
+    }else if(this.tempOrderType == '' || this.tempOrderType == undefined || this.tempOrderType == null){
       this.msg.WarnNotify('Select Order Type')
-    }else if(this.coverOf == '' || this.coverOf == 0 || this.coverOf == undefined){
+    }else if(this.tempOrderType == 'Dine In' && (this.coverOf == '' || this.coverOf == 0 || this.coverOf == undefined)){
       this.msg.WarnNotify('Enter Cover oF')
     }else{
 
+
+      if(this.tempOrderType !== 'Dine In'){
+        this.tempTableID = 0;
+        this.coverOf = 0;
+      }
+  
+
       this.tableID = this.tempTableID;
-      this.tableTitle = this.tableList.find((e:any)=>e.tableID == this.tableID).tableTitle;
+      if(this.tempOrderType == 'Dine In'){
+        this.tableTitle = this.tableList.find((e:any)=>e.tableID == this.tableID).tableTitle;
+      }
       this.orderType = this.tempOrderType;
 
       $('#NewBill').hide();
-      $('.modal').remove();
-      $('body').removeClass('modal-open');
+      // $('.modal').remove();
+      // $('body').removeClass('modal-open');
       $('.modal-backdrop').remove();
+     
 
 
     }
@@ -167,26 +198,30 @@ export class SaleComponent implements OnInit {
     
   }
 
+
+   ////////////////////////////////////////////
+
+   getBankList(){
+    this.http.get(environment.mainApi+'acc/GetVoucherCBCOA?type=BRV').subscribe(
+      (Response:any)=>{
+        this.bankCoaList = Response;
+        this.bankCoaID = Response[0].coaID;
+        //console.log(Response);
+      },
+      (Error)=>{
+        //console.log(Error);
+      }
+    )
+  }
+
   
-
-
-  // getAllRecipe(){
-  //   this.http.get(environment.mainApi+this.global.restaurentLink+'GetAllRecipes').subscribe(
-  //     (Response:any)=>{
-  //      this.tempRecipeList = Response;
-  //       this.RecipeList = this.tempRecipeList.filter((e:any)=>e.recipeCatID == this.categoryID);
-  //       //console.log(Response);
-  //     }
-  //   )
-  // }
-
   onCatSelected(item:any){
     this.categoryID = item.recipeCatID;
     // alert(item.recipeCatID)
     // alert(item.prodFlag)
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetAllRecipesCatWise?CatID='+item.recipeCatID +'&reqFlag='+item.prodFlag).subscribe(
       (Response:any)=>{
-        //console.log(Response)
+       // console.log(Response)
         this.RecipeList = Response;
       }
     )
@@ -199,7 +234,7 @@ export class SaleComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetRecipeCategories').subscribe(
       (Response:any)=>{
         this.categoriesList = Response;
-        console.log(Response);
+       // console.log(Response);
         this.categoryID = this.categoriesList[0].recipeCatID;
     
       }
@@ -268,7 +303,12 @@ export class SaleComponent implements OnInit {
     if(this.billDiscount == '' || this.billDiscount == undefined){
       this.billDiscount = 0;
     }
+    if(this.orderType == 'Dine In'){
+      this.OtherCharges = this.subTotal * (this.serviceCharges / 100);
+    }
     this.netTotal = (this.subTotal + parseFloat(this.OtherCharges)) - parseFloat(this.billDiscount);
+
+    this.change = (this.cash + this.bankCash) -  this.netTotal;
   }
 
 
@@ -276,7 +316,7 @@ export class SaleComponent implements OnInit {
 
   productSelected(item:any,qty:any){
     // alert(this.tempIndex);
-    if(this.tableID == 0 && this.orderType == 'di'){
+    if(this.tableID == 0 && this.orderType == 'Dine In'){
       this.msg.WarnNotify('Table Number Must be Selected');
     }else if(qty <= 0){
       this.msg.WarnNotify('Enter Valid Quantity')
@@ -288,8 +328,19 @@ export class SaleComponent implements OnInit {
      //   this.tableData[index].quantity = parseFloat( this.tableData[index].quantity +1 ); 
      // }else{
        
-     this.tableData.push({productID:item.productID,productTitle:item.recipeTitle,quantity:qty,costPrice:item.recipeCostPrice,avgCostPrice:item.avgCostPrice,
-    salePrice:item.recipeSalePrice,recipeID:item.recipeID,cookingAriaID:item.cookingAreaID,cookingTime:item.cookingTime,requestType:'Order',entryType:'New'});
+     this.tableData.push({productID:item.productID,
+      productTitle:item.recipeTitle,
+      quantity:qty,
+      costPrice:item.recipeCostPrice,
+      avgCostPrice:item.avgCostPrice,
+      salePrice:item.recipeSalePrice,
+      recipeID:item.recipeID,
+      cookingAriaID:item.cookingAreaID,
+      cookingTime:item.cookingTime,
+      requestType:'Order',
+      entryType:'New',
+      autoInvDetID:0,
+    });
           // this.tableData.push({recipeID:item.recipeID,recipeTitle:item.recipeTitle,quantity:qty,recipeSalePrice:item.recipeSalePrice});
       
      // }
@@ -302,13 +353,20 @@ export class SaleComponent implements OnInit {
 
   save(type:any){
 
-    if(this.tableID == 0 || this.tableID == undefined){
+    if(this.orderType == 'Dine In' && (this.tableID == 0 || this.tableID == undefined) ){
       this.msg.WarnNotify('Select Table')
     }else if(this.orderType == '' || this.orderType == undefined){
       this.msg.WarnNotify('Select Order Type')
     }else if(this.tableData == '' || this.tableData == undefined){
       this.msg.WarnNotify('One Product must be Entered')
-    }else{
+    }else if(this.paymentType == 'Split' && ((this.cash + this.bankCash) > this.netTotal || (this.cash + this.bankCash) < this.netTotal )){
+      this.msg.WarnNotify('Amount in Not Valid')
+    }else if(this.paymentType == 'Cash' && ( this.cash < this.netTotal)){
+      this.msg.WarnNotify('Enter Valid Amount')
+    }else if(this.paymentType == 'Bank' && ( this.bankCash < this.netTotal)){
+      this.msg.WarnNotify('Enter Valid Amount')
+    }
+    else{
 
       if(this.billDiscount == '' || this.billDiscount == undefined || this.billDiscount == null){
         this.billDiscount = 0;
@@ -342,7 +400,9 @@ export class SaleComponent implements OnInit {
             if(Response.msg == 'Data Saved Successfully'){
               this.msg.SuccessNotify(Response.msg);
               this.getTable()
+              this.onCatSelected(this.categoriesList[0]);
               this.reset();
+              this.getHoldBills();
               
             }else{
               this.msg.WarnNotify(Response.msg);
@@ -353,10 +413,7 @@ export class SaleComponent implements OnInit {
       }
 
       if(type == 'rehold'){
-        this.dialogue.open(PincodeComponent,{
-          width:'30%',
-        }).afterClosed().subscribe(pin=>{
-          if(pin != ''){
+  
             this.app.startLoaderDark()
             this.http.post(environment.mainApi+this.global.restaurentLink+'UpdateHold',{
               InvBillNo:this.invBillNo,
@@ -372,8 +429,7 @@ export class SaleComponent implements OnInit {
               Remarks: this.billRemarks,
               OrderType: this.orderType,
               CoverOf: this.coverOf,
-              PinCode:pin,
-          
+
               SaleDetail: JSON.stringify(this.tableData) ,
           
               UserID: this.global.getUserID()
@@ -383,6 +439,7 @@ export class SaleComponent implements OnInit {
                   this.msg.SuccessNotify(Response.msg);
                   this.getTable()
                   this.reset();
+                  this.getHoldBills();
                   
                 }else{
                   this.msg.WarnNotify(Response.msg);
@@ -390,60 +447,55 @@ export class SaleComponent implements OnInit {
                 this.app.stopLoaderDark();
               }
             )
-          }
-        })
+        
         
       }
 
       if(type == 'sale'){
-        this.dialogue.open(PincodeComponent,{
-          width:'30%',
-        }).afterClosed().subscribe(pin=>{
-          if(pin != ''){
-            this.app.startLoaderDark()
-            this.http.post(environment.mainApi+this.global.restaurentLink+'InsertSale',{
-              HoldInvNo:this.invBillNo,
-              OrderNo:this.orderNo,
-              InvDate: this.global.dateFormater(this.invoiceDate,'-'),
-              TableID: this.tableID,
-              TmpTableID:this.prevTableID,
-              PartyID: this.PartyID,
-              InvType: "S",
-              ProjectID: this.ProjectID,
-              BookerID: this.BookerID,
-              PaymentType: this.paymentType,
-              Remarks: this.billRemarks,
-              OrderType: this.orderType,
-              CoverOf: this.coverOf,
 
-              BillTotal:this.subTotal,
-              BillDiscount:this.billDiscount,
-              OtherCharges:this.OtherCharges,
-              NetTotal:this.netTotal,
-              CashRec:this.cash,
-              Change:(this.cash - this.netTotal),
-              BankCoaID:this.bankCoaID,
-              BankCash:this.bankCash,
-              
-          
-              SaleDetail: JSON.stringify(this.tableData) ,
-              PinCode:pin,
-              UserID: this.global.getUserID()
-            }).subscribe(
-              (Response:any)=>{
-                if(Response.msg == 'Data Saved Successfully'){
-                  this.msg.SuccessNotify(Response.msg);
-                  this.getTable()
-                  this.reset();
-                  
-                }else{
-                  this.msg.WarnNotify(Response.msg);
+        
+
+        if(this.paymentType == 'Complimentary'){
+
+
+          this.dialogue.open(PincodeComponent,{
+            width:'30%'
+          }).afterClosed().subscribe(pin=>{
+            if(pin !== ''){
+              this.http.post(environment.mainApi+this.global.userLink+'MatchPassword',{
+                RestrictionCodeID : 3,
+                Password : pin,
+                UserID : this.global.getUserID()
+      
+              }).subscribe(
+                (Response:any)=>{
+                  if(Response.msg == 'Password Matched Successfully'){
+                    this.cash = 0;
+                    this.bankCash = 0;
+                    this.change = 0;
+                    this.billDiscount = 0;
+                    this.OtherCharges = 0;
+                    this.bankCoaID = 0;
+                    this.getTotal();         
+                    this.InsertSale();
+                  }else{
+                    this.msg.WarnNotify(Response.msg);
+                  }
                 }
-                this.app.stopLoaderDark();
-              }
-            )
-          }
-        })
+              )
+            }
+          })
+
+
+       
+        }else{
+          this.InsertSale()
+        }
+      
+            
+        
+          
+     
         
       }
 
@@ -453,24 +505,195 @@ export class SaleComponent implements OnInit {
   }
 
 
+  InsertSale(){
+    this.app.startLoaderDark()
+    this.http.post(environment.mainApi+this.global.restaurentLink+'InsertSale',{
+      HoldInvNo:this.invBillNo,
+      OrderNo:this.orderNo,
+      InvDate: this.global.dateFormater(this.invoiceDate,'-'),
+      TableID: this.tableID,
+      TmpTableID:this.prevTableID,
+      PartyID: this.PartyID,
+      InvType: "S",
+      ProjectID: this.ProjectID,
+      BookerID: this.BookerID,
+      PaymentType: this.paymentType,
+      Remarks: this.billRemarks,
+      OrderType: this.orderType,
+      CoverOf: this.coverOf,
 
-  findHoldBills(type:any){
+      BillTotal:this.subTotal,
+      BillDiscount:this.billDiscount,
+      OtherCharges:this.OtherCharges,
+      NetTotal:this.netTotal,
+      CashRec:this.cash,
+      Change:this.change,
+      BankCoaID:this.bankCoaID,
+      BankCash:this.bankCash,
 
-
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryBillSingleDate?Type='+type+'&creationdate='+this.global.dateFormater(new Date(),'-')).subscribe(
+      SaleDetail: JSON.stringify(this.tableData) ,
+      UserID: this.global.getUserID()
+    }).subscribe(
       (Response:any)=>{
-        this.holdBillList = Response;
-         console.log(this.holdBillList);
+        if(Response.msg == 'Data Saved Successfully'){
+          
+          this.msg.SuccessNotify(Response.msg);
+          this.printbill('save')
+          this.getTable();
+          this.onCatSelected(this.categoriesList[0]);
+          this.getHoldBills();
+          this.reset();
+            $('#paymentMehtod').hide();
+            // $('.modal').remove();
+            // $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+          
+        }else{
+          this.msg.WarnNotify(Response.msg);
+        }
+        this.app.stopLoaderDark();
       }
     )
+  }
+
+
+
+  getHoldBills(){
+
+
+    this.http.get(environment.mainApi+this.global.restaurentLink+'GetHoldBills').subscribe(
+      (Response:any)=>{
+        this.holdBillList = Response;
+       //  console.log(Response);
+      }
+    )
+  }
+
+
+    getBillDetail(item:any){
+    
+    this.tableID = item.tableID;
+    this.tempTableID = item.tableID;
+    this.tempOrderType = item.orderType;
+    this.holdbtnType = 'rehold';
+    this.tableTitle = '';
+   if(item.orderType == 'Dine In'){
+    this.tableTitle = item.tableTitle;
+   }
+    this.invBillNo = item.invBillNo;
+    this.PartyID = item.partyID;
+    this.ProjectID = item.projectID;
+    this.BookerID = item.bookerID;
+    this.billRemarks = item.remarks;
+    this.orderType= item.orderType;
+    this.coverOf = item.coverOf;
+    this.prevTableID = item.tmpTableID;
+    this.billDiscount = item.billDiscount;
+    this.OtherCharges = item.otherCharges;  
+    this.invoiceDate = new Date(item.invDate);
+
+    
+    this.http.get(environment.mainApi+this.global.restaurentLink+'GetHoldedBillDetail?BillNo='+item.invBillNo).subscribe(
+      (Response:any)=>{
+       // console.log(Response);
+        this.tableData =[];
+
+        Response.forEach((e:any) => {
+          this.tableData.push({productID:e.productID,
+            productTitle:e.productTitle,
+            quantity:e.quantity,
+            costPrice:e.costPrice,
+            avgCostPrice:e.avgCostPrice,
+            salePrice:e.salePrice,
+            recipeID:e.recipeID,
+            cookingAriaID:e.cookingAreaID,
+            cookingTime:e.cookingTime,
+            requestType:e.requestType,
+            entryType:e.entryType,
+            autoInvDetID:e.autoInvDetID,
+          });
+
+
+        });
+        this.getTotal()
+       // console.log(this.tableData);
+       
+        
+      }
+    )
+
+   
   }
 
   ///////////////////////////////////////////////////////////////
 
   deleteRow(item:any){
-    var index = this.tableData.indexOf(item);
-    this.tableData.splice(index,1);
-    this.getTotal();
+    if(item.entryType == 'New'){
+      var index = this.tableData.indexOf(item);
+      this.tableData.splice(index,1);
+      this.getTotal();
+    }
+    if(item.entryType == 'Saved'){
+      this.dialogue.open(PincodeComponent,{
+        width:'30%'
+      }).afterClosed().subscribe(pin=>{
+        if(pin !== ''){
+          this.http.post(environment.mainApi+this.global.userLink+'MatchPassword',{
+            RestrictionCodeID : 1,
+            Password : pin,
+            UserID : this.global.getUserID()
+  
+          }).subscribe(
+            (Response:any)=>{
+              if(Response.msg == 'Password Matched Successfully'){
+
+                this.http.post(environment.mainApi+this.global.restaurentLink+'InsertVoidItem',{
+                  InvBillNo: this.invBillNo,
+                  ProductID: item.productID, 
+                  ProductTitle: item.productTitle,
+                  Quantity:1, 
+                  CostPrice: item.costPrice,
+                  AvgCostPrice: item.avgCostPrice,
+                  SalePrice: item.salePrice,
+                  RecipeID: item.recipeID, 
+                  CookingAriaID: item.cookingAreaID,
+                  CookingTime: item.cookingTime,
+                  RequestType: item.requestType,
+                  EntryType: item.entryType,
+                  ReqRefNo: item.autoInvDetID,
+      
+                  PinCode: pin,
+                  UserID: this.global.getUserID()       
+                }).subscribe(
+                  (Response:any)=>{
+                    if(Response.msg == 'Data Saved Successfully'){
+                      this.msg.SuccessNotify('Item Void');
+                      if(item.quantity <= 1){
+                        var index = this.tableData.indexOf(item);
+                        this.tableData.splice(index,1);
+                      }else{
+                        item.quantity -= 1;
+                      }
+                      this.getTotal()
+      
+                    }else{
+                      this.msg.WarnNotify(Response.msg);
+                    }
+                  }
+                )
+                       
+              }else{
+                this.msg.WarnNotify(Response.msg);
+              }
+            }
+          )
+
+
+         
+        }
+      })
+    }
+    
   }
 
 
@@ -496,16 +719,13 @@ export class SaleComponent implements OnInit {
   }
 
 
-
-
-
-
-
+  
 
 ///////////////////////////////////////////////////////////////
 
   reset(){
-  this.bankCoaID = 0;
+  this.change = 0;
+
   this.OtherCharges = 0;
   this.billDiscount = 0;
   this.invBillNo = '';
@@ -513,17 +733,18 @@ export class SaleComponent implements OnInit {
   this.orderNo = 0;
   this.coverOf = '';
   this.billRemarks = '';
-  this.BookerID = 0;
+  this.BookerID = 1;
   this.ProjectID = this.global.InvProjectID;
   this.PartyID = 0;
   this.invoiceDate = new Date();
-  this.orderType = 'di';
+  this.orderType = '';
   this.paymentType = '';
   this.cash = 0;
   this.bankCash = 0;
 
   this.tableID = 0;
   this.tempTableID = 0;
+  this.prevTableID = 0;
   this.tempOrderType = '';
   this.tableTitle = '';
   this.tempProdRow = [];
@@ -533,8 +754,91 @@ export class SaleComponent implements OnInit {
   this.subTotal = 0;
   this.netTotal = 0 ;
   this.tempRecipeList = [];
+  this.holdbtnType = 'hold';
+  this.getBankList();
 
   }
 
+
+
+  myPrintData:any = [];
+  myInvoiceNo = '';
+  mytableNo = '';
+  myCounterName = '';
+  myInvDate:Date = new Date();
+  myOrderType = '';
+  mySubTotal = 0;
+  myNetTotal = 0;
+  myOtherCharges = 0;
+  myRemarks = '';
+  myDiscount = 0;
+  myCash = 0;
+  myChange = 0;
+  myBank = 0;
+  myPaymentType = '';
+
+  
+  
+  
+
+
+  printbill(type:any){
+
+
+    if(this.invBillNo != ''){
+      this.myInvoiceNo = this.invBillNo;
+      this.myPrintData = this.tableData;    
+      this.mytableNo = this.tableTitle;
+      this.myInvDate = this.invoiceDate;
+      this.myOrderType = this.orderType;
+      this.mySubTotal = this.subTotal;
+      this.myNetTotal = this.netTotal;
+      this.myOtherCharges =  this.OtherCharges;
+      this.myRemarks = this.billRemarks; 
+      this.myCash = this.cash;
+      this.myBank = this.bankCash;
+      this.myDiscount = this.billDiscount;
+      this.myChange = this.change;
+      this.myPaymentType = this.paymentType;
+      
+      if(type == 'rehold'){
+        this.save('rehold');
+      }
+       
+  
+      setTimeout(() => {
+        this.global.printData('#billPrint');
+      }, 200);
+    }else{
+      this.msg.WarnNotify('No Bill Retrieved')
+    }
+
+  
+  }
+
+
+
+  verifyDiscount(disc:any,){
+    this.dialogue.open(PincodeComponent,{
+      width:'30%'
+    }).afterClosed().subscribe(pin=>{
+      if(pin !== ''){
+        this.http.post(environment.mainApi+this.global.userLink+'MatchPassword',{
+          RestrictionCodeID : 2,
+          Password : pin,
+          UserID : this.global.getUserID()
+
+        }).subscribe(
+          (Response:any)=>{
+            if(Response.msg == 'Password Matched Successfully'){
+              this.billDiscount = disc;           
+            }else{
+              this.msg.WarnNotify(Response.msg);
+            }
+          }
+        )
+      }
+    })
+  }
 
 }

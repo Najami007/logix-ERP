@@ -1,0 +1,76 @@
+<div class="bg-gray h-100 p-4">
+    <div class="container body p-2  min-600 " >
+
+
+       <div>
+
+        <mat-form-field class="col-lg-11" appearance="outline">
+            <mat-label class="ps-5">Search.....</mat-label>
+            <input #CodeSearch matInput type="search" class="text-secondary">
+            <mat-icon matPrefix class="text-secondary">search</mat-icon>
+        </mat-form-field>
+       </div>
+
+
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Title</th>
+                    <th>Remarks</th>
+                    <th>Edit</th>
+                    <th>Reset</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of codesList index as index">
+                    <td>{{index +1}}</td>
+                    <td>{{item.restrictionTitle}}</td>
+                    <td>{{item.restrictionRemarks}}</td>
+                    <td><button mat-mini-fab color="primary" data-bs-toggle="modal" data-bs-target="#pwdModal"
+                         (click)="restrictionCodeID = item.restrictionCodeID"><mat-icon>edit</mat-icon></button></td>
+                    <td><button mat-mini-fab (click)="resetCode()"><mat-icon>rotate_left</mat-icon></button></td>
+                </tr>
+            </tbody>
+            
+        </table>
+    
+    
+    
+       <!----------------Modal Window for Quantity ---------->
+
+
+
+       <div class="modal fade" id="pwdModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+       aria-labelledby="pwdModalLabel">
+       <div class="modal-dialog modal-dialog-centered modal-sm">
+           <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+               <div class="modal-body">
+
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Password</mat-label>
+                    <input type="text" matInput [(ngModel)]="password" />
+                </mat-form-field>
+
+        
+               </div>
+
+               <div class="modal-footer bg-mf-blue">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="updateCode()">Update</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+           </div>
+       </div>
+   </div>
+
+   <!---------------------------------------------------------->
+
+    
+    
+    
+    
+    </div>
+</div>
+
