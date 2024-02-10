@@ -132,7 +132,7 @@
                     <mat-form-field  appearance="outline"  class="w-100 mt-2">
                         <mat-label>Enter Note</mat-label>
                         <mat-select [disabled]="disableNote " [(ngModel)]="NoteID" >
-                            <mat-option *ngFor="let item of notesList" [value]="item.noteID">{{item.noteTitle}}</mat-option>
+                            <mat-option [disabled]="item.coaTypeID != CoaType" *ngFor="let item of notesList" [value]="item.noteID">{{item.noteTitle}}</mat-option>
                         </mat-select>
                         
                            <!-- <mat-hint>Must Be a Number</mat-hint> -->
@@ -163,7 +163,7 @@
 
                 <mat-form-field class="w-100" appearance="outline">
                     <mat-label class="ps-5">Search.....</mat-label>
-                    <input [(ngModel)]="txtSearch" matInput type="search" class="text-secondary">
+                    <input #coaSearch  matInput type="text" class="text-secondary">
                     <mat-icon matPrefix class="text-secondary">search</mat-icon>
                 </mat-form-field>
             
@@ -184,8 +184,8 @@
                     </thead>
     
                     <tbody>
-                        <tr  *ngFor="let item of ChartsofAccountsData | filter : txtSearch; let i=index" >
-                            <td>{{i+1}}</td>
+                        <tr  *ngFor="let item of ChartsofAccountsData |filter:coaSearch.value index as index" >
+                            <td>{{index+1}}</td>
                             <td class="cursorPointer" (click)="updateCoa(item)">{{item.accountCode}}</td>
                             <td>{{item.coaTitle}}</td>
                             <td>{{item.coaTypeTitle}}</td>  

@@ -30,9 +30,10 @@ export class MapWHProductComponent implements OnInit {
   }
   ngOnInit(): void {
     this.getCategories();
+    this.getCookingArea();
   }
 
-
+  cookingAriaID = 0;
   productID = 0;
   categoryID = 0;
   productList:any = [];
@@ -42,6 +43,17 @@ export class MapWHProductComponent implements OnInit {
   categoriesList:any = [];
 
 
+  cookingAreaList:any = [];
+
+
+  getCookingArea(){
+    this.http.get(environment.mainApi+this.global.restaurentLink+'GetCookingAria').subscribe(
+      (Response:any)=>{
+        this.cookingAreaList = Response;
+       // console.log(Response);
+      }
+    )
+  }
 
   getCategories(){
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetRecipeCategories').subscribe(
@@ -60,6 +72,8 @@ export class MapWHProductComponent implements OnInit {
       this.msg.WarnNotify('Select Product')
     }else if(this.categoryID == 0 || this.categoryID == undefined){
       this.msg.WarnNotify('Select Category')
+    }else if(this.cookingAriaID == 0 || this.cookingAriaID == undefined){
+      this.msg.WarnNotify('Select Cooking Area')
     }
     else{
       this.dialog.open(PincodeComponent,{
@@ -70,7 +84,7 @@ export class MapWHProductComponent implements OnInit {
           this.http.post(environment.mainApi+this.global.restaurentLink+'MapProductWithRecipe',{
             ProductID: this.productID,
             RecipeCatID: this.categoryID,
-        
+            CookingAriaID:this.cookingAriaID,
             PinCode: pin,
             UserID: this.global.getUserID()
           }).subscribe(
@@ -101,6 +115,7 @@ export class MapWHProductComponent implements OnInit {
   reset(){
     this.productID = 0;
     this.categoryID = 0;
+    this.cookingAriaID = 0;
   }
 
 }

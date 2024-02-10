@@ -147,24 +147,25 @@
 
                 <div class="w-50 text-center">
 
-                    <button mat-raised-button class="m-1 text-white bg-secondary w-50" *ngIf="holdbtnType == 'hold'"
+                    <button mat-raised-button class="m-1 text-white bg-secondary col-lg-5" *ngIf="holdbtnType == 'hold'"
                     matTooltip="Hold Current Bill"   (click)="save('hold')">HOLD</button>
-                    <button mat-raised-button class="m-1 text-white bg-secondary w-50" *ngIf="holdbtnType == 'rehold'"
+                    <button mat-raised-button class="m-1 text-white bg-secondary col-lg-5" *ngIf="holdbtnType == 'rehold'"
                     matTooltip="ReHold Current Bill"   (click)="save('rehold')">ReHold</button>
-                    <button mat-raised-button class="m-1 text-white bg-success w-50" data-bs-toggle="modal"
+                    <button mat-raised-button class="m-1 text-white bg-success col-lg-5" data-bs-toggle="modal"
                     matTooltip="Save Current Bill"    data-bs-target="#paymentMehtod">Save</button>
 
-                    <button mat-raised-button class="m-1 text-white bg-primary w-50" data-bs-toggle="modal"
+                    <button mat-raised-button class="m-1 text-white bg-primary col-lg-5" data-bs-toggle="modal"
                     matTooltip="Retrieve Hold Bills"   data-bs-target="#retrieveBill">Retrieve</button>
-                    <button mat-raised-button class="m-1 text-white bg-warning w-50" accesskey="n"
+                    <button mat-raised-button class="m-1 text-white bg-warning col-lg-5" accesskey="n"
                         matTooltip="New bill (Alt + n)" data-bs-toggle="modal" data-bs-target="#NewBill"
                         [disabled]="tableData != ''" (click)="reset()">New Bill</button>
-                    <button matTooltip="Hold & Print Current Bill" mat-raised-button class="m-1 text-white bg-primary w-50"
+                    <button matTooltip="Hold & Print Current Bill" mat-raised-button class="m-1 text-white bg-primary col-lg-5"
                      (click)="printbill('rehold')">Hold & Print</button>
 
                      <button  accesskey="b" mat-raised-button data-bs-toggle="modal" data-bs-target="#savedBill"
-                      class="m-1 text-white bg-primary w-50 d-none">Duplicate</button>
+                      class="m-1 text-white bg-primary col-lg-5 d-none">Duplicate</button>
 
+                      <button   mat-raised-button class="m-1 text-white bg-primary col-lg-5" (click)="voidBill()">Void Bill</button>
 
                 </div>
 
@@ -209,8 +210,8 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><mat-icon>edit</mat-icon></td>
-                            <td></td>
+                            <td class="text-primary"><mat-icon>print</mat-icon></td>
+                            <td class="text-success"><mat-icon>receipt</mat-icon></td>
                         </tr>
                     </tbody>
                     
@@ -299,7 +300,7 @@
             <div class="text-end d-flex " style="float: right;">
 
                 
-                <span class="fw-bold d-flex flex-column col-lg-2">
+                <span class="fw-bold d-flex flex-column text-end col-lg-3">
                     <mat-label>Sub Total</mat-label>
                     <mat-label *ngIf="myDiscount != 0">Discount</mat-label>
                     <mat-label *ngIf="myOtherCharges != 0">Other Charges</mat-label>
@@ -310,7 +311,7 @@
 
                 </span>
 
-                <span class="d-flex flex-column col-lg-2">
+                <span class="d-flex flex-column text-end col-lg-3">
                     <mat-label>{{mySubTotal}}</mat-label>
                     <mat-label *ngIf="myDiscount != 0">{{myDiscount}}</mat-label>
                     <mat-label *ngIf="myOtherCharges != 0">{{myOtherCharges}}</mat-label>
@@ -498,7 +499,7 @@
                         <div class="col-lg-2 border-start p-1">
 
                             <mat-radio-group aria-label="Select an option" [(ngModel)]="tempOrderType">
-                                <mat-radio-button *ngFor="let item of orderTypeList" [disabled]="invBillNo !== ''"
+                                <mat-radio-button *ngFor="let item of orderTypeList" [disabled]="invBillNo !== '' || orderType != ''"
                                     (change)="onOrderTypeSelected(item.val)"
                                     [value]="item.val">{{item.title}}</mat-radio-button>
                             </mat-radio-group>
@@ -528,7 +529,7 @@
     <!---------------------------------------------------------->
 
 
-    <!----------------Modal Window for Retrieving Saved Bills ---------->
+    <!----------------Modal Window for Retrieving Holded Bills ---------->
 
 
 

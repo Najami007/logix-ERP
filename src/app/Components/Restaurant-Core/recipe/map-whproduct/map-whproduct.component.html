@@ -21,6 +21,14 @@
                 [value]="item.recipeCatID">{{item.recipeCatTitle}}</mat-option>
         </mat-select>
     </mat-form-field>
+    <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Cooking Area</mat-label>
+        <mat-select [(ngModel)]="cookingAriaID">
+            <mat-option><ngx-mat-select-search #arSearch [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+            <mat-option *ngFor="let item of cookingAreaList |filter:arSearch.value" [value]="item.cookingAriaID">{{item.cookingAriaTitle}}</mat-option>
+        </mat-select>
+    </mat-form-field>
     
     
     <div class="text-center">

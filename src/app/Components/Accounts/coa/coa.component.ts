@@ -64,15 +64,15 @@ export class COAComponent  implements OnInit {
   error: any;
   coaSearch:any;
   actionbtn='Save';
-  txtSearch :any;
-  CoaType:any; 
+
+  CoaType = 0; 
   coaLevel:any;
   level1='';
   level2='';
   level3='';
   level4='';
-  CoaTitle:any;
-  TransactionAllowed:any;
+  CoaTitle = '';
+  TransactionAllowed = false;
 
   NoteID:any = 0;
 
@@ -311,47 +311,31 @@ onlevel3Change(){
 
   Save() {
 
-    if(this.CoaType == '' || this.CoaType == undefined){
+    if(this.CoaType == 0 || this.CoaType == undefined){
       this.msg.WarnNotify('Select the Charts Of Accouts Type')
     }else if(this.coaLevel == '' || this.coaLevel == undefined){
       this.msg.WarnNotify('Select COA Level')
-    }
-    // else if(this.coaLevel == 1){
-    //   if(this.level1 == '' || this.level1 == undefined){
-    //     this.msg.WarnNotify('Please Enter the Charts of Accounts Level')
-    //   }
-    // }else if(this.coaLevel == 2){
-    //   if(this.level1 == '' || this.level1 == undefined){
-    //     this.msg.WarnNotify('Select Level 1')
-    //   }
-    //    if(this.level2 == '' || this.level2 == undefined){
-    //     this.msg.WarnNotify('Enter Level 2')
-    //   }
-    // }else if(this.coaLevel == 3){
-    //   if(this.level1 == '' || this.level1 == undefined){
-    //     this.msg.WarnNotify('Select Level 1')
-    //   }
-    //    if(this.level2 == '' || this.level2 == undefined){
-    //     this.msg.WarnNotify('Select Level 2')
-    //   }
-    //    if(this.level3 == '' || this.level3 == undefined){
-    //     this.msg.WarnNotify('Enter level 3')
-    //   }
-    // }else if(this.coaLevel == 4 ){
-    //   if(this.level1 == '' || this.level1 == undefined){
-    //     this.msg.WarnNotify('Select Level 1')
-    //   }
-    //    if(this.level2 == '' || this.level2 == undefined){
-    //     this.msg.WarnNotify('Select Level 2')
-    //   }
-    //    if(this.level3 == '' || this.level3 == undefined){
-    //     this.msg.WarnNotify('Select level 3')
-    //   }
-    //    if(this.level4 == '' || this.level4 == undefined){
-    //     this.msg.WarnNotify('Enter level 4')
-    //   }
-    // }
-    else if(this.CoaTitle == '' || this.CoaTitle == undefined){
+    }else if(this.coaLevel == 1 && (this.level1 == '' || this.level1 == undefined || this.level1 == null)){
+      this.msg.WarnNotify('Enter Level 1')
+    }else if(this.coaLevel == 2 && (this.level1== "" || this.level1 == undefined )){
+      this.msg.WarnNotify('Select Level 1')
+    }else if(this.coaLevel == 2 && (this.level2== "" || this.level2 == undefined )){
+      this.msg.WarnNotify('Enter Level 2')
+    }else if(this.coaLevel == 3 && (this.level1== "" || this.level1 == undefined )){
+      this.msg.WarnNotify('Select Level 1')
+    }else if(this.coaLevel == 3 && (this.level2== "" || this.level2 == undefined )){
+      this.msg.WarnNotify('Select Level 2')
+    }else if(this.coaLevel == 3 && (this.level3== "" || this.level3 == undefined )){
+      this.msg.WarnNotify('Enter Level 3')
+    }else if(this.coaLevel == 4 && (this.level1== "" || this.level1 == undefined )){
+      this.msg.WarnNotify('Select Level 1')
+    }else if(this.coaLevel == 4 && (this.level2== "" || this.level2 == undefined )){
+      this.msg.WarnNotify('Select Level 2')
+    }else if(this.coaLevel == 4 && (this.level3== "" || this.level3 == undefined )){
+      this.msg.WarnNotify('Select Level 3')
+    }else if(this.coaLevel == 4 && (this.level4== "" || this.level4 == undefined )){
+      this.msg.WarnNotify('Enter Level 4')
+    }else if(this.CoaTitle == '' || this.CoaTitle == undefined){
       this.msg.WarnNotify('COA Title Required');
     }else if(((this.CoaType == 1 || this.CoaType == 4 || this.CoaType == 5) && this.TransactionAllowed == true) 
     && (this.NoteID == 0 || this.NoteID == undefined || this.NoteID == '' ) ){
@@ -480,7 +464,7 @@ onlevel3Change(){
 
 
   reset(){
-    this.CoaType = '';
+    this.CoaType = 0;
     this.coaLevel = '';
     this.level1 = '';
     this.level2 = '';
@@ -488,7 +472,7 @@ onlevel3Change(){
     this.level4 = '';
     this.AccountLabelHeadValue = '';
     this.CoaTitle = '';
-    this.TransactionAllowed = "";
+    this.TransactionAllowed =false;
     this.NoteID = 0;
 
   }

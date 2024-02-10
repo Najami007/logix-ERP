@@ -1,12 +1,12 @@
-<div class="text-center body justify-content-center d-flex flex-column row ">
+<div class="body justify-content-center ">
+
+
+    <div class="justify-content-around d-flex  w-100 fw-bold">
+        <button mat-raised-button style="width: 200px; height: 200px;background-color: rgb(196, 255, 198);" data-bs-toggle="modal" data-bs-target="#doc" (click)="Type = 'Day Open'"><strong>Day Open</strong></button>
+        <button mat-raised-button style="width: 200px; height: 200px;background-color: rgb(255, 206, 196);" data-bs-toggle="modal" data-bs-target="#doc" (click)="Type = 'Day Close'"><strong>Day Close</strong></button>
+    </div>
 
 <!-- 
-    <div>
-        <button mat-raised-button data-bs-toggle="modal" data-bs-target="#doc" (click)="Type = 'Day Open'">Day Open</button>
-        <button mat-raised-button data-bs-toggle="modal" data-bs-target="#doc" (click)="Type = 'Day Close'">Day Close</button>
-    </div> -->
-
-
     <div class="container">
         <div class="days" style="position: absolute; left: 0; width: 100vw; display: flex; justify-content: space-evenly;">
           <h1 class="in">DAY <br>&nbsp; IN</h1>
@@ -25,7 +25,7 @@
               <span></span>
             </div>
           </div>
-
+ -->
 
 
 
@@ -50,9 +50,9 @@
 
                 </div>
 
-                <div class="modal-footer">
-                    <button class="btn btn-success" data-bs-dismiss="modal" (click)="save()">Save</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div class="modal-footer bg-mf-blue">
+                    <button class="bg-success text-white" mat-raised-button data-bs-dismiss="modal" (click)="save()">Save</button>
+                    <button type="button" class="bg-secondary text-white"  mat-raised-button  data-bs-dismiss="modal">Close</button>
                 </div>
 
 

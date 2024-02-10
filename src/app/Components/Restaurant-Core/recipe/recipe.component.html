@@ -67,12 +67,19 @@
                             <mat-option  value="Others">Others</mat-option>
                         </mat-select>
                     </mat-form-field> -->
-                    <mat-form-field class="col-lg-5 me-1" appearance="outline">
+                    <mat-form-field class="col-lg-3 me-1" appearance="outline">
                         <mat-label>Cooking Time</mat-label>
                        <input matInput [(ngModel)]="cookingTime" />
                     </mat-form-field>
-
-                    <mat-form-field appearance="outline" class="col-lg-6">
+                    <mat-form-field class="col-lg-3 me-1" appearance="outline">
+                        <mat-label>Cooking Area</mat-label>
+                        <mat-select [(ngModel)]="cookingAriaID">
+                            <mat-option><ngx-mat-select-search #arSearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of cookingAreaList |filter:arSearch.value" [value]="item.cookingAriaID">{{item.cookingAriaTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="col-lg-5">
                         <mat-label>Description</mat-label>
                         <textarea matInput type="text" rows="1" [(ngModel)]="Description"></textarea>
                     </mat-form-field>
@@ -292,8 +299,9 @@
                                             <th>Quantity</th>
                                             <th>Avg Cost</th>
                                             <th>Cost</th>
-                                            <th>Avg Cost Total</th>
+                                     
                                             <th>Cost Total</th>
+                                            <th>Avg Cost Total</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -301,7 +309,7 @@
                                         <tr *ngFor="let item of menuProdList index as index" (click)="showImg(item)">
                                             <td>{{index+1}}</td>
                                             <td >{{item.productTitle}}</td>
-                                            <td class="text-center"><input type="text" [disabled]="item.disable" [(ngModel)]="item.quantity" min="0"
+                                            <td class="text-center"><input type="text" [disabled]="item.lockedStatus" [(ngModel)]="item.quantity" min="0"
                                                     (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
                                                     (keyup)="changeValue(item);getTotal();showImg(item);"
                                                     class="qty{{index}} text-center" style="width: 80px;"></td>
@@ -312,7 +320,7 @@
                                             <td class="text-center">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
                                             <td class="text-center">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
                                             
-                                            <td class="cursorPointer" ><mat-icon *ngIf="item.disable == false"  (click)="delRow(item)">delete</mat-icon></td>
+                                            <td class="cursorPointer" ><mat-icon   (click)="delRow(item)">delete</mat-icon></td>
                                         </tr>
                                         <tr>
                                             <td colspan="2"></td>
