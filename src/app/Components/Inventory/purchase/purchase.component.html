@@ -60,8 +60,8 @@
                     <input type="text" style="background-color:transparent;border: 1px solid rgb(13, 110, 253);border-radius: 5px 0px 0px 5px;"
                         #pbarcode [(ngModel)]="PBarcode"
                         (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event);focusto('ovhd',$event)"
-                        id="searchProduct" class="searchProduct col-lg-10" placeholder="Scan Barcode (Alt + s)"
-                        autofocus autocomplete="off" accesskey="s">
+                        id="searchProduct" class="searchProduct col-lg-10" placeholder="Scan Barcode (Alt + b)"
+                        autofocus autocomplete="off" accesskey="b">
 
                     <button accesskey="n" class="bg-primary text-white col-lg-2" data-bs-toggle="modal"
                         data-bs-target="#prodModal" matTooltip="Search Product By Name"

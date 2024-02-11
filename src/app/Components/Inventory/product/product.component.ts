@@ -37,6 +37,7 @@ export class ProductComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+    
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
@@ -313,6 +314,8 @@ export class ProductComponent implements OnInit {
         this.update();
       }
 
+      
+
     }
 
    }
@@ -407,6 +410,7 @@ export class ProductComponent implements OnInit {
               this.getProductList();
               this.reset('');
               this.app.stopLoaderDark();
+             
             } else {
               this.msg.WarnNotify(Response.msg);
               this.app.stopLoaderDark();

@@ -1,4 +1,4 @@
-<div class="d-flex h-100 body" style="background-color: gainsboro;">
+<div class="d-flex h-100 body" style="background-color: rgb(255, 255, 255);overflow: hidden;">
 
     <div class="col-lg-9 bg-white " >
 
@@ -51,8 +51,8 @@
                 <mat-label class="text-primary">Search Barcode / Product</mat-label> 
                <input type="text"  #pbarcode [(ngModel)]="PBarcode"
                     (keydown)="searchByCode($event);this.changeFocus($event,'.prodRow')" id="searchProduct"
-                    class="p-1 mb-2 searchProduct" placeholder="Alt + s" autofocus
-                    autocomplete="off" accesskey="s">
+                    class="p-1 mb-2 searchProduct" placeholder="Alt + b" autofocus
+                    autocomplete="off" accesskey="b">
     
                 <div class="w-100 d-flex flex-column SearchConatiner cursorPointer"
                     *ngIf="PBarcode != '' && PBarcode != undefined">
@@ -70,7 +70,7 @@
         </div>
 
 
-        <div style="max-height: 70%;overflow-y:scroll ;">
+        <div style="max-height: 80%;overflow-y:scroll !important;">
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -122,7 +122,7 @@
 
    
 
-    <div class="col-lg-3 " style="background-color: rgb(226, 222, 222);position: fixed;right: 0%;">
+    <div class="col-lg-3 h-100" style="background-color: rgb(226, 222, 222);position: fixed;right: 0%;">
 
        <div class="p-1">
         <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">

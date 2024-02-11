@@ -1,11 +1,15 @@
 
 <div class="text-center justify-content-center align-content-center align-item-center ">
-    <div class="text-end pt-4 pe-4 cursorPointer">
+    <!-- <div class="text-end pt-4 pe-4 cursorPointer">
         <button mat-icon-button (click)="closeDialog()"><mat-icon>close</mat-icon></button>
+    </div> -->
+
+    <div class="avatar-preview">
+        <div  id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + productImage + ')' }"></div>
     </div>
-    <div  >
+    <!-- <div  >
         <img [src]="productImage" alt="" height="400" width="400">
-    </div>
+    </div> -->
 
     <div class="text-end p-3 bg-mf">
         <button mat-raised-button (click)="closeDialog()">Close</button>

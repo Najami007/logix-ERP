@@ -27,7 +27,7 @@ export class OrderDashboardComponent implements OnInit {
     private dialog:MatDialog
   ){
 
-    this.mySubscription= interval(10000).subscribe((x =>{
+    this.mySubscription= interval(20000).subscribe((x =>{
       this.getOrderList();
       this.getVoidList();
   }));
