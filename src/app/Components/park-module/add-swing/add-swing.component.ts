@@ -22,7 +22,7 @@ export class AddSwingComponent implements OnInit {
   page:number = 1;
   count: number = 0;
  
-  tableSize: number = 0;
+  tableSize: number = 10;
   tableSizes : any = [];
 
   onTableDataChange(event:any){
@@ -58,7 +58,7 @@ export class AddSwingComponent implements OnInit {
   ngOnInit(): void {
     this.global.setHeaderTitle('Add Swing');
     this.getSwing();
-    this.tableSize = this.global.paginationDefaultTalbeSize;
+    
     this.tableSizes = this.global.paginationTableSizes;
 
   }

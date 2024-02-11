@@ -1,22 +1,25 @@
 
-        <div class="container p-2">
+    <div >
 
        <form  method="post">
         <div class="text-center  mt-3 d-flex justify-content-between p-3">
             <p class="dialogueTitle">ADD PINCODE</p><mat-icon class="cursorPointer"
                 (click)="closeDialogue()">cancel</mat-icon>
         </div>
-        <div>
+        <div class="container p-2">
             <mat-form-field class="w-100" appearance="outline">
                 <mat-label>Enter Pincode</mat-label>
                 <input matInput name="pin" type="password" [(ngModel)]="pinCode">
             </mat-form-field>
         </div>
 
-        
-        <div class="text-center">
-            <button   (click)="save()" class="btn btn-success">Save</button>
+
+        <div class="bg-mf text-end p-3">
+            <button mat-raised-button class="bg-success text-white me-1" (click)="save()">Save</button>
+            <button mat-raised-button class="bg-secondary text-white" (click)="closeDialogue()">Close</button>
         </div>
+        
+       
        </form>
     </div>
 

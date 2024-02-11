@@ -1,8 +1,12 @@
 <div class="body text-center p-4">
 
+    <!-- <input  accept=".wav"  (change)="onDocSelected($event)"  #vDoc type="file" id="vDoc"  class="border border-dark">
 
+    <audio  id="boom" >
+        <source src="../../../../assets/Sounds/beep.wav" type="audio">
+       </audio> -->
 <div class="d-flex p-1 justify-content-between">
-    <mat-card class="col-lg-3" style="height: 80vh; background-color: azure;margin-right: 5px;">
+    <mat-card class="col-lg-3" style="height: 85vh; background-color: azure;margin-right: 5px; overflow-y:auto;">
         <div class="text-center">
             <h2>New Order</h2>
         </div>
@@ -31,7 +35,7 @@
 
     </mat-card>
 
-    <mat-card class="col-lg-3" style="background-color: rgb(238, 248, 217);margin-right: 5px;">
+    <mat-card class="col-lg-3" style="height: 85vh;background-color: rgb(238, 248, 217);margin-right: 5px;overflow-y:auto;">
         <div class="text-center">
             <h2>Pending Order</h2>
         </div>
@@ -60,7 +64,7 @@
 
     </mat-card>
 
-    <mat-card class="col-lg-3" style="background-color: rgb(240, 240, 255);margin-right: 5px;">
+    <mat-card class="col-lg-3" style="height: 85vh;background-color: rgb(240, 240, 255);margin-right: 5px;overflow-y:auto;">
         <div class="text-center">
             <h2>Delivered Order</h2>
         </div>
@@ -89,7 +93,7 @@
 
     </mat-card>
 
-    <mat-card class="col-lg-3" style="background-color: rgb(255, 240, 244);margin-right: 5px;">
+    <mat-card class="col-lg-3" style="height: 85vh;background-color: rgb(255, 240, 244);margin-right: 5px;overflow-y:auto;">
         <div class="text-center">
             <h2>Canceled Order</h2>
         </div>
@@ -111,7 +115,7 @@
                     <td>{{item.createdOn | date:'hh:mm:a'}}</td>
                     <td>{{item.productTitle}}</td>
                     <td>{{item.quantity }}</td>
-                    <td><button mat-mini-fab class="btn-size"><mat-icon>done_outline</mat-icon></button></td>
+                    <td><button mat-mini-fab class="btn-size" *ngIf="item.reqStatus == false" (click)="approveOrder(item)"><mat-icon>done_outline</mat-icon></button></td>
 
                 </tr>
             </tbody>

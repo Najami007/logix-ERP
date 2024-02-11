@@ -1,10 +1,11 @@
 
-<div class="container p-3 text-center">
+<div >
 
 
     <div class="text-center  mt-3 d-flex justify-content-between p-3"><p class="dialogueTitle">CHANGE PINCODE</p><mat-icon class="cursorPointer" (click)="closeDialogue()">cancel</mat-icon></div>
 
 
+  <div class="container p-3 text-center">
     <mat-form-field class="w-100" appearance="outline">
         <mat-label>Old Pin</mat-label>
         <input matInput type="password" [(ngModel)]="oldPin">
@@ -14,10 +15,13 @@
         <mat-label>New Pin</mat-label>
         <input matInput type="password" [(ngModel)]="newPin">
     </mat-form-field>
+  </div>
 
 
-    <button mat-raised-button class="bg-success text-white" (click)="changePin()">Save</button>
-
+  <div class="bg-mf text-end p-3">
+    <button mat-raised-button class="bg-success text-white me-1" (click)="changePin()">Save</button>
+    <button mat-raised-button class="bg-secondary text-white" (click)="closeDialogue()">Close</button>
+</div>
 
 </div>
 

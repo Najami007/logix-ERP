@@ -1,37 +1,40 @@
-<div class="p-4">
-    <div class="text-center border-bottom mb-3  mt-3 d-flex justify-content-between"><p class="dialogueTitle">Map Product With Category</p><mat-icon class="cursorPointer" (click)="closeDialogue()">cancel</mat-icon></div>
+<div >
+    <div class="ps-4 pe-4 text-center border-bottom mb-3  mt-3 d-flex justify-content-between"><p class="dialogueTitle">Map Product With Category</p><mat-icon class="cursorPointer" (click)="closeDialogue()">cancel</mat-icon></div>
 
-    <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Products</mat-label>
-        <mat-select [(ngModel)]="productID" name="location">
-            <mat-option><ngx-mat-select-search #prod [placeholderLabel]="'Search...'"
+    <div class="p-4">
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Products</mat-label>
+            <mat-select [(ngModel)]="productID" name="location">
+                <mat-option><ngx-mat-select-search #prod [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of productList | filter:prod.value"
+                    [value]="item.productID">{{item.productTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        
+        
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Category</mat-label>
+            <mat-select [(ngModel)]="categoryID" name="location">
+                <mat-option><ngx-mat-select-search #cat [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of categoriesList | filter:cat.value"
+                    [value]="item.recipeCatID">{{item.recipeCatTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Cooking Area</mat-label>
+            <mat-select [(ngModel)]="cookingAriaID">
+                <mat-option><ngx-mat-select-search #arSearch [placeholderLabel]="'Search...'"
                     [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-            <mat-option *ngFor="let item of productList | filter:prod.value"
-                [value]="item.productID">{{item.productTitle}}</mat-option>
-        </mat-select>
-    </mat-form-field>
+                <mat-option *ngFor="let item of cookingAreaList |filter:arSearch.value" [value]="item.cookingAriaID">{{item.cookingAriaTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
     
     
-    <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Category</mat-label>
-        <mat-select [(ngModel)]="categoryID" name="location">
-            <mat-option><ngx-mat-select-search #cat [placeholderLabel]="'Search...'"
-                    [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-            <mat-option *ngFor="let item of categoriesList | filter:cat.value"
-                [value]="item.recipeCatID">{{item.recipeCatTitle}}</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field class="w-100" appearance="outline">
-        <mat-label>Cooking Area</mat-label>
-        <mat-select [(ngModel)]="cookingAriaID">
-            <mat-option><ngx-mat-select-search #arSearch [placeholderLabel]="'Search...'"
-                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-            <mat-option *ngFor="let item of cookingAreaList |filter:arSearch.value" [value]="item.cookingAriaID">{{item.cookingAriaTitle}}</mat-option>
-        </mat-select>
-    </mat-form-field>
-    
-    
-    <div class="text-center">
-        <button class="btn btn-success w-50" (click)="save()">Save</button>
+    <div class="text-end p-3 bg-mf">
+        <button class="btn btn-success w-25 me-1" (click)="save()">Save</button>
+        <button class="btn btn-secondary w-25" (click)="closeDialogue()">Close</button>
     </div>
 </div>

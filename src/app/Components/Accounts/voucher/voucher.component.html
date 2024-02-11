@@ -491,7 +491,7 @@
 
         <!-- Modal for Add Document-->
         <div class="modal fade" id="voucherDocument" tabindex="-1" aria-labelledby="voucherDocumentLabel" aria-hidden="true" data-bs-backdrop="false">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="voucherDocumentLabel">Select PDF File</h5>
@@ -505,7 +505,7 @@
                         <mat-hint class="text-danger">File Must be PDF Only</mat-hint>
                     </span>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer bg-mf">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                   <button type="button" class="btn btn-primary" (click)="insertVoucherDocument()">Save changes</button>
                 </div>
