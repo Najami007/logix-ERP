@@ -124,9 +124,7 @@ export class AddUserComponent implements OnInit {
         this.inserUser();
       }else if(this.btnType == 'Update'){
 
-        this.dialogue.open(PincodeComponent,{
-          width:"30%",
-        }).afterClosed().subscribe(pin=>{         
+        this.global.openPinCode().subscribe(pin=>{         
             if(pin != ''){
               this.updateUser(pin);  
             }
@@ -219,9 +217,7 @@ export class AddUserComponent implements OnInit {
   deleteUser(row:any){
 
     
-    this.dialogue.open(PincodeComponent,{
-      width:"30%",
-    }).afterClosed().subscribe(pin=>{         
+    this.global.openPinCode().subscribe(pin=>{         
    
       if(pin !== ''){
         Swal.fire({
@@ -271,9 +267,7 @@ export class AddUserComponent implements OnInit {
   blockUser(row:any,status:any){
 
     
-    this.dialogue.open(PincodeComponent,{
-      width:"30%",
-    }).afterClosed().subscribe(pin=>{  
+    this.global.openPinCode().subscribe(pin=>{  
       
       if(pin !== ''){
         
@@ -309,9 +303,7 @@ export class AddUserComponent implements OnInit {
 
   resetPin(row:any){
 
-    this.dialogue.open(PincodeComponent,{
-      width:"30%",
-    }).afterClosed().subscribe(pin=>{  
+    this.global.openPinCode().subscribe(pin=>{  
      
       
       if(pin !== ''){

@@ -15,12 +15,12 @@ import { PincodeComponent } from '../../User/pincode/pincode.component';
 export class DayopencloseComponent implements OnInit {
 
   constructor(
-    private http:HttpClient,
-    private global:GlobalDataModule,
-    private app:AppComponent,
-    private msg:NotificationService,
-    private dialog:MatDialog
-  ){}
+    private http: HttpClient,
+    private global: GlobalDataModule,
+    private app: AppComponent,
+    private msg: NotificationService,
+    private dialog: MatDialog
+  ) { }
 
 
   ngOnInit(): void {
@@ -28,111 +28,144 @@ export class DayopencloseComponent implements OnInit {
   }
 
   Type = '';
-  date:Date = new Date();
+  date: Date = new Date();
 
-  save(){
-    
-   if(this.Type == 'Day Open'){
+  save() {
 
-    this.dialog.open(PincodeComponent, {
-      width: '30%'
-    }).afterClosed().subscribe(pin => {
-      if (pin !== '') {
-        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
-          RestrictionCodeID: 4,
-          Password: pin,
-          UserID: this.global.getUserID()
+    if (this.Type == 'Day Open') {
 
-        }).subscribe(
-          (Response: any) => {
-            if (Response.msg == 'Password Matched Successfully') {
+      this.global.openPinCode().subscribe(pin => {
+        if (pin !== '') {
+          this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+            RestrictionCodeID: 4,
+            Password: pin,
+            UserID: this.global.getUserID()
 
-              this.app.startLoaderDark();
-              this.http.post(environment.mainApi+this.global.userLink+'_dayOpen',{
-                DayOpenDate:this.global.dateFormater( this.date,'-'),
-                UserID: this.global.getUserID()
+          }).subscribe(
+            (Response: any) => {
+              if (Response.msg == 'Password Matched Successfully') {
+
+                this.app.startLoaderDark();
+                this.http.post(environment.mainApi + this.global.userLink + '_dayOpen', {
+                  DayOpenDate: this.global.dateFormater(this.date, '-'),
+                  UserID: this.global.getUserID()
                 }).subscribe(
-                  (Response:any)=>{
-                    if(Response.msg == 'Data Saved Successfully'){
+                  (Response: any) => {
+                    if (Response.msg == 'Data Saved Successfully') {
                       this.msg.SuccessNotify(Response.msg);
                       this.date = new Date();
-                    }else{
+                    } else {
                       this.msg.WarnNotify(Response.msg);
                     }
-          
+
                     this.app.stopLoaderDark();
-                   
+
                   }
                 )
 
-            } else {
-              this.msg.WarnNotify(Response.msg);
+              } else {
+                this.msg.WarnNotify(Response.msg);
+              }
             }
-          }
-        )
+          )
 
 
 
-      }
-    })
+        }
+      })
 
-    
-  
-   }
 
-   
 
-   if(this.Type == 'Day Close'){
-    this.dialog.open(PincodeComponent, {
-      width: '30%'
-    }).afterClosed().subscribe(pin => {
-      if (pin !== '') {
-        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
-          RestrictionCodeID: 4,
-          Password: pin,
-          UserID: this.global.getUserID()
+    }
 
-        }).subscribe(
-          (Response: any) => {
-            if (Response.msg == 'Password Matched Successfully') {
-              this.app.startLoaderDark();
-              this.http.post(environment.mainApi+this.global.userLink+'_dayClose',{
-                DayOpenDate: this.global.dateFormater( this.date,'-'),
-                UserID: this.global.getUserID()
+
+
+    if (this.Type == 'Day Close') {
+      this.global.openPinCode().subscribe(pin => {
+        if (pin !== '') {
+          this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+            RestrictionCodeID: 4,
+            Password: pin,
+            UserID: this.global.getUserID()
+
+          }).subscribe(
+            (Response: any) => {
+              if (Response.msg == 'Password Matched Successfully') {
+                this.app.startLoaderDark();
+                this.http.post(environment.mainApi + this.global.userLink + '_dayClose', {
+                  DayOpenDate: this.global.dateFormater(this.date, '-'),
+                  UserID: this.global.getUserID()
                 }).subscribe(
-                  (Response:any)=>{
-                    if(Response.msg == 'Data Updated Successfully'){
+                  (Response: any) => {
+                    if (Response.msg == 'Data Updated Successfully') {
                       this.msg.SuccessNotify(Response.msg);
                       this.date = new Date();
-                    }else{
+                    } else {
                       this.msg.WarnNotify(Response.msg);
                     }
-          
+
                     this.app.stopLoaderDark();
                   }
                 )
-           
-            } else {
-              this.msg.WarnNotify(Response.msg);
+
+              } else {
+                this.msg.WarnNotify(Response.msg);
+              }
             }
-          }
-        )
+          )
 
 
 
-      }
-    })
-  
-      
-  
- 
+        }
+      })
 
 
-   }
+
+
+
+
+    }
 
 
 
 
   }
+
+
+  postingRemarks: any;
+  projectID = this.global.InvProjectID;
+
+
+
+
+  postBills() {
+    if(this.postingRemarks ==  '' || this.postingRemarks == undefined){
+      this.msg.WarnNotify('Enter Posting Remarks')
+    }else{
+      this.global.openPinCode().subscribe(pin => {
+        if (pin !== '') {
+          this.app.startLoaderDark();
+          this.http.post(environment.mainApi + this.global.userLink + 'PostBills', {
+            Remarks: this.postingRemarks,
+            ProjectID: this.projectID,
+            PinCode: pin,
+            UserID: this.global.getUserID()
+          }).subscribe(
+            (Response: any) => {
+              if (Response.msg == 'Data Posted Successfully') {
+                this.msg.SuccessNotify(Response.msg);
+                this.postingRemarks = '';
+              } else {
+                this.msg.WarnNotify(Response.msg);
+              }
+  
+              this.app.stopLoaderDark();
+            }
+          )
+        }
+      })
+    }
+  }
+
 
 }

@@ -236,9 +236,7 @@ export class BudgettingComponent implements OnInit {
       if(this.btnText == 'Save'){
         this.insertBudget();
       }else if(this.btnText == 'Update'){
-        this.dialogue.open(PincodeComponent,{
-          width:'30%'
-        }).afterClosed().subscribe(pin=>{
+        this.globalData.openPinCode().subscribe(pin=>{
           if(pin != ''){
             this.updateBudget(pin);
           }
@@ -335,9 +333,7 @@ export class BudgettingComponent implements OnInit {
   ///////////////////////////////////////////
   deleteBudget(row:any){
 
-    this.dialogue.open(PincodeComponent,{
-      width:'30%'
-    }).afterClosed().subscribe(pin=>{
+    this.globalData.openPinCode().subscribe(pin=>{
       if(pin != ''){
         Swal.fire({
           title:'Alert!',
@@ -383,9 +379,7 @@ export class BudgettingComponent implements OnInit {
 
   approveBudget(row:any){
 
-    this.dialogue.open(PincodeComponent,{
-      width:'30%'
-    }).afterClosed().subscribe(pin=>{
+    this.globalData.openPinCode().subscribe(pin=>{
       if(pin != ''){
         Swal.fire({
           title:'Alert!',

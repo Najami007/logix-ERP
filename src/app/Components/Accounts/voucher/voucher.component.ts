@@ -405,9 +405,7 @@ export class VoucherComponent implements OnInit{
   }
 
   insertVoucherDocument(){
-  this.dialogue.open(PincodeComponent,{
-    width:'30%'
-  }).afterClosed().subscribe(pin=>{
+    this.globalData.openPinCode().subscribe(pin=>{
     if(pin != ''){
       this.http.post(environment.mainApi+this.globalData.accountLink+'AddVoucherDocument',{
      
@@ -492,9 +490,7 @@ downloadVoucherDocument(row:any){
   DeleteVoucher(row:any){
 
 
-    this.dialogue.open(PincodeComponent,{
-      width:'30%',
-    }).afterClosed().subscribe(pin=>{
+    this.globalData.openPinCode().subscribe(pin=>{
       if(pin!= ''){
     Swal.fire({
       title:'Alert!',
@@ -536,9 +532,7 @@ downloadVoucherDocument(row:any){
 
   approveBill(row:any){
 
-    this.dialogue.open(PincodeComponent,{
-      width:'30%',
-    }).afterClosed().subscribe(pin=>{
+    this.globalData.openPinCode().subscribe(pin=>{
       if(pin!= ''){
         Swal.fire({
           title:'Alert!',

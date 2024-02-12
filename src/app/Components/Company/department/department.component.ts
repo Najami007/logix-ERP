@@ -80,10 +80,7 @@ export class DepartmentComponent implements OnInit{
         this.insert();
       }else if(this.actionbtn == 'Update'){
         
-        this.dialogue.open(PincodeComponent,{
-          width:'30%'
-
-        }).afterClosed().subscribe(pin=>{
+        this.globaldata.openPinCode().subscribe(pin=>{
         
           if(pin != ''){
             this.update(pin);
@@ -177,10 +174,7 @@ export class DepartmentComponent implements OnInit{
 
   deleteDepartment(row:any){
 
-    this.dialogue.open(PincodeComponent,{
-      width:"30%",
-    
-    }).afterClosed().subscribe(pin=>{
+    this.globaldata.openPinCode().subscribe(pin=>{
       if(pin != ''){
 
 

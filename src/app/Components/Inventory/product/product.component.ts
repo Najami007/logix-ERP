@@ -368,13 +368,14 @@ export class ProductComponent implements OnInit {
     )
   }
 
+  openFlag = false;
   update() {
-    
-    this.dialogue.open(PincodeComponent, {
-      width: '30%'
-    }).afterClosed().subscribe(pin => {
-      if (pin != '') {
-        this.app.startLoaderDark();
+
+  if(this.openFlag == false){
+    this.openFlag = true;
+    this.global.openPinCode().subscribe(pin=>{
+      if(pin !== ''){
+        this.app.startLoaderDark();     
         this.http.post(environment.mainApi + this.global.inventoryLink+'UpdateProduct', {
           ProductID: this.ProductID,
           CategoryID: this.CategoryID,
@@ -415,13 +416,20 @@ export class ProductComponent implements OnInit {
               this.msg.WarnNotify(Response.msg);
               this.app.stopLoaderDark();
             }
+            this.openFlag = false;
           },
           (error:any)=>{
             this.app.stopLoaderDark();
           }
         )
       }
-    })
+
+      if(pin == ''){
+        this.openFlag = false;
+      }
+    }
+    )
+  }
   }
 
   reset(type:any) {
@@ -504,9 +512,7 @@ export class ProductComponent implements OnInit {
 
   deleteProd(row: any) { 
 
-    this.dialogue.open(PincodeComponent,{
-      width:'30%'
-    }).afterClosed().subscribe(pin=>{
+    this.global.openPinCode().subscribe(pin=>{
 
      if(pin != ''){
 
@@ -560,9 +566,7 @@ export class ProductComponent implements OnInit {
 
   activeProduct(row:any){
    
-    this.dialogue.open(PincodeComponent,{
-      width:'30%'
-    }).afterClosed().subscribe(pin=>{
+    this.global.openPinCode().subscribe(pin=>{
       if(pin != ''){
         this.app.startLoaderDark();
         this.http.post(environment.mainApi+this.global.inventoryLink+'ActiveProduct',{

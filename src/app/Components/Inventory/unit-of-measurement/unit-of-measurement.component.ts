@@ -105,9 +105,7 @@ export class UnitOfMeasurementComponent implements OnInit{
 
   update(){
 
-    this.dialogue.open(PincodeComponent,{
-      width:'30%'
-    }).afterClosed().subscribe(pin=>{
+    this.globaldata.openPinCode().subscribe(pin=>{
 
      if(pin != ''){
 
@@ -157,9 +155,7 @@ export class UnitOfMeasurementComponent implements OnInit{
   }
 
   delete(row:any){ 
-    this.dialogue.open(PincodeComponent,{
-      width:'30%'
-    }).afterClosed().subscribe(pin=>{
+    this.globaldata.openPinCode().subscribe(pin=>{
 
      if(pin != ''){
 

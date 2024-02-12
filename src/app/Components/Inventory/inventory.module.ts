@@ -30,6 +30,9 @@ import { ProductImgComponent } from './product/product-img/product-img.component
 import { LimittoPipe } from 'src/app/Shared/pipes/limitto.pipe';
 import { InvreportcatwiseComponent } from './InventoryReports/invreportcatwise/invreportcatwise.component';
 import { InvcredComponent } from './InventoryReports/invreportcatwise/invcred/invcred.component';
+import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { InvrptprodwiseComponent } from './InventoryReports/invrptprodwise/invrptprodwise.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 
 
@@ -111,6 +114,11 @@ export const inventoryRoutes: Route[] = [
     component: InvreportcatwiseComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'invrptpw',
+    component: InvrptprodwiseComponent,
+    canActivate: [AuthGuard]
+  },
 
 
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
@@ -142,6 +150,7 @@ export const inventoryRoutes: Route[] = [
     LimittoPipe,
     InvreportcatwiseComponent,
     InvcredComponent,
+    InvrptprodwiseComponent,
     
  
 
@@ -156,11 +165,14 @@ export const inventoryRoutes: Route[] = [
     NgxMatSelectSearchModule,
     TextMaskModule,
     Ng2SearchPipeModule,
+    NgxMaterialTimepickerModule
 
 
   ],
   exports: [
     RouterModule
-  ]
+  ],
+  providers: []
+
 })
 export class InventoryModule { }

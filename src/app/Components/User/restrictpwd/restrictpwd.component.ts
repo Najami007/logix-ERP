@@ -51,9 +51,7 @@ export class RestrictpwdComponent implements OnInit {
 
 
   updateCode(){
-    this.dialog.open(PincodeComponent,{
-      width:'30%',
-    }).afterClosed().subscribe(pin=>{
+    this.global.openPinCode().subscribe(pin=>{
       if(pin != ''){
         this.app.startLoaderDark()
         this.http.post(environment.mainApi+this.global.userLink+'UpdateRestrictionCode',{
@@ -80,9 +78,7 @@ export class RestrictpwdComponent implements OnInit {
 
 
   resetCode(){
-    this.dialog.open(PincodeComponent,{
-      width:'30%',
-    }).afterClosed().subscribe(pin=>{
+    this.global.openPinCode().subscribe(pin=>{
       if(pin != ''){
         this.app.startLoaderDark()
         this.http.post(environment.mainApi+this.global.userLink+'ResetRestrictionCode',{

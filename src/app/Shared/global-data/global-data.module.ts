@@ -13,6 +13,8 @@ import * as b64 from 'base64-js/index.js';
 import { AppComponent } from 'src/app/app.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductImgComponent } from 'src/app/Components/Inventory/product/product-img/product-img.component';
+import { PincodeComponent } from 'src/app/Components/User/pincode/pincode.component';
+
 
 
 
@@ -64,7 +66,8 @@ export class GlobalDataModule implements OnInit {
     private http: HttpClient,
     private rout: Router,
     private msg: NotificationService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    
     // public app: AppComponent,
 
   ) {
@@ -244,6 +247,7 @@ export class GlobalDataModule implements OnInit {
 
         var userID = value._culId;
         localStorage.setItem('curVal', JSON.stringify({ value }));
+      
 
         if (value.msg == 'Logged in Successfully') {
 
@@ -255,6 +259,7 @@ export class GlobalDataModule implements OnInit {
 
               localStorage.setItem('mid', JSON.stringify(Response[0].moduleID));
               this.setMenuItem(Response[0].moduleID);
+             
               // console.log(Response);
             }
           )
@@ -635,6 +640,7 @@ export class GlobalDataModule implements OnInit {
   }
 
 
+  ///////// show img in modal window
   showProductImage(img: any, prodID:number) {
    
     if(prodID != 0){
@@ -664,7 +670,7 @@ export class GlobalDataModule implements OnInit {
   }
 
 
-
+  /////// will allow only number keys
   handleNumKeys(e:any){
 
 
@@ -731,12 +737,12 @@ export class GlobalDataModule implements OnInit {
   }
 
 
-
+  ///////////////// func to get products
  public getProducts(): Observable<any>{
   return  this.http.get(environment.mainApi+this.inventoryLink+'GetActiveProduct').pipe(retry(3));
   }
 
-
+  //////////// func to get product Detail
  public getProdDetail(id:any, barcode:any): Observable<any>{
   
    return this.http.get(environment.mainApi+this.inventoryLink+'GetSingleProductDetail?ProductID='+id+'&Barcode='+barcode).pipe(retry(3));
@@ -749,5 +755,16 @@ export class GlobalDataModule implements OnInit {
     $(cls).trigger('focus')
    }, 500);
   }
+
+  ///////////// for opening pincode modal window
+  public openPinCode(): Observable<any>{
+    return  this.dialog.open(PincodeComponent,{
+      width:'30%',
+      enterAnimationDuration:500,
+      hasBackdrop:true,
+      disableClose:true,
+    }).afterClosed().pipe(retry(3));
+    }
+  
 
 }

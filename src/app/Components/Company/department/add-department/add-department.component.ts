@@ -52,10 +52,7 @@ export class AddDepartmentComponent implements OnInit{
         this.insert();
       }else if(this.actionbtn == 'Update'){
         
-        this.dialogue.open(PincodeComponent,{
-          width:'30%'
-
-        }).afterClosed().subscribe(pin=>{
+        this.global.openPinCode().subscribe(pin=>{
         
           if(pin != ''){
             this.update(pin);

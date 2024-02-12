@@ -1,6 +1,6 @@
-<div class="body bg-gray h-100">
+<div class="body h-100">
     
-    <mat-tab-group mat-align-tabs="center"  [selectedIndex]="tabIndex"
+    <mat-tab-group mat-align-tabs="center" class="h-100"  [selectedIndex]="tabIndex"
         (selectedIndexChange)="changeTab($event)">
         <mat-tab label="ADD / Modify" class="h-100">
             <div class="container-fluid p-1 row">
@@ -116,7 +116,7 @@
                                 *ngIf="PBarcode != '' && PBarcode != undefined">
                                 <div class="card " *ngFor="let item of productList| filter:PBarcode index as index"
                                     (click)="holdDataFunction(item)">
-                                    <button (keydown)="this.global.handleProdFocus(item,$event,'.prodRow','.searchProduct   ',productList)"
+                                    <button (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct   ',productList,index)"
                                      class="prodRow{{index}}"   style="background: none;border: none;text-align: left;">{{item.productTitle}}
                                         (<b>{{item.barcode}}</b> )</button>
                                 </div>
@@ -130,8 +130,7 @@
                     </div>
 
 
-                    <div class="card"
-                        style="max-height: 500px;height: 500px;overflow-y:scroll; background-color: rgba(225, 244, 236, 0.816);">
+                    <div class="card"  style="min-height: 70vh;max-height: 100vh;overflow-y:scroll; background-color: rgba(225, 244, 236, 0.816);">
 
 
                         <table class="table table-hover">
@@ -154,6 +153,7 @@
                                     <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
                                             (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
                                             (keyup)="changeValue(item);getTotal();showImg(item);"
+                                            (click)="rowFocused = index"
                                             class="qty{{index}} text-center" style="width: 80px;"></td>
 
                                     <td>{{item.avgCostPrice | number:'1.0-2'}}</td>
@@ -205,7 +205,8 @@
                             <th>Sale</th>
                             <th>Category</th>
                             <th>Edit</th>
-                            <th>Approve</th>
+                            <th>Lock Status</th>
+                            <th>Status</th>
                             <th>Copy</th>
                             <th>Delete</th>
                         </tr>
@@ -221,9 +222,9 @@
                             <td>{{item.recipeCatTitle}}</td>
                             <td class="cursorPointer"><mat-icon class="text-success"
                                     (click)="edit(item)">edit</mat-icon></td>
-                            <td class="text-success"><mat-icon *ngIf="item.approvedStatus == false" (click)="approveRecipe(item)">check</mat-icon>
-                                <mat-icon *ngIf="item.approvedStatus == true">done_all</mat-icon></td>
-                                <td class="cursorPointer "><mat-icon data-bs-toggle="modal"
+                            <td ><mat-icon (click)="approveRecipe(item)">{{item.approvedStatus == true ? 'lock' :'lock_open'}}</mat-icon></td>
+                            <td class="cursorPointer"><mat-icon [ngClass]="item.activeStatus == false ?'text-danger': 'text-success'" (click)="activeRecipe(item)" >{{item.activeStatus == false ? 'indeterminate_check_box' :'check_box'}}</mat-icon></td>
+                            <td class="cursorPointer "><mat-icon data-bs-toggle="modal"
                                     data-bs-target="#otherRecipe" (click)="copyRecipe(item)">save</mat-icon></td>
                             <td class="cursorPointer"><mat-icon class="text-danger"
                                     (click)="delete(item)">delete</mat-icon></td>
@@ -312,6 +313,7 @@
                                             <td class="text-center"><input type="text" [disabled]="item.lockedStatus" [(ngModel)]="item.quantity" min="0"
                                                     (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
                                                     (keyup)="changeValue(item);getTotal();showImg(item);"
+                                                    (click)="rowFocused = index"
                                                     class="qty{{index}} text-center" style="width: 80px;"></td>
         
                                             <td>{{item.avgCostPrice | number:'1.0-2'}}</td>

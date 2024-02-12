@@ -97,9 +97,7 @@ export class SectionComponent implements OnInit {
       if(this.btnType == 'Save'){
         this.insert()
       }else if(this.btnType == 'Update'){
-        this.dialogue.open(PincodeComponent,{
-          width:'30%'
-        }).afterClosed().subscribe(pin=>{
+        this.globaldata.openPinCode().subscribe(pin=>{
           if(pin!= ''){
             this.update(pin);
           }
@@ -177,9 +175,7 @@ export class SectionComponent implements OnInit {
 
   deleteSection(row:any){
 
-    this.dialogue.open(PincodeComponent,{
-      width:'30%'
-    }).afterClosed().subscribe(pin=>{
+    this.globaldata.openPinCode().subscribe(pin=>{
       if(pin!= ''){
        
         Swal.fire({

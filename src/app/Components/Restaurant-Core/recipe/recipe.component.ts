@@ -403,6 +403,55 @@ export class RecipeComponent implements OnInit{
      }
    }
 
+   handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[],index:any){
+    
+    // if(e.shiftKey && e.keyCode == 9 ){
+    //     this.prodFocusedRow = index - 1; 
+    //     var clsName = cls + this.prodFocusedRow; 
+    //     $(clsName).trigger('focus');
+    //  }
+
+    /////move down
+    if(e.keyCode == 40|| e.keyCode == 9){
+
+ 
+      if(prodList.length > 1 ){
+       this.prodFocusedRow += 1;
+       if (this.prodFocusedRow >= prodList.length) {      
+         this.prodFocusedRow -= 1  
+     } else {
+         var clsName = cls + this.prodFocusedRow;    
+        //  alert(clsName);
+         $(clsName).trigger('focus');
+       
+     }}
+   }
+ 
+ 
+      //Move up
+      if (e.keyCode == 38) {
+ 
+       if (this.prodFocusedRow == 0) {
+           $(endFocus).trigger('focus');
+           this.prodFocusedRow = 0;
+  
+       }
+ 
+       if (prodList.length > 1) {
+ 
+           this.prodFocusedRow -= 1;
+ 
+           var clsName = cls + this.prodFocusedRow;
+          //  alert(clsName);
+           $(clsName).trigger('focus');
+           
+ 
+       }
+ 
+   }
+
+  }
+
    prodFocusedRow =0;
    changeFocus(e:any, cls:any){
 
@@ -589,9 +638,7 @@ export class RecipeComponent implements OnInit{
           )
         }else if(this.btnType == 'Update'){
          
-          this.dialog.open(PincodeComponent,{
-            width:"30%"
-          }).afterClosed().subscribe(pin=>{
+          this.global.openPinCode().subscribe(pin=>{
             if(pin != ''){
               this.app.startLoaderDark();
               this.http.post(environment.mainApi+this.global.restaurentLink+'UpdateRecipe',{
@@ -762,15 +809,14 @@ export class RecipeComponent implements OnInit{
 
 
   approveRecipe(item:any){
+   //console.log(item);
 
-    this.dialog.open(PincodeComponent,{
-      width:"30%",
-    }).afterClosed().subscribe(pin=>{
+    this.global.openPinCode().subscribe(pin=>{
       if(pin != ''){
         this.app.startLoaderDark();
         this.http.post(environment.mainApi+this.global.restaurentLink+'ApproveRecipe',{
           RecipeID: item.recipeID,
-
+          ApprovedStatus:!item.approvedStatus,
           PinCode: pin,
           UserID: this.global.getUserID(),
         }).subscribe(
@@ -791,10 +837,36 @@ export class RecipeComponent implements OnInit{
   }
 
 
+  activeRecipe(item:any){
+
+    this.global.openPinCode().subscribe(pin=>{
+      if(pin != ''){
+        this.app.startLoaderDark();
+        this.http.post(environment.mainApi+this.global.restaurentLink+'ActiveRecipe',{
+          RecipeID: item.recipeID,
+          ActiveStatus: !item.activeStatus,
+          PinCode: pin,
+          UserID: this.global.getUserID(),
+        }).subscribe(
+          (Response:any)=>{
+            if(Response.msg == "Data Updated Successfully"){
+              this.msg.SuccessNotify(Response.msg);
+              this.getAllRecipe();
+            }else {
+              this.msg.WarnNotify(Response.msg);
+              
+            }
+            this.app.stopLoaderDark();
+          }
+        )
+      }
+    })
+
+  }
+
+
   delete(row:any){
-    this.dialog.open(PincodeComponent,{
-      width:'30%'
-    }).afterClosed().subscribe(pin=>{
+    this.global.openPinCode().subscribe(pin=>{
 
      if(pin != ''){
 

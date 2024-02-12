@@ -72,9 +72,7 @@ export class AddAreaComponent implements OnInit{
       )
       }
       if(this.btntype == 'Update'){
-       this.dialog.open(PincodeComponent,{
-        width:"30%"
-       }).afterClosed().subscribe(pin=>{
+        this.global.openPinCode().subscribe(pin=>{
         if(pin != ''){
           $('.loaderDark').show();
         this.http.post(environment.mainApi+this.global.restaurentLink+'UpdateCookingAria',{

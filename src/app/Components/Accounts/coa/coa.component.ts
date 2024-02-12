@@ -408,9 +408,7 @@ onlevel3Change(){
 
 ///////////////////////////////////////////////////////////////////////////////
   deleteCoa(row:any){
- this.dialogue.open(PincodeComponent,{
-  width:'30%',
- }).afterClosed().subscribe(pin=>{
+    this.globalData.openPinCode().subscribe(pin=>{
   if(pin != ''){
     Swal.fire({
       title:'Alert!',

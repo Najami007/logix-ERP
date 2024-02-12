@@ -68,9 +68,7 @@ export class RecipeCategoryComponent implements OnInit{
 
 
   delete(row:any){
-    this.dialog.open(PincodeComponent,{
-      width:'30%'
-    }).afterClosed().subscribe(pin=>{
+    this.global.openPinCode().subscribe(pin=>{
 
      if(pin != ''){
 

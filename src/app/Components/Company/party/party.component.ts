@@ -243,9 +243,7 @@ addCity(){
     }else if(this.btnType == 'Update'){
       
    
-      this.dialogue.open(PincodeComponent,{
-        width:"30%"
-      }).afterClosed().subscribe(pin=>{
+      this.globalData.openPinCode().subscribe(pin=>{
         if(pin != ''){
           this.app.startLoaderDark();
           this.http.post(environment.mainApi+this.globalData.companyLink+'updateparty',{
@@ -339,9 +337,7 @@ addCity(){
 ////////////////to Delete The Party/////////////////////////
   DeleteParty(row:any){
 
-    this.dialogue.open(PincodeComponent,{
-      width:"30%"
-    }).afterClosed().subscribe(pin=>{
+    this.globalData.openPinCode().subscribe(pin=>{
       if(pin != ''){
         alert(pin);
         Swal.fire({

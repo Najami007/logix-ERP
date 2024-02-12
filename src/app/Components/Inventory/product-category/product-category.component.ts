@@ -116,9 +116,7 @@ export class ProductCategoryComponent implements OnInit{
   }
 
   update(){
-    this.dialogue.open(PincodeComponent,{
-      width:'30%'
-    }).afterClosed().subscribe(pin=>{
+    this.globaldata.openPinCode().subscribe(pin=>{
 
      if(pin != ''){
       this.app.startLoaderDark();
@@ -167,9 +165,7 @@ export class ProductCategoryComponent implements OnInit{
   }
 
   delete(row:any){
-    this.dialogue.open(PincodeComponent,{
-      width:'30%'
-    }).afterClosed().subscribe(pin=>{
+    this.globaldata.openPinCode().subscribe(pin=>{
 
      if(pin != ''){
 

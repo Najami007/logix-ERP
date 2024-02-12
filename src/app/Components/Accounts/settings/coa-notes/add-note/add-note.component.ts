@@ -77,9 +77,7 @@ export class AddNoteComponent implements OnInit{
       if(this.actionbtn == 'Save'){
        this.insertNote();
       }else if(this.actionbtn == 'Update'){
-        this.dialogue.open(PincodeComponent,{
-          width:'30%',
-        }).afterClosed().subscribe(pin=>{
+        this.global.openPinCode().subscribe(pin=>{
           if(pin != ''){
             this.UpdateNote(pin);
           }

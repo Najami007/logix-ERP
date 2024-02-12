@@ -78,9 +78,7 @@ export class TableComponent implements OnInit {
 
   delete(item:any){
 
-    this.dialogue.open(PincodeComponent,{
-      width:'30%',
-    }).afterClosed().subscribe(pin=>{
+    this.global.openPinCode().subscribe(pin=>{
       if(pin != ''){
         this.app.startLoaderDark();
         this.http.post(environment.mainApi+this.global.restaurentLink+'deleteTable',{

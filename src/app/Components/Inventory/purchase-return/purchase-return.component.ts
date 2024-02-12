@@ -663,9 +663,7 @@ export class PurchaseReturnComponent implements OnInit{
              }
            )
           }else if(this.holdBtnType == 'ReHold'){
-           this.dialogue.open(PincodeComponent,{
-             width:"30%"
-           }).afterClosed().subscribe(pin=>{
+            this.global.openPinCode().subscribe(pin=>{
              if(pin != ''){
                this.app.startLoaderDark();
           

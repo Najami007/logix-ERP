@@ -24,6 +24,12 @@ import { MapWHProductComponent } from './recipe/map-whproduct/map-whproduct.comp
 import { CookingareaComponent } from './cookingarea/cookingarea.component';
 import { AddAreaComponent } from './cookingarea/add-area/add-area.component';
 import { OrderDashboardComponent } from './order-dashboard/order-dashboard.component';
+import { SaleReportComponent } from './restaurantReports/sale-report/sale-report.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { SaleRptRecipewiseComponent } from './restaurantReports/sale-rpt-recipewise/sale-rpt-recipewise.component';
+import { SaleRptOrderTypewiseComponent } from './restaurantReports/sale-rpt-order-typewise/sale-rpt-order-typewise.component';
+import { SaleRptTablewiseComponent } from './restaurantReports/sale-rpt-tablewise/sale-rpt-tablewise.component';
+import { SaleRptRecipeCatwiseComponent } from './restaurantReports/sale-rpt-recipe-catwise/sale-rpt-recipe-catwise.component';
 
 
 
@@ -38,6 +44,11 @@ export const restCore: Route[] = [
   {path:'doc', component:DayopencloseComponent, canActivate:[AuthGuard] },
   {path:'ckar', component:CookingareaComponent, canActivate:[AuthGuard] },
   {path:'ordrdb', component:OrderDashboardComponent, canActivate:[AuthGuard] },
+  {path:'slrpt', component:SaleReportComponent, canActivate:[AuthGuard] },
+  {path:'srptrw', component:SaleRptRecipewiseComponent, canActivate:[AuthGuard] },
+  {path:'srptcw', component:SaleRptRecipeCatwiseComponent, canActivate:[AuthGuard] },
+  {path:'srpttw', component:SaleRptTablewiseComponent, canActivate:[AuthGuard] },
+  {path:'srptotw', component:SaleRptOrderTypewiseComponent, canActivate:[AuthGuard] },
 
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
@@ -63,6 +74,12 @@ export const restCore: Route[] = [
     CookingareaComponent,
     AddAreaComponent,
     OrderDashboardComponent,
+    SaleReportComponent,
+    SaleRptRecipewiseComponent,
+    SaleRptOrderTypewiseComponent,
+    SaleRptTablewiseComponent,
+    SaleRptRecipeCatwiseComponent,
+    
 
   ],
   imports: [
@@ -75,7 +92,8 @@ export const restCore: Route[] = [
     MatFormFieldModule,
     ChartModule,
     NgxMatSelectSearchModule,
-    TextMaskModule
+    TextMaskModule,
+    NgxMaterialTimepickerModule
   ],
   exports: [
     RouterModule

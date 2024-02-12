@@ -113,10 +113,7 @@ export class PartnersComponent implements OnInit {
       if(this.btnType == 'Save'){
         this.insertPartner();
       }else if(this.btnType == 'Update'){
-        this.dialogue.open(PincodeComponent,{
-          width:"40%",
-    
-        }).afterClosed().subscribe(pin=>{
+        this.global.openPinCode().subscribe(pin=>{
           if(pin != ''){
             this.updatePartner(pin);
           }
@@ -202,10 +199,7 @@ export class PartnersComponent implements OnInit {
 
   deletePartner(row:any){
 
-    this.dialogue.open(PincodeComponent,{
-      width:"30%",
-
-    }).afterClosed().subscribe(pin=>{
+    this.global.openPinCode().subscribe(pin=>{
       if(pin != ''){
 
 

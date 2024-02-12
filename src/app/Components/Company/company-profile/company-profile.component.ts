@@ -278,9 +278,7 @@ export class CompanyProfileComponent implements OnInit {
       if(this.btnType == 'Save'){
         this.insertCompany();
       }else if(this.btnType == 'Update'){
-        this.dialogue.open(PincodeComponent,{
-          width:"30%",
-        }).afterClosed().subscribe(pin=>{         
+        this.global.openPinCode().subscribe(pin=>{         
             if(pin != ''){
               this.updateCompany(pin);  
             }
@@ -446,14 +444,9 @@ export class CompanyProfileComponent implements OnInit {
 
   deleteProfile(item:any){
 
-    this.dialogue.open(PincodeComponent,{
-      width:"30%",
-    }).afterClosed().subscribe(pin=>{         
+    this.global.openPinCode().subscribe(pin=>{         
         if(pin != ''){
-
-
-
-          
+   
     Swal.fire({
       title:'Alert!',
       text:'Confirm to Delete the Data',

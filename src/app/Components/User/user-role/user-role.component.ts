@@ -128,9 +128,7 @@ export class UserRoleComponent implements OnInit {
 
         //////////// will open the pin code field and on close call the api
         
-        this.dialogue.open(PincodeComponent,{
-          width:"30%",
-        }).afterClosed().subscribe(pin=>{         
+        this.global.openPinCode().subscribe(pin=>{         
            if(pin !== ''){
             this.updateRole(pin);  
            }
@@ -299,6 +297,7 @@ export class UserRoleComponent implements OnInit {
     // this.getMenuList();
     this.selectedModuleMenuList = [];
     this.TempModuleList = [];
+    
 
     this.roleTitle = row.roleTitle;
     this.roleDescription = row.roleDescription;
@@ -390,9 +389,7 @@ export class UserRoleComponent implements OnInit {
   deleteRole(row:any){
 
 
-    this.dialogue.open(PincodeComponent,{
-      width:"30%",
-    }).afterClosed().subscribe(pin=>{         
+    this.global.openPinCode().subscribe(pin=>{         
    
       if(pin !== ''){
         Swal.fire({

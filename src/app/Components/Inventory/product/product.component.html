@@ -1,4 +1,4 @@
-<mat-tab-group mat-align-tabs="center" class="body bg-gray h-100" [selectedIndex]="tabIndex"
+<mat-tab-group mat-align-tabs="center" class="body  h-100" [selectedIndex]="tabIndex"
     (selectedIndexChange)="changeTab($event)" >
     <mat-tab label="ADD PRODUCT" class="h-100">
       
@@ -221,7 +221,7 @@
 
     <mat-tab label="SAVED PRODUCTS" class="h-100 ">
 
-        <div class="container-fluid bg-light ">
+        <div class="container-fluid  ">
             <mat-form-field appearance="outline" class="w-100 pt-2">
                 <mat-label>Search.....</mat-label>
                 <input type="text" id="searchProduct" matInput #searchProd [(ngModel)]="searchProduct" (keydown)="applyFilter($event)">
@@ -403,7 +403,7 @@
                   </tr>
                 </table>
               
-                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+                <mat-paginator [pageSizeOptions]="[100, 50, 25, 10]" aria-label="Select page of users"></mat-paginator>
               </div>
     
         </div>

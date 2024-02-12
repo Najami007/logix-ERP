@@ -61,9 +61,7 @@ export class UpdateCoaComponent implements OnInit{
     }else{
 
 
-      this.dialogue.open(PincodeComponent,{
-        width:'30%'
-      }).afterClosed().subscribe(pin=>{
+      this.global.openPinCode().subscribe(pin=>{
         if(pin != ''){
           $('.loaderDark').show();
       

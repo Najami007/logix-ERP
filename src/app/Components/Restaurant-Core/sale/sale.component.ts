@@ -471,9 +471,7 @@ export class SaleComponent implements OnInit {
         if (this.paymentType == 'Complimentary') {
 
 
-          this.dialogue.open(PincodeComponent, {
-            width: '30%'
-          }).afterClosed().subscribe(pin => {
+          this.global.openPinCode().subscribe(pin => {
             if (pin !== '') {
               this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
                 RestrictionCodeID: 3,
@@ -648,9 +646,7 @@ export class SaleComponent implements OnInit {
       if (this.tableData.length == 1 && item.quantity <= 1) {
         this.voidBill();
       } else {
-        this.dialogue.open(PincodeComponent, {
-          width: '30%'
-        }).afterClosed().subscribe(pin => {
+        this.global.openPinCode().subscribe(pin => {
           if (pin !== '') {
             this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
               RestrictionCodeID: 1,
@@ -861,9 +857,7 @@ export class SaleComponent implements OnInit {
 
   verifyDiscount(disc: any,) {
     if (this.tableData != '') {
-      this.dialogue.open(PincodeComponent, {
-        width: '30%'
-      }).afterClosed().subscribe(pin => {
+      this.global.openPinCode().subscribe(pin => {
         if (pin !== '') {
           this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
             RestrictionCodeID: 2,
@@ -900,9 +894,7 @@ export class SaleComponent implements OnInit {
       }).then((result) => {
 
         if (result.isConfirmed) {
-          this.dialogue.open(PincodeComponent, {
-            width: '30%'
-          }).afterClosed().subscribe(pin => {
+          this.global.openPinCode().subscribe(pin => {
             if (pin !== '') {
               this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
                 RestrictionCodeID: 1,

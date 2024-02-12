@@ -186,9 +186,7 @@ export class AddSwingComponent implements OnInit {
   }
 
   update(){
-    this.dialogue.open(PincodeComponent,{
-      width:'30%',
-    }).afterClosed().subscribe(pin=>{
+    this.global.openPinCode().subscribe(pin=>{
 
     if(pin != ''){
       this.app.startLoaderDark();
@@ -242,9 +240,7 @@ export class AddSwingComponent implements OnInit {
 
 
 
-    this.dialogue.open(PincodeComponent,{
-      width:'30%',
-    }).afterClosed().subscribe(pin=>{
+    this.global.openPinCode().subscribe(pin=>{
       if(pin!= ''){
     Swal.fire({
       title:'Alert!',
@@ -304,9 +300,7 @@ export class AddSwingComponent implements OnInit {
   changeStatus(row:any){
 
         
-    this.dialogue.open(PincodeComponent,{
-      width:"30%",
-    }).afterClosed().subscribe(pin=>{  
+    this.global.openPinCode().subscribe(pin=>{  
       
       if(pin !== ''){
         

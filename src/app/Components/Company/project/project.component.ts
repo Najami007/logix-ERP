@@ -74,9 +74,7 @@ export class ProjectComponent implements OnInit {
     if(this.actionbtn == 'Save'){
       this.insert()
     }else if(this.actionbtn == 'Update'){
-      this.dialogue.open(PincodeComponent,{
-        width:'30%'
-      }).afterClosed().subscribe(pin=>{
+      this.global.openPinCode().subscribe(pin=>{
         if(pin != ''){
           this.update(pin);
         }
@@ -161,9 +159,7 @@ edit(row:any){
 
 delete(row:any){
 
-  this.dialogue.open(PincodeComponent,{
-    width:'30%'
-  }).afterClosed().subscribe(pin=>{
+  this.global.openPinCode().subscribe(pin=>{
     if(pin != ''){
 
       Swal.fire({

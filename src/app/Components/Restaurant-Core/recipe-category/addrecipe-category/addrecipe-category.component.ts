@@ -78,9 +78,7 @@ export class AddrecipeCategoryComponent implements OnInit {
         )
       }else if(this.btnType == 'Update'){
        
-        this.dialog.open(PincodeComponent,{
-          width:"30%"
-        }).afterClosed().subscribe(pin=>{
+        this.global.openPinCode().subscribe(pin=>{
           if(pin != ''){
             this.app.startLoaderDark();
 
