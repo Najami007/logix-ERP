@@ -8,6 +8,8 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import Swal from 'sweetalert2';
+import { SaleBillDetailComponent } from './sale-bill-detail/sale-bill-detail.component';
+
 
 @Component({
   selector: 'app-sale',
@@ -51,18 +53,14 @@ export class SaleComponent implements OnInit {
   ngOnInit(): void {
     this.global.setHeaderTitle('Sale');
     this.getCategories();
-    // setTimeout(() => {
-    //   console.log(this.categoriesList[0]);
-    // }, 500);
+ 
     setTimeout(() => {
       this.onCatSelected(this.categoriesList[0]);
     }, 200);
-    // this.getAllRecipe();
     this.getTable();
     this.getHoldBills();
     this.getBankList();
-
-    // this.RecipeList =  this.RecipeList.filter((e:any)=>e.recipeCatID == this.categoryID);
+    this.getSavedBill();
 
 
   }
@@ -150,7 +148,6 @@ export class SaleComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetTable').subscribe(
       (Response: any) => {
         this.tableList = Response;
-        //console.log(Response);
       }
     )
   }
@@ -213,7 +210,6 @@ export class SaleComponent implements OnInit {
         setTimeout(() => {
           this.bankCoaID = Response[0].coaID;
         }, 200);
-        //console.log(Response);
       },
       (Error) => {
         //console.log(Error);
@@ -225,15 +221,12 @@ export class SaleComponent implements OnInit {
 
   onCatSelected(item: any) {
     this.categoryID = item.recipeCatID;
-    // alert(item.recipeCatID)
-    // alert(item.prodFlag)
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipesCatWise?CatID=' + item.recipeCatID + '&reqFlag=' + item.prodFlag).subscribe(
       (Response: any) => {
-        // console.log(Response)
         this.RecipeList = Response;
       }
     )
-    // this.RecipeList = this.tempRecipeList.filter((e:any)=>e.recipeCatID == catID);
+
   }
 
 
@@ -243,60 +236,12 @@ export class SaleComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetRecipeCategories').subscribe(
       (Response: any) => {
         this.categoriesList = Response;
-        // console.log(Response);
         this.categoryID = this.categoriesList[0].recipeCatID;
 
       }
     )
   }
 
-
-  rowFocused = 0;
-  handleFocus(item: any, e: any, cls: string) {
-
-    if (item.quantity < 0 || item.quantity == '') {
-      item.quantity = 0;
-    }
-
-    /////move down
-    if (e.keyCode == 40) {
-
-      if (this.tableData.length > 1) {
-        this.rowFocused += 1;
-        if (this.rowFocused >= this.tableData.length) {
-          this.rowFocused -= 1
-        } else {
-          var clsName = cls + this.rowFocused;
-          // alert(clsName);   
-          $(clsName).trigger('focus');
-        }
-      }
-    }
-
-
-    //Move up
-    if (e.keyCode == 38) {
-
-      if (this.tableData.length > 1) {
-
-        this.rowFocused -= 1;
-
-        var clsName = cls + this.rowFocused;
-        // alert(clsName);
-        $(clsName).trigger('focus');
-
-
-      }
-
-    }
-
-    ////removeing row
-    if (e.keyCode == 46) {
-      this.deleteRow(item);
-      //  $(cls+'0').trigger('focus');   
-    }
-
-  }
 
 
 
@@ -333,12 +278,7 @@ export class SaleComponent implements OnInit {
       this.msg.WarnNotify('Enter Valid Quantity')
     } else {
       var index = this.tableData.findIndex((e: any) => e.recipeID == item.recipeID);
-      // console.log(index);
-      // alert( index)
-      //if(index !== -1){
-      //   this.tableData[index].quantity = parseFloat( this.tableData[index].quantity +1 ); 
-      // }else{
-
+      
       this.tableData.push({
         productID: item.productID,
         productTitle: item.recipeTitle,
@@ -466,11 +406,10 @@ export class SaleComponent implements OnInit {
 
       if (type == 'sale') {
 
-
-
         if (this.paymentType == 'Complimentary') {
 
-
+          $('#paymentMehtod').hide();
+          $('.modal-backdrop').remove();
           this.global.openPinCode().subscribe(pin => {
             if (pin !== '') {
               this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
@@ -540,14 +479,13 @@ export class SaleComponent implements OnInit {
     }).subscribe(
       (Response: any) => {
         if (Response.msg == 'Data Saved Successfully') {
-          console.log(Response);
           this.msg.SuccessNotify(Response.msg);
-          // this.printbill('save')
 
           this.printAfterSave(Response.invNo);
           this.getTable();
           this.onCatSelected(this.categoriesList[0]);
           this.getHoldBills();
+          this.getSavedBill();
           this.reset();
           /////////// will hide the modal window ///////////
           $('#paymentMehtod').hide();
@@ -569,7 +507,6 @@ export class SaleComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetHoldBills').subscribe(
       (Response: any) => {
         this.holdBillList = Response;
-        //  console.log(Response);
       }
     )
   }
@@ -601,7 +538,6 @@ export class SaleComponent implements OnInit {
 
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetHoldedBillDetail?BillNo=' + item.invBillNo).subscribe(
       (Response: any) => {
-        // console.log(Response);
         this.tableData = [];
 
         Response.forEach((e: any) => {
@@ -623,7 +559,6 @@ export class SaleComponent implements OnInit {
 
         });
         this.getTotal()
-        // console.log(this.tableData);
 
 
       }
@@ -787,9 +722,12 @@ export class SaleComponent implements OnInit {
   myChange = 0;
   myBank = 0;
   myPaymentType = '';
+  myDuplicateFlag = false;
+  myTime:any;
 
 
   printAfterSave(invNo: any) {
+    this.myDuplicateFlag = false;
     this.myInvoiceNo = invNo;
     this.mytableNo = this.tableTitle;
     this.myInvDate = this.invoiceDate;
@@ -818,10 +756,11 @@ export class SaleComponent implements OnInit {
 
   }
 
-  printbill(type: any) {
+  HOldandPrint(type: any) {
 
 
     if (this.invBillNo != '') {
+      this.myDuplicateFlag = false;
       this.myInvoiceNo = this.invBillNo;
       this.myPrintData = this.tableData;
       this.mytableNo = this.tableTitle;
@@ -913,7 +852,6 @@ export class SaleComponent implements OnInit {
                       UserID: this.global.getUserID()
                     }).subscribe(
                       (Response: any) => {
-                        console.log(Response)
                         if (Response.msg == 'Data Saved Successfully') {
                           this.msg.SuccessNotify('Bill Void');
                           this.getTotal();
@@ -943,5 +881,58 @@ export class SaleComponent implements OnInit {
     }
 
   }
+
+
+  savedbillList:any = [];
+
+  getSavedBill(){
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetOpenDaySale').subscribe(
+      (Response:any)=>{
+          this.savedbillList = Response;
+      }
+    )
+  }
+
+
+  printDuplicateBill(item:any){
+
+    this.myInvoiceNo = item.invBillNo;
+    this.mytableNo = item.tableTitle;
+    this.myInvDate = item.createdOn ;
+    this.myCounterName = item.entryUser;
+    this.myOrderType = item.orderType;
+    this.mySubTotal = item.billTotal;
+    this.myNetTotal = item.netTotal;
+    this.myOtherCharges = item.otherCharges;
+    this.myRemarks = item.remarks;
+    this.myCash = item.cashRec;
+    this.myBank = item.netTotal - item.cashRec;
+    this.myDiscount = item.billDiscount;
+    this.myChange = item.change;
+    this.myPaymentType = item.paymentType;
+    this.myDuplicateFlag = true;
+    this.http.get(environment.mainApi+this.global.restaurentLink+'PrintBill?BillNo='+item.invBillNo).subscribe(
+      (Response:any)=>{
+        this.myPrintData = Response;
+      }
+    )
+
+
+    setTimeout(() => {
+      this.global.printData('#billPrint');
+    }, 200);
+  }
+
+  billDetails(item:any){
+    this.dialogue.open(SaleBillDetailComponent,{
+      width:'50%',
+      data:item,
+      disableClose:true,
+    }).afterClosed().subscribe(value=>{
+      
+    })
+  }
+
+
 
 }

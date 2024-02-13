@@ -33,6 +33,8 @@ import { InvcredComponent } from './InventoryReports/invreportcatwise/invcred/in
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { InvrptprodwiseComponent } from './InventoryReports/invrptprodwise/invrptprodwise.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { SalePurchaseRptdatewiseComponent } from './InventoryReports/sale-purchase-rptdatewise/sale-purchase-rptdatewise.component';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 
 
@@ -119,6 +121,11 @@ export const inventoryRoutes: Route[] = [
     component: InvrptprodwiseComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'sprptdw',
+    component: SalePurchaseRptdatewiseComponent,
+    canActivate: [AuthGuard]
+  },
 
 
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
@@ -151,6 +158,7 @@ export const inventoryRoutes: Route[] = [
     InvreportcatwiseComponent,
     InvcredComponent,
     InvrptprodwiseComponent,
+    SalePurchaseRptdatewiseComponent,
     
  
 
@@ -165,7 +173,8 @@ export const inventoryRoutes: Route[] = [
     NgxMatSelectSearchModule,
     TextMaskModule,
     Ng2SearchPipeModule,
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    ScrollingModule
 
 
   ],

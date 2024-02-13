@@ -9,13 +9,12 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { SaleBillDetailComponent } from '../../sale/sale-bill-detail/sale-bill-detail.component';
 
-
 @Component({
-  selector: 'app-sale-rpt-recipe-catwise',
-  templateUrl: './sale-rpt-recipe-catwise.component.html',
-  styleUrls: ['./sale-rpt-recipe-catwise.component.scss']
+  selector: 'app-sale-rpt-payment-typewise',
+  templateUrl: './sale-rpt-payment-typewise.component.html',
+  styleUrls: ['./sale-rpt-payment-typewise.component.scss']
 })
-export class SaleRptRecipeCatwiseComponent implements OnInit {
+export class SaleRptPaymentTypewiseComponent implements OnInit {
 
 
 
@@ -42,15 +41,16 @@ export class SaleRptRecipeCatwiseComponent implements OnInit {
   ngOnInit(): void {
     this.global.setHeaderTitle('Sale Report (Recipewise)');
     this.getUsers();
-    this.getCategories();
+    $('#detailTable').show();
+    $('#summaryTable').hide();
 
   }
 
 
 
-  orderTypeList:any = [{val:'Dine In', title:'Dine In'},{val:'Take Away', title:'Take Away'},{val:'Home Delivery', title:'Home Delivery'},]
+  paymentTypeList:any = [{val:'Cash', title:'Cash'},{val:'Bank', title:'Bank'},{val:'Split', title:'Split'},{val:'Complimentary', title:'Complimentary'},]
 
-  orderType:any = 'Dine In';
+  paymentType:any = 'Cash';
 
   userList: any = [];
   userID = 0;
@@ -62,29 +62,9 @@ export class SaleRptRecipeCatwiseComponent implements OnInit {
   toTime: any = '23:59';
 
   SaleDetailList: any = [];
-
+  saleSummaryList:any = [];
   reportType: any;
 
-  categoriesList:any = [];
-  recipeCatID = 0;
-  CategoryTitle = '';
-
-
-  
-  getCategories(){
-    this.http.get(environment.mainApi+this.global.restaurentLink+'GetRecipeCategories').subscribe(
-      (Response:any)=>{
-        this.categoriesList = Response;
-      }
-    )
-  }
-
-
-  
-  onCatSelected() {
-    var title = this.categoriesList.find((e: any) => e.recipeCatID == this.recipeCatID);
-    this.CategoryTitle = title.recipeCatTitle;
-  }
 
 
 
@@ -95,7 +75,7 @@ export class SaleRptRecipeCatwiseComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.userLink + 'getuser').subscribe(
       (Response) => {
         this.userList = Response;
-            this.app.stopLoaderDark();
+        this.app.stopLoaderDark();
 
       },
       (error: any) => {
@@ -122,15 +102,35 @@ export class SaleRptRecipeCatwiseComponent implements OnInit {
 
     // alert(this.recipeCatID);
    
-  if(this.recipeCatID == 0 || this.recipeCatID == undefined){
-    this.msg.WarnNotify('Select Category')
+  if(type == 'detail' && (this.paymentType == '' || this.paymentType == undefined)){
+    this.msg.WarnNotify('Select Payment Type')
   }else{
-    if(type == 'summary'){
-      this.reportType = 'Summary';
-      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleSummaryRecipeCatAndDateWise?reqCID='+this.recipeCatID+'&reqUID='+this.userID+'&FromDate='+
+
+   if(type == 'detail'){
+    $('#detailTable').show();
+    $('#summaryTable').hide();
+    this.reportType = 'Detail';
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInOutDetailPTWiseAndDateWise?reqPT='+this.paymentType+'&reqUID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response: any) => {
         this.SaleDetailList = Response;
+        this.grandTotal = 0;
+        Response.forEach((e:any) => {
+          this.grandTotal += e.netTotal;
+        });
+
+      }
+    )
+   }
+
+   if(type == 'summary'){
+    $('#detailTable').hide();
+        $('#summaryTable').show();
+        this.reportType = 'Summary';
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPaymentSaleSummaryDateWise?reqUID='+this.userID+'&FromDate='+
+    this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
+      (Response: any) => {
+        this.saleSummaryList = Response;
         this.grandTotal = 0;
         Response.forEach((e:any) => {
           this.grandTotal += e.total;
@@ -138,22 +138,9 @@ export class SaleRptRecipeCatwiseComponent implements OnInit {
 
       }
     )
-    }
+   }
+    
 
-    if(type == 'detail'){
-      this.reportType = 'Detail';
-      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleDetailRecipeCatAndDateWise?reqCID='+this.recipeCatID+'&reqUID='+this.userID+'&FromDate='+
-    this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
-      (Response: any) => {
-        this.SaleDetailList = Response;
-        this.grandTotal = 0;
-        Response.forEach((e:any) => {
-          this.grandTotal += e.quantity * e.salePrice;
-        });
-
-      }
-    )
-    }
   }
     
 
@@ -168,7 +155,6 @@ export class SaleRptRecipeCatwiseComponent implements OnInit {
     this.global.printData('#PrintDiv')
   }
 
-
   billDetails(item:any){
     this.dialog.open(SaleBillDetailComponent,{
       width:'50%',
@@ -179,5 +165,5 @@ export class SaleRptRecipeCatwiseComponent implements OnInit {
     })
   }
 
-}
 
+}

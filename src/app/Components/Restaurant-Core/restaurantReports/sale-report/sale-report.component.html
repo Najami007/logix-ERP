@@ -74,7 +74,8 @@
 
                     <h1 class="companyName">{{item.companyName}}</h1>
 
-                    <p class="rptTitle" style="margin-top:-20px">Sale {{reportType}} Report <span *ngIf="userName != ''">({{userName}})</span></p>
+                    <p class="rptTitle" style="margin-top:-20px">Sale {{reportType}} Report</p>
+                    <p style="margin-top: -15px;" > <b *ngIf="userName != ''">User: {{userName}}</b></p>
                     <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
 
@@ -110,7 +111,7 @@
             <tbody>
                 <tr *ngFor="let item of SaleDetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td class="text-center">{{item.invBillNo}}</td>
+                    <td class="text-center cursorPointer " (click)="billDetails(item)"><span class="text-primary border-bottom">{{item.invBillNo}}</span></td>
                     <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
                     <td class="text-center">{{item.tableTitle}}</td>
                     <td class="text-end">{{item.billTotal |number:'1.0-0'}}</td>
@@ -154,7 +155,7 @@
             <tbody>
                 <tr *ngFor="let item of SaleDetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td class="text-center">{{item.invBillNo}}</td>
+                    <td class="text-center cursorPointer " (click)="billDetails(item)"><span class="text-primary border-bottom">{{item.invBillNo}}</span></td>
                     <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
                     <td>{{item.tableTitle}}</td>
                     <td>{{item.productTitle}}</td>

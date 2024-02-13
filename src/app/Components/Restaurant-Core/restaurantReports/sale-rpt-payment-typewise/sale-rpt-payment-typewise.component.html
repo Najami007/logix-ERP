@@ -14,12 +14,12 @@
             </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline" class="col-lg-3">
-            <mat-label>Recipe Category</mat-label>
-            <mat-select [(ngModel)]="recipeCatID" (selectionChange)="onCatSelected()">
-                <mat-option><ngx-mat-select-search #catSearch [placeholderLabel]="'Search...'"
+            <mat-label>Payment Type</mat-label>
+            <mat-select [(ngModel)]="paymentType">
+                <mat-option><ngx-mat-select-search #typeSearch [placeholderLabel]="'Search...'"
                     [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                <mat-option  *ngFor="let item of categoriesList | filter:catSearch.value"
-                    [value]="item.recipeCatID">{{item.recipeCatTitle}}</mat-option>
+                <mat-option  *ngFor="let item of paymentTypeList | filter:typeSearch.value"
+                    [value]="item.val">{{item.title}}</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field  appearance="outline" style="width: 150px;">
@@ -91,8 +91,9 @@
 
                     <h1 class="companyName">{{item.companyName}}</h1>
 
-                    <p class="rptTitle" style="margin-top:-20px">Sale {{reportType}} Report</p>
-                    <p style="margin-top: -15px;" > <b *ngIf="userName != ''">User: {{userName}}</b><b> | Title: {{CategoryTitle}}</b></p>
+                    <p class="rptTitle" style="margin-top:-20px">Sale {{reportType}} Report </p>
+                    <p style="margin-top: -15px;" *ngIf="userName != '' || reportType == 'Detail'" > <b *ngIf="userName != ''">User: {{userName}} |</b>
+                        <b *ngIf="paymentType != ''">  Type: {{paymentType}}</b></p>
                     <p style="margin-top:-15px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
 
@@ -108,17 +109,17 @@
         </div>
 
 
-        <table class="table table-logix" id="summaryTable">
+        <table class="table table-logix" id="detailTable">
             <thead>
                 <tr>
                     <th>S#</th>
-                    <th *ngIf="reportType == 'Detail'">Bill #</th>
-                    <th *ngIf="reportType == 'Detail'">Date</th>
-                    <th>Title</th>
-                    <th *ngIf="reportType == 'Detail'">Qty</th>
-                    <th *ngIf="reportType == 'Detail'" style="width: 120px;">Price</th>
-                    <th  style="width: 120px;">Total</th>
-                    <th *ngIf="reportType == 'Detail'">Entered By</th>
+                    <th>Bill #</th>
+                    <th style="width: 200px;">Date</th>
+                    <th>Table</th>
+                    <th style="width: 120px;">Bill</th>
+                    <th style="width: 150px;">Other Charges</th>
+                    <th style="width: 120px;">Net Total</th>
+                    <th>Entered By</th>
 
                 </tr>
 
@@ -127,21 +128,45 @@
             <tbody>
                 <tr *ngFor="let item of SaleDetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td *ngIf="reportType == 'Detail'" class="text-center cursorPointer " (click)="billDetails(item)"><span class="text-primary border-bottom">{{item.invBillNo}}</span></td>
-                    <td *ngIf="reportType == 'Detail'">{{item.invDate |date:'dd-MM-yyyy'}}</td>
-                    <td >{{item.productTitle}}</td>
-                    <td *ngIf="reportType == 'Detail'" class="text-center">{{item.quantity |number:'1.0-0'}}</td>
-                    <td *ngIf="reportType == 'Detail'" class="text-end">{{item.salePrice|number:'1.0-0'}}</td>
-                    <td *ngIf="reportType == 'Summary'" class="text-end">{{item.total |number:'1.0-0'}}</td>
-                    <td *ngIf="reportType == 'Detail'" class="text-end">{{item.quantity * item.salePrice |number:'1.0-0'}}</td>
-                    <td *ngIf="reportType == 'Detail'" >{{item.entryUser}}</td>
+                    <td class="text-center cursorPointer " (click)="billDetails(item)"><span class="text-primary border-bottom">{{item.invBillNo}}</span></td>
+                    <td>{{item.invDate |date:'dd-MM-yyyy'}} ({{item.createdOn |date:'hh:mm:a'}})</td>
+                    <td class="text-center">{{item.tableTitle}}</td>
+                    <td class="text-end">{{item.billTotal |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.otherCharges|number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.netTotal |number:'1.0-0'}}</td>
+                    <td>{{item.entryUser}}</td>
+                </tr>
+                <tr>
+                    <td colspan="6"></td>
+                    <th class="text-end">{{grandTotal|number:'1.0-0'}}</th>
+                    <td></td>
+                </tr>
+            </tbody>
+          
+
+          
+        </table>
+
+        <table class="table table-logix" id="summaryTable">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Type</th>
+                    <th >Net Total</th>
+
+                </tr>
+
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of saleSummaryList index as index">
+                    <td class="text-center">{{index + 1}}</td>
+                    <td >{{item.paymentType}}</td>
+                    <td class="text-end">{{item.total |number:'1.0-0'}}</td>
                 </tr>
                 <tr>
                     <td colspan="2"></td>
-                    <td *ngIf="reportType == 'Detail'" colspan="2"></td>
-                    <td *ngIf="reportType == 'Detail'" colspan="2"></td>
-                    <th class="text-end">{{grandTotal|number:'1.0-0'}}</th>
-                    <td *ngIf="reportType == 'Detail'"></td>
+                    <th class="text-end">{{grandTotal|number:'1.0-0'}}</th> 
                 </tr>
             </tbody>
           
@@ -152,11 +177,14 @@
 
 
 
+
+
     </div>
 
 
 
 </div>
+
 
 
 

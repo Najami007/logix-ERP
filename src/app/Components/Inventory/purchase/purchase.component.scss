@@ -19,6 +19,28 @@ input:focus{
     height: 50px;
 }
 
+
+.a{
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    color: black;
+    text-align: center;
+    padding: 5px;
+
+}
+
+.example-viewport {
+    height: 350px;
+    width: 100%;
+    border: 1px solid black;
+  }
+  
+  .example-item {
+    height: 50px;
+    width: 100%;
+  }
+
 .SearchConatiner{
 // border: 0px solid rgb(180, 180, 180);
 // background-color: rgb(249, 249, 249);

@@ -651,8 +651,17 @@ export class IssuanceComponent implements OnInit {
 
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetIssueInventoryBillSingleDate?Type='+type+'&creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
       (Response:any)=>{
-        this.IssueBillList = Response;
-         console.log(this.IssueBillList);
+        this.IssueBillList = [];
+        if(type == 'HI'){
+          Response.forEach((e:any) => {
+            if(e.approvedStatus == false){
+              this.IssueBillList.push(e);
+            }
+          });
+        }
+        if(type == 'I'){
+          this.IssueBillList = Response;
+        }
       }
     )
   }

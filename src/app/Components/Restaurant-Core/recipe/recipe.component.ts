@@ -81,7 +81,6 @@ export class RecipeComponent implements OnInit{
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetCookingAria').subscribe(
       (Response:any)=>{
         this.cookingAreaList = Response;
-        //console.log(Response);
       }
     )
   }
@@ -809,7 +808,6 @@ export class RecipeComponent implements OnInit{
 
 
   approveRecipe(item:any){
-   //console.log(item);
 
     this.global.openPinCode().subscribe(pin=>{
       if(pin != ''){

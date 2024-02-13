@@ -211,7 +211,7 @@
                         <td class="text-end">{{item.salePrice|number:'1.0-2'}}</td>
                         <!-- <td class="text-center">{{item.qtyIn}}</td>
                         <td class="text-center">{{item.qtyOut}}</td> -->
-                        <td class="text-center">{{item.qtyIn - item.qtyOut|number:'1.0-2'}}</td>
+                        <td class="text-center">{{item.qtyIn - item.qtyOut |number:'1.0-3'}}</td>
                         <td class="text-end">{{item.costPrice * (item.qtyIn - item.qtyOut)|number:'1.0-2'}}</td>
                         <td class="text-end">{{item.avgCostPrice * (item.qtyIn - item.qtyOut)|number:'1.0-2'}}</td>
                         <td class="text-end">{{item.salePrice * (item.qtyIn - item.qtyOut)|number:'1.0-2'}}</td>

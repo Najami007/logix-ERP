@@ -1,0 +1,75 @@
+<div >
+ <div class="p-3">
+    <div >
+        <table class="table table-logix">
+          <thead>
+              <tr>
+                  <th>Inv #</th>
+              </tr>
+          </thead>
+          <tbody class="text-center">
+              <tr>
+                  <td>{{myInvoiceNo}}</td>
+              </tr>
+             
+          </tbody>
+        </table>
+  
+        <tr>
+          <th>Remarks:-</th>
+          <td class="ms-2">{{myRemarks}}</td>
+      </tr>
+      </div>
+  
+      <h2 *ngIf="myPaymentType == 'Complimentary'" class="border border-dark w-100 text-center">Complimentary</h2>
+  
+  
+      <div>
+          <table class="table table-logix">
+              <thead>
+                  <tr>
+                      <th>S#</th>
+                      <th>Title</th>
+                      <th>Qty</th>
+                      <th>Price</th>
+                      <th>Total</th>
+                      
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let item of myPrintData index as index">
+                      <td>{{index +1}}</td>
+                      <td>{{item.productTitle}}</td>
+                      <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
+                      <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
+                      <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
+  
+                  </tr>
+              </tbody>
+          </table>
+  
+          <div class="d-flex  text-end" style="text-align: end;">
+  
+              <div class="col-lg-4"></div>
+              <div class="col-lg-4"></div>
+              
+              <div class="row fw-bold col-lg-2 text-end" >
+                  <mat-label>Total</mat-label>
+  
+              </div>
+  
+              <div class="row text-end col-lg-2" >
+                  <mat-label>{{mySubTotal}}</mat-label>  
+              </div>
+          </div>
+      </div>
+  
+  
+ </div>
+    <div class="text-end bg-mf p-3">
+        <button mat-raised-button (click)="closeDialog()">Close</button>
+
+    </div>
+
+</div>
+

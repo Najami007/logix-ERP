@@ -942,8 +942,17 @@ export class PurchaseReturnComponent implements OnInit{
 
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryBillSingleDate?Type='+type+'&creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
       (Response:any)=>{
-        this.holdBillList = Response;
-        // console.log(this.holdBillList);
+        this.holdBillList = [];
+        if(type == 'hpr'){
+          Response.forEach((e:any) => {
+            if(e.approvedStatus == false){
+              this.holdBillList.push(e);
+            }
+          });
+        }
+        if(type == 'pr'){
+          this.holdBillList = Response;
+        }
       }
     )
   }

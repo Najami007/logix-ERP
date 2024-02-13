@@ -80,7 +80,7 @@
         <div style="min-height: 400px;" class="p-2">
 
             <!-----------   Bill Area ------------------->
-            <div class="billTable" style="height: 50vh;">
+            <div class="billTable" style="height: 52vh;">
 
                 <table class="table-logix cursorPointer">
                     <thead>
@@ -160,7 +160,7 @@
                         matTooltip="New bill (Alt + n)" data-bs-toggle="modal" data-bs-target="#NewBill"
                         [disabled]="tableData != ''" (click)="reset()">New Bill</button>
                     <button matTooltip="Hold & Print Current Bill" mat-raised-button class="m-1 text-white bg-primary col-lg-5"
-                     (click)="printbill('rehold')">Hold & Print</button>
+                     (click)="HOldandPrint('rehold')">Hold & Print</button>
 
                      <button  accesskey="b" mat-raised-button data-bs-toggle="modal" data-bs-target="#savedBill"
                       class="m-1 text-white bg-primary col-lg-5 d-none">Duplicate</button>
@@ -192,13 +192,16 @@
      aria-labelledby="savedBillLabel">
      <div class="modal-dialog modal-dialog-centered modal-xl">
          <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-             <div class="modal-body">
+             <div class="modal-body" style="max-height: 400px;overflow-y: scroll;">
 
                 <table class="table">
                     <thead>
                         <tr>
                             <th>S#</th>
+                            <th>Bill #</th>
+                            <th>Date</th>
                             <th>Table No</th>
+                            <th>Type</th>
                             <th>Amount</th>
                             <th>Print</th>
                             <th>Detail</th>
@@ -206,12 +209,15 @@
 
                     </thead>
                     <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td class="text-primary"><mat-icon>print</mat-icon></td>
-                            <td class="text-success"><mat-icon>receipt</mat-icon></td>
+                        <tr *ngFor="let item of savedbillList index as index">
+                            <td>{{index+1}}</td>
+                            <td>{{item.invBillNo}}</td>
+                            <td>{{item.invDate|date:'dd-MM-yyyy'}} ({{item.createdOn|date:'hh:MM:a'}})</td>
+                            <td>{{item.tableTitle}}</td>
+                            <td>{{item.paymentType}}</td>
+                            <td>{{item.netTotal |number:'1.0-0'}}</td>
+                            <td class="text-primary cursorPointer"><mat-icon (click)="printDuplicateBill(item)">print</mat-icon></td>
+                            <td class="text-success cursorPointer"><mat-icon (click)="billDetails(item)">receipt</mat-icon></td>
                         </tr>
                     </tbody>
                     
@@ -251,15 +257,15 @@
                     <th>Inv #</th>
                     <th>Date</th>
                     <th>Counter</th>
-                    <th>Type</th>
+                    <th>Table</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="text-center">
                 <tr>
                     <td>{{myInvoiceNo}}</td>
-                    <td>{{myInvDate | date:'dd-MM-yyyy'}}</td>
+                    <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
                     <td>{{myCounterName}}</td>
-                    <td>{{myOrderType}}</td>
+                    <td>{{mytableNo}}</td>
                 </tr>
                
             </tbody>
@@ -272,6 +278,7 @@
         </div>
 
         <h2 *ngIf="myPaymentType == 'Complimentary'" class="border border-dark w-100 text-center">Complimentary</h2>
+        <h2 *ngIf="myDuplicateFlag == true" class="border border-dark w-100 text-center">Duplicate</h2>
 
         <div>
             <table class="table table-logix">
@@ -297,30 +304,32 @@
                 </tbody>
             </table>
 
-            <div class="text-end d-flex " style="float: right;">
+            <div class="d-flex  text-end" style="text-align: end;">
 
+                <div class="col-lg-4"></div>
+                <div class="col-lg-4"></div>
                 
-                <span class="fw-bold d-flex flex-column text-end col-lg-3">
+                <div class="row fw-bold col-lg-2 text-end" >
                     <mat-label>Sub Total</mat-label>
                     <mat-label *ngIf="myDiscount != 0">Discount</mat-label>
                     <mat-label *ngIf="myOtherCharges != 0">Other Charges</mat-label>
                     <mat-label>Net Total</mat-label>
-                    <mat-label *ngIf="myCash != 0">Cash</mat-label>
-                    <mat-label *ngIf="myBank != 0">Bank</mat-label>
+                    <mat-label *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">Cash</mat-label>
+                    <mat-label *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">Bank</mat-label>
                     <mat-label *ngIf="myChange != 0">Change</mat-label>
 
-                </span>
+                </div>
 
-                <span class="d-flex flex-column text-end col-lg-3">
+                <div class="row text-end col-lg-2" >
                     <mat-label>{{mySubTotal}}</mat-label>
                     <mat-label *ngIf="myDiscount != 0">{{myDiscount}}</mat-label>
                     <mat-label *ngIf="myOtherCharges != 0">{{myOtherCharges}}</mat-label>
                     <mat-label>{{myNetTotal}}</mat-label>
-                    <mat-label *ngIf="myCash != 0">{{myCash}}</mat-label>
-                    <mat-label *ngIf="myBank != 0">{{myBank}}</mat-label>
+                    <mat-label *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">{{myCash}}</mat-label>
+                    <mat-label *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">{{myBank}}</mat-label>
                     <mat-label *ngIf="myChange != 0">{{myChange}}</mat-label>
 
-                </span>
+                </div>
             </div>
         </div>
 

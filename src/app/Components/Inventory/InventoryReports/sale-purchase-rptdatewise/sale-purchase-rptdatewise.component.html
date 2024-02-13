@@ -1,6 +1,6 @@
 <div class="body container-fluid">
 
-    <div class="d-flex justify-content-between mt-2">
+    <div class="d-flex justify-content-around mt-2">
 
 
         <mat-form-field appearance="outline" class="col-lg-3">
@@ -13,22 +13,13 @@
                     [value]="item.userID">{{item.userName}}</mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field appearance="outline" class="col-lg-3">
-            <mat-label>Recipe Category</mat-label>
-            <mat-select [(ngModel)]="recipeCatID" (selectionChange)="onCatSelected()">
-                <mat-option><ngx-mat-select-search #catSearch [placeholderLabel]="'Search...'"
-                    [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                <mat-option  *ngFor="let item of categoriesList | filter:catSearch.value"
-                    [value]="item.recipeCatID">{{item.recipeCatTitle}}</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field  appearance="outline" style="width: 150px;">
+        <mat-form-field class="col-lg-2" appearance="outline">
             <mat-label>From Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
             <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
             <mat-datepicker #sDate></mat-datepicker>
         </mat-form-field>
-        <mat-form-field style="width: 150px;" appearance="outline" >
+        <mat-form-field class="col-lg-2 " appearance="outline">
             <mat-label>From Time</mat-label>    
         <div class="toggle-example d-flex">
             <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
@@ -39,13 +30,13 @@
         </mat-form-field>
 
 
-        <mat-form-field style="width: 150px;" appearance="outline">
+        <mat-form-field class="col-lg-2" appearance="outline">
             <mat-label>To Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
             <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
             <mat-datepicker #eDate></mat-datepicker>
         </mat-form-field>
-        <mat-form-field style="width: 150px;" appearance="outline">
+        <mat-form-field class="col-lg-2" appearance="outline">
             <mat-label>To Time</mat-label>
             <div class="toggle-example d-flex">
                 <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
@@ -55,17 +46,19 @@
         </mat-form-field>
 
     </div>
+   
     <div class="d-flex justify-content-center">
-        <!-- <mat-form-field appearance="fill" class="col-lg-3 me-2">
-            <mat-label>Report Type</mat-label>
-            <mat-select [(ngModel)]="rptType" >
-                <mat-option *ngFor="let item of reportList"
+        <mat-form-field appearance="fill" class="col-lg-3 me-2">
+            <mat-label>Reports</mat-label>
+            <mat-select [(ngModel)]="tmpRptType" >
+                <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of reportsList | filter:rptSearch.value"
                     [value]="item.val">{{item.title}}</mat-option>
             </mat-select>
-        </mat-form-field> -->
+        </mat-form-field>
         <div class="col-lg-4 pb-2" *ngIf="crudList.r">
-
-            <button class="btn btn-success btn-rpt col-lg-4 me-1" (click)="getReport('summary')">Summary</button>
+            <button class="btn btn-success btn-rpt col-lg-4  me-1" (click)="getReport('summary')">Summary</button>
             <button class="btn btn-success btn-rpt col-lg-4 me-1" (click)="getReport('detail')">Detail</button>
             <button class="btn btn-primary btn-rpt col-lg-2" (click)="print()"><mat-icon>print</mat-icon></button>
         </div>
@@ -92,8 +85,8 @@
                     <h1 class="companyName">{{item.companyName}}</h1>
 
                     <p class="rptTitle" style="margin-top:-20px">Sale {{reportType}} Report</p>
-                    <p style="margin-top: -15px;" > <b *ngIf="userName != ''">User: {{userName}}</b><b> | Title: {{CategoryTitle}}</b></p>
-                    <p style="margin-top:-15px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                    <p style="margin-top: -15px;" > <b *ngIf="userName != ''">User: {{userName}}</b></p>
+                    <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
 
 
@@ -107,18 +100,19 @@
             </div>
         </div>
 
+    
 
         <table class="table table-logix" id="summaryTable">
             <thead>
                 <tr>
                     <th>S#</th>
-                    <th *ngIf="reportType == 'Detail'">Bill #</th>
-                    <th *ngIf="reportType == 'Detail'">Date</th>
-                    <th>Title</th>
-                    <th *ngIf="reportType == 'Detail'">Qty</th>
-                    <th *ngIf="reportType == 'Detail'" style="width: 120px;">Price</th>
-                    <th  style="width: 120px;">Total</th>
-                    <th *ngIf="reportType == 'Detail'">Entered By</th>
+                    <th>Bill #</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th >Party</th>
+                    <th >Booker</th>
+                    <th style="width: 120px;">Total</th>
+                    <th>Entered By</th>
 
                 </tr>
 
@@ -127,24 +121,20 @@
             <tbody>
                 <tr *ngFor="let item of SaleDetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td *ngIf="reportType == 'Detail'" class="text-center cursorPointer " (click)="billDetails(item)"><span class="text-primary border-bottom">{{item.invBillNo}}</span></td>
-                    <td *ngIf="reportType == 'Detail'">{{item.invDate |date:'dd-MM-yyyy'}}</td>
-                    <td >{{item.productTitle}}</td>
-                    <td *ngIf="reportType == 'Detail'" class="text-center">{{item.quantity |number:'1.0-0'}}</td>
-                    <td *ngIf="reportType == 'Detail'" class="text-end">{{item.salePrice|number:'1.0-0'}}</td>
-                    <td *ngIf="reportType == 'Summary'" class="text-end">{{item.total |number:'1.0-0'}}</td>
-                    <td *ngIf="reportType == 'Detail'" class="text-end">{{item.quantity * item.salePrice |number:'1.0-0'}}</td>
-                    <td *ngIf="reportType == 'Detail'" >{{item.entryUser}}</td>
+                    <td class="text-center">{{item.invBillNo}}</td>
+                    <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
+                    <td >{{item.locationTitle}}</td>
+                    <td >{{item.partyName}}</td>
+                    <td >{{item.bookerName }}</td>
+                    <td class="text-end">{{item.netTotal |number:'1.0-0'}}</td>
+                    <td>{{item.entryUser}}</td>
                 </tr>
                 <tr>
-                    <td colspan="2"></td>
-                    <td *ngIf="reportType == 'Detail'" colspan="2"></td>
-                    <td *ngIf="reportType == 'Detail'" colspan="2"></td>
-                    <th class="text-end">{{grandTotal|number:'1.0-0'}}</th>
-                    <td *ngIf="reportType == 'Detail'"></td>
+                    <td colspan="6"></td>
+                    <td class="fw-bold text-end">{{netGrandTotal |number:'1.0-0'}}</td>
+                    <td></td>
                 </tr>
             </tbody>
-          
 
           
         </table>
@@ -152,12 +142,56 @@
 
 
 
+        <table class="table table-logix" id="detailTable">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Bill #</th>
+                    <th>Date</th>
+                    <th *ngIf="rptType == 's'">Table</th>
+                    <th>Title</th>
+                    <th>Qty</th>
+                    <th style="width: 120px;">Cost Price</th>
+                    <th style="width: 150px;">Avg Cost</th>
+                    <th style="width: 120px;">Sale Price</th>
+                    <th>Total</th>
+
+                </tr>
+
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of SaleDetailList index as index">
+                    <td class="text-center">{{index + 1}}</td>
+                    <td class="text-center">{{item.invBillNo}}</td>
+                    <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
+                    <td *ngIf="rptType == 's'">{{item.tableTitle}}</td>
+                    <td>{{item.productTitle}}</td>
+                    <td class="text-center">{{item.quantity}}</td>
+                    <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
+                    <td class="text-end">{{item.avgCostPrice |number:'1.0-1'}}</td>
+                    <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
+                    <td class="text-end" *ngIf="rptType == 's'">{{item.salePrice * item.quantity |number:'1.0-1'}}</td>
+                    <td class="text-end" *ngIf="rptType != 's'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td>
+                  
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td *ngIf="rptType == 's'"></td>
+                    <td></td>
+                    <td class="fw-bold text-center">{{qtyTotal  |number:'1.0-0'}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="fw-bold text-end">{{detNetTotal |number:'1.0-0'}}</td>
+                </tr>
+            </tbody>
+          
+        </table>
     </div>
 
 
 
 </div>
-
-
 
 

@@ -6,28 +6,24 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
-import { SaleBillDetailComponent } from '../../sale/sale-bill-detail/sale-bill-detail.component';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-sale-report',
-  templateUrl: './sale-report.component.html',
-  styleUrls: ['./sale-report.component.scss']
+  selector: 'app-sale-purchase-rptdatewise',
+  templateUrl: './sale-purchase-rptdatewise.component.html',
+  styleUrls: ['./sale-purchase-rptdatewise.component.scss']
 })
-export class SaleReportComponent implements OnInit {
+export class SalePurchaseRptdatewiseComponent implements OnInit {
 
   
   
   companyProfile:any = [];
   crudList:any = [];
-
   constructor(
     private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
     private global:GlobalDataModule,
-    private route:Router,
-    private dialog:MatDialog,
+    private route:Router
     
   ){
 
@@ -48,6 +44,20 @@ export class SaleReportComponent implements OnInit {
 
 
 
+  reportsList:any = [
+    {val:'s',title:'Sale Report'},
+    {val:'p',title:'Purchase Report'},
+    {val:'pr',title:'Purchase Return Report'},
+    {val:'I',title:'Issuance Report'},
+    {val:'AI',title:'Adjustment In Report'},
+    {val:'Ao',title:'Adjustment Out Report'},
+    {val:'Dl',title:'Damage Loss Report'},
+    {val:'E',title:'Expiry Report'},
+  
+]
+tmpRptType = 's';
+rptType:any = 's';
+
 
   userList:any = [];
   userID = 0;
@@ -67,7 +77,9 @@ export class SaleReportComponent implements OnInit {
     this.app.startLoaderDark()
     this.http.get(environment.mainApi+this.global.userLink+'getuser').subscribe(
       (Response)=>{
-        this.userList = Response;      
+        this.userList = Response;
+        // console.log(Response);
+        
         this.app.stopLoaderDark();
 
       },
@@ -95,12 +107,12 @@ export class SaleReportComponent implements OnInit {
    detNetTotal = 0;
 
    getReport(type:any){
-
+    this.rptType = this.tmpRptType;
    if(type == 'summary'){
     $('#detailTable').hide();
     $('#summaryTable').show();
     this.reportType = 'Summary';
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventorySummaryDateWise?reqType=s&reqUserID='+this.userID+'&FromDate='+
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventorySummaryDateWise?reqType='+this.rptType+'&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
         this.SaleDetailList = Response;
@@ -113,6 +125,7 @@ export class SaleReportComponent implements OnInit {
           this.chargesTotal += e.otherCharges;
           this.netGrandTotal += e.netTotal;
         });
+         console.log(Response)
       }
     )
    }
@@ -121,15 +134,21 @@ export class SaleReportComponent implements OnInit {
     $('#detailTable').show();
     $('#summaryTable').hide();
     this.reportType = 'Detail';
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryDetailDateWise?reqType=s&reqUserID='+this.userID+'&FromDate='+
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryDetailDateWise?reqType='+this.rptType+'&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
         this.SaleDetailList = Response;
+        console.log(Response)
         this.qtyTotal = 0;
         this.detNetTotal = 0;
          Response.forEach((e:any) => {
           this.qtyTotal += e.quantity;
-          this.detNetTotal += e.salePrice * e.quantity;
+          if(this.rptType == 's'){
+            this.detNetTotal += e.salePrice * e.quantity;
+          }
+          else{
+            this.detNetTotal += e.costPrice * e.quantity;
+          }
          });
       }
     )
@@ -143,16 +162,6 @@ export class SaleReportComponent implements OnInit {
    print(){
     this.global.printData('#PrintDiv')
    }
-
-
-   billDetails(item:any){
-    this.dialog.open(SaleBillDetailComponent,{
-      width:'50%',
-      data:item,
-      disableClose:true,
-    }).afterClosed().subscribe()
-  }
-
  
 
 }

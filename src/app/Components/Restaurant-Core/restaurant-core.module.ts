@@ -30,6 +30,9 @@ import { SaleRptRecipewiseComponent } from './restaurantReports/sale-rpt-recipew
 import { SaleRptOrderTypewiseComponent } from './restaurantReports/sale-rpt-order-typewise/sale-rpt-order-typewise.component';
 import { SaleRptTablewiseComponent } from './restaurantReports/sale-rpt-tablewise/sale-rpt-tablewise.component';
 import { SaleRptRecipeCatwiseComponent } from './restaurantReports/sale-rpt-recipe-catwise/sale-rpt-recipe-catwise.component';
+import { SaleRptPaymentTypewiseComponent } from './restaurantReports/sale-rpt-payment-typewise/sale-rpt-payment-typewise.component';
+import { SaleBillDetailComponent } from './sale/sale-bill-detail/sale-bill-detail.component';
+
 
 
 
@@ -49,6 +52,7 @@ export const restCore: Route[] = [
   {path:'srptcw', component:SaleRptRecipeCatwiseComponent, canActivate:[AuthGuard] },
   {path:'srpttw', component:SaleRptTablewiseComponent, canActivate:[AuthGuard] },
   {path:'srptotw', component:SaleRptOrderTypewiseComponent, canActivate:[AuthGuard] },
+  {path:'srptptw', component:SaleRptPaymentTypewiseComponent, canActivate:[AuthGuard] },
 
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
@@ -79,6 +83,9 @@ export const restCore: Route[] = [
     SaleRptOrderTypewiseComponent,
     SaleRptTablewiseComponent,
     SaleRptRecipeCatwiseComponent,
+    SaleRptPaymentTypewiseComponent,
+    SaleBillDetailComponent,
+   
     
 
   ],

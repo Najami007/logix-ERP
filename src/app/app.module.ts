@@ -32,6 +32,8 @@ import { MainComponent } from './Components/Layout/main/main.component';
 import { TopNavBarComponent } from './Components/Layout/top-nav-bar/top-nav-bar.component';
 import { HeaderComponent } from './Components/Layout/header/header.component';
 import { NumberInputComponent } from './Components/Common/number-input/number-input.component';
+
+
 // import {  TruncatePipe } from './Shared/pipes/limitto.pipe';
 // import { FilterPipe } from './Shared/pipes/filter.pipe';
 

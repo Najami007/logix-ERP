@@ -15,10 +15,10 @@
         </mat-form-field>
         <mat-form-field appearance="outline" class="col-lg-3">
             <mat-label>Recipe</mat-label>
-            <mat-select [(ngModel)]="recipeID" >
+            <mat-select [(ngModel)]="recipeID" (selectionChange)="OnRecipeSelected()">
                 <mat-option><ngx-mat-select-search #recSearch [placeholderLabel]="'Search...'"
                         [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                <mat-option *ngFor="let item of RecipeList | filter:recSearch.value"
+                <mat-option  *ngFor="let item of RecipeList | filter:recSearch.value"
                     [value]="item.recipeID">{{item.recipeTitle}}</mat-option>
             </mat-select>
         </mat-form-field>
@@ -55,9 +55,17 @@
         </mat-form-field>
 
     </div>
-    <div class="d-flex justify-content-around">
+    <div class="d-flex justify-content-center">
+        <!-- <mat-form-field appearance="fill" class="col-lg-3 me-2">
+            <mat-label>Report Type</mat-label>
+            <mat-select [(ngModel)]="rptType" >
+                <mat-option *ngFor="let item of reportList"
+                    [value]="item.val">{{item.title}}</mat-option>
+            </mat-select>
+        </mat-form-field> -->
         <div class="col-lg-4 pb-2" *ngIf="crudList.r">
-            <button class="btn btn-success btn-rpt col-lg-4  me-1" (click)="getReport('dine In')">Summary</button>
+
+            <button class="btn btn-success btn-rpt col-lg-4 me-1" (click)="getReport('summary')">Summary</button>
             <button class="btn btn-success btn-rpt col-lg-4 me-1" (click)="getReport('detail')">Detail</button>
             <button class="btn btn-primary btn-rpt col-lg-2" (click)="print()"><mat-icon>print</mat-icon></button>
         </div>
@@ -83,8 +91,9 @@
 
                     <h1 class="companyName">{{item.companyName}}</h1>
 
-                    <p class="rptTitle" style="margin-top:-20px">Sale {{reportType}} Report <span *ngIf="userName != ''">({{userName}})</span></p>
-                    <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                    <p class="rptTitle" style="margin-top:-20px">Sale {{reportType}} Report</p>
+                    <p style="margin-top: -15px;" > <b *ngIf="userName != ''">User: {{userName}}</b></p>
+                    <p style="margin-top:-15px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
 
 
@@ -98,17 +107,18 @@
             </div>
         </div>
 
-    
+        
+        <h3 class="text-center fw-bold" style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">{{recipeTitle}}</h3>
 
-        <table class="table table-logix" id="summaryTable">
+        <table class="table table-logix" id="detailTable">
             <thead>
                 <tr>
                     <th>S#</th>
                     <th>Bill #</th>
                     <th>Date</th>
                     <th>Table</th>
-                    <th style="width: 120px;">Bill</th>
-                    <th style="width: 150px;">Charges</th>
+                    <th style="width: 120px;">Qty</th>
+                    <th style="width: 150px;">Sale</th>
                     <th style="width: 120px;">Total</th>
                     <th>Entered By</th>
 
@@ -116,6 +126,57 @@
 
 
             </thead>
+            <tbody>
+                <tr *ngFor="let item of SaleDetailList index as index">
+                    <td class="text-center">{{index + 1}}</td>
+                    <td class="text-center cursorPointer " (click)="billDetails(item)"><span class="text-primary border-bottom">{{item.invBillNo}}</span></td>
+                    <td>{{item.invDate |date:'dd-MM-yyyy'}} ({{item.createdOn |date:'hh:mm:a'}})</td>
+                    <td>{{item.tableTitle}}</td>
+                    <td class="text-center">{{item.quantity}}</td>
+                    <td class="text-end">{{item.salePrice|number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-0'}}</td>
+                    <td>{{item.entryUser}}</td>
+                </tr>
+                <tr>
+                    <td colspan="4"></td>
+                    <td class="text-center fw-bold">{{QtyTotal|number:'1.0-0'}}</td>
+                    <td></td>
+                    <td class="text-end fw-bold">{{detailTotal|number:'1.0-0'}}</td>
+                    <td></td>
+                </tr>
+            </tbody>
+          
+
+          
+        </table>
+
+        <table class="table table-logix" id="summaryTable">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Date</th>
+                    <th>Title</th>
+                    <th style="width: 120px;">Qty</th>
+                    <th style="width: 120px;">Total</th>
+
+                </tr>
+
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of saleSummaryList index as index">
+                    <td class="text-center">{{index + 1}}</td>
+                    <td>{{item.invDate |date:'dd-MM-yyyy'}}</td>
+                    <td>{{item.recipeTitle}}</td>
+                    <td class="text-center">{{item.quantity}}</td>
+                    <td class="text-end">{{item.total |number:'1.0-0'}}</td>
+                </tr>
+                <tr>
+                    <td colspan="4"></td>
+                    <td class="text-center fw-bold">{{QtyTotal|number:'1.0-0'}}</td>
+                    <td class="text-end fw-bold">{{summaryTotal|number:'1.0-0'}}</td>
+                </tr>
+            </tbody>
           
 
           

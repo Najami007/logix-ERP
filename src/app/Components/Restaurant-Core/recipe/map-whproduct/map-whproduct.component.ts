@@ -50,7 +50,6 @@ export class MapWHProductComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetCookingAria').subscribe(
       (Response:any)=>{
         this.cookingAreaList = Response;
-       // console.log(Response);
       }
     )
   }
@@ -59,7 +58,6 @@ export class MapWHProductComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetRecipeCategories').subscribe(
       (Response:any)=>{
         this.categoriesList = Response;
-       // console.log(Response);
       }
     )
   }

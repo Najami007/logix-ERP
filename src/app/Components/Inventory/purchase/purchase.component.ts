@@ -13,6 +13,7 @@ import * as $ from 'jquery';
 import Swal from 'sweetalert2';
 import { AddpartyComponent } from '../../Company/party/addparty/addparty.component';
 
+
 @Component({
   selector: 'app-purchase',
   templateUrl: './purchase.component.html',
@@ -360,12 +361,10 @@ export class PurchaseComponent implements OnInit{
    changeFocus(e:any, cls:any){
 
   if(e.target.value == ''){
-    if(e.keyCode == 40){
-      
+    if(e.keyCode == 40){  
       if(this.tableDataList.length >= 1 ){ 
         this.rowFocused = 0; 
          $('.qty0').focus();
-
       }
      }
   }else{
@@ -395,8 +394,7 @@ export class PurchaseComponent implements OnInit{
          var clsName = cls + this.prodFocusedRow;    
         //  alert(clsName);
          $(clsName).trigger('focus');
-         e.which = 9;   
-         $(clsName).trigger(e)       
+        //  e.keyCode = 9;    
      }}
    }
  
@@ -959,8 +957,18 @@ export class PurchaseComponent implements OnInit{
 
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryBillSingleDate?Type='+type+'&creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
       (Response:any)=>{
-        this.holdBillList = Response;
-         console.log(this.holdBillList);
+      
+         this.holdBillList = [];
+         if(type == 'hp'){
+           Response.forEach((e:any) => {
+             if(e.approvedStatus == false){
+               this.holdBillList.push(e);
+             }
+           });
+         }
+         if(type == 'p'){
+           this.holdBillList = Response;
+         }
       }
     )
   }
