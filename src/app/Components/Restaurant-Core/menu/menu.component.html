@@ -3,7 +3,7 @@
 
 
        <div>
-        <button mat-fab class="col-lg-1 me-2" (click)="addMenu()"><mat-icon>add</mat-icon></button>
+        <button mat-fab class="col-lg-1 me-2" *ngIf="crudList.c" (click)="addMenu()"><mat-icon>add</mat-icon></button>
 
         <mat-form-field class="col-lg-11" appearance="outline">
             <mat-label class="ps-5">Search.....</mat-label>
@@ -13,7 +13,7 @@
        </div>
 
 
-        <table class="table">
+        <table class="table" *ngIf="crudList.r">
 
             <thead>
                 <tr>

@@ -22,7 +22,7 @@ export class AddUserComponent implements OnInit {
  mobileMask = this.global.mobileMask;
 
 
- crudList:any = [];
+ crudList:any = {c:true,r:true,u:true,d:true};
 
   constructor(
     private http:HttpClient,

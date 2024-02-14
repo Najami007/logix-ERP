@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment.development';
 })
 export class ActiveMemberRptComponent implements OnInit {
   companyProfile:any= [];
-  crudList:any = [];
+  crudList:any = {c:true,r:true,u:true,d:true};
   constructor(
     private http:HttpClient,
     private global:GlobalDataModule,

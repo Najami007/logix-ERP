@@ -19,7 +19,7 @@ export class SaleReportComponent implements OnInit {
   
   
   companyProfile:any = [];
-  crudList:any = [];
+  crudList:any = {c:true,r:true,u:true,d:true};
 
   constructor(
     private http:HttpClient,

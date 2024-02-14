@@ -1,0 +1,133 @@
+<div class="body container-fluid">
+
+    <div class="d-flex justify-content-between mt-2">
+
+        <mat-form-field class="col-lg-2" appearance="outline">
+            <mat-label>From Date</mat-label>
+            <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
+            <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
+            <mat-datepicker #sDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="col-lg-2 " appearance="outline">
+            <mat-label>From Time</mat-label>    
+        <div class="toggle-example d-flex">
+            <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+            <ngx-material-timepicker-toggle [for]="fTime"></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #fTime></ngx-material-timepicker>
+        </div>
+
+        </mat-form-field>
+
+
+        <mat-form-field class="col-lg-2" appearance="outline">
+            <mat-label>To Date</mat-label>
+            <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
+            <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+            <mat-datepicker #eDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="col-lg-2" appearance="outline">
+            <mat-label>To Time</mat-label>
+            <div class="toggle-example d-flex">
+                <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+                <ngx-material-timepicker-toggle [for]="tTime"></ngx-material-timepicker-toggle>
+                <ngx-material-timepicker #tTime></ngx-material-timepicker>
+            </div>
+        </mat-form-field>
+
+    </div>
+
+    <div class="d-flex justify-content-center">
+
+
+        <mat-form-field appearance="fill" class="col-lg-3 me-2">
+            <mat-label>Reports</mat-label>
+            <mat-select [(ngModel)]="rptType" >
+                <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of reportsList | filter:rptSearch.value"
+                    [value]="item.val">{{item.title}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div class="col-lg-4 pb-2" *ngIf="crudList.r">
+          
+            <button class="btn btn-success btn-rpt col-lg-4  me-1" (click)="getReport(rptType)">Get Report</button>
+            <button class="btn btn-primary btn-rpt col-lg-1" (click)="print()"><mat-icon>print</mat-icon></button>
+        </div>
+   
+    </div>
+
+
+
+
+
+
+    
+    <div id="PrintDiv">
+
+        <!-------------------------    Top Logo Section -------------------->
+
+        <div class="hide">
+            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
+                        [width]="item.logo1Width">
+                </span>
+                <span>
+
+
+                    <h1 class="companyName">{{item.companyName}}</h1>
+
+                    <p class="rptTitle" style="margin-top:-20px">Top Least Sale {{reportType}} Report </p>
+                    <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                        {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
+
+
+                </span>
+                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                        height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                </span>
+
+
+            </div>
+        </div>
+
+    
+
+        <table class="table table-logix" id="summaryTable">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Title</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                </tr>
+
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of reportDataList index as index">
+                    <td class="text-center">{{index + 1}}</td>
+                    <td>{{item.productTitle}}</td>
+                    <td class="text-center">{{item.saleQty|number:'1.0-2'}}</td>
+                    <td class="text-end">{{item.total|number:'1.0-0'}}</td>
+                </tr>
+              
+                    <tr>
+                        <th colspan="2"></th>
+                        <th class="text-center">{{qtyTotal |number:'1.0-2'}}</th>
+                        <th class="text-end">{{netTotal |number:'1.0-0'}}</th>
+                    </tr>
+            </tbody>
+          
+        </table>
+
+
+    </div>
+
+
+
+</div>
+
+

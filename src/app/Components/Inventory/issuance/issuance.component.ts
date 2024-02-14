@@ -17,7 +17,7 @@ import Swal from 'sweetalert2';
 })
 export class IssuanceComponent implements OnInit {
 
-  crudList:any =[];
+  crudList:any = {c:true,r:true,u:true,d:true};
   companyProfile:any = [];
 
   constructor(
@@ -269,7 +269,7 @@ export class IssuanceComponent implements OnInit {
     }
   }
 
-  rowFocused = 0;
+  rowFocused = -1;
   prodFocusedRow= 0;
    changeFocus(e:any, cls:any){
 

@@ -26,7 +26,7 @@ export class LedgerComponent {
   date = new FormControl(new Date());
 
   CoaList:any;
-  crudList:any = [];
+  crudList:any = {c:true,r:true,u:true,d:true};
   companyProfile:any = [];
 
  

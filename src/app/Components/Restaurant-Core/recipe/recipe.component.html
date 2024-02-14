@@ -7,7 +7,7 @@
 
                 <!-------------     Column 1 Detail Area-->
 
-                <div class="col-lg-6 pt-2">
+                <div class="col-lg-6 pt-2" >
 
 
                     <div class=" d-flex">
@@ -93,14 +93,14 @@
                             *ngIf="crudList.u && btnType == 'Update'">{{btnType}}</button>
                         <button class="btn btn-danger w-25" (click)="reset()">Reset</button>
 
-                        <button class="btn btn-warning w-25" (click)="MapProdWithCategory()">Map Product</button>
+                        <button *ngIf="crudList.c" class="btn btn-warning w-25" (click)="MapProdWithCategory()">Map Product</button>
                     </div>
 
 
                 </div>
 
                 <!-------------     Column 2 Ingedient Detail Area-->
-                <div class="col-lg-6">
+                <div class="col-lg-6" >
 
                     <div class="ps-1 d-flex ">
 
@@ -130,7 +130,7 @@
                     </div>
 
 
-                    <div class="card"  style="min-height: 70vh;max-height: 100vh;overflow-y:scroll; background-color: rgba(225, 244, 236, 0.816);">
+                    <div class="card"  style="min-height: 68vh;max-height: 68vh;overflow-y:scroll; background-color: rgba(225, 244, 236, 0.816);">
 
 
                         <table class="table table-hover">
@@ -207,6 +207,7 @@
                             <th>Edit</th>
                             <th>Lock Status</th>
                             <th>Status</th>
+                            <th>Retrieve</th>
                             <th>Copy</th>
                             <th>Delete</th>
                         </tr>
@@ -222,12 +223,11 @@
                             <td>{{item.recipeCatTitle}}</td>
                             <td class="cursorPointer"><mat-icon class="text-success"
                                     (click)="edit(item)">edit</mat-icon></td>
-                            <td ><mat-icon (click)="approveRecipe(item)">{{item.approvedStatus == true ? 'lock' :'lock_open'}}</mat-icon></td>
-                            <td class="cursorPointer"><mat-icon [ngClass]="item.activeStatus == false ?'text-danger': 'text-success'" (click)="activeRecipe(item)" >{{item.activeStatus == false ? 'indeterminate_check_box' :'check_box'}}</mat-icon></td>
-                            <td class="cursorPointer "><mat-icon data-bs-toggle="modal"
-                                    data-bs-target="#otherRecipe" (click)="copyRecipe(item)">save</mat-icon></td>
-                            <td class="cursorPointer"><mat-icon class="text-danger"
-                                    (click)="delete(item)">delete</mat-icon></td>
+                            <td ><mat-icon *ngIf="crudList.u" (click)="approveRecipe(item)">{{item.approvedStatus == true ? 'lock' :'lock_open'}}</mat-icon></td>
+                            <td class="cursorPointer"><mat-icon *ngIf="crudList.u" [ngClass]="item.activeStatus == false ?'text-danger': 'text-success'" (click)="activeRecipe(item)" >{{item.activeStatus == false ? 'indeterminate_check_box' :'check_box'}}</mat-icon></td>
+                            <td  class="cursorPointer"><mat-icon  (click)="getIngredient(item)">photo_filter</mat-icon></td>
+                            <td class="cursorPointer "><mat-icon data-bs-toggle="modal" data-bs-target="#otherRecipe" *ngIf="crudList.u" (click)="copyRecipe(item)">save</mat-icon></td>
+                            <td class="cursorPointer"><mat-icon class="text-danger" *ngIf="crudList.d" (click)="delete(item)">delete</mat-icon></td>
 
                         </tr>
                     </tbody>

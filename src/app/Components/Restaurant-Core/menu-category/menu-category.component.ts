@@ -16,7 +16,7 @@ import { AddMenuCategoryComponent } from './add-menu-category/add-menu-category.
 export class MenuCategoryComponent implements OnInit{
   @ViewChild(AddMenuCategoryComponent) addCategory: any;
 
-  crudList:any = [];
+  crudList:any = {c:true,r:true,u:true,d:true};
 
   constructor(
     private http:HttpClient,

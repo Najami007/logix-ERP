@@ -19,7 +19,7 @@ import Swal from 'sweetalert2';
 export class RecipeCategoryComponent implements OnInit{
   @ViewChild(AddrecipeCategoryComponent) addCategory: any;
 
-  crudList:any = [];
+  crudList:any = {c:true,r:true,u:true,d:true};
 
   constructor(
     private http:HttpClient,

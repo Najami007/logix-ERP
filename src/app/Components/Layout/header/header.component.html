@@ -1,5 +1,5 @@
-<div class="pb-5 ps-2 pe-3 bg-white shadow "  style="height: 40px;">
-    <span class="justify-content-between d-flex">
+<div class="pb-5 ps-2 pe-3 bg-white justify-content-center shadow"  style="height: 40px;">
+    <span class="justify-content-between d-flex w-100">
        
             <!-- <button class="button" mat-icon-button (click)="toggleSideBar()"><mat-icon>{{Menu}}</mat-icon> </button> -->
 
@@ -12,7 +12,7 @@
            </div> -->
 
 
-           <div class="d-flex  ps-2 mt-2  " style="border-radius: 30px;" >
+        <div class="col-lg-4 text-start d-flex  ps-2 mt-1  " style="border-radius: 30px;" >
             
                 <h4 class="mt-2 text-muted" style="font-family: Arial, Helvetica, sans-serif;">Software By: </h4> 
             <!-- <span class="fw-bold text-muted">Logix Solutionz</span> -->
@@ -24,11 +24,13 @@
            
         </div>
         
-        <h4 class="m-3 text-muted" style="font-family: Arial, Helvetica, sans-serif;letter-spacing:5px;">
+       <div class="col-lg-4 d-flex mt-3 row justify-content-center text-center">
+        <h4 class="text-muted" style="font-family: Arial, Helvetica, sans-serif;letter-spacing:5px;">
             {{title}}
         </h4>
 
-        <div class="mt-1">
+       </div>
+        <div class="mt-1 col-lg-4 text-end">
             <button mat-mini-fab class="example-icon" aria-label="Example icon-button with share icon"
             [matMenuTriggerFor]="menu">
             <mat-icon>apps</mat-icon>

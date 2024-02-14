@@ -1,7 +1,7 @@
 <div class="body">
 
     <!-- ////////////////////////// first row////////////////// -->
-    <div class="mb-2  d-flex" style=" box-shadow: 0px 0px 10px 0px rgb(192, 209, 235);background-color:rgb(213, 241, 220);height: 130px;" >
+    <div class="mb-2 p-1 d-flex w-100" style="box-shadow: 0px 0px 10px 0px rgb(192, 209, 235);background-color:rgb(213, 241, 220);" >
         <div class="d-flex just col-lg-11 mb-2 ps-3 pe-3" >
     
             <div class="d-flex pt-4 justify-content-between col-lg-11  ps-3 pe-3">
@@ -31,10 +31,10 @@
 
         </div>
 
-        <div class="mb-2 col-lg-1 text-center border border-primary" >
+        <div class="mb-2 col-lg-1 text-center border border-primary" style="height: 130px;width: 130px;" >
             <div class="p-1 " *ngIf="tableDataList != ''"
                 (click)="this.global.showProductImage(this.productImage,0)">
-                <img [src]="productImage" alt="" height="110" width="110">
+                <img [src]="productImage" alt="" height="120" width="120">
             </div>
         </div>
 
@@ -48,9 +48,9 @@
 
     <!-- ////////////////////////// Table Row////////////////// -->
 
-    <div class="border rounded card shadow p-2">
+    <div class="border rounded card shadow p-2 w-100" style="overflow-y: scroll !important; max-height: 65vh;padding-bottom: 120px;">
 
-        <table class="table table-hover table-logix">
+        <table class="table table-hover table-logix"  >
             <thead>
                 <tr>
                     <th>S#</th>
@@ -68,24 +68,26 @@
 
             </thead>
 
-            <tbody style="height: 30px;">
-                <tr *ngFor="let item of tableDataList  index as index" (click)="showImg(item);rowFocused = index">
+            <tbody >
+                <tr *ngFor="let item of tableDataList  index as index" (click)="showImg(item);rowFocused = index" [ngClass]="rowFocused == index ?'bg-dg':''">
                     <td class="text-center">{{index+1}}</td>
                     <td>{{item.barcode}}</td>
                     <td>{{item.ProductTitle}}</td>
                     <td><input type="date" class="expDate{{index}}" [(ngModel)]="item.ExpiryDate" (change)="change()"
+                        (keydown)="rowFocused = index"
+                        (keyup)="rowFocused = index"
                             style="height: 25px; width: 150px;"></td>
 
 
                     <td class="text-center"><input type="text" [(ngModel)]="item.Quantity" min="0"
                             (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
-                            (keyup)="changeValue(item);getTotal();" class="qty{{index}} text-center"
+                            (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index" class="qty{{index}} text-center"
                             style="width: 80px;"></td>
 
 
                     <td class="text-center"><input type="text" [(ngModel)]="item.CostPrice" min="0"
                             (keydown)="changeValue(item);this.handleNumKeys(item,$event,'.cp',index);getTotal();"
-                            (keyup)="changeValue(item);getTotal();" class="cp{{index}} text-center"
+                            (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index" class="cp{{index}} text-center"
                             style="width: 80px;"></td>
 
                     <!-- <td class="text-center">{{item.CostPrice |number}}</td> -->
@@ -93,7 +95,7 @@
 
                     <td class="text-center"><input type="text" [(ngModel)]="item.SalePrice" min="0"
                             (keydown)="changeValue(item);this.handleNumKeys(item,$event,'.sp',index);"
-                            (keyup)="changeValue(item);showImg(item);" class="sp{{index}} text-center"
+                            (keyup)="changeValue(item);showImg(item);rowFocused = index" class="sp{{index}} text-center"
                             style="width: 80px;">
                     </td>
 
@@ -122,7 +124,7 @@
     <!-- //////////////////////////Row 3////////////////// -->
 
 
-    <div class="w-100 d-flex flex-inline bg-white" *ngIf="hideTotalFlag" style="position: fixed;z-index:50;bottom: 6%;" id="totalRow"
+    <div class="w-100 d-flex flex-inline bg-white" *ngIf="hideTotalFlag" style="position: fixed;bottom: 6%;" id="totalRow"
         >
 
         <!-- //////////////////////first Column/////////////////////// -->

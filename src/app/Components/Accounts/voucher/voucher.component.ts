@@ -41,7 +41,7 @@ export class VoucherComponent implements OnInit{
 
 
   RoleID:any;
-  crudList:any = [];
+  crudList:any = {c:true,r:true,u:true,d:true};
   companyProfile:any;
 
   constructor(private msg: NotificationService,

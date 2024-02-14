@@ -19,7 +19,7 @@ export class CompanyProfileComponent implements OnInit {
 
   mobilemask = this.global.mobileMask;
   phonemask = this.global.phoneMask;
-  crudList:any = [];
+  crudList:any = {c:true,r:true,u:true,d:true};
 
   constructor(
     private http:HttpClient,

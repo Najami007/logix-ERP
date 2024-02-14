@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { AddcityComponent } from '../settings/city/addcity/addcity.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-party',
@@ -41,16 +42,20 @@ export class PartyComponent implements OnInit{
   mobileMask = this.globalData.mobileMask;
   telephoneMask = this.globalData.phoneMask;
 
-
+  crudList:any = {c:true,r:true,u:true,d:true};
 
   constructor(private globalData: GlobalDataModule,
  
     private http : HttpClient,
     private msg : NotificationService,
     private app:AppComponent,
-    private dialogue:MatDialog
+    private dialogue:MatDialog,
+    private route:Router
     ){
-
+      this.globalData.getMenuList().subscribe((data)=>{
+        this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      })
+  
   }
   ngOnInit(): void{
    this.globalData.setHeaderTitle('Add Party');

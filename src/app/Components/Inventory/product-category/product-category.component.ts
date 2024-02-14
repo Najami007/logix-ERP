@@ -17,7 +17,7 @@ import Swal from 'sweetalert2';
 })
 export class ProductCategoryComponent implements OnInit{
 
-  crudList:any = [];
+  crudList:any = {c:true,r:true,u:true,d:true};
 
   constructor(private http:HttpClient,
     private msg:NotificationService,

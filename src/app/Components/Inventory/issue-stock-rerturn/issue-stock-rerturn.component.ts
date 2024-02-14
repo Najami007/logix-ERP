@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { Router } from '@angular/router';
 import { Observable, retry } from 'rxjs';
-
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-issue-stock-rerturn',
   templateUrl: './issue-stock-rerturn.component.html',
@@ -16,14 +16,14 @@ import { Observable, retry } from 'rxjs';
 })
 export class IssueStockRerturnComponent implements OnInit {
 
-  crudList:any =[];
+  crudList:any = {c:true,r:true,u:true,d:true};
   companyProfile:any = [];
 
   constructor(
     private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
-    private global:GlobalDataModule,
+    public global:GlobalDataModule,
     private dialog:MatDialog,
     private route:Router
   ){
@@ -36,17 +36,22 @@ export class IssueStockRerturnComponent implements OnInit {
     this.global.getCompany().subscribe((data)=>{
       this.companyProfile = data;
     });
+
+
+    
+    this.global.getProducts().subscribe(
+      (data:any)=>{this.productList = data;})
   }
 
 
 
   ngOnInit(): void {
-   this.global.setHeaderTitle('Issuance');
+   this.global.setHeaderTitle('Stock Return');
    this.getLocation();
-   this.getProducts();
-
+  
   }
 
+  projectID = this.global.InvProjectID;
   Date:Date = new Date();
   holdInvNo = '-';
   holdBtnType = 'Hold';
@@ -66,6 +71,9 @@ export class IssueStockRerturnComponent implements OnInit {
   totalQty:number = 0;
   IssueType:any;
   IssueBillList:any = [];
+
+  avgCostTotal = 0;
+  CostTotal = 0;
   
   onLocationSelected(type:any){
  
@@ -92,15 +100,6 @@ export class IssueStockRerturnComponent implements OnInit {
 
 
 
-  getProducts(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetActiveProduct').subscribe(
-      (Response)=>{
-        this.productList = Response;
-       // console.log(Response);
- 
-      }
-    )
-  }
 
 
   searchByCode(e:any){
@@ -120,29 +119,41 @@ export class IssueStockRerturnComponent implements OnInit {
       
           //// push the data using index
           if (condition == undefined) {
+
+
+            this.global.getProdDetail(0,this.PBarcode).subscribe(
+              (Response:any)=>{
+                //console.log(Response)
+                  this.tableDataList.push({
+                    productID:Response[0].productID,
+                    productTitle:Response[0].productTitle,
+                    barcode:Response[0].barcode,
+                    productImage:Response[0].productImage,
+                    quantity:1,
+                    wohCP:Response[0].costPrice,
+                    avgCostPrice:Response[0].avgCostPrice,
+                    costPrice:Response[0].costPrice,
+                    salePrice:Response[0].salePrice,
+                    ovhPercent:0,
+                    ovhAmount:0,
+                    expiryDate:this.global.dateFormater(new Date(),'-'),
+                    batchNo:'-',
+                    batchStatus:'-',
+                    uomID:Response[0].uomID,
+                    packing:1,
+                    discInP:0,
+                    discInR:0,
+                    aq:Response[0].aq,
+              
+                  });
+                  this.getTotal();
+            
+
+                this.productImage = Response[0].productImage;
+              }
+            )
       
-          //console.log(data);
-          this.tableDataList.push({
-            productID:row.productID,
-            productTitle:row.productTitle,
-            barcode:row.barcode,
-            productImage:row.productImage,
-            quantity:1,
-            avgCostPrice:row.avgCostPrice,
-            costPrice:row.costPrice,
-            salePrice:row.salePrice,
-            expiryDate:this.global.dateFormater(new Date(),'-'),
-            batchNo:'-',
-            batchStatus:'-',
-            uomID:row.uomID,
-            packing:1,
-            discInP:0,
-            discInR:0,
-      
-          })
-      
-          this.productImage = row.productImage;
-        
+
           this.PBarcode = '';
           $('#searchProduct').trigger('focus');
         }else {
@@ -158,6 +169,7 @@ export class IssueStockRerturnComponent implements OnInit {
      
        
        this.PBarcode = '';
+       this.getTotal();
    
        }
     }
@@ -174,31 +186,43 @@ export class IssueStockRerturnComponent implements OnInit {
 
     if (condition == undefined) {
 
+
+      this.global.getProdDetail(data.productID,'').subscribe(
+        (Response:any)=>{
+          //  console.log(Response);
+
+          
+            this.tableDataList.push({
+              productID:Response[0].productID,
+              productTitle:Response[0].productTitle,
+              barcode:Response[0].barcode,
+              productImage:Response[0].productImage,
+              quantity:1,
+              wohCP:Response[0].costPrice,
+              costPrice:Response[0].costPrice,
+              avgCostPrice:Response[0].avgCostPrice,
+              salePrice:Response[0].salePrice,
+              ovhPercent:0,
+              ovhAmount:0,
+              expiryDate:this.global.dateFormater(new Date(),'-'),
+              batchNo:'-',
+              batchStatus:'-',
+              uomID:Response[0].uomID,
+              packing:1,
+              discInP:0,
+              discInR:0,
+              aq:Response[0].aq,
+        
+            })
+            this.getTotal();
+           
+          
+         this.productImage = Response[0].productImage;
+        }
+      )
+
     //console.log(data);
-    this.tableDataList.push({
-      productID:data.productID,
-      productTitle:data.productTitle,
-      barcode:data.barcode,
-      productImage:data.productImage,
-      quantity:1,
-      avgCostPrice:data.avgCostPrice,
-      costPrice:data.costPrice,
-      salePrice:data.salePrice,
-      expiryDate:this.global.dateFormater(new Date(),'-'),
-      batchNo:'-',
-      batchStatus:'-',
-      uomID:data.uomID,
-      packing:1,
-      discInP:0,
-      discInR:0,
-     
-
-    })
-
-    // console.log(this.tableDataList);
-
-    this.productImage = data.productImage;
-    
+  
     this.PBarcode = '';
     $('#searchProduct').trigger('focus');
   }else {
@@ -215,6 +239,9 @@ export class IssueStockRerturnComponent implements OnInit {
   }
 
 
+  
+
+
   showImg(item:any){
     
     var index = this.tableDataList.findIndex((e:any)=> e.productID == item.productID);
@@ -225,10 +252,14 @@ export class IssueStockRerturnComponent implements OnInit {
   getTotal() {
     this.subTotal = 0;
     this.totalQty = 0;
+    this.CostTotal = 0;
+    this.avgCostTotal = 0;
     for (var i = 0; i < this.tableDataList.length; i++) {
    
       this.subTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].costPrice));
       this.totalQty += parseFloat(this.tableDataList[i].quantity);
+      this.CostTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].costPrice));
+      this.avgCostTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].avgCostPrice))
       // this.myTotal = this.mySubtoatal - this.myDiscount;
       // this.myDue = this.myPaid - this.myTotal;\
     
@@ -237,18 +268,84 @@ export class IssueStockRerturnComponent implements OnInit {
     }
   }
 
-  rowFocused = 0;
-  handleNumKeys(item:any ,e:any,cls:string){
+  rowFocused = -1;
+  prodFocusedRow= 0;
+   changeFocus(e:any, cls:any){
 
-   
+  if(e.target.value == ''){
+    if(e.keyCode == 40){
+      
+      if(this.tableDataList.length >= 1 ){ 
+        this.rowFocused = 0; 
+         $('.qty0').trigger('focus');
 
-    // if (e.target.value < '0') {
-    //   e.target.value = 0;
-    // }else if(e.target.value == ''){
-    //   e.target.value = 0
-    // }
+      }
+     }
+  }else{
+    this.prodFocusedRow = 0;
+      /////move down
+      if(e.keyCode == 40){
+        if(this.productList.length >= 1 ){  
+          $('.prodRow0').trigger('focus');
+       }  
+     }}
+   }
 
+   handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[]){
+    
 
+    /////move down
+    if(e.keyCode == 40|| e.keyCode == 9){
+
+ 
+      if(prodList.length > 1 ){
+       this.prodFocusedRow += 1;
+       if (this.prodFocusedRow >= prodList.length) {      
+         this.prodFocusedRow -= 1  
+     } else {
+         var clsName = cls + this.prodFocusedRow;    
+        //  alert(clsName);
+         $(clsName).trigger('focus');
+         e.which = 9;   
+         $(clsName).trigger(e)       
+     }}
+   }
+ 
+ 
+      //Move up
+      if (e.keyCode == 38) {
+ 
+       if (this.prodFocusedRow == 0) {
+           $(endFocus).trigger('focus');
+           this.prodFocusedRow = 0;
+  
+       }
+ 
+       if (prodList.length > 1) {
+ 
+           this.prodFocusedRow -= 1;
+ 
+           var clsName = cls + this.prodFocusedRow;
+          //  alert(clsName);
+           $(clsName).trigger('focus');
+           
+ 
+       }
+ 
+   }
+
+  }
+
+  handleNumKeys(item:any ,e:any,cls:string,index:any){
+
+   if(e.keyCode == 9){
+    this.rowFocused = index +1;
+   }
+
+   if(e.shiftKey && e.keyCode == 9 ){
+  
+    this.rowFocused = index - 1;
+   }
 
     if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
       // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
@@ -301,22 +398,32 @@ export class IssueStockRerturnComponent implements OnInit {
 
   }
 
-  focusToQty(e:any){
-    if(e.keyCode == 40){
-      
-      if(this.tableDataList.length >= 1 ){  
-         $('.qty0').trigger('focus');
-
-      }
-     }
-   }
-
   delRow(item: any) {
-    var index = this.tableDataList.findIndex((e:any)=> e.productID == item.productID);
-    this.tableDataList.splice(index, 1);
-    this.getTotal();
+    Swal.fire({
+      title:'Alert!',
+      text:'Confirm to Delete Product',
+      position:'center',
+      icon:'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirm',
+    }).then((result)=>{
+
+      if(result.isConfirmed){
+   
+        var index = this.tableDataList.indexOf(item);
+        this.tableDataList.splice(index, 1);
+        this.getTotal();
+
+    }
+   }
+   )
+    
+  
     
   }
+
 
   changeValue(item:any){
     var myIndex = this.tableDataList.indexOf(item);
@@ -337,14 +444,31 @@ export class IssueStockRerturnComponent implements OnInit {
    
   SaveBill(type:any){
     var isValidFlag = true;
+    this.tableDataList.forEach((p:any) => {  
+
+      p.quantity = parseFloat(p.quantity);
+      p.salePrice = parseFloat(p.salePrice);
+      p.costPrice = parseFloat(p.costPrice);
+      
+      // console.log(p)     
+        if(p.quantity == 0 || p.quantity == '0' || p.quantity == '' || p.quantity == undefined || p.quantity == null){
+          this.msg.WarnNotify('('+p.productTitle+') Quantity is not Valid');
+           isValidFlag = false;
+          //  console.log(p)
+          //  console.log(this.tableDataList)
+           return;
+        }
+      });
        
     if(this.tableDataList == ''){
       this.msg.WarnNotify('Atleast One Product Must Be Selected')
     }else if( this.locationID == undefined || this.locationID == 0){
       this.msg.WarnNotify('Select Warehouse Location')
-    }else if(this.locationTwoID == 0 || this.locationTwoID == undefined){
-      this.msg.WarnNotify('Select Department')
-    }else if(this.IssueType == '' || this.IssueType == undefined){
+    }
+    // else if(this.locationTwoID == 0 || this.locationTwoID == undefined){
+    //   this.msg.WarnNotify('Select Department')
+    // }
+    else if(this.IssueType == '' || this.IssueType == undefined){
       this.msg.WarnNotify('Select Issuance Type')
     }
     else {
@@ -359,12 +483,12 @@ export class IssueStockRerturnComponent implements OnInit {
         if(type == 'hold'){
           if(this.holdBtnType == 'Hold'){
            this.app.startLoaderDark();
-           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertIssueStock',{
-           InvType: "HIR",
+           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertRecStock',{
+           InvType: "HR",
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
            LocationID: this.locationID,
            LocationTitle:this.locationTitle,
-           ProjectID: 1,
+           ProjectID: this.projectID,
            IssueType:this.IssueType,
            IssueStatus:'A',
            BillTotal: this.subTotal,
@@ -391,18 +515,16 @@ export class IssueStockRerturnComponent implements OnInit {
              }
            )
           }else if(this.holdBtnType == 'ReHold'){
-           this.dialog.open(PincodeComponent,{
-             width:"30%"
-           }).afterClosed().subscribe(pin=>{
+            this.global.openPinCode().subscribe(pin=>{
              if(pin != ''){
                this.app.startLoaderDark();
           
-           this.http.post(environment.mainApi+this.global.inventoryLink+'UpdateHoldedIssueInvoice',{
+           this.http.post(environment.mainApi+this.global.inventoryLink+'UpdateHoldedRecInvoice',{
            InvBillNo: this.holdInvNo,
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
            LocationID: this.locationID,
            LocationTitle:this.locationTitle,
-           ProjectID: 1,
+           ProjectID: this.projectID,
            IssueType:this.IssueType,
            IssueStatus:'A',
            BillTotal: this.subTotal,
@@ -433,13 +555,27 @@ export class IssueStockRerturnComponent implements OnInit {
           }
      
          }else if(type == 'issue'){
-           this.app.startLoaderDark();
-           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertIssueStock',{
-            InvType: "IR",
+
+          Swal.fire({
+            title:'Alert!',
+            text:'Confirm to Save',
+            position:'center',
+            icon:'success',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Confirm',
+          }).then((result)=>{
+      
+            if(result.isConfirmed){
+         
+              this.app.startLoaderDark();
+           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertRecStock',{
+            InvType: "R",
             InvDate: this.global.dateFormater(this.invoiceDate,'-'),
             LocationID: this.locationID,
             LocationTitle:this.locationTitle,
-            ProjectID: 1,
+            ProjectID: this.projectID,
             IssueType:this.IssueType,
             IssueStatus:'A',
             BillTotal: this.subTotal,
@@ -466,6 +602,10 @@ export class IssueStockRerturnComponent implements OnInit {
                }
              }
            )
+          }
+         }
+         )
+         
          }
      
       }
@@ -494,24 +634,35 @@ export class IssueStockRerturnComponent implements OnInit {
     this.holdInvNo = '-';
     this.IssueBillList = [];
     this.IssueType = '';
+    this.avgCostTotal = 0;
+    this.CostTotal = 0;
 
   }
 
 
   
   findHoldBills(type:any){
-    if(type == 'HIR'){
+    if(type == 'HR'){
       $('#edit').show();
     }
 
-    if(type == 'IR'){
+    if(type == 'R'){
       $('#edit').hide()
     }
 
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetIssueInventoryBillSingleDate?Type='+type+'&creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
       (Response:any)=>{
-        this.IssueBillList = Response;
-         console.log(this.IssueBillList);
+        this.IssueBillList = [];
+        if(type == 'HR'){
+          Response.forEach((e:any) => {
+            if(e.approvedStatus == false){
+              this.IssueBillList.push(e);
+            }
+          });
+        }
+        if(type == 'R'){
+          this.IssueBillList = Response;
+        }
       }
     )
   }
@@ -530,6 +681,7 @@ export class IssueStockRerturnComponent implements OnInit {
   myTableDataList:any = [];
   myBillTotalQty = 0;
   myCPTotal = 0;
+  myAvgCPTotal = 0;
   mySPTotal = 0;
   myBillStatus = false;
 
@@ -553,6 +705,7 @@ export class IssueStockRerturnComponent implements OnInit {
         this.myBillTotalQty = 0;
         this.myCPTotal = 0;
         this.mySPTotal = 0;
+        this.myAvgCPTotal = 0;
        
         this.productImage = Response[Response.length - 1].productImage;
 
@@ -560,7 +713,9 @@ export class IssueStockRerturnComponent implements OnInit {
           Response.forEach((e:any) => {
             this.myBillTotalQty += e.quantity;
             this.myCPTotal += e.costPrice * e.quantity;
+            this.myAvgCPTotal += e.avgCostPrice * e.quantity;
             this.mySPTotal += e.salePrice * e.quantity;
+
 
             this.myTableDataList.push({
               ProductID:e.productID,
@@ -612,11 +767,15 @@ export class IssueStockRerturnComponent implements OnInit {
       (Response:any)=>{
         console.log(Response);
         this.totalQty = 0;
+        this.CostTotal = 0;
+        this.avgCostTotal = 0;
         this.productImage = Response[Response.length - 1].productImage;
 
 
           Response.forEach((e:any) => {
             this.totalQty += e.quantity;
+            this.CostTotal += e.quantity * e.costPrice;
+            this.avgCostTotal += e.quantity * e.avgCostPrice;
             this.tableDataList.push({
               productID:e.productID,
               productTitle:e.productTitle,
@@ -633,6 +792,7 @@ export class IssueStockRerturnComponent implements OnInit {
               packing:e.packing,
               discInP:e.discInP,
               discInR:e.discInR,
+              aq:e.aq,
             })
           });
           // this.getTotal();

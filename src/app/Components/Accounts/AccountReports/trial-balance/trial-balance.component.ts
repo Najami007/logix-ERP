@@ -16,7 +16,7 @@ export class TrialBalanceComponent implements OnInit {
 
 
  
-   crudList:any = [];
+  crudList:any = {c:true,r:true,u:true,d:true};
 
    companyProfile:any = [];
 

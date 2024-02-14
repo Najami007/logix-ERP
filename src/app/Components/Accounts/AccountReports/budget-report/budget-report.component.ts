@@ -16,7 +16,7 @@ export class BudgetReportComponent implements OnInit{
 
     
  projectList:any = [];
- crudList:any = [];
+ crudList:any = {c:true,r:true,u:true,d:true};
 
 
 

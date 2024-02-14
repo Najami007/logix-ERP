@@ -44,6 +44,7 @@ export class InvreportcatwiseComponent implements OnInit {
 
 
   companyProfile:any = [];
+  crudList:any = {c:true,r:true,u:true,d:true};
 
   constructor(
     private http:HttpClient,
@@ -57,6 +58,10 @@ export class InvreportcatwiseComponent implements OnInit {
     this.global.getCompany().subscribe((data)=>{
       this.companyProfile = data;
     });
+
+    this.global.getMenuList().subscribe((data)=>{
+      this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    })
 
   }
   ngOnInit(): void {
@@ -105,7 +110,7 @@ export class InvreportcatwiseComponent implements OnInit {
 
 
   reportType = 'full';
-  Title = '';
+  Title = 'Full';
 
   inventoryList:any = [];
 
@@ -144,23 +149,23 @@ export class InvreportcatwiseComponent implements OnInit {
     
 
     if(type == 'cat'){
-      this.categoryTitle =   this.CategoriesList.find((e:any)=>e.categoryID == this.categoryID).categoryTitle; 
+      this.categoryTitle = 'Cat: ' +  this.CategoriesList.find((e:any)=>e.categoryID == this.categoryID).categoryTitle; 
     }
 
     if(type == 'subcat'){
-      this.subCategoryTitle =   this.SubCategoriesList.find((e:any)=>e.subCategoryID == this.subCategoryID).subCategoryTitle;
+      this.subCategoryTitle = 'Sub Cat: ' +  this.SubCategoriesList.find((e:any)=>e.subCategoryID == this.subCategoryID).subCategoryTitle;
     }
 
     if(type == 'brand'){
-      this.brandTitle =  this.BrandList.find((e:any)=>e.brandID == this.brandID).brandTitle;
+      this.brandTitle = 'Brand: ' + this.BrandList.find((e:any)=>e.brandID == this.brandID).brandTitle;
     }
 
     if(type == 'type'){
-      this.typeTitle =    this.ProductTypeList.find((e:any)=>e.productTypeID == this.typeID).productTypeTitle;
+      this.typeTitle = 'Type: ' +   this.ProductTypeList.find((e:any)=>e.productTypeID == this.typeID).productTypeTitle;
     }
 
     if(type == 'location'){
-      this.locationTitle =  this.locationList.find((e:any)=>e.locationID == this.locationID).locationTitle;
+      this.locationTitle = 'Loc: ' + this.locationList.find((e:any)=>e.locationID == this.locationID).locationTitle;
     }
 
   }
@@ -334,7 +339,15 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = false;
       this.locFlag = false;
       this.typeFlag = false
- 
+      this.Title = 'Full'
+      document.location.reload();
+    //  setTimeout(() => {
+    //   $('#credential').hide();
+    //   $('.modal').hide();
+    //   $('body').removeClass('modal-open');
+    //   $('.modal-backdrop').hide();
+    // //  }, 500);
+    //  this.getReport();
     }
 
     

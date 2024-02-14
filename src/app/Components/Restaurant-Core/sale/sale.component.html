@@ -167,6 +167,10 @@
 
                       <button   mat-raised-button class="m-1 text-white bg-primary col-lg-5" (click)="voidBill()">Void Bill</button>
 
+
+                      <button data-bs-toggle="modal" data-bs-target="#mergeBill" mat-raised-button class="m-1 text-white col-lg-5" 
+                      style="background-color: pink;" (click)="voidBill()">Merge Bill</button>
+
                 </div>
 
 
@@ -183,6 +187,140 @@
 
     </div>
 
+
+
+
+
+        <!----------------Modal Window for Merging Bill---------->
+
+
+
+        <div class="modal fade" id="mergeBill" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="mergeBillLabel">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+                <div class="modal-body">
+
+   
+                <mat-form-field appearance="outline" class="w-50 pe-2">
+                    <mat-label>Bill No 1</mat-label>
+                    <mat-select [(ngModel)]="mergeBillNo1">
+                        <mat-option [disabled]="mergeBillNo2 == item.invBillNo" *ngFor="let item of holdBillList" [value]="item.invBillNo">{{item.tableTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-50 ">
+                    <mat-label>Bill No 2</mat-label>
+                    <mat-select [(ngModel)]="mergeBillNo2">
+                        <mat-option [disabled]="mergeBillNo1 == item.invBillNo" *ngFor="let item of holdBillList" [value]="item.invBillNo">{{item.tableTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+   
+   
+                </div>
+   
+                <div class="modal-footer bg-mf-blue">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="mergeBills()">Print</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+   
+            </div>
+        </div>
+    </div>
+   
+    <!---------------------------------------------------------->
+   
+
+    
+        <!------------------------------ Design For Merged Bill Pirnt  --------------------->
+
+
+
+        <div id="mergePrint" class="d-none">
+            <div class="text-center">
+                <img [src]="companyLogo" [height]="100" [width]="100">
+                <h2>{{companyName}}</h2>
+                <p>{{companyAddress}}</p>
+                <p>{{CompanyMobile}}</p>
+    
+            </div>
+    
+    
+            <div >
+              <table class="table table-logix">
+                <thead>
+                    <tr>
+                        <th>Inv #</th>
+                        <th>Date</th>
+                        <th>Counter</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr>
+                        <td>({{mergeBillNo1}}) ({{mergeBillNo2}})</td>
+                        <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
+                        <td>{{myCounterName}}</td>
+                    </tr>
+                   
+                </tbody>
+              </table>
+    
+              <tr>
+                <th>Remarks:-</th>
+                <td class="ms-2">{{myRemarks}}</td>
+            </tr>
+            </div>
+    
+            <div>
+                <table class="table table-logix">
+                    <thead>
+                        <tr>
+                            <th>S#</th>
+                            <th>Table</th>
+                            <th>Title</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of myPrintData index as index">
+                            <td>{{index +1}}</td>
+                            <td>{{item.tableTitle}}</td>
+                            <td>{{item.productTitle}}</td>
+                            <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
+                            <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
+                            <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
+    
+                        </tr>
+                    </tbody>
+                </table>
+    
+                <div class="d-flex  text-end" style="text-align: end;">
+    
+                    <div class="col-lg-4"></div>
+                    <div class="col-lg-4"></div>
+                    
+                    <div class="row fw-bold col-lg-2 text-end" >
+                        <mat-label>Sub Total</mat-label>
+                        <mat-label *ngIf="myOtherCharges != 0">Other Charges</mat-label>
+                        <mat-label>Net Total</mat-label>
+                    </div>
+    
+                    <div class="row text-end col-lg-2" >
+                        <mat-label>{{mySubTotal}}</mat-label>
+                        <mat-label *ngIf="myOtherCharges != 0">{{myOtherCharges}}</mat-label>
+                        <mat-label>{{myNetTotal}}</mat-label>
+    
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    
+    
+        <!---------------------------------------------------------------------------------->
+    
 
      <!----------------Modal Window for Retrieving Saved Bills For Duplicate Print ---------->
 
@@ -336,6 +474,8 @@
     </div>
 
 
+    <!---------------------------------------------------------------------------------->
+
 
      <!----------------Modal Window for Discount ---------->
 
@@ -423,10 +563,24 @@
                 </div>
                 <div class="modal-body">
 
+
                     <div class="d-flex justify-content-between">
                         <h2 class="text-center text-success">Bill Total: {{netTotal | number:'1.0-1'}}</h2>
                         <h2 class="text-center text-danger">Change: {{ change | number:'1.0-1'}}</h2>
                     </div>
+
+                    <mat-form-field appearance="outline" class="col-lg-6 pe-1">
+                        <mat-label>Customer Name</mat-label>
+                        <input type="text" matInput [(ngModel)]="customerName" />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="col-lg-6 w-50">
+                        <mat-label>Customer Mobile</mat-label>
+                        <input matInput type="text" [textMask]="{mask:mobileMask}" [(ngModel)]="customerMobileno" />
+                    </mat-form-field>
+                    <label class="fw-bold">Add Document</label>
+                  <div>
+                    <input  accept=".pdf"  (change)="onDocSelected($event)"  #vDoc type="file" id="vDoc"  class=" mb-2">
+                  </div>
 
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>Payment Type</mat-label>

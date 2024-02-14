@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./coa-notes.component.scss']
 })
 export class CoaNotesComponent implements OnInit{
-  crudList:any = [];
+  crudList:any = {c:true,r:true,u:true,d:true};
 
   constructor(
     private dialogue:MatDialog,

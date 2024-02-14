@@ -21,7 +21,7 @@ import { AddpartyComponent } from '../../Company/party/addparty/addparty.compone
 })
 export class PurchaseComponent implements OnInit{
   companyProfile:any = [];
-  crudList:any = [];
+  crudList:any = {c:true,r:true,u:true,d:true};
   constructor(
     private http:HttpClient,
     private msg:NotificationService,
@@ -356,7 +356,7 @@ export class PurchaseComponent implements OnInit{
 
  
 
-   rowFocused = 0;
+   rowFocused = -1;
   prodFocusedRow= 0;
    changeFocus(e:any, cls:any){
 
@@ -395,7 +395,9 @@ export class PurchaseComponent implements OnInit{
         //  alert(clsName);
          $(clsName).trigger('focus');
         //  e.keyCode = 9;    
+      
      }}
+    //  alert(this.prodFocusedRow);
    }
  
  
@@ -443,24 +445,24 @@ export class PurchaseComponent implements OnInit{
 
   handleNumKeys(item:any ,e:any,cls:string,index:any){
 
-    if(e.keyCode == 9){
-      if(cls == '.sp'){
-        this.rowFocused = index + 1;
-      }else{
-        this.rowFocused = index ;
-      }
+  //   if(e.keyCode == 9){
+  //     if(cls == '.sp'){
+  //       this.rowFocused = index + 1;
+  //     }else{
+  //       this.rowFocused = index ;
+  //     }
       
-    }
+  //   }
 
     
-   if(e.shiftKey && e.keyCode == 9 ){
+  //  if(e.shiftKey && e.keyCode == 9 ){
   
-    if(cls == '.qty'){
-      this.rowFocused = index - 1;
-    }else{
-      this.rowFocused = index ;
-    }
-   }
+  //   if(cls == '.qty'){
+  //     this.rowFocused = index - 1;
+  //   }else{
+  //     this.rowFocused = index ;
+  //   }
+  //  }
 
     if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
       // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot

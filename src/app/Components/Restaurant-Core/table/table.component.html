@@ -3,7 +3,7 @@
 
 
        <div>
-        <button mat-fab class="col-lg-1 me-2" (click)="addTable()"><mat-icon>add</mat-icon></button>
+        <button mat-fab class="col-lg-1 me-2" *ngIf="crudList.c" (click)="addTable()"><mat-icon>add</mat-icon></button>
 
         <mat-form-field class="col-lg-11" appearance="outline">
             <mat-label class="ps-5">Search.....</mat-label>
@@ -13,7 +13,7 @@
        </div>
 
 
-        <table class="table">
+        <table class="table" *ngIf="crudList.r">
 
             <thead>
                 <tr>
@@ -29,8 +29,8 @@
                     <td>{{index +1}}</td>
                     <td>{{item.tableTitle}}</td>
                     <td>{{item.tableDescription}}</td>
-                    <td class="cursorPointer text-success"><button mat-icon-button (click)="editTable(item)"><mat-icon>edit</mat-icon></button></td>
-                    <td class="cursorPointer text-danger"><button mat-icon-button (click)="delete(item)"><mat-icon>delete</mat-icon></button></td>
+                    <td class="cursorPointer text-success"><button *ngIf="crudList.u" mat-icon-button (click)="editTable(item)"><mat-icon>edit</mat-icon></button></td>
+                    <td class="cursorPointer text-danger"><button *ngIf="crudList.d" mat-icon-button (click)="delete(item)"><mat-icon>delete</mat-icon></button></td>
                 </tr>
             </tbody>
             

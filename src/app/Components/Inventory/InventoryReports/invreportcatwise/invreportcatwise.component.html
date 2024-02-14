@@ -1,7 +1,7 @@
 <div class="body ">
 
 
-    <div class="d-flex text-center justify-content-around pt-2 ps-1 pe-1">
+    <div class="d-flex  justify-content-around pt-2  border-bottom" >
 
         <mat-form-field appearance="outline" class="w-50">
             <mat-label>Select Report Type</mat-label>
@@ -14,7 +14,7 @@
         <button mat-raised-button data-bs-toggle="modal" data-bs-target="#credential" color="primary" class="btn-rpt" (click)="openDialog()">Get Report</button>
 
 
-
+            <!---------------------------------- Modal Window for Credentials-------------------------->
         <div class="modal fade" id="credential" tabindex="-1" data-bs-backdrop="static" aria-labelledby="credentialLabel" >
             <div class="modal-dialog modal-dialog-centered  modal-l">
               <div class="modal-content">
@@ -82,7 +82,6 @@
     
 
         <div >
-            <hr>
 
             <div class="pt-2 d-flex m-1 justify-content-between">
                 <mat-form-field class="col-lg-11" appearance="outline">
@@ -110,9 +109,7 @@
                         
     
                         <p class="rptTitle" style="margin-top:-20px">Inventory Report  </p>
-                        <p>({{Title}})</p>
-                        <h4 class="projtitl"  style="margin-top:-20px;">Project:</h4>
-                      
+                        <p style="margin-top:-20px" class="fw-bold">({{Title}})</p>
                     </span>
                     <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
                         <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
@@ -156,11 +153,11 @@
                             <td class="text-end">{{item.salePrice * (item.qtyIn - item.qtyOut)|number:'1.0-2'}}</td>
                         </tr>
                         <tr>
-                            <th colspan="8"></th>
-                            <th>{{balanceQtyTotal |number:'1.0-2'}}</th>
-                            <th>{{costTotal |number:'1.0-2'}}</th>
-                            <th>{{avgCostTotal |number:'1.0-2'}}</th>
-                            <th>{{saleTotal |number:'1.0-2'}}</th>
+                            <td colspan="8"></td>
+                            <td class="text-center">{{balanceQtyTotal |number:'1.0-3'}}</td>
+                            <td class="text-end fw-bold">{{costTotal |number:'1.0-2'}}</td>
+                            <td class="text-end fw-bold">{{avgCostTotal |number:'1.0-2'}}</td>
+                            <td class="text-end fw-bold">{{saleTotal |number:'1.0-2'}}</td>
                         </tr>
                       
                       
@@ -177,7 +174,7 @@
          <div class="container-fluid">
             <div class="text-center ">
                 <h3 style="font-family:Verdana, Geneva, Tahoma, sans-serif;">Inventory Report</h3>
-                <p style="font-family: 'Times New Roman', Times, serif;margin-top: -20px;"><strong>{{Title}}</strong></p>
+                <p style="font-family:Verdana, Geneva, Tahoma, sans-serif;margin-top: -20px;"><strong>{{Title}}</strong></p>
             </div>
             <table class="table table-logix">
     
@@ -218,11 +215,11 @@
                     </tr>
 
                     <tr>
-                        <th colspan="6"></th>
-                        <th>{{balanceQtyTotal |number:'1.0-2'}}</th>
-                        <th>{{costTotal |number:'1.0-2'}}</th>
-                        <th>{{avgCostTotal |number:'1.0-2'}}</th>
-                        <th>{{saleTotal |number:'1.0-2'}}</th>
+                        <td colspan="6"></td>
+                        <td class="text-center">{{balanceQtyTotal |number:'1.0-3'}}</td>
+                        <td class="text-end fw-bold">{{costTotal |number:'1.0-2'}}</td>
+                        <td class="text-end fw-bold">{{avgCostTotal |number:'1.0-2'}}</td>
+                        <td class="text-end fw-bold">{{saleTotal |number:'1.0-2'}}</td>
                     </tr>
                   
 

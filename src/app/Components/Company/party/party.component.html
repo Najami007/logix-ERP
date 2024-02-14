@@ -82,7 +82,8 @@
         </div>
 
        <div class="d-flex justify-content-center">
-        <Button class="btn btn-success btn-save m-2 w-25" (click)="saveParty()">{{btnType}}</Button>
+        <Button class="btn btn-success btn-save m-2 w-25" *ngIf="crudList.c && btnType == 'Save'" (click)="saveParty()">{{btnType}}</Button>
+        <Button class="btn btn-success btn-save m-2 w-25" *ngIf="crudList.u && btnType == 'Update'" (click)="saveParty()">{{btnType}}</Button>
         <Button class="btn btn-danger btn-reset m-2 w-25" (click)="reset()">Reset</Button>
        </div>
     </div>
@@ -110,7 +111,7 @@
        </div>
 
         <mat-progress-bar mode="indeterminate" *ngIf="loadingBar == 'start'"></mat-progress-bar>
-            <table class="table">
+            <table class="table" *ngIf="crudList.r">
                 <thead>
                     <th >S.#</th>
                     <th >Party Name</th>
@@ -133,7 +134,7 @@
                         <td >
                             <div >
                                 <mat-icon class="text-success cursorPointer"(click)="editParty(item)">edit</mat-icon>
-                            <mat-icon class="text-danger cursorPointer" (click)="DeleteParty(item)"> delete</mat-icon>
+                            <mat-icon class="text-danger cursorPointer" *ngIf="crudList.d" (click)="DeleteParty(item)"> delete</mat-icon>
                             </div>
                         </td>
                      

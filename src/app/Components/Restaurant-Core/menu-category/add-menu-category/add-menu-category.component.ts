@@ -11,7 +11,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
   styleUrls: ['./add-menu-category.component.scss']
 })
 export class AddMenuCategoryComponent implements OnInit {
-  crudList:any = [];
+  crudList:any = {c:true,r:true,u:true,d:true};
 
   constructor(
     private http:HttpClient,

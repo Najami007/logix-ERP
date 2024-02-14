@@ -26,7 +26,7 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class ProductComponent implements OnInit {
 
-  crudList: any = [];
+  crudList:any = {c:true,r:true,u:true,d:true};
 
   dataSource!: MatTableDataSource<any>;
 

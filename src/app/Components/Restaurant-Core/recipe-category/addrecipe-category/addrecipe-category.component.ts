@@ -16,7 +16,7 @@ import { RecipeCategoryComponent } from '../recipe-category.component';
 })
 export class AddrecipeCategoryComponent implements OnInit {
 
-  crudList:any = [];
+  crudList:any = {c:true,r:true,u:true,d:true};
 
   constructor(
     private http:HttpClient,

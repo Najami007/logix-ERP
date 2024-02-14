@@ -28,6 +28,8 @@ export class SaleComponent implements OnInit {
   CompanyMobile: any = '';
   companyName: any = '';
 
+  mobileMask = this.global.mobileMask;
+
   constructor(
     private http: HttpClient,
     private msg: NotificationService,
@@ -127,6 +129,10 @@ export class SaleComponent implements OnInit {
   tempTableID = 0;
   tempOrderType = '';
   tableTitle: any = '';
+
+  customerName= '';
+  customerMobileno = '';
+  invDocument:any = '';
 
 
   tempProdRow: any = [];
@@ -302,6 +308,37 @@ export class SaleComponent implements OnInit {
   }
 
 
+
+
+  onDocSelected(event:any) {
+
+  
+    if(this.global.getExtension(event.target.value) == 'pdf'){
+    let targetEvent = event.target;
+
+    let file:File = targetEvent.files[0];
+
+    let fileReader:FileReader = new FileReader();
+
+
+    fileReader.onload =(e)=>{
+      this.invDocument = fileReader.result;
+    }
+
+    fileReader.readAsDataURL(file);
+
+    }else{
+      this.msg.WarnNotify('File Must Be pdf Only');
+      event.target.value = '';
+      this.invDocument = '';
+    }
+  
+
+
+  //console.log(this.imageFile);
+}
+
+
   /////////////////////////////////////////////////////////////////
 
   save(type: any) {
@@ -312,12 +349,16 @@ export class SaleComponent implements OnInit {
       this.msg.WarnNotify('Select Order Type')
     } else if (this.tableData == '' || this.tableData == undefined) {
       this.msg.WarnNotify('One Product must be Entered')
-    } else if (this.paymentType == 'Split' && ((this.cash + this.bankCash) > this.netTotal || (this.cash + this.bankCash) < this.netTotal)) {
+    } else if (type == 'sale' && this.paymentType == 'Split' && ((this.cash + this.bankCash) > this.netTotal || (this.cash + this.bankCash) < this.netTotal)) {
       this.msg.WarnNotify('Amount in Not Valid')
-    } else if (this.paymentType == 'Cash' && (this.cash < this.netTotal)) {
+    } else if (type == 'sale' && this.paymentType == 'Cash' && (this.cash < this.netTotal)) {
       this.msg.WarnNotify('Enter Valid Amount')
-    } else if (this.paymentType == 'Bank' && (this.bankCash < this.netTotal)) {
+    } else if (type == 'sale' && this.paymentType == 'Bank' && (this.bankCash < this.netTotal)) {
       this.msg.WarnNotify('Enter Valid Amount')
+    }else if(type == 'sale' && (this.customerName =='' && this.customerMobileno != '')){
+      this.msg.WarnNotify('Enter Customer Name')
+    }else if(type == 'sale' && (this.customerName !='' && this.customerMobileno == '')){
+      this.msg.WarnNotify('Enter Customer Name')
     }
     else {
 
@@ -344,6 +385,7 @@ export class SaleComponent implements OnInit {
           Remarks: this.billRemarks,
           OrderType: this.orderType,
           CoverOf: this.coverOf,
+
 
           SaleDetail: JSON.stringify(this.tableData),
 
@@ -449,6 +491,17 @@ export class SaleComponent implements OnInit {
   //////////////////////////////////////////////////////////////////
 
   InsertSale() {
+
+    if(this.customerMobileno == '' || this.customerMobileno == undefined){
+      this.customerMobileno = '0000-0000000';
+    }
+    if(this.customerName == '' || this.customerName == undefined){
+      this.customerName = '-';
+    }
+    if(this.invDocument =='' || this.invDocument == undefined){
+      this.invDocument = '-';
+    }
+
     this.app.startLoaderDark()
     this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertSale', {
       HoldInvNo: this.invBillNo,
@@ -473,6 +526,9 @@ export class SaleComponent implements OnInit {
       Change: this.change,
       BankCoaID: this.bankCoaID,
       BankCash: this.bankCash,
+      InvoiceDocument:this.invDocument,
+      CusContactNo:this.customerMobileno,
+      CusName:this.customerName,
 
       SaleDetail: JSON.stringify(this.tableData),
       UserID: this.global.getUserID()
@@ -702,7 +758,34 @@ export class SaleComponent implements OnInit {
     this.tempRecipeList = [];
     this.holdbtnType = 'hold';
     this.getBankList();
+    this.customerName = '';
+    this.customerMobileno = '';
+    this.invDocument = '';
+    this.mergeBillNo1 = '';
+    this.mergeBillNo2 = '';
 
+  }
+
+  resetPrint(){
+    this.myPrintData = [];
+    this.myInvoiceNo = '';
+    this.mytableNo = '';
+    this.myCounterName = '';
+    this.myInvDate = '';
+    this.myOrderType = '';
+    this.mySubTotal = 0;
+    this.myNetTotal = 0;
+    this.myOtherCharges = 0;
+    this.myRemarks = '';
+    this.myDiscount = 0;
+    this.myCash = 0;
+    this.myChange = 0;
+    this.myBank = 0;
+    this.myPaymentType = '';
+    this.myDuplicateFlag = false;
+    this.myTime = '';
+    this.mergeBillNo1 = '';
+    this.mergeBillNo2 = '';
   }
 
 
@@ -711,7 +794,7 @@ export class SaleComponent implements OnInit {
   myInvoiceNo = '';
   mytableNo = '';
   myCounterName = '';
-  myInvDate: Date = new Date();
+  myInvDate: any = new Date();
   myOrderType = '';
   mySubTotal = 0;
   myNetTotal = 0;
@@ -724,6 +807,7 @@ export class SaleComponent implements OnInit {
   myPaymentType = '';
   myDuplicateFlag = false;
   myTime:any;
+  myCounter:any = '';
 
 
   printAfterSave(invNo: any) {
@@ -895,7 +979,7 @@ export class SaleComponent implements OnInit {
 
 
   printDuplicateBill(item:any){
-
+    //console.log(item)
     this.myInvoiceNo = item.invBillNo;
     this.mytableNo = item.tableTitle;
     this.myInvDate = item.createdOn ;
@@ -933,6 +1017,43 @@ export class SaleComponent implements OnInit {
     })
   }
 
+
+  mergeBillNo1 = '';
+  mergeBillNo2 = '';
+
+  mergeBills(){
+    // alert(this.mergeBillNo1)
+    // alert(this.mergeBillNo2)
+  if(this.mergeBillNo1 == '' || this.mergeBillNo2 == ''){
+    this.msg.WarnNotify('Select Both Bill 1 and 2')
+  }else{
+    this.http.get(environment.mainApi+this.global.restaurentLink+'MergeAndPrintBill?BillNo='+this.mergeBillNo1+'&BillNo2='+this.mergeBillNo2).subscribe(
+      (Response:any)=>{
+        console.log(Response);
+    this.myInvoiceNo = Response[0].invBillNo;
+    this.myInvDate = Response[0].invDate;
+    this.myOrderType = Response[0].orderType;
+    this.myRemarks = Response[0].billRemarks;
+    this.myCounter =  Response[0].billRemarks;
+        
+       this.myPrintData = Response;
+
+       Response.forEach((e:any) => {
+          this.mySubTotal = e.quantity * e.salePrice;
+          this.myOtherCharges = e.otherCharges;
+
+       });
+
+
+       setTimeout(() => {
+        this.global.printData('#mergePrint');
+       }, 500);
+
+      
+      }
+    )
+  }
+  }
 
 
 }

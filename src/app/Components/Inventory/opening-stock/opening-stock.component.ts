@@ -15,7 +15,7 @@ import { Observable, retry } from 'rxjs';
 })
 export class OpeningStockComponent implements OnInit {
 
-  crudList:any =[];
+  crudList:any = {c:true,r:true,u:true,d:true};
   companyProfile:any = [];
 
   constructor(

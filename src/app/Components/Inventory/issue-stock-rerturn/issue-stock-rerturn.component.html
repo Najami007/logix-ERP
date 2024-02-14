@@ -1,10 +1,13 @@
-<div class="d-flex h-100 body" style="background-color: gainsboro;">
+<div class="d-flex h-100 body" style="background-color: rgb(255, 255, 255);overflow: hidden;">
+
 
     <div class="col-lg-9 bg-white " >
 
-        <div class="d-flex justify-content-around p-1">
+         <!-------------------- Top Date and location section --------------->
+
+        <div class="d-flex justify-content-around pt-3">
             <mat-form-field appearance="outline" class="col-lg-2">
-                <mat-label>Select Invoice Date</mat-label>
+                <mat-label>Invoice Date</mat-label>
                 <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="invDate"
                     [matDatepicker]="iDate">
                 <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
@@ -16,26 +19,26 @@
                 <mat-select [(ngModel)]="locationID" name="location" (selectionChange)="onLocationSelected('l1')">
                     <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
                             [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                    <mat-option *ngFor="let item of locationList | filter:locationSearch.value" 
+                    <mat-option *ngFor="let item of locationList | filter:locationSearch.value"  [disabled]="item.locationID == locationTwoID"
                         [value]="item.locationID">{{item.locationTitle}}</mat-option>
                 </mat-select>
             </mat-form-field>
 
 
-            <mat-form-field appearance="outline" class="col-lg-2">
+            <!-- <mat-form-field appearance="outline" class="col-lg-2">
                 <mat-label>Department</mat-label>
                 <mat-select [(ngModel)]="locationTwoID" name="location" (selectionChange)="onLocationSelected('l2')">
                     <mat-option><ngx-mat-select-search #depSearch [placeholderLabel]="'Search...'"
                             [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                    <mat-option *ngFor="let item of locationList | filter:depSearch.value"
+                    <mat-option *ngFor="let item of locationList | filter:depSearch.value" [disabled]="item.locationID == locationID"
                         [value]="item.locationID">{{item.locationTitle}}</mat-option>
                 </mat-select>
-            </mat-form-field>
+            </mat-form-field> -->
             <mat-form-field appearance="outline" class="col-lg-2">
                 <mat-label>Issue Type</mat-label>
                 <mat-select [(ngModel)]="IssueType" name="location" (selectionChange)="onLocationSelected('l2')">
-                    <mat-option value="Stock Transfer">Stock Transfer</mat-option>
                     <mat-option value="Expense">Expense</mat-option>
+                    <mat-option value="Buffet Expense">Buffet Expense</mat-option>
                 </mat-select>
             </mat-form-field>
 
@@ -46,31 +49,36 @@
         </div>
           
         <div class="ps-1 d-flex ">
+
+             <!-------------------- Product Search Bar --------------->
            
             <div class="col-lg-9  d-flex flex-column">
                 <mat-label class="text-primary">Search Barcode / Product</mat-label> 
-               <input type="text"  #pbarcode [(ngModel)]="PBarcode"
-                    (keydown)="searchByCode($event);this.focusToQty($event);" id="searchProduct"
-                    class="p-1 mb-2 searchProduct" placeholder="Alt + s" autofocus
-                    autocomplete="off" accesskey="s">
+               <input type="text"  #pbarcode [(ngModel)]="PBarcode"  style="background-color:transparent;border: 1px solid rgb(13, 110, 253);border-radius: 5px 0px 0px 5px;"
+                    (keydown)="searchByCode($event);this.changeFocus($event,'.prodRow')" id="searchProduct"
+                    class="p-1 mb-2 searchProduct" placeholder="Alt + b" autofocus
+                    autocomplete="off" accesskey="b">
     
-                <div class="w-100 d-flex flex-column SearchConatiner cursorPointer"
+                <div class="  d-flex flex-column SearchConatiner cursorPointer"
                     *ngIf="PBarcode != '' && PBarcode != undefined">
-                    <div class="card " *ngFor="let item of productList| filter:PBarcode"
+                    <mat-card class="card " *ngFor="let item of productList| filter:PBarcode index as index"
                         (click)="holdDataFunction(item)">
-                        <button style="background: none;border: none;text-align: left;">{{item.productTitle}}
+                        <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn" (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">{{item.productTitle}}
                             (<b>{{item.barcode}}</b> )</button>
-                    </div>
+                    </mat-card>
                 </div>
             </div>
             <div class="col-lg-3 text-center">
-                <button mat-raised-button class="bg-primary text-white w-50 btn-rpt">Load</button>
+                <button mat-raised-button class="bg-primary text-white w-50 btn-rpt" (click)="ngOnInit()">Load</button>
             </div>
 
         </div>
 
 
-        <div style="max-height: 500px;overflow-y:scroll ;">
+
+        <!-------------------- Table Area for Products --------------->
+
+        <div style="max-height: 80%;overflow-y:scroll !important;padding-bottom: 60px;">
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -80,34 +88,39 @@
                         <th>Quantity</th>
                         <th>Avg Cost</th>
                         <th>Cost</th>
-                        <th>Total</th>
+                        <th>Avg Total</th>
+                        <th>Cost Total</th>
+                        <th>AQ</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of tableDataList.reverse() index as index" (click)="showImg(item)">
+                    <tr *ngFor="let item of tableDataList index as index" (click)="showImg(item);rowFocused = index" [ngClass]="rowFocused == index ?'bg-dg':''">
                       <td>{{index+1}}</td>
                       <td>{{item.barcode}}</td>
                       <td>{{item.productTitle}}</td>
-                      <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
-                        (keydown)="this.handleNumKeys(item,$event,'.qty');getTotal();changeValue(item);"
+                      <td class=""><input type="text" [(ngModel)]="item.quantity" min="0"
+                        (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
                         (keyup)="changeValue(item);getTotal();showImg(item);"
                         class="qty{{index}} text-center" style="width: 80px;"></td>
-                        
-                        <!-- <td class="text-center"><input type="text" [(ngModel)]="item.costPrice" min="0"
-                            (keydown)="this.handleNumKeys(item,$event,'.cp');getTotal();changeValue(item);"
-                            (keyup)="changeValue(item);getTotal();showImg(item);"
-                            class="cp{{index}} text-center" style="width: 80px;"></td> -->
                             <td>{{item.avgCostPrice | number:'1.0-2'}}</td>
                             <td>{{item.costPrice | number:'1.0-2'}}</td>
-                     
+                        <td>{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
                       <td>{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
-                      <td class="cursorPointer"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
+                      <td class="text-center">{{item.aq}}</td>
+                      <td class="cursorPointer text-danger"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
                     </tr>
                     <tr>
                         <td colspan="3"></td>
-                        <th class="text-center">{{totalQty}}</th>
-                        <th colspan="4"></th>
+                        
+                        <th class="">{{totalQty}}</th>
+                        <th colspan="2"></th>
+                        <th class="">{{avgCostTotal |number:'1.0-2'}}</th>
+                        <th class="">{{CostTotal |number:'1.0-2'}}</th>
+                        <th></th>
+                        <td class="text-center"><mat-icon class="cursorPointer " (click)="reset()">delete</mat-icon></td>
+                      
+
                     </tr>
                 </tbody>
             </table>
@@ -117,37 +130,16 @@
 
    
 
-    <div class="col-lg-3 " style="background-color: rgb(226, 222, 222);">
+    <div class="col-lg-3 h-100" style="background-color: rgb(226, 222, 222);position: fixed;right: 0%;">
 
        <div class="p-1">
         <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
-            <div class="text-center" *ngIf="tableDataList != ''" data-bs-toggle="modal" data-bs-target="#picModal">
-                <img [src]="productImage" alt="" height="190" width="200">
+            <div class="text-center" *ngIf="tableDataList != ''" >
+                <img [src]="productImage" alt="" height="190" width="200" (click)="this.global.showProductImage(this.productImage,0)">
             </div>
         </mat-card>
 
 
-        <!---------------------  Bigger Picture Modal ---------------->
-        
-        <div class="modal fade" #picModal id="picModal" tabindex="-1" aria-labelledby="picModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                 
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
-                </div>
-                <div class="modal-body">
-                    <div class="p-1 col-lg-1" *ngIf="tableDataList != ''"  >
-                        <img [src]="productImage" alt="" height="400" width="400">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
-             
-                </div>
-              </div>
-            </div>
-          </div>
        </div>
 
        <div class="p-1">
@@ -155,7 +147,7 @@
            <mat-card-content>
             <div class="justify-content-around d-flex" >
                 <p class="fs-40">Total</p>
-                <p class="font-digit fs-50" >{{subTotal |number:'1.0-0'}}</p>
+                <p class="font-digit fs-50" >{{subTotal |number:'1.0-2'}}</p>
             </div>
            </mat-card-content>
         </mat-card>
@@ -163,209 +155,217 @@
 
 
        <div class="mt-4 d-flex justify-content-around">
-        <button mat-raised-button class="bg-primary text-white w-25" (click)="SaveBill('hold')">{{holdBtnType}}</button>
-        <button mat-raised-button class="bg-success text-white w-25" (click)="SaveBill('issue')">Save</button>
+        <button mat-raised-button *ngIf="crudList.c" class="bg-primary text-white w-25" (click)="SaveBill('hold')">{{holdBtnType}}</button>
+        <button mat-raised-button *ngIf="crudList.c" class="bg-success text-white w-25" (click)="SaveBill('issue')">Save</button>
         
        </div>
        <div class="mt-4 d-flex justify-content-around">
-        <button mat-raised-button class="bg-transparent text-danger " data-bs-toggle="modal" data-bs-target="#holdModal">Retrive</button>
+        <button mat-raised-button class="bg-danger text-white "  data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>
 
 
-                   <!---------------     Modal Window for Retreiving Hold Bills --------------->
-        <div class="modal fade" id="holdModal" tabindex="-1" aria-labelledby="holdModalLabel" >
-            <div class="modal-dialog  modal-xl">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h2 class="modal-title" id="holdModalLabel">Bill Details</h2>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
-                </div>
-                <div class="modal-body">
-    
-                    <div class="d-flex justify-content-between">
-                        <mat-form-field class="col-lg-4" appearance="outline">
-                            <mat-label>Date</mat-label>
-                            <input matInput type="text" readonly="true" [(ngModel)]="Date" [matDatepicker]="hbDate">
-                            <mat-datepicker-toggle matSuffix [for]="hbDate"></mat-datepicker-toggle>
-                            <mat-datepicker #hbDate ></mat-datepicker>
-                        </mat-form-field>
-                 
-    
-                        <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 bg-primary text-white btn-rpt" (click)="findHoldBills('HIR')" >Hold Bill</button>
-                        <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt" (click)="findHoldBills('IR')" >Pur Retrun Bill</button>
-    
-                       <mat-form-field class="col-lg-3" appearance="outline">
-                        <mat-label>Search.......</mat-label>
-                        <input matInput #holdSearch type="text" class="col-lg-4" >
-                       </mat-form-field>
-    
-                    </div>
-    
-                    <table class="table table-logix">
-                        <thead>
-                            <tr>
-                                <th>S#</th>
-                                <th>Inv No.</th>
-                                <th>Date</th>
-                                <th>Type</th>
-                                <th>Department</th>
-                                <th>Amount</th>
-                                <th>User</th>
-                                <th *ngIf="crudList.r">Action</th>
-                                <th *ngIf="crudList.u" id="edit">Retrive</th>
-                            </tr>
-    
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let item of IssueBillList  | filter:holdSearch.value index as index">
-                                <td>{{index+1}}</td>
-                                <td>{{item.invBillNo}}</td>
-                                <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
-                                <td>{{item.issueType}}</td>
-                                <td>{{item.locationTwoTitle}}</td>
-                                <td>{{item.netTotal | number:'1.0-0'}}</td>
-                                <td>{{item.entryUser}}</td>
-                                <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary" (click)="printBill(item)" >print</mat-icon></td>
-                                <td class="text-center cursorPointer" *ngIf=" item.invType == 'HI' && crudList.u"><mat-icon data-bs-dismiss="modal"  (click)="retriveBill(item)">edit</mat-icon></td>
-    
-                            </tr>
-                        </tbody>
-                    </table>
-                   
-            
-                </div>
-            
-              </div>
-            </div>
-          </div>
-
-
-      <!----------- Print Area For Bill Print --------------------->
-
-          <div id="printDiv" class="d-none" >
-            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
-                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
-                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
-                </span>
-                <span class="mt-3">
-                    <h3 class="companyName">{{item.companyName}}</h3>
-                    <p style="margin-top: -15px;">{{item.companyAddress}}</p>
-                    <!-- <p style="margin-top: -20px;">{{item.companyMobile}}  {{item.companyPhone}}</p>
-                    <p style="margin-top: -20px;">{{item.companyEmail}}</p> -->
-                </span>
-                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
-                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
-                </span>
-        
-        
-            </div>
        
-           <hr>
-           <h3 class="border border-dark w-100 text-center">Stock Issue Note  
-            <span class="badge text-danger" *ngIf="myBillStatus == false">UnApproved</span> 
-            <span class="badge text-success " *ngIf="myBillStatus == true">Approved</span> </h3>
-        <div class="d-flex mb-1">
-
-          <div class="d-flex border border-dark p-2 me-1 w-50">
-            <div class="row">
-                <label class="fw-bold" >Date:</label>
-                <label class="fw-bold" >Inv No:</label>
-                <label class="fw-bold" >Issued To:</label>
-                <label class="fw-bold" >Issued Type:</label>
-             
-            </div>
-            <div class="row">
-                <label >{{myInvoiceDate | date:'dd-MM-yyyy'}}</label>
-                <label >{{myInvoiceNo}}</label>
-                <label >{{myLocationTwoTitle}}</label>
-                <label >{{myIssueType}}</label>
-                
-            </div>
-          </div>
-           <div class="d-flex border border-dark p-2 w-50">
-            <div class="row">
-            
-                <label class="fw-bold" >Issued From:</label>
-                <label class="fw-bold" >Remarks:</label>
-            </div>
-            <div class="row">
-              
-                <label >{{myLocationTitle}}</label>
-                <label >{{myInvRemarks}}</label>
-            </div>
-           </div>
-
-        </div>
-        <table class="table table-purchase">
-            <thead>
-                <tr>
-                    <th>S#</th>
-                    <th class="col-lg-3">Product Name</th>
-                    <th class="text-center">Quantity</th>
-                    <th class=" text-center">Cost Price</th>
-                    <!-- <th class=" text-center">Sale Price</th> -->
-                    <th class=" text-center">Cost Total</th>
-                    <!-- <th class=" text-center">Sale Total</th> -->
-
-                </tr>
-            </thead>
-            <tbody style="height: 30px;">
-                <tr *ngFor="let item of myTableDataList index as index">
-                    <td class="text-center">{{index+1}}</td>
-            
-                    <td><div class="d-flex">
-                            <span style="width: 100px;">{{item.ProductTitle}}</span> 
-                            <span style="width: 150px;">({{item.barcode}})</span>
-                        </div></td>
-             
-                    <td class="text-center ">{{item.Quantity |number}}</td>
-                    <td class="text-end ">{{item.CostPrice |number: '1.0-1'}}</td>
-                    <!-- <td class="text-end ">{{item.SalePrice |number: '1.0-1'}}</td> -->
-                    <td class="text-end ">{{item.CostPrice * item.Quantity |number: '1.0-1'}}</td>
-                    <!-- <td class="text-end ">{{item.SalePrice * item.Quantity |number: '1.0-1'}}</td> -->
-
-                </tr>
-                <tr>
-                    <th colspan="2"></th>
-                    <th class="text-center">{{myBillTotalQty}}</th>
-                    <th></th>
-                    <!-- <th></th> -->
-                    <th class="text-end">{{myCPTotal | number:'1.0-1'}}</th>
-                    <!-- <th class="text-end">{{mySPTotal | number:'1.0-1'}}</th> -->
-                   
-                    <!-- <th class="text-end">{{mywohCPTotal | number:'1.0-1'}}</th> -->
-                    <!-- <th></th>
-                    <th></th> -->
-                </tr>
-            </tbody>
-        </table>
-        <div class="d-flex text-end border border-dark" style="text-align: end;">
-
-            <div class="row w-75">
-                <label class="fw-bold">Total</label>
-                <!-- <label class="fw-bold">OverHead</label>
-                <label class="fw-bold">Discount</label>
-                <label class="fw-bold">Net Total</label> -->
-            </div>
-            <div class="row w-25">
-                <label class="fw-bold">{{mySubTotal |number}}</label>
-                <!-- <label class="fw-bold">{{myOverHeadAmount}}</label>
-                <label class="fw-bold" >{{mydiscount}}</label>
-                <label class="fw-bold">{{(mySubTotal + myOverHeadAmount)-mydiscount}}</label> -->
-            </div>
-
-        </div>
-
-        <div class="d-flex justify-content-around mt-5">
-            <label class="border-0 border-top border-dark fw-bold">Created By</label>
-            <label class="border-0 border-top border-dark fw-bold" >Checked By</label>
-            <label class="border-0 border-top border-dark fw-bold">Approved By</label>
-        </div>
-      </div>
-
 
 
        </div>
 
     </div>
+
+
+                <!---------------     Modal Window for Retreiving Hold Bills --------------->
+                <div class="modal fade" id="holdModal" tabindex="-1" aria-labelledby="holdModalLabel" >
+                    <div class="modal-dialog mt-5  modal-xl">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h2 class="modal-title" id="holdModalLabel">Bill Details</h2>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+                        </div>
+                        <div class="modal-body">
+            
+                            <div class="d-flex justify-content-between">
+                                <mat-form-field class="col-lg-4" appearance="outline">
+                                    <mat-label>Date</mat-label>
+                                    <input matInput type="text" readonly="true" [(ngModel)]="Date" [matDatepicker]="hbDate">
+                                    <mat-datepicker-toggle matSuffix [for]="hbDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #hbDate ></mat-datepicker>
+                                </mat-form-field>
+                         
+            
+                                <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 bg-primary text-white btn-rpt" (click)="findHoldBills('HR')" >Hold Bill</button>
+                                <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt" (click)="findHoldBills('R')" >Issue Bill</button>
+            
+                               <mat-form-field class="col-lg-3" appearance="outline">
+                                <mat-label>Search.......</mat-label>
+                                <input matInput #holdSearch type="text" class="col-lg-4" >
+                               </mat-form-field>
+            
+                            </div>
+            
+                            <table class="table table-logix">
+                                <thead>
+                                    <tr>
+                                        <th>S#</th>
+                                        <th>Inv No.</th>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Location</th>
+                                        <th>Amount</th>
+                                        <th>User</th>
+                                        <th *ngIf="crudList.r">Action</th>
+                                        <th *ngIf="crudList.u" id="edit">Retrive</th>
+                                    </tr>
+            
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of IssueBillList  | filter:holdSearch.value index as index">
+                                        <td>{{index+1}}</td>
+                                        <td>{{item.invBillNo}}</td>
+                                        <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
+                                        <td>{{item.issueType}}</td>
+                                        <td>{{item.locationTitle}}</td>
+                                        <td>{{item.netTotal | number:'1.0-0'}}</td>
+                                        <td>{{item.entryUser}}</td>
+                                        <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary" (click)="printBill(item)" >print</mat-icon></td>
+                                        <td class="text-center cursorPointer" *ngIf=" item.invType == 'HR' && crudList.u"><mat-icon data-bs-dismiss="modal"  (click)="retriveBill(item)">edit</mat-icon></td>
+            
+                                    </tr>
+                                </tbody>
+                            </table>
+                           
+                    
+                        </div>
+                    
+                      </div>
+                    </div>
+                  </div>
+        
+        
+              <!----------- Print Area For Bill Print --------------------->
+        
+                  <div id="printDiv" class="d-none" >
+                    <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                        <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                            <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
+                        </span>
+                        <span class="mt-3">
+                            <h3 class="companyName">{{item.companyName}}</h3>
+                            <p style="margin-top: -15px;">{{item.companyAddress}}</p>
+                            <!-- <p style="margin-top: -20px;">{{item.companyMobile}}  {{item.companyPhone}}</p>
+                            <p style="margin-top: -20px;">{{item.companyEmail}}</p> -->
+                        </span>
+                        <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                            <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                        </span>
+                
+                
+                    </div>
+               
+                   <hr>
+                   <h3 class="border border-dark w-100 text-center">Stock Return Note  
+                    <span class="badge text-danger" *ngIf="myBillStatus == false">UnApproved</span> 
+                    <span class="badge text-success " *ngIf="myBillStatus == true">Approved</span> </h3>
+                <div class="d-flex mb-1">
+        
+                  <div class="d-flex border border-dark p-2 me-1 w-50">
+                    <div class="row">
+                        <label class="fw-bold" >Date:</label>
+                        <label class="fw-bold" >Inv No:</label>
+                        <label class="fw-bold" >Issued To:</label>
+                        <label class="fw-bold" >Issued Type:</label>
+                     
+                    </div>
+                    <div class="row">
+                        <label >{{myInvoiceDate | date:'dd-MM-yyyy'}}</label>
+                        <label >{{myInvoiceNo}}</label>
+                        <label >{{myLocationTwoTitle}}</label>
+                        <label >{{myIssueType}}</label>
+                        
+                    </div>
+                  </div>
+                   <div class="d-flex border border-dark p-2 w-50">
+                    <div class="row">
+                    
+                        <label class="fw-bold" >Issued From:</label>
+                        <label class="fw-bold" >Remarks:</label>
+                    </div>
+                    <div class="row">
+                      
+                        <label >{{myLocationTitle}}</label>
+                        <label >{{myInvRemarks}}</label>
+                    </div>
+                   </div>
+        
+                </div>
+                <table class="table table-purchase">
+                    <thead>
+                        <tr>
+                            <th>S#</th>
+                            <th class="col-lg-3">Product Name</th>
+                            <th class="text-center">Quantity</th>
+                            <th class=" text-center">Cost Price</th>
+                            <th class=" text-center">Avg Cost</th>
+                            <!-- <th class=" text-center">Sale Price</th> -->
+                            <th class=" text-center">Cost Total</th>
+                            <th class=" text-center">Avg Cost Total</th>
+                            <!-- <th class=" text-center">Sale Total</th> -->
+        
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <tr *ngFor="let item of myTableDataList index as index">
+                            <td class="text-center">{{index+1}}</td>
+                    
+                            <td><div class="d-flex">
+                                    <span style="width: 100px;">{{item.ProductTitle}}</span> 
+                                    <span style="width: 150px;">({{item.barcode}})</span>
+                                </div></td>
+                     
+                            <td class="text-center ">{{item.Quantity |number}}</td>
+                            <td class="text-end ">{{item.CostPrice |number: '1.0-1'}}</td>
+                            <td class="text-end ">{{item.avgCostPrice |number: '1.0-1'}}</td>
+                            <!-- <td class="text-end ">{{item.SalePrice |number: '1.0-1'}}</td> -->
+                            <td class="text-end ">{{item.CostPrice * item.Quantity |number: '1.0-1'}}</td>
+                            <td class="text-end ">{{item.avgCostPrice * item.Quantity |number: '1.0-1'}}</td>
+                            <!-- <td class="text-end ">{{item.SalePrice * item.Quantity |number: '1.0-1'}}</td> -->
+        
+                        </tr>
+                        <tr>
+                            <th colspan="2"></th>
+                            <th class="text-center">{{myBillTotalQty}}</th>
+                            <th></th>
+                            <th></th>
+                            <th class="text-end">{{myCPTotal | number:'1.0-1'}}</th>
+                            <th class="text-end">{{myAvgCPTotal | number:'1.0-1'}}</th>
+                            <!-- <th class="text-end">{{mySPTotal | number:'1.0-1'}}</th> -->
+                           
+                            <!-- <th class="text-end">{{mywohCPTotal | number:'1.0-1'}}</th> -->
+                            <!-- <th></th>
+                            <th></th> -->
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="d-flex text-end border border-dark" style="text-align: end;">
+        
+                    <div class="row w-75">
+                        <label class="fw-bold">Total</label>
+                        <!-- <label class="fw-bold">OverHead</label>
+                        <label class="fw-bold">Discount</label>
+                        <label class="fw-bold">Net Total</label> -->
+                    </div>
+                    <div class="row w-25">
+                        <label class="fw-bold">{{mySubTotal |number}}</label>
+                        <!-- <label class="fw-bold">{{myOverHeadAmount}}</label>
+                        <label class="fw-bold" >{{mydiscount}}</label>
+                        <label class="fw-bold">{{(mySubTotal + myOverHeadAmount)-mydiscount}}</label> -->
+                    </div>
+        
+                </div>
+        
+                <div class="d-flex justify-content-around mt-5">
+                    <label class="border-0 border-top border-dark fw-bold">Created By</label>
+                    <label class="border-0 border-top border-dark fw-bold" >Checked By</label>
+                    <label class="border-0 border-top border-dark fw-bold">Approved By</label>
+                </div>
+              </div>
+        
 
 </div>

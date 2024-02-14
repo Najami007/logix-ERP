@@ -8,6 +8,7 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { AddAreaComponent } from './add-area/add-area.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cookingarea',
@@ -16,14 +17,20 @@ import { AddAreaComponent } from './add-area/add-area.component';
 })
 export class CookingareaComponent implements OnInit {
 
-
+  crudList:any = {c:true,r:true,u:true,d:true};
   constructor(
     private http:HttpClient,
     private msg:NotificationService,
     private global:GlobalDataModule,
     private app:AppComponent,
-    private dialogue:MatDialog
-  ){}
+    private dialogue:MatDialog,
+    private route:Router
+  ){
+    this.global.getMenuList().subscribe((data)=>{
+      this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    })
+
+  }
 
 
 

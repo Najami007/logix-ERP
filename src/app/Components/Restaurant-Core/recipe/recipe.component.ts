@@ -15,17 +15,17 @@ import { MapWHProductComponent } from './map-whproduct/map-whproduct.component';
   templateUrl: './recipe.component.html',
   styleUrls: ['./recipe.component.scss']
 })
-export class RecipeComponent implements OnInit{
-    tabIndex = 0;
-  crudList:any = [];
+export class RecipeComponent implements OnInit {
+  tabIndex = 0;
+  crudList: any = { c: true, r: true, u: true, d: true };
   constructor(
-    private http:HttpClient,
-    private msg:NotificationService,
-    private app:AppComponent,
-    public global:GlobalDataModule,
-    private dialog:MatDialog,
-    private route:Router
-  ){
+    private http: HttpClient,
+    private msg: NotificationService,
+    private app: AppComponent,
+    public global: GlobalDataModule,
+    private dialog: MatDialog,
+    private route: Router
+  ) {
 
     this.global.getMenuList().subscribe((data) => {
 
@@ -33,208 +33,208 @@ export class RecipeComponent implements OnInit{
     })
 
 
-    
+
     this.global.getProducts().subscribe(
-      (data:any)=>{this.productList = data;})
+      (data: any) => { this.productList = data; })
   }
 
 
 
   ngOnInit(): void {
-   this.global.setHeaderTitle('Recipe');
-   this.getAllRecipe();
-   this.getCategories();
-   this.getCookingArea()
+    this.global.setHeaderTitle('Recipe');
+    this.getAllRecipe();
+    this.getCategories();
+    this.getCookingArea()
   }
 
   cookingAriaID = 0;
   btnType = 'Save';
   recipeID = 0;
-  recipeTitle:any;
-  recipeImg:any;
-  salePrice:any;
-  costPrice:any;
+  recipeTitle: any;
+  recipeImg: any;
+  salePrice: any;
+  costPrice: any;
   recipeRefID = 0;
-  Description:any;
-  PBarcode:any;
-  productImage:any;
+  Description: any;
+  PBarcode: any;
+  productImage: any;
   recipeType = 'Dine In';
   cookingTime = '';
-  costTotal:number = 0;
-  avgCostTotal:number = 0;
+  costTotal: number = 0;
+  avgCostTotal: number = 0;
   projectID = this.global.InvProjectID;
 
-  totalQty:any = 0;
-  productList:any = [];
+  totalQty: any = 0;
+  productList: any = [];
 
-  menuProdList:any = [];
+  menuProdList: any = [];
 
-  RecipeList:any = [];
-
-
-  categoryID:number = 0;
-  categoriesList:any = [];
-  cookingAreaList:any = [];
+  RecipeList: any = [];
 
 
-  getCookingArea(){
-    this.http.get(environment.mainApi+this.global.restaurentLink+'GetCookingAria').subscribe(
-      (Response:any)=>{
+  categoryID: number = 0;
+  categoriesList: any = [];
+  cookingAreaList: any = [];
+
+
+  getCookingArea() {
+    this.http.get(environment.mainApi + this.global.restaurentLink + 'GetCookingAria').subscribe(
+      (Response: any) => {
         this.cookingAreaList = Response;
       }
     )
   }
 
 
-  getCategories(){
-    this.http.get(environment.mainApi+this.global.restaurentLink+'GetRecipeCategories').subscribe(
-      (Response:any)=>{
-        this.categoriesList = Response.filter((e:any)=>e.prodFlag == false);
-      
+  getCategories() {
+    this.http.get(environment.mainApi + this.global.restaurentLink + 'GetRecipeCategories').subscribe(
+      (Response: any) => {
+        this.categoriesList = Response.filter((e: any) => e.prodFlag == false);
+
       }
     )
   }
 
-  getAllRecipe(){
-    this.http.get(environment.mainApi+this.global.restaurentLink+'GetAllRecipes').subscribe(
-      (Response:any)=>{
+  getAllRecipe() {
+    this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipes').subscribe(
+      (Response: any) => {
         this.RecipeList = Response;
-     
+
       }
     )
   }
 
-  showImg(item:any){
-    
-    var index = this.menuProdList.findIndex((e:any)=> e.productID == item.productID);
+  showImg(item: any) {
+
+    var index = this.menuProdList.findIndex((e: any) => e.productID == item.productID);
     this.productImage = this.menuProdList[index].productImage;
-  
+
   }
 
 
-  changeValue(item:any){
+  changeValue(item: any) {
     var myIndex = this.menuProdList.indexOf(item);
-   
+
     var myQty = this.menuProdList[myIndex].quantity;
     var myCP = this.menuProdList[myIndex].costPrice;
     var mySP = this.menuProdList[myIndex].salePrice;
-    if(myCP == null || myCP == '' || myCP == undefined){
-     
+    if (myCP == null || myCP == '' || myCP == undefined) {
+
       this.menuProdList[myIndex].costPrice = 0;
-    }else if(myQty == null || myQty == '' || myQty == undefined){
+    } else if (myQty == null || myQty == '' || myQty == undefined) {
       this.menuProdList[myIndex].quantity = 0;
-    }else if(mySP == null || mySP == '' || mySP == undefined){
+    } else if (mySP == null || mySP == '' || mySP == undefined) {
       this.menuProdList[myIndex].salePrice = 0;
     }
-   }
+  }
 
 
-  
-  searchByCode(e:any){
 
-    if(this.PBarcode !== ''){
-      if(e.keyCode == 13){
+  searchByCode(e: any) {
+
+    if (this.PBarcode !== '') {
+      if (e.keyCode == 13) {
         ///// check the product in product list by barcode
-        var row =  this.productList.find((p:any)=> p.barcode == this.PBarcode);
-   
+        var row = this.productList.find((p: any) => p.barcode == this.PBarcode);
+
         /////// check already present in the table or not
-        if(row !== undefined){
+        if (row !== undefined) {
           var condition = this.menuProdList.find(
             (x: any) => x.productID == row.productID
           );
-      
+
           var index = this.menuProdList.indexOf(condition);
-      
+
           //// push the data using index
           if (condition == undefined) {
 
 
-            
 
-           
-            this.global.getProdDetail(0,this.PBarcode).subscribe(
-              (Response:any)=>{
-              
-                 if(this.recipeType == 'Dine In'){
+
+
+            this.global.getProdDetail(0, this.PBarcode).subscribe(
+              (Response: any) => {
+
+                if (this.recipeType == 'Dine In') {
                   this.menuProdList.push({
-                    productID:Response[0].productID,
-                    productTitle:Response[0].productTitle,
-                    barcode:Response[0].barcode,
-                    productImage:Response[0].productImage,
-                    quantity:1,
-                    wohCP:Response[0].costPrice,
-                    avgCostPrice:Response[0].avgCostPrice,
-                    costPrice:Response[0].costPrice,
-                    salePrice:Response[0].salePrice,
-                    ovhPercent:0,
-                    ovhAmount:0,
-                    expiryDate:this.global.dateFormater(new Date(),'-'),
-                    batchNo:'-',
-                    batchStatus:'-',
-                    uomID:Response[0].uomID,
-                    packing:1,
-                    discInP:0,
-                    discInR:0,
-                    aq:Response[0].aq,
-                    lockedStatus:true,
+                    productID: Response[0].productID,
+                    productTitle: Response[0].productTitle,
+                    barcode: Response[0].barcode,
+                    productImage: Response[0].productImage,
+                    quantity: 1,
+                    wohCP: Response[0].costPrice,
+                    avgCostPrice: Response[0].avgCostPrice,
+                    costPrice: Response[0].costPrice,
+                    salePrice: Response[0].salePrice,
+                    ovhPercent: 0,
+                    ovhAmount: 0,
+                    expiryDate: this.global.dateFormater(new Date(), '-'),
+                    batchNo: '-',
+                    batchStatus: '-',
+                    uomID: Response[0].uomID,
+                    packing: 1,
+                    discInP: 0,
+                    discInR: 0,
+                    aq: Response[0].aq,
+                    lockedStatus: true,
                   });
-                 }else{
+                } else {
                   this.menuProdList.push({
-                    productID:Response[0].productID,
-                    productTitle:Response[0].productTitle,
-                    barcode:Response[0].barcode,
-                    productImage:Response[0].productImage,
-                    quantity:1,
-                    wohCP:Response[0].costPrice,
-                    avgCostPrice:Response[0].avgCostPrice,
-                    costPrice:Response[0].costPrice,
-                    salePrice:Response[0].salePrice,
-                    ovhPercent:0,
-                    ovhAmount:0,
-                    expiryDate:this.global.dateFormater(new Date(),'-'),
-                    batchNo:'-',
-                    batchStatus:'-',
-                    uomID:Response[0].uomID,
-                    packing:1,
-                    discInP:0,
-                    discInR:0,
-                    aq:Response[0].aq,
-                    lockedStatus:false,
+                    productID: Response[0].productID,
+                    productTitle: Response[0].productTitle,
+                    barcode: Response[0].barcode,
+                    productImage: Response[0].productImage,
+                    quantity: 1,
+                    wohCP: Response[0].costPrice,
+                    avgCostPrice: Response[0].avgCostPrice,
+                    costPrice: Response[0].costPrice,
+                    salePrice: Response[0].salePrice,
+                    ovhPercent: 0,
+                    ovhAmount: 0,
+                    expiryDate: this.global.dateFormater(new Date(), '-'),
+                    batchNo: '-',
+                    batchStatus: '-',
+                    uomID: Response[0].uomID,
+                    packing: 1,
+                    discInP: 0,
+                    discInR: 0,
+                    aq: Response[0].aq,
+                    lockedStatus: false,
                   });
-                 }
-                  this.getTotal();
-            
+                }
+                this.getTotal();
+
 
                 this.productImage = Response[0].productImage;
               }
             )
-      
-          
-        
-          this.PBarcode = '';
-          $('#searchProduct').trigger('focus');
-        }else {
-          this.menuProdList[index].quantity += 1;
-          this.productImage = this.menuProdList[index].productImage;
-       
-          this.PBarcode = '';
-          $('#searchProduct').trigger('focus');
-        }
-        }else{
+
+
+
+            this.PBarcode = '';
+            $('#searchProduct').trigger('focus');
+          } else {
+            this.menuProdList[index].quantity += 1;
+            this.productImage = this.menuProdList[index].productImage;
+
+            this.PBarcode = '';
+            $('#searchProduct').trigger('focus');
+          }
+        } else {
           this.msg.WarnNotify('Product Not Found')
         }
-     
-       
-       this.PBarcode = '';
-   
-       }
+
+
+        this.PBarcode = '';
+
+      }
     }
 
-   
+
   }
 
-  holdDataFunction(data:any){
-  var condition = this.menuProdList.find(
+  holdDataFunction(data: any) {
+    var condition = this.menuProdList.find(
       (x: any) => x.productID == data.productID
     );
 
@@ -242,86 +242,86 @@ export class RecipeComponent implements OnInit{
 
     if (condition == undefined) {
 
-      this.global.getProdDetail(data.productID,'').subscribe(
-        (Response:any)=>{
-          
+      this.global.getProdDetail(data.productID, '').subscribe(
+        (Response: any) => {
 
-          
-            if(this.recipeType == 'Dine In'){
-              this.menuProdList.push({
-                productID:Response[0].productID,
-                productTitle:Response[0].productTitle,
-                barcode:Response[0].barcode,
-                productImage:Response[0].productImage,
-                quantity:1,
-                wohCP:Response[0].costPrice,
-                costPrice:Response[0].costPrice,
-                avgCostPrice:Response[0].avgCostPrice,
-                salePrice:Response[0].salePrice,
-                ovhPercent:0,
-                ovhAmount:0,
-                expiryDate:this.global.dateFormater(new Date(),'-'),
-                batchNo:'-',
-                batchStatus:'-',
-                uomID:Response[0].uomID,
-                packing:1,
-                discInP:0,
-                discInR:0,
-                aq:Response[0].aq,
-                lockedStatus:true,
-          
-              })
-            }else{
-              this.menuProdList.push({
-                productID:Response[0].productID,
-                productTitle:Response[0].productTitle,
-                barcode:Response[0].barcode,
-                productImage:Response[0].productImage,
-                quantity:1,
-                wohCP:Response[0].costPrice,
-                costPrice:Response[0].costPrice,
-                avgCostPrice:Response[0].avgCostPrice,
-                salePrice:Response[0].salePrice,
-                ovhPercent:0,
-                ovhAmount:0,
-                expiryDate:this.global.dateFormater(new Date(),'-'),
-                batchNo:'-',
-                batchStatus:'-',
-                uomID:Response[0].uomID,
-                packing:1,
-                discInP:0,
-                discInR:0,
-                aq:Response[0].aq,
-                lockedStatus:false,
-          
-              })
-            }
-            this.getTotal();
-           
-          
-         this.productImage = Response[0].productImage;
+
+
+          if (this.recipeType == 'Dine In') {
+            this.menuProdList.push({
+              productID: Response[0].productID,
+              productTitle: Response[0].productTitle,
+              barcode: Response[0].barcode,
+              productImage: Response[0].productImage,
+              quantity: 1,
+              wohCP: Response[0].costPrice,
+              costPrice: Response[0].costPrice,
+              avgCostPrice: Response[0].avgCostPrice,
+              salePrice: Response[0].salePrice,
+              ovhPercent: 0,
+              ovhAmount: 0,
+              expiryDate: this.global.dateFormater(new Date(), '-'),
+              batchNo: '-',
+              batchStatus: '-',
+              uomID: Response[0].uomID,
+              packing: 1,
+              discInP: 0,
+              discInR: 0,
+              aq: Response[0].aq,
+              lockedStatus: true,
+
+            })
+          } else {
+            this.menuProdList.push({
+              productID: Response[0].productID,
+              productTitle: Response[0].productTitle,
+              barcode: Response[0].barcode,
+              productImage: Response[0].productImage,
+              quantity: 1,
+              wohCP: Response[0].costPrice,
+              costPrice: Response[0].costPrice,
+              avgCostPrice: Response[0].avgCostPrice,
+              salePrice: Response[0].salePrice,
+              ovhPercent: 0,
+              ovhAmount: 0,
+              expiryDate: this.global.dateFormater(new Date(), '-'),
+              batchNo: '-',
+              batchStatus: '-',
+              uomID: Response[0].uomID,
+              packing: 1,
+              discInP: 0,
+              discInR: 0,
+              aq: Response[0].aq,
+              lockedStatus: false,
+
+            })
+          }
+          this.getTotal();
+
+
+          this.productImage = Response[0].productImage;
         }
       )
 
 
-  
-    
-    this.PBarcode = '';
-    $('#searchProduct').trigger('focus');
-  }else {
-    if(this.menuProdList[index].disable == false){
-      this.menuProdList[index].quantity += 1;
-    }else{
-      this.msg.WarnNotify('Can Not Edit this Product')
-    }
-   
-    this.productImage = this.menuProdList[index].productImage;
-    
-    this.PBarcode = '';
-    $('#searchProduct').trigger('focus');
-  }
 
-  this.getTotal();
+
+      this.PBarcode = '';
+      $('#searchProduct').trigger('focus');
+    } else {
+      if (this.menuProdList[index].disable == false) {
+        this.menuProdList[index].quantity += 1;
+      } else {
+        this.msg.WarnNotify('Can Not Edit this Product')
+      }
+
+      this.productImage = this.menuProdList[index].productImage;
+
+      this.PBarcode = '';
+      $('#searchProduct').trigger('focus');
+    }
+
+    this.getTotal();
     this.PBarcode = '';
     return false;
   }
@@ -329,81 +329,82 @@ export class RecipeComponent implements OnInit{
 
 
   rowFocused = 0;
-  handleNumKeys(item:any ,e:any,cls:string,index:any){
+  handleNumKeys(item: any, e: any, cls: string, index: any) {
 
-    if(e.keyCode == 9){
-      this.rowFocused = index +1;
-     }
-  
-     if(e.shiftKey && e.keyCode == 9 ){
-    
+    if (e.keyCode == 9) {
+      this.rowFocused = index + 1;
+    }
+
+    if (e.shiftKey && e.keyCode == 9) {
+
       this.rowFocused = index - 1;
-     }
+    }
 
 
     if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
       // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
-  }
-  else {
+    }
+    else {
       e.preventDefault();
-  }
+    }
 
-  /////move down
-    if(e.keyCode == 40){
-     
-     if(this.menuProdList.length > 1 ){
-      this.rowFocused += 1;
-      if (this.rowFocused >= this.menuProdList.length) {      
-        this.rowFocused -= 1  
-    } else {
-        var clsName = cls + this.rowFocused;    
-        $(clsName).trigger('focus');    
-    }}
-  }
+    /////move down
+    if (e.keyCode == 40) {
+
+      if (this.menuProdList.length > 1) {
+        this.rowFocused += 1;
+        if (this.rowFocused >= this.menuProdList.length) {
+          this.rowFocused -= 1
+        } else {
+          var clsName = cls + this.rowFocused;
+          $(clsName).trigger('focus');
+        }
+      }
+    }
 
 
-     //Move up
-     if (e.keyCode == 38) {
+    //Move up
+    if (e.keyCode == 38) {
 
       if (this.rowFocused == 0) {
-          $(".searchProduct").trigger('focus');
-          this.rowFocused = 0;
- 
+        $(".searchProduct").trigger('focus');
+        this.rowFocused = 0;
+
       }
 
       if (this.menuProdList.length > 1) {
 
-          this.rowFocused -= 1;
+        this.rowFocused -= 1;
 
-          var clsName = cls + this.rowFocused;
-          $(clsName).trigger('focus');
-          
+        var clsName = cls + this.rowFocused;
+        $(clsName).trigger('focus');
+
 
       }
 
-  }
+    }
 
     ////removeing row
     if (e.keyCode == 46) {
 
       this.delRow(item);
       this.rowFocused = 0;
-  }
+    }
 
   }
 
-  focusToQty(e:any){
-    if(e.keyCode == 40){
-      
-      if(this.menuProdList.length >= 1 ){  
-         $('.qty0').trigger('focus');
+  focusToQty(e: any) {
+    if (e.keyCode == 40) {
+
+      if (this.menuProdList.length >= 1) {
+        $('.qty0').trigger('focus');
 
       }
-     }
-   }
+    }
+  }
 
-   handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[],index:any){
-    
+  handleProdFocus(item: any, e: any, cls: any, endFocus: any, prodList: [], index: any) {
+
     // if(e.shiftKey && e.keyCode == 9 ){
     //     this.prodFocusedRow = index - 1; 
     //     var clsName = cls + this.prodFocusedRow; 
@@ -411,84 +412,86 @@ export class RecipeComponent implements OnInit{
     //  }
 
     /////move down
-    if(e.keyCode == 40|| e.keyCode == 9){
+    if (e.keyCode == 40 || e.keyCode == 9) {
 
- 
-      if(prodList.length > 1 ){
-       this.prodFocusedRow += 1;
-       if (this.prodFocusedRow >= prodList.length) {      
-         this.prodFocusedRow -= 1  
-     } else {
-         var clsName = cls + this.prodFocusedRow;    
-        //  alert(clsName);
-         $(clsName).trigger('focus');
-       
-     }}
-   }
- 
- 
-      //Move up
-      if (e.keyCode == 38) {
- 
-       if (this.prodFocusedRow == 0) {
-           $(endFocus).trigger('focus');
-           this.prodFocusedRow = 0;
-  
-       }
- 
-       if (prodList.length > 1) {
- 
-           this.prodFocusedRow -= 1;
- 
-           var clsName = cls + this.prodFocusedRow;
+
+      if (prodList.length > 1) {
+        this.prodFocusedRow += 1;
+        if (this.prodFocusedRow >= prodList.length) {
+          this.prodFocusedRow -= 1
+        } else {
+          var clsName = cls + this.prodFocusedRow;
           //  alert(clsName);
-           $(clsName).trigger('focus');
-           
- 
-       }
- 
-   }
+          $(clsName).trigger('focus');
+
+        }
+      }
+    }
+
+
+    //Move up
+    if (e.keyCode == 38) {
+
+      if (this.prodFocusedRow == 0) {
+        $(endFocus).trigger('focus');
+        this.prodFocusedRow = 0;
+
+      }
+
+      if (prodList.length > 1) {
+
+        this.prodFocusedRow -= 1;
+
+        var clsName = cls + this.prodFocusedRow;
+        //  alert(clsName);
+        $(clsName).trigger('focus');
+
+
+      }
+
+    }
 
   }
 
-   prodFocusedRow =0;
-   changeFocus(e:any, cls:any){
+  prodFocusedRow = 0;
+  changeFocus(e: any, cls: any) {
 
-    if(e.target.value == ''){
-      if(e.keyCode == 40){
-        
-        if(this.menuProdList.length >= 1 ){ 
-          this.rowFocused = 0; 
-           $('.qty0').trigger('focus');
-  
+    if (e.target.value == '') {
+      if (e.keyCode == 40) {
+
+        if (this.menuProdList.length >= 1) {
+          this.rowFocused = 0;
+          $('.qty0').trigger('focus');
+
         }
-       }
-    }else{
+      }
+    } else {
       this.prodFocusedRow = 0;
-        /////move down
-        if(e.keyCode == 40){
-          if(this.productList.length >= 1 ){  
-            $('.prodRow0').trigger('focus');
-            // e.which = 9;   
-            // $('.prodRow0').trigger(e)  ;
-         }  
-       }}
-     }
+      /////move down
+      if (e.keyCode == 40) {
+        if (this.productList.length >= 1) {
+          $('.prodRow0').trigger('focus');
+          // e.which = 9;   
+          // $('.prodRow0').trigger(e)  ;
+        }
+      }
+    }
+  }
 
 
 
-  onProdSelect(row:any){
+  onProdSelect(row: any) {
 
-    if(this.menuProdList.find((e:any)=> e.productID == row.productID)){
-    this.msg.WarnNotify('Item Already Exist')    
-    }else{
+    if (this.menuProdList.find((e: any) => e.productID == row.productID)) {
+      this.msg.WarnNotify('Item Already Exist')
+    } else {
 
       this.menuProdList.push({
-        productID : row.productID,
-        productTitle:row.productTitle,
-        quantity :1,
-        costPrice:row.costPrice,
-      
+        productID: row.productID,
+        productTitle: row.productTitle,
+        quantity: 1,
+        costPrice: row.costPrice,
+
       })
     }
 
@@ -498,181 +501,181 @@ export class RecipeComponent implements OnInit{
   }
 
 
-  getTotal(){
+  getTotal() {
     this.costPrice = 0;
     this.totalQty = 0;
     this.avgCostTotal = 0;
     this.costTotal = 0;
 
-    this.menuProdList.forEach((e:any) => {
+    this.menuProdList.forEach((e: any) => {
       this.costPrice += e.costPrice * e.quantity;
       this.totalQty += parseFloat(e.quantity);
-      this.avgCostTotal +=  e.avgCostPrice * e.quantity;
-      this.costTotal +=  e.costPrice * e.quantity;
+      this.avgCostTotal += e.avgCostPrice * e.quantity;
+      this.costTotal += e.costPrice * e.quantity;
     });
-    
+
   }
 
 
 
-  delRow(row:any){
+  delRow(row: any) {
     var index = this.menuProdList.indexOf(row);
-    this.menuProdList.splice(index,1);
+    this.menuProdList.splice(index, 1);
     this.getTotal();
   }
 
 
 
 
-  onImgSelected(event:any) {
+  onImgSelected(event: any) {
 
-  
-    var imgSize = event.target.files[0].size ;
-    var isConvert:number = parseFloat((imgSize / 1048576).toFixed(2));
 
-    if(isConvert > 1){
-      
-       this.msg.WarnNotify('File Size is more than 1MB');
+    var imgSize = event.target.files[0].size;
+    var isConvert: number = parseFloat((imgSize / 1048576).toFixed(2));
+
+    if (isConvert > 1) {
+
+      this.msg.WarnNotify('File Size is more than 1MB');
     }
-    else{
+    else {
 
-    ////////////// will check the file type ////////////////
-      if(this.global.getExtension(event.target.value) != 'pdf'){   
+      ////////////// will check the file type ////////////////
+      if (this.global.getExtension(event.target.value) != 'pdf') {
         let targetEvent = event.target;
 
-    /////////// assign the targeted file to file variable
-        let file:File = targetEvent.files[0];   
-    
-        let fileReader:FileReader = new FileReader();
-    
-     //////////////// if the file is other than pdf eill assign to product img varialb
-        fileReader.onload =(e)=>{
-          this.recipeImg = fileReader.result;          
-        }
-    
-        fileReader.readAsDataURL(file);
-    
-      }else{
-    
-          this.msg.WarnNotify('File Must Be in jpg or png formate');
-          event.target.value = '';
-          this.recipeImg = '';
+        /////////// assign the targeted file to file variable
+        let file: File = targetEvent.files[0];
+
+        let fileReader: FileReader = new FileReader();
+
+        //////////////// if the file is other than pdf eill assign to product img varialb
+        fileReader.onload = (e) => {
+          this.recipeImg = fileReader.result;
         }
 
+        fileReader.readAsDataURL(file);
+
+      } else {
+
+        this.msg.WarnNotify('File Must Be in jpg or png formate');
+        event.target.value = '';
+        this.recipeImg = '';
+      }
+
     }
- 
-    
+
+
   }
 
 
 
-  save(){
+  save() {
     var isValidFlag = true;
-    this.menuProdList.forEach((e:any) => {
-      
-      if(e.quantity == 0 || e.quantity == '0' || e.quantity == '' || e.quantity == undefined || e.quantity == null){
-        this.msg.WarnNotify('('+e.productTitle+') Quantity is not Valid');
+    this.menuProdList.forEach((e: any) => {
+
+      if (e.quantity == 0 || e.quantity == '0' || e.quantity == '' || e.quantity == undefined || e.quantity == null) {
+        this.msg.WarnNotify('(' + e.productTitle + ') Quantity is not Valid');
         isValidFlag = false;
-         return;
+        return;
       }
 
 
     });
 
-    if(this.recipeTitle == '' || this.recipeTitle == undefined){
+    if (this.recipeTitle == '' || this.recipeTitle == undefined) {
       this.msg.WarnNotify('Enter Recipe Title')
-    }else if(this.costPrice == 0 || this.costPrice == '' || this.costPrice == undefined){
+    } else if (this.costPrice == 0 || this.costPrice == '' || this.costPrice == undefined) {
       this.msg.WarnNotify('Select Ingredients')
-    }else if(this.salePrice == 0 || this.salePrice == '' || this.salePrice == undefined){
+    } else if (this.salePrice == 0 || this.salePrice == '' || this.salePrice == undefined) {
       this.msg.WarnNotify('Enter Receipe Sale Price')
-    }else if(this.recipeImg == '' || this.recipeImg == undefined){
+    } else if (this.recipeImg == '' || this.recipeImg == undefined) {
       this.msg.WarnNotify('Select Recipe Image')
-    }else if(this.categoryID == 0 || this.categoryID == undefined){
+    } else if (this.categoryID == 0 || this.categoryID == undefined) {
       this.msg.WarnNotify('Select Category');
-    }else if(this.cookingAriaID == 0 || this.cookingAriaID == undefined){
+    } else if (this.cookingAriaID == 0 || this.cookingAriaID == undefined) {
       this.msg.WarnNotify('Select Cooking area');
-    }else if(this.costPrice > this.salePrice ){
+    } else if (this.costPrice > this.salePrice) {
       this.msg.WarnNotify('Receipe Cost is not Valid')
-    }else if(this.recipeType == '' || this.recipeType == undefined){
+    } else if (this.recipeType == '' || this.recipeType == undefined) {
       this.msg.WarnNotify('Select Recipe Type');
-    }else if(this.cookingTime == '' || this.cookingTime == '0' || this.cookingTime == undefined){
+    } else if (this.cookingTime == '' || this.cookingTime == '0' || this.cookingTime == undefined) {
       this.msg.WarnNotify('Enter Recipe Cooking Time')
     }
     else {
 
-      if(this.Description == '' || this.Description == undefined){
+      if (this.Description == '' || this.Description == undefined) {
         this.Description = '-';
       }
-     
 
-      if(isValidFlag){
-        if(this.btnType == 'Save'){
+
+      if (isValidFlag) {
+        if (this.btnType == 'Save') {
           this.app.startLoaderDark();
-          this.http.post(environment.mainApi+this.global.restaurentLink+'InsertRecipe',{
+          this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertRecipe', {
             RecipeTitle: this.recipeTitle,
             RecipeDescription: this.Description,
             RecipeCostPrice: this.costPrice,
             RecipeSalePrice: this.salePrice,
-            RecipeCatID:this.categoryID,
+            RecipeCatID: this.categoryID,
             ProjectID: this.projectID,
             RecipeImage: this.recipeImg,
-            RecipeType:this.recipeType,
-            CookingTime:this.cookingTime,
-            CookingAriaID:this.cookingAriaID,
-            RecipeDetail: JSON.stringify(this.menuProdList) ,
-        
+            RecipeType: this.recipeType,
+            CookingTime: this.cookingTime,
+            CookingAriaID: this.cookingAriaID,
+            RecipeDetail: JSON.stringify(this.menuProdList),
+
             UserID: this.global.getUserID(),
           }).subscribe(
-            (Response:any)=>{
-              if(Response.msg == 'Data Saved Successfully'){
+            (Response: any) => {
+              if (Response.msg == 'Data Saved Successfully') {
                 this.msg.SuccessNotify(Response.msg);
                 this.getAllRecipe();
                 this.reset();
                 this.app.stopLoaderDark();
-              }else{
+              } else {
                 this.msg.WarnNotify(Response.msg);
                 this.app.stopLoaderDark();
               }
             }
           )
-        }else if(this.btnType == 'Update'){
-         
-          this.global.openPinCode().subscribe(pin=>{
-            if(pin != ''){
+        } else if (this.btnType == 'Update') {
+
+          this.global.openPinCode().subscribe(pin => {
+            if (pin != '') {
               this.app.startLoaderDark();
-              this.http.post(environment.mainApi+this.global.restaurentLink+'UpdateRecipe',{
+              this.http.post(environment.mainApi + this.global.restaurentLink + 'UpdateRecipe', {
                 RecipeID: this.recipeID,
                 RecipeTitle: this.recipeTitle,
                 RecipeDescription: this.Description,
                 RecipeCostPrice: this.costPrice,
                 RecipeSalePrice: this.salePrice,
-                RecipeType:this.recipeType,
-                RecipeRefID:this.recipeRefID,
-                CookingTime:this.cookingTime,
-                CookingAriaID:this.cookingAriaID,
-                RecipeCatID:this.categoryID,
+                RecipeType: this.recipeType,
+                RecipeRefID: this.recipeRefID,
+                CookingTime: this.cookingTime,
+                CookingAriaID: this.cookingAriaID,
+                RecipeCatID: this.categoryID,
                 ProjectID: this.projectID,
                 RecipeImage: this.recipeImg,
-                PinCode:pin,
-            
-                RecipeDetail: JSON.stringify(this.menuProdList) ,
-            
+                PinCode: pin,
+
+                RecipeDetail: JSON.stringify(this.menuProdList),
+
                 UserID: this.global.getUserID(),
               }).subscribe(
-                (Response:any)=>{
-                  if(Response.msg == 'Data Updated Successfully'){
+                (Response: any) => {
+                  if (Response.msg == 'Data Updated Successfully') {
                     this.msg.SuccessNotify(Response.msg);
                     this.getAllRecipe();
                     this.reset();
                     this.app.stopLoaderDark();
-                  }else{
+                  } else {
                     this.msg.WarnNotify(Response.msg);
                     this.app.stopLoaderDark();
                   }
                 }
               )
             }
-          })       
+          })
         }
       }
 
@@ -681,8 +684,8 @@ export class RecipeComponent implements OnInit{
   }
 
 
-  edit(item:any){
-  
+  edit(item: any) {
+
     this.btnType = 'Update';
     this.tabIndex = 0;
     this.recipeType = item.recipeType;
@@ -694,37 +697,37 @@ export class RecipeComponent implements OnInit{
     this.recipeImg = item.recipeImage;
     this.recipeRefID = item.recipeRefID;
     this.Description = item.recipeDescription;
-    this.cookingTime  = item.cookingTime;
+    this.cookingTime = item.cookingTime;
     this.cookingAriaID = item.cookingAriaID;
 
-    this.http.get(environment.mainApi+this.global.restaurentLink+'GetSingleRecipeDetail?recipeid='+item.recipeID).subscribe(
-      (Response:any)=>{
-       
+    this.http.get(environment.mainApi + this.global.restaurentLink + 'GetSingleRecipeDetail?recipeid=' + item.recipeID).subscribe(
+      (Response: any) => {
+
         this.menuProdList = [];
-        Response.forEach((e:any) => {
+        Response.forEach((e: any) => {
           this.menuProdList.push({
-            productID:e.productID,
-            productTitle:e.productTitle,
-            barcode:e.barcode,
-            productImage:e.productImage,
-            quantity:e.quantity,
-            avgCostPrice:e.avgCostPrice,
-            costPrice:e.costPrice,
-            salePrice:e.salePrice,
-            expiryDate:this.global.dateFormater(new Date(),'-'),
-            batchNo:'-',
-            batchStatus:'-',
-            uomID:e.uomID,
-            packing:1,
-            discInP:0,
-            discInR:0,
-            lockedStatus:e.lockedStatus,
-      
+            productID: e.productID,
+            productTitle: e.productTitle,
+            barcode: e.barcode,
+            productImage: e.productImage,
+            quantity: e.quantity,
+            avgCostPrice: e.avgCostPrice,
+            costPrice: e.costPrice,
+            salePrice: e.salePrice,
+            expiryDate: this.global.dateFormater(new Date(), '-'),
+            batchNo: '-',
+            batchStatus: '-',
+            uomID: e.uomID,
+            packing: 1,
+            discInP: 0,
+            discInR: 0,
+            lockedStatus: e.lockedStatus,
+
           })
         });
 
         this.getTotal();
-     
+
 
       }
     )
@@ -733,15 +736,15 @@ export class RecipeComponent implements OnInit{
   }
 
 
-  copyRecipe(item:any){
+  copyRecipe(item: any) {
     this.menuProdList = [];
     var recID = 0;
-    if(item.recipeRefID > 0){
+    if (item.recipeRefID > 0) {
       this.btnType = 'Update';
       recID = item.recipeRefID;
       this.recipeID = item.recipeRefID;
-    
-    }else  if(item.recipeRefID == 0){
+
+    } else if (item.recipeRefID == 0) {
       recID = item.recipeID
     }
     this.recipeType = 'Others';
@@ -751,80 +754,176 @@ export class RecipeComponent implements OnInit{
     this.salePrice = item.recipeSalePrice;
     this.recipeImg = item.recipeImage;
     this.Description = item.recipeDescription;
-    this.cookingTime  = item.cookingTime;
+    this.cookingTime = item.cookingTime;
     this.cookingAriaID = item.cookingAriaID;
-    
-    this.http.get(environment.mainApi+this.global.restaurentLink+'GetSingleRecipeDetail?recipeid='+recID).subscribe(
-      (Response:any)=>{
-       
-       this.menuProdList = [];
-       var tempProdList:any = [];
-       Response.forEach((e:any) => {      
-                  
-    
-        
+
+    this.http.get(environment.mainApi + this.global.restaurentLink + 'GetSingleRecipeDetail?recipeid=' + recID).subscribe(
+      (Response: any) => {
+
+        this.menuProdList = [];
+        var tempProdList: any = [];
+        Response.forEach((e: any) => {
+
+
+
           this.menuProdList.push({
-            productID:e.productID,
-            productTitle:e.productTitle,
-            barcode:e.barcode,
-            productImage:e.productImage,
-            quantity:e.quantity,
-            avgCostPrice:e.avgCostPrice,
-            costPrice:e.costPrice,
-            salePrice:e.salePrice,
-            expiryDate:this.global.dateFormater(new Date(),'-'),
-            batchNo:'-',
-            batchStatus:'-',
-            uomID:e.uomID,
-            packing:1,
-            discInP:0,
-            discInR:0,
-            lockedStatus:e.lockedStatus,
-      
-          }) 
-         
-        
-   
-    });
-       
-       
-    
-          this.getTotal()
+            productID: e.productID,
+            productTitle: e.productTitle,
+            barcode: e.barcode,
+            productImage: e.productImage,
+            quantity: e.quantity,
+            avgCostPrice: e.avgCostPrice,
+            costPrice: e.costPrice,
+            salePrice: e.salePrice,
+            expiryDate: this.global.dateFormater(new Date(), '-'),
+            batchNo: '-',
+            batchStatus: '-',
+            uomID: e.uomID,
+            packing: 1,
+            discInP: 0,
+            discInR: 0,
+            lockedStatus: e.lockedStatus,
+
+          })
+
+
+
+        });
+
+
+
+        this.getTotal()
 
 
 
 
-       
-  
+
+
 
       }
     )
 
-      
-   
+
+
 
 
   }
 
 
-  approveRecipe(item:any){
 
-    this.global.openPinCode().subscribe(pin=>{
-      if(pin != ''){
+  getIngredient(item: any) {
+
+    if (this.menuProdList == '') {
+      this.http.get(environment.mainApi + this.global.restaurentLink + 'GetSingleRecipeDetail?recipeid=' + item.recipeID).subscribe(
+        (Response: any) => {
+
+          this.menuProdList = [];
+          var tempProdList: any = [];
+          Response.forEach((e: any) => {
+
+            this.menuProdList.push({
+              productID: e.productID,
+              productTitle: e.productTitle,
+              barcode: e.barcode,
+              productImage: e.productImage,
+              quantity: e.quantity,
+              avgCostPrice: e.avgCostPrice,
+              costPrice: e.costPrice,
+              salePrice: e.salePrice,
+              expiryDate: this.global.dateFormater(new Date(), '-'),
+              batchNo: '-',
+              batchStatus: '-',
+              uomID: e.uomID,
+              packing: 1,
+              discInP: 0,
+              discInR: 0,
+              lockedStatus: e.lockedStatus,
+
+            })
+          });
+
+
+
+          this.getTotal()
+          this.tabIndex = 0;
+
+
+
+
+
+
+
+        }
+      )
+    }
+
+    if (this.menuProdList != '') {
+      this.http.get(environment.mainApi + this.global.restaurentLink + 'GetSingleRecipeDetail?recipeid=' + item.recipeID).subscribe(
+        (Response: any) => {
+          Response.forEach((e: any) => {
+           var value = this.menuProdList.find((f:any)=>f.productID == e.productID);
+            var index = this.menuProdList.indexOf(value);
+          //  alert(index);
+              if (value !== undefined) {
+                this.menuProdList[index].quantity +=  e.quantity;
+
+              }
+              if (value == undefined) {
+                this.menuProdList.push({
+                  productID: e.productID,
+                  productTitle: e.productTitle,
+                  barcode: e.barcode,
+                  productImage: e.productImage,
+                  quantity: e.quantity,
+                  avgCostPrice: e.avgCostPrice,
+                  costPrice: e.costPrice,
+                  salePrice: e.salePrice,
+                  expiryDate: this.global.dateFormater(new Date(), '-'),
+                  batchNo: '-',
+                  batchStatus: '-',
+                  uomID: e.uomID,
+                  packing: 1,
+                  discInP: 0,
+                  discInR: 0,
+                  lockedStatus: e.lockedStatus,
+
+                })
+              }
+            });
+
+          
+          this.getTotal()
+          this.tabIndex = 0;
+        }
+      )
+
+    }
+
+
+
+
+
+  }
+
+
+  approveRecipe(item: any) {
+
+    this.global.openPinCode().subscribe(pin => {
+      if (pin != '') {
         this.app.startLoaderDark();
-        this.http.post(environment.mainApi+this.global.restaurentLink+'ApproveRecipe',{
+        this.http.post(environment.mainApi + this.global.restaurentLink + 'ApproveRecipe', {
           RecipeID: item.recipeID,
-          ApprovedStatus:!item.approvedStatus,
+          ApprovedStatus: !item.approvedStatus,
           PinCode: pin,
           UserID: this.global.getUserID(),
         }).subscribe(
-          (Response:any)=>{
-            if(Response.msg == "Approved Successfully"){
+          (Response: any) => {
+            if (Response.msg == "Approved Successfully") {
               this.msg.SuccessNotify(Response.msg);
               this.getAllRecipe();
-            }else {
+            } else {
               this.msg.WarnNotify(Response.msg);
-              
+
             }
             this.app.stopLoaderDark();
           }
@@ -835,24 +934,24 @@ export class RecipeComponent implements OnInit{
   }
 
 
-  activeRecipe(item:any){
+  activeRecipe(item: any) {
 
-    this.global.openPinCode().subscribe(pin=>{
-      if(pin != ''){
+    this.global.openPinCode().subscribe(pin => {
+      if (pin != '') {
         this.app.startLoaderDark();
-        this.http.post(environment.mainApi+this.global.restaurentLink+'ActiveRecipe',{
+        this.http.post(environment.mainApi + this.global.restaurentLink + 'ActiveRecipe', {
           RecipeID: item.recipeID,
           ActiveStatus: !item.activeStatus,
           PinCode: pin,
           UserID: this.global.getUserID(),
         }).subscribe(
-          (Response:any)=>{
-            if(Response.msg == "Data Updated Successfully"){
+          (Response: any) => {
+            if (Response.msg == "Data Updated Successfully") {
               this.msg.SuccessNotify(Response.msg);
               this.getAllRecipe();
-            }else {
+            } else {
               this.msg.WarnNotify(Response.msg);
-              
+
             }
             this.app.stopLoaderDark();
           }
@@ -863,61 +962,62 @@ export class RecipeComponent implements OnInit{
   }
 
 
-  delete(row:any){
-    this.global.openPinCode().subscribe(pin=>{
+  delete(row: any) {
+    this.global.openPinCode().subscribe(pin => {
 
-     if(pin != ''){
+      if (pin != '') {
 
 
-      Swal.fire({
-        title:'Alert!',
-        text:'Confirm to Delete the Data',
-        position:'center',
-        icon:'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Confirm',
-      }).then((result)=>{
+        Swal.fire({
+          title: 'Alert!',
+          text: 'Confirm to Delete the Data',
+          position: 'center',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Confirm',
+        }).then((result) => {
 
-        if(result.isConfirmed){
-      this.app.startLoaderDark();
+          if (result.isConfirmed) {
+            this.app.startLoaderDark();
 
-      this.http.post(environment.mainApi+this.global.restaurentLink+'deleteRecipe',{
-        RecipeID: row.recipeID,
-        RecipeRefID:row.recipeRefID,
-        PinCode:pin,
-        UserID: this.global.getUserID()
+            this.http.post(environment.mainApi + this.global.restaurentLink + 'deleteRecipe', {
+              RecipeID: row.recipeID,
+              RecipeRefID: row.recipeRefID,
+              PinCode: pin,
+              UserID: this.global.getUserID()
 
-      }).subscribe(
-        (Response:any)=>{
-          if(Response.msg == 'Data Deleted Successfully'){
-            this.msg.SuccessNotify(Response.msg);
-            this.getAllRecipe();
-            this.app.stopLoaderDark();
-          
-            
-          }else{
-            this.msg.WarnNotify(Response.msg);
-            this.app.stopLoaderDark();
+            }).subscribe(
+              (Response: any) => {
+                if (Response.msg == 'Data Deleted Successfully') {
+                  this.msg.SuccessNotify(Response.msg);
+                  this.getAllRecipe();
+                  this.app.stopLoaderDark();
+
+
+                } else {
+                  this.msg.WarnNotify(Response.msg);
+                  this.app.stopLoaderDark();
+                }
+              },
+              (error: any) => {
+                this.app.stopLoaderDark();
+              }
+            )
+
           }
-        },
-        (error:any)=>{
-          this.app.stopLoaderDark();
         }
-      )
+        )
+
 
       }
-     }
-     )
-
-
-     }})
+    })
   }
 
 
 
-  reset(){
+  reset() {
     this.recipeID = 0;
     this.cookingAriaID = 0;
     this.categoryID = 0;
@@ -936,14 +1036,14 @@ export class RecipeComponent implements OnInit{
     this.cookingTime = '';
     this.recipeRefID = 0;
 
-    
+
 
   }
 
 
 
 
-  
+
   /////// to change the tab on edit
 
   changeTab(tabNum: any) {
@@ -953,11 +1053,11 @@ export class RecipeComponent implements OnInit{
 
 
 
-  MapProdWithCategory(){
-    this.dialog.open(MapWHProductComponent,{
-      width:'40%',
-    }).afterClosed().subscribe(value=>{
-      if(value == 'Update'){
+  MapProdWithCategory() {
+    this.dialog.open(MapWHProductComponent, {
+      width: '40%',
+    }).afterClosed().subscribe(value => {
+      if (value == 'Update') {
         this.getAllRecipe();
       }
     })

@@ -1,9 +1,9 @@
 <div class="d-flex h-100 body" style="background-color: gainsboro;">
 
-    <div class="col-lg-9 bg-white " >
+    <div class="col-lg-9 bg-white p-2" >
 
-        <div class="d-flex justify-content-around pt-3">
-            <mat-form-field appearance="outline" class="col-lg-2">
+        <div class="d-flex justify-content-between ">
+            <mat-form-field appearance="outline" class="col-lg-3">
                 <mat-label>Select Invoice Date</mat-label>
                 <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="invDate"
                     [matDatepicker]="iDate">
@@ -11,7 +11,7 @@
                 <mat-datepicker #iDate></mat-datepicker>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="col-lg-2 ">
+            <mat-form-field appearance="outline" class="col-lg-3 ">
                 <mat-label>Location</mat-label>
                 <mat-select [(ngModel)]="locationID" name="location" >
                     <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
@@ -42,12 +42,12 @@
            
             <div class="col-lg-9  d-flex flex-column">
                 <mat-label class="text-primary">Search Barcode / Product</mat-label> 
-               <input type="text"  #pbarcode [(ngModel)]="PBarcode"
+               <input type="text"  #pbarcode [(ngModel)]="PBarcode"  style="background-color:transparent;border: 1px solid rgb(13, 110, 253);border-radius: 5px 0px 0px 5px;"
                     (keydown)="searchByCode($event);this.changeFocus($event,'.prodRow');" id="searchProduct"
                     class="p-1 mb-2 searchProduct" placeholder="Alt + s" autofocus
                     autocomplete="off" accesskey="s">
     
-                <div class="w-100 d-flex flex-column SearchConatiner cursorPointer"
+                <div class="d-flex flex-column SearchConatiner cursorPointer"
                     *ngIf="PBarcode != '' && PBarcode != undefined">
                     <div class="card " *ngFor="let item of productList| filter:PBarcode index as index"
                         (click)="holdDataFunction(item)">
@@ -63,7 +63,7 @@
         </div>
 
 
-        <div style="max-height: 80%;overflow-y:scroll ;">
+        <div style="max-height: 80%;overflow-y:scroll ;padding-bottom: 60px;">
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -80,7 +80,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of tableDataList index as index" (click)="showImg(item);rowFocused = index">
+                    <tr *ngFor="let item of tableDataList index as index" (click)="showImg(item);rowFocused = index" [ngClass]="rowFocused == index ?'bg-dg':''">
                       <td>{{index+1}}</td>
                       <td>{{item.barcode}}</td>
                       <td>{{item.productTitle}}</td>
@@ -147,7 +147,7 @@
         
        </div>
        <div class="mt-4 d-flex justify-content-around">
-        <button mat-raised-button *ngIf="crudList.r" class="bg-transparent text-danger w-50" data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>
+        <button mat-raised-button *ngIf="crudList.r" class="bg-danger text-white w-50" data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>
 
 
      

@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
 })
 export class BrandComponent implements OnInit{
 
-  crudList:any = [];
+  crudList:any = {c:true,r:true,u:true,d:true};
 
   constructor(private http:HttpClient,
     private msg:NotificationService,
@@ -25,9 +25,12 @@ export class BrandComponent implements OnInit{
     private route:Router
     
     ){
-      this.globaldata.getMenuList().subscribe((data)=>{
-        this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      })
+      
+        this.globaldata.getMenuList().subscribe((data)=>{
+          this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+   
+        })
+     
 
     }
   ngOnInit(): void {

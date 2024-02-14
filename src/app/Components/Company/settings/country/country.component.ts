@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 })
 export class CountryComponent implements OnInit{
 
-  crudList:any =[];
+  crudList:any = {c:true,r:true,u:true,d:true};
 
   constructor(private http:HttpClient,
     private msg:NotificationService,

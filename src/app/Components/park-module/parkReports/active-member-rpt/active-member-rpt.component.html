@@ -1,7 +1,7 @@
 <div class="bg-gray body">
     
 <div class="container pt-5">
-    <button mat-mini-fab color="primary" (click)="print()"><mat-icon>print</mat-icon></button>
+    <button mat-mini-fab color="primary" *ngIf="crudList.r" (click)="print()"><mat-icon>print</mat-icon></button>
 </div>
 
 <div id="PrintDiv" class="container p-5">
