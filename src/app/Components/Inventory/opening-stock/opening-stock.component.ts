@@ -8,6 +8,8 @@ import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { Router } from '@angular/router';
 import { Observable, retry } from 'rxjs';
+import { SavedBillComponent } from '../../Restaurant-Core/sale/saved-bill/saved-bill.component';
+
 @Component({
   selector: 'app-opening-stock',
   templateUrl: './opening-stock.component.html',
@@ -29,7 +31,7 @@ export class OpeningStockComponent implements OnInit {
 
     this.global.getMenuList().subscribe((data)=>{
       this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      // console.log(this.crudList);
+
     })
 
     this.global.getCompany().subscribe((data)=>{
@@ -48,8 +50,9 @@ export class OpeningStockComponent implements OnInit {
 
   }
 
+  btnType = 'Save';
   Date:Date = new Date();
-  holdInvNo = '-';
+  invBillNo = '-';
   holdBtnType = 'Hold';
   invoiceDate:Date = new Date();
   locationID  = 0;
@@ -67,6 +70,9 @@ export class OpeningStockComponent implements OnInit {
   
   avgCostTotal = 0;
   CostTotal = 0;
+
+  projectID = this.global.InvProjectID;
+  bookerID = 1;
 
   getLocation(){
     this.http.get(environment.mainApi+this.global.inventoryLink+'getlocation').subscribe(
@@ -99,9 +105,7 @@ export class OpeningStockComponent implements OnInit {
 
             this.global.getProdDetail(0,this.PBarcode).subscribe(
               (Response:any)=>{
-                //  console.log(Response);
-      
-                
+                               
                   this.tableDataList.push({
                     productID:Response[0].productID,
                     productTitle:Response[0].productTitle,
@@ -163,7 +167,7 @@ export class OpeningStockComponent implements OnInit {
 
       this.global.getProdDetail(data.productID,'').subscribe(
         (Response:any)=>{
-          //  console.log(Response);
+         
 
           
             this.tableDataList.push({
@@ -230,7 +234,7 @@ export class OpeningStockComponent implements OnInit {
       // this.myDue = this.myPaid - this.myTotal;\
     
 
-     // console.log(this.tableDataList)
+
     }
   }
   rowFocused = 0;
@@ -373,7 +377,7 @@ export class OpeningStockComponent implements OnInit {
 
   changeValue(item:any){
     var myIndex = this.tableDataList.indexOf(item);
-   // console.log(this.tableDataList[myIndex]);
+ 
     var myQty = this.tableDataList[myIndex].quantity;
     var myCP = this.tableDataList[myIndex].costPrice;
     var mySP = this.tableDataList[myIndex].salePrice;
@@ -400,8 +404,6 @@ export class OpeningStockComponent implements OnInit {
         if(p.quantity == 0 || p.quantity == '0' || p.quantity == '' || p.quantity == undefined || p.quantity == null){
           this.msg.WarnNotify('('+p.productTitle+') Quantity is not Valid');
            isValidFlag = false;
-          //  console.log(p)
-          //  console.log(this.tableDataList)
            return;
         }
       });
@@ -421,32 +423,69 @@ export class OpeningStockComponent implements OnInit {
 
       if(isValidFlag == true){
         
-           this.app.startLoaderDark();
-           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertStockAdjustment',{
-            InvType: this.adjustmentType,
-            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
-            LocationID: this.locationID,
-            ProjectID: 1,
-            BillTotal: this.subTotal,
-            NetTotal: this.subTotal ,
-            Remarks: this.invRemarks,
-            InvoiceDocument: "-",
-            InvDetail: JSON.stringify(this.tableDataList),    
-            UserID: this.global.getUserID(),
-            HoldInvNo:this.holdInvNo,
-           }).subscribe(
-             (Response:any)=>{
-               if(Response.msg == 'Data Saved Successfully'){
-                 this.msg.SuccessNotify(Response.msg);
-                 this.reset(); 
-                 this.app.stopLoaderDark();
-                
-               }else{
-                 this.msg.WarnNotify(Response.msg);
-                 this.app.stopLoaderDark();
+          
+          if(this.btnType == 'Save'){
+            this.app.startLoaderDark();
+            this.http.post(environment.mainApi+this.global.inventoryLink+'InsertOpeningStock',{
+              InvType: 'OS',
+              InvDate: this.global.dateFormater(this.invoiceDate,'-'),
+              LocationID: this.locationID,
+              ProjectID: this.projectID,
+              BookerID:this.bookerID,
+              BillTotal: this.subTotal,
+              NetTotal: this.subTotal ,
+              Remarks: this.invRemarks,
+              InvoiceDocument: "-",
+              InvDetail: JSON.stringify(this.tableDataList),    
+              UserID: this.global.getUserID(),
+             }).subscribe(
+               (Response:any)=>{
+                 if(Response.msg == 'Data Saved Successfully'){
+                   this.msg.SuccessNotify(Response.msg);
+                   this.reset(); 
+                   this.app.stopLoaderDark();
+                  
+                 }else{
+                   this.msg.WarnNotify(Response.msg);
+                   this.app.stopLoaderDark();
+                 }
                }
-             }
-           )
+             )
+          }
+
+          if(this.btnType == 'Update'){
+          this.global.openPinCode().subscribe(pin=>{
+            if(pin != ''){
+              this.app.startLoaderDark();
+              this.http.post(environment.mainApi+this.global.inventoryLink+'UpdateOpeningStock',{
+                InvBillNo: this.invBillNo,
+                InvDate: this.global.dateFormater(this.invoiceDate,'-'),
+                LocationID: this.locationID,
+                ProjectID: this.projectID,
+                BookerID:this.bookerID,
+                BillTotal: this.subTotal,
+                NetTotal: this.subTotal ,
+                Remarks: this.invRemarks,
+                InvoiceDocument: "-",
+                InvDetail: JSON.stringify(this.tableDataList), 
+                PinCode:pin,   
+                UserID: this.global.getUserID(),
+               }).subscribe(
+                 (Response:any)=>{
+                   if(Response.msg == 'Data Saved Successfully'){
+                     this.msg.SuccessNotify(Response.msg);
+                     this.reset(); 
+                     this.app.stopLoaderDark();
+                    
+                   }else{
+                     this.msg.WarnNotify(Response.msg);
+                     this.app.stopLoaderDark();
+                   }
+                 }
+               )
+            }
+          })
+          }
          
      
       }
@@ -469,7 +508,7 @@ export class OpeningStockComponent implements OnInit {
     this.subTotal = 0;
     this.holdBtnType = 'Hold';
     this.productImage = '';
-    this.holdInvNo = '-';
+    this.invBillNo = '-';
     this.IssueBillList = [];
     this.adjustmentType = '';
     this.CostTotal = 0;
@@ -479,19 +518,11 @@ export class OpeningStockComponent implements OnInit {
 
 
   
-  FindSavedBills(type:any){
-    // if(type == 'HIR'){
-    //   $('#edit').show();
-    // }
-
-    // if(type == 'IR'){
-    //   $('#edit').hide()
-    // }
-
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetStockAdjustmentInvBillSingleDate?creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
+  FindSavedBills(){
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetOpeningStock?creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
       (Response:any)=>{
         this.IssueBillList = Response;
-         console.log(this.IssueBillList);
+   
       }
     )
   }
@@ -563,7 +594,6 @@ export class OpeningStockComponent implements OnInit {
             })
           });
 
-          // console.log(this.tableDataList);
           setTimeout(() => {
             this.global.printData('#printDiv')
           }, 200);
@@ -577,18 +607,16 @@ export class OpeningStockComponent implements OnInit {
 
   retriveBill(item:any){
     
-    //console.log(item);
     this.tableDataList = [];
-    this.holdBtnType = 'ReHold'
+    this.btnType = 'Update';
     this.invoiceDate = new Date(item.invDate);
     this.locationID = item.locationID;
     this.invRemarks = item.remarks;
-    this.holdInvNo = item.invBillNo;
+    this.invBillNo = item.invBillNo;
     this.subTotal = item.billTotal;
 
     this.getBillDetail(item.invBillNo).subscribe(
       (Response:any)=>{
-        console.log(Response);
         this.totalQty = 0;
         this.productImage = Response[Response.length - 1].productImage;
 
@@ -613,12 +641,11 @@ export class OpeningStockComponent implements OnInit {
               discInR:e.discInR,
             })
           });
-          // this.getTotal();
+          this.getTotal();
         
       }
     )
 
-    // console.log(this.locationTitle,this.locationTwoTitle)
 
   }
 
@@ -628,7 +655,71 @@ export class OpeningStockComponent implements OnInit {
    }
  
 
+   DeleteInv(row:any){
+    $('#holdModal').hide();
+    this.global.openPinCode().subscribe(pin=>{
+      $('#holdModal').show();
+      if(pin != ''){
+        this.app.startLoaderDark();
+        this.http.post(environment.mainApi+this.global.inventoryLink+'DeleteBill',{
+          InvBillNo: row.invBillNo,
+          PinCode: pin,
+          UserID: this.global.getUserID()
+        }).subscribe(
+          (Response:any)=>{
+            if(Response.msg == 'Data Deleted Successfully'){
 
+              this.msg.SuccessNotify(Response.msg);
+              this.FindSavedBills();
+              this.app.stopLoaderDark();
+
+            }else{
+              this.msg.WarnNotify(Response.msg)
+            }
+           
+
+          }
+        )
+      }
+    })
+   }
+
+
+   approveBill(row:any){
+    $('#holdModal').hide();
+    this.global.openPinCode().subscribe(pin=>{
+      $('#holdModal').show();
+      if(pin != ''){
+        this.app.startLoaderDark();
+        this.http.post(environment.mainApi+this.global.inventoryLink+'PostOpeningStockBill',{
+          InvBillNo: row.invBillNo,
+          Remarks:'-',
+          PinCode: pin,
+          UserID: this.global.getUserID()
+        }).subscribe(
+          (Response:any)=>{
+            if(Response.msg == 'Data Posted Successfully'){
+
+              this.msg.SuccessNotify(Response.msg);
+              this.FindSavedBills();
+         
+
+            }else{
+              this.msg.WarnNotify(Response.msg)
+            }
+
+
+            this.app.stopLoaderDark();
+           
+
+          }
+        )
+      }
+    })
+   }
+
+
+ 
 
 
 }

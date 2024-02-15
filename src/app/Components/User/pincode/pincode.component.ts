@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { data } from 'jquery';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 
@@ -20,11 +21,14 @@ export class PincodeComponent implements OnInit{
   ){}
 
   ngOnInit(): void {
+    if(this.editData == 'Password'){
+      this.Title = 'Password';
+    }
    
   }
 
 
-
+  Title = 'Pincode'
 
   pinCode:any = '';
 

@@ -682,9 +682,9 @@ export class GlobalDataModule implements OnInit {
   }
 
   
-  if(e.target.value == '' ){
-   e.target.value = 0;
-  }
+  // if(e.target.value == '' ){
+  //  e.target.value = 0;
+  // }
 
 
 
@@ -766,5 +766,16 @@ export class GlobalDataModule implements OnInit {
     }).afterClosed().pipe(retry(3));
     }
   
+
+      ///////////// for opening Password modal window
+  public openPassword(type:any): Observable<any>{
+    return  this.dialog.open(PincodeComponent,{
+      width:'30%',
+      enterAnimationDuration:500,
+      hasBackdrop:true,
+      disableClose:true,
+      data:type
+    }).afterClosed().pipe(retry(3));
+    }
 
 }

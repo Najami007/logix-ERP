@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import Swal from 'sweetalert2';
 import { SaleBillDetailComponent } from './sale-bill-detail/sale-bill-detail.component';
+import { SavedBillComponent } from './saved-bill/saved-bill.component';
 
 
 @Component({
@@ -62,7 +63,7 @@ export class SaleComponent implements OnInit {
     this.getTable();
     this.getHoldBills();
     this.getBankList();
-    this.getSavedBill();
+    
 
 
   }
@@ -76,33 +77,6 @@ export class SaleComponent implements OnInit {
   ]
 
   categoriesList: any = [];
-
-
-
-  tempProductList = [
-    { id: 1, catID: 6, pName: 'Coke', pSale: 150, img: '../../../../assets/Images/pepsi.jfif' },
-    { id: 2, catID: 6, pName: 'Pepsi', pSale: 120, img: '../../../../assets/Images/pepsi.jfif' },
-    { id: 3, catID: 1, pName: 'Chicken Fajiat Pizza', pSale: 1050, img: '../../../../assets/Images/pizza.jfif' },
-    { id: 4, catID: 2, pName: 'Burger', pSale: 500, img: '../../../../assets/Images/Burger.jpg' },
-    { id: 5, catID: 2, pName: 'Pasta', pSale: 750, img: '../../../../assets/Images/pasta.jfif' },
-    { id: 6, catID: 1, pName: 'Vegetable Pizza', pSale: 1050, img: '../../../../assets/Images/pizza.jfif' },
-    { id: 7, catID: 2, pName: 'Cheese Burger', pSale: 500, img: '../../../../assets/Images/Burger.jpg' },
-    { id: 8, catID: 2, pName: 'Fruid Salad', pSale: 750, img: '../../../../assets/Images/FruitSalad.jfif' },
-    { id: 9, catID: 1, pName: 'Crust Pizza', pSale: 1050, img: '../../../../assets/Images/pizza.jfif' },
-    { id: 10, catID: 5, pName: 'Prawns', pSale: 500, img: '../../../../assets/Images/Prawns.jfif' },
-    { id: 11, catID: 6, pName: 'Pasta', pSale: 750, img: '../../../../assets/Images/pasta.jfif' },
-    { id: 12, catID: 1, pName: ' Pizza', pSale: 1050, img: '../../../../assets/Images/pizza.jfif' },
-    { id: 13, catID: 1, pName: ' Pizza', pSale: 1050, img: '../../../../assets/Images/pizza.jfif' },
-    { id: 14, catID: 1, pName: ' Pizza', pSale: 1050, img: '../../../../assets/Images/pizza.jfif' },
-    { id: 15, catID: 1, pName: 'BBQ Pizza', pSale: 1050, img: '../../../../assets/Images/pizza.jfif' },
-    { id: 16, catID: 1, pName: 'BBQ Pizza', pSale: 1050, img: '../../../../assets/Images/pizza.jfif' },
-    { id: 17, catID: 1, pName: 'BBQ Pizza', pSale: 1050, img: '../../../../assets/Images/pizza.jfif' },
-    { id: 18, catID: 1, pName: 'BBQ Pizza', pSale: 1050, img: '../../../../assets/Images/pizza.jfif' },
-    { id: 19, catID: 1, pName: 'BBQ Pizza', pSale: 1050, img: '../../../../assets/Images/pizza.jfif' },
-    { id: 20, catID: 1, pName: 'BBQ Pizza', pSale: 1050, img: '../../../../assets/Images/pizza.jfif' },
-
-  ]
-
 
   serviceCharges = 5;
   bankCoaID = 0;
@@ -136,7 +110,7 @@ export class SaleComponent implements OnInit {
 
 
   tempProdRow: any = [];
-  tempQty: any;
+  tempQty = 1 ;
   tempIndex: any;
 
   tableData: any = [];
@@ -385,6 +359,7 @@ export class SaleComponent implements OnInit {
           Remarks: this.billRemarks,
           OrderType: this.orderType,
           CoverOf: this.coverOf,
+          OtherCharges: this.OtherCharges,
 
 
           SaleDetail: JSON.stringify(this.tableData),
@@ -424,6 +399,7 @@ export class SaleComponent implements OnInit {
           Remarks: this.billRemarks,
           OrderType: this.orderType,
           CoverOf: this.coverOf,
+          OtherCharges: this.OtherCharges,
 
           SaleDetail: JSON.stringify(this.tableData),
 
@@ -541,8 +517,9 @@ export class SaleComponent implements OnInit {
           this.getTable();
           this.onCatSelected(this.categoriesList[0]);
           this.getHoldBills();
-          this.getSavedBill();
+         setTimeout(() => {
           this.reset();
+         }, 200);
           /////////// will hide the modal window ///////////
           $('#paymentMehtod').hide();
           $('.modal-backdrop').remove();
@@ -580,6 +557,7 @@ export class SaleComponent implements OnInit {
       this.tableTitle = item.tableTitle;
     }
     this.invBillNo = item.invBillNo;
+    this.OtherCharges = item.otherCharges;
     this.PartyID = item.partyID;
     this.ProjectID = item.projectID;
     this.BookerID = item.bookerID;
@@ -750,7 +728,7 @@ export class SaleComponent implements OnInit {
     this.tempOrderType = '';
     this.tableTitle = '';
     this.tempProdRow = [];
-    this.tempQty = 0;
+    this.tempQty = 1;
     this.tempIndex = 0;
     this.tableData = [];
     this.subTotal = 0;
@@ -811,9 +789,9 @@ export class SaleComponent implements OnInit {
 
 
   printAfterSave(invNo: any) {
+    // alert(invNo);
     this.myDuplicateFlag = false;
     this.myInvoiceNo = invNo;
-    this.mytableNo = this.tableTitle;
     this.myInvDate = this.invoiceDate;
     this.myOrderType = this.orderType;
     this.mySubTotal = this.subTotal;
@@ -825,16 +803,18 @@ export class SaleComponent implements OnInit {
     this.myDiscount = this.billDiscount;
     this.myChange = this.change;
     this.myPaymentType = this.paymentType;
-    this.myPrintData = this.tableData;
 
-    // this.http.get(environment.mainApi+this.global.restaurentLink+'GetHoldedBillDetail?BillNo='+invNo).subscribe(
-    //   (Response:any)=>{
-    //    console.log(Response);
-    //     this.myPrintData =Response;})
+    this.http.get(environment.mainApi+this.global.restaurentLink+'GetHoldedBillDetail?BillNo='+invNo).subscribe(
+      (Response:any)=>{
+        console.log(Response);
+      this.mytableNo = Response[0].tableTitle;
+      this.myCounterName = Response[0].entryUser;
+
+        this.myPrintData =Response;})
 
     setTimeout(() => {
       this.global.printData('#billPrint');
-    }, 200);
+    }, 500);
 
 
 
@@ -846,8 +826,6 @@ export class SaleComponent implements OnInit {
     if (this.invBillNo != '') {
       this.myDuplicateFlag = false;
       this.myInvoiceNo = this.invBillNo;
-      this.myPrintData = this.tableData;
-      this.mytableNo = this.tableTitle;
       this.myInvDate = this.invoiceDate;
       this.myOrderType = this.orderType;
       this.mySubTotal = this.subTotal;
@@ -860,6 +838,15 @@ export class SaleComponent implements OnInit {
       this.myChange = this.change;
       this.myPaymentType = this.paymentType;
 
+      this.http.get(environment.mainApi+this.global.restaurentLink+'GetHoldedBillDetail?BillNo='+this.invBillNo).subscribe(
+        (Response:any)=>{
+        //  console.log(Response);
+        this.mytableNo = Response[0].tableTitle;
+        this.myCounterName = Response[0].entryUser;
+
+          this.myPrintData = Response;
+        })
+
       if (type == 'rehold') {
         this.save('rehold');
       }
@@ -867,7 +854,7 @@ export class SaleComponent implements OnInit {
 
       setTimeout(() => {
         this.global.printData('#billPrint');
-      }, 200);
+      }, 500);
     } else {
       this.msg.WarnNotify('No Bill Retrieved')
     }
@@ -970,52 +957,15 @@ export class SaleComponent implements OnInit {
   savedbillList:any = [];
 
   getSavedBill(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetOpenDaySale').subscribe(
-      (Response:any)=>{
-          this.savedbillList = Response;
-      }
-    )
+
+    this.dialogue.open(SavedBillComponent,{
+      width:'60%',
+    }).afterClosed().subscribe()
   }
 
 
-  printDuplicateBill(item:any){
-    //console.log(item)
-    this.myInvoiceNo = item.invBillNo;
-    this.mytableNo = item.tableTitle;
-    this.myInvDate = item.createdOn ;
-    this.myCounterName = item.entryUser;
-    this.myOrderType = item.orderType;
-    this.mySubTotal = item.billTotal;
-    this.myNetTotal = item.netTotal;
-    this.myOtherCharges = item.otherCharges;
-    this.myRemarks = item.remarks;
-    this.myCash = item.cashRec;
-    this.myBank = item.netTotal - item.cashRec;
-    this.myDiscount = item.billDiscount;
-    this.myChange = item.change;
-    this.myPaymentType = item.paymentType;
-    this.myDuplicateFlag = true;
-    this.http.get(environment.mainApi+this.global.restaurentLink+'PrintBill?BillNo='+item.invBillNo).subscribe(
-      (Response:any)=>{
-        this.myPrintData = Response;
-      }
-    )
 
 
-    setTimeout(() => {
-      this.global.printData('#billPrint');
-    }, 200);
-  }
-
-  billDetails(item:any){
-    this.dialogue.open(SaleBillDetailComponent,{
-      width:'50%',
-      data:item,
-      disableClose:true,
-    }).afterClosed().subscribe(value=>{
-      
-    })
-  }
 
 
   mergeBillNo1 = '';
@@ -1029,18 +979,21 @@ export class SaleComponent implements OnInit {
   }else{
     this.http.get(environment.mainApi+this.global.restaurentLink+'MergeAndPrintBill?BillNo='+this.mergeBillNo1+'&BillNo2='+this.mergeBillNo2).subscribe(
       (Response:any)=>{
-        console.log(Response);
+         //console.log(Response);
     this.myInvoiceNo = Response[0].invBillNo;
     this.myInvDate = Response[0].invDate;
     this.myOrderType = Response[0].orderType;
     this.myRemarks = Response[0].billRemarks;
-    this.myCounter =  Response[0].billRemarks;
+    this.myCounter =  Response[0].entryUser;
+    
         
        this.myPrintData = Response;
+       this.mySubTotal = 0;
+       this.OtherCharges = 0;
 
        Response.forEach((e:any) => {
-          this.mySubTotal = e.quantity * e.salePrice;
-          this.myOtherCharges = e.otherCharges;
+          this.mySubTotal += e.quantity * e.salePrice;
+          this.myOtherCharges += e.otherCharges;
 
        });
 
@@ -1055,5 +1008,15 @@ export class SaleComponent implements OnInit {
   }
   }
 
+
+  increment(type:any,value:any){
+    if(type == 'add'){
+      this.tempQty += 1;
+    }
+
+    if(type == 'minus'){
+      this.tempQty -= 1;
+    }
+  }
 
 }

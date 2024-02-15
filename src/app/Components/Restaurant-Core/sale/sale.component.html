@@ -30,17 +30,19 @@
 
         <!-----------   Products Area ------------------->
         <div class="row cursorPointer">
-            <div *ngFor="let item of RecipeList" style="width: 150px;">
-                <mat-card style="width:140px; height: 160px;" class="m-1 shadow recipecard" data-bs-toggle="modal"
+            <div *ngFor="let item of RecipeList" style="width: 200px;">
+                <mat-card style="width:180px; height: 200px;" class="m-1 shadow recipecard" data-bs-toggle="modal"
                     data-bs-target="#qtyModal" (click)="tempProdRow = item;this.global.focusTo('.prodQty')">
-
+                
+                    <!-- <div style="height: 150px;width: 170px;background-size: cover;" [ngStyle]="{ 'background-image': 'url(' + item.recipeImage + ')' }"></div> -->
                     <div class="text-center">
-                        <img *ngIf="item.recipeImage" [src]="item.recipeImage" alt="" height="100px" width="100px">
+                        <img *ngIf="item.recipeImage" [src]="item.recipeImage" alt="" height="150px" width="170px">
                     </div>
 
-                    <mat-card-footer class="text-center"
-                        style="font-size: x-small;"><strong>{{item.recipeTitle}}</strong></mat-card-footer>
-                    <mat-card-footer class="text-center text-success">{{item.recipeSalePrice}}</mat-card-footer>
+                    <mat-card-footer class="text-center" style="font-size: x-small;"><strong>{{item.recipeTitle}}</strong></mat-card-footer>
+                    <mat-card-footer class="text-center text-success " style="font-size: 20px;">{{item.recipeSalePrice}}</mat-card-footer>
+                
+                        
                 </mat-card>
             </div>
         </div>
@@ -162,14 +164,13 @@
                     <button matTooltip="Hold & Print Current Bill" mat-raised-button class="m-1 text-white bg-primary col-lg-5"
                      (click)="HOldandPrint('rehold')">Hold & Print</button>
 
-                     <button  accesskey="b" mat-raised-button data-bs-toggle="modal" data-bs-target="#savedBill"
-                      class="m-1 text-white bg-primary col-lg-5 d-none">Duplicate</button>
+                     <button  accesskey="b" mat-raised-button matTooltip="Retreiving Saved Bills" class="m-1  col-lg-5 " (click)="getSavedBill()">Duplicate</button>
 
-                      <button   mat-raised-button class="m-1 text-white bg-primary col-lg-5" (click)="voidBill()">Void Bill</button>
+                      <button   mat-raised-button matTooltip="Void Full Bill" class="m-1 text-white bg-primary col-lg-5" (click)="voidBill()">Void Bill</button>
 
 
-                      <button data-bs-toggle="modal" data-bs-target="#mergeBill" mat-raised-button class="m-1 text-white col-lg-5" 
-                      style="background-color: pink;" (click)="voidBill()">Merge Bill</button>
+                      <button data-bs-toggle="modal" matTooltip="Merge Two Bills" data-bs-target="#mergeBill" mat-raised-button class="m-1 text-white col-lg-5" 
+                      style="background-color: pink;" >Merge Bill</button>
 
                 </div>
 
@@ -246,7 +247,7 @@
     
     
             <div >
-              <table class="table table-logix">
+              <table class="table table-logix2">
                 <thead>
                     <tr>
                         <th>Inv #</th>
@@ -258,7 +259,7 @@
                     <tr>
                         <td>({{mergeBillNo1}}) ({{mergeBillNo2}})</td>
                         <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
-                        <td>{{myCounterName}}</td>
+                        <td>{{myCounter}}</td>
                     </tr>
                    
                 </tbody>
@@ -271,7 +272,7 @@
             </div>
     
             <div>
-                <table class="table table-logix">
+                <table class="table table-logix2">
                     <thead>
                         <tr>
                             <th>S#</th>
@@ -286,7 +287,7 @@
                     <tbody>
                         <tr *ngFor="let item of myPrintData index as index">
                             <td>{{index +1}}</td>
-                            <td>{{item.tableTitle}}</td>
+                            <td class="text-start">{{item.tableTitle}}</td>
                             <td>{{item.productTitle}}</td>
                             <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
                             <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
@@ -295,8 +296,32 @@
                         </tr>
                     </tbody>
                 </table>
+
+                <table class="w-100 text-end mt-2">
+                    <tbody>
+                        <tr>
+                            <th>Sub Total</th>
+                            <td>{{mySubTotal |number:'1.0-0'}}</td>
+                     
+                        </tr>
+                        <tr *ngIf="myOtherCharges != 0">
+                            <th *ngIf="myOrderType == 'Dine In'">Service Charges</th>
+                            <th *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</th>
+                            <th *ngIf="myOrderType == 'Take Away'">Other Charges</th>
+                            <td>{{myOtherCharges|number:'1.0-0'}}</td>
+                     
+                        </tr>
+                        <tr>
+                            <th>Net Total</th>
+                            <td>{{mySubTotal + myOtherCharges|number:'1.0-0'}}</td>
+                     
+                        </tr>
+                     
+                        
+                    </tbody>
+                </table>
     
-                <div class="d-flex  text-end" style="text-align: end;">
+                <!-- <div class="d-flex  text-end" style="text-align: end;">
     
                     <div class="col-lg-4"></div>
                     <div class="col-lg-4"></div>
@@ -313,7 +338,7 @@
                         <mat-label>{{myNetTotal}}</mat-label>
     
                     </div>
-                </div>
+                </div> -->
             </div>
     
         </div>
@@ -322,58 +347,7 @@
         <!---------------------------------------------------------------------------------->
     
 
-     <!----------------Modal Window for Retrieving Saved Bills For Duplicate Print ---------->
-
-
-
-     <div class="modal fade" id="savedBill" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-     aria-labelledby="savedBillLabel">
-     <div class="modal-dialog modal-dialog-centered modal-xl">
-         <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-             <div class="modal-body" style="max-height: 400px;overflow-y: scroll;">
-
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>S#</th>
-                            <th>Bill #</th>
-                            <th>Date</th>
-                            <th>Table No</th>
-                            <th>Type</th>
-                            <th>Amount</th>
-                            <th>Print</th>
-                            <th>Detail</th>
-                        </tr>
-
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of savedbillList index as index">
-                            <td>{{index+1}}</td>
-                            <td>{{item.invBillNo}}</td>
-                            <td>{{item.invDate|date:'dd-MM-yyyy'}} ({{item.createdOn|date:'hh:MM:a'}})</td>
-                            <td>{{item.tableTitle}}</td>
-                            <td>{{item.paymentType}}</td>
-                            <td>{{item.netTotal |number:'1.0-0'}}</td>
-                            <td class="text-primary cursorPointer"><mat-icon (click)="printDuplicateBill(item)">print</mat-icon></td>
-                            <td class="text-success cursorPointer"><mat-icon (click)="billDetails(item)">receipt</mat-icon></td>
-                        </tr>
-                    </tbody>
-                    
-                </table>
-
-
-             </div>
-
-             <div class="modal-footer bg-mf-blue">
-                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-             </div>
-
-         </div>
-     </div>
- </div>
-
- <!---------------------------------------------------------->
-
+  
     <!------------------------------ Design For Bill Pirnt  --------------------->
 
 
@@ -389,7 +363,7 @@
 
 
         <div >
-          <table class="table table-logix">
+          <table class="table table-logix2">
             <thead>
                 <tr>
                     <th>Inv #</th>
@@ -419,7 +393,7 @@
         <h2 *ngIf="myDuplicateFlag == true" class="border border-dark w-100 text-center">Duplicate</h2>
 
         <div>
-            <table class="table table-logix">
+            <table class="w-100 table-logix2">
                 <thead>
                     <tr>
                         <th>S#</th>
@@ -433,7 +407,7 @@
                 <tbody>
                     <tr *ngFor="let item of myPrintData index as index">
                         <td>{{index +1}}</td>
-                        <td>{{item.productTitle}}</td>
+                        <td class="text-start">{{item.productTitle}}</td>
                         <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
                         <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
                         <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
@@ -442,33 +416,52 @@
                 </tbody>
             </table>
 
-            <div class="d-flex  text-end" style="text-align: end;">
 
-                <div class="col-lg-4"></div>
-                <div class="col-lg-4"></div>
-                
-                <div class="row fw-bold col-lg-2 text-end" >
-                    <mat-label>Sub Total</mat-label>
-                    <mat-label *ngIf="myDiscount != 0">Discount</mat-label>
-                    <mat-label *ngIf="myOtherCharges != 0">Other Charges</mat-label>
-                    <mat-label>Net Total</mat-label>
-                    <mat-label *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">Cash</mat-label>
-                    <mat-label *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">Bank</mat-label>
-                    <mat-label *ngIf="myChange != 0">Change</mat-label>
 
-                </div>
+            <table class="w-100 text-end mt-2">
+                <tbody>
+                    <tr>
+                        <th>Sub Total</th>
+                        <td>{{mySubTotal |number:'1.0-0'}}</td>
+                 
+                    </tr>
+                    <tr  *ngIf="myOtherCharges > 0">
+                        <th *ngIf="myOrderType == 'Dine In'">Service Charges</th>
+                        <th *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</th>
+                        <th *ngIf="myOrderType == 'Take Away'">Other Charges</th>
+                        <td>{{myOtherCharges|number:'1.0-0'}}</td>
+                 
+                    </tr>
+                    <tr *ngIf="myDiscount > 0">
+                        <th>Discount</th>
+                        <td>{{myDiscount|number:'1.0-0'}}</td>
+                 
+                    </tr>
+                 
+                    <tr>
+                        <th>Net Total</th>
+                        <td>{{mySubTotal + myOtherCharges|number:'1.0-0'}}</td>
+                 
+                    </tr>
+                    <tr  *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
+                        <th >Cash</th>
+                        <td>{{myBank|number:'1.0-0'}}</td>
+                 
+                    </tr>
+                    <tr *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
+                        <th>Bank</th>
+                        <td>{{mySubTotal + myOtherCharges|number:'1.0-0'}}</td>
+                 
+                    </tr>
+                    <tr *ngIf="myChange > 0">
+                        <th>Change</th>
+                        <td>{{myChange|number:'1.0-0'}}</td>
+                 
+                    </tr>
+                    
+                </tbody>
+            </table>
 
-                <div class="row text-end col-lg-2" >
-                    <mat-label>{{mySubTotal}}</mat-label>
-                    <mat-label *ngIf="myDiscount != 0">{{myDiscount}}</mat-label>
-                    <mat-label *ngIf="myOtherCharges != 0">{{myOtherCharges}}</mat-label>
-                    <mat-label>{{myNetTotal}}</mat-label>
-                    <mat-label *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">{{myCash}}</mat-label>
-                    <mat-label *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">{{myBank}}</mat-label>
-                    <mat-label *ngIf="myChange != 0">{{myChange}}</mat-label>
-
-                </div>
-            </div>
         </div>
 
     </div>
@@ -524,19 +517,23 @@
                 <div class="modal-body">
                     <div>
                         <form method="post">
-
-                            <div>
+                            <mat-label class="text-center">Enter Quantity</mat-label>
+                            <div class="d-flex">
+                              
                                 <mat-form-field appearance="outline" class="w-100">
-                                    <mat-label>Quantity</mat-label>
-                                    <input class="prodQty" (keydown)="this.global.handleNumKeys($event)" type="number"
+                                    <mat-icon (click)="increment('add',tempQty)" matPrefix>add</mat-icon>
+                                    
+                                    <input class="prodQty text-center" [value]="tempQty" (keydown)="this.global.handleNumKeys($event)" type="number"
                                         min="0" matInput #prodQty />
+                                        <mat-icon  (click)="increment('minus',tempQty)" matSuffix>remove</mat-icon>    
                                 </mat-form-field>
+                                
                             </div>
 
                             <div class="text-center d-flex justify-content-between ">
                                 <button class="btn btn-success" data-bs-dismiss="modal"
-                                    (click)="productSelected(tempProdRow,prodQty.value);prodQty.value =''">Save</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    (click)="productSelected(tempProdRow,prodQty.value);tempQty = 1">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="tempQty = 1">Close</button>
                             </div>
                         </form>
                     </div>

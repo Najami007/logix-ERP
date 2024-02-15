@@ -1,0 +1,171 @@
+
+    <div >
+        <div class="p-2"  style="max-height: 400px;overflow-y: scroll;">
+
+           <button mat-raised-button color="primary" (click)="getSavedBill()">Get Bills</button>
+
+           <table class="table">
+               <thead>
+                   <tr>
+                       <th>S#</th>
+                       <th>Bill #</th>
+                       <th>Date</th>
+                       <th>Table No</th>
+                       <th>Type</th>
+                       <th>Amount</th>
+                       <th>Print</th>
+                       <th>Detail</th>
+                   </tr>
+
+               </thead>
+               <tbody>
+                   <tr *ngFor="let item of savedbillList index as index">
+                       <td>{{index+1}}</td>
+                       <td>{{item.invBillNo}}</td>
+                       <td>{{item.invDate|date:'dd-MM-yyyy'}} ({{item.createdOn|date:'hh:MM:a'}})</td>
+                       <td>{{item.tableTitle}}</td>
+                       <td>{{item.paymentType}}</td>
+                       <td>{{item.netTotal |number:'1.0-0'}}</td>
+                       <td class="text-primary cursorPointer"><mat-icon (click)="printDuplicateBill(item)">print</mat-icon></td>
+                       <td class="text-success cursorPointer"><mat-icon (click)="billDetails(item)">receipt</mat-icon></td>
+                   </tr>
+               </tbody>
+               
+           </table>
+
+
+        </div>
+
+        <div class="text-end bg-mf-blue p-3">
+            <button type="button" class="btn btn-secondary"  (click)="closeDialog()">Close</button>
+        </div>
+
+    </div>
+
+
+
+    
+    <!------------------------------ Design For Bill Pirnt  --------------------->
+
+
+
+    <div id="duplicate" class="d-none">
+        <div class="text-center">
+            <img [src]="companyLogo" [height]="100" [width]="100">
+            <h2>{{companyName}}</h2>
+            <p>{{companyAddress}}</p>
+            <p>{{CompanyMobile}}</p>
+
+        </div>
+
+
+        <div >
+          <table class="table table-logix2">
+            <thead>
+                <tr>
+                    <th>Inv #</th>
+                    <th>Date</th>
+                    <th>Counter</th>
+                    <th>Table</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                <tr>
+                    <td>{{myInvoiceNo}}</td>
+                    <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
+                    <td>{{myCounterName}}</td>
+                    <td>{{mytableNo}}</td>
+                </tr>
+               
+            </tbody>
+          </table>
+
+          <tr>
+            <th>Remarks:-</th>
+            <td class="ms-2">{{myRemarks}}</td>
+        </tr>
+        </div>
+
+        <h2 *ngIf="myPaymentType == 'Complimentary'" class="border border-dark w-100 text-center">Complimentary</h2>
+        <h2 *ngIf="myDuplicateFlag == true" class="border border-dark w-100 text-center">Duplicate</h2>
+
+        <div>
+            <table class="table table-logix2">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Title</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of myPrintData index as index">
+                        <td>{{index +1}}</td>
+                        <td class="text-center">{{item.productTitle}}</td>
+                        <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+            <table class="w-100 text-end mt-2">
+                <tbody>
+                    <tr>
+                        <th>Sub Total</th>
+                        <td>{{mySubTotal |number:'1.0-0'}}</td>
+                 
+                    </tr>
+                    <tr  *ngIf="myOtherCharges > 0">
+                        <th *ngIf="myOrderType == 'Dine In'">Service Charges</th>
+                        <th *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</th>
+                        <th *ngIf="myOrderType == 'Take Away'">Other Charges</th>
+                        <td>{{myOtherCharges|number:'1.0-0'}}</td>
+                 
+                    </tr>
+                    <tr *ngIf="myDiscount > 0">
+                        <th>Discount</th>
+                        <td>{{myDiscount|number:'1.0-0'}}</td>
+                 
+                    </tr>
+                 
+                    <tr>
+                        <th>Net Total</th>
+                        <td>{{mySubTotal + myOtherCharges|number:'1.0-0'}}</td>
+                 
+                    </tr>
+                    <tr  *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
+                        <th >Cash</th>
+                        <td>{{myBank|number:'1.0-0'}}</td>
+                 
+                    </tr>
+                    <tr *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
+                        <th>Bank</th>
+                        <td>{{mySubTotal + myOtherCharges|number:'1.0-0'}}</td>
+                 
+                    </tr>
+                    <tr *ngIf="myChange > 0">
+                        <th>Change</th>
+                        <td>{{myChange|number:'1.0-0'}}</td>
+                 
+                    </tr>
+                    
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!---------------------------------------------------------------------------------->
+
+
+
+

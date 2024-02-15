@@ -1,7 +1,7 @@
 <div class="d-flex h-100 body" style="background-color: rgb(255, 255, 255);overflow: hidden;">
 
 
-    <div class="col-lg-9 bg-white " >
+    <div class="col-lg-10 bg-white " >
 
          <!-------------------- Top Date and location section --------------->
 
@@ -49,15 +49,15 @@
             </mat-form-field>
         </div>
           
-        <div class="ps-1 d-flex ">
+        <div class="ps-2 d-flex ">
 
              <!-------------------- Product Search Bar --------------->
            
             <div class="col-lg-9  d-flex flex-column">
                 <mat-label class="text-primary">Search Barcode / Product</mat-label> 
-               <input type="text"  #pbarcode [(ngModel)]="PBarcode"  style="background-color:transparent;border: 1px solid rgb(13, 110, 253);border-radius: 5px 0px 0px 5px;"
+               <input type="text"  #pbarcode [(ngModel)]="PBarcode"  
                     (keydown)="searchByCode($event);this.changeFocus($event,'.prodRow')" id="searchProduct"
-                    class="p-1 mb-2 searchProduct" placeholder="Alt + b" autofocus
+                    class="p-1 ps-2 mb-2 searchProduct" placeholder="Alt + b" autofocus
                     autocomplete="off" accesskey="b">
     
                 <div class="  d-flex flex-column SearchConatiner cursorPointer"
@@ -69,8 +69,8 @@
                     </mat-card>
                 </div>
             </div>
-            <div class="col-lg-3 text-center">
-                <button mat-raised-button class="bg-primary text-white w-50 btn-rpt" (click)="ngOnInit()">Load</button>
+            <div class="col-lg-3 text-start ms-1 pt-3 mt-1">
+                <button mat-raised-button class="bg-primary text-white w-50 " style="height: 40px;" (click)="ngOnInit()">Load</button>
             </div>
 
         </div>
@@ -131,7 +131,7 @@
 
    
 
-    <div class="col-lg-3 h-100" style="background-color: rgb(226, 222, 222);position: fixed;right: 0%;">
+    <div class="col-lg-2 h-100" style="background-color: rgb(226, 222, 222);position: fixed;right: 0%;">
 
        <div class="p-1">
         <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
@@ -147,8 +147,8 @@
         <mat-card class="p-1 w-100 " >
            <mat-card-content>
             <div class="justify-content-around d-flex" >
-                <p class="fs-40">Total</p>
-                <p class="font-digit fs-50" >{{subTotal |number:'1.0-2'}}</p>
+                <p style="font-size: 30px;">Total</p>
+                <p class="font-digit " style="font-size: 30px;" >{{subTotal |number:'1.0-2'}}</p>
             </div>
            </mat-card-content>
         </mat-card>

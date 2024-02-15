@@ -1,3 +1,5 @@
+
+
 .searchProduct:focus{
   
     outline: none;
@@ -9,7 +11,13 @@
     height: 40px;
     border: none;
     border-bottom: 1px solid gray;
+    background-color:transparent;
+    border: 1px solid rgb(13, 110, 253);
+    border-radius: 5px 5px 5px 5px;
+    background-color: gainsboro;
 }
+
+
 
 .prodBtn:focus{
     outline: none;
@@ -18,7 +26,6 @@
     zoom: 1;
    
 }
-
 
 .SearchConatiner{
 // border: 0px solid rgb(180, 180, 180);
@@ -48,24 +55,11 @@ overflow-y: scroll;
     height: 30px;
     display: block;
  }
-
 }
 
-
-.font-digit{
-    font-family: 'digital';
-  }
 
 
 ::ng-deep .cdk-overlay-container{
     z-index:2000;
   }
-
-
-//   .modal-backdrop {
-//     z-index: -1;
-//   }
-
-.showtop{
-    z-index: 500 !important;
-}
+  

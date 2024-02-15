@@ -1,6 +1,6 @@
 <div class="d-flex body h-100" style="background-color: gainsboro;">
 
-    <div class="col-lg-9 bg-white " >
+    <div class="col-lg-10 bg-white " >
         <mat-card class="shadow ms-1 me-1 " style="background-color: rgb(255, 255, 255);">
             <mat-card-content>
                 <div class="d-flex justify-content-between ">
@@ -121,7 +121,7 @@
 
    
 
-    <div class="col-lg-3 " style="background-color: rgb(226, 222, 222);position: fixed;right: 0%;">
+    <div class="col-lg-2 " style="background-color: rgb(226, 222, 222);position: fixed;right: 0%;">
 
        <div class="p-1">
         <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
@@ -137,8 +137,8 @@
         <mat-card class="p-1 w-100 " >
            <mat-card-content>
             <div class="justify-content-around d-flex" >
-                <p class="fs-40">Total</p>
-                <p class="font-digit fs-50" >{{subTotal |number:'1.0-2'}}</p>
+                <p style="font-size: 30px;">Total</p>
+                <p class="font-digit " style="font-size: 30px;" >{{subTotal |number:'1.0-2'}}</p>
             </div>
            </mat-card-content>
         </mat-card>
@@ -147,7 +147,7 @@
 
        <div class="mt-4 d-flex justify-content-around">
         <!-- <button mat-raised-button class="bg-primary text-white w-25" (click)="SaveBill('hold')">{{holdBtnType}}</button> -->
-        <button mat-raised-button *ngIf="crudList.c" class="bg-success text-white w-50" (click)="SaveBill('issue')">Save</button>
+        <button mat-raised-button *ngIf="crudList.c" class="bg-success text-white w-50" (click)="SaveBill('issue')">{{btnType}}</button>
         
        </div>
        <div class="mt-4 d-flex justify-content-around">
@@ -180,7 +180,7 @@
                                 </mat-form-field>
                          
             
-                                <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt" (click)="FindSavedBills('ai')" >Get Invoices</button>
+                                <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt" (click)="FindSavedBills()" >Get Invoices</button>
             
                                <mat-form-field class="col-lg-3" appearance="outline">
                                 <mat-label>Search.......</mat-label>
@@ -200,7 +200,6 @@
                                         <th>Amount</th>
                                         <th>User</th>
                                         <th *ngIf="crudList.r">Action</th>
-                                        <!-- <th *ngIf="crudList.u" id="edit">Retrive</th> -->
                                     </tr>
             
                                 </thead>
@@ -213,8 +212,13 @@
                                         <td>{{item.locationTitle}}</td>
                                         <td class="text-end">{{item.netTotal | number:'1.0-0'}}</td>
                                         <td>{{item.entryUser}}</td>
-                                        <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary" (click)="printBill(item)" >print</mat-icon></td>
-                                        <!-- <td class="text-center cursorPointer" *ngIf=" item.invType == 'HI' && crudList.u"><mat-icon data-bs-dismiss="modal"  (click)="retriveBill(item)">edit</mat-icon></td> -->
+                                        <td class="text-center cursorPointer" *ngIf="crudList.r">
+                                            
+                                        <mat-icon data-bs-dismiss="modal" *ngIf="item.approvedStatus == false"  (click)="retriveBill(item)">edit_outline</mat-icon>
+                                        <mat-icon class="text-success"  (click)="item.approvedStatus ? '' : approveBill(item) ">{{item.approvedStatus ? 'done_all' :'check'}}</mat-icon>
+                                        <mat-icon class="text-primary" (click)="printBill(item)" >print</mat-icon>
+                                        <mat-icon class="text-danger" *ngIf="item.approvedStatus == false" (click)="DeleteInv(item)" >delete_outline</mat-icon>
+                                    </td>
             
                                     </tr>
                                 </tbody>
@@ -249,7 +253,7 @@
                     </div>
                
                    <hr>
-                   <h3 class="border border-dark w-100 text-center">Stock Adjustment Note  
+                   <h3 class="border border-dark w-100 text-center">Opening Stock Note  
                     <span class="badge text-danger" *ngIf="myBillStatus == false">UnApproved</span> 
                     <span class="badge text-success " *ngIf="myBillStatus == true">Approved</span> </h3>
                 <div class="d-flex mb-1">

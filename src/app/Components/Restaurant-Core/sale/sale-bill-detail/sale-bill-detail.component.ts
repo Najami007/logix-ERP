@@ -52,8 +52,6 @@ export class SaleBillDetailComponent implements OnInit{
     this.myInvDate = item.createdOn;
     this.myCounterName = item.entryUser;
     this.myOrderType = item.orderType;
-    this.mySubTotal = item.billTotal;
-    this.myNetTotal = item.netTotal;
     this.myOtherCharges = item.otherCharges;
     this.myRemarks = item.remarks;
     this.myCash = item.cashRec;

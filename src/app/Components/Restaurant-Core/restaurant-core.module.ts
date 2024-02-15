@@ -32,6 +32,7 @@ import { SaleRptTablewiseComponent } from './restaurantReports/sale-rpt-tablewis
 import { SaleRptRecipeCatwiseComponent } from './restaurantReports/sale-rpt-recipe-catwise/sale-rpt-recipe-catwise.component';
 import { SaleRptPaymentTypewiseComponent } from './restaurantReports/sale-rpt-payment-typewise/sale-rpt-payment-typewise.component';
 import { SaleBillDetailComponent } from './sale/sale-bill-detail/sale-bill-detail.component';
+import { SavedBillComponent } from './sale/saved-bill/saved-bill.component';
 
 
 
@@ -85,6 +86,7 @@ export const restCore: Route[] = [
     SaleRptRecipeCatwiseComponent,
     SaleRptPaymentTypewiseComponent,
     SaleBillDetailComponent,
+    SavedBillComponent,
    
     
 

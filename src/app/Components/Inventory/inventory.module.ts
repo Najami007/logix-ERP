@@ -35,6 +35,8 @@ import { InvrptprodwiseComponent } from './InventoryReports/invrptprodwise/invrp
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { SalePurchaseRptdatewiseComponent } from './InventoryReports/sale-purchase-rptdatewise/sale-purchase-rptdatewise.component';
 import { TopLeastSaleQtyAmountwiseComponent } from './InventoryReports/top-least-sale-qty-amountwise/top-least-sale-qty-amountwise.component';
+import { RetailSaleComponent } from './retail-sale/retail-sale.component';
+
 
 
 
@@ -84,6 +86,11 @@ export const inventoryRoutes: Route[] = [
   {
     path: 'pur',
     component: PurchaseComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'retsale',
+    component: RetailSaleComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -165,7 +172,8 @@ export const inventoryRoutes: Route[] = [
     InvrptprodwiseComponent,
     SalePurchaseRptdatewiseComponent,
     TopLeastSaleQtyAmountwiseComponent,
-    
+    RetailSaleComponent,
+
  
 
   ],

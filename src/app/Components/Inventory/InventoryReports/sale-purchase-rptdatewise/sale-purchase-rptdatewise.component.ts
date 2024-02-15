@@ -115,6 +115,7 @@ rptType:any = 's';
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventorySummaryDateWise_2?reqType='+this.rptType+'&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
+        // console.log(Response);
         this.SaleDetailList = Response;
         this.billTotal = 0;
         this.chargesTotal = 0;
@@ -123,9 +124,9 @@ rptType:any = 's';
         Response.forEach((e:any) => {
           this.billTotal += e.billTotal;
           this.chargesTotal += e.otherCharges;
-          this.netGrandTotal += e.netTotal;
+          this.netGrandTotal += e.billTotal;
         });
-         console.log(Response)
+        
       }
     )
    }

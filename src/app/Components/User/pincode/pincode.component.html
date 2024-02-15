@@ -3,12 +3,12 @@
 
        <form  method="post">
         <div class="text-center  mt-3 d-flex justify-content-between p-3">
-            <p class="dialogueTitle">ADD PINCODE</p><mat-icon class="cursorPointer"
+            <p class="dialogueTitle">ADD {{Title}}</p><mat-icon class="cursorPointer"
                 (click)="closeDialogue()">cancel</mat-icon>
         </div>
         <div class="container p-2">
             <mat-form-field class="w-100" appearance="outline">
-                <mat-label>Enter Pincode</mat-label>
+                <mat-label>Enter {{Title}}</mat-label>
                 <input matInput name="pin" type="password" [(ngModel)]="pinCode">
             </mat-form-field>
         </div>

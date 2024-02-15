@@ -84,7 +84,7 @@ export class OrderDashboardComponent implements OnInit {
     this.deliveredOrderList = [];
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetOrdersAndVoidItemsDetail?todate='+this.global.dateFormater(this.curDate,'-')+'&type=order').subscribe(
       (Response:any)=>{
- 
+       
         Response.forEach((e:any) => {
         if(e.quantity > 0){
           if(e.reqStatus == false ){
@@ -99,10 +99,11 @@ export class OrderDashboardComponent implements OnInit {
           }
         }
         });
-        // console.log(this.newOrderList.length , this.tempOrderList.length)
         if(this.tempOrderList!= '' && (this.newOrderList.length > this.tempOrderList.length) ){
           this.beep();
         }
+        // console.log(this.newOrderList.length , this.tempOrderList.length)
+       
 
 
       }

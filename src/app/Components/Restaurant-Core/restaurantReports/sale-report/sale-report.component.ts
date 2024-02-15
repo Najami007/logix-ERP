@@ -100,7 +100,7 @@ export class SaleReportComponent implements OnInit {
     $('#detailTable').hide();
     $('#summaryTable').show();
     this.reportType = 'Summary';
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventorySummaryDateWise?reqType=s&reqUserID='+this.userID+'&FromDate='+
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventorySummaryDateWise_2?reqType=s&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
         this.SaleDetailList = Response;
@@ -121,7 +121,7 @@ export class SaleReportComponent implements OnInit {
     $('#detailTable').show();
     $('#summaryTable').hide();
     this.reportType = 'Detail';
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryDetailDateWise?reqType=s&reqUserID='+this.userID+'&FromDate='+
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryDetailDateWise_3?reqType=s&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
         this.SaleDetailList = Response;
