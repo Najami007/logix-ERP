@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -11,6 +11,14 @@ import Swal from 'sweetalert2';
 import { SaleBillDetailComponent } from './sale-bill-detail/sale-bill-detail.component';
 import { SavedBillComponent } from './saved-bill/saved-bill.component';
 
+
+$(window).focus(function () {
+ console.log('active')
+});
+$(window).blur(function () {
+  //do something
+   console.log("You left this tab");
+})
 
 @Component({
   selector: 'app-sale',
@@ -53,6 +61,7 @@ export class SaleComponent implements OnInit {
   }
 
 
+
   ngOnInit(): void {
     this.global.setHeaderTitle('Sale');
     this.getCategories();
@@ -63,10 +72,13 @@ export class SaleComponent implements OnInit {
     this.getTable();
     this.getHoldBills();
     this.getBankList();
+
     
 
 
   }
+
+
 
 
 
@@ -94,8 +106,8 @@ export class SaleComponent implements OnInit {
   categoryID: any = 0;
   orderType = '';
   paymentType = '';
-  cash = 0;
-  bankCash = 0;
+  cash:any = 0;
+  bankCash:any = 0;
   change = 0;
   bankCoaList: any = [];
 
@@ -243,7 +255,7 @@ export class SaleComponent implements OnInit {
     }
     this.netTotal = (this.subTotal + parseFloat(this.OtherCharges)) - parseFloat(this.billDiscount);
 
-    this.change = (this.cash + this.bankCash) - this.netTotal;
+    this.change = (parseFloat(this.cash) + parseFloat(this.bankCash)) - this.netTotal;
   }
 
 
@@ -603,77 +615,88 @@ export class SaleComponent implements OnInit {
 
   ///////////////////////////////////////////////////////////////
 
-  deleteRow(item: any) {
+  tempDeleteRow:any = [];
+
+  deleteRow(item: any,voidQty:any) {
     if (item.entryType == 'New') {
       var index = this.tableData.indexOf(item);
       this.tableData.splice(index, 1);
       this.getTotal();
     }
 
+    if(voidQty > item.quantity){
+      this.msg.WarnNotify('Void Quantity is not Valid');
+      return;
+    }else{
+      if (item.entryType == 'Saved') {
 
-    if (item.entryType == 'Saved') {
-      if (this.tableData.length == 1 && item.quantity <= 1) {
-        this.voidBill();
-      } else {
-        this.global.openPinCode().subscribe(pin => {
-          if (pin !== '') {
-            this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
-              RestrictionCodeID: 1,
-              Password: pin,
-              UserID: this.global.getUserID()
 
-            }).subscribe(
-              (Response: any) => {
-                if (Response.msg == 'Password Matched Successfully') {
-
-                  this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertVoidItem', {
-                    InvBillNo: this.invBillNo,
-                    ProductID: item.productID,
-                    ProductTitle: item.productTitle,
-                    Quantity: 1,
-                    CostPrice: item.costPrice,
-                    AvgCostPrice: item.avgCostPrice,
-                    SalePrice: item.salePrice,
-                    RecipeID: item.recipeID,
-                    CookingAriaID: item.cookingAriaID,
-                    CookingTime: item.cookingTime,
-                    RequestType: 'Void',
-                    EntryType: item.entryType,
-                    ReqRefNo: item.autoInvDetID,
-
-                    PinCode: pin,
-                    UserID: this.global.getUserID()
-                  }).subscribe(
-                    (Response: any) => {
-                      if (Response.msg == 'Data Saved Successfully') {
-                        this.msg.SuccessNotify('Item Void');
-                        if (item.quantity <= 1) {
-                          var index = this.tableData.indexOf(item);
-                          this.tableData.splice(index, 1);
+        if (this.tableData.length == 1 && item.quantity <= 1) {
+          this.voidBill();
+        } else {
+          this.global.openPinCode().subscribe(pin => {
+            if (pin !== '') {
+              this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+                RestrictionCodeID: 1,
+                Password: pin,
+                UserID: this.global.getUserID()
+  
+              }).subscribe(
+                (Response: any) => {
+                  if (Response.msg == 'Password Matched Successfully') {
+  
+                    this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertVoidItem', {
+                      InvBillNo: this.invBillNo,
+                      ProductID: item.productID,
+                      ProductTitle: item.productTitle,
+                      Quantity: voidQty,
+                      CostPrice: item.costPrice,
+                      AvgCostPrice: item.avgCostPrice,
+                      SalePrice: item.salePrice,
+                      RecipeID: item.recipeID,
+                      CookingAriaID: item.cookingAriaID,
+                      CookingTime: item.cookingTime,
+                      RequestType: 'Void',
+                      EntryType: item.entryType,
+                      ReqRefNo: item.autoInvDetID,
+  
+                      PinCode: pin,
+                      UserID: this.global.getUserID()
+                    }).subscribe(
+                      (Response: any) => {
+                        if (Response.msg == 'Data Saved Successfully') {
+                          this.msg.SuccessNotify('Item Void');
+                          if (item.quantity <= 1 || voidQty == item.quantity) {
+                            var index = this.tableData.indexOf(item);
+                            this.tableData.splice(index, 1);
+                          } else {
+                            item.quantity -= voidQty;
+                          }
+                          this.tempDeleteRow = [];
+                          this.getTotal()
+  
                         } else {
-                          item.quantity -= 1;
+                          this.msg.WarnNotify(Response.msg);
                         }
-                        this.getTotal()
-
-                      } else {
-                        this.msg.WarnNotify(Response.msg);
                       }
-                    }
-                  )
-
-                } else {
-                  this.msg.WarnNotify(Response.msg);
+                    )
+  
+                  } else {
+                    this.msg.WarnNotify(Response.msg);
+                  }
                 }
-              }
-            )
-
-
-
-          }
-        })
+              )
+  
+  
+  
+            }
+          })
+        }
       }
+  
     }
 
+    
   }
 
 

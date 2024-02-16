@@ -20,7 +20,7 @@ input:focus{
 }
 
 
-.a{
+a{
     text-decoration: none;
     display: flex;
     flex-direction: row;
@@ -49,8 +49,8 @@ input:focus{
 width: 100%;
 // z-index:1000;
 // position: absolute;
-top: 0;
-height: 45vh;
+margin-top: -20px;
+height: 350px;
 overflow-y: scroll;
 
 // max-width: 470px;

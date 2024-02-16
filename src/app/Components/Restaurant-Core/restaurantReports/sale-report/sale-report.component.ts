@@ -30,6 +30,7 @@ export class SaleReportComponent implements OnInit {
     private dialog:MatDialog,
     
   ){
+ 
 
     this.global.getCompany().subscribe((data)=>{
       this.companyProfile = data;
@@ -44,6 +45,7 @@ export class SaleReportComponent implements OnInit {
     this.getUsers();
     $('#detailTable').show();
     $('#summaryTable').hide();
+   
   }
 
 
@@ -63,7 +65,7 @@ export class SaleReportComponent implements OnInit {
   reportType:any;
 
   getUsers(){
- 
+    
     this.app.startLoaderDark()
     this.http.get(environment.mainApi+this.global.userLink+'getuser').subscribe(
       (Response)=>{

@@ -36,6 +36,10 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { SalePurchaseRptdatewiseComponent } from './InventoryReports/sale-purchase-rptdatewise/sale-purchase-rptdatewise.component';
 import { TopLeastSaleQtyAmountwiseComponent } from './InventoryReports/top-least-sale-qty-amountwise/top-least-sale-qty-amountwise.component';
 import { RetailSaleComponent } from './retail-sale/retail-sale.component';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+import { EnterQtyComponent } from './retail-sale/enter-qty/enter-qty.component';
+import { RtlSavedBillComponent } from './retail-sale/rtl-saved-bill/rtl-saved-bill.component';
+ 
 
 
 
@@ -173,6 +177,8 @@ export const inventoryRoutes: Route[] = [
     SalePurchaseRptdatewiseComponent,
     TopLeastSaleQtyAmountwiseComponent,
     RetailSaleComponent,
+    EnterQtyComponent,
+    RtlSavedBillComponent,
 
  
 
@@ -188,8 +194,7 @@ export const inventoryRoutes: Route[] = [
     TextMaskModule,
     Ng2SearchPipeModule,
     NgxMaterialTimepickerModule,
-    
-
+    ScrollingModule,
 
   ],
   exports: [

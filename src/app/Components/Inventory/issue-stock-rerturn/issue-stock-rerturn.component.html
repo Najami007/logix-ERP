@@ -54,7 +54,7 @@
            
             <div class="col-lg-9  d-flex flex-column">
                 <mat-label class="text-primary">Search Barcode / Product</mat-label> 
-               <input type="text"  #pbarcode [(ngModel)]="PBarcode"  style="background-color:transparent;border: 1px solid rgb(13, 110, 253);border-radius: 5px 0px 0px 5px;"
+               <input type="text"  #pbarcode [(ngModel)]="PBarcode"  
                     (keydown)="searchByCode($event);this.changeFocus($event,'.prodRow')" id="searchProduct"
                     class="p-1 mb-2 searchProduct" placeholder="Alt + b" autofocus
                     autocomplete="off" accesskey="b">
@@ -68,8 +68,8 @@
                     </mat-card>
                 </div>
             </div>
-            <div class="col-lg-3 text-center">
-                <button mat-raised-button class="bg-primary text-white w-50 btn-rpt" (click)="ngOnInit()">Load</button>
+            <div class="col-lg-3 text-start ms-1 pt-3 mt-1">
+                <button mat-raised-button class="bg-primary text-white w-50 " (click)="ngOnInit()">Load</button>
             </div>
 
         </div>

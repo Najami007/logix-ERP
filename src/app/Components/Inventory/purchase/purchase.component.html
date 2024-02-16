@@ -242,13 +242,10 @@
                         <!-- <div class="SearchConatiner cursorPointer"
                         *ngIf="productName != '' && productName != undefined">
                         <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
-                            <button href="#" *cdkVirtualFor="let item of productList | filter:productName  index as index"  (click)="holdDataFunction(item)"
+                            <a href="#" *cdkVirtualFor="let item of productList | filter:productName  index as index"  (click)="holdDataFunction(item)"
                             (keydown)="handleProdFocus(item,$event,'.prodRow','.prodName',productList)"
-                            class=" prodRow{{index}} prodBtn  example-item">{{item.productTitle}}<b>({{item.barcode}})</b></button>
-                          </cdk-virtual-scroll-viewport>
-
-                    
-                       
+                            class=" prodRow{{index}} prodBtn  example-item">{{item.productTitle}}<b>({{item.barcode}})</b></a>
+                          </cdk-virtual-scroll-viewport>             
                     </div> -->
 
                         <div class="SearchConatiner cursorPointer"

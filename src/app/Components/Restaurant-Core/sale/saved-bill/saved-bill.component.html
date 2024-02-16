@@ -137,17 +137,17 @@
                  
                     <tr>
                         <th>Net Total</th>
-                        <td>{{mySubTotal + myOtherCharges|number:'1.0-0'}}</td>
+                        <td>{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-0'}}</td>
                  
                     </tr>
                     <tr  *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
                         <th >Cash</th>
-                        <td>{{myBank|number:'1.0-0'}}</td>
+                        <td>{{myCash|number:'1.0-0'}}</td>
                  
                     </tr>
                     <tr *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
                         <th>Bank</th>
-                        <td>{{mySubTotal + myOtherCharges|number:'1.0-0'}}</td>
+                        <td>{{myBank|number:'1.0-0'}}</td>
                  
                     </tr>
                     <tr *ngIf="myChange > 0">

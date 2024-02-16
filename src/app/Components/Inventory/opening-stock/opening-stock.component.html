@@ -32,29 +32,32 @@
                 </div>
             </mat-card-content>
             <mat-card-content>
-                <div class="ps-1 d-flex pt-1">
+                <div class="ps-1 d-flex ">
+
+                    <!-------------------- Product Search Bar --------------->
+                  
+                   <div class="col-lg-9  d-flex flex-column">
+                       <mat-label class="text-primary">Search Barcode / Product</mat-label> 
+                      <input type="text"  #pbarcode [(ngModel)]="PBarcode"  
+                           (keydown)="searchByCode($event);this.changeFocus($event,'.prodRow')" id="searchProduct"
+                           class="p-1 mb-2 searchProduct" placeholder="Alt + b" autofocus
+                           autocomplete="off" accesskey="b">
            
-                    <div class="col-lg-9  d-flex flex-column">
-                        <mat-label class="text-primary">Search Barcode / Product</mat-label> 
-                       <input type="text"  #pbarcode [(ngModel)]="PBarcode" style="background-color:transparent;border: 1px solid rgb(13, 110, 253);border-radius: 5px 0px 0px 5px;"
-                            (keydown)="searchByCode($event);this.changeFocus($event,'.prodRow');" id="searchProduct"
-                            class="p-1 mb-2 searchProduct" placeholder="Alt + s" autofocus
-                            autocomplete="off" accesskey="s">
-            
-                        <div class="d-flex flex-column SearchConatiner cursorPointer"
-                            *ngIf="PBarcode != '' && PBarcode != undefined">
-                            <div class="card " *ngFor="let item of productList| filter:PBarcode index as index"
-                                (click)="holdDataFunction(item)">
-                                <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn" (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">{{item.productTitle}}
-                                    (<b>{{item.barcode}}</b> )</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 text-center">
-                        <button mat-raised-button class="bg-primary text-white w-50 btn-rpt" (click)="ngOnInit()">Load</button>
-                    </div>
-        
-                </div>
+                       <div class="  d-flex flex-column SearchConatiner cursorPointer"
+                           *ngIf="PBarcode != '' && PBarcode != undefined">
+                           <mat-card class="card " *ngFor="let item of productList| filter:PBarcode index as index"
+                               (click)="holdDataFunction(item)">
+                               <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn" (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">{{item.productTitle}}
+                                   (<b>{{item.barcode}}</b> )</button>
+                           </mat-card>
+                       </div>
+                   </div>
+                   <div class="col-lg-3 text-start ms-1 pt-3 mt-1">
+                       <button mat-raised-button class="bg-primary text-white w-50 " (click)="ngOnInit()">Load</button>
+                   </div>
+       
+               </div>
+       
             </mat-card-content>
            </mat-card>
 

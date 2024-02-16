@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -8,6 +8,13 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 
+import * as $ from 'jquery';
+import { EnterQtyComponent } from './enter-qty/enter-qty.component';
+import { Observable, retry } from 'rxjs';
+import { RtlSavedBillComponent } from './rtl-saved-bill/rtl-saved-bill.component';
+
+
+
 @Component({
   selector: 'app-retail-sale',
   templateUrl: './retail-sale.component.html',
@@ -15,8 +22,27 @@ import Swal from 'sweetalert2';
 })
 export class RetailSaleComponent implements OnInit {
 
-  companyProfile:any = [];
+  ////////////////// will give the current tab visible status
+    
+  @HostListener('document:visibilitychange', ['$event'])
+
+  appVisibility() {
+    if (document.hidden) { 
+
+     } 
+     else {
+       this.getCurrentBill();
+     }
+ }
+ companyProfile: any = [];
+ companyLogo: any = '';
+ companyAddress: any = '';
+ CompanyMobile: any = '';
+ companyName: any = '';
   crudList:any = {c:true,r:true,u:true,d:true};
+
+
+  mobileMask = this.global.mobileMask;
   constructor(
     private http:HttpClient,
     private msg:NotificationService,
@@ -30,8 +56,12 @@ export class RetailSaleComponent implements OnInit {
       // console.log(this.crudList);
     })
 
-    this.global.getCompany().subscribe((data)=>{
+    this.global.getCompany().subscribe((data) => {
       this.companyProfile = data;
+      this.companyLogo = data[0].companyLogo1;
+      this.CompanyMobile = data[0].companyMobile;
+      this.companyAddress = data[0].companyAddress;
+      this.companyName = data[0].companyName;
     });
 
 
@@ -42,34 +72,94 @@ export class RetailSaleComponent implements OnInit {
   ngOnInit(): void {
    this.global.setHeaderTitle('Sale');
    this.getBankList();
+   this.getCurrentBill();
+   
   }
 
-
+ 
+  billRemarks = '';
 
   productList:any = [];
   bankCoaList:any =[];
-
-
+  projectID = 1;
+  InvDate = new Date();
   PBarcode:any;
   tableDataList:any = [];
   productImage:any;
-  discount = 0;
+  discount:any = 0;
+  otherCharges:any = 0;
   change = 0;
-  paymentType = '';
-  cash = 0;
-  bankCash = 0;
+  paymentType = 'Cash';
+  cash:any = 0;
+  bankCash:any = 0;
   bankCoaID = 0;
 
   subTotal = 0;
   netTotal = 0;
   totalQty = 0;
  
+  customerName = '' ;
+  customerMobileno = '';
+
+  savedBillList:any = [];
+  curDate = new Date();
+
+  tempQty = 1;
+  tempProdRow:any;
 
 
-
-
-
+  invBillNo = '';
   
+
+  //////////////////////////////////////////////////////////////////////////////////
+  getCurrentBill(){
+    
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetSaleExistingBill?reqUserID='+this.global.getUserID()).subscribe(
+      (Response:any)=>{
+        this.tableDataList = [];
+       if(Response != ''){
+        this.invBillNo = Response[0].invBillNo;
+       }
+         //console.log(Response);
+        // this.tableDataList = Response;
+        
+        Response.forEach((e:any) => {
+          this.tableDataList.push({
+            productID:e.productID,
+            productTitle:e.productTitle,
+            barcode:e.barcode,
+            productImage:e.productImage,
+            quantity:e.quantity,
+            wohCP:e.costPrice,
+            costPrice:e.costPrice,
+            avgCostPrice:e.avgCostPrice,
+            salePrice:e.salePrice,
+            ovhPercent:0,
+            ovhAmount:0,
+            expiryDate:this.global.dateFormater(new Date(),'-'),
+            batchNo:'-',
+            batchStatus:'-',
+            uomID:e.uomID,
+            packing:1,
+            discInP:0,
+            discInR:0,
+            aq:e.aq,
+            autoInvDetID:e.autoInvDetID,
+      
+          })
+        });
+
+        if(Response != ''){
+          this.productImage = Response[0].productImage;
+        }
+        this.getTotal();
+        
+      }
+    )
+  }
+
+
+
   ////////////////////////////////////////////
 
   getBankList() {
@@ -86,133 +176,52 @@ export class RetailSaleComponent implements OnInit {
     )
   }
 
-
+  //////////////////////////////////////////////////////////////////////////////////
 
   holdDataFunction(data:any){
-    var condition = this.tableDataList.find((x: any) => x.productID == data.productID);
+
   
-      var index = this.tableDataList.indexOf(condition);
-  
-      if (condition == undefined) {
-  
-  
-        this.global.getProdDetail(data.productID,'').subscribe(
+        this.http.post(environment.mainApi+this.global.inventoryLink+'AddSaleProduct',{
+          PartyID: 0,
+          ProductID: data.productID,
+          Barcode: "",
+      
+          UserID: this.global.getUserID()
+        }).subscribe(
           (Response:any)=>{
-            //  console.log(Response);
-  
-            
-              this.tableDataList.push({
-                productID:Response[0].productID,
-                productTitle:Response[0].productTitle,
-                barcode:Response[0].barcode,
-                productImage:Response[0].productImage,
-                quantity:1,
-                wohCP:Response[0].costPrice,
-                costPrice:Response[0].costPrice,
-                avgCostPrice:Response[0].avgCostPrice,
-                salePrice:Response[0].salePrice,
-                ovhPercent:0,
-                ovhAmount:0,
-                expiryDate:this.global.dateFormater(new Date(),'-'),
-                batchNo:'-',
-                batchStatus:'-',
-                uomID:Response[0].uomID,
-                packing:1,
-                discInP:0,
-                discInR:0,
-                aq:Response[0].aq,
-          
-              })
-              
-             
-            
-           this.productImage = Response[0].productImage;
+            if(Response.msg == 'Data Saved Successfully'){
+              this.getCurrentBill();
+            }else{
+              this.msg.WarnNotify(Response.msg);
+            }
           }
         )
-  
-      //console.log(data);
-    
-      this.PBarcode = '';
-      $('#searchProduct').trigger('focus');
-    }else {
-      this.tableDataList[index].quantity += 1;
-      this.productImage = this.tableDataList[index].productImage;
       
       this.PBarcode = '';
       $('#searchProduct').trigger('focus');
-    }
-  
-    this.getTotal();
-      this.PBarcode = '';
-      return false;
+       this.getTotal();
     }
 
-    
+      //////////////////////////////////////////////////////////////////////////////////
   searchByCode(e:any){
 
     if(this.PBarcode !== ''){
       if(e.keyCode == 13){
-        ///// check the product in product list by barcode
-        var row =  this.productList.find((p:any)=> p.barcode == this.PBarcode);
-   
-        /////// check already present in the table or not
-        if(row !== undefined){
-          var condition = this.tableDataList.find(
-            (x: any) => x.productID == row.productID
-          );
+        this.http.post(environment.mainApi+this.global.inventoryLink+'AddSaleProduct',{
+          PartyID: 0,
+          ProductID: 0,
+          Barcode: this.PBarcode,
       
-          var index = this.tableDataList.indexOf(condition);
-      
-          //// push the data using index
-          if (condition == undefined) {
-
-
-            this.global.getProdDetail(0,this.PBarcode).subscribe(
-              (Response:any)=>{
-                //console.log(Response)
-                  this.tableDataList.push({
-                    productID:Response[0].productID,
-                    productTitle:Response[0].productTitle,
-                    barcode:Response[0].barcode,
-                    productImage:Response[0].productImage,
-                    quantity:1,
-                    wohCP:Response[0].costPrice,
-                    avgCostPrice:Response[0].avgCostPrice,
-                    costPrice:Response[0].costPrice,
-                    salePrice:Response[0].salePrice,
-                    ovhPercent:0,
-                    ovhAmount:0,
-                    expiryDate:this.global.dateFormater(new Date(),'-'),
-                    batchNo:'-',
-                    batchStatus:'-',
-                    uomID:Response[0].uomID,
-                    packing:1,
-                    discInP:0,
-                    discInR:0,
-                    aq:Response[0].aq,
-              
-                  });
-                  this.getTotal();
-            
-
-                this.productImage = Response[0].productImage;
-              }
-            )
-      
-
-          this.PBarcode = '';
-          $('#searchProduct').trigger('focus');
-        }else {
-          this.tableDataList[index].quantity += 1;
-          this.productImage = this.tableDataList[index].productImage;
-       
-          this.PBarcode = '';
-          $('#searchProduct').trigger('focus');
-        }
-        }else{
-          this.msg.WarnNotify('Product Not Found')
-        }
-     
+          UserID: this.global.getUserID()
+        }).subscribe(
+          (Response:any)=>{
+            if(Response.msg == 'Data Saved Successfully'){
+              this.getCurrentBill();
+            }else{
+              this.msg.WarnNotify(Response.msg);
+            }
+          }
+        )
        
        this.PBarcode = '';
        this.getTotal();
@@ -223,10 +232,13 @@ export class RetailSaleComponent implements OnInit {
    
   }
 
+    //////////////////////////////////////////////////////////////////////////////////
 
     getTotal() {
+      // alert();
       this.subTotal = 0;
       this.totalQty = 0;
+      this.netTotal = 0;
       for (var i = 0; i < this.tableDataList.length; i++) {
      
         this.subTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].salePrice));
@@ -235,12 +247,13 @@ export class RetailSaleComponent implements OnInit {
       }
       
 
-      this.netTotal = this.subTotal - this.discount;
+      this.netTotal = (this.subTotal + parseFloat(this.otherCharges) ) - parseFloat(this.discount);
+      this.change =  (parseFloat(this.cash) + parseFloat(this.bankCash)) - this.netTotal;
     }
 
-
+  //////////////////////////////////////////////////////////////////////////////////
   
-    rowFocused = 0;
+    rowFocused = -1;
     prodFocusedRow = 0;
 
     handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[]){
@@ -258,8 +271,8 @@ export class RetailSaleComponent implements OnInit {
            var clsName = cls + this.prodFocusedRow;    
           //  alert(clsName);
            $(clsName).trigger('focus');
-           e.which = 9;   
-           $(clsName).trigger(e)       
+          //  e.which = 9;   
+          //  $(clsName).trigger(e)       
        }}
      }
    
@@ -328,6 +341,8 @@ export class RetailSaleComponent implements OnInit {
     else {
         e.preventDefault();
     }
+
+   
   
     /////move down
       if(e.keyCode == 40){
@@ -373,32 +388,68 @@ export class RetailSaleComponent implements OnInit {
   
     }
   
+
+      //////////////////////////////////////////////////////////////////////////////////
+
+
     delRow(item: any) {
-      Swal.fire({
-        title:'Alert!',
-        text:'Confirm to Delete Product',
-        position:'center',
-        icon:'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Confirm',
-      }).then((result)=>{
+
+
+      if (this.invBillNo != '') {
+        Swal.fire({
+          title: 'Alert!',
+          text: 'Confirm to Void Product',
+          position: 'center',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Confirm',
+        }).then((result) => {
   
-        if(result.isConfirmed){
-     
-          var index = this.tableDataList.indexOf(item);
-          this.tableDataList.splice(index, 1);
-          this.getTotal();
+          if (result.isConfirmed) {
+            this.global.openPinCode().subscribe(pin => {
+              if (pin !== '') {
+                this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+                  RestrictionCodeID: 1,
+                  Password: pin,
+                  UserID: this.global.getUserID()
   
+                }).subscribe(
+                  (Response: any) => {
+                    if (Response.msg == 'Password Matched Successfully') {
+  
+                        this.voidProduct(item);
+  
+                    } else {
+                      this.msg.WarnNotify(Response.msg);
+                    }
+                  }
+                )
+  
+  
+  
+              }
+            })
+          }
+  
+  
+        })
       }
-     }
-     )
-      
+  
+
+  
     
       
     }
 
+
+      //////////////////////////////////////////////////////////////////////////////////
+
+   
+
+
+      //////////////////////////////////////////////////////////////////////////////////
 
     changeValue(item:any){
       var myIndex = this.tableDataList.indexOf(item);
@@ -416,6 +467,7 @@ export class RetailSaleComponent implements OnInit {
       }
      }
 
+       //////////////////////////////////////////////////////////////////////////////////
      
      showImg(item:any){
     
@@ -424,10 +476,68 @@ export class RetailSaleComponent implements OnInit {
     
     }
 
+  //////////////////////////////////////////////////////////////////////////////////
 
-    save(type:any){}
+    save(){
+
+      if(this.paymentType == 'Cash' && (this.cash == 0 || this.cash == undefined || this.cash == null)){
+        this.msg.WarnNotify('Enter Cash')
+      }else if(this.paymentType == 'Cash' && this.cash < this.netTotal){
+        this.msg.WarnNotify('Entered Cash is not Valid')
+      }else if ( this.paymentType == 'Split' && ((this.cash + this.bankCash) > this.netTotal || (this.cash + this.bankCash) < this.netTotal)) {
+        this.msg.WarnNotify('Amount in Not Valid')
+      } else if ( this.paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
+        this.msg.WarnNotify('Enter Valid Amount')
+      }else if(this.customerName =='' && this.customerMobileno != ''){
+        this.msg.WarnNotify('Enter Customer Name')
+      }else if(this.customerName !='' && this.customerMobileno == ''){
+        this.msg.WarnNotify('Enter Customer Mobile')
+      }else {
+        this.http.post(environment.mainApi+this.global.inventoryLink+'InsertVoidableSale',{
+          HoldInvNo: this.invBillNo,
+          InvDate: this.global.dateFormater(this.InvDate,'-'),
+          PartyID: 0,
+          InvType: "S",
+          ProjectID: this.projectID,
+          BookerID: 0,
+          PaymentType: this.paymentType,
+          Remarks: this.billRemarks,
+          OrderType: "Take Away",
+          BillTotal:this.subTotal,
+          BillDiscount: this.discount,
+          OtherCharges: this.otherCharges,
+          NetTotal:this.netTotal,
+          CashRec:this.cash,
+          Change:this.change,
+          BankCoaID: this.bankCoaID,
+          BankCash: this.bankCash,
+      
+          CusContactNo: this.customerMobileno,
+          CusName: this.customerName,
+      
+      
+          SaleDetail: JSON.stringify(this.tableDataList),
+          UserID:this.global.getUserID()
+        }).subscribe(
+          (Response:any)=>{
+            if(Response.msg == 'Data Saved Successfully'){
+              this.msg.SuccessNotify(Response.msg);
+              console.log(Response);
+              this.PrintAfterSave(Response.invNo);
+              this.getCurrentBill();
+              this.reset();
+            }else{
+              this.msg.WarnNotify(Response.msg);
+            }
+          }
+        )
+      }
+
+    
+
+    }
   
-
+  //////////////////////////////////////////////////////////////////////////////////
 
 
     reset(){
@@ -439,14 +549,234 @@ export class RetailSaleComponent implements OnInit {
       this.totalQty = 0;
       this.rowFocused = 0;
       this.prodFocusedRow = 0;
-      this.paymentType = '';
+      this.otherCharges = 0;  
+      this.paymentType = 'Cash';
       this.change = 0;
       this.cash = 0;
       this.bankCash = 0;
+      this.customerMobileno = '';
+      this.customerName = '';
       
 
     }
+    
 
+  //////////////////////////////////////////////////////////////////////////////////
+    
+
+
+  openQtyModal(e:any,item:any){
+       if(e.keyCode == 13 || e.button == 0){
+      //  $('#qtyModal').show();
+      this.dialogue.open(EnterQtyComponent,{
+        width:'20%',
+        data:item.quantity,
+      disableClose:true,
+      hasBackdrop:true,
+      }).afterClosed().subscribe(qty=>{
+        $('.qty'+this.rowFocused).trigger('focus');
+        if(qty != ''){
+          /////////////////////////// checking whether quantity increase and trigger api
+          if(qty > item.quantity){
+            this.http.post(environment.mainApi+this.global.inventoryLink+'AddSaleQuantity',{
+              InvBillNo: this.invBillNo,
+              ProductID: item.productID,
+              Quantity: qty - item.quantity,
+          
+              UserID: this.global.getUserID(),
+            }).subscribe(
+              (Response:any)=>{
+                if(Response.msg == 'Data Updated Successfully'){
+                  this.getCurrentBill();
+                }else{
+                  this.msg.WarnNotify(Response.msg);
+                }
+              }
+            )
+          }
+
+           /////////////////////////// checking whether quantity decrease and trigger void
+          if(qty < item.quantity){
+            this.http.post(environment.mainApi+this.global.inventoryLink+'VoidProduct',{
+              InvBillNo: this.invBillNo,
+              ProductID: item.productID, 
+              ProductTitle: item.productTitle,
+              Quantity:item.quantity - qty, 
+              CostPrice: item.costPrice,
+              AvgCostPrice: item.avgCostPrice,
+              SalePrice: item.salePrice,
+              ReqRefNo: item.autoInvDetID,
+          
+              UserID: this.global.getUserID(),
+            }).subscribe(
+              (Response:any)=>{
+                if(Response.msg == 'Data Saved Successfully'){
+                  this.getCurrentBill();
+                }else{
+                  this.msg.WarnNotify(Response.msg);
+                }
+              }
+            )
+            
+          }
+        }
+      })
+
+      } 
+  }
+  
+
+  //////////////////////////////////////////////////////////////////////////////////
+
+
+  voidBill(){
+
+    if (this.invBillNo != '') {
+      Swal.fire({
+        title: 'Alert!',
+        text: 'Confirm to Void Full Bill',
+        position: 'center',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Confirm',
+      }).then((result) => {
+
+        if (result.isConfirmed) {
+          this.global.openPinCode().subscribe(pin => {
+            if (pin !== '') {
+              this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+                RestrictionCodeID: 1,
+                Password: pin,
+                UserID: this.global.getUserID()
+
+              }).subscribe(
+                (Response: any) => {
+                  if (Response.msg == 'Password Matched Successfully') {
+
+                    this.http.post(environment.mainApi+this.global.inventoryLink+'VoidAllProducts',{
+                      InvBillNo: this.invBillNo,
+                      SaleDetail: JSON.stringify(this.tableDataList),  
+                      UserID: this.global.getUserID(),
+                    }).subscribe(
+                      (Response:any)=>{
+                        if(Response.msg == 'Data Saved Successfully'){
+                          this.getCurrentBill();
+                        }else{
+                          this.msg.WarnNotify(Response.msg);
+                        }
+                      }
+                    )
+
+                  } else {
+                    this.msg.WarnNotify(Response.msg);
+                  }
+                }
+              )
+
+
+
+            }
+          })
+        }
+
+
+      })
+    }
+
+  
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////
+
+  voidProduct(item:any){
+    // console.log(item);
+    this.http.post(environment.mainApi+this.global.inventoryLink+'VoidProduct',{
+      InvBillNo: this.invBillNo,
+      ProductID: item.productID, 
+      ProductTitle: item.productTitle,
+      Quantity:item.quantity, 
+      CostPrice: item.costPrice,
+      AvgCostPrice: item.avgCostPrice,
+      SalePrice: item.salePrice,
+      ReqRefNo: item.autoInvDetID,
+  
+      UserID: this.global.getUserID(),
+    }).subscribe(
+      (Response:any)=>{
+        if(Response.msg == 'Data Saved Successfully'){
+          this.getCurrentBill();
+        }else{
+          this.msg.WarnNotify(Response.msg);
+        }
+      }
+    )
+  }
+
+
+  openSavedBill(){
+    this.dialogue.open(RtlSavedBillComponent,{
+      width:'60%',
+    }).afterClosed().subscribe(
+      
+    )
+  }
+
+
+
+
+  savedbillList:any = [];
+  
+  
+  
+  myPrintData: any = [];
+  myInvoiceNo = '';
+  mytableNo = '';
+  myCounterName = '';
+  myInvDate: any = new Date();
+  myOrderType = '';
+  mySubTotal = 0;
+  myNetTotal = 0;
+  myOtherCharges = 0;
+  myRemarks = '';
+  myDiscount = 0;
+  myCash = 0;
+  myChange = 0;
+  myBank = 0;
+  myPaymentType = '';
+  myDuplicateFlag = false;
+  myTime:any;
+
+  PrintAfterSave(InvNo:any){
+    //console.log(item)
+    
+
+    this.http.get(environment.mainApi+this.global.restaurentLink+'PrintBill?BillNo='+InvNo).subscribe(
+      (Response:any)=>{
+        this.myInvoiceNo = InvNo;
+        this.myInvDate = Response[0].createdOn ;
+        this.myCounterName = Response[0].entryUser;
+        this.mySubTotal = Response[0].billTotal;
+        this.myNetTotal = Response[0].netTotal;
+        this.myOtherCharges = Response[0].otherCharges;
+        this.myRemarks = Response[0].remarks;
+        this.myCash = Response[0].cashRec;
+        this.myBank = Response[0].netTotal - Response[0].cashRec;
+        this.myDiscount = Response[0].billDiscount;
+        this.myChange = Response[0].change;
+        this.myPaymentType = Response[0].paymentType;
+        //console.log(Response);
+        this.myPrintData = Response;
+      }
+    )
+
+
+    setTimeout(() => {
+      this.global.printData('#printBill');
+    }, 500);
+  }
 
 
 }
+

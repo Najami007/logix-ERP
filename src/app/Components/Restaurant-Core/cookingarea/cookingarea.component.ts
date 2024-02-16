@@ -42,7 +42,7 @@ export class CookingareaComponent implements OnInit {
   }
 
 
-  tableList:any = [];
+  cookingAreaList:any = [];
 
 
   menuSearch:any;
@@ -50,7 +50,7 @@ export class CookingareaComponent implements OnInit {
   getCookingArea(){
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetCookingAria').subscribe(
       (Response:any)=>{
-        this.tableList = Response;
+        this.cookingAreaList = Response;
         console.log(Response);
       }
     )
