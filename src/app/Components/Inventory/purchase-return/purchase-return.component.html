@@ -1,42 +1,41 @@
 <div class="body">
 
     <!-- ////////////////////////// first row////////////////// -->
-    <div class="mb-2 p-1 d-flex w-100" style="box-shadow: 0px 0px 10px 0px rgb(192, 209, 235);background-color:rgb(213, 241, 220);" >
-        <div class="d-flex just col-lg-11 mb-2 ps-3 pe-3" >
+    <div class="mb-2 p-1 d-flex w-100" style="box-shadow: 0px 0px 10px 0px rgb(192, 209, 235);background-color:rgb(255, 255, 255);" >
+        <mat-card class="d-flex just col-lg-11 mb-2 ps-3 pe-3 me-1 pt-3" style="background-color: #e8e8e4   ;">
     
-            <div class="d-flex pt-4 justify-content-between col-lg-11  ps-3 pe-3">
-                <div class="col-lg-9 d-flex ">
-                    <input type="text" style="background-color:transparent;border: 1px solid rgb(13, 110, 253);border-radius: 5px 0px 0px 5px;"
-                        #pbarcode [(ngModel)]="PBarcode"
+            <div class="d-flex pt-4 justify-content-between col-lg-11  ps-3 pe-3" >
+                <div class="col-lg-8 d-flex ">
+                    <input type="text" #pbarcode [(ngModel)]="PBarcode"
                         (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event);"
-                        id="searchProduct" class="searchProduct col-lg-10" placeholder="Scan Barcode (Alt + b)"
+                        id="searchProduct" class="searchProduct ps-1" placeholder="Scan Barcode (Alt + b)"
                         autofocus autocomplete="off" accesskey="b">
 
-                    <button accesskey="n" class="bg-primary text-white col-lg-2" data-bs-toggle="modal"
+                    <button accesskey="n" class="bg-primary text-white " data-bs-toggle="modal"
                         data-bs-target="#prodModal" matTooltip="Search Product By Name (Alt + n)"
                         style="height: 50px;width: 50px;border: 1px solid rgb(13, 110, 253);border-radius: 0px 5px 5px 0px;"
                         (click)="focusto('#prodName',$event)"><mat-icon>search</mat-icon></button>
                 </div>
 
 
-                <div class="col-lg-3 text-end ">
+                <div class="col-lg-4 ms-1">
 
-                    <button class="w-25 btn btn-danger me-1"
+                    <button class="w-25 btn btn-danger me-1" style="height: 50px;"
                         data-bs-toggle="modal"  data-bs-target="#holdModal">Retrieve</button>
-                    <button class=" w-25 btn btn-primary me-1  " *ngIf="crudList.c"
+                    <button class=" w-25 btn btn-primary me-1  " *ngIf="crudList.c" style="height: 50px;"
                         (click)="SaveBill('hold')">{{holdBtnType}}</button>
-                    <button class=" w-25 btn btn-success " *ngIf="crudList.c" (click)="SaveBill('purchase')">Save</button>
+                    <button class=" w-25 btn btn-success " style="height: 50px;" *ngIf="crudList.c" (click)="SaveBill('purchase')">Save</button>
                 </div>
             </div>
 
-        </div>
+        </mat-card>
 
-        <div class="mb-2 col-lg-1 text-center border border-primary" style="height: 130px;width: 130px;" >
+        <mat-card class="mb-2 col-lg-1 text-center border border-primary" style="height: 130px;width: 130px;" >
             <div class="p-1 " *ngIf="tableDataList != ''"
                 (click)="this.global.showProductImage(this.productImage,0)">
                 <img [src]="productImage" alt="" height="120" width="120">
             </div>
-        </div>
+        </mat-card>
 
 
 

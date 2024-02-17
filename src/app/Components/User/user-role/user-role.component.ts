@@ -207,7 +207,9 @@ export class UserRoleComponent implements OnInit {
 
 
   addToSelectedModule(item:any,index:any,type:any){
+
     if(type == 'a'){
+   
       if(item.a == true){
         this.menuList[index].c = true;
         this.menuList[index].r = true;
@@ -309,10 +311,12 @@ export class UserRoleComponent implements OnInit {
         var AllowedRolesList:any = [];
         
         Response.forEach((e:any) => {
-
+         
           //// will replace the menu list crud fields by comparing with response //////////
 
           var index = this.menuList.findIndex((obj:any)=>obj.menuID == e.menuID);
+         
+
           this.menuList[index].c = e.c;
           this.menuList[index].r = e.r;
           this.menuList[index].u = e.u;

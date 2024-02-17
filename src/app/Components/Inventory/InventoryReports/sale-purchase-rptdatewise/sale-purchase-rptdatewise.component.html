@@ -48,7 +48,7 @@
     </div>
    
     <div class="d-flex justify-content-center">
-        <mat-form-field appearance="fill" class="col-lg-3 me-2">
+        <mat-form-field  class="col-lg-3 me-2">
             <mat-label>Reports</mat-label>
             <mat-select [(ngModel)]="tmpRptType" >
                 <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
@@ -108,7 +108,7 @@
                     <th>S#</th>
                     <th>Bill #</th>
                     <th>Date</th>
-                    <th>Location</th>
+                    <!-- <th>Location</th> -->
                     <th *ngIf="rptType == 'p'">Party</th>
                     <th *ngIf="rptType == 'p'">Booker</th>
                     <th style="width: 120px;">Total</th>
@@ -123,14 +123,14 @@
                     <td class="text-center">{{index + 1}}</td>
                     <td class="text-center">{{item.invBillNo}}</td>
                     <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
-                    <td >{{item.locationTitle}}</td>
+                    <!-- <td >{{item.locationTitle}}</td> -->
                     <td *ngIf="rptType == 'p'">{{item.partyName}}</td>
                     <td *ngIf="rptType == 'p'">{{item.bookerName }}</td>
                     <td class="text-end">{{item.billTotal  |number:'1.0-0'}}</td>
                     <td>{{item.entryUser}}</td>
                 </tr>
                 <tr>
-                    <td colspan="4"></td>
+                    <td colspan="3"></td>
                     <td *ngIf="rptType == 'p'"></td>
                     <td *ngIf="rptType == 'p'"></td>
                     <td class="fw-bold text-end">{{netGrandTotal |number:'1.0-0'}}</td>
@@ -150,13 +150,15 @@
                     <th>S#</th>
                     <th>Bill #</th>
                     <th>Date</th>
-                    <th *ngIf="rptType == 's'">Table</th>
+                    <!-- <th *ngIf="rptType == 's'">Table</th> -->
                     <th>Title</th>
                     <th>Qty</th>
                     <th style="width: 120px;">Cost Price</th>
                     <th style="width: 150px;">Avg Cost</th>
                     <th style="width: 120px;">Sale Price</th>
                     <th>Total</th>
+                    <th *ngIf="rptType == 's'">Profit</th>
+                    <th *ngIf="rptType == 's'">Profit %</th>
 
                 </tr>
 
@@ -167,7 +169,7 @@
                     <td class="text-center">{{index + 1}}</td>
                     <td class="text-center">{{item.invBillNo}}</td>
                     <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
-                    <td *ngIf="rptType == 's'">{{item.tableTitle}}</td>
+                    <!-- <td *ngIf="rptType == 's'">{{item.tableTitle}}</td> -->
                     <td>{{item.productTitle}}</td>
                     <td class="text-center">{{item.quantity}}</td>
                     <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
@@ -175,10 +177,12 @@
                     <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
                     <td class="text-end" *ngIf="rptType == 's'">{{item.salePrice * item.quantity |number:'1.0-1'}}</td>
                     <td class="text-end" *ngIf="rptType != 's'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td>
+                    <td class="text-end" *ngIf="rptType == 's'">{{(item.salePrice * item.quantity) - (item.avgCostPrice * item.quantity) |number:'1.0-1'}}</td>
+                    <td class="text-end" *ngIf="rptType == 's'">{{(((item.salePrice * item.quantity) - (item.avgCostPrice * item.quantity)) / (item.salePrice * item.quantity)) * 100 |number:'1.0-1'}}%</td>
                   
                 </tr>
                 <tr>
-                    <td colspan="3"></td>
+                    <td colspan="2"></td>
                     <td *ngIf="rptType == 's'"></td>
                     <td></td>
                     <td class="fw-bold text-center">{{qtyTotal  |number:'1.0-0'}}</td>
@@ -186,6 +190,8 @@
                     <td></td>
                     <td></td>
                     <td class="fw-bold text-end">{{detNetTotal |number:'1.0-0'}}</td>
+                    <td *ngIf="rptType == 's'" class="fw-bold text-end">{{profitTotal |number:'1.0-0'}}</td>
+                    <td *ngIf="rptType == 's'" class="fw-bold text-end">{{profitTotal / detNetTotal * 100 |number:'1.0-2'}}%</td>
                 </tr>
             </tbody>
           

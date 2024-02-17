@@ -105,6 +105,8 @@ rptType:any = 's';
 
    qtyTotal = 0;
    detNetTotal = 0;
+   profitTotal = 0;
+   profitPercentTotal = 0;
 
    getReport(type:any){
     this.rptType = this.tmpRptType;
@@ -125,6 +127,7 @@ rptType:any = 's';
           this.billTotal += e.billTotal;
           this.chargesTotal += e.otherCharges;
           this.netGrandTotal += e.billTotal;
+
         });
         
       }
@@ -142,10 +145,14 @@ rptType:any = 's';
         console.log(Response)
         this.qtyTotal = 0;
         this.detNetTotal = 0;
+        this.profitPercentTotal = 0;
+        this.profitTotal = 0;
          Response.forEach((e:any) => {
           this.qtyTotal += e.quantity;
           if(this.rptType == 's'){
             this.detNetTotal += e.salePrice * e.quantity;
+            this.profitTotal += (e.salePrice * e.quantity) - (e.avgCostPrice * e.quantity);
+            // this.profitPercentTotal += (((e.salePrice * e.quantity) - (e.avgCostPrice * e.quantity)) / (e.salePrice * e.quantity));
           }
           else{
             this.detNetTotal += e.costPrice * e.quantity;

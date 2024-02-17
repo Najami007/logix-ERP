@@ -39,6 +39,14 @@ import { RetailSaleComponent } from './retail-sale/retail-sale.component';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { EnterQtyComponent } from './retail-sale/enter-qty/enter-qty.component';
 import { RtlSavedBillComponent } from './retail-sale/rtl-saved-bill/rtl-saved-bill.component';
+import { RetailSaleReturnComponent } from './retail-sale-return/retail-sale-return.component';
+import { VoidableSaleComponent } from './voidable-sale/voidable-sale.component';
+
+import { VsenterqtyComponent } from './voidable-sale/vsenterqty/vsenterqty.component';
+import { VssavedbillComponent } from './voidable-sale/vssavedbill/vssavedbill.component';
+import { VoidableSalertnComponent } from './voidable-salertn/voidable-salertn.component';
+import { VrtnenterqtyComponent } from './voidable-salertn/vrtnenterqty/vrtnenterqty.component';
+import { VrtnsavedbillComponent } from './voidable-salertn/vrtnsavedbill/vrtnsavedbill.component';
  
 
 
@@ -93,8 +101,13 @@ export const inventoryRoutes: Route[] = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'retsale',
-    component: RetailSaleComponent,
+    path: 'vblsale',
+    component: VoidableSaleComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'vblsalertn',
+    component: VoidableSalertnComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -179,6 +192,13 @@ export const inventoryRoutes: Route[] = [
     RetailSaleComponent,
     EnterQtyComponent,
     RtlSavedBillComponent,
+    RetailSaleReturnComponent,
+    VoidableSaleComponent,
+    VsenterqtyComponent,
+    VssavedbillComponent,
+    VoidableSalertnComponent,
+    VrtnenterqtyComponent,
+    VrtnsavedbillComponent,
 
  
 
