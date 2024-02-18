@@ -42,8 +42,8 @@
 
                         </div>
 
-                        <div class="avatar-upload ms-2 col-lg-4   ">
-                            <div class="avatar-edit">
+                        <div class="avatar-upload ms-2 col-lg-4   " (click)="this.global.showProductImage(recipeImg,0)">
+                            <div class="avatar-edit" >
                                 <input type="file" id="prodimg" accept="" #prodimg (change)="onImgSelected($event)" />
                                 <label for="prodimg"><mat-icon class=" mt-1">edit</mat-icon></label>
                             </div>

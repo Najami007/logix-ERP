@@ -50,6 +50,7 @@ export class InvrptprodwiseComponent implements OnInit {
 
   reportsList:any = [
     {val:'s',title:'Sale Report'},
+    {val:'sr',title:'Sale Return Report'},
     {val:'p',title:'Purchase Report'},
     {val:'pr',title:'Purchase Return Report'},
     {val:'I',title:'Issuance Report'},

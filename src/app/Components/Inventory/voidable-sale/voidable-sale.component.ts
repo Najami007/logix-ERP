@@ -35,6 +35,7 @@ export class VoidableSaleComponent implements OnInit {
      } 
      else {
        this.getCurrentBill();
+     
      }
  }
  companyProfile: any = [];
@@ -76,8 +77,11 @@ export class VoidableSaleComponent implements OnInit {
    this.global.setHeaderTitle('Sale');
    this.getBankList();
    this.getCurrentBill();
-   
+   $('#vssearchProduct').trigger('focus');
   }
+
+
+  
 
  
   billRemarks = '';
@@ -92,7 +96,7 @@ export class VoidableSaleComponent implements OnInit {
   discount:any = 0;
   otherCharges:any = 0;
   change = 0;
-  paymentType = 'Cash';
+  paymentType = '';
   cash:any = 0;
   bankCash:any = 0;
   bankCoaID = 0;
@@ -109,10 +113,22 @@ export class VoidableSaleComponent implements OnInit {
 
   tempQty = 1;
   tempProdRow:any;
+  tempDisc = 0;
+  DiscPercent = 0;
 
 
   invBillNo = '';
   
+
+  onDiscChange(type:any){
+    if(type == 'amt'){
+      this.DiscPercent = (this.tempDisc /  this.netTotal) * 100;
+    }
+
+    if(type == 'percent'){
+      this.tempDisc = (this.netTotal * this.DiscPercent) / 100;
+    }
+  }
 
   //////////////////////////////////////////////////////////////////////////////////
   getCurrentBill(){
@@ -199,9 +215,9 @@ export class VoidableSaleComponent implements OnInit {
             }
           }
         )
-      
+        $('.billArea').scrollTop(0);
       this.PBarcode = '';
-      $('#searchProduct').trigger('focus');
+      $('#vssearchProduct').trigger('focus');
        this.getTotal();
     }
 
@@ -226,7 +242,7 @@ export class VoidableSaleComponent implements OnInit {
             }
           }
         )
-       
+        $('.billArea').scrollTop(0);
        this.PBarcode = '';
        this.getTotal();
    
@@ -272,12 +288,18 @@ export class VoidableSaleComponent implements OnInit {
 
     handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[]){
     
+      if(e.keyCode == 9 && !e.shiftKey){
+        this.prodFocusedRow += 1;
+
+      }
+      if(e.shiftKey && e.keyCode == 9){
+        this.prodFocusedRow -= 1;
+
+      }
 
       /////move down
-      if(e.keyCode == 40|| e.keyCode == 9){
-  
-   
-        if(prodList.length > 1 ){
+      if(e.keyCode == 40 ){  
+        if(prodList.length > 0 ){
          this.prodFocusedRow += 1;
          if (this.prodFocusedRow >= prodList.length) {      
            this.prodFocusedRow -= 1  
@@ -285,8 +307,8 @@ export class VoidableSaleComponent implements OnInit {
            var clsName = cls + this.prodFocusedRow;    
           //  alert(clsName);
            $(clsName).trigger('focus');
-          //  e.which = 9;   
-          //  $(clsName).trigger(e)       
+        
+            
        }}
      }
    
@@ -313,6 +335,7 @@ export class VoidableSaleComponent implements OnInit {
    
      }
   
+    //  alert(this.prodFocusedRow);  
     }
 
     changeFocus(e:any, cls:any){
@@ -342,13 +365,13 @@ export class VoidableSaleComponent implements OnInit {
        
 
   focusTo(e:any,cls:any){
-    if(cls == '#disc' && e.keyCode == 13 && e.target.value == ''){
+    if(cls == '#disc' && e.keyCode == 13 ){
       $(cls).trigger('focus');
     }
     if(cls == '#charges' && e.keyCode == 13 ){
       $(cls).trigger('focus');
     }
-    if(cls == '#cash' && e.keyCode == 13 ){
+    if(cls == '#cash' && e.keyCode == 13 && e.target.value == '' ){
       $(cls).trigger('focus');
     }
     
@@ -356,7 +379,7 @@ export class VoidableSaleComponent implements OnInit {
       $(cls).trigger('focus');
     }
 
-    if(cls == '#searchProduct' && e.keyCode == 13 ){
+    if(cls == '#vssearchProduct' && e.keyCode == 13 ){
       $(cls).trigger('focus');
     }
   
@@ -446,7 +469,7 @@ export class VoidableSaleComponent implements OnInit {
         }).then((result) => {
   
           if (result.isConfirmed) {
-            this.global.openPinCode().subscribe(pin => {
+            this.global.openPassword('Password').subscribe(pin => {
               if (pin !== '') {
                 this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
                   RestrictionCodeID: 1,
@@ -455,10 +478,8 @@ export class VoidableSaleComponent implements OnInit {
   
                 }).subscribe(
                   (Response: any) => {
-                    if (Response.msg == 'Password Matched Successfully') {
-  
+                    if (Response.msg == 'Password Matched Successfully') { 
                         this.voidProduct(item);
-  
                     } else {
                       this.msg.WarnNotify(Response.msg);
                     }
@@ -479,6 +500,38 @@ export class VoidableSaleComponent implements OnInit {
   
     
       
+    }
+
+
+    EnterDiscount(amount:any){
+      this.global.openPassword('Password').subscribe(pin => {
+        if (pin !== '') {
+          this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+            RestrictionCodeID: 2,
+            Password: pin,
+            UserID: this.global.getUserID()
+
+          }).subscribe(
+            (Response: any) => {
+              if (Response.msg == 'Password Matched Successfully') { 
+                $('#cash').trigger('focus');
+                if(amount == '' || amount == undefined){
+                  this.discount = 0;
+                }else{
+                  this.discount = amount;
+                }
+                this.getTotal()
+                
+              } else {
+                this.msg.WarnNotify(Response.msg);
+              }
+            }
+          )
+
+
+
+        }
+      })
     }
 
 
@@ -513,21 +566,22 @@ export class VoidableSaleComponent implements OnInit {
 
   //////////////////////////////////////////////////////////////////////////////////
 
-    save(){
+    save(paymentType:any){
 
-      if(this.paymentType == 'Cash' && (this.cash == 0 || this.cash == undefined || this.cash == null)){
+      if(paymentType == 'Cash' && (this.cash == 0 || this.cash == undefined || this.cash == null)){
         this.msg.WarnNotify('Enter Cash')
-      }else if(this.paymentType == 'Cash' && this.cash < this.netTotal){
+      }else if(paymentType == 'Cash' && this.cash < this.netTotal){
         this.msg.WarnNotify('Entered Cash is not Valid')
-      }else if ( this.paymentType == 'Split' && ((this.cash + this.bankCash) > this.netTotal || (this.cash + this.bankCash) < this.netTotal)) {
+      }else if ( paymentType == 'Split' && ((this.cash + this.bankCash) > this.netTotal || (this.cash + this.bankCash) < this.netTotal)) {
         this.msg.WarnNotify('Amount in Not Valid')
-      } else if ( this.paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
+      } else if ( paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
         this.msg.WarnNotify('Enter Valid Amount')
       }else if(this.customerName =='' && this.customerMobileno != ''){
         this.msg.WarnNotify('Enter Customer Name')
       }else if(this.customerName !='' && this.customerMobileno == ''){
         this.msg.WarnNotify('Enter Customer Mobile')
       }else {
+        
         this.http.post(environment.mainApi+this.global.inventoryLink+'InsertVoidableSale',{
           HoldInvNo: this.invBillNo,
           InvDate: this.global.dateFormater(this.InvDate,'-'),
@@ -535,7 +589,7 @@ export class VoidableSaleComponent implements OnInit {
           InvType: "S",
           ProjectID: this.projectID,
           BookerID: 0,
-          PaymentType: this.paymentType,
+          PaymentType: paymentType,
           Remarks: this.billRemarks,
           OrderType: "Take Away",
           BillTotal:this.subTotal,
@@ -561,6 +615,9 @@ export class VoidableSaleComponent implements OnInit {
               this.PrintAfterSave(Response.invNo);
               this.getCurrentBill();
               this.reset();
+              $('#vssearchProduct').trigger('focus');
+              $('#paymentMehtod').hide();
+              $('.modal-backdrop').remove();
             }else{
               this.msg.WarnNotify(Response.msg);
             }
@@ -591,6 +648,9 @@ export class VoidableSaleComponent implements OnInit {
       this.bankCash = 0;
       this.customerMobileno = '';
       this.customerName = '';
+      this.tempDisc = 0;
+      this.tempProdRow = '';
+      this.tempQty = 0;
       
 
     }
@@ -681,7 +741,7 @@ export class VoidableSaleComponent implements OnInit {
       }).then((result) => {
 
         if (result.isConfirmed) {
-          this.global.openPinCode().subscribe(pin => {
+          this.global.openPassword('Password').subscribe(pin => {
             if (pin !== '') {
               this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
                 RestrictionCodeID: 1,
@@ -701,9 +761,12 @@ export class VoidableSaleComponent implements OnInit {
                         if(Response.msg == 'Data Saved Successfully'){
                           this.getCurrentBill();
                           this.reset(); 
+                          $('#vssearchProduct').trigger('focus');
                         }else{
                           this.msg.WarnNotify(Response.msg);
                         }
+
+                        $('#vssearchProduct').trigger('focus');
                       }
                     )
 
@@ -745,9 +808,12 @@ export class VoidableSaleComponent implements OnInit {
       (Response:any)=>{
         if(Response.msg == 'Data Saved Successfully'){
           this.getCurrentBill();
+          $('#vssearchProduct').trigger('focus');
+          $('.billArea').scrollTop(0);
         }else{
           this.msg.WarnNotify(Response.msg);
         }
+        $('#vssearchProduct').trigger('focus');
       }
     )
   }

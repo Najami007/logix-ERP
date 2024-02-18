@@ -15,9 +15,9 @@
                   
                    <div class="col-lg-9  d-flex flex-column ">
                        <mat-label class="text-secondary">Search Barcode / Product</mat-label> 
-                      <input type="text"  #pbarcode [(ngModel)]="PBarcode"   id="searchProduct"
-                      (keydown)="searchByCode($event);changeFocus($event,'.prodRow');focusTo($event,'#disc')"
-                           class="p-1 ps-2 mb-2 searchProduct" placeholder="Alt + b" autofocus
+                      <input type="text"  #pbarcode [(ngModel)]="PBarcode"   id="vsrtnsearchProduct"
+                      (keydown)="searchByCode($event);changeFocus($event,'.prodRow');focusTo($event,'#cash')"
+                           class="p-1 ps-2 mb-2 searchProduct" placeholder="Alt + b" autofocus (focus)="rowFocused = -1"
                            autocomplete="off" accesskey="b">
            
                        <div class="  d-flex flex-column SearchConatiner cursorPointer"
@@ -37,16 +37,16 @@
 
                <!-------------------------------Bill Products Area ------------------>
 
-                <div style="height: 80vh !important ;overflow-y: scroll;background-color: #f6f2e7;">
+                <div class="rtnBillArea" style="height: 80vh !important ;overflow-y: scroll;background-color: #f6f2e7;">
                     <table class="table" >
                     <thead>
                         <tr>
                             <th>S#</th>
-                            <th>Title</th>
-                            <th>Qty</th>
-                            <th>Price</th>
-                            <th>Total</th>
-                            <th>Action</th>
+                            <th style="width: 800px;">Title</th>
+                            <th style="width: 200;">Qty</th>
+                            <th style="width: 200;">Price</th>
+                            <th style="width: 200;">Total</th>
+                            <th style="width: 200;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,17 +76,18 @@
         <div class="col-lg-2 h-100 " style="position: fixed;left: 83%;">
 
          
-            <div class="p-1 w-100" >
-                <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
-                    <div class="text-center" *ngIf="tableDataList != ''" >
-                        <img [src]="productImage" alt="" height="190" width="200" (click)="this.global.showProductImage(this.productImage,0)">
-                    </div>
-                </mat-card>
-               </div>
+      
 
+            <div class="mt-1 ms-1 me-1 card p-2" style=" border-radius: 5px 5px 5px 5px;min-height: 100%;max-height: 100%; background-color: rgb(240, 247, 245);">
 
-            <div class="mt-1 ms-1 me-1 card p-2" style=" border-radius: 5px 5px 5px 5px;min-height: 64.5vh;max-height: 100%; background-color: rgb(240, 247, 245);">
-
+                <div class="p-1 w-100" >
+                    <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
+                        <div class="text-center" *ngIf="tableDataList != ''" >
+                            <img [src]="productImage" alt="" height="190" width="200" (click)="this.global.showProductImage(this.productImage,0)">
+                        </div>
+                    </mat-card>
+                   </div>
+    
                 <div class="d-flex pb-2 flex-column border-bottom">
                     <div class=" pt-3 d-flex justify-content-between">
                         <p style="font-size: 15px;color: rgb(0, 0, 0);">TOTAL</p>
@@ -120,22 +121,27 @@
                         <p style="font-size: 40px;color: rgb(19, 83, 27);" class="font-digit pt-1 text-end">{{netTotal || 0
                             |number:'1.0-1'}}</p>
                     </div> -->
-                    <div class="w-100">
+                    <!-- <div class="w-100">
                         <p style="font-size: 15px;color: rgb(3, 3, 3)"  class="text-end">CHANGE</p>
                         <p style="font-size: 40px;color: rgb(0, 0, 0);" class="font-digit pt-1 text-end">{{change || 0
                             |number:'1.0-1'}}</p>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
 
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Remarks</mat-label>
+                    <textarea matInput rows="1" [(ngModel)]="billRemarks"></textarea>
+                </mat-form-field>
+
                 <div class="text-center d-flex pt-4">
-                    <button class="col-lg-2 me-1" style="background-color:transparent;border-radius: 5px;" (click)="voidBill()"><mat-icon>delete_outline</mat-icon></button>
+                    <button class="col-lg-2 me-1 delBtn" style="background-color:transparent;border-radius: 5px;" (click)="voidBill()"><mat-icon>delete_outline</mat-icon></button>
                     <button class="btn col-lg-10 text-center btn-success me-1 " id="save" (click)="save()">Save</button>
                     
                     
                 </div>
               <div class="mt-2">
-                <button class="btn w-50 btn-danger d-none" accesskey="d" (click)="openSavedBill()">Duplicate</button>
+                <button class="btn w-100 btn-danger  " accesskey="d" (click)="openSavedBill()">Duplicate</button>
                 <!-- <button class="btn col-lg-12 d-flex justify-content-between btn-primary me-1 pt-3" data-bs-toggle="modal" data-bs-target="#paymentMehtod">
                     <p>Other Payment</p> <mat-icon>keyboard_arrow_right</mat-icon></button> -->
               </div>
@@ -241,7 +247,7 @@
     <div class="text-center">
         <img [src]="companyLogo" [height]="100" [width]="100">
         <h2>{{companyName}}</h2>
-        <p style="margin-top: -25px;">{{companyAddress}}</p>
+        <p style="margin-top: -15px;">{{companyAddress}}</p>
         <p style="margin-top: -20px;">{{CompanyMobile}}</p>
 
     </div>

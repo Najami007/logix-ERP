@@ -1,6 +1,6 @@
 <div class="body" style="background-color: rgb(255, 255, 255);" >
 
-    <div class="d-flex pt-1  shadow" style="position: fixed;z-index: 5; background-color: rgb(255, 255, 255);">
+    <div class="d-flex pt-1 " style="position: fixed;z-index: 5; background-color: rgb(255, 255, 255);">
         <div class="row   col-lg-11  ps-3 pe-3">
 
             <div class="d-flex pt-1">
@@ -57,9 +57,9 @@
 
             <div class="d-flex ">
                 <div class="col-lg-8 d-flex">
-                    <input type="text"  #pbarcode [(ngModel)]="PBarcode"
+                    <input type="text"  [(ngModel)]="PBarcode"
                         (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event);focusto('ovhd',$event)"
-                        id="searchProduct" class="searchProduct ps-2" placeholder="Scan Barcode (Alt + b)"
+                        id="psearchProduct" class="searchProduct ps-2" placeholder="Scan Barcode (Alt + b)" (focus)="rowFocused = -1"
                         autofocus autocomplete="off" accesskey="b">
 
                     <button accesskey="n" class="bg-primary text-white " data-bs-toggle="modal"

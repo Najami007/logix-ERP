@@ -224,7 +224,7 @@
         <div class="container-fluid  ">
             <mat-form-field appearance="outline" class="w-100 pt-2">
                 <mat-label>Search.....</mat-label>
-                <input type="text" id="searchProduct" matInput #searchProd [(ngModel)]="searchProduct" (keydown)="applyFilter($event)">
+                <input type="text" id="searchProduct" matInput #searchProd [(ngModel)]="searchProduct" (keydown)="applyFilter()">
             </mat-form-field>
             <hr>
 <!--             

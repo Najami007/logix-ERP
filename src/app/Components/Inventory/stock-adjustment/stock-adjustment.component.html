@@ -46,7 +46,7 @@
                <mat-label class="text-primary">Search Barcode / Product</mat-label> 
               <input type="text"  #pbarcode [(ngModel)]="PBarcode"  
                    (keydown)="searchByCode($event);this.changeFocus($event,'.prodRow')" id="searchProduct"
-                   class="p-1 mb-2 searchProduct" placeholder="Alt + b" autofocus
+                   class="p-1 mb-2 searchProduct" placeholder="Alt + b" autofocus (focus)="rowFocused = -1"
                    autocomplete="off" accesskey="b">
    
                <div class="  d-flex flex-column SearchConatiner cursorPointer"
@@ -59,14 +59,14 @@
                </div>
            </div>
            <div class="col-lg-3 text-start ms-1 pt-3 mt-1">
-               <button mat-raised-button class="bg-primary text-white w-50 " (click)="ngOnInit()">Load</button>
+               <button mat-raised-button class="bg-primary text-white w-50 " style="height: 40px;"  (click)="ngOnInit()">Load</button>
            </div>
 
        </div>
 
 
 
-        <div style="max-height: 80%;overflow-y:scroll ;padding-bottom: 60px;">
+        <div style="max-height: 75vh;overflow-y:scroll ;padding-bottom: 60px;">
             <table class="table table-hover">
                 <thead>
                     <tr>

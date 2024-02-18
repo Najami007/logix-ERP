@@ -76,7 +76,7 @@
             </span>
             <span class="col-lg-2 p-1  border">
                 <button class="btn btn-warning" [disabled]="orderType == ''" data-bs-toggle="modal"
-                    data-bs-target="#NewBill">Chage</button>
+                    data-bs-target="#NewBill">Change</button>
 
             </span>
         </div>
@@ -679,7 +679,7 @@
 
                 <div class="modal-footer bg-mf-blue">
                     <button class="btn btn-success" (click)="save('sale')">Save</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="paymentType = ''">Close</button>
                 </div>
 
 

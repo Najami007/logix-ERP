@@ -47,7 +47,7 @@ export class StockAdjustmentComponent implements OnInit {
   ngOnInit(): void {
    this.global.setHeaderTitle('Stock Adjustment');
    this.getLocation();
-
+   $('.searchProduct').trigger('focus');
   }
 
   Date:Date = new Date();
@@ -257,10 +257,19 @@ export class StockAdjustmentComponent implements OnInit {
    }
 
    handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[]){
-    
+       
+    if(e.keyCode == 9 && !e.shiftKey){
+      this.prodFocusedRow += 1;
+
+    }
+    if(e.shiftKey && e.keyCode == 9){
+      this.prodFocusedRow -= 1;
+
+    }
+
 
     /////move down
-    if(e.keyCode == 40|| e.keyCode == 9){
+    if(e.keyCode == 40){
 
  
       if(prodList.length > 1 ){

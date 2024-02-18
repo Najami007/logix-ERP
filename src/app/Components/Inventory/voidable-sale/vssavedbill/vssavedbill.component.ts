@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable, retry } from 'rxjs';
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/sale/sale-bill-detail/sale-bill-detail.component';
@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment.development';
   templateUrl: './vssavedbill.component.html',
   styleUrls: ['./vssavedbill.component.scss']
 })
-export class VssavedbillComponent {
+export class VssavedbillComponent implements OnInit {
 
   companyProfile: any = [];
   companyLogo: any = '';
@@ -34,6 +34,9 @@ export class VssavedbillComponent {
       this.companyAddress = data[0].companyAddress;
       this.companyName = data[0].companyName;
     });
+  }
+  ngOnInit(): void {
+    this.getSavedBill();
   }
 
 
@@ -72,7 +75,25 @@ export class VssavedbillComponent {
 
   getSavedBill(){
 
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetOpenDaySale').subscribe(
+      (Response:any)=>{
+        this.savedbillList = [];
+        Response.forEach((e:any) => {
+          if(e.invType == 'S'){
+            this.savedbillList.push(e);
+          }
+          
+        });
+       
+      }
+    )
 
+  }
+
+
+
+  printDuplicateBill(item:any){
+    
     this.global.openPassword('Password').subscribe(pin => {
       if (pin !== '') {
         this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
@@ -83,12 +104,34 @@ export class VssavedbillComponent {
         }).subscribe(
           (Response: any) => {
             if (Response.msg == 'Password Matched Successfully') {
-              this.http.get(environment.mainApi+this.global.inventoryLink+'GetOpenDaySale').subscribe(
+
+              this.myInvoiceNo = item.invBillNo;
+              this.mytableNo = item.tableTitle;
+              this.myInvDate = item.createdOn ;
+              this.myCounterName = item.entryUser;
+              this.myOrderType = item.orderType;
+              this.mySubTotal = item.billTotal;
+              this.myNetTotal = item.netTotal;
+              this.myOtherCharges = item.otherCharges;
+              this.myRemarks = item.remarks;
+              this.myCash = item.cashRec;
+              this.myBank = item.netTotal - item.cashRec;
+              this.myDiscount = item.billDiscount;
+              this.myChange = item.change;
+              this.myPaymentType = item.paymentType;
+              this.myDuplicateFlag = true;
+              this.http.get(environment.mainApi+this.global.restaurentLink+'PrintBill?BillNo='+item.invBillNo).subscribe(
                 (Response:any)=>{
-              
-                    this.savedbillList = Response;
+                  //console.log(Response);
+                  this.myPrintData = Response;
                 }
               )
+          
+          
+              setTimeout(() => {
+                this.global.printData('#duplicate');
+              }, 500);
+             
             } else {
               this.msg.WarnNotify(Response.msg);
             }
@@ -96,49 +139,39 @@ export class VssavedbillComponent {
         )
       }
     })
-   
-  }
-
-
-
-  printDuplicateBill(item:any){
     //console.log(item)
-    this.myInvoiceNo = item.invBillNo;
-    this.mytableNo = item.tableTitle;
-    this.myInvDate = item.createdOn ;
-    this.myCounterName = item.entryUser;
-    this.myOrderType = item.orderType;
-    this.mySubTotal = item.billTotal;
-    this.myNetTotal = item.netTotal;
-    this.myOtherCharges = item.otherCharges;
-    this.myRemarks = item.remarks;
-    this.myCash = item.cashRec;
-    this.myBank = item.netTotal - item.cashRec;
-    this.myDiscount = item.billDiscount;
-    this.myChange = item.change;
-    this.myPaymentType = item.paymentType;
-    this.myDuplicateFlag = true;
-    this.http.get(environment.mainApi+this.global.restaurentLink+'PrintBill?BillNo='+item.invBillNo).subscribe(
-      (Response:any)=>{
-        //console.log(Response);
-        this.myPrintData = Response;
-      }
-    )
-
-
-    setTimeout(() => {
-      this.global.printData('#duplicate');
-    }, 500);
+  
   }
 
   billDetails(item:any){
-    this.dialogue.open(SaleBillDetailComponent,{
-      width:'50%',
-      data:item,
-      disableClose:true,
-    }).afterClosed().subscribe(value=>{
-      
+
+    
+    this.global.openPassword('Password').subscribe(pin => {
+      if (pin !== '') {
+        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+          RestrictionCodeID: 5,
+          Password: pin,
+          UserID: this.global.getUserID()
+
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Password Matched Successfully') {
+              this.dialogue.open(SaleBillDetailComponent,{
+                width:'50%',
+                data:item,
+                disableClose:true,
+              }).afterClosed().subscribe(value=>{
+                
+              })
+            } else {
+              this.msg.WarnNotify(Response.msg);
+            }
+          }
+        )
+      }
     })
+
+   
   }
 
 

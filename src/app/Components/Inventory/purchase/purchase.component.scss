@@ -13,7 +13,7 @@ input:focus{
 
 
 
-#searchProduct{
+#psearchProduct{
     font-size: 18px;
     font-weight: 400;
     height: 50px;
@@ -54,8 +54,8 @@ width: 100%;
 // z-index:1000;
 // position: absolute;
 margin-top: -20px;
-height: 350px;
-overflow-y: scroll;
+max-height: 45vh;
+overflow: hidden;
 
 // max-width: 470px;
 

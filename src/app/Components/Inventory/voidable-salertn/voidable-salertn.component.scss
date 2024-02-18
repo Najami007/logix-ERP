@@ -36,7 +36,7 @@ width: 960px;
 z-index:1000;
 position: absolute;
 max-height: 250px;
-overflow-y: scroll;
+overflow: hidden;
 // max-width: 500px;
 
 
@@ -62,4 +62,20 @@ overflow-y: scroll;
 ::ng-deep .cdk-overlay-container{
     z-index:2000;
   }
+
+.rtnBillArea::-webkit-scrollbar-track {
+    background: #f6f2e7;
+  }
+
+  .delBtn{
+    background-color:transparent;
+    border-radius: 5px;
+  }
+
+  .delBtn:focus{
+    background-color: black !important;
+    color: white !important;
+  }
+  
+  
   

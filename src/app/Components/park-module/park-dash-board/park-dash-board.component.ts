@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment.development';
   templateUrl: './park-dash-board.component.html',
   styleUrls: ['./park-dash-board.component.scss']
 })
-export class ParkDashBoardComponent {
+export class ParkDashBoardComponent      {
 
 
   constructor(private globalData :GlobalDataModule,

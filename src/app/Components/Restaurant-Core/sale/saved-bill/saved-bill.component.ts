@@ -26,6 +26,9 @@ export class SavedBillComponent {
     private msg:NotificationService,
     private dialogue:MatDialog
   ){
+
+    this.getSavedBill()
+
     this.global.getCompany().subscribe((data) => {
       this.companyProfile = data;
       this.companyLogo = data[0].companyLogo1;
@@ -59,7 +62,19 @@ export class SavedBillComponent {
   myTime:any;
 
   getSavedBill(){
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetOpenDaySale').subscribe(
+      (Response:any)=>{
+    
+          this.savedbillList = Response;
+      }
+    )
 
+   
+  }
+
+
+
+  printDuplicateBill(item:any){
 
     this.global.openPassword('Password').subscribe(pin => {
       if (pin !== '') {
@@ -71,25 +86,7 @@ export class SavedBillComponent {
         }).subscribe(
           (Response: any) => {
             if (Response.msg == 'Password Matched Successfully') {
-              this.http.get(environment.mainApi+this.global.inventoryLink+'GetOpenDaySale').subscribe(
-                (Response:any)=>{
-              
-                    this.savedbillList = Response;
-                }
-              )
-            } else {
-              this.msg.WarnNotify(Response.msg);
-            }
-          }
-        )
-      }
-    })
-   
-  }
-
-
-
-  printDuplicateBill(item:any){
+             
     //console.log(item)
     this.myInvoiceNo = item.invBillNo;
     this.mytableNo = item.tableTitle;
@@ -117,16 +114,43 @@ export class SavedBillComponent {
     setTimeout(() => {
       this.global.printData('#duplicate');
     }, 500);
+            } else {
+              this.msg.WarnNotify(Response.msg);
+            }
+          }
+        )
+      }
+    })
+   
   }
 
   billDetails(item:any){
-    this.dialogue.open(SaleBillDetailComponent,{
-      width:'50%',
-      data:item,
-      disableClose:true,
-    }).afterClosed().subscribe(value=>{
-      
+    this.global.openPassword('Password').subscribe(pin => {
+      if (pin !== '') {
+        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+          RestrictionCodeID: 5,
+          Password: pin,
+          UserID: this.global.getUserID()
+
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Password Matched Successfully') {
+              this.dialogue.open(SaleBillDetailComponent,{
+                width:'50%',
+                data:item,
+                disableClose:true,
+              }).afterClosed().subscribe(value=>{
+                
+              })
+            } else {
+              this.msg.WarnNotify(Response.msg);
+            }
+          }
+        )
+      }
     })
+   
+   
   }
 
 

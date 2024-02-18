@@ -36,8 +36,9 @@ width: 960px;
 z-index:1000;
 position: absolute;
 max-height: 250px;
-overflow-y: scroll;
+// overflow-y: scroll;
 // max-width: 500px;
+overflow: hidden;
 
 
 .SearchConatiner , .card{
@@ -61,5 +62,20 @@ overflow-y: scroll;
 
 ::ng-deep .cdk-overlay-container{
     z-index:2000;
+  }
+
+.totalArea::-webkit-scrollbar-track {
+    background: rgb(240, 247, 245);
+  }
+
+
+  .delBtn{
+    background-color:transparent;
+    border-radius: 5px;
+  }
+
+  .delBtn:focus{
+    background-color: black !important;
+    color: white !important;
   }
   

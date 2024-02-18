@@ -175,8 +175,8 @@
                     <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.avgCostPrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
-                    <td class="text-end" *ngIf="rptType == 's'">{{item.salePrice * item.quantity |number:'1.0-1'}}</td>
-                    <td class="text-end" *ngIf="rptType != 's'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td>
+                    <td class="text-end" *ngIf="rptType == 's' || rptType == 'sr'">{{item.salePrice * item.quantity |number:'1.0-1'}}</td>
+                    <td class="text-end" *ngIf="rptType != 's' && rptType != 'sr'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td>
                     <td class="text-end" *ngIf="rptType == 's'">{{(item.salePrice * item.quantity) - (item.avgCostPrice * item.quantity) |number:'1.0-1'}}</td>
                     <td class="text-end" *ngIf="rptType == 's'">{{(((item.salePrice * item.quantity) - (item.avgCostPrice * item.quantity)) / (item.salePrice * item.quantity)) * 100 |number:'1.0-1'}}%</td>
                   
@@ -185,8 +185,9 @@
                     <td colspan="2"></td>
                     <td *ngIf="rptType == 's'"></td>
                     <td></td>
+                    <td *ngIf="rptType != 's'"></td>
                     <td class="fw-bold text-center">{{qtyTotal  |number:'1.0-0'}}</td>
-                    <td></td>
+                    <td ></td>                    
                     <td></td>
                     <td></td>
                     <td class="fw-bold text-end">{{detNetTotal |number:'1.0-0'}}</td>

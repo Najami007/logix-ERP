@@ -46,6 +46,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
 
   reportsList:any = [
     {val:'s',title:'Sale Report'},
+    {val:'sr',title:'Sale Return Report'},
     {val:'p',title:'Purchase Report'},
     {val:'pr',title:'Purchase Return Report'},
     {val:'I',title:'Issuance Report'},
@@ -117,7 +118,7 @@ rptType:any = 's';
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventorySummaryDateWise_2?reqType='+this.rptType+'&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
-        // console.log(Response);
+         //console.log(Response);
         this.SaleDetailList = Response;
         this.billTotal = 0;
         this.chargesTotal = 0;
@@ -149,7 +150,7 @@ rptType:any = 's';
         this.profitTotal = 0;
          Response.forEach((e:any) => {
           this.qtyTotal += e.quantity;
-          if(this.rptType == 's'){
+          if(this.rptType == 's' || this.rptType == 'sr'){
             this.detNetTotal += e.salePrice * e.quantity;
             this.profitTotal += (e.salePrice * e.quantity) - (e.avgCostPrice * e.quantity);
             // this.profitPercentTotal += (((e.salePrice * e.quantity) - (e.avgCostPrice * e.quantity)) / (e.salePrice * e.quantity));

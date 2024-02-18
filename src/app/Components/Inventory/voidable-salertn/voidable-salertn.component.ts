@@ -72,6 +72,7 @@ export class VoidableSalertnComponent implements OnInit {
    this.global.setHeaderTitle('Sale Return');
    this.getBankList();
    this.getCurrentBill();
+   $('#vsrtnsearchProduct').trigger('focus');
    
   }
 
@@ -195,9 +196,9 @@ export class VoidableSalertnComponent implements OnInit {
             }
           }
         )
-      
+        $('.rtnBillArea').scrollTop(0);
       this.PBarcode = '';
-      $('#searchProduct').trigger('focus');
+      $('#vsrtnsearchProduct').trigger('focus');
        this.getTotal();
     }
 
@@ -222,7 +223,7 @@ export class VoidableSalertnComponent implements OnInit {
             }
           }
         )
-       
+        $('.rtnBillArea').scrollTop(0);
        this.PBarcode = '';
        this.getTotal();
    
@@ -267,10 +268,19 @@ export class VoidableSalertnComponent implements OnInit {
     prodFocusedRow = 0;
 
     handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[]){
-    
+       
+      if(e.keyCode == 9 && !e.shiftKey){
+        this.prodFocusedRow += 1;
+
+      }
+      if(e.shiftKey && e.keyCode == 9){
+        this.prodFocusedRow -= 1;
+
+      }
+
 
       /////move down
-      if(e.keyCode == 40|| e.keyCode == 9){
+      if(e.keyCode == 40){
   
    
         if(prodList.length > 1 ){
@@ -344,7 +354,7 @@ export class VoidableSalertnComponent implements OnInit {
     if(cls == '#charges' && e.keyCode == 13 ){
       $(cls).trigger('focus');
     }
-    if(cls == '#cash' && e.keyCode == 13 ){
+    if(cls == '#cash' && e.keyCode == 13 && e.target.value == ''){
       $(cls).trigger('focus');
     }
     
@@ -352,7 +362,7 @@ export class VoidableSalertnComponent implements OnInit {
       $(cls).trigger('focus');
     }
 
-    if(cls == '#searchProduct' && e.keyCode == 13 ){
+    if(cls == '#vsrtnsearchProduct' && e.keyCode == 13 ){
       $(cls).trigger('focus');
     }
   
@@ -442,7 +452,7 @@ export class VoidableSalertnComponent implements OnInit {
         }).then((result) => {
   
           if (result.isConfirmed) {
-            this.global.openPinCode().subscribe(pin => {
+            this.global.openPassword('Password').subscribe(pin => {
               if (pin !== '') {
                 this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
                   RestrictionCodeID: 1,
@@ -560,6 +570,7 @@ export class VoidableSalertnComponent implements OnInit {
               this.PrintAfterSave(Response.invNo);
               this.getCurrentBill();
               this.reset();
+              $('#vssearchProduct').trigger('focus');
             }else{
               this.msg.WarnNotify(Response.msg);
             }
@@ -680,7 +691,7 @@ export class VoidableSalertnComponent implements OnInit {
       }).then((result) => {
 
         if (result.isConfirmed) {
-          this.global.openPinCode().subscribe(pin => {
+          this.global.openPassword('Password').subscribe(pin => {
             if (pin !== '') {
               this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
                 RestrictionCodeID: 1,
@@ -699,6 +710,7 @@ export class VoidableSalertnComponent implements OnInit {
                       (Response:any)=>{
                         if(Response.msg == 'Data Saved Successfully'){
                           this.getCurrentBill();
+                          $(".searchProduct").trigger('focus');
                         }else{
                           this.msg.WarnNotify(Response.msg);
                         }
@@ -743,6 +755,8 @@ export class VoidableSalertnComponent implements OnInit {
       (Response:any)=>{
         if(Response.msg == 'Data Saved Successfully'){
           this.getCurrentBill();
+          $(".searchProduct").trigger('focus');
+          $('.rtnBillArea').scrollTop(0);
         }else{
           this.msg.WarnNotify(Response.msg);
         }

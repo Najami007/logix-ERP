@@ -47,7 +47,7 @@ export class OpeningStockComponent implements OnInit {
   ngOnInit(): void {
    this.global.setHeaderTitle('Opening Stock');
    this.getLocation();
-
+   $('.searchProduct').trigger('focus');
   }
 
   btnType = 'Save';
@@ -262,9 +262,19 @@ export class OpeningStockComponent implements OnInit {
 
    handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[]){
     
+   
+   /////// increment in prodfocus on tab click
+   if(e.keyCode == 9 && !e.shiftKey){
+    this.prodFocusedRow += 1;
 
+  }
+  /////// decrement in prodfocus on shift tab click
+  if(e.shiftKey && e.keyCode == 9){
+    this.prodFocusedRow -= 1;
+
+  }
     /////move down
-    if(e.keyCode == 40|| e.keyCode == 9){
+    if(e.keyCode == 40){
 
  
       if(prodList.length > 1 ){

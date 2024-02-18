@@ -34,9 +34,9 @@ export class ProductComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter() {
+    // const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = this.searchProduct;
     
 
     if (this.dataSource.paginator) {
@@ -411,6 +411,9 @@ export class ProductComponent implements OnInit {
               this.getProductList();
               this.reset('');
               this.app.stopLoaderDark();
+              setTimeout(() => {
+                this.applyFilter();
+              }, 500);
              
             } else {
               this.msg.WarnNotify(Response.msg);

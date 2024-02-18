@@ -53,6 +53,7 @@ export class PurchaseReturnComponent implements OnInit{
     this.getBooker();
     this.getLocation();
     this.getSuppliers();
+    $('.searchProduct').trigger('focus');
 
 
    
@@ -410,9 +411,19 @@ export class PurchaseReturnComponent implements OnInit{
 
    handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[]){
     
+   /////// increment in prodfocus on tab click
+    if(e.keyCode == 9 && !e.shiftKey){
+      this.prodFocusedRow += 1;
+
+    }
+    /////// decrement in prodfocus on shift tab click
+    if(e.shiftKey && e.keyCode == 9){
+      this.prodFocusedRow -= 1;
+
+    }
 
     /////move down
-    if(e.keyCode == 40|| e.keyCode == 9){
+    if(e.keyCode == 40){
 
  
       if(prodList.length > 1 ){

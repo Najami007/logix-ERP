@@ -47,6 +47,8 @@ import { VssavedbillComponent } from './voidable-sale/vssavedbill/vssavedbill.co
 import { VoidableSalertnComponent } from './voidable-salertn/voidable-salertn.component';
 import { VrtnenterqtyComponent } from './voidable-salertn/vrtnenterqty/vrtnenterqty.component';
 import { VrtnsavedbillComponent } from './voidable-salertn/vrtnsavedbill/vrtnsavedbill.component';
+import { InvDashboardComponent } from './inv-dashboard/inv-dashboard.component';
+import { SaleRptPaymentTypewiseComponent } from './InventoryReports/sale-rpt-payment-typewise/sale-rpt-payment-typewise.component';
  
 
 
@@ -156,6 +158,17 @@ export const inventoryRoutes: Route[] = [
     component: TopLeastSaleQtyAmountwiseComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'invdsbrd',
+    component: InvDashboardComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'isrptptw',
+    component: SaleRptPaymentTypewiseComponent,
+    canActivate: [AuthGuard]
+  },
+
 
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 
@@ -199,6 +212,8 @@ export const inventoryRoutes: Route[] = [
     VoidableSalertnComponent,
     VrtnenterqtyComponent,
     VrtnsavedbillComponent,
+    InvDashboardComponent,
+    SaleRptPaymentTypewiseComponent,
 
  
 

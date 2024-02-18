@@ -8,7 +8,7 @@
                 <div class="col-lg-8 d-flex ">
                     <input type="text" #pbarcode [(ngModel)]="PBarcode"
                         (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event);"
-                        id="searchProduct" class="searchProduct ps-1" placeholder="Scan Barcode (Alt + b)"
+                        id="searchProduct" class="searchProduct ps-1" placeholder="Scan Barcode (Alt + b)" (focus)="rowFocused = -1"
                         autofocus autocomplete="off" accesskey="b">
 
                     <button accesskey="n" class="bg-primary text-white " data-bs-toggle="modal"
