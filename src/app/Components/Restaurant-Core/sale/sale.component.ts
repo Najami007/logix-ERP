@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -26,7 +26,17 @@ $(window).blur(function () {
   styleUrls: ['./sale.component.scss']
 })
 export class SaleComponent implements OnInit {
+  @HostListener('document:visibilitychange', ['$event'])
 
+  appVisibility() {
+    if (document.hidden) { 
+
+     } 
+     else {
+       this.getHoldBills();
+     
+     }
+ }
 
   holdbtnType = 'hold';
 
@@ -225,11 +235,12 @@ export class SaleComponent implements OnInit {
   //////////////////////////////////////////////////////////
 
   getCategories() {
+    this.app.startLoaderDark();
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetRecipeCategories').subscribe(
       (Response: any) => {
         this.categoriesList = Response;
         this.categoryID = this.categoriesList[0].recipeCatID;
-
+        this.app.stopLoaderDark();
       }
     )
   }
@@ -291,6 +302,7 @@ export class SaleComponent implements OnInit {
       this.getTotal();
     }
     this.tempProdRow = [];
+    this.tempQty = 1;
   }
 
 
@@ -325,7 +337,7 @@ export class SaleComponent implements OnInit {
 }
 
 
-  /////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
 
   save(type: any) {
 
@@ -440,7 +452,7 @@ export class SaleComponent implements OnInit {
 
           $('#paymentMehtod').hide();
           $('.modal-backdrop').remove();
-          this.global.openPinCode().subscribe(pin => {
+          this.global.openPassword('Password').subscribe(pin => {
             if (pin !== '') {
               this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
                 RestrictionCodeID: 3,
@@ -476,7 +488,7 @@ export class SaleComponent implements OnInit {
     }
   }
 
-  //////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
 
   InsertSale() {
 
@@ -634,7 +646,7 @@ export class SaleComponent implements OnInit {
         if (this.tableData.length == 1 && item.quantity <= 1) {
           this.voidBill();
         } else {
-          this.global.openPinCode().subscribe(pin => {
+          this.global.openPassword('Password').subscribe(pin => {
             if (pin !== '') {
               this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
                 RestrictionCodeID: 1,
@@ -889,9 +901,12 @@ export class SaleComponent implements OnInit {
   ////////////////////////////////////////////////////////////
 
   verifyDiscount(disc: any,) {
-    if (this.tableData != '') {
-      this.global.openPinCode().subscribe(pin => {
+    if (disc > this.netTotal){
+      this.msg.WarnNotify('Discount is not valid!')
+    } else{
+      this.global.openPassword('Password').subscribe(pin => {
         if (pin !== '') {
+          this.app.startLoaderDark();
           this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
             RestrictionCodeID: 2,
             Password: pin,
@@ -904,6 +919,7 @@ export class SaleComponent implements OnInit {
               } else {
                 this.msg.WarnNotify(Response.msg);
               }
+              this.app.stopLoaderDark();
             }
           )
         }
@@ -927,7 +943,7 @@ export class SaleComponent implements OnInit {
       }).then((result) => {
 
         if (result.isConfirmed) {
-          this.global.openPinCode().subscribe(pin => {
+          this.global.openPassword('Password').subscribe(pin => {
             if (pin !== '') {
               this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
                 RestrictionCodeID: 1,
@@ -937,7 +953,7 @@ export class SaleComponent implements OnInit {
               }).subscribe(
                 (Response: any) => {
                   if (Response.msg == 'Password Matched Successfully') {
-
+                    this.app.startLoaderDark();
                     this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertVoidFullBill', {
                       InvBillNo: this.invBillNo,
                       TableID: this.tableID,
@@ -955,6 +971,7 @@ export class SaleComponent implements OnInit {
                         } else {
                           this.msg.WarnNotify(Response.msg);
                         }
+                        this.app.stopLoaderDark();
                       }
                     )
 
@@ -1002,7 +1019,7 @@ export class SaleComponent implements OnInit {
   }else{
     this.http.get(environment.mainApi+this.global.restaurentLink+'MergeAndPrintBill?BillNo='+this.mergeBillNo1+'&BillNo2='+this.mergeBillNo2).subscribe(
       (Response:any)=>{
-         //console.log(Response);
+         console.log(Response);
     this.myInvoiceNo = Response[0].invBillNo;
     this.myInvDate = Response[0].invDate;
     this.myOrderType = Response[0].orderType;
@@ -1013,12 +1030,13 @@ export class SaleComponent implements OnInit {
        this.myPrintData = Response;
        this.mySubTotal = 0;
        this.OtherCharges = 0;
-
+       this.myOtherCharges = this.holdBillList.find((e:any)=>e.invBillNo == this.mergeBillNo1).otherCharges + 
+        this.holdBillList.find((e:any)=>e.invBillNo == this.mergeBillNo2).otherCharges;
        Response.forEach((e:any) => {
           this.mySubTotal += e.quantity * e.salePrice;
-          this.myOtherCharges += e.otherCharges;
-
        });
+
+     
 
 
        setTimeout(() => {

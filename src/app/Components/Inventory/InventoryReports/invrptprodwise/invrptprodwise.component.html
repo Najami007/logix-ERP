@@ -69,9 +69,9 @@
             </mat-select>
         </mat-form-field>
 
-        <div class="col-lg-2 pb-2" *ngIf="crudList.r">
+        <div class="col-lg-3 pb-2" *ngIf="crudList.r">
           
-            <button class="btn btn-success btn-rpt col-lg-2  me-1" (click)="getReport(rptType)">Get Report</button>
+            <button class="btn btn-success btn-rpt col-lg-4  me-1" (click)="getReport(rptType)">Get Report</button>
             <button class="btn btn-primary btn-rpt col-lg-1" (click)="print()"><mat-icon>print</mat-icon></button>
         </div>
    
@@ -98,7 +98,7 @@
 
                     <h1 class="companyName">{{item.companyName}}</h1>
 
-                    <p class="rptTitle" style="margin-top:-20px">Sale {{reportType}} Report <span *ngIf="userName != ''">({{userName}})</span></p>
+                    <p class="rptTitle" style="margin-top:-20px">{{reportType}} <span *ngIf="userName != ''">({{userName}})</span></p>
                     <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
 
@@ -123,6 +123,7 @@
                     <th>Date</th>
                     <th>Title</th>
                     <th >Location</th>
+                    <th >Type</th>
                     <th >Qty</th>
                     <th>Cost</th>
                     <th>Sale</th>
@@ -141,6 +142,7 @@
                     <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
                     <td >{{item.productTitle}} <b *ngIf="item.barcode !== null">({{item.barcode}})</b></td>
                     <td >{{item.locationTitle }}</td>
+                    <td >{{item.issueType }}</td>
                     <td class="text-center">{{item.quantity}}</td>
                     <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>

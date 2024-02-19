@@ -5,7 +5,7 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
-import { interval,Subscription } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 
 
 
@@ -20,90 +20,110 @@ export class OrderDashboardComponent implements OnInit {
 
   mySubscription: Subscription;
   constructor(
-    private http:HttpClient,
-    private global:GlobalDataModule,
-    private msg:NotificationService,
-    private app:AppComponent,
-    private dialog:MatDialog
-  ){
+    private http: HttpClient,
+    private global: GlobalDataModule,
+    private msg: NotificationService,
+    private app: AppComponent,
+    private dialog: MatDialog
+  ) {
 
-    this.mySubscription= interval(20000).subscribe((x =>{
+    this.mySubscription = interval(20000).subscribe((x => {
       this.getOrderList();
       this.getVoidList();
-  }));
+    }));
   }
 
-  
+
 
   ngOnInit(): void {
     this.global.setHeaderTitle('Kitchen DashBoard');
     this.getVoidList();
     this.getOrderList();
+    this.getCookingArea();
 
   }
 
-
+  locationID = 0;
   curDate = new Date()
 
-  voidOrderList:any = [];
-  tempVoidList:any = [];
-  newOrderList:any = [];
-  tempOrderList:any = [];
-  
-  PendingOrderList:any = [];
-  deliveredOrderList:any = [];
+  voidOrderList: any = [];
+  tempVoidList: any = [];
+  newOrderList: any = [];
+  tempOrderList: any = [];
 
-   sound:any = "data:audio/wav;base64,//uQRAAAAWMSLwUIYAAsYkXgoQwAEaYLWfkWgAI0wWs/ItAAAGDgYtAgAyN+QWaAAihwMWm4G8QQRDiMcCBcH3Cc+CDv/7xA4Tvh9Rz/y8QADBwMWgQAZG/ILNAARQ4GLTcDeIIIhxGOBAuD7hOfBB3/94gcJ3w+o5/5eIAIAAAVwWgQAVQ2ORaIQwEMAJiDg95G4nQL7mQVWI6GwRcfsZAcsKkJvxgxEjzFUgfHoSQ9Qq7KNwqHwuB13MA4a1q/DmBrHgPcmjiGoh//EwC5nGPEmS4RcfkVKOhJf+WOgoxJclFz3kgn//dBA+ya1GhurNn8zb//9NNutNuhz31f////9vt///z+IdAEAAAK4LQIAKobHItEIYCGAExBwe8jcToF9zIKrEdDYIuP2MgOWFSE34wYiR5iqQPj0JIeoVdlG4VD4XA67mAcNa1fhzA1jwHuTRxDUQ//iYBczjHiTJcIuPyKlHQkv/LHQUYkuSi57yQT//uggfZNajQ3Vmz+Zt//+mm3Wm3Q576v////+32///5/EOgAAADVghQAAAAA//uQZAUAB1WI0PZugAAAAAoQwAAAEk3nRd2qAAAAACiDgAAAAAAABCqEEQRLCgwpBGMlJkIz8jKhGvj4k6jzRnqasNKIeoh5gI7BJaC1A1AoNBjJgbyApVS4IDlZgDU5WUAxEKDNmmALHzZp0Fkz1FMTmGFl1FMEyodIavcCAUHDWrKAIA4aa2oCgILEBupZgHvAhEBcZ6joQBxS76AgccrFlczBvKLC0QI2cBoCFvfTDAo7eoOQInqDPBtvrDEZBNYN5xwNwxQRfw8ZQ5wQVLvO8OYU+mHvFLlDh05Mdg7BT6YrRPpCBznMB2r//xKJjyyOh+cImr2/4doscwD6neZjuZR4AgAABYAAAABy1xcdQtxYBYYZdifkUDgzzXaXn98Z0oi9ILU5mBjFANmRwlVJ3/6jYDAmxaiDG3/6xjQQCCKkRb/6kg/wW+kSJ5//rLobkLSiKmqP/0ikJuDaSaSf/6JiLYLEYnW/+kXg1WRVJL/9EmQ1YZIsv/6Qzwy5qk7/+tEU0nkls3/zIUMPKNX/6yZLf+kFgAfgGyLFAUwY//uQZAUABcd5UiNPVXAAAApAAAAAE0VZQKw9ISAAACgAAAAAVQIygIElVrFkBS+Jhi+EAuu+lKAkYUEIsmEAEoMeDmCETMvfSHTGkF5RWH7kz/ESHWPAq/kcCRhqBtMdokPdM7vil7RG98A2sc7zO6ZvTdM7pmOUAZTnJW+NXxqmd41dqJ6mLTXxrPpnV8avaIf5SvL7pndPvPpndJR9Kuu8fePvuiuhorgWjp7Mf/PRjxcFCPDkW31srioCExivv9lcwKEaHsf/7ow2Fl1T/9RkXgEhYElAoCLFtMArxwivDJJ+bR1HTKJdlEoTELCIqgEwVGSQ+hIm0NbK8WXcTEI0UPoa2NbG4y2K00JEWbZavJXkYaqo9CRHS55FcZTjKEk3NKoCYUnSQ0rWxrZbFKbKIhOKPZe1cJKzZSaQrIyULHDZmV5K4xySsDRKWOruanGtjLJXFEmwaIbDLX0hIPBUQPVFVkQkDoUNfSoDgQGKPekoxeGzA4DUvnn4bxzcZrtJyipKfPNy5w+9lnXwgqsiyHNeSVpemw4bWb9psYeq//uQZBoABQt4yMVxYAIAAAkQoAAAHvYpL5m6AAgAACXDAAAAD59jblTirQe9upFsmZbpMudy7Lz1X1DYsxOOSWpfPqNX2WqktK0DMvuGwlbNj44TleLPQ+Gsfb+GOWOKJoIrWb3cIMeeON6lz2umTqMXV8Mj30yWPpjoSa9ujK8SyeJP5y5mOW1D6hvLepeveEAEDo0mgCRClOEgANv3B9a6fikgUSu/DmAMATrGx7nng5p5iimPNZsfQLYB2sDLIkzRKZOHGAaUyDcpFBSLG9MCQALgAIgQs2YunOszLSAyQYPVC2YdGGeHD2dTdJk1pAHGAWDjnkcLKFymS3RQZTInzySoBwMG0QueC3gMsCEYxUqlrcxK6k1LQQcsmyYeQPdC2YfuGPASCBkcVMQQqpVJshui1tkXQJQV0OXGAZMXSOEEBRirXbVRQW7ugq7IM7rPWSZyDlM3IuNEkxzCOJ0ny2ThNkyRai1b6ev//3dzNGzNb//4uAvHT5sURcZCFcuKLhOFs8mLAAEAt4UWAAIABAAAAAB4qbHo0tIjVkUU//uQZAwABfSFz3ZqQAAAAAngwAAAE1HjMp2qAAAAACZDgAAAD5UkTE1UgZEUExqYynN1qZvqIOREEFmBcJQkwdxiFtw0qEOkGYfRDifBui9MQg4QAHAqWtAWHoCxu1Yf4VfWLPIM2mHDFsbQEVGwyqQoQcwnfHeIkNt9YnkiaS1oizycqJrx4KOQjahZxWbcZgztj2c49nKmkId44S71j0c8eV9yDK6uPRzx5X18eDvjvQ6yKo9ZSS6l//8elePK/Lf//IInrOF/FvDoADYAGBMGb7FtErm5MXMlmPAJQVgWta7Zx2go+8xJ0UiCb8LHHdftWyLJE0QIAIsI+UbXu67dZMjmgDGCGl1H+vpF4NSDckSIkk7Vd+sxEhBQMRU8j/12UIRhzSaUdQ+rQU5kGeFxm+hb1oh6pWWmv3uvmReDl0UnvtapVaIzo1jZbf/pD6ElLqSX+rUmOQNpJFa/r+sa4e/pBlAABoAAAAA3CUgShLdGIxsY7AUABPRrgCABdDuQ5GC7DqPQCgbbJUAoRSUj+NIEig0YfyWUho1VBBBA//uQZB4ABZx5zfMakeAAAAmwAAAAF5F3P0w9GtAAACfAAAAAwLhMDmAYWMgVEG1U0FIGCBgXBXAtfMH10000EEEEEECUBYln03TTTdNBDZopopYvrTTdNa325mImNg3TTPV9q3pmY0xoO6bv3r00y+IDGid/9aaaZTGMuj9mpu9Mpio1dXrr5HERTZSmqU36A3CumzN/9Robv/Xx4v9ijkSRSNLQhAWumap82WRSBUqXStV/YcS+XVLnSS+WLDroqArFkMEsAS+eWmrUzrO0oEmE40RlMZ5+ODIkAyKAGUwZ3mVKmcamcJnMW26MRPgUw6j+LkhyHGVGYjSUUKNpuJUQoOIAyDvEyG8S5yfK6dhZc0Tx1KI/gviKL6qvvFs1+bWtaz58uUNnryq6kt5RzOCkPWlVqVX2a/EEBUdU1KrXLf40GoiiFXK///qpoiDXrOgqDR38JB0bw7SoL+ZB9o1RCkQjQ2CBYZKd/+VJxZRRZlqSkKiws0WFxUyCwsKiMy7hUVFhIaCrNQsKkTIsLivwKKigsj8XYlwt/WKi2N4d//uQRCSAAjURNIHpMZBGYiaQPSYyAAABLAAAAAAAACWAAAAApUF/Mg+0aohSIRobBAsMlO//Kk4soosy1JSFRYWaLC4qZBYWFRGZdwqKiwkNBVmoWFSJkWFxX4FFRQWR+LsS4W/rFRb/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRib3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU=";
+  PendingOrderList: any = [];
+  deliveredOrderList: any = [];
 
-  getVoidList(){  
-   
+  sound: any = "data:audio/wav;base64,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qJrx4KOQjahZxWbcZgztj2c49nKmkId44S71j0c8eV9yDK6uPRzx5X18eDvjvQ6yKo9ZSS6l//8elePK/Lf//IInrOF/FvDoADYAGBMGb7FtErm5MXMlmPAJQVgWta7Zx2go+8xJ0UiCb8LHHdftWyLJE0QIAIsI+UbXu67dZMjmgDGCGl1H+vpF4NSDckSIkk7Vd+sxEhBQMRU8j/12UIRhzSaUdQ+rQU5kGeFxm+hb1oh6pWWmv3uvmReDl0UnvtapVaIzo1jZbf/pD6ElLqSX+rUmOQNpJFa/r+sa4e/pBlAABoAAAAA3CUgShLdGIxsY7AUABPRrgCABdDuQ5GC7DqPQCgbbJUAoRSUj+NIEig0YfyWUho1VBBBA//uQZB4ABZx5zfMakeAAAAmwAAAAF5F3P0w9GtAAACfAAAAAwLhMDmAYWMgVEG1U0FIGCBgXBXAtfMH10000EEEEEECUBYln03TTTdNBDZopopYvrTTdNa325mImNg3TTPV9q3pmY0xoO6bv3r00y+IDGid/9aaaZTGMuj9mpu9Mpio1dXrr5HERTZSmqU36A3CumzN/9Robv/Xx4v9ijkSRSNLQhAWumap82WRSBUqXStV/YcS+XVLnSS+WLDroqArFkMEsAS+eWmrUzrO0oEmE40RlMZ5+ODIkAyKAGUwZ3mVKmcamcJnMW26MRPgUw6j+LkhyHGVGYjSUUKNpuJUQoOIAyDvEyG8S5yfK6dhZc0Tx1KI/gviKL6qvvFs1+bWtaz58uUNnryq6kt5RzOCkPWlVqVX2a/EEBUdU1KrXLf40GoiiFXK///qpoiDXrOgqDR38JB0bw7SoL+ZB9o1RCkQjQ2CBYZKd/+VJxZRRZlqSkKiws0WFxUyCwsKiMy7hUVFhIaCrNQsKkTIsLivwKKigsj8XYlwt/WKi2N4d//uQRCSAAjURNIHpMZBGYiaQPSYyAAABLAAAAAAAACWAAAAApUF/Mg+0aohSIRobBAsMlO//Kk4soosy1JSFRYWaLC4qZBYWFRGZdwqKiwkNBVmoWFSJkWFxX4FFRQWR+LsS4W/rFRb/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRib3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU=";
+
+  cookingAreaList: any = [];
+
+
+
+  getCookingArea() {
+    this.http.get(environment.mainApi + this.global.restaurentLink + 'GetCookingAria').subscribe(
+      (Response: any) => {
+        this.cookingAreaList = Response;
+        //console.log(Response);
+      }
+    )
+  }
+
+
+
+  getVoidList() {
+
     this.tempVoidList = this.voidOrderList;
     this.voidOrderList = [];
-    this.http.get(environment.mainApi+this.global.restaurentLink+'GetOrdersAndVoidItemsDetail?todate='+this.global.dateFormater(this.curDate,'-')+'&type=void').subscribe(
-      (Response:any)=>{
+    this.http.get(environment.mainApi+this.global.restaurentLink+'GetOrdersAndVoidItemsDetail?todate='+this.global.dateFormater(this.curDate, '-')
+    +'&type=void').subscribe(
+      (Response: any) => {
         this.voidOrderList = Response;
         // console.log(Response)
-      
-        if( this.tempOrderList != '' && (this.voidOrderList.length > this.tempVoidList.length)){  
+
+        if (this.tempOrderList != '' && (this.voidOrderList.length > this.tempVoidList.length)) {
           this.beep();
         }
-       
+
 
       }
     )
   }
-  
 
 
-  getOrderList(){
-   if(this.newOrderList != ''){
-    this.tempOrderList = this.newOrderList;
-   }
+
+  getOrderList() {
+    if (this.newOrderList != '') {
+      this.tempOrderList = this.newOrderList;
+    }
     this.PendingOrderList = [];
     this.newOrderList = [];
     this.deliveredOrderList = [];
-    this.http.get(environment.mainApi+this.global.restaurentLink+'GetOrdersAndVoidItemsDetail?todate='+this.global.dateFormater(this.curDate,'-')+'&type=order').subscribe(
-      (Response:any)=>{
-       
-        Response.forEach((e:any) => {
-        if(e.quantity > 0){
-          if(e.reqStatus == false ){
-            this.newOrderList.push(e);
-          }
-          if(e.reqStatus == true && e.dStatus == false ){
-            this.PendingOrderList.push(e);
-          }
+    this.http.get(environment.mainApi+this.global.restaurentLink +'GetOrdersAndVoidItemsDetail?todate='+this.global.dateFormater(this.curDate,'-') +
+    '&type=order').subscribe(
+      (Response: any) => {
+        //console.log(Response);
+       if(Response != null){
+        Response.forEach((e: any) => {
+          if (e.quantity > 0) {
+            if (e.reqStatus == false) {
+              this.newOrderList.push(e);
+            }
+            if (e.reqStatus == true && e.dStatus == false) {
+              this.PendingOrderList.push(e);
+            }
 
-          if(e.reqStatus == true && e.dStatus == true){
-            this.deliveredOrderList.push(e)
+            if (e.reqStatus == true && e.dStatus == true) {
+              this.deliveredOrderList.push(e)
+            }
           }
-        }
         });
-        if(this.tempOrderList!= '' && (this.newOrderList.length > this.tempOrderList.length) ){
+       }
+        if (this.tempOrderList != '' && (this.newOrderList.length > this.tempOrderList.length)) {
           this.beep();
         }
         // console.log(this.newOrderList.length , this.tempOrderList.length)
-       
+
 
 
       }
@@ -111,19 +131,19 @@ export class OrderDashboardComponent implements OnInit {
   }
 
 
-  onDocSelected(event:any) {
+  onDocSelected(event: any) {
 
-  
-  
+
+
     let targetEvent = event.target;
 
-    let file:File = targetEvent.files[0];
+    let file: File = targetEvent.files[0];
 
-    let fileReader:FileReader = new FileReader();
+    let fileReader: FileReader = new FileReader();
 
 
-    fileReader.onload =(e)=>{
-       this.sound = fileReader.result;
+    fileReader.onload = (e) => {
+      this.sound = fileReader.result;
     }
 
     fileReader.readAsDataURL(file);
@@ -131,15 +151,15 @@ export class OrderDashboardComponent implements OnInit {
     // new Audio(this.sound).play()
 
     this.beep()
-  
 
 
-  //console.log(this.imageFile);
-}
+
+    //console.log(this.imageFile);
+  }
 
 
-  beep(){
-   
+  beep() {
+
     // var doc:any =  document.querySelector('boom');
     // doc.play();
     // var voice = new Audio(this.sound);
@@ -149,19 +169,19 @@ export class OrderDashboardComponent implements OnInit {
 
 
 
-  approveOrder(item:any){
+  approveOrder(item: any) {
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+this.global.restaurentLink+'ApproveOrderVoidRequest',{
+    this.http.post(environment.mainApi + this.global.restaurentLink + 'ApproveOrderVoidRequest', {
       AutoInvDetID: item.autoInvDetID,
       UserID: this.global.getUserID()
     }).subscribe(
-      (Response:any)=>{
-        if(Response.msg == 'Approved Successfully'){
+      (Response: any) => {
+        if (Response.msg == 'Approved Successfully') {
           this.msg.SuccessNotify('Accepted');
-          
+
           this.getOrderList();
           this.getVoidList();
-        }else{
+        } else {
           this.msg.WarnNotify(Response.msg);
         }
 
@@ -171,18 +191,18 @@ export class OrderDashboardComponent implements OnInit {
   }
 
 
-  ApproveDelivery(item:any){
+  ApproveDelivery(item: any) {
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+this.global.restaurentLink+'UpdateDeliveryStatus',{
+    this.http.post(environment.mainApi + this.global.restaurentLink + 'UpdateDeliveryStatus', {
       AutoInvDetID: item.autoInvDetID,
       UserID: this.global.getUserID()
     }).subscribe(
-      (Response:any)=>{
-        if(Response.msg == 'Deliver Successfully'){
+      (Response: any) => {
+        if (Response.msg == 'Deliver Successfully') {
           this.msg.SuccessNotify('Order Delivered');
-          
+
           this.getOrderList();
-        }else{
+        } else {
           this.msg.WarnNotify(Response.msg);
         }
 

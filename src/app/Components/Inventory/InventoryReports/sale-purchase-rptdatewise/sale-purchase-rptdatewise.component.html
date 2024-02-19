@@ -84,7 +84,7 @@
 
                     <h1 class="companyName">{{item.companyName}}</h1>
 
-                    <p class="rptTitle" style="margin-top:-20px">Sale {{reportType}} Report</p>
+                    <p class="rptTitle" style="margin-top:-20px">{{reportType}}</p>
                     <p style="margin-top: -15px;" > <b *ngIf="userName != ''">User: {{userName}}</b></p>
                     <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
@@ -108,6 +108,7 @@
                     <th>S#</th>
                     <th>Bill #</th>
                     <th>Date</th>
+                    <th *ngIf="rptType == 'I' || rptType == 'R'">Type</th>
                     <!-- <th>Location</th> -->
                     <th *ngIf="rptType == 'p'">Party</th>
                     <th *ngIf="rptType == 'p'">Booker</th>
@@ -123,15 +124,17 @@
                     <td class="text-center">{{index + 1}}</td>
                     <td class="text-center">{{item.invBillNo}}</td>
                     <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
+                    <td  *ngIf="rptType == 'I' || rptType == 'R'">{{item.issueType}}</td>
                     <!-- <td >{{item.locationTitle}}</td> -->
                     <td *ngIf="rptType == 'p'">{{item.partyName}}</td>
                     <td *ngIf="rptType == 'p'">{{item.bookerName }}</td>
-                    <td class="text-end">{{item.billTotal  |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.billTotal + item.overHeadAmount  |number:'1.0-0'}}</td>
                     <td>{{item.entryUser}}</td>
                 </tr>
                 <tr>
                     <td colspan="3"></td>
                     <td *ngIf="rptType == 'p'"></td>
+                    <td *ngIf="rptType == 'I' || rptType == 'R'"></td>
                     <td *ngIf="rptType == 'p'"></td>
                     <td class="fw-bold text-end">{{netGrandTotal |number:'1.0-0'}}</td>
                     <td></td>

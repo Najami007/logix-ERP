@@ -18,6 +18,9 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { UserRoleComponent } from './user-role/user-role.component';
 import { AuthGuard } from 'src/app/auth.guard';
 import { RestrictpwdComponent } from './restrictpwd/restrictpwd.component';
+import { DayopencloseComponent } from './dayopenclose/dayopenclose.component';
+import { DayOpencloseRptComponent } from './day-openclose-rpt/day-openclose-rpt.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 
 
@@ -26,6 +29,8 @@ export const userRoutes: Route[] = [
   {path:'adduser', component:AddUserComponent,canActivate:[AuthGuard]  },
   {path:'usrl', component:UserRoleComponent,canActivate:[AuthGuard]  },
   {path:'respwd', component:RestrictpwdComponent,canActivate:[AuthGuard]  },
+  {path:'doc', component:DayopencloseComponent, canActivate:[AuthGuard] },
+  {path:'rptdoc', component:DayOpencloseRptComponent, canActivate:[AuthGuard] },
 
   {path:'**', redirectTo:'home',pathMatch:'full'}
 
@@ -40,8 +45,10 @@ export const userRoutes: Route[] = [
     ChangePINComponent,
     UserRoleComponent,
     RestrictpwdComponent,
-    
+    DayOpencloseRptComponent,
+    DayopencloseComponent,   
   ],
+  
   imports: [
     CommonModule,
     RouterModule.forChild(userRoutes),
@@ -51,7 +58,8 @@ export const userRoutes: Route[] = [
     MaterialModule,
     NgxMatSelectSearchModule,
     TextMaskModule,
-    Ng2SearchPipeModule
+    Ng2SearchPipeModule,
+    NgxMaterialTimepickerModule
 
 
 

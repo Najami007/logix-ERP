@@ -125,10 +125,11 @@
                 <div class="justify-content-between p-1 w-50 border-end">
 
                     <div class="d-flex justify-content-between w-100">
-                        <mat-label class="w-50" data-bs-toggle="modal"
+                        <mat-label class="w-50 text-primary cursorPointer" data-bs-toggle="modal"
                             data-bs-target="#disc"><strong>Discount</strong></mat-label>
-                        <input disabled="true" [(ngModel)]="billDiscount" class="w-50 text-end" (keyup)="getTotal();"
-                            (keydown)="getTotal();this.global.handleNumKeys($event)" />
+                        <p class="text-center font-digit" style="font-size: 30px;">{{billDiscount |number:'1.0-2'}}</p>
+                        <!-- <input disabled="true" [(ngModel)]="billDiscount" class="w-50 text-end" (keyup)="getTotal();"
+                            (keydown)="getTotal();this.global.handleNumKeys($event)" /> -->
                     </div>
 
                     <div class="d-flex justify-content-between w-100 pt-1">
@@ -593,7 +594,7 @@
 
                             <div class="text-center d-flex justify-content-between ">
                                 <button class="btn btn-success" data-bs-dismiss="modal"
-                                    (click)="productSelected(tempProdRow,prodQty.value);tempQty = 1;">Save</button>
+                                    (click)="productSelected(tempProdRow,prodQty.value);prodQty.value = '1';tempQty = 1">Save</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                     (click)="tempQty = 1">Close</button>
                             </div>

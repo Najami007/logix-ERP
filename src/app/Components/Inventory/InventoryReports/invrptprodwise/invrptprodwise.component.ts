@@ -54,6 +54,7 @@ export class InvrptprodwiseComponent implements OnInit {
     {val:'p',title:'Purchase Report'},
     {val:'pr',title:'Purchase Return Report'},
     {val:'I',title:'Issuance Report'},
+    {val:'R',title:'Stock Receive'},
     {val:'AI',title:'Adjustment In Report'},
     {val:'Ao',title:'Adjustment Out Report'},
     {val:'Dl',title:'Damage Loss Report'},
@@ -112,17 +113,27 @@ export class InvrptprodwiseComponent implements OnInit {
 
 
   getReport(type: any) {
+    this.reportType = this.reportsList.find((e:any)=>e.val == type).title;
 
-
-    console.log(this.userID,this.productID,type);
+    //console.log(this.userID,this.productID,type);
     if (this.productID == 0 || this.productID == undefined) {
       this.msg.WarnNotify('Select Product')
     } else {
       this.http.get(environment.mainApi + this.global.inventoryLink +'GetProductInOutDetailDateWise?reqType='+type+'&reqPID='+this.productID+'&reqUID='+this.userID+'&FromDate='+
         this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
           (Response: any) => {
-            this.invDetailList = Response;
-            console.log(Response)
+            this.invDetailList = [];
+            if(type == 'R'){
+              Response.forEach((e:any) => {
+                if(e.issueType != 'Stock Transfer'){
+                  this.invDetailList.push(e);
+                }
+              });
+            }else{
+              this.invDetailList = Response;
+            }
+           
+           // console.log(Response)
           }
         )
     }

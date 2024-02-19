@@ -63,17 +63,23 @@ export class MapWHProductComponent implements OnInit {
   }
 
 
-  save(){
+  save(type:any){
   //  alert(this.productID);
   //  alert(this.categoryID);
     if(this.productID == 0 || this.productID == undefined){
       this.msg.WarnNotify('Select Product')
-    }else if(this.categoryID == 0 || this.categoryID == undefined){
+    }else if(type == 'map' && (this.categoryID == 0 || this.categoryID == undefined) ){
       this.msg.WarnNotify('Select Category')
-    }else if(this.cookingAriaID == 0 || this.cookingAriaID == undefined){
+    }else if(type == 'map' && (this.cookingAriaID == 0 || this.cookingAriaID == undefined)){
       this.msg.WarnNotify('Select Cooking Area')
     }
     else{
+      if(type == 'unmap'){
+        this.categoryID = 0;
+        this.cookingAriaID = 0;
+      }
+
+      
       this.dialog.open(PincodeComponent,{
         width:"30%",
       }).afterClosed().subscribe(pin=>{

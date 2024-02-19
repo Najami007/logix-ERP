@@ -15,7 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProductImgComponent } from 'src/app/Components/Inventory/product/product-img/product-img.component';
 import { PincodeComponent } from 'src/app/Components/User/pincode/pincode.component';
 
-
+import { CookieService } from 'ngx-cookie-service';
 
 
 
@@ -67,6 +67,7 @@ export class GlobalDataModule implements OnInit {
     private rout: Router,
     private msg: NotificationService,
     private dialog: MatDialog,
+    private cookie:CookieService
     
     // public app: AppComponent,
 
@@ -134,6 +135,8 @@ export class GlobalDataModule implements OnInit {
     var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
 
     return parseInt(atob(atob(credentials.value._culId)));
+ 
+    return parseInt(atob(atob(this.cookie.get('ui'))))
 
   }
 
@@ -143,6 +146,7 @@ export class GlobalDataModule implements OnInit {
     var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
 
     return atob(atob(credentials.value._culName)).toString();
+    // return atob(atob(this.cookie.get('un'))).toString();
 
   }
 
@@ -159,6 +163,7 @@ export class GlobalDataModule implements OnInit {
     var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
 
     return atob(atob(credentials.value._cuLnk)).toString();
+    // return atob(atob(this.cookie.get('ul'))).toString()
   }
 
 
@@ -244,9 +249,13 @@ export class GlobalDataModule implements OnInit {
       Password: password,
     }).subscribe({
       next: (value: any) => {
-
+        // console.log(value);
+        var curDate:Date = new Date();
         var userID = value._culId;
         localStorage.setItem('curVal', JSON.stringify({ value }));
+         this.cookie.set('ui',value._culId);
+         this.cookie.set('un',value._culName);
+         this.cookie.set('ul',value._cuLnk);
       
 
         if (value.msg == 'Logged in Successfully') {
@@ -259,6 +268,7 @@ export class GlobalDataModule implements OnInit {
 
               localStorage.setItem('mid', JSON.stringify(Response[0].moduleID));
               this.setMenuItem(Response[0].moduleID);
+              this.cookie.set('mid',Response[0].moduleID);
              
               // console.log(Response);
             }
@@ -306,6 +316,10 @@ export class GlobalDataModule implements OnInit {
 
           localStorage.removeItem('curVal');
           localStorage.removeItem('mid');
+          document.cookie = 'ui=';
+          document.cookie = 'un=';
+          document.cookie = 'ul=';
+          document.cookie = 'mid=';
           // localStorage.removeItem('cmpnyVal');
           this.rout.navigate(['login']);
           $('.loaderDark').fadeOut(500);

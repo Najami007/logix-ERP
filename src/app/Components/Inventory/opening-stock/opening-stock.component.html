@@ -306,9 +306,9 @@
                         <tr *ngFor="let item of myTableDataList index as index">
                             <td class="text-center">{{index+1}}</td>
                     
-                            <td><div class="d-flex">
-                                    <span style="width: 100px;">{{item.ProductTitle}}</span> 
-                                    <span style="width: 150px;">({{item.barcode}})</span>
+                            <td><div class="row">
+                                    <span >{{item.ProductTitle}}</span> 
+                                    <span >({{item.barcode}})</span>
                                 </div></td>
                      
                             <td class="text-center ">{{item.Quantity |number}}</td>

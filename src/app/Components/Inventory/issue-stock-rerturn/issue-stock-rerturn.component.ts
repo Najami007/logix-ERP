@@ -46,7 +46,7 @@ export class IssueStockRerturnComponent implements OnInit {
 
 
   ngOnInit(): void {
-   this.global.setHeaderTitle('Stock Return');
+   this.global.setHeaderTitle('Stock Receive');
    this.getLocation();
    $('.searchProduct').trigger('focus');
   }
@@ -662,6 +662,7 @@ export class IssueStockRerturnComponent implements OnInit {
 
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetIssueInventoryBillSingleDate?Type='+type+'&creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
       (Response:any)=>{
+        console.log();
         this.IssueBillList = [];
         if(type == 'HR'){
           Response.forEach((e:any) => {
@@ -671,7 +672,7 @@ export class IssueStockRerturnComponent implements OnInit {
           });
         }
         if(type == 'R'){
-          this.IssueBillList = Response;
+          this.IssueBillList = Response.filter((e:any)=> e.issueType != 'Stock Transfer');
         }
       }
     )

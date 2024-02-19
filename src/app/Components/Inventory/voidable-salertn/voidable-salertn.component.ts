@@ -113,7 +113,7 @@ export class VoidableSalertnComponent implements OnInit {
 
   //////////////////////////////////////////////////////////////////////////////////
   getCurrentBill(){
-    
+    this.app.startLoaderDark();
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetSaleExistingBill?reqUserID='+this.global.getUserID()).subscribe(
       (Response:any)=>{
         this.tableDataList = [];
@@ -153,12 +153,11 @@ export class VoidableSalertnComponent implements OnInit {
           this.productImage = Response[0].productImage;
         }
         this.getTotal();
+        this.app.stopLoaderDark();
         
       }
     )
   }
-
-
 
   ////////////////////////////////////////////
 
@@ -176,7 +175,7 @@ export class VoidableSalertnComponent implements OnInit {
     )
   }
 
-  //////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 
   holdDataFunction(data:any){
 
@@ -202,7 +201,7 @@ export class VoidableSalertnComponent implements OnInit {
        this.getTotal();
     }
 
-      //////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
   searchByCode(e:any){
 
     if(this.PBarcode !== ''){
@@ -233,7 +232,7 @@ export class VoidableSalertnComponent implements OnInit {
    
   }
 
-    //////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 
     getTotal() {
       // alert();
@@ -262,7 +261,7 @@ export class VoidableSalertnComponent implements OnInit {
       this.change =  (parseFloat(this.cash) + parseFloat(this.bankCash)) - this.netTotal;
     }
 
-  //////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
   
     rowFocused = -1;
     prodFocusedRow = 0;
@@ -347,26 +346,26 @@ export class VoidableSalertnComponent implements OnInit {
 
        
 
-  focusTo(e:any,cls:any){
-    if(cls == '#disc' && e.keyCode == 13 && e.target.value == ''){
-      $(cls).trigger('focus');
-    }
-    if(cls == '#charges' && e.keyCode == 13 ){
-      $(cls).trigger('focus');
-    }
-    if(cls == '#cash' && e.keyCode == 13 && e.target.value == ''){
-      $(cls).trigger('focus');
-    }
-    
-    if(cls == '#save' && e.keyCode == 13 ){
-      $(cls).trigger('focus');
-    }
+    focusTo(e:any,cls:any){
+      if(cls == '#disc' && e.keyCode == 13 && e.target.value == ''){
+        $(cls).trigger('focus');
+      }
+      if(cls == '#charges' && e.keyCode == 13 ){
+        $(cls).trigger('focus');
+      }
+      if(cls == '#cash' && e.keyCode == 13 && e.target.value == ''){
+        $(cls).trigger('focus');
+      }
+      
+      if(cls == '#save' && e.keyCode == 13 ){
+        $(cls).trigger('focus');
+      }
 
-    if(cls == '#vsrtnsearchProduct' && e.keyCode == 13 ){
-      $(cls).trigger('focus');
+      if(cls == '#vsrtnsearchProduct' && e.keyCode == 13 ){
+        $(cls).trigger('focus');
+      }
+    
     }
-  
-  }
   
     handleNumKeys(item:any ,e:any,cls:string,index:any){
   
@@ -433,7 +432,7 @@ export class VoidableSalertnComponent implements OnInit {
     }
   
 
-      //////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 
 
     delRow(item: any) {
@@ -488,12 +487,12 @@ export class VoidableSalertnComponent implements OnInit {
     }
 
 
-      //////////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////
 
    
 
 
-      //////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 
     changeValue(item:any){
       var myIndex = this.tableDataList.indexOf(item);
@@ -511,7 +510,7 @@ export class VoidableSalertnComponent implements OnInit {
       }
      }
 
-       //////////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////
      
      showImg(item:any){
     
@@ -537,6 +536,7 @@ export class VoidableSalertnComponent implements OnInit {
       }else if(this.customerName !='' && this.customerMobileno == ''){
         this.msg.WarnNotify('Enter Customer Mobile')
       }else {
+        this.app.startLoaderDark();
         this.http.post(environment.mainApi+this.global.inventoryLink+'InsertVoidableSaleRtn',{
           HoldInvNo: this.invBillNo,
           InvDate: this.global.dateFormater(this.InvDate,'-'),
@@ -554,12 +554,9 @@ export class VoidableSalertnComponent implements OnInit {
           CashRec:this.cash,
           Change:this.change,
           BankCoaID: this.bankCoaID,
-          BankCash: this.bankCash,
-      
+          BankCash: this.bankCash,      
           CusContactNo: this.customerMobileno,
           CusName: this.customerName,
-      
-      
           SaleDetail: JSON.stringify(this.tableDataList),
           UserID:this.global.getUserID()
         }).subscribe(
@@ -574,6 +571,7 @@ export class VoidableSalertnComponent implements OnInit {
             }else{
               this.msg.WarnNotify(Response.msg);
             }
+            this.app.startLoaderDark();
           }
         )
       }
@@ -701,7 +699,7 @@ export class VoidableSalertnComponent implements OnInit {
               }).subscribe(
                 (Response: any) => {
                   if (Response.msg == 'Password Matched Successfully') {
-
+                    this.app.startLoaderDark();
                     this.http.post(environment.mainApi+this.global.inventoryLink+'VoidAllProducts',{
                       InvBillNo: this.invBillNo,
                       SaleDetail: JSON.stringify(this.tableDataList),  
@@ -714,6 +712,7 @@ export class VoidableSalertnComponent implements OnInit {
                         }else{
                           this.msg.WarnNotify(Response.msg);
                         }
+                        this.app.stopLoaderDark();
                       }
                     )
 
@@ -740,6 +739,7 @@ export class VoidableSalertnComponent implements OnInit {
 
   voidProduct(item:any){
     // console.log(item);
+    this.app.startLoaderDark();
     this.http.post(environment.mainApi+this.global.inventoryLink+'VoidProduct',{
       InvBillNo: this.invBillNo,
       ProductID: item.productID, 
@@ -760,6 +760,7 @@ export class VoidableSalertnComponent implements OnInit {
         }else{
           this.msg.WarnNotify(Response.msg);
         }
+        this.app.stopLoaderDark();
       }
     )
   }

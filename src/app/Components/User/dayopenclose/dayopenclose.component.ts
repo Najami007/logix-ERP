@@ -5,7 +5,7 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
-import { PincodeComponent } from '../../User/pincode/pincode.component';
+import { PincodeComponent } from '../pincode/pincode.component';
 
 @Component({
   selector: 'app-dayopenclose',

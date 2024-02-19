@@ -19,7 +19,6 @@ import { RecipeCategoryComponent } from './recipe-category/recipe-category.compo
 import { AddrecipeCategoryComponent } from './recipe-category/addrecipe-category/addrecipe-category.component';
 import { TableComponent } from './table/table.component';
 import { AddtableComponent } from './table/addtable/addtable.component';
-import { DayopencloseComponent } from './dayopenclose/dayopenclose.component';
 import { MapWHProductComponent } from './recipe/map-whproduct/map-whproduct.component';
 import { CookingareaComponent } from './cookingarea/cookingarea.component';
 import { AddAreaComponent } from './cookingarea/add-area/add-area.component';
@@ -41,13 +40,13 @@ import { TabletSaleComponent } from './tablet-sale/tablet-sale.component';
 
 
 
+
 export const restCore: Route[] = [
 
   {path:'sale', component:SaleComponent, canActivate:[AuthGuard] },
   {path:'tbl', component:TableComponent, canActivate:[AuthGuard] },
   {path:'rcp', component:RecipeComponent, canActivate:[AuthGuard] },
   {path:'recCat', component:RecipeCategoryComponent, canActivate:[AuthGuard] },
-  {path:'doc', component:DayopencloseComponent, canActivate:[AuthGuard] },
   {path:'ckar', component:CookingareaComponent, canActivate:[AuthGuard] },
   {path:'ordrdb', component:OrderDashboardComponent, canActivate:[AuthGuard] },
   {path:'slrpt', component:SaleReportComponent, canActivate:[AuthGuard] },
@@ -78,7 +77,7 @@ export const restCore: Route[] = [
     AddrecipeCategoryComponent,
     TableComponent,
     AddtableComponent,
-    DayopencloseComponent,
+    
     MapWHProductComponent,
     CookingareaComponent,
     AddAreaComponent,
@@ -93,6 +92,7 @@ export const restCore: Route[] = [
     SavedBillComponent,
     RestDashboardComponent,
     TabletSaleComponent,
+   
    
     
 

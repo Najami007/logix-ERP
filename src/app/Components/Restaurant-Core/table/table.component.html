@@ -1,44 +1,68 @@
 <div class="body ">
-    <div class="container  p-2" >
+   <div class="d-flex">
+    <div class="container-fluid  p-2 col-lg-6 border-0 border-end" >
+        <h2>ADD TABLE</h2>
 
-
-       <div>
-        <button mat-fab class="col-lg-1 me-2" *ngIf="crudList.c" (click)="addTable()"><mat-icon>add</mat-icon></button>
-
-        <mat-form-field class="col-lg-11" appearance="outline">
-            <mat-label class="ps-5">Search.....</mat-label>
-            <input #tableSearch matInput type="search" class="text-secondary">
-            <mat-icon matPrefix class="text-secondary">search</mat-icon>
-        </mat-form-field>
-       </div>
-
-
-        <table class="table" *ngIf="crudList.r">
-
-            <thead>
-                <tr>
-                    <th>S#</th>
-                    <th>Table Title</th>
-                    <th>Description</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of tableList | filter:tableSearch.value index as index">
-                    <td>{{index +1}}</td>
-                    <td>{{item.tableTitle}}</td>
-                    <td>{{item.tableDescription}}</td>
-                    <td class="cursorPointer text-success"><button *ngIf="crudList.u" mat-icon-button (click)="editTable(item)"><mat-icon>edit</mat-icon></button></td>
-                    <td class="cursorPointer text-danger"><button *ngIf="crudList.d" mat-icon-button (click)="delete(item)"><mat-icon>delete</mat-icon></button></td>
-                </tr>
-            </tbody>
-            
-        </table>
-    
-    
-
-    
-    </div>
+        <div>
+         <button mat-fab class="col-lg-1 me-2" *ngIf="crudList.c" (click)="addTable()"><mat-icon>add</mat-icon></button>
+ 
+         <mat-form-field class="col-lg-11" appearance="outline">
+             <mat-label class="ps-5">Search.....</mat-label>
+             <input #tableSearch matInput type="search" class="text-secondary">
+             <mat-icon matPrefix class="text-secondary">search</mat-icon>
+         </mat-form-field>
+        </div>
+ 
+ 
+        <div >
+         <table>
+             <tbody class="">
+                 <tr style="display: inline-flex; " class="cursorPointer "
+                     *ngFor="let item of tableList | filter:tableSearch.value ">
+                     <mat-card class="btblbtn justify-content-around">
+                         <span>{{item.tableTitle}}</span>
+                        <div class="d-flex  justify-content-around">
+                         <span class="text-success" ><button mat-icon-button (click)="editTable(item)"><mat-icon>edit</mat-icon></button></span>
+                         <span class="text-danger"><button mat-icon-button (click)="delete(item)"><mat-icon>delete</mat-icon></button></span>
+                        </div>
+                     </mat-card>
+                 </tr>
+             </tbody>
+         </table>
+     </div>
+ 
+         <!-- <table class="table" *ngIf="crudList.r">
+ 
+             <thead>
+                 <tr>
+                     <th>S#</th>
+                     <th>Table Title</th>
+                     <th>Description</th>
+                     <th>Edit</th>
+                     <th>Delete</th>
+                 </tr>
+             </thead>
+             <tbody>
+                 <tr *ngFor="let item of tableList | filter:tableSearch.value index as index">
+                     <td>{{index +1}}</td>
+                     <td>{{item.tableTitle}}</td>
+                     <td>{{item.tableDescription}}</td>
+                     <td class="cursorPointer text-success"><button *ngIf="crudList.u" mat-icon-button (click)="editTable(item)"><mat-icon>edit</mat-icon></button></td>
+                     <td class="cursorPointer text-danger"><button *ngIf="crudList.d" mat-icon-button (click)="delete(item)"><mat-icon>delete</mat-icon></button></td>
+                 </tr>
+             </tbody>
+             
+         </table> -->
+     
+     
+ 
+     
+     </div>
+ 
+     <div class="col-lg-6 p-1">
+        <h2>ADD COOKING AREA</h2>
+         <app-cookingarea></app-cookingarea>
+     </div>
+   </div>
 </div>
 

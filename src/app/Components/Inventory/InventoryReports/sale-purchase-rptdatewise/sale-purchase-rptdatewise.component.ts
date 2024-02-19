@@ -50,6 +50,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     {val:'p',title:'Purchase Report'},
     {val:'pr',title:'Purchase Return Report'},
     {val:'I',title:'Issuance Report'},
+    {val:'R',title:'Stock Receive'},
     {val:'AI',title:'Adjustment In Report'},
     {val:'Ao',title:'Adjustment Out Report'},
     {val:'Dl',title:'Damage Loss Report'},
@@ -110,24 +111,41 @@ rptType:any = 's';
    profitPercentTotal = 0;
 
    getReport(type:any){
+
+   this.reportType = this.reportsList.find((e:any)=>e.val == this.rptType).title;
+  
+
     this.rptType = this.tmpRptType;
    if(type == 'summary'){
     $('#detailTable').hide();
     $('#summaryTable').show();
-    this.reportType = 'Summary';
+    // this.reportType = 'Summary';
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventorySummaryDateWise_2?reqType='+this.rptType+'&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
-         //console.log(Response);
-        this.SaleDetailList = Response;
+        this.SaleDetailList = [];
+        // console.log(Response);
+        if(this.rptType == 'R'){
+          Response.forEach((e:any)=>{
+            if(e.issueType != 'Stock Transfer'){
+              this.SaleDetailList.push(e);
+            }
+          }
+           
+          )
+          // this.SaleDetailList = Response.fil;
+        }else{
+          this.SaleDetailList = Response;
+        }
         this.billTotal = 0;
         this.chargesTotal = 0;
         this.netGrandTotal = 0;
 
-        Response.forEach((e:any) => {
+        this.SaleDetailList.forEach((e:any) => {
+         
           this.billTotal += e.billTotal;
           this.chargesTotal += e.otherCharges;
-          this.netGrandTotal += e.billTotal;
+          this.netGrandTotal += e.billTotal + e.overHeadAmount;
 
         });
         
@@ -138,17 +156,31 @@ rptType:any = 's';
    if(type == 'detail'){
     $('#detailTable').show();
     $('#summaryTable').hide();
-    this.reportType = 'Detail';
+    // this.reportType = 'Detail';
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryDetailDateWise_3?reqType='+this.rptType+'&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
-        this.SaleDetailList = Response;
+        console.log(Response);
+        this.SaleDetailList = [];
+        if(this.rptType == 'R'){
+          Response.forEach((e:any)=>{
+            if(e.issueType != 'Stock Transfer'){
+              this.SaleDetailList.push(e);
+            }
+          }
+           
+          )
+          // this.SaleDetailList = Response.fil;
+        }else{
+          this.SaleDetailList = Response;
+        }
+        // this.SaleDetailList = Response;
         console.log(Response)
         this.qtyTotal = 0;
         this.detNetTotal = 0;
         this.profitPercentTotal = 0;
         this.profitTotal = 0;
-         Response.forEach((e:any) => {
+         this.SaleDetailList.forEach((e:any) => {
           this.qtyTotal += e.quantity;
           if(this.rptType == 's' || this.rptType == 'sr'){
             this.detNetTotal += e.salePrice * e.quantity;

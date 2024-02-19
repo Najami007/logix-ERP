@@ -133,15 +133,14 @@ export class VoidableSaleComponent implements OnInit {
   //////////////////////////////////////////////////////////////////////////////////
   getCurrentBill(){
     
+    this.app.startLoaderDark();
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetSaleExistingBill?reqUserID='+this.global.getUserID()).subscribe(
       (Response:any)=>{
         this.tableDataList = [];
        if(Response != ''){
         this.invBillNo = Response[0].invBillNo;
        }
-         //console.log(Response);
-        // this.tableDataList = Response;
-        
+ 
         Response.forEach((e:any) => {
           this.tableDataList.push({
             productID:e.productID,
@@ -172,6 +171,8 @@ export class VoidableSaleComponent implements OnInit {
           this.productImage = Response[0].productImage;
         }
         this.getTotal();
+
+        this.app.stopLoaderDark();
         
       }
     )
@@ -504,8 +505,12 @@ export class VoidableSaleComponent implements OnInit {
 
 
     EnterDiscount(amount:any){
+     if( amount > this.netTotal){
+      this.msg.WarnNotify('Discount is not Valid!')
+     }else{
       this.global.openPassword('Password').subscribe(pin => {
         if (pin !== '') {
+          this.app.startLoaderDark();
           this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
             RestrictionCodeID: 2,
             Password: pin,
@@ -525,6 +530,8 @@ export class VoidableSaleComponent implements OnInit {
               } else {
                 this.msg.WarnNotify(Response.msg);
               }
+              
+              this.app.stopLoaderDark();
             }
           )
 
@@ -532,6 +539,7 @@ export class VoidableSaleComponent implements OnInit {
 
         }
       })
+     }
     }
 
 
@@ -581,7 +589,7 @@ export class VoidableSaleComponent implements OnInit {
       }else if(this.customerName !='' && this.customerMobileno == ''){
         this.msg.WarnNotify('Enter Customer Mobile')
       }else {
-        
+        this.app.startLoaderDark();
         this.http.post(environment.mainApi+this.global.inventoryLink+'InsertVoidableSale',{
           HoldInvNo: this.invBillNo,
           InvDate: this.global.dateFormater(this.InvDate,'-'),
@@ -599,12 +607,9 @@ export class VoidableSaleComponent implements OnInit {
           CashRec:this.cash,
           Change:this.change,
           BankCoaID: this.bankCoaID,
-          BankCash: this.bankCash,
-      
+          BankCash: this.bankCash,     
           CusContactNo: this.customerMobileno,
-          CusName: this.customerName,
-      
-      
+          CusName: this.customerName,   
           SaleDetail: JSON.stringify(this.tableDataList),
           UserID:this.global.getUserID()
         }).subscribe(
@@ -621,6 +626,7 @@ export class VoidableSaleComponent implements OnInit {
             }else{
               this.msg.WarnNotify(Response.msg);
             }
+            this.app.stopLoaderDark();
           }
         )
       }

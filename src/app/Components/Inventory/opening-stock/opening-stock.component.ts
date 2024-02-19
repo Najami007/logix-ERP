@@ -482,7 +482,7 @@ export class OpeningStockComponent implements OnInit {
                 UserID: this.global.getUserID(),
                }).subscribe(
                  (Response:any)=>{
-                   if(Response.msg == 'Data Saved Successfully'){
+                   if(Response.msg == 'Data Updated Successfully'){
                      this.msg.SuccessNotify(Response.msg);
                      this.reset(); 
                      this.app.stopLoaderDark();
