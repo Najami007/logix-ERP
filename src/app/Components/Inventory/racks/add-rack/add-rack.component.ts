@@ -23,7 +23,10 @@ export class AddRackComponent {
   ){}
 
   ngOnInit(): void {
-    
+    setTimeout(() => {
+      alert()
+      $('#title').trigger('focus')
+    }, 500);
   }
 
 

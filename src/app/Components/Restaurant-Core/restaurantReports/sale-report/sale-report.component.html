@@ -101,6 +101,7 @@
                     <th>Table</th>
                     <th style="width: 120px;">Bill</th>
                     <th style="width: 150px;">Charges</th>
+                    <th style="width: 150px;">Discount</th>
                     <th style="width: 120px;">Total</th>
                     <th>Entered By</th>
 
@@ -116,6 +117,7 @@
                     <td class="text-center">{{item.tableTitle}}</td>
                     <td class="text-end">{{item.billTotal |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.otherCharges |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.billDiscount |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.netTotal |number:'1.0-0'}}</td>
                     <td>{{item.entryUser}}</td>
                 </tr>
@@ -123,6 +125,7 @@
                     <td colspan="4"></td>
                     <td class="fw-bold text-end">{{billTotal |number:'1.0-0'}}</td>
                     <td class="fw-bold text-end">{{chargesTotal |number:'1.0-0'}}</td>
+                    <td class="fw-bold text-end">{{discountTotal |number:'1.0-0'}}</td>
                     <td class="fw-bold text-end">{{netGrandTotal |number:'1.0-0'}}</td>
                     <td></td>
                 </tr>

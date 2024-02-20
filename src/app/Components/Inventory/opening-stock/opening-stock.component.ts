@@ -237,7 +237,7 @@ export class OpeningStockComponent implements OnInit {
 
     }
   }
-  rowFocused = 0;
+  rowFocused =-1;
   prodFocusedRow= 0;
    changeFocus(e:any, cls:any){
 
@@ -517,6 +517,7 @@ export class OpeningStockComponent implements OnInit {
     this.totalQty = 0;
     this.subTotal = 0;
     this.holdBtnType = 'Hold';
+    this.btnType = 'Save';
     this.productImage = '';
     this.invBillNo = '-';
     this.IssueBillList = [];

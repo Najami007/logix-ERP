@@ -26,6 +26,7 @@ export class RacksComponent implements OnInit{
     private route:Router
     
     ){
+     
 
       this.globaldata.getMenuList().subscribe((data)=>{
         this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
@@ -35,6 +36,7 @@ export class RacksComponent implements OnInit{
   ngOnInit(): void {
     this.globaldata.setHeaderTitle('Rack');
     this.getRacksList();
+   
     
    
   }

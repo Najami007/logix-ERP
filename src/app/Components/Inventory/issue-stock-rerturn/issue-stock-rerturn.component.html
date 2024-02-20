@@ -59,12 +59,13 @@
                     class="p-1 mb-2 searchProduct" placeholder="Alt + b" autofocus
                     autocomplete="off" accesskey="b">
     
-                <div class="  d-flex flex-column SearchConatiner cursorPointer"
+                <div class="col-lg-7  d-flex flex-column SearchConatiner cursorPointer"
                     *ngIf="PBarcode != '' && PBarcode != undefined">
                     <mat-card class="card " *ngFor="let item of productList| filter:PBarcode index as index"
                         (click)="holdDataFunction(item)">
-                        <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn" (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">{{item.productTitle}}
-                            (<b>{{item.barcode}}</b> )</button>
+                        <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn justify-content-between d-flex" 
+                        (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)"><p>{{item.productTitle}}</p>
+                            <p><strong>({{item.barcode}})</strong></p> </button>
                     </mat-card>
                 </div>
             </div>
@@ -79,7 +80,7 @@
         <!-------------------- Table Area for Products --------------->
 
         <div style="max-height: 75vh;overflow-y:scroll !important;padding-bottom: 60px;">
-            <table class="table table-hover">
+            <table class="table table-hover table-logix">
                 <thead>
                     <tr>
                         <th>S#</th>
@@ -99,24 +100,24 @@
                       <td>{{index+1}}</td>
                       <td>{{item.barcode}}</td>
                       <td>{{item.productTitle}}</td>
-                      <td class=""><input type="text" [(ngModel)]="item.quantity" min="0"
+                      <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
                         (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
                         (keyup)="changeValue(item);getTotal();showImg(item);"
                         class="qty{{index}} text-center" style="width: 80px;"></td>
-                            <td>{{item.avgCostPrice | number:'1.0-2'}}</td>
-                            <td>{{item.costPrice | number:'1.0-2'}}</td>
-                        <td>{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
-                      <td>{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
+                            <td class="text-end">{{item.avgCostPrice | number:'1.0-2'}}</td>
+                            <td class="text-end">{{item.costPrice | number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
+                      <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
                       <td class="text-center">{{item.aq}}</td>
-                      <td class="cursorPointer text-danger"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
+                      <td class="cursorPointer text-center text-danger"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
                     </tr>
                     <tr>
                         <td colspan="3"></td>
                         
                         <th class="">{{totalQty}}</th>
                         <th colspan="2"></th>
-                        <th class="">{{avgCostTotal |number:'1.0-2'}}</th>
-                        <th class="">{{CostTotal |number:'1.0-2'}}</th>
+                        <th class="text-end">{{avgCostTotal |number:'1.0-2'}}</th>
+                        <th class="text-end">{{CostTotal |number:'1.0-2'}}</th>
                         <th></th>
                         <td class="text-center"><mat-icon class="cursorPointer " (click)="reset()">delete</mat-icon></td>
                       
@@ -135,7 +136,7 @@
        <div class="p-1">
         <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
             <div class="text-center" *ngIf="tableDataList != ''" >
-                <img [src]="productImage" alt="" height="190" width="200" (click)="this.global.showProductImage(this.productImage,0)">
+                <img [src]="productImage" alt="" accesskey="i" height="190" width="200" (click)="this.global.showProductImage(this.productImage,0)">
             </div>
         </mat-card>
 

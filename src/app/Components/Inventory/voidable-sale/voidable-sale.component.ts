@@ -133,7 +133,7 @@ export class VoidableSaleComponent implements OnInit {
   //////////////////////////////////////////////////////////////////////////////////
   getCurrentBill(){
     
-    this.app.startLoaderDark();
+  
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetSaleExistingBill?reqUserID='+this.global.getUserID()).subscribe(
       (Response:any)=>{
         this.tableDataList = [];
@@ -171,9 +171,7 @@ export class VoidableSaleComponent implements OnInit {
           this.productImage = Response[0].productImage;
         }
         this.getTotal();
-
-        this.app.stopLoaderDark();
-        
+       
       }
     )
   }
@@ -734,7 +732,7 @@ export class VoidableSaleComponent implements OnInit {
 
   voidBill(){
 
-    if (this.invBillNo != '') {
+    if (this.tableDataList.length > 0) {
       Swal.fire({
         title: 'Alert!',
         text: 'Confirm to Void Full Bill',

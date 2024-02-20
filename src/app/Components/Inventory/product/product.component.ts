@@ -639,6 +639,10 @@ export class ProductComponent implements OnInit {
 
 
   addCategory(){
+    // alert()
+    
+      // $('#title2').focus()
+  
     this.dialogue.open(AddCategoryComponent,{
       width:'40%'
     }).afterClosed().subscribe(value=>{

@@ -1,0 +1,63 @@
+<mat-nav-list class="h-100" style="background-color: rgb(5, 6, 55);">
+    <!-- <div class="navHeader text-center text-white pt-4 m-2">
+        <h1><mat-icon class="pt-1">format_list_bulleted</mat-icon>  MENU ITEM</h1>
+    </div>
+    <mat-divider ></mat-divider> -->
+    <div class="py-2 d-flex flex-column nav">
+
+
+        <!-- =================================Finance and Accounts arear below here ======================================= -->
+        <!-- <div  class=" d-flex flex-column rounded" *ngFor="let item of menuList let i = index">
+            <a class="list-item" *ngIf="item.parentMenuID == 0 && item.isParentMenu == false"
+            routerLink="/{{item.moduleLink}}/{{item.menuLink}}" routerLinkActive="list-item-active">{{item.menuTitle}}</a>  
+
+            <a class="list-item cursorPointer collapsed text-truncate" (click)="collapseAccounts()" 
+            *ngIf="item.isParentMenu == true"  routerLinkActive="list-item-active">
+                {{item.menuTitle}}<mat-icon class="sideicon pt-1">{{dropDownIcon}}</mat-icon></a>  
+                
+                <div   class="m-1 p-1 d-flex flex-column rounded collapse " [id]="'collapseExample' + i">
+                   <span *ngFor="let row of menuList">
+                    <a *ngIf="item.menuID == row.parentMenuID" class="list-item" routerLink="/{{row.moduleLink}}/{{row.menuLink}}" routerLinkActive="list-item-active">
+                        {{row.menuTitle}}</a>
+                   </span>
+                   
+                </div>
+            
+           </div> -->
+
+      
+           <ul *ngFor="let item of menuList; let i = index" class="nav flex-column flex-nowrap " style="overflow-x: hidden;">
+            <li class="nav-item" *ngIf="item.parentMenuID == 0 && item.isParentMenu == false">
+              <a class="list-item nav-link text-truncate" href="" routerLinkActive="active"
+                routerLink="/{{item.moduleLink}}/{{item.menuLink}}" ><span
+                  class="d-none d-sm-inline">{{ item.menuTitle }}</span></a>
+            </li>
+            <li class="nav-item" *ngIf="item.isParentMenu == true">
+              <a class="list-item nav-link collapsed text-truncate" data-bs-toggle="collapse" [href]="'#collapseExample' + i"
+                role="button" aria-expanded="false" aria-controls="subMenuConfig"><span
+                  class="d-none d-sm-inline">{{ item.menuTitle }}</span><mat-icon class="pt-2">arrow_drop_down</mat-icon></a>
+              <div class="collapse " style="background-color: rgb(67, 66, 66);"  [id]="'collapseExample' + i">
+                <ul class="nav flex-column dark-bg" *ngFor="let row of menuList">
+                  <li class="nav-item" *ngIf="item.menuID == row.parentMenuID">
+                    <a class="list-item nav-link text-truncate" href="" routerLinkActive="active"
+                      routerLink="/{{row.moduleLink}}/{{row.menuLink}}" ><span
+                        class="d-none d-sm-inline">{{row.menuTitle}}</span></a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+     
+
+            <!-- ==============div will expand on Above link  click ========================== -->
+       
+
+        
+            
+    </div>
+    <div class="d-flex border-bottom text-white text-end pt-5">
+        <mat-icon class="pe-1" style="font-size: 20px;" >copyright</mat-icon> <h5>Copyright By : <strong> Logix Solutionz</strong></h5>
+    </div>
+</mat-nav-list>
+
+

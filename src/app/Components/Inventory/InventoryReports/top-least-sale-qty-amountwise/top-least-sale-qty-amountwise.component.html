@@ -100,6 +100,8 @@
                 <tr>
                     <th>S#</th>
                     <th>Title</th>
+                    <th>Sold</th>
+                    <th>Return</th>
                     <th>Qty</th>
                     <th>Total</th>
                 </tr>
@@ -110,12 +112,16 @@
                 <tr *ngFor="let item of reportDataList index as index">
                     <td class="text-center">{{index + 1}}</td>
                     <td>{{item.productTitle}}</td>
-                    <td class="text-center">{{item.saleQty|number:'1.0-2'}}</td>
+                    <td class="text-center">{{item.saleQty}}</td>
+                    <td class="text-center">{{item.rtnQty}}</td>
+                    <td class="text-center">{{item.quantity|number:'1.0-2'}}</td>
                     <td class="text-end">{{item.total|number:'1.0-0'}}</td>
                 </tr>
               
                     <tr>
                         <th colspan="2"></th>
+                        <th class="text-center">{{saleQtyTotal |number:'1.0-2'}}</th>
+                        <th class="text-center">{{rtnQtyTotal |number:'1.0-2'}}</th>
                         <th class="text-center">{{qtyTotal |number:'1.0-2'}}</th>
                         <th class="text-end">{{netTotal |number:'1.0-0'}}</th>
                     </tr>

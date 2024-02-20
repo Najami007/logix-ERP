@@ -49,6 +49,7 @@ import { VrtnenterqtyComponent } from './voidable-salertn/vrtnenterqty/vrtnenter
 import { VrtnsavedbillComponent } from './voidable-salertn/vrtnsavedbill/vrtnsavedbill.component';
 import { InvDashboardComponent } from './inv-dashboard/inv-dashboard.component';
 import { SaleRptPaymentTypewiseComponent } from './InventoryReports/sale-rpt-payment-typewise/sale-rpt-payment-typewise.component';
+import { ChartModule } from 'angular-highcharts';
  
 
 
@@ -230,7 +231,7 @@ export const inventoryRoutes: Route[] = [
     Ng2SearchPipeModule,
     NgxMaterialTimepickerModule,
     ScrollingModule,
-
+    ChartModule,
   ],
   exports: [
     RouterModule

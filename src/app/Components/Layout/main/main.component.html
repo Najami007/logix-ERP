@@ -1,20 +1,22 @@
 <!-- <mat-drawer-container class="mat-drawer-container displayMainPage">
  <mat-drawer mode="side" [opened]="sideBarOpen" class="mat-drawer">
-        
+        <app-side-navbar></app-side-navbar>
     </mat-drawer>  
  
-        <app-top-nav-bar></app-top-nav-bar>
+       <mat-drawer-container>
+        <app-top-nav-bar class="" (toggleMySideBar)="sideBarToggler()"></app-top-nav-bar>
         <router-outlet ></router-outlet>
         <div class="header" >
             <app-header></app-header>
         </div>
+       </mat-drawer-container>
        
 
 
-  </mat-drawer-container> -->
+  </mat-drawer-container>  -->
 
 
-  <!-- <mat-drawer-container class="mat-drawer-container displayMainPage" autosize>
+<!-- <mat-drawer-container class="mat-drawer-container displayMainPage" autosize>
     
            <app-top-nav-bar></app-top-nav-bar>
            <section>
@@ -25,7 +27,7 @@
                <app-header></app-header>
            </div>
    
-     </mat-drawer-container> -->
+     </mat-drawer-container>  -->
 
   <div class="h-100">
    
@@ -33,7 +35,7 @@
 
  
   <router-outlet ></router-outlet>
-  <div style="height: 0% !important;"></div>
+
 
   <div class="header" >
     <app-header></app-header>

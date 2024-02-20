@@ -1,0 +1,69 @@
+<div class="body">
+    <div id="main-content " class="d-flex mt-4 ">
+        <section class="statis ps-3 pe-3 text-center col-lg-4  mb-3">
+            <div class="" *ngFor="let item of cardDataList">
+                <div class="col-md-12 mb-2" >
+                    <div class="box bg-warning text-white  p-3 mat-elevation-z2 " style="box-shadow: 0px 0px 10px 1px  rgb(180, 183, 219);" >
+                        <i ><mat-icon>attach_money</mat-icon></i>                  
+                        <p class="value font-digit ">{{item.totalSaleAmount |number:'1.0-0'}}</p>
+                        <p class="lead ">TOTAL SALES</p>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-2">
+                    <div class="box  bg-danger text-white p-3 mat-elevation-z2" style="box-shadow: 0px 0px 10px 1px  rgb(190, 215, 190);">
+                        <i class=""><mat-icon>receipt</mat-icon> </i>
+                        <p class="value font-digit">{{item.totalTktSold|number:'1.0-0'}}</p>
+                        <p class="lead">TOTAL BILLS</p>
+                    </div>
+                </div>
+                <div class="col-md-12  mb-2">
+                    <div class="box bg-success  p-3 text-white mat-elevation-z2" style="box-shadow: 0px 0px  10px 0px  rgb(173, 167, 165);">
+                        <i class=" " ><mat-icon>save_alt</mat-icon></i>
+                 
+                        <div class="value d-flex text-center justify-content-center  "><p class="font-digit">{{item.maxSale | number:'1.0-0'}}</p></div>
+                        <p class="lead">ITems    SOLD</p>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-2">
+                    <div class="box  bg-primary text-white p-3 mat-elevation-z2" style="box-shadow: 0px 0px 10px 1px  rgb(205, 193, 193);">
+                        <i class=""><mat-icon>bar_chart</mat-icon></i>
+            
+                        <div class="d-flex value justify-content-center  "><p class="font-digit">{{item.maxQty | number:'1.0-0'}}</p> <p style="font-size: 17px;">{{item.maxQtySwingTitle}}</p></div>
+
+                        <!-- <p class="text-danger font-digit">{{item.maxQty|number:'1.0-0'}} {{item.maxQtySwingTitle}}</p> -->
+                        <p class="lead">HIGHEST sold</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="pe-3 col-lg-8 h-100">
+            <div >
+                <div class="ms-3 mat-elevation-z2" style="height: 430px;" [chart]="monthly_Sale_Chart"></div>
+              </div>
+          </section>
+    </div>
+    
+    
+    <div class="d-flex">
+        
+    
+
+      <section class="col-lg-4 " >
+        <div class="col-md-12">
+            <div class="me-3 mat-elevation-z2" [chart]="swingSale_pie_chart"></div>
+          </div>
+
+    </section>
+
+
+    <section class="pe-3 col-lg-8 h-100">
+        <div >
+            <div class="ms-3 mat-elevation-z2"  [chart]="monthly_Bar_Chart"></div>
+          </div>
+      </section>
+    </div>
+
+    
+
+</div>

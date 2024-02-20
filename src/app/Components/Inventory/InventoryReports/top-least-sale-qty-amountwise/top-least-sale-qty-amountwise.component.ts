@@ -61,6 +61,8 @@ export class TopLeastSaleQtyAmountwiseComponent {
 
 
   qtyTotal = 0;
+  saleQtyTotal = 0;
+  rtnQtyTotal = 0;
   netTotal = 0;
 
   getReport(type:any){
@@ -73,9 +75,13 @@ export class TopLeastSaleQtyAmountwiseComponent {
         //console.log(Response);
         this.qtyTotal = 0;
         this.netTotal = 0;
+        this.saleQtyTotal = 0;
+        this.rtnQtyTotal = 0;
         Response.forEach((e:any) => {
-          this.qtyTotal += e.saleQty;
+          this.qtyTotal += e.quantity;
           this.netTotal += e.total;
+          this.saleQtyTotal += e.saleQty;
+          this.rtnQtyTotal += e.rtnQty;
         });
 
         this.app.stopLoaderDark();

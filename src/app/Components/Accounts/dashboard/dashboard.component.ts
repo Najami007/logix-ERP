@@ -137,21 +137,21 @@ export class DashboardComponent implements OnInit{
 
   
   incomeExpenseChart() {
-    let chart =new Chart({
-      chart: {
-        type: 'column',
-      },
-      title: {
-        text: 'INCOME VS EXPENSE',
-      },
-      subtitle: {
-        text: 'CURRENT MONTH',
-      },
-      xAxis: {
-        categories: this.MonthList,
-        crosshair: true,
-      },
-      yAxis: {
+      let chart =new Chart({
+        chart: {
+          type: 'column',
+        },
+        title: {
+          text: 'INCOME VS EXPENSE',
+        },
+        subtitle: {
+          text: 'CURRENT MONTH',
+        },
+        xAxis: {
+          categories: this.MonthList,
+          crosshair: true,
+        },
+        yAxis: {
         min: 0,
         title: {
           text: 'Amount',

@@ -400,7 +400,7 @@ export class PurchaseComponent implements OnInit{
       if(prodList.length > 1 ){
        this.prodFocusedRow += 1;
        if (this.prodFocusedRow >= prodList.length) {      
-         this.prodFocusedRow -= 1  
+         this.prodFocusedRow -= 1  ;
      } else {
          var clsName = cls + this.prodFocusedRow;    
         //  alert(clsName);

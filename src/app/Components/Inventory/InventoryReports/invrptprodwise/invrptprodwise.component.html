@@ -123,7 +123,7 @@
                     <th>Date</th>
                     <th>Title</th>
                     <th >Location</th>
-                    <th >Type</th>
+                    <th *ngIf="rptType == 'I' || rptType == 'R'">Type</th>
                     <th >Qty</th>
                     <th>Cost</th>
                     <th>Sale</th>
@@ -142,7 +142,7 @@
                     <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
                     <td >{{item.productTitle}} <b *ngIf="item.barcode !== null">({{item.barcode}})</b></td>
                     <td >{{item.locationTitle }}</td>
-                    <td >{{item.issueType }}</td>
+                    <td *ngIf="rptType == 'I' || rptType == 'R'">{{item.issueType }}</td>
                     <td class="text-center">{{item.quantity}}</td>
                     <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>

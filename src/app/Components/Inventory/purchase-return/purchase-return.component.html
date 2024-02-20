@@ -19,19 +19,18 @@
 
 
                 <div class="col-lg-4 ms-1">
-
+                    <button class=" w-25 btn btn-primary me-1  " *ngIf="crudList.c" style="height: 50px;"
+                    (click)="SaveBill('hold')">{{holdBtnType}}</button>
                     <button class="w-25 btn btn-danger me-1" style="height: 50px;"
                         data-bs-toggle="modal"  data-bs-target="#holdModal">Retrieve</button>
-                    <button class=" w-25 btn btn-primary me-1  " *ngIf="crudList.c" style="height: 50px;"
-                        (click)="SaveBill('hold')">{{holdBtnType}}</button>
-                    <button class=" w-25 btn btn-success " style="height: 50px;" *ngIf="crudList.c" (click)="SaveBill('purchase')">Save</button>
+                    
                 </div>
             </div>
 
         </mat-card>
 
         <mat-card class="mb-2 col-lg-1 text-center border border-primary" style="height: 130px;width: 130px;" >
-            <div class="p-1 " *ngIf="tableDataList != ''"
+            <div class="p-1 " *ngIf="tableDataList != ''" accesskey="i"
                 (click)="this.global.showProductImage(this.productImage,0)">
                 <img [src]="productImage" alt="" height="120" width="120">
             </div>
@@ -132,7 +131,7 @@
             <mat-card-content class="">
                 <mat-form-field appearance="outline" class="col-lg-3 p-1">
                     <mat-label>Invoice Date</mat-label>
-                    <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
+                    <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput type="text" name="voucherDate"
                         [matDatepicker]="voucherDate">
                     <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
                     <mat-datepicker #voucherDate></mat-datepicker>
@@ -233,6 +232,10 @@
                     <h2 class="text-secondary ">TOTAL</h2>
                     <h1 style="font-size: 50px;" class="text-danger">{{subTotal || 0 |number:'1.0-2'}}</h1>
                 </div>
+            <div class="text-center">
+                <button class=" w-50 btn btn-success " style="height: 50px;" *ngIf="crudList.c" (click)="SaveBill('purchase')">Save</button>
+
+            </div>
 
             </mat-card-content>
 

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -9,6 +9,7 @@ import { ChangePasswordComponent } from '../../User/change-password/change-passw
 import { ChangePINComponent } from '../../User/change-pin/change-pin.component';
 import { Subscription } from 'rxjs';
 import { AppComponent } from 'src/app/app.component';
+import { MainComponent } from '../main/main.component';
 
 @Component({
   selector: 'app-top-nav-bar',
@@ -23,13 +24,14 @@ export class TopNavBarComponent implements OnInit{
     
     
     tstUN:any = "";
-
+    @Output() toggleMySideBar : EventEmitter<any> = new EventEmitter();
   constructor(private globalData:GlobalDataModule,
     private msg:NotificationService,
     private http:HttpClient,
     private route:Router,
     private dialogue:MatDialog,
-    private app:AppComponent
+    private app:AppComponent,
+    private m :MainComponent,
     ){
 
       this.clickEventSubscription = this.globalData
@@ -43,6 +45,19 @@ export class TopNavBarComponent implements OnInit{
 
 
   }
+
+  Menu = "menu";
+  
+  toggleSideBar(){
+    this.toggleMySideBar.emit(); 
+    
+  if(this.m.sideBarOpen == true){
+      this.Menu = "menu_open";
+    }else{
+      this.Menu = "menu";
+    }
+  }
+
   
     ngOnInit(): void {
       this.moduleID = localStorage.getItem('mid');
@@ -141,6 +156,18 @@ export class TopNavBarComponent implements OnInit{
       })
       }
   
+
+
+
+      setMenu(item: any) {
+
+        this.route.navigate(['home']);
+        localStorage.setItem('mid',JSON.stringify(item.moduleID));
+        this.globalData.setMenuItem(item.moduleID);
+        // window.location.reload();
+        
+    
+      }
   
   
   }

@@ -1,11 +1,11 @@
 <div class="d-flex h-100 body" style="background-color: gainsboro;">
 
-    <div class="col-lg-10 bg-white p-2" >
+    <div class="col-lg-9 bg-white p-2" >
 
         <div class="d-flex justify-content-between ">
             <mat-form-field appearance="outline" class="col-lg-3">
                 <mat-label>Select Invoice Date</mat-label>
-                <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="invDate"
+                <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput type="text" name="invDate"
                     [matDatepicker]="iDate">
                 <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
                 <mat-datepicker #iDate></mat-datepicker>
@@ -49,12 +49,13 @@
                    class="p-1 mb-2 searchProduct" placeholder="Alt + b" autofocus (focus)="rowFocused = -1"
                    autocomplete="off" accesskey="b">
    
-               <div class="  d-flex flex-column SearchConatiner cursorPointer"
+               <div class=" d-flex flex-column SearchConatiner cursorPointer"
                    *ngIf="PBarcode != '' && PBarcode != undefined">
                    <mat-card class="card " *ngFor="let item of productList| filter:PBarcode index as index"
                        (click)="holdDataFunction(item)">
-                       <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn" (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">{{item.productTitle}}
-                           (<b>{{item.barcode}}</b> )</button>
+                       <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn justify-content-between d-flex" 
+                       (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)"><p>{{item.productTitle}}</p>
+                           <p><strong>({{item.barcode}})</strong></p> </button>
                    </mat-card>
                </div>
            </div>
@@ -67,7 +68,7 @@
 
 
         <div style="max-height: 75vh;overflow-y:scroll ;padding-bottom: 60px;">
-            <table class="table table-hover">
+            <table class="table table-hover table-logix">
                 <thead>
                     <tr>
                         <th>S#</th>
@@ -87,7 +88,7 @@
                       <td>{{index+1}}</td>
                       <td>{{item.barcode}}</td>
                       <td>{{item.productTitle}}</td>
-                      <td ><input type="text" [(ngModel)]="item.quantity" min="0"
+                      <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
                         (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
                         (keyup)="changeValue(item);getTotal();showImg(item);"
                         
@@ -97,19 +98,19 @@
                             (keydown)="this.handleNumKeys(item,$event,'.cp');getTotal();changeValue(item);"
                             (keyup)="changeValue(item);getTotal();showImg(item);"
                             class="cp{{index}} text-center" style="width: 80px;"></td> -->
-                            <td>{{item.avgCostPrice | number:'1.0-2'}}</td>
-                            <td>{{item.costPrice | number:'1.0-2'}}</td>
-                        <td>{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
-                      <td>{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
+                            <td class="text-end">{{item.avgCostPrice | number:'1.0-2'}}</td>
+                            <td class="text-end">{{item.costPrice | number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
+                      <td class="text-end"> {{item.costPrice * item.quantity |number:'1.0-2'}}</td>
                       <td class="text-center">{{item.aq}}</td>
-                      <td class="cursorPointer"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
+                      <td class="cursorPointer text-danger text-center"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
                     </tr>
                     <tr>
                         <td colspan="3"></td>
-                        <th >{{totalQty |number:'1.0-2'}}</th>
+                        <th class="text-center">{{totalQty |number:'1.0-2'}}</th>
                         <th colspan="2"></th>
-                        <th>{{CostTotal |number:'1.0-2'}}</th>
-                        <th>{{avgCostTotal |number:'1.0-2'}}</th>
+                        <th class="text-end"> {{CostTotal |number:'1.0-2'}}</th>
+                        <th class="text-end">{{avgCostTotal |number:'1.0-2'}}</th>
                         <th></th>
                         <td class="text-center"><mat-icon class="cursorPointer " (click)="reset()">delete</mat-icon></td>
                     </tr>
@@ -121,12 +122,12 @@
 
    
 
-    <div class="col-lg-2 " style="background-color: rgb(226, 222, 222);position: fixed;right: 0%;">
+    <div class="col-lg-3 " style="background-color: rgb(226, 222, 222);position: fixed;right: 0%;">
 
        <div class="p-1">
         <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
             <div class="text-center" *ngIf="tableDataList != ''" >
-                <img [src]="productImage" alt="" height="190" width="200"  (click)="this.global.showProductImage(this.productImage,0)">
+                <img [src]="productImage" alt="" accesskey="i" height="190" width="200"  (click)="this.global.showProductImage(this.productImage,0)">
             </div>
         </mat-card>
 
@@ -136,8 +137,8 @@
         <mat-card class="p-1 w-100 " >
            <mat-card-content>
             <div class="justify-content-around d-flex" >
-                <p style="font-size: 30px;">Total</p>
-                <p class="font-digit " style="font-size: 30px;" >{{subTotal |number:'1.0-2'}}</p>
+                <p class="fs-40">Total</p>
+                <p class="font-digit fs-50" >{{subTotal |number:'1.0-2'}}</p>
             </div>
            </mat-card-content>
         </mat-card>

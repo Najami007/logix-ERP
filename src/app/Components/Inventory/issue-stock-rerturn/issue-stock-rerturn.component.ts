@@ -718,7 +718,7 @@ export class IssueStockRerturnComponent implements OnInit {
         this.mySPTotal = 0;
         this.myAvgCPTotal = 0;
        
-        this.productImage = Response[Response.length - 1].productImage;
+        // this.productImage = Response[Response.length - 1].productImage;
 
 
           Response.forEach((e:any) => {

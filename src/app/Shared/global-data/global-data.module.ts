@@ -32,6 +32,8 @@ import { CookieService } from 'ngx-cookie-service';
 
 export class GlobalDataModule implements OnInit {
 
+  DisableDate = true;
+
   InvProjectID = 1;
 
   inventoryLink = 'inv/';

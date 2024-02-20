@@ -1,6 +1,6 @@
 <div class="container-fluid d-flex  body" ondblclick="return false;">
 
-    <div class="col-lg-8 bg-white">
+    <div class="col-lg-8 prodArea bg-white">
 
 
         <!-----------   categories Row ------------------->
@@ -55,26 +55,26 @@
     </div>
 
 
-    <div class="col-lg-4 bg-gray  border-0 border-start"
-        style="left: 66.6%; height: 100vh;position:fixed;overflow: scroll;">
+    <div class="col-lg-4 bg-gray billArea  border-0 border-start"
+        style="right: 0%; height: 100vh;position:fixed;overflow: scroll;">
 
         <!-----------   Table Side First Row ------------------->
 
         <div class=" d-flex ">
-            <span class="col-lg-1 text-center ps-1 pt-1   border">
+            <span class="col-lg-1 tn text-center ps-1 pt-1   border">
                 <p class="text-center p-1"
                     style="height: 30px;width: 30px;background-color: rgb(219, 249, 223);color: #088203; border-radius: 100%;">
                     {{tableTitle}}</p>
             </span>
 
-            <span class="col-lg-9 p-1 p-2 border">
+            <span class="col-lg-9 ot p-1 p-2 border">
 
                 <select class="w-100 border-0 bg-gray" disabled="true" [(ngModel)]="orderType">
                     <option *ngFor="let item of orderTypeList" [value]="item.val">{{item.title}}</option>
                 </select>
 
             </span>
-            <span class="col-lg-2 p-1  border">
+            <span class="col-lg-2 chng p-1  border">
                 <button class="btn btn-warning" [disabled]="orderType == ''" data-bs-toggle="modal"
                     data-bs-target="#NewBill">Change</button>
 
@@ -119,7 +119,7 @@
 
 
             <!-----------   Bill Total Amount Section ------------------->
-            <div class="d-flex bg-white border-top p-1 col-lg-4" style="position: fixed;bottom: 6%;right: 0%;">
+            <div class="d-flex bg-white border-top p-1 col-lg-4 btas" style="position: fixed;bottom: 6%;right: 0%;">
 
 
                 <div class="justify-content-between p-1 w-50 border-end">
@@ -157,33 +157,33 @@
 
                 <div class="w-50 text-center">
 
-                    <button mat-raised-button class="m-1 text-white bg-secondary col-lg-5" *ngIf="holdbtnType == 'hold'"
+                    <button mat-raised-button class="m-1 btn text-white bg-secondary col-lg-5" *ngIf="holdbtnType == 'hold'"
                         matTooltip="Hold Current Bill" (click)="save('hold')">HOLD</button>
 
-                    <button mat-raised-button class="m-1 text-white bg-secondary col-lg-5"
+                    <button mat-raised-button class="m-1 btn text-white bg-secondary col-lg-5"
                         *ngIf="holdbtnType == 'rehold'" matTooltip="ReHold Current Bill"(click)="save('rehold')">ReHold</button>
 
-                    <button mat-raised-button class="m-1 text-white bg-success col-lg-5" data-bs-toggle="modal"
+                    <button mat-raised-button class="m-1 btn text-white bg-success col-lg-5" data-bs-toggle="modal"
                         matTooltip="Save Current Bill" data-bs-target="#paymentMehtod">Save</button>
 
-                    <button mat-raised-button class="m-1 text-white bg-primary col-lg-5" data-bs-toggle="modal"
+                    <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5" data-bs-toggle="modal"
                         matTooltip="Retrieve Hold Bills" data-bs-target="#retrieveBill"(click)="getHoldBills()">Retrieve</button>
 
-                    <button mat-raised-button class="m-1 text-white bg-warning col-lg-5" accesskey="n" matTooltip="New bill (Alt + n)"
+                    <button mat-raised-button class="m-1 btn text-white bg-warning col-lg-5" accesskey="n" matTooltip="New bill (Alt + n)"
                          data-bs-toggle="modal" data-bs-target="#NewBill" [disabled]="tableData != ''" (click)="reset()">New Bill</button>
 
 
-                    <button matTooltip="Hold & Print Current Bill" mat-raised-button style="font-size: 11px;"
-                        class="m-1 text-white bg-primary col-lg-5" (click)="HOldandPrint('rehold')">Hold & Print</button>
+                    <button matTooltip="Hold & Print  Current Bill" mat-raised-button style="font-size: 11px;"
+                        class="m-1 text-white btn bg-primary col-lg-5" (click)="HOldandPrint('rehold')">Hold & Print</button>
 
-                    <button accesskey="b" mat-raised-button matTooltip="Retreiving Saved Bills" class="m-1  col-lg-5 "
+                    <button accesskey="b" mat-raised-button matTooltip="Retreiving Saved Bills" class="m-1 btn  col-lg-5 "
                         (click)="getSavedBill()">Duplicate</button>
             
-                    <button mat-raised-button matTooltip="Void Full Bill" class="m-1 text-white bg-primary col-lg-5"
+                    <button mat-raised-button matTooltip="Void Full Bill" class="m-1 text-white btn bg-primary col-lg-5"
                         (click)="voidBill()">Void Bill</button>
 
                     <button data-bs-toggle="modal" matTooltip="Merge Two Bills" data-bs-target="#mergeBill"
-                        mat-raised-button class="m-1 text-white col-lg-5" style="background-color: pink;">Merge Bill</button>
+                        mat-raised-button class="m-1 text-white btn col-lg-5" style="background-color: pink;">Merge Bill</button>
 
                 </div>
 
@@ -366,9 +366,10 @@
 
                     </tr>
                     <tr *ngIf="myOtherCharges != 0">
-                        <th *ngIf="myOrderType == 'Dine In'">Service Charges</th>
-                        <th *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</th>
-                        <th *ngIf="myOrderType == 'Take Away'">Other Charges</th>
+                        <!-- <th *ngIf="myOrderType == 'Dine In'">Service Charges</th> -->
+                        <!-- <th *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</th>
+                        <th *ngIf="myOrderType == 'Take Away'">Other Charges</th> -->
+                        <th >Service Charges</th>
                         <td>{{myOtherCharges|number:'1.0-0'}}</td>
 
                     </tr>

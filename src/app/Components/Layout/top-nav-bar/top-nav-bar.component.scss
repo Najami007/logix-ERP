@@ -91,7 +91,23 @@
   }*/
 }
 
+.sideNavBtn{
+  display: none;
+}
+   
+@media only screen and (max-width:650px){
+  .topNavMenuList{
+    display: none;
+  }
 
+  .sideNavBtn{
+    display:block;
+  }
+
+  .logo{
+    padding-top: 5px;
+  }
+}
 
 
   

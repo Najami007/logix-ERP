@@ -13,15 +13,15 @@
                     <div class="box  bg-danger text-white p-3 mat-elevation-z2" style="box-shadow: 0px 0px 10px 1px  rgb(190, 215, 190);">
                         <i class=""><mat-icon>receipt</mat-icon> </i>
                         <p class="value font-digit">{{item.totalTktSold|number:'1.0-0'}}</p>
-                        <p class="lead">TOTAL TICKETS</p>
+                        <p class="lead">TOTAL BILLS</p>
                     </div>
                 </div>
                 <div class="col-md-3  ">
                     <div class="box bg-success  p-3 text-white mat-elevation-z2" style="box-shadow: 0px 0px  10px 0px  rgb(173, 167, 165);">
                         <i class=" " ><mat-icon>save_alt</mat-icon></i>
                  
-                        <div class="value d-flex text-center justify-content-center  "><p class="font-digit">{{item.maxSale | number:'1.0-0'}}</p> <p style="font-size: 15px;">{{item.maxSaleSwingTitle}}</p></div>
-                        <p class="lead   ">HIGHEST AMOUNT</p>
+                        <div class="value d-flex text-center justify-content-center  "><p class="font-digit">{{item.maxSale | number:'1.0-0'}}</p></div>
+                        <p class="lead">RECIPE SOLD</p>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -31,7 +31,7 @@
                         <div class="d-flex value justify-content-center  "><p class="font-digit">{{item.maxQty | number:'1.0-0'}}</p> <p style="font-size: 17px;">{{item.maxQtySwingTitle}}</p></div>
 
                         <!-- <p class="text-danger font-digit">{{item.maxQty|number:'1.0-0'}} {{item.maxQtySwingTitle}}</p> -->
-                        <p class="lead">HIGHEST TICKET</p>
+                        <p class="lead">HIGHEST sold</p>
                     </div>
                 </div>
             </div>

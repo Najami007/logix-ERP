@@ -95,6 +95,7 @@ export class SaleReportComponent implements OnInit {
 
    qtyTotal = 0;
    detNetTotal = 0;
+   discountTotal = 0;
 
    getReport(type:any){
 
@@ -109,11 +110,13 @@ export class SaleReportComponent implements OnInit {
         this.billTotal = 0;
         this.chargesTotal = 0;
         this.netGrandTotal = 0;
-
+        this.discountTotal = 0;
         Response.forEach((e:any) => {
           this.billTotal += e.billTotal;
           this.chargesTotal += e.otherCharges;
+          this.discountTotal += e.billDiscount;
           this.netGrandTotal += e.netTotal;
+
         });
       }
     )

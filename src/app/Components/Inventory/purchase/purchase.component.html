@@ -6,7 +6,7 @@
             <div class="d-flex pt-1">
                 <mat-form-field appearance="outline" class="col-lg-2 pe-1">
                     <mat-label>Invoice Date</mat-label>
-                    <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
+                    <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput type="text" name="voucherDate"
                         [matDatepicker]="voucherDate">
                     <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
                     <mat-datepicker #voucherDate></mat-datepicker>
@@ -70,11 +70,11 @@
 
 
                 <div class="col-lg-4 ms-1">
-
+                    <button *ngIf="crudList.c" style="height: 50px;" class=" w-25 btn btn-primary " matTooltip="Hold Bill"
+                    (click)="SaveBill('hold')">{{holdBtnType}}</button>
                     <button  class=" w-25 btn btn-danger me-1" style="height: 50px;" matTooltip="Retrieve Bill" data-bs-toggle="modal"
                         data-bs-target="#holdModal">Retrieve</button>
-                    <button *ngIf="crudList.c" style="height: 50px;" class=" w-25 btn btn-primary " matTooltip="Hold Bill"
-                        (click)="SaveBill('hold')">{{holdBtnType}}</button>
+                  
 
                 </div>
             </div>
@@ -82,7 +82,7 @@
 
      <div class="col-lg-1 text-end">
         <mat-card class=" border border-primary justify-content-center p-1" style="width: 160px;height: 160px;">
-            <div class="text-center " *ngIf="tableDataList != ''"
+            <div class="text-center " *ngIf="tableDataList != ''" accesskey="i"
                 (click)="this.global.showProductImage(this.productImage,0)">
                 <img [src]="productImage" alt="" height="150px" width="150px">
             </div>

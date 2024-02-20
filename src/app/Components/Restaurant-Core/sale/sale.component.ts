@@ -916,6 +916,7 @@ export class SaleComponent implements OnInit {
             (Response: any) => {
               if (Response.msg == 'Password Matched Successfully') {
                 this.billDiscount = disc;
+                this.getTotal();
               } else {
                 this.msg.WarnNotify(Response.msg);
               }
@@ -967,6 +968,7 @@ export class SaleComponent implements OnInit {
                           this.getTotal();
                           this.reset();
                           this.getHoldBills();
+                          this.getTable()
 
                         } else {
                           this.msg.WarnNotify(Response.msg);
