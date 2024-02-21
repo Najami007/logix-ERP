@@ -67,6 +67,10 @@
    }
 
 
+   .table2{
+    display: none;
+   }
+
    
    @media only screen and (max-width:1000px){
 
@@ -75,12 +79,36 @@
         flex-direction: column;
       }
 
+    
       .prodArea{
-        width: 50%;
+        width: 65%;
       }
 
       .billArea{
-        width: 50%;
+        width: 35%;
+
+        .table1{
+          display: none;
+        }
+  
+        .table2{
+          display: block;
+        }
+
+        table{
+         
+          tbody{
+            width: 100%;
+            tr{
+              border: 1px solid black;
+              // display: flex;
+              // flex-direction: column;
+              td{
+                border: 0;
+              }
+            }
+          }
+        }
 
         .billHeader{
           width: 100%;

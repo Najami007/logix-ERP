@@ -1,12 +1,12 @@
 <div class="body ">
-   <div class="d-flex">
+   <div class="row container-fluid">
     <div class="container-fluid  p-2 col-lg-6 border-0 border-end" >
         <h2>ADD TABLE</h2>
 
-        <div>
-         <button mat-fab class="col-lg-1 me-1" *ngIf="crudList.c" (click)="addTable()"><mat-icon>add</mat-icon></button>
+        <div class="row">
+         <button mat-fab class="col-lg-1 ms-1" *ngIf="crudList.c" (click)="addTable()"><mat-icon>add</mat-icon></button>
  
-         <mat-form-field class="col-lg-11" appearance="outline">
+         <mat-form-field class="col-lg-11 ps-1" appearance="outline">
              <mat-label class="ps-5">Search.....</mat-label>
              <input #tableSearch matInput type="search" class="text-secondary">
              <mat-icon matPrefix class="text-secondary">search</mat-icon>

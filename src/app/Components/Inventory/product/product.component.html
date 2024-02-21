@@ -7,7 +7,7 @@
             <div>
                 <mat-form-field appearance="outline" class="col-lg-6 pe-5 ">
                     <mat-label>Category</mat-label>
-                    <mat-select [(ngModel)]="CategoryID" (selectionChange)="getSubCategory()" name="pCategory">
+                    <mat-select [(ngModel)]="CategoryID" #category (selectionChange)="getSubCategory()" name="pCategory">
                         <mat-option *ngFor="let item of CategoriesList"
                             [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
 
@@ -16,7 +16,7 @@
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="col-lg-6 ">
                     <mat-label>Sub Category</mat-label>
-                    <mat-select [(ngModel)]="SubCategoryID" name="pSubCategory">
+                    <mat-select [(ngModel)]="SubCategoryID" #subCategory name="pSubCategory">
                         <mat-option *ngFor="let item of SubCategoriesList"
                             [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
                     </mat-select>
@@ -62,7 +62,7 @@
 
                 <mat-form-field appearance="outline" class="col-lg-3 pe-2">
                     <mat-label>Brand</mat-label>
-                    <mat-select [(ngModel)]="BrandID">
+                    <mat-select [(ngModel)]="BrandID" #brand>
                         <mat-option><ngx-mat-select-search #brand [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
                         <mat-option *ngFor="let item of BrandList | filter:brand.value"
@@ -76,10 +76,10 @@
 
                 <mat-form-field appearance="outline" class="col-lg-3 pe-5">
                     <mat-label>Rack</mat-label>
-                    <mat-select [(ngModel)]="rackID">
-                        <mat-option><ngx-mat-select-search #rack [placeholderLabel]="'Search...'"
+                    <mat-select [(ngModel)]="rackID" #rack>
+                        <mat-option><ngx-mat-select-search #rackSearch [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                        <mat-option *ngFor="let item of RacksList |filter:rack.value"
+                        <mat-option *ngFor="let item of RacksList |filter:rackSearch.value"
                             [value]="item.rackID">{{item.rackTitle}}</mat-option>
                     </mat-select>
                     <mat-icon class="cursorPointer" (click)="addRack()" matSuffix>add</mat-icon>
@@ -88,10 +88,10 @@
 
                 <mat-form-field appearance="outline" class="col-lg-3 pe-2  ">
                     <mat-label>UOM</mat-label>
-                    <mat-select [(ngModel)]="UOMID">
-                        <mat-option><ngx-mat-select-search #uom [placeholderLabel]="'Search...'"
+                    <mat-select [(ngModel)]="UOMID" #uom>
+                        <mat-option><ngx-mat-select-search #uomSearch [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                        <mat-option *ngFor="let item of UOMList |filter:uom.value"
+                        <mat-option *ngFor="let item of UOMList |filter:uomSearch.value"
                             [value]="item.uomID">{{item.uomTitle}}</mat-option>
                     </mat-select>
                     <mat-icon class="cursorPointer" (click)="addUOM()" matSuffix>add</mat-icon>
@@ -183,7 +183,7 @@
                             <label (click)="productImg = ''"><mat-icon class=" mt-1">delete</mat-icon></label>
                         </div>
                         <div class="avatar-preview">
-                            <div (click)="this.global.showProductImage(productImg,0)" id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + productImg + ')' }"></div>
+                            <div (click)="this.global.showProductImage(productImg,0)" accesskey="i" id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + productImg + ')' }"></div>
                         </div>
                     </div>
     

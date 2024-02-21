@@ -157,16 +157,10 @@
 
        <div class="mt-4 d-flex justify-content-around">
         <button mat-raised-button *ngIf="crudList.c" class="bg-primary text-white w-25" (click)="SaveBill('hold')">{{holdBtnType}}</button>
-        <button mat-raised-button *ngIf="crudList.c" class="bg-success text-white w-25" (click)="SaveBill('issue')">Save</button>
-        
+        <button mat-raised-button class="bg-danger text-white w-25"  data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>     
        </div>
        <div class="mt-4 d-flex justify-content-around">
-        <button mat-raised-button class="bg-danger text-white "  data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>
-
-
-       
-
-
+        <button mat-raised-button *ngIf="crudList.c" class="bg-success text-white w-25" (click)="SaveBill('issue')">Save</button>
        </div>
 
     </div>

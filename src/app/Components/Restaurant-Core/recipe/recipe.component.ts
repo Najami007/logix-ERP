@@ -403,55 +403,61 @@ export class RecipeComponent implements OnInit {
     }
   }
 
-  handleProdFocus(item: any, e: any, cls: any, endFocus: any, prodList: [], index: any) {
-
-    // if(e.shiftKey && e.keyCode == 9 ){
-    //     this.prodFocusedRow = index - 1; 
-    //     var clsName = cls + this.prodFocusedRow; 
-    //     $(clsName).trigger('focus');
-    //  }
-
-    /////move down
-    if (e.keyCode == 40 || e.keyCode == 9) {
-
-
-      if (prodList.length > 1) {
+ 
+  handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[]){
+    
+   
+    /////// increment in prodfocus on tab click
+    if(e.keyCode == 9 && !e.shiftKey){
+     this.prodFocusedRow += 1;
+ 
+   }
+   /////// decrement in prodfocus on shift tab click
+   if(e.shiftKey && e.keyCode == 9){
+     this.prodFocusedRow -= 1;
+ 
+   }
+     /////move down
+     if(e.keyCode == 40){
+ 
+  
+       if(prodList.length > 1 ){
         this.prodFocusedRow += 1;
-        if (this.prodFocusedRow >= prodList.length) {
-          this.prodFocusedRow -= 1
-        } else {
-          var clsName = cls + this.prodFocusedRow;
-          //  alert(clsName);
+        if (this.prodFocusedRow >= prodList.length) {      
+          this.prodFocusedRow -= 1  
+      } else {
+          var clsName = cls + this.prodFocusedRow;    
+         //  alert(clsName);
           $(clsName).trigger('focus');
-
+          e.which = 9;   
+          $(clsName).trigger(e)       
+      }}
+    }
+  
+  
+       //Move up
+       if (e.keyCode == 38) {
+  
+        if (this.prodFocusedRow == 0) {
+            $(endFocus).trigger('focus');
+            this.prodFocusedRow = 0;
+   
         }
-      }
+  
+        if (prodList.length > 1) {
+  
+            this.prodFocusedRow -= 1;
+  
+            var clsName = cls + this.prodFocusedRow;
+           //  alert(clsName);
+            $(clsName).trigger('focus');
+            
+  
+        }
+  
     }
-
-
-    //Move up
-    if (e.keyCode == 38) {
-
-      if (this.prodFocusedRow == 0) {
-        $(endFocus).trigger('focus');
-        this.prodFocusedRow = 0;
-
-      }
-
-      if (prodList.length > 1) {
-
-        this.prodFocusedRow -= 1;
-
-        var clsName = cls + this.prodFocusedRow;
-        //  alert(clsName);
-        $(clsName).trigger('focus');
-
-
-      }
-
-    }
-
-  }
+ 
+   }
 
   prodFocusedRow = 0;
   changeFocus(e: any, cls: any) {

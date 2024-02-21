@@ -1,21 +1,5 @@
-// mat-nav-list{
-//   background-color: rgb(255, 255, 255);
-// }
-.navHeader {
-  text-align: center;
- 
-  
-}
-.navHeader img {
-  height: 80px;
-}
 
-/*
-.mat-divider {
- 
- 
-  border: 1px dashed white !important;
-}*/
+
 
 .list-itm {
   color: #505050 !important;
@@ -25,26 +9,7 @@
   text-decoration: none;
   padding: 10px;
   list-style-type: none;
-  
-  /*
-  border: 1px dotted;
-  border-top:none;
-  border-right:none ;
-  border-left: none;*/
-  
-  
 
-  
- 
-  /*
-  &:hover {
-      background-color: #000000 !important;
-      border-radius: 4px;
-      color: white !important;
-      
-  }
-
-  */
 }
 
 .dropdownhead{
@@ -72,41 +37,47 @@
 
 .active {
   color: rgb(6, 6, 6) !important;
-  /*background-color: rgb(255, 80, 36);
-  border-radius: 25px;*/
-  
   border-bottom: 1px solid rgb(204, 202, 202) ;
   border-bottom: 1px dotted;
-  // border-radius: 10px;
-  // background-color: rgb(255, 254, 254) !important;
-  // box-shadow: 1px 1px 2px rgb(221, 212, 212),;
   font-weight: bold;
   
-  /*
-  ::ng-deep {
-
-      &:hover {
-          background: #242424 !important;
-      }
-  }*/
 }
 
-.sideNavBtn{
+
+.logoutBtn{
+  min-width: 120px;
+  height: 40px; 
+  font-size: 15px; 
+  font-family: Arial, Helvetica, sans-serif;
+   border-radius: 20px;
+}
+
+
+
+.menuBar2{
   display: none;
 }
    
-@media only screen and (max-width:650px){
+@media only screen and (max-width:700px){
   .topNavMenuList{
-    display: none;
-  }
-
-  .sideNavBtn{
-    display:block;
+    display: none !important;
+    overflow-y: scroll;
   }
 
   .logo{
     padding-top: 5px;
+  
   }
+
+  .menuBar1{
+    display: none;
+  }
+
+  .menuBar2{
+    display: flex;
+  }
+
+
 }
 
 

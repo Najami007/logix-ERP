@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Observable, retry } from 'rxjs';
@@ -565,7 +565,11 @@ export class PurchaseReturnComponent implements OnInit{
  
   }
 
+  @ViewChild('supplier') myParty:any;
   addParty(){
+    setTimeout(() => {
+      this.myParty.close()
+    }, 200);
     this.dialogue.open(AddpartyComponent,{
       width:"50%"
     }).afterClosed().subscribe(value=>{

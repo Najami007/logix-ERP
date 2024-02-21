@@ -51,7 +51,7 @@
                                 <label (click)="recipeImg = ''"><mat-icon class=" mt-1">delete</mat-icon></label>
                             </div>
                             <div class="avatar-preview">
-                                <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + recipeImg + ')' }">
+                                <div id="imagePreview" accesskey="i" [ngStyle]="{ 'background-image': 'url(' + recipeImg + ')' }">
                                 </div>
                             </div>
                         </div>
@@ -93,7 +93,7 @@
                             *ngIf="crudList.u && btnType == 'Update'">{{btnType}}</button>
                         <button class="btn btn-danger w-25" (click)="reset()">Reset</button>
 
-                        <button *ngIf="crudList.c" class="btn btn-warning w-25" (click)="MapProdWithCategory()">Map Product</button>
+                        <button *ngIf="crudList.c" class="btn btn-warning w-25 text-white" (click)="MapProdWithCategory()">Map / Unmap Product</button>
                     </div>
 
 
@@ -102,7 +102,7 @@
                 <!-------------     Column 2 Ingedient Detail Area-->
                 <div class="col-lg-6" >
 
-                    <div class="ps-1 d-flex ">
+                    <div class="ps-1 row ">
 
                         <div class="col-lg-9  d-flex flex-column">
                             <mat-label class="text-primary">Search Barcode / Product</mat-label>
@@ -112,13 +112,13 @@
                                 class="p-1 mb-2 searchProduct bg-transparent" placeholder="Alt + s" autofocus autocomplete="off"
                                 accesskey="s">
 
-                            <div class="w-100 d-flex flex-column SearchConatiner cursorPointer"
+                            <div class="col-lg-5 d-flex flex-column SearchConatiner cursorPointer"
                                 *ngIf="PBarcode != '' && PBarcode != undefined">
                                 <div class="card " *ngFor="let item of productList| filter:PBarcode index as index"
                                     (click)="holdDataFunction(item)">
-                                    <button (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct   ',productList,index)"
-                                     class="prodRow{{index}}"   style="background: none;border: none;text-align: left;">{{item.productTitle}}
-                                        (<b>{{item.barcode}}</b> )</button>
+                                    <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn justify-content-between d-flex" 
+                                    (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)"><p>{{item.productTitle}}</p>
+                                        <p><strong>({{item.barcode}})</strong></p> </button>
                                 </div>
                             </div>
                         </div>

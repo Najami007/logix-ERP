@@ -30,18 +30,18 @@
             <li class="nav-item" *ngIf="item.parentMenuID == 0 && item.isParentMenu == false">
               <a class="list-item nav-link text-truncate" href="" routerLinkActive="active"
                 routerLink="/{{item.moduleLink}}/{{item.menuLink}}" ><span
-                  class="d-none d-sm-inline">{{ item.menuTitle }}</span></a>
+                  class=" d-sm-inline">{{ item.menuTitle }}</span></a>
             </li>
             <li class="nav-item" *ngIf="item.isParentMenu == true">
               <a class="list-item nav-link collapsed text-truncate" data-bs-toggle="collapse" [href]="'#collapseExample' + i"
                 role="button" aria-expanded="false" aria-controls="subMenuConfig"><span
-                  class="d-none d-sm-inline">{{ item.menuTitle }}</span><mat-icon class="pt-2">arrow_drop_down</mat-icon></a>
+                  class=" d-sm-inline">{{ item.menuTitle }}</span><mat-icon class="pt-2">arrow_drop_down</mat-icon></a>
               <div class="collapse " style="background-color: rgb(67, 66, 66);"  [id]="'collapseExample' + i">
                 <ul class="nav flex-column dark-bg" *ngFor="let row of menuList">
                   <li class="nav-item" *ngIf="item.menuID == row.parentMenuID">
                     <a class="list-item nav-link text-truncate" href="" routerLinkActive="active"
                       routerLink="/{{row.moduleLink}}/{{row.menuLink}}" ><span
-                        class="d-none d-sm-inline">{{row.menuTitle}}</span></a>
+                        class=" d-sm-inline">{{row.menuTitle}}</span></a>
                   </li>
                 </ul>
               </div>

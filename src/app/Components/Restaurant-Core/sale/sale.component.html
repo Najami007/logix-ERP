@@ -61,24 +61,25 @@
         <!-----------   Table Side First Row ------------------->
 
         <div class=" d-flex ">
-            <span class="col-lg-1 tn text-center ps-1 pt-1   border">
-                <p class="text-center p-1"
-                    style="height: 30px;width: 30px;background-color: rgb(219, 249, 223);color: #088203; border-radius: 100%;">
-                    {{tableTitle}}</p>
-            </span>
+            <div class="col-lg-3 tn text-center ps-1 pt-1   border">
+                <p class="text-center p-1 " style="font-size: 20px;"><strong>{{tableTitle}}</strong></p>
+            </div>
 
-            <span class="col-lg-9 ot p-1 p-2 border">
+            <div class="col-lg-7 ot border d-flex flex-column justify-content-center">
 
-                <select class="w-100 border-0 bg-gray" disabled="true" [(ngModel)]="orderType">
+                <div class="pt-1 text-center ">
+                    <h3 style="font-size: 20px;"><strong>{{orderType}}</strong></h3>
+                </div>
+                <!-- <select class="w-100 border-0 bg-gray" disabled="true" [(ngModel)]="orderType">
                     <option *ngFor="let item of orderTypeList" [value]="item.val">{{item.title}}</option>
-                </select>
+                </select> -->
 
-            </span>
-            <span class="col-lg-2 chng p-1  border">
+            </div>
+            <div class="col-lg-2 chng p-1  border">
                 <button class="btn btn-warning" [disabled]="orderType == ''" data-bs-toggle="modal"
                     data-bs-target="#NewBill">Change</button>
 
-            </span>
+            </div>
         </div>
 
         <div style="min-height: 400px;" class="p-2">
@@ -125,26 +126,26 @@
                 <div class="justify-content-between p-1 w-50 border-end">
 
                     <div class="d-flex justify-content-between w-100">
-                        <mat-label class="w-50 text-primary cursorPointer" data-bs-toggle="modal"
-                            data-bs-target="#disc"><strong>Discount</strong></mat-label>
+                        <a class="w-50 text-primary cursorPointer" data-bs-toggle="modal"
+                            data-bs-target="#disc"><strong>ADD DISCOUNT</strong></a>
                         <p class="text-center font-digit" style="font-size: 30px;">{{billDiscount |number:'1.0-2'}}</p>
                         <!-- <input disabled="true" [(ngModel)]="billDiscount" class="w-50 text-end" (keyup)="getTotal();"
                             (keydown)="getTotal();this.global.handleNumKeys($event)" /> -->
                     </div>
 
                     <div class="d-flex justify-content-between w-100 pt-1">
-                        <mat-label class="w-50"><strong>Other Charges</strong></mat-label>
+                        <mat-label class="w-50"><strong>SERVICE CHARGES</strong></mat-label>
                         <input [disabled]="orderType == 'Dine In' || orderType == 'Take Away' || orderType == ''"
                             [(ngModel)]="OtherCharges" class="w-50 text-end" (keyup)="getTotal();"
                             (keydown)="getTotal();this.global.handleNumKeys($event)" />
                     </div>
 
                     <div class="d-flex justify-content-between w-100 pt-1">
-                        <mat-label><strong>Sub Total</strong></mat-label>
+                        <mat-label><strong>SUB TOTAL</strong></mat-label>
                         <p class="text-center font-digit" style="font-size: 30px;">{{subTotal |number}}</p>
                     </div>
                     <div class="d-flex justify-content-between  w-100">
-                        <mat-label><strong>Net Total</strong></mat-label>
+                        <mat-label><strong>NET TOTAL</strong></mat-label>
                         <p class="text-center font-digit" style="font-size: 30px;">{{netTotal |number}}</p>
                     </div>
                     <mat-form-field class="w-100" appearance="outline">
@@ -157,20 +158,21 @@
 
                 <div class="w-50 text-center">
 
-                    <button mat-raised-button class="m-1 btn text-white bg-secondary col-lg-5" *ngIf="holdbtnType == 'hold'"
+                    <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5" *ngIf="holdbtnType == 'hold'"
                         matTooltip="Hold Current Bill" (click)="save('hold')">HOLD</button>
 
-                    <button mat-raised-button class="m-1 btn text-white bg-secondary col-lg-5"
+                    <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5"
                         *ngIf="holdbtnType == 'rehold'" matTooltip="ReHold Current Bill"(click)="save('rehold')">ReHold</button>
 
-                    <button mat-raised-button class="m-1 btn text-white bg-success col-lg-5" data-bs-toggle="modal"
-                        matTooltip="Save Current Bill" data-bs-target="#paymentMehtod">Save</button>
-
-                    <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5" data-bs-toggle="modal"
+                    <button mat-raised-button class="m-1 btn text-white bg-danger col-lg-5" data-bs-toggle="modal"
                         matTooltip="Retrieve Hold Bills" data-bs-target="#retrieveBill"(click)="getHoldBills()">Retrieve</button>
+  
 
                     <button mat-raised-button class="m-1 btn text-white bg-warning col-lg-5" accesskey="n" matTooltip="New bill (Alt + n)"
                          data-bs-toggle="modal" data-bs-target="#NewBill" [disabled]="tableData != ''" (click)="reset()">New Bill</button>
+
+                     <button mat-raised-button class="m-1 btn text-white bg-success col-lg-5" data-bs-toggle="modal"
+                         matTooltip="Save Current Bill" data-bs-target="#paymentMehtod">Save</button>
 
 
                     <button matTooltip="Hold & Print  Current Bill" mat-raised-button style="font-size: 11px;"
@@ -179,7 +181,7 @@
                     <button accesskey="b" mat-raised-button matTooltip="Retreiving Saved Bills" class="m-1 btn  col-lg-5 "
                         (click)="getSavedBill()">Duplicate</button>
             
-                    <button mat-raised-button matTooltip="Void Full Bill" class="m-1 text-white btn bg-primary col-lg-5"
+                    <button mat-raised-button matTooltip="Void Full Bill" class="m-1 text-white btn bg-info col-lg-5"
                         (click)="voidBill()">Void Bill</button>
 
                     <button data-bs-toggle="modal" matTooltip="Merge Two Bills" data-bs-target="#mergeBill"
@@ -256,7 +258,7 @@
 
     <div class="modal fade" id="mergeBill" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
         aria-labelledby="mergeBillLabel">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-body">
 
@@ -574,7 +576,7 @@
 
     <div class="modal fade" id="qtyModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
         aria-labelledby="qtyModalLabel">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-body">
                     <div>
@@ -616,7 +618,7 @@
 
     <div class="modal fade" id="paymentMehtod" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
         aria-labelledby="paymentMehtodLabel">
-        <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered ">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-header">
                     <h2 class="modal-title" id="paymentMehtodLabel">Payment Method</h2>
@@ -698,7 +700,7 @@
 
     <div class="modal fade" id="NewBill" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
         aria-labelledby="NewBillLabel">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-body">
 
@@ -763,7 +765,7 @@
 
     <div class="modal fade" id="retrieveBill" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
         aria-labelledby="retrieveBillLabel">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-body">
 

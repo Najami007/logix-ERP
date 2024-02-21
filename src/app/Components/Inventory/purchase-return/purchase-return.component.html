@@ -185,7 +185,7 @@
             <mat-card-content class="d-flex flex-column">
                 <mat-form-field appearance="outline">
                     <mat-label>Supplier</mat-label>
-                    <mat-select [(ngModel)]="partyID" (selectionChange)="onPartySelected()" name="customer">
+                    <mat-select [(ngModel)]="partyID"  #supplier (selectionChange)="onPartySelected()" name="customer">
                         <mat-option><ngx-mat-select-search #partySearch [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                         <mat-option *ngFor="let item of suppliersList | filter:partySearch.value"

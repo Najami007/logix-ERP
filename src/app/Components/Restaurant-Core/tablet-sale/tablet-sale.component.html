@@ -61,38 +61,40 @@
         <!-----------   Table Side First Row ------------------->
 
         <div class=" d-flex ">
-            <span class="col-lg-1 tn text-center ps-1 pt-1   border">
-                <p class="text-center p-1"
-                    style="height: 30px;width: 30px;background-color: rgb(219, 249, 223);color: #088203; border-radius: 100%;">
-                    {{tableTitle}}</p>
-            </span>
+            <div class="col-lg-3 tn text-center ps-1 pt-1   border">
+                <p class="text-center p-1 " style="font-size: 20px;"><strong>{{tableTitle}}</strong></p>
+            </div>
 
-            <span class="col-lg-8 ot p-1 p-2 border">
+            <div class="col-lg-7 ot border d-flex flex-column justify-content-center">
 
-                <select class="w-100 border-0 bg-gray" disabled="true" [(ngModel)]="orderType">
+                <div class="pt-1 text-center ">
+                    <h3 style="font-size: 20px;"><strong>{{orderType}}</strong></h3>
+                </div>
+                <!-- <select class="w-100 border-0 bg-gray" disabled="true" [(ngModel)]="orderType">
                     <option *ngFor="let item of orderTypeList" [value]="item.val">{{item.title}}</option>
-                </select>
+                </select> -->
 
-            </span>
-            <span class="col-lg-3 chng text-center ps-1 pt-1 border">
+            </div>
+            <div class="col-lg-2 chng p-1  border">
                 <button class="btn btn-warning" [disabled]="orderType == ''" data-bs-toggle="modal"
                     data-bs-target="#NewBill">Change</button>
 
-            </span>
+            </div>
         </div>
+
         <!-----------   Bill Total Amount Section ------------------->
 
         <div class="w-100 d-flex justify-content-around">
 
       
-            <button mat-fab class="m-1 text-white bg-primary col-lg-5" data-bs-toggle="modal"
+            <button mat-fab class="m-1 text-white bg-danger col-lg-5" data-bs-toggle="modal"
                 matTooltip="Retrieve Hold Bills" data-bs-target="#retrieveBill"(click)="getHoldBills()">Retrieve</button>
 
                 
-            <button mat-fab class="m-1 text-white bg-secondary col-lg-5" *ngIf="holdbtnType == 'hold'"
+            <button mat-fab class="m-1 text-white bg-primary col-lg-5" *ngIf="holdbtnType == 'hold'"
             matTooltip="Hold Current Bill" (click)="save('hold')">HOLD</button>
 
-        <button mat-fab class="m-1 text-white bg-secondary col-lg-5"
+        <button mat-fab class="m-1 text-white bg-primary col-lg-5"
             *ngIf="holdbtnType == 'rehold'" matTooltip="ReHold Current Bill"(click)="save('rehold')">ReHold</button>
 
 
@@ -106,7 +108,7 @@
             <!-----------   Bill Area ------------------->
             <div class="billTable" style="height: 70vh;">
 
-                <table class="table-logix cursorPointer">
+                <table class="table cursorPointer table1 " >
                     <thead>
                         <tr>
                             <th>S#</th>
@@ -125,6 +127,31 @@
                             <td class="text-center">{{item.quantity}}</td>
                             <td class="text-center">{{item.salePrice * item.quantity |number:'1.0-1'}}</td>
                             <td class="text-center"><mat-icon class="text-danger" *ngIf="item.entryType == 'New'"(click)="deleteRow(item,'')">delete</mat-icon>
+
+                                <!-------------- will Open void Qty modal when void button click ------------------->
+                            <mat-icon class="text-danger" data-bs-toggle="modal" data-bs-target="#voidQtyModal" *ngIf="item.entryType == 'Saved'" (click)="tempDeleteRow = item">indeterminate_check_box</mat-icon>
+                                    </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table  cursorPointer table2">
+
+                    <tbody>
+                        <tr *ngFor="let item of tableData index as index">
+                            <td class="border-end bg-dark text-center text-white">{{index+1}}</td>
+                       
+                            <td class="d-flex flex-column">
+                                <span><strong>{{item.productTitle}}</strong></span>
+                                <span>
+                                    {{item.salePrice |number:'1.0-1'}} x {{item.quantity}} = <b>{{item.salePrice * item.quantity |number:'1.0-1'}}</b>
+                                </span>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><mat-icon class="text-danger" *ngIf="item.entryType == 'New'"(click)="deleteRow(item,'')">delete</mat-icon>
 
                                 <!-------------- will Open void Qty modal when void button click ------------------->
                             <mat-icon class="text-danger" data-bs-toggle="modal" data-bs-target="#voidQtyModal" *ngIf="item.entryType == 'Saved'" (click)="tempDeleteRow = item">indeterminate_check_box</mat-icon>
@@ -568,7 +595,7 @@
 
     <div class="modal fade" id="paymentMehtod" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
         aria-labelledby="paymentMehtodLabel">
-        <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered ">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-header">
                     <h2 class="modal-title" id="paymentMehtodLabel">Payment Method</h2>
@@ -650,7 +677,7 @@
 
     <div class="modal fade" id="NewBill" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
         aria-labelledby="NewBillLabel">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-body">
 
@@ -715,7 +742,7 @@
 
     <div class="modal fade" id="retrieveBill" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
         aria-labelledby="retrieveBillLabel">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-body">
 

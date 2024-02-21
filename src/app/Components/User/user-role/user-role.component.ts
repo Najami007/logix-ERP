@@ -315,8 +315,9 @@ export class UserRoleComponent implements OnInit {
           //// will replace the menu list crud fields by comparing with response //////////
 
           var index = this.menuList.findIndex((obj:any)=>obj.menuID == e.menuID);
-         
-
+      
+         console.log(e,index)
+        if(index != -1){
           this.menuList[index].c = e.c;
           this.menuList[index].r = e.r;
           this.menuList[index].u = e.u;
@@ -324,6 +325,7 @@ export class UserRoleComponent implements OnInit {
           if(e.c  && e.r  && e.u  && e.d ){
             this.menuList[index].a = true;
           }
+        }
 
           //////////////// will push the data to allowedRolesList for Temporary Use ///////////
 

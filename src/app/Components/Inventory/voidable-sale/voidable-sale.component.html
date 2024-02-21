@@ -13,21 +13,20 @@
 
                     <!-------------------- Product Search Bar --------------->
 
-                    <div class="col-lg-9  d-flex flex-column ">
+                    <div class="col-lg-9  d-flex flex-column pb-2">
                         <mat-label class="text-secondary">Search Barcode / Product</mat-label>
                         <input type="text"  [(ngModel)]="PBarcode" id="vssearchProduct"
                             (keydown)="searchByCode($event);changeFocus($event,'.prodRow');focusTo($event,'#cash')"
                             class="p-1 ps-2 mb-2 searchProduct" placeholder="Alt + b"  (focus)="rowFocused = -1"
                             autocomplete="off" accesskey="b">
 
-                        <div class="  d-flex flex-column SearchConatiner cursorPointer"
+                        <div class="col-lg-12 SearchConatiner cursorPointer"
                             *ngIf="PBarcode != '' && PBarcode != undefined">
                             <mat-card class="card " *ngFor="let item of productList| filter:PBarcode index as index"
                                 (click)="holdDataFunction(item);">
-                                <button style="height: 40px; background: none;border: none;text-align: left;"
-                                    class="prodRow{{index}} prodBtn"
-                                    (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">{{item.productTitle}}
-                                    (<b>{{item.barcode}}</b> )</button>
+                        <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn justify-content-between d-flex" 
+                        (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)"><p>{{item.productTitle}}</p>
+                            <p><strong>({{item.barcode}})</strong></p> </button>
                             </mat-card>
                         </div>
                     </div>
@@ -88,7 +87,7 @@
                 <div class="p-1 w-100">
                     <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
                         <div class="text-center" *ngIf="tableDataList != ''">
-                            <img [src]="productImage" alt="" height="190" width="200"
+                            <img [src]="productImage" alt="" height="190" width="200" accesskey="i"
                                 (click)="this.global.showProductImage(this.productImage,0)">
                         </div>
                     </mat-card>
@@ -375,28 +374,28 @@
                 </tr>
                 <tr *ngIf="myDiscount > 0">
                     <th>Discount</th>
-                    <td>{{myDiscount|number:'1.0-0'}}</td>
+                    <td>{{myDiscount|number:'1.0-1'}}</td>
 
                 </tr>
 
                 <tr>
                     <th>Net Total</th>
-                    <td>{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-0'}}</td>
+                    <td>{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</td>
 
                 </tr>
                 <tr *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
                     <th>Cash</th>
-                    <td>{{myCash|number:'1.0-0'}}</td>
+                    <td>{{myCash|number:'1.0-1'}}</td>
 
                 </tr>
                 <tr *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
                     <th>Bank</th>
-                    <td>{{myBank|number:'1.0-0'}}</td>
+                    <td>{{myBank|number:'1.0-1'}}</td>
 
                 </tr>
                 <tr *ngIf="myChange > 0">
                     <th>Change</th>
-                    <td>{{myChange|number:'1.0-0'}}</td>
+                    <td>{{myChange|number:'1.0-1'}}</td>
 
                 </tr>
 

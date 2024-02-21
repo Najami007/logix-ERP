@@ -623,7 +623,7 @@ export class TabletSaleComponent implements OnInit {
         if (this.tableData.length == 1 && item.quantity <= 1) {
           this.voidBill();
         } else {
-          this.global.openPinCode().subscribe(pin => {
+          this.global.openPassword('Password').subscribe(pin => {
             if (pin !== '') {
               this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
                 RestrictionCodeID: 1,
@@ -879,7 +879,7 @@ export class TabletSaleComponent implements OnInit {
 
   verifyDiscount(disc: any,) {
     if (this.tableData != '') {
-      this.global.openPinCode().subscribe(pin => {
+      this.global.openPassword('Password').subscribe(pin => {
         if (pin !== '') {
           this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
             RestrictionCodeID: 2,
@@ -916,7 +916,7 @@ export class TabletSaleComponent implements OnInit {
       }).then((result) => {
 
         if (result.isConfirmed) {
-          this.global.openPinCode().subscribe(pin => {
+          this.global.openPassword('Password').subscribe(pin => {
             if (pin !== '') {
               this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
                 RestrictionCodeID: 1,

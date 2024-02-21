@@ -2,7 +2,7 @@
        
 <div class="p-5">
     <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Select Party</mat-label>
+        <mat-label>Select Note</mat-label>
         <mat-select [(ngModel)]="noteID" [disabled]="coaTypeID == 2 || this.coaTypeID == 3 || transactionAllowed == false">
             <mat-option  *ngFor="let item of notesList " [value]="item.noteID">{{item.noteTitle}}</mat-option>
         </mat-select>

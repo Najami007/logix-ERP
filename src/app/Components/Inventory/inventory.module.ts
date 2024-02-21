@@ -50,7 +50,9 @@ import { VrtnsavedbillComponent } from './voidable-salertn/vrtnsavedbill/vrtnsav
 import { InvDashboardComponent } from './inv-dashboard/inv-dashboard.component';
 import { SaleRptPaymentTypewiseComponent } from './InventoryReports/sale-rpt-payment-typewise/sale-rpt-payment-typewise.component';
 import { ChartModule } from 'angular-highcharts';
- 
+import { PurchaseReportSupplierwiseComponent } from './InventoryReports/purchase-report-supplierwise/purchase-report-supplierwise.component';
+import { PurchaseReportProdSupplierwiseComponent } from './InventoryReports/purchase-report-prod-supplierwise/purchase-report-prod-supplierwise.component';
+import { BarcodeReportComponent } from './InventoryReports/barcode-report/barcode-report.component';
 
 
 
@@ -215,6 +217,10 @@ export const inventoryRoutes: Route[] = [
     VrtnsavedbillComponent,
     InvDashboardComponent,
     SaleRptPaymentTypewiseComponent,
+    PurchaseReportSupplierwiseComponent,
+    PurchaseReportProdSupplierwiseComponent,
+    BarcodeReportComponent,
+    
 
  
 

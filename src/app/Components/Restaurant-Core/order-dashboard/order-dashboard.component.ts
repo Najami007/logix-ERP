@@ -72,11 +72,17 @@ export class OrderDashboardComponent implements OnInit {
 
 
   getVoidList() {
+    var type = '';
+    if(this.locationID == 0){
+      type = 'void';
+    }else{
+      type = 'locwisevoid&locid='+this.locationID;
+    }
 
     this.tempVoidList = this.voidOrderList;
     this.voidOrderList = [];
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetOrdersAndVoidItemsDetail?todate='+this.global.dateFormater(this.curDate, '-')
-    +'&type=void').subscribe(
+    +'&type='+type).subscribe(
       (Response: any) => {
         this.voidOrderList = Response;
         // console.log(Response)
@@ -96,11 +102,20 @@ export class OrderDashboardComponent implements OnInit {
     if (this.newOrderList != '') {
       this.tempOrderList = this.newOrderList;
     }
+
+
+    var type = '';
+    if(this.locationID == 0){
+      type = 'order';
+    }else{
+      type = 'locwiseorder&locid='+this.locationID;
+    }
+
     this.PendingOrderList = [];
     this.newOrderList = [];
     this.deliveredOrderList = [];
     this.http.get(environment.mainApi+this.global.restaurentLink +'GetOrdersAndVoidItemsDetail?todate='+this.global.dateFormater(this.curDate,'-') +
-    '&type=order').subscribe(
+    '&type='+type).subscribe(
       (Response: any) => {
         //console.log(Response);
        if(Response != null){

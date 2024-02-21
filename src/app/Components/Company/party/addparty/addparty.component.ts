@@ -32,6 +32,7 @@ export class AddpartyComponent implements OnInit {
 
   }
   ngOnInit(): void {
+    this.getCityNames();
    
   }
 

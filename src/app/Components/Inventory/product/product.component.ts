@@ -18,6 +18,7 @@ import Swal from 'sweetalert2';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-product',
@@ -287,7 +288,7 @@ export class ProductComponent implements OnInit {
     }else if(this.pctCode == '' || this.pctCode == undefined){
       this.msg.WarnNotify('Enter PCT Code')
     }else if( this.allowMinus == undefined){
-      alert(this.allowMinus);
+      
       this.msg.WarnNotify('Select Allow Minus True or False')
     }else if( this.barcodeType == undefined){
       this.msg.WarnNotify('Select Barcode Type')
@@ -604,8 +605,12 @@ export class ProductComponent implements OnInit {
 
   }
 
-
+  @ViewChild('brand') mybrand:any;
   addBrand(){
+    setTimeout(() => {
+      this.mybrand.close()
+   
+    }, 200);
     this.dialogue.open(AddBrandComponent,{
       width:'40%'
     }).afterClosed().subscribe(value=>{
@@ -615,8 +620,12 @@ export class ProductComponent implements OnInit {
     })
   }
 
-  
+  @ViewChild('rack') myrack:any; 
   addRack(){
+    setTimeout(() => {
+      this.myrack.close()
+   
+    }, 200);
     this.dialogue.open(AddRackComponent,{
       width:'40%'
     }).afterClosed().subscribe(value=>{
@@ -626,8 +635,12 @@ export class ProductComponent implements OnInit {
     })
   }
 
-
+  @ViewChild('uom') myUom:any;
   addUOM(){
+    setTimeout(() => {
+      this.myUom.close()
+   
+    }, 200);
     this.dialogue.open(AddUOMComponent,{
       width:'40%'
     }).afterClosed().subscribe(value=>{
@@ -637,11 +650,15 @@ export class ProductComponent implements OnInit {
     })
   }
 
-
+  @ViewChild('category') myCategory:any;
+ 
   addCategory(){
     // alert()
     
-      // $('#title2').focus()
+    setTimeout(() => {
+      this.myCategory.close()
+   
+    }, 200);
   
     this.dialogue.open(AddCategoryComponent,{
       width:'40%'
@@ -653,8 +670,13 @@ export class ProductComponent implements OnInit {
 
   }
 
+  @ViewChild('subCategory') mysubcat:any;
 
   addSubCategory(){
+    setTimeout(() => {
+      this.mysubcat.close()
+   
+    }, 200);
     this.dialogue.open(AddProdSubCategoryComponent,{
       width:'40%'
     }).afterClosed().subscribe(value=>{

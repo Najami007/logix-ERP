@@ -87,68 +87,54 @@
   </mat-toolbar-row> -->
 
 
-  <mat-toolbar-row class="bg-white justify-content-between menuBar">
+  <mat-toolbar-row class="bg-white  menuBar1 justify-content-between ">
 
- 
-
-    <div class=" topNavMenuList d-flex ">
-      <button class="button sideNavBtn " mat-icon-button (click)="toggleSideBar()"><mat-icon>{{Menu}}</mat-icon> </button>
-
-      <div class="d-flex bg-white ps-2 logo border-end pe-2">
-        <img [src]="logo1" height="35" width="35">
+    
+    <div class=" d-flex ">
+      <div class="d-flex">
+      
+        <div class="bg-white logo ps-2 border-end pe-2">
+          <img [src]="logo1"  height="35px" width="35px">
+        </div>
       </div>
+    
+      <div class="d-flex topNavMenuList  nav">
+        <ul class="nav " *ngFor="let item of menuList; let i = index">
+         <li class="nav-item" *ngIf="item.parentMenuID == 0 && item.isParentMenu == false"> 
+          <a  class="list-itm"
+          routerLink="/{{item.moduleLink}}/{{item.menuLink}}" routerLinkActive="active">
+          {{ item.menuTitle }}
+        </a>
+         </li>
 
+         
 
-      <div class="topNavMenuList">
-        <span *ngFor="let item of menuList; let i = index">
-          <a *ngIf="item.parentMenuID == 0 && item.isParentMenu == false" class="list-itm"
-            routerLink="/{{item.moduleLink}}/{{item.menuLink}}" routerLinkActive="active">
-            {{ item.menuTitle }}
-          </a>
-        </span>
-
-
-
-        <span *ngFor="let item of menuList; let i = index">
-          <div *ngIf="item.isParentMenu == true" class="dropdown cursorPointer ">
-
+          <li class="nav-item"  *ngIf="item.isParentMenu == true" class="dropdown cursorPointer ">
+  
             <a class="list-itm" [matMenuTriggerFor]="menu">{{ item.menuTitle }}<mat-icon
                 class="sideicon mb-1">arrow_drop_down</mat-icon></a>
-
+  
             <div>
               <mat-menu #menu="matMenu" [scrollLeft]="true" class="dropdown-content">
                 <span *ngFor="let row of menuList">
                   <a *ngIf="item.menuID == row.parentMenuID  " style="min-width: 200px !important;" class="list-itm"
                     routerLink="/{{row.moduleLink}}/{{row.menuLink}}" routerLinkActive="active">{{row.menuTitle}}</a>
                 </span>
-
-              </mat-menu>
-
-            </div>
-          </div>
-        </span>
-
-
-        <!-- <span *ngFor="let item of menuList; let i = index">
-          <div *ngIf="item.isParentMenu == true" class="dropdown cursorPointer ">
   
-            <a class="list-itm" >{{ item.menuTitle }}<mat-icon class="sideicon mb-1">arrow_drop_down</mat-icon></a>
-            <div class="dropdown-content" >
-              <span *ngFor="let row of menuList">
-                <a *ngIf="item.menuID == row.parentMenuID  " class="list-itm" routerLink="/{{row.moduleLink}}/{{row.menuLink}}" routerLinkActive="active">{{row.menuTitle}}</a>
-              </span>
-       
+              </mat-menu>
+  
             </div>
-        </div>
-      </span> -->
+          </li>
+  
+        </ul>
+  
+  
+  
+  
       </div>
 
-    </div>
-
-
-
-
-    <div class="d-flex lgbtn bg-white shadow justify-content-between"
+      </div>
+      <div class="d-flex col-lg-1 text-end bg-white shadow justify-content-between logout"
       style="min-width: 120px;height: 40px; font-size: 15px; font-family: Arial, Helvetica, sans-serif; border-radius: 20px;">
       <p class="mt-1 pe-1 ps-1 uname">
         {{ UserName }}
@@ -169,13 +155,45 @@
           <mat-icon>vpn_key</mat-icon>
           <span>Change Pin</span>
         </button></mat-menu>
-
-    </div>
-
-
-
-
+  
+       </div>
+   
 
   </mat-toolbar-row>
+
+  <mat-toolbar-row class="bg-white  menuBar2 justify-content-between">
+    <div class="d-flex">
+      <button class="button sideNavBtn " mat-icon-button (click)="toggleSideBar()"><mat-icon>{{Menu}}</mat-icon> </button>
+      <div class="bg-white logo ps-2 border-end pe-2">
+        <img [src]="logo1"  height="35px" width="35px">
+      </div>
+    </div>
+  
+    <div class="d-flex col-lg-1 bg-white shadow justify-content-between logoutBtn">
+    <p class="mt-1 pe-1 ps-1 uname">
+      {{ UserName }}
+    </p>
+    <button mat-mini-fab class="bg-success" [matMenuTriggerFor]="userMenu" aria-label="">
+      <mat-icon>person</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Log out</span>
+      </button>
+      <button mat-menu-item (click)="changePassword()">
+        <mat-icon>lock</mat-icon>
+        <span>Change Password</span>
+      </button>
+      <button mat-menu-item (click)="changePin()">
+        <mat-icon>vpn_key</mat-icon>
+        <span>Change Pin</span>
+      </button></mat-menu>
+
+     </div>
+
+  </mat-toolbar-row>
+
+
 
 </mat-toolbar>

@@ -1,9 +1,9 @@
 <div class="body container-fluid">
 
-    <div class="d-flex justify-content-between mt-2">
+    <div class="row justify-content-between mt-2">
 
 
-        <mat-form-field appearance="outline" class="col-lg-3">
+        <mat-form-field appearance="outline" class="col-lg-2">
             <mat-label>User</mat-label>
             <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
                 <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
@@ -13,7 +13,7 @@
                     [value]="item.userID">{{item.userName}}</mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field appearance="outline" class="col-lg-3">
+        <mat-form-field appearance="outline" class="col-lg-2">
             <mat-label>Table</mat-label>
             <mat-select [(ngModel)]="tableID" (selectionChange)="onTableSelected()">
                 <mat-option><ngx-mat-select-search #tSearch [placeholderLabel]="'Search...'"
@@ -22,13 +22,13 @@
                     [value]="item.tableID">{{item.tableTitle}}</mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field  appearance="outline" style="width: 150px;">
+        <mat-form-field  appearance="outline" class="col-lg-2">
             <mat-label>From Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
             <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
             <mat-datepicker #sDate></mat-datepicker>
         </mat-form-field>
-        <mat-form-field style="width: 150px;" appearance="outline" >
+        <mat-form-field class="col-lg-2" appearance="outline" >
             <mat-label>From Time</mat-label>    
         <div class="toggle-example d-flex">
             <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
@@ -39,13 +39,13 @@
         </mat-form-field>
 
 
-        <mat-form-field style="width: 150px;" appearance="outline">
+        <mat-form-field class="col-lg-2" appearance="outline">
             <mat-label>To Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
             <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
             <mat-datepicker #eDate></mat-datepicker>
         </mat-form-field>
-        <mat-form-field style="width: 150px;" appearance="outline">
+        <mat-form-field class="col-lg-2" appearance="outline">
             <mat-label>To Time</mat-label>
             <div class="toggle-example d-flex">
                 <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
@@ -55,7 +55,7 @@
         </mat-form-field>
 
     </div>
-    <div class="d-flex justify-content-center">
+    <div class="row justify-content-center">
         <!-- <mat-form-field appearance="fill" class="col-lg-3 me-2">
             <mat-label>Report Type</mat-label>
             <mat-select [(ngModel)]="rptType" >

@@ -1,6 +1,7 @@
 <div class="container  bg-gray body" >
 
-    <div class="row justify-content-around mt-2" >
+  
+      <div class=" row justify-content-around mt-2">
         <mat-form-field appearance="outline" class="col-lg-4">
             <mat-label >Swing</mat-label>
             <mat-select [(ngModel)]="swingID" >
@@ -41,11 +42,14 @@
                 <ngx-material-timepicker #tTime></ngx-material-timepicker>
             </div>
         </mat-form-field>
+      </div>
 
-        <div class="col-lg-4 mb-2" *ngIf="crudList.r">
-            <button class="btn btn-success btn-rpt col-lg-4 me-1 " *ngIf="crudList.r" (click)="getReport()">Get Report</button>
-            <button class="btn btn-primary btn-rpt col-lg-2" *ngIf="crudList.r" (click)="print()">Print</button>
-        </div>
+   <div class=" row justify-content-around">
+    <div class=" col-lg-4 mb-2" *ngIf="crudList.r">
+        <button class="btn btn-success btn-rpt col-lg-4 me-1 " *ngIf="crudList.r" (click)="getReport()">Get Report</button>
+        <button class="btn btn-primary btn-rpt col-lg-2" *ngIf="crudList.r" (click)="print()">Print</button>
+    </div>
+   </div>
 
         <div id="PrintDiv" >
 
@@ -138,7 +142,6 @@
         </div>
 
 
-    </div>
 
    
 

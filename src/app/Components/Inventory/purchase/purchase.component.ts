@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Observable, retry } from 'rxjs';
@@ -12,6 +12,7 @@ import { PincodeComponent } from '../../User/pincode/pincode.component';
 import * as $ from 'jquery';
 import Swal from 'sweetalert2';
 import { AddpartyComponent } from '../../Company/party/addparty/addparty.component';
+import { MatSelect } from '@angular/material/select';
 
 
 @Component({
@@ -537,8 +538,12 @@ export class PurchaseComponent implements OnInit{
  
   }
 
+  @ViewChild('supplier') myParty:any;
 
   addParty(){
+    setTimeout(() => {
+      this.myParty.close()
+    }, 200);
     this.dialogue.open(AddpartyComponent,{
       width:"50%"
     }).afterClosed().subscribe(value=>{

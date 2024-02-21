@@ -36,7 +36,7 @@ export class CookingareaComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.global.setHeaderTitle("Cooking Area");
+    // this.global.setHeaderTitle("Cooking Area");
     this.getCookingArea();
     
   }
@@ -59,7 +59,7 @@ export class CookingareaComponent implements OnInit {
 
   addTable(){
     this.dialogue.open(AddAreaComponent,{
-      width:'40%'
+      width:'50%'
     }).afterClosed().subscribe(val=>{
       if(val == 'Update'){
         this.getCookingArea();
@@ -71,7 +71,7 @@ export class CookingareaComponent implements OnInit {
   editTable(item:any){
 
     this.dialogue.open(AddAreaComponent,{
-      width:'40%',
+      width:'50%',
       data:item,
     }).afterClosed().subscribe(val=>{
       if(val == 'Update'){

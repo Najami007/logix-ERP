@@ -36,7 +36,7 @@ export class TableComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.global.setHeaderTitle("Table");
+    this.global.setHeaderTitle("Table / Cooking Area");
     this.getTable();
     
   }
@@ -59,7 +59,7 @@ export class TableComponent implements OnInit {
 
   addTable(){
     this.dialogue.open(AddtableComponent,{
-      width:'30%'
+      width:'50%'
     }).afterClosed().subscribe(val=>{
       if(val == 'Update'){
         this.getTable();
@@ -71,7 +71,7 @@ export class TableComponent implements OnInit {
   editTable(item:any){
 
     this.dialogue.open(AddtableComponent,{
-      width:'30%',
+      width:'50%',
       data:item,
     }).afterClosed().subscribe(val=>{
       if(val == 'Update'){
