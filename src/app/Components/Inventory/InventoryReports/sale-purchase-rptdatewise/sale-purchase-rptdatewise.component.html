@@ -45,7 +45,7 @@
         </div>
        
         <div class="row justify-content-center">
-            <mat-form-field  class="col-lg-3 me-2">
+            <mat-form-field  class="col-lg-6 pe-2" appearance="outline">
                 <mat-label>Reports</mat-label>
                 <mat-select [(ngModel)]="tmpRptType" >
                     <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
@@ -54,7 +54,7 @@
                         [value]="item.val">{{item.title}}</mat-option>
                 </mat-select>
             </mat-form-field>
-            <div class="col-lg-4 pb-2" *ngIf="crudList.r">
+            <div class="col-lg-6 pb-2" *ngIf="crudList.r">
                 <button class="btn btn-success btn-rpt col-lg-4  me-1" (click)="getReport('summary')">Summary</button>
                 <button class="btn btn-success btn-rpt col-lg-4 me-1" (click)="getReport('detail')">Detail</button>
                 <button class="btn btn-primary btn-rpt col-lg-2" (click)="print()"><mat-icon>print</mat-icon></button>

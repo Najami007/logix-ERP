@@ -1,0 +1,131 @@
+<div class="body container-fluid">
+
+    <div class="row justify-content-between mt-2">
+
+   
+        <mat-form-field  appearance="outline" class="col-lg-3" >
+            <mat-label>From Date</mat-label>
+            <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
+            <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
+            <mat-datepicker #sDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="col-lg-3" appearance="outline" >
+            <mat-label>From Time</mat-label>         
+            <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+            <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #fTime></ngx-material-timepicker>
+        </mat-form-field>
+
+
+        <mat-form-field class="col-lg-3" appearance="outline">
+            <mat-label>To Date</mat-label>
+            <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
+            <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+            <mat-datepicker #eDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="col-lg-3" appearance="outline">
+            <mat-label>To Time</mat-label>
+                <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+                <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
+                <ngx-material-timepicker #tTime></ngx-material-timepicker>
+        </mat-form-field>
+
+    </div>
+    <div class="row text-center justify-content-center">
+
+        <div class="col-lg-3 pb-2" *ngIf="crudList.r">
+          
+            <button class="btn btn-success btn-rpt col-lg-4  me-1" (click)="getReport('')">Get Report</button>
+            <button class="btn btn-primary btn-rpt col-lg-1" (click)="print()"><mat-icon>print</mat-icon></button>
+        </div>
+   
+    </div>
+
+
+
+
+    
+    <div id="PrintDiv">
+
+        <!-------------------------    Top Logo Section -------------------->
+
+        <div class="hide">
+            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
+                        [width]="item.logo1Width">
+                </span>
+                <span>
+
+
+                    <h1 class="companyName">{{item.companyName}}</h1>
+
+                    <p class="rptTitle" style="margin-top:-20px">Purchase Sale Comparison Report </p>
+                    <p style="margin-top: -15px;" *ngIf="userName != ''" > <b *ngIf="userName != ''">User: {{userName}} |</b> </p>
+                    <p style="margin-top:-15px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                        {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
+
+
+                </span>
+                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                        height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                </span>
+
+
+            </div>
+        </div>
+
+
+        <table class="table table-logix" id="detailTable">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Title</th>
+                    <th>Pur Qty</th>
+                    <th >Sale Qty</th>
+                    <th>Pur Total</th>
+                    <th >Sale Total</th>
+                    <th>Difference</th>
+
+                </tr>
+
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of DetailList index as index">
+                    <td class="text-center">{{index + 1}}</td>
+                    <td>{{item.productTitle}} ({{item.barcode}})</td>
+                    <td class="text-center">{{item.purQty}}</td>
+                    <td class="text-center">{{item.saleQty}}</td>
+                    <td class="text-end">{{item.purTotal |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.saleTotal |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.purTotal - item.saleTotal |number:'1.0-0'}}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <th class="text-center">{{purQtyTotal|number:'1.0-0'}}</th>
+                    <th class="text-center">{{saleQtyTotal|number:'1.0-0'}}</th>
+                    <th class="text-end">{{purchaseTotal|number:'1.0-0'}}</th>
+                    <th class="text-end">{{saleTotal|number:'1.0-0'}}</th>
+                    <th class="text-end">{{purchaseTotal - saleTotal |number:'1.0-0'}}</th>
+                </tr>
+            </tbody>
+          
+
+          
+        </table>
+
+    
+
+
+
+
+
+    </div>
+
+
+
+</div>
+
+

@@ -1,4 +1,5 @@
 @import url('./app/Shared/Navbar/navbar.scss');
+// @import url('./assets/style/barcode.scss');
 
 @font-face {
   font-family: 'digital';
@@ -13,6 +14,36 @@
   src: url('./assets/fonts/Roboto/Roboto-Regular.ttf');
 }
 
+@font-face {
+  font-family: 'barcode';
+  src: url('./assets/fonts/barcode/code128.ttf');
+}
+
+.font-barcode{
+  font-family:'barcode' !important;
+  font-size: 50px;
+  border: 0px solid red;
+  height: 50px;
+
+  overflow: hidden;
+}
+
+
+
+.bcodep{
+  width: 50%;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.bcodet{
+  width: 50%;
+  font-weight: 400;
+  font-size: 20px;
+}
+.bcodeC{
+  font-weight: bold;
+}
 
 
 @media only screen and (max-width:1000px){
@@ -50,8 +81,7 @@ html ,body {
 
 .body{
   padding-top:65px !important;
-  padding-bottom: 45px !important;
-  
+  padding-bottom: 28px !important;  
 }
 
 .font-digit{

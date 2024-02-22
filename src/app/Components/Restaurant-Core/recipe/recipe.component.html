@@ -10,14 +10,14 @@
                 <div class="col-lg-6 pt-2" >
 
 
-                    <div class=" d-flex">
-                        <div class="w-100">
-                            <mat-form-field appearance="outline" class="w-50 p-1">
+                    <div class="row text-center">
+                        <div class="col-lg-9 row">
+                            <mat-form-field appearance="outline" class="col-lg-6">
                                 <mat-label>Recipe Title</mat-label>
                                 <input matInput [(ngModel)]="recipeTitle" type="text">
                             </mat-form-field>
 
-                            <mat-form-field class="w-50" appearance="outline">
+                            <mat-form-field class="col-lg-6" appearance="outline">
                                 <mat-label>Category</mat-label>
                                 <mat-select [(ngModel)]="categoryID">
                                     <mat-option><ngx-mat-select-search #catSearch [placeholderLabel]="'Search...'"
@@ -26,12 +26,12 @@
                                 </mat-select>
                             </mat-form-field>
 
-                            <mat-form-field appearance="outline" class="w-50 p-1">
+                            <mat-form-field appearance="outline" class="col-lg-6">
                                 <mat-label>Cost Price</mat-label>
                                 <input matInput [(ngModel)]="costPrice" type="text" disabled="true">
                             </mat-form-field>
 
-                            <mat-form-field appearance="outline" class="w-50 ">
+                            <mat-form-field appearance="outline" class="col-lg-6 ">
                                 <mat-label>Sale Price</mat-label>
                                 <input matInput [(ngModel)]="salePrice" type="text">
                             </mat-form-field>
@@ -42,7 +42,7 @@
 
                         </div>
 
-                        <div class="avatar-upload ms-2 col-lg-4   " (click)="this.global.showProductImage(recipeImg,0)">
+                        <div class="avatar-upload ps-2 col-lg-3   " (click)="this.global.showProductImage(recipeImg,0)">
                             <div class="avatar-edit" >
                                 <input type="file" id="prodimg" accept="" #prodimg (change)="onImgSelected($event)" />
                                 <label for="prodimg"><mat-icon class=" mt-1">edit</mat-icon></label>
@@ -59,31 +59,26 @@
 
                     </div>
 
-                            
-                    <!-- <mat-form-field class="col-lg-5 me-1" appearance="outline">
-                        <mat-label>Type</mat-label>
-                        <mat-select [(ngModel)]="recipeType">
-                            <mat-option  value="Dine In">Dine In</mat-option>
-                            <mat-option  value="Others">Others</mat-option>
-                        </mat-select>
-                    </mat-form-field> -->
-                    <mat-form-field class="col-lg-3 me-1" appearance="outline">
-                        <mat-label>Cooking Time</mat-label>
-                       <input matInput [(ngModel)]="cookingTime" />
-                    </mat-form-field>
-                    <mat-form-field class="col-lg-3 me-1" appearance="outline">
-                        <mat-label>Cooking Area</mat-label>
-                        <mat-select [(ngModel)]="cookingAriaID">
-                            <mat-option><ngx-mat-select-search #arSearch [placeholderLabel]="'Search...'"
-                                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                            <mat-option *ngFor="let item of cookingAreaList |filter:arSearch.value" [value]="item.cookingAriaID">{{item.cookingAriaTitle}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <mat-form-field appearance="outline" class="col-lg-5">
-                        <mat-label>Description</mat-label>
-                        <textarea matInput type="text" rows="1" [(ngModel)]="Description"></textarea>
-                    </mat-form-field>
+            
+                    <div class="row">
+                        <mat-form-field class="col-lg-3" appearance="outline">
+                            <mat-label>Cooking Time</mat-label>
+                        <input matInput [(ngModel)]="cookingTime" />
+                        </mat-form-field>
+                        <mat-form-field class="col-lg-3 " appearance="outline">
+                            <mat-label>Cooking Area</mat-label>
+                            <mat-select [(ngModel)]="cookingAriaID">
+                                <mat-option><ngx-mat-select-search #arSearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                                <mat-option *ngFor="let item of cookingAreaList |filter:arSearch.value" [value]="item.cookingAriaID">{{item.cookingAriaTitle}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" class="col-lg-5">
+                            <mat-label>Description</mat-label>
+                            <textarea matInput type="text" rows="1" [(ngModel)]="Description"></textarea>
+                        </mat-form-field>
 
+                    </div>
                   
 
                     <div class="justify-content-between d-flex">

@@ -34,6 +34,7 @@ import { SaleBillDetailComponent } from './sale/sale-bill-detail/sale-bill-detai
 import { SavedBillComponent } from './sale/saved-bill/saved-bill.component';
 import { RestDashboardComponent } from './rest-dashboard/rest-dashboard.component';
 import { TabletSaleComponent } from './tablet-sale/tablet-sale.component';
+import { RecipeListComponent } from './restaurantReports/recipe-list/recipe-list.component';
 
 
 
@@ -92,6 +93,7 @@ export const restCore: Route[] = [
     SavedBillComponent,
     RestDashboardComponent,
     TabletSaleComponent,
+    RecipeListComponent,
    
    
     

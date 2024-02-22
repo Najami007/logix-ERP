@@ -1,178 +1,179 @@
-<div class="d-flex h-100 body" style="background-color: rgb(255, 255, 255);overflow: hidden;">
+<div class=" body h-100" >
 
 
+  <div class="row h-100" style="background-color: rgb(255, 255, 255);">
     <div class="col-lg-9 bg-white " >
 
-         <!-------------------- Top Date and location section --------------->
+        <!-------------------- Top Date and location section --------------->
 
-        <div class="d-flex justify-content-around pt-3">
-            <mat-form-field appearance="outline" class="col-lg-2">
-                <mat-label>Invoice Date</mat-label>
-                <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput type="text" name="invDate"
-                    [matDatepicker]="iDate">
-                <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
-                <mat-datepicker #iDate></mat-datepicker>
-            </mat-form-field>
+       <div class="row  p-2">
+           <mat-form-field appearance="outline" class="col-lg-2">
+               <mat-label>Invoice Date</mat-label>
+               <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput type="text" name="invDate"
+                   [matDatepicker]="iDate">
+               <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
+               <mat-datepicker #iDate></mat-datepicker>
+           </mat-form-field>
 
-            <mat-form-field appearance="outline" class="col-lg-2 ">
-                <mat-label>Location</mat-label>
-                <mat-select [(ngModel)]="locationID" name="location" (selectionChange)="onLocationSelected('l1')">
-                    <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
-                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                    <mat-option *ngFor="let item of locationList | filter:locationSearch.value"  [disabled]="item.locationID == locationTwoID"
-                        [value]="item.locationID">{{item.locationTitle}}</mat-option>
-                </mat-select>
-            </mat-form-field>
+           <mat-form-field appearance="outline" class="col-lg-2 ">
+               <mat-label>Location</mat-label>
+               <mat-select [(ngModel)]="locationID" name="location" (selectionChange)="onLocationSelected('l1')">
+                   <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
+                           [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                   <mat-option *ngFor="let item of locationList | filter:locationSearch.value"  [disabled]="item.locationID == locationTwoID"
+                       [value]="item.locationID">{{item.locationTitle}}</mat-option>
+               </mat-select>
+           </mat-form-field>
 
 
-            <mat-form-field appearance="outline" class="col-lg-2">
-                <mat-label>Department</mat-label>
-                <mat-select [(ngModel)]="locationTwoID" name="location" (selectionChange)="onLocationSelected('l2')">
-                    <mat-option><ngx-mat-select-search #depSearch [placeholderLabel]="'Search...'"
-                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                    <mat-option *ngFor="let item of locationList | filter:depSearch.value" [disabled]="item.locationID == locationID"
-                        [value]="item.locationID">{{item.locationTitle}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="col-lg-2">
-                <mat-label>Issue Type</mat-label>
-                <mat-select [(ngModel)]="IssueType" name="location" (selectionChange)="onLocationSelected('l2')">
-                    <mat-option value="Stock Transfer">Stock Transfer</mat-option>
-                    <mat-option value="Expense">Expense</mat-option>
-                    <mat-option value="Buffet Expense">Buffet Expense</mat-option>
-                </mat-select>
-            </mat-form-field>
+           <mat-form-field appearance="outline" class="col-lg-2">
+               <mat-label>Department</mat-label>
+               <mat-select [(ngModel)]="locationTwoID" name="location" (selectionChange)="onLocationSelected('l2')">
+                   <mat-option><ngx-mat-select-search #depSearch [placeholderLabel]="'Search...'"
+                           [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                   <mat-option *ngFor="let item of locationList | filter:depSearch.value" [disabled]="item.locationID == locationID"
+                       [value]="item.locationID">{{item.locationTitle}}</mat-option>
+               </mat-select>
+           </mat-form-field>
+           <mat-form-field appearance="outline" class="col-lg-2">
+               <mat-label>Issue Type</mat-label>
+               <mat-select [(ngModel)]="IssueType" name="location" (selectionChange)="onLocationSelected('l2')">
+                   <mat-option value="Stock Transfer">Stock Transfer</mat-option>
+                   <mat-option value="Expense">Expense</mat-option>
+                   <mat-option value="Buffet Expense">Buffet Expense</mat-option>
+               </mat-select>
+           </mat-form-field>
 
-            <mat-form-field appearance="outline" class="col-lg-3">
-                <mat-label>Remarks</mat-label>
-                <input matInput type="text" [(ngModel)]="invRemarks">
-            </mat-form-field>
-        </div>
+           <mat-form-field appearance="outline" class="col-lg-4">
+               <mat-label>Remarks</mat-label>
+               <input matInput type="text" [(ngModel)]="invRemarks">
+           </mat-form-field>
+       </div>
+         
+       <div class="ps-2 d-flex ">
+
+            <!-------------------- Product Search Bar --------------->
           
-        <div class="ps-2 d-flex ">
-
-             <!-------------------- Product Search Bar --------------->
-           
-            <div class="col-lg-9  d-flex flex-column">
-                <mat-label class="text-primary">Search Barcode / Product</mat-label> 
-               <input type="text"  #pbarcode [(ngModel)]="PBarcode"  
-                    (keydown)="searchByCode($event);this.changeFocus($event,'.prodRow')" id="searchProduct"
-                    class="p-1 ps-2 mb-2 searchProduct" placeholder="Alt + b" autofocus
-                    autocomplete="off" accesskey="b">
-    
-                <div class="  d-flex flex-column SearchConatiner cursorPointer "
-                    *ngIf="PBarcode != '' && PBarcode != undefined">
-                    <mat-card class="card " *ngFor="let item of productList| filter:PBarcode index as index"
-                        (click)="holdDataFunction(item)">
-                        <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn justify-content-between d-flex" 
-                        (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)"><p>{{item.productTitle}}</p>
-                            <p><strong>({{item.barcode}})</strong></p> </button>
-                    </mat-card>
-                </div>
-            </div>
-            <div class="col-lg-3 text-start ms-1 pt-3 mt-1">
-                <button mat-raised-button class="bg-primary text-white w-50 " style="height: 40px;"  (click)="ngOnInit()">Load</button>
-            </div>
-
-        </div>
-
-
-
-        <!-------------------- Table Area for Products --------------->
-
-        <div style="max-height: 75vh;overflow-y:scroll !important;padding-bottom: 60px;">
-            <table class="table table-hover table-logix">
-                <thead>
-                    <tr>
-                        <th>S#</th>
-                        <th>Barcode</th>
-                        <th>Product Name</th>
-                        <th>Quantity</th>
-                        <th>Avg Cost</th>
-                        <th>Cost</th>
-                        <th>Avg Total</th>
-                        <th>Cost Total</th>
-                        <th>AQ</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of tableDataList index as index" (click)="showImg(item);rowFocused = index" [ngClass]="rowFocused == index ?'bg-dg':''">
-                      <td>{{index+1}}</td>
-                      <td>{{item.barcode}}</td>
-                      <td>{{item.productTitle}}</td>
-                      <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
-                        (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
-                        (keyup)="changeValue(item);getTotal();showImg(item);"
-                        class="qty{{index}} text-center" style="width: 80px;"></td>
-                            <td class="text-end">{{item.avgCostPrice | number:'1.0-2'}}</td>
-                            <td class="text-end">{{item.costPrice | number:'1.0-2'}}</td>
-                        <td class="text-end">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
-                      <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
-                      <td class="text-center">{{item.aq}}</td>
-                      <td class="cursorPointer text-center  text-danger"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
-                    </tr>
-                    <tr>
-                        <td colspan="3"></td>
-                        
-                        <th class="">{{totalQty}}</th>
-                        <th colspan="2"></th>
-                        <th class="text-end">{{avgCostTotal |number:'1.0-2'}}</th>
-                        <th class="text-end">{{CostTotal |number:'1.0-2'}}</th>
-                        <th></th>
-                        <td class="text-center"><mat-icon class="cursorPointer " (click)="reset()">delete</mat-icon></td>
-                      
-
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-    </div>
-
+           <div class="col-lg-9  d-flex flex-column">
+               <mat-label class="text-primary">Search Barcode / Product</mat-label> 
+              <input type="text"  #pbarcode [(ngModel)]="PBarcode"  
+                   (keydown)="searchByCode($event);this.changeFocus($event,'.prodRow')" id="searchProduct"
+                   class="p-1 ps-2 mb-2 searchProduct" placeholder="Alt + b" autofocus
+                   autocomplete="off" accesskey="b">
    
-
-    <div class="col-lg-3 h-100" style="background-color: rgb(226, 222, 222);position: fixed;right: 0%;">
-
-       <div class="p-1">
-        <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
-            <div class="text-center" *ngIf="tableDataList != ''" >
-                <img [src]="productImage" alt="" height="190" width="200" accesskey="i" (click)="this.global.showProductImage(this.productImage,0)">
-            </div>
-        </mat-card>
-
+               <div class="  d-flex flex-column SearchConatiner cursorPointer "
+                   *ngIf="PBarcode != '' && PBarcode != undefined">
+                   <mat-card class="card " *ngFor="let item of productList| filter:PBarcode index as index"
+                       (click)="holdDataFunction(item)">
+                       <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn justify-content-between d-flex" 
+                       (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)"><p>{{item.productTitle}}</p>
+                           <p><strong>({{item.barcode}})</strong></p> </button>
+                   </mat-card>
+               </div>
+           </div>
+           <div class="col-lg-3 text-start ms-1 pt-3 mt-1">
+               <button mat-raised-button class="bg-primary text-white w-50 " style="height: 40px;"  (click)="ngOnInit()">Load</button>
+           </div>
 
        </div>
 
-       <div class="p-1">
-        <mat-card class="p-1 w-100 " >
-           <mat-card-content>
-            <div class="justify-content-around d-flex" >
-                <p class="fs-40">Total</p>
-                <p class="font-digit fs-50"  >{{subTotal |number:'1.0-2'}}</p>
-            </div>
-           </mat-card-content>
-        </mat-card>
+
+
+       <!-------------------- Table Area for Products --------------->
+
+       <div style="max-height: 70vh;overflow-y:scroll !important;padding-bottom: 60px;">
+           <table class="table table-hover table-logix">
+               <thead>
+                   <tr>
+                       <th>S#</th>
+                       <th>Barcode</th>
+                       <th>Product Name</th>
+                       <th>Quantity</th>
+                       <th>Avg Cost</th>
+                       <th>Cost</th>
+                       <th>Avg Total</th>
+                       <th>Cost Total</th>
+                       <th>AQ</th>
+                       <th>Action</th>
+                   </tr>
+               </thead>
+               <tbody>
+                   <tr *ngFor="let item of tableDataList index as index" (click)="showImg(item);rowFocused = index" [ngClass]="rowFocused == index ?'bg-dg':''">
+                     <td>{{index+1}}</td>
+                     <td>{{item.barcode}}</td>
+                     <td>{{item.productTitle}}</td>
+                     <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
+                       (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
+                       (keyup)="changeValue(item);getTotal();showImg(item);"
+                       class="qty{{index}} text-center" style="width: 80px;"></td>
+                           <td class="text-end">{{item.avgCostPrice | number:'1.0-2'}}</td>
+                           <td class="text-end">{{item.costPrice | number:'1.0-2'}}</td>
+                       <td class="text-end">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
+                     <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
+                     <td class="text-center">{{item.aq}}</td>
+                     <td class="cursorPointer text-center  text-danger"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
+                   </tr>
+                   <tr>
+                       <td colspan="3"></td>
+                       
+                       <th class="">{{totalQty}}</th>
+                       <th colspan="2"></th>
+                       <th class="text-end">{{avgCostTotal |number:'1.0-2'}}</th>
+                       <th class="text-end">{{CostTotal |number:'1.0-2'}}</th>
+                       <th></th>
+                       <td class="text-center"><mat-icon class="cursorPointer " (click)="reset()">delete</mat-icon></td>
+                     
+
+                   </tr>
+               </tbody>
+           </table>
        </div>
 
+   </div>
 
-       <div class="mt-4 d-flex justify-content-around">
-        <button mat-raised-button *ngIf="crudList.c" class="bg-primary text-white w-25" (click)="SaveBill('hold')">{{holdBtnType}}</button>
-        <button mat-raised-button class="bg-danger text-white w-25"  data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>
-        
-       </div>
-       <div class="mt-4 d-flex justify-content-around">
-        
-        <button mat-raised-button *ngIf="crudList.c" class="bg-success text-white w-25" (click)="SaveBill('issue')">Save</button>
+  
+
+   <div class="col-lg-3 h-100" style="background-color: rgb(226, 222, 222);">
+
+      <div class="p-1">
+       <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
+           <div class="text-center" *ngIf="tableDataList != ''" >
+               <img [src]="productImage" alt="" height="190" width="200" accesskey="i" (click)="this.global.showProductImage(this.productImage,0)">
+           </div>
+       </mat-card>
 
 
+      </div>
+
+      <div class="p-1">
+       <mat-card class="p-1 w-100 " >
+          <mat-card-content>
+           <div class="text-center " >
+               <p class="font-digit fs-50">{{subTotal |number:'1.0-2'}}</p>
+           </div>
+          </mat-card-content>
+       </mat-card>
+      </div>
+
+
+      <div class="mt-4 d-flex justify-content-around">
+       <button mat-raised-button *ngIf="crudList.c" class="bg-primary text-white w-25" (click)="SaveBill('hold')">{{holdBtnType}}</button>
+       <button mat-raised-button class="bg-danger text-white w-25"  data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>
        
+      </div>
+      <div class="mt-4 d-flex justify-content-around">
+       
+       <button mat-raised-button *ngIf="crudList.c" class="bg-success text-white w-25" (click)="SaveBill('issue')">Save</button>
 
 
-       </div>
+      
 
-    </div>
 
+      </div>
+
+   </div>
+
+  </div>
 
                 <!---------------     Modal Window for Retreiving Hold Bills --------------->
                 <div class="modal fade" id="holdModal" tabindex="-1" aria-labelledby="holdModalLabel" >

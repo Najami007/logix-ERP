@@ -34,7 +34,7 @@
     <div class="row justify-content-center">
 
 
-        <mat-form-field appearance="fill" class="col-lg-3 me-2">
+        <mat-form-field appearance="outline" class="col-lg-3 pe-2">
             <mat-label>Reports</mat-label>
             <mat-select [(ngModel)]="rptType" >
                 <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
@@ -44,7 +44,7 @@
             </mat-select>
         </mat-form-field>
 
-        <div class="col-lg-4 pb-2" *ngIf="crudList.r">
+        <div class="col-lg-3 pb-2" *ngIf="crudList.r">
           
             <button class="btn btn-success btn-rpt col-lg-4  me-1" (click)="getReport(rptType)">Get Report</button>
             <button class="btn btn-primary btn-rpt col-lg-1" (click)="print()"><mat-icon>print</mat-icon></button>
@@ -97,7 +97,7 @@
                     <th>Title</th>
                     <th>Sold</th>
                     <th>Return</th>
-                    <th>Qty</th>
+                    <th>Net Qty</th>
                     <th>Total</th>
                 </tr>
 

@@ -59,23 +59,20 @@
         style="right: 0%; height: 100rem;position:fixed;overflow: scroll;">
 
         <!-----------   Table Side First Row ------------------->
-
         <div class=" d-flex ">
-            <div class="col-lg-3 tn text-center ps-1 pt-1   border">
-                <p class="text-center p-1 " style="font-size: 20px;"><strong>{{tableTitle}}</strong></p>
+            <div class="col-lg-3  text-center pt-3 tn  border">
+                <p style="font-size: 20px;"><strong>{{tableTitle}}</strong></p>
             </div>
 
-            <div class="col-lg-7 ot border d-flex flex-column justify-content-center">
-
-                <div class="pt-1 text-center ">
-                    <h3 style="font-size: 20px;"><strong>{{orderType}}</strong></h3>
-                </div>
+            <div class="col-lg-7 pt-3 text-center ot border">
+      
+                    <p style="font-size: 20px;"><strong>{{orderType}}</strong></p>
                 <!-- <select class="w-100 border-0 bg-gray" disabled="true" [(ngModel)]="orderType">
                     <option *ngFor="let item of orderTypeList" [value]="item.val">{{item.title}}</option>
                 </select> -->
 
             </div>
-            <div class="col-lg-2 chng p-1  border">
+            <div class="col-lg-2 chng p-1 text-center  border">
                 <button class="btn btn-warning" [disabled]="orderType == ''" data-bs-toggle="modal"
                     data-bs-target="#NewBill">Change</button>
 

@@ -53,6 +53,8 @@ import { ChartModule } from 'angular-highcharts';
 import { PurchaseReportSupplierwiseComponent } from './InventoryReports/purchase-report-supplierwise/purchase-report-supplierwise.component';
 import { PurchaseReportProdSupplierwiseComponent } from './InventoryReports/purchase-report-prod-supplierwise/purchase-report-prod-supplierwise.component';
 import { BarcodeReportComponent } from './InventoryReports/barcode-report/barcode-report.component';
+import { SalePurchaseComparisonRptDatewiseComponent } from './InventoryReports/sale-purchase-comparison-rpt-datewise/sale-purchase-comparison-rpt-datewise.component';
+import { SalePurchaseComparisonRptsupplierwiseComponent } from './InventoryReports/sale-purchase-comparison-rptsupplierwise/sale-purchase-comparison-rptsupplierwise.component';
 
 
 
@@ -171,6 +173,34 @@ export const inventoryRoutes: Route[] = [
     component: SaleRptPaymentTypewiseComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'prptsw',
+    component: PurchaseReportSupplierwiseComponent,
+    canActivate: [AuthGuard]
+  },
+
+  {
+    path: 'prptpsw',
+    component: PurchaseReportProdSupplierwiseComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'spcrptdw',
+    component: SalePurchaseComparisonRptDatewiseComponent,
+    canActivate: [AuthGuard]
+  },
+
+  {
+    path: 'spcrptsw',
+    component: SalePurchaseComparisonRptsupplierwiseComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'brpt',
+    component: BarcodeReportComponent,
+    canActivate: [AuthGuard]
+  },
+
 
 
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
@@ -220,6 +250,8 @@ export const inventoryRoutes: Route[] = [
     PurchaseReportSupplierwiseComponent,
     PurchaseReportProdSupplierwiseComponent,
     BarcodeReportComponent,
+    SalePurchaseComparisonRptDatewiseComponent,
+    SalePurchaseComparisonRptsupplierwiseComponent,
     
 
  

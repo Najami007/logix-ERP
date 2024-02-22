@@ -1,4 +1,4 @@
-<div class="body">
+<div class="body" ondblclick="return false">
 
     <div class="d-flex">
 
@@ -76,7 +76,7 @@
         </div>
 
         <!------------------ column 2 Amount side area ---------------->
-        <div class="col-lg-2 h-100 " style="position: fixed;left: 83%;">
+        <div class="col-lg-2 h-100 " style="position: fixed;right: 0%;">
 
 
            
@@ -93,8 +93,6 @@
                     </mat-card>
                 </div>
                 
-                <div><a href="" data-bs-toggle="modal" data-bs-target="#discountModal">ADD DISCOUNT</a></div>
-
                 <div class="d-flex pb-2 flex-column border-bottom">
                     <div class=" pt-3 d-flex justify-content-between">
                         <p style="font-size: 15px;color: rgb(0, 0, 0);">TOTAL</p>
@@ -105,7 +103,7 @@
 
                     <div class="d-flex justify-content-between">
                         <div class="d-flex justify-content-between col-lg-12">
-                            <p style="font-size: 15px;color: rgb(6, 6, 6)">DISCOUNT</p>
+                            <p class="text-primary" accesskey="t" data-bs-toggle="modal" data-bs-target="#discountModal">ADD DISCOUN<u>T</u></p>
                             <p style="font-size: 40px;color: rgb(9, 9, 9);" class="font-digit text-end">{{discount |number:'1.0-1'}}
                         </div>
                         <!-- <div class=" col-lg-6">
@@ -116,10 +114,10 @@
                     </div> -->
                     </div>
                     <div class=" col-lg-12  pt-1">
-                        <p style="font-size: 15px;color: rgb(6, 6, 6)" class="w-100">CASH</p>
-                        <input class="bg-success border-0 text-white text-end font-digit w-100" id="cash"
+                        <p style="font-size: 15px;color: rgb(6, 6, 6)" class="w-100"><u>C</u>ASH</p>
+                        <input class="bg-success border-0  text-white text-end font-digit w-100" autocomplete="false" id="cash" accesskey="c"
                             style="font-size: 30px;" type="text" [(ngModel)]="cash" (keyup)="getTotal()"
-                            (keydown)="getTotal();this.global.handleNumKeys($event);focusTo($event,'#searchProduct')" />
+                            (keydown)="getTotal();this.global.handleNumKeys($event);focusTo($event,'#save')" />
                     </div>
                     <div class="">
                         <div class="w-100">
@@ -138,24 +136,25 @@
                 </div>
 
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Remarks</mat-label>
-                    <textarea matInput rows="1" [(ngModel)]="billRemarks"></textarea>
+                    <mat-label><u>R</u>emarks</mat-label>
+                    <textarea matInput accesskey="r" rows="1" [(ngModel)]="billRemarks"></textarea>
                 </mat-form-field>
 
                 <div class="text-center d-flex pt-4 me-1">
                     <button class="col-lg-2 me-1 delBtn" matTooltip="Void Full Bill"
                         (click)="voidBill()"><mat-icon>delete_outline</mat-icon></button>
-                    <button class="btn col-lg-10 text-center btn-success " accesskey="s" id="save"
-                        (click)="save('Cash')">Save</button>
+                    <button class="btn col-lg-10 text-center btn-success" accesskey="s" id="save"
+                        (click)="save('Cash')"><u>S</u>ave</button>
 
 
                 </div>
                 <div class="mt-2 d-flex justify-content-between">
-                    <div class=" pe-1"><button class="btn btn-danger " style="height: 60px;width: 100px;"
-                            (click)="openSavedBill()">Duplicate</button></div>
-                    <button class="btn w-75  d-flex justify-content-between btn-primary  pt-3"
+                    <div class=" pe-1"><button class="btn btn-danger " accesskey="u" style="height: 60px;width: 100px;"
+                            (click)="openSavedBill()">D<u>u</u>plicate</button></div>
+
+                    <button accesskey="o" class="btn w-75  d-flex justify-content-between btn-primary  pt-3"
                         data-bs-toggle="modal" data-bs-target="#paymentMehtod">
-                        <p>Other Payment</p> <mat-icon>keyboard_arrow_right</mat-icon>
+                        <p><u>O</u>ther Payment</p> <mat-icon>keyboard_arrow_right</mat-icon>
                     </button>
                 </div>
 
@@ -174,7 +173,7 @@
 
 
 
-<div class="modal fade" id="discountModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+<div class="modal fade" id="discountModal" tabindex="-1" data-bs-backdrop="static" 
     aria-labelledby="discountModalLabel">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content " style="background-color: rgb(248, 247, 247);">

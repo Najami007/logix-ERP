@@ -40,14 +40,16 @@ export class InvDashboardComponent {
   
   }
 
-  cardDataList:any =[];
+  cardDataList:any =[{totalSale:0,totalPurchase:0,totalItems:0,totalAmount:0,productTitle:''}];
  
 
   getCardsData(){
-    this.http.get(environment.mainApi+this.globalData.parkLink+'GetTotals').subscribe(
+    this.http.get(environment.mainApi+this.globalData.inventoryLink+'GetTotals').subscribe(
       (Response:any)=>{
-        this.cardDataList = Response;
-         console.log(Response);  
+        if(Response != ''){
+          this.cardDataList = Response;
+        }
+        // console.log(Response);  
       }
     )
   }
@@ -62,11 +64,11 @@ export class InvDashboardComponent {
   saleList:any = [];
 
   getMonthlySales(){
-    this.http.get(environment.mainApi+this.globalData.parkLink+'GetDailyQtyTotal').subscribe(
+    this.http.get(environment.mainApi+this.globalData.inventoryLink+'GetSoldInvoicesQty').subscribe(
       (Response:any)=>{
-          Response.forEach((e:any) => {
+        Response.forEach((e:any) => {
           this.dayList.push(e.day);
-          this.saleList.push(e.ticketQuantity)
+          this.saleList.push(e.saleQty )
         });
         
         this.monthlySale();
@@ -82,7 +84,7 @@ export class InvDashboardComponent {
         type: 'line',
       },
       title: {
-        text: 'Analysis Sale (Current Month)',
+        text: 'Analysis Sale Invoices (Current Month)',
       },
       subtitle: {
         text: '',
@@ -92,7 +94,7 @@ export class InvDashboardComponent {
       },
       yAxis: {
         title: {
-          text: 'Daily Ticket Sold Quantity ',
+          text: 'Daily Sold Invoices Quantity ',
         },
       },
       plotOptions: {
@@ -105,7 +107,7 @@ export class InvDashboardComponent {
       },
       series: [
         {
-          name: 'Montyly Sale',
+          name: 'Sale Invoices',
           type: 'line',
           data: this.saleList,
         },

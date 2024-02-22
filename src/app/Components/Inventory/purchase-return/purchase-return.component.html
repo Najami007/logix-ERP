@@ -1,10 +1,10 @@
 <div class="body">
 
     <!-- ////////////////////////// first row////////////////// -->
-    <div class="mb-2 p-1 d-flex w-100" style="box-shadow: 0px 0px 10px 0px rgb(192, 209, 235);background-color:rgb(255, 255, 255);" >
-        <mat-card class="d-flex just col-lg-11 mb-2 ps-3 pe-3 me-1 pt-3" style="background-color: #e8e8e4   ;">
+    <div class="mb-2 p-1 row w-100" style="box-shadow: 0px 0px 10px 0px rgb(192, 209, 235);background-color:rgb(255, 255, 255);" >
+        <mat-card class="row just col-lg-11 mb-2 ps-3 pe-3 me-1 pt-3" style="background-color: #e8e8e4   ;">
     
-            <div class="d-flex pt-4 justify-content-between col-lg-11  ps-3 pe-3" >
+            <div class="row pt-4 justify-content-between col-lg-11  ps-3 pe-3" >
                 <div class="col-lg-8 d-flex ">
                     <input type="text" #pbarcode [(ngModel)]="PBarcode"
                         (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event);"
@@ -18,7 +18,7 @@
                 </div>
 
 
-                <div class="col-lg-4 ms-1">
+                <div class="col-lg-4 ps-1">
                     <button class=" w-25 btn btn-primary me-1  " *ngIf="crudList.c" style="height: 50px;"
                     (click)="SaveBill('hold')">{{holdBtnType}}</button>
                     <button class="w-25 btn btn-danger me-1" style="height: 50px;"
@@ -32,7 +32,7 @@
         <mat-card class="mb-2 col-lg-1 text-center border border-primary" style="height: 130px;width: 130px;" >
             <div class="p-1 " *ngIf="tableDataList != ''" accesskey="i"
                 (click)="this.global.showProductImage(this.productImage,0)">
-                <img [src]="productImage" alt="" height="120" width="120">
+                <img [src]="productImage" alt="" height="110" width="110">
             </div>
         </mat-card>
 
@@ -46,7 +46,7 @@
 
     <!-- ////////////////////////// Table Row////////////////// -->
 
-    <div class="border rounded card shadow p-2 w-100" style="overflow-y: scroll !important; max-height: 65vh;padding-bottom: 120px;">
+    <div class="border rounded card shadow p-2 w-100" style="overflow-y: scroll !important; max-height: 70vh;padding-bottom: 120px;">
 
         <table class="table table-hover table-logix"  >
             <thead>
@@ -122,13 +122,13 @@
     <!-- //////////////////////////Row 3////////////////// -->
 
 
-    <div class="w-100 d-flex flex-inline bg-white" *ngIf="hideTotalFlag" style="position: fixed;bottom: 6%;" id="totalRow"
+    <div class="w-100 row  bg-white" *ngIf="hideTotalFlag" style="position: absolute;bottom: 6%;" id="totalRow"
         >
 
         <!-- //////////////////////first Column/////////////////////// -->
         <mat-card class=" col-lg-7" style="background-color: rgb(248, 237, 217);">
 
-            <mat-card-content class="">
+            <mat-card-content class="row">
                 <mat-form-field appearance="outline" class="col-lg-3 p-1">
                     <mat-label>Invoice Date</mat-label>
                     <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput type="text" name="voucherDate"

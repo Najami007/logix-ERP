@@ -346,19 +346,22 @@ export class VoidableSalertnComponent implements OnInit {
 
        
 
-    focusTo(e:any,cls:any){
+    focusTo(e:any,cls:string){
       if(cls == '#disc' && e.keyCode == 13 && e.target.value == ''){
         $(cls).trigger('focus');
       }
       if(cls == '#charges' && e.keyCode == 13 ){
         $(cls).trigger('focus');
       }
-      if(cls == '#cash' && e.keyCode == 13 && e.target.value == ''){
+      if(cls == '#cash' && e.keyCode == 13 ){
         $(cls).trigger('focus');
+        
       }
       
       if(cls == '#save' && e.keyCode == 13 ){
         $(cls).trigger('focus');
+      //  var elem = document.getElementById('save');
+      //  elem?.focus();
       }
 
       if(cls == '#vsrtnsearchProduct' && e.keyCode == 13 ){

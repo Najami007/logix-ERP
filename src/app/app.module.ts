@@ -35,6 +35,7 @@ import { NumberInputComponent } from './Components/Common/number-input/number-in
 import { SideNavbarComponent } from './Components/Layout/side-navbar/side-navbar.component';
 
 
+
 // import {  TruncatePipe } from './Shared/pipes/limitto.pipe';
 // import { FilterPipe } from './Shared/pipes/filter.pipe';
 
@@ -64,7 +65,7 @@ import { SideNavbarComponent } from './Components/Layout/side-navbar/side-navbar
     TopNavBarComponent,
     HeaderComponent,
     NumberInputComponent,
-    SideNavbarComponent
+    SideNavbarComponent,
     // TruncatePipe ,  
     // FilterPipe
  
