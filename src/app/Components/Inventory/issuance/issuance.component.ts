@@ -50,6 +50,7 @@ export class IssuanceComponent implements OnInit {
    this.global.setHeaderTitle('Issuance');
    this.getLocation();
    $('.searchProduct').trigger('focus');
+   this.getIssueTypes();
   
   }
 
@@ -73,9 +74,19 @@ export class IssuanceComponent implements OnInit {
   totalQty:number = 0;
   IssueType:any;
   IssueBillList:any = [];
-
+  issueTypeList:any = [];
   avgCostTotal = 0;
   CostTotal = 0;
+
+
+  getIssueTypes(){
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetIssueType').subscribe(
+      (Response:any)=>{
+        this.issueTypeList = Response;
+        //console.log(Response);
+      }
+    )
+  }
   
   onLocationSelected(type:any){
  
@@ -99,9 +110,6 @@ export class IssuanceComponent implements OnInit {
       }
     )
   }
-
-
-
 
 
   searchByCode(e:any){

@@ -49,6 +49,7 @@ export class IssueStockRerturnComponent implements OnInit {
    this.global.setHeaderTitle('Stock Receive');
    this.getLocation();
    $('.searchProduct').trigger('focus');
+   this.getIssueTypes();
   }
 
   projectID = this.global.InvProjectID;
@@ -71,9 +72,19 @@ export class IssueStockRerturnComponent implements OnInit {
   totalQty:number = 0;
   IssueType:any;
   IssueBillList:any = [];
-
+  issueTypeList:any = [];
   avgCostTotal = 0;
   CostTotal = 0;
+
+
+  getIssueTypes(){
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetIssueType').subscribe(
+      (Response:any)=>{
+        this.issueTypeList = Response;
+       // console.log(Response);
+      }
+    )
+  }
   
   onLocationSelected(type:any){
  

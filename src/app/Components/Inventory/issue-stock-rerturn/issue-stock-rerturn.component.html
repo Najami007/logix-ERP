@@ -36,9 +36,8 @@
             </mat-form-field> -->
             <mat-form-field appearance="outline" class="col-lg-2">
                 <mat-label>Issue Type</mat-label>
-                <mat-select [(ngModel)]="IssueType" name="location" (selectionChange)="onLocationSelected('l2')">
-                    <mat-option value="Expense">Expense</mat-option>
-                    <mat-option value="Buffet Expense">Buffet Expense</mat-option>
+                <mat-select [(ngModel)]="IssueType" name="location" >
+                <mat-option *ngFor="let item of issueTypeList" [value]="item.issueTypeTitle" [disabled]="item.issueTypeTitle == 'Stock Transfer'">{{item.issueTypeTitle}}</mat-option>
                 </mat-select>
             </mat-form-field>
 

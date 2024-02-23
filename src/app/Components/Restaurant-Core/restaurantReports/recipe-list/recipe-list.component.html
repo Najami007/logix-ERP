@@ -1,11 +1,27 @@
 <div class="body">
 
-    <mat-form-field class="col-lg-12" appearance="outline">
+  <div class="container-fluid p-2">
+   <div class="row">
+
+    <mat-form-field class="col-lg-8" appearance="outline">
         <mat-label class="ps-5">Search.....</mat-label>
         <input #recipeSearch matInput type="search" class="text-secondary">
         <mat-icon matPrefix class="text-secondary">search</mat-icon>
     </mat-form-field>
 
+    <mat-form-field class="col-lg-3" appearance="outline">
+    <mat-label>Category</mat-label>
+    <mat-select [(ngModel)]="catID" (selectionChange)="getAllRecipe()">
+        <mat-option><ngx-mat-select-search #catSearch [placeholderLabel]="'Search...'"
+            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+        <mat-option [value]="0">ALL</mat-option>
+        <mat-option *ngFor="let item of categoriesList |filter:catSearch.value" [value]="item.recipeCatID">{{item.recipeCatTitle}}</mat-option>
+    </mat-select>
+    </mat-form-field>
+    <button mat-fab color="primary" class="col-lg-1" (click)="print()"><mat-icon>print</mat-icon></button>
+   </div>
+
+  <div>
     <table class="table">
         <thead>
             <tr>
@@ -16,6 +32,7 @@
                 <th>Cost</th>
                 <th>Sale</th>
                 <th>Category</th>
+                <th>Detail</th>
              
             </tr>
         </thead>
@@ -24,10 +41,11 @@
                 <td>{{index+1}}</td>
                 <td>{{item.recipeTitle}}</td>
                 <td>{{item.recipeType}}</td>
-                <td>{{item.cookingTime}}</td>
+                <td>{{item.cookingTime}} min</td>
                 <td>{{item.recipeCostPrice |number:'1.0-0'}}</td>
                 <td>{{item.recipeSalePrice |number:'1.0-0'}}</td>
                 <td>{{item.recipeCatTitle}}</td>
+                <td class="cursorPointer text-success"><mat-icon (click)="getDetail(item)">receipt</mat-icon></td>
             
 
             </tr>
@@ -35,5 +53,64 @@
 
 
     </table>
+  </div>
 
+  <!--------------------- For Table Print -------------------->
+
+  <div class="hide" id="printRecipeList">
+    <div >
+        <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+            <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
+                    [width]="item.logo1Width">
+            </span>
+            <span>
+
+
+                <h1 class="companyName">{{item.companyName}}</h1>
+
+                <p class="rptTitle" style="margin-top:-20px">List Of Recipe's</p>
+                         </span>
+            <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                    height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+            </span>
+
+
+        </div>
+    </div>
+
+    
+  <table class="table">
+    <thead>
+        <tr>
+            <th>S#</th>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Time</th>
+            <th>Cost</th>
+            <th>Sale</th>
+            <th>Category</th>
+         
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of RecipeList |filter:recipeSearch.value index as index">
+            <td>{{index+1}}</td>
+            <td>{{item.recipeTitle}}</td>
+            <td>{{item.recipeType}}</td>
+            <td>{{item.cookingTime}} min</td>
+            <td>{{item.recipeCostPrice |number:'1.0-0'}}</td>
+            <td>{{item.recipeSalePrice |number:'1.0-0'}}</td>
+            <td>{{item.recipeCatTitle}}</td>  
+
+        </tr>
+    </tbody>
+
+
+</table>
+
+  </div>
+
+  </div>
 </div>

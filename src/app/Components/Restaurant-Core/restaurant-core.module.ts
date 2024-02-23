@@ -35,6 +35,7 @@ import { SavedBillComponent } from './sale/saved-bill/saved-bill.component';
 import { RestDashboardComponent } from './rest-dashboard/rest-dashboard.component';
 import { TabletSaleComponent } from './tablet-sale/tablet-sale.component';
 import { RecipeListComponent } from './restaurantReports/recipe-list/recipe-list.component';
+import { RecipeDetailComponent } from './recipe/recipe-detail/recipe-detail.component';
 
 
 
@@ -58,6 +59,7 @@ export const restCore: Route[] = [
   {path:'srptptw', component:SaleRptPaymentTypewiseComponent, canActivate:[AuthGuard] },
   {path:'restdsbrd', component:RestDashboardComponent, canActivate:[AuthGuard] },
   {path:'tbsale', component:TabletSaleComponent, canActivate:[AuthGuard] },
+  {path:'lorecp', component:RecipeListComponent, canActivate:[AuthGuard] },
 
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
@@ -94,6 +96,7 @@ export const restCore: Route[] = [
     RestDashboardComponent,
     TabletSaleComponent,
     RecipeListComponent,
+    RecipeDetailComponent,
    
    
     
