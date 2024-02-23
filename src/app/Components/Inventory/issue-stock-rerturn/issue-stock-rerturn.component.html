@@ -1,20 +1,20 @@
-<div class="d-flex h-100 body" style="background-color: rgb(255, 255, 255);overflow: hidden;">
+<div class="row h-100 body" style="background-color: rgb(255, 255, 255);">
 
 
     <div class="col-lg-9 bg-white " >
 
          <!-------------------- Top Date and location section --------------->
 
-        <div class="d-flex justify-content-around pt-3">
-            <mat-form-field appearance="outline" class="col-lg-2">
+        <div class="row p-2 justify-content-between">
+            <mat-form-field appearance="outline" class="col-lg-3">
                 <mat-label>Invoice Date</mat-label>
-                <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="invDate"
+                <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput type="text" name="invDate"
                     [matDatepicker]="iDate">
                 <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
                 <mat-datepicker #iDate></mat-datepicker>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="col-lg-2 ">
+            <mat-form-field appearance="outline" class="col-lg-3 ">
                 <mat-label>Location</mat-label>
                 <mat-select [(ngModel)]="locationID" name="location" (selectionChange)="onLocationSelected('l1')">
                     <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
@@ -34,7 +34,7 @@
                         [value]="item.locationID">{{item.locationTitle}}</mat-option>
                 </mat-select>
             </mat-form-field> -->
-            <mat-form-field appearance="outline" class="col-lg-2">
+            <mat-form-field appearance="outline" class="col-lg-3">
                 <mat-label>Issue Type</mat-label>
                 <mat-select [(ngModel)]="IssueType" name="location" >
                 <mat-option *ngFor="let item of issueTypeList" [value]="item.issueTypeTitle" [disabled]="item.issueTypeTitle == 'Stock Transfer'">{{item.issueTypeTitle}}</mat-option>
@@ -47,7 +47,7 @@
             </mat-form-field>
         </div>
           
-        <div class="ps-1 d-flex ">
+        <div class="ps-2 d-flex ">
 
              <!-------------------- Product Search Bar --------------->
            
@@ -78,7 +78,7 @@
 
         <!-------------------- Table Area for Products --------------->
 
-        <div style="max-height: 75vh;overflow-y:scroll !important;padding-bottom: 60px;">
+        <div style="max-height: 70vh;overflow-y:scroll !important;padding-bottom: 60px;">
             <table class="table table-hover table-logix">
                 <thead>
                     <tr>
@@ -130,7 +130,7 @@
 
    
 
-    <div class="col-lg-3 h-100" style="background-color: rgb(226, 222, 222);position: fixed;right: 0%;">
+    <div class="col-lg-3 h-100" style="background-color: rgb(226, 222, 222);">
 
        <div class="p-1">
         <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
@@ -166,7 +166,7 @@
 
                 <!---------------     Modal Window for Retreiving Hold Bills --------------->
                 <div class="modal fade" id="holdModal" tabindex="-1" aria-labelledby="holdModalLabel" >
-                    <div class="modal-dialog mt-5  modal-xl">
+                    <div class="modal-dialog modal-dialog-scrollable mt-5  modal-xl">
                       <div class="modal-content">
                         <div class="modal-header">
                           <h2 class="modal-title" id="holdModalLabel">Bill Details</h2>

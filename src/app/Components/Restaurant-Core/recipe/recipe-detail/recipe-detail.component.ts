@@ -27,16 +27,21 @@ export class RecipeDetailComponent  {
     });
 
     if(this.data){
-      this.recipeTitle = this.data.recipeTitle;
-     this.recipeType = this.data.recipeType;
-     this.costPrice = this.data.recipeCostPrice;
-     this.salePrice = this.data.recipeSalePrice;
+    var recipeID = 0;
+    if(this.data.recipeRefID > 0){
+      recipeID = this.data.recipeRefID;
+    }else{
+      recipeID = this.data.recipeID;
+    }
      this.Category = this.data.recipeCatTitle;
      this.cookingTime = this.data.cookingTime;
 
-     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetSingleRecipeDetail?recipeid=' +this.data.recipeID).subscribe(
+     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetSingleRecipeDetail?recipeid='+recipeID).subscribe(
       (Response: any) => {
-
+        this.costPrice = Response[0].recipeCostPrice;
+        this.recipeTitle = Response[0].productTitle;
+        this.recipeType = Response[0].recipeType;
+        this.salePrice = Response[0].recipeSalePrice;
         this.prodList = [];
         Response.forEach((e: any) => {
           this.prodList.push({

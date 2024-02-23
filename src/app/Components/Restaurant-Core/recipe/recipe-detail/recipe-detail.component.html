@@ -28,7 +28,7 @@
 
         
             <mat-card-content>
-                <table class="table">
+                <table class="table table-logix">
                     <thead>
                         <tr>
                             <th>S#</th>
@@ -42,12 +42,12 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of prodList index as index">
-                            <td>{{index +1}}</td>
+                            <td class="text-center">{{index +1}}</td>
                             <td>{{item.productTitle}}</td>
-                            <td>{{item.quantity |number:'1.0-3'}}</td>
-                            <td>{{item.costPrice |number:'1.0-1'}}</td>
+                            <td class="text-center">{{item.quantity |number:'1.0-3'}}</td>
+                            <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
                             <!-- <td>{{item.avgCostPrice |number:'1.0-1'}}</td> -->
-                            <td>{{item.quantity * item.costPrice |number:'1.0-1'}}</td>
+                            <td class="text-end">{{item.quantity * item.costPrice |number:'1.0-1'}}</td>
                             <!-- <td>{{item.quantity * item.avgCostPrice |number:'1.0-1'}}</td> -->
                         </tr>
         

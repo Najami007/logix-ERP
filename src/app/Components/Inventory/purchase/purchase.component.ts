@@ -158,7 +158,7 @@ export class PurchaseComponent implements OnInit{
 
    setTimeout(() => {
     $(cls).trigger('focus');
-   }, 1500);
+   }, 500);
 
    if(cls == 'ovhd' && e.keyCode == 13 ){
     if(e.target.value == ''){

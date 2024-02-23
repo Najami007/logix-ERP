@@ -7,12 +7,12 @@
             <div class="container-fluid  mt-3">
 
                 <!-- --------------------First Row-------------- -->
-                <div class="pform row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="pform row ">
 
 
                     <!-- --------------------voucher Type selected here-------------- -->
 
-                    <mat-form-field class="col-lg-6 col-md-6 col-sm-6 col-xs-6" appearance="outline">
+                    <mat-form-field class="col-lg-6 " appearance="outline">
                         <mat-label>Voucher Type </mat-label>
                         <mat-select [(ngModel)]="vType" name="vType"  [disabled]="VoucherData != ''"
                             (selectionChange)=" getRefCoa()">
@@ -30,7 +30,7 @@
 
 
 
-                    <mat-form-field class="col-lg-6 col-md-6 col-sm-6 col-xs-6" appearance="outline">
+                    <mat-form-field class="col-lg-6 " appearance="outline">
                         <mat-label>Voucher Date</mat-label>
                         <input readonly="true" matInput   [(ngModel)]="invoiceDate"
                             [matDatepicker]="picker" >
@@ -49,9 +49,9 @@
 
                 <!-- --------------------Second Row-------------- -->
 
-                <div class="pform row col-lg-12 col-md-12 col-sm-12 col-xs-12" style="align-items: center;">
+                <div class="pform row " style="align-items: center;">
 
-                    <mat-form-field class="col-lg-5 col-md-5 col-sm-5 col-xs-5  " appearance="outline">
+                    <mat-form-field class="col-lg-5 " appearance="outline">
                         <mat-label>Project </mat-label>
                         <mat-select [(ngModel)]="projectID" >
                             <mat-option *ngFor="let item of projectList " value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
@@ -61,7 +61,7 @@
                     <!-- --------------------Bank Select Area-------------- -->
 
 
-                    <mat-form-field class="col-lg-5 col-md-5 col-sm-5 col-xs-5" appearance="outline">
+                    <mat-form-field class="col-lg-5 " appearance="outline">
                         <mat-label>Refrence COA </mat-label>
                         <mat-select [(ngModel)]="refrenceCOA" [disabled]="vType == 'JV'">
                             <mat-option *ngFor="let item of refCoaList " value="{{item.coaID}}">{{item.coaTitle}}</mat-option>
@@ -72,7 +72,7 @@
 
                      <!---------------       Bank Receipt No    ---------------------->
 
-                    <mat-form-field class=" col-lg-2 col-md-2 col-sm-2 col-xs-2" appearance="outline">
+                    <mat-form-field class=" col-lg-2 " appearance="outline">
                         <mat-label>Bank Receipt No</mat-label>
                         <input matInput [(ngModel)]="bankReceiptNo" [defaultValue]="0" type="text">
                     </mat-form-field>
@@ -81,7 +81,7 @@
 
 
 
-                <div class="container-fluid py-2 col-lg-12 col-md-12 col-sm-12 col-xs-12 bg-light border ">
+                <div class="container-fluid py-2 col-lg-12 bg-light border ">
                     <div class="col-lg-12 row fw-bold mt-4">
                         <span class="col-lg-3 ">Account Title</span>
                         <span class="col-lg-4">Narration</span>
@@ -89,7 +89,7 @@
                         <span class="col-lg-2 text-end">Credit</span>
                     </div>
                     <!-- --------------------Third row-------------- -->
-                    <div class=" row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class=" row col-lg-12 ">
                         <!-- -------------------Coa Account Select Area-------------- -->
 
 
@@ -132,7 +132,7 @@
                         </mat-form-field>
 
                         <!-- -------------------Save Icon Button-------------- -->
-                        <div class="form-field col-lg-1 col-md-1 col-sm-1 col-xs-1 text-start ">
+                        <div class="form-field col-lg-1 text-start ">
                             <button style="height: 60px; width: 50px;" class="btn btn-success" type="button" (click)="save()">
                                 <mat-icon class="mat-icon-rtl-mirror" >save</mat-icon>
                             </button>
@@ -185,7 +185,7 @@
 
                 </div>
                 <br>
-                <div class="bg-light d-flex">
+                <div class="bg-light row">
                     <mat-form-field class="col-lg-8 h-25 p-3 " appearance="outline">
                         <mat-label>Narration</mat-label>
                         <textarea matInput rows="1" [(ngModel)]="narration" name="Narration" placeholder="Narration"></textarea>
@@ -198,9 +198,9 @@
                         <mat-hint class="text-danger">File Must be PDF Only</mat-hint>
                     </span>
                 </div>
-                <div class="text-center " >
+                <div class="text-center row justify-content-center" >
                     <button  class="btn btn-success btn-save  col-lg-3 me-2" *ngIf="crudList.c" (click)="insertVoucher()"> Save</button>
-                        <button   class="btn btn-danger btn-reset  col-lg-3 "  (click)="reset()"> Reset</button>
+                    <button   class="btn btn-danger btn-reset  col-lg-3 "  (click)="reset()"> Reset</button>
                 </div>
             </div>
             

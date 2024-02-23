@@ -55,6 +55,8 @@ import { PurchaseReportProdSupplierwiseComponent } from './InventoryReports/purc
 import { BarcodeReportComponent } from './InventoryReports/barcode-report/barcode-report.component';
 import { SalePurchaseComparisonRptDatewiseComponent } from './InventoryReports/sale-purchase-comparison-rpt-datewise/sale-purchase-comparison-rpt-datewise.component';
 import { SalePurchaseComparisonRptsupplierwiseComponent } from './InventoryReports/sale-purchase-comparison-rptsupplierwise/sale-purchase-comparison-rptsupplierwise.component';
+import { VoidListReportComponent } from './InventoryReports/void-list-report/void-list-report.component';
+import { CashierClosingRptComponent } from './InventoryReports/cashier-closing-rpt/cashier-closing-rpt.component';
 
 
 
@@ -200,6 +202,16 @@ export const inventoryRoutes: Route[] = [
     component: BarcodeReportComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'vrptuw',
+    component: VoidListReportComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'ccrpt',
+    component: CashierClosingRptComponent,
+    canActivate: [AuthGuard]
+  },
 
 
 
@@ -252,6 +264,8 @@ export const inventoryRoutes: Route[] = [
     BarcodeReportComponent,
     SalePurchaseComparisonRptDatewiseComponent,
     SalePurchaseComparisonRptsupplierwiseComponent,
+    VoidListReportComponent,
+    CashierClosingRptComponent,
     
 
  

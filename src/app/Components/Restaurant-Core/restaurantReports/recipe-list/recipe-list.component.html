@@ -33,6 +33,7 @@
                 <th>Sale</th>
                 <th>Category</th>
                 <th>Detail</th>
+    
              
             </tr>
         </thead>
@@ -45,7 +46,9 @@
                 <td>{{item.recipeCostPrice |number:'1.0-0'}}</td>
                 <td>{{item.recipeSalePrice |number:'1.0-0'}}</td>
                 <td>{{item.recipeCatTitle}}</td>
-                <td class="cursorPointer text-success"><mat-icon (click)="getDetail(item)">receipt</mat-icon></td>
+                <td><mat-icon class="cursorPointer text-success" (click)="getDetail(item)">receipt</mat-icon>
+                    <mat-icon *ngIf="item.recipeRefID > 0" class="cursorPointer text-dark" (click)="getOtherRecipeDetail(item)">file_copy</mat-icon></td>
+           
             
 
             </tr>

@@ -59,7 +59,7 @@ export class CookingareaComponent implements OnInit {
 
   addTable(){
     this.dialogue.open(AddAreaComponent,{
-      width:'50%'
+      width:'40%'
     }).afterClosed().subscribe(val=>{
       if(val == 'Update'){
         this.getCookingArea();
@@ -71,7 +71,7 @@ export class CookingareaComponent implements OnInit {
   editTable(item:any){
 
     this.dialogue.open(AddAreaComponent,{
-      width:'50%',
+      width:'40%',
       data:item,
     }).afterClosed().subscribe(val=>{
       if(val == 'Update'){

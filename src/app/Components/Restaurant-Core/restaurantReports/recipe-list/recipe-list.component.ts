@@ -81,6 +81,13 @@ export class RecipeListComponent implements OnInit {
     }).afterClosed().subscribe()
   }
 
+  getOtherRecipeDetail(item:any){
+    this.dialog.open(RecipeDetailComponent,{
+      width:'50%',
+      data:item
+    }).afterClosed().subscribe()
+  }
+
   print(){
     this.global.printData('#printRecipeList');
   }

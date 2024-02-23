@@ -59,7 +59,7 @@ export class TableComponent implements OnInit {
 
   addTable(){
     this.dialogue.open(AddtableComponent,{
-      width:'50%'
+      width:'40%'
     }).afterClosed().subscribe(val=>{
       if(val == 'Update'){
         this.getTable();
@@ -71,7 +71,7 @@ export class TableComponent implements OnInit {
   editTable(item:any){
 
     this.dialogue.open(AddtableComponent,{
-      width:'50%',
+      width:'40%',
       data:item,
     }).afterClosed().subscribe(val=>{
       if(val == 'Update'){

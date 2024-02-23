@@ -1,0 +1,85 @@
+<div class="body container-fluid">
+
+
+    <div class="row text-center">
+
+
+   
+        <div class="col-lg-3 pb-2" *ngIf="crudList.r">
+
+            <button class="btn btn-primary btn-rpt col-lg-1" (click)="print()"><mat-icon>print</mat-icon></button>
+        </div>
+   
+    </div>
+
+
+
+
+
+
+    
+    <div id="PrintDiv">
+
+        <!-------------------------    Top Logo Section -------------------->
+
+        <div class="hide">
+            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
+                        [width]="item.logo1Width">
+                </span>
+                <span>
+                    <h1 class="companyName">{{item.companyName}}</h1>
+                </span>
+                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                        height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                </span>
+
+
+            </div>
+        </div>
+
+    
+
+        <table class="table table-logix" id="summaryTable">
+        
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Cashier</th>
+                    <th>Sales</th>
+                    <th>Sale Return</th>
+                    <th>Net Sales</th>
+                    <th>Bank</th>
+                    <th>Cash</th>
+                    <th>Complimentary</th>
+                    <th>Discount</th>
+                    <th>Service Charges</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of ClosingDetail index as index">
+                    <td class="text-center">{{index +1}}</td>
+                    <td >{{item.userName}}</td>
+                    <td  class="text-end">{{item.totalSale |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.saleReturn |number:'1.0-0'}}</td>
+                    <td class="text-end">{{ item.totalSale -item.saleReturn |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.bank |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.cashIn - item.cashOut |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.complimentary |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.disocunt |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.servicesCharges |number:'1.0-0'}}</td>
+                </tr>
+            </tbody>
+          
+        </table>
+
+
+    </div>
+
+
+
+</div>
+
+

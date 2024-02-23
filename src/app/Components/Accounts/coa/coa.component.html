@@ -6,13 +6,13 @@
 
           <mat-card class="container bg-light border p-5 mt-5 shadow">
             
-            <div class="container d-flex col-lg-12  ">
-                <span class=" mt-3 pt-4 d-flex flex-column col-lg-6">
+            <div class="d-flex">
+                <span class=" mt-3 pt-4  col-lg-6">
 
 
                     <!-- Coa Types Selected Here -->
                     
-                        <mat-form-field appearance="outline" class=""> 
+                        <mat-form-field appearance="outline" class="col-lg-12"> 
                             <mat-label >Select Type </mat-label>
                             <mat-select [(ngModel)]="CoaType"  (selectionChange)="onCoaTypeChange();noteEnable()"  Data-live-Search="true">
                                 <mat-option *ngFor="let item of coaTypesList "
@@ -22,7 +22,7 @@
                         </mat-form-field>
 
                    
-                        <mat-form-field appearance="outline" class=""> 
+                        <mat-form-field appearance="outline" class="col-lg-12"> 
                             <mat-label>Select Level</mat-label>
                             <mat-select (selectionChange)="setvalue();onCoaLevelChange()" [(ngModel)]="coaLevel" class="" #AccountHeadLabel >
                                 <mat-option *ngFor="let item of LevelList"
@@ -32,7 +32,7 @@
                   
                     <!-- Coa Level 1 Selected Here -->
                     
-                        <mat-form-field appearance="outline" *ngIf="coaLevel > 1 " class=" ">
+                        <mat-form-field appearance="outline" *ngIf="coaLevel > 1 " class="col-lg-12 ">
                             <mat-label>Level 1</mat-label>
                             <mat-select class=""  (selectionChange)="onlevel1Change();setvalue()" [(ngModel)]="level1"  >
                                 <mat-option *ngFor="let item of coaLevel1List" [value]="item.level1" [disabled]="item.transactionAllowed" >
@@ -41,7 +41,7 @@
                               
                             </mat-select>
                         </mat-form-field>
-                        <mat-form-field appearance="outline" *ngIf="coaLevel == 1" class=" ">
+                        <mat-form-field appearance="outline" *ngIf="coaLevel == 1" class=" col-lg-12">
                             <mat-label>Enter Level 1</mat-label>
                             <input class="numOnly" matInput type="text" min="1" #EnterLevel aria-label="level1" (keyup)="setvalue();"
                                [(ngModel)]="level1" >
@@ -50,7 +50,7 @@
                    
                      <!-- Coa Level 2 Selected Here -->
                     
-                        <mat-form-field appearance="outline" *ngIf="coaLevel > 2" class="">
+                        <mat-form-field appearance="outline" *ngIf="coaLevel > 2" class="col-lg-12">
                             <mat-label>Level 2</mat-label>
                             <mat-select class="" (selectionChange)="onlevel2Change();setvalue()" [(ngModel)]="level2"  >
                                 <mat-option *ngFor="let item of coaLevel2List" [value]="item.coaTypeID" [disabled]="item.transactionAllowed">
@@ -61,7 +61,7 @@
                             </mat-select>
                         </mat-form-field>
 
-                        <mat-form-field appearance="outline" *ngIf="coaLevel == 2" class="">
+                        <mat-form-field appearance="outline" *ngIf="coaLevel == 2" class="col-lg-12">
                             <mat-label>Enter Level 2</mat-label>
                             <input class="numOnly" matInput type="text" min="1"  #EnterLevel aria-label="level2" (keyup)="setvalue();"
                                [(ngModel)]="level2" >
@@ -69,7 +69,7 @@
                         </mat-form-field>
 
                             <!-- Coa level 3 Iput Field -->
-                        <mat-form-field appearance="outline" *ngIf="coaLevel > 3" class="">
+                        <mat-form-field appearance="outline" *ngIf="coaLevel > 3" class="col-lg-12">
                             <mat-label>Level 3</mat-label>
                             <mat-select class=""   (selectionChange)="onlevel3Change();setvalue()" [(ngModel)]="level3" >
                                 <mat-option *ngFor="let item of coaLevel3List" [value]="item.coaTypeID" [disabled]="item.transactionAllowed">
@@ -78,7 +78,7 @@
                                 
                             </mat-select>
                         </mat-form-field>
-                        <mat-form-field appearance="outline" *ngIf="coaLevel == 3" class="">
+                        <mat-form-field appearance="outline" *ngIf="coaLevel == 3" class="col-lg-12">
                             <mat-label>Enter Level 3</mat-label>
                             <input class="numOnly" matInput type="text" min="1"  #EnterLevel aria-label="level3"
                               (keyup)="setvalue();"
@@ -90,7 +90,7 @@
                     <!-- Coa level 4 Iput Field -->
                  
 
-                        <mat-form-field appearance="outline" *ngIf="coaLevel == 4" class="">
+                        <mat-form-field appearance="outline" *ngIf="coaLevel == 4" class="col-lg-12">
                             <mat-label>Enter Level 4</mat-label>
                             <input class="numOnly" matInput type="text" min="1" #EnterLevel aria-label="level4"
                            

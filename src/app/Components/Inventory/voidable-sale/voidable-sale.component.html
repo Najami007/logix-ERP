@@ -1,12 +1,12 @@
 <div class="body" ondblclick="return false">
 
-    <div class="d-flex">
+    <div class="row w-100 p-1">
 
         <!------------------ column 1 bill side ---------------->
 
-        <div class="col-lg-10 h-100 ">
+        <div class="col-lg-10 ">
 
-            <div class="mt-1 ms-1 me-1 card shadow" style="border-radius: 5px 5px 5px 5px;height: 87vh;">
+            <div class="card shadow" style="border-radius: 5px 5px 5px 5px;height: 87vh;">
 
                 <!------------------------- Search Bar Area ------------------>
                 <div class="ps-2 d-flex" style="background-color: rgb(237, 233, 233);">
@@ -76,14 +76,14 @@
         </div>
 
         <!------------------ column 2 Amount side area ---------------->
-        <div class="col-lg-2 h-100 " style="position: fixed;right: 0%;">
+        <div class="col-lg-2 ">
 
 
            
 
 
-            <div class="mt-1 ms-1 me-1 card p-2 totalArea"
-                style=" overflow-y: scroll; border-radius: 5px 5px 5px 5px;min-height: 90vh;max-height:90vh; background-color: rgb(240, 247, 245);">
+            <div class=" card p-2 totalArea"
+                style=" overflow-y: scroll; border-radius: 5px 5px 5px 5px;min-height: 87vh;max-height:87vh; background-color: rgb(240, 247, 245);">
                 <div class="p-1 w-100">
                     <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
                         <div class="text-center" *ngIf="tableDataList != ''">
@@ -149,7 +149,7 @@
 
                 </div>
                 <div class="mt-2 d-flex justify-content-between">
-                    <div class=" pe-1"><button class="btn btn-danger " accesskey="u" style="height: 60px;width: 100px;"
+                    <div class="pe-1"><button class="btn btn-danger " accesskey="u" style="height: 60px;width: 100px;"
                             (click)="openSavedBill()">D<u>u</u>plicate</button></div>
 
                     <button accesskey="o" class="btn w-75  d-flex justify-content-between btn-primary  pt-3"
@@ -175,9 +175,10 @@
 
 <div class="modal fade" id="discountModal" tabindex="-1" data-bs-backdrop="static" 
     aria-labelledby="discountModalLabel">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-dialog modal-dialog-scrollables modal-dialog-centered modal-sm">
         <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-               <div class="modal-body">
+           <form method="post">
+            <div class="modal-body">
 
                 <mat-form-field appearance="outline" class="w-50 pe-1">
                     <mat-label>Discount Amount</mat-label>
@@ -199,6 +200,7 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
 
+           </form>
 
         </div>
     </div>
@@ -215,7 +217,7 @@
 
 <div class="modal fade" id="paymentMehtod" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
     aria-labelledby="paymentMehtodLabel">
-    <div class="modal-dialog modal-dialog-centered ">
+    <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered ">
         <div class="modal-content " style="background-color: rgb(248, 247, 247);">
             <div class="modal-header">
                 <h2 class="modal-title" id="paymentMehtodLabel">Payment Method</h2>

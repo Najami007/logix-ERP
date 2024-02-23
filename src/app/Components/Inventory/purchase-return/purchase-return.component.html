@@ -1,7 +1,7 @@
 <div class="body">
 
     <!-- ////////////////////////// first row////////////////// -->
-    <div class="mb-2 p-1 row w-100" style="box-shadow: 0px 0px 10px 0px rgb(192, 209, 235);background-color:rgb(255, 255, 255);" >
+    <div class="mb-2 pt-1 ps-1 row " style="box-shadow: 0px 0px 10px 0px rgb(192, 209, 235);background-color:rgb(255, 255, 255);" >
         <mat-card class="row just col-lg-11 mb-2 ps-3 pe-3 me-1 pt-3" style="background-color: #e8e8e4   ;">
     
             <div class="row pt-4 justify-content-between col-lg-11  ps-3 pe-3" >
@@ -29,12 +29,14 @@
 
         </mat-card>
 
-        <mat-card class="mb-2 col-lg-1 text-center border border-primary" style="height: 130px;width: 130px;" >
+      <div class=" col-lg-1 d-flex justify-content-center">
+        <mat-card class="mb-2 text-center border border-primary" style="height: 130px;width: 130px;" >
             <div class="p-1 " *ngIf="tableDataList != ''" accesskey="i"
                 (click)="this.global.showProductImage(this.productImage,0)">
                 <img [src]="productImage" alt="" height="110" width="110">
             </div>
         </mat-card>
+      </div>
 
 
 
@@ -107,7 +109,7 @@
                     <td colspan="4"></td>
                     <td class="text-center fw-bold">{{myTotalQty }}</td>
                     <td colspan="4"></td>
-                    <td class="text-center"><mat-icon class="cursorPointer " (click)="reset()">delete</mat-icon></td>
+                    <td class="text-center"><mat-icon class="cursorPointer " (click)="emptyBill()">delete</mat-icon></td>
                 </tr>
 
 
@@ -122,7 +124,7 @@
     <!-- //////////////////////////Row 3////////////////// -->
 
 
-    <div class="w-100 row  bg-white" *ngIf="hideTotalFlag" style="position: absolute;bottom: 6%;" id="totalRow"
+    <div class="w-100 row  bg-white" *ngIf="hideTotalFlag" style="position: fixed;bottom: 6%;" id="totalRow"
         >
 
         <!-- //////////////////////first Column/////////////////////// -->
@@ -264,9 +266,9 @@
 
 
     <div class="modal fade" id="prodModal" tabindex="-1" aria-labelledby="prodModalLabel">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
             <div class="modal-content">
-                <div class="modal-header align-content-center ">
+                <div class="modal-header  align-content-center ">
                     <h2 class="modal-title" id="prodModalLabel">Search Product</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -312,7 +314,7 @@
 
 
     <div class="modal fade" id="holdModal" tabindex="-1" aria-labelledby="holdModalLabel">
-        <div class="modal-dialog mt-5  modal-xl">
+        <div class="modal-dialog modal-dialog-scrollable mt-5  modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h2 class="modal-title" id="holdModalLabel">Bill Details</h2>

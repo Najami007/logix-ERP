@@ -19,7 +19,7 @@
 
     <div class="text-end p-3 bg-mf">
         <button class="w-25 bg-success text-white me-1" mat-stroked-button (click)="save()">{{btntype}}</button>
-        <button class="w-25 bg-danger text-white" mat-stroked-button>Reset</button>
+        <button class="w-25 bg-secondary text-white" mat-stroked-button (click)="closeDialogue()">Close</button>
         <mat-checkbox [(ngModel)]="autoEmpty" ><p class="text-white pt-1">Auto Empty</p></mat-checkbox>
     </div>
 

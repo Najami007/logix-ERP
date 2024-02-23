@@ -1,6 +1,6 @@
 <div class="container-fluid d-flex  body" ondblclick="return false;">
 
-    <div class="col-lg-8 prodArea bg-white">
+    <div class="col-lg-8 prodArea ">
 
 
         <!-----------   categories Row ------------------->
@@ -256,7 +256,7 @@
 
     <div class="modal fade" id="mergeBill" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
         aria-labelledby="mergeBillLabel">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-scrollable modal-dialog-centered modal-sm">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-body">
 
@@ -301,8 +301,8 @@
         <div class="text-center">
             <img [src]="companyLogo" [height]="100" [width]="100">
             <h2>{{companyName}}</h2>
-            <p>{{companyAddress}}</p>
-            <p>{{CompanyMobile}}</p>
+            <p style="margin-top: -15px;">{{companyAddress}}</p>
+            <p style="margin-top: -15px;">{{CompanyMobile}}</p>
 
         </div>
 
@@ -349,7 +349,7 @@
                     <tr *ngFor="let item of myPrintData index as index">
                         <td>{{index +1}}</td>
                         <td class="text-start">{{item.tableTitle}}</td>
-                        <td>{{item.productTitle}}</td>
+                        <td class="text-start">{{item.productTitle}}</td>
                         <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
                         <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
                         <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
@@ -418,8 +418,8 @@
         <div class="text-center">
             <img [src]="companyLogo" [height]="100" [width]="100">
             <h2>{{companyName}}</h2>
-            <p>{{companyAddress}}</p>
-            <p>{{CompanyMobile}}</p>
+            <p style="margin-top: -15px;">{{companyAddress}}</p>
+            <p style="margin-top: -15px;">{{CompanyMobile}}</p>
 
         </div>
 
@@ -537,11 +537,12 @@
 
     <div class="modal fade" id="disc" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
         aria-labelledby="discLabel">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+            <form method="post">
                 <div class="modal-body">
 
-                    <form method="post">
+                    
 
                         <div>
                             <mat-form-field appearance="outline" class="w-100">
@@ -550,17 +551,15 @@
                                     min="0" matInput #bDisc />
                             </mat-form-field>
                         </div>
-
-                        <div class="modal-footer text-end p-3 bg-mf">
-                            <button class="btn btn-success" data-bs-dismiss="modal"
-                                (click)="verifyDiscount(bDisc.value);bDisc.value =''">Save</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </form>
-
-
+                
+                   
                 </div>
-
+                <div class="modal-footer text-end p-3 bg-mf">
+                    <button class="btn btn-success" data-bs-dismiss="modal"
+                        (click)="verifyDiscount(bDisc.value);bDisc.value =''">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
 
             </div>
         </div>

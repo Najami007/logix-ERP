@@ -25,14 +25,14 @@
                             </mat-select>
                         </mat-form-field>
          
-                        <mat-form-field class="col-lg-2 col-md-2 col-sm-2 col-xs-2 " appearance="outline">
+                        <mat-form-field class="col-lg-2  " appearance="outline">
                             <mat-label>From Date</mat-label>
                             <input matInput type="text"  readonly="true" [(ngModel)]="startDate" [matDatepicker]="sDate">
                             <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
                             <mat-datepicker #sDate></mat-datepicker>
                         </mat-form-field>
 
-                        <mat-form-field class="col-lg-2 col-md-2 col-sm-2 col-xs-2" appearance="outline">
+                        <mat-form-field class="col-lg-2 " appearance="outline">
                             <mat-label>To Date</mat-label>
                             <input matInput type="text" readonly="true" [(ngModel)]="EndDate"  [matDatepicker]="eDate">
                             <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>

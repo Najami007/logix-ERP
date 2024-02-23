@@ -66,6 +66,9 @@ overflow: hidden;
 .rtnBillArea::-webkit-scrollbar-track {
     background: #f6f2e7;
   }
+  .totalArea::-webkit-scrollbar-track {
+    background: rgb(240, 247, 245);
+  }
 
   .delBtn{
     background-color:transparent;

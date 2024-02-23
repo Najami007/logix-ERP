@@ -1,5 +1,5 @@
 
-<div class="container-fluid d-flex body bg-gray h-100">
+<div class="container-fluid row body bg-gray h-100">
 
     <div class="col-lg-8 pe-2" style="min-height: 600px;">
 
@@ -59,7 +59,7 @@
 
 
     <!-------------------------       Bill Side Area -------------------->
-    <div class="col-lg-4 border " style="left: 67%; height: 100%;position: fixed;">
+    <div class="col-lg-4 border bg-gray" style="left: 67%; height: 100%;position: fixed;">
 
 
         <div  class="p-2" >
@@ -109,10 +109,10 @@
                     <mat-label>Remarks</mat-label>
                     <textarea matInput rows="1" [(ngModel)]="ticketRemarks" ></textarea>
                 </mat-form-field>
-                <span class="p-1 d-flex">
+                <div class="p-1 text-center">
                     <!-- <button mat-raised-button class="m-1 text-white bg-secondary w-50" >HOLD</button> -->
                     <button mat-raised-button  class="m-1 text-white bg-success w-50" (click)="save()">Save</button>
-                </span>
+                </div>
                 
 
             </div>

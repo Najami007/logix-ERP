@@ -1,10 +1,10 @@
-<div class="body h-100" style="background-color: rgb(255, 255, 255);" >
+<div class="body h-100" >
 
-    <div class="row w-100 pt-2 " style="background-color: rgb(255, 255, 255);">
-        <div class=" col-lg-11  ">
+    <div class="d-flex" style="background-color: rgb(255, 255, 255);">
+        <div class="col-lg-10  p-2">
 
             <div class="row">
-                <mat-form-field appearance="outline" class="col-lg-2 ">
+                <mat-form-field appearance="outline" class="col-lg-2 d-none">
                     <mat-label>Invoice Date</mat-label>
                     <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput type="text" name="voucherDate"
                         [matDatepicker]="voucherDate">
@@ -48,14 +48,14 @@
                     </mat-select>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="col-lg-2 ">
+                <mat-form-field appearance="outline" class="col-lg-4 ">
                     <mat-label>Remarks</mat-label>
                     <textarea matInput rows="1" [(ngModel)]="invRemarks" type="text" name="remarks"></textarea>
                 </mat-form-field>
                 
             </div>
             <!------------------- Product search Area -------->
-            <div class=" d-flex  prod">
+            <div class="row prod">
                 <div class="col-lg-8 d-flex">
                     <input type="text"  [(ngModel)]="PBarcode"
                         (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event);focusto('ovhd',$event)"
@@ -69,10 +69,10 @@
                 </div>
 
 
-                <div class="col-lg-4 ms-1">
-                    <button *ngIf="crudList.c" style="height: 50px;" class=" w-25 btn btn-primary me-1" matTooltip="Hold Bill"
+                <div class="col-lg-3 ms-1">
+                    <button *ngIf="crudList.c" style="height: 50px;" class=" col-lg-5 btn btn-primary me-1" matTooltip="Hold Bill"
                     (click)="SaveBill('hold')">{{holdBtnType}}</button>
-                    <button  class=" w-25 btn btn-danger me-1"  data-bs-toggle="modal" style="height: 50px;" matTooltip="Retrieve Bill" 
+                    <button  class=" col-lg-5 btn btn-danger me-1"  data-bs-toggle="modal" style="height: 50px;" matTooltip="Retrieve Bill" 
                         data-bs-target="#holdModal">Retrieve</button>
                 
 
@@ -81,11 +81,11 @@
         
         </div>
 
-         <div class="col-lg-1">
-                <mat-card class=" border border-primary justify-content-center p-1" style="width: 160px;height: 160px;">
+         <div class="col-lg-2 p-2 d-flex justify-content-center ">
+                <mat-card class=" border border-primary  p-1" style="width: 140px;height: 140px;">
                     <div class="text-center " *ngIf="tableDataList != ''" accesskey="i"
                         (click)="this.global.showProductImage(this.productImage,0)">
-                        <img [src]="productImage" alt="" height="150px" width="150px">
+                        <img [src]="productImage" alt="" height="130px" width="130px">
                     </div>
                 </mat-card>
             </div>
@@ -231,7 +231,7 @@
 
 
     <div class="modal fade" id="prodModal" tabindex="-1"  aria-labelledby="prodModalLabel">
-        <div class="modal-dialog modal-dialog-centered  modal-xl">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-xl">
             <div class="modal-content">
                 <div class="modal-header align-content-center ">
                     <h2 class="modal-title" id="prodModalLabel">Search Product</h2>
@@ -291,7 +291,7 @@
 
 
     <div class="modal modals fade" id="holdModal" tabindex="-1" data-bs-backdrop="true" aria-labelledby="holdModalLabel">
-        <div class="modal-dialog  mt-5  modal-xl">
+        <div class="modal-dialog modal-dialog-scrollable mt-5  modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h2 class="modal-title" id="holdModalLabel">Bill Details</h2>

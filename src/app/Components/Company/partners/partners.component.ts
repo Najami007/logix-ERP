@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
@@ -77,8 +77,13 @@ export class PartnersComponent implements OnInit {
   }
 
 
+  @ViewChild('city') mycity:any;
 
   addCity(){
+    setTimeout(() => {
+      this.mycity.close()
+   
+    }, 100);
     this.dialogue.open(AddcityComponent,{
       width:"40%",
 

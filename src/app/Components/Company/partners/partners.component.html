@@ -1,6 +1,6 @@
 <div  class="   body">
 
-    <div class="d-flex bg-gray w-100">
+    <div class="row bg-gray w-100">
         <div class="col-lg-4 bg-white p-5  h-100">
             <h2 class="border-bottom">Partner's Detail</h2>
             <mat-form-field class="w-100" appearance="outline">
@@ -23,18 +23,20 @@
                 <input matInput type="text" [(ngModel)]="partnerEmail"  >
             </mat-form-field>
     
-            <mat-form-field class="col-lg-8 pe-1" appearance="outline">
+            <mat-form-field class="w-100 " appearance="outline">
                 <mat-label>City</mat-label>
-              <mat-select [(ngModel)]="cityID">
+              <mat-select [(ngModel)]="cityID" #city>
                 <mat-option><ngx-mat-select-search [(ngModel)]="citySearch"
                     [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
                     name="search"></ngx-mat-select-search></mat-option>
                 <mat-option *ngFor="let item of citiesList |filter:citySearch" [value]="item.cityID">{{item.cityName}}</mat-option>
+               
               </mat-select>
+              <mat-icon class="cursorPointer" (click)="addCity()" matSuffix>add</mat-icon>
             </mat-form-field>
     
             
-            <button mat-raised-button color="primary" class="col-lg-4 "  style="height: 55px;" (click)="addCity()"><mat-icon>add</mat-icon></button>
+            <!-- <button mat-raised-button color="primary" class="col-lg-4 "  style="height: 55px;" (click)="addCity()"><mat-icon>add</mat-icon></button> -->
     
             <mat-form-field class="w-100" appearance="outline">
                 <mat-label>Address</mat-label>

@@ -183,12 +183,12 @@ button {
     display: inline-block;
     font-size: 18px;
     min-width: 5px;
-    color: #333;
+    color: rgb(196, 200, 201);
     transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
   
   .input-field1 .float1:focus+label span,
   .input-field1 .float1:valid+label span {
-    color: rgb(140, 215, 225);
+    color: rgb(196, 200, 201);
     transform: translateY(-30px);
   }

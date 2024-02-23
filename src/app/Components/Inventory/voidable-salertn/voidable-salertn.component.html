@@ -1,12 +1,12 @@
 <div class="body">
 
-    <div class="d-flex">
+    <div class="row p-1">
 
         <!------------------ column 1 bill side ---------------->
 
-        <div class="col-lg-10 h-100 ">
+        <div class="col-lg-10 ">
 
-            <div class="mt-1 ms-1 me-1 card shadow" style="border-radius: 5px 5px 5px 5px;height: 87vh;">
+            <div class="card shadow" style="border-radius: 5px 5px 5px 5px;height: 87vh;">
 
                 <!------------------------- Search Bar Area ------------------>
                 <div class="ps-2 d-flex" style="background-color: rgb(237, 233, 233);">
@@ -81,13 +81,10 @@
         </div>
 
         <!------------------ column 2 Amount side area ---------------->
-        <div class="col-lg-2 h-100 " style="position: fixed;right: 0%;">
+        <div class="col-lg-2 " >
 
-
-
-
-            <div class="mt-1 ms-1 me-1 card p-2 totalArea"
-                s style=" overflow-y: scroll; border-radius: 5px 5px 5px 5px;min-height: 90vh;max-height:90vh;padding-bottom: 50px !important; background-color: rgb(240, 247, 245);">
+            <div class="card p-2 totalArea"
+                 style=" overflow-y: scroll; border-radius: 5px 5px 5px 5px;height:87vh;padding-bottom: 50px !important; background-color: rgb(240, 247, 245);">
 
                 <div class="p-1 w-100">
                     <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
@@ -127,21 +124,23 @@
                             (keydown)="getTotal();this.global.handleNumKeys($event);focusTo($event,'#save')" />
                     </div>
 
+                   
+                        <div class="w-100">
+                            <p style="font-size: 15px;color: rgb(3, 3, 3)">NET TOTAL</p>
+                            <p style="font-size: 40px;color: rgb(19, 83, 27);" class="font-digit pt-1 text-end">
+                                {{netTotal || 0
+                                |number:'1.0-1'}}</p>
+                        </div>
+                        <div class="w-100">
+                            <p style="font-size: 15px;color: rgb(3, 3, 3)">CHANGE</p>
+                            <p style="font-size: 40px;color: rgb(0, 0, 0);" class="font-digit pt-1 text-end">{{change ||
+                                0
+                                |number:'1.0-1'}}</p>
+                        </div>
+           
+
                 </div>
-                <div class="">
-                    <div class="w-100">
-                        <p style="font-size: 15px;color: rgb(3, 3, 3)">NET TOTAL</p>
-                        <p style="font-size: 40px;color: rgb(19, 83, 27);" class="font-digit pt-1 text-end">
-                            {{netTotal || 0
-                            |number:'1.0-1'}}</p>
-                    </div>
-                    <div class="w-100">
-                        <p style="font-size: 15px;color: rgb(3, 3, 3)">CHANGE</p>
-                        <p style="font-size: 40px;color: rgb(0, 0, 0);" class="font-digit pt-1 text-end">{{change ||
-                            0
-                            |number:'1.0-1'}}</p>
-                    </div>
-                </div>
+                
 
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label><u>R</u>emarks</mat-label>
@@ -149,14 +148,14 @@
                 </mat-form-field>
 
                 <div class="text-center d-flex pt-4">
-                    <button class="col-lg-2 me-1 delBtn" style="background-color:transparent;border-radius: 5px;"
+                    <button class="col-lg-2 delBtn" style="background-color:transparent;border-radius: 5px;margin-right: 1px;"
                         (click)="voidBill()"><mat-icon>delete_outline</mat-icon></button>
-                    <button class="btn col-lg-10 text-center btn-success me-1" id="save" (click)="save()"><u>S</u>ave</button>
+                    <button class="btn col-lg-10 text-center btn-success" id="save" (click)="save()"><u>S</u>ave</button>
 
 
                 </div>
-                <div class="mt-2">
-                    <button class="btn w-100 btn-danger  " accesskey="u"
+                <div class="pt-2">
+                    <button class="btn col-lg-12 btn-danger  " accesskey="u"
                         (click)="openSavedBill()">D<u>u</u>plicate</button>
                     <!-- <button class="btn col-lg-12 d-flex justify-content-between btn-primary me-1 pt-3" data-bs-toggle="modal" data-bs-target="#paymentMehtod">
                     <p>Other Payment</p> <mat-icon>keyboard_arrow_right</mat-icon></button> -->
@@ -182,7 +181,7 @@
 
 <div class="modal fade" id="paymentMehtod" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
     aria-labelledby="paymentMehtodLabel">
-    <div class="modal-dialog modal-dialog-centered ">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered ">
         <div class="modal-content " style="background-color: rgb(248, 247, 247);">
             <div class="modal-header">
                 <h2 class="modal-title" id="paymentMehtodLabel">Payment Method</h2>

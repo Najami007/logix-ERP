@@ -363,7 +363,7 @@ export class PurchaseReturnComponent implements OnInit{
 
     setTimeout(() => {
      $(cls).trigger('focus');
-    }, 1500);
+    }, 500);
  
     if(cls == 'ovhd' && e.keyCode == 13 ){
      if(e.target.value == ''){
@@ -973,5 +973,29 @@ export class PurchaseReturnComponent implements OnInit{
   }
 
 
+  emptyBill(){
+   if(this.tableDataList != ''){
+    Swal.fire({
+      title:'Alert!',
+      text:'Confirm to Clear All Data',
+      position:'center',
+      icon:'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirm',
+    }).then((result)=>{
+
+      if(result.isConfirmed){
+   
+        this.reset();
+    
+
+    }
+   }
+   )
+    
+   }
+  }
 
 }
