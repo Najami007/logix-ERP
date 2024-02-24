@@ -81,7 +81,7 @@ export class VoidableSalertnComponent implements OnInit {
 
   productList:any = [];
   bankCoaList:any =[];
-  projectID = 1;
+  projectID = this.global.InvProjectID;
   InvDate = new Date();
   PBarcode:any = '';
   tableDataList:any = [];
@@ -806,7 +806,7 @@ export class VoidableSalertnComponent implements OnInit {
     //console.log(item)
     
 
-    this.http.get(environment.mainApi+this.global.restaurentLink+'PrintBill?BillNo='+InvNo).subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+InvNo).subscribe(
       (Response:any)=>{
         this.myInvoiceNo = InvNo;
         this.myInvDate = Response[0].createdOn ;

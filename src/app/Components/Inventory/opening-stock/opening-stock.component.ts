@@ -379,9 +379,13 @@ export class OpeningStockComponent implements OnInit {
 
 
   delRow(item: any) {
-    var index = this.tableDataList.indexOf(item);
-    this.tableDataList.splice(index, 1);
-    this.getTotal();
+    this.global.confirmAlert().subscribe(
+      (Response:any)=>{
+        if(Response == true){
+          var index = this.tableDataList.indexOf(item);
+          this.tableDataList.splice(index, 1);
+          this.getTotal();
+        }})
     
   }
 
@@ -727,6 +731,14 @@ export class OpeningStockComponent implements OnInit {
         )
       }
     })
+   }
+
+   EmptyData(){
+    this.global.confirmAlert().subscribe(
+      (Response:any)=>{
+        if(Response == true){
+          this.reset();
+        }})
    }
 
 

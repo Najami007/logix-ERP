@@ -119,7 +119,7 @@ export class VrtnsavedbillComponent implements OnInit {
               this.myChange = item.change;
               this.myPaymentType = item.paymentType;
               this.myDuplicateFlag = true;
-              this.http.get(environment.mainApi+this.global.restaurentLink+'PrintBill?BillNo='+item.invBillNo).subscribe(
+              this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+item.invBillNo).subscribe(
                 (Response:any)=>{
                   //console.log(Response);
                   this.myPrintData = Response;

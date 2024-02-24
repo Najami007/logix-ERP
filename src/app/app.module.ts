@@ -33,6 +33,7 @@ import { TopNavBarComponent } from './Components/Layout/top-nav-bar/top-nav-bar.
 import { HeaderComponent } from './Components/Layout/header/header.component';
 import { NumberInputComponent } from './Components/Common/number-input/number-input.component';
 import { SideNavbarComponent } from './Components/Layout/side-navbar/side-navbar.component';
+import { ConfirmationAlertComponent } from './Components/Common/confirmation-alert/confirmation-alert.component';
 
 
 
@@ -66,6 +67,7 @@ import { SideNavbarComponent } from './Components/Layout/side-navbar/side-navbar
     HeaderComponent,
     NumberInputComponent,
     SideNavbarComponent,
+    ConfirmationAlertComponent,
     // TruncatePipe ,  
     // FilterPipe
  

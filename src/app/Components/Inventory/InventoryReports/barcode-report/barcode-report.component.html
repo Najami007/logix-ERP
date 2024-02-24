@@ -33,22 +33,24 @@
 
         <div class="col-lg-12 row text-center justify-content-center">
 
-            <mat-card class="text-center pt-5" style="height: 400px;width: 400px;" *ngFor="let item of curProduct">
-                <mat-card-header style="border: 0%;" ><button mat-mini-fab (click)="print()"><mat-icon>print</mat-icon></button></mat-card-header>
+            <div class=" card pt-5 col-lg-9" style="height: 400px;width: 600px;" >
+                <div style="border: 0%;" ><button mat-mini-fab (click)="print()"><mat-icon>print</mat-icon></button></div>
 
-                <mat-card-content>
-                   <div id="PrintDiv">
-                    <div class="font-barcode">{{item.barcode}}</div>
-                    <!-- <div class="bcodeC">{{item.barcode}}</div> -->
+                <div *ngFor="let item of curProduct" class="text-center">
+                   <div id="PrintDiv" class="text-center" style="width: 300px;height: 300px;">
+                    <div class="text-center">
+                        <div class="font-barcode" >{{item.barcode}}</div>
+                        <div class="bcodeC">{{item.barcode}}</div>
+                    </div>
                     <div class="d-flex text-center">
                         <div class="bcodet">{{item.productTitle}}</div>
-                    <div class="bcodep">{{item.salePrice}}</div>
+                    <div class="bcodep">Rs.{{item.salePrice}}</div>
                     </div>
                    </div>
                    
-                </mat-card-content  >
+                </div  >
 
-            </mat-card>
+            </div>
 
         </div>
 

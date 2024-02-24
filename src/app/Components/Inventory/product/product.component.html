@@ -64,9 +64,9 @@
                 <mat-form-field appearance="outline" class="col-lg-3 ">
                     <mat-label>Brand</mat-label>
                     <mat-select [(ngModel)]="BrandID" #brand>
-                        <mat-option><ngx-mat-select-search #brand [placeholderLabel]="'Search...'"
+                        <mat-option><ngx-mat-select-search #brandSearch [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                        <mat-option *ngFor="let item of BrandList | filter:brand.value"
+                        <mat-option *ngFor="let item of BrandList | filter:brandSearch.value"
                             [value]="item.brandID">{{item.brandTitle}}</mat-option>
                     </mat-select>
                     <mat-icon class="cursorPointer" (click)="addBrand()" matSuffix>add</mat-icon>

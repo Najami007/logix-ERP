@@ -63,9 +63,7 @@ export class DashboardComponent implements OnInit{
   budgetAmountList:any = [];
   consumedAmountList:any = [];
 
-  cardsData:any;
-
-  IncomeList:any = [];
+   IncomeList:any = [];
   ExpenseList:any = [];
   MonthList:any = []
 
@@ -88,14 +86,17 @@ export class DashboardComponent implements OnInit{
    prevMonthIncomeAmountList:any = []
    
   
-
+   cardsData:any = [{totalRooms:0,mappedRooms:0,totalExpense:0,totalIncome:0}]
 
   //////////////////////////////////
   getCardsData(){
 
     this.http.get(environment.mainApi+'acc/GetTotals').subscribe(
-      (Response)=>{
+      (Response:any)=>{
+        console.log(Response)
+       if(Response != null){
         this.cardsData = Response;
+       }
         //console.log(Response);
 
       }

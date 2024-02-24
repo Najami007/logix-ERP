@@ -16,12 +16,18 @@
 }
 
 @font-face {
-  font-family: 'barcode';
-  src: url('./assets/fonts/barcode/code128.ttf');
+  font-family: 'barcode128';
+  font-style: normal;
+  src: url('./assets/fonts/barcode/Code39Azalea.ttf');
+}
+
+@font-face {
+  font-family: 'barcode39';
+  src: url('./assets/fonts/barcode/BarCode39Lesbar-3yDM.ttf ');
 }
 
 .font-barcode{
-  font-family:'barcode' !important;
+  font-family:'barcode128' !important;
   font-size: 50px;
   border: 0px solid red;
   height: 50px;

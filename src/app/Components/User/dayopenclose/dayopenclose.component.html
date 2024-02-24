@@ -1,7 +1,26 @@
-<div class="body text-center">
+<div class="body text-center h-100">
 
 
-    <div class="justify-content-around row  w-100 fw-bold">
+    <div class="d-flex flex-column  p-5 h-100">
+        <div class="text-center p-5 row justify-content-around">
+            <button mat-raised-button style="width: 200px; height: 200px;background-color: rgb(196, 255, 198);"
+            data-bs-toggle="modal" data-bs-target="#doc" (click)="Type = 'Day Open'"><strong>Day Open</strong></button>
+
+        <button mat-raised-button style="width: 200px; height: 200px;background-color: rgb(196, 255, 252);"
+            data-bs-toggle="modal" data-bs-target="#post" ><strong>Posting</strong></button>
+
+
+        <button mat-raised-button style="width: 200px; height: 200px;background-color: rgb(255, 206, 196);"
+            data-bs-toggle="modal" data-bs-target="#doc" (click)="Type = 'Day Close'"><strong>Day Close</strong></button>
+
+        </div>
+      
+      
+       
+      </div>
+      
+
+    <!-- <div class="justify-content-around row  w-100 fw-bold">
         <button mat-raised-button style="width: 200px; height: 200px;background-color: rgb(196, 255, 198);"
             data-bs-toggle="modal" data-bs-target="#doc" (click)="Type = 'Day Open'"><strong>Day Open</strong></button>
 
@@ -12,7 +31,7 @@
         <button mat-raised-button style="width: 200px; height: 200px;background-color: rgb(255, 206, 196);"
             data-bs-toggle="modal" data-bs-target="#doc" (click)="Type = 'Day Close'"><strong>Day Close</strong></button>
 
-    </div>
+    </div> -->
 
 
         <!---------------------- Modal Window for Date Selection ------------->

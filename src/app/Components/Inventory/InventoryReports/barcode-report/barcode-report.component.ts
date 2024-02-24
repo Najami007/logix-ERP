@@ -138,9 +138,7 @@ export class BarcodeReportComponent implements OnInit {
 
   print(){
     
-  this.global.printData('#PrintDiv')
-
-  
+  this.global.printBarcode('#PrintDiv')
 
   }
  

@@ -50,6 +50,7 @@ export class StockAdjustmentComponent implements OnInit {
    $('.searchProduct').trigger('focus');
   }
 
+  projectID = this.global.InvProjectID;
   Date:Date = new Date();
   holdInvNo = '-';
   holdBtnType = 'Hold';
@@ -374,18 +375,9 @@ export class StockAdjustmentComponent implements OnInit {
 
  
   delRow(item: any) {
-    Swal.fire({
-      title:'Alert!',
-      text:'Confirm to Delete Product',
-      position:'center',
-      icon:'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Confirm',
-    }).then((result)=>{
-
-      if(result.isConfirmed){
+    this.global.confirmAlert().subscribe(
+      (Response:any)=>{
+        if(Response == true){
    
         var index = this.tableDataList.indexOf(item);
         this.tableDataList.splice(index, 1);
@@ -397,6 +389,16 @@ export class StockAdjustmentComponent implements OnInit {
     
   
     
+  }
+
+
+  EmptyData(){
+    this.global.confirmAlert().subscribe(
+      (Response:any)=>{
+        if(Response == true){
+
+          this.reset();
+        }})
   }
 
 
@@ -452,24 +454,15 @@ export class StockAdjustmentComponent implements OnInit {
 
       if(isValidFlag == true){
 
-        Swal.fire({
-          title:'Alert!',
-          text:'Confirm to Save',
-          position:'center',
-          icon:'success',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Confirm',
-        }).then((result)=>{
-    
-          if(result.isConfirmed){
+        this.global.confirmAlert().subscribe(
+          (Response:any)=>{
+            if(Response == true){
             this.app.startLoaderDark();
             this.http.post(environment.mainApi+this.global.inventoryLink+'InsertStockAdjustment',{
              InvType: this.adjustmentType,
              InvDate: this.global.dateFormater(this.invoiceDate,'-'),
              LocationID: this.locationID,
-             ProjectID: 1,
+             ProjectID: this.projectID,
              BillTotal: this.subTotal,
              NetTotal: this.subTotal ,
              Remarks: this.invRemarks,

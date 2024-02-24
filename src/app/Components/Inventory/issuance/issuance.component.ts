@@ -419,18 +419,9 @@ export class IssuanceComponent implements OnInit {
   }
 
   delRow(item: any) {
-    Swal.fire({
-      title:'Alert!',
-      text:'Confirm to Delete Product',
-      position:'center',
-      icon:'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Confirm',
-    }).then((result)=>{
-
-      if(result.isConfirmed){
+    this.global.confirmAlert().subscribe(
+      (Response:any)=>{
+        if(Response == true){
    
         var index = this.tableDataList.indexOf(item);
         this.tableDataList.splice(index, 1);
@@ -442,6 +433,15 @@ export class IssuanceComponent implements OnInit {
     
   
     
+  }
+
+  EmptyData(){
+    this.global.confirmAlert().subscribe(
+      (Response:any)=>{
+        if(Response == true){
+          this.reset();
+
+        }})
   }
 
 
@@ -574,55 +574,46 @@ export class IssuanceComponent implements OnInit {
      
          }else if(type == 'issue'){
 
-          Swal.fire({
-            title:'Alert!',
-            text:'Confirm to Save',
-            position:'center',
-            icon:'success',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Confirm',
-          }).then((result)=>{
-      
-            if(result.isConfirmed){
+          this.global.confirmAlert().subscribe(
+            (Response:any)=>{
+              if(Response == true){
+                this.app.startLoaderDark();
+                this.http.post(environment.mainApi+this.global.inventoryLink+'InsertIssueStock',{
+                 InvType: "I",
+                 InvDate: this.global.dateFormater(this.invoiceDate,'-'),
+                 LocationID: this.locationID,
+                 LocationTitle:this.locationTitle,
+                 ProjectID: this.projectID,
+                 IssueType:this.IssueType,
+                 IssueStatus:'A',
+                 BillTotal: this.subTotal,
+                 NetTotal: this.subTotal ,
+                 Remarks: this.invRemarks,
+                 InvoiceDocument: "-",
+                 LocationTwoID:this.locationTwoID,
+                 LocationTwoTitle:this.locationTwoTitle,
+             
+                 InvDetail: JSON.stringify(this.tableDataList),
+             
+                 UserID: this.global.getUserID(),
+                 HoldInvNo:this.holdInvNo,
+                }).subscribe(
+                  (Response:any)=>{
+                    if(Response.msg == 'Data Saved Successfully'){
+                      this.msg.SuccessNotify(Response.msg);
+                      this.reset(); 
+                      this.app.stopLoaderDark();
+                     
+                    }else{
+                      this.msg.WarnNotify(Response.msg);
+                      this.app.stopLoaderDark();
+                    }
+                  }
+                )
+              }
+            }
+          )
          
-              this.app.startLoaderDark();
-           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertIssueStock',{
-            InvType: "I",
-            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
-            LocationID: this.locationID,
-            LocationTitle:this.locationTitle,
-            ProjectID: this.projectID,
-            IssueType:this.IssueType,
-            IssueStatus:'A',
-            BillTotal: this.subTotal,
-            NetTotal: this.subTotal ,
-            Remarks: this.invRemarks,
-            InvoiceDocument: "-",
-            LocationTwoID:this.locationTwoID,
-            LocationTwoTitle:this.locationTwoTitle,
-        
-            InvDetail: JSON.stringify(this.tableDataList),
-        
-            UserID: this.global.getUserID(),
-            HoldInvNo:this.holdInvNo,
-           }).subscribe(
-             (Response:any)=>{
-               if(Response.msg == 'Data Saved Successfully'){
-                 this.msg.SuccessNotify(Response.msg);
-                 this.reset(); 
-                 this.app.stopLoaderDark();
-                
-               }else{
-                 this.msg.WarnNotify(Response.msg);
-                 this.app.stopLoaderDark();
-               }
-             }
-           )
-          }
-         }
-         )
          
          }
      
@@ -635,6 +626,7 @@ export class IssuanceComponent implements OnInit {
   
    
   }
+
 
 
   reset(){

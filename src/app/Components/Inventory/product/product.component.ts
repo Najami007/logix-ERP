@@ -483,7 +483,7 @@ export class ProductComponent implements OnInit {
     this.productNameOthLanguage = row.productTitleOtherLang;
     this.productCode = row.productCode;
     this.Barcode = row.barcode;
-    this.BrandID = row.brandID;
+    // this.BrandID = row.brandID;
     this.rackID = row.rackID;
     this.UOMID = row.uomID;
     this.CostPrice = row.costPrice;

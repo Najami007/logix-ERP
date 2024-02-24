@@ -313,7 +313,7 @@ export class PurchaseReturnComponent implements OnInit{
     this.myTotalQty = 0;
     for (var i = 0; i < this.tableDataList.length; i++) {
    
-      this.subTotal += (parseFloat(this.tableDataList[i].Quantity) * parseFloat(this.tableDataList[i].CostPrice));
+      this.subTotal += (parseFloat(this.tableDataList[i].Quantity) * parseFloat(this.tableDataList[i].CostPrice)) - this.discount;
       this.myTotalQty += parseFloat(this.tableDataList[i].Quantity);
       // this.myTotal = this.mySubtoatal - this.myDiscount;
       // this.myDue = this.myPaid - this.myTotal;\
@@ -324,18 +324,9 @@ export class PurchaseReturnComponent implements OnInit{
   }
 
   delRow(item: any) {
-    Swal.fire({
-      title:'Alert!',
-      text:'Confirm to Delete Product',
-      position:'center',
-      icon:'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Confirm',
-    }).then((result)=>{
-
-      if(result.isConfirmed){
+    this.global.confirmAlert().subscribe(
+      (Response:any)=>{
+        if(Response == true){
    
         var index = this.tableDataList.indexOf(item);
         this.tableDataList.splice(index, 1);
@@ -718,6 +709,10 @@ export class PurchaseReturnComponent implements OnInit{
           }
      
          }else if(type == 'purchase'){
+
+          this.global.confirmAlert().subscribe(
+            (Response:any)=>{
+              if(Response == true){
            this.app.startLoaderDark();
            this.http.post(environment.mainApi+this.global.inventoryLink+'InsertPurchaseRtn',{
            InvType: "PR",
@@ -751,6 +746,7 @@ export class PurchaseReturnComponent implements OnInit{
                }
              }
            )
+            }})
          }
      
       }
@@ -975,18 +971,9 @@ export class PurchaseReturnComponent implements OnInit{
 
   emptyBill(){
    if(this.tableDataList != ''){
-    Swal.fire({
-      title:'Alert!',
-      text:'Confirm to Clear All Data',
-      position:'center',
-      icon:'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Confirm',
-    }).then((result)=>{
-
-      if(result.isConfirmed){
+    this.global.confirmAlert().subscribe(
+      (Response:any)=>{
+        if(Response == true){
    
         this.reset();
     

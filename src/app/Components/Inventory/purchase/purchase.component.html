@@ -4,7 +4,7 @@
         <div class="col-lg-10  p-2">
 
             <div class="row">
-                <mat-form-field appearance="outline" class="col-lg-2 d-none">
+                <mat-form-field appearance="outline" *ngIf="global.DisableDate == false" class="col-lg-2">
                     <mat-label>Invoice Date</mat-label>
                     <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput type="text" name="voucherDate"
                         [matDatepicker]="voucherDate">
@@ -165,7 +165,7 @@
                             <td colspan="4"></td>
                             <td class="text-center">{{myTotalQty }}</td>
                             <td colspan="4"></td>
-                            <td class="text-center"><mat-icon class="cursorPointer" (click)="reset()">delete</mat-icon>
+                            <td class="text-center"><mat-icon class="cursorPointer" (click)="EmptyData()">delete</mat-icon>
                             </td>
                         </tr>
 
@@ -343,7 +343,7 @@
                                 <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
                                 <td>{{item.partyName}}</td>
                                 <td>{{item.locationTitle}}</td>
-                                <td>{{(item.billTotal + item.overHeadAmount) -item.billDiscount | number:'1.0-0'}}</td>
+                                <td class="text-end">{{(item.billTotal + item.overHeadAmount)  | number:'1.0-0'}}</td>
                                 <td>{{item.entryUser}}</td>
                                 <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary"
                                         (click)="printBill(item)">print</mat-icon></td>

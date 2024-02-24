@@ -34,7 +34,7 @@ export class DayopencloseComponent implements OnInit {
 
     if (this.Type == 'Day Open') {
 
-      this.global.openPinCode().subscribe(pin => {
+      this.global.openPassword('Password').subscribe(pin => {
         if (pin !== '') {
           this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
             RestrictionCodeID: 4,
@@ -81,7 +81,7 @@ export class DayopencloseComponent implements OnInit {
 
 
     if (this.Type == 'Day Close') {
-      this.global.openPinCode().subscribe(pin => {
+      this.global.openPassword('Password').subscribe(pin => {
         if (pin !== '') {
           this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
             RestrictionCodeID: 4,

@@ -131,15 +131,15 @@
         <mat-card class=" col-lg-7" style="background-color: rgb(248, 237, 217);">
 
             <mat-card-content class="row">
-                <mat-form-field appearance="outline" class="col-lg-3 p-1">
+                <mat-form-field appearance="outline" *ngIf="global.DisableDate == false" class="col-lg-2">
                     <mat-label>Invoice Date</mat-label>
-                    <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput type="text" name="voucherDate"
+                    <input [(ngModel)]="invoiceDate"  [disabled]="global.DisableDate" readonly="true" matInput type="text" name="voucherDate"
                         [matDatepicker]="voucherDate">
                     <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
                     <mat-datepicker #voucherDate></mat-datepicker>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="col-lg-3 p-1">
+                <mat-form-field appearance="outline" class="col-lg-3 ">
                     <mat-label>Location</mat-label>
                     <mat-select [(ngModel)]="locationID" name="location">
                         <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
@@ -148,7 +148,7 @@
                             [value]="item.locationID">{{item.locationTitle}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="col-lg-3 p-1">
+                <mat-form-field appearance="outline" class="col-lg-3 ">
                     <mat-label>Purchaser</mat-label>
                     <mat-select [(ngModel)]="bookerID" name="location">
                         <mat-option><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
@@ -158,19 +158,19 @@
                     </mat-select>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="col-lg-3 p-1">
+                <mat-form-field appearance="outline" class="col-lg-3 ">
                     <mat-label>Ref Inv No.</mat-label>
                     <input matInput [(ngModel)]="refInvNo" type="text" name="refInvNo">
                 </mat-form-field>
-                <!-- <mat-form-field appearance="outline" class="col-lg-3 p-1">
+                <mat-form-field appearance="outline" class="col-lg-3 ">
             <mat-label>Discount</mat-label>
-            <input matInput [(ngModel)]="discount" (keyup)="this.global.avoidMinus($event);" type="number" name="dicount">
+            <input matInput [(ngModel)]="discount" (keyup)="this.global.avoidMinus($event);getTotal()" type="number" name="dicount">
         </mat-form-field>
-        <mat-form-field appearance="outline" class="col-lg-3 p-1">
+        <!-- <mat-form-field appearance="outline" class="col-lg-3 p-1">
             <mat-label>OverHead</mat-label>
             <input matInput (keyup)="distributeOverHead();this.global.avoidMinus($event);" [(ngModel)]="overHead" type="number" name="refInvNo">
         </mat-form-field> -->
-                <mat-form-field appearance="outline" class="col-lg-12 p-1">
+                <mat-form-field appearance="outline" class="col-lg-12 ">
                     <mat-label>Remarks</mat-label>
                     <textarea matInput rows="1" [(ngModel)]="invRemarks" type="text" name="remarks"></textarea>
                 </mat-form-field>
@@ -365,7 +365,7 @@
                                 <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
                                 <td>{{item.partyName}}</td>
                                 <td>{{item.locationTitle}}</td>
-                                <td>{{(item.billTotal + item.overHeadAmount) -item.billDiscount | number:'1.0-0'}}</td>
+                                <td class="text-end">{{(item.billTotal + item.overHeadAmount)| number:'1.0-0'}}</td>
                                 <td>{{item.entryUser}}</td>
                                 <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary"
                                         (click)="printBill(item)">print</mat-icon></td>

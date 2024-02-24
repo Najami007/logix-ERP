@@ -420,18 +420,9 @@ export class IssueStockRerturnComponent implements OnInit {
   }
 
   delRow(item: any) {
-    Swal.fire({
-      title:'Alert!',
-      text:'Confirm to Delete Product',
-      position:'center',
-      icon:'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Confirm',
-    }).then((result)=>{
-
-      if(result.isConfirmed){
+    this.global.confirmAlert().subscribe(
+      (Response:any)=>{
+        if(Response == true){
    
         var index = this.tableDataList.indexOf(item);
         this.tableDataList.splice(index, 1);
@@ -576,19 +567,9 @@ export class IssueStockRerturnComponent implements OnInit {
           }
      
          }else if(type == 'issue'){
-
-          Swal.fire({
-            title:'Alert!',
-            text:'Confirm to Save',
-            position:'center',
-            icon:'success',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Confirm',
-          }).then((result)=>{
-      
-            if(result.isConfirmed){
+          this.global.confirmAlert().subscribe(
+            (Response:any)=>{
+              if(Response == true){
          
               this.app.startLoaderDark();
            this.http.post(environment.mainApi+this.global.inventoryLink+'InsertRecStock',{

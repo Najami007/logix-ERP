@@ -286,6 +286,7 @@ export class VoucherSupervisionComponent {
    ///////////////////////////////////////////////////
 
    printBill(row:any){
+    // alert(row.projectID)
 
     
     this.lblInvoiceNo = row.invoiceNo;

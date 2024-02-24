@@ -35,40 +35,94 @@ export class CashierClosingRptComponent implements OnInit {
       this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
     })
 
-    this.global.getCurrentOpenDay().subscribe(
-      (Response:any)=>{
-        console.log(Response);
-        // this.curDayOpen = Response;
-        if(Response != ''){
-          this.getReport(Response[0].docID);
-        }
-      }
-    )
+ 
 
   }
   ngOnInit(): void {
     this.global.setHeaderTitle('Cashier Closing Report');
+    this.getUsers();
  
 
   }
 
 
 
-
+  Date = new Date();
 
   ClosingDetail: any = [];
+  userList:any = [];
+  userID = 0;
+  userName = '';
+
+
+  getUsers() {
+
+    this.app.startLoaderDark()
+    this.http.get(environment.mainApi + this.global.userLink + 'getuser').subscribe(
+      (Response) => {
+        this.userList = Response;
+        // console.log(Response);
+
+        this.app.stopLoaderDark();
+
+      },
+      (error: any) => {
+        console.log(error);
+        this.app.stopLoaderDark();
+      }
+    )
+
+  }
+
+  
+  onUserSelected() {
+    var curUser = this.userList.find((e: any) => e.userID == this.userID);
+    this.userName = curUser.userName;
+  }
 
 
 
-  getReport(id:any) {
-      this.http.get(environment.mainApi + this.global.inventoryLink +'GetDayClosingRpt_9?reqDayID='+id).subscribe(
-          (Response: any) => {
-            this.ClosingDetail = Response;
-            console.log(Response);
-          }
-        )
-    
+  TotalSales = 0;
+  totalSaleReturn = 0;
+  totalServiceCharges = 0;
+  totalCash = 0;
+  totalBank = 0;
+  totalComplimentary = 0;
+  totalDiscount = 0;
 
+  getReport() {
+
+   
+          this.http.get(environment.mainApi + this.global.inventoryLink +'GetDayClosingRpt_9?reqDate='+this.global.dateFormater(this.Date,'-')).subscribe(
+            (Response: any) => {
+              console.log(Response);
+              this.TotalSales = 0
+              this.totalSaleReturn = 0
+              this.totalServiceCharges = 0
+              this.totalCash = 0
+              this.totalBank = 0
+              this.totalComplimentary= 0
+              this.totalDiscount = 0
+              
+              if(this.userID > 0){
+                this.ClosingDetail = Response.filter((e:any)=>e.userID == this.userID);
+              }else{
+                this.ClosingDetail = Response;
+              }
+              
+              this.ClosingDetail.forEach((e:any) => {
+                this.TotalSales += e.totalSale;
+                this.totalSaleReturn += e.saleReturn;
+                this.totalServiceCharges += e.servicesCharges;
+                this.totalCash += e.cashIn - e.cashOut;
+                this.totalBank += e.bank;
+                this.totalComplimentary += e.complimentary;
+                this.totalDiscount += e.disocunt;
+              });
+
+            }
+          )
+      
 
 
   }

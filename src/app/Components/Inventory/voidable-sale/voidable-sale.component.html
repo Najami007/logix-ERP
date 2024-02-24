@@ -87,7 +87,7 @@
                 <div class="p-1 w-100">
                     <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
                         <div class="text-center" *ngIf="tableDataList != ''">
-                            <img [src]="productImage" alt="" height="190" width="200" accesskey="i"
+                            <img [src]="productImage || ''" alt="" height="190" width="200" accesskey="i"
                                 (click)="this.global.showProductImage(this.productImage,0)">
                         </div>
                     </mat-card>
@@ -154,7 +154,7 @@
 
                     <button accesskey="o" class="btn w-75  d-flex justify-content-between btn-primary  pt-3"
                         data-bs-toggle="modal" data-bs-target="#paymentMehtod">
-                        <p><u>O</u>ther Payment</p> <mat-icon>keyboard_arrow_right</mat-icon>
+                        <p><u>O</u>ther</p> <mat-icon>keyboard_arrow_right</mat-icon>
                     </button>
                 </div>
 
@@ -177,7 +177,7 @@
     aria-labelledby="discountModalLabel">
     <div class="modal-dialog modal-dialog-scrollables modal-dialog-centered modal-sm">
         <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-           <form method="post">
+      
             <div class="modal-body">
 
                 <mat-form-field appearance="outline" class="w-50 pe-1">
@@ -196,11 +196,11 @@
             </div>
 
             <div class="modal-footer bg-mf-blue">
-                <button class="btn btn-success" data-bs-dismiss="modal" (click)="EnterDiscount(tempDisc);   ">Save</button>
+                <button class="btn btn-success" data-bs-dismiss="modal" (click)="EnterDiscount(tempDisc)">Save</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
 
-           </form>
+
 
         </div>
     </div>

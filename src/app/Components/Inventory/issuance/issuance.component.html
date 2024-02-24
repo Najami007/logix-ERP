@@ -7,7 +7,7 @@
         <!-------------------- Top Date and location section --------------->
 
        <div class="row  p-2">
-           <mat-form-field appearance="outline" class="col-lg-2">
+           <mat-form-field appearance="outline" *ngIf="global.DisableDate == false" class="col-lg-2">
                <mat-label>Invoice Date</mat-label>
                <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput type="text" name="invDate"
                    [matDatepicker]="iDate">
@@ -119,7 +119,7 @@
                        <th class="text-end">{{avgCostTotal |number:'1.0-2'}}</th>
                        <th class="text-end">{{CostTotal |number:'1.0-2'}}</th>
                        <th></th>
-                       <td class="text-center"><mat-icon class="cursorPointer " (click)="reset()">delete</mat-icon></td>
+                       <td class="text-center"><mat-icon class="cursorPointer " (click)="EmptyData()">delete</mat-icon></td>
                      
 
                    </tr>
@@ -224,7 +224,7 @@
                                         <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
                                         <td>{{item.issueType}}</td>
                                         <td>{{item.locationTwoTitle}}</td>
-                                        <td>{{item.netTotal | number:'1.0-0'}}</td>
+                                        <td class="text-end">{{item.netTotal | number:'1.0-0'}}</td>
                                         <td>{{item.entryUser}}</td>
                                         <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary" (click)="printBill(item)" >print</mat-icon></td>
                                         <td class="text-center cursorPointer" *ngIf=" item.invType == 'HI' && crudList.u"><mat-icon data-bs-dismiss="modal"  (click)="retriveBill(item)">edit</mat-icon></td>
