@@ -62,10 +62,31 @@ export class VoidableSalertnComponent implements OnInit {
       this.companyAddress = data[0].companyAddress;
       this.companyName = data[0].companyName;
     });
-
-
-    this.global.getProducts().subscribe(
+  this.global.getProducts().subscribe(
       (data:any)=>{this.productList = data;})
+
+
+        ///////////// will Check day is opened or not
+
+  
+      this.global.getCurrentOpenDay().subscribe(
+        (Response:any)=>{
+          // alert(Response)
+          if(Response == null || Response == ''){
+            Swal.fire({
+              title: 'Alert!',
+              text: 'Day Is Currently Closed',
+              position: 'center',
+              icon: 'warning',
+              showCancelButton: false,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'OK',
+            })
+          }
+        }
+      )
+      
 
   }
   ngOnInit(): void {
@@ -602,7 +623,7 @@ export class VoidableSalertnComponent implements OnInit {
       this.bankCash = 0;
       this.customerMobileno = '';
       this.customerName = '';
-      
+      this.billRemarks = '';
 
     }
     

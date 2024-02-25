@@ -5,10 +5,10 @@
 
         <div class="col-lg-12 row text-center justify-content-center">
 
-            <div class="col-lg-6  d-flex flex-column">
+            <div class="col-lg-6 pe-1  d-flex flex-column">
                 <mat-label class="text-primary">Search Barcode / Product</mat-label> 
                <input type="text"   #pbarcode [(ngModel)]="PBarcode"  
-                    (keydown)="this.changeFocus($event,'.prodRow')" id="searchProduct"
+                    (keydown)="changeFocus($event,'.prodRow');searchByCode($event)" id="searchProduct"
                     class="p-1 ps-2 mb-2 searchProduct" placeholder="Alt + b" autofocus
                     autocomplete="off" accesskey="b">
     
@@ -23,8 +23,8 @@
                 </div>
 
             </div>
-            <div class="col-lg-3 text-start ms-1 pt-3 mt-1">
-                <button mat-raised-button class="bg-primary text-white w-50 " style="height: 40px;" >Barcode</button>
+            <div class="col-lg-3 text-start pt-3 mt-1">
+                <button mat-raised-button class="bg-primary text-white w-50 " style="height: 40px;"  (click)="ngOnInit()">Load</button>
             </div>
 
       
@@ -33,19 +33,22 @@
 
         <div class="col-lg-12 row text-center justify-content-center">
 
-            <div class=" card pt-5 col-lg-9" style="height: 400px;width: 600px;" >
-                <div style="border: 0%;" ><button mat-mini-fab (click)="print()"><mat-icon>print</mat-icon></button></div>
+            <div class="pt-1 card w-75" style="height: 400px;width: 600px;" >
+                <div class="text-start" ><button mat-mini-fab (click)="print()"><mat-icon>print</mat-icon></button></div>
 
-                <div *ngFor="let item of curProduct" class="text-center">
-                   <div id="PrintDiv" class="text-center" style="width: 300px;height: 300px;">
-                    <div class="text-center">
-                        <div class="font-barcode" >{{item.barcode}}</div>
-                        <div class="bcodeC">{{item.barcode}}</div>
-                    </div>
-                    <div class="d-flex text-center">
-                        <div class="bcodet">{{item.productTitle}}</div>
-                    <div class="bcodep">Rs.{{item.salePrice}}</div>
-                    </div>
+                <div *ngFor="let item of curProduct" class="d-flex  justify-content-center">
+                   <div id="PrintDiv" >
+                    <div style="padding-left: -3px;"> 
+                        <p style="margin-bottom: -5px;" class="fw-bold">{{companyName}}</p>
+                        <ngx-barcode [bc-font-size]="15"   [bc-value]="item.barcode" [bc-display-value]="true"></ngx-barcode>
+                        <!-- <div class="font-barcode" >{{item.barcode}}</div> -->
+                        <!-- <div class="bcodeC">{{item.barcode}}</div> -->
+                        <div class="d-flex text-center">
+                            <div class="bcodet" >{{item.productTitle}}</div>
+                            <div class="bcodep text-start">Rs.{{item.salePrice}}</div>
+                        </div>
+                    </div> 
+                 
                    </div>
                    
                 </div  >

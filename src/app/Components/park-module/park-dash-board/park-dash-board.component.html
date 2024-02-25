@@ -1,42 +1,43 @@
 <div class="body">
     <div id="main-content ">
-        <section class="statis mt-4 ps-3 pe-3 text-center">
-            <div class="row" *ngFor="let item of cardDataList">
-                <div class="col-lg-3 mb-4" >
-                    <div class="box bg-white  card p-3 mat-elevation-z2 " style="box-shadow: 0px 0px 10px 1px  rgb(180, 183, 219);" >
-                        <i class="text-primary"><mat-icon>attach_money</mat-icon></i>
-                        <p class="text-primary font-digit">{{item.totalSaleAmount |number:'1.0-0'}}</p>
-                        <p class="lead text-primary">TOTAL SALES</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 mb-4">
-                    <div class="box card bg-white p-3 mat-elevation-z2" style="box-shadow: 0px 0px 10px 1px  rgb(190, 215, 190);">
-                        <i class="text-success"><mat-icon>receipt</mat-icon> </i>
-                        <p class="text-success font-digit">{{item.totalTktSold|number:'1.0-0'}}</p>
-                        <p class="lead text-success">TOTAL TICKETS</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 mb-4 ">
-                    <div class="box bg-white card p-3 text-white mat-elevation-z2" style="box-shadow: 0px 0px  10px 0px  rgb(173, 167, 165);">
-                        <i class=" color" ><mat-icon>save_alt</mat-icon></i>
-                 
-                        <div class="color d-flex text-center justify-content-center  "><p class="font-digit">{{item.maxSale | number:'1.0-0'}}</p> <p style="font-size: 15px;">{{item.maxSaleSwingTitle}}</p></div>
-                        <p class="lead  color ">HIGHEST AMOUNT</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 mb-4">
-                    <div class="box card bg-white p-3 text-white mat-elevation-z2" style="box-shadow: 0px 0px 10px 1px  rgb(205, 193, 193);">
-                        <i class="text-danger"><mat-icon>bar_chart</mat-icon></i>
-            
-                        <div class="text-danger d-flex justify-content-center  "><p class="font-digit">{{item.maxQty | number:'1.0-0'}}</p> <p style="font-size: 17px;">{{item.maxQtySwingTitle}}</p></div>
 
+        <section class="statis p-2 text-center  mb-3" >
+            <div class="row"  *ngFor="let item of cardDataList">
+                <div class="col-lg-3 mb-2" >
+                    <div class="box bg-warning text-white  p-3 mat-elevation-z2 " style="box-shadow: 0px 0px 10px 1px  rgb(180, 183, 219);" >
+                        <i ><mat-icon>attach_money</mat-icon></i>                  
+                        <p class="value font-digit ">{{item.totalSaleAmount || 0  |number:'1.0-0'}}</p>
+                        <p class="lead ">TOTAL SALES</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 mb-2">
+                    <div class="box  bg-danger text-white p-3 mat-elevation-z2" style="box-shadow: 0px 0px 10px 1px  rgb(190, 215, 190);">
+                        <i class=""><mat-icon>receipt</mat-icon> </i>
+                        <p class="value font-digit">{{item.totalTktSold || 0 |number:'1.0-0'}}</p>
+                        <p class="lead">TOTAL TICKETS</p>
+                    </div>
+                </div>
+                <div class="col-lg-3  mb-2">
+                    <div class="box bg-success  p-3 text-white mat-elevation-z2" style="box-shadow: 0px 0px  10px 0px  rgb(173, 167, 165);">
+                        <i class=" " ><mat-icon>save_alt</mat-icon></i>
+                 
+                        <div class="value d-flex text-center justify-content-center  "><p class="font-digit">{{item.maxSale || 0  | number:'1.0-0'}}</p></div>
+                        <p class="lead">TOTAL EXPENSE</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 mb-2">
+                    <div class="box  bg-primary text-white p-3 mat-elevation-z2" style="box-shadow: 0px 0px 10px 1px  rgb(205, 193, 193);">
+                        <i class=""><mat-icon>bar_chart</mat-icon></i>
+            
+                        <div class="d-flex value justify-content-center  "><p class="font-digit">{{item.maxQty || 0  | number:'1.0-0'}}</p>  <p style="font-size: 17px;">{{item.maxQtySwingTitle}}</p></div>
+    
                         <!-- <p class="text-danger font-digit">{{item.maxQty|number:'1.0-0'}} {{item.maxQtySwingTitle}}</p> -->
-                        <p class="lead text-danger">HIGHEST TICKET</p>
+                        <p class="lead">TOTAL INCOME</p>
                     </div>
                 </div>
             </div>
         </section>
-    </div>
+     </div>
     
     
     

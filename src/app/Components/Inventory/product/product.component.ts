@@ -483,7 +483,7 @@ export class ProductComponent implements OnInit {
     this.productNameOthLanguage = row.productTitleOtherLang;
     this.productCode = row.productCode;
     this.Barcode = row.barcode;
-    // this.BrandID = row.brandID;
+    this.BrandID = row.brandID;
     this.rackID = row.rackID;
     this.UOMID = row.uomID;
     this.CostPrice = row.costPrice;
@@ -519,20 +519,6 @@ export class ProductComponent implements OnInit {
     this.global.openPinCode().subscribe(pin=>{
 
      if(pin != ''){
-
-
-      Swal.fire({
-        title:'Alert!',
-        text:'Confirm to Delete the Data',
-        position:'center',
-        icon:'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Confirm',
-      }).then((result)=>{
-
-        if(result.isConfirmed){
       this.app.startLoaderDark();
 
       this.http.post(environment.mainApi+this.global.inventoryLink+'deleteProduct',{
@@ -557,11 +543,6 @@ export class ProductComponent implements OnInit {
           this.app.stopLoaderDark();
         }
       )
-
-      }
-     }
-     )
-
 
      }})
 

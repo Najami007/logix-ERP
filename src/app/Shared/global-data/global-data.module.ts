@@ -35,7 +35,8 @@ export class GlobalDataModule implements OnInit {
 
   DisableDate = true;
 
-  InvProjectID = 1;
+  InvProjectID = 6;
+  parkProjectID = 6;
 
   inventoryLink = 'inv/';
   userLink = 'user/';
@@ -424,21 +425,21 @@ export class GlobalDataModule implements OnInit {
     frameDoc.document.open();
 
     //Create a new HTML document.
-    // frameDoc.document.write(
-    //   "<html><head><title>DIV Contents</title>" +
-    //     "<style>" +
-    //     printCss +
-    //     "</style>"
-    // );
+    frameDoc.document.write(
+      "<html><head><title>DIV Contents</title>"
+        
+    );
 
     //Append the external CSS file. <link rel="stylesheet" href="../../../styles.scss" /> <link rel="stylesheet" href="../../../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
     // frameDoc.document.write(
     //   '<style type="text/css" media="print">@page { size: portrait; }</style>'
     // );
     frameDoc.document.write(
-
-      '<link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>'
-      + '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'
+      //  '<link rel="stylesheet" href="../../styles.scss" type="text/scss" media="print"/>'+
+      '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'+
+       '<link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>' 
+      
+      
 
       //  +'<style type="text/css" media="print">.font-barcode{font-family:"barcode128" !important;}</style>'
       // +"<style>" +
@@ -450,8 +451,7 @@ export class GlobalDataModule implements OnInit {
       // '<link rel="stylesheet" href="../css/bootstrap.css" type="text/css"  media="print"/>'
     );
     frameDoc.document.write('</head><body>');
-
-    //Append the DIV contents.
+      //Append the DIV contents.
     frameDoc.document.write(contents);
     frameDoc.document.write('</body></html>');
 
@@ -736,7 +736,7 @@ export class GlobalDataModule implements OnInit {
         }
       )
     }else{
-      if((img == undefined || img == '') && prodID == 0){
+      if((img == undefined || img == '' || img == null || img == '-') && prodID == 0){
     
       }else  {
         this.dialog.open(ProductImgComponent, {

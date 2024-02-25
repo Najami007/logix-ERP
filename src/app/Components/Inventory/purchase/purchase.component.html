@@ -1,4 +1,4 @@
-<div class="body h-100" >
+<div class="body h-100 " >
 
     <div class="d-flex" style="background-color: rgb(255, 255, 255);">
         <div class="col-lg-10  p-2">
@@ -85,7 +85,7 @@
                 <mat-card class=" border border-primary  p-1" style="width: 140px;height: 140px;">
                     <div class="text-center " *ngIf="tableDataList != ''" accesskey="i"
                         (click)="this.global.showProductImage(this.productImage,0)">
-                        <img [src]="productImage" alt="" height="130px" width="130px">
+                        <img [src]="productImage" alt="Img not Found" height="130px" width="130px">
                     </div>
                 </mat-card>
             </div>
@@ -97,7 +97,7 @@
 
     </div> -->
 
-    <div class="row "   >
+    <div class="row w-100"   >
 
         <div class="col-lg-10 pt-1 billArea" >
             <!-- ////////////////////////// Table Row////////////////// -->
@@ -239,15 +239,20 @@
                 </div>
                 <div class="modal-body" style="height: 60vh;">
                     <div class="d-flex flex-column">
-                        <mat-form-field appearance="outline" class="w-100">
+                       <div class="row">
+                        <mat-form-field appearance="outline" class="col-lg-10">
                             <input type="text" matInput #pName [(ngModel)]="productName" id="prodName"
                                 (keydown)="this.changeFocus($event,'.fintProd')" 
                                 placeholder="Search Barcode / Name (Alt + a)" class="fintProd prodName" autocomplete="off"
                                 accesskey="a">
 
                         </mat-form-field>
+                        <div class="col-lg-2">      
+                        <button class="btn btn-primary w-100  btn-rpt" (click)="ngOnInit()">Load</button>
+                        </div>
 
                        
+                       </div>
 
                         <!-- <div class="SearchConatiner cursorPointer"
                         *ngIf="productName != '' && productName != undefined">

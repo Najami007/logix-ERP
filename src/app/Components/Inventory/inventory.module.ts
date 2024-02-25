@@ -58,6 +58,7 @@ import { SalePurchaseComparisonRptsupplierwiseComponent } from './InventoryRepor
 import { VoidListReportComponent } from './InventoryReports/void-list-report/void-list-report.component';
 import { CashierClosingRptComponent } from './InventoryReports/cashier-closing-rpt/cashier-closing-rpt.component';
 
+import { NgxBarcodeModule } from 'ngx-barcode';
 
 
 
@@ -284,6 +285,7 @@ export const inventoryRoutes: Route[] = [
     NgxMaterialTimepickerModule,
     ScrollingModule,
     ChartModule,
+    NgxBarcodeModule
   ],
   exports: [
     RouterModule

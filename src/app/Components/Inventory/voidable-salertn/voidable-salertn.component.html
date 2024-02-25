@@ -1,6 +1,6 @@
-<div class="body">
+<div class="body" ondblclick="return false">
 
-    <div class="row p-1">
+    <div class="row w-100 p-1">
 
         <!------------------ column 1 bill side ---------------->
 
@@ -89,7 +89,7 @@
                 <div class="p-1 w-100">
                     <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
                         <div class="text-center" *ngIf="tableDataList != ''">
-                            <img [src]="productImage" alt="" height="190" width="200" accesskey="i"
+                            <img [src]="productImage" alt="" height="190" width="200" alt="Img not Found" accesskey="i"
                                 (click)="this.global.showProductImage(this.productImage,0)">
                         </div>
                     </mat-card>
@@ -144,7 +144,7 @@
 
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label><u>R</u>emarks</mat-label>
-                    <textarea matInput rows="1" [(ngModel)]="billRemarks"></textarea>
+                    <textarea matInput accesskey="r" rows="1" [(ngModel)]="billRemarks"></textarea>
                 </mat-form-field>
 
                 <div class="text-center d-flex pt-4">

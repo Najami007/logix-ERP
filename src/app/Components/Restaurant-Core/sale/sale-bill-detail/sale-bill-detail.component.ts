@@ -59,7 +59,7 @@ export class SaleBillDetailComponent implements OnInit{
     this.myDiscount = item.billDiscount;
     this.myChange = item.change;
     this.myPaymentType = item.paymentType;
-    this.http.get(environment.mainApi+this.global.restaurentLink+'PrintBill?BillNo='+item.invBillNo).subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+item.invBillNo).subscribe(
       (Response:any)=>{
         this.myPrintData = Response;
         Response.forEach((e:any) => {

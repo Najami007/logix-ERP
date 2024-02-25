@@ -1,79 +1,77 @@
 <div class="text-center">
 
-    <div class="d-flex m-3">
-        <div class="col-lg-12 mt-1">
-            <mat-form-field class="col-lg-5 me-5" appearance="outline">
+    <div class="row m-3">
+      
+            <mat-form-field class="col-lg-6" appearance="outline">
                 <mat-label>Party Type</mat-label>
                 <mat-select [(ngModel)]="partyType">
                     <mat-option value="Customer">Customer</mat-option>
                     <mat-option value="Supplier">Supplier</mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field class="col-lg-5 me-5" appearance="outline">
+            <mat-form-field class="col-lg-6" appearance="outline">
                 <mat-label>Party Name</mat-label>
                 <input [(ngModel)]="partyName"  matInput type="text">
             </mat-form-field>
             
             
-            <mat-form-field class="col-lg-5 me-5" appearance="outline">
+            <mat-form-field class="col-lg-6" appearance="outline">
                 <mat-label>Party CNIC</mat-label>
                 <input [(ngModel)]="partyCNIC" [textMask]="{mask:cnicMask}"    matInput type="text">
             </mat-form-field>
             
-            <mat-form-field class="col-lg-5 me-5" appearance="outline">
+            <mat-form-field class="col-lg-6" appearance="outline">
                 <mat-label>Passport no.</mat-label>
                 <input [(ngModel)]="passportNo"   matInput type="text">
             </mat-form-field>
-            <mat-form-field class="col-lg-5 me-5" appearance="outline">
+            <mat-form-field class="col-lg-6" appearance="outline">
                 <mat-label>Mobile no.</mat-label>
                 <input [(ngModel)]="partyMobileno" [textMask]="{mask:mobileMask}"  matInput type="text">
             </mat-form-field>
-            <mat-form-field class="col-lg-5 me-5" appearance="outline">
+            <mat-form-field class="col-lg-6" appearance="outline">
                 <mat-label>Telephone no.</mat-label>
                 <input  [(ngModel)]="partyTelephoneno" [textMask]="{mask:telephoneMask}"  matInput type="text">
             </mat-form-field>
 
-            <mat-form-field class="col-lg-5 me-5" appearance="outline">
+            <mat-form-field class="col-lg-6" appearance="outline">
                 <mat-label>Bank Name</mat-label>
                 <input  [(ngModel)]="bankName"   matInput type="text">
             </mat-form-field>
 
-            <mat-form-field class="col-lg-5 me-5" appearance="outline">
+            <mat-form-field class="col-lg-6" appearance="outline">
                 <mat-label>Account Title</mat-label>
                 <input  [(ngModel)]="accountTitle"   matInput type="text">
             </mat-form-field>
 
-            <mat-form-field class="col-lg-5 me-5" appearance="outline">
+            <mat-form-field class="col-lg-6" appearance="outline">
                 <mat-label>Account No.</mat-label>
                 <input  [(ngModel)]="accountNo"   matInput type="text">
             </mat-form-field>
          
-            
-                <button class=" btn btn-primary me-1" style="height: 55px;width: 60px;" (click)="addCity()"><mat-icon>add</mat-icon></button>
-                <mat-form-field  class="col-lg-4 me-5" appearance="outline"> 
-                    <mat-label>City</mat-label>
-                    <mat-select [(ngModel)]="City">
-                        <mat-option><ngx-mat-select-search #citySearch
-                            [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
-                            name="search"></ngx-mat-select-search></mat-option>
-                        <mat-option *ngFor="let item of CitiesNames |filter:citySearch.value" value="{{item.cityID}}">{{item.cityName}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-                
+            <mat-form-field  class="col-lg-6 " appearance="outline"> 
+                <mat-label>City</mat-label>
+                <mat-select [(ngModel)]="City" #city>
+                    <mat-option><ngx-mat-select-search #citySearch
+                        [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                        name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of CitiesNames |filter:citySearch.value" value="{{item.cityID}}">{{item.cityName}}</mat-option>
+                </mat-select>
+                <mat-icon matSuffix (click)="addCity()">add</mat-icon>
+            </mat-form-field>
         
            
             
-            <mat-form-field class="col-lg-5 me-5" appearance="outline">
+            <mat-form-field class="col-lg-6" appearance="outline">
                 <mat-label>Address</mat-label>
                 <textarea [(ngModel)]="partyAddress" matInput type="text"></textarea>
             </mat-form-field>
             
-            <mat-form-field class="col-lg-5 me-5" appearance="outline">
+            <mat-form-field class="col-lg-6" appearance="outline">
                 <mat-label>Description</mat-label>
                 <textarea [(ngModel)]="description" matInput type="text"></textarea>
             </mat-form-field>
         </div>
-    </div>
+
 
    <div class="text-end bg-mf p-3">
     <Button class="btn btn-success btn-save m-2 w-25" (click)="saveParty()">{{btnType}}</Button>

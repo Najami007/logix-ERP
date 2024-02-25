@@ -52,6 +52,8 @@ export class ParkSaleComponent {
    
     
   }
+
+  projectID = this.global.parkProjectID;
   tempTicketNo:number = 0;
   billType:any = 'Sale';
   billSearch:any;
@@ -202,7 +204,7 @@ ticketArray:any = [];
         TicketDate: this.curDateTime,
         Type: "S",
         TicketRemarks: this.ticketRemarks,
-        ProjectID: 6,
+        ProjectID: this.projectID,
         TicketDetail: JSON.stringify(this.TicketDetails),
         UserID: this.global.getUserID()
       }).subscribe(
@@ -238,7 +240,7 @@ ticketArray:any = [];
           TicketDate: this.curDateTime,
           Type: "SR",
           TicketRemarks: this.ticketRemarks,
-          ProjectID: 6,
+          ProjectID: this.projectID,
           TicketDetail: JSON.stringify(this.rtnTicketDetails),
           UserID: this.global.getUserID()
         }).subscribe(

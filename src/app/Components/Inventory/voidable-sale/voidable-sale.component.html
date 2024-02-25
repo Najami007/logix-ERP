@@ -77,17 +77,12 @@
 
         <!------------------ column 2 Amount side area ---------------->
         <div class="col-lg-2 ">
-
-
-           
-
-
             <div class=" card p-2 totalArea"
                 style=" overflow-y: scroll; border-radius: 5px 5px 5px 5px;min-height: 87vh;max-height:87vh; background-color: rgb(240, 247, 245);">
                 <div class="p-1 w-100">
                     <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
                         <div class="text-center" *ngIf="tableDataList != ''">
-                            <img [src]="productImage || ''" alt="" height="190" width="200" accesskey="i"
+                            <img [src]="productImage || ''" alt="" height="190" width="200" alt="Img not Found" accesskey="i"
                                 (click)="this.global.showProductImage(this.productImage,0)">
                         </div>
                     </mat-card>
@@ -103,7 +98,7 @@
 
                     <div class="d-flex justify-content-between">
                         <div class="d-flex justify-content-between col-lg-12">
-                            <p class="text-primary" accesskey="t" data-bs-toggle="modal" data-bs-target="#discountModal">ADD DISCOUN<u>T</u></p>
+                            <p class="text-primary cursorPointer" accesskey="t" data-bs-toggle="modal" data-bs-target="#discountModal">ADD DISCOUN<u>T</u></p>
                             <p style="font-size: 40px;color: rgb(9, 9, 9);" class="font-digit text-end">{{discount |number:'1.0-1'}}
                         </div>
                         <!-- <div class=" col-lg-6">
@@ -153,7 +148,7 @@
                             (click)="openSavedBill()">D<u>u</u>plicate</button></div>
 
                     <button accesskey="o" class="btn w-75  d-flex justify-content-between btn-primary  pt-3"
-                        data-bs-toggle="modal" data-bs-target="#paymentMehtod">
+                        data-bs-toggle="modal" data-bs-target="#paymentMehtod" (click)="cash = 0;this.getTotal()">
                         <p><u>O</u>ther</p> <mat-icon>keyboard_arrow_right</mat-icon>
                     </button>
                 </div>

@@ -871,7 +871,7 @@ export class RecipeComponent implements OnInit {
             var index = this.menuProdList.indexOf(value);
           //  alert(index);
               if (value !== undefined) {
-                this.menuProdList[index].quantity +=  e.quantity;
+                this.menuProdList[index].quantity = parseFloat(this.menuProdList[index].quantity) + e.quantity;
 
               }
               if (value == undefined) {

@@ -1,7 +1,7 @@
-<div class="body">
+<div class="body ">
 
     <!-- ////////////////////////// first row////////////////// -->
-    <div class="mb-2 pt-1 ps-1 row " style="box-shadow: 0px 0px 10px 0px rgb(192, 209, 235);background-color:rgb(255, 255, 255);" >
+    <div class="mb-2 pt-1 ps-1 row w-100" style="box-shadow: 0px 0px 10px 0px rgb(192, 209, 235);background-color:rgb(255, 255, 255);" >
         <mat-card class="row just col-lg-11 mb-2 ps-3 pe-3 me-1 pt-3" style="background-color: #e8e8e4   ;">
     
             <div class="row pt-4 justify-content-between col-lg-11  ps-3 pe-3" >
@@ -33,7 +33,7 @@
         <mat-card class="mb-2 text-center border border-primary" style="height: 130px;width: 130px;" >
             <div class="p-1 " *ngIf="tableDataList != ''" accesskey="i"
                 (click)="this.global.showProductImage(this.productImage,0)">
-                <img [src]="productImage" alt="" height="110" width="110">
+                <img [src]="productImage" alt="Img not Found" height="110" width="110">
             </div>
         </mat-card>
       </div>
@@ -274,12 +274,19 @@
                 </div>
                 <div class="modal-body" style="height: 60vh;">
                     <div class="d-flex flex-column">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <input type="text" matInput #pName [(ngModel)]="productName" id="prodName"
-                                (keydown)="this.changeFocus($event,'.fintProd')" placeholder="Barcode / Name (Alt + a)" class="fintProd prodName"
-                                autofocus autocomplete="off" accesskey="a">
-
-                        </mat-form-field>
+                        <div class="d-flex flex-column">
+                            <div class="row">
+                             <mat-form-field appearance="outline" class="col-lg-10">
+                                 <input type="text" matInput #pName [(ngModel)]="productName" id="prodName"
+                                     (keydown)="this.changeFocus($event,'.fintProd')" 
+                                     placeholder="Search Barcode / Name (Alt + a)" class="fintProd prodName" autocomplete="off"
+                                     accesskey="a">
+     
+                             </mat-form-field>
+                             <div class="col-lg-2">      
+                             <button class="btn btn-primary w-100  btn-rpt" (click)="ngOnInit()">Load</button>
+                             </div>                            
+                            </div>
 
 
                         <div class="SearchConatiner cursorPointer"

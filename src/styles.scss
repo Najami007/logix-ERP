@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: 'digital';
-  src: url('./assets/fonts/digital-7.ttf');
+  src: url('./assets/fonts/digital/digital-7.ttf');
 }
 @font-face {
   font-family: 'ubuntu';
@@ -15,10 +15,16 @@
   src: url('./assets/fonts/Roboto/Roboto-Regular.ttf');
 }
 
+// @font-face {
+//   font-family: 'barcode128';
+//   font-style: normal;
+//   src: url('./assets/fonts/barcode/code128.ttf');
+// }
+
 @font-face {
   font-family: 'barcode128';
   font-style: normal;
-  src: url('./assets/fonts/barcode/Code39Azalea.ttf');
+  src: url('./assets/fonts/barcode/code128.ttf');
 }
 
 @font-face {
@@ -27,9 +33,10 @@
 }
 
 .font-barcode{
-  font-family:'barcode128' !important;
-  font-size: 50px;
-  border: 0px solid red;
+  // font-family: 'Code 128' !important;
+  font-family: Code 128, Helvetica, sans-serif ;
+  font-size: 15px;
+  border: 1px solid red;
   height: 50px;
 
   overflow: hidden;
@@ -40,13 +47,13 @@
 .bcodep{
   width: 50%;
   font-weight: bold;
-  font-size: 30px;
+  font-size: 20px;
 }
 
 .bcodet{
   width: 50%;
   font-weight: 400;
-  font-size: 20px;
+  font-size: 17px;
 }
 .bcodeC{
   font-weight: bold;

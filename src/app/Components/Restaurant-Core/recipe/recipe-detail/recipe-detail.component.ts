@@ -25,16 +25,16 @@ export class RecipeDetailComponent  {
     this.global.getCompany().subscribe((data)=>{
       this.companyProfile = data;
     });
-
+    //console.log(data)
     if(this.data){
     var recipeID = 0;
-    if(this.data.recipeRefID > 0){
-      recipeID = this.data.recipeRefID;
+    if(this.data[1].type == 'Other'){
+      recipeID = this.data[0].recipeRefID;
     }else{
-      recipeID = this.data.recipeID;
+      recipeID = this.data[0].recipeID;
     }
-     this.Category = this.data.recipeCatTitle;
-     this.cookingTime = this.data.cookingTime;
+     this.Category = this.data[0].recipeCatTitle;
+     this.cookingTime = this.data[0].cookingTime;
 
      this.http.get(environment.mainApi + this.global.restaurentLink + 'GetSingleRecipeDetail?recipeid='+recipeID).subscribe(
       (Response: any) => {

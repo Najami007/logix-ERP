@@ -53,7 +53,7 @@ export class AddUserComponent implements OnInit {
   UserName:any;
   loginName:any;
   mobileNo:any;
- 
+  userEmail:any;
   RoleID:any;
   password:any;
   confirmPassword:any;
@@ -145,6 +145,7 @@ export class AddUserComponent implements OnInit {
       UserName: this.UserName,
       MobileNo: this.mobileNo,
       LoginName: this.loginName,
+      UserEmail:this.userEmail,
       Password: this.password,
       RoleID: this.RoleID,
       UserID: this.global.getUserID()
@@ -175,6 +176,7 @@ export class AddUserComponent implements OnInit {
       UserID:this.userID,
       PinCode: pinCode,
       UserName: this.UserName,
+      UserEmail:this.userEmail,
       MobileNo: this.mobileNo,
       LoginName: this.loginName,
       RoleID: this.RoleID,
@@ -207,6 +209,7 @@ export class AddUserComponent implements OnInit {
     this.loginName = row.loginName;
     this.mobileNo = row.mobileNo;
     this.RoleID = row.roleID;
+    this.userEmail = row.userEmail;
 
   }
 
@@ -370,6 +373,7 @@ export class AddUserComponent implements OnInit {
     this.password = '';
     this.confirmPassword = '';
     this.btnType = 'Save';
+    this.userEmail = '';
   }
 
 }

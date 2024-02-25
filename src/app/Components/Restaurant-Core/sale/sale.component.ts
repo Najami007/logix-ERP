@@ -68,6 +68,28 @@ export class SaleComponent implements OnInit {
     this.global.getMenuList().subscribe((data) => {
       this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
     })
+
+
+    ///////////// will Check day is opened or not
+
+    this.global.getCurrentOpenDay().subscribe(
+      (Response:any)=>{
+        // alert(Response)
+        if(Response == null || Response == ''){
+          Swal.fire({
+            title: 'Alert!',
+            text: 'Day Is Currently Closed',
+            position: 'center',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK',
+          })
+        }
+      }
+    )
+    
   }
 
 

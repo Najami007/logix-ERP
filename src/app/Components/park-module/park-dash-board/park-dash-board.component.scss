@@ -1,19 +1,37 @@
+@import url('../../../../assets/style/dashboard.scss');
 
-
-.card{
-    // border-radius: 5px;
-    font-size: 30px;
-    // box-shadow: 10px 8px 10px 5px  rgb(238, 239, 239);
+// .card{
+//     // border-radius: 5px;
+//     font-size: 30px;
+//     // box-shadow: 10px 8px 10px 5px  rgb(238, 239, 239);
     
-    .lead{
-        font-weight: 500;
-    }
+//     .lead{
+//         font-weight: 500;
+//     }
 
-    .font-digit{
-        padding-top: 5px;
-    }
-}
+//     .font-digit{
+//         padding-top: 5px;
+//     }
+// }
 
-.color{
+// .color{
+//     color: rgb(95, 58, 45);
+// }
+
+
+.value{
+    font-size: 40px;
+  }
+  
+  .lead{
+    font-weight: 500;
+    text-transform: uppercase !important;
+  }
+  
+  .font-digit{
+    padding-top: 5px;
+  }
+  
+  .color{
     color: rgb(95, 58, 45);
-}
+  }

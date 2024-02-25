@@ -13,6 +13,11 @@
             <mat-label>Login Name</mat-label>
             <input matInput type="text" [(ngModel)]="loginName">
         </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>User Email</mat-label>
+            <input matInput type="email" [(ngModel)]="userEmail">
+        </mat-form-field>
+
 
         <mat-form-field appearance="outline" class="w-100">
             <mat-label>Mobile No</mat-label>
@@ -63,6 +68,7 @@
                 <tr>
                     <th>User Name</th>
                     <th>Login Name</th>
+                    <th>Role</th>
                     <th>Mobile</th>
                     <th *ngIf="crudList.u">Edit</th>
                     <th *ngIf="crudList.u">Reset PIN</th>
@@ -75,6 +81,7 @@
                 <tr *ngFor="let item of userList | filter:txtSearch">
                     <td>{{item.userName}}</td>
                     <td>{{item.loginName}}</td>
+                    <td>{{item.roleTitle}}</td>
                     <td>{{item.mobileNo}}</td>
                     <td *ngIf="crudList.u"><button mat-mini-fab class="bg-success h30px w30px"  (click)="editUser(item)"><mat-icon  >edit</mat-icon></button></td>
                     <td *ngIf="crudList.u"><button mat-mini-fab class="bg-primary h30px w30px " (click)="resetPin(item)"   ><mat-icon >vpn_key</mat-icon></button></td>

@@ -751,7 +751,7 @@
                         <tbody class="">
                             <tr style="display: inline-flex; " class="cursorPointer "
                                 *ngFor="let item of holdBillList ">
-                                <mat-card class="btblbtn justify-content-center" (click)="getBillDetail(item)">
+                                <mat-card *ngIf="item.orderType == 'Dine In'" class="btblbtn justify-content-center" (click)="getBillDetail(item)">
                                     <span>{{item.tableTitle}}</span>
                                 </mat-card>
                             </tr>

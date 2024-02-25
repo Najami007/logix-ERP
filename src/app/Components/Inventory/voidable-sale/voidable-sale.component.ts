@@ -18,6 +18,7 @@ import { VssavedbillComponent } from './vssavedbill/vssavedbill.component';
 
 
 
+
 @Component({
   selector: 'app-voidable-sale',
   templateUrl: './voidable-sale.component.html',
@@ -71,6 +72,29 @@ export class VoidableSaleComponent implements OnInit {
 
     this.global.getProducts().subscribe(
       (data:any)=>{this.productList = data;})
+
+
+        ///////////// will Check day is opened or not
+
+  
+      this.global.getCurrentOpenDay().subscribe(
+        (Response:any)=>{
+          // alert(Response)
+          if(Response == null || Response == ''){
+            Swal.fire({
+              title: 'Alert!',
+              text: 'Day Is Currently Closed',
+              position: 'center',
+              icon: 'warning',
+              showCancelButton: false,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'OK',
+            })
+          }
+        }
+      )
+      
 
   }
   ngOnInit(): void {
@@ -655,6 +679,7 @@ export class VoidableSaleComponent implements OnInit {
       this.tempDisc = 0;
       this.tempProdRow = '';
       this.tempQty = 0;
+      this.billRemarks = '';
       
 
     }

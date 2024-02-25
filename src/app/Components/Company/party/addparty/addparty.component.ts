@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
@@ -85,18 +85,22 @@ export class AddpartyComponent implements OnInit {
 
 
 
+  @ViewChild('city') mycity:any;
+
+  addCity(){
+    setTimeout(() => {
+      this.mycity.close()
+   
+    }, 100);
+    this.dialogue.open(AddcityComponent,{
+      width:"40%",
   
-addCity(){
-  this.dialogue.open(AddcityComponent,{
-    width:"40%",
-
-  }).afterClosed().subscribe(val=>{
-    if(val == 'Update'){
-      this.getCityNames();
-    }
-  })
-}
-
+    }).afterClosed().subscribe(val=>{
+      if(val == 'Update'){
+        this.getCityNames();
+      }
+    })
+  }
 
 
 

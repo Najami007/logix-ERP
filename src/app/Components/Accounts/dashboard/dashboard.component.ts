@@ -33,10 +33,11 @@ export class DashboardComponent implements OnInit{
   Acounts_Chart:Chart |undefined;
 
   profit_loss_chart:Chart |undefined;
+  profit_Line_Chart:Chart |undefined;
 
   budget_Chart:Chart | undefined;
   Income_Detail_Chart:Chart | undefined;
-  prvious_Income_Detail_Chart:Chart | undefined;
+  Expense_Detail_Chart:Chart | undefined;
   room_Booking_Chart:Chart | undefined;
 
   
@@ -46,11 +47,12 @@ export class DashboardComponent implements OnInit{
     this.getBudget();
     this.GetIncExp();
     this.getIncome();
-    this.getPrviousMonthIncome();
+    this.getExpense();
     this.getBookings();
     this.globalData.setHeaderTitle('Finance DashBoard');
   
 
+    this.AnnualProfitLoss();
   
    //this.getbudgetChart();
    
@@ -82,8 +84,8 @@ export class DashboardComponent implements OnInit{
    IncomeHeadsList:any = [];
    IncomeHeadsAmountList:any = [];
 
-   prevMonthIncomeHeadsList:any = [];
-   prevMonthIncomeAmountList:any = []
+   expenseHeadList:any = [];
+   ExpenseAmountList:any = []
    
   
    cardsData:any = [{totalRooms:0,mappedRooms:0,totalExpense:0,totalIncome:0}]
@@ -93,7 +95,7 @@ export class DashboardComponent implements OnInit{
 
     this.http.get(environment.mainApi+'acc/GetTotals').subscribe(
       (Response:any)=>{
-        console.log(Response)
+        //console.log(Response)
        if(Response != null){
         this.cardsData = Response;
        }
@@ -120,14 +122,9 @@ export class DashboardComponent implements OnInit{
 
           if(e.coaTypeID == 3){
             this.IncomeList.push(e.amount);
-          }
-
-        
+          }   
           this.MonthList.push(this.MonthNameList[e.month-1]);
-
           this.incomeExpenseChart();
-          
-
         });
 
         this.incomeExpenseChart();
@@ -293,7 +290,7 @@ export class DashboardComponent implements OnInit{
     this.IncomeHeadsAmountList = [];
   
 
-    this.http.get(environment.mainApi+'acc/GetProfitDetailRpt?fromdate='+this.globalData.dateFormater(this.firstDay,'-')+'&todate='
+    this.http.get(environment.mainApi+'acc/GetProfitRpt?fromdate='+this.globalData.dateFormater(this.firstDay,'-')+'&todate='
       +this.globalData.dateFormater(this.lastDay,'-')).subscribe(
         (Response:any)=>{
 
@@ -373,17 +370,17 @@ export class DashboardComponent implements OnInit{
   ///////////////////////////////////////////////////////
 
 
-  getPrviousMonthIncome(){
+  getExpense(){
    
-    this.prevMonthIncomeHeadsList = [];
-    this.prevMonthIncomeAmountList = [];
+    this.expenseHeadList = [];
+    this.ExpenseAmountList = [];
     
 
 
-    this.http.get(environment.mainApi+'acc/GetProfitDetailRpt?fromdate='+this.globalData.dateFormater(this.priviousMonthFirstDay,'-')+'&todate='
-      +this.globalData.dateFormater(this.priviousMonthLastDay,'-')).subscribe(
+    this.http.get(environment.mainApi+'acc/GetLossRpt?fromdate='+this.globalData.dateFormater(this.firstDay,'-')+'&todate='
+      +this.globalData.dateFormater(this.lastDay,'-')).subscribe(
         (Response:any)=>{
-
+          console.log(Response);
           // this.IncomeHeadsList = [
           //   'salaries',
           //   'medical',
@@ -404,40 +401,42 @@ export class DashboardComponent implements OnInit{
            Response.forEach((obj:any) => {
 
 
-            var amount = (obj.credit - obj.debit).toFixed();
-            this.prevMonthIncomeHeadsList.push(obj.coaTitle);
+            var amount = (obj.debit - obj.credit).toFixed();
+            this.expenseHeadList.push(obj.coaTitle);
             var tmpArry:any = [];
             tmpArry.push(obj.coaTitle, parseFloat(amount), false);
-            this.prevMonthIncomeAmountList.push(tmpArry);
+            this.ExpenseAmountList.push(tmpArry);
+            
             
           });
           
          }
-            this.previousIncomeDetailPieChart();
+         //console.log(this.ExpenseAmountList)
+            this.ExpenseDetailChart();
 
         },
         (Error)=>{
-          this.previousIncomeDetailPieChart();
+          this.ExpenseDetailChart();
         }
       )
   }
 
-  previousIncomeDetailPieChart() {
+  ExpenseDetailChart() {
     let chart = new Chart({
       chart: {
         styledMode: false,
       },
 
       title: {
-        text: 'INCOME ANALYSIS',
+        text: 'Expense ANALYSIS',
       },
       subtitle: {
-        text: 'PREVIOUS MONTH'
+        text: 'Current MONTH'
            
     },
 
       xAxis: {
-        categories: this.prevMonthIncomeHeadsList,
+        categories: this.expenseHeadList,
       },
 
       series: [
@@ -447,12 +446,12 @@ export class DashboardComponent implements OnInit{
           
           keys: ['name', 'y', 'selected', 'sliced'],
           //keys: ['y', 'selected', 'sliced'],
-          data: this.prevMonthIncomeAmountList ,   
+          data: this.ExpenseAmountList ,   
            showInLegend: true,
         },
       ],
     });
-    this.prvious_Income_Detail_Chart = chart;
+    this.Expense_Detail_Chart = chart;
   }
 
 
@@ -704,6 +703,47 @@ export class DashboardComponent implements OnInit{
       this.getBookingBarChart();
     }
     )
+  }
+
+
+///////////////////////////////////////////////////////////////////
+  
+  AnnualProfitLoss() {
+    let chart = new Chart({
+      chart: {
+        type: 'line',
+      },
+      title: {
+        text: 'Analysis Profit (Annual)',
+      },
+      subtitle: {
+        text: '',
+      },
+      xAxis: {
+        categories:["abc"],
+      },
+      yAxis: {
+        title: {
+          text: 'Amount ',
+        },
+      },
+      plotOptions: {
+        line: {
+          dataLabels: {
+            enabled: true,
+          },
+          enableMouseTracking: false,
+        },
+      },
+      series: [
+        {
+          name: 'Profit / Loss',
+          type: 'line',
+          data: [0,1,2],
+        },
+      ],
+    });
+    this.profit_Line_Chart = chart;
   }
 
 }
