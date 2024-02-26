@@ -104,7 +104,7 @@ export class ProductComponent implements OnInit {
   Validation = true;
   btnType = 'Save';
   autoEmpty = false;
-  searchProduct:any;
+  searchProduct:any = '';
   CategoriesList: any;
   SubCategoriesList: any;
   ProductID: any;
@@ -412,9 +412,11 @@ export class ProductComponent implements OnInit {
               this.getProductList();
               this.reset('');
               this.app.stopLoaderDark();
+             if(this.searchProduct != ''){
               setTimeout(() => {
                 this.applyFilter();
               }, 500);
+             }
              
             } else {
               this.msg.WarnNotify(Response.msg);
