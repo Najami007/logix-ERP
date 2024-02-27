@@ -47,6 +47,9 @@ export class RecipeComponent implements OnInit {
     this.getCookingArea()
   }
 
+  autoEmptyFlag = true;
+  foodCost = 0;
+
   cookingAriaID = 0;
   btnType = 'Save';
   recipeID = 0;
@@ -99,6 +102,7 @@ export class RecipeComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipes').subscribe(
       (Response: any) => {
         this.RecipeList = Response;
+        // console.log(Response);
 
       }
     )
@@ -514,12 +518,13 @@ export class RecipeComponent implements OnInit {
     this.costTotal = 0;
 
     this.menuProdList.forEach((e: any) => {
-      this.costPrice += e.costPrice * e.quantity;
+      this.costPrice += e.avgCostPrice * e.quantity;
       this.totalQty += parseFloat(e.quantity);
       this.avgCostTotal += e.avgCostPrice * e.quantity;
       this.costTotal += e.costPrice * e.quantity;
     });
 
+      this.foodCost = (this.costPrice / this.salePrice) * 100;
   }
 
 
@@ -1025,6 +1030,12 @@ export class RecipeComponent implements OnInit {
 
   reset() {
     this.recipeID = 0;
+    this.recipeType = 'Dine In';
+    this.btnType = 'Save';
+    this.productImage = '';  
+    this.recipeImg = '';
+    this.recipeRefID = 0;
+   if(this.autoEmptyFlag){
     this.cookingAriaID = 0;
     this.categoryID = 0;
     this.recipeTitle = '';
@@ -1035,12 +1046,9 @@ export class RecipeComponent implements OnInit {
     this.totalQty = 0;
     this.costTotal = 0;
     this.avgCostTotal = 0;
-    this.recipeImg = '';
-    this.productImage = '';
-    this.btnType = 'Save';
-    this.recipeType = 'Dine In';
     this.cookingTime = '';
-    this.recipeRefID = 0;
+    this.foodCost = 0;
+   }
 
 
 

@@ -40,7 +40,7 @@ export class RestrictpwdComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.userLink+'GetRestrictionCode').subscribe(
       (Response:any)=>{
         this.codesList = Response;
-        console.log(Response)
+        //console.log(Response)
 
       }
     )

@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
 
 
 companyProfile:any = [];
+companyLog = '';
 
   constructor(private msg:NotificationService,
                private rout : Router,
@@ -22,7 +23,12 @@ companyProfile:any = [];
     ){
 
       this.globalData.getCompany().subscribe((data)=>{
-        this.companyProfile = data;
+        // this.companyProfile = data;
+        if(data == '' || data == undefined || data == null){
+
+        }else{
+          this.companyLog = data[0].companyLogo1;
+        }
         // console.log(data);
       });
     }

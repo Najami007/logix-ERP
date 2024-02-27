@@ -244,10 +244,12 @@ export class SaleComponent implements OnInit {
   ///////////////////////////////////////////////////////////
 
   onCatSelected(item: any) {
+    // alert(item.recipeCatID);
     this.categoryID = item.recipeCatID;
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipesCatWise?CatID=' + item.recipeCatID + '&reqFlag=' + item.prodFlag).subscribe(
       (Response: any) => {
         this.RecipeList = Response;
+        console.log(Response);
       }
     )
 
