@@ -324,6 +324,9 @@ export class PurchaseComponent implements OnInit{
     var index = this.tableDataList.indexOf(item);
     this.tableDataList.splice(index, 1);
     this.getTotal();
+    this.rowFocused -= 1;
+    $('.qty'+this.rowFocused).trigger('focus');
+    
   
 
     }
@@ -648,6 +651,9 @@ export class PurchaseComponent implements OnInit{
                  this.msg.WarnNotify(Response.msg);
                  this.app.stopLoaderDark();
                }
+             },
+             (Error:any)=>{
+              this.app.stopLoaderDark();
              }
            )
           }else if(this.holdBtnType == 'ReHold'){
@@ -684,6 +690,9 @@ export class PurchaseComponent implements OnInit{
                  this.msg.WarnNotify(Response.msg);
                  this.app.stopLoaderDark();
                }
+             },
+             (Error:any)=>{
+              this.app.stopLoaderDark();
              }
            )
              }

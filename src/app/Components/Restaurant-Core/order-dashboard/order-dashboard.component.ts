@@ -64,7 +64,7 @@ export class OrderDashboardComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetCookingAria').subscribe(
       (Response: any) => {
         this.cookingAreaList = Response;
-        //console.log(Response);
+        
       }
     )
   }
@@ -85,7 +85,7 @@ export class OrderDashboardComponent implements OnInit {
     +'&type='+type).subscribe(
       (Response: any) => {
         this.voidOrderList = Response;
-        // console.log(Response)
+      
 
         if (this.tempOrderList != '' && (this.voidOrderList.length > this.tempVoidList.length)) {
           this.beep();
@@ -117,7 +117,7 @@ export class OrderDashboardComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.restaurentLink +'GetOrdersAndVoidItemsDetail?todate='+this.global.dateFormater(this.curDate,'-') +
     '&type='+type).subscribe(
       (Response: any) => {
-        //console.log(Response);
+       
        if(Response != null){
         Response.forEach((e: any) => {
           if (e.quantity > 0) {
@@ -137,7 +137,7 @@ export class OrderDashboardComponent implements OnInit {
         if (this.tempOrderList != '' && (this.newOrderList.length > this.tempOrderList.length)) {
           this.beep();
         }
-        // console.log(this.newOrderList.length , this.tempOrderList.length)
+  
 
 
 
@@ -162,14 +162,13 @@ export class OrderDashboardComponent implements OnInit {
     }
 
     fileReader.readAsDataURL(file);
-    console.log(this.sound);
+   
     // new Audio(this.sound).play()
 
     this.beep()
 
 
 
-    //console.log(this.imageFile);
   }
 
 

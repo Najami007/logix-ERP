@@ -427,6 +427,8 @@ export class IssueStockRerturnComponent implements OnInit {
         var index = this.tableDataList.indexOf(item);
         this.tableDataList.splice(index, 1);
         this.getTotal();
+        this.rowFocused -= 1;
+        $('.qty'+this.rowFocused).trigger('focus');
 
     }
    }

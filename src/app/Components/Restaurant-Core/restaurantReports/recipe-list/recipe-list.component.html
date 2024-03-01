@@ -30,6 +30,7 @@
                 <th>Type</th>
                 <th>Time</th>
                 <th>Cost</th>
+                <th>Food Cost</th>
                 <th>Sale</th>
                 <th>Category</th>
                 <th>Detail</th>
@@ -43,7 +44,8 @@
                 <td>{{item.recipeTitle}}</td>
                 <td>{{item.recipeType}}</td>
                 <td>{{item.cookingTime}} min</td>
-                <td>{{item.recipeCostPrice |number:'1.0-0'}}</td>
+                <td>{{item.recipeCurrentCostPrice |number:'1.0-1'}}</td>
+                <td>{{(item.recipeCurrentCostPrice / item.recipeSalePrice) * 100 |number:'1.0-1'}}%</td>
                 <td>{{item.recipeSalePrice |number:'1.0-0'}}</td>
                 <td>{{item.recipeCatTitle}}</td>
                 <td><mat-icon class="cursorPointer text-success" (click)="getDetail(item)">receipt</mat-icon>
@@ -92,6 +94,7 @@
             <th>Type</th>
             <th>Time</th>
             <th>Cost</th>
+            <th>Food Cost</th>
             <th>Sale</th>
             <th>Category</th>
          
@@ -103,7 +106,8 @@
             <td>{{item.recipeTitle}}</td>
             <td>{{item.recipeType}}</td>
             <td>{{item.cookingTime}} min</td>
-            <td>{{item.recipeCostPrice |number:'1.0-0'}}</td>
+            <td>{{item.recipeCurrentCostPrice |number:'1.0-0'}}</td>
+            <td>{{(item.recipeCurrentCostPrice / item.recipeSalePrice) * 100 |number:'1.0-1'}}%</td>
             <td>{{item.recipeSalePrice |number:'1.0-0'}}</td>
             <td>{{item.recipeCatTitle}}</td>  
 

@@ -1,4 +1,4 @@
-<div>
+<div  style="height: 80vh; overflow-y: scroll;">
 
     <mat-card class="bg-mute">
       
@@ -45,9 +45,9 @@
                             <td class="text-center">{{index +1}}</td>
                             <td>{{item.productTitle}}</td>
                             <td class="text-center">{{item.quantity |number:'1.0-3'}}</td>
-                            <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
+                            <td class="text-end">{{item.avgCostPrice |number:'1.0-1'}}</td>
                             <!-- <td>{{item.avgCostPrice |number:'1.0-1'}}</td> -->
-                            <td class="text-end">{{item.quantity * item.costPrice |number:'1.0-1'}}</td>
+                            <td class="text-end">{{item.quantity * item.avgCostPrice |number:'1.0-1'}}</td>
                             <!-- <td>{{item.quantity * item.avgCostPrice |number:'1.0-1'}}</td> -->
                         </tr>
         
@@ -57,6 +57,7 @@
             <div class="mt-4">
                 <div class="d-flex justify-content-around" style="height: 80px;"> 
                 <span><b>Cost Price: {{costPrice | number:"1.0-1"}}</b></span>
+                <span><b>Food Cost: {{(costPrice / salePrice) * 100 | number:"1.0-1"}} %</b></span>
                  <span><b>Sale Price: {{salePrice | number:"1.0-1"}}</b></span>
                 </div>
             </div>

@@ -33,7 +33,7 @@ import { ConfirmationAlertComponent } from 'src/app/Components/Common/confirmati
 
 export class GlobalDataModule implements OnInit {
 
-  DisableDate = true;
+  DisableDate = false;
 
   InvProjectID = 6;
   parkProjectID = 6;

@@ -130,7 +130,7 @@
                             <td class="text-center"><mat-icon class="text-danger" *ngIf="item.entryType == 'New'"(click)="deleteRow(item,'')">delete</mat-icon>
 
                                 <!-------------- will Open void Qty modal when void button click ------------------->
-                            <mat-icon class="text-danger" data-bs-toggle="modal" data-bs-target="#voidQtyModal" *ngIf="item.entryType == 'Saved'" (click)="tempDeleteRow = item">indeterminate_check_box</mat-icon>
+                            <!-- <mat-icon class="text-danger" data-bs-toggle="modal" data-bs-target="#voidQtyModal" *ngIf="item.entryType == 'Saved'" (click)="tempDeleteRow = item">indeterminate_check_box</mat-icon> -->
                                     </td>
 
                         </tr>
@@ -155,7 +155,7 @@
                             <td><mat-icon class="text-danger" *ngIf="item.entryType == 'New'"(click)="deleteRow(item,'')">delete</mat-icon>
 
                                 <!-------------- will Open void Qty modal when void button click ------------------->
-                            <mat-icon class="text-danger" data-bs-toggle="modal" data-bs-target="#voidQtyModal" *ngIf="item.entryType == 'Saved'" (click)="tempDeleteRow = item">indeterminate_check_box</mat-icon>
+                            <!-- <mat-icon class="text-danger" data-bs-toggle="modal" data-bs-target="#voidQtyModal" *ngIf="item.entryType == 'Saved'" (click)="tempDeleteRow = item">indeterminate_check_box</mat-icon> -->
                                     </td>
 
                         </tr>
@@ -575,7 +575,7 @@
 
                             <div class="text-center d-flex justify-content-between ">
                                 <button class="btn btn-success" data-bs-dismiss="modal"
-                                    (click)="productSelected(tempProdRow,prodQty.value);tempQty = 1;">Save</button>
+                                    (click)="productSelected(tempProdRow,prodQty.value);prodQty.value = '1';tempQty = 1;">Save</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                     (click)="tempQty = 1">Close</button>
                             </div>

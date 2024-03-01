@@ -68,7 +68,7 @@ export class OpeningStockComponent implements OnInit {
   adjustmentType = 'OS';
   IssueBillList:any = [];
   
-  avgCostTotal = 0;
+  salePriceTotal = 0;
   CostTotal = 0;
 
   projectID = this.global.InvProjectID;
@@ -223,13 +223,13 @@ export class OpeningStockComponent implements OnInit {
     this.subTotal = 0;
     this.totalQty = 0;
     this.CostTotal = 0;
-    this.avgCostTotal = 0;
+    this.salePriceTotal = 0;
     for (var i = 0; i < this.tableDataList.length; i++) {
    
       this.subTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].costPrice));
       this.totalQty += parseFloat(this.tableDataList[i].quantity);
       this.CostTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].costPrice));
-      this.avgCostTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].avgCostPrice))
+      this.salePriceTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].salePrice))
       // this.myTotal = this.mySubtoatal - this.myDiscount;
       // this.myDue = this.myPaid - this.myTotal;\
     
@@ -314,68 +314,145 @@ export class OpeningStockComponent implements OnInit {
    }
 
   }
+
   handleNumKeys(item:any ,e:any,cls:string,index:any){
 
-    if(e.keyCode == 9){
-      this.rowFocused = index +1;
-     }
-
-     if(e.shiftKey && e.keyCode == 9 ){
-  
-      this.rowFocused = index - 1;
-     }
-  
-
-    if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
-      // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
-  }
-  else {
-      e.preventDefault();
-  }
-
-  /////move down
-    if(e.keyCode == 40){
-     
-     if(this.tableDataList.length > 1 ){
-      this.rowFocused += 1;
-      if (this.rowFocused >= this.tableDataList.length) {      
-        this.rowFocused -= 1  
-    } else {
-        var clsName = cls + this.rowFocused;    
-        $(clsName).trigger('focus');    
-    }}
-  }
-
-
-     //Move up
-     if (e.keyCode == 38) {
-
-      if (this.rowFocused == 0) {
-          $(".searchProduct").trigger('focus');
-          this.rowFocused = 0;
- 
+      if(e.keyCode == 9){
+        if(cls == '.sp'){
+          this.rowFocused = index + 1;
+        }else{
+          this.rowFocused = index ;
+        }
+        
       }
+  
+      
+     if(e.shiftKey && e.keyCode == 9 ){
+    
+      if(cls == '.qty'){
+        this.rowFocused = index - 1;
+      }else{
+        this.rowFocused = index ;
+      }
+     }
+  
+      if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
+        // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
+    }
+    else {
+        e.preventDefault();
+    }
+  
+    /////move down
+      if(e.keyCode == 40){
+       
+       if(this.tableDataList.length > 1 ){
+        this.rowFocused += 1;
+        if (this.rowFocused >= this.tableDataList.length) {      
+          this.rowFocused -= 1  
+      } else {
+          var clsName = cls + this.rowFocused; 
+          // alert(clsName);   
+          // e.which = e.ctrlKey + 97;
+          $(clsName).trigger('focus');  
+          // $(clsName).trigger(e);  
+      }}
+    }
+  
+  
+       //Move up
+       if (e.keyCode == 38) {
+  
+        if (this.rowFocused == 0) {
+            $(".searchProduct").trigger('focus');
+            this.rowFocused = 0;
+   
+        }
+  
+        if (this.tableDataList.length > 1) {
+  
+            this.rowFocused -= 1;
+  
+            var clsName = cls + this.rowFocused;
+            // alert(clsName);
+            $(clsName).trigger('focus');
+            
+  
+        }
+  
+    }
+  
+      ////removeing row
+      if (e.keyCode == 46) {
+  
+        this.delRow(item);
+        this.rowFocused = 0;
+    }
+  
+    }
+  
+  // handleNumKeys(item:any ,e:any,cls:string,index:any){
 
-      if (this.tableDataList.length > 1) {
+  //   if(e.keyCode == 9){
+  //     this.rowFocused = index +1;
+  //    }
 
-          this.rowFocused -= 1;
+  //    if(e.shiftKey && e.keyCode == 9 ){
+  
+  //     this.rowFocused = index - 1;
+  //    }
+  
 
-          var clsName = cls + this.rowFocused;
-          $(clsName).trigger('focus');
+  //   if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
+  //     // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
+  // }
+  // else {
+  //     e.preventDefault();
+  // }
+
+  // /////move down
+  //   if(e.keyCode == 40){
+     
+  //    if(this.tableDataList.length > 1 ){
+  //     this.rowFocused += 1;
+  //     if (this.rowFocused >= this.tableDataList.length) {      
+  //       this.rowFocused -= 1  
+  //   } else {
+  //       var clsName = cls + this.rowFocused;    
+  //       $(clsName).trigger('focus');    
+  //   }}
+  // }
+
+
+  //    //Move up
+  //    if (e.keyCode == 38) {
+
+  //     if (this.rowFocused == 0) {
+  //         $(".searchProduct").trigger('focus');
+  //         this.rowFocused = 0;
+ 
+  //     }
+
+  //     if (this.tableDataList.length > 1) {
+
+  //         this.rowFocused -= 1;
+
+  //         var clsName = cls + this.rowFocused;
+  //         $(clsName).trigger('focus');
           
 
-      }
+  //     }
 
-  }
+  // }
 
-    ////removeing row
-    if (e.keyCode == 46) {
+  //   ////removeing row
+  //   if (e.keyCode == 46) {
 
-      this.delRow(item);
-      this.rowFocused = 0;
-  }
+  //     this.delRow(item);
+  //     this.rowFocused = 0;
+  // }
 
-  }
+  // }
 
 
   delRow(item: any) {
@@ -385,6 +462,8 @@ export class OpeningStockComponent implements OnInit {
           var index = this.tableDataList.indexOf(item);
           this.tableDataList.splice(index, 1);
           this.getTotal();
+          this.rowFocused -= 1;
+          $('.qty'+this.rowFocused).trigger('focus');
         }})
     
   }
@@ -417,6 +496,16 @@ export class OpeningStockComponent implements OnInit {
       
         if(p.quantity == 0 || p.quantity == '0' || p.quantity == '' || p.quantity == undefined || p.quantity == null){
           this.msg.WarnNotify('('+p.productTitle+') Quantity is not Valid');
+           isValidFlag = false;
+           return;
+        }
+        if(p.salePrice < p.costPrice || p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null){
+          this.msg.WarnNotify('('+p.productTitle+') Sale Price is not Valid');
+           isValidFlag = false;
+           return;
+        }
+        if(  p.costPrice > p.salePrice  || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null){
+          this.msg.WarnNotify('('+p.productTitle+') Cost Price is not Valid');
            isValidFlag = false;
            return;
         }
@@ -527,7 +616,7 @@ export class OpeningStockComponent implements OnInit {
     this.IssueBillList = [];
     this.adjustmentType = '';
     this.CostTotal = 0;
-    this.avgCostTotal = 0;
+    this.salePriceTotal = 0;
 
   }
 
@@ -701,6 +790,7 @@ export class OpeningStockComponent implements OnInit {
 
 
    approveBill(row:any){
+    // alert(row.invBillNo);
     $('#holdModal').hide();
     this.global.openPinCode().subscribe(pin=>{
       $('#holdModal').show();

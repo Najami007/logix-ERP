@@ -34,8 +34,6 @@ export class RecipeComponent implements OnInit {
 
 
 
-    this.global.getProducts().subscribe(
-      (data: any) => { this.productList = data; })
   }
 
 
@@ -45,6 +43,10 @@ export class RecipeComponent implements OnInit {
     this.getAllRecipe();
     this.getCategories();
     this.getCookingArea()
+
+    
+    this.global.getProducts().subscribe(
+      (data: any) => { this.productList = data; })
   }
 
   autoEmptyFlag = true;
@@ -695,6 +697,22 @@ export class RecipeComponent implements OnInit {
   }
 
 
+  getRecipeImage(recipeID:any,type:any){
+    this.http.get(environment.mainApi+this.global.restaurentLink+'GetRecipeImage?RecipeID='+recipeID).subscribe(
+      (Response:any)=>{
+        //console.log(Response);
+       if(type == 'hide'){
+        this.recipeImg = Response[0].recipeImage;
+       }
+       if(type == 'show'){
+     
+          this.global.showProductImage(Response[0].recipeImage,0);
+     
+       }
+      }
+    )
+  }
+
   edit(item: any) {
 
     this.btnType = 'Update';
@@ -705,11 +723,13 @@ export class RecipeComponent implements OnInit {
     this.recipeTitle = item.recipeTitle;
     this.costPrice = item.recipeCostPrice;
     this.salePrice = item.recipeSalePrice;
-    this.recipeImg = item.recipeImage;
+    this.getRecipeImage(item.recipeID,'hide');
+    // this.recipeImg = this.getRecipeImage(item.recipeID);
     this.recipeRefID = item.recipeRefID;
     this.Description = item.recipeDescription;
     this.cookingTime = item.cookingTime;
     this.cookingAriaID = item.cookingAriaID;
+    
 
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetSingleRecipeDetail?recipeid=' + item.recipeID).subscribe(
       (Response: any) => {
@@ -848,7 +868,7 @@ export class RecipeComponent implements OnInit {
               packing: 1,
               discInP: 0,
               discInR: 0,
-              lockedStatus: e.lockedStatus,
+              lockedStatus: false,
 
             })
           });
