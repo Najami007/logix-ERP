@@ -235,7 +235,7 @@ export class PurchaseComponent implements OnInit{
 
          
         }else {
-          this.tableDataList[index].Quantity += 1;
+          this.tableDataList[index].Quantity = parseFloat(this.tableDataList[index].Quantity) + 1;
           this.productImage = this.tableDataList[index].productImage;
         }
         }else{
@@ -301,7 +301,7 @@ export class PurchaseComponent implements OnInit{
         }
       )
   }else {
-    this.tableDataList[index].Quantity += 1;
+    this.tableDataList[index].Quantity = parseFloat(this.tableDataList[index].Quantity) + 1;
     this.productImage = this.tableDataList[index].productImage;
   }
   this.app.stopLoaderDark();
@@ -324,10 +324,8 @@ export class PurchaseComponent implements OnInit{
     var index = this.tableDataList.indexOf(item);
     this.tableDataList.splice(index, 1);
     this.getTotal();
-    this.rowFocused -= 1;
-    $('.qty'+this.rowFocused).trigger('focus');
-    
-  
+    this.rowFocused = index - 1;
+        $('.qty'+this.rowFocused).trigger('focus');
 
     }
    }

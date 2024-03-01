@@ -40,7 +40,7 @@ export class SaleRptRecipeCatwiseComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Sale Report (Recipewise)');
+    this.global.setHeaderTitle('Sale Report (Categorywise)');
     this.getUsers();
     this.getCategories();
 

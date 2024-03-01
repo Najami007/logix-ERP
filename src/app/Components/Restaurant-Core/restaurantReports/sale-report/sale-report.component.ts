@@ -41,7 +41,7 @@ export class SaleReportComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Sale Report');
+    this.global.setHeaderTitle('Sale Report (Datewise)');
     this.getUsers();
     $('#detailTable').show();
     $('#summaryTable').hide();
@@ -55,12 +55,16 @@ export class SaleReportComponent implements OnInit {
   userID = 0;
   userName = '';
 
+  startVal:any = '';
+  endVal:any = '';
   fromDate:Date = new Date();
   fromTime:any = '00:00';
   toDate:Date = new Date();
   toTime:any = '23:59';
 
+  saleSummaryList:any = [];
   SaleDetailList:any = [];
+  tempSaleDetailList:any = [];
 
   reportType:any;
 
@@ -81,7 +85,25 @@ export class SaleReportComponent implements OnInit {
    
   }
 
+  filterRecipe(start:any,end:any,type:any){
+    this.app.startLoaderDark();
+  if(type == 'perc'){
+    this.SaleDetailList = this.tempSaleDetailList.filter((e:any)=>((e.avgCostPrice / e.salePrice) * 100) >= start &&
+    ((e.avgCostPrice / e.salePrice) * 100) <= end  )
+  }
 
+  if(type == 'cost'){
+    this.SaleDetailList = this.tempSaleDetailList.filter((e:any)=>e.avgCostPrice >= start && e.avgCostPrice <= end  )
+  }
+
+  if(type == 'sale'){
+    this.SaleDetailList = this.tempSaleDetailList.filter((e:any)=>e.salePrice >= start && e.salePrice <= end   )
+  }
+
+  
+  
+     this.app.stopLoaderDark();
+  }
 
   
   onUserSelected(){
@@ -94,7 +116,8 @@ export class SaleReportComponent implements OnInit {
    netGrandTotal = 0;
 
    qtyTotal = 0;
-   detNetTotal = 0;
+   detSaleTotal = 0;
+   detCostTotal = 0;
    discountTotal = 0;
 
    getReport(type:any){
@@ -106,7 +129,7 @@ export class SaleReportComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventorySummaryDateWise_2?reqType=s&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
-        this.SaleDetailList = Response;
+        this.saleSummaryList = Response;
         this.billTotal = 0;
         this.chargesTotal = 0;
         this.netGrandTotal = 0;
@@ -129,12 +152,14 @@ export class SaleReportComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryDetailDateWise_3?reqType=s&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
+        this.tempSaleDetailList = Response;
         this.SaleDetailList = Response;
         this.qtyTotal = 0;
-        this.detNetTotal = 0;
+        this.detSaleTotal = 0;
          Response.forEach((e:any) => {
           this.qtyTotal += e.quantity;
-          this.detNetTotal += e.salePrice * e.quantity;
+          this.detSaleTotal += e.salePrice * e.quantity;
+          this.detCostTotal += e.avgCostPrice * e.quantity;
          });
       }
     )

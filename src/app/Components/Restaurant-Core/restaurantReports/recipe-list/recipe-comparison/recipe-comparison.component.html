@@ -1,0 +1,128 @@
+<div class="" style="overflow-x: hidden;">
+    
+  <div class="row p-3">
+    <mat-form-field appearance="outline" class="col-lg-5">
+        <mat-label>Recipe 1</mat-label>
+        <mat-select [(ngModel)]="recipe1">
+            <mat-option [disabled]="item.recipeID == recipe2" *ngFor="let item of recipeList" [value]="item.recipeID">{{item.recipeTitle}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col-lg-5">
+        <mat-label>Recipe 1</mat-label>
+        <mat-select [(ngModel)]="recipe2">
+            <mat-option [disabled]="item.recipeID == recipe1" *ngFor="let item of recipeList" [value]="item.recipeID">{{item.recipeTitle}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <div class="col-lg-2">
+        <button class="btn btn-success btn-rpt w-100" (click)="getReport()">Get Report</button>
+    </div>
+  </div>
+
+
+  <div id="recipeDetail">
+    <div  class="hide">
+        <div class="text-center" *ngFor="let item of companyProfile">
+                <h1 class="companyName">{{item.companyName}}</h1>
+                <p class="rptTitle" style="margin-top:-20px">Recipe Comparison</p>     
+        </div>
+    </div>
+   
+  <div class="row p-2">
+    
+    <div class="col-lg-6">
+        <div class="d-flex flex-column">
+            <span><b>Title:</b> {{recipeTitle1}}</span>
+            <!-- <span><b>Category:</b> {{Category1}}</span>
+            <span><b>Type:</b> {{recipeType1}}</span> -->
+           
+        </div>
+
+        <div>
+            
+            <table class="table table-logix">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Title</th>
+                        <th>Qty</th>
+                        <th>Cost</th>
+                        <!-- <th>Avg</th> -->
+                        <th>Cost Total</th>
+                        <!-- <th>Avg Total</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of prodListRecipe1 index as index">
+                        <td class="text-center">{{index +1}}</td>
+                        <td>{{item.productTitle}}</td>
+                        <td class="text-center">{{item.quantity |number:'1.0-3'}}</td>
+                        <td class="text-end">{{item.avgCostPrice |number:'1.0-1'}}</td>
+                        <!-- <td>{{item.avgCostPrice |number:'1.0-1'}}</td> -->
+                        <td class="text-end">{{item.quantity * item.avgCostPrice |number:'1.0-1'}}</td>
+                        <!-- <td>{{item.quantity * item.avgCostPrice |number:'1.0-1'}}</td> -->
+                    </tr>
+    
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-4">
+            <div class="d-flex justify-content-around" style="height: 80px;"> 
+            <span><b>Cost Price: {{costPrice1 | number:"1.0-1"}}</b></span>
+            <span><b>Food Cost: {{(costPrice1 / salePrice1) * 100 | number:"1.0-1"}} %</b></span>
+             <span><b>Sale Price: {{salePrice1 | number:"1.0-1"}}</b></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="d-flex flex-column">
+            <span><b>Title:</b> {{recipeTitle2}}</span>
+            <!-- <span><b>Category:</b> {{Category2}}</span>
+            <span><b>Type:</b> {{recipeType2}}</span> -->
+           
+        </div>
+        <div>
+            <table class="table table-logix">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Title</th>
+                        <th>Qty</th>
+                        <th>Cost</th>
+                        <!-- <th>Avg</th> -->
+                        <th>Cost Total</th>
+                        <!-- <th>Avg Total</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of prodListRecipe2 index as index">
+                        <td class="text-center">{{index +1}}</td>
+                        <td>{{item.productTitle}}</td>
+                        <td class="text-center">{{item.quantity |number:'1.0-3'}}</td>
+                        <td class="text-end">{{item.avgCostPrice |number:'1.0-1'}}</td>
+                        <!-- <td>{{item.avgCostPrice |number:'1.0-1'}}</td> -->
+                        <td class="text-end">{{item.quantity * item.avgCostPrice |number:'1.0-1'}}</td>
+                        <!-- <td>{{item.quantity * item.avgCostPrice |number:'1.0-1'}}</td> -->
+                    </tr>
+    
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-4">
+            <div class="d-flex justify-content-around" style="height: 80px;"> 
+            <span><b>Cost Price: {{costPrice2 | number:"1.0-1"}}</b></span>
+            <span><b>Food Cost: {{(costPrice2 / salePrice2) * 100 | number:"1.0-1"}} %</b></span>
+             <span><b>Sale Price: {{salePrice2 | number:"1.0-1"}}</b></span>
+            </div>
+        </div>
+    </div>
+  </div>
+ 
+  </div>
+
+
+  <div class="text-end pb-4 pe-4">
+    <button mat-icon-button color="primary" (click)="print()"><mat-icon>print</mat-icon></button>
+    <button mat-icon-button color="dark" (click)="closeDialog()"><mat-icon>close</mat-icon></button>
+</div>
+
+</div>

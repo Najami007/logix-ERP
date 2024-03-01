@@ -132,7 +132,7 @@ export class StockAdjustmentComponent implements OnInit {
           this.PBarcode = '';
           $('#searchProduct').trigger('focus');
         }else {
-          this.tableDataList[index].quantity += 1;
+          this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
           this.productImage = this.tableDataList[index].productImage;
     
           this.PBarcode = '';
@@ -195,7 +195,7 @@ export class StockAdjustmentComponent implements OnInit {
     this.PBarcode = '';
     $('#searchProduct').trigger('focus');
   }else {
-    this.tableDataList[index].quantity += 1;
+    this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
     this.productImage = this.tableDataList[index].productImage;
     
     this.PBarcode = '';
@@ -382,9 +382,8 @@ export class StockAdjustmentComponent implements OnInit {
         var index = this.tableDataList.indexOf(item);
         this.tableDataList.splice(index, 1);
         this.getTotal();
-        this.rowFocused -= 1;
+        this.rowFocused = index - 1;
         $('.qty'+this.rowFocused).trigger('focus');
-
     }
    }
    )

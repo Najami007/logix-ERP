@@ -100,14 +100,14 @@
                     </td>
 
                     <td class="text-end">{{item.CostPrice * item.Quantity |number}}</td>
-                    <td class="text-center">{{item.aq}}</td>
+                    <td class="text-center">{{item.aq |number:'1.0-3'}}</td>
                     <td class="text-danger text-center cursorPointer"><mat-icon (click)="delRow(item)">delete</mat-icon>
                     </td>
 
                 </tr>
                 <tr>
                     <td colspan="4"></td>
-                    <td class="text-center fw-bold">{{myTotalQty }}</td>
+                    <td class="text-center fw-bold">{{myTotalQty|number:'1.0-3' }}</td>
                     <td colspan="4"></td>
                     <td class="text-center"><mat-icon class="cursorPointer " (click)="emptyBill()">delete</mat-icon></td>
                 </tr>
@@ -158,11 +158,11 @@
                     </mat-select>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="col-lg-3 ">
+                <mat-form-field appearance="outline" [ngClass]="global.DisableDate == true ? 'col-lg-3' :'col-lg-2'" >
                     <mat-label>Ref Inv No.</mat-label>
                     <input matInput [(ngModel)]="refInvNo" type="text" name="refInvNo">
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="col-lg-3 ">
+                <mat-form-field appearance="outline" [ngClass]="global.DisableDate == true ? 'col-lg-3' :'col-lg-2'">
             <mat-label>Discount</mat-label>
             <input matInput [(ngModel)]="discount" (keyup)="this.global.avoidMinus($event);getTotal()" type="number" name="dicount">
         </mat-form-field>

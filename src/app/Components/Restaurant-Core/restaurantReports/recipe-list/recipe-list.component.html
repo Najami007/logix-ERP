@@ -2,13 +2,27 @@
 
   <div class="container-fluid p-2">
    <div class="row">
-
-    <mat-form-field class="col-lg-8" appearance="outline">
+    <mat-form-field class="col-lg-4" appearance="outline">
         <mat-label class="ps-5">Search.....</mat-label>
         <input #recipeSearch matInput type="search" class="text-secondary">
         <mat-icon matPrefix class="text-secondary">search</mat-icon>
     </mat-form-field>
 
+    <mat-form-field class="col-lg-1" appearance="outline">
+        <mat-label>Start</mat-label>
+        <input  matInput type="text" [(ngModel)]="startPerc" class="text-secondary">
+    </mat-form-field>
+    <mat-form-field class="col-lg-1" appearance="outline">
+        <mat-label>End</mat-label>
+        <input  matInput type="text" [(ngModel)]="endPerc" class="text-secondary">
+    </mat-form-field>
+   <div class="col-lg-1">
+    <button class=" btn-rpt btn btn-primary" (click)="filterRecipeByPercentage()">%</button>
+   </div>
+   <div class="col-lg-1">
+    <button class=" btn-rpt btn btn-primary" (click)="openComparison()">Comparison</button>
+   </div>
+    
     <mat-form-field class="col-lg-3" appearance="outline">
     <mat-label>Category</mat-label>
     <mat-select [(ngModel)]="catID" (selectionChange)="getAllRecipe()">
@@ -34,6 +48,7 @@
                 <th>Sale</th>
                 <th>Category</th>
                 <th>Detail</th>
+                <th>Img</th>
     
              
             </tr>
@@ -50,6 +65,7 @@
                 <td>{{item.recipeCatTitle}}</td>
                 <td><mat-icon class="cursorPointer text-success" (click)="getDetail(item)">receipt</mat-icon>
                     <mat-icon *ngIf="item.recipeRefID > 0" class="cursorPointer text-dark" (click)="getOtherRecipeDetail(item)">file_copy</mat-icon></td>
+                <td class="cursorPointer"><mat-icon (click)="getRecipeImage(item.recipeID)">image</mat-icon></td>
            
             
 

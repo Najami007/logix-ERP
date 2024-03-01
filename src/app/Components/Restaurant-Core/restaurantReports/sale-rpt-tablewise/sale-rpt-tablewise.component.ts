@@ -39,7 +39,7 @@ export class SaleRptTablewiseComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Sale Report (Recipewise)');
+    this.global.setHeaderTitle('Sale Report (Tablewise)');
     this.getUsers();
     this.getTable();
     $('#detailTable').hide();

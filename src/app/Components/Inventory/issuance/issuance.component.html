@@ -42,7 +42,7 @@
                </mat-select>
            </mat-form-field>
 
-           <mat-form-field appearance="outline" class="col-lg-4">
+           <mat-form-field appearance="outline" [ngClass]="global.DisableDate == true ? 'col-lg-6' :'col-lg-4'">
                <mat-label>Remarks</mat-label>
                <input matInput type="text" [(ngModel)]="invRemarks">
            </mat-form-field>
@@ -108,13 +108,13 @@
                            <td class="text-end">{{item.costPrice | number:'1.0-2'}}</td>
                        <td class="text-end">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
                      <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
-                     <td class="text-center">{{item.aq}}</td>
+                     <td class="text-center">{{item.aq |number:'1.0-3'}}</td>
                      <td class="cursorPointer text-center  text-danger"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
                    </tr>
                    <tr>
                        <td colspan="3"></td>
                        
-                       <th class="">{{totalQty}}</th>
+                       <th class="">{{totalQty |number:'1.0-3'}}</th>
                        <th colspan="2"></th>
                        <th class="text-end">{{avgCostTotal |number:'1.0-2'}}</th>
                        <th class="text-end">{{CostTotal |number:'1.0-2'}}</th>

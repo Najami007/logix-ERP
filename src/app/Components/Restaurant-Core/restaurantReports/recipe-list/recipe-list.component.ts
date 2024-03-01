@@ -7,6 +7,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { RecipeDetailComponent } from '../../recipe/recipe-detail/recipe-detail.component';
+import { RecipeComparisonComponent } from './recipe-comparison/recipe-comparison.component';
 
 @Component({
   selector: 'app-recipe-list',
@@ -44,11 +45,24 @@ export class RecipeListComponent implements OnInit {
     this.getCategories();
   }
 
-
+  startPerc:any = '';
+  endPerc:any = '';
   RecipeList:any = [];
   categoriesList:any = [];
   catID = 0;
+  tempRecipeList:any = [];
   
+  filterRecipeByPercentage(){
+    this.app.startLoaderDark();
+  if(this.catID > 0){
+    this.RecipeList = this.tempRecipeList.filter((e:any)=>((e.recipeCurrentCostPrice / e.recipeSalePrice) * 100) >= this.startPerc &&
+    ((e.recipeCurrentCostPrice / e.recipeSalePrice) * 100) <= this.endPerc && e.recipeCatID == this.catID )
+  }else{
+    this.RecipeList = this.tempRecipeList.filter((e:any)=>((e.recipeCurrentCostPrice / e.recipeSalePrice) * 100) >= this.startPerc &&
+    ((e.recipeCurrentCostPrice / e.recipeSalePrice) * 100) <= this.endPerc )
+  }
+     this.app.stopLoaderDark();
+  }
 
   getCategories(){
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetRecipeCategories').subscribe(
@@ -61,13 +75,29 @@ export class RecipeListComponent implements OnInit {
 
 
   getAllRecipe() {
+    this.app.startLoaderDark();
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipes').subscribe(
       (Response: any) => {
+        this.tempRecipeList = Response;
      if(this.catID != 0){
       this.RecipeList = Response.filter((e:any)=>e.recipeCatID == this.catID);
      }else{
       this.RecipeList = Response;
      }
+     this.app.stopLoaderDark();
+      },
+      (Error:any)=>{
+        this.app.stopLoaderDark();
+      }
+    )
+  }
+
+
+  getRecipeImage(recipeID:any){
+    this.http.get(environment.mainApi+this.global.restaurentLink+'GetRecipeImage?RecipeID='+recipeID).subscribe(
+      (Response:any)=>{
+    
+          this.global.showProductImage(Response[0].recipeImage,0);
 
       }
     )
@@ -90,5 +120,12 @@ export class RecipeListComponent implements OnInit {
 
   print(){
     this.global.printData('#printRecipeList');
+  }
+
+  openComparison(){
+    this.dialog.open(RecipeComparisonComponent,{
+      width:'80%',
+      disableClose:true,
+    }).afterClosed().subscribe()
   }
 }

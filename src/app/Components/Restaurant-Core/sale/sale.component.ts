@@ -12,13 +12,7 @@ import { SaleBillDetailComponent } from './sale-bill-detail/sale-bill-detail.com
 import { SavedBillComponent } from './saved-bill/saved-bill.component';
 
 
-$(window).focus(function () {
- console.log('active')
-});
-$(window).blur(function () {
-  //do something
-   console.log("You left this tab");
-})
+
 
 @Component({
   selector: 'app-sale',
@@ -100,7 +94,7 @@ export class SaleComponent implements OnInit {
  
     setTimeout(() => {
       this.onCatSelected(this.categoriesList[0]);
-    }, 200);
+    }, 400);
     this.getTable();
     this.getHoldBills();
     this.getBankList();
@@ -249,7 +243,7 @@ export class SaleComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipesCatWise?CatID=' + item.recipeCatID + '&reqFlag=' + item.prodFlag).subscribe(
       (Response: any) => {
         this.RecipeList = Response;
-        console.log(Response);
+        //console.log(Response);
       }
     )
 
@@ -264,6 +258,9 @@ export class SaleComponent implements OnInit {
       (Response: any) => {
         this.categoriesList = Response;
         this.categoryID = this.categoriesList[0].recipeCatID;
+        this.app.stopLoaderDark();
+      },
+      (Error:any)=>{
         this.app.stopLoaderDark();
       }
     )
@@ -327,6 +324,9 @@ export class SaleComponent implements OnInit {
     }
     this.tempProdRow = [];
     this.tempQty = 1;
+
+    $('#recSearch').trigger('focus');
+    $('#recSearch').val('');
   }
 
 

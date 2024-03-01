@@ -37,6 +37,7 @@ import { TabletSaleComponent } from './tablet-sale/tablet-sale.component';
 import { RecipeListComponent } from './restaurantReports/recipe-list/recipe-list.component';
 import { RecipeDetailComponent } from './recipe/recipe-detail/recipe-detail.component';
 import { VoidReportComponent } from './restaurantReports/void-report/void-report.component';
+import { RecipeComparisonComponent } from './restaurantReports/recipe-list/recipe-comparison/recipe-comparison.component';
 
 
 
@@ -100,6 +101,7 @@ export const restCore: Route[] = [
     RecipeListComponent,
     RecipeDetailComponent,
     VoidReportComponent,
+    RecipeComparisonComponent,
    
    
     

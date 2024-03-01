@@ -105,7 +105,7 @@ export class SavedBillComponent {
     this.myDuplicateFlag = true;
     this.http.get(environment.mainApi+this.global.restaurentLink+'PrintBill?BillNo='+item.invBillNo).subscribe(
       (Response:any)=>{
-        //console.log(Response);
+        console.log(Response);
         this.myPrintData = Response;
       }
     )

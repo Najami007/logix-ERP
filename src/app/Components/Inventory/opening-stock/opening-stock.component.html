@@ -2,7 +2,7 @@
 
     <div class="col-lg-9 bg-white " >
         <div class="row p-2 justify-content-between ">
-            <mat-form-field appearance="outline" class="col-lg-3">
+            <mat-form-field appearance="outline" *ngIf="global.DisableDate == false" class="col-lg-3">
                 <mat-label>Invoice Date</mat-label>
                 <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput type="text" name="invDate"
                     [matDatepicker]="iDate">
@@ -23,7 +23,7 @@
 
             
 
-            <mat-form-field appearance="outline" class="col-lg-6">
+            <mat-form-field appearance="outline" [ngClass]="global.DisableDate == true ? 'col-lg-9' :'col-lg-6'">
                 <mat-label>Remarks</mat-label>
                 <input matInput type="text" [(ngModel)]="invRemarks">
             </mat-form-field>
@@ -99,7 +99,7 @@
                         </td>
                           <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
                         <td class="text-end">{{item.salePrice * item.quantity |number:'1.0-2'}}</td>
-                        <td class="text-center">{{item.aq}}</td>
+                        <td class="text-center">{{item.aq |number:'1.0-3'}}</td>
                         <td class="cursorPointer text-center text-danger"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
                       </tr>
                       <tr>
@@ -322,7 +322,7 @@
                         </tr>
                         <tr>
                             <th colspan="2"></th>
-                            <th class="text-center">{{myBillTotalQty}}</th>
+                            <th class="text-center">{{myBillTotalQty|number:'1.0-3'}}</th>
                             <th></th>
                             <th></th>
                             <!-- <th></th> -->
