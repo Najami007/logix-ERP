@@ -55,9 +55,9 @@ export class TabletSaleComponent implements OnInit {
     this.global.setHeaderTitle('Sale');
     this.getCategories();
  
-    setTimeout(() => {
-      this.onCatSelected(this.categoriesList[0]);
-    }, 200);
+    // setTimeout(() => {
+    //   this.onCatSelected(this.categoriesList[0]);
+    // }, 200);
     this.getTable();
     this.getHoldBills();
     this.getBankList();
@@ -79,7 +79,7 @@ export class TabletSaleComponent implements OnInit {
 
   categoriesList: any = [];
 
-  serviceCharges = 5;
+  serviceCharges = 5.5;
   bankCoaID = 0;
   OtherCharges: any = 0;
   billDiscount: any = 0;
@@ -217,7 +217,8 @@ export class TabletSaleComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetRecipeCategories').subscribe(
       (Response: any) => {
         this.categoriesList = Response;
-        this.categoryID = this.categoriesList[0].recipeCatID;
+        // this.categoryID = this.categoriesList[0].recipeCatID;
+        this.onCatSelected(Response[0]);
 
       }
     )

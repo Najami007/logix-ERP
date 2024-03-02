@@ -112,6 +112,8 @@ export class InvrptprodwiseComponent implements OnInit {
   }
 
 
+  QtyTotal = 0;
+
   getReport(type: any) {
     this.reportType = this.reportsList.find((e:any)=>e.val == type).title;
 
@@ -119,19 +121,27 @@ export class InvrptprodwiseComponent implements OnInit {
     if (this.productID == 0 || this.productID == undefined) {
       this.msg.WarnNotify('Select Product')
     } else {
+      this.app.startLoaderDark();
       this.http.get(environment.mainApi + this.global.inventoryLink +'GetProductInOutDetailDateWise?reqType='+type+'&reqPID='+this.productID+'&reqUID='+this.userID+'&FromDate='+
         this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
           (Response: any) => {
             this.invDetailList = [];
             if(type == 'R'){
               Response.forEach((e:any) => {
+
                 if(e.issueType != 'Stock Transfer'){
                   this.invDetailList.push(e);
+                  this.QtyTotal += e.quantity;
                 }
               });
             }else{
               this.invDetailList = Response;
+              Response.forEach((e:any) => {
+                this.QtyTotal += e.quantity;
+            });
             }
+
+            this.app.stopLoaderDark();
            
            // console.log(Response)
           }

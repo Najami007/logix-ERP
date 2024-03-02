@@ -38,8 +38,7 @@ export class StockAdjustmentComponent implements OnInit {
       this.companyProfile = data;
     });
 
-    this.global.getProducts().subscribe(
-      (data:any)=>{this.productList = data;})
+
   }
 
 
@@ -48,6 +47,8 @@ export class StockAdjustmentComponent implements OnInit {
    this.global.setHeaderTitle('Stock Adjustment');
    this.getLocation();
    $('.searchProduct').trigger('focus');
+   this.global.getProducts().subscribe(
+    (data:any)=>{this.productList = data;})
   }
 
   projectID = this.global.InvProjectID;

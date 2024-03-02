@@ -39,11 +39,7 @@ export class PurchaseReturnComponent implements OnInit{
     });
 
 
-    this.global.getProducts().subscribe(
-      (data:any)=>{
-        this.productList = data;
-      }
-    )
+   
 
   }
 
@@ -54,7 +50,11 @@ export class PurchaseReturnComponent implements OnInit{
     this.getLocation();
     this.getSuppliers();
     $('.searchProduct').trigger('focus');
-
+    this.global.getProducts().subscribe(
+      (data:any)=>{
+        this.productList = data;
+      }
+    )
 
    
   }

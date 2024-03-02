@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit{
     this.GetIncExp();
     this.getIncome();
     this.getExpense();
-    this.getBookings();
+    // this.getBookings();
     this.globalData.setHeaderTitle('Finance DashBoard');
   
 
@@ -113,6 +113,7 @@ export class DashboardComponent implements OnInit{
   GetIncExp(){
     this.http.get(environment.mainApi+'acc/GetIncExp').subscribe(
       (Response:any)=>{
+        //console.log(Response);
        
         Response.forEach((e:any) => {
 
@@ -380,7 +381,7 @@ export class DashboardComponent implements OnInit{
     this.http.get(environment.mainApi+'acc/GetLossRpt?fromdate='+this.globalData.dateFormater(this.firstDay,'-')+'&todate='
       +this.globalData.dateFormater(this.lastDay,'-')).subscribe(
         (Response:any)=>{
-          console.log(Response);
+        //  console.log(Response);
           // this.IncomeHeadsList = [
           //   'salaries',
           //   'medical',
@@ -465,245 +466,245 @@ export class DashboardComponent implements OnInit{
     { roomNo: 5, bookings: 50 }
   ];
 
-  getRoomsBooking(){
+  // getRoomsBooking(){
    
-    const chart = new Chart( {
-      chart: {
-        type: 'columnrange'
-      },
-      title: {
-        text: 'Room Bookings Between 2023-10-01 and 2023-10-07'
-      },
-      xAxis: {
-        title: {
-          text: 'Room No.'
-        }
-      },
-      yAxis: {
-        title: {
-          text: 'Bookings'
-        }
-      },
-      series: []
-    });
-  }
-
-
-  getBookingBarChart(){
-
   //   const chart = new Chart( {
-
   //     chart: {
-  //         type: 'columnrange',
-  //         inverted: true
+  //       type: 'columnrange'
   //     },
+  //     title: {
+  //       text: 'Room Bookings Between 2023-10-01 and 2023-10-07'
+  //     },
+  //     xAxis: {
+  //       title: {
+  //         text: 'Room No.'
+  //       }
+  //     },
+  //     yAxis: {
+  //       title: {
+  //         text: 'Bookings'
+  //       }
+  //     },
+  //     series: []
+  //   });
+  // }
+
+
+  // getBookingBarChart(){
+
+  // //   const chart = new Chart( {
+
+  // //     chart: {
+  // //         type: 'columnrange',
+  // //         inverted: true
+  // //     },
   
      
   
+  // //     title: {
+  // //         text: 'Temperature variation by month'
+  // //     },
+  
+  // //     subtitle: {
+  // //         text: 'Observed in Vik i Sogn, Norway, 2021 | ' +
+  // //             'Source: <a href="https://www.vikjavev.no/ver/" target="_blank">Vikjavev</a>'
+  // //     },
+  
+  // //     xAxis: {
+  // //         categories: ['01', '02', '03', '04', '05', '06',
+  // //             '07', '08', '09', '10', '11', '12']
+  // //     },
+  
+  // //     yAxis: {
+  // //         title: {
+  // //             text: 'Temperature ( °C )'
+  // //         }
+  // //     },
+  
+  // //     tooltip: {
+  // //         valueSuffix: '°C'
+  // //     },
+  
+  // //     plotOptions: {
+  // //         columnrange: {
+  // //             borderRadius: '50%',
+  // //             dataLabels: {
+  // //                 enabled: true,
+  // //                 format: '{y}°C'
+  // //             }
+  // //         }
+  // //     },
+  
+  // //     legend: {
+  // //         enabled: false
+  // //     },
+  
+  // //     series: [{
+  // //         type:'bar',
+  // //         name: 'Temperatures',
+  // //         data: [
+  // //             [13.9, 5.2],
+  // //             [16.7, 10.6],
+  // //             [4.7, 11.6],
+  // //             [4.4, 16.8],
+  // //             [2.1, 27.2],
+  // //             [5.9, 29.4],
+  // //             [6.5, 29.1],
+  // //             [4.7, 25.4],
+  // //             [4.3, 21.6],
+  // //             [3.5, 15.1],
+  // //             [9.8, 12.5],
+  // //             [11.5, 8.4]
+  // //         ]
+  // //     }]
+  
+  // // });
+
+  // // const chart = new Chart(
+  // //    {   
+  // //     chart : {
+  // //        type: 'columnrange',
+  // //        inverted:true
+  // //     },
+  // //     title : {
+  // //        text: 'Temperature variation by month'   
+  // //     },
+  // //     subtitle : {
+  // //        text: 'Observed in Vik i Sogn, Norway, 2009'   
+  // //     },
+  // //     xAxis : {
+  // //        categories: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']      
+  // //     },
+  // //     yAxis : {     
+  // //        title: {
+  // //           text: 'Temperature ( \xB0C )'         
+  // //        }      
+  // //     },
+  // //     tooltip: {
+  // //        headerFormat: '<span style = "font-size:10px">{point.key}</span><table>',
+  // //           pointFormat: '<tr><td style = "color:{series.color};padding:0">{series.name}: </td>' +
+  // //           '<td style = "padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+  // //           footerFormat: '</table>',
+  // //        shared: true,
+  // //        useHTML: true
+  // //     },
+  // //     plotOptions : {
+  // //        columnrange: {
+  // //           dataLabels: {
+  // //              enabled: true,
+  // //              formatter: function () {
+  // //                 return this.y + '\xB0C';
+  // //              }
+  // //           }
+  // //        }
+  // //     },
+  // //     credits : {
+  // //        enabled: false
+  // //     },
+  // //     series : [{
+  // //       type:'columnrange',
+  // //        name: 'Temperatures',
+  // //        data: [
+  // //           [-9.7, 9.4],
+  // //           [-8.7, 6.5],
+  // //           [-3.5, 9.4],
+  // //           [-1.4, 19.9],
+  // //           [0.0, 22.6],
+  // //           [2.9, 29.5],
+  // //           [9.2, 30.7],
+  // //           [7.3, 26.5],
+  // //           [4.4, 18.0],
+  // //           [-3.1, 11.4],
+  // //           [-5.2, 10.4],
+  // //           [-13.5, 9.8]
+  // //        ]
+  // //     }]
+  // //  })
+
+  // let chart = new Chart({
+  //   chart: {
+  //     type: 'columnrange',
+  //     inverted: true
+  //   },
+
+  //   title: {
+  //     text: 'Booking Table'
+  //   },
+
+  //   subtitle: {
+  //     text: 'Current Month'
+  //   },
+
+  //   xAxis: {
+  //     categories: [this.BookingsList.roomTitle]
+  //   },
+
+  //   yAxis: {
+  //     opposite: true,
+  //   type: "datetime",
+  //   tickmarkPlacement: "on",
+  //   tickInterval: 3600 * 1000,
+  //   // dateTimeLabelFormats: {
+  //   //   day: "%H:%M:%S",
+  //   //   // week: "%H:%M:%S",
+  //   //   month: "%H:%M:%S",
+  //   //   year: "%H:%M:%S"
+  //   // },
+
   //     title: {
-  //         text: 'Temperature variation by month'
+  //       text: 'Date'
   //     },
-  
-  //     subtitle: {
-  //         text: 'Observed in Vik i Sogn, Norway, 2021 | ' +
-  //             'Source: <a href="https://www.vikjavev.no/ver/" target="_blank">Vikjavev</a>'
-  //     },
-  
-  //     xAxis: {
-  //         categories: ['01', '02', '03', '04', '05', '06',
-  //             '07', '08', '09', '10', '11', '12']
-  //     },
-  
-  //     yAxis: {
-  //         title: {
-  //             text: 'Temperature ( °C )'
-  //         }
-  //     },
-  
-  //     tooltip: {
-  //         valueSuffix: '°C'
-  //     },
-  
-  //     plotOptions: {
-  //         columnrange: {
-  //             borderRadius: '50%',
-  //             dataLabels: {
-  //                 enabled: true,
-  //                 format: '{y}°C'
-  //             }
-  //         }
-  //     },
-  
-  //     legend: {
-  //         enabled: false
-  //     },
-  
-  //     series: [{
-  //         type:'bar',
-  //         name: 'Temperatures',
-  //         data: [
-  //             [13.9, 5.2],
-  //             [16.7, 10.6],
-  //             [4.7, 11.6],
-  //             [4.4, 16.8],
-  //             [2.1, 27.2],
-  //             [5.9, 29.4],
-  //             [6.5, 29.1],
-  //             [4.7, 25.4],
-  //             [4.3, 21.6],
-  //             [3.5, 15.1],
-  //             [9.8, 12.5],
-  //             [11.5, 8.4]
-  //         ]
-  //     }]
-  
-  // });
-
-  // const chart = new Chart(
-  //    {   
-  //     chart : {
-  //        type: 'columnrange',
-  //        inverted:true
-  //     },
-  //     title : {
-  //        text: 'Temperature variation by month'   
-  //     },
-  //     subtitle : {
-  //        text: 'Observed in Vik i Sogn, Norway, 2009'   
-  //     },
-  //     xAxis : {
-  //        categories: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']      
-  //     },
-  //     yAxis : {     
-  //        title: {
-  //           text: 'Temperature ( \xB0C )'         
-  //        }      
-  //     },
-  //     tooltip: {
-  //        headerFormat: '<span style = "font-size:10px">{point.key}</span><table>',
-  //           pointFormat: '<tr><td style = "color:{series.color};padding:0">{series.name}: </td>' +
-  //           '<td style = "padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-  //           footerFormat: '</table>',
-  //        shared: true,
-  //        useHTML: true
-  //     },
-  //     plotOptions : {
-  //        columnrange: {
-  //           dataLabels: {
-  //              enabled: true,
-  //              formatter: function () {
-  //                 return this.y + '\xB0C';
-  //              }
-  //           }
-  //        }
-  //     },
-  //     credits : {
-  //        enabled: false
-  //     },
-  //     series : [{
-  //       type:'columnrange',
-  //        name: 'Temperatures',
-  //        data: [
-  //           [-9.7, 9.4],
-  //           [-8.7, 6.5],
-  //           [-3.5, 9.4],
-  //           [-1.4, 19.9],
-  //           [0.0, 22.6],
-  //           [2.9, 29.5],
-  //           [9.2, 30.7],
-  //           [7.3, 26.5],
-  //           [4.4, 18.0],
-  //           [-3.1, 11.4],
-  //           [-5.2, 10.4],
-  //           [-13.5, 9.8]
-  //        ]
-  //     }]
-  //  })
-
-  let chart = new Chart({
-    chart: {
-      type: 'columnrange',
-      inverted: true
-    },
-
-    title: {
-      text: 'Booking Table'
-    },
-
-    subtitle: {
-      text: 'Current Month'
-    },
-
-    xAxis: {
-      categories: [this.BookingsList.roomTitle]
-    },
-
-    yAxis: {
-      opposite: true,
-    type: "datetime",
-    tickmarkPlacement: "on",
-    tickInterval: 3600 * 1000,
-    // dateTimeLabelFormats: {
-    //   day: "%H:%M:%S",
-    //   // week: "%H:%M:%S",
-    //   month: "%H:%M:%S",
-    //   year: "%H:%M:%S"
-    // },
-
-      title: {
-        text: 'Date'
-      },
       
-    },
+  //   },
 
-    // tooltip: {
-    //   valueSuffix: '°C'
-    // },
+  //   // tooltip: {
+  //   //   valueSuffix: '°C'
+  //   // },
 
-    // plotOptions: {
-    //   columnrange: {
-    //     dataLabels: {
-    //       enabled: true,
-    //       format: '{y}'
-    //     }
-    //   }
-    // },
+  //   // plotOptions: {
+  //   //   columnrange: {
+  //   //     dataLabels: {
+  //   //       enabled: true,
+  //   //       format: '{y}'
+  //   //     }
+  //   //   }
+  //   // },
 
-    legend: {
-      enabled: false
-    },
+  //   legend: {
+  //     enabled: false
+  //   },
 
-    series: [{
-      type:'columnrange',
-      name: 'Date',
-      data: [
-       this.BookingsList.dateOfArrival,this.BookingsList.dateOfDeparture
+  //   series: [{
+  //     type:'columnrange',
+  //     name: 'Date',
+  //     data: [
+  //      this.BookingsList.dateOfArrival,this.BookingsList.dateOfDeparture
 
 
-      ]
-    }]
-  });
+  //     ]
+  //   }]
+  // });
     
    
-  this.room_Booking_Chart = chart;
+  // this.room_Booking_Chart = chart;
   
-  }
+  // }
 
 
   
   BookingsList:any = [];
 
-  getBookings(){
-    this.http.get(environment.mainApi+'acc/agetbooking').subscribe(
-    (Response:any)=>{
+  // getBookings(){
+  //   this.http.get(environment.mainApi+'acc/agetbooking').subscribe(
+  //   (Response:any)=>{
       
 
-      this.BookingsList =Response.filter((e:any)=>e.bookingStatus == 'Confirmed');
-      // console.log(this.BookingsList);
-      this.getBookingBarChart();
-    }
-    )
-  }
+  //     this.BookingsList =Response.filter((e:any)=>e.bookingStatus == 'Confirmed');
+  //     // console.log(this.BookingsList);
+  //     this.getBookingBarChart();
+  //   }
+  //   )
+  // }
 
 
 ///////////////////////////////////////////////////////////////////

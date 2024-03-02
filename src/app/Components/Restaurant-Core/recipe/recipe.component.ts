@@ -435,8 +435,8 @@ export class RecipeComponent implements OnInit {
           var clsName = cls + this.prodFocusedRow;    
          //  alert(clsName);
           $(clsName).trigger('focus');
-          e.which = 9;   
-          $(clsName).trigger(e)       
+          // e.which = 9;   
+          // $(clsName).trigger(e)       
       }}
     }
   

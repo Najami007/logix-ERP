@@ -38,8 +38,6 @@ export class OpeningStockComponent implements OnInit {
       this.companyProfile = data;
     });
 
-    this.global.getProducts().subscribe(
-      (data:any)=>{this.productList = data;})
   }
 
 
@@ -48,6 +46,9 @@ export class OpeningStockComponent implements OnInit {
    this.global.setHeaderTitle('Opening Stock');
    this.getLocation();
    $('.searchProduct').trigger('focus');
+   
+   this.global.getProducts().subscribe(
+    (data:any)=>{this.productList = data;})
   }
 
   btnType = 'Save';

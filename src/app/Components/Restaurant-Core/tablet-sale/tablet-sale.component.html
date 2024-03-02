@@ -19,7 +19,8 @@
 
 
             <div class="scrollContainer">
-
+                <button (click)="onCatSelected({recipeCatID:0,prodFlag:false})" [ngClass]="categoryID == 0  ? 'bg-blue' : ''"
+                class="border item text-center m-1 p-1">ALL</button>
                 <button *ngFor="let item of categoriesList|filter:catSearch.value"
                     (click)="onCatSelected(item);catSearch.value = ''"
                     [ngClass]="item.recipeCatID == categoryID  ? 'bg-blue' : ''"

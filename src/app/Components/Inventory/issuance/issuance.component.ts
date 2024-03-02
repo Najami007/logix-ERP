@@ -40,8 +40,7 @@ export class IssuanceComponent implements OnInit {
 
 
     
-    this.global.getProducts().subscribe(
-      (data:any)=>{this.productList = data;})
+ 
   }
 
 
@@ -51,6 +50,8 @@ export class IssuanceComponent implements OnInit {
    this.getLocation();
    $('.searchProduct').trigger('focus');
    this.getIssueTypes();
+   this.global.getProducts().subscribe(
+    (data:any)=>{this.productList = data;})
   
   }
 
@@ -326,8 +327,8 @@ export class IssuanceComponent implements OnInit {
          var clsName = cls + this.prodFocusedRow;    
         //  alert(clsName);
          $(clsName).trigger('focus');
-         e.which = 9;   
-         $(clsName).trigger(e)       
+        //  e.which = 9;   
+        //  $(clsName).trigger(e)       
      }}
    }
  

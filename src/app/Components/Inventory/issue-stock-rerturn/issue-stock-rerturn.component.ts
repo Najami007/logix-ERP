@@ -38,9 +38,6 @@ export class IssueStockRerturnComponent implements OnInit {
     });
 
 
-    
-    this.global.getProducts().subscribe(
-      (data:any)=>{this.productList = data;})
   }
 
 
@@ -50,6 +47,10 @@ export class IssueStockRerturnComponent implements OnInit {
    this.getLocation();
    $('.searchProduct').trigger('focus');
    this.getIssueTypes();
+   
+    
+   this.global.getProducts().subscribe(
+    (data:any)=>{this.productList = data;})
   }
 
   projectID = this.global.InvProjectID;

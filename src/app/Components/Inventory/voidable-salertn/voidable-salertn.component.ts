@@ -62,8 +62,7 @@ export class VoidableSalertnComponent implements OnInit {
       this.companyAddress = data[0].companyAddress;
       this.companyName = data[0].companyName;
     });
-  this.global.getProducts().subscribe(
-      (data:any)=>{this.productList = data;})
+
 
 
         ///////////// will Check day is opened or not
@@ -94,6 +93,9 @@ export class VoidableSalertnComponent implements OnInit {
    this.getBankList();
    this.getCurrentBill();
    $('#vsrtnsearchProduct').trigger('focus');
+   
+   this.global.getProducts().subscribe(
+    (data:any)=>{this.productList = data;})
    
   }
 

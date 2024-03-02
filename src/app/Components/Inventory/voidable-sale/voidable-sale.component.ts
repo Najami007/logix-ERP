@@ -70,8 +70,7 @@ export class VoidableSaleComponent implements OnInit {
     });
 
 
-    this.global.getProducts().subscribe(
-      (data:any)=>{this.productList = data;})
+   
 
 
         ///////////// will Check day is opened or not
@@ -102,6 +101,9 @@ export class VoidableSaleComponent implements OnInit {
    this.getBankList();
    this.getCurrentBill();
    $('#vssearchProduct').trigger('focus');
+   
+   this.global.getProducts().subscribe(
+    (data:any)=>{this.productList = data;})
   }
 
 
