@@ -128,7 +128,7 @@
                 <div class="justify-content-between p-1 w-50 border-end">
 
                     <div class="d-flex justify-content-between w-100">
-                        <mat-label class="w-50 text-primary cursorPointer" data-bs-toggle="modal"
+                        <mat-label class="w-50 text-primary cursorPointer" data-bs-toggle="modal" (click)="focusTo('#discInput')"
                             data-bs-target="#disc" accesskey="t"><strong>ADD DISCOUN<u>T</u></strong></mat-label>
                         <p class="text-center font-digit" style="font-size: 30px;">{{billDiscount |number:'1.0-2'}}</p>
                         <!-- <input disabled="true" [(ngModel)]="billDiscount" class="w-50 text-end" (keyup)="getTotal();"
@@ -144,11 +144,11 @@
 
                     <div class="d-flex justify-content-between w-100 pt-1">
                         <mat-label><strong>SUB TOTAL</strong></mat-label>
-                        <p class="text-center font-digit" style="font-size: 30px;">{{subTotal |number}}</p>
+                        <p class="text-center font-digit" style="font-size: 30px;">{{subTotal |number:'1.0-1'}}</p>
                     </div>
                     <div class="d-flex justify-content-between  w-100">
                         <mat-label><strong>NET TOTAL</strong></mat-label>
-                        <p class="text-center font-digit" style="font-size: 30px;">{{netTotal |number}}</p>
+                        <p class="text-center font-digit" style="font-size: 30px;">{{netTotal |number:'1.0-1'}}</p>
                     </div>
                     <mat-form-field class="w-100" appearance="outline">
                         <mat-label>Remar<u>k</u>s</mat-label>
@@ -161,32 +161,32 @@
                 <div class="w-50 text-center">
 
                     <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5" *ngIf="holdbtnType == 'hold'"
-                        matTooltip="Hold Current Bill" (click)="save('hold')" accesskey="h">HOLD</button>
+                        matTooltip="Hold Current Bill"  matTooltipPosition="left" (click)="save('hold')" accesskey="h">HOLD</button>
 
                     <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5"
-                        *ngIf="holdbtnType == 'rehold'" matTooltip="ReHold Current Bill"(click)="save('rehold')">ReHold</button>
+                        *ngIf="holdbtnType == 'rehold'" matTooltipPosition="left" matTooltip="ReHold Current Bill"(click)="save('rehold')">ReHold</button>
 
                     <button mat-raised-button class="m-1 btn text-white bg-danger col-lg-5" data-bs-toggle="modal"
-                        matTooltip="Retrieve Hold Bills" data-bs-target="#retrieveBill"(click)="getHoldBills()" accesskey="r"><u>R</u>etrieve</button>
+                        matTooltip="Retrieve Hold Bills" matTooltipPosition="right" data-bs-target="#retrieveBill"(click)="getHoldBills()" accesskey="r"><u>R</u>etrieve</button>
   
 
-                    <button mat-raised-button class="m-1 btn text-white bg-warning col-lg-5" accesskey="n" matTooltip="New bill (Alt + n)"
-                         data-bs-toggle="modal" data-bs-target="#NewBill" [disabled]="tableData != ''" (click)="reset()"><u>N</u>ew Bill</button>
+                    <button mat-raised-button class="m-1 btn text-white bg-warning col-lg-5" accesskey="n" matTooltip="New bill (Alt + n)" matTooltipPosition="left"
+                         data-bs-toggle="modal"  data-bs-target="#NewBill" [disabled]="tableData != ''" (click)="reset()"><u>N</u>ew Bill</button>
 
-                     <button mat-raised-button class="m-1 btn text-white bg-success col-lg-5" data-bs-toggle="modal"
+                     <button mat-raised-button class="m-1 btn text-white bg-success col-lg-5" data-bs-toggle="modal" matTooltipPosition="right"
                          matTooltip="Save Current Bill" data-bs-target="#paymentMehtod" accesskey="s"><u>S</u>ave</button>
 
 
-                    <button matTooltip="Hold & Print  Current Bill" mat-raised-button style="font-size: 11px;"
+                    <button matTooltip="Hold & Print  Current Bill" matTooltipPosition="left" mat-raised-button style="font-size: 11px;" 
                         class="m-1 text-white btn bg-primary col-lg-5" (click)="HOldandPrint('rehold')" accesskey="p">Hold & <u>P</u>rint</button>
 
-                    <button accesskey="u" mat-raised-button matTooltip="Retreiving Saved Bills" class="m-1 btn  col-lg-5 "
+                    <button accesskey="u" mat-raised-button matTooltip="Retreiving Saved Bills" matTooltipPosition="right" class="m-1 btn  col-lg-5 "
                         (click)="getSavedBill()" >D<u>u</u>plicate</button>
             
-                    <button mat-raised-button matTooltip="Void Full Bill" class="m-1 text-white btn bg-info col-lg-5"
+                    <button mat-raised-button matTooltip="Void Full Bill" matTooltipPosition="left" class="m-1 text-white btn bg-info col-lg-5"
                         (click)="voidBill()" accesskey="v"><u>V</u>oid Bill</button>
 
-                    <button data-bs-toggle="modal" matTooltip="Merge Two Bills" data-bs-target="#mergeBill"
+                    <button data-bs-toggle="modal" matTooltip="Merge Two Bills" matTooltipPosition="right" data-bs-target="#mergeBill"
                         mat-raised-button class="m-1 text-white btn col-lg-5" style="background-color: pink;" accesskey="m"><u>M</u>erge Bill</button>
 
                 </div>
@@ -219,7 +219,6 @@
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-body">
-                    <div>
                    <form method="post">
                     
                     <mat-label class="text-center">Enter Void Quantity</mat-label>
@@ -239,9 +238,7 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                             (click)="tempQty = 1">Close</button>
                     </div>
-                   </form>
-                    
-                    </div>
+                   </form>       
                 </div>
             </div>
         </div>
@@ -551,7 +548,7 @@
                         <div>
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>Discount</mat-label>
-                                <input class="prodQty" (keydown)="this.global.handleNumKeys($event)" type="number"
+                                <input class="prodQty" name="discount"  id="discInput" (keydown)="this.global.handleNumKeys($event)" type="number"
                                     min="0" matInput #bDisc />
                             </mat-form-field>
                         </div>
@@ -708,22 +705,22 @@
         aria-labelledby="NewBillLabel">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+                <form method="post">
                 <div class="modal-body">
-
-
+                  
                     <div class="d-flex">
                         <div class="col-lg-10">
                             <table>
                                 <tbody class="">
                                     <tr style="display: inline-flex; " class="cursorPointer "
                                         *ngFor="let item of tableList ">
-                                        <mat-card class="btblbtn justify-content-center"
+                                        <mat-card name="TableNo" class="btblbtn justify-content-center"
                                             *ngIf="item.tableStatus == false"
                                             [ngClass]="item.tableID == tempTableID ? 'bg-primary text-white' : 'bg-white'"
                                             (click)="tempTableID = item.tableID">
                                             <span>{{item.tableTitle}}</span>
                                         </mat-card>
-                                        <mat-card class="btblbtn justify-content-center bg-warning text-white"
+                                        <mat-card name="TableNo" class="btblbtn justify-content-center bg-warning text-white"
                                             *ngIf="item.tableStatus == true">
                                             <span>{{item.tableTitle}}</span>
                                         </mat-card>
@@ -733,29 +730,30 @@
                         </div>
                         <div class="col-lg-2 border-start p-1">
 
-                            <mat-radio-group aria-label="Select an option" [(ngModel)]="tempOrderType">
+                            <mat-radio-group name="orderType" aria-label="Select an option" [(ngModel)]="tempOrderType">
                                 <mat-radio-button *ngFor="let item of orderTypeList"
                                     [disabled]="invBillNo !== '' || orderType != ''"
                                     (change)="onOrderTypeSelected(item.val)"
                                     [value]="item.val">{{item.title}}</mat-radio-button>
                             </mat-radio-group>
 
-                            <mat-form-field appearance="outline" class="w-100 pt-4">
+                            <mat-form-field  appearance="outline" class="w-100 pt-4">
                                 <mat-label>Cover</mat-label>
-                                <input type="text" (keydown)="this.global.handleNumKeys($event)" matInput
+                                <input name="cover" type="number" (keydown)="this.global.handleNumKeys($event)" matInput
                                     [(ngModel)]="coverOf" />
                             </mat-form-field>
 
                         </div>
                     </div>
-
-
+              
                 </div>
 
                 <div class="modal-footer bg-mf-blue">
                     <button class="btn btn-success" (click)="selectT()">Save</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
+
+            </form>
 
 
             </div>

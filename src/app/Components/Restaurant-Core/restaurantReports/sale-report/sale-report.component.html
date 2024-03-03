@@ -178,7 +178,7 @@
                     <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
                     <td>{{item.tableTitle}}</td>
                     <td>{{item.productTitle}}</td>
-                    <td class="text-center">{{item.quantity}}</td>
+                    <td class="text-center">{{item.quantity |number:'1.0-3'}}</td>
                     <!-- <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td> -->
                     <td class="text-end">{{item.avgCostPrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{(item.avgCostPrice / item.salePrice) * 100 |number:'1.0-1'}}%</td>
@@ -189,7 +189,7 @@
                 </tr>
                 <tr>
                     <td colspan="5"></td>
-                    <td class="fw-bold text-center">{{qtyTotal  |number:'1.0-0'}}</td>
+                    <td class="fw-bold text-center">{{qtyTotal  |number:'1.0-3'}}</td>
                     <td></td>
                     <td></td>
                     <td></td>

@@ -219,7 +219,10 @@ export class TabletSaleComponent implements OnInit {
         this.categoriesList = Response;
         // this.categoryID = this.categoriesList[0].recipeCatID;
         this.onCatSelected(Response[0]);
-
+        this.app.stopLoaderDark();
+      },
+      (Error:any)=>{
+        this.app.stopLoaderDark();
       }
     )
   }

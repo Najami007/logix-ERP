@@ -116,14 +116,14 @@
                     </thead>
                     <tbody >
                         <tr class="text-end" >
-                            <td>{{totalServiceCharges}}</td>
-                            <td>{{TotalSales}}</td>
-                            <td>{{totalSaleReturn}}</td>
-                            <td>{{TotalSales - totalSaleReturn}}</td>
-                            <td>{{totalCash}}</td>
-                            <td>{{totalBank}}</td>
-                            <td>{{totalComplimentary}}</td>
-                            <td>{{totalDiscount}}</td>
+                            <td>{{totalServiceCharges |number:'1.0-0'}}</td>
+                            <td>{{TotalSales |number:'1.0-0'}}</td>
+                            <td>{{totalSaleReturn |number:'1.0-0'}}</td>
+                            <td>{{TotalSales - totalSaleReturn |number:'1.0-0'}}</td>
+                            <td>{{totalCash |number:'1.0-0'}}</td>
+                            <td>{{totalBank |number:'1.0-0'}}</td>
+                            <td>{{totalComplimentary |number:'1.0-0'}}</td>
+                            <td>{{totalDiscount |number:'1.0-0'}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -166,7 +166,7 @@
                             </tr>
                             <tr>
                                 <td class="text-start"><b>Total</b></td>
-                                <td class="text-end"><b>{{(item.cashIn - item.cashOut) + item.bank + item.complimentary + item.disocunt}}</b></td>
+                                <td class="text-end"><b>{{(item.cashIn - item.cashOut) + item.bank + item.complimentary + item.disocunt |number:'1.0-0'}}</b></td>
                             </tr>
                             <!-- <tr>
                                 <td class="text-start"><b>Amount Received</b></td>
@@ -175,7 +175,7 @@
                         </tbody>
                     </table>
 
-                    <div class="d-flex justify-content-between">
+                    <div class="row justify-content-between">
                         <mat-label class="fw-bold col-lg-6">Signature:_________________________</mat-label>
                         <mat-label class="fw-bold col-lg-6">Received Amount:___________________</mat-label>
                     </div>

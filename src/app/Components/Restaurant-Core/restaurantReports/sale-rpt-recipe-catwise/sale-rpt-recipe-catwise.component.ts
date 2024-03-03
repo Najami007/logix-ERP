@@ -127,21 +127,27 @@ export class SaleRptRecipeCatwiseComponent implements OnInit {
   }else{
     if(type == 'summary'){
       this.reportType = 'Summary';
+      this.app.startLoaderDark();
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleSummaryRecipeCatAndDateWise?reqCID='+this.recipeCatID+'&reqUID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response: any) => {
+        console.log(Response)
         this.SaleDetailList = Response;
         this.grandTotal = 0;
         Response.forEach((e:any) => {
           this.grandTotal += e.total;
         });
-
+        this.app.stopLoaderDark();
+      },
+      (Error:any)=>{
+        this.app.stopLoaderDark();
       }
     )
     }
 
     if(type == 'detail'){
       this.reportType = 'Detail';
+      this.app.startLoaderDark();
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleDetailRecipeCatAndDateWise?reqCID='+this.recipeCatID+'&reqUID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response: any) => {
@@ -150,7 +156,10 @@ export class SaleRptRecipeCatwiseComponent implements OnInit {
         Response.forEach((e:any) => {
           this.grandTotal += e.quantity * e.salePrice;
         });
-
+        this.app.stopLoaderDark();
+      } ,
+      (Error:any)=>{
+        this.app.stopLoaderDark();
       }
     )
     }

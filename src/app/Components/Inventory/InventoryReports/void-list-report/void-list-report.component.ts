@@ -91,12 +91,16 @@ rptType:any = 's';
 
    getReport(){
 
-
+    this.app.startLoaderDark();
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetVoidItemsRptDateWise?reqUID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
         this.voidList = Response;
         //console.log(Response);
+        this.app.stopLoaderDark();
+      },
+      (Error:any)=>{
+        this.app.stopLoaderDark();
       }
     )
    

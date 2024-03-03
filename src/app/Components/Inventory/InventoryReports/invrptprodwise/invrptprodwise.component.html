@@ -141,7 +141,7 @@
                     <td >{{item.productTitle}} <b *ngIf="item.barcode !== null">({{item.barcode}})</b></td>
                     <td >{{item.locationTitle }}</td>
                     <td *ngIf="rptType == 'I' || rptType == 'R'">{{item.issueType }}</td>
-                    <td class="text-center">{{item.quantity}}</td>
+                    <td class="text-center">{{item.quantity |number:"1.0-3"}}</td>
                     <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-1'}}</td>

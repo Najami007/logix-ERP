@@ -110,7 +110,7 @@
                     <th *ngIf="reportType == 'Detail'">Bill #</th>
                     <th *ngIf="reportType == 'Detail'">Date</th>
                     <th>Title</th>
-                    <th *ngIf="reportType == 'Detail'">Qty</th>
+                    <th >Qty</th>
                     <th *ngIf="reportType == 'Detail'" style="width: 120px;">Price</th>
                     <th  style="width: 120px;">Total</th>
                     <th *ngIf="reportType == 'Detail'">Entered By</th>
@@ -125,7 +125,7 @@
                     <td *ngIf="reportType == 'Detail'" class="text-center cursorPointer " (click)="billDetails(item)"><span class="text-primary border-bottom">{{item.invBillNo}}</span></td>
                     <td *ngIf="reportType == 'Detail'">{{item.invDate |date:'dd-MM-yyyy'}}</td>
                     <td >{{item.productTitle}}</td>
-                    <td *ngIf="reportType == 'Detail'" class="text-center">{{item.quantity |number:'1.0-0'}}</td>
+                    <td  class="text-center">{{item.quantity |number:'1.0-0'}}</td>
                     <td *ngIf="reportType == 'Detail'" class="text-end">{{item.salePrice|number:'1.0-0'}}</td>
                     <td *ngIf="reportType == 'Summary'" class="text-end">{{item.total |number:'1.0-0'}}</td>
                     <td *ngIf="reportType == 'Detail'" class="text-end">{{item.quantity * item.salePrice |number:'1.0-0'}}</td>
@@ -133,7 +133,8 @@
                 </tr>
                 <tr>
                     <td colspan="2"></td>
-                    <td *ngIf="reportType == 'Detail'" colspan="2"></td>
+                    <td *ngIf="reportType == 'Detail'"></td>
+                    <td></td>
                     <td *ngIf="reportType == 'Detail'" colspan="2"></td>
                     <th class="text-end">{{grandTotal|number:'1.0-0'}}</th>
                     <td *ngIf="reportType == 'Detail'"></td>

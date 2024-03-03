@@ -87,7 +87,7 @@ export class SavedBillComponent {
           (Response: any) => {
             if (Response.msg == 'Password Matched Successfully') {
              
-    //console.log(item)
+    
     this.myInvoiceNo = item.invBillNo;
     this.mytableNo = item.tableTitle;
     this.myInvDate = item.createdOn ;
@@ -103,17 +103,18 @@ export class SavedBillComponent {
     this.myChange = item.change;
     this.myPaymentType = item.paymentType;
     this.myDuplicateFlag = true;
-    this.http.get(environment.mainApi+this.global.restaurentLink+'PrintBill?BillNo='+item.invBillNo).subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+item.invBillNo).subscribe(
       (Response:any)=>{
-        console.log(Response);
+      
         this.myPrintData = Response;
+        setTimeout(() => {
+          this.global.printData('#duplicate');
+        }, 500);
       }
     )
 
 
-    setTimeout(() => {
-      this.global.printData('#duplicate');
-    }, 500);
+  
             } else {
               this.msg.WarnNotify(Response.msg);
             }

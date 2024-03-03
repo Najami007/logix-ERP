@@ -126,6 +126,7 @@ export class InvrptprodwiseComponent implements OnInit {
         this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
           (Response: any) => {
             this.invDetailList = [];
+            this.QtyTotal = 0;
             if(type == 'R'){
               Response.forEach((e:any) => {
 

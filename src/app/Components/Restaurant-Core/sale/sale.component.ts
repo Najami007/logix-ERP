@@ -158,6 +158,13 @@ export class SaleComponent implements OnInit {
 
   tableList: any = [];
 
+
+  focusTo(id:any){
+    setTimeout(() => {
+      $(id).trigger('focus');
+    }, 500);
+  }
+
   ////////////////////////////////////////////////////////////
 
   getTable() {
@@ -228,7 +235,7 @@ export class SaleComponent implements OnInit {
         }, 200);
       },
       (Error) => {
-        //console.log(Error);
+        
       }
     )
   }
@@ -241,7 +248,7 @@ export class SaleComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipesCatWise?CatID=' + item.recipeCatID + '&reqFlag=' + item.prodFlag).subscribe(
       (Response: any) => {
         this.RecipeList = Response;
-        //console.log(Response);
+        
       }
     )
 
@@ -352,11 +359,7 @@ export class SaleComponent implements OnInit {
       this.msg.WarnNotify('File Must Be pdf Only');
       event.target.value = '';
       this.invDocument = '';
-    }
-  
-
-
-  //console.log(this.imageFile);
+    } 
 }
 
 
@@ -414,6 +417,7 @@ export class SaleComponent implements OnInit {
           UserID: this.global.getUserID()
         }).subscribe(
           (Response: any) => {
+         
             if (Response.msg == 'Data Saved Successfully') {
               this.msg.SuccessNotify(Response.msg);
               this.getTable()
@@ -453,6 +457,7 @@ export class SaleComponent implements OnInit {
           UserID: this.global.getUserID()
         }).subscribe(
           (Response: any) => {
+          
             if (Response.msg == 'Data Updated Successfully') {
               this.msg.SuccessNotify(Response.msg);
               this.getTable()
@@ -864,15 +869,26 @@ export class SaleComponent implements OnInit {
 
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetHoldedBillDetail?BillNo='+invNo).subscribe(
       (Response:any)=>{
-        console.log(Response);
+      
       this.mytableNo = Response[0].tableTitle;
       this.myCounterName = Response[0].entryUser;
 
-        this.myPrintData =Response;})
+        this.myPrintData =Response;
+        setTimeout(() => {
+          this.global.printData('#billPrint');
+        }, 500);
+      })
 
-    setTimeout(() => {
-      this.global.printData('#billPrint');
-    }, 500);
+      // this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+invNo).subscribe(
+      //   (Response:any)=>{
+      //    
+      //     this.myPrintData = Response;
+      //     setTimeout(() => {
+      //       this.global.printData('#duplicate');
+      //     }, 500);
+      //   }
+      // )
+ 
 
 
 
@@ -895,24 +911,30 @@ export class SaleComponent implements OnInit {
       this.myDiscount = this.billDiscount;
       this.myChange = this.change;
       this.myPaymentType = this.paymentType;
+      this.myPrintData  = this.tableData;
+      this.myPrintData = this.tableData;
+      // setTimeout(() => {
+      //   this.global.printData('#billPrint');
+      // }, 200);
 
+     
       this.http.get(environment.mainApi+this.global.restaurentLink+'GetHoldedBillDetail?BillNo='+this.invBillNo).subscribe(
         (Response:any)=>{
-        //  console.log(Response);
+
         this.mytableNo = Response[0].tableTitle;
         this.myCounterName = Response[0].entryUser;
 
-          this.myPrintData = Response;
+        //  this.myPrintData = Response;
+        if (type == 'rehold') {
+          this.save('rehold');
+        }
+
+          setTimeout(() => {
+            this.global.printData('#billPrint');
+          }, 200);
         })
 
-      if (type == 'rehold') {
-        this.save('rehold');
-      }
-
-
-      setTimeout(() => {
-        this.global.printData('#billPrint');
-      }, 500);
+  
     } else {
       this.msg.WarnNotify('No Bill Retrieved')
     }
@@ -1044,7 +1066,7 @@ export class SaleComponent implements OnInit {
   }else{
     this.http.get(environment.mainApi+this.global.restaurentLink+'MergeAndPrintBill?BillNo='+this.mergeBillNo1+'&BillNo2='+this.mergeBillNo2).subscribe(
       (Response:any)=>{
-         console.log(Response);
+        
     this.myInvoiceNo = Response[0].invBillNo;
     this.myInvDate = Response[0].invDate;
     this.myOrderType = Response[0].orderType;

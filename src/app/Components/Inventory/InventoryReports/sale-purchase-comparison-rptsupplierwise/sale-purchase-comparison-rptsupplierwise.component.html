@@ -104,8 +104,8 @@
                 <tr *ngFor="let item of DetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
                     <td>{{item.productTitle}} ({{item.barcode}})</td>
-                    <td class="text-center">{{item.purQty}}</td>
-                    <td class="text-center">{{item.saleQty}}</td>
+                    <td class="text-center">{{item.purQty |number:'1.0-3'}}</td>
+                    <td class="text-center">{{item.saleQty |number:'1.0-3'}}</td>
                     <td class="text-end">{{item.purTotal |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.saleTotal |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.purTotal - item.saleTotal |number:'1.0-0'}}</td>

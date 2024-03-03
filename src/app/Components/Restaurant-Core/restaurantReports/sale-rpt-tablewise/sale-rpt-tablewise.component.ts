@@ -132,6 +132,7 @@ export class SaleRptTablewiseComponent implements OnInit {
         $('#detailTable').show();
       $('#summaryTable').hide();
       this.reportType = 'Detail';
+      this.app.startLoaderDark();
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleDetailTableWiseAndDateWise?reqtid='+this.tableID+'&reqUID='+this.userID+'&FromDate='+
         this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
           (Response: any) => {
@@ -144,7 +145,10 @@ export class SaleRptTablewiseComponent implements OnInit {
               this.billGrandTotal += e.billTotal;
               this.OtherChargesTotal += e.otherCharges;
             });
-  
+            this.app.stopLoaderDark();
+          },
+          (Error:any)=>{
+            this.app.stopLoaderDark();
           }
         )
       }
@@ -153,6 +157,7 @@ export class SaleRptTablewiseComponent implements OnInit {
         $('#detailTable').hide();
         $('#summaryTable').show();
         this.reportType = 'Summary';
+        this.app.startLoaderDark();
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetTableSaleSummaryDateWise?&reqUID='+this.userID+'&FromDate='+
         this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
           (Response: any) => {
@@ -161,7 +166,10 @@ export class SaleRptTablewiseComponent implements OnInit {
             Response.forEach((e:any) => {
              this.summaryTotal += e.total;
             });
-  
+            this.app.stopLoaderDark();
+          },
+          (Error:any)=>{
+            this.app.stopLoaderDark();
           }
         )
       }
