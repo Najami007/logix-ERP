@@ -86,7 +86,7 @@ export class SalePurchaseComparisonRptsupplierwiseComponent  implements OnInit {
 
       },
       (error: any) => {
-        console.log(error);
+    
         this.app.stopLoaderDark();
       }
     )
@@ -135,7 +135,7 @@ export class SalePurchaseComparisonRptsupplierwiseComponent  implements OnInit {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseSaleComparisonRptSupplierWise_7?reqPartyID='+this.partyID+'&FromDate='+this.global.dateFormater(this.fromDate, '-')+
     '&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response: any) => {
-        //console.log(Response);
+       
         this.DetailList = Response;
         this.purQtyTotal = 0;
         this.saleQtyTotal = 0;

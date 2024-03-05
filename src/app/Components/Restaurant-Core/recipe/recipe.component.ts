@@ -104,7 +104,7 @@ export class RecipeComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipes').subscribe(
       (Response: any) => {
         this.RecipeList = Response;
-        // console.log(Response);
+     
 
       }
     )
@@ -597,9 +597,14 @@ export class RecipeComponent implements OnInit {
 
     if (this.recipeTitle == '' || this.recipeTitle == undefined) {
       this.msg.WarnNotify('Enter Recipe Title')
-    } else if (this.costPrice == 0 || this.costPrice == '' || this.costPrice == undefined) {
+    }
+    //  else if (this.costPrice == 0 || this.costPrice == '' || this.costPrice == undefined) {
+    //   this.msg.WarnNotify('Select Ingredients')
+    // } 
+      else if (this.menuProdList == '') {
       this.msg.WarnNotify('Select Ingredients')
-    } else if (this.salePrice == 0 || this.salePrice == '' || this.salePrice == undefined) {
+    }
+    else if (this.salePrice == 0 || this.salePrice == '' || this.salePrice == undefined) {
       this.msg.WarnNotify('Enter Receipe Sale Price')
     } else if (this.recipeImg == '' || this.recipeImg == undefined) {
       this.msg.WarnNotify('Select Recipe Image')
@@ -700,7 +705,7 @@ export class RecipeComponent implements OnInit {
   getRecipeImage(recipeID:any,type:any){
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetRecipeImage?RecipeID='+recipeID).subscribe(
       (Response:any)=>{
-        //console.log(Response);
+        
        if(type == 'hide'){
         this.recipeImg = Response[0].recipeImage;
        }

@@ -429,7 +429,11 @@ export class SaleComponent implements OnInit {
               this.msg.WarnNotify(Response.msg);
             }
             this.app.stopLoaderDark();
-          }
+          },
+          (Error:any)=>{
+            this.msg.WarnNotify(Error);
+            this.app.stopLoaderDark();
+           }
         )
       }
 
@@ -468,7 +472,11 @@ export class SaleComponent implements OnInit {
               this.msg.WarnNotify(Response.msg);
             }
             this.app.stopLoaderDark();
-          }
+          },
+          (Error:any)=>{
+            this.msg.WarnNotify(Error);
+            this.app.stopLoaderDark();
+           }
         )
 
 
@@ -501,7 +509,11 @@ export class SaleComponent implements OnInit {
                   } else {
                     this.msg.WarnNotify(Response.msg);
                   }
-                }
+                },
+                (Error:any)=>{
+                  this.msg.WarnNotify(Error);
+                  this.app.stopLoaderDark();
+                 }
               )
             }
           })
@@ -580,7 +592,11 @@ export class SaleComponent implements OnInit {
           this.msg.WarnNotify(Response.msg);
         }
         this.app.stopLoaderDark();
-      }
+      },
+      (Error:any)=>{
+        this.msg.WarnNotify(Error);
+        this.app.stopLoaderDark();
+       }
     )
   }
 
@@ -592,7 +608,11 @@ export class SaleComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetHoldBills').subscribe(
       (Response: any) => {
         this.holdBillList = Response;
-      }
+      },
+      (Error:any)=>{
+        this.msg.WarnNotify(Error);
+        
+       }
     )
   }
 
@@ -647,7 +667,11 @@ export class SaleComponent implements OnInit {
         this.getTotal()
 
 
-      }
+      },
+      (Error:any)=>{
+        this.msg.WarnNotify(Error);
+      
+       }
     )
 
 
@@ -718,7 +742,11 @@ export class SaleComponent implements OnInit {
                         } else {
                           this.msg.WarnNotify(Response.msg);
                         }
-                      }
+                      },
+                      (Error:any)=>{
+                        this.msg.WarnNotify(Error);
+                       
+                       }
                     )
   
                   } else {
@@ -966,7 +994,11 @@ export class SaleComponent implements OnInit {
                 this.msg.WarnNotify(Response.msg);
               }
               this.app.stopLoaderDark();
-            }
+            },
+            (Error:any)=>{
+              this.msg.WarnNotify(Error);
+              this.app.stopLoaderDark();
+             }
           )
         }
       })
@@ -1025,7 +1057,11 @@ export class SaleComponent implements OnInit {
                   } else {
                     this.msg.WarnNotify(Response.msg);
                   }
-                }
+                },
+                (Error:any)=>{
+                  this.msg.WarnNotify(Error);
+                  this.app.stopLoaderDark();
+                 }
               )
 
 

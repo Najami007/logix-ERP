@@ -56,7 +56,11 @@ export class BrandComponent implements OnInit{
     this.http.get(environment.mainApi+this.globaldata.inventoryLink+'GetBrand').subscribe(
       (Response:any)=>{
         this.BrandList = Response;
-      }
+      },
+      (Error:any)=>{
+        this.msg.WarnNotify(Error);
+  
+       }
     )
   }
 

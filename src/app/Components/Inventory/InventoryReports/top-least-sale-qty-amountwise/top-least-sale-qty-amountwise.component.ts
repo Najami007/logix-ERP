@@ -72,7 +72,7 @@ export class TopLeastSaleQtyAmountwiseComponent {
     this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
         this.reportDataList = Response;
-        //console.log(Response);
+       
         this.qtyTotal = 0;
         this.netTotal = 0;
         this.saleQtyTotal = 0;

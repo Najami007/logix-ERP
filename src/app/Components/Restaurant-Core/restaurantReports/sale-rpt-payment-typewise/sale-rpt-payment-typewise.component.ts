@@ -79,7 +79,7 @@ export class SaleRptPaymentTypewiseComponent implements OnInit {
 
       },
       (error: any) => {
-        console.log(error);
+      
         this.app.stopLoaderDark();
       }
     )

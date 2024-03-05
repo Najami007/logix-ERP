@@ -124,6 +124,7 @@
                     <th *ngIf="rptType == 'I' || rptType == 'R'">Type</th>
                     <th >Qty</th>
                     <th>Cost</th>
+                    <th>Avg Cost</th>
                     <th>Sale</th>
                     <th >Cost Total</th>
                     <th >Sale Total</th>
@@ -143,6 +144,7 @@
                     <td *ngIf="rptType == 'I' || rptType == 'R'">{{item.issueType }}</td>
                     <td class="text-center">{{item.quantity |number:"1.0-3"}}</td>
                     <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
+                    <td class="text-end">{{item.avgCostPrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.salePrice * item.quantity |number:'1.0-1'}}</td>

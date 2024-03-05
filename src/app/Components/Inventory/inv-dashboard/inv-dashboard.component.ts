@@ -49,7 +49,7 @@ export class InvDashboardComponent {
         if(Response != ''){
           this.cardDataList = Response;
         }
-        // console.log(Response);  
+      
       }
     )
   }
@@ -184,7 +184,7 @@ export class InvDashboardComponent {
   getSwingSale(){
     this.http.get(environment.mainApi+this.globalData.parkLink+'GetSwingQtyTotal').subscribe(
       (Response:any)=>{
-        // console.log(Response);
+
 
         Response.forEach((e:any) => {
           this.swingsList.push(e.swingTitle);
@@ -194,7 +194,7 @@ export class InvDashboardComponent {
         });
         
         this.swingSaleChart();
-        // console.log(this.swingSaleAmountList)
+    
       }
     )
   }
@@ -243,7 +243,7 @@ export class InvDashboardComponent {
     this.http.get(environment.mainApi+this.globalData.parkLink+'GetActiveSwingQtyTotal').subscribe(
       (Response:any) =>{
         this.activeMemberList = Response;
-        //console.log(Response);
+    
       }
     )
   }

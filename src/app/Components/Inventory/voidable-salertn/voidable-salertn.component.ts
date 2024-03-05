@@ -52,7 +52,7 @@ export class VoidableSalertnComponent implements OnInit {
   ){
     this.global.getMenuList().subscribe((data)=>{
       this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      // console.log(this.crudList);
+    
     })
 
     this.global.getCompany().subscribe((data) => {
@@ -143,9 +143,7 @@ export class VoidableSalertnComponent implements OnInit {
        if(Response != ''){
         this.invBillNo = Response[0].invBillNo;
        }
-         //console.log(Response);
-        // this.tableDataList = Response;
-        
+
         Response.forEach((e:any) => {
           this.tableDataList.push({
             productID:e.productID,
@@ -193,7 +191,7 @@ export class VoidableSalertnComponent implements OnInit {
         }, 200);
       },
       (Error) => {
-        //console.log(Error);
+      
       }
     )
   }
@@ -216,7 +214,11 @@ export class VoidableSalertnComponent implements OnInit {
             }else{
               this.msg.WarnNotify(Response.msg);
             }
-          }
+          },
+          (Error:any)=>{
+            this.msg.WarnNotify(Error);
+           
+           }
         )
         $('.rtnBillArea').scrollTop(0);
       this.PBarcode = '';
@@ -243,7 +245,11 @@ export class VoidableSalertnComponent implements OnInit {
             }else{
               this.msg.WarnNotify(Response.msg);
             }
-          }
+          },
+          (Error:any)=>{
+            this.msg.WarnNotify(Error);
+          
+           }
         )
         $('.rtnBillArea').scrollTop(0);
        this.PBarcode = '';
@@ -493,7 +499,11 @@ export class VoidableSalertnComponent implements OnInit {
                     } else {
                       this.msg.WarnNotify(Response.msg);
                     }
-                  }
+                  },
+                  (Error:any)=>{
+                    this.msg.WarnNotify(Error);
+                    
+                   }
                 )
   
   
@@ -522,7 +532,7 @@ export class VoidableSalertnComponent implements OnInit {
 
     changeValue(item:any){
       var myIndex = this.tableDataList.indexOf(item);
-     // console.log(this.tableDataList[myIndex]);
+     
       var myQty = this.tableDataList[myIndex].quantity;
       var myCP = this.tableDataList[myIndex].costPrice;
       var mySP = this.tableDataList[myIndex].salePrice;
@@ -589,7 +599,7 @@ export class VoidableSalertnComponent implements OnInit {
           (Response:any)=>{
             if(Response.msg == 'Data Saved Successfully'){
               this.msg.SuccessNotify(Response.msg);
-              console.log(Response);
+           
               this.PrintAfterSave(Response.invNo);
               this.getCurrentBill();
               this.reset();
@@ -598,7 +608,11 @@ export class VoidableSalertnComponent implements OnInit {
               this.msg.WarnNotify(Response.msg);
             }
             this.app.stopLoaderDark();
-          }
+          },
+          (Error:any)=>{
+            this.msg.WarnNotify(Error);
+            this.app.stopLoaderDark();
+           }
         )
       }
 
@@ -662,7 +676,11 @@ export class VoidableSalertnComponent implements OnInit {
                 }else{
                   this.msg.WarnNotify(Response.msg);
                 }
-              }
+              },
+              (Error:any)=>{
+                this.msg.WarnNotify(Error);
+                this.app.stopLoaderDark();
+               }
             )
           }
 
@@ -686,7 +704,11 @@ export class VoidableSalertnComponent implements OnInit {
                 }else{
                   this.msg.WarnNotify(Response.msg);
                 }
-              }
+              },
+              (Error:any)=>{
+                this.msg.WarnNotify(Error);
+                this.app.stopLoaderDark();
+               }
             )
             
           }
@@ -764,7 +786,7 @@ export class VoidableSalertnComponent implements OnInit {
   ///////////////////////////////////////////////////////////////////////////////
 
   voidProduct(item:any){
-    // console.log(item);
+
     this.app.startLoaderDark();
     this.http.post(environment.mainApi+this.global.inventoryLink+'VoidProduct',{
       InvBillNo: this.invBillNo,
@@ -826,7 +848,7 @@ export class VoidableSalertnComponent implements OnInit {
   myTime:any;
 
   PrintAfterSave(InvNo:any){
-    //console.log(item)
+
     
 
     this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+InvNo).subscribe(
@@ -843,7 +865,7 @@ export class VoidableSalertnComponent implements OnInit {
         this.myDiscount = Response[0].billDiscount;
         this.myChange = Response[0].change;
         this.myPaymentType = Response[0].paymentType;
-        //console.log(Response);
+     
         this.myPrintData = Response;
       }
     )

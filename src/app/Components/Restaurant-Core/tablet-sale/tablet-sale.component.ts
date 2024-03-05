@@ -193,7 +193,7 @@ export class TabletSaleComponent implements OnInit {
         }, 200);
       },
       (Error) => {
-        //console.log(Error);
+   
       }
     )
   }
@@ -313,8 +313,6 @@ export class TabletSaleComponent implements OnInit {
     }
   
 
-
-  //console.log(this.imageFile);
 }
 
 
@@ -383,7 +381,11 @@ export class TabletSaleComponent implements OnInit {
               this.msg.WarnNotify(Response.msg);
             }
             this.app.stopLoaderDark();
-          }
+          },
+          (Error:any)=>{
+            this.msg.WarnNotify(Error);
+            this.app.stopLoaderDark();
+           }
         )
       }
 
@@ -421,7 +423,11 @@ export class TabletSaleComponent implements OnInit {
               this.msg.WarnNotify(Response.msg);
             }
             this.app.stopLoaderDark();
-          }
+          },
+          (Error:any)=>{
+            this.msg.WarnNotify(Error);
+            this.app.stopLoaderDark();
+           }
         )
 
 
@@ -454,7 +460,11 @@ export class TabletSaleComponent implements OnInit {
                   } else {
                     this.msg.WarnNotify(Response.msg);
                   }
-                }
+                },
+                (Error:any)=>{
+                  this.msg.WarnNotify(Error);
+                  this.app.stopLoaderDark();
+                 }
               )
             }
           })
@@ -533,7 +543,11 @@ export class TabletSaleComponent implements OnInit {
           this.msg.WarnNotify(Response.msg);
         }
         this.app.stopLoaderDark();
-      }
+      },
+      (Error:any)=>{
+        this.msg.WarnNotify(Error);
+        this.app.stopLoaderDark();
+       }
     )
   }
 
@@ -822,7 +836,7 @@ export class TabletSaleComponent implements OnInit {
 
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetHoldedBillDetail?BillNo='+invNo).subscribe(
       (Response:any)=>{
-        console.log(Response);
+       
       this.mytableNo = Response[0].tableTitle;
       this.myCounterName = Response[0].entryUser;
 
@@ -856,7 +870,7 @@ export class TabletSaleComponent implements OnInit {
 
       this.http.get(environment.mainApi+this.global.restaurentLink+'GetHoldedBillDetail?BillNo='+this.invBillNo).subscribe(
         (Response:any)=>{
-        //  console.log(Response);
+       
         this.mytableNo = Response[0].tableTitle;
         this.myCounterName = Response[0].entryUser;
 
@@ -989,7 +1003,7 @@ export class TabletSaleComponent implements OnInit {
   }else{
     this.http.get(environment.mainApi+this.global.restaurentLink+'MergeAndPrintBill?BillNo='+this.mergeBillNo1+'&BillNo2='+this.mergeBillNo2).subscribe(
       (Response:any)=>{
-         //console.log(Response);
+    
     this.myInvoiceNo = Response[0].invBillNo;
     this.myInvDate = Response[0].invDate;
     this.myOrderType = Response[0].orderType;

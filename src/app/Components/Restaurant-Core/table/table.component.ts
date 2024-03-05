@@ -51,7 +51,7 @@ export class TableComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetTable').subscribe(
       (Response:any)=>{
         this.tableList = Response;
-        //console.log(Response);
+     
       }
     )
   }

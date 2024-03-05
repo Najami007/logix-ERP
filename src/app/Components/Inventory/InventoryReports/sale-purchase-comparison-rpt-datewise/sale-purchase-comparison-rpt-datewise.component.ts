@@ -87,7 +87,7 @@ export class SalePurchaseComparisonRptDatewiseComponent  implements OnInit {
 
       },
       (error: any) => {
-        console.log(error);
+      
         this.app.stopLoaderDark();
       }
     )
@@ -132,7 +132,7 @@ export class SalePurchaseComparisonRptDatewiseComponent  implements OnInit {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseSaleComparisonRptDateWise_8?FromDate='+this.global.dateFormater(this.fromDate, '-')+
     '&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response: any) => {
-        //console.log(Response);
+    
         this.DetailList = Response;
         this.purQtyTotal = 0;
         this.saleQtyTotal = 0;

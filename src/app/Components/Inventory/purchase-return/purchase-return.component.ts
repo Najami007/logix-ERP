@@ -31,7 +31,7 @@ export class PurchaseReturnComponent implements OnInit{
   ){
     this.global.getMenuList().subscribe((data)=>{
       this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      // console.log(this.crudList);
+   
     })
 
     this.global.getCompany().subscribe((data)=>{
@@ -89,7 +89,7 @@ export class PurchaseReturnComponent implements OnInit{
 
 
   change(){
-    //console.log(this.tableDataList);
+
   }
 
 
@@ -193,7 +193,7 @@ export class PurchaseReturnComponent implements OnInit{
             // this.app.startLoaderDark();
             this.global.getProdDetail(0,this.PBarcode).subscribe(
               (Response:any)=>{
-                //console.log(Response)
+              
                   this.tableDataList.push({
                     ProductID:Response[0].productID,
                     ProductTitle:Response[0].productTitle,
@@ -244,9 +244,7 @@ export class PurchaseReturnComponent implements OnInit{
   }
 
   holdDataFunction(data:any){
-    //console.log(data);
-   
-    // console.log(this.productImage);
+  
     
 
     var condition = this.tableDataList.find(
@@ -263,8 +261,6 @@ export class PurchaseReturnComponent implements OnInit{
 
       this.global.getProdDetail(data.productID,'').subscribe(
         (Response:any)=>{
-          // console.log(Response);
-
           
             this.tableDataList.push({
               ProductID:Response[0].productID,
@@ -315,11 +311,7 @@ export class PurchaseReturnComponent implements OnInit{
    
       this.subTotal += (parseFloat(this.tableDataList[i].Quantity) * parseFloat(this.tableDataList[i].CostPrice)) - this.discount;
       this.myTotalQty += parseFloat(this.tableDataList[i].Quantity);
-      // this.myTotal = this.mySubtoatal - this.myDiscount;
-      // this.myDue = this.myPaid - this.myTotal;\
     
-
-     // console.log(this.tableDataList)
     }
   }
 
@@ -458,7 +450,7 @@ export class PurchaseReturnComponent implements OnInit{
 
    changeValue(item:any){
     var myIndex = this.tableDataList.indexOf(item);
-   // console.log(this.tableDataList[myIndex]);
+
    var myQty = this.tableDataList[myIndex].Quantity;
    var myCP = this.tableDataList[myIndex].CostPrice;
    var mySP = this.tableDataList[myIndex].SalePrice;
@@ -584,22 +576,20 @@ export class PurchaseReturnComponent implements OnInit{
     if(p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null ){
       this.msg.WarnNotify('('+p.ProductTitle+') Cost Price is not Valid');
        isValidFlag = false;
-      //  console.log(p)
+      
        return;
     }
 
     if( p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null ){
       this.msg.WarnNotify('('+p.ProductTitle+') Sale Price is not Valid');
        isValidFlag = false;
-      //  console.log(p)
+      
        return;
     }
 
     if(p.Quanity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == ''){
       this.msg.WarnNotify('('+p.ProductTitle+') Quantity is not Valid');
        isValidFlag = false;
-      //  console.log(p)
-      //  console.log(this.tableDataList)
        return;
     }
     
@@ -666,7 +656,11 @@ export class PurchaseReturnComponent implements OnInit{
                  this.msg.WarnNotify(Response.msg);
                  this.app.stopLoaderDark();
                }
-             }
+             },
+             (Error:any)=>{
+               this.msg.WarnNotify(Error);
+               this.app.stopLoaderDark();
+              }
            )
           }else if(this.holdBtnType == 'ReHold'){
             this.global.openPinCode().subscribe(pin=>{
@@ -702,7 +696,11 @@ export class PurchaseReturnComponent implements OnInit{
                  this.msg.WarnNotify(Response.msg);
                  this.app.stopLoaderDark();
                }
-             }
+             },
+             (Error:any)=>{
+               this.msg.WarnNotify(Error);
+               this.app.stopLoaderDark();
+              }
            )
              }
            })
@@ -744,7 +742,11 @@ export class PurchaseReturnComponent implements OnInit{
                  this.msg.WarnNotify(Response.msg);
                  this.app.stopLoaderDark();
                }
-             }
+             },
+             (Error:any)=>{
+               this.msg.WarnNotify(Error);
+               this.app.stopLoaderDark();
+              }
            )
             }})
          }
@@ -786,7 +788,6 @@ export class PurchaseReturnComponent implements OnInit{
 
 
   distributeOverHead(){
-    // console.log(this.subTotal,this.overHead,this.discount)
     var amount = this.overHead / this.myTotalQty;
     for(var i=0; i<this.tableDataList.length;i++){this.tableDataList[i].CostPrice = parseFloat(this.tableDataList[i].wohCP) + amount}    
     this.getTotal();
@@ -844,7 +845,7 @@ export class PurchaseReturnComponent implements OnInit{
         });
      
          overhead = item.overHeadAmount / totalQty;
-        // console.log(item.overHeadAmount,totalQty,overhead);
+      
  
        }
 
@@ -873,7 +874,6 @@ export class PurchaseReturnComponent implements OnInit{
             })
           });
 
-          // console.log(this.tableDataList);
           setTimeout(() => {
             this.global.printData('#printDiv')
           }, 200);
@@ -886,8 +886,7 @@ export class PurchaseReturnComponent implements OnInit{
   }
 
   retriveBill(item:any){
-    
-    //console.log(item);
+ 
     this.tableDataList = [];
     this.holdBtnType = 'ReHold'
     this.invoiceDate = new Date(item.invDate);

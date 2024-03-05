@@ -99,7 +99,7 @@ export class SaleRptTablewiseComponent implements OnInit {
 
       },
       (error: any) => {
-        console.log(error);
+      
         this.app.stopLoaderDark();
       }
     )

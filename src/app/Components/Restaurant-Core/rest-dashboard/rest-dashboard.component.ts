@@ -46,7 +46,7 @@ export class RestDashboardComponent  {
     this.http.get(environment.mainApi+this.globalData.parkLink+'GetTotals').subscribe(
       (Response:any)=>{
         this.cardDataList = Response;
-         console.log(Response);  
+         
       }
     )
   }
@@ -124,7 +124,7 @@ export class RestDashboardComponent  {
   getSwingSale(){
     this.http.get(environment.mainApi+this.globalData.parkLink+'GetSwingQtyTotal').subscribe(
       (Response:any)=>{
-        // console.log(Response);
+        
 
         Response.forEach((e:any) => {
           this.swingsList.push(e.swingTitle);
@@ -134,7 +134,7 @@ export class RestDashboardComponent  {
         });
         
         this.swingSaleChart();
-        // console.log(this.swingSaleAmountList)
+    
       }
     )
   }
@@ -183,7 +183,7 @@ export class RestDashboardComponent  {
     this.http.get(environment.mainApi+this.globalData.parkLink+'GetActiveSwingQtyTotal').subscribe(
       (Response:any) =>{
         this.activeMemberList = Response;
-        //console.log(Response);
+        
       }
     )
   }

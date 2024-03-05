@@ -33,6 +33,7 @@
           
        </div>
         <!-----------   Products Area ------------------->
+      
         <div class="row cursorPointer">
             <div *ngFor="let item of RecipeList|filter:recipeSearch.value" style="width: 170px;">
                 <mat-card style="width:160px; height: 160px;" class="m-1 shadow recipecard" data-bs-toggle="modal"
@@ -56,6 +57,7 @@
                 </mat-card>
             </div>
         </div>
+
 
 
 
@@ -680,16 +682,13 @@
 
 
 
-    <div class="modal fade" id="NewBill" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-labelledby="NewBillLabel">
+    <div class="modal fade" id="NewBill" tabindex="-1" aria-labelledby="NewBillLabel">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <form  method="post">
-                    <div class="modal-body">
-
-
+                    <div class="modal-body" >
                         <div class="d-flex">
-                            <div class="col-lg-10">
+                            <div class="col-lg-10" style="height: 50vh;overflow-y: scroll;">
                                 <table>
                                     <tbody class="">
                                         <tr style="display: inline-flex; " class="cursorPointer "
@@ -709,14 +708,17 @@
                                 </table>
                             </div>
                             <div class="col-lg-2 border-start p-1">
-    
+                         
+                                <div class="w-100 text-end">
+                                    <button mat-mini-fab data-bs-dismiss="modal"><mat-icon>close</mat-icon></button>
+                                </div>
                                 <mat-radio-group name="orderType" aria-label="Select an option" [(ngModel)]="tempOrderType">
                                     <mat-radio-button *ngFor="let item of orderTypeList"
                                         [disabled]="invBillNo !== '' || orderType != ''"
                                         (change)="onOrderTypeSelected(item.val)"
                                         [value]="item.val">{{item.title}}</mat-radio-button>
                                 </mat-radio-group>
-    
+                                
                                 <mat-form-field  appearance="outline" class="w-100 pt-4">
                                     <mat-label>Cover</mat-label>
                                     <input name="Cover" type="number" (keydown)="this.global.handleNumKeys($event)" matInput

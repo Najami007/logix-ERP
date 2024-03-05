@@ -79,7 +79,11 @@ export class OpeningStockComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.inventoryLink+'getlocation').subscribe(
       (Response:any)=>{
         this.locationList = Response;
-      }
+      },
+      (Error:any)=>{
+        this.msg.WarnNotify(Error);
+     
+       }
     )
   }
 
@@ -553,7 +557,11 @@ export class OpeningStockComponent implements OnInit {
                    this.msg.WarnNotify(Response.msg);
                    this.app.stopLoaderDark();
                  }
-               }
+               },
+               (Error:any)=>{
+                 this.msg.WarnNotify(Error);
+                 this.app.stopLoaderDark();
+                }
              )
           }
 
@@ -585,7 +593,11 @@ export class OpeningStockComponent implements OnInit {
                      this.msg.WarnNotify(Response.msg);
                      this.app.stopLoaderDark();
                    }
-                 }
+                 },
+                 (Error:any)=>{
+                   this.msg.WarnNotify(Error);
+                   this.app.stopLoaderDark();
+                  }
                )
             }
           })
@@ -628,7 +640,11 @@ export class OpeningStockComponent implements OnInit {
       (Response:any)=>{
         this.IssueBillList = Response;
    
-      }
+      },
+      (Error:any)=>{
+        this.msg.WarnNotify(Error);
+        this.app.stopLoaderDark();
+       }
     )
   }
 
@@ -818,7 +834,11 @@ export class OpeningStockComponent implements OnInit {
             this.app.stopLoaderDark();
            
 
-          }
+          },
+          (Error:any)=>{
+            this.msg.WarnNotify(Error);
+            this.app.stopLoaderDark();
+           }
         )
       }
     })

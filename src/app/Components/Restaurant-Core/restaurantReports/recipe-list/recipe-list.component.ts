@@ -68,7 +68,7 @@ export class RecipeListComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetRecipeCategories').subscribe(
       (Response:any)=>{
         this.categoriesList = Response;
-        //console.log(Response);
+     
       }
     )
   }

@@ -63,12 +63,49 @@ export class SaleRptRecipewiseComponent implements OnInit {
 
   SaleDetailList: any = [];
   saleSummaryList:any = [];
+  tempSaleSummaryList:any = [];
 
   reportType: any;
   recipeID = 0;
   recipeTitle = '';
   tempRecipeTitle = '';
   RecipeList: any = [];
+
+
+  startVal: any = '';
+  endVal: any = '';
+
+  filterRecipe(start: any, end: any, type: any) {
+    if (this.tempSaleSummaryList == ''){
+      this.msg.WarnNotify('First Click Summary')
+    }else{
+      this.app.startLoaderDark();
+      if (type == 'perc') {
+        this.saleSummaryList = this.tempSaleSummaryList.filter((e: any) => ((e.avgCostPrice / e.total) * 100) >= start &&
+          ((e.avgCostPrice / e.total) * 100) <= end)
+      }
+
+      if (type == 'qty') {
+        this.saleSummaryList = this.tempSaleSummaryList.filter((e: any) => e.quantity >= start && e.quantity <= end)
+      }
+
+    
+
+      this.QtyTotal = 0;
+      this.summaryTotal =0;
+      this.summaryAvgCostTotal = 0;
+      this.saleSummaryList.forEach((e:any) => {
+        this.QtyTotal += e.quantity;
+        this.summaryAvgCostTotal += e.avgCostPrice * e.quantity;
+        this.summaryTotal += e.total;
+      });
+
+      this.app.stopLoaderDark();
+    }
+
+    
+  }
+
 
   getAllRecipe() {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipes').subscribe(
@@ -90,7 +127,7 @@ export class SaleRptRecipewiseComponent implements OnInit {
 
       },
       (error: any) => {
-        console.log(error);
+        
         this.app.stopLoaderDark();
       }
     )
@@ -98,7 +135,7 @@ export class SaleRptRecipewiseComponent implements OnInit {
   }
 
 
-
+ 
 
   onUserSelected() {
     var curUser = this.userList.find((e: any) => e.userID == this.userID);
@@ -113,7 +150,9 @@ export class SaleRptRecipewiseComponent implements OnInit {
 
   QtyTotal = 0;
   detailTotal = 0;
+  detailAvgCostTotal = 0;
   summaryTotal = 0;
+  summaryAvgCostTotal = 0;
 
   getReport(type:any) {
 
@@ -132,12 +171,17 @@ export class SaleRptRecipewiseComponent implements OnInit {
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetRecipeSaleDetailDateWise?reqrid='+this.recipeID+'&reqUID='+this.userID+'&FromDate='+
       this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
         (Response: any) => {
+        
+          this.saleSummaryList = [];
+          this.tempSaleSummaryList = [];
           this.SaleDetailList = Response;
 
+          this.detailAvgCostTotal = 0;
           this.QtyTotal = 0;
           this.detailTotal =0;
           Response.forEach((e:any) => {
             this.QtyTotal += e.quantity;
+            this.detailAvgCostTotal += e.avgCostPrice * e.quantity;
             this.detailTotal += e.quantity * e.salePrice;
           });
 
@@ -160,12 +204,17 @@ export class SaleRptRecipewiseComponent implements OnInit {
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetRecipeSaleSummaryDateWise?&reqUID='+this.userID+'&FromDate='+
         this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
           (Response: any) => {
+            this.SaleDetailList = [];
+        
             this.saleSummaryList = Response;
+            this.tempSaleSummaryList = Response;
 
             this.QtyTotal = 0;
             this.summaryTotal =0;
+            this.summaryAvgCostTotal = 0;
             Response.forEach((e:any) => {
               this.QtyTotal += e.quantity;
+              this.summaryAvgCostTotal += e.avgCostPrice * e.quantity;
               this.summaryTotal += e.total;
             });
             this.app.stopLoaderDark();

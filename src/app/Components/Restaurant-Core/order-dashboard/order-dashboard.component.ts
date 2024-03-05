@@ -80,10 +80,11 @@ export class OrderDashboardComponent implements OnInit {
     }
 
     this.tempVoidList = this.voidOrderList;
-    this.voidOrderList = [];
+
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetOrdersAndVoidItemsDetail?todate='+this.global.dateFormater(this.curDate, '-')
     +'&type='+type).subscribe(
       (Response: any) => {
+        this.voidOrderList = [];
         this.voidOrderList = Response;
       
 
@@ -111,12 +112,14 @@ export class OrderDashboardComponent implements OnInit {
       type = 'locwiseorder&locid='+this.locationID;
     }
 
-    this.PendingOrderList = [];
-    this.newOrderList = [];
-    this.deliveredOrderList = [];
+   
+ 
     this.http.get(environment.mainApi+this.global.restaurentLink +'GetOrdersAndVoidItemsDetail?todate='+this.global.dateFormater(this.curDate,'-') +
     '&type='+type).subscribe(
       (Response: any) => {
+        this.PendingOrderList = [];
+        this.newOrderList = [];
+        this.deliveredOrderList = [];
        
        if(Response != null){
         Response.forEach((e: any) => {
@@ -207,7 +210,7 @@ export class OrderDashboardComponent implements OnInit {
 
   ApproveDelivery(item: any) {
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi + this.global.restaurentLink + 'UpdateDeliveryStatus', {
+    this.http.post(environment.mainApi+this.global.restaurentLink+'UpdateDeliveryStatus', {
       AutoInvDetID: item.autoInvDetID,
       UserID: this.global.getUserID()
     }).subscribe(

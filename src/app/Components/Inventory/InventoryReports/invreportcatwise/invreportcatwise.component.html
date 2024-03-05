@@ -82,7 +82,8 @@
     </div>
     <div class="p-1 d-flex justify-content-between">
         <mat-form-field class="col-lg-11 pe-1" appearance="outline">
-            <input matInput #InvSearch  placeholder="Search..." />
+            <mat-label><u>S</u>earch...</mat-label>
+            <input matInput #InvSearch accesskey="s" />
         </mat-form-field>
         <div class="col-lg-1 ">
             <button mat-fab class=" " color="primary" (click)="print()"><mat-icon>print</mat-icon></button>
@@ -139,26 +140,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of inventoryList index as index">
+                        <tr *ngFor="let item of inventoryList|filter:InvSearch.value index as index" [ngClass]="(item.qtyIn - item.qtyOut)< 0 ?'fw-bold':''">
                             <td class="text-center">{{index+1}}</td>
                             <td>{{item.productTitle}}</td>
                             <td>{{item.barcode}}</td>
-                            <td class="text-end">{{item.costPrice |number:'1.0-2'}}</td>
-                            <td class="text-end">{{item.avgCostPrice|number:'1.0-2'}}</td>
-                            <td class="text-end">{{item.salePrice|number:'1.0-2'}}</td>
+                            <td class="text-end">{{item.costPrice |number:'1.0-3'}}</td>
+                            <td class="text-end">{{item.avgCostPrice|number:'1.0-3'}}</td>
+                            <td class="text-end">{{item.salePrice|number:'1.0-3'}}</td>
                             <!-- <td class="text-center">{{item.qtyIn}}</td>
                             <td class="text-center">{{item.qtyOut}}</td> -->
-                            <td class="text-center">{{item.qtyIn - item.qtyOut|number:'1.0-2'}}</td>
-                            <td class="text-end">{{item.costPrice * (item.qtyIn - item.qtyOut)|number:'1.0-2'}}</td>
-                            <td class="text-end">{{item.avgCostPrice * (item.qtyIn - item.qtyOut)|number:'1.0-2'}}</td>
-                            <td class="text-end">{{item.salePrice * (item.qtyIn - item.qtyOut)|number:'1.0-2'}}</td>
+                            <td class="text-center">{{item.qtyIn - item.qtyOut|number:'1.0-3'}}</td>
+                            <td class="text-end">{{item.costPrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>
+                            <td class="text-end">{{item.avgCostPrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>
+                            <td class="text-end">{{item.salePrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>
                         </tr>
                         <tr>
-                            <td colspan="8"></td>
+                            <td colspan="6"></td>
                             <td class="text-center fw-bold">{{balanceQtyTotal |number:'1.0-3'}}</td>
-                            <td class="text-end fw-bold">{{costTotal |number:'1.0-2'}}</td>
-                            <td class="text-end fw-bold">{{avgCostTotal |number:'1.0-2'}}</td>
-                            <td class="text-end fw-bold">{{saleTotal |number:'1.0-2'}}</td>
+                            <td class="text-end fw-bold">{{costTotal |number:'1.0-3'}}</td>
+                            <td class="text-end fw-bold">{{avgCostTotal |number:'1.0-3'}}</td>
+                            <td class="text-end fw-bold">{{saleTotal |number:'1.0-3'}}</td>
                         </tr>
                       
                       
@@ -200,27 +201,28 @@
                         itemsPerPage : tableSize,
                         currentPage : page,
                         totalItems :    count,
-                    }  ; index as index">
+                    }  ; index as index" [ngClass]="(item.qtyIn - item.qtyOut)< 0 ?'text-danger fw-bold':''">
                         <td class="text-center">{{index+1}}</td>
                         <td>{{item.productTitle}}</td>
                         <td>{{item.barcode}}</td>
-                        <td class="text-end">{{item.costPrice |number:'1.0-2'}}</td>
-                        <td class="text-end">{{item.avgCostPrice|number:'1.0-2'}}</td>
-                        <td class="text-end">{{item.salePrice|number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.costPrice |number:'1.0-3'}}</td>
+                        <td class="text-end">{{item.avgCostPrice|number:'1.0-3'}}</td>
+                        <td class="text-end">{{item.salePrice|number:'1.0-3'}}</td>
                         <!-- <td class="text-center">{{item.qtyIn}}</td>
                         <td class="text-center">{{item.qtyOut}}</td> -->
-                        <td class="text-center">{{item.qtyIn - item.qtyOut |number:'1.0-3'}}</td>
-                        <td class="text-end">{{item.costPrice * (item.qtyIn - item.qtyOut)|number:'1.0-2'}}</td>
-                        <td class="text-end">{{item.avgCostPrice * (item.qtyIn - item.qtyOut)|number:'1.0-2'}}</td>
-                        <td class="text-end">{{item.salePrice * (item.qtyIn - item.qtyOut)|number:'1.0-2'}}</td>
+                        <td class="text-center" >{{item.qtyIn - item.qtyOut |number:'1.0-3'}}</td>
+                        <td class="text-end">{{item.costPrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>
+                        <td class="text-end">{{item.avgCostPrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>
+                        <td class="text-end">{{item.salePrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>
                     </tr>
 
                     <tr>
                         <td colspan="6"></td>
-                        <td class="text-center fw-bold">{{balanceQtyTotal |number:'1.0-3'}}</td>
-                        <td class="text-end fw-bold">{{costTotal |number:'1.0-2'}}</td>
-                        <td class="text-end fw-bold">{{avgCostTotal |number:'1.0-2'}}</td>
-                        <td class="text-end fw-bold">{{saleTotal |number:'1.0-2'}}</td>
+                        <!-- <td class="text-center fw-bold">{{balanceQtyTotal |number:'1.0-3'}}</td> -->
+                        <td class="text-center fw-bold"></td>
+                        <td class="text-end fw-bold">{{costTotal |number:'1.0-3'}}</td>
+                        <td class="text-end fw-bold">{{avgCostTotal |number:'1.0-3'}}</td>
+                        <td class="text-end fw-bold">{{saleTotal |number:'1.0-3'}}</td>
                     </tr>
                   
 

@@ -35,12 +35,12 @@ export class RecipeDetailComponent  {
     }
      this.Category = this.data[0].recipeCatTitle;
      this.cookingTime = this.data[0].cookingTime;
-   
+     this.costPrice = this.data[0].recipeCurrentCostPrice;
 
      this.http.get(environment.mainApi + this.global.restaurentLink + 'GetSingleRecipeDetail?recipeid='+recipeID).subscribe(
       (Response: any) => {
         //console.log(Response);
-        this.costPrice = Response[0].recipeCostPrice;
+       
         this.recipeTitle = Response[0].recipeTitle;
         this.recipeType = Response[0].recipeType;
         this.salePrice = Response[0].recipeSalePrice;

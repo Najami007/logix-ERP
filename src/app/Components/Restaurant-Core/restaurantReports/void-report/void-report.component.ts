@@ -68,13 +68,13 @@ rptType:any = 's';
     this.http.get(environment.mainApi+this.global.userLink+'getuser').subscribe(
       (Response)=>{
         this.userList = Response;
-        // console.log(Response);
+    
         
         this.app.stopLoaderDark();
 
       },
       (error:any)=>{
-        console.log(error);
+  
         this.app.stopLoaderDark();
       }
     )
@@ -97,7 +97,7 @@ rptType:any = 's';
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
         this.voidList = Response;
-        //console.log(Response);
+        
         this.app.stopLoaderDark();
       },
       (Error:any)=>{

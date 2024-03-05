@@ -157,7 +157,7 @@ export class ProductComponent implements OnInit {
         this.dataSource = new MatTableDataSource(Response);
          this.dataSource.paginator = this.paginator;
          this.dataSource.sort = this.sort;  
-       // console.log(Response);
+       
       }
     )
   }
@@ -168,7 +168,11 @@ export class ProductComponent implements OnInit {
       (Response: any) => {
         this.ProductTypeList = Response;
      
-      }
+      },
+      (Error:any)=>{
+        this.msg.WarnNotify(Error);
+      
+       }
     )
   }
 
@@ -179,7 +183,11 @@ export class ProductComponent implements OnInit {
       (Response: any) => {
         this.UOMList = Response;
      
-      }
+      },
+      (Error:any)=>{
+        this.msg.WarnNotify(Error);
+      
+       }
     )
   }
 
@@ -189,7 +197,11 @@ export class ProductComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.inventoryLink+'getrack').subscribe(
       (Response: any) => {
         this.RacksList = Response;
-      }
+      },
+      (Error:any)=>{
+        this.msg.WarnNotify(Error);
+       
+       }
     )
   }
 
@@ -199,7 +211,11 @@ export class ProductComponent implements OnInit {
     this.http.get(environment.mainApi +this.global.inventoryLink+'GetBrand').subscribe(
       (Response: any) => {
         this.BrandList = Response;
-      }
+      },
+      (Error:any)=>{
+        this.msg.WarnNotify(Error);
+     
+       }
     )
   }
 
@@ -228,28 +244,7 @@ export class ProductComponent implements OnInit {
 
 
   save() {
-    // console.log(  this.ProductID ,
-    //   this.CategoryID ,
-    //   this.SubCategoryID ,
-    //   this.BrandID ,
-    //   this.rackID ,
-    //   this.ProductName ,
-    //   this.productCode ,
-    //   this.productNameOthLanguage ,
-    //     this.Description ,
-    //   this.minRol ,
-    //   this.maxRol ,
-    //   this.gst ,
-    //   this.Et ,
-    //   this.pctCode ,
-    //   this.allowMinus ,
-    //   this.CostPrice ,
-    //   this.SalePrice ,
-    //   this.DiscPercent ,
-    //   this.DiscRupee ,
-    //   this.UOMID ,
-    //   this.Barcode ,
-    //   this.barcodeType ,)
+
 
     if(this.CategoryID == '' || this.CategoryID == undefined){
       this.msg.WarnNotify('Select Category')
@@ -364,6 +359,7 @@ export class ProductComponent implements OnInit {
         }
       },
       (error:any)=>{
+        this.msg.WarnNotify(error);
         this.app.stopLoaderDark();
       }
     )
@@ -425,6 +421,7 @@ export class ProductComponent implements OnInit {
             this.openFlag = false;
           },
           (error:any)=>{
+            this.msg.WarnNotify(error);
             this.app.stopLoaderDark();
           }
         )

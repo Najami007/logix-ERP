@@ -50,7 +50,11 @@ export class LocationsComponent implements OnInit{
     this.http.get(environment.mainApi+this.globaldata.inventoryLink+'getlocation').subscribe(
       (Response:any)=>{
         this.locationList = Response;
-      }
+      },
+      (Error:any)=>{
+        this.msg.WarnNotify(Error);
+   
+       }
     )
   }
 
@@ -131,6 +135,7 @@ export class LocationsComponent implements OnInit{
           }
         },
         (error:any)=>{
+          this.msg.WarnNotify(error);
           this.app.stopLoaderDark();
         }
       )
@@ -197,6 +202,7 @@ export class LocationsComponent implements OnInit{
           }
         },
         (error:any)=>{
+          this.msg.WarnNotify(error);
           this.app.stopLoaderDark();
         }
       )

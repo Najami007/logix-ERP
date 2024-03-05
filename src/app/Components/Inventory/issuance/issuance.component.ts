@@ -9,6 +9,7 @@ import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { Router } from '@angular/router';
 import { Observable, retry } from 'rxjs';
 import Swal from 'sweetalert2';
+import { error } from 'jquery';
 
 @Component({
   selector: 'app-issuance',
@@ -31,7 +32,6 @@ export class IssuanceComponent implements OnInit {
 
     this.global.getMenuList().subscribe((data)=>{
       this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      // console.log(this.crudList);
     })
 
     this.global.getCompany().subscribe((data)=>{
@@ -84,8 +84,11 @@ export class IssuanceComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetIssueType').subscribe(
       (Response:any)=>{
         this.issueTypeList = Response;
-        //console.log(Response);
-      }
+      },
+      (Error:any)=>{
+        this.msg.WarnNotify(Error);
+       
+       }
     )
   }
   
@@ -108,7 +111,11 @@ export class IssuanceComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.inventoryLink+'getlocation').subscribe(
       (Response:any)=>{
         this.locationList = Response;
-      }
+      },
+      (Error:any)=>{
+        this.msg.WarnNotify(Error);
+      
+       }
     )
   }
 
@@ -134,7 +141,7 @@ export class IssuanceComponent implements OnInit {
 
             this.global.getProdDetail(0,this.PBarcode).subscribe(
               (Response:any)=>{
-                //console.log(Response)
+            
                   this.tableDataList.push({
                     productID:Response[0].productID,
                     productTitle:Response[0].productTitle,
@@ -200,9 +207,7 @@ export class IssuanceComponent implements OnInit {
 
       this.global.getProdDetail(data.productID,'').subscribe(
         (Response:any)=>{
-          //  console.log(Response);
-
-          
+               
             this.tableDataList.push({
               productID:Response[0].productID,
               productTitle:Response[0].productTitle,
@@ -232,8 +237,7 @@ export class IssuanceComponent implements OnInit {
         }
       )
 
-    //console.log(data);
-  
+
     this.PBarcode = '';
     $('#searchProduct').trigger('focus');
   }else {
@@ -271,11 +275,7 @@ export class IssuanceComponent implements OnInit {
       this.totalQty += parseFloat(this.tableDataList[i].quantity);
       this.CostTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].costPrice));
       this.avgCostTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].avgCostPrice))
-      // this.myTotal = this.mySubtoatal - this.myDiscount;
-      // this.myDue = this.myPaid - this.myTotal;\
-    
 
-     // console.log(this.tableDataList)
     }
   }
 
@@ -449,7 +449,7 @@ export class IssuanceComponent implements OnInit {
 
   changeValue(item:any){
     var myIndex = this.tableDataList.indexOf(item);
-   // console.log(this.tableDataList[myIndex]);
+
     var myQty = this.tableDataList[myIndex].quantity;
     var myCP = this.tableDataList[myIndex].costPrice;
     var mySP = this.tableDataList[myIndex].salePrice;
@@ -471,13 +471,10 @@ export class IssuanceComponent implements OnInit {
       p.quantity = parseFloat(p.quantity);
       p.salePrice = parseFloat(p.salePrice);
       p.costPrice = parseFloat(p.costPrice);
-      
-      // console.log(p)     
+          
         if(p.quantity == 0 || p.quantity == '0' || p.quantity == '' || p.quantity == undefined || p.quantity == null){
           this.msg.WarnNotify('('+p.productTitle+') Quantity is not Valid');
            isValidFlag = false;
-          //  console.log(p)
-          //  console.log(this.tableDataList)
            return;
         }
       });
@@ -532,6 +529,10 @@ export class IssuanceComponent implements OnInit {
                  this.msg.WarnNotify(Response.msg);
                  this.app.stopLoaderDark();
                }
+             },
+             (Error:any)=>{
+              this.msg.WarnNotify(Error);
+              this.app.stopLoaderDark();
              }
            )
           }else if(this.holdBtnType == 'ReHold'){
@@ -568,6 +569,10 @@ export class IssuanceComponent implements OnInit {
                  this.msg.WarnNotify(Response.msg);
                  this.app.stopLoaderDark();
                }
+             },
+             (Error:any)=>{
+              this.msg.WarnNotify(Error);
+              this.app.stopLoaderDark();
              }
            )
              }
@@ -610,7 +615,11 @@ export class IssuanceComponent implements OnInit {
                       this.msg.WarnNotify(Response.msg);
                       this.app.stopLoaderDark();
                     }
-                  }
+                  },
+                  (Error:any)=>{
+                    this.msg.WarnNotify(Error);
+                    this.app.stopLoaderDark();
+                   }
                 )
               }
             }
@@ -675,7 +684,10 @@ export class IssuanceComponent implements OnInit {
         if(type == 'I'){
           this.IssueBillList = Response;
         }
-      }
+      },
+      (Error:any)=>{
+        this.msg.WarnNotify(Error);
+       }
     )
   }
 
@@ -748,7 +760,6 @@ export class IssuanceComponent implements OnInit {
             })
           });
 
-          // console.log(this.tableDataList);
           setTimeout(() => {
             this.global.printData('#printDiv')
           }, 200);
@@ -762,7 +773,6 @@ export class IssuanceComponent implements OnInit {
 
   retriveBill(item:any){
     
-    //console.log(item);
     this.tableDataList = [];
     this.holdBtnType = 'ReHold'
     this.invoiceDate = new Date(item.invDate);
@@ -777,7 +787,7 @@ export class IssuanceComponent implements OnInit {
 
     this.getBillDetail(item.invBillNo).subscribe(
       (Response:any)=>{
-        console.log(Response);
+  
         this.totalQty = 0;
         this.CostTotal = 0;
         this.avgCostTotal = 0;
@@ -812,7 +822,6 @@ export class IssuanceComponent implements OnInit {
       }
     )
 
-    // console.log(this.locationTitle,this.locationTwoTitle)
 
   }
 

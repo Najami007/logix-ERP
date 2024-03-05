@@ -99,7 +99,7 @@ export class SaleRptRecipeCatwiseComponent implements OnInit {
 
       },
       (error: any) => {
-        console.log(error);
+   
         this.app.stopLoaderDark();
       }
     )
@@ -131,7 +131,7 @@ export class SaleRptRecipeCatwiseComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleSummaryRecipeCatAndDateWise?reqCID='+this.recipeCatID+'&reqUID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response: any) => {
-        console.log(Response)
+     
         this.SaleDetailList = Response;
         this.grandTotal = 0;
         Response.forEach((e:any) => {

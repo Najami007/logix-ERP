@@ -76,7 +76,7 @@ export class SaleRptOrderTypewiseComponent implements OnInit {
 
       },
       (error: any) => {
-        console.log(error);
+        
         this.app.stopLoaderDark();
       }
     )

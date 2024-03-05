@@ -33,7 +33,6 @@ export class PurchaseComponent implements OnInit{
   ){
     this.global.getMenuList().subscribe((data)=>{
       this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      // console.log(this.crudList);
     })
 
     this.global.getCompany().subscribe((data)=>{
@@ -89,7 +88,7 @@ export class PurchaseComponent implements OnInit{
 
 
   change(){
-    //console.log(this.tableDataList);
+    
   }
 
 
@@ -203,7 +202,7 @@ export class PurchaseComponent implements OnInit{
             // this.app.startLoaderDark();
             this.global.getProdDetail(0,this.PBarcode).subscribe(
               (Response:any)=>{
-                //console.log(Response)
+              
                   this.tableDataList.push({
                     ProductID:Response[0].productID,
                     ProductTitle:Response[0].productTitle,
@@ -270,7 +269,7 @@ export class PurchaseComponent implements OnInit{
 
       this.global.getProdDetail(data.productID,'').subscribe(
         (Response:any)=>{
-          //  console.log(Response);
+       
 
           
             this.tableDataList.push({
@@ -441,7 +440,7 @@ export class PurchaseComponent implements OnInit{
  
    changeValue(item:any){
     var myIndex = this.tableDataList.indexOf(item);
-   // console.log(this.tableDataList[myIndex]);
+   
     var myQty = this.tableDataList[myIndex].Quantity;
     var myCP = this.tableDataList[myIndex].CostPrice;
     var mySP = this.tableDataList[myIndex].SalePrice;
@@ -567,22 +566,20 @@ export class PurchaseComponent implements OnInit{
       if(p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null ){
         this.msg.WarnNotify('('+p.ProductTitle+') Cost Price is not Valid');
          isValidFlag = false;
-        //  console.log(p)
+
          return;
       }
 
       if( p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null ){
         this.msg.WarnNotify('('+p.ProductTitle+') Sale Price is not Valid');
          isValidFlag = false;
-        //  console.log(p)
+  
          return;
       }
 
       if(p.Quanity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == ''){
         this.msg.WarnNotify('('+p.ProductTitle+') Quantity is not Valid');
          isValidFlag = false;
-        //  console.log(p)
-        //  console.log(this.tableDataList)
          return;
       }
       
@@ -864,7 +861,6 @@ export class PurchaseComponent implements OnInit{
         });
      
          overhead = item.overHeadAmount / totalQty;
-        // console.log(item.overHeadAmount,totalQty,overhead);
  
        }
 
@@ -893,7 +889,7 @@ export class PurchaseComponent implements OnInit{
             })
           });
 
-          // console.log(this.tableDataList);
+
           setTimeout(() => {
             this.global.printData('#printDiv')
           }, 200);
@@ -909,7 +905,6 @@ export class PurchaseComponent implements OnInit{
   wohCPTotal = 0;
   retriveBill(item:any){
 
-    //console.log(item);
     this.tableDataList = [];
     this.holdBtnType = 'ReHold'
     this.invoiceDate = new Date(item.invDate);

@@ -1,5 +1,5 @@
 <div class="body">
-    <div id="main-content " class="row mt-4 ">
+    <div id="main-content " class="row mt-4 p-2">
         <section class="statis ps-3 pe-3 text-center col-lg-4  mb-3">
             <div class="" >
                 <div class="col-md-12 mb-2" >
@@ -37,7 +37,7 @@
             </div>
         </section>
 
-        <section class="pe-3 col-lg-8 h-100">
+        <section class="col-lg-8 ">
             <div >
                 <div class="ms-3 mat-elevation-z2" style="height: 430px;" [chart]="monthly_Sale_Chart"></div>
               </div>
@@ -45,23 +45,21 @@
     </div>
     
     
-    <div class="row">
+    <div class="row p-2">
         
     
 
-      <section class="col-lg-4 " >
-        <div class="col-md-12">
-            <div class="me-3 mat-elevation-z2" [chart]="swingSale_pie_chart"></div>
+      
+        <div class="col-lg-4">
+            <div class="mat-elevation-z2" [chart]="swingSale_pie_chart"></div>
           </div>
 
-    </section>
 
 
-    <section class="pe-3 col-lg-8 h-100">
-        <div >
-            <div class="ms-3 mat-elevation-z2"  [chart]="monthly_Bar_Chart"></div>
+        <div class="col-lg-8" >
+            <div class="mat-elevation-z2"  [chart]="monthly_Bar_Chart"></div>
           </div>
-      </section>
+   
     </div>
 
     

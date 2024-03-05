@@ -38,7 +38,7 @@
 
                             <mat-form-field appearance="outline" class="col-lg-6 ">
                                 <mat-label>Sale Price</mat-label>
-                                <input matInput [(ngModel)]="salePrice" (keydown)="getTotal()" type="text">
+                                <input matInput [(ngModel)]="salePrice" (keydown)="getTotal();global.handleNumKeys($event)" type="text">
                             </mat-form-field>
 
 
@@ -88,7 +88,7 @@
                     </div>
                   
 
-                    <div class="justify-content-between d-flex">
+                    <div class="justify-content-around d-flex">
                         <button #toggleBtn class="btn btn-success w-25"  (click)="save() "
                             *ngIf="crudList.c && btnType == 'Save'">{{btnType}}</button>
                         <button #toggleBtn class="btn btn-success  w-25"  (click)="save() "
@@ -96,7 +96,7 @@
                         <button class="btn btn-danger w-25" accesskey="r" (click)="reset()"><u>R</u>eset</button>
                         <mat-checkbox [(ngModel)]="autoEmptyFlag">Auto Empty</mat-checkbox>
 
-                        <button *ngIf="crudList.c" class="btn btn-warning w-25 text-white" (click)="MapProdWithCategory()">Map / Unmap Product</button>
+                        <!-- <button *ngIf="crudList.c" class="btn btn-warning w-25 text-white" (click)="MapProdWithCategory()">Map / Unmap Product</button> -->
                     </div>
 
 

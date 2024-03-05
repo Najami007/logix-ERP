@@ -1,6 +1,6 @@
 <div class="body">
     <div id="main-content ">
-        <section class="statis mt-4 ps-3 pe-3 text-center  mb-3">
+        <section class="statis mt-4 ps-2 pe-2 text-center  mb-3">
             <div class="row" *ngFor="let item of cardDataList">
                 <div class="col-md-3 " >
                     <div class="box bg-warning text-white  p-3 mat-elevation-z2 " style="box-shadow: 0px 0px 10px 1px  rgb(180, 183, 219);" >
@@ -39,20 +39,17 @@
     </div>
     
     
-    <div class="d-flex">
+    <div class="row p-2">
         
-      <section class="pe-3 col-lg-8 h-100">
-        <div  >
-            <div class="ms-3 mat-elevation-z2" [chart]="monthly_Sale_Chart"></div>
-          </div>
-      </section>
 
-      <section class="col-lg-4 " >
-        <div class="col-md-12">
-            <div class="me-3 mat-elevation-z2" [chart]="swingSale_pie_chart"></div>
+        <div class=" col-lg-8" >
+            <div class=" mat-elevation-z2" [chart]="monthly_Sale_Chart"></div>
+          </div>
+     
+        <div class="col-lg-4 ">
+            <div class=" mat-elevation-z2" [chart]="swingSale_pie_chart"></div>
           </div>
 
-    </section>
     </div>
 
     

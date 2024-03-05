@@ -109,7 +109,7 @@ export class SavedBillComponent {
         this.myPrintData = Response;
         setTimeout(() => {
           this.global.printData('#duplicate');
-        }, 500);
+        }, 200);
       }
     )
 

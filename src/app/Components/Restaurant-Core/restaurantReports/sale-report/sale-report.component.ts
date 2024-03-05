@@ -78,7 +78,7 @@ export class SaleReportComponent implements OnInit {
 
       },
       (error: any) => {
-        console.log(error);
+     
         this.app.stopLoaderDark();
       }
     )

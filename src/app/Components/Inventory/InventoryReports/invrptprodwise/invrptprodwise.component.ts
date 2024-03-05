@@ -59,6 +59,7 @@ export class InvrptprodwiseComponent implements OnInit {
     {val:'Ao',title:'Adjustment Out Report'},
     {val:'Dl',title:'Damage Loss Report'},
     {val:'E',title:'Expiry Report'},
+    {val:'OS',title:'Opening Stock Report'},
   
 ]
 
@@ -90,13 +91,13 @@ export class InvrptprodwiseComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.userLink + 'getuser').subscribe(
       (Response) => {
         this.userList = Response;
-        // console.log(Response);
+    
 
         this.app.stopLoaderDark();
 
       },
       (error: any) => {
-        console.log(error);
+       
         this.app.stopLoaderDark();
       }
     )
@@ -117,7 +118,7 @@ export class InvrptprodwiseComponent implements OnInit {
   getReport(type: any) {
     this.reportType = this.reportsList.find((e:any)=>e.val == type).title;
 
-    //console.log(this.userID,this.productID,type);
+   
     if (this.productID == 0 || this.productID == undefined) {
       this.msg.WarnNotify('Select Product')
     } else {
@@ -144,7 +145,11 @@ export class InvrptprodwiseComponent implements OnInit {
 
             this.app.stopLoaderDark();
            
-           // console.log(Response)
+     
+          },
+          (Error:any)=>{
+            this.app.stopLoaderDark();
+            this.msg.WarnNotify('Unable to Connect to Data')
           }
         )
     }

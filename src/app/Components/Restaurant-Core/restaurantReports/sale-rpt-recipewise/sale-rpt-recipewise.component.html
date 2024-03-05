@@ -3,7 +3,7 @@
     <div class="row justify-content-between mt-2">
 
 
-        <mat-form-field appearance="outline" class="col-lg-2">
+        <!-- <mat-form-field appearance="outline" class="col-lg-2">
             <mat-label>User</mat-label>
             <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
                 <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
@@ -12,8 +12,8 @@
                 <mat-option *ngFor="let item of userList | filter:usearch.value"
                     [value]="item.userID">{{item.userName}}</mat-option>
             </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col-lg-2">
+        </mat-form-field> -->
+        <mat-form-field appearance="outline" class="col-lg-4    ">
             <mat-label>Recipe</mat-label>
             <mat-select [(ngModel)]="recipeID" (selectionChange)="OnRecipeSelected()">
                 <mat-option><ngx-mat-select-search #recSearch [placeholderLabel]="'Search...'"
@@ -50,7 +50,7 @@
         </mat-form-field>
 
     </div>
-    <div class="row justify-content-center">
+    <div class="row">
         <!-- <mat-form-field appearance="fill" class="col-lg-3 me-2">
             <mat-label>Report Type</mat-label>
             <mat-select [(ngModel)]="rptType" >
@@ -58,6 +58,21 @@
                     [value]="item.val">{{item.title}}</mat-option>
             </mat-select>
         </mat-form-field> -->
+
+        <mat-form-field class="col-lg-2" appearance="outline">
+            <mat-label>Start</mat-label>
+            <input  matInput type="text" [(ngModel)]="startVal" class="text-secondary">
+        </mat-form-field>
+        <mat-form-field class="col-lg-2" appearance="outline">
+            <mat-label>End</mat-label>
+            <input  matInput type="text" [(ngModel)]="endVal" class="text-secondary">
+        </mat-form-field>
+       <div class="col-lg-1">
+        <button class=" btn-rpt btn btn-primary" (click)="filterRecipe(startVal,endVal,'perc')">%<mat-icon>filter_list</mat-icon></button>
+       </div>
+       <div class="col-lg-1">
+        <button class=" btn-rpt btn btn-primary" (click)="filterRecipe(startVal,endVal,'qty')">Qty<mat-icon>filter_list</mat-icon></button>
+       </div>
         <div class="col-lg-4 pb-2" *ngIf="crudList.r">
 
             <button class="btn btn-success btn-rpt col-lg-4 me-1" (click)="getReport('summary')">Summary</button>
@@ -113,9 +128,12 @@
                     <th>Date</th>
                     <th>Table</th>
                     <th style="width: 120px;">Qty</th>
+                    <th style="width: 120px;">Cost</th>
+                    <th style="width: 120px;">Food Cost</th>
                     <th style="width: 150px;">Sale</th>
-                    <th style="width: 120px;">Total</th>
-                    <th>Entered By</th>
+                    <th style="width: 120px;">Cost Total</th>
+                    <th style="width: 120px;">Sale Total</th>
+                   
 
                 </tr>
 
@@ -127,17 +145,23 @@
                     <td class="text-center cursorPointer " (click)="billDetails(item)"><span class="text-primary border-bottom">{{item.invBillNo}}</span></td>
                     <td>{{item.invDate |date:'dd-MM-yyyy'}} ({{item.createdOn |date:'hh:mm:a'}})</td>
                     <td>{{item.tableTitle}}</td>
-                    <td class="text-center">{{item.quantity}}</td>
-                    <td class="text-end">{{item.salePrice|number:'1.0-0'}}</td>
-                    <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-0'}}</td>
-                    <td>{{item.entryUser}}</td>
+                    <td class="text-center">{{item.quantity | number:'1.0-3'}}</td>
+                    <td class="text-end">{{item.avgCostPrice  |number:'1.0-3'}}</td>
+                    <td class="text-end">{{((item.avgCostPrice / item.quantity) / item.salePrice) * 100|number:'1.0-3'}}%</td>
+                    <td class="text-end">{{item.salePrice|number:'1.0-3'}}</td>
+                    <td class="text-end">{{item.avgCostPrice * item.quantity|number:'1.0-3'}}</td>
+                    <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-3'}}</td>
+                   
                 </tr>
                 <tr>
                     <td colspan="4"></td>
-                    <td class="text-center fw-bold">{{QtyTotal|number:'1.0-0'}}</td>
+                    <td class="text-center fw-bold">{{QtyTotal|number:'1.0-3'}}</td>
                     <td></td>
-                    <td class="text-end fw-bold">{{detailTotal|number:'1.0-0'}}</td>
+                    <td class="text-end fw-bold">{{(detailAvgCostTotal / detailTotal) * 100|number:'1.0-3'}}%   </td>
                     <td></td>
+                    <td class="text-end fw-bold">{{detailAvgCostTotal|number:'1.0-3'}}</td>  
+                    <td class="text-end fw-bold">{{detailTotal|number:'1.0-3'}}</td>
+                   
                 </tr>
             </tbody>
           
@@ -149,10 +173,12 @@
             <thead>
                 <tr>
                     <th>S#</th>
-                    <th>Date</th>
+                    <!-- <th>Date</th> -->
                     <th>Title</th>
                     <th style="width: 120px;">Qty</th>
-                    <th style="width: 120px;">Total</th>
+                    <th style="width: 120px;">Cost Total</th>
+                    <th style="width: 120px;">Food Cost</th>
+                    <th style="width: 120px;">Sale Total</th>
 
                 </tr>
 
@@ -161,15 +187,19 @@
             <tbody>
                 <tr *ngFor="let item of saleSummaryList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td>{{item.invDate |date:'dd-MM-yyyy'}}</td>
+                    <!-- <td>{{item.invDate |date:'dd-MM-yyyy'}}</td> -->
                     <td>{{item.recipeTitle}}</td>
-                    <td class="text-center">{{item.quantity}}</td>
-                    <td class="text-end">{{item.total |number:'1.0-0'}}</td>
+                    <td class="text-center">{{item.quantity |number:'1.0-3'}}</td>
+                    <td class="text-end">{{item.avgCostPrice * item.quantity |number:'1.0-3'}}</td>
+                    <td class="text-center">{{((item.avgCostPrice * item.quantity) / item.total) * 100 |number:'1.0-3'}}%</td>
+                    <td class="text-end">{{item.total |number:'1.0-3'}}</td>
                 </tr>
                 <tr>
-                    <td colspan="3"></td>
-                    <td class="text-center fw-bold">{{QtyTotal|number:'1.0-0'}}</td>
-                    <td class="text-end fw-bold">{{summaryTotal|number:'1.0-0'}}</td>
+                    <td colspan="2"></td>
+                    <td class="text-center fw-bold">{{QtyTotal|number:'1.0-3'}}</td>
+                    <td class="text-end fw-bold">{{summaryAvgCostTotal|number:'1.0-3'}}</td>
+                    <td class="text-center fw-bold">{{(summaryAvgCostTotal / summaryTotal) * 100|number:'1.0-3'}}%</td>
+                    <td class="text-end fw-bold">{{summaryTotal|number:'1.0-3'}}</td>
                 </tr>
             </tbody>
           

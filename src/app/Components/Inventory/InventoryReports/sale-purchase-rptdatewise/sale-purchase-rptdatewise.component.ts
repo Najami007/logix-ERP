@@ -55,6 +55,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     {val:'Ao',title:'Adjustment Out Report'},
     {val:'Dl',title:'Damage Loss Report'},
     {val:'E',title:'Expiry Report'},
+    {val:'OS',title:'Opening Stock Report'},
   
 ]
 tmpRptType = 's';
@@ -80,13 +81,13 @@ rptType:any = 's';
     this.http.get(environment.mainApi+this.global.userLink+'getuser').subscribe(
       (Response)=>{
         this.userList = Response;
-        // console.log(Response);
+        
         
         this.app.stopLoaderDark();
 
       },
       (error:any)=>{
-        console.log(error);
+        
         this.app.stopLoaderDark();
       }
     )
@@ -124,7 +125,7 @@ rptType:any = 's';
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
         this.SaleDetailList = [];
-        // console.log(Response);
+       
         if(this.rptType == 'R'){
           Response.forEach((e:any)=>{
             if(e.issueType != 'Stock Transfer'){
@@ -160,7 +161,7 @@ rptType:any = 's';
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryDetailDateWise_3?reqType='+this.rptType+'&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
-        console.log(Response);
+        
         this.SaleDetailList = [];
         if(this.rptType == 'R'){
           Response.forEach((e:any)=>{
@@ -174,8 +175,7 @@ rptType:any = 's';
         }else{
           this.SaleDetailList = Response;
         }
-        // this.SaleDetailList = Response;
-        console.log(Response)
+    
         this.qtyTotal = 0;
         this.detNetTotal = 0;
         this.profitPercentTotal = 0;

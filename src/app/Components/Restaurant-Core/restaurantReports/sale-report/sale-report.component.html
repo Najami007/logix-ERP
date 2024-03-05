@@ -160,11 +160,12 @@
                     <th>Title</th>
                     <th>Qty</th>
                     <th style="width: 120px;">Cost Price</th>
-                    <th style="width: 120px;">Food Cost</th>
+                    
                     <!-- <th style="width: 150px;">Avg Cost</th> -->
                    
                     <th style="width: 120px;">Sale Price</th>
                     <th>Cost Total</th>
+                    <th style="width: 120px;">Food Cost</th>
                     <th>Sale Total</th>
 
                 </tr>
@@ -180,11 +181,12 @@
                     <td>{{item.productTitle}}</td>
                     <td class="text-center">{{item.quantity |number:'1.0-3'}}</td>
                     <!-- <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td> -->
-                    <td class="text-end">{{item.avgCostPrice |number:'1.0-1'}}</td>
-                    <td class="text-end">{{(item.avgCostPrice / item.salePrice) * 100 |number:'1.0-1'}}%</td>
-                    <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
-                    <td class="text-end">{{item.avgCostPrice * item.quantity |number:'1.0-1'}}</td>
-                    <td class="text-end">{{item.salePrice * item.quantity |number:'1.0-1'}}</td>
+                    <td class="text-end">{{item.avgCostPrice |number:'1.0-3'}}</td>
+              
+                    <td class="text-end">{{item.salePrice |number:'1.0-3'}}</td>
+                    <td class="text-end">{{item.avgCostPrice * item.quantity |number:'1.0-3'}}</td>
+                    <td class="text-end">{{(item.avgCostPrice / item.salePrice) * 100 |number:'1.0-3'}}%</td>
+                    <td class="text-end">{{item.salePrice * item.quantity |number:'1.0-3'}}</td>
                   
                 </tr>
                 <tr>
@@ -192,9 +194,10 @@
                     <td class="fw-bold text-center">{{qtyTotal  |number:'1.0-3'}}</td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td class="fw-bold text-end">{{detCostTotal |number:'1.0-0'}}</td>
-                    <td class="fw-bold text-end">{{detSaleTotal |number:'1.0-0'}}</td>
+              
+                    <td class="fw-bold text-end">{{detCostTotal |number:'1.0-3'}}</td>
+                    <td class="fw-bold text-end">{{detCostTotal / detSaleTotal * 100 |number:'1.0-3'}}%</td>
+                    <td class="fw-bold text-end">{{detSaleTotal |number:'1.0-3'}}</td>
                 </tr>
             </tbody>
           

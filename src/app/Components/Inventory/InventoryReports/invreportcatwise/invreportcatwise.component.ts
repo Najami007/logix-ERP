@@ -298,7 +298,7 @@ export class InvreportcatwiseComponent implements OnInit {
           (Response:any)=>{
           
             this.inventoryList = Response;
-            // console.log(Response);
+           
             this.app.stopLoaderDark();
             this.costTotal = 0;
             this.avgCostTotal = 0;
