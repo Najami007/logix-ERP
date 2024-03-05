@@ -177,8 +177,8 @@
                          matTooltip="Save Current Bill" data-bs-target="#paymentMehtod" accesskey="s"><u>S</u>ave</button>
 
 
-                    <button matTooltip="Hold & Print  Current Bill" matTooltipPosition="left" mat-raised-button style="font-size: 11px;" 
-                        class="m-1 text-white btn bg-primary col-lg-5" (click)="HOldandPrint('rehold')" accesskey="p">Hold & <u>P</u>rint</button>
+                    <button matTooltip="Print  Current Bill" matTooltipPosition="left" mat-raised-button 
+                        class="m-1 text-white btn bg-primary col-lg-5" (click)="HOldandPrint('rehold')" accesskey="p"><u>P</u>rint</button>
 
                     <button accesskey="u" mat-raised-button matTooltip="Retreiving Saved Bills" matTooltipPosition="right" class="m-1 btn  col-lg-5 "
                         (click)="getSavedBill()" >D<u>u</u>plicate</button>
@@ -438,7 +438,7 @@
                 <tbody class="text-center">
                     <tr>
                         <td>{{myInvoiceNo}}</td>
-                        <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
+                        <td>{{myInvDate | date:'dd-MM-yyyy '}} ({{myInvTime|date:'hh:mm:ss:a'}})</td>
                         <td>{{myCounterName}}</td>
                         <td>{{mytableNo}}</td>
                     </tr>
@@ -663,7 +663,7 @@
                         <div class="d-flex justify-content-between text-center mb-2"
                             *ngIf="paymentType == 'Cash' || paymentType == 'Split'">
                             <mat-label style="font-size: 25px;">Cash:</mat-label>
-                            <input type="number" style="font-size: 25px;width: 120px;"
+                            <input type="number" style="font-size: 25px;width: 180px;"
                                 (keydown)="this.global.handleNumKeys($event);getTotal()" (keyup)="getTotal()"
                                 [(ngModel)]="cash" />
                         </div>
@@ -674,7 +674,7 @@
                             <select [(ngModel)]="bankCoaID " style="width: 150px;">
                                 <option *ngFor="let item of bankCoaList" [value]="item.coaID">{{item.coaTitle}}</option>
                             </select>
-                            <input type="number" style="font-size: 25px;width: 120px;"
+                            <input type="number" style="font-size: 25px;width: 180px;" [disabled]="paymentType == 'Split' || paymentType == 'Bank'"
                                 (keydown)="this.global.handleNumKeys($event);getTotal()" (keyup)="getTotal()"
                                 [(ngModel)]="bankCash" />
                         </div>

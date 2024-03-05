@@ -98,11 +98,20 @@ export class SavedBillComponent {
     this.myOtherCharges = item.otherCharges;
     this.myRemarks = item.remarks;
     this.myCash = item.cashRec;
-    this.myBank = item.netTotal - item.cashRec;
+    // this.myBank = item.netTotal - item.cashRec;
     this.myDiscount = item.billDiscount;
     this.myChange = item.change;
     this.myPaymentType = item.paymentType;
     this.myDuplicateFlag = true;
+
+         
+    if(this.myPaymentType == 'Bank'){
+      this.myBank = this.myNetTotal;
+    }
+    if(this.myPaymentType == 'Split'){
+      this.myBank = this.myNetTotal - this.myCash;
+    }
+
     this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+item.invBillNo).subscribe(
       (Response:any)=>{
       

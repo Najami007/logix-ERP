@@ -126,14 +126,16 @@
                     <thead >
                         <tr class="text-center">
                             <th>S#</th>
-                            <th >Product Title</th>
                             <th >Barcode</th>
+                            <th >Product Title</th>
+                             <!-- <th >In</th>
+                            <th >Out</th> -->
+                        
+                            <th >Balance</th>
                             <th >Cost Price</th>
                             <th>Avg Cost Price</th>
                             <th >Sale Price</th>
-                            <!-- <th >In</th>
-                            <th >Out</th> -->
-                            <th >Balance</th>
+                           
                             <th>Cost Total</th>
                             <th>Avg Cost Total</th>
                             <th>Sale Total  </th>
@@ -142,14 +144,15 @@
                     <tbody>
                         <tr *ngFor="let item of inventoryList|filter:InvSearch.value index as index" [ngClass]="(item.qtyIn - item.qtyOut)< 0 ?'fw-bold':''">
                             <td class="text-center">{{index+1}}</td>
-                            <td>{{item.productTitle}}</td>
                             <td>{{item.barcode}}</td>
-                            <td class="text-end">{{item.costPrice |number:'1.0-3'}}</td>
-                            <td class="text-end">{{item.avgCostPrice|number:'1.0-3'}}</td>
-                            <td class="text-end">{{item.salePrice|number:'1.0-3'}}</td>
+                            <td>{{item.productTitle}}</td>
                             <!-- <td class="text-center">{{item.qtyIn}}</td>
                             <td class="text-center">{{item.qtyOut}}</td> -->
                             <td class="text-center">{{item.qtyIn - item.qtyOut|number:'1.0-3'}}</td>
+                            <td class="text-end">{{item.costPrice |number:'1.0-3'}}</td>
+                            <td class="text-end">{{item.avgCostPrice|number:'1.0-3'}}</td>
+                            <td class="text-end">{{item.salePrice|number:'1.0-3'}}</td>
+                           
                             <td class="text-end">{{item.costPrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>
                             <td class="text-end">{{item.avgCostPrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>
                             <td class="text-end">{{item.salePrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>
@@ -183,14 +186,16 @@
                 <thead >
                     <tr class="text-center">
                         <th>S#</th>
-                        <th >Product Title</th>
                         <th >Barcode</th>
+                        <th >Product Title</th>
+                         <!-- <th >In</th>
+                        <th >Out</th> -->
+                        <th >Avl Qty</th>
+                       
                         <th >Cost Price</th>
                         <th>Avg Cost Price</th>
                         <th >Sale Price</th>
-                        <!-- <th >In</th>
-                        <th >Out</th> -->
-                        <th >Avl Qty</th>
+                       
                         <th>Cost Total</th>
                         <th>Avg Cost Total</th>
                         <th>Sale Total  </th>
@@ -203,14 +208,15 @@
                         totalItems :    count,
                     }  ; index as index" [ngClass]="(item.qtyIn - item.qtyOut)< 0 ?'text-danger fw-bold':''">
                         <td class="text-center">{{index+1}}</td>
-                        <td>{{item.productTitle}}</td>
                         <td>{{item.barcode}}</td>
-                        <td class="text-end">{{item.costPrice |number:'1.0-3'}}</td>
-                        <td class="text-end">{{item.avgCostPrice|number:'1.0-3'}}</td>
-                        <td class="text-end">{{item.salePrice|number:'1.0-3'}}</td>
+                        <td>{{item.productTitle}}</td>
                         <!-- <td class="text-center">{{item.qtyIn}}</td>
                         <td class="text-center">{{item.qtyOut}}</td> -->
                         <td class="text-center" >{{item.qtyIn - item.qtyOut |number:'1.0-3'}}</td>
+                        <td class="text-end">{{item.costPrice |number:'1.0-3'}}</td>
+                        <td class="text-end">{{item.avgCostPrice|number:'1.0-3'}}</td>
+                        <td class="text-end">{{item.salePrice|number:'1.0-3'}}</td>
+                        
                         <td class="text-end">{{item.costPrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>
                         <td class="text-end">{{item.avgCostPrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>
                         <td class="text-end">{{item.salePrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>

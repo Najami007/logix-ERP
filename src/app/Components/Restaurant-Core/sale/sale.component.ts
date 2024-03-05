@@ -291,8 +291,15 @@ export class SaleComponent implements OnInit {
     if (this.orderType == 'Dine In') {
       this.OtherCharges = this.subTotal * (this.serviceCharges / 100);
     }
+ 
     this.netTotal = (this.subTotal + parseFloat(this.OtherCharges)) - parseFloat(this.billDiscount);
 
+    if(this.paymentType == 'Split'){
+      this.bankCash = this.netTotal - parseFloat(this.cash);
+    }
+    if(this.paymentType == 'Bank'){
+      this.bankCash = this.netTotal;
+    }
     this.change = (parseFloat(this.cash) + parseFloat(this.bankCash)) - this.netTotal;
   }
 
@@ -863,7 +870,8 @@ export class SaleComponent implements OnInit {
   myInvoiceNo = '';
   mytableNo = '';
   myCounterName = '';
-  myInvDate: any = new Date();
+  myInvDate: any = '';
+  myInvTime:any = '';
   myOrderType = '';
   mySubTotal = 0;
   myNetTotal = 0;
@@ -880,45 +888,40 @@ export class SaleComponent implements OnInit {
 
 
   printAfterSave(invNo: any) {
-    // alert(invNo);
     this.myDuplicateFlag = false;
-    this.myInvoiceNo = invNo;
-    this.myInvDate = this.invoiceDate;
-    this.myOrderType = this.orderType;
-    this.mySubTotal = this.subTotal;
-    this.myNetTotal = this.netTotal;
-    this.myOtherCharges = this.OtherCharges;
-    this.myRemarks = this.billRemarks;
-    this.myCash = this.cash;
-    this.myBank = this.bankCash;
-    this.myDiscount = this.billDiscount;
-    this.myChange = this.change;
-    this.myPaymentType = this.paymentType;
+   
+      this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+invNo).subscribe(
+        (Response:any)=>{
+         
+          this.myInvoiceNo = Response[0].invBillNo;
+          this.myInvDate = Response[0].invDate;
+          this.myOrderType =Response[0].orderType;
+          this.mySubTotal = Response[0].billTotal;
+          this.myNetTotal = Response[0].netTotal;
+          this.myOtherCharges = Response[0].otherCharges;
+          this.myRemarks = Response[0].remarks;
+          this.myCash = Response[0].cashRec;
+          // this.myBank = Response[0].bankCash;
+          this.myDiscount = Response[0].billDiscount;
+          this.myChange = Response[0].change;
+          this.myPaymentType = Response[0].paymentType;
+          this.mytableNo = Response[0].tableTitle;
+          this.myCounterName = Response[0].entryUser;
+          this.myInvTime = Response[0].createdOn;
+          
+          if(this.myPaymentType == 'Bank'){
+            this.myBank = this.myNetTotal;
+          }
+          if(this.myPaymentType == 'Split'){
+            this.myBank = this.myNetTotal - this.myCash;
+          }
 
-    this.http.get(environment.mainApi+this.global.restaurentLink+'GetHoldedBillDetail?BillNo='+invNo).subscribe(
-      (Response:any)=>{
-      
-      this.mytableNo = Response[0].tableTitle;
-      this.myCounterName = Response[0].entryUser;
-
-        this.myPrintData =Response;
-        setTimeout(() => {
-          this.global.printData('#billPrint');
-        }, 500);
-      })
-
-      // this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+invNo).subscribe(
-      //   (Response:any)=>{
-      //    
-      //     this.myPrintData = Response;
-      //     setTimeout(() => {
-      //       this.global.printData('#duplicate');
-      //     }, 500);
-      //   }
-      // )
- 
-
-
+          this.myPrintData =Response;
+          setTimeout(() => {
+            this.global.printData('#billPrint');
+          }, 500);
+        }
+      )
 
   }
 
@@ -929,6 +932,7 @@ export class SaleComponent implements OnInit {
       this.myDuplicateFlag = false;
       this.myInvoiceNo = this.invBillNo;
       this.myInvDate = this.invoiceDate;
+     
       this.myOrderType = this.orderType;
       this.mySubTotal = this.subTotal;
       this.myNetTotal = this.netTotal;
@@ -948,9 +952,10 @@ export class SaleComponent implements OnInit {
      
       this.http.get(environment.mainApi+this.global.restaurentLink+'GetHoldedBillDetail?BillNo='+this.invBillNo).subscribe(
         (Response:any)=>{
-
+        
         this.mytableNo = Response[0].tableTitle;
         this.myCounterName = Response[0].entryUser;
+        this.myInvTime = Response[0].createdOn;
 
         //  this.myPrintData = Response;
         if (type == 'rehold') {
