@@ -600,7 +600,9 @@ export class VoidableSaleComponent implements OnInit {
 
     save(paymentType:any){
 
-      if(paymentType == 'Cash' && (this.cash == 0 || this.cash == undefined || this.cash == null)){
+      if(this.tableDataList == ''){
+        this.msg.WarnNotify('Select Product');
+      }if(paymentType == 'Cash' && (this.cash == 0 || this.cash == undefined || this.cash == null)){
         this.msg.WarnNotify('Enter Cash')
       }else if(paymentType == 'Cash' && this.cash < this.netTotal){
         this.msg.WarnNotify('Entered Cash is not Valid')
@@ -922,13 +924,14 @@ export class VoidableSaleComponent implements OnInit {
         this.myPaymentType = Response[0].paymentType;
 
         this.myPrintData = Response;
+        setTimeout(() => {
+          this.global.printData('#printBill');
+        }, 500);
       }
     )
 
 
-    setTimeout(() => {
-      this.global.printData('#printBill');
-    }, 500);
+   
   }
 
 

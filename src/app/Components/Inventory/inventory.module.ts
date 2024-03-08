@@ -59,6 +59,8 @@ import { VoidListReportComponent } from './InventoryReports/void-list-report/voi
 import { CashierClosingRptComponent } from './InventoryReports/cashier-closing-rpt/cashier-closing-rpt.component';
 
 import { NgxBarcodeModule } from 'ngx-barcode';
+import { RetailRtnSavedbillComponent } from './retail-sale-return/retail-rtn-savedbill/retail-rtn-savedbill.component';
+import { RetailRtnEnterQtyComponent } from './retail-sale-return/retail-rtn-enter-qty/retail-rtn-enter-qty.component';
 
 
 
@@ -118,6 +120,16 @@ export const inventoryRoutes: Route[] = [
   {
     path: 'vblsalertn',
     component: VoidableSalertnComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'retsl',
+    component: RetailSaleComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'retslrtn',
+    component: RetailSaleReturnComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -267,6 +279,8 @@ export const inventoryRoutes: Route[] = [
     SalePurchaseComparisonRptsupplierwiseComponent,
     VoidListReportComponent,
     CashierClosingRptComponent,
+    RetailRtnSavedbillComponent,
+    RetailRtnEnterQtyComponent,
     
 
  

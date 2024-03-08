@@ -1,1 +1,380 @@
-<p>retail-sale-return works!</p>
+<div class="body" ondblclick="return false">
+
+    <div class="row w-100 p-1">
+
+        <!------------------ column 1 bill side ---------------->
+
+        <div class="col-lg-10 ">
+
+            <div class="card shadow" style="border-radius: 5px 5px 5px 5px;height: 87vh;">
+
+                <!------------------------- Search Bar Area ------------------>
+                <div class="ps-2 d-flex" style="background-color: rgb(237, 233, 233);">
+
+                    <!-------------------- Product Search Bar --------------->
+
+                    <div class="col-lg-9  d-flex flex-column pb-2">
+                        <mat-label class="text-secondary">Search Barcode / Product</mat-label>
+                        <input type="text" #pbarcode [(ngModel)]="PBarcode" id="searchBarcode"
+                            (keydown)="searchByCode($event);changeFocus($event,'.prodRow');focusTo($event,'#disc')"
+                            class="p-1 ps-2 mb-2 searchProduct" placeholder="Alt + b" (focus)="rowFocused = -1"
+                            autocomplete="off" accesskey="b">
+
+                        <div class="  d-flex flex-column SearchConatiner cursorPointer"
+                            *ngIf="PBarcode != '' && PBarcode != undefined">
+                            <mat-card class="card " *ngFor="let item of productList| filter:PBarcode index as index"
+                                (click)="holdDataFunction(item);">
+                                <button style="height: 40px; background: none;border: none;text-align: left;"
+                                    class="prodRow{{index}} prodBtn justify-content-between d-flex"
+                                    (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">
+                                    <p>{{item.productTitle}}</p>
+                                    <p><strong>({{item.barcode}})</strong></p>
+                                </button>
+                            </mat-card>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 text-start ms-1 pt-3 mt-1">
+                        <button mat-raised-button class="bg-primary text-white w-50 " style="height: 40px;"
+                            (click)="ngOnInit()">Load</button>
+                    </div>
+
+                </div>
+
+                <!-------------------------------Bill Products Area ------------------>
+
+                <div class="rtnBillArea" style="height: 80vh !important ;overflow-y: scroll;">
+                    <table class="table table-logix">
+                        <thead>
+                            <tr>
+                                <th>S#</th>
+                                <th style="width: 800px;">Title</th>
+                                <th style="width: 200;">Qty</th>
+                                <th style="width: 200;">Price</th>
+                                <th style="width: 200;">Total</th>
+                                <th style="width: 200;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of tableDataList index as index"
+                                (click)="showImg(item);rowFocused = index;" [ngClass]="rowFocused == index ?'bg-dg':''">
+                                <td class="text-center">{{index +1}}</td>
+                                <td>{{item.productTitle}}</td>
+
+                                <td class="text-center"><input type="text" [readOnly]="true" [(ngModel)]="item.quantity"
+                                        min="0"
+                                        (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();"
+                                        (keyup)="getTotal();showImg(item);"
+                                        (keypress)="openQtyModal($event,item)" (click)="openQtyModal($event,item)"
+                                        class="qty{{index}} text-center" style="width: 80px;"></td>
+                                <td class="text-end">{{item.salePrice|number:'1.0-0'}}</td>
+
+                                <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-0'}}</td>
+                                <td class="cursorPointer text-center text-danger"><mat-icon
+                                        (click)="delRow(item)">close</mat-icon></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"></td>
+                                <td class="cursorPointer text-danger text-center"><mat-icon (click)="reset()">delete</mat-icon></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!------------------ column 2 Amount side area ---------------->
+        <div class="col-lg-2 " >
+
+            <div class="card p-2 totalArea"
+                 style=" overflow-y: scroll; border-radius: 5px 5px 5px 5px;height:87vh;padding-bottom: 50px !important; background-color: rgb(240, 247, 245);">
+
+                <div class="p-1 w-100">
+                    <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
+                        <div class="text-center" *ngIf="tableDataList != ''">
+                            <img [src]="productImage" alt="" height="190" width="200" alt="Img not Found" accesskey="i"
+                                (click)="this.global.showProductImage(this.productImage,0)">
+                        </div>
+                    </mat-card>
+                </div>
+
+                <div class="d-flex pb-2 flex-column border-bottom">
+                    <div class=" pt-3 d-flex justify-content-between">
+                        <p style="font-size: 15px;color: rgb(0, 0, 0);">TOTAL</p>
+                        <p style="font-size: 40px;color: rgb(255, 0, 0);" class="font-digit text-end">{{subTotal
+                            |number:'1.0-1'}}
+                        </p>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <div class=" col-lg-12">
+                            <p >DISCOUN<u>T</u></p>
+                            <input class="bg-dark border-0 text-white text-end font-digit w-100" id="disc" accesskey="t"   
+                                style="font-size: 30px;" type="text" [(ngModel)]="discount" (keyup)="getTotal()"
+                                (keydown)="getTotal();this.global.handleNumKeys($event);focusTo($event,'#cash')" />
+                        </div>
+                        <!--  <div class=" col-lg-6">
+                        <p style="font-size: 15px;color: rgb(6, 6, 6)" class="text-end">Other Charges</p>
+                        <input class="bg-dark border-0 text-white text-end font-digit w-100" id="charges"
+                            style="font-size: 30px;" type="text" [(ngModel)]="otherCharges" (keyup)="getTotal()"
+                            (keydown)="getTotal();this.global.handleNumKeys($event);focusTo($event,'#cash')" />
+                    </div>-->
+                    </div>
+                    <div class=" col-lg-12  pt-1">
+                        <p style="font-size: 15px;color: rgb(6, 6, 6)" class="w-100"><u>C</u>ASH</p>
+                        <input class="bg-success border-0 text-white text-end font-digit w-100" id="cash" accesskey="c"
+                            style="font-size: 30px;" type="text" [(ngModel)]="cash" (keyup)="getTotal()"
+                            (keydown)="getTotal();this.global.handleNumKeys($event);focusTo($event,'#save')" />
+                    </div>
+
+                   
+                        <div class="w-100">
+                            <p style="font-size: 15px;color: rgb(3, 3, 3)">NET TOTAL</p>
+                            <p style="font-size: 40px;color: rgb(19, 83, 27);" class="font-digit pt-1 text-end">
+                                {{netTotal || 0
+                                |number:'1.0-1'}}</p>
+                        </div>
+                        <div class="w-100">
+                            <p style="font-size: 15px;color: rgb(3, 3, 3)">CHANGE</p>
+                            <p style="font-size: 40px;color: rgb(0, 0, 0);" class="font-digit pt-1 text-end">{{change ||
+                                0
+                                |number:'1.0-1'}}</p>
+                        </div>
+           
+
+                </div>
+                
+
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label><u>R</u>emarks</mat-label>
+                    <textarea matInput accesskey="r" rows="1" [(ngModel)]="billRemarks"></textarea>
+                </mat-form-field>
+
+                <div class="text-center d-flex pt-4">
+                    <!-- <button class="col-lg-2 delBtn" style="background-color:transparent;border-radius: 5px;margin-right: 1px;"
+                        (click)="reset()"><mat-icon>delete_outline</mat-icon></button> -->
+                    <button class=" w-100 btn btn-success" id="save" accesskey="s" (click)="save()"><u>S</u>ave</button>
+
+
+                </div>
+                <div class="pt-2">
+                    <button class="btn col-lg-12 btn-danger  " accesskey="u"
+                        (click)="openSavedBill()">D<u>u</u>plicate</button>
+                    <!-- <button class="btn col-lg-12 d-flex justify-content-between btn-primary me-1 pt-3" data-bs-toggle="modal" data-bs-target="#paymentMehtod">
+                    <p>Other Payment</p> <mat-icon>keyboard_arrow_right</mat-icon></button> -->
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+<!----------------Modal Window for Payment Mehtod currently not in use ---------->
+
+
+
+<div class="modal fade" id="paymentMehtod" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    aria-labelledby="paymentMehtodLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered ">
+        <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+            <div class="modal-header">
+                <h2 class="modal-title" id="paymentMehtodLabel">Payment Method</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="d-flex justify-content-between">
+                    <h2 class="text-center text-success">Bill Total: {{netTotal | number:'1.0-1'}}</h2>
+                    <h2 class="text-center text-danger">Change: {{ change | number:'1.0-1'}}</h2>
+                </div>
+
+                <mat-form-field appearance="outline" class="col-lg-6 pe-1">
+                    <mat-label>Customer Name</mat-label>
+                    <input type="text" matInput [(ngModel)]="customerName" />
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-lg-6 w-50">
+                    <mat-label>Customer Mobile</mat-label>
+                    <input matInput type="text" [textMask]="{mask:mobileMask}" [(ngModel)]="customerMobileno" />
+                </mat-form-field>
+                <label class="fw-bold">Add Document</label>
+
+
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Payment Type</mat-label>
+                    <mat-select [(ngModel)]="paymentType" (selectionChange)="cash = 0; bankCash = 0;getTotal()">
+                        <!-- <mat-option value="Cash">Cash</mat-option> -->
+                        <mat-option value="Bank">Bank</mat-option>
+                        <mat-option value="Split">Split</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-card class=" p-2 bg-warning" *ngIf="paymentType !== ''">
+
+                    <div class="d-flex justify-content-between text-center mb-2"
+                        *ngIf="paymentType == 'Cash' || paymentType == 'Split'">
+                        <mat-label style="font-size: 25px;">Cash:</mat-label>
+                        <input type="number" style="font-size: 25px;width: 120px;"
+                            (keydown)="this.global.handleNumKeys($event);getTotal()" (keyup)="getTotal()"
+                            [(ngModel)]="cash" />
+                    </div>
+
+                    <div class="d-flex justify-content-between  "
+                        *ngIf="paymentType == 'Bank' || paymentType == 'Split'">
+                        <mat-label style="font-size: 25px;">Bank:</mat-label>
+                        <select [(ngModel)]="bankCoaID " style="width: 150px;">
+                            <option *ngFor="let item of bankCoaList" [value]="item.coaID">{{item.coaTitle}}</option>
+                        </select>
+                        <input type="number" style="font-size: 25px;width: 120px;"
+                            (keydown)="this.global.handleNumKeys($event);getTotal()" (keyup)="getTotal()"
+                            [(ngModel)]="bankCash" />
+                    </div>
+
+                </mat-card>
+
+
+            </div>
+
+            <div class="modal-footer bg-mf-blue">
+                <button class="btn btn-success" (click)="save()">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------------------------->
+
+
+
+
+<!------------------------------ Design For Bill Pirnt  --------------------->
+
+
+
+<div id="printBill" class="d-none">
+    <div class="text-center">
+        <img [src]="companyLogo" [height]="100" [width]="100">
+        <h2>{{companyName}}</h2>
+        <p style="margin-top: -15px;">{{companyAddress}}</p>
+        <p style="margin-top: -20px;">{{CompanyMobile}}</p>
+
+    </div>
+
+
+    <div>
+        <table class="table table-logix2">
+            <thead>
+                <tr>
+                    <th>Inv #</th>
+                    <th>Date</th>
+                    <th>Counter</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                <tr>
+                    <td>{{myInvoiceNo}}</td>
+                    <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
+                    <td>{{myCounterName}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+        
+        <tr>
+            <th>Remarks:-</th>
+            <td class="ms-2">{{myRemarks}}</td>
+        </tr>
+    </div>
+
+    <h2 *ngIf="myPaymentType == 'Complimentary'" class="border border-dark w-100 text-center">Complimentary</h2>
+    <h2 *ngIf="myDuplicateFlag == true" class="border border-dark w-100 text-center">Duplicate</h2>
+    <h2  class="border border-dark w-100 text-center">Sale Return</h2>
+
+    <div>
+        <table class="table table-logix2">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Title</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                    <th>Total</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of myPrintData index as index">
+                    <td>{{index +1}}</td>
+                    <td class="text-start">{{item.productTitle}}</td>
+                    <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
+                    <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
+                    <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
+
+                </tr>
+            </tbody>
+        </table>
+
+
+
+        <table class="w-100 text-end mt-2">
+            <tbody>
+                <tr>
+                    <th>Sub Total</th>
+                    <td>{{mySubTotal |number:'1.0-0'}}</td>
+
+                </tr>
+                <tr *ngIf="myOtherCharges > 0">
+
+                    <th>Other Charges</th>
+                    <td>{{myOtherCharges|number:'1.0-0'}}</td>
+
+                </tr>
+                <tr *ngIf="myDiscount > 0">
+                    <th>Discount</th>
+                    <td>{{myDiscount|number:'1.0-0'}}</td>
+
+                </tr>
+
+                <tr>
+                    <th>Net Total</th>
+                    <td>{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</td>
+
+                </tr>
+                <tr *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
+                    <th>Cash</th>
+                    <td>{{myCash|number:'1.0-1'}}</td>
+
+                </tr>
+                <tr *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
+                    <th>Bank</th>
+                    <td>{{myBank|number:'1.0-1'}}</td>
+
+                </tr>
+                <tr *ngIf="myChange > 0">
+                    <th>Change</th>
+                    <td>{{myChange|number:'1.0-1'}}</td>
+
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+
+<!---------------------------------------------------------------------------------->

@@ -27,7 +27,8 @@
              
 
                     <div class="input-field1">
-                        <input required="" type="password" name="pwd"   [(ngModel)]="userPassword" class="float1 w-100" autofocus>
+                        <input required="" type="password" name="pwd" id="pwd"    [(ngModel)]="userPassword" class="float1 w-100" autofocus>
+                      
                         <label >
                             <span style="transition-delay:350ms">P</span>
                             <span style="transition-delay:300ms">a</span>
@@ -38,8 +39,11 @@
                             <span style="transition-delay:50ms">r</span>
                             <span style="transition-delay:0ms">d</span>
                         </label>
-               
+                     <div class="text-end">   <mat-checkbox  (click)="global.showPassword($event,'#pwd')">Show</mat-checkbox></div>
                 </div>
+            
+                <!-- <mat-icon matSuffix (click)="global.showPassword($event,'#cpwd')">{{cpwd.type == 'password' ?'visibility':'visibility_off'}}</mat-icon> -->
+
                 <div class="text-center">
                     <button (click)="login()" class="btn btn-success">Log in</button>
                 </div>

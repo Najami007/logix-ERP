@@ -33,7 +33,7 @@ import { ConfirmationAlertComponent } from 'src/app/Components/Common/confirmati
 
 export class GlobalDataModule implements OnInit {
 
-  DisableDate = false;
+  DisableDate = true;
 
   InvProjectID = 6;
   parkProjectID = 6;
@@ -870,6 +870,16 @@ export class GlobalDataModule implements OnInit {
       }
     
     
+
+    showPassword(event:any,id:any){
+        if( $(id).attr("type") == 'password'){
+         return $(id).attr("type" , "text");
+        }else{
+          
+          return $(id).attr("type" , "password");
+          
+        }
+      }
 
 
 }

@@ -88,13 +88,11 @@ export class CashierClosingRptComponent implements OnInit {
   totalBank = 0;
   totalComplimentary = 0;
   totalDiscount = 0;
+  totalHDCharges = 0;
 
-  getReport() {
-
-   
+  getReport() {   
           this.http.get(environment.mainApi + this.global.inventoryLink +'GetDayClosingRpt_9?reqDate='+this.global.dateFormater(this.Date,'-')).subscribe(
             (Response: any) => {
-         
               this.TotalSales = 0
               this.totalSaleReturn = 0
               this.totalServiceCharges = 0
@@ -102,6 +100,7 @@ export class CashierClosingRptComponent implements OnInit {
               this.totalBank = 0
               this.totalComplimentary= 0
               this.totalDiscount = 0
+              this.totalHDCharges = 0;
               
               if(this.userID > 0){
                 this.ClosingDetail = Response.filter((e:any)=>e.userID == this.userID);
@@ -117,13 +116,11 @@ export class CashierClosingRptComponent implements OnInit {
                 this.totalBank += e.bank;
                 this.totalComplimentary += e.complimentary;
                 this.totalDiscount += e.disocunt;
+                this.totalHDCharges += e.hdCharges;
               });
 
             }
           )
-      
-
-
   }
 
 

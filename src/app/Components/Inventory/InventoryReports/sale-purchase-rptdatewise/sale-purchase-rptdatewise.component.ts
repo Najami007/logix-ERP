@@ -125,6 +125,7 @@ rptType:any = 's';
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
         this.SaleDetailList = [];
+        //console.log(Response);
        
         if(this.rptType == 'R'){
           Response.forEach((e:any)=>{
@@ -187,8 +188,11 @@ rptType:any = 's';
             this.profitTotal += (e.salePrice * e.quantity) - (e.avgCostPrice * e.quantity);
             // this.profitPercentTotal += (((e.salePrice * e.quantity) - (e.avgCostPrice * e.quantity)) / (e.salePrice * e.quantity));
           }
-          else{
+          else if(this.rptType == 'p' || this.rptType == 'pr'){
             this.detNetTotal += e.costPrice * e.quantity;
+          }
+          else{
+            this.detNetTotal += e.avgCostPrice * e.quantity;
           }
          });
       }

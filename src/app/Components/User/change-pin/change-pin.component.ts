@@ -19,7 +19,7 @@ export class ChangePINComponent implements OnInit {
     private http:HttpClient,
     @Inject(MAT_DIALOG_DATA) public editData : any,
     private dialogRef: MatDialogRef<ChangePINComponent>,
-    private global:GlobalDataModule,
+    public global:GlobalDataModule,
     private msg:NotificationService,
     private dialogue:MatDialog
   ){}

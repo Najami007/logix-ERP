@@ -273,7 +273,7 @@ export class IssueStockRerturnComponent implements OnInit {
     this.avgCostTotal = 0;
     for (var i = 0; i < this.tableDataList.length; i++) {
    
-      this.subTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].costPrice));
+      this.subTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].avgCostPrice));
       this.totalQty += parseFloat(this.tableDataList[i].quantity);
       this.CostTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].costPrice));
       this.avgCostTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].avgCostPrice))

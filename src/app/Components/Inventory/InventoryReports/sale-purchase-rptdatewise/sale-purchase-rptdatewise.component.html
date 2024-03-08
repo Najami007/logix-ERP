@@ -177,7 +177,9 @@
                     <td class="text-end">{{item.avgCostPrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
                     <td class="text-end" *ngIf="rptType == 's' || rptType == 'sr'">{{item.salePrice * item.quantity |number:'1.0-1'}}</td>
-                    <td class="text-end" *ngIf="rptType != 's' && rptType != 'sr'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td>
+                    <!-- <td class="text-end" *ngIf="rptType != 's' && rptType != 'sr'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td> -->
+                    <td class="text-end" *ngIf="rptType == 'p' || rptType == 'pr'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td>
+                    <td class="text-end" *ngIf="rptType == 'I' || rptType == 'R'|| rptType == 'AI'|| rptType == 'AO'|| rptType == 'DL'|| rptType == 'E'|| rptType == 'OS'">{{item.avgCostPrice * item.quantity |number:'1.0-1'}}</td>
                     <td class="text-end" *ngIf="rptType == 's'">{{(item.salePrice * item.quantity) - (item.avgCostPrice * item.quantity) |number:'1.0-1'}}</td>
                     <td class="text-end" *ngIf="rptType == 's'">{{(((item.salePrice * item.quantity) - (item.avgCostPrice * item.quantity)) / (item.salePrice * item.quantity)) * 100 |number:'1.0-1'}}%</td>
                   

@@ -592,14 +592,14 @@ export class PurchaseComponent implements OnInit{
        
     if(this.tableDataList == ''){
       this.msg.WarnNotify('Atleast One Product Must Be Selected')
-    }else if(this.locationID == '' || this.locationID == undefined || this.locationID == 0){
-      this.msg.WarnNotify('Select Warehouse Location')
+    }else if(this.bookerID == 0 || this.bookerID == undefined){
+      this.msg.WarnNotify("Select Purchaser")
     }else if(this.refInvNo == '' || this.refInvNo == undefined){
       this.msg.WarnNotify('Enter Reference Invoice No')
     }else if(this.partyID == '' || this.partyID == 0 || this.partyID == undefined){
       this.msg.WarnNotify('Select Supplier Party')
-    }else if(this.bookerID == 0 || this.bookerID == undefined){
-      this.msg.WarnNotify("Select Booker")
+    }else if(this.locationID == '' || this.locationID == undefined || this.locationID == 0){
+      this.msg.WarnNotify('Select Warehouse Location')
     }else {
 
     

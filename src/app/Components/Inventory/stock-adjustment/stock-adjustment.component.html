@@ -107,7 +107,7 @@
                             <td class="text-end">{{item.costPrice | number:'1.0-2'}}</td>
                             <td class="text-end">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
                             <td class="text-end"> {{item.costPrice * item.quantity |number:'1.0-2'}}</td>
-                            <td class="text-center">{{item.aq}}</td>
+                            <td class="text-center">{{item.aq |number:'1.0-3'}}</td>
                             <td class="cursorPointer text-danger text-center"><mat-icon
                                     (click)="delRow(item)">delete</mat-icon></td>
                         </tr>

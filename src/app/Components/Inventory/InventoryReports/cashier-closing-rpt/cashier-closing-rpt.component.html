@@ -22,7 +22,7 @@
         </mat-form-field>
 
         <mat-form-field  appearance="outline" class="col-lg-3" >
-            <mat-label>From Date</mat-label>
+            <mat-label>Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="Date" [matDatepicker]="sDate">
             <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
             <mat-datepicker #sDate></mat-datepicker>
@@ -63,48 +63,14 @@
 
             </div>
         </div>
-
-    
-
-        <!-- <table class="table table-logix" id="summaryTable">
-        
-            <thead>
-                <tr>
-                    <th>S#</th>
-                    <th>Cashier</th>
-                    <th>Sales</th>
-                    <th>Sale Return</th>
-                    <th>Net Sales</th>
-                    <th>Bank</th>
-                    <th>Cash</th>
-                    <th>Complimentary</th>
-                    <th>Discount</th>
-                    <th>Service Charges</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of ClosingDetail index as index">
-                    <td class="text-center">{{index +1}}</td>
-                    <td >{{item.userName}}</td>
-                    <td  class="text-end">{{item.totalSale |number:'1.0-0'}}</td>
-                    <td class="text-end">{{item.saleReturn |number:'1.0-0'}}</td>
-                    <td class="text-end">{{ item.totalSale -item.saleReturn |number:'1.0-0'}}</td>
-                    <td class="text-end">{{item.bank |number:'1.0-0'}}</td>
-                    <td class="text-end">{{item.cashIn - item.cashOut |number:'1.0-0'}}</td>
-                    <td class="text-end">{{item.complimentary |number:'1.0-0'}}</td>
-                    <td class="text-end">{{item.disocunt |number:'1.0-0'}}</td>
-                    <td class="text-end">{{item.servicesCharges |number:'1.0-0'}}</td>
-                </tr>
-            </tbody>
-          
-        </table> -->
-
+ 
         <div class="row justify-content-center p-3">  
             <div class="p-2 card" style="width: 98%;">
                 <table class="table table-logix">
                     <thead>
                         <tr>
-                            <th>Service Charges</th>
+                            <th>SR Charges</th>
+                            <th>HD Charges</th>
                             <th>Sale</th>
                             <th>Sale Return</th>
                             <th>Net Sale</th>
@@ -117,6 +83,7 @@
                     <tbody >
                         <tr class="text-end" >
                             <td>{{totalServiceCharges |number:'1.0-0'}}</td>
+                            <td>{{totalHDCharges |number:'1.0-0'}}</td>
                             <td>{{TotalSales |number:'1.0-0'}}</td>
                             <td>{{totalSaleReturn |number:'1.0-0'}}</td>
                             <td>{{TotalSales - totalSaleReturn |number:'1.0-0'}}</td>
@@ -140,7 +107,7 @@
                         <span><b>Day Closed:</b> {{item.dayCloseTime |date:'dd-MM-yyyy hh:mm:a'}}</span>
                         <span><b>Closed By:</b> {{item.dayCloseBy }}</span>
                         <span><b>Sale Return:</b> {{item.saleReturn |number:'1.0-0'}}</span>
-                        <span><b>Service Charges:</b> {{item.servicesCharges |number:'1.0-0'}}</span>
+                        <span><b>SC \ HD:</b> {{item.servicesCharges |number:'1.0-0'}} \ {{item.hdCharges |number:'1.0-0'}}</span>
                     </div>
                 </div>
                 <div>

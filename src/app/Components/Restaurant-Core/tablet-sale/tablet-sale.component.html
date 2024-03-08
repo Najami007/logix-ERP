@@ -693,13 +693,13 @@
                                     <tbody class="">
                                         <tr style="display: inline-flex; " class="cursorPointer "
                                             *ngFor="let item of tableList ">
-                                            <mat-card name="TableNo" class="btblbtn justify-content-center"
+                                            <mat-card name="tsTableNo" class="btblbtn justify-content-center"
                                                 *ngIf="item.tableStatus == false"
                                                 [ngClass]="item.tableID == tempTableID ? 'bg-primary text-white' : 'bg-white'"
                                                 (click)="tempTableID = item.tableID">
                                                 <span>{{item.tableTitle}}</span>
                                             </mat-card>
-                                            <mat-card name="TableNo" class="btblbtn justify-content-center bg-warning text-white"
+                                            <mat-card name="tsTableNo" class="btblbtn justify-content-center bg-warning text-white"
                                                 *ngIf="item.tableStatus == true">
                                                 <span>{{item.tableTitle}}</span>
                                             </mat-card>
@@ -709,10 +709,7 @@
                             </div>
                             <div class="col-lg-2 border-start p-1">
                          
-                                <div class="w-100 text-end">
-                                    <button mat-mini-fab data-bs-dismiss="modal"><mat-icon>close</mat-icon></button>
-                                </div>
-                                <mat-radio-group name="orderType" aria-label="Select an option" [(ngModel)]="tempOrderType">
+                                <mat-radio-group name="tsOrderType" aria-label="Select an option" [(ngModel)]="tempOrderType">
                                     <mat-radio-button *ngFor="let item of orderTypeList"
                                         [disabled]="invBillNo !== '' || orderType != ''"
                                         (change)="onOrderTypeSelected(item.val)"
@@ -721,7 +718,7 @@
                                 
                                 <mat-form-field  appearance="outline" class="w-100 pt-4">
                                     <mat-label>Cover</mat-label>
-                                    <input name="Cover" type="number" (keydown)="this.global.handleNumKeys($event)" matInput
+                                    <input name="tsCover" type="number" (keydown)="this.global.handleNumKeys($event)" matInput
                                         [(ngModel)]="coverOf" />
                                 </mat-form-field>
     

@@ -8,9 +8,9 @@ export const environment = {
 
 
       //mainApi: 'http://159.69.174.21:2006/',  ////////// live Server Mehria Brands
-      mainApi: 'http://159.69.174.21:2007/',  ////////// live Server Balck Gold Restaurant
+      //mainApi: 'http://159.69.174.21:2007/',  ////////// live Server Balck Gold Restaurant
       //mainApi: 'http://192.168.100.250:1007/',  ////////// live Server Dani System
       //mainApi: 'http://192.168.10.100:1002/',
-     // mainApi: 'http://192.168.10.100:1003/',    ////////// Local Server
+      mainApi: 'http://192.168.10.100:1003/',    ////////// Local Server
     
 };

@@ -1,4 +1,3 @@
-
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -8,13 +7,12 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { environment } from 'src/environments/environment.development';
 
-
 @Component({
-  selector: 'app-rtl-saved-bill',
-  templateUrl: './rtl-saved-bill.component.html',
-  styleUrls: ['./rtl-saved-bill.component.scss']
+  selector: 'app-retail-rtn-savedbill',
+  templateUrl: './retail-rtn-savedbill.component.html',
+  styleUrls: ['./retail-rtn-savedbill.component.scss']
 })
-export class RtlSavedBillComponent implements OnInit {
+export class RetailRtnSavedbillComponent  implements OnInit {
 
   companyProfile: any = [];
   companyLogo: any = '';
@@ -24,7 +22,7 @@ export class RtlSavedBillComponent implements OnInit {
   constructor(
     private http:HttpClient,
     @Inject(MAT_DIALOG_DATA) public data : any,
-    private dialogRef: MatDialogRef<RtlSavedBillComponent>,
+    private dialogRef: MatDialogRef<RetailRtnSavedbillComponent>,
     private global:GlobalDataModule,
     private msg:NotificationService,
     private dialogue:MatDialog
@@ -42,41 +40,7 @@ export class RtlSavedBillComponent implements OnInit {
   }
 
 
-  savedbillList:any =[];
-
-
-  
-
-
-
-
-  public getBillDetail(billNo:any):Observable<any>{
-    return this.http.get(environment.mainApi+this.global.inventoryLink+'GetSingleBillDetail?reqInvBillNo='+billNo).pipe(retry(3));
-   }
- 
-
-  //////////////////////////////////////////////////////////////////////////////////
-  
- 
-  
-
-  getSavedBill(){
-
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetOpenDaySale').subscribe(
-      (Response:any)=>{
-        this.savedbillList = [];
-        Response.forEach((e:any) => {
-          if(e.invType == 'S'){
-            this.savedbillList.push(e);
-          }
-          
-        });
-       
-      }
-    )
-
-  }
-
+  savedbillList:any = [];
 
 
 
@@ -99,7 +63,31 @@ export class RtlSavedBillComponent implements OnInit {
   myTime:any;
 
 
+  public getBillDetail(billNo:any):Observable<any>{
+    return this.http.get(environment.mainApi+this.global.inventoryLink+'GetSingleBillDetail?reqInvBillNo='+billNo).pipe(retry(3));
+   }
  
+
+  //////////////////////////////////////////////////////////////////////////////////
+  
+ 
+   
+
+  getSavedBill(){
+
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetOpenDaySale').subscribe(
+      (Response:any)=>{
+        this.savedbillList = [];
+        Response.forEach((e:any) => {
+          if(e.invType == 'SR'){
+            this.savedbillList.push(e);
+          }
+          
+        });
+      }
+    )
+
+  }
 
 
 
@@ -189,7 +177,6 @@ export class RtlSavedBillComponent implements OnInit {
   closeDialog(){
     this.dialogRef.close()
   }
-
 
 }
 

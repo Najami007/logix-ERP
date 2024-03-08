@@ -19,10 +19,10 @@ companyLog = '';
   constructor(private msg:NotificationService,
                private rout : Router,
                private http : HttpClient,
-               private globalData:GlobalDataModule
+               public global:GlobalDataModule
     ){
 
-      this.globalData.getCompany().subscribe((data)=>{
+      this.global.getCompany().subscribe((data)=>{
         // this.companyProfile = data;
         if(data == '' || data == undefined || data == null){
 
@@ -63,7 +63,7 @@ companyLog = '';
       //console.log(this.userEmail,this.userPassword)
 
 
-      this.globalData.login(this.userEmail,this.userPassword);
+      this.global.login(this.userEmail,this.userPassword);
 
     }
 

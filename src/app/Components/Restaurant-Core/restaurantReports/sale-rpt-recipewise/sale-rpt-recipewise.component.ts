@@ -81,8 +81,8 @@ export class SaleRptRecipewiseComponent implements OnInit {
     }else{
       this.app.startLoaderDark();
       if (type == 'perc') {
-        this.saleSummaryList = this.tempSaleSummaryList.filter((e: any) => ((e.avgCostPrice / e.total) * 100) >= start &&
-          ((e.avgCostPrice / e.total) * 100) <= end)
+        this.saleSummaryList = this.tempSaleSummaryList.filter((e: any) => (((e.avgCostPrice * e.quantity) / e.total) * 100) >= start &&
+          (((e.avgCostPrice * e.quantity)  / e.total) * 100) <= end)
       }
 
       if (type == 'qty') {
