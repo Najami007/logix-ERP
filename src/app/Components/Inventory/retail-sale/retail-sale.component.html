@@ -272,7 +272,7 @@ aria-labelledby="paymentMehtodLabel">
 
 <div id="cncBillPrint" class="d-none">
     <div class="text-center">
-        <img [src]="companyLogo" [height]="100" [width]="100">
+        <img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
         <h2>{{companyName}}</h2>
         <p style="margin-top: -15px;">{{companyAddress}}</p>
         <p style="margin-top: -20px;">{{CompanyMobile}}</p>
@@ -338,7 +338,7 @@ aria-labelledby="paymentMehtodLabel">
             <tbody>
                 <tr>
                     <th>Sub Total</th>
-                    <td>{{mySubTotal |number:'1.0-0'}}</td>
+                    <td>{{mySubTotal |number:'1.0-1'}}</td>
 
                 </tr>
                 <tr *ngIf="myOtherCharges > 0">

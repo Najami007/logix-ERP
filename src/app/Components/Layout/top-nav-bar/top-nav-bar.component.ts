@@ -71,6 +71,8 @@ export class TopNavBarComponent implements OnInit{
     UserName:any = 'abc';
     companyProfile:any;
     logo1:any = '../../../../assets/Images/logo.png';
+    height:any = 0;
+    width:any = 0;
 
     ////////////////////////////////////////////////////////////////////////
   getCompany(){
@@ -78,7 +80,10 @@ export class TopNavBarComponent implements OnInit{
       (Response:any)=>{
         if(Response != ''){
           this.companyProfile = Response;
-        this.logo1 = this.companyProfile[0].companyLogo1; 
+        this.logo1 = this.companyProfile[0].companyLogo3; 
+        this.height = this.companyProfile[0].logo3Height;
+        this.width = this.companyProfile[0].logo3Width;
+        
         //console.log(Response);  
         this.globalData.comapnayProfile = Response[0];      
         }

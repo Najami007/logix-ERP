@@ -15,6 +15,7 @@ import { RtlSavedBillComponent } from './rtl-saved-bill/rtl-saved-bill.component
 
 
 
+
 @Component({
   selector: 'app-retail-sale',
   templateUrl: './retail-sale.component.html',
@@ -24,6 +25,8 @@ export class RetailSaleComponent implements OnInit {
 
   companyProfile: any = [];
   companyLogo: any = '';
+  logoHeight:any = 0;
+  logoWidth:any = 0;
   companyAddress: any = '';
   CompanyMobile: any = '';
   companyName: any = '';
@@ -51,6 +54,8 @@ export class RetailSaleComponent implements OnInit {
       this.CompanyMobile = data[0].companyMobile;
       this.companyAddress = data[0].companyAddress;
       this.companyName = data[0].companyName;
+      this.logoHeight = data[0].logo1Height;
+      this.logoWidth = data[0].logo1Width;
     });
 
   }
@@ -67,6 +72,7 @@ export class RetailSaleComponent implements OnInit {
   projectID = this.global.InvProjectID;
 
   tableDataList:any = [];
+  tempTableDataList:any = [];
   InvDate = new Date();
   PBarcode:any = '';
   productImage = '';
@@ -150,6 +156,9 @@ export class RetailSaleComponent implements OnInit {
                     aq:Response[0].aq,
               
                   });
+
+
+                //  this.tableDataList = this.tableDataList.sort((a:any,b:any)=> b.productID - a.productID);
                   this.getTotal();
             
 
@@ -217,7 +226,8 @@ export class RetailSaleComponent implements OnInit {
               discInR:0,
               aq:Response[0].aq,
         
-            })
+            });
+            // this.tableDataList.sort((a:any,b:any)=> b.productID - a.productID);
             this.getTotal();
            
           
@@ -521,14 +531,14 @@ export class RetailSaleComponent implements OnInit {
       p.costPrice = parseFloat(p.costPrice);
           
         if(p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null ){
-          this.msg.WarnNotify('('+p.ProductTitle+') Cost Price is not Valid');
+          this.msg.WarnNotify('('+p.productTitle+') Cost Price is not Valid');
            isValidFlag = false;
   
            return;
         }
   
         if( p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null ){
-          this.msg.WarnNotify('('+p.ProductTitle+') Sale Price is not Valid');
+          this.msg.WarnNotify('('+p.productTitle+') Sale Price is not Valid');
            isValidFlag = false;
     
            return;
@@ -554,9 +564,9 @@ export class RetailSaleComponent implements OnInit {
       this.msg.WarnNotify('Entered Cash is not Valid')
     }else if ( paymentType == 'Split' && ((this.cash + this.bankCash) > this.netTotal || (this.cash + this.bankCash) < this.netTotal)) {
       this.msg.WarnNotify('Sum Of Both Amount must be Equal to Net Total')
-    }else if(this.cash < 0 ){
+    }else if(this.paymentType == 'Split' && this.cash <= 0 ){
         this.msg.WarnNotify('Cash Amount is Not Valid')
-    }else if(this.bankCash < 0 ){
+    }else if(this.paymentType == 'Split' && this.bankCash <= 0 ){
       this.msg.WarnNotify('Bank Amount is Not Valid')
   }
      else if ( paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {

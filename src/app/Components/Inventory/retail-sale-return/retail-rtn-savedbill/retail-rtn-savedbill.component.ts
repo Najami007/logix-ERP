@@ -16,6 +16,8 @@ export class RetailRtnSavedbillComponent  implements OnInit {
 
   companyProfile: any = [];
   companyLogo: any = '';
+  logoHeight:any = 0;
+  logoWidth:any = 0;
   companyAddress: any = '';
   CompanyMobile: any = '';
   companyName: any = '';
@@ -33,6 +35,8 @@ export class RetailRtnSavedbillComponent  implements OnInit {
       this.CompanyMobile = data[0].companyMobile;
       this.companyAddress = data[0].companyAddress;
       this.companyName = data[0].companyName;
+      this.logoHeight = data[0].logo1Height;
+      this.logoWidth = data[0].logo1Width;
     });
   }
   ngOnInit(): void {

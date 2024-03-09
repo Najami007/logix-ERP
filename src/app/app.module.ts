@@ -37,6 +37,7 @@ import { ConfirmationAlertComponent } from './Components/Common/confirmation-ale
 
 
 
+
 // import {  TruncatePipe } from './Shared/pipes/limitto.pipe';
 // import { FilterPipe } from './Shared/pipes/filter.pipe';
 
@@ -68,6 +69,7 @@ import { ConfirmationAlertComponent } from './Components/Common/confirmation-ale
     NumberInputComponent,
     SideNavbarComponent,
     ConfirmationAlertComponent,
+ 
     // TruncatePipe ,  
     // FilterPipe
  
