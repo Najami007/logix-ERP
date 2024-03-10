@@ -58,6 +58,28 @@ export class RetailSaleComponent implements OnInit {
       this.logoWidth = data[0].logo1Width;
     });
 
+    
+        ///////////// will Check day is opened or not
+
+  
+        this.global.getCurrentOpenDay().subscribe(
+          (Response:any)=>{
+            // alert(Response)
+            if(Response == null || Response == ''){
+              Swal.fire({
+                title: 'Alert!',
+                text: 'Day Is Currently Closed',
+                position: 'center',
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK',
+              })
+            }
+          }
+        )
+
   }
   ngOnInit(): void {
    this.global.setHeaderTitle('Sale');
