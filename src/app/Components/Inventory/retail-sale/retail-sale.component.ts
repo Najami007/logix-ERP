@@ -90,6 +90,8 @@ export class RetailSaleComponent implements OnInit {
   }
   
 
+  sortType = 'desc';
+
   productList:any = [];
   projectID = this.global.InvProjectID;
 
@@ -114,6 +116,12 @@ export class RetailSaleComponent implements OnInit {
 
   bankCoaList:any = [];
 
+
+  changeOrder(){
+    this.sortType = this.sortType == 'desc' ? 'asc' :'desc';
+    this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
+
+  }
 
   ////////////////////////////////////////////
 
@@ -157,6 +165,9 @@ export class RetailSaleComponent implements OnInit {
               (Response:any)=>{
               
                   this.tableDataList.push({
+                    rowIndex:this.tableDataList.length == 0 ? this.tableDataList.length + 1 
+                    : this.sortType == 'desc' ?  this.tableDataList[0].rowIndex + 1 
+                    : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
                     productID:Response[0].productID,
                     productTitle:Response[0].productTitle,
                     barcode:Response[0].barcode,
@@ -179,8 +190,8 @@ export class RetailSaleComponent implements OnInit {
               
                   });
 
-
-                //  this.tableDataList = this.tableDataList.sort((a:any,b:any)=> b.productID - a.productID);
+                  //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
+                  this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
                   this.getTotal();
             
 
@@ -192,6 +203,8 @@ export class RetailSaleComponent implements OnInit {
          
         }else {
           this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+          this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length -1].rowIndex + 1 ;
+          this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
           this.productImage = this.tableDataList[index].productImage;
         }
         }else{
@@ -225,9 +238,11 @@ export class RetailSaleComponent implements OnInit {
       this.global.getProdDetail(data.productID,'').subscribe(
         (Response:any)=>{
        
-
-          
             this.tableDataList.push({
+              
+              rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1 
+              : this.sortType == 'desc' ?  this.tableDataList[0].rowIndex + 1 
+              : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
               productID:Response[0].productID,
               productTitle:Response[0].productTitle,
               barcode:Response[0].barcode,
@@ -249,7 +264,8 @@ export class RetailSaleComponent implements OnInit {
               aq:Response[0].aq,
         
             });
-            // this.tableDataList.sort((a:any,b:any)=> b.productID - a.productID);
+            // this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
+           this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
             this.getTotal();
            
           
@@ -258,7 +274,10 @@ export class RetailSaleComponent implements OnInit {
       )
   }else {
     this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+    this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length -1].rowIndex + 1 ;
+    this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
     this.productImage = this.tableDataList[index].productImage;
+  
   }
   this.app.stopLoaderDark();
     this.productName = '';

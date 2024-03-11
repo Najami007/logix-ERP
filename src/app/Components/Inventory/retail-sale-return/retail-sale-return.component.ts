@@ -89,7 +89,7 @@ export class RetailSaleReturnComponent implements OnInit {
    
   }
 
- 
+  sortType = 'desc';
   billRemarks = '';
 
   productList:any = [];
@@ -123,7 +123,11 @@ export class RetailSaleReturnComponent implements OnInit {
 
   invBillNo = '';
   
+  changeOrder(){
+    this.sortType = this.sortType == 'desc' ? 'asc' :'desc';
+    this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
 
+  }
 
 
   ////////////////////////////////////////////
@@ -166,6 +170,9 @@ export class RetailSaleReturnComponent implements OnInit {
               (Response:any)=>{
               
                   this.tableDataList.push({
+                    rowIndex:this.tableDataList.length == 0 ? this.tableDataList.length + 1 
+                    : this.sortType == 'desc' ?  this.tableDataList[0].rowIndex + 1 
+                    : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
                     productID:Response[0].productID,
                     productTitle:Response[0].productTitle,
                     barcode:Response[0].barcode,
@@ -187,6 +194,9 @@ export class RetailSaleReturnComponent implements OnInit {
                     aq:Response[0].aq,
               
                   });
+
+                  this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
+
                   this.getTotal();
             
 
@@ -198,6 +208,8 @@ export class RetailSaleReturnComponent implements OnInit {
          
         }else {
           this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+          this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length -1].rowIndex + 1 ;
+          this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
           this.productImage = this.tableDataList[index].productImage;
         }
         }else{
@@ -234,6 +246,9 @@ export class RetailSaleReturnComponent implements OnInit {
 
           
             this.tableDataList.push({
+              rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1 
+              : this.sortType == 'desc' ?  this.tableDataList[0].rowIndex + 1 
+              : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
               productID:Response[0].productID,
               productTitle:Response[0].productTitle,
               barcode:Response[0].barcode,
@@ -255,6 +270,7 @@ export class RetailSaleReturnComponent implements OnInit {
               aq:Response[0].aq,
         
             })
+            this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
             this.getTotal();
            
           
@@ -263,6 +279,8 @@ export class RetailSaleReturnComponent implements OnInit {
       )
   }else {
     this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+    this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length -1].rowIndex + 1 ;
+    this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
     this.productImage = this.tableDataList[index].productImage;
   }
   this.app.stopLoaderDark();

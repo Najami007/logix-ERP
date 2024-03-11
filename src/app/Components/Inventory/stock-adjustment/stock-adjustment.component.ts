@@ -51,6 +51,10 @@ export class StockAdjustmentComponent implements OnInit {
     (data:any)=>{this.productList = data;})
   }
 
+
+
+  sortType = 'desc';
+
   projectID = this.global.InvProjectID;
   Date:Date = new Date();
   holdInvNo = '-';
@@ -70,6 +74,14 @@ export class StockAdjustmentComponent implements OnInit {
   IssueBillList:any = [];
   avgCostTotal = 0;
   CostTotal = 0;
+
+
+  
+  changeOrder(){
+    this.sortType = this.sortType == 'desc' ? 'asc' :'desc';
+    this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
+
+  }
 
 
   getLocation(){
@@ -104,6 +116,9 @@ export class StockAdjustmentComponent implements OnInit {
               (Response:any)=>{
   
                   this.tableDataList.push({
+                    rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1 
+                    : this.sortType == 'desc' ?  this.tableDataList[0].rowIndex + 1 
+                    : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
                     productID:Response[0].productID,
                     productTitle:Response[0].productTitle,
                     barcode:Response[0].barcode,
@@ -121,7 +136,9 @@ export class StockAdjustmentComponent implements OnInit {
                     discInR:0,
                     aq:Response[0].aq,
               
-                  })
+                  });
+
+                  this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
                   this.getTotal();
                  
                 
@@ -134,6 +151,8 @@ export class StockAdjustmentComponent implements OnInit {
           $('#searchProduct').trigger('focus');
         }else {
           this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+          this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length -1].rowIndex + 1 ;
+          this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
           this.productImage = this.tableDataList[index].productImage;
     
           this.PBarcode = '';
@@ -166,6 +185,9 @@ export class StockAdjustmentComponent implements OnInit {
         (Response:any)=>{
       
             this.tableDataList.push({
+              rowIndex:this.tableDataList.length == 0 ? this.tableDataList.length + 1 
+              : this.sortType == 'desc' ?  this.tableDataList[0].rowIndex + 1 
+              : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
               productID:Response[0].productID,
               productTitle:Response[0].productTitle,
               barcode:Response[0].barcode,
@@ -183,7 +205,11 @@ export class StockAdjustmentComponent implements OnInit {
               discInR:0,
               aq:Response[0].aq,
         
-            })
+            });
+
+            //////////sorting data table base on sort type
+            this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
+                 
             this.getTotal();
            
           
@@ -195,6 +221,8 @@ export class StockAdjustmentComponent implements OnInit {
     $('#searchProduct').trigger('focus');
   }else {
     this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+    this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length -1].rowIndex + 1 ;
+    this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
     this.productImage = this.tableDataList[index].productImage;
     
     this.PBarcode = '';
@@ -628,8 +656,10 @@ export class StockAdjustmentComponent implements OnInit {
 
 
           Response.forEach((e:any) => {
+            
             this.totalQty += e.quantity;
             this.tableDataList.push({
+              rowIndex:this.tableDataList.length + 1,
               productID:e.productID,
               productTitle:e.productTitle,
               barcode:e.barcode,
@@ -648,6 +678,12 @@ export class StockAdjustmentComponent implements OnInit {
               aq:e.aq,
             })
           });
+
+
+          //////////sorting data table base on sort type
+          this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) 
+          : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
+
           // this.getTotal();
         
       }

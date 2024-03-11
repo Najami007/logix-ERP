@@ -106,6 +106,7 @@ export class CashierClosingRptComponent implements OnInit {
                 this.ClosingDetail = Response.filter((e:any)=>e.userID == this.userID);
               }else{
                 this.ClosingDetail = Response;
+                
               }
               
               this.ClosingDetail.forEach((e:any) => {

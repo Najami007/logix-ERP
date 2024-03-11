@@ -91,7 +91,7 @@ export class PurchaseComponent implements OnInit{
     
   }
 
-
+  sortType = 'desc';
  
   currentPartyAddress:any;  /////////// will shows the current party address on page
   currentPartyCity:any;      /////////// will shows the current party City on page
@@ -110,8 +110,10 @@ export class PurchaseComponent implements OnInit{
 
 
 
-  dragFunc(e:any){
-    
+  changeOrder(){
+    this.sortType = this.sortType == 'desc' ? 'asc' :'desc';
+    this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
+
   }
    /////// to change the tab on edit
 
@@ -204,6 +206,9 @@ export class PurchaseComponent implements OnInit{
               (Response:any)=>{
               
                   this.tableDataList.push({
+                    rowIndex:this.tableDataList.length == 0 ? this.tableDataList.length + 1 
+                    : this.sortType == 'desc' ?  this.tableDataList[0].rowIndex + 1 
+                    : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
                     ProductID:Response[0].productID,
                     ProductTitle:Response[0].productTitle,
                     barcode:Response[0].barcode,
@@ -224,6 +229,8 @@ export class PurchaseComponent implements OnInit{
                     AQ:Response[0].aq,
               
                   });
+
+                  this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
                   this.getTotal();
             
 
@@ -235,6 +242,8 @@ export class PurchaseComponent implements OnInit{
          
         }else {
           this.tableDataList[index].Quantity = parseFloat(this.tableDataList[index].Quantity) + 1;
+          this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length -1].rowIndex + 1 ;
+          this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
           this.productImage = this.tableDataList[index].productImage;
         }
         }else{
@@ -273,6 +282,9 @@ export class PurchaseComponent implements OnInit{
 
           
             this.tableDataList.push({
+              rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1 
+              : this.sortType == 'desc' ?  this.tableDataList[0].rowIndex + 1 
+              : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
               ProductID:Response[0].productID,
               ProductTitle:Response[0].productTitle,
               barcode:Response[0].barcode,
@@ -292,7 +304,9 @@ export class PurchaseComponent implements OnInit{
               discInR:0,
               AQ:Response[0].aq,
         
-            })
+            });
+
+            this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
             this.getTotal();
            
           
@@ -301,6 +315,8 @@ export class PurchaseComponent implements OnInit{
       )
   }else {
     this.tableDataList[index].Quantity = parseFloat(this.tableDataList[index].Quantity) + 1;
+    this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length -1].rowIndex + 1 ;
+    this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
     this.productImage = this.tableDataList[index].productImage;
   }
   this.app.stopLoaderDark();
@@ -925,8 +941,10 @@ export class PurchaseComponent implements OnInit{
         this.productImage = Response[Response.length - 1].productImage;
 
           Response.forEach((e:any) => {
+            
             this.myTotalQty += e.quantity;
             this.tableDataList.push({
+              rowIndex:this.tableDataList.length + 1,
               ProductID:e.productID,
               ProductTitle:e.productTitle,
               barcode:e.barcode,
@@ -945,6 +963,8 @@ export class PurchaseComponent implements OnInit{
               AQ:e.aq,
             })
           });
+
+          this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
           this.getTotal();
 
         
