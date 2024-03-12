@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { NotificationService } from 'src/app/Shared/service/notification.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
@@ -52,7 +52,7 @@ export class ProductSubCategoryComponent implements OnInit {
   categoryID:any;
   subCategoryTitle:any;
   categoryList:any  = [];
-  subCategoryList:any = [];
+  subCategoryList: any[] = [];
   subCategoryID:any;
   description:any;
   
@@ -73,7 +73,8 @@ export class ProductSubCategoryComponent implements OnInit {
   /////////////////////////////////////////////////////////////////////
 
   getSubCategory(){
-    this.http.get(environment.mainApi+this.globaldata.inventoryLink+'GetSubCategory').subscribe(
+    var reqHeader = new HttpHeaders({ "Content-Type": "application/json" });
+    this.http.get(environment.mainApi+this.globaldata.inventoryLink+'GetSubCategory', { headers: reqHeader }).subscribe(
       (Response:any)=>{
         this.subCategoryList = Response;
       }

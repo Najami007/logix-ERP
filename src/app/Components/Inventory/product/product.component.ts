@@ -80,8 +80,6 @@ export class ProductComponent implements OnInit {
       this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
     })
 
-    
-
   }
 
 
@@ -97,6 +95,41 @@ export class ProductComponent implements OnInit {
     this.getProductList();
     this.tableSize = this.global.paginationDefaultTalbeSize;
     this.tableSizes = this.global.paginationTableSizes;
+  }
+
+
+  brandSearchID = 0;
+  subCategorySearchID = 0;
+  categorySearchID = 0;
+
+  subCategoryFilterList:any = [];
+  tempProdList:any= [];
+
+  filterProductList(id:any , type:any){
+    
+    if(type == 'brand'){
+      this.app.startLoaderDark();
+      this.productList = this.tempProdList.filter((e:any)=> e.brandID == id);
+      this.dataSource = new MatTableDataSource(this.productList);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort; 
+
+      this.app.stopLoaderDark();
+
+    }
+
+    if(type == 'subcat'){
+      this.app.startLoaderDark();
+      this.productList = this.tempProdList.filter((e:any)=> e.subCategoryID == id);
+      this.dataSource = new MatTableDataSource(this.productList);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.app.stopLoaderDark(); 
+    }
+   
+    if( id == 0){
+          this.getProductList();
+        } 
   }
 
 
@@ -153,7 +186,8 @@ export class ProductComponent implements OnInit {
   getProductList(){
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetProduct').subscribe(
       (Response:any)=>{
-        // this.productList = Response;
+        this.productList = Response;
+        this.tempProdList = Response;
         this.dataSource = new MatTableDataSource(Response);
          this.dataSource.paginator = this.paginator;
          this.dataSource.sort = this.sort;  
@@ -225,7 +259,7 @@ export class ProductComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.inventoryLink+'GetSubCategory').subscribe(
       (Response: any) => {
         this.SubCategoriesList = Response.filter((e: any) => e.categoryID == this.CategoryID);
-
+        this.subCategoryFilterList = Response;
       }
     )
   }

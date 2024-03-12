@@ -8,8 +8,11 @@
                 
                 <mat-form-field appearance="outline" class="col-lg-6 ">
                     <mat-label>Category</mat-label>
+                  
                     <mat-select [(ngModel)]="CategoryID" #category (selectionChange)="getSubCategory()" name="pCategory">
-                        <mat-option *ngFor="let item of CategoriesList"
+                        <mat-option><ngx-mat-select-search #catsearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of CategoriesList | filter:catsearch.value"
                             [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
 
                     </mat-select>
@@ -17,8 +20,11 @@
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="col-lg-6 ">
                     <mat-label>Sub Category</mat-label>
+                 
                     <mat-select [(ngModel)]="SubCategoryID" #subCategory name="pSubCategory">
-                        <mat-option *ngFor="let item of SubCategoriesList"
+                        <mat-option><ngx-mat-select-search #subcatsearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of SubCategoriesList| filter:subcatsearch.value "
                             [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
                     </mat-select>
                     <mat-icon class="cursorPointer" (click)="addSubCategory()" matSuffix>add</mat-icon>
@@ -220,11 +226,35 @@
 
     <mat-tab label="SAVED PRODUCTS" class="h-100 ">
 
-        <div class="container-fluid  row">
-            <mat-form-field appearance="outline" class="col-lg-12 pt-2">
+        <div class="container-fluid  row pt-2">
+            <mat-form-field appearance="outline" class="col-lg-6 ">
                 <mat-label>Search.....</mat-label>
                 <input type="text" id="searchProduct" matInput #searchProd [(ngModel)]="searchProduct" (keydown)="applyFilter()">
             </mat-form-field>
+            <mat-form-field appearance="outline" class="col-lg-3 ">
+                <mat-label>Sub Category</mat-label>
+              
+                <mat-select [(ngModel)]="subCategorySearchID" (selectionChange)="filterProductList(subCategorySearchID,'subcat')" >
+                    <mat-option><ngx-mat-select-search #scfs [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option [value]="0">ALL</mat-option>
+                    <mat-option *ngFor="let item of subCategoryFilterList | filter:scfs.value"
+                        [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-lg-3 ">
+                <mat-label>Brand</mat-label>
+                
+                <mat-select [(ngModel)]="brandSearchID"  (selectionChange)="filterProductList(brandSearchID,'brand')">
+                    <mat-option><ngx-mat-select-search #bfs [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                    <mat-option [value]="0">ALL</mat-option>
+                    <mat-option *ngFor="let item of BrandList | filter:bfs.value"
+                        [value]="item.brandID">{{item.brandTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+       
             <hr>
 <!--             
             <table class="table table-hover">
