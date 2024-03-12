@@ -62,7 +62,7 @@
 
                                 <td class="text-center"><input type="text" [readOnly]="true" [(ngModel)]="item.quantity"
                                         min="0"
-                                        (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();"
+                                        (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();"
                                         (keyup)="getTotal();showImg(item);"
                                         (keypress)="openQtyModal($event,item)" (click)="openQtyModal($event,item)"
                                         class="qty{{index}} text-center" style="width: 80px;"></td>

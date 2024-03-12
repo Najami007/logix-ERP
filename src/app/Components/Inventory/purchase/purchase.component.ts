@@ -50,7 +50,7 @@ export class PurchaseComponent implements OnInit{
     this.getBooker();
     this.getLocation();
     this.getSuppliers();  
-      $('.searchProduct').trigger('focus');
+      $('.searchBarcode').trigger('focus');
 
       this.global.getProducts().subscribe(
         (data:any)=>{this.productList = data;})
@@ -471,7 +471,7 @@ export class PurchaseComponent implements OnInit{
     
    }
 
-  handleNumKeys(item:any ,e:any,cls:string,index:any){
+   handleUpdown(item:any ,e:any,cls:string,index:any){
 
   //   if(e.keyCode == 9){
   //     if(cls == '.sp'){
@@ -491,6 +491,11 @@ export class PurchaseComponent implements OnInit{
   //     this.rowFocused = index ;
   //   }
   //  }
+
+    ////////// focusing to product search
+  if(e.keyCode == 13){
+    $('#psearchProduct').trigger('focus');
+   }
 
     if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
       // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot

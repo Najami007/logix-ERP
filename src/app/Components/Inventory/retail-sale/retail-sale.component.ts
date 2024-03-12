@@ -84,7 +84,11 @@ export class RetailSaleComponent implements OnInit {
   ngOnInit(): void {
    this.global.setHeaderTitle('Sale');
    this.getBankList();
-   $('#psearchProduct').trigger('focus');
+ 
+   setTimeout(() => {
+    $('#psearchProduct').trigger('focus');
+   }, 200);
+   
    this.global.getProducts().subscribe(
     (data:any)=>{this.productList = data;})
   }
@@ -313,20 +317,14 @@ export class RetailSaleComponent implements OnInit {
     
     if(cls == '#save' && e.keyCode == 13 ){
       $(cls).trigger('focus');
-    //  var elem = document.getElementById('save');
-    //  elem?.focus();
+    
     }
 
     if(cls == '#vsrtnsearchProduct' && e.keyCode == 13 ){
       $(cls).trigger('focus');
     }
  
-    // if(cls == 'save' && e.keyCode == 13  ){
-    //  $('#save').trigger('focus');
- 
-    // }
- 
-    
+  
  
    }
  
@@ -445,7 +443,7 @@ export class RetailSaleComponent implements OnInit {
 
   }
 
-  handleNumKeys(item:any ,e:any,cls:string,index:any){
+  handleUpdown(item:any ,e:any,cls:string,index:any){
 
    if(e.keyCode == 9){
     this.rowFocused = index +1;

@@ -108,15 +108,15 @@
                     <thead>
                         <tr>
                             <th class="cursorPointer" (click)="changeOrder()">S#</th>
-                            <th class="col-lg-2">Barcode</th>
-                            <th class="col-lg-3">Product Name</th>
-                            <th class="col-lg-1">Expiry</th>
-                            <th class="col-lg-1">Quantity</th>
-                            <th class="col-lg-1">Cost Price</th>
-                            <th class="col-lg-1">Sale Price</th>
-                            <th class="col-lg-1">Cost Total</th>
-                            <th class="col-lg-1">AQ</th>
-                            <th class="col-lg-1">Action</th>
+                            <th >Barcode</th>
+                            <th >Product Name</th>
+                            <th>Expiry</th>
+                            <th >Quantity</th>
+                            <th >Cost Price</th>
+                            <th >Sale Price</th>
+                            <th >Cost Total</th>
+                            <th >AQ</th>
+                            <th >Action</th>
                         </tr>
 
                     </thead>
@@ -134,20 +134,20 @@
 
 
                             <td class="text-center"><input type="text" [(ngModel)]="item.Quantity" min="0" draggable="false" dropzone="false"
-                                    (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
+                                    (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);"
                                     (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index"
                                     (change)="getTotal();"
                                     class="qty{{index}} text-center" style="width: 80px;"></td>
 
 
                             <td class="text-center"><input type="text" [(ngModel)]="item.CostPrice" min="0" draggable="false"
-                                    (keydown)="changeValue(item);this.handleNumKeys(item,$event,'.cp',index);getTotal();"
+                                    (keydown)="changeValue(item);this.handleUpdown(item,$event,'.cp',index);getTotal();"
                                     (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index"
                                     (change)="getTotal()"
                                     class="cp{{index}} text-center" style="width: 80px;"></td>
 
                             <td class="text-center"><input type="text" [(ngModel)]="item.SalePrice" min="0" draggable="false"
-                                    (keydown)="changeValue(item);this.handleNumKeys(item,$event,'.sp',index);"
+                                    (keydown)="changeValue(item);this.handleUpdown(item,$event,'.sp',index);"
                                     (keyup)="changeValue(item);showImg(item);rowFocused = index"
                                     (change)="getTotal()" class="sp{{index}} text-center"
                                     style="width: 80px;">
