@@ -1,6 +1,5 @@
-<mat-tab-group mat-align-tabs="center" class="body  h-100" [selectedIndex]="tabIndex"
-    (selectedIndexChange)="changeTab($event)" >
-    <mat-tab label="ADD PRODUCT" class="h-100">
+<mat-tab-group mat-align-tabs="center" class="body h-100"  [selectedIndex]="tabIndex" (selectedIndexChange)="changeTab($event)" >
+    <mat-tab label="ADD PRODUCT"  >
       
         <div class="card mb-3 container-fluid text-center w-75 border bg-light pt-2 mt-1">
 
@@ -224,17 +223,21 @@
 
     </mat-tab>
 
-    <mat-tab label="SAVED PRODUCTS" class="h-100 ">
+    <mat-tab label="SAVED PRODUCTS"  >
 
         <div class="container-fluid  row pt-2">
+
+
+            
+
             <mat-form-field appearance="outline" class="col-lg-6 ">
                 <mat-label>Search.....</mat-label>
-                <input type="text" id="searchProduct" matInput #searchProd [(ngModel)]="searchProduct" (keydown)="applyFilter()">
+                <input type="text" id="searchProduct" matInput #searchProd [(ngModel)]="searchProduct">
             </mat-form-field>
-            <mat-form-field appearance="outline" class="col-lg-3 ">
+            <mat-form-field appearance="outline" class="col-lg-2 ">
                 <mat-label>Sub Category</mat-label>
               
-                <mat-select [(ngModel)]="subCategorySearchID" (selectionChange)="filterProductList(subCategorySearchID,'subcat')" >
+                <mat-select [(ngModel)]="subCategoryFilterID" (selectionChange)="filterProductList('subcat')" >
                     <mat-option><ngx-mat-select-search #scfs [placeholderLabel]="'Search...'"
                         [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
                         <mat-option [value]="0">ALL</mat-option>
@@ -243,10 +246,10 @@
                 </mat-select>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="col-lg-3 ">
+            <mat-form-field appearance="outline" class="col-lg-2 ">
                 <mat-label>Brand</mat-label>
                 
-                <mat-select [(ngModel)]="brandSearchID"  (selectionChange)="filterProductList(brandSearchID,'brand')">
+                <mat-select [(ngModel)]="brandFilterID"  (selectionChange)="filterProductList('brand')">
                     <mat-option><ngx-mat-select-search #bfs [placeholderLabel]="'Search...'"
                         [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
                     <mat-option [value]="0">ALL</mat-option>
@@ -254,9 +257,20 @@
                         [value]="item.brandID">{{item.brandTitle}}</mat-option>
                 </mat-select>
             </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-lg-2 ">
+                <mat-label>Status</mat-label>
+                
+                <mat-select [(ngModel)]="activeFilterID"  (selectionChange)="filterProductList('status')">
+                   <mat-option [value]="'-'">ALL</mat-option>
+                    <mat-option  [value]="true">Active</mat-option>
+                    <mat-option  [value]="false">Deactive</mat-option>
+                </mat-select>
+            </mat-form-field>
        
             <hr>
-<!--             
+             
+         <div>
             <table class="table table-hover">
                 <thead>
                     <th>S#</th>
@@ -304,24 +318,10 @@
                 </tbody>
               
             </table>
-            <div class="d-flex">
-               
-                <pagination-controls
-                previousLabel="Prev"
-                nextLabel="Next"
-                (pageChange)="onTableDataChange($event)"
-                ></pagination-controls>
-                
+            <br/>
+         </div>
 
-                <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
-                <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);" (change)="onTableSizeChange($event)">
-                    <option *ngFor=" let item of tableSizes"  [selected]="tableSize == item">{{item}}</option>
-                </select>
-                
-            </div> -->
-
-
-            <div class="mat-elevation-z2">
+            <!-- <div class="mat-elevation-z2">
                 <table mat-table [dataSource]="dataSource" matSort>
               
              
@@ -426,7 +426,7 @@
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
               
-                  <!-- Row shown when there is no matching data. -->
+                
                   <tr class="mat-row" *matNoDataRow style="border-bottom: 2px soli black;">
                     <td class="mat-cell" colspan="4">No data matching the filter "{{searchProd.value}}"</td>
                   </tr>
@@ -434,9 +434,27 @@
               
                 <mat-paginator [pageSizeOptions]="[100, 50, 25, 10]" aria-label="Select page of users"></mat-paginator>
               </div>
-    
-        </div>
+     -->
+        </div> <!--End container div-->
+
         
+         
 
     </mat-tab>
+
+    
+
 </mat-tab-group>
+
+
+<div class="d-flex" *ngIf="tabIndex == 1" style="position: fixed; bottom: 32px !important; width: 100%; background-color: #fff; z-index: 100;">
+               
+    <pagination-controls  previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)"></pagination-controls>
+    
+
+    <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+    <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);" (change)="onTableSizeChange($event)">
+        <option *ngFor=" let item of tableSizes"  [selected]="tableSize == item">{{item}}</option>
+    </select>
+    
+</div>

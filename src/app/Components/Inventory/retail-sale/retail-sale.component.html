@@ -309,8 +309,8 @@ aria-labelledby="paymentMehtodLabel">
     <h2 *ngIf="myDuplicateFlag == true" class="border border-dark w-100 text-center">Duplicate</h2>
 
     <div>
-        <table class="table table-logix2">
-            <thead>
+        <table class="table table-sale">
+            <thead >
                 <tr>
                     <th>S#</th>
                     <th>Title</th>
@@ -334,45 +334,45 @@ aria-labelledby="paymentMehtodLabel">
 
 
 
-        <table class="w-100 text-end mt-2">
+        <table class="w-100 text-end mt-2 text-uppercase">
             <tbody>
                 <tr>
                     <th>Sub Total</th>
-                    <td>{{mySubTotal |number:'1.0-1'}}</td>
-
+                    <th class="fs-20">{{mySubTotal |number:'1.0-1'}}</th>
+             
                 </tr>
-                <tr *ngIf="myOtherCharges > 0">
-                    <th>Service Charges</th>
-                    <td>{{myOtherCharges|number:'1.0-0'}}</td>
-
+                <tr  *ngIf="myOtherCharges > 0">
+                    <th >Other Charges</th>
+                    <th class="fs-20"> {{myOtherCharges|number:'1.0-1'}}</th>
+             
                 </tr>
                 <tr *ngIf="myDiscount > 0">
                     <th>Discount</th>
-                    <td>{{myDiscount|number:'1.0-1'}}</td>
-
+                    <th class="fs-20">{{myDiscount|number:'1.0-1'}}</th>
+             
                 </tr>
-
+             
                 <tr>
                     <th>Net Total</th>
-                    <td>{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</td>
-
+                    <th class="fs-20">{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</th>
+             
                 </tr>
-                <tr *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
-                    <th>Cash</th>
-                    <td>{{myCash|number:'1.0-1'}}</td>
-
+                <tr  *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
+                    <th >Cash</th>
+                    <th class="fs-20">{{myCash|number:'1.0-2'}}</th>
+             
                 </tr>
                 <tr *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
                     <th>Bank</th>
-                    <td>{{myBank|number:'1.0-1'}}</td>
-
+                    <th class="fs-20">{{myBank|number:'1.0-1'}}</th>
+             
                 </tr>
                 <tr *ngIf="myChange > 0">
                     <th>Change</th>
-                    <td>{{myChange|number:'1.0-1'}}</td>
-
+                    <th class="fs-20">{{myChange|number:'1.0-1'}}</th>
+             
                 </tr>
-
+                
             </tbody>
         </table>
 

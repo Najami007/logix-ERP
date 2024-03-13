@@ -727,7 +727,7 @@ export class RetailSaleComponent implements OnInit {
   myPaymentType = '';
   myDuplicateFlag = false;
   myTime:any;
-
+  myQtyTotal =0;
   PrintAfterSave(InvNo:any){
     
 
@@ -747,6 +747,11 @@ export class RetailSaleComponent implements OnInit {
         this.myDiscount = Response[0].billDiscount;
         this.myChange = Response[0].change;
         this.myPaymentType = Response[0].paymentType;
+
+        this.myQtyTotal = 0;
+        Response.forEach((e:any) => {
+            this.myQtyTotal += e.quantity;
+        });
 
         setTimeout(() => {
           this.global.printData('#cncBillPrint');

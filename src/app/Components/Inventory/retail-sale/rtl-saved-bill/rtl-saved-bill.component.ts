@@ -101,6 +101,7 @@ export class RtlSavedBillComponent implements OnInit {
   myPaymentType = '';
   myDuplicateFlag = false;
   myTime:any;
+  myQtyTotal =0;
 
 
  
@@ -139,6 +140,10 @@ export class RtlSavedBillComponent implements OnInit {
                 (Response:any)=>{
                   //console.log(Response);
                   this.myPrintData = Response;
+                  this.myQtyTotal = 0;
+                  Response.forEach((e:any) => {
+                      this.myQtyTotal += e.quantity;
+                  });
                 }
               )
           

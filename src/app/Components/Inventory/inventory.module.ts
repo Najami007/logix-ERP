@@ -61,6 +61,7 @@ import { CashierClosingRptComponent } from './InventoryReports/cashier-closing-r
 import { NgxBarcodeModule } from 'ngx-barcode';
 import { RetailRtnSavedbillComponent } from './retail-sale-return/retail-rtn-savedbill/retail-rtn-savedbill.component';
 import { RetailRtnEnterQtyComponent } from './retail-sale-return/retail-rtn-enter-qty/retail-rtn-enter-qty.component';
+import { PaymentComponent } from './payment/payment.component';
 
 
 
@@ -281,6 +282,7 @@ export const inventoryRoutes: Route[] = [
     CashierClosingRptComponent,
     RetailRtnSavedbillComponent,
     RetailRtnEnterQtyComponent,
+    PaymentComponent,
     
 
  

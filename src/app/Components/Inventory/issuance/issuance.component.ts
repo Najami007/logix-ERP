@@ -55,6 +55,11 @@ export class IssuanceComponent implements OnInit {
   
   }
 
+
+  
+  sortType = 'desc';
+
+
   projectID = this.global.InvProjectID;
   Date:Date = new Date();
   holdInvNo = '-';
@@ -78,6 +83,14 @@ export class IssuanceComponent implements OnInit {
   issueTypeList:any = [];
   avgCostTotal = 0;
   CostTotal = 0;
+
+
+
+  changeOrder(){
+    this.sortType = this.sortType == 'desc' ? 'asc' :'desc';
+    this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
+
+  }
 
 
   getIssueTypes(){
@@ -143,6 +156,9 @@ export class IssuanceComponent implements OnInit {
               (Response:any)=>{
             
                   this.tableDataList.push({
+                    rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1 
+                    : this.sortType == 'desc' ?  this.tableDataList[0].rowIndex + 1 
+                    : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
                     productID:Response[0].productID,
                     productTitle:Response[0].productTitle,
                     barcode:Response[0].barcode,
@@ -164,6 +180,8 @@ export class IssuanceComponent implements OnInit {
                     aq:Response[0].aq,
               
                   });
+
+                  this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
                   this.getTotal();
             
 
@@ -176,6 +194,8 @@ export class IssuanceComponent implements OnInit {
           $('#searchProduct').trigger('focus');
         }else {
           this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+          this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length -1].rowIndex + 1 ;
+          this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
           this.productImage = this.tableDataList[index].productImage;
        
           this.PBarcode = '';
@@ -209,6 +229,9 @@ export class IssuanceComponent implements OnInit {
         (Response:any)=>{
                
             this.tableDataList.push({
+              rowIndex:this.tableDataList.length == 0 ? this.tableDataList.length + 1 
+              : this.sortType == 'desc' ?  this.tableDataList[0].rowIndex + 1 
+              : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
               productID:Response[0].productID,
               productTitle:Response[0].productTitle,
               barcode:Response[0].barcode,
@@ -229,7 +252,11 @@ export class IssuanceComponent implements OnInit {
               discInR:0,
               aq:Response[0].aq,
         
-            })
+            });
+
+             //////////sorting data table base on sort type
+             this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
+                 
             this.getTotal();
            
           
@@ -242,6 +269,8 @@ export class IssuanceComponent implements OnInit {
     $('#searchProduct').trigger('focus');
   }else {
     this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+    this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length -1].rowIndex + 1 ;
+    this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
     this.productImage = this.tableDataList[index].productImage;
     
     this.PBarcode = '';
@@ -795,10 +824,12 @@ export class IssuanceComponent implements OnInit {
 
 
           Response.forEach((e:any) => {
+         
             this.totalQty += e.quantity;
             this.CostTotal += e.quantity * e.costPrice;
             this.avgCostTotal += e.quantity * e.avgCostPrice;
             this.tableDataList.push({
+              rowIndex:this.tableDataList.length + 1,
               productID:e.productID,
               productTitle:e.productTitle,
               barcode:e.barcode,
@@ -817,6 +848,11 @@ export class IssuanceComponent implements OnInit {
               aq:e.aq,
             })
           });
+
+            //////////sorting data table base on sort type
+            this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) 
+            : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
+  
           // this.getTotal();
         
       }

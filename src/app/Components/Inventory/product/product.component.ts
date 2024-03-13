@@ -59,12 +59,18 @@ export class ProductComponent implements OnInit {
 
     this.page = event;
     this.getProductList();
+    setTimeout(() => {
+      this.filterProductList(this.filterType);
+    }, 500);
   }
 
   onTableSizeChange(event:any):void{
     this.tableSize = event.target.value;
     this.page =1;
     this.getProductList();
+    setTimeout(() => {
+      this.filterProductList(this.filterType);
+    }, 500);
   }
 
   constructor(
@@ -98,38 +104,40 @@ export class ProductComponent implements OnInit {
   }
 
 
-  brandSearchID = 0;
-  subCategorySearchID = 0;
-  categorySearchID = 0;
+  brandFilterID = 0;
+  subCategoryFilterID = 0;
+  categoryFilterID = 0;
+  activeFilterID:any = '-';
+
+  filterType = '';
 
   subCategoryFilterList:any = [];
   tempProdList:any= [];
 
-  filterProductList(id:any , type:any){
+  filterProductList(type:any){
     
-    if(type == 'brand'){
-      this.app.startLoaderDark();
-      this.productList = this.tempProdList.filter((e:any)=> e.brandID == id);
-      this.dataSource = new MatTableDataSource(this.productList);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort; 
+    this.filterType = type;
 
-      this.app.stopLoaderDark();
+    if(type == 'brand'){
+      this.productList = this.brandFilterID == 0 ? this.productList = this.tempProdList : this.tempProdList.filter((e:any)=> e.brandID == this.brandFilterID);
+
 
     }
 
     if(type == 'subcat'){
-      this.app.startLoaderDark();
-      this.productList = this.tempProdList.filter((e:any)=> e.subCategoryID == id);
-      this.dataSource = new MatTableDataSource(this.productList);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.app.stopLoaderDark(); 
+      
+      this.productList =this.subCategoryFilterID == 0 ? this.productList = this.tempProdList : this.tempProdList.filter((e:any)=> e.subCategoryID == this.subCategoryFilterID);
+ 
     }
    
-    if( id == 0){
-          this.getProductList();
-        } 
+
+    
+    if(type == 'status'){
+
+      this.productList =this.activeFilterID == '-' ? this.productList = this.tempProdList : this.tempProdList.filter((e:any)=> e.activeStatus == this.activeFilterID);
+    }
+
+ 
   }
 
 
@@ -188,9 +196,10 @@ export class ProductComponent implements OnInit {
       (Response:any)=>{
         this.productList = Response;
         this.tempProdList = Response;
-        this.dataSource = new MatTableDataSource(Response);
-         this.dataSource.paginator = this.paginator;
-         this.dataSource.sort = this.sort;  
+
+        // this.dataSource = new MatTableDataSource(Response);
+        //  this.dataSource.paginator = this.paginator;
+        //  this.dataSource.sort = this.sort;  
        
       }
     )
@@ -442,11 +451,9 @@ export class ProductComponent implements OnInit {
               this.getProductList();
               this.reset('');
               this.app.stopLoaderDark();
-             if(this.searchProduct != ''){
               setTimeout(() => {
-                this.applyFilter();
+                this.filterProductList(this.filterType);
               }, 500);
-             }
              
             } else {
               this.msg.WarnNotify(Response.msg);

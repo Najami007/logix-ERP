@@ -77,6 +77,17 @@ export class IssueStockRerturnComponent implements OnInit {
   avgCostTotal = 0;
   CostTotal = 0;
 
+  sortType = 'desc';
+
+  changeOrder(){
+    this.sortType = this.sortType == 'desc' ? 'asc' :'desc';
+    this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
+
+  }
+
+
+
+
 
   getIssueTypes(){
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetIssueType').subscribe(
@@ -144,6 +155,9 @@ export class IssueStockRerturnComponent implements OnInit {
               (Response:any)=>{
                
                   this.tableDataList.push({
+                    rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1 
+                    : this.sortType == 'desc' ?  this.tableDataList[0].rowIndex + 1 
+                    : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
                     productID:Response[0].productID,
                     productTitle:Response[0].productTitle,
                     barcode:Response[0].barcode,
@@ -165,6 +179,7 @@ export class IssueStockRerturnComponent implements OnInit {
                     aq:Response[0].aq,
               
                   });
+                  this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
                   this.getTotal();
             
 
@@ -177,6 +192,8 @@ export class IssueStockRerturnComponent implements OnInit {
           $('#searchProduct').trigger('focus');
         }else {
           this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+          this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length -1].rowIndex + 1 ;
+          this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
           this.productImage = this.tableDataList[index].productImage;
        
           this.PBarcode = '';
@@ -212,6 +229,9 @@ export class IssueStockRerturnComponent implements OnInit {
 
           
             this.tableDataList.push({
+              rowIndex:this.tableDataList.length == 0 ? this.tableDataList.length + 1 
+              : this.sortType == 'desc' ?  this.tableDataList[0].rowIndex + 1 
+              : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
               productID:Response[0].productID,
               productTitle:Response[0].productTitle,
               barcode:Response[0].barcode,
@@ -232,7 +252,11 @@ export class IssueStockRerturnComponent implements OnInit {
               discInR:0,
               aq:Response[0].aq,
         
-            })
+            });
+
+               //////////sorting data table base on sort type
+               this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
+              
             this.getTotal();
            
           
@@ -244,6 +268,8 @@ export class IssueStockRerturnComponent implements OnInit {
     $('#searchProduct').trigger('focus');
   }else {
     this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+    this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length -1].rowIndex + 1 ;
+    this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
     this.productImage = this.tableDataList[index].productImage;
     
     this.PBarcode = '';
@@ -791,10 +817,12 @@ export class IssueStockRerturnComponent implements OnInit {
 
 
           Response.forEach((e:any) => {
+            
             this.totalQty += e.quantity;
             this.CostTotal += e.quantity * e.costPrice;
             this.avgCostTotal += e.quantity * e.avgCostPrice;
             this.tableDataList.push({
+              rowIndex:this.tableDataList.length + 1,
               productID:e.productID,
               productTitle:e.productTitle,
               barcode:e.barcode,
@@ -813,6 +841,12 @@ export class IssueStockRerturnComponent implements OnInit {
               aq:e.aq,
             })
           });
+
+          
+            //////////sorting data table base on sort type
+            this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) 
+            : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
+  
           // this.getTotal();
         
       }
