@@ -16,5 +16,5 @@ export const environment = {
 
       //mainApi: 'http://localhost:1001/',  /////////// For All Customers Local
 
-      //mainApi: 'http://192.168.0.200:1001/',  /////////// For All Customers Sharing
+     // mainApi: 'http://192.168.1.200:1001/',  /////////// For All Customers Sharing
 };

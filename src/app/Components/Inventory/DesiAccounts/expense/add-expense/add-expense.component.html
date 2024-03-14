@@ -1,0 +1,46 @@
+<div class="p-4">
+
+    <div >
+        <mat-label style="font-size: 20px;">Balance: <b class="font-digit text-danger" style="font-size: 30px;">{{supplierBalance}}</b></mat-label>
+    </div>
+    <hr>
+<div class="row">
+    
+
+    <mat-form-field appearance="outline" class="col-lg-12">
+        <mat-label>Type</mat-label>
+        <mat-select id="type" [(ngModel)]="paymentType" (selectionChange)="getCoaList();coaID = 0">
+         <mat-option *ngFor="let item of paymentTypeList" [value]="item.value">{{item.title}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="col-lg-12">
+        <mat-label>COA</mat-label>
+        <mat-select  [(ngModel)]="coaID">
+         <mat-option *ngFor="let item of coaList" [value]="item.coaID">{{item.coaTitle}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="col-lg-6">
+        <mat-label>Amount</mat-label>
+       <input matInput [(ngModel)]="amount" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="col-lg-6">
+        <mat-label>Discount</mat-label>
+       <input matInput [(ngModel)]="discount" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="col-lg-12">
+        <mat-label>Remarks</mat-label>
+       <textarea matInput [(ngModel)]="remarks" ></textarea>
+    </mat-form-field>
+</div>
+
+
+</div>
+
+<div class="bg-mf text-end p-3">
+    <button class="btn btn-success me-1">Save</button>
+    <button class="btn btn-secondary" (click)="closeDialog()">Close</button>
+</div>

@@ -33,6 +33,7 @@ import { ConfirmationAlertComponent } from 'src/app/Components/Common/confirmati
 
 export class GlobalDataModule implements OnInit {
 
+  thankyouImage = '../../assets/Images/thankyou.png';
   DisableDate = true;
 
   InvProjectID = 6;
@@ -880,6 +881,24 @@ export class GlobalDataModule implements OnInit {
           
         }
       }
+
+
+ public getCustomerList(): Observable<any>{
+  
+        return  this.http.get(environment.mainApi+this.companyLink+'getcustomer').pipe(retry(3));
+       }
+    
+
+public getSupplierList(): Observable<any>{
+  
+        return  this.http.get(environment.mainApi+this.companyLink+'getsupplier').pipe(retry(3));
+       }
+
+       
+public getCashBankCoa(type:any): Observable<any>{
+  
+  return  this.http.get(environment.mainApi + 'acc/GetVoucherCBCOA?type='+type).pipe(retry(3));
+ }
 
 
 }

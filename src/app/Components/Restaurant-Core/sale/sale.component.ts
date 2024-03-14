@@ -263,7 +263,11 @@ export class SaleComponent implements OnInit {
       (Response: any) => {
         this.categoriesList = Response;
         // this.categoryID = this.categoriesList[0].recipeCatID;
+   
+       if(Response != '' && Response != null){
         this.onCatSelected(Response[0]);
+       }
+      
         this.app.stopLoaderDark();
       },
       (Error:any)=>{

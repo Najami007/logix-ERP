@@ -61,7 +61,14 @@ import { CashierClosingRptComponent } from './InventoryReports/cashier-closing-r
 import { NgxBarcodeModule } from 'ngx-barcode';
 import { RetailRtnSavedbillComponent } from './retail-sale-return/retail-rtn-savedbill/retail-rtn-savedbill.component';
 import { RetailRtnEnterQtyComponent } from './retail-sale-return/retail-rtn-enter-qty/retail-rtn-enter-qty.component';
-import { PaymentComponent } from './payment/payment.component';
+
+import { PaymentComponent } from './DesiAccounts/payment/payment.component';
+import { ReceiptComponent } from './DesiAccounts/receipt/receipt.component';
+import { ExpenseComponent } from './DesiAccounts/expense/expense.component';
+import { AddPaymentComponent } from './DesiAccounts/payment/add-payment/add-payment.component';
+import { AddReceiptComponent } from './DesiAccounts/receipt/add-receipt/add-receipt.component';
+import { AddExpenseComponent } from './DesiAccounts/expense/add-expense/add-expense.component';
+
 
 
 
@@ -226,6 +233,24 @@ export const inventoryRoutes: Route[] = [
     component: CashierClosingRptComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'pmt',
+    component: PaymentComponent,
+    canActivate: [AuthGuard]
+  },
+
+  {
+    path: 'exp',
+    component: ExpenseComponent,
+    canActivate: [AuthGuard]
+  },
+
+  {
+    path: 'rcpt',
+    component: ReceiptComponent,
+    canActivate: [AuthGuard]
+  },
+
 
 
 
@@ -283,6 +308,12 @@ export const inventoryRoutes: Route[] = [
     RetailRtnSavedbillComponent,
     RetailRtnEnterQtyComponent,
     PaymentComponent,
+    ReceiptComponent,
+    ExpenseComponent,
+    AddPaymentComponent,
+    AddReceiptComponent,
+    AddExpenseComponent,
+   
     
 
  

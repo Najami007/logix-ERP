@@ -25,7 +25,7 @@ export class RetailRtnSavedbillComponent  implements OnInit {
     private http:HttpClient,
     @Inject(MAT_DIALOG_DATA) public data : any,
     private dialogRef: MatDialogRef<RetailRtnSavedbillComponent>,
-    private global:GlobalDataModule,
+    public global:GlobalDataModule,
     private msg:NotificationService,
     private dialogue:MatDialog
   ){

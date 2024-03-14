@@ -125,47 +125,68 @@
 
 
 
-        <table class="w-100 text-end mt-2 text-uppercase">
-            <tbody>
-                <tr>
-                    <th>Sub Total</th>
-                    <th class="fs-20">{{mySubTotal |number:'1.0-1'}}</th>
-             
-                </tr>
-                <tr  *ngIf="myOtherCharges > 0">
-                    <th >Other Charges</th>
-                    <th class="fs-20"> {{myOtherCharges|number:'1.0-1'}}</th>
-             
-                </tr>
-                <tr *ngIf="myDiscount > 0">
-                    <th>Discount</th>
-                    <th class="fs-20">{{myDiscount|number:'1.0-1'}}</th>
-             
-                </tr>
-             
-                <tr>
-                    <th>Net Total</th>
-                    <th class="fs-20">{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</th>
-             
-                </tr>
-                <tr  *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
-                    <th >Cash</th>
-                    <th class="fs-20">{{myCash|number:'1.0-1'}}</th>
-             
-                </tr>
-                <tr *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
-                    <th>Bank</th>
-                    <th class="fs-20">{{myBank|number:'1.0-1'}}</th>
-             
-                </tr>
-                <tr *ngIf="myChange > 0">
-                    <th>Change</th>
-                    <th class="fs-20">{{myChange|number:'1.0-1'}}</th>
-             
-                </tr>
-                
-            </tbody>
-        </table>
+       <table class="w-100  text-uppercase">
+        <tbody>
+            <tr class="text-center">
+                <td width="40%" rowspan="7" style="font-size: 10px;" >
+                    <img [src]="global.thankyouImage" height="80" width="80" /><br />
+                    FOR VISITING US.
+                </td>
+            </tr>
+            <tr class="text-end">
+              
+                <td></td>
+                <td class="fw-bold">Sub Total</td>
+                <td  class="fs-20 fw-bold">{{mySubTotal |number:'1.0-1'}}</td>
+         
+            </tr>
+            <tr class="text-end"    *ngIf="myOtherCharges > 0">
+                <td></td>
+                <td  class="fw-bold" >Other Charges</td>
+                <td class="fs-20 fw-bold"> {{myOtherCharges|number:'1.0-1'}}</td>
+         
+            </tr>
+            <tr class="text-end" *ngIf="myDiscount > 0">
+                <td></td>
+                <td   class="fw-bold" >Discount</td>
+                <td class="fs-20 fw-bold">{{myDiscount|number:'1.0-1'}}</td>
+         
+            </tr>
+         
+            <tr class="text-end">
+                <td></td>
+                <td   class="fw-bold" >Net Total</td>
+                <td class="fs-20 fw-bold">{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</td>
+         
+            </tr>
+            <tr class="text-end" *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
+                <td></td>
+                <td   class="fw-bold">Cash</td>
+                <td class="fs-20 fw-bold">{{myCash|number:'1.0-1'}}</td>
+         
+            </tr>
+            <tr class="text-end" *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
+                <td></td>
+                <td   class="fw-bold" >Bank</td>
+                <td class="fs-20 fw-bold">{{myBank|number:'1.0-1'}}</td>
+         
+            </tr>
+            <tr class="text-end" *ngIf="myChange > 0">
+                <td></td>
+                <td   class="fw-bold" >Change</td>
+                <td class="fs-20 fw-bold">{{myChange|number:'1.0-1'}}</td>
+         
+            </tr>
+            
+        </tbody>
+    </table>
+
+
+
+        <hr>
+        <div>
+            <p>Wish to Serve You Again!</p>
+        </div>
 
     </div>
 

@@ -304,7 +304,7 @@
     <h2  class="border border-dark w-100 text-center">Sale Return</h2>
 
     <div>
-        <table class="table table-logix2">
+        <table class="table table-sale">
             <thead>
                 <tr>
                     <th>S#</th>
@@ -329,49 +329,68 @@
 
 
 
-        <table class="w-100 text-end mt-2">
+        <table class="w-100  text-uppercase">
             <tbody>
-                <tr>
-                    <th>Sub Total</th>
-                    <td>{{mySubTotal |number:'1.0-0'}}</td>
-
+                <tr class="text-center">
+                    <td width="40%" rowspan="7" style="font-size: 10px;" >
+                        <img [src]="global.thankyouImage" height="80" width="80" /><br />
+                        FOR VISITING US.
+                    </td>
                 </tr>
-                <tr *ngIf="myOtherCharges > 0">
-
-                    <th>Other Charges</th>
-                    <td>{{myOtherCharges|number:'1.0-0'}}</td>
-
+                <tr class="text-end">
+                  
+                    <td></td>
+                    <td class="fw-bold">Sub Total</td>
+                    <td  class="fs-20 fw-bold">{{mySubTotal |number:'1.0-1'}}</td>
+             
                 </tr>
-                <tr *ngIf="myDiscount > 0">
-                    <th>Discount</th>
-                    <td>{{myDiscount|number:'1.0-0'}}</td>
-
+                <tr class="text-end"    *ngIf="myOtherCharges > 0">
+                    <td></td>
+                    <td  class="fw-bold" >Other Charges</td>
+                    <td class="fs-20 fw-bold"> {{myOtherCharges|number:'1.0-1'}}</td>
+             
                 </tr>
-
-                <tr>
-                    <th>Net Total</th>
-                    <td>{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</td>
-
+                <tr class="text-end" *ngIf="myDiscount > 0">
+                    <td></td>
+                    <td   class="fw-bold" >Discount</td>
+                    <td class="fs-20 fw-bold">{{myDiscount|number:'1.0-1'}}</td>
+             
                 </tr>
-                <tr *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
-                    <th>Cash</th>
-                    <td>{{myCash|number:'1.0-1'}}</td>
-
+             
+                <tr class="text-end">
+                    <td></td>
+                    <td   class="fw-bold" >Net Total</td>
+                    <td class="fs-20 fw-bold">{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</td>
+             
                 </tr>
-                <tr *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
-                    <th>Bank</th>
-                    <td>{{myBank|number:'1.0-1'}}</td>
-
+                <tr class="text-end" *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
+                    <td></td>
+                    <td   class="fw-bold">Cash</td>
+                    <td class="fs-20 fw-bold">{{myCash|number:'1.0-1'}}</td>
+             
                 </tr>
-                <tr *ngIf="myChange > 0">
-                    <th>Change</th>
-                    <td>{{myChange|number:'1.0-1'}}</td>
-
+                <tr class="text-end" *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
+                    <td></td>
+                    <td   class="fw-bold" >Bank</td>
+                    <td class="fs-20 fw-bold">{{myBank|number:'1.0-1'}}</td>
+             
                 </tr>
-
+                <tr class="text-end" *ngIf="myChange > 0">
+                    <td></td>
+                    <td   class="fw-bold" >Change</td>
+                    <td class="fs-20 fw-bold">{{myChange|number:'1.0-1'}}</td>
+             
+                </tr>
+                
             </tbody>
         </table>
-
+    
+    
+    
+            <hr>
+            <div>
+                <p>Wish to Serve You Again!</p>
+            </div>
     </div>
 
 </div>
