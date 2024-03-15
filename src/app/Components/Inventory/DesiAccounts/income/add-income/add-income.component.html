@@ -1,0 +1,49 @@
+<div class="p-4">
+
+    <div class="row">
+        
+    
+        <mat-form-field appearance="outline"  class="col-lg-12">
+            <mat-label>Invoice Date</mat-label>
+            <input [(ngModel)]="invoiceDate"  readonly="true" matInput type="text" name="invDate"
+                [matDatepicker]="iDate">
+            <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
+            <mat-datepicker #iDate></mat-datepicker>
+        </mat-form-field>
+    
+        <mat-form-field appearance="outline" class="col-lg-6">
+            <mat-label>Income Head</mat-label>
+            <mat-select  [(ngModel)]="refCoaID">
+                <mat-option><ngx-mat-select-search #coaSearch [placeholderLabel]="'Search...'"
+                    [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+             <mat-option *ngFor="let item of coaList |filter:coaSearch.value" [value]="item.coaID">{{item.coaTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    
+    
+        <mat-form-field appearance="outline" class="col-lg-6">
+            <mat-label>Ref Coa</mat-label>
+            <mat-select  [(ngModel)]="coaID">
+             
+             <mat-option *ngFor="let item of refCoaList " [value]="item.coaID">{{item.coaTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    
+        <mat-form-field appearance="outline" class="col-lg-12">
+            <mat-label>Amount</mat-label>
+           <input matInput [(ngModel)]="amount" (keydown)="global.handleNumKeys($event);" />
+        </mat-form-field>
+    
+        <mat-form-field appearance="outline" class="col-lg-12">
+            <mat-label>Remarks</mat-label>
+           <textarea matInput [(ngModel)]="remarks" ></textarea>
+        </mat-form-field>
+    </div>
+    
+    
+    </div>
+    
+    <div class="bg-mf text-end p-3">
+        <button class="btn btn-success me-1" (click)="save()">{{btnType}}</button>
+        <button class="btn btn-secondary" (click)="closeDialog()">Close</button>
+    </div>

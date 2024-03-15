@@ -68,6 +68,12 @@ import { ExpenseComponent } from './DesiAccounts/expense/expense.component';
 import { AddPaymentComponent } from './DesiAccounts/payment/add-payment/add-payment.component';
 import { AddReceiptComponent } from './DesiAccounts/receipt/add-receipt/add-receipt.component';
 import { AddExpenseComponent } from './DesiAccounts/expense/add-expense/add-expense.component';
+import { IncomeComponent } from './DesiAccounts/income/income.component';
+import { AddIncomeComponent } from './DesiAccounts/income/add-income/add-income.component';
+import { AddBankComponent } from './DesiAccounts/add-bank/add-bank.component';
+import { BankDepositAndWithdrawComponent } from './DesiAccounts/bank-deposit-and-withdraw/bank-deposit-and-withdraw.component';
+import { AdddwComponent } from './DesiAccounts/bank-deposit-and-withdraw/adddw/adddw.component'; 
+
 
 
 
@@ -250,6 +256,21 @@ export const inventoryRoutes: Route[] = [
     component: ReceiptComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'inc',
+    component: IncomeComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'bdw',
+    component: BankDepositAndWithdrawComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'adbnk',
+    component: AddBankComponent,
+    canActivate: [AuthGuard]
+  },
 
 
 
@@ -313,6 +334,12 @@ export const inventoryRoutes: Route[] = [
     AddPaymentComponent,
     AddReceiptComponent,
     AddExpenseComponent,
+    IncomeComponent,
+    AddIncomeComponent,
+    AddBankComponent,
+    BankDepositAndWithdrawComponent,
+    AdddwComponent,
+    
    
     
 

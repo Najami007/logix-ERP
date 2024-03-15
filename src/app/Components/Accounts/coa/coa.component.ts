@@ -410,17 +410,6 @@ onlevel3Change(){
   deleteCoa(row:any){
     this.globalData.openPinCode().subscribe(pin=>{
   if(pin != ''){
-    Swal.fire({
-      title:'Alert!',
-      text:'Confirm to Delete the Data',
-      position:'center',
-      icon:'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Confirm',
-    }).then((result)=>{
-      if(result.isConfirmed){
 
         //////on confirm button mainApi the api will run
         this.http.post(environment.mainApi+this.globalData.accountLink+'DeleteChartOfAccount',{
@@ -443,8 +432,7 @@ onlevel3Change(){
                 console.log(this.error);
               }
             )
-      }
-    });
+    
   }
  })
     

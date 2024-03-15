@@ -5,16 +5,19 @@ import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
-import { AddExpenseComponent } from './add-expense/add-expense.component';
+
 import { environment } from 'src/environments/environment.development';
+import { AdddwComponent } from './adddw/adddw.component';
 import { VoucherDetailsComponent } from 'src/app/Components/Accounts/voucher/voucher-details/voucher-details.component';
 
+
+
 @Component({
-  selector: 'app-expense',
-  templateUrl: './expense.component.html',
-  styleUrls: ['./expense.component.scss']
+  selector: 'app-bank-deposit-and-withdraw',
+  templateUrl: './bank-deposit-and-withdraw.component.html',
+  styleUrls: ['./bank-deposit-and-withdraw.component.scss']
 })
-export class ExpenseComponent {
+export class BankDepositAndWithdrawComponent {
 
 
   crudList:any = {c:true,r:true,u:true,d:true};
@@ -35,7 +38,7 @@ export class ExpenseComponent {
 
     }
   ngOnInit(): void {
-    this.globaldata.setHeaderTitle('Expense');
+    this.globaldata.setHeaderTitle('Bank Deposit / Withdraw');
     this.getSavedData();
    
   }
@@ -45,7 +48,7 @@ export class ExpenseComponent {
   
 
   add(){
-    this.dialogue.open(AddExpenseComponent,{
+    this.dialogue.open(AdddwComponent,{
       width:'30%',
     }).afterClosed().subscribe(value =>{
       if(value == 'update'){
@@ -57,7 +60,7 @@ export class ExpenseComponent {
 
 
   edit(item:any){
-    this.dialogue.open(AddExpenseComponent,{
+    this.dialogue.open(AdddwComponent,{
       width:'30%',
       data:item,
     }).afterClosed().subscribe(value =>{
@@ -69,7 +72,7 @@ export class ExpenseComponent {
 
   getSavedData(){
 
-      this.http.get(environment.mainApi+this.globaldata.accountLink+'GetPayRec?reqType=EXP').subscribe(
+      this.http.get(environment.mainApi+this.globaldata.accountLink+'GetPayRec?reqType=DEP').subscribe(
         (Response:any)=>{
           this.savedDataList = Response;
          
@@ -110,6 +113,8 @@ export class ExpenseComponent {
   }
 
 
+
+  
   VoucherDetails(row:any){
     this.dialogue.open(VoucherDetailsComponent,{
       width:"40%",
@@ -118,6 +123,5 @@ export class ExpenseComponent {
       
     })
   }
-
 
 }

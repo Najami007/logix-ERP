@@ -313,7 +313,7 @@ export class VoucherComponent implements OnInit{
   ////////////////////////////////////////////
 
   getRefCoa(){
-    this.http.get(environment.mainApi+'acc/GetVoucherCBCOA?type='+this.vType).subscribe(
+    this.http.get(environment.mainApi+this.globalData.accountLink+'GetVoucherCBCOA?type='+this.vType).subscribe(
       (Response)=>{
         this.refCoaList = Response;
       },
@@ -492,17 +492,6 @@ downloadVoucherDocument(row:any){
 
     this.globalData.openPinCode().subscribe(pin=>{
       if(pin!= ''){
-    Swal.fire({
-      title:'Alert!',
-      text:'Confirm to Delete the Data',
-      position:'center',
-      icon:'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Confirm',
-    }).then((result)=>{
-      if(result.isConfirmed){
 
         //////on confirm button pressed the api will run
         this.http.post(environment.mainApi+this.globalData.accountLink+'DeleteVoucher',{
@@ -519,8 +508,8 @@ downloadVoucherDocument(row:any){
             }
           }
         ) 
-      }
-    });
+      
+    
 
   }})
 

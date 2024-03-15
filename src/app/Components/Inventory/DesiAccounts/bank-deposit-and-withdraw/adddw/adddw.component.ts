@@ -6,16 +6,16 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { environment } from 'src/environments/environment.development';
 
 @Component({
-  selector: 'app-add-expense',
-  templateUrl: './add-expense.component.html',
-  styleUrls: ['./add-expense.component.scss']
+  selector: 'app-adddw',
+  templateUrl: './adddw.component.html',
+  styleUrls: ['./adddw.component.scss']
 })
-export class AddExpenseComponent implements OnInit {
+export class AdddwComponent implements OnInit {
 
   
   constructor(
     private http:HttpClient,
-    private dialogRef: MatDialogRef<AddExpenseComponent>,
+    private dialogRef: MatDialogRef<AdddwComponent>,
     public global:GlobalDataModule,
     private msg:NotificationService,
     @Inject(MAT_DIALOG_DATA) public editData : any,
@@ -26,15 +26,16 @@ export class AddExpenseComponent implements OnInit {
     setTimeout(() => {
       $('#type').trigger('focus');
     }, 500);
-    this.getRefCoaList();
-    this.getCoaList();
+    this.getCashList();
+    this.getBankList();
 
     if(this.editData){
+      
       this.invoiceNo = this.editData.invoiceNo;
       this.invoiceDate = this.editData.invoiceDate;
-      this.partyID = this.editData.partyID;
-      this.refCoaID = this.editData.refCoaID;
-      this.coaID = this.editData.coaID;
+      this.subType = this.editData.subType;
+      this.bankCoaID = this.subType == 'Deposit' ? this.coaID : this.refCoaID ;
+      this.cashCoaID = this.subType == 'Deposit' ? this.refCoaID : this.coaID ;
       this.amount = this.editData.amount;
       this.discount = this.editData.discount;
       this.remarks = this.editData.invoiceRemarks;
@@ -59,7 +60,8 @@ export class AddExpenseComponent implements OnInit {
   remarks = '';
   partyID = 0;
 
-  paymentType = '';
+  subType = '';
+  subTypeList = [{title:'Deposit'},{title:'Withdrawal'}]
 
 
   getSupplier(){
@@ -70,43 +72,29 @@ export class AddExpenseComponent implements OnInit {
     )
   }
 
-
+  bankCoaID = 0;
+  cashCoaID = 0;
+  cashHeadList:any = [];
+  BankList:any = []
   ////////////////////////////////////////////
 
-  getCoaList(){
-    this.global.getCashBankCoa('EXP')
-      .subscribe(
+  getBankList(){
+    this.global.getCashBankCoa('BRV').subscribe(
       (Response: any) => {
-        // console.log(Response);
-        this.coaList = Response;
-      },
-      (Error) => {
-      
+         this.BankList = Response;
       }
     )
   }
 
-  getRefCoaList() {
-
-  
-
-    this.global.getCashBankCoa('CRV').subscribe(
+  getCashList() {
+   this.global.getCashBankCoa('CRV').subscribe(
       (Response: any) => {
-        Response.forEach((e:any) => {
-          this.refCoaList.push(e);
-        });
-        
+      
+        this.cashHeadList = Response;
       }
     )
 
-    this.global.getCashBankCoa('BRV').subscribe(
-      (Response: any) => {
-        Response.forEach((e:any) => {
-          this.refCoaList.push(e);
-        });
-        
-      }
-    )
+   
 
     
   }
@@ -114,10 +102,12 @@ export class AddExpenseComponent implements OnInit {
 
   save(){
     
-    if(this.coaID == 0 || this.coaID == undefined || this.coaID == null){
-      this.msg.WarnNotify('Select Expense Head')
-    }else if(this.refCoaID == 0 || this.refCoaID == undefined || this.refCoaID == null){
-      this.msg.WarnNotify('Select Cash Or Bank')
+    if(this.subType == '' || this.subType == undefined || this.subType == null){
+      this.msg.WarnNotify('Select Transaction Type');
+    }else if(this.bankCoaID == 0 || this.bankCoaID == undefined || this.bankCoaID == null){
+      this.msg.WarnNotify('Select Bank Head')
+    } if(this.cashCoaID == 0 || this.cashCoaID == undefined || this.cashCoaID == null){
+      this.msg.WarnNotify('Select Cash Head')
     }else if(this.amount == 0 || this.amount == undefined || this.amount == null){
       this.msg.WarnNotify('Enter Amount')
     }else{
@@ -141,16 +131,16 @@ export class AddExpenseComponent implements OnInit {
 
   insert(){
     $('.loaderDark').show();
-    this.http.post(environment.mainApi+this.global.accountLink+'InsertExpense',{
+    this.http.post(environment.mainApi+this.global.accountLink+'InsertDepositWithdrawal',{
     InvoiceDate: this.invoiceDate,
     Type: "JV",
+    SubType: this.subType,
     InvoiceRemarks: this.remarks,
     BankReceiptNo: this.bankReceiptNo,
-    COAID: this.coaID,
-    RefCOAID: this.refCoaID,
+    COAID: this.subType == 'Deposit' ? this.bankCoaID : this.cashCoaID,
+    RefCOAID: this.subType == 'Deposit' ? this.cashCoaID : this.bankCoaID,
     Amount: this.amount,
-    
-    UserID: this.global.getUserID()
+    UserID:  this.global.getUserID()
     }).subscribe(
       (Response:any)=>{
         if(Response.msg == 'Data Saved Successfully'){
@@ -176,16 +166,17 @@ export class AddExpenseComponent implements OnInit {
 
       if(pin != ''){
         $('.loaderDark').show();
-        this.http.post(environment.mainApi+this.global.accountLink+'UpdateExpense',{
-        InvoiceNo: this.invoiceNo,
-        InvoiceDate: this.invoiceDate,
-        InvoiceRemarks: this.remarks,
-        BankReceiptNo: this.bankReceiptNo,
-        COAID: this.coaID,
-        RefCOAID: this.refCoaID,
-        Amount: this.amount,
-        PinCode: pin,
-        UserID: this.global.getUserID()
+        this.http.post(environment.mainApi+this.global.accountLink+'UpdateDepositWithdrawal',{
+          InvoiceNo: this.invoiceNo,
+          InvoiceDate: this.invoiceDate,
+          Type: "JV",
+          SubType: this.subType,
+          InvoiceRemarks: this.remarks,
+          BankReceiptNo: this.bankReceiptNo,
+          COAID: this.subType == 'Deposit' ? this.bankCoaID : this.cashCoaID,
+          RefCOAID: this.subType == 'Deposit' ? this.cashCoaID : this.bankCoaID,
+          Amount: this.amount,
+          UserID:  this.global.getUserID()
         }).subscribe(
           (Response:any)=>{
             if(Response.msg == 'Data Updated Successfully'){
@@ -223,7 +214,11 @@ export class AddExpenseComponent implements OnInit {
     this.amount = 0;
     this.discount = 0;
     this.btnType = 'Save';
+    this.bankCoaID = 0;
+    this.cashCoaID = 0;
+    this.subType = '';
 
   }
 
 }
+

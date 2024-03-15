@@ -53,7 +53,9 @@ projectID :any;
 getProject(){
   this.http.get(environment.mainApi+'cmp/getproject').subscribe(
     (Response:any)=>{
+     if(this.projectID != 0 && this.projectID != ''){
       this.lblProjectName = Response.find((e:any)=>e.projectID == this.projectID).projectTitle;
+     }
     }
   )
 }

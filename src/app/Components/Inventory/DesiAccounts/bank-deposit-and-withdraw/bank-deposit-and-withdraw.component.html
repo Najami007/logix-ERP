@@ -26,7 +26,7 @@
                     <td>{{index + 1}}</td>
                     <td>{{item.invoiceDate | date:'dd-MM-yyyy'}}</td>
                     <td>{{item.invoiceNo}}</td>
-                    <td>{{item.coaTitle}}</td>
+                    <td>{{item.subType}}</td>
                     <td>{{item.amount |number:'1.0-1'}}</td>
                     <td class="cursorPointer">
                         <mat-icon class="text-success"(click)="edit(item)">edit</mat-icon>
@@ -40,5 +40,6 @@
     </div>
 
 </div>
+
 
 

@@ -1,11 +1,12 @@
 <div class="body container">
 
     <div class="p-2 row justify-content-center">
-        <button type="button" mat-fab color="primary" (click)="addReceipt()"><mat-icon>add</mat-icon></button>
-        <mat-form-field appearance="outline" class="col-lg-11">
+        <button type="button" mat-fab color="primary" *ngIf="crudList.c" (click)="addReceipt()"><mat-icon>add</mat-icon></button>
+        <mat-form-field appearance="outline" [ngClass]="crudList.c ? 'col-lg-11' :'col-lg-12' " >
             <mat-label>Search....</mat-label>
-            <input matInput #paymentSearch  />
+            <input matInput #search  />
         </mat-form-field>
+      
     </div>
 
     <div class="p-2">
@@ -14,13 +15,93 @@
                 <tr>
                     <th>S#</th>
                     <th>Date</th>
-                    <th>Title</th>
+                    <th>Inv No.</th>
+                    <th>Customer</th>
                     <th>Amount</th>
+                    <th>Remarks</th>
                     <th>Action</th>
                 </tr>
             </thead>
+            <tbody *ngIf="crudList.r">
+                <tr *ngFor="let item of receiptsList |filter:search.value index as index">
+                    <td >{{index +1}}</td>
+                    <td>{{item.invoiceDate | date:'dd-MM-YYYY'}}</td>
+                    <td >{{item.invoiceNo }}</td>
+                    <td >{{item.partyName }}</td>
+                    <td >{{item.amount |number:'1.0-1'}}</td>
+                    <td>{{item.invoiceRemarks }}</td>
+                    <td class="cursorPointer">
+                        <mat-icon class="text-success" *ngIf="crudList.u" (click)="edit(item)">edit</mat-icon>
+                        <mat-icon class="text-danger" *ngIf="crudList.d" (click)="delete(item)">delete</mat-icon>
+                        <mat-icon class="text-success" (click)="VoucherDetails(item)">receipt</mat-icon>
+                    </td>
+                    </tr>
+            </tbody>
         </table>
     </div>
 
+</div>
+
+
+  <!----------- Print Area For Bill Print --------------------->
+        
+  <div id="printDiv" class="d-none" >
+    <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+        <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+            <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
+        </span>
+        <span class="mt-3">
+            <h3 class="companyName">{{item.companyName}}</h3>
+            <p style="margin-top: -15px;">{{item.companyAddress}}</p>
+            <!-- <p style="margin-top: -20px;">{{item.companyMobile}}  {{item.companyPhone}}</p>
+            <p style="margin-top: -20px;">{{item.companyEmail}}</p> -->
+        </span>
+        <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+            <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+        </span>
+
+
+    </div>
+
+<!-- <div class="d-flex mb-1">
+
+  <div class="d-flex border border-dark p-2 me-1 w-50">
+    <div class="row">
+        <label class="fw-bold" >Date:</label>
+        <label class="fw-bold" >Inv No:</label>
+        <label class="fw-bold" >Issued From:</label>
+        <label class="fw-bold" >Issued Type:</label>
+     
+    </div>
+    <div class="row">
+        <label >{{myInvoiceDate | date:'dd-MM-yyyy'}}</label>
+        <label >{{myInvoiceNo}}</label>
+        <label >{{myLocationTitle}}</label>
+        <label >{{myIssueType}}</label>
+        
+    </div>
+  </div>
+   <div class="d-flex border border-dark p-2 w-50">
+    <div class="row">
+    
+        <label class="fw-bold" >Issued To:</label>
+        <label class="fw-bold" >Remarks:</label>
+    </div>
+    <div class="row">
+      
+        <label >{{myLocationTwoTitle}}</label>
+        <label >{{myInvRemarks}}</label>
+    </div>
+   </div>
+
+</div> -->
+
+
+
+<div class="d-flex justify-content-around mt-5">
+    <label class="border-0 border-top border-dark fw-bold">Created By</label>
+    <label class="border-0 border-top border-dark fw-bold" >Checked By</label>
+    <label class="border-0 border-top border-dark fw-bold">Approved By</label>
+</div>
 </div>
 

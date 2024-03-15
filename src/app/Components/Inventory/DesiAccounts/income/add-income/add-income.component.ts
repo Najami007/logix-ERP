@@ -4,18 +4,17 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { environment } from 'src/environments/environment.development';
-
 @Component({
-  selector: 'app-add-expense',
-  templateUrl: './add-expense.component.html',
-  styleUrls: ['./add-expense.component.scss']
+  selector: 'app-add-income',
+  templateUrl: './add-income.component.html',
+  styleUrls: ['./add-income.component.scss']
 })
-export class AddExpenseComponent implements OnInit {
+export class AddIncomeComponent  implements OnInit {
 
   
   constructor(
     private http:HttpClient,
-    private dialogRef: MatDialogRef<AddExpenseComponent>,
+    private dialogRef: MatDialogRef<AddIncomeComponent>,
     public global:GlobalDataModule,
     private msg:NotificationService,
     @Inject(MAT_DIALOG_DATA) public editData : any,
@@ -74,7 +73,7 @@ export class AddExpenseComponent implements OnInit {
   ////////////////////////////////////////////
 
   getCoaList(){
-    this.global.getCashBankCoa('EXP')
+    this.global.getCashBankCoa('INC')
       .subscribe(
       (Response: any) => {
         // console.log(Response);
@@ -141,7 +140,7 @@ export class AddExpenseComponent implements OnInit {
 
   insert(){
     $('.loaderDark').show();
-    this.http.post(environment.mainApi+this.global.accountLink+'InsertExpense',{
+    this.http.post(environment.mainApi+this.global.accountLink+'InsertIncome',{
     InvoiceDate: this.invoiceDate,
     Type: "JV",
     InvoiceRemarks: this.remarks,
@@ -176,7 +175,7 @@ export class AddExpenseComponent implements OnInit {
 
       if(pin != ''){
         $('.loaderDark').show();
-        this.http.post(environment.mainApi+this.global.accountLink+'UpdateExpense',{
+        this.http.post(environment.mainApi+this.global.accountLink+'UpdateIncome',{
         InvoiceNo: this.invoiceNo,
         InvoiceDate: this.invoiceDate,
         InvoiceRemarks: this.remarks,
@@ -227,3 +226,4 @@ export class AddExpenseComponent implements OnInit {
   }
 
 }
+
