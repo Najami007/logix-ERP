@@ -32,8 +32,8 @@ export class AddIncomeComponent  implements OnInit {
       this.invoiceNo = this.editData.invoiceNo;
       this.invoiceDate = this.editData.invoiceDate;
       this.partyID = this.editData.partyID;
-      this.refCoaID = this.editData.refCoaID;
-      this.coaID = this.editData.coaID;
+      this.refCoaID = this.editData.refCOAID;
+      this.coaID = this.editData.coaid;
       this.amount = this.editData.amount;
       this.discount = this.editData.discount;
       this.remarks = this.editData.invoiceRemarks;
@@ -57,7 +57,7 @@ export class AddIncomeComponent  implements OnInit {
   bankReceiptNo = '';
   remarks = '';
   partyID = 0;
-
+  projectID = 0;
   paymentType = '';
 
 
@@ -121,6 +121,10 @@ export class AddIncomeComponent  implements OnInit {
       this.msg.WarnNotify('Enter Amount')
     }else{
 
+      if(this.bankReceiptNo == '' || this.bankReceiptNo == null || this.bankReceiptNo == undefined){
+        this.bankReceiptNo = '-';
+      }
+
       if(this.remarks == '' || this.remarks == undefined || this.remarks == null){
         this.remarks = '-';
       }  
@@ -148,7 +152,7 @@ export class AddIncomeComponent  implements OnInit {
     COAID: this.coaID,
     RefCOAID: this.refCoaID,
     Amount: this.amount,
-    
+    ProjectID:this.projectID,
     UserID: this.global.getUserID()
     }).subscribe(
       (Response:any)=>{
@@ -183,6 +187,7 @@ export class AddIncomeComponent  implements OnInit {
         COAID: this.coaID,
         RefCOAID: this.refCoaID,
         Amount: this.amount,
+        ProjectID:this.projectID,
         PinCode: pin,
         UserID: this.global.getUserID()
         }).subscribe(

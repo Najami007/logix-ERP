@@ -91,7 +91,9 @@ constructor( private route:Router,private global:GlobalDataModule){
   ngOnInit(){
     
     this.global.getCompany();
- 
+    setTimeout(() => {
+      this.stopLoaderDark();  
+    }, 500);
     // if(localStorage.getItem('curVal') == null || localStorage.getItem('curVal') == '' ){
     //   this.route.navigate(['']);
     // }
@@ -101,7 +103,7 @@ constructor( private route:Router,private global:GlobalDataModule){
 
   startLoaderDark() {
     $(".loaderDark").show();
-   this.loaderAnimation();
+
   }
 
   stopLoaderDark() {

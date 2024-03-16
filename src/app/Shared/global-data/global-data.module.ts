@@ -59,7 +59,7 @@ export class GlobalDataModule implements OnInit {
 
 
   paginationDefaultTalbeSize = 50;
-  paginationTableSizes: any = [10, 25, 50, 100];
+  paginationTableSizes: any = [10, 25, 50, 100,500,1000];
 
 
   public currentUserSubject: BehaviorSubject<userInterface>;

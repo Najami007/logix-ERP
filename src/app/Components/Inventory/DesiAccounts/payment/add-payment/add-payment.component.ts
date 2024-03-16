@@ -27,12 +27,12 @@ export class AddPaymentComponent {
     }, 500);
 
     if(this.editData){
- 
+      console.log(this.editData);
       this.invoiceNo = this.editData.invoiceNo;
       this.invoiceDate = this.editData.invoiceDate;
       this.partyID = this.editData.partyID;
       this.paymentType = this.editData.type;
-      this.coaID = this.editData.coaID;
+      this.coaID = this.editData.coaid;
       this.amount = this.editData.amount;
       this.discount = this.editData.discount;
       this.remarks = this.editData.invoiceRemarks;
@@ -57,7 +57,7 @@ export class AddPaymentComponent {
   coaID = 0;
   remarks = '';
   partyID = 0;
-
+  projectID = 0;
   paymentTypeList = [{value:'CPV',title:'Cash'},{value:'BPV',title:'Bank'},];
 
   paymentType = '';
@@ -80,9 +80,9 @@ export class AddPaymentComponent {
     this.global.getCashBankCoa(this.paymentType).subscribe(
       (Response: any) => {
         this.coaList = Response;
-       if(Response != '' && Response != null){
-        this.coaID = Response[0].coaID;
-       }
+      //  if(Response != '' && Response != null){
+      //   this.coaID = Response[0].coaID;
+      //  }
       },
       (Error) => {
       
@@ -103,6 +103,10 @@ export class AddPaymentComponent {
       }else if(this.amount == 0 || this.amount == undefined || this.amount == null){
   
       }else{
+
+        if(this.bankReceiptNo == '' || this.bankReceiptNo == null || this.bankReceiptNo == undefined){
+          this.bankReceiptNo = '-';
+        }
         
         if(this.discount == '' || this.discount == undefined || this.discount == null){
           this.discount = 0;
@@ -135,6 +139,7 @@ export class AddPaymentComponent {
         BankReceiptNo: this.bankReceiptNo,
         COAID: this.coaID,
         Amount: this.amount,
+        ProjectID:this.projectID,
         Discount: this.discount,
         UserID: this.global.getUserID()
       }).subscribe(
@@ -171,6 +176,7 @@ export class AddPaymentComponent {
             COAID: this.coaID,
             Amount: this.amount,
             Discount: this.discount,
+            ProjectID:this.projectID,
             Pincode:pin,
             UserID: this.global.getUserID()
           }).subscribe(

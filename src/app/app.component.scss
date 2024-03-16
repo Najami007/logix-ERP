@@ -12,6 +12,9 @@
     z-index: 10000;
     // opacity: 0.8;
     // padding-top:21%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
      
   }
   
@@ -27,6 +30,42 @@
     opacity: 0.8;
     background-color:red;
   }
+
+
+  .box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // min-height: 100vh;
+  }
+
+
+
+  .waviy {
+    position: relative;
+    -webkit-box-reflect: below 60px linear-gradient(transparent, rgba(251,251,251,0.1));
+    font-size: 80px;
+  }
+  .waviy span {
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    position: relative;
+    display: inline-block;
+    color: #000;
+    text-transform: uppercase;
+    animation: waviy 1.5s infinite;
+    animation-delay: calc(.1s * var(--i));
+    font-weight: 600;
+    
+    margin-right: 5px;
+  }
+  @keyframes waviy {
+    0%,40%,100% {
+      transform: translateY(0)
+    }
+    20% {
+      transform: translateY(-100px)
+    }
+  }
   
   // body {
   //   margin: 0;
@@ -40,81 +79,81 @@
 
 /* New Loader LOGIXERP */
 
-.container {
-  font-family:Verdana, Geneva, Tahoma, sans-serif;
-  font-weight: bold;
-  display: flex;
-  position: relative;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  font-size: 40px;
-  text-transform: uppercase;
-}
+// .container {
+//   font-family:Verdana, Geneva, Tahoma, sans-serif;
+//   font-weight: bold;
+//   display: flex;
+//   position: relative;
+//   justify-content: center;
+//   align-items: center;
+//   min-height: 100vh;
+//   font-size: 40px;
+//   text-transform: uppercase;
+// }
 
-.box {
-  position: relative;
-  width: 40px;
-  height: 150px;
-  line-height: 250px;
-  text-align: center;
-  transform-origin: top center;
-  color: #fff;
-  filter: drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.192));
-  -webkit-box-reflect: below 10px linear-gradient(transparent, rgba(0, 0, 0, 0.042));
-}
+// .box {
+//   position: relative;
+//   width: 40px;
+//   height: 150px;
+//   line-height: 250px;
+//   text-align: center;
+//   transform-origin: top center;
+//   color: #fff;
+//   filter: drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.192));
+//   -webkit-box-reflect: below 10px linear-gradient(transparent, rgba(0, 0, 0, 0.042));
+// }
 
-.box::before,
-.box::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: -1;
-}
+// .box::before,
+// .box::after {
+//   content: "";
+//   position: absolute;
+//   top: 0;
+//   left: 50%;
+//   transform: translateX(-50%);
+//   z-index: -1;
+// }
 
-.box::before {
-  width: 15px;
-  height: 15px;
-  border-radius: 15px;
-  background: #fff;
-}
+// .box::before {
+//   width: 15px;
+//   height: 15px;
+//   border-radius: 15px;
+//   background: #fff;
+// }
 
-.l::before {
-  width: 15px;
-  height: 15px;
-  border-radius: 15px;
-  background: #fff;
-  position: absolute;
-  left: 15px;
-}
+// .l::before {
+//   width: 15px;
+//   height: 15px;
+//   border-radius: 15px;
+//   background: #fff;
+//   position: absolute;
+//   left: 15px;
+// }
 
-.box::after {
-  width: 1px;
-  height: 75%;
-  background: #fff;
-  position: absolute;
-}
+// .box::after {
+//   width: 1px;
+//   height: 75%;
+//   background: #fff;
+//   position: absolute;
+// }
 
-.X::after {
-  width: 1px;
-  height: 80%;
-  background: #fff;
-  position: absolute;
-}
+// .X::after {
+//   width: 1px;
+//   height: 80%;
+//   background: #fff;
+//   position: absolute;
+// }
 
-.N::after {
-  width: 1px;
-  height: 82%;
-  background: #444;
-  position: absolute;
-}
+// .N::after {
+//   width: 1px;
+//   height: 82%;
+//   background: #444;
+//   position: absolute;
+// }
 
-.l::after {
-  width: 1px;
-  height: 80%;
-  background: #fff
+// .l::after {
+//   width: 1px;
+//   height: 80%;
+//   background: #fff
   
   
   
@@ -145,19 +184,17 @@
   
   
   
-  ;
-  position: absolute;
-  left: 38%;
-}
+//   ;
+//   position: absolute;
+//   left: 38%;
+// }
 
-.one {
-  transform: rotate(-10deg);
-}
+// .one {
+//   transform: rotate(-10deg);
+// }
 
-.blue {
-  color: #fff;
-
-
+// .blue {
+//   color: #fff;
 
 
 
@@ -170,11 +207,13 @@
 
 
 
-}
 
-.gold {
-  color: #f26922;
-}
+
+// }
+
+// .gold {
+//   color: #f26922;
+// }
 
 
 

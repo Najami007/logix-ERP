@@ -10,11 +10,11 @@ import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-add-bank',
-  templateUrl: './add-bank.component.html',
-  styleUrls: ['./add-bank.component.scss']
+  selector: 'app-add-coa',
+  templateUrl: './add-coa.component.html',
+  styleUrls: ['./add-coa.component.scss']
 })
-export class AddBankComponent implements OnInit{
+export class AddCoaComponent implements OnInit{
 
   crudList:any = {c:true,r:true,u:true,d:true};
 
@@ -35,7 +35,8 @@ export class AddBankComponent implements OnInit{
     }
   ngOnInit(): void {
     this.globaldata.setHeaderTitle('ADD BANK');
-    this.getBankList();
+     this.getCoaType();
+    this.getSavedData('EXP');
    
     
    
@@ -47,22 +48,87 @@ export class AddBankComponent implements OnInit{
   btnType:any = 'Save';
   description:any;
 
-  bankList:any = [];
 
 
+  notesList:any = [];
+  coaList:any = [];
+  coaTypesList:any = [];
+  
+  savedDataList:any = [];
+  CoaTitle:any = '';
+  CoaTypeID:any = 0;
+  level1 = '';
+  level2 = '';
+  level3 = '';
+  level4 = '';
+  TransactionAllowed = true;
+  NoteID:any =[];
+
+  searchType:any = [{value:'EXP',title:'Expense'},{value:'INC',title:'Income'},]
+///////////////////////////// will get the notes list
+  
+getNotes(){
+  this.http.get(environment.mainApi+this.globaldata.accountLink+'GetNote').subscribe(
+    (Response )=>{
+      this.notesList = Response;
+
+    }
+    
+  )
+}
 
 
-
-  getBankList(){
-    this.http.get(environment.mainApi+this.globaldata.accountLink+'getvouchercbcoa?type=BPV').subscribe(
-      (Response:any)=>{
-        this.bankList = Response;
-        
+  //////////////////////////////////////////////////////////
+  GetChartOfAccount(){
+    this.http.get(environment.mainApi+this.globaldata.accountLink+'GetChartOfAccount').subscribe(
+      {
+        next:value=>{
+    
+          this.coaList = value;
+        },
+        error:error=>{
+          console.log(error);
+        }
       }
     )
   }
 
+
   
+  //////////////////////////// will get the coa main five types///////////////////
+
+  getCoaType(){
+    this.http.get(environment.mainApi+this.globaldata.accountLink+'getcoatype').subscribe(
+      {
+        next:value=>{
+          // console.log(value);
+          this.coaTypesList = value;
+         
+          
+        },
+        error:error=>{
+          console.log(error);
+        }
+      }
+    )
+  }
+
+
+
+  getSavedData(type:any){
+    this.globaldata.getCashBankCoa(type)
+      .subscribe(
+      (Response: any) => {
+        // console.log(Response);
+        this.savedDataList = Response;
+      },
+      (Error) => {
+      
+      }
+    )
+  }
+
+
 
 
   save(){
@@ -86,65 +152,64 @@ export class AddBankComponent implements OnInit{
   }
 
 
-
-
   insert(){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+this.globaldata.accountLink+'InsertBank',{  
-      CoaTitle: this.coaTitle,
-      UserID: this.globaldata.getUserID()
+    this.http.post(environment.mainApi+this.globaldata.accountLink+'InsertChartOfAccount',{
+    CoaTitle: this.CoaTitle,
+    CoaTypeID: this.CoaTypeID,
+    Level1: this.level1.toString(),
+    Level2: '',
+    Level3:'',
+    Level4:'',
+    TransactionAllowed: this.TransactionAllowed,
+    Editable: false,
+    IsService: false,
+    noteID:this.NoteID,
+    UserID: this.globaldata.getUserID(),
+  
     }).subscribe(
       (Response:any)=>{
-        if(Response.msg == 'Data Saved Successfully'){
+        // console.log(this.TransactionAllowed);
+        if(Response.msg == "Data Saved Successfully"){
           this.msg.SuccessNotify(Response.msg);
-          this.getBankList();
+          this.GetChartOfAccount();
           this.reset();
           this.app.stopLoaderDark();
-
         }else{
           this.msg.WarnNotify(Response.msg);
           this.app.stopLoaderDark();
         }
-      },
-      (error:any)=>{
-        this.app.stopLoaderDark();
       }
+      
     )
   }
 
   update(){
 
     this.globaldata.openPinCode().subscribe(pin=>{
-
-     if(pin != ''){
-
-      
-      this.app.startLoaderDark();
-      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'updateBank',{
-        coaID:this.coaID,  
-        CoaTitle: this.coaTitle,
-        PinCode:pin,
-        UserID: this.globaldata.getUserID()
-      }).subscribe(
-        (Response:any)=>{
-          if(Response.msg == 'Data Updated Successfully'){
-            this.msg.SuccessNotify(Response.msg);
-            this.getBankList();
-            this.reset();
-            this.app.stopLoaderDark();
-  
-          }else{
-            this.msg.WarnNotify(Response.msg);
-            this.app.stopLoaderDark();
+      if(pin != ''){
+        
+    
+        this.http.post(environment.mainApi+this.globaldata.accountLink+'UpdateChartofAccount',{
+          CoaID: this.coaID,
+          CoaTitle: this.coaTitle,
+          NoteID:0,
+          pinCode:pin,
+          UserID: this.globaldata.getUserID()
+        }).subscribe(
+          (Response:any)=>{
+            if(Response.msg == 'Data Updated Successfully'){
+              this.msg.SuccessNotify(Response.msg);
+          
+    
+            }else{
+              this.msg.WarnNotify(Response.msg);
+             
+            }
           }
-        },
-        (error:any)=>{
-          this.app.stopLoaderDark();
-        }
-      )
-     }
+        )
+      }
     })
-   
   }
 
 
@@ -180,7 +245,7 @@ if(pin != ''){
             (Response:any)=>{
               if(Response.msg == "Data Deleted Successfully"){
                 this.msg.SuccessNotify(Response.msg);
-                this.getBankList();
+   
               }else{
                 this.msg.WarnNotify(Response.msg);
               }
@@ -196,3 +261,4 @@ if(pin != ''){
 }
 
 }
+

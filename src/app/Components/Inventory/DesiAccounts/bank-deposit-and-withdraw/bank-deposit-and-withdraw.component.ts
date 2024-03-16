@@ -19,7 +19,7 @@ import { VoucherDetailsComponent } from 'src/app/Components/Accounts/voucher/vou
 })
 export class BankDepositAndWithdrawComponent {
 
-
+  companyProfile:any = [];
   crudList:any = {c:true,r:true,u:true,d:true};
 
   constructor(private http:HttpClient,
@@ -34,7 +34,10 @@ export class BankDepositAndWithdrawComponent {
 
       this.globaldata.getMenuList().subscribe((data)=>{
         this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      })
+      });
+      this.globaldata.getCompany().subscribe((data)=>{
+        this.companyProfile = data;
+      });
 
     }
   ngOnInit(): void {
@@ -123,5 +126,115 @@ export class BankDepositAndWithdrawComponent {
       
     })
   }
+
+
+
+  
+  //////////////// print Variables/////////////////////
+
+ lblInvoiceNo:any;
+ lblInvoiceDate:any;
+ lblRemarks:any;
+ lblVoucherType:any;
+ lblProjectName:any;
+ lblVoucherTable:any;
+ lblDebitTotal:any;
+ lblCreditTotal:any;
+ lblSubType:any;
+ lblVoucherPrintDate = new Date();
+
+
+   ///////////////////////////////////////////////////
+
+   printBill(row:any){
+
+    
+    this.lblInvoiceNo = row.invoiceNo;
+    this.lblInvoiceDate = row.invoiceDate;
+    this.lblRemarks = row.invoiceRemarks;
+    this.lblVoucherType = row.type;
+    this.lblProjectName = row.projectTitle;
+    this.lblSubType = row.subType;
+    this.getInvoiceDetail(row.invoiceNo);
+    
+
+    
+      setTimeout(() => {
+        if(this.lblInvoiceDetails != ''){
+          this.globaldata.printData('#InvociePrint');
+        }else{
+          this.msg.WarnNotify('Error Occured While Printing');
+        }
+      }, 500);
+    
+  }
+
+
+
+  lblInvoiceDetails:any = [];
+  
+  /////////////////////////////////////////////
+
+  getInvoiceDetail(invoiceNo:any){
+
+    this.lblDebitTotal = 0;
+    this.lblCreditTotal = 0;
+    this.lblInvoiceDetails = [];
+
+    
+    this.http.get(environment.mainApi+this.globaldata.accountLink+'GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
+      (Response:any)=>{
+        // console.log(Response);
+        this.lblInvoiceDetails = Response;
+        if(Response != ''){
+         
+          Response.forEach((e:any) => {
+            this.lblDebitTotal += e.debit;
+            this.lblCreditTotal += e.credit;
+          });
+        }
+      },
+      (error:any)=>{
+        console.log(error);
+        this.msg.WarnNotify('Error Occured While Printing');
+      }
+    )
+  }
+
+
+  
+  ////////////////////////////////////////////////
+
+  approveBill(row:any){
+
+    this.globaldata.openPinCode().subscribe(pin=>{
+      if(pin!= ''){
+   
+    
+            //////on confirm button pressed the api will run
+            this.http.post(environment.mainApi+this.globaldata.accountLink+'ApproveVoucher',{
+              InvoiceNo: row.invoiceNo,
+              PinCode:pin,
+            UserID: this.globaldata.getUserID(),
+            }).subscribe(
+              (Response:any)=>{
+                // console.log(Response.msg);
+                if(Response.msg == 'Voucher Approved Successfully'){
+                  this.msg.SuccessNotify(Response.msg);
+                  this.getSavedData();
+                }else{
+                  this.msg.WarnNotify(Response.msg);
+                }
+                
+              }
+            )
+        
+      }
+    })
+
+
+   
+  }
+
 
 }

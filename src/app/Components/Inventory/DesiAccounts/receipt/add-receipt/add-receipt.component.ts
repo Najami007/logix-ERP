@@ -29,11 +29,11 @@ export class AddReceiptComponent implements OnInit {
     }, 500);
 
     if(this.editData){
-      this.invoiceNo = this.editData.invoiceNo;
+       this.invoiceNo = this.editData.invoiceNo;
       this.invoiceDate = this.editData.invoiceDate;
       this.partyID = this.editData.partyID;
       this.paymentType = this.editData.type;
-      this.coaID = this.editData.coaID;
+      this.coaID = this.editData.coaid;
       this.amount = this.editData.amount;
       this.discount = this.editData.discount;
       this.remarks = this.editData.invoiceRemarks;
@@ -59,7 +59,7 @@ export class AddReceiptComponent implements OnInit {
   remarks = '';
   partyID = 0;
   bankReceiptNo = '';
-
+  projectID = 0;
   paymentTypeList = [{value:'CRV',title:'Cash'},{value:'BRV',title:'Bank'},];
 
   paymentType = '';
@@ -82,9 +82,9 @@ export class AddReceiptComponent implements OnInit {
     this.global.getCashBankCoa(this.paymentType).subscribe(
       (Response: any) => {
         this.coaList = Response;
-       if(Response != '' || Response != null){
-        this.coaID = Response[0].coaID;
-       }
+      //  if(Response != '' || Response != null){
+      //   this.coaID = Response[0].coaID;
+      //  }
       },
       (Error) => {
       
@@ -106,6 +106,10 @@ export class AddReceiptComponent implements OnInit {
       }else if(this.amount == 0 || this.amount == undefined || this.amount == null){
   
       }else{
+
+        if(this.bankReceiptNo == '' || this.bankReceiptNo == null || this.bankReceiptNo == undefined){
+          this.bankReceiptNo = '-';
+        }
 
         if(this.discount == '' || this.discount == undefined || this.discount == null){
           this.discount = 0;
@@ -138,6 +142,7 @@ export class AddReceiptComponent implements OnInit {
         BankReceiptNo: this.bankReceiptNo,
         COAID: this.coaID,
         Amount: this.amount,
+        ProjectID:this.projectID,
         Discount: this.discount,
         UserID: this.global.getUserID()
       }).subscribe(
@@ -175,6 +180,7 @@ export class AddReceiptComponent implements OnInit {
             Amount: this.amount,
             Discount: this.discount,
             Pincode:pin,
+            ProjectID:this.projectID,
             UserID: this.global.getUserID()
           }).subscribe(
             (Response:any)=>{

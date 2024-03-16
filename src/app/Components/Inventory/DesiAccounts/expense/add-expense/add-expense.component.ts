@@ -30,11 +30,14 @@ export class AddExpenseComponent implements OnInit {
     this.getCoaList();
 
     if(this.editData){
+      console.log(this.editData);
       this.invoiceNo = this.editData.invoiceNo;
       this.invoiceDate = this.editData.invoiceDate;
       this.partyID = this.editData.partyID;
-      this.refCoaID = this.editData.refCoaID;
-      this.coaID = this.editData.coaID;
+
+      this.refCoaID = this.editData.refCOAID;
+      this.coaID = this.editData.coaid;
+   
       this.amount = this.editData.amount;
       this.discount = this.editData.discount;
       this.remarks = this.editData.invoiceRemarks;
@@ -58,7 +61,7 @@ export class AddExpenseComponent implements OnInit {
   bankReceiptNo = '';
   remarks = '';
   partyID = 0;
-
+  projectID = 0;
   paymentType = '';
 
 
@@ -122,6 +125,9 @@ export class AddExpenseComponent implements OnInit {
       this.msg.WarnNotify('Enter Amount')
     }else{
 
+      if(this.bankReceiptNo == '' || this.bankReceiptNo == null || this.bankReceiptNo == undefined){
+        this.bankReceiptNo = '-';
+      }
       if(this.remarks == '' || this.remarks == undefined || this.remarks == null){
         this.remarks = '-';
       }  
@@ -149,7 +155,7 @@ export class AddExpenseComponent implements OnInit {
     COAID: this.coaID,
     RefCOAID: this.refCoaID,
     Amount: this.amount,
-    
+    ProjectID:this.projectID,
     UserID: this.global.getUserID()
     }).subscribe(
       (Response:any)=>{
@@ -184,6 +190,7 @@ export class AddExpenseComponent implements OnInit {
         COAID: this.coaID,
         RefCOAID: this.refCoaID,
         Amount: this.amount,
+        ProjectID:this.projectID,
         PinCode: pin,
         UserID: this.global.getUserID()
         }).subscribe(

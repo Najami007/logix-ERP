@@ -7,16 +7,17 @@ import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 import { AppComponent } from 'src/app/app.component';
 import { MatDialog } from '@angular/material/dialog';
-import { VoucherDetailsComponent } from './voucher-details/voucher-details.component';
+
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { Router } from '@angular/router';
+import { VoucherDetailsComponent } from '../voucher/voucher-details/voucher-details.component';
 
 @Component({
-  selector: 'app-voucher',
-  templateUrl: './voucher.component.html',
-  styleUrls: ['./voucher.component.scss']
+  selector: 'app-voucher2',
+  templateUrl: './voucher2.component.html',
+  styleUrls: ['./voucher2.component.scss']
 })
-export class VoucherComponent implements OnInit{
+export class Voucher2Component implements OnInit{
 
   loadingBar = 'start';
 
@@ -118,14 +119,14 @@ export class VoucherComponent implements OnInit{
   cash = 'Cash';
   coaSearch = '';
   txtSearch: string = '';
-  invoiceNo:any;
-  vType: any;
+  invoiceNo:any = '';
+  vType: any = '';
   transactionType: any = 'Cash';
   invoiceDate:Date = new Date();
   refrenceCOA: any = 0;
-  projectID:any;
-  partyID: any ;
-  COATitleID: any ;
+  projectID:any = 0;
+  partyID: any = 0;
+  COATitleID: any;
   DebitAmount: any = 0 ;
   CreditAmount: any = 0 ;
   detailNarration:any;
@@ -207,7 +208,10 @@ export class VoucherComponent implements OnInit{
 
     // finding the value of coatitle in voucherdata array here
     const findValue = this.VoucherData.find((obj : any) => obj.COAID === this.COATitleID);
-    if(this.COATitleID == '' || this.COATitleID == undefined){
+   
+    if(this.vType == '' || this.vType == undefined){
+      this.msg.WarnNotify('Select Voucher Type First');
+    }else if(this.COATitleID == '' || this.COATitleID == undefined){
       this.msg.WarnNotify('Select COA Head')
     }else if(this.detailNarration == '' || this.detailNarration == undefined){
       this.msg.WarnNotify('Enter the Head Narration')
@@ -319,15 +323,15 @@ export class VoucherComponent implements OnInit{
     
     if(this.vType == '' || this.vType == undefined){
       this.msg.WarnNotify('Select Voucher Type')
-    }else if(this.VoucherData == ''){
-      this.msg.WarnNotify('Data Table is Empty');
+    }else if(this.projectID == ''|| this.projectID == undefined){
+      this.msg.WarnNotify('Select Project')
     }else if(this.refrenceCOA == 0 && (this.vType == 'CPV' || this.vType == 'CRV'  || this.vType == 'BPV' || this.vType == 'BRV')){
       this.msg.WarnNotify('Select Refrence Chart of Account')
+    } else if(this.VoucherData == ''){
+      this.msg.WarnNotify('Data Table is Empty');
     } else if(this.vType == 'JV' && this.creditTotal != this.debittotal){
       this.msg.WarnNotify('Debit And Credit Total Side Must Be Equal')
-    } else if(this.projectID == ''|| this.projectID == undefined){
-      this.msg.WarnNotify('Select Project')
-    }
+    } 
     else{
 
         

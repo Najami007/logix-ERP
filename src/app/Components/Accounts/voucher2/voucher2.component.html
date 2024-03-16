@@ -1,16 +1,194 @@
 <mat-tab-group class="body ">
     <mat-tab label="Voucher Form "  >
-        <div class="container mt-2 Voucher">
+
+       <div class="row container-fluid  p-2">
+        <div class="col-lg-4">
+
+           <div class="row">
+            <mat-form-field class="col-lg-12" appearance="outline">
+                <mat-label>Voucher Type </mat-label>
+                <mat-select [(ngModel)]="vType" name="vType"  [disabled]="VoucherData != ''"
+                    (selectionChange)=" getRefCoa()">
+                    <mat-option *ngFor="let item of voucherTypes "
+                        value="{{item.value}}">{{item.type}}</mat-option>
+
+                </mat-select>
+            </mat-form-field>
+
+
+            <mat-form-field class="col-lg-12" appearance="outline">
+                <mat-label>Voucher Date</mat-label>
+                <input readonly="true" matInput   [(ngModel)]="invoiceDate"
+                    [matDatepicker]="picker" >
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="col-lg-12 " appearance="outline">
+                <mat-label>Project </mat-label>
+                <mat-select [(ngModel)]="projectID" >
+                    <mat-option *ngFor="let item of projectList " value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col-lg-12 " appearance="outline">
+                <mat-label>Refrence COA </mat-label>
+                <mat-select [(ngModel)]="refrenceCOA" [disabled]="vType == 'JV'">
+                    <mat-option *ngFor="let item of refCoaList " value="{{item.coaID}}">{{item.coaTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            
+            <mat-form-field class=" col-lg-12 " appearance="outline">
+                <mat-label>Refrence No</mat-label>
+                <input matInput [(ngModel)]="bankReceiptNo" [defaultValue]="0" type="text">
+            </mat-form-field>
+
+            
+                <mat-form-field class="col-lg-12" appearance="outline">
+                    <mat-label>Narration</mat-label>
+                    <textarea matInput [(ngModel)]="narration" name="Narration" placeholder="Narration"></textarea>
+                </mat-form-field>
+           </div>
+
+                <span class="col-lg-12 ps-2 d-flex border-bottom pb-1">
+                    <button  type="button" mat-raised-button (click)="vDoc.click()">Choose File</button>
+                    <input  hidden accept=".pdf"  (change)="onDocSelected($event)"  #vDoc type="file" id="vDoc"  class="border border-dark">
+                    <p class="text-center text-secondary mt-1 p-2">{{vDoc.value}}</p>
+              
+                </span>
+                <mat-hint class="text-danger">File Must be PDF Only</mat-hint>
+          
+            <div class="text-center row justify-content-center" >
+                <button  class="btn btn-success btn-save  col-lg-3 me-2" *ngIf="crudList.c" (click)="insertVoucher()"> Save</button>
+                <button   class="btn btn-danger btn-reset  col-lg-3 "  (click)="reset()"> Reset</button>
+            </div>
+
+
+            
+
+
+
+        </div>
+
+        <div class="col-lg-8 border p-3" style="background-color: rgb(247, 251, 250);">
+
+        
+                <div class="row fw-bold">
+                    <span class="col-lg-3 ">Account Title</span>
+                    <span class="col-lg-4">Narration</span>
+                    <span class="col-lg-2 text-end">Debit</span>
+                    <span class="col-lg-2 text-end">Credit</span>
+                </div>
+         
+                <div class=" row ">
+                    <mat-form-field class="col-lg-3" appearance="outline">
+                        <mat-label>COA Title </mat-label>
+                        <mat-select id="cTitle" class="cTitle" [(ngModel)]="COATitleID" name="coaTitle"
+                            accesskey="c">
+                            <mat-option><ngx-mat-select-search [(ngModel)]="coaSearch"
+                                [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                                    ></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of CoaList | filter:coaSearch "
+                                [value]="item.coaID">{{item.coaTitle}} - ({{item.accountCode}})</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+
+               
+                    <mat-form-field class=" col-lg-4 " appearance="outline">
+
+                        <textarea  rows="1" matInput [(ngModel)]="detailNarration"  type="text"  ></textarea>
+                    </mat-form-field>
+
+
+                    <mat-form-field class=" col-lg-2 " appearance="outline">
+
+                        <input class="text-end" matInput [(ngModel)]="DebitAmount" (keydown)="changeValue($event)" [defaultValue]="0"
+                            type="number" min="0" [disabled]="vType == 'CRV' || vType == 'BRV' || vType == ''">
+                    </mat-form-field>
+  
+
+
+                    <mat-form-field class=" col-lg-2 " appearance="outline">
+
+                        <input class="text-end" matInput [(ngModel)]="CreditAmount" [defaultValue]="0"
+                            (keydown)="changeValue($event)" type="number" min="0" [disabled]="vType == 'CPV' || vType == 'BPV' || vType == ''">
+                    </mat-form-field>
+
+       
+                    <div class="col-lg-1 text-start ">
+                        <button style="height: 60px; width: 50px;" class="btn btn-success" type="button" (click)="save()">
+                            <mat-icon class="mat-icon-rtl-mirror" >save</mat-icon>
+                        </button>
+                       
+                    </div>
+
+       
+                        <div class="mt-3 " style="height: 62vh; overflow-y: scroll;">
+                            
+                            <table class="table  cursorPointer" >
+
+                                <thead>
+                                    <tr class="col-lg-12 font-size">
+                                        <th class="col-lg-1 ">S#</th>
+                                        <th class="col-lg-3 ">Title</th>
+                                        <th class="col-lg-3 ">Narration</th>
+                                        <th class="col-lg-2 ">Debit Amont</th>
+                                        <th class="col-lg-2 ">Credit Amount</th>
+                                        <th class="col-lg-1 ">Action</th>
+
+                                    </tr>
+                                </thead>
+
+
+
+                                <tbody>
+
+                                    <tr *ngFor="let item of VoucherData, ;index as index ">
+                                        <td class="">{{index+1}}</td>
+                                        <td class="">{{item.title}}</td>
+                                        <td class="">{{item.DetailNarration}}</td>
+                                        <td class="">{{item.Debit |number}}</td>
+                                        <td class="">{{item.Credit |number}}</td>
+                                        <td class=" "><mat-icon class=" text-danger "
+                                            (click)="deleteRow(item)">delete</mat-icon></td>
+
+                                    </tr>
+                                    <tr *ngIf="VoucherData != ''" class="fw-bold bg-light">
+                                        <td></td>
+                                        <td> Total</td>
+                                        <td></td>
+                                        <td>{{debittotal |number}}</td>
+                                        <td>{{creditTotal |number}}</td>
+                                        <td></td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                </div>
+
+         
+
+        </div> 
+       </div>
+
+
+
+
+        <!-- <div class="container mt-2 Voucher">
 
 
 
             <div class="container-fluid  mt-3">
 
-                <!-- --------------------First Row-------------- -->
+       
                 <div class="pform row ">
 
 
-                    <!-- --------------------voucher Type selected here-------------- -->
+            
 
                     <mat-form-field class="col-lg-6 " appearance="outline">
                         <mat-label>Voucher Type </mat-label>
@@ -26,7 +204,6 @@
 
 
 
-                    <!-- --------------------voucher DAte selected here-------------- -->
 
 
 
@@ -47,7 +224,6 @@
                
              
 
-                <!-- --------------------Second Row-------------- -->
 
                 <div class="pform row " style="align-items: center;">
 
@@ -58,7 +234,7 @@
                         </mat-select>
                     </mat-form-field>
 
-                    <!-- --------------------Bank Select Area-------------- -->
+             
 
 
                     <mat-form-field class="col-lg-5 " appearance="outline">
@@ -69,8 +245,6 @@
                     </mat-form-field>
                     
 
-
-                     <!---------------       Bank Receipt No    ---------------------->
 
                     <mat-form-field class=" col-lg-2 " appearance="outline">
                         <mat-label>Refrence No</mat-label>
@@ -88,9 +262,9 @@
                         <span class="col-lg-2 text-end">Debit</span>
                         <span class="col-lg-2 text-end">Credit</span>
                     </div>
-                    <!-- --------------------Third row-------------- -->
+              
                     <div class=" row col-lg-12 ">
-                        <!-- -------------------Coa Account Select Area-------------- -->
+                   
 
 
 
@@ -107,22 +281,21 @@
                         </mat-form-field>
 
 
-                        <!-- -------------------Narration Enter Area-------------- -->
-
+                
                         <mat-form-field class=" col-lg-4 " appearance="outline">
 
                             <textarea  rows="1" matInput [(ngModel)]="detailNarration"  type="text"  ></textarea>
                         </mat-form-field>
 
 
-                        <!-- -------------------Debit amount Enter Area-------------- -->
+                   
 
                         <mat-form-field class=" col-lg-2 " appearance="outline">
 
                             <input class="text-end" matInput [(ngModel)]="DebitAmount" (keydown)="changeValue($event)" [defaultValue]="0"
                                 type="number" min="0" [disabled]="vType == 'CRV' || vType == 'BRV'">
                         </mat-form-field>
-                        <!-- -------------------Credit amount Enter Area-------------- -->
+                        
 
 
                         <mat-form-field class=" col-lg-2 " appearance="outline">
@@ -131,7 +304,7 @@
                                 (keydown)="changeValue($event)" type="number" min="0" [disabled]="vType == 'CPV' || vType == 'BPV'">
                         </mat-form-field>
 
-                        <!-- -------------------Save Icon Button-------------- -->
+                       
                         <div class="form-field col-lg-1 text-start ">
                             <button style="height: 60px; width: 50px;" class="btn btn-success" type="button" (click)="save()">
                                 <mat-icon class="mat-icon-rtl-mirror" >save</mat-icon>
@@ -139,7 +312,7 @@
                            
                         </div>
 
-                        <!-- -------------------Table Area -------------- -->
+                   
 
                         <table class=" table  mt-3 cursorPointer">
 
@@ -204,10 +377,10 @@
                 </div>
             </div>
             
-        </div>
+        </div> -->
 
 
-        <!-------------------     Invoice Print Section ------------------------->
+       
 
         <div class="d-none" id="afterSavePrint">
             <div class="text-end ">{{lblVoucherPrintDate |date:'short'}}</div>
@@ -263,10 +436,10 @@
                     <thead>
                         
                         <th style="width: 30px;">S#</th>
-                        <th style="width: 200px;">Description</th>
-                        <th  class="col-lg-2">Debit</th>
-                        <th  class="Col-lg-2">Credit</th>
-                        <th  style="width: 350px;">Narration</th>   
+                        <th >Description</th>
+                        <th  >Debit</th>
+                        <th  >Credit</th>
+                        <th  >Narration</th>   
                     
                     </thead>
                     <tbody>
@@ -305,7 +478,6 @@
 
 
 
-    <!----------------------         Saved Record Section ---------------->
 
     <mat-tab label="Saved Record" >
 
@@ -360,7 +532,7 @@
                                 <mat-icon *ngIf="item.voucherDocument != '-'" (click)="downloadVoucherDocument(item)">remove_red_eye</mat-icon>
                             </td>
                         <td *ngIf="crudList.r || crudList.d   || crudList.u  ">
-                            <mat-icon class="text-success"*ngIf="item.approvedStatus == false && crudList.u"   (click)="approveBill(item)">check</mat-icon>
+                        <mat-icon class="text-success"*ngIf="item.approvedStatus == false && crudList.u"   (click)="approveBill(item)">check</mat-icon>
                         <mat-icon *ngIf="item.approvedStatus"  aria-label="Approved" class="text-success" >done_all</mat-icon>
                         <mat-icon class="text-danger" *ngIf="crudList.d && item.approvedStatus == false" (click)="DeleteVoucher(item)">delete</mat-icon>
                         <mat-icon class="text-primary" *ngIf="crudList.r" (click)="printBill(item)">print</mat-icon></td>
@@ -449,10 +621,10 @@
                     <thead>
                         
                         <th style="width: 30px;">S#</th>
-                        <th style="width: 200px;">Description</th>
-                        <th  class="col-lg-2">Debit</th>
-                        <th  class="Col-lg-2">Credit</th>
-                        <th  style="width: 350px;">Narration</th>
+                        <th >Description</th>
+                        <th >Debit</th>
+                        <th >Credit</th>
+                        <th >Narration</th>
                     
                     </thead>
                     <tbody>
@@ -515,6 +687,7 @@
 
     </mat-tab>
 </mat-tab-group>
+
 
 
 

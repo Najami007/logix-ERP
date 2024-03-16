@@ -30,12 +30,11 @@ export class AdddwComponent implements OnInit {
     this.getBankList();
 
     if(this.editData){
-      
       this.invoiceNo = this.editData.invoiceNo;
-      this.invoiceDate = this.editData.invoiceDate;
+      this.invoiceDate = new Date(this.editData.invoiceDate);
       this.subType = this.editData.subType;
-      this.bankCoaID = this.subType == 'Deposit' ? this.coaID : this.refCoaID ;
-      this.cashCoaID = this.subType == 'Deposit' ? this.refCoaID : this.coaID ;
+      this.bankCoaID = this.subType == 'Deposit' ? this.editData.coaid : this.editData.refCOAID ;
+      this.cashCoaID = this.subType == 'Deposit' ? this.editData.refCOAID : this.editData.coaid ;
       this.amount = this.editData.amount;
       this.discount = this.editData.discount;
       this.remarks = this.editData.invoiceRemarks;
@@ -56,9 +55,10 @@ export class AdddwComponent implements OnInit {
   coaID = 0;
   refCoaID = 0;
   refCoaList:any = [];
-  bankReceiptNo = '';
+  bankReceiptNo = '-';
   remarks = '';
   partyID = 0;
+  projectID = 0;
 
   subType = '';
   subTypeList = [{title:'Deposit'},{title:'Withdrawal'}]
@@ -111,11 +111,15 @@ export class AdddwComponent implements OnInit {
     }else if(this.amount == 0 || this.amount == undefined || this.amount == null){
       this.msg.WarnNotify('Enter Amount')
     }else{
+      
+      if(this.bankReceiptNo == '' || this.bankReceiptNo == null || this.bankReceiptNo == undefined){
+        this.bankReceiptNo = '-';
+      }
 
       if(this.remarks == '' || this.remarks == undefined || this.remarks == null){
         this.remarks = '-';
       }  
-
+    
       if(this.btnType == 'Save'){
         this.insert();
       }
@@ -139,6 +143,7 @@ export class AdddwComponent implements OnInit {
     BankReceiptNo: this.bankReceiptNo,
     COAID: this.subType == 'Deposit' ? this.bankCoaID : this.cashCoaID,
     RefCOAID: this.subType == 'Deposit' ? this.cashCoaID : this.bankCoaID,
+    ProjectID:this.projectID,
     Amount: this.amount,
     UserID:  this.global.getUserID()
     }).subscribe(
@@ -168,14 +173,15 @@ export class AdddwComponent implements OnInit {
         $('.loaderDark').show();
         this.http.post(environment.mainApi+this.global.accountLink+'UpdateDepositWithdrawal',{
           InvoiceNo: this.invoiceNo,
-          InvoiceDate: this.invoiceDate,
-          Type: "JV",
+          InvoiceDate: this.global.dateFormater(this.invoiceDate,'-'),
           SubType: this.subType,
           InvoiceRemarks: this.remarks,
           BankReceiptNo: this.bankReceiptNo,
           COAID: this.subType == 'Deposit' ? this.bankCoaID : this.cashCoaID,
           RefCOAID: this.subType == 'Deposit' ? this.cashCoaID : this.bankCoaID,
+          ProjectID:this.projectID,
           Amount: this.amount,
+          Pincode:pin,
           UserID:  this.global.getUserID()
         }).subscribe(
           (Response:any)=>{

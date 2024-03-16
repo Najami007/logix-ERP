@@ -1,9 +1,10 @@
 <div class="p-4">
 
-    <div >
-        <mat-label style="font-size: 20px;">Balance: <b class="font-digit text-danger" style="font-size: 30px;">{{supplierBalance}}</b></mat-label>
+    <div class="d-flex justify-content-between">
+        <h3 class="text-uppercase">Customer Receipt</h3>
+        <h3  class="text-uppercase" >Balance: <b class="font-digit text-danger" style="font-size: 30px;">{{supplierBalance}}</b></h3>
     </div>
-    <hr>
+     <hr>
 <div class="row">
     <mat-form-field appearance="outline"  class="col-lg-12">
         <mat-label>Invoice Date</mat-label>
@@ -31,7 +32,7 @@
 
     <mat-form-field appearance="outline" class="col-lg-6">
         <mat-label>COA</mat-label>
-        <mat-select [disabled]="coaList.length == 1"  [(ngModel)]="coaID">
+        <mat-select  [(ngModel)]="coaID">
          <mat-option  *ngFor="let item of coaList" [value]="item.coaID">{{item.coaTitle}}</mat-option>
         </mat-select>
     </mat-form-field>

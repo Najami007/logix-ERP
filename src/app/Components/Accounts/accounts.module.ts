@@ -32,6 +32,7 @@ import { TrialBalanceComponent } from './AccountReports/trial-balance/trial-bala
 import { DayTransactionComponent } from './day-transaction/day-transaction.component';
 import { VoucherDetailsComponent } from './voucher/voucher-details/voucher-details.component';
 import { AuthGuard } from 'src/app/auth.guard';
+import { Voucher2Component } from './voucher2/voucher2.component';
 
 
 
@@ -43,7 +44,7 @@ export const accountRountes: Route[] = [
   
     {path:'dashboard', component:DashboardComponent,  canActivate:[AuthGuard]},
     {path:'coa', component:COAComponent,  canActivate:[AuthGuard]},
-    {path:'voucher', component:VoucherComponent,canActivate:[AuthGuard]  },
+    {path:'voucher', component:Voucher2Component,canActivate:[AuthGuard]  },
     {path:'bdgtng', component:BudgettingComponent, canActivate:[AuthGuard] },
     {path:'setting', component:SettingsComponent, canActivate:[AuthGuard] },
     {path:'dtran', component:DayTransactionComponent, canActivate:[AuthGuard] },
@@ -77,6 +78,7 @@ export const accountRountes: Route[] = [
     TrialBalanceComponent,
     DayTransactionComponent,
     VoucherDetailsComponent,
+    Voucher2Component,
   
 
     

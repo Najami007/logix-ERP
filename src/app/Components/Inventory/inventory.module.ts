@@ -72,7 +72,8 @@ import { IncomeComponent } from './DesiAccounts/income/income.component';
 import { AddIncomeComponent } from './DesiAccounts/income/add-income/add-income.component';
 import { AddBankComponent } from './DesiAccounts/add-bank/add-bank.component';
 import { BankDepositAndWithdrawComponent } from './DesiAccounts/bank-deposit-and-withdraw/bank-deposit-and-withdraw.component';
-import { AdddwComponent } from './DesiAccounts/bank-deposit-and-withdraw/adddw/adddw.component'; 
+import { AdddwComponent } from './DesiAccounts/bank-deposit-and-withdraw/adddw/adddw.component';
+import { AddCoaComponent } from './DesiAccounts/add-coa/add-coa.component'; 
 
 
 
@@ -271,6 +272,11 @@ export const inventoryRoutes: Route[] = [
     component: AddBankComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'coa',
+    component: AddCoaComponent,
+    canActivate: [AuthGuard]
+  },
 
 
 
@@ -339,6 +345,7 @@ export const inventoryRoutes: Route[] = [
     AddBankComponent,
     BankDepositAndWithdrawComponent,
     AdddwComponent,
+    AddCoaComponent,
     
    
     

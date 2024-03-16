@@ -1,8 +1,8 @@
 <div class="body container">
 
     <div class="p-2 row justify-content-center">
-        <button type="button" mat-fab color="primary" (click)="add()"><mat-icon>add</mat-icon></button>
-        <mat-form-field appearance="outline" class="col-lg-11">
+        <button type="button" mat-fab color="primary" *ngIf="crudList.c" autofocus (click)="add()"><mat-icon>add</mat-icon></button>
+        <mat-form-field appearance="outline" [ngClass]="crudList.c == false ? 'col-lg-12' : 'col-lg-11' ">
             <mat-label>Search....</mat-label>
             <input matInput #search  />
         </mat-form-field>
@@ -29,8 +29,11 @@
                     <td>{{item.coaTitle}}</td>
                     <td>{{item.amount |number:'1.0-1'}}</td>
                     <td class="cursorPointer">
-                        <mat-icon class="text-success"(click)="edit(item)">edit</mat-icon>
-                        <mat-icon class="text-danger" (click)="delete(item)">delete</mat-icon>
+                        <mat-icon class="text-success" *ngIf="crudList.u && item.approvedStatus == false" (click)="edit(item)">edit</mat-icon>
+                        <mat-icon class="text-primary" *ngIf="crudList.r" (click)="printBill(item)">print</mat-icon>
+                        <mat-icon class="text-success"*ngIf="item.approvedStatus == false && crudList.u"   (click)="approveBill(item)">check</mat-icon>
+                        <mat-icon *ngIf="item.approvedStatus"  aria-label="Approved" class="text-success" >done_all</mat-icon>
+                        <mat-icon class="text-danger" *ngIf="crudList.d && item.approvedStatus == false" (click)="delete(item)">delete</mat-icon>
                         <mat-icon class="text-success" (click)="VoucherDetails(item)">receipt</mat-icon>
                     </td>
 
@@ -40,5 +43,104 @@
     </div>
 
 </div>
+
+
+
+
+   <!-------------------     Invoice Print Section ------------------------->
+
+   <div class="d-none InvociePrint" id="InvociePrint">
+    <div class="text-end ">{{lblVoucherPrintDate |date:'short'}}</div>
+    <div class="mt-2">
+        
+        <!-------------------------    Top Logo Section -------------------->
+        <div class="text-center border-bottom d-flex justify-content-between" *ngFor="let item of companyProfile">
+            <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
+
+            </span>
+            <span class="mt-3">
+                <h3 class="companyName">{{item.companyName}}</h3>
+                <p style="margin-top: -15px;">{{item.companyAddress}}</p>
+                <p style="margin-top: -20px;">{{item.companyMobile}}  {{item.companyPhone}}</p>
+                <p style="margin-top: -20px;">{{item.companyEmail}}</p>
+            </span>
+            <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" [height]="item.logo2Height" [width]="item.logo2Width">
+
+            </span>
+    
+    
+        </div>
+
+
+        <!-------------------------- Headers Area   ----------------------->
+       <div class="d-flex">
+        <div class="row mt-5"  >
+
+            <b class="row">
+            <h6>Invoice No:</h6>
+            <h6>Project:</h6>
+            <h6>Invoice Date:</h6>
+            <h6>Narration:</h6>
+            </b>
+
+        </div>
+        <div class="row mt-5" >
+
+            <p>{{lblInvoiceNo}}</p>
+            <p>{{lblProjectName}}</p>
+            <p>{{lblInvoiceDate | date:'yyyy-MM-dd'}}</p>
+            <p>{{lblRemarks}}</p>
+            
+
+        </div>
+       </div>
+
+       <!-----------------------   Print Table Area --------------------->
+
+       <div>
+        <table class="table table-logix">
+            <thead>
+                
+                <th style="width: 30px;">S#</th>
+                <th >Description</th>
+                <th  >Debit</th>
+                <th  >Credit</th>
+                <th  >Narration</th>
+            
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of lblInvoiceDetails; index as index">
+                    <td>{{index+1}}</td>
+                    <td>{{item.coaTitle}} ({{item.accountCode}})</td>
+                    <td class="text-end">{{item.debit |number}}</td>
+                    <td  class="text-end">{{item.credit |number}}</td>
+                    <td >{{item.detailNarration}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><b>Total</b></td>
+                    <td  class="text-end"><b>{{lblDebitTotal |number}}</b></td>
+                    <td  class="text-end"><b>{{lblCreditTotal |number}}</b></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+       </div>
+
+
+       <div class="d-flex justify-content-between mt-5 pt-5">
+        <h5 *ngIf="lblVoucherType == 'CPV' || lblVoucherType == 'BPV'" class="border-bottom border-dark">Received BY</h5>
+        <h5 class="border-bottom border-dark">Created BY</h5>
+        <h5 class="border-bottom border-dark">Approved BY</h5>
+        <h5 class="border-bottom border-dark">Checked BY</h5>
+       </div>
+
+
+
+    </div>
+</div>
+
 
 
