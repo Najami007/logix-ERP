@@ -104,11 +104,19 @@
                     <td class="text-end fw-bold">{{incDebitTotal |number:'1.0-0'}}</td>
                     <td class="text-end fw-bold">{{incCreditTotal |number:'1.0-0'}}</td>
                 </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    
+                </tr>
                 
                 <tr style="border: 1px double; " class="mt-2 mb-2" >
-                    <td colspan="2" class="fw-bold"> Total Income</td>
+                    <td colspan="2" class="fw-bold text-center"> Total Income</td>
                     
-                    <td class="text-end fw-bold">{{ incCreditTotal - incDebitTotal  |number:'1.0-0'}}</td>
+                    <td class="text-end fw-bold" style="font-size: 20px;">{{ incCreditTotal - incDebitTotal  |number:'1.0-0'}}</td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    
                 </tr>
 
                  <!---------------- Expense SEction ------------------>
@@ -128,11 +136,20 @@
                     <th class="text-end">{{expDebitTotal |number:'1.0-0'}}</th>
                     <th class="text-end">{{expCreditTotal |number:'1.0-0'}}</th>
                 </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    
+                </tr>
                 
                 <tr style="border: 1px double; " class="mt-2 mb-2">
                     <th colspan="2  " > Total Expense</th>
                     
-                    <th colspan="1" class="text-end">{{expDebitTotal - expCreditTotal |number:'1.0-0'}}</th>
+                    <th colspan="1" class="text-end" style="font-size: 20px;">{{expDebitTotal - expCreditTotal |number:'1.0-0'}}</th>
+                </tr>
+
+                <tr>
+                    <td colspan="3"></td>
+                    
                 </tr>
 
 
@@ -142,7 +159,7 @@
                     <th colspan="2" *ngIf="(incCreditTotal - incDebitTotal ) - (expDebitTotal - expCreditTotal) >= 0">NET PROFIT</th>
                     <th colspan="2" *ngIf="(incCreditTotal - incDebitTotal ) - (expDebitTotal - expCreditTotal) < 0">NET LOSS</th>
                     
-                    <th>{{(incCreditTotal - incDebitTotal ) - (expDebitTotal - expCreditTotal) |number :'1.0-0'}}</th>
+                    <th style="font-size: 20px;">{{(incCreditTotal - incDebitTotal ) - (expDebitTotal - expCreditTotal) |number :'1.0-0'}}</th>
                 </tr>
 
 

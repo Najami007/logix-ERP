@@ -50,7 +50,7 @@ export class AddReceiptComponent implements OnInit {
   btnType = 'Save';
   invoiceNo = '';
   invoiceDate = new Date();
-  supplierBalance = 0;
+  customerBalance = 0;
   amount = 0;
   discount:any = 0;
   customerList:any = [];
@@ -64,6 +64,14 @@ export class AddReceiptComponent implements OnInit {
 
   paymentType = '';
 
+
+  getSupplierBalance(){
+    this.http.get(environment.mainApi+this.global.accountLink+'getcussupbalance?reqtype=cus&reqpartyid='+this.partyID).subscribe(
+      (Response:any)=>{
+         this.customerBalance = Response[0].amount;
+      }
+    )
+  }
 
   getSupplier(){
     this.global.getCustomerList().subscribe(

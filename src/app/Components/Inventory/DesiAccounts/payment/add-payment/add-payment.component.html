@@ -2,7 +2,7 @@
 
     <div class="d-flex justify-content-between">
         <h3 class="text-uppercase">Supplier Payment</h3>
-        <h3  class="text-uppercase" >Balance: <b class="font-digit text-danger" style="font-size: 30px;">{{supplierBalance}}</b></h3>
+        <h3  class="text-uppercase" >Balance: <b class="font-digit text-danger" style="font-size: 20px;">{{supplierBalance|number:'1.0-1'}}</b></h3>
     </div>
     <hr>
 <div class="row">
@@ -16,7 +16,7 @@
     
     <mat-form-field appearance="outline" class="col-lg-12">
         <mat-label>Supplier</mat-label>
-        <mat-select id="supplier" [(ngModel)]="partyID">
+        <mat-select id="supplier" [(ngModel)]="partyID" (selectionChange)="getSupplierBalance()">
             <mat-option><ngx-mat-select-search #supSerach [placeholderLabel]="'Search...'"
                 [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
             <mat-option *ngFor="let item of supplierList |filter:supSerach.value" [value]="item.partyID">{{item.partyName}}  ({{item.cityName}})</mat-option>

@@ -27,7 +27,6 @@ export class AddPaymentComponent {
     }, 500);
 
     if(this.editData){
-      console.log(this.editData);
       this.invoiceNo = this.editData.invoiceNo;
       this.invoiceDate = this.editData.invoiceDate;
       this.partyID = this.editData.partyID;
@@ -62,6 +61,14 @@ export class AddPaymentComponent {
 
   paymentType = '';
 
+
+  getSupplierBalance(){
+    this.http.get(environment.mainApi+this.global.accountLink+'getcussupbalance?reqtype=sup&reqpartyid='+this.partyID).subscribe(
+      (Response:any)=>{
+        this.supplierBalance = Response[0].amount;
+      }
+    )
+  }
 
   getSupplier(){
     this.global.getSupplierList().subscribe(

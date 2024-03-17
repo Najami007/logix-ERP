@@ -6,22 +6,14 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-invreportcatwise',
   templateUrl: './invreportcatwise.component.html',
   styleUrls: ['./invreportcatwise.component.scss']
 })
-export class InvreportcatwiseComponent implements OnInit {
-
-
-
-
-
-
-
-
-  
+export class InvreportcatwiseComponent implements OnInit {  
 
   page:number = 1;
   count: number = 0;
@@ -108,7 +100,7 @@ export class InvreportcatwiseComponent implements OnInit {
   typeFlag = false;
   
 
-
+  minusOnly = false;
   reportType = 'full';
   Title = 'Full';
 
@@ -296,8 +288,14 @@ export class InvreportcatwiseComponent implements OnInit {
       // alert(this.reportType+idType);
         this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryRpt?rptType='+this.reportType+idType).subscribe(
           (Response:any)=>{
+
+            if(this.minusOnly == false){
+              this.inventoryList = Response;
+            }else{
+              this.inventoryList = Response.filter((e:any)=> (e.qtyIn - e.qtyOut) < 0 );
+            }
           
-            this.inventoryList = Response;
+            // this.inventoryList = Response;
            
             this.app.stopLoaderDark();
             this.costTotal = 0;
@@ -306,7 +304,7 @@ export class InvreportcatwiseComponent implements OnInit {
             this.balanceQtyTotal = 0;
 
          if(Response != null)
-         Response.forEach((e:any) => {
+         this.inventoryList.forEach((e:any) => {
           this.costTotal += e.costPrice * (e.qtyIn - e.qtyOut);
           this.avgCostTotal += e.avgCostPrice * (e.qtyIn - e.qtyOut);
           this.saleTotal += e.salePrice * (e.qtyIn - e.qtyOut);
@@ -334,20 +332,17 @@ export class InvreportcatwiseComponent implements OnInit {
 
     
     if(this.reportType == 'full'){
+     setTimeout(() => {
+      $('#credential').hide();
+      $('.modal-backdrop').remove();
+     }, 500);
       this.catFlag = false;
       this.subCatFlag = false;
       this.brandFlag = false;
       this.locFlag = false;
       this.typeFlag = false
       this.Title = 'Full'
-      document.location.reload();
-    //  setTimeout(() => {
-    //   $('#credential').hide();
-    //   $('.modal').hide();
-    //   $('body').removeClass('modal-open');
-    //   $('.modal-backdrop').hide();
-    // //  }, 500);
-    //  this.getReport();
+      this.getReport(); 
     }
 
     

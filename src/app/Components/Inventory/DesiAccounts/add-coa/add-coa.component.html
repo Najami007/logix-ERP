@@ -6,7 +6,7 @@
 
         <mat-form-field appearance="outline" class="col-lg-12"> 
             <mat-label >Select Type </mat-label>
-            <mat-select [(ngModel)]="CoaTypeID"    Data-live-Search="true">
+            <mat-select [(ngModel)]="CoaTypeID" [disabled]="btnType == 'Update'"    Data-live-Search="true">
                 <mat-option [disabled]="item.coaTypeID !== 2 && item.coaTypeID !== 3" *ngFor="let item of coaTypesList "
                     value="{{item.coaTypeID}}">{{item.coaTypeTitle}}</mat-option>
 
@@ -40,7 +40,7 @@
 
         <mat-form-field class="col-lg-3" appearance="outline">
             <mat-label>Type</mat-label>
-            <mat-select value="EXP" #type (selectionChange)="getSavedData(type.value)">
+            <mat-select  [(ngModel)]="FilterType" #type (selectionChange)="getSavedData(type.value)">
                 <mat-option *ngFor="let item of searchType" [value]="item.value">{{item.title}}</mat-option>
             </mat-select>
         </mat-form-field>

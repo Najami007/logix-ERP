@@ -30,7 +30,7 @@ export class AddExpenseComponent implements OnInit {
     this.getCoaList();
 
     if(this.editData){
-      console.log(this.editData);
+     
       this.invoiceNo = this.editData.invoiceNo;
       this.invoiceDate = this.editData.invoiceDate;
       this.partyID = this.editData.partyID;
@@ -80,7 +80,7 @@ export class AddExpenseComponent implements OnInit {
     this.global.getCashBankCoa('EXP')
       .subscribe(
       (Response: any) => {
-        // console.log(Response);
+  
         this.coaList = Response;
       },
       (Error) => {

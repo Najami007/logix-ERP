@@ -51,18 +51,17 @@ export class AddCoaComponent implements OnInit{
 
 
   notesList:any = [];
-  coaList:any = [];
   coaTypesList:any = [];
   
   savedDataList:any = [];
-  CoaTitle:any = '';
   CoaTypeID:any = 0;
   level1 = '';
   level2 = '';
   level3 = '';
   level4 = '';
   TransactionAllowed = true;
-  NoteID:any =[];
+  NoteID = 0;
+  FilterType = 'EXP';
 
   searchType:any = [{value:'EXP',title:'Expense'},{value:'INC',title:'Income'},]
 ///////////////////////////// will get the notes list
@@ -78,20 +77,7 @@ getNotes(){
 }
 
 
-  //////////////////////////////////////////////////////////
-  GetChartOfAccount(){
-    this.http.get(environment.mainApi+this.globaldata.accountLink+'GetChartOfAccount').subscribe(
-      {
-        next:value=>{
-    
-          this.coaList = value;
-        },
-        error:error=>{
-          console.log(error);
-        }
-      }
-    )
-  }
+
 
 
   
@@ -101,13 +87,10 @@ getNotes(){
     this.http.get(environment.mainApi+this.globaldata.accountLink+'getcoatype').subscribe(
       {
         next:value=>{
-          // console.log(value);
           this.coaTypesList = value;
-         
-          
-        },
+         },
         error:error=>{
-          console.log(error);
+         
         }
       }
     )
@@ -119,7 +102,6 @@ getNotes(){
     this.globaldata.getCashBankCoa(type)
       .subscribe(
       (Response: any) => {
-        // console.log(Response);
         this.savedDataList = Response;
       },
       (Error) => {
@@ -132,13 +114,21 @@ getNotes(){
 
 
   save(){
-    if(this.coaTitle == '' || this.coaTitle == undefined){
-      this.msg.WarnNotify('Enter Bank Title')
+    if(this.btnType == 'Save' && (this.CoaTypeID == '' || this.CoaTypeID == undefined || this.CoaTypeID == 0)){
+      this.msg.WarnNotify('Select COA Type')
+    }else if(this.coaTitle == '' || this.coaTitle == undefined){
+      this.msg.WarnNotify('Enter COA Title')
     }else{
 
       if(this.description == '' || this.description == undefined){
         this.description = '-';
       }
+
+      if(this.CoaTypeID == 2 ){this.globaldata.getCashBankCoa('EXP').subscribe((Response: any) => {this.level1 = Response.length+1;})}
+      
+
+      if(this.CoaTypeID == 3 ){this.globaldata.getCashBankCoa('INC').subscribe((Response: any) => {this.level1 = Response.length+1;})}
+
 
       if(this.btnType == 'Save'){
         this.insert();
@@ -155,7 +145,7 @@ getNotes(){
   insert(){
     this.app.startLoaderDark();
     this.http.post(environment.mainApi+this.globaldata.accountLink+'InsertChartOfAccount',{
-    CoaTitle: this.CoaTitle,
+    CoaTitle: this.coaTitle,
     CoaTypeID: this.CoaTypeID,
     Level1: this.level1.toString(),
     Level2: '',
@@ -169,10 +159,10 @@ getNotes(){
   
     }).subscribe(
       (Response:any)=>{
-        // console.log(this.TransactionAllowed);
-        if(Response.msg == "Data Saved Successfully"){
+          if(Response.msg == "Data Saved Successfully"){
           this.msg.SuccessNotify(Response.msg);
-          this.GetChartOfAccount();
+        
+          this.getSavedData(this.FilterType);
           this.reset();
           this.app.stopLoaderDark();
         }else{
@@ -189,22 +179,24 @@ getNotes(){
     this.globaldata.openPinCode().subscribe(pin=>{
       if(pin != ''){
         
-    
+        this.app.startLoaderDark();
         this.http.post(environment.mainApi+this.globaldata.accountLink+'UpdateChartofAccount',{
           CoaID: this.coaID,
           CoaTitle: this.coaTitle,
-          NoteID:0,
+          NoteID:this.NoteID,
           pinCode:pin,
           UserID: this.globaldata.getUserID()
         }).subscribe(
           (Response:any)=>{
             if(Response.msg == 'Data Updated Successfully'){
               this.msg.SuccessNotify(Response.msg);
-          
-    
+           
+              this.getSavedData(this.FilterType);
+              this.reset();
+              this.app.stopLoaderDark();
             }else{
               this.msg.WarnNotify(Response.msg);
-             
+              this.app.stopLoaderDark();
             }
           }
         )
@@ -217,6 +209,12 @@ getNotes(){
   reset(){
     this.coaTitle = '';
     this.coaID = 0 ;
+    this.NoteID = 0;
+    this.level1 = '';
+    this.level2 = '';
+    this.level3 = '';
+    this.level4 = '';
+    this.CoaTypeID = 0;
     this.description = '';
     this.btnType = 'Save';
 
@@ -225,6 +223,8 @@ getNotes(){
 
   edit(row:any){
     this.coaID  = row.coaID;
+    this.NoteID = row.noteID;
+    this.CoaTypeID = row.coaTypeID;
     this.coaTitle = row.coaTitle;
     this.btnType  = 'Update';
   }
@@ -235,8 +235,8 @@ delete(row:any){
   this.globaldata.openPinCode().subscribe(pin=>{
 if(pin != ''){
 
-      //////on confirm button mainApi the api will run
-      this.http.post(environment.mainApi+this.globaldata.accountLink+'DeleteChartOfAccount',{
+      this.app.startLoaderDark();
+       this.http.post(environment.mainApi+this.globaldata.accountLink+'DeleteChartOfAccount',{
         CoaID: row.coaID,
         PinCode:pin,
         AccountCode:row.accountCode,
@@ -245,13 +245,15 @@ if(pin != ''){
             (Response:any)=>{
               if(Response.msg == "Data Deleted Successfully"){
                 this.msg.SuccessNotify(Response.msg);
-   
+                this.getSavedData(this.FilterType);
+
               }else{
                 this.msg.WarnNotify(Response.msg);
               }
+              this.app.stopLoaderDark();
             },
             (error:any)=>{
-              console.log(error);
+             this.app.stopLoaderDark();
             }
           )
   

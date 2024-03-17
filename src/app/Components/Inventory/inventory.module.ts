@@ -73,7 +73,10 @@ import { AddIncomeComponent } from './DesiAccounts/income/add-income/add-income.
 import { AddBankComponent } from './DesiAccounts/add-bank/add-bank.component';
 import { BankDepositAndWithdrawComponent } from './DesiAccounts/bank-deposit-and-withdraw/bank-deposit-and-withdraw.component';
 import { AdddwComponent } from './DesiAccounts/bank-deposit-and-withdraw/adddw/adddw.component';
-import { AddCoaComponent } from './DesiAccounts/add-coa/add-coa.component'; 
+import { AddCoaComponent } from './DesiAccounts/add-coa/add-coa.component';
+import { PriceCheckerComponent } from './price-checker/price-checker.component';
+import { OpeningCashComponent } from './DesiAccounts/opening-cash/opening-cash.component';
+import { ProfitWithdrawalComponent } from './DesiAccounts/profit-withdrawal/profit-withdrawal.component'; 
 
 
 
@@ -277,6 +280,11 @@ export const inventoryRoutes: Route[] = [
     component: AddCoaComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'pckr',
+    component: PriceCheckerComponent,
+    canActivate: [AuthGuard]
+  },  
 
 
 
@@ -346,6 +354,9 @@ export const inventoryRoutes: Route[] = [
     BankDepositAndWithdrawComponent,
     AdddwComponent,
     AddCoaComponent,
+    PriceCheckerComponent,
+    OpeningCashComponent,
+    ProfitWithdrawalComponent,
     
    
     

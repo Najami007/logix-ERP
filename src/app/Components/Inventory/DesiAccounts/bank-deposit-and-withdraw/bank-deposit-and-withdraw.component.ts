@@ -184,7 +184,7 @@ export class BankDepositAndWithdrawComponent {
     
     this.http.get(environment.mainApi+this.globaldata.accountLink+'GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
       (Response:any)=>{
-        // console.log(Response);
+       
         this.lblInvoiceDetails = Response;
         if(Response != ''){
          
@@ -195,7 +195,6 @@ export class BankDepositAndWithdrawComponent {
         }
       },
       (error:any)=>{
-        console.log(error);
         this.msg.WarnNotify('Error Occured While Printing');
       }
     )
@@ -218,7 +217,7 @@ export class BankDepositAndWithdrawComponent {
             UserID: this.globaldata.getUserID(),
             }).subscribe(
               (Response:any)=>{
-                // console.log(Response.msg);
+                
                 if(Response.msg == 'Voucher Approved Successfully'){
                   this.msg.SuccessNotify(Response.msg);
                   this.getSavedData();

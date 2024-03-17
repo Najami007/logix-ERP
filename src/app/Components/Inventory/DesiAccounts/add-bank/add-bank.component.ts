@@ -46,6 +46,7 @@ export class AddBankComponent implements OnInit{
   coaID:number = 0;
   btnType:any = 'Save';
   description:any;
+  noteID:any = 0;
 
   bankList:any = [];
 
@@ -115,34 +116,29 @@ export class AddBankComponent implements OnInit{
   update(){
 
     this.globaldata.openPinCode().subscribe(pin=>{
-
-     if(pin != ''){
-
-      
-      this.app.startLoaderDark();
-      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'updateBank',{
-        coaID:this.coaID,  
-        CoaTitle: this.coaTitle,
-        PinCode:pin,
-        UserID: this.globaldata.getUserID()
-      }).subscribe(
-        (Response:any)=>{
-          if(Response.msg == 'Data Updated Successfully'){
-            this.msg.SuccessNotify(Response.msg);
-            this.getBankList();
-            this.reset();
-            this.app.stopLoaderDark();
-  
-          }else{
-            this.msg.WarnNotify(Response.msg);
-            this.app.stopLoaderDark();
+      if(pin != ''){
+        
+        this.app.startLoaderDark();
+        this.http.post(environment.mainApi+this.globaldata.accountLink+'UpdateChartofAccount',{
+          CoaID: this.coaID,
+          CoaTitle: this.coaTitle,
+          NoteID:this.noteID,
+          pinCode:pin,
+          UserID: this.globaldata.getUserID()
+        }).subscribe(
+          (Response:any)=>{
+            if(Response.msg == 'Data Updated Successfully'){
+              this.msg.SuccessNotify(Response.msg);
+              this.getBankList();
+              this.reset();
+              this.app.stopLoaderDark();
+            }else{
+              this.msg.WarnNotify(Response.msg);
+              this.app.stopLoaderDark();
+            }
           }
-        },
-        (error:any)=>{
-          this.app.stopLoaderDark();
-        }
-      )
-     }
+        )
+      }
     })
    
   }
@@ -160,6 +156,7 @@ export class AddBankComponent implements OnInit{
 
   edit(row:any){
     this.coaID  = row.coaID;
+    this.noteID = row.noteID;
     this.coaTitle = row.coaTitle;
     this.btnType  = 'Update';
   }
@@ -168,9 +165,9 @@ export class AddBankComponent implements OnInit{
 ///////////////////////////////////////////////////////////////////////////////
 delete(row:any){
   this.globaldata.openPinCode().subscribe(pin=>{
-if(pin != ''){
+  if(pin != ''){
 
-      //////on confirm button mainApi the api will run
+    this.app.startLoaderDark();
       this.http.post(environment.mainApi+this.globaldata.accountLink+'DeleteChartOfAccount',{
         CoaID: row.coaID,
         PinCode:pin,
@@ -184,9 +181,10 @@ if(pin != ''){
               }else{
                 this.msg.WarnNotify(Response.msg);
               }
+              this.app.stopLoaderDark();
             },
             (error:any)=>{
-              console.log(error);
+              this.app.stopLoaderDark();
             }
           )
   

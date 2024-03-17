@@ -76,7 +76,7 @@ export class AddIncomeComponent  implements OnInit {
     this.global.getCashBankCoa('INC')
       .subscribe(
       (Response: any) => {
-        // console.log(Response);
+     
         this.coaList = Response;
       },
       (Error) => {

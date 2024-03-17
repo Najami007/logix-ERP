@@ -178,7 +178,7 @@ export class ReceiptComponent {
     
     this.http.get(environment.mainApi+this.global.accountLink+'GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
       (Response:any)=>{
-        // console.log(Response);
+        
         this.lblInvoiceDetails = Response;
         if(Response != ''){
          
@@ -189,7 +189,7 @@ export class ReceiptComponent {
         }
       },
       (error:any)=>{
-        console.log(error);
+      
         this.msg.WarnNotify('Error Occured While Printing');
       }
     )
@@ -209,7 +209,7 @@ export class ReceiptComponent {
             UserID: this.global.getUserID(),
             }).subscribe(
               (Response:any)=>{
-                // console.log(Response.msg);
+                
                 if(Response.msg == 'Voucher Approved Successfully'){
                   this.msg.SuccessNotify(Response.msg);
                   this.getReceipts();
