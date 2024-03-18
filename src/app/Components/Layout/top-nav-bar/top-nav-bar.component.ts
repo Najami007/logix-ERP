@@ -93,6 +93,21 @@ export class TopNavBarComponent implements OnInit{
   }
 
   
+  hideFlag = true;
+
+  hideUnhide(){
+   this.hideFlag != this.hideFlag;
+   if(this.hideFlag == true){
+    $('#menubar').fadeOut(500);
+    // $('#menuBar2').fadeOut(500);
+   }
+
+   if(this.hideFlag == false){
+    $('#menubar').show();
+    // $('#menuBar2').show();
+   }
+
+  }
  
     
    

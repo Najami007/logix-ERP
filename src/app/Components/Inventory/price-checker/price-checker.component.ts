@@ -36,7 +36,10 @@ export class PriceCheckerComponent implements OnInit {
 
   }
   ngOnInit(): void {
-   this.global.setHeaderTitle('Price Checker')
+   this.global.setHeaderTitle('Price Checker');
+   setTimeout(() => {
+    $('#barcode').trigger('focus');
+   }, 500);
   }
 
   
@@ -53,8 +56,11 @@ export class PriceCheckerComponent implements OnInit {
         (Response:any)=>{
           this.productName = Response[0].productTitle;
           this.productPrice = Response[0].salePrice;
+          this.barcode = '';
         }
       )
+
+      this.barcode = '';
     }
     }
   

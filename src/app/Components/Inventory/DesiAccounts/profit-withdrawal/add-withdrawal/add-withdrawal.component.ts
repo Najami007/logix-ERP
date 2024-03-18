@@ -6,22 +6,21 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { environment } from 'src/environments/environment.development';
 
 @Component({
-  selector: 'app-add-payment',
-  templateUrl: './add-payment.component.html',
-  styleUrls: ['./add-payment.component.scss']
+  selector: 'app-add-withdrawal',
+  templateUrl: './add-withdrawal.component.html',
+  styleUrls: ['./add-withdrawal.component.scss']
 })
-export class AddPaymentComponent {
+export class AddWithdrawalComponent {
 
   constructor(
     private http:HttpClient,
-    private dialogRef: MatDialogRef<AddPaymentComponent>,
+    private dialogRef: MatDialogRef<AddWithdrawalComponent>,
     public global:GlobalDataModule,
     private msg:NotificationService,
     @Inject(MAT_DIALOG_DATA) public editData : any,
   ){}
 
   ngOnInit(): void {
-    this.getSupplier();
     setTimeout(() => {
       $('#supplier').trigger('focus');
     }, 500);
@@ -29,7 +28,6 @@ export class AddPaymentComponent {
     if(this.editData){
       this.invoiceNo = this.editData.invoiceNo;
       this.invoiceDate = this.editData.invoiceDate;
-      this.partyID = this.editData.partyID;
       this.paymentType = this.editData.type;
       this.coaID = this.editData.coaid;
       this.amount = this.editData.amount;
@@ -55,29 +53,14 @@ export class AddPaymentComponent {
   coaList:any = [];
   coaID = 0;
   remarks = '';
-  partyID = 0;
   projectID = 0;
   paymentTypeList = [{value:'CPV',title:'Cash'},{value:'BPV',title:'Bank'},];
 
   paymentType = '';
 
 
-  getSupplierBalance(){
-    this.http.get(environment.mainApi+this.global.accountLink+'getcussupbalance?reqtype=sup&reqpartyid='+this.partyID).subscribe(
-      (Response:any)=>{
-        this.supplierBalance = Response[0].amount;
-      }
-    )
-  }
-
-  getSupplier(){
-    this.global.getSupplierList().subscribe(
-      (Response)=>{
-        this.supplierList = Response;
-      }
-    )
-  }
-
+ 
+  
 
   ////////////////////////////////////////////
 
@@ -101,14 +84,12 @@ export class AddPaymentComponent {
     //////////////////////////////////////////
 
     Save(){
-      if(this.partyID == 0 || this.partyID == undefined){
-        this.msg.WarnNotify('Select Supplier')
-      }else if(this.paymentType == '' || this.paymentType == undefined){
+      if(this.paymentType == '' || this.paymentType == undefined){
         this.msg.WarnNotify('Select Payment Type')
       }else if(this.coaID == 0 || this.coaID == undefined){
         this.msg.WarnNotify('Select COA')
       }else if(this.amount == 0 || this.amount == undefined || this.amount == null){
-        this.msg.WarnNotify('Enter Amount')
+          this.msg.WarnNotify('Enter Amount')
       }else{
 
         if(this.bankReceiptNo == '' || this.bankReceiptNo == null || this.bankReceiptNo == undefined){
@@ -138,16 +119,14 @@ export class AddPaymentComponent {
 
     insert(){
       $('.loaderDark').show();
-      this.http.post(environment.mainApi+this.global.accountLink+'InsertPayment',{
+      this.http.post(environment.mainApi+this.global.accountLink+'InsertProfitWithdrawal',{
         InvoiceDate: this.invoiceDate,
-        PartyID: this.partyID, 
         Type: this.paymentType,
         InvoiceRemarks: this.remarks,
         BankReceiptNo: this.bankReceiptNo,
         COAID: this.coaID,
         Amount: this.amount,
         ProjectID:this.projectID,
-        Discount: this.discount,
         UserID: this.global.getUserID()
       }).subscribe(
         (Response:any)=>{
@@ -174,15 +153,13 @@ export class AddPaymentComponent {
       this.global.openPinCode().subscribe(pin=>{
         if(pin != ''){
           $('.loaderDark').show();
-          this.http.post(environment.mainApi+this.global.accountLink+'UpdatePayment',{
+          this.http.post(environment.mainApi+this.global.accountLink+'UpdateProfitWithdrawal',{
             InvoiceNo:this.invoiceNo,
             InvoiceDate: this.invoiceDate,
-            PartyID: this.partyID, 
             InvoiceRemarks: this.remarks,
             BankReceiptNo: this.bankReceiptNo,
             COAID: this.coaID,
             Amount: this.amount,
-            Discount: this.discount,
             ProjectID:this.projectID,
             Pincode:pin,
             UserID: this.global.getUserID()
@@ -216,7 +193,6 @@ export class AddPaymentComponent {
   reset(){
     this.invoiceNo = '';
     this.invoiceDate = new Date();
-    this.partyID = 0;
     this.paymentType = '';
     this.coaID = 0;
     this.amount = 0;
@@ -228,3 +204,4 @@ export class AddPaymentComponent {
 
 
 }
+

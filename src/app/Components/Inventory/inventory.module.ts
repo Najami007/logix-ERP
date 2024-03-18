@@ -76,7 +76,9 @@ import { AdddwComponent } from './DesiAccounts/bank-deposit-and-withdraw/adddw/a
 import { AddCoaComponent } from './DesiAccounts/add-coa/add-coa.component';
 import { PriceCheckerComponent } from './price-checker/price-checker.component';
 import { OpeningCashComponent } from './DesiAccounts/opening-cash/opening-cash.component';
-import { ProfitWithdrawalComponent } from './DesiAccounts/profit-withdrawal/profit-withdrawal.component'; 
+import { ProfitWithdrawalComponent } from './DesiAccounts/profit-withdrawal/profit-withdrawal.component';
+import { AddWithdrawalComponent } from './DesiAccounts/profit-withdrawal/add-withdrawal/add-withdrawal.component';
+import { AddOpeningComponent } from './DesiAccounts/opening-cash/add-opening/add-opening.component'; 
 
 
 
@@ -284,7 +286,17 @@ export const inventoryRoutes: Route[] = [
     path: 'pckr',
     component: PriceCheckerComponent,
     canActivate: [AuthGuard]
+  }, 
+  {
+    path: 'pftwd',
+    component: ProfitWithdrawalComponent,
+    canActivate: [AuthGuard]
   },  
+  {
+    path: 'opc',
+    component: OpeningCashComponent,
+    canActivate: [AuthGuard]
+  },    
 
 
 
@@ -357,6 +369,8 @@ export const inventoryRoutes: Route[] = [
     PriceCheckerComponent,
     OpeningCashComponent,
     ProfitWithdrawalComponent,
+    AddWithdrawalComponent,
+    AddOpeningComponent,
     
    
     
