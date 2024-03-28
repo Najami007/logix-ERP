@@ -19,6 +19,24 @@ export class ReceiptComponent {
 
 
   
+  page:number = 1;
+  count: number = 0;
+ 
+  tableSize: number = 0;
+  tableSizes : any = [];
+
+  onTableDataChange(event:any){
+
+    this.page = event;
+    this.getReceipts();
+  }
+
+  onTableSizeChange(event:any):void{
+    this.tableSize = event.target.value;
+    this.page =1;
+    this.getReceipts();
+  }
+
 
   companyProfile:any = [];
   crudList:any = {c:true,r:true,u:true,d:true};
@@ -45,6 +63,10 @@ export class ReceiptComponent {
   ngOnInit(): void {
     this.global.setHeaderTitle('Receipt');
     this.getReceipts();
+
+    this.tableSize = this.global.paginationDefaultTalbeSize;
+    this.tableSizes = this.global.paginationTableSizes;
+   
 
    
   }

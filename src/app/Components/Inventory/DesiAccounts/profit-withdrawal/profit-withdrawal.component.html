@@ -2,7 +2,7 @@
 
     <div class="p-2 row justify-content-center">
         <button type="button" mat-fab color="primary" *ngIf="crudList.c" autofocus (click)="addPayment()"><mat-icon>add</mat-icon></button>
-        <mat-form-field appearance="outline" [ngClass]="crudList.c == false ? 'col-lg-12' : 'col-lg-11' ">
+        <mat-form-field appearance="outline" [ngClass]="crudList.c == false ? 'col-sm-12' : 'col-sm-11' ">
             <mat-label>Search....</mat-label>
             <input matInput #search  />
         </mat-form-field>
@@ -21,7 +21,11 @@
                 </tr>
             </thead>
             <tbody >
-                <tr *ngFor="let item of savedDataList |filter:search.value index as index">
+                <tr *ngFor="let item of savedDataList |filter:search.value |paginate:{
+                    itemsPerPage : tableSize,
+                    currentPage : page,
+                    totalItems :    count,
+                }  ; index as index">
                     <td >{{index +1}}</td>
                     <td >{{item.invoiceDate | date:'dd-MM-YYYY'}}</td>
                     <td >{{item.invoiceNo }}</td>
@@ -38,6 +42,21 @@
                     </tr>
             </tbody>
         </table>
+        <div class="d-flex" >
+            <!-- <mat-hint class="me-1 text-secondary">Total Rows : ({{SavedVoucherData.length || 0}})    </mat-hint> -->
+            <pagination-controls
+            previousLabel="Prev"
+            nextLabel="Next"
+            (pageChange)="onTableDataChange($event)"
+            ></pagination-controls>
+            
+
+            <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+            <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);" (change)="onTableSizeChange($event)">
+                <option *ngFor=" let item of tableSizes">{{item}}</option>
+            </select>
+            
+        </div>
     </div>
 
 </div>

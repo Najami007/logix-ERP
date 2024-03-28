@@ -19,6 +19,27 @@ import { VoucherDetailsComponent } from 'src/app/Components/Accounts/voucher/vou
 })
 export class BankDepositAndWithdrawComponent {
 
+
+
+  
+  page:number = 1;
+  count: number = 0;
+ 
+  tableSize: number = 0;
+  tableSizes : any = [];
+
+  onTableDataChange(event:any){
+
+    this.page = event;
+    this.getSavedData();
+  }
+
+  onTableSizeChange(event:any):void{
+    this.tableSize = event.target.value;
+    this.page =1;
+    this.getSavedData();
+  }
+
   companyProfile:any = [];
   crudList:any = {c:true,r:true,u:true,d:true};
 
@@ -43,6 +64,9 @@ export class BankDepositAndWithdrawComponent {
   ngOnInit(): void {
     this.globaldata.setHeaderTitle('Bank Deposit / Withdraw');
     this.getSavedData();
+
+    this.tableSize = this.globaldata.paginationDefaultTalbeSize;
+    this.tableSizes = this.globaldata.paginationTableSizes;
    
   }
 

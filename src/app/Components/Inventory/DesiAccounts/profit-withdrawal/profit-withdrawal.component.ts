@@ -17,6 +17,26 @@ import { AddWithdrawalComponent } from './add-withdrawal/add-withdrawal.componen
 })
 export class ProfitWithdrawalComponent {
 
+  
+  page:number = 1;
+  count: number = 0;
+ 
+  tableSize: number = 0;
+  tableSizes : any = [];
+
+  onTableDataChange(event:any){
+
+    this.page = event;
+    this.getSavedData();
+  }
+
+  onTableSizeChange(event:any):void{
+    this.tableSize = event.target.value;
+    this.page =1;
+    this.getSavedData();
+  }
+
+
 
   companyProfile:any = [];
   crudList:any = {c:true,r:true,u:true,d:true};
@@ -43,6 +63,9 @@ export class ProfitWithdrawalComponent {
   ngOnInit(): void {
     this.globaldata.setHeaderTitle('Profit Withdrawal');
     this.getSavedData();
+    this.tableSize = this.globaldata.paginationDefaultTalbeSize;
+    this.tableSizes = this.globaldata.paginationTableSizes;
+   
 
    
   }

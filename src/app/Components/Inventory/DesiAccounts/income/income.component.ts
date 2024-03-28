@@ -17,6 +17,25 @@ import { VoucherDetailsComponent } from 'src/app/Components/Accounts/voucher/vou
   styleUrls: ['./income.component.scss']
 })
 export class IncomeComponent {
+  
+  page:number = 1;
+  count: number = 0;
+ 
+  tableSize: number = 0;
+  tableSizes : any = [];
+
+  onTableDataChange(event:any){
+
+    this.page = event;
+    this.getSavedData();
+  }
+
+  onTableSizeChange(event:any):void{
+    this.tableSize = event.target.value;
+    this.page =1;
+    this.getSavedData();
+  }
+
 
   companyProfile:any = [];
   crudList:any = {c:true,r:true,u:true,d:true};
@@ -43,6 +62,9 @@ export class IncomeComponent {
   ngOnInit(): void {
     this.globaldata.setHeaderTitle('Income');
     this.getSavedData();
+    this.tableSize = this.globaldata.paginationDefaultTalbeSize;
+    this.tableSizes = this.globaldata.paginationTableSizes;
+   
    
   }
 
