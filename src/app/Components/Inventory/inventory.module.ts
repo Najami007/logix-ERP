@@ -78,7 +78,9 @@ import { PriceCheckerComponent } from './price-checker/price-checker.component';
 import { OpeningCashComponent } from './DesiAccounts/opening-cash/opening-cash.component';
 import { ProfitWithdrawalComponent } from './DesiAccounts/profit-withdrawal/profit-withdrawal.component';
 import { AddWithdrawalComponent } from './DesiAccounts/profit-withdrawal/add-withdrawal/add-withdrawal.component';
-import { AddOpeningComponent } from './DesiAccounts/opening-cash/add-opening/add-opening.component'; 
+import { AddOpeningComponent } from './DesiAccounts/opening-cash/add-opening/add-opening.component';
+import { WholeSaleComponent } from './whole-sale/whole-sale.component';
+import { WhsSavedBillComponent } from './whole-sale/whs-saved-bill/whs-saved-bill.component'; 
 
 
 
@@ -297,6 +299,12 @@ export const inventoryRoutes: Route[] = [
     component: OpeningCashComponent,
     canActivate: [AuthGuard]
   },    
+  {
+    path: 'whsl',
+    component: WholeSaleComponent,
+    canActivate: [AuthGuard]
+  },    
+
 
 
 
@@ -371,6 +379,8 @@ export const inventoryRoutes: Route[] = [
     ProfitWithdrawalComponent,
     AddWithdrawalComponent,
     AddOpeningComponent,
+    WholeSaleComponent,
+    WhsSavedBillComponent,
     
    
     
