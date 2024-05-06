@@ -34,6 +34,9 @@ import { HeaderComponent } from './Components/Layout/header/header.component';
 import { NumberInputComponent } from './Components/Common/number-input/number-input.component';
 import { SideNavbarComponent } from './Components/Layout/side-navbar/side-navbar.component';
 import { ConfirmationAlertComponent } from './Components/Common/confirmation-alert/confirmation-alert.component';
+import { SharedServicesDataModule } from './Shared/helper/shared-services-data/shared-services-data.module';
+import { SharedFieldValidationModule } from './Shared/helper/shared-field-validation/shared-field-validation.module';
+import { DatePipe } from '@angular/common';
 
 
 
@@ -100,7 +103,10 @@ import { ConfirmationAlertComponent } from './Components/Common/confirmation-ale
     NgxMatSelectSearchModule,
     MaterialModule,
     NgxMaterialTimepickerModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    SharedServicesDataModule,
+    SharedFieldValidationModule,
+ 
    
     
   

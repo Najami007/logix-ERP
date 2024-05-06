@@ -46,6 +46,7 @@ import { RecipeComparisonComponent } from './restaurantReports/recipe-list/recip
 
 
 
+
 export const restCore: Route[] = [
 
   {path:'sale', component:SaleComponent, canActivate:[AuthGuard] },
@@ -120,10 +121,11 @@ export const restCore: Route[] = [
     ChartModule,
     NgxMatSelectSearchModule,
     TextMaskModule,
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+
   ],
   exports: [
-    RouterModule
+    RouterModule,
   ]
 })
 export class RestaurantCoreModule { }

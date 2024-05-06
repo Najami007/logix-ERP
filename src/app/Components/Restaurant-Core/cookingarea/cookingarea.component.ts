@@ -9,6 +9,8 @@ import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { AddAreaComponent } from './add-area/add-area.component';
 import { Router } from '@angular/router';
+import { SharedServicesDataModule } from 'src/app/Shared/helper/shared-services-data/shared-services-data.module';
+
 
 @Component({
   selector: 'app-cookingarea',
@@ -24,7 +26,8 @@ export class CookingareaComponent implements OnInit {
     private global:GlobalDataModule,
     private app:AppComponent,
     private dialogue:MatDialog,
-    private route:Router
+    private route:Router,
+    private dataService:SharedServicesDataModule,
   ){
     this.global.getMenuList().subscribe((data)=>{
       this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
@@ -48,12 +51,20 @@ export class CookingareaComponent implements OnInit {
   menuSearch:any;
 
   getCookingArea(){
-    this.http.get(environment.mainApi+this.global.restaurentLink+'GetCookingAria').subscribe(
+    // this.http.get(environment.mainApi+this.global.restaurentLink+'GetCookingAria').subscribe(
+    //   (Response:any)=>{
+    //     this.cookingAreaList = Response;
+        
+    //   }
+    // )
+
+    this.dataService.getHttp(this.global.restaurentLink+'GetCookingAria','').subscribe(
       (Response:any)=>{
         this.cookingAreaList = Response;
-        
       }
     )
+
+
   }
 
 
@@ -88,7 +99,7 @@ export class CookingareaComponent implements OnInit {
     this.global.openPinCode().subscribe(pin=>{
       if(pin != ''){
         this.app.startLoaderDark();
-        this.http.post(environment.mainApi+this.global.restaurentLink+'deleteCookingAria',{
+        this.dataService.deleteHttp(this.global.restaurentLink+'deleteCookingAria',{
           CookingAriaID:item.cookingAriaID,
           PinCode:pin,
           UserID:this.global.getUserID()
@@ -107,6 +118,8 @@ export class CookingareaComponent implements OnInit {
         )
       }
     })
+
+   
   }
 
 

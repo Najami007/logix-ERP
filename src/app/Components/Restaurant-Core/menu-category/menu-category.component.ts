@@ -19,7 +19,7 @@ export class MenuCategoryComponent implements OnInit{
   crudList:any = {c:true,r:true,u:true,d:true};
 
   constructor(
-    private http:HttpClient,
+      private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
     private global:GlobalDataModule,
