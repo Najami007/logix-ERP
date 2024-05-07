@@ -1,6 +1,6 @@
-<div class="row body" style="min-height: 700px;">
+<div class="row p-2 body" style="min-height: 700px;">
 
-    <div class="col-lg-4 p-1">
+    <div class="col-lg-4 ">
 
         <h1 class="border-bottom p-2">Add Swing Detail's</h1>
 
@@ -10,14 +10,14 @@
 
 
 
-            <div class="col-lg-8">
+            <div class="col-lg-9 row">
                 <mat-form-field appearance="outline" class="w-100 ">
                     <mat-label>Swing Title</mat-label>
                     <input matInput [(ngModel)]="swingTitle" type="text">
                 </mat-form-field>
 
 
-                <mat-form-field appearance="outline" class="w-50 p-1 ">
+                <mat-form-field appearance="outline" class="w-50 ">
                     <mat-label>Code</mat-label>
                     <input matInput [(ngModel)]="swingCode" type="text">
                 </mat-form-field>
@@ -28,7 +28,7 @@
 
             </div>
 
-            <div class="avatar-upload ms-2 col-lg-4   ">
+            <div class="avatar-upload ms-2 col-lg-3   ">
                 <div class="avatar-edit">
                     <input type="file" id="prodimg" accept="" #prodimg (change)="onImgSelected($event)" />
                     <label for="prodimg"><mat-icon class=" mt-1">edit</mat-icon></label>
@@ -72,7 +72,7 @@
 
 
 
-    <div class="col-lg-8 container-fluid bg-light ">
+    <div class="col-lg-8 border-start container-fluid bg-light ">
         <mat-form-field appearance="outline" class="w-100 pt-2">
             <mat-label>Search.....</mat-label>
             <input type="text" matInput>

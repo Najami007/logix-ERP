@@ -7,6 +7,7 @@ import { SharedFieldValidationModule } from '../shared-field-validation/shared-f
 
 
 
+
 @NgModule({
   declarations: [],
   imports: [
@@ -31,7 +32,8 @@ export class SharedServicesDataModule {
 
   constructor(
     private http:HttpClient,
-    private valid:SharedFieldValidationModule
+    private valid:SharedFieldValidationModule,
+  
 
   ){}
 

@@ -51,7 +51,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of menuList index as index">
-                                <td *ngIf="item.moduleID == moduleID">{{item.menuTitle}}</td>
+                                <td *ngIf="item.moduleID == moduleID" class="text-start">{{item.menuTitle}}</td>
                                 <td *ngIf="item.moduleID == moduleID"><input type="checkbox" (change)="addToSelectedModule(item,index,'')" [(ngModel)]="item.c"></td>
                                 <td *ngIf="item.moduleID == moduleID"><input type="checkbox" (change)="addToSelectedModule(item,index,'')" [(ngModel)]="item.r"></td>
                                 <td *ngIf="item.moduleID == moduleID"><input type="checkbox" (change)="addToSelectedModule(item,index,'')" [(ngModel)]="item.u"></td>

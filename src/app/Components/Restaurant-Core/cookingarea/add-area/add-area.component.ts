@@ -3,6 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PincodeComponent } from 'src/app/Components/User/pincode/pincode.component';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
+import { SharedServicesDataModule } from 'src/app/Shared/helper/shared-services-data/shared-services-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { environment } from 'src/environments/environment.development';
 @Component({
@@ -14,6 +15,7 @@ export class AddAreaComponent implements OnInit{
 
 
   constructor(
+    private dataService:SharedServicesDataModule,
     private http:HttpClient,
     private global:GlobalDataModule,
     private msg:NotificationService,
@@ -53,6 +55,8 @@ export class AddAreaComponent implements OnInit{
    
       if(this.btntype == 'Save'){
         $('.loaderDark').show();
+        
+
       this.http.post(environment.mainApi+this.global.restaurentLink+'insertCookingAria',{
         CookingAriaTitle:this.cookingAreaTitle,
         CookingAriaDescription:this.description,

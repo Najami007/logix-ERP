@@ -9,14 +9,14 @@
     <mat-form-field class="w-100" appearance="outline">
         <mat-label>Old Pin</mat-label>
         <input matInput type="password" id="pwd" #pwd [(ngModel)]="oldPin">
-        <mat-icon matSuffix (click)="global.showPassword($event,'#pwd')">{{pwd.type == 'password' ?'visibility':'visibility_off'}}</mat-icon>
+        <mat-icon matSuffix (click)="global.showPassword($event,'#pwd')">{{pwd.type == 'password' ?'visibility_off':'visibility'}}</mat-icon>
 
     </mat-form-field>
 
     <mat-form-field class="w-100" appearance="outline">
         <mat-label>New Pin</mat-label>
         <input matInput type="password" id="cpwd" #cpwd [(ngModel)]="newPin">
-        <mat-icon matSuffix (click)="global.showPassword($event,'#cpwd')">{{cpwd.type == 'password' ?'visibility':'visibility_off'}}</mat-icon>
+        <mat-icon matSuffix (click)="global.showPassword($event,'#cpwd')">{{cpwd.type == 'password' ?'visibility_off':'visibility'}}</mat-icon>
 
     </mat-form-field>
   </div>

@@ -316,7 +316,7 @@ export class UserRoleComponent implements OnInit {
 
           var index = this.menuList.findIndex((obj:any)=>obj.menuID == e.menuID);
       
-         console.log(e,index)
+         //console.log(e,index)
         if(index != -1){
           this.menuList[index].c = e.c;
           this.menuList[index].r = e.r;
