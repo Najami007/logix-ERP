@@ -1,0 +1,37 @@
+<div class="body container">
+
+    <div class="p-2 row justify-content-center">
+        <button type="button" mat-fab color="primary" *ngIf="crudList.c" autofocus (click)="addModule()"><mat-icon>add</mat-icon></button>
+        <mat-form-field appearance="outline" [ngClass]="crudList.c == false ? 'col-lg-12' : 'col-lg-11' ">
+            <mat-label>Search....</mat-label>
+            <input matInput #search  />
+        </mat-form-field>
+    </div>
+
+    <div class="p-2">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Date</th>
+                    <th>Inv No.</th>
+                    <th>Supplier</th>
+                    <th>Amount</th>
+                    <th>Remarks</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody >
+            
+            </tbody>
+        </table>
+       
+    </div>
+
+</div>
+
+
+
+
+
+

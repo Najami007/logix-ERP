@@ -41,6 +41,7 @@ import { DatePipe } from '@angular/common';
 
 
 
+
 // import {  TruncatePipe } from './Shared/pipes/limitto.pipe';
 // import { FilterPipe } from './Shared/pipes/filter.pipe';
 
@@ -72,7 +73,7 @@ import { DatePipe } from '@angular/common';
     NumberInputComponent,
     SideNavbarComponent,
     ConfirmationAlertComponent,
- 
+
     // TruncatePipe ,  
     // FilterPipe
  

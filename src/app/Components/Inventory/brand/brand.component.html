@@ -55,8 +55,8 @@
                 <tbody>
                     <tr *ngFor="let item of BrandList | filter:txtSearch  index as index">
                         <td>{{index+1}}</td>
-                        <td>{{item.brandTitle}}</td>
-                        <td>{{item.brandCode}}</td>
+                        <td class="text-start">{{item.brandTitle}}</td>
+                        <td class="text-start">{{item.brandCode}}</td>
                         <td *ngIf="crudList.u"><button mat-mini-fab  class="bg-success text-white h30px w30px" (click)="edit(item)"><mat-icon >edit</mat-icon></button></td>
                         <td *ngIf="crudList.d"><button mat-mini-fab  color="warn" class="h30px w30px" (click)="delete(item)"><mat-icon>delete</mat-icon></button></td>
                     </tr>

@@ -50,6 +50,12 @@ loadChildren:()=>
 import('./Components/park-module/park-module.module').then((m)=>m.ParkModuleModule),
 
 },
+{path:'cpl', 
+component:MainComponent,
+loadChildren:()=> 
+import('./Components/control-panel/control-panel.module').then((m)=>m.ControlPanelModule),
+
+},
 { path: '**', redirectTo: 'login', pathMatch: 'full' },
  
 
