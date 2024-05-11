@@ -1,1 +1,52 @@
-<p>menu works!</p>
+<div class="body container">
+
+    <div class="p-2 row justify-content-center">
+        <button type="button" mat-fab color="primary" *ngIf="crudList.c" autofocus (click)="addMenu()"><mat-icon>add</mat-icon></button>
+        <mat-form-field appearance="outline" [ngClass]="crudList.c == false ? 'col-lg-12' : 'col-lg-11' ">
+            <mat-label>Search....</mat-label>
+            <input matInput #search  />
+        </mat-form-field>
+    </div>
+
+    <div class="p-2">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Title</th>
+                    <th>Module</th>
+                    <th>Serial</th>
+                    <th>Link</th>
+                    <th>IsParent</th>
+                    <th>Edit</th>
+                    <th>Status</th>
+                    <!-- <th>Delete</th> -->
+                </tr>
+            </thead>
+            <tbody >
+                <tr *ngFor="let item of moduleList | filter: search.value index as index">
+                    <td>{{index +1 }}</td>
+                    <td>{{item.menuTitle}}</td>
+                    <td>{{item.moduleTitle}}</td>
+                    <td>{{item.serialNo}}</td>
+                    <td>{{item.menuLink}}</td>
+                    <td>{{item.isParentMenu}}</td>
+                    <td><mat-icon class="text-success cursorPointer" (click)="editMenu(item)">edit</mat-icon></td>
+                    <td><mat-icon (click)="ActivateModule(item)" class="cursorPointer" [ngClass]="item.isActive == false ? 'text-success' : 'text-danger'">{{item.isActive == false ? "offline_pin" :  "not_interested"}} </mat-icon></td>
+                    <!-- <td><mat-icon (click)="delete(item)" class="text-danger cursorPointer">delete</mat-icon></td> -->
+
+                </tr>
+            
+            </tbody>
+        </table>
+       
+    </div>
+
+</div>
+
+
+
+
+
+
+

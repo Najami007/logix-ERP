@@ -4,6 +4,8 @@ import { environment } from 'src/environments/environment.development';
 import { Observable, Subject, catchError, retry, takeUntil, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { SharedFieldValidationModule } from '../shared-field-validation/shared-field-validation.module';
+import { NotificationService } from '../../service/notification.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 
@@ -15,13 +17,11 @@ import { SharedFieldValidationModule } from '../shared-field-validation/shared-f
   ]
 })
 
-@Injectable({
-  providedIn: 'root'
-})
+
 
 export class SharedServicesDataModule { 
 
-  private baseURL = environment.mainApi;
+  private baseURL = environment.apiUrl;
 
   destroy$: Subject<boolean> = new Subject<boolean>();
 
@@ -33,6 +33,8 @@ export class SharedServicesDataModule {
   constructor(
     private http:HttpClient,
     private valid:SharedFieldValidationModule,
+    private msg:NotificationService,
+    private toastr: ToastrService
   
 
   ){}
@@ -48,7 +50,7 @@ export class SharedServicesDataModule {
 
   // Http POST
   public createRequest(functionName: string, data: any): Observable<any> {
-    console.log('to send', data);
+    //console.log('to send', data);
     return this.http
       .post(this.baseURL + functionName, data)
       .pipe(retry(3), catchError(this.handleError));
@@ -75,18 +77,19 @@ export class SharedServicesDataModule {
 
     if (error.error instanceof ErrorEvent) {
       // client side error
-      errorMessage = 'Error: ${error.error.message}';
+      errorMessage = "Error:" + error.error.message;
     } else {
       // server side error
-      errorMessage = 'Error Code: ${error.status}\nMessage: ${error.message}';
+      errorMessage = 'Error Code: '+ error.status +'\nMessage: '+ error.message;
     }
 
-    this.valid.apiErrorResponse(errorMessage);
+    //this.valid.apiErrorResponse(errorMessage);
     console.log(errorMessage);
     // window.alert(errorMessage);
     return throwError(errorMessage);
   }
-
+  
+  
 
 
 

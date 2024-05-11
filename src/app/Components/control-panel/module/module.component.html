@@ -13,15 +13,27 @@
             <thead>
                 <tr>
                     <th>S#</th>
-                    <th>Date</th>
-                    <th>Inv No.</th>
-                    <th>Supplier</th>
-                    <th>Amount</th>
-                    <th>Remarks</th>
-                    <th>Action</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Icon</th>
+                    <th>Link</th>
+                    <th>Edit</th>
+                    <th>Status</th>
+                    <!-- <th>Delete</th> -->
                 </tr>
             </thead>
             <tbody >
+                <tr *ngFor="let item of moduleList | filter: search.value index as index">
+                    <td>{{index +1 }}</td>
+                    <td>{{item.moduleTitle}}</td>
+                    <td>{{item.moduleDescription}}</td>
+                    <td><mat-icon>{{item.moduleIcon}}</mat-icon></td>
+                    <td>{{item.moduleLink}}</td>
+                    <td><mat-icon class="text-success cursorPointer" (click)="editModule(item)">edit</mat-icon></td>
+                    <td><mat-icon (click)="ActivateModule(item)" class="cursorPointer" [ngClass]="item.activeStatus == false ? 'text-success' : 'text-danger'">{{item.activeStatus  == false ? "offline_pin" :  "not_interested"}} </mat-icon></td>
+                    <!-- <td><mat-icon (click)="delete(item)" class="text-danger cursorPointer">delete</mat-icon></td> -->
+
+                </tr>
             
             </tbody>
         </table>

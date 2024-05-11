@@ -3,20 +3,19 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
+import { SharedServicesDataModule } from 'src/app/Shared/helper/shared-services-data/shared-services-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
-import { AddModuleComponent } from './add-module/add-module.component';
-import { SharedServicesDataModule } from 'src/app/Shared/helper/shared-services-data/shared-services-data.module';
-import { error } from 'jquery';
+import { AddFeatureComponent } from './add-feature/add-feature.component';
 
 @Component({
-  selector: 'app-module',
-  templateUrl: './module.component.html',
-  styleUrls: ['./module.component.scss']
+  selector: 'app-features',
+  templateUrl: './features.component.html',
+  styleUrls: ['./features.component.scss']
 })
-export class ModuleComponent {
+export class FeaturesComponent {
 
-
+  
   companyProfile:any = [];
   crudList:any = {c:true,r:true,u:true,d:true};
 
@@ -43,58 +42,60 @@ export class ModuleComponent {
 
 
     ngOnInit(): void {
-      this.globaldata.setHeaderTitle('Modules');
-      this.getModuleList();
+      this.globaldata.setHeaderTitle('Features');
+      this.getFeatureList();
      
     }
 
+
     UserId = this.globaldata.getUserID();
-    moduleList:any = [];
+    featureList:any = [];
 
     
-  addModule(){
-    this.dialogue.open(AddModuleComponent,{
+  add(){
+    this.dialogue.open(AddFeatureComponent,{
       width:'30%',
     }).afterClosed().subscribe(value=>{
       if(value == 'update'){
-        this.getModuleList();
+        this.getFeatureList();
              }
     })
   }
 
 
-  getModuleList(){
-    this.dataService.getHttp(this.globaldata.userLink+ 'getModule','').subscribe(
+  getFeatureList(){
+    this.dataService.getHttp(this.globaldata.companyLink+ 'getFeatures','').subscribe(
       (Response:any)=>{
-          this.moduleList = Response;
-        
+          this.featureList = Response;
+                  
       }
     )
   }
 
 
-  editModule(item:any){
-    this.dialogue.open(AddModuleComponent,{
+  edit(item:any){
+    this.dialogue.open(AddFeatureComponent,{
       width:'30%',
       data:item,
     }).afterClosed().subscribe(value=>{
       if(value == 'update'){
-        this.getModuleList();
+        this.getFeatureList();
              }
     })
   }
 
 
+
   ActivateModule(item:any){
-    this.dataService.saveHttp(this.globaldata.userLink+ 'activateModule',{
-      ModuleID : item.moduleID,
-      ActiveStatus : false,
+    this.dataService.saveHttp(this.globaldata.companyLink+ 'activateFeature',{
+      FeatureID : item.featureID,
+      FeatureStatus : !item.featureStatus,
       UserID :this.UserId,
     }).subscribe(
     (Response:any)=>{
       if(Response.msg == 'Data Updated Successfully'){
         this.msg.SuccessNotify(Response.msg);
-        this.getModuleList();
+        this.getFeatureList();
       }else{
         this.msg.WarnNotify(Response.msg);
       }
@@ -105,28 +106,8 @@ export class ModuleComponent {
     )
 
   }
-
-
   
-  delete(item:any){
-     this.dataService.deleteHttp(this.globaldata.userLink+ 'deleteModule',{
-      ModuleID : item.moduleID,
-      UserID :this.UserId,
-    }).subscribe(
-    (Response:any)=>{
-      if(Response.msg == 'Data Deleted Successfully'){
-        this.msg.SuccessNotify(Response.msg);
-        this.getModuleList();
-      }else{
-        this.msg.WarnNotify(Response.msg);
-      }
-    },
-    (error:any)=>{
-        console.log(error)
-    }
-    )
-
-  }
+ 
 
 
 

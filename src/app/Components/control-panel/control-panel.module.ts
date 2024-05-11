@@ -12,12 +12,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/Shared/material/material.module';
+import { AddMenuComponent } from './menu/add-menu/add-menu.component';
+import { CodesComponent } from './codes/codes.component';
+import { AddCodeComponent } from './codes/add-code/add-code.component';
+import { FeaturesComponent } from './features/features.component';
+import { AddFeatureComponent } from './features/add-feature/add-feature.component';
 
 
 export const panelRoutes: Route[] = [
 
   {path:'module', component:ModuleComponent,  canActivate:[AuthGuard] },
   {path:'menu', component:MenuComponent,  canActivate:[AuthGuard]},
+  {path:'codes', component:CodesComponent,  canActivate:[AuthGuard]},
+  {path:'feature', component:FeaturesComponent,  canActivate:[AuthGuard]},
  
   {path:'**', redirectTo:'home',pathMatch:'full'}
 
@@ -29,7 +36,12 @@ export const panelRoutes: Route[] = [
   declarations: [
     ModuleComponent,
     MenuComponent,
-    AddModuleComponent
+    AddModuleComponent,
+    AddMenuComponent,
+    CodesComponent,
+    AddCodeComponent,
+    FeaturesComponent,
+    AddFeatureComponent
   ],
   imports: [
     CommonModule,

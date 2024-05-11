@@ -3,21 +3,19 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
+import { SharedServicesDataModule } from 'src/app/Shared/helper/shared-services-data/shared-services-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
-
-import { SharedServicesDataModule } from 'src/app/Shared/helper/shared-services-data/shared-services-data.module';
-import { error } from 'jquery';
-import { AddMenuComponent } from './add-menu/add-menu.component';
+import { AddCodeComponent } from './add-code/add-code.component';
 
 @Component({
-  selector: 'app-menu',
-  templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss']
+  selector: 'app-codes',
+  templateUrl: './codes.component.html',
+  styleUrls: ['./codes.component.scss']
 })
-export class MenuComponent {
+export class CodesComponent {
 
-
+  
   companyProfile:any = [];
   crudList:any = {c:true,r:true,u:true,d:true};
 
@@ -44,70 +42,53 @@ export class MenuComponent {
 
 
     ngOnInit(): void {
-      this.globaldata.setHeaderTitle('Modules');
-      this.getMenuList();
+      this.globaldata.setHeaderTitle('Codes');
+      this.getCodesList();
      
     }
 
+
     UserId = this.globaldata.getUserID();
-    moduleList:any = [];
+    codeList:any = [];
 
     
-  addMenu(){
-    this.dialogue.open(AddMenuComponent,{
-      width:'40%',
+  addCode(){
+    this.dialogue.open(AddCodeComponent,{
+      width:'30%',
     }).afterClosed().subscribe(value=>{
       if(value == 'update'){
-        this.getMenuList();
+        this.getCodesList();
              }
     })
   }
 
 
-  getMenuList(){
-    this.dataService.getHttp(this.globaldata.userLink+ 'getMenu','').subscribe(
+  getCodesList(){
+    this.dataService.getHttp(this.globaldata.companyLink+ 'getCodes','').subscribe(
       (Response:any)=>{
-          this.moduleList = Response;
-         
+          this.codeList = Response;
         
       }
     )
   }
 
 
-  editMenu(item:any){
-    this.dialogue.open(AddMenuComponent,{
-      width:'40%',
+  editModule(item:any){
+    this.dialogue.open(AddCodeComponent,{
+      width:'30%',
       data:item,
     }).afterClosed().subscribe(value=>{
       if(value == 'update'){
-        this.getMenuList();
+        this.getCodesList();
              }
     })
   }
 
 
-  ActivateModule(item:any){
-    this.dataService.saveHttp(this.globaldata.userLink+ 'deleteMenu',{
-      MenuID : item.menuID,
-      IsActive : !item.isActive,
-      UserID :this.UserId,
-    }).subscribe(
-    (Response:any)=>{
-      if(Response.msg == 'Data Deleted Successfully'){
-        this.msg.SuccessNotify(Response.msg);
-        this.getMenuList();
-      }else{
-        this.msg.WarnNotify(Response.msg);
-      }
-    },
-    (error:any)=>{
-        console.log(error)
-    }
-    )
 
-  }
 
+  
+ 
 
 
 

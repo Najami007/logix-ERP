@@ -1,0 +1,51 @@
+<div class="p-4">
+        <h3 class="text-uppercase">Add Credentials</h3>
+       <hr>
+
+    <div class="row">
+
+        <mat-form-field appearance="outline" class="w-50">
+            <mat-label>ID</mat-label>
+            <input matInput [(ngModel)]="ID" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-50">
+            <mat-label>Code</mat-label>
+            <input matInput [(ngModel)]="Code" />
+        </mat-form-field>   
+
+        <mat-form-field appearance="outline" class="w-50">
+            <mat-label>Type</mat-label>
+            <input matInput [(ngModel)]="Type" />
+        </mat-form-field>  
+
+        <mat-form-field appearance="outline" class="w-50">
+            <mat-label>Title</mat-label>
+            <input matInput [(ngModel)]="Title" />
+        </mat-form-field>  
+
+        <mat-form-field appearance="outline" class="w-50">
+            <mat-label>Table Name</mat-label>
+            <input matInput [(ngModel)]="TableName" />
+        </mat-form-field>  
+
+        <mat-form-field appearance="outline" class="w-50">
+            <mat-label>Module</mat-label>
+            <input matInput [(ngModel)]="Module" />
+        </mat-form-field>  
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Remarks</mat-label>
+            <textarea matInput [(ngModel)]="Remarks" ></textarea>
+        </mat-form-field>  
+
+        
+        
+    </div>
+
+
+</div>
+<div class="bg-mf text-end p-3">
+    <button class="btn btn-success me-1" (click)="Save()">{{btnType}}</button>
+    <button class="btn btn-secondary" (click)="closeDialog()">Close</button>
+</div>

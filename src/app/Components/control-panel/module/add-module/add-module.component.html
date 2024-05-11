@@ -1,1 +1,30 @@
-<p>add-module works!</p>
+<div class="p-4">
+        <h3 class="text-uppercase">Add Credentials</h3>
+    <hr>
+
+    <div class="row">
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Module Name</mat-label>
+            <input matInput [(ngModel)]="moduleTitle"   />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-50">
+            <mat-label>Module Icon</mat-label>
+            <input matInput [(ngModel)]="moduleIcon"   />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-50">
+            <mat-label>Module Link</mat-label>
+            <input matInput [(ngModel)]="moduleLink"   />
+        </mat-form-field>
+    
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Description</mat-label>
+            <textarea matInput [(ngModel)]="description" ></textarea>
+        </mat-form-field>
+    </div>
+
+
+</div>
+<div class="bg-mf text-end p-3">
+    <button class="btn btn-success me-1" (click)="Save()">{{btnType}}</button>
+    <button class="btn btn-secondary" (click)="closeDialog()">Close</button>
+</div>

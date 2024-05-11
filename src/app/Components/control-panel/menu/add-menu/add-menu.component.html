@@ -1,0 +1,62 @@
+<div class="p-4">
+
+        <h3 class="text-uppercase">Add Credentials</h3>
+
+    <hr>
+
+    <div class="row">
+
+        
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Menu Title</mat-label>
+            <input matInput [(ngModel)]="menuTitle" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Module</mat-label>
+            <mat-select [(ngModel)]="moduleID">
+                <mat-option><ngx-mat-select-search #moduleSearch
+                    [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                        ></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of moduleList | filter:moduleSearch.value" [value]="item.moduleID">{{item.moduleTitle}}</mat-option>
+                </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-50">
+            <mat-label>Is Parent Menu</mat-label>
+            <mat-select [(ngModel)]="isParentMenu">
+                <mat-option [value]="true">True</mat-option>
+                <mat-option [value]="false">False</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-50">
+            <mat-label>Serial No</mat-label>
+            <input matInput [(ngModel)]="serialNo" />
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isParentMenu == false" appearance="outline" class="w-100">
+            <mat-label>Menu Link</mat-label>
+            <input matInput [(ngModel)]="menuLink" />
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isParentMenu == false" appearance="outline" class="w-100">
+            <mat-label>Parent Menu</mat-label>
+            <mat-select [(ngModel)]="ParentMenuID">
+                <mat-option><ngx-mat-select-search #parentMenuSearch
+                    [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                        ></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of parentMenuList | filter:parentMenuSearch.value" [value]="item.menuID">{{item.menuTitle}}</mat-option>
+                </mat-select>
+        </mat-form-field>
+        
+    </div>
+
+
+</div>
+<div class="bg-mf text-end p-3">
+    <button class="btn btn-success me-1" (click)="Save()">{{btnType}}</button>
+    <button class="btn btn-secondary" (click)="closeDialog()">Close</button>
+</div>
+

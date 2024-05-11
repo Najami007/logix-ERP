@@ -16,7 +16,7 @@ export const environment = {
       //mainApi: 'http://192.168.10.100:1002/',
       mainApi: 'http://192.168.10.100:1003/',    /////////// Local Server Office
 
-      
+      apiUrl: 'https://localhost:7005/',
 
       //mainApi: 'http://localhost:1001/',  /////////// For All Customers Local
 
