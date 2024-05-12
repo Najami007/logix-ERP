@@ -27,7 +27,7 @@
                                 <button style="height: 40px; background: none;border: none;text-align: left;"
                                     class="prodRow{{index}} prodBtn justify-content-between d-flex"
                                     (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">
-                                    <p>{{item.productTitle}}</p>
+                                    <p>{{item.productTitle}} <b>({{item.salePrice}})</b></p>
                                     <p><strong>({{item.barcode}})</strong></p>
                                 </button>
                             </mat-card>

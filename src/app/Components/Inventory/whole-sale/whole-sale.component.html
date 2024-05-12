@@ -14,7 +14,7 @@
                         autofocus autocomplete="off" accesskey="b">
 
                     <button accesskey="n" class="bg-primary text-white " data-bs-toggle="modal"
-                        data-bs-target="#prodModal" matTooltip="Search Product By Name"
+                        data-bs-target="#prodModal" matTooltip="Search Product By Name (alt + n)"
                         style="height: 50px;width: 50px;border: 1px solid rgb(13, 110, 253);border-radius: 0px 5px 5px 0px;"
                         (click)="focusto('#prodName',$event)"><mat-icon>search</mat-icon></button>
                 </div>
@@ -71,10 +71,10 @@
                 </div>
             </div>
 
-            <div class="p-1 text-center">
+            <div class="pt-1 pb-1 text-center">
                  <button class="w-100 btn-rpt btn btn-success" id="save" (click)="save('Cash')" accesskey="S" ><u>S</u>ave</button>
             </div>
-            <div class=" p-1 d-flex justify-content-between">
+            <div class="d-flex justify-content-between">
                 <div class="pe-1"><button class="btn btn-danger " accesskey="u" style="height: 60px;width: 100px;"
                     (click)="openSavedBill()">D<u>u</u>plicate</button></div>
 

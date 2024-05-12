@@ -392,6 +392,10 @@ export class SaleComponent implements OnInit {
       this.msg.WarnNotify('Enter Valid Amount')
     }else if(type == 'sale' && (this.customerName =='' && this.customerMobileno != '')){
       this.msg.WarnNotify('Enter Customer Name')
+    }else if(type == 'sale' && this.paymentType == 'Split' && this.cash <= 0 ){
+      this.msg.WarnNotify('Cash Amount is Not Valid')
+     }else if(type == 'sale' && this.paymentType == 'Split' && this.bankCash <= 0 ){
+      this.msg.WarnNotify('Bank Amount is Not Valid')
     }else if(type == 'sale' && (this.customerName !='' && this.customerMobileno == '')){
       this.msg.WarnNotify('Enter Customer Name')
     }

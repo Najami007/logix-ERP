@@ -25,7 +25,7 @@
                             <mat-card class="card " *ngFor="let item of productList| filter:PBarcode index as index"
                                 (click)="holdDataFunction(item);">
                         <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn justify-content-between d-flex" 
-                        (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)"><p>{{item.productTitle}}</p>
+                        (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)"><p>{{item.productTitle}} <b>({{item.salePrice}})</b></p>
                             <p><strong>({{item.barcode}})</strong></p> </button>
                             </mat-card>
                         </div>
@@ -263,7 +263,7 @@
                         </select>
                         <mat-label style="font-size: 25px;">Bank:</mat-label>
                         
-                        <input type="number" style="font-size: 25px;width: 120px;" class="font-digit text-end"
+                        <input type="number" [disabled]="paymentType == 'Bank' || paymentType == 'Split'" style="font-size: 25px;width: 120px;" class="font-digit text-end"
                             (keydown)="this.global.handleNumKeys($event);getTotal()" (keyup)="getTotal()"
                             [(ngModel)]="bankCash" />
                     </div>

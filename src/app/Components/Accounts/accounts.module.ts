@@ -33,6 +33,26 @@ import { DayTransactionComponent } from './day-transaction/day-transaction.compo
 import { VoucherDetailsComponent } from './voucher/voucher-details/voucher-details.component';
 import { AuthGuard } from 'src/app/auth.guard';
 import { Voucher2Component } from './voucher2/voucher2.component';
+import { PriceCheckerComponent } from '../Inventory/price-checker/price-checker.component';
+import { PaymentComponent } from './DesiAccounts/payment/payment.component';
+import { ExpenseComponent } from './DesiAccounts/expense/expense.component';
+import { ReceiptComponent } from './DesiAccounts/receipt/receipt.component';
+import { IncomeComponent } from './DesiAccounts/income/income.component';
+import { BankDepositAndWithdrawComponent } from './DesiAccounts/bank-deposit-and-withdraw/bank-deposit-and-withdraw.component';
+import { AddBankComponent } from './DesiAccounts/add-bank/add-bank.component';
+import { AddCoaComponent } from './DesiAccounts/add-coa/add-coa.component';
+import { ProfitWithdrawalComponent } from './DesiAccounts/profit-withdrawal/profit-withdrawal.component';
+import { OpeningCashComponent } from './DesiAccounts/opening-cash/opening-cash.component';
+import { AccountAdjustmentComponent } from './DesiAccounts/account-adjustment/account-adjustment.component';
+import { PartyOpeningBalanceComponent } from './DesiAccounts/party-opening-balance/party-opening-balance.component';
+import { AddReceiptComponent } from './DesiAccounts/receipt/add-receipt/add-receipt.component';
+import { AdddwComponent } from './DesiAccounts/bank-deposit-and-withdraw/adddw/adddw.component';
+import { AddExpenseComponent } from './DesiAccounts/expense/add-expense/add-expense.component';
+import { AddIncomeComponent } from './DesiAccounts/income/add-income/add-income.component';
+import { AddOpeningComponent } from './DesiAccounts/opening-cash/add-opening/add-opening.component';
+import { AddPaymentComponent } from './DesiAccounts/payment/add-payment/add-payment.component';
+import { AddWithdrawalComponent } from './DesiAccounts/profit-withdrawal/add-withdrawal/add-withdrawal.component';
+
 
 
 
@@ -55,6 +75,20 @@ export const accountRountes: Route[] = [
     {path:'cbrpt', component:CashbookComponent, canActivate:[AuthGuard] },
     {path:'plrpt', component:PLStatComponent, canActivate:[AuthGuard] },
     {path:'tbrpt', component:TrialBalanceComponent, canActivate:[AuthGuard] },
+
+    /// Desi Accounts Imports
+    {path: 'pmt',component: PaymentComponent,canActivate: [AuthGuard]},
+    {path: 'exp',component: ExpenseComponent, canActivate: [AuthGuard]}, 
+    {path: 'rcpt',component: ReceiptComponent,canActivate: [AuthGuard]},
+    {path: 'inc',component: IncomeComponent, canActivate: [AuthGuard]},
+    {path: 'bdw',component: BankDepositAndWithdrawComponent,canActivate: [AuthGuard]},
+    {path: 'adbnk',component: AddBankComponent,canActivate: [AuthGuard]},
+    {path: 'acoa',component: AddCoaComponent,canActivate: [AuthGuard]},
+    {path: 'pftwd',component: ProfitWithdrawalComponent,canActivate: [AuthGuard]},  
+    {path: 'opc',component: OpeningCashComponent,canActivate: [AuthGuard]},
+    {path: 'accadj', component: AccountAdjustmentComponent,canActivate: [AuthGuard]},     
+    {path: 'pob',component: PartyOpeningBalanceComponent,canActivate: [AuthGuard]},    
+  
     {path:'**', redirectTo:'home',pathMatch:'full'}
   
  
@@ -79,6 +113,26 @@ export const accountRountes: Route[] = [
     DayTransactionComponent,
     VoucherDetailsComponent,
     Voucher2Component,
+    PaymentComponent,
+    ExpenseComponent,
+    ReceiptComponent,
+    IncomeComponent,
+    BankDepositAndWithdrawComponent,
+    AddBankComponent,
+    AddCoaComponent,
+    ProfitWithdrawalComponent,
+    OpeningCashComponent,
+    AccountAdjustmentComponent,
+    PartyOpeningBalanceComponent,
+    AddReceiptComponent,
+    AdddwComponent,
+    AddExpenseComponent,
+    AddIncomeComponent,
+    AddOpeningComponent,
+    AddPaymentComponent,
+    AddWithdrawalComponent,
+    
+    
   
 
     

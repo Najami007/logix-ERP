@@ -304,6 +304,15 @@ export class VoidableSaleComponent implements OnInit {
 
       this.netTotal = (this.subTotal + parseFloat(this.otherCharges) ) - parseFloat(this.discount);
       this.change =  (parseFloat(this.cash) + parseFloat(this.bankCash)) - this.netTotal;
+
+      
+    if(this.paymentType == 'Split'){
+            
+      this.bankCash = this.netTotal - parseFloat(this.cash);
+    }
+    if(this.paymentType == 'Bank'){
+      this.bankCash = this.netTotal;
+    }
     }
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -608,7 +617,11 @@ export class VoidableSaleComponent implements OnInit {
         this.msg.WarnNotify('Entered Cash is not Valid')
       }else if ( paymentType == 'Split' && ((this.cash + this.bankCash) > this.netTotal || (this.cash + this.bankCash) < this.netTotal)) {
         this.msg.WarnNotify('Amount in Not Valid')
-      } else if ( paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
+      }else if(this.paymentType == 'Split' && this.cash <= 0 ){
+        this.msg.WarnNotify('Cash Amount is Not Valid')
+      } else if(this.paymentType == 'Split' && this.bankCash <= 0 ){
+        this.msg.WarnNotify('Bank Amount is Not Valid')
+      }else if ( paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
         this.msg.WarnNotify('Enter Valid Amount')
       }else if(this.customerName =='' && this.customerMobileno != ''){
         this.msg.WarnNotify('Enter Customer Name')

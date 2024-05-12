@@ -62,25 +62,12 @@ import { NgxBarcodeModule } from 'ngx-barcode';
 import { RetailRtnSavedbillComponent } from './retail-sale-return/retail-rtn-savedbill/retail-rtn-savedbill.component';
 import { RetailRtnEnterQtyComponent } from './retail-sale-return/retail-rtn-enter-qty/retail-rtn-enter-qty.component';
 
-import { PaymentComponent } from './DesiAccounts/payment/payment.component';
-import { ReceiptComponent } from './DesiAccounts/receipt/receipt.component';
-import { ExpenseComponent } from './DesiAccounts/expense/expense.component';
-import { AddPaymentComponent } from './DesiAccounts/payment/add-payment/add-payment.component';
-import { AddReceiptComponent } from './DesiAccounts/receipt/add-receipt/add-receipt.component';
-import { AddExpenseComponent } from './DesiAccounts/expense/add-expense/add-expense.component';
-import { IncomeComponent } from './DesiAccounts/income/income.component';
-import { AddIncomeComponent } from './DesiAccounts/income/add-income/add-income.component';
-import { AddBankComponent } from './DesiAccounts/add-bank/add-bank.component';
-import { BankDepositAndWithdrawComponent } from './DesiAccounts/bank-deposit-and-withdraw/bank-deposit-and-withdraw.component';
-import { AdddwComponent } from './DesiAccounts/bank-deposit-and-withdraw/adddw/adddw.component';
-import { AddCoaComponent } from './DesiAccounts/add-coa/add-coa.component';
+
 import { PriceCheckerComponent } from './price-checker/price-checker.component';
-import { OpeningCashComponent } from './DesiAccounts/opening-cash/opening-cash.component';
-import { ProfitWithdrawalComponent } from './DesiAccounts/profit-withdrawal/profit-withdrawal.component';
-import { AddWithdrawalComponent } from './DesiAccounts/profit-withdrawal/add-withdrawal/add-withdrawal.component';
-import { AddOpeningComponent } from './DesiAccounts/opening-cash/add-opening/add-opening.component';
+
 import { WholeSaleComponent } from './whole-sale/whole-sale.component';
-import { WhsSavedBillComponent } from './whole-sale/whs-saved-bill/whs-saved-bill.component'; 
+import { WhsSavedBillComponent } from './whole-sale/whs-saved-bill/whs-saved-bill.component';
+
 
 
 
@@ -247,63 +234,20 @@ export const inventoryRoutes: Route[] = [
     component: CashierClosingRptComponent,
     canActivate: [AuthGuard]
   },
-  {
-    path: 'pmt',
-    component: PaymentComponent,
-    canActivate: [AuthGuard]
-  },
-
-  {
-    path: 'exp',
-    component: ExpenseComponent,
-    canActivate: [AuthGuard]
-  },
-
-  {
-    path: 'rcpt',
-    component: ReceiptComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'inc',
-    component: IncomeComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'bdw',
-    component: BankDepositAndWithdrawComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'adbnk',
-    component: AddBankComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'coa',
-    component: AddCoaComponent,
-    canActivate: [AuthGuard]
-  },
+  
   {
     path: 'pckr',
     component: PriceCheckerComponent,
     canActivate: [AuthGuard]
   }, 
-  {
-    path: 'pftwd',
-    component: ProfitWithdrawalComponent,
-    canActivate: [AuthGuard]
-  },  
-  {
-    path: 'opc',
-    component: OpeningCashComponent,
-    canActivate: [AuthGuard]
-  },    
+     
   {
     path: 'whsl',
     component: WholeSaleComponent,
     canActivate: [AuthGuard]
   },    
+    
+
 
 
 
@@ -362,25 +306,12 @@ export const inventoryRoutes: Route[] = [
     CashierClosingRptComponent,
     RetailRtnSavedbillComponent,
     RetailRtnEnterQtyComponent,
-    PaymentComponent,
-    ReceiptComponent,
-    ExpenseComponent,
-    AddPaymentComponent,
-    AddReceiptComponent,
-    AddExpenseComponent,
-    IncomeComponent,
-    AddIncomeComponent,
-    AddBankComponent,
-    BankDepositAndWithdrawComponent,
-    AdddwComponent,
-    AddCoaComponent,
+   
     PriceCheckerComponent,
-    OpeningCashComponent,
-    ProfitWithdrawalComponent,
-    AddWithdrawalComponent,
-    AddOpeningComponent,
+   
     WholeSaleComponent,
     WhsSavedBillComponent,
+  
     
    
     

@@ -569,19 +569,19 @@ export class RetailSaleComponent implements OnInit {
       p.salePrice = parseFloat(p.salePrice);
       p.costPrice = parseFloat(p.costPrice);
           
-        if(p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null ){
-          this.msg.WarnNotify('('+p.productTitle+') Cost Price is not Valid');
-           isValidFlag = false;
+        // if(p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null ){
+        //   this.msg.WarnNotify('('+p.productTitle+') Cost Price is not Valid');
+        //    isValidFlag = false;
   
-           return;
-        }
+        //    return;
+        // }
   
-        if( p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null ){
-          this.msg.WarnNotify('('+p.productTitle+') Sale Price is not Valid');
-           isValidFlag = false;
+        // if( p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null ){
+        //   this.msg.WarnNotify('('+p.productTitle+') Sale Price is not Valid');
+        //    isValidFlag = false;
     
-           return;
-        }
+        //    return;
+        // }
   
         if(p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == ''){
           this.msg.WarnNotify('('+p.productTitle+') Quantity is not Valid');
