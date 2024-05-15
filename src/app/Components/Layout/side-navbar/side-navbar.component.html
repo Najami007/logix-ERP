@@ -41,7 +41,7 @@
                   <li class="nav-item" *ngIf="item.menuID == row.parentMenuID">
                     <a class="list-item nav-link text-truncate" href="" routerLinkActive="active"
                       routerLink="/{{row.moduleLink}}/{{row.menuLink}}" ><span
-                        class=" d-sm-inline">{{row.menuTitle}}</span></a>
+                        class=" d-sm-inline">{{row.menuTitle | slice:0 :25}} {{row.menuTitle.length > 25  ? "..." : ''}}</span></a>
                   </li>
                 </ul>
               </div>

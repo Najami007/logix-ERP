@@ -84,11 +84,19 @@
            
         </tbody>
       </table>
-
-      <tr>
-        <th>Remarks:-</th>
-        <td class="ms-2">{{myRemarks}}</td>
-    </tr>
+    <table>
+        <tbody>
+            <tr>
+                <th>Customer:</th>
+                <td class="ms-2">{{myCustomerName}}</td>
+            </tr>
+        
+              <tr>
+                <th>Remarks:-</th>
+                <td class="ms-2">{{myRemarks}}</td>
+            </tr>
+        </tbody>
+    </table>
     </div>
 
     <h2 *ngIf="myPaymentType == 'Complimentary'" class="border border-dark w-100 text-center">Complimentary</h2>

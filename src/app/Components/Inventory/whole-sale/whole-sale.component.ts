@@ -180,10 +180,35 @@ export class WholeSaleComponent implements OnInit {
   
   searchByCode(e:any){
 
+    var barcode = this.PBarcode;
+    var qty:number = 1;
+    var type = '';
+
     if(this.PBarcode !== ''){
       if(e.keyCode == 13){
+
+        /// Seperating by / and coverting to Qty
+        if(this.PBarcode.split("/")[1] != undefined){
+           barcode = this.PBarcode.split("/")[0];
+           qty = parseFloat(this.PBarcode.split("/")[1]);
+           type = 'price';
+        
+                  
+        }
+         /// Seperating by - and coverting to Qty 
+         if(this.PBarcode.split("-")[1] != undefined){
+           barcode = this.PBarcode.split("-")[0];
+           qty = parseFloat(this.PBarcode.split("-")[1]);
+           type = 'qty';
+           
+        }
+
+
+     
+     
+
         ///// check the product in product list by barcode
-        var row =  this.productList.find((p:any)=> p.barcode == this.PBarcode);
+        var row =  this.productList.find((p:any)=> p.barcode == barcode);
    
         /////// check already present in the table or not
         if(row !== undefined){
@@ -192,14 +217,19 @@ export class WholeSaleComponent implements OnInit {
           );
       
           var index = this.tableDataList.indexOf(condition);
-      
+          
           //// push the data using index
           if (condition == undefined) {
-
+            
          
             // this.app.startLoaderDark();
-            this.global.getProdDetail(0,this.PBarcode).subscribe(
+            this.global.getProdDetail(0,barcode).subscribe(
               (Response:any)=>{
+          
+                if(type == 'price'){
+                    qty =  qty / parseFloat(Response[0].salePrice) ;
+                  
+               }
               
                   this.tableDataList.push({
                     rowIndex:this.tableDataList.length == 0 ? this.tableDataList.length + 1 
@@ -209,7 +239,7 @@ export class WholeSaleComponent implements OnInit {
                     productTitle:Response[0].productTitle,
                     barcode:Response[0].barcode,
                     productImage:Response[0].productImage,
-                    quantity:1,
+                    quantity:qty,
                     wohCP:Response[0].costPrice,
                     avgCostPrice:Response[0].avgCostPrice,
                     costPrice:Response[0].costPrice,
@@ -239,7 +269,11 @@ export class WholeSaleComponent implements OnInit {
 
          
         }else {
-          this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+
+          if(this.PBarcode.split("/")[1] != undefined){
+            qty =  this.PBarcode.split("/")[1] /  this.tableDataList[index].salePrice ;
+       }
+          this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + qty;
           this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length -1].rowIndex + 1 ;
           this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
           this.productImage = this.tableDataList[index].productImage;
@@ -258,6 +292,7 @@ export class WholeSaleComponent implements OnInit {
 
    
   }
+
 
   holdDataFunction(data:any){
  
@@ -649,9 +684,9 @@ export class WholeSaleComponent implements OnInit {
    if(isValidFlag == true){
     if(this.tableDataList == ''){
       this.msg.WarnNotify('No Product Seleted')
-    }else if(paymentType == 'Cash' && (this.cash == 0 || this.cash == undefined || this.cash == null)){
+    }else if(paymentType == 'Cash'&& this.partyID == 0 && (this.cash == 0 || this.cash == undefined || this.cash == null)){
       this.msg.WarnNotify('Enter Cash')
-    }else if(paymentType == 'Cash' && this.cash < this.netTotal){
+    }else if(paymentType == 'Cash' && this.partyID == 0 && this.cash < this.netTotal){
       this.msg.WarnNotify('Entered Cash is not Valid')
     }else if ( paymentType == 'Split' && ((this.cash + this.bankCash) > this.netTotal || (this.cash + this.bankCash) < this.netTotal)) {
       this.msg.WarnNotify('Sum Of Both Amount must be Equal to Net Total')
@@ -768,6 +803,7 @@ export class WholeSaleComponent implements OnInit {
   myInvoiceNo = '';
   mytableNo = '';
   myCounterName = '';
+  myCustomerName = '';
   myInvDate: any = new Date();
   myOrderType = '';
   mySubTotal = 0;
@@ -801,6 +837,7 @@ export class WholeSaleComponent implements OnInit {
         this.myDiscount = Response[0].billDiscount;
         this.myChange = Response[0].change;
         this.myPaymentType = Response[0].paymentType;
+        this.myCustomerName = Response[0].partyName;
 
         this.myQtyTotal = 0;
         Response.forEach((e:any) => {

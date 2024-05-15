@@ -87,6 +87,7 @@ export class WhsSavedBillComponent implements OnInit {
   myInvoiceNo = '';
   mytableNo = '';
   myCounterName = '';
+  myCustomerName = '';
   myInvDate: any = new Date();
   myOrderType = '';
   mySubTotal = 0;
@@ -134,11 +135,13 @@ export class WhsSavedBillComponent implements OnInit {
               this.myDiscount = item.billDiscount;
               this.myChange = item.change;
               this.myPaymentType = item.paymentType;
+              
               this.myDuplicateFlag = true;
               this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+item.invBillNo).subscribe(
                 (Response:any)=>{
                   //console.log(Response);
                   this.myPrintData = Response;
+                  this.myCustomerName = Response[0].partyName;
                   this.myQtyTotal = 0;
                   Response.forEach((e:any) => {
                       this.myQtyTotal += e.quantity;

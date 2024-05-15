@@ -1,98 +1,10 @@
 <mat-toolbar class="w-100" id="menubar">
 
-
-  <!-- <mat-toolbar-row class="bg-white justify-content-between">
-
-    <div>
-    <a class="list-itm" routerLink="./dashboard" routerLinkActive="active">DashBoard</a>
-
-    <a class="list-itm" routerLink="./coa" routerLinkActive="active">Charts of Accounts</a>
-
-    <a class="list-itm" routerLink="./voucher" routerLinkActive="active">
-      Voucher</a>
-    <a class="list-itm" routerLink="./bdgtng" routerLinkActive="active">
-      Budgetting</a>
-    <a class="list-itm" routerLink="./spvn" routerLinkActive="active">
-      Supervision</a>
-      <a class="list-itm" routerLink="./dtran" routerLinkActive="active">
-        Day Transaction</a>
-
-
-    <div class="dropdown cursorPointer ">
-      <a class="list-itm ">
-        Settings <mat-icon class="sideicon mb-1">arrow_drop_down</mat-icon></a>
-      <div class="dropdown-content">
-
-        <a class="list-itm" routerLink="./settings" routerLinkActive="active">
-          Settings</a>
-
-      </div>
-    </div>
-
-
-    <div class="dropdown cursorPointer ">
-      <a class="list-itm ">
-        Reports <mat-icon class="sideicon mb-1">arrow_drop_down</mat-icon></a>
-      <div class="dropdown-content">
-
-        <a class="list-itm" routerLink="./ldgrrpt" routerLinkActive="active">
-          Ledger Report</a>
-          <a class="list-itm" routerLink="./plrpt" routerLinkActive="active">
-            Profit & Loss Statement</a>
-            <a class="list-itm" routerLink="./tbrpt" routerLinkActive="active">
-             Trial Balance</a>    
-        <a class="list-itm" routerLink="./bsrpt" routerLinkActive="active">
-          Balance Sheet</a>
-        <a class="list-itm" routerLink="./cbrpt" routerLinkActive="active">
-            Cash Book</a>
-          <a class="list-itm" routerLink="./bdgrpt" routerLinkActive="active">
-            Budget Report</a>
-
-      </div>
-    </div>
-
-  </div>
-
-
-
-     
-        
-        <div class="d-flex bg-white shadow justify-content-between" style="min-width: 120px;max-width: 500px; height: 40px; font-size: 15px; font-family: Arial, Helvetica, sans-serif; border-radius: 20px;" >
-          <p> </p>
-
-          <p class="mt-1 pe-1 ps-1" >
-              {{ UserName }}
-          </p>
-          <button mat-mini-fab class="bg-success"  [matMenuTriggerFor]="userMenu"
-              aria-label="">
-              <mat-icon>person</mat-icon>
-          </button>
-          <mat-menu #userMenu="matMenu">
-              <button mat-menu-item (click)="logout()">
-                  <mat-icon>exit_to_app</mat-icon>
-                  <span>Log out</span>
-              </button> 
-              <button mat-menu-item  (click)="changePassword()">
-                <mat-icon>lock</mat-icon>
-                <span>Change Password</span>
-            </button>
-            <button mat-menu-item (click)="changePin()">
-              <mat-icon>vpn_key</mat-icon>
-              <span>Change Pin</span>
-          </button></mat-menu>
-              
-        </div>
-   
-
-  </mat-toolbar-row> -->
-
-
   <mat-toolbar-row class="bg-white  menuBar1 justify-content-between " id="menuBar1">
 
     
     <div class=" d-flex ">
       <div class="d-flex">
-      
         <div class="bg-white logo ps-2 border-end pe-2">
           <img [src]="logo1"  [height]="height" [width]="width">
         </div>
@@ -172,8 +84,8 @@
 
   <mat-toolbar-row class="bg-white  menuBar2 justify-content-between" id="menuBar2">
     <div class="d-flex">
-      <button class="button sideNavBtn " mat-icon-button (click)="toggleSideBar()"><mat-icon>{{Menu}}</mat-icon> </button>
-      <div class="bg-white logo ps-2 border-end pe-2">
+      <button  mat-icon-button (click)="toggleSideBar()"><mat-icon>{{Menu}}</mat-icon> </button>
+      <div class="bg-white logo ps-2  pe-2">
         <img [src]="logo1"  height="35px" width="35px">
       </div>
     </div>

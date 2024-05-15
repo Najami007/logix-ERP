@@ -66,7 +66,9 @@
                                         (keyup)="getTotal();showImg(item);"
                                         (keypress)="openQtyModal($event,item)" (click)="openQtyModal($event,item)"
                                         class="qty{{index}} text-center" style="width: 80px;"></td>
-                                <td class="text-end">{{item.salePrice|number:'1.0-0'}}</td>
+                            <td class="text-end cursorPointer" data-bs-toggle="modal" data-bs-target="#priceChangeModal" (click)="tempProdData = item;global.focusTo('#amnt')"
+                             >{{item.salePrice |number:'1.0-3'}}</td>
+                             <!-- <td class="text-end">{{item.salePrice|number:'1.0-0'}}</td> -->
 
                                 <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-0'}}</td>
                                 <td class="cursorPointer text-center text-danger"><mat-icon
@@ -397,3 +399,33 @@
 
 
 <!---------------------------------------------------------------------------------->
+
+
+<!------------------------- Modal Window for Product Search by Name =----------------->
+
+
+<div class="modal fade" id="priceChangeModal" tabindex="-1"  aria-labelledby="priceChangeModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-sm">
+        <div class="modal-content">
+            <!-- <div class="modal-header align-content-center ">
+                <h2 class="modal-title" id="priceChangeModalLabel"></h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div> -->
+          <form action="" method="post">
+            <div class="modal-body" >
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>Amount</mat-label>
+                    <input matInput #amnt id="amnt" (keydown)="global.handleNumKeys($event)" />
+                </mat-form-field>
+               
+            </div>
+
+            <div class="modal-footer bg-mf-blue">
+                <button class="btn btn-success" (click)="editPrice(amnt.value);amnt.value = ''" >Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </form>
+
+        </div>
+    </div>
+</div>

@@ -14,6 +14,7 @@
                 <tr>
                     <th>S#</th>
                     <th>Title</th>
+                    <th>Parent Menu</th>
                     <th>Module</th>
                     <th>Serial</th>
                     <th>Link</th>
@@ -27,6 +28,7 @@
                 <tr *ngFor="let item of moduleList | filter: search.value index as index">
                     <td>{{index +1 }}</td>
                     <td>{{item.menuTitle}}</td>
+                    <td>{{item.parentMenuTitle}}</td>
                     <td>{{item.moduleTitle}}</td>
                     <td>{{item.serialNo}}</td>
                     <td>{{item.menuLink}}</td>

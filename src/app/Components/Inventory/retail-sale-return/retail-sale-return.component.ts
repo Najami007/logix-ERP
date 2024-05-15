@@ -520,8 +520,26 @@ delRow(item: any) {
 
 
  //////////////////////////////////////////////////////////////////////////////////
-
+ tempProdData:any = [];
+ editPrice(amount:any){
+    
+  if(amount < this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].costPrice){
+    this.msg.WarnNotify('Price is Less than Cost');
+  }else{
+    this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice = amount;
+    this.getTotal();
+    this.tempProdData = [];
+    $('#priceChangeModal').hide();
+    // $('.modal').remove();
+    // $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
    
+  }
+
+
+
+}
+
 
 
 //////////////////////////////////////////////////////////////////////////////////

@@ -53,8 +53,10 @@ export class TopNavBarComponent implements OnInit{
     
   if(this.m.sideBarOpen == true){
       this.Menu = "menu_open";
+     
     }else{
       this.Menu = "menu";
+
     }
   }
 
