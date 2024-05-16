@@ -1,4 +1,5 @@
 @import url('./app/Shared/Navbar/navbar.scss');
+@import url('./assets/style/common.scss');
 // @import url('./assets/style/logixDesign.css');
 // @import url('./assets/style/barcode.scss');
 @import '~material-design-icons/iconfont/material-icons.css';
@@ -79,6 +80,8 @@ html ,body {
     margin: 0;
     height: 100%;
     font-family: sans-serif;
+    
+  
 
     .modal-backdrop {
       display: none;
@@ -214,51 +217,6 @@ html ,body {
   text-align: center;
 }
 
-
-/////////////////////////////////////
-
-
-
-
-// .table-purchase > thead > tr > th {
-//   /*background-color:#D2101B;*/
-//   /*color:#fff;*/  
-//   font-weight: bold;  
-//   text-align: center;
-//   border:1px solid black;
-// }
-
-// .table-purchase > thead  > th {
-//   /*background-color:#D2101B;*/
-//   /*color:#fff;*/  
-//   font-weight: bold;  
-//   text-align: center;
-//   border:1px solid black;
-// }
-
-// .table-purchase > thead > tr > td {
-//   /*background-color:#D2101B;*/
-//   /*color:#fff;*/  
-//   text-align: left;
-//   border:1px solid black;
-// }
-
-// .table-purchase > tbody > tr > td {
-//   border: 1px solid #000 !important;
-// }
-
-// .table-purchase > tbody > tr > th {
-//   border: 1px solid #000 !important;
-//   font-weight: bold;  
-//   text-align: center;
-// }
-
-
-
-
-
-
-/////////////////////////////////////////////////////
 
 
 
