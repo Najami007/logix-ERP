@@ -56,6 +56,12 @@ loadChildren:()=>
 import('./Components/control-panel/control-panel.module').then((m)=>m.ControlPanelModule),
 
 },
+{path:'hr', 
+component:MainComponent,
+loadChildren:()=> 
+import('./Components/hrms/hrms.module').then((m)=>m.HRMSModule),
+
+},
 { path: '**', redirectTo: 'login', pathMatch: 'full' },
  
 

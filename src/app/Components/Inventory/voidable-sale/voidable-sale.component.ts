@@ -260,6 +260,7 @@ export class VoidableSaleComponent implements OnInit {
           UserID: this.global.getUserID()
         }).subscribe(
           (Response:any)=>{
+            alert(Response.msg);
             if(Response.msg == 'Data Saved Successfully'){
               this.getCurrentBill();
             }else{
