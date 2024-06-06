@@ -75,7 +75,7 @@
     <div class="col-lg-8 border-start container-fluid bg-light ">
         <mat-form-field appearance="outline" class="w-100 pt-2">
             <mat-label>Search.....</mat-label>
-            <input type="text" matInput>
+            <input type="text" #swingSearch matInput>
         </mat-form-field>
         <hr>
         <table class="table table-hover" *ngIf="crudList.r">
@@ -91,7 +91,7 @@
             </thead>
             <tbody>
 
-                <tr *ngFor="let item of swingsList |paginate:{
+                <tr *ngFor="let item of swingsList|filter:swingSearch.value |paginate:{
                     itemsPerPage : tableSize,
                     currentPage : page,
                     totalItems :    count,

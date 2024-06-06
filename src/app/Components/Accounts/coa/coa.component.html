@@ -163,7 +163,7 @@
 
                 <mat-form-field class="w-100" appearance="outline">
                     <mat-label class="ps-5">Search.....</mat-label>
-                    <input #coaSearch   matInput type="text" class="text-secondary">
+                    <input #coaSearch name="search"  matInput type="text" class="text-secondary">
                     <mat-icon matPrefix class="text-secondary">search</mat-icon>
                 </mat-form-field>
             
@@ -184,7 +184,7 @@
                     </thead>
     
                     <tbody>
-                        <tr  *ngFor="let item of ChartsofAccountsData |filter:coaSearch.value index as index" >
+                        <tr  *ngFor="let item of ChartsofAccountsData |filter:coaSearch.value ; index as index" >
                             <td>{{index+1}}</td>
                             <td class="cursorPointer" (click)="updateCoa(item)">{{item.accountCode}}</td>
                             <td>{{item.coaTitle}}</td>

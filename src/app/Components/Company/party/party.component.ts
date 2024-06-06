@@ -151,7 +151,7 @@ addCity(){
       {
         next:value =>{
           this.partyData = value;
-          console.log(value);
+          //console.log(value);
           this.loadingBar = 'Stop';     
         },
         error: error=>{

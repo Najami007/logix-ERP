@@ -54,28 +54,20 @@
 
 
 
-.menuBar2{
+.mIcon{
   display: none;
 }
    
 @media only screen and (max-width:1150px){
   .topNavMenuList{
     display: none !important;
-    overflow-y: scroll;
   }
 
-  .logo{
-    padding-top: 5px;
-  
+   .mIcon{
+    display:contents;
   }
+ 
 
-  .menuBar1{
-    display: none;
-  }
-
-  .menuBar2{
-    display: flex;
-  }
 
 
 }

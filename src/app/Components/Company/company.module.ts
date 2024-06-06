@@ -23,6 +23,8 @@ import { ProjectComponent } from './project/project.component';
 import { AuthGuard } from 'src/app/auth.guard';
 import { PartyComponent } from './party/party.component';
 import { AddpartyComponent } from './party/addparty/addparty.component';
+import { FilterPipe } from 'src/app/Shared/pipes/filter/filter.pipe';
+import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 
 
 
@@ -59,6 +61,7 @@ export const companyRoutes: Route[] = [
     ProjectComponent,
     PartyComponent,
     AddpartyComponent,
+    
   
   ],
   imports: [
@@ -67,11 +70,12 @@ export const companyRoutes: Route[] = [
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    Ng2SearchPipeModule,
+    //Ng2SearchPipeModule,
     MatFormFieldModule,
     ChartModule,
     NgxMatSelectSearchModule,
-    TextMaskModule
+    TextMaskModule,
+    PipesModule,
 
 
 

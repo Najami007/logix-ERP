@@ -23,6 +23,7 @@ import { TicketDetailComponent } from './park-sale/ticket-detail/ticket-detail.c
 import { ParkDashBoardComponent } from './park-dash-board/park-dash-board.component';
 import { ChartModule,HIGHCHARTS_MODULES } from 'angular-highcharts';
 import { ActiveMemberRptComponent } from './parkReports/active-member-rpt/active-member-rpt.component';
+import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 
 
 
@@ -69,9 +70,10 @@ export const parkRoutes: Route[] = [
     MaterialModule,
     NgxMatSelectSearchModule,
     // TextMaskModule,
-    Ng2SearchPipeModule,
+    //Ng2SearchPipeModule,
     NgxMaterialTimepickerModule,
-    ChartModule
+    ChartModule,
+    PipesModule
   ],
   exports: [
     RouterModule

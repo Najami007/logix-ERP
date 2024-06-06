@@ -25,9 +25,7 @@ import * as more from 'highcharts/highcharts-more.src';
 import * as exporting from 'highcharts/modules/exporting.src';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { NotificationService } from './Shared/service/notification.service';
 import { HomeComponent } from './Components/home/home.component';
-import { COAComponent } from './Components/Accounts/coa/coa.component';
 import { MainComponent } from './Components/Layout/main/main.component';
 import { TopNavBarComponent } from './Components/Layout/top-nav-bar/top-nav-bar.component';
 import { HeaderComponent } from './Components/Layout/header/header.component';
@@ -37,6 +35,8 @@ import { ConfirmationAlertComponent } from './Components/Common/confirmation-ale
 import { SharedServicesDataModule } from './Shared/helper/shared-services-data/shared-services-data.module';
 import { SharedFieldValidationModule } from './Shared/helper/shared-field-validation/shared-field-validation.module';
 import { DatePipe } from '@angular/common';
+import { FilterPipe } from './Shared/pipes/filter/filter.pipe';
+
 
 
 
@@ -66,16 +66,16 @@ import { DatePipe } from '@angular/common';
     AppComponent, 
     LoginComponent,
     HomeComponent,
-    COAComponent,
     MainComponent,
     TopNavBarComponent,
     HeaderComponent,
     NumberInputComponent,
     SideNavbarComponent,
     ConfirmationAlertComponent,
+    //LFilterPipe,
 
     // TruncatePipe ,  
-    // FilterPipe
+    //  FilterPipe
  
 
   ],
@@ -107,11 +107,15 @@ import { DatePipe } from '@angular/common';
     NgxPaginationModule,
     SharedServicesDataModule,
     SharedFieldValidationModule,
- 
+    
+   
    
     
   
 
+  ],
+  exports:[
+   
   ],
   // providers: [{ provide: HIGHCHARTS_MODULES, useFactory: () => [ more, exporting ] }, NotificationService,GlobalDataModule],
   bootstrap: [AppComponent]

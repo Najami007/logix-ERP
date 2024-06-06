@@ -67,6 +67,7 @@ import { PriceCheckerComponent } from './price-checker/price-checker.component';
 
 import { WholeSaleComponent } from './whole-sale/whole-sale.component';
 import { WhsSavedBillComponent } from './whole-sale/whs-saved-bill/whs-saved-bill.component';
+import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 
 
 
@@ -328,11 +329,12 @@ export const inventoryRoutes: Route[] = [
     MaterialModule,
     NgxMatSelectSearchModule,
     TextMaskModule,
-    Ng2SearchPipeModule,
+    //Ng2SearchPipeModule,
     NgxMaterialTimepickerModule,
     ScrollingModule,
     ChartModule,
-    NgxBarcodeModule
+    NgxBarcodeModule,
+    PipesModule
   ],
   exports: [
     RouterModule

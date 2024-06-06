@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Host, HostBinding, Inject, OnInit, Output, Renderer2, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -10,6 +10,8 @@ import { ChangePINComponent } from '../../User/change-pin/change-pin.component';
 import { Subscription } from 'rxjs';
 import { AppComponent } from 'src/app/app.component';
 import { MainComponent } from '../main/main.component';
+import { FormControl } from '@angular/forms';
+import { OverlayContainer } from 'ngx-toastr';
 
 @Component({
   selector: 'app-top-nav-bar',
@@ -23,8 +25,9 @@ export class TopNavBarComponent implements OnInit{
     moduleID?: string | null;
     
     
-    tstUN:any = "";
+   
     @Output() toggleMySideBar : EventEmitter<any> = new EventEmitter();
+    toggleControl: any;
   constructor(private globalData:GlobalDataModule,
     private msg:NotificationService,
     private http:HttpClient,
@@ -32,6 +35,9 @@ export class TopNavBarComponent implements OnInit{
     private dialogue:MatDialog,
     private app:AppComponent,
     private m :MainComponent,
+    private overlay :OverlayContainer,
+
+    private render:Renderer2,
     ){
 
       this.clickEventSubscription = this.globalData
@@ -46,12 +52,33 @@ export class TopNavBarComponent implements OnInit{
 
   }
 
+   
+  ngOnInit(): void {
+
+    this.moduleID = localStorage.getItem('mid');
+    this.UserName = this.globalData.getUserName();
+    this.getMenu();
+    this.getCompany();
+  
+
+  }
+
+  changeThemeFlag = false;
+
+
+
+
+
+
+
+
+
   Menu = "menu";
   
   toggleSideBar(){
     this.toggleMySideBar.emit(); 
     
-  if(this.m.sideBarOpen == true){
+  if(this.m.sideBarOpen){
       this.Menu = "menu_open";
      
     }else{
@@ -60,16 +87,11 @@ export class TopNavBarComponent implements OnInit{
     }
   }
 
-  
-    ngOnInit(): void {
-      this.moduleID = localStorage.getItem('mid');
-      this.UserName = this.globalData.getUserName();
-      this.getMenu();
-      this.getCompany();
-      // this.globalData.getCrud();
-      // console.log(this.globalData.getCrud())
+ 
+ 
 
-    }
+
+
     UserName:any = 'abc';
     companyProfile:any;
     logo1:any = '../../../../assets/Images/logo.png';
@@ -94,22 +116,24 @@ export class TopNavBarComponent implements OnInit{
     )
   }
 
+
+
   
   hideFlag = true;
 
-  hideUnhide(){
-   this.hideFlag != this.hideFlag;
-   if(this.hideFlag == true){
-    $('#menubar').fadeOut(500);
-    // $('#menuBar2').fadeOut(500);
-   }
+  // hideUnhide(){
+  //  this.hideFlag != this.hideFlag;
+  //  if(this.hideFlag == true){
+  //   $('#menubar').fadeOut(500);
+  //   // $('#menuBar2').fadeOut(500);
+  //  }
 
-   if(this.hideFlag == false){
-    $('#menubar').show();
-    // $('#menuBar2').show();
-   }
+  //  if(this.hideFlag == false){
+  //   $('#menubar').show();
+  //   // $('#menuBar2').show();
+  //  }
 
-  }
+  // }
  
     
    

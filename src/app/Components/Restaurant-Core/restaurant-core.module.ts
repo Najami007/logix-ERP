@@ -38,6 +38,7 @@ import { RecipeListComponent } from './restaurantReports/recipe-list/recipe-list
 import { RecipeDetailComponent } from './recipe/recipe-detail/recipe-detail.component';
 import { VoidReportComponent } from './restaurantReports/void-report/void-report.component';
 import { RecipeComparisonComponent } from './restaurantReports/recipe-list/recipe-comparison/recipe-comparison.component';
+import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 
 
 
@@ -116,12 +117,13 @@ export const restCore: Route[] = [
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    Ng2SearchPipeModule,
+    //Ng2SearchPipeModule,
     MatFormFieldModule,
     ChartModule,
     NgxMatSelectSearchModule,
     TextMaskModule,
     NgxMaterialTimepickerModule,
+    PipesModule
 
   ],
   exports: [

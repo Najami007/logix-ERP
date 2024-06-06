@@ -73,7 +73,7 @@ export class LedgerComponent {
   }
 
   projectSearch:any;
-  coaID:any;
+  coaID:any  ;
   projectID:number = 0;
   projectName:any;
   startDate = new Date();
@@ -110,13 +110,6 @@ export class LedgerComponent {
 
 
 
-//  getCrud(){
-//   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
-//     (Response:any)=>{
-//       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-//     }
-//   )
-// }
 
 
 
@@ -162,6 +155,7 @@ export class LedgerComponent {
       }
     )
   }
+ 
 
 
   ///////////////////////////////////////////////////////
@@ -206,8 +200,7 @@ export class LedgerComponent {
     
   }
 
-
-
+  
 
    ///////////////////////////////////////////////////
 

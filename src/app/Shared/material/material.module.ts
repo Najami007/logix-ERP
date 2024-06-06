@@ -40,7 +40,11 @@ import { NgxPaginationModule } from 'ngx-pagination';
 
 
 
+
 @NgModule({
+  declarations:[
+    
+  ],
   imports: [
     MatInputModule,
     MatCardModule,
@@ -72,7 +76,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     MatPaginatorModule,
     MatSortModule,
     MatProgressBarModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+  
 
   ],
   exports: [
@@ -105,7 +110,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     MatPaginatorModule,
     MatSortModule,
     MatProgressBarModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+   
     
   ],
 })

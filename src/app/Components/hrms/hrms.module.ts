@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ChartModule } from 'angular-highcharts';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { TextMaskModule } from 'angular2-text-mask';
+import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 
 
 export const hrmsRoutes: Route[] = [
@@ -39,11 +40,12 @@ export const hrmsRoutes: Route[] = [
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    Ng2SearchPipeModule,
+    //Ng2SearchPipeModule,
     MatFormFieldModule,
     ChartModule,
     NgxMatSelectSearchModule,
-    TextMaskModule
+    TextMaskModule,
+    PipesModule
   ]
 })
 export class HRMSModule { }

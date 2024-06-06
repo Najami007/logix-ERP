@@ -52,6 +52,9 @@ import { AddIncomeComponent } from './DesiAccounts/income/add-income/add-income.
 import { AddOpeningComponent } from './DesiAccounts/opening-cash/add-opening/add-opening.component';
 import { AddPaymentComponent } from './DesiAccounts/payment/add-payment/add-payment.component';
 import { AddWithdrawalComponent } from './DesiAccounts/profit-withdrawal/add-withdrawal/add-withdrawal.component';
+import { FilterPipe } from 'src/app/Shared/pipes/filter/filter.pipe';
+import { LFilterPipe } from 'src/app/Shared/Pipe/LFilter/lfilter.pipe';
+import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 
 
 
@@ -131,6 +134,8 @@ export const accountRountes: Route[] = [
     AddOpeningComponent,
     AddPaymentComponent,
     AddWithdrawalComponent,
+    COAComponent
+   
     
     
   
@@ -141,9 +146,11 @@ export const accountRountes: Route[] = [
     CommonModule,
     RouterModule.forChild(accountRountes),
     MaterialModule,
+    PipesModule,
     FormsModule,
     ReactiveFormsModule,
-    Ng2SearchPipeModule,
+ 
+    //Ng2SearchPipeModule,
     MatFormFieldModule,
     ChartModule,
     NgxMatSelectSearchModule
@@ -153,6 +160,8 @@ export const accountRountes: Route[] = [
   ],
   exports:[
     RouterModule,
+  
+  
     
     
   ],

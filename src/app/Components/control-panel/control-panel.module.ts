@@ -17,6 +17,7 @@ import { CodesComponent } from './codes/codes.component';
 import { AddCodeComponent } from './codes/add-code/add-code.component';
 import { FeaturesComponent } from './features/features.component';
 import { AddFeatureComponent } from './features/add-feature/add-feature.component';
+import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 
 
 export const panelRoutes: Route[] = [
@@ -41,7 +42,8 @@ export const panelRoutes: Route[] = [
     CodesComponent,
     AddCodeComponent,
     FeaturesComponent,
-    AddFeatureComponent
+    AddFeatureComponent,
+    
   ],
   imports: [
     CommonModule,
@@ -49,11 +51,12 @@ export const panelRoutes: Route[] = [
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    Ng2SearchPipeModule,
+    //Ng2SearchPipeModule,
     MatFormFieldModule,
     ChartModule,
     NgxMatSelectSearchModule,
-    TextMaskModule
+    // TextMaskModule,
+    PipesModule
   ]
 })
 export class ControlPanelModule { }

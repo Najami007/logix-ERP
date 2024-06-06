@@ -21,6 +21,7 @@ import { RestrictpwdComponent } from './restrictpwd/restrictpwd.component';
 import { DayopencloseComponent } from './dayopenclose/dayopenclose.component';
 import { DayOpencloseRptComponent } from './day-openclose-rpt/day-openclose-rpt.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 
 
 
@@ -58,8 +59,9 @@ export const userRoutes: Route[] = [
     MaterialModule,
     NgxMatSelectSearchModule,
     TextMaskModule,
-    Ng2SearchPipeModule,
-    NgxMaterialTimepickerModule
+    //Ng2SearchPipeModule,
+    NgxMaterialTimepickerModule,
+    PipesModule
 
 
 
