@@ -23,9 +23,10 @@ $my-theme-dark: mat.define-dark-theme((
    accent: $my-accent,
    warn: $my-warn,
  ),
+ 
 
 ));
-
+//@include mat.all-component-colors($my-theme-dark);
 .darkTheme{
   @include mat.all-component-colors($my-theme-dark);
 }
@@ -816,4 +817,14 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .min-600{
   min-height: 600px !important;
+}
+
+
+
+///////////////////////////// Sale Page Design ///////////////////
+
+
+
+.btn{
+  min-width: 80px;
 }

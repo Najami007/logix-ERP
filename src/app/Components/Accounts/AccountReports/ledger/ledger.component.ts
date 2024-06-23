@@ -213,12 +213,7 @@ export class LedgerComponent {
 
 
   VoucherDetails(row:any){
-    this.dialogue.open(VoucherDetailsComponent,{
-      width:"40%",
-      data:row,
-    }).afterClosed().subscribe(val=>{
-      
-    })
+    row.invoiceNo > 0 ?this.dialogue.open(VoucherDetailsComponent,{width:"40%",data:row,}).afterClosed().subscribe(val=>{ }) : '';
   }
 
 

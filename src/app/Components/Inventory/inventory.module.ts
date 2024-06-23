@@ -68,6 +68,9 @@ import { PriceCheckerComponent } from './price-checker/price-checker.component';
 import { WholeSaleComponent } from './whole-sale/whole-sale.component';
 import { WhsSavedBillComponent } from './whole-sale/whs-saved-bill/whs-saved-bill.component';
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
+import { GarmentSaleComponent } from './garment-sale/garment-sale.component';
+import { GarmentSavedBillComponent } from './garment-sale/garment-saved-bill/garment-saved-bill.component';
+import { SaleReportCustomerwiseComponent } from './InventoryReports/sale-report-customerwise/sale-report-customerwise.component';
 
 
 
@@ -247,7 +250,16 @@ export const inventoryRoutes: Route[] = [
     component: WholeSaleComponent,
     canActivate: [AuthGuard]
   },    
-    
+  {
+    path: 'gmsale',
+    component: GarmentSaleComponent,
+    canActivate: [AuthGuard]
+  }, 
+  {
+    path: 'slrptcw',
+    component: SaleReportCustomerwiseComponent,
+    canActivate: [AuthGuard]
+  }, 
 
 
 
@@ -312,6 +324,9 @@ export const inventoryRoutes: Route[] = [
    
     WholeSaleComponent,
     WhsSavedBillComponent,
+    GarmentSaleComponent,
+    GarmentSavedBillComponent,
+    SaleReportCustomerwiseComponent,
   
     
    
@@ -334,7 +349,8 @@ export const inventoryRoutes: Route[] = [
     ScrollingModule,
     ChartModule,
     NgxBarcodeModule,
-    PipesModule
+    PipesModule,
+    
   ],
   exports: [
     RouterModule

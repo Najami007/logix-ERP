@@ -72,6 +72,7 @@ import { FilterPipe } from './Shared/pipes/filter/filter.pipe';
     NumberInputComponent,
     SideNavbarComponent,
     ConfirmationAlertComponent,
+    
     //LFilterPipe,
 
     // TruncatePipe ,  
@@ -107,6 +108,7 @@ import { FilterPipe } from './Shared/pipes/filter/filter.pipe';
     NgxPaginationModule,
     SharedServicesDataModule,
     SharedFieldValidationModule,
+  
     
    
    
