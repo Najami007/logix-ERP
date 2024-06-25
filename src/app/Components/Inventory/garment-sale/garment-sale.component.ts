@@ -89,7 +89,25 @@ export class GarmentSaleComponent implements OnInit {
    }, 200);
    
    this.global.getProducts().subscribe(
-    (data:any)=>{this.productList = data;})
+    (data:any)=>{this.productList = data;});
+
+    for(let i=0; i <= 100; i++){this.discountList.push({value:i});}
+      
+    
+   
+  }
+
+  discountList:any = []; 
+  billDiscount:any;
+
+  applyDiscount(){
+    
+    this.tableDataList.forEach((e:any) => {
+        e.discInP = this.billDiscount;
+        e.discInR = (e.salePrice * this.billDiscount) /100
+    });
+    this.getTotal();
+
   }
 
 
@@ -705,6 +723,14 @@ export class GarmentSaleComponent implements OnInit {
            isValidFlag = false;
            return;
         }
+
+        if(p.costPrice > (p.salePrice - p.discInR)  ){
+          this.msg.WarnNotify('('+p.productTitle+') Discount not valid');
+           isValidFlag = false;
+  
+           return;
+        }
+  
         
        
      
@@ -848,6 +874,8 @@ export class GarmentSaleComponent implements OnInit {
   myDuplicateFlag = false;
   myTime:any;
   myQtyTotal =0;
+  myDiscInR = 0;
+  myDiscInP = 0;
   PrintAfterSave(InvNo:any){
     
 

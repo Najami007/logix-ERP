@@ -71,6 +71,7 @@ import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 import { GarmentSaleComponent } from './garment-sale/garment-sale.component';
 import { GarmentSavedBillComponent } from './garment-sale/garment-saved-bill/garment-saved-bill.component';
 import { SaleReportCustomerwiseComponent } from './InventoryReports/sale-report-customerwise/sale-report-customerwise.component';
+import { InvAuditComponent } from './inv-audit/inv-audit.component';
 
 
 
@@ -260,6 +261,11 @@ export const inventoryRoutes: Route[] = [
     component: SaleReportCustomerwiseComponent,
     canActivate: [AuthGuard]
   }, 
+  {
+    path: 'invadt',
+    component: InvAuditComponent,
+    canActivate: [AuthGuard]
+  }, 
 
 
 
@@ -327,6 +333,7 @@ export const inventoryRoutes: Route[] = [
     GarmentSaleComponent,
     GarmentSavedBillComponent,
     SaleReportCustomerwiseComponent,
+    InvAuditComponent,
   
     
    

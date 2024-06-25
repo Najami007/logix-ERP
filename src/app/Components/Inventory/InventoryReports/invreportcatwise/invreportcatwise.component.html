@@ -1,84 +1,22 @@
 <div class="body ">
 
 
-    <div class="row  container-fluid  justify-content-center pt-2  border-bottom" >
+    <div class="ps-1 d-flex  pt-2  border-bottom" >
 
         <mat-form-field appearance="outline" class="col-lg-10">
-            <mat-label>Select Report Type</mat-label>
+            <mat-label>Report Type</mat-label>
             <mat-select [(ngModel)]="reportType" (selectionChange)="emptyField()" >
                 <mat-option *ngFor="let item of reportTypeList index as index" [value]="item.val">{{index+1}} - {{item.title}}</mat-option>
             </mat-select>
         </mat-form-field>
 
 
-       <div class="col-lg-2">
+       <div class="col-lg-2 ms-1">
         <button mat-raised-button data-bs-toggle="modal" data-bs-target="#credential" color="primary" class="btn-rpt " (click)="openDialog()">Get Report</button>
         <mat-checkbox [(ngModel)]="minusOnly">Minus Only</mat-checkbox>
 
        </div>
 
-            <!---------------------------------- Modal Window for Credentials-------------------------->
-        <div class="modal fade" id="credential" tabindex="-1" data-bs-backdrop="static" aria-labelledby="credentialLabel" >
-            <div class="modal-dialog modal-dialog-centered  modal-l">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h2 class="modal-title" id="credentialLabel">Select Credentials</h2>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
-                </div>
-                <div class="modal-body">
-
-                    <!-- <select appearance="outline" *ngIf="reportType == 'cw'|| reportType == 'scw'" >
-                        <option><ngx-mat-select-search   #cat [placeholderLabel]="'Search...'"
-                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></option>
-                        <option *ngFor="let item of CategoriesList |filter:cat.value" value="{{item.categoryID}}">{{item.categoryTitle}}</option>
-                    </select> -->
-
-                    <mat-form-field appearance="outline" *ngIf="catFlag" class="w-100 cat">
-                        <mat-label>Category</mat-label>
-                        <mat-select [(ngModel)]="categoryID"  (selectionChange)="onSelection('cat',$event);getSubCategory()" >
-                        
-                            <mat-option *ngFor="let item of CategoriesList " [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
-                        </mat-select>
-                     </mat-form-field>
-
-                     <mat-form-field appearance="outline" *ngIf="subCatFlag" class="w-100 subcat">
-                        <mat-label>Sub Category</mat-label>
-                        <mat-select [(ngModel)]="subCategoryID" (selectionChange)="onSelection('subcat',$event)">
-                            <mat-option *ngFor="let item of SubCategoriesList " [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
-                        </mat-select>
-                     </mat-form-field>
-                     <mat-form-field appearance="outline" class="w-100 brand" *ngIf="brandFlag">
-                        <mat-label>Brand</mat-label>
-                        <mat-select [(ngModel)]="brandID" (selectionChange)="onSelection('brand',$event)">
-                            <mat-option *ngFor="let item of BrandList " [value]="item.brandID">{{item.brandTitle}}</mat-option>
-                        </mat-select>
-                     </mat-form-field>
-                     <mat-form-field appearance="outline" class="w-100 type" *ngIf="typeFlag"> 
-                        <mat-label>Type</mat-label>
-                        <mat-select [(ngModel)]="typeID" (selectionChange)="onSelection('type',$event)">
-                            <mat-option *ngFor="let item of ProductTypeList " [value]="item.productTypeID">{{item.productTypeTitle}}</mat-option>
-                        </mat-select>
-                     </mat-form-field>
-    
-                 <mat-form-field appearance="outline" class="w-100 loc" *ngIf="locFlag">
-                    <mat-label>Location</mat-label>
-                    <mat-select [(ngModel)]="locationID" (selectionChange)="onSelection('location',$event)">
-                        <mat-option *ngFor="let item of locationList " [value]="item.locationID">{{item.locationTitle}}</mat-option>
-                    </mat-select>
-                 </mat-form-field>
-                   
-            
-                </div>
-
-                <div class="modal-footer bg-mf">
-                    <button class="btn btn-success" data-bs-dismiss="modal" (click)="getReport()">Get Report</button>
-                    <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal"  >Close </button>
-                  </div>
-                
-            
-              </div>
-            </div>
-          </div>
 
     </div>
     <div class="p-1 d-flex justify-content-between">
@@ -177,7 +115,7 @@
 
 
 
-         <div class="container-fluid">
+         <div class="p-1">
             <div class="text-center ">
                 <h3 style="font-family:Verdana, Geneva, Tahoma, sans-serif;">Inventory Report</h3>
                 <p style="font-family:Verdana, Geneva, Tahoma, sans-serif;margin-top: -20px;"><strong>{{Title}}</strong></p>
@@ -262,3 +200,68 @@
 
 
 </div>
+
+
+
+            <!---------------------------------- Modal Window for Credentials-------------------------->
+            <div class="modal fade" id="credential" tabindex="-1" data-bs-backdrop="static" aria-labelledby="credentialLabel" >
+                <div class="modal-dialog modal-dialog-centered  modal-l">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h2 class="modal-title text-uppercase" id="credentialLabel">Credentials</h2>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+                    </div>
+                    <div class="modal-body">
+    
+                        <!-- <select appearance="outline" *ngIf="reportType == 'cw'|| reportType == 'scw'" >
+                            <option><ngx-mat-select-search   #cat [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></option>
+                            <option *ngFor="let item of CategoriesList |filter:cat.value" value="{{item.categoryID}}">{{item.categoryTitle}}</option>
+                        </select> -->
+    
+                        <mat-form-field appearance="outline" *ngIf="catFlag" class="w-100 cat">
+                            <mat-label>Category</mat-label>
+                            <mat-select [(ngModel)]="categoryID"  (selectionChange)="onSelection('cat',$event);getSubCategory()" >
+                            
+                                <mat-option *ngFor="let item of CategoriesList " [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
+                            </mat-select>
+                         </mat-form-field>
+    
+                         <mat-form-field appearance="outline" *ngIf="subCatFlag" class="w-100 subcat">
+                            <mat-label>Sub Category</mat-label>
+                            <mat-select [(ngModel)]="subCategoryID" (selectionChange)="onSelection('subcat',$event)">
+                                <mat-option *ngFor="let item of SubCategoriesList " [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
+                            </mat-select>
+                         </mat-form-field>
+                         <mat-form-field appearance="outline" class="w-100 brand" *ngIf="brandFlag">
+                            <mat-label>Brand</mat-label>
+                            <mat-select [(ngModel)]="brandID" (selectionChange)="onSelection('brand',$event)">
+                                <mat-option *ngFor="let item of BrandList " [value]="item.brandID">{{item.brandTitle}}</mat-option>
+                            </mat-select>
+                         </mat-form-field>
+                         <mat-form-field appearance="outline" class="w-100 type" *ngIf="typeFlag"> 
+                            <mat-label>Type</mat-label>
+                            <mat-select [(ngModel)]="typeID" (selectionChange)="onSelection('type',$event)">
+                                <mat-option *ngFor="let item of ProductTypeList " [value]="item.productTypeID">{{item.productTypeTitle}}</mat-option>
+                            </mat-select>
+                         </mat-form-field>
+        
+                     <mat-form-field appearance="outline" class="w-100 loc" *ngIf="locFlag">
+                        <mat-label>Location</mat-label>
+                        <mat-select [(ngModel)]="locationID" (selectionChange)="onSelection('location',$event)">
+                            <mat-option *ngFor="let item of locationList " [value]="item.locationID">{{item.locationTitle}}</mat-option>
+                        </mat-select>
+                     </mat-form-field>
+                       
+                
+                    </div>
+    
+                    <div class="modal-footer bg-mf">
+                        <button class="btn btn-success" data-bs-dismiss="modal" (click)="getReport()">Get Report</button>
+                        <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal"  >Close </button>
+                      </div>
+                    
+                
+                  </div>
+                </div>
+              </div>

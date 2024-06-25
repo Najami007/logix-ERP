@@ -280,6 +280,39 @@
 }
 
 
+/* Design for Garment Sale Bill Print*/
+
+.table-garment-sale{
+  width: 100%;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  border: 2px solid black !important;
+}
+
+.table-garment-sale >thead>tr>th{
+  padding: 5px;
+  border: 1px solid rgb(148, 146, 146);
+  text-transform: uppercase;
+
+}
+
+.table-garment-sale-2 >tbody>tr{
+  padding: 5px;
+  border-bottom: 2px dotted rgb(148, 146, 146) !important;
+}
+
+.table-garment-sale-2 >tbody>tr>td{
+  border-top:1px solid rgb(148, 146, 146);
+  border-bottom:0px ;
+
+  border-right: 1px solid rgb(148, 146, 146);
+  border-left: 1px solid rgb(148, 146, 146);
+  font-size: 12px !important;
+}
+
+
+
+
 
 
 

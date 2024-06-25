@@ -35,7 +35,7 @@
 
            </div>
 
-           <div class="pt-3 ps-3" >
+           <div class="pt-3" >
         
             <div class="border-bottom ">
                 <div class="pt-2 d-flex justify-content-between">
@@ -147,10 +147,20 @@
             </div>
         </div>
             
-
+      
+      
         </div>
 
     </div>
+      
+  <div style="position: fixed;bottom: 3%;left: 25%;">
+    <mat-form-field style="width: 100px;">
+        <mat-label>Disc</mat-label>
+        <mat-select [(ngModel)]="billDiscount" name="billDiscount" (selectionChange)="applyDiscount()">
+            <mat-option *ngFor="let item of discountList" [value]="item.value">{{item.value}}%</mat-option>
+        </mat-select>
+    </mat-form-field>
+  </div>
 
 
         <!------------------------- Modal Window for Product Search by Name =----------------->
@@ -370,25 +380,38 @@ aria-labelledby="paymentMehtodLabel">
     <h2 *ngIf="myDuplicateFlag == true" class="border border-dark w-100 text-center">Duplicate</h2>
 
     <div>
-        <table class="table table-sale">
+        <table class="w-100 table-garment-sale">
             <thead >
                 <tr>
-                    <th>S#</th>
-                    <th>Title</th>
-                    <th>Qty</th>
-                    <th>Price</th>
-                    <th>Total</th>
-
+                    <th style="width:10% !important;">Qty</th>
+                    <th style="width:20% !important;">Price</th>
+                    <th style="width:10% !important;">Disc Rs</th>
+                    <th style="width:10% !important;">Disc %</th>
+                    <th style="width:20% !important;">Total</th>
+                    
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of myPrintTableData index as index">
-                    <td>{{index +1}}</td>
-                    <td class="text-start">{{item.productTitle}}</td>
-                    <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
-                    <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
-                    <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
+                <tr *ngFor="let item of myPrintTableData index as index" >
+                    <td colspan="5" class="text-start">
+                        &nbsp;{{index +1}}. <b> {{item.productTitle}}</b>
+                        <table class="table-garment-sale-2 w-100">
+                            <tr>
+                                <td class="text-center" style="width:10% !important;">{{item.quantity |number:'1.0-2'}}</td>
+                                <td class="text-end" style="width:20% !important;">{{item.salePrice |number:'1.0-2'}}</td>
+                                <td class="text-end" style="width:10% !important;">{{myDiscInR|number:'1.0-2'}}</td>
+                                <td class="text-end" style="width:10% !important;">{{myDiscInP|number:'1.0-2'}}</td>
+                                <td class="text-end" style="width:20% !important;">{{(item.quantity * item.salePrice) - (item.DiscInR * item.quantity) |number:'1.0-2'}}</td>
+                            </tr>
+                        </table>
+                    </td>
+                    
 
+                </tr>
+                <tr>
+                    <td colspan="2">Total Items</td>
+                    <td class="fw-bold">{{myQtyTotal | number:'1.0-2'}}</td>
+                    <td colspan="3"></td>
                 </tr>
             </tbody>
         </table>

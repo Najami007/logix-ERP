@@ -1,10 +1,10 @@
 <div class="body ">
 
     <!-- ////////////////////////// first row////////////////// -->
-    <div class="mb-2 pt-1 ps-1 row w-100" style="box-shadow: 0px 0px 10px 0px rgb(192, 209, 235);background-color:rgb(255, 255, 255);" >
-        <mat-card class="row col-lg-11 mb-2  me-1 pt-3" style="background-color: #e8e8e4   ;">
+    <div class="row w-100 mb-2 pt-1 ps-1 " style="box-shadow: 0px 0px 10px 0px rgb(192, 209, 235);background-color:rgb(255, 255, 255);" >
+        <div class="row col-lg-11 card  pt-3" style="background-color: #e8e8e4   ;">
     
-            <div class="row pt-4 justify-content-between col-lg-11  ps-3 pe-3" >
+            <div class="row pt-4 justify-content-between col-lg-11" >
                 <div class="col-lg-8 d-flex ">
                     <input type="text" #pbarcode [(ngModel)]="PBarcode"
                         (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event);"
@@ -27,10 +27,10 @@
                 </div>
             </div>
 
-        </mat-card>
+        </div>
 
-      <div class=" col-lg-1 d-flex justify-content-center">
-        <mat-card class="mb-2 text-center border border-primary" style="height: 130px;width: 130px;" >
+      <div class="ms-4 col-lg-1 d-flex justify-content-center">
+        <mat-card class="text-center border border-primary" style="height: 130px;width: 130px;" >
             <div class="p-1 " *ngIf="tableDataList != ''" accesskey="i"
                 (click)="this.global.showProductImage(this.productImage,0)">
                 <img [src]="productImage" alt="Img not Found" height="110" width="110">
@@ -48,7 +48,7 @@
 
     <!-- ////////////////////////// Table Row////////////////// -->
 
-    <div class="border rounded card shadow p-2 w-100" style="overflow-y: scroll !important; max-height: 70vh;padding-bottom: 120px;">
+    <div class="border rounded card shadow p-1 w-100" style="overflow-y: scroll !important; max-height: 70vh;padding-bottom: 120px;">
 
         <table class="table table-hover table-logix"  >
             <thead>
@@ -124,13 +124,12 @@
     <!-- //////////////////////////Row 3////////////////// -->
 
 
-    <div class="w-100 row  bg-white" *ngIf="hideTotalFlag" style="position: fixed;bottom: 6%;" id="totalRow"
-        >
+    <div class="w-100 row  bg-white " *ngIf="hideTotalFlag" style="position: fixed;bottom: 6%;" id="totalRow">
 
         <!-- //////////////////////first Column/////////////////////// -->
-        <mat-card class=" col-lg-7" style="background-color: rgb(248, 237, 217);">
+        <div class=" col-lg-7 card" style="background-color: rgb(248, 237, 217);">
 
-            <mat-card-content class="row">
+            <div class="row ps-1 pt-3">
                 <mat-form-field appearance="outline" *ngIf="global.DisableDate == false" class="col-lg-2">
                     <mat-label>Invoice Date</mat-label>
                     <input [(ngModel)]="invoiceDate"  [disabled]="global.DisableDate" readonly="true" matInput type="text" name="voucherDate"
@@ -177,14 +176,14 @@
 
 
 
-            </mat-card-content>
+            </div>
 
-        </mat-card>
+        </div>
 
         <!-- //////////////////////Second Column/////////////////////// -->
-        <mat-card class="col-lg-3">
+        <div class="col-lg-3 card">
 
-            <mat-card-content class="d-flex flex-column">
+            <div class="d-flex flex-column ps-1 pt-3">
                 <mat-form-field appearance="outline">
                     <mat-label>Supplier</mat-label>
                     <mat-select [(ngModel)]="partyID"  #supplier (selectionChange)="onPartySelected()" name="customer">
@@ -212,15 +211,15 @@
                         <label class="pt-2">{{supplierDetail.partyCNIC}}</label>
                     </div>
                 </div>
-            </mat-card-content>
+            </div>
 
 
 
-        </mat-card>
+        </div>
 
 
         <!-- //////////////////////Third Column/////////////////////// -->
-        <mat-card class=" col-lg-2" style="background-color: rgb(245, 240, 236);">
+        <div class=" col-lg-2 card" style="background-color: rgb(245, 240, 236);">
 
             <div class="text-end">
                 <button  id="hideBtn" class="text-danger" matTooltip="Hide Total" (click)="hide('hide')"
@@ -229,7 +228,7 @@
             </div>
 
 
-            <mat-card-content class="d-flex flex-column">
+            <div class="d-flex flex-column">
                 <div class=" pt-3  text-center">
                     <h2 class="text-secondary ">TOTAL</h2>
                     <h1 style="font-size: 50px;" class="text-danger">{{subTotal || 0 |number:'1.0-2'}}</h1>
@@ -239,9 +238,9 @@
 
             </div>
 
-            </mat-card-content>
+            </div>
 
-        </mat-card>
+        </div>
     </div>
 
 
