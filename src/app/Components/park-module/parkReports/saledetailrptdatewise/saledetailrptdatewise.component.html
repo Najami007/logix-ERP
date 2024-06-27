@@ -1,192 +1,202 @@
-<div class="container-fluid body"  >
+<div class="container-fluid body">
 
-    <div class="row justify-content-around mt-2" >
-      
+    <div>
 
-        <mat-form-field class="col-lg-2" appearance="outline">
-            <mat-label>From Date</mat-label>
-            <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
-            <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
-            <mat-datepicker #sDate></mat-datepicker>
-        </mat-form-field>
+        <div class="row  mt-2">
 
-        <mat-form-field class="col-lg-2 " appearance="outline">
-            <mat-label>From Time</mat-label>    
-        <div class="toggle-example d-flex">
-            <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
-            <ngx-material-timepicker-toggle [for]="fTime"></ngx-material-timepicker-toggle>
-            <ngx-material-timepicker #fTime></ngx-material-timepicker>
+            <mat-form-field class="col-lg-3" appearance="outline">
+                <mat-label>From Date</mat-label>
+                <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
+                <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
+                <mat-datepicker #sDate></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="col-lg-3 " appearance="outline">
+                <mat-label>From Time</mat-label>
+                <div class="toggle-example d-flex">
+                    <input matInput [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+                    <ngx-material-timepicker-toggle [for]="fTime"></ngx-material-timepicker-toggle>
+                    <ngx-material-timepicker #fTime></ngx-material-timepicker>
+                </div>
+
+            </mat-form-field>
+
+            <mat-form-field class="col-lg-3" appearance="outline">
+                <mat-label>To Date</mat-label>
+                <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
+                <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+                <mat-datepicker #eDate></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="col-lg-3" appearance="outline">
+                <mat-label>To Time</mat-label>
+                <div class="toggle-example d-flex">
+                    <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+                    <ngx-material-timepicker-toggle [for]="tTime"></ngx-material-timepicker-toggle>
+                    <ngx-material-timepicker #tTime></ngx-material-timepicker>
+                </div>
+            </mat-form-field>
+
+        
         </div>
-
-        </mat-form-field>
-
-        <mat-form-field class="col-lg-2" appearance="outline">
-            <mat-label>To Date</mat-label>
-            <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
-            <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
-            <mat-datepicker #eDate></mat-datepicker>
-        </mat-form-field>
-
-        <mat-form-field class="col-lg-2" appearance="outline">
-            <mat-label>To Time</mat-label>
-            <div class="toggle-example d-flex">
-                <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
-                <ngx-material-timepicker-toggle [for]="tTime"></ngx-material-timepicker-toggle>
-                <ngx-material-timepicker #tTime></ngx-material-timepicker>
-            </div>
-        </mat-form-field>
-
-        <div class="col-lg-4" *ngIf="crudList.r" >
-            <button class="btn btn-success btn-rpt col-lg-4 me-1 " *ngIf="crudList.r"  (click)="getReport('detail')">Detail</button>
-            <button class="btn btn-success btn-rpt col-lg-4 me-1 " *ngIf="crudList.r" (click)="getReport('summary')">Summary</button>
+        <div class="col-lg-12 mb-2 text-center" *ngIf="crudList.r">
+            <button class="btn btn-success btn-rpt col-lg-2 me-1 " *ngIf="crudList.r"
+                (click)="getReport('detail')">Detail</button>
+            <button class="btn btn-success btn-rpt col-lg-2 me-1 " *ngIf="crudList.r"
+                (click)="getReport('summary')">Summary</button>
             <button class="btn btn-primary btn-rpt col-lg-2" *ngIf="crudList.r" (click)="print()">Print</button>
         </div>
 
-        <div id="PrintDiv" >
+        <div id="PrintDiv">
 
-               <!-------------------------    Top Logo Section -------------------->
+            <!-------------------------    Top Logo Section -------------------->
 
-        <div class="hide">
-            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
-                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
-                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
-                </span>
-                <span >
-                    
+            <div class="hide">
+                <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                    <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset=""
+                            [height]="item.logo1Height" [width]="item.logo1Width">
+                    </span>
+                    <span>
 
-                    <h1 class="companyName">{{item.companyName}}</h1>
-                    
-                    <p class="rptTitle" style="margin-top:-20px">Swing Sale Summary</p>
-                    <h4 class="projtitl"  style="margin-top:-20px;"><b >Project:</b> Playtorium</h4>
-                    <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}} ({{fromTime}}) <b>To:</b> {{toDate | date:'dd-MM-yyyy'}} ({{toTime}})</p>
 
-                  
-                </span>
-                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
-                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
-                </span>
-        
-        
+                        <h1 class="companyName">{{item.companyName}}</h1>
+
+                        <p class="rptTitle" style="margin-top:-20px">Swing Sale Summary</p>
+                        <h4 class="projtitl" style="margin-top:-20px;"><b>Project:</b> Playtorium</h4>
+                        <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}} ({{fromTime}})
+                            <b>To:</b> {{toDate | date:'dd-MM-yyyy'}} ({{toTime}})</p>
+
+
+                    </span>
+                    <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                            height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                    </span>
+
+
+                </div>
             </div>
-           </div>
-      
+
             <table class="table table-logix" id="detailTable">
                 <thead>
                     <tr>
-                        <th >S#</th>
+                        <th>S#</th>
                         <th>Ticket #</th>
                         <th>Date</th>
-                        <th >Title</th>
+                        <th>Title</th>
                         <th>Price</th>
-                        <th >Quantity</th>
+                        <th>Quantity</th>
                         <th>Total</th>
 
                     </tr>
-                
-          
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of SaleList index as index">
-                    <td>{{index+1}}</td>
-                    <td class="text-center">{{item.ticketNo}}</td>
-                    <td>{{item.entryDateTime | date:'dd-MM-yyyy hh:mm:ss:a '}}</td>
-                    <td>{{item.swingTitle}}</td>
-                    <td class="text-end">{{item.ticketPrice}}</td>
-                    <td class="text-center">{{item.ticketQuantity | number:'1.0-0'}}</td>
-                    <td  class="text-end"> {{item.ticketPrice * item.ticketQuantity | number:'1.0-0'}}</td>
-                </tr>
-                <tr>
-                    <td colspan="5" class="text-center"><strong>Total</strong></td>
-                    <td class="text-center"><strong>{{saleTotalQty | number:'1.0-0'}}</strong></td>
-                    <td class="text-end"><strong>{{saleTotalAmount | number:'1.0-0'}}</strong></td>
-                </tr>
-            </tbody>
-            <tbody>
-                <tr *ngFor="let item of returnList index as index">
-                    <td>{{index+1}}</td>
-                    <td class="text-center">{{item.ticketNo}}</td>
-                    <td>{{item.entryDateTime | date:'dd-MM-yyyy hh:mm:ss:a '}}</td>
-                    <td>{{item.swingTitle}}</td>
-                    <td class="text-end">{{item.ticketPrice}}</td>
-                    <td class="text-center">{{item.ticketQuantity | number:'1.0-0'}}</td>
-                    <td  class="text-end"> {{item.ticketPrice * item.ticketQuantity | number:'1.0-0'}}</td>
-                </tr>
-                <tr>
-                    <td colspan="5" class="text-center"><strong>Total</strong></td>
-                    <td class="text-center"><strong>{{returnTotalQty | number:'1.0-0'}}</strong></td>
-                    <td class="text-end"><strong>{{returnTotalAmount | number:'1.0-0'}}</strong></td>
-                </tr>
-            </tbody>
-            <tbody>
-             
-                <tr>
-                    <td colspan="5" class="text-center"><strong>Net Total</strong></td>
-                    <td class="text-center"><strong>{{saleTotalQty - returnTotalQty | number}}</strong></td>
-                    <td class="text-end"><strong>{{saleTotalAmount - returnTotalAmount | number:'1.0-0'}}</strong></td>
-                </tr>
-            </tbody>
+
+
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of SaleList index as index">
+                        <td>{{index+1}}</td>
+                        <td class="text-center">{{item.ticketNo}}</td>
+                        <td>{{item.entryDateTime | date:'dd-MM-yyyy hh:mm:ss:a '}}</td>
+                        <td>{{item.swingTitle}}</td>
+                        <td class="text-end">{{item.ticketPrice}}</td>
+                        <td class="text-center">{{item.ticketQuantity | number:'1.0-0'}}</td>
+                        <td class="text-end"> {{item.ticketPrice * item.ticketQuantity | number:'1.0-0'}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="text-center"><strong>Total</strong></td>
+                        <td class="text-center"><strong>{{saleTotalQty | number:'1.0-0'}}</strong></td>
+                        <td class="text-end"><strong>{{saleTotalAmount | number:'1.0-0'}}</strong></td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr *ngFor="let item of returnList index as index">
+                        <td>{{index+1}}</td>
+                        <td class="text-center">{{item.ticketNo}}</td>
+                        <td>{{item.entryDateTime | date:'dd-MM-yyyy hh:mm:ss:a '}}</td>
+                        <td>{{item.swingTitle}}</td>
+                        <td class="text-end">{{item.ticketPrice}}</td>
+                        <td class="text-center">{{item.ticketQuantity | number:'1.0-0'}}</td>
+                        <td class="text-end"> {{item.ticketPrice * item.ticketQuantity | number:'1.0-0'}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="text-center"><strong>Total</strong></td>
+                        <td class="text-center"><strong>{{returnTotalQty | number:'1.0-0'}}</strong></td>
+                        <td class="text-end"><strong>{{returnTotalAmount | number:'1.0-0'}}</strong></td>
+                    </tr>
+                </tbody>
+                <tbody>
+
+                    <tr>
+                        <td colspan="5" class="text-center"><strong>Net Total</strong></td>
+                        <td class="text-center"><strong>{{saleTotalQty - returnTotalQty | number}}</strong></td>
+                        <td class="text-end"><strong>{{saleTotalAmount - returnTotalAmount | number:'1.0-0'}}</strong>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
 
             <table class="table table-logix" id="summaryTable">
                 <thead>
                     <tr>
-                        <th >S#</th>
+                        <th>S#</th>
                         <th>Ticket #</th>
                         <th>Date</th>
-                        <th >Title</th>
-                        <th >Quantity</th>
+                        <th>Title</th>
+                        <th>Quantity</th>
                         <th>Amount</th>
 
                     </tr>
-                
-          
-            </thead>
-            <tbody>
-                <th colspan="8" class="text-center fw-bold border border-dark w-100">SALE</th>
-                <tr *ngFor="let item of SaleList index as index">
-                    <td>{{index+1}}</td>
-                    <td class="text-center">{{item.ticketNo}}</td>
-                    <td>{{item.entryDateTime | date:'dd-MM-yyyy hh:mm:ss:a '}}</td>
-                    <td>{{item.swingTitle}}</td>
-                    <td class="text-center">{{item.ticketQuantity | number:'1.0-0'}}</td>
-                    <td  class="text-end"> {{item.ticketTotal | number:'1.0-0'}}</td>
-                </tr>
-                <tr>
-                    <td colspan="4" class="text-center"><strong>Total</strong></td>
-                    <td class="text-center"><strong>{{saleTotalQty | number:'1.0-0'}}</strong></td>
-                    <td class="text-end"><strong>{{saleTotalAmount | number:'1.0-0'}}</strong></td>
-                </tr>
-            </tbody>
-            <tbody>
-                <th colspan="8" class="text-center fw-bold border border-dark w-100">SALE RETURN</th>
-                <tr *ngFor="let item of returnList index as index">
-                    <td>{{index+1}}</td>
-                    <td class="text-center">{{item.ticketNo}}</td>
-                    <td>{{item.entryDateTime | date:'dd-MM-yyyy hh:mm:ss:a '}}</td>
-                    <td>{{item.swingTitle}}</td>
-                    <td class="text-center">{{item.ticketQuantity | number:'1.0-0'}}</td>
-                    <td  class="text-end"> {{item.ticketTotal | number:'1.0-0'}}</td>
-                </tr>
-                <tr>
-                    <td colspan="4" class="text-center"><strong>Total</strong></td>
-                    <td class="text-center"><strong>{{returnTotalQty | number:'1.0-0'}}</strong></td>
-                    <td class="text-end"><strong>{{returnTotalAmount | number:'1.0-0'}}</strong></td>
-                </tr>
-            </tbody>
-            <tbody>
-            
-                <tr>
-                    <td colspan="4" class="text-center"><strong>Net Total</strong></td>
-                    <td class="text-center"><strong>{{saleTotalQty - returnTotalQty | number}}</strong></td>
-                    <td class="text-end"><strong>{{saleTotalAmount - returnTotalAmount | number:'1.0-0'}}</strong></td>
-                </tr>
-            </tbody>
+
+
+                </thead>
+                <tbody>
+                    <th colspan="8" class="text-center fw-bold border border-dark w-100">SALE</th>
+                    <tr *ngFor="let item of SaleList index as index">
+                        <td>{{index+1}}</td>
+                        <td class="text-center">{{item.ticketNo}}</td>
+                        <td>{{item.entryDateTime | date:'dd-MM-yyyy hh:mm:ss:a '}}</td>
+                        <td>{{item.swingTitle}}</td>
+                        <td class="text-center">{{item.ticketQuantity | number:'1.0-0'}}</td>
+                        <td class="text-end"> {{item.ticketTotal | number:'1.0-0'}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-center"><strong>Total</strong></td>
+                        <td class="text-center"><strong>{{saleTotalQty | number:'1.0-0'}}</strong></td>
+                        <td class="text-end"><strong>{{saleTotalAmount | number:'1.0-0'}}</strong></td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <th colspan="8" class="text-center fw-bold border border-dark w-100">SALE RETURN</th>
+                    <tr *ngFor="let item of returnList index as index">
+                        <td>{{index+1}}</td>
+                        <td class="text-center">{{item.ticketNo}}</td>
+                        <td>{{item.entryDateTime | date:'dd-MM-yyyy hh:mm:ss:a '}}</td>
+                        <td>{{item.swingTitle}}</td>
+                        <td class="text-center">{{item.ticketQuantity | number:'1.0-0'}}</td>
+                        <td class="text-end"> {{item.ticketTotal | number:'1.0-0'}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-center"><strong>Total</strong></td>
+                        <td class="text-center"><strong>{{returnTotalQty | number:'1.0-0'}}</strong></td>
+                        <td class="text-end"><strong>{{returnTotalAmount | number:'1.0-0'}}</strong></td>
+                    </tr>
+                </tbody>
+                <tbody>
+
+                    <tr>
+                        <td colspan="4" class="text-center"><strong>Net Total</strong></td>
+                        <td class="text-center"><strong>{{saleTotalQty - returnTotalQty | number}}</strong></td>
+                        <td class="text-end"><strong>{{saleTotalAmount - returnTotalAmount | number:'1.0-0'}}</strong>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
 
 
     </div>
 
-   
+
 
 </div>

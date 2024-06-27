@@ -1,7 +1,7 @@
 <div class="container-fluid body" >
 
   
-      <div class=" row justify-content-around mt-2">
+      <div class=" row  mt-2">
         <mat-form-field appearance="outline" class="col-lg-4">
             <mat-label >Swing</mat-label>
             <mat-select [(ngModel)]="swingID" >
@@ -18,7 +18,7 @@
             <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
             <mat-datepicker #sDate></mat-datepicker>
         </mat-form-field>
-        <mat-form-field class="col-lg-2 row" appearance="outline">
+        <mat-form-field class="col-lg-2 " appearance="outline">
             <mat-label>From Time</mat-label>    
         <div class="toggle-example d-flex">
             <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>

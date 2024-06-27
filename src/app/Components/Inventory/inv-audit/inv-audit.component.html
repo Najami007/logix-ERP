@@ -29,6 +29,10 @@
                      </mat-card>
                  </div>
              </div>
+             <div>
+                <mat-label class="text-primary">Quantity</mat-label> 
+                <input type="text" (keydown)="InsertToTable($event)" class="p-1 ps-2 mb-2 qtyInput" id="qtyInput" autofocus autocomplete="off" accesskey="">
+             </div>
              <div class="col-lg-3 text-start ms-1 pt-3 mt-1">
                  <button mat-raised-button class="bg-primary text-white w-50 " style="height: 40px;"  (click)="ngOnInit()">Load</button>
              </div>

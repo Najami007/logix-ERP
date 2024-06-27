@@ -508,7 +508,7 @@ aria-labelledby="paymentMehtodLabel">
             </div>
 
             <div class="modal-footer bg-mf-blue">
-                <button class="btn btn-success" (click)="editPrice(amnt.value);amnt.value = ''" >Save</button>
+                <button class="btn btn-success" data-bs-dismiss="modal" (click)="editPrice(amnt.value);amnt.value = ''" >Save</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </form>
@@ -533,7 +533,7 @@ aria-labelledby="paymentMehtodLabel">
             </div>
 
             <div class="modal-footer bg-mf-blue">
-                <button class="btn btn-success" (click)="editDiscR(discr.value);discr.value = ''" >Save</button>
+                <button class="btn btn-success" data-bs-dismiss="modal" (click)="editDiscR(discr.value);discr.value = ''" >Save</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </form>
@@ -551,14 +551,14 @@ aria-labelledby="paymentMehtodLabel">
           <form action="" method="post">
             <div class="modal-body" >
                 <mat-form-field class="w-100" appearance="outline">
-                    <mat-label>Disc Rs</mat-label>
-                    <input matInput #discp id="discr" (keydown)="global.handleNumKeys($event)" />
+                    <mat-label>Disc %</mat-label>
+                    <input matInput #discp id="discp" (keydown)="global.handleNumKeys($event)" />
                 </mat-form-field>
                
             </div>
 
             <div class="modal-footer bg-mf-blue">
-                <button class="btn btn-success" (click)="editDiscP(discp.value);discp.value = ''" >Save</button>
+                <button class="btn btn-success"  data-bs-dismiss="modal" (click)="editDiscP(discp.value);discp.value = ''" >Save</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </form>

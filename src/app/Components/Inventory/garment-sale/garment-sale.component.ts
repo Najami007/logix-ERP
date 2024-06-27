@@ -656,10 +656,10 @@ export class GarmentSaleComponent implements OnInit {
       this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice = amount;
       this.getTotal();
       this.tempProdData = [];
-      $('#priceChangeModal').hide();
-      // $('.modal').remove();
-      // $('body').removeClass('modal-open');
-      $('.modal-backdrop').remove();
+      // $('#priceChangeModal').hide();
+      // // $('.modal').remove();
+      // // $('body').removeClass('modal-open');
+      // $('.modal-backdrop').remove();
      
     }
 
@@ -673,10 +673,10 @@ export class GarmentSaleComponent implements OnInit {
       this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInP = (amount  / this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice) * 100;
       this.getTotal();
       this.tempProdData = [];
-      $('#discrChangeModal').hide();
-      // $('.modal').remove();
-      // $('body').removeClass('modal-open');
-      $('.modal-backdrop').remove();
+      // $('#discrChangeModal').hide();
+      // // $('.modal').remove();
+      // // $('body').removeClass('modal-open');
+      // $('.modal-backdrop').remove();
 
   }
 
@@ -686,10 +686,10 @@ export class GarmentSaleComponent implements OnInit {
 
     this.getTotal();
     this.tempProdData = [];
-    $('#discpChangeModal').hide();
-    // $('.modal').remove();
-    // $('body').removeClass('modal-open');
-    $('.modal-backdrop').remove();
+    // $('#discpChangeModal').hide();
+    // // $('.modal').remove();
+    // // $('body').removeClass('modal-open');
+    // $('.modal-backdrop').remove();
 
 }
 

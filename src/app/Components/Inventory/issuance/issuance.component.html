@@ -6,7 +6,7 @@
 
         <!-------------------- Top Date and location section --------------->
 
-       <div class="row  ps-1 pt-2">
+       <div class="row  ps-1 pe-1 pt-2">
            <mat-form-field appearance="outline" *ngIf="global.DisableDate == false" class="col-lg-2">
                <mat-label>Invoice Date</mat-label>
                <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput type="text" name="invDate"

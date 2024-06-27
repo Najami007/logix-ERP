@@ -25,6 +25,8 @@ import { PartyComponent } from './party/party.component';
 import { AddpartyComponent } from './party/addparty/addparty.component';
 import { FilterPipe } from 'src/app/Shared/pipes/filter/filter.pipe';
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
+import { ListOfCustomersComponent } from './CmpReports/list-of-customers/list-of-customers.component';
+import { ListOfSuppliersComponent } from './CmpReports/list-of-suppliers/list-of-suppliers.component';
 
 
 
@@ -39,6 +41,8 @@ export const companyRoutes: Route[] = [
   {path:'asec', component:SectionComponent,canActivate:[AuthGuard]  },
   {path:'proj', component:ProjectComponent,canActivate:[AuthGuard]  },
   {path:'party', component:PartyComponent,canActivate:[AuthGuard]  },
+  {path:'loc', component:ListOfCustomersComponent,canActivate:[AuthGuard]  },
+  {path:'los', component:ListOfSuppliersComponent,canActivate:[AuthGuard]  },
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
 
@@ -61,6 +65,8 @@ export const companyRoutes: Route[] = [
     ProjectComponent,
     PartyComponent,
     AddpartyComponent,
+    ListOfCustomersComponent,
+    ListOfSuppliersComponent,
     
   
   ],
