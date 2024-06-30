@@ -127,6 +127,7 @@ export class GarmentSaleComponent implements OnInit {
   productImage = '';
   productName:any = '';
   discount:any = 0;
+  otherDiscount:any = 0;
   cash:any = 0;
   change = 0;
   paymentType = 'Cash';
@@ -439,7 +440,7 @@ export class GarmentSaleComponent implements OnInit {
 
     
     
-    this.netTotal = this.subTotal - parseFloat(this.discount);
+    this.netTotal = this.subTotal - parseFloat(this.discount) - parseFloat(this.otherDiscount);
     this.change = parseFloat(this.cash) -  this.netTotal ;
 
     if(this.paymentType == 'Split'){
@@ -822,6 +823,9 @@ export class GarmentSaleComponent implements OnInit {
     this.InvDate = new Date();
     this.billRemarks = '';
     this.otherCharges = 0;
+    this.billDiscount = 0;
+    this.otherDiscount = 0;
+    
     
   }
 
