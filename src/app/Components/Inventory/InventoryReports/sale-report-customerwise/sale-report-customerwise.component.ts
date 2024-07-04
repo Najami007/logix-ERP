@@ -127,8 +127,8 @@ export class SaleReportCustomerwiseComponent implements OnInit {
     $('#detailTable').show();
     $('#summaryTable').hide();
     this.reportType = 'Detail';
-    this.http.get(environment.mainApi+this.global.inventoryLink + 'GetPurchaseRptSupplierWiseDetail_5?reqUserID='+this.userID+'&reqPartyID='+this.partyID+'&FromDate='+
-    this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
+    this.http.get(environment.mainApi+this.global.inventoryLink + 'GetSaleDetailCustomerDateWise?reqUID='+this.userID+'&FromDate='+
+    this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime+'&PartyID='+this.partyID).subscribe(
       (Response: any) => {
     
         this.DetailList = Response;
@@ -152,10 +152,10 @@ export class SaleReportCustomerwiseComponent implements OnInit {
     $('#detailTable').hide();
         $('#summaryTable').show();
         this.reportType = 'Summary';
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseRptSupplierWiseSummary_4?reqUserID='+this.userID+'&reqPartyID='+this.partyID+'&FromDate='+
-    this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleSummaryCustomerDateWise?reqUID='+this.userID+'&FromDate='+
+    this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime+'&PartyID='+this.partyID).subscribe(
       (Response: any) => {
-      
+        
         this.summaryList = Response;
         this.grandTotal = 0;
         Response.forEach((e:any) => {

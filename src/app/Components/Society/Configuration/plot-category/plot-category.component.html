@@ -1,0 +1,30 @@
+<div class="row container-fluid vh-100 body">
+
+
+    <div class="col-md-4  border">
+        <h2 class="pt-2 pb-2 border-bottom">Add / Modify</h2>
+
+        <mat-form-field class="w-100">
+          <mat-label>Plot Category Title</mat-label>
+            <input matInput placeholder="" maxlength="15" [(ngModel)]="plotCategoryTitle" />
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <mat-label>Plot Size</mat-label>
+            <input matInput placeholder="" maxlength="3" [(ngModel)]="plotSize" />
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <mat-label>Plot Unit</mat-label>
+            <input matInput placeholder="" maxlength="10" [(ngModel)]="unit" />
+          </mat-form-field>
+
+    </div>
+
+    <div class="col-md-8">
+        <h2 class="pt-2 pb-2 border-bottom">Saved Plot Categories</h2>
+
+        <app-plot-category-table (eventEmitter)="edit($event,$event)"></app-plot-category-table>
+        
+    </div>
+
+
+</div>

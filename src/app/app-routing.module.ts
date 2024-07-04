@@ -62,6 +62,12 @@ loadChildren:()=>
 import('./Components/hrms/hrms.module').then((m)=>m.HRMSModule),
 
 },
+{path:'soc', 
+  component:MainComponent,
+  loadChildren:()=> 
+  import('./Components/Society/society.module').then((m)=>m.SocietyModule),
+  
+  },
 { path: '**', redirectTo: 'login', pathMatch: 'full' },
  
 

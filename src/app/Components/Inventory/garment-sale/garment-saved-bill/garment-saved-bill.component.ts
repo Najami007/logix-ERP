@@ -74,8 +74,9 @@ export class GarmentSavedBillComponent implements OnInit {
             this.savedbillList.push(e);
           }
           
+          
         });
-       
+     
       }
     )
 
@@ -88,6 +89,7 @@ export class GarmentSavedBillComponent implements OnInit {
   myInvoiceNo = '';
   mytableNo = '';
   myCounterName = '';
+  myCustomerName = '';
   myInvDate: any = new Date();
   myOrderType = '';
   mySubTotal = 0;
@@ -102,8 +104,8 @@ export class GarmentSavedBillComponent implements OnInit {
   myDuplicateFlag = false;
   myTime:any;
   myQtyTotal =0;
-  myDiscInR = 0;
-  myDiscInP = 0;
+  myOfferDiscount = 0;
+  myBookerName = '';
 
 
  
@@ -142,12 +144,15 @@ export class GarmentSavedBillComponent implements OnInit {
               this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+item.invBillNo).subscribe(
                 
                 (Response:any)=>{
-             
+                  
+                  this.myBookerName = Response[0].bookerName;
+                  this.myCustomerName = Response[0].partyName;
                   //console.log(Response);
                   this.myPrintData = Response;
                   this.myQtyTotal = 0;
                   Response.forEach((e:any) => {
                       this.myQtyTotal += e.quantity;
+                      this.myOfferDiscount += e.discInR * e.quantity;
                   });
                 }
               )

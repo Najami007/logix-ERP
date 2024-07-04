@@ -18,6 +18,7 @@
                    <th>Date</th>
                    <th>Type</th>
                    <th>Counter</th>
+                   <th>Customer</th>
                    <!-- <th>Amount</th> -->
                    <th>Print</th>
                    <th>Detail</th>
@@ -32,6 +33,7 @@
                    <td>{{item.invDate|date:'dd-MM-yyyy'}} ({{item.createdOn|date:'hh:mm:a'}})</td>
                    <td>{{item.paymentType}}</td>
                    <td>{{item.entryUser}}</td>
+                   <td>{{item.partyName || "Walk In"}}</td>
                    <!-- <td>{{item.netTotal |number:'1.0-0'}}</td> -->
                    <td class="text-primary cursorPointer"><mat-icon (click)="printDuplicateBill(item)">print</mat-icon></td>
                    <td class="text-success cursorPointer"><mat-icon (click)="billDetails(item)">receipt</mat-icon></td>
@@ -59,16 +61,16 @@
 
 <div id="duplicate" class="d-none">
     <div class="text-center">
-        <img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
-        <h2>{{companyName}}</h2>
-        <p style="margin-top: -15px;">{{companyAddress}}</p>
-        <p style="margin-top: -20px;">{{CompanyMobile}}</p>
+        <img *ngIf="companyLogo" [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
+        <h3 class="text-uppercase">{{companyName}}</h3>
+        <p style="margin-top: -10px;" class="fs-11 text-uppercase">{{companyAddress}}</p>
+        <p style="margin-top: -20px;" class="fs-11">{{CompanyMobile}}</p>
 
     </div>
 
 
     <div >
-      <table class="table table-logix2">
+      <table class="table-logix2">
         <thead>
             <tr>
                 <th>Inv #</th>
@@ -86,19 +88,27 @@
         </tbody>
       </table>
 
-      <tr>
-        <th>Remarks:-</th>
-        <td class="ms-2">{{myRemarks}}</td>
+  <table>
+    <tr *ngIf="myCustomerName != null">
+        <th class="fs-12">Customer:-</th>
+        <td class="ms-2 fs-11">{{myCustomerName}}</td>
     </tr>
+    <tr *ngIf="myBookerName != null">
+        <th class="fs-12">Booker:- </th>
+        <td class="ms-2 fs-11">{{myBookerName}}</td>
+    </tr>
+ 
+    
+  </table>
     </div>
 
-    <h2 *ngIf="myPaymentType == 'Complimentary'" class="border border-dark w-100 text-center">Complimentary</h2>
-    <h2 *ngIf="myDuplicateFlag == true" class="border border-dark w-100 text-center">Duplicate</h2>
+    <p *ngIf="myPaymentType == 'Complimentary'" class="border border-dark text-center">Complimentary</p>
+    <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center">Duplicate</p>
 
     <div>
         <table class="w-100 table-garment-sale">
             <thead >
-                <tr>
+                <tr class="fs-12">
                     <th style="width:10% !important;">Qty</th>
                     <th style="width:20% !important;">Price</th>
                     <th style="width:10% !important;">Disc Rs</th>
@@ -108,23 +118,23 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of myPrintData index as index" >
+                <tr class="fs-11" *ngFor="let item of myPrintData index as index" >
                     <td colspan="5" class="text-start">
                         &nbsp;{{index +1}}. <b> {{item.productTitle}}</b>
                         <table class="table-garment-sale-2 w-100">
                             <tr>
                                 <td class="text-center" style="width:10% !important;">{{item.quantity |number:'1.0-2'}}</td>
                                 <td class="text-end" style="width:20% !important;">{{item.salePrice |number:'1.0-2'}}</td>
-                                <td class="text-end" style="width:10% !important;">{{myDiscInR|number:'1.0-2'}}</td>
-                                <td class="text-end" style="width:10% !important;">{{myDiscInP|number:'1.0-2'}}</td>
-                                <td class="text-end" style="width:20% !important;">{{(item.quantity * item.salePrice) - (myDiscInR * item.quantity) |number:'1.0-2'}}</td>
+                                <td class="text-end" style="width:10% !important;">{{item.discInR|number:'1.0-2'}}</td>
+                                <td class="text-end" style="width:10% !important;">{{item.discInP|number:'1.0-2'}}</td>
+                                <td class="text-end" style="width:20% !important;">{{(item.quantity * item.salePrice) - (item.discInR * item.quantity) |number:'1.0-2'}}</td>
                             </tr>
                         </table>
                     </td>
                     
 
                 </tr>
-                <tr>
+                <tr class="fs-11">
                     <td colspan="2">Total Items</td>
                     <td class="fw-bold">{{myQtyTotal | number:'1.0-2'}}</td>
                     <td colspan="3"></td>
@@ -135,55 +145,61 @@
 
 
        <table class="w-100  text-uppercase">
-        <tbody>
-            <tr class="text-center">
+        <tbody class="fs-16 fw-bold">
+            <!-- <tr class="text-center">
                 <td width="40%" rowspan="7" style="font-size: 10px;" >
                     <img [src]="global.thankyouImage" height="80" width="80" /><br />
                     FOR VISITING US.
                 </td>
-            </tr>
+            </tr> -->
             <tr class="text-end">
               
                 <td></td>
-                <td class="fw-bold">Sub Total</td>
-                <td  class="fs-20 fw-bold">{{mySubTotal |number:'1.0-1'}}</td>
+                <td >Sub Total</td>
+                <td  >{{mySubTotal |number:'1.0-1'}}</td>
          
             </tr>
             <tr class="text-end"    *ngIf="myOtherCharges > 0">
                 <td></td>
-                <td  class="fw-bold" >Other Charges</td>
-                <td class="fs-20 fw-bold"> {{myOtherCharges|number:'1.0-1'}}</td>
+                <td   >Other Charges</td>
+                <td > {{myOtherCharges|number:'1.0-1'}}</td>
          
             </tr>
-            <tr class="text-end" *ngIf="myDiscount > 0">
+            <tr class="text-end" *ngIf="myOfferDiscount > 0">
                 <td></td>
-                <td   class="fw-bold" >Discount</td>
-                <td class="fs-20 fw-bold">{{myDiscount|number:'1.0-1'}}</td>
+                <td >Offer Disc</td>
+                <td >{{myOfferDiscount|number:'1.0-1'}}</td>
+
+            </tr>
+            <tr class="text-end" *ngIf="myDiscount - myOfferDiscount > 0">
+                <td></td>
+                <td >Disc</td>
+                <td >{{myDiscount - myOfferDiscount|number:'1.0-1'}}</td>
          
             </tr>
          
             <tr class="text-end">
                 <td></td>
-                <td   class="fw-bold" >Net Total</td>
-                <td class="fs-20 fw-bold">{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</td>
+                <td >Net Total</td>
+                <td >{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</td>
          
             </tr>
             <tr class="text-end" *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
                 <td></td>
-                <td   class="fw-bold">Cash</td>
-                <td class="fs-20 fw-bold">{{myCash|number:'1.0-1'}}</td>
+                <td >Cash</td>
+                <td >{{myCash|number:'1.0-1'}}</td>
          
             </tr>
             <tr class="text-end" *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
                 <td></td>
-                <td   class="fw-bold" >Bank</td>
-                <td class="fs-20 fw-bold">{{myBank|number:'1.0-1'}}</td>
+                <td >Bank</td>
+                <td >{{myBank|number:'1.0-1'}}</td>
          
             </tr>
             <tr class="text-end" *ngIf="myChange > 0">
                 <td></td>
-                <td   class="fw-bold" >Change</td>
-                <td class="fs-20 fw-bold">{{myChange|number:'1.0-1'}}</td>
+                <td >Change</td>
+                <td >{{myChange|number:'1.0-1'}}</td>
          
             </tr>
             
@@ -193,7 +209,13 @@
 
 
         <hr>
-        <div>
+       <table>
+        <tr class="fs-11">
+            <th >Remarks:- </th>
+            <td >{{myRemarks}}</td>
+        </tr>
+       </table>
+        <div class="fs-11">
             <p>Wish to Serve You Again!</p>
         </div>
 

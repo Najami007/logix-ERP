@@ -110,6 +110,8 @@ rptType:any = 's';
    detNetTotal = 0;
    profitTotal = 0;
    profitPercentTotal = 0;
+   discountTotal=0;
+   summaryNetTotal= 0;
 
    getReport(type:any){
 
@@ -125,7 +127,7 @@ rptType:any = 's';
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
         this.SaleDetailList = [];
-        //console.log(Response);
+       //console.log(Response);
        
         if(this.rptType == 'R'){
           Response.forEach((e:any)=>{
@@ -142,12 +144,16 @@ rptType:any = 's';
         this.billTotal = 0;
         this.chargesTotal = 0;
         this.netGrandTotal = 0;
+        this.discountTotal = 0;
+        this.summaryNetTotal = 0;
 
         this.SaleDetailList.forEach((e:any) => {
          
           this.billTotal += e.billTotal;
           this.chargesTotal += e.otherCharges;
           this.netGrandTotal += e.billTotal + e.overHeadAmount;
+          this.discountTotal += e.billDiscount;
+          this.summaryNetTotal += e.netTotal;
 
         });
         
@@ -162,7 +168,7 @@ rptType:any = 's';
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryDetailDateWise_3?reqType='+this.rptType+'&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
-        
+        console.log(Response);
         this.SaleDetailList = [];
         if(this.rptType == 'R'){
           Response.forEach((e:any)=>{

@@ -101,9 +101,10 @@ export class ProductComponent implements OnInit {
     this.getProductList();
     this.tableSize = this.global.paginationDefaultTalbeSize;
     this.tableSizes = this.global.paginationTableSizes;
+    for (let i = 0; i <= 100; i++) { this.discountList.push({ value: i }); }
   }
 
-
+  discountList: any = [];
   brandFilterID = 0;
   subCategoryFilterID = 0;
   categoryFilterID = 0;
@@ -140,7 +141,7 @@ export class ProductComponent implements OnInit {
  
   }
 
-
+ 
   tabIndex: any;
   Validation = true;
   btnType = 'Save';
@@ -163,8 +164,8 @@ export class ProductComponent implements OnInit {
   rackID: any;
   minRol: any;
   maxRol: any;
-  DiscPercent: any;
-  DiscRupee: any;
+  DiscPercent: any = 0;
+  DiscRupee: any = 0;
   gst: any;
   Et: any;
   allowMinus: any = false;
@@ -190,6 +191,10 @@ export class ProductComponent implements OnInit {
 
   displayedColumns = ['Product Title', 'Product Title 2', 'Product Barcode', 'Sub Category', 
   'Brand','UOM','Type', 'Cost Price', 'Average Cost' , 'Sale Price','GST', 'Entered By','Active Status','Image','Edit','Delete' ]
+
+  applyDiscount() {
+    this.DiscRupee = (this.SalePrice == '' || this.SalePrice == undefined || this.SalePrice == null ? 0 : this.SalePrice * this.DiscPercent) / 100
+  }
   
   getProductList(){
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetProduct').subscribe(
@@ -498,8 +503,8 @@ export class ProductComponent implements OnInit {
     this.allowMinus = false;
     this.CostPrice = '';
     this.SalePrice = '';
-    this.DiscPercent = '';
-    this.DiscRupee = '';
+    this.DiscPercent = 0;
+    this.DiscRupee = 0;
     this.UOMID = '';
     // this.Barcode = '';
     this.prodBarcodeType = 'auto'

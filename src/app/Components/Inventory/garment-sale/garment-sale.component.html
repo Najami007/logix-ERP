@@ -47,7 +47,7 @@
 
                     <div class="pt-2 d-flex justify-content-between">
                         <p style="font-size: 15px;color: rgb(0, 0, 0);">DISCOUNT</p>
-                        <p style="font-size: 2rem;color: rgb(31, 29, 29);" class="font-digit text-end">{{discount
+                        <p style="font-size: 2rem;color: rgb(31, 29, 29);" class="font-digit text-end">{{offerDiscount
                             |number:'1.0-1'}}
                         </p>
                     </div>
@@ -55,7 +55,7 @@
                     <div class="pt-2 d-flex justify-content-between">
                         <p style="font-size: 15px;color: rgb(6, 6, 6)" class="w-50 pt-3 text-uppercase">Other DISCOUN<u>T</u></p>
                         <input class="bg-transparent border-0  text-dark text-end font-digit w-100" autocomplete="false"
-                            id="disc" accesskey="t" style="font-size: 2rem;" type="text" [(ngModel)]="otherDiscount"
+                            id="disc" accesskey="t" style="font-size: 2rem;" type="text" [(ngModel)]="discount"
                             (keyup)="getTotal()"
                             (keydown)="getTotal();this.global.handleNumKeys($event);focusto('#cash',$event)" />
                     </div>
@@ -63,6 +63,7 @@
                     <div class="pt-2 d-flex justify-content-between">
                         <p style="font-size: 15px;color: rgb(6, 6, 6)" class="w-50 pt-3"><u>C</u>ASH</p>
                         <input class="bg-transparent border-0  text-success text-end font-digit w-100"
+                            [disabled]="paymentType !== 'Cash'"
                             autocomplete="false" id="cash" accesskey="c" style="font-size: 3rem;" type="text"
                             [(ngModel)]="cash" (keyup)="getTotal()"
                             (keydown)="getTotal();this.global.handleNumKeys($event);focusto('#save',$event)" />
@@ -133,9 +134,8 @@
                                     style="width: 80px;">
                             </td> -->
 
-                                <td class="text-end cursorPointer" data-bs-toggle="modal"
-                                    data-bs-target="#priceChangeModal"
-                                    (click)="tempProdData = item;global.focusTo('#amnt')">{{item.salePrice
+                                <td class="text-end cursorPointer" 
+                                    (click)="tempProdData = item;editSP(item)">{{item.salePrice
                                     |number:'1.0-3'}}</td>
 
                                 <td class="text-end cursorPointer" data-bs-toggle="modal"
@@ -147,8 +147,10 @@
                                     (click)="tempProdData = item;global.focusTo('#discp')">{{item.discInP
                                     |number:'1.0-3'}}</td>
 
-
-                                <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-3'}}</td>
+                                <td class="text-end cursorPointer" data-bs-toggle="modal"
+                                data-bs-target="#totalChangeModal"
+                                (click)="tempProdData = item;global.focusTo('#totalAmnt')">{{item.total |number:'1.0-3'}}</td>
+                                <!-- <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-3'}}</td> -->
                                 <td class="cursorPointer text-danger text-center"><mat-icon
                                         (click)="delRow(item)">close</mat-icon></td>
                             </tr>
@@ -173,11 +175,18 @@
 
     </div>
 
-    <div style="position: fixed;bottom: 3%;left: 25%;">
+    <div style="position: fixed;bottom: 2.5%;left: 25%;">
         <mat-form-field style="width: 110px;">
             <mat-label>Disc</mat-label>
             <mat-select [(ngModel)]="billDiscount" name="billDiscount" (selectionChange)="applyDiscount()">
                 <mat-option *ngFor="let item of discountList" [value]="item.value">{{item.value}}%</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-50">
+            <mat-label>Booker</mat-label>
+            <mat-select [(ngModel)]="bookerID" name="billDiscount" >
+                <mat-option *ngFor="let item of bookerList" [value]="item.bookerID">{{item.bookerName}}</mat-option>
             </mat-select>
         </mat-form-field>
     </div>
@@ -291,8 +300,8 @@
 
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>Customer</mat-label>
-                        <mat-select class="w-100" [(ngModel)]="partyID" #supplier name="customer">
-                            <mat-option [value]="0">Regular Customer</mat-option>
+                        <mat-select class="w-100" [(ngModel)]="partyID" (selectionChange)="partySelect()" #supplier name="customer">
+                            <mat-option [value]="0">WalkIn Customer</mat-option>
                             <mat-option *ngFor="let item of partyList "
                                 [value]="item.partyID">{{item.partyName}}</mat-option>
 
@@ -309,6 +318,7 @@
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>Payment Type</mat-label>
                         <mat-select #pType [(ngModel)]="paymentType" (selectionChange)="cash = 0;getTotal()">
+                            <mat-option value="Credit">Credit</mat-option>
                             <mat-option value="Cash">Cash</mat-option>
                             <mat-option value="Bank">Bank</mat-option>
                             <mat-option value="Split">Split</mat-option>
@@ -363,153 +373,327 @@
 
     <div id="cncBillPrint" class="d-none">
         <div class="text-center">
-            <img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
-            <h2>{{companyName}}</h2>
-            <p style="margin-top: -15px;">{{companyAddress}}</p>
-            <p style="margin-top: -20px;">{{CompanyMobile}}</p>
-
+            <img *ngIf="companyLogo" [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
+            <h3 class="text-uppercase">{{companyName}}</h3>
+            <p style="margin-top: -10px;" class="fs-11 text-uppercase">{{companyAddress}}</p>
+            <p style="margin-top: -20px;" class="fs-11">{{CompanyMobile}}</p>
+    
         </div>
-
-
-        <div>
-            <table class="table table-logix2">
-                <thead>
-                    <tr>
-                        <th>Inv #</th>
-                        <th>Date</th>
-                        <th>Counter</th>
-
-                    </tr>
-                </thead>
-                <tbody class="text-center">
-                    <tr>
-                        <td>{{myInvoiceNo}}</td>
-                        <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
-                        <td>{{myCounterName}}</td>
-
-                    </tr>
-
-                </tbody>
-            </table>
-            <tr>
-                <th>Customer</th>
-                <td class="ms-2">{{myCustomerName}}</td>
-            </tr>
-
-            <tr>
-                <th>Remarks:-</th>
-                <td class="ms-2">{{myRemarks}}</td>
-            </tr>
+    
+    
+        <div >
+          <table class="table-logix2">
+            <thead>
+                <tr>
+                    <th>Inv #</th>
+                    <th>Date</th>
+                    <th>Counter</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                <tr>
+                    <td>{{myInvoiceNo}}</td>
+                    <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
+                    <td>{{myCounterName}}</td>
+                </tr>
+               
+            </tbody>
+          </table>
+    
+      <table>
+        <tr *ngIf="myCustomerName != null">
+            <th class="fs-12">Customer:-</th>
+            <td class="ms-2 fs-11">{{myCustomerName}}</td>
+        </tr>
+        <tr *ngIf="myBookerName != null">
+            <th class="fs-12">Booker:- </th>
+            <td class="ms-2 fs-11">{{myBookerName}}</td>
+        </tr>
+     
+        
+      </table>
         </div>
-
-        <h2 *ngIf="myPaymentType == 'Complimentary'" class="border border-dark w-100 text-center">Complimentary</h2>
-        <h2 *ngIf="myDuplicateFlag == true" class="border border-dark w-100 text-center">Duplicate</h2>
-
+        <p class="border border-dark text-center">Customer Copy</p>
+        <p *ngIf="myPaymentType == 'Complimentary'" class="border border-dark text-center">Complimentary</p>
+        <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center">Duplicate</p>
+    
         <div>
             <table class="w-100 table-garment-sale">
-                <thead>
-                    <tr>
+                <thead >
+                    <tr class="fs-12">
                         <th style="width:10% !important;">Qty</th>
                         <th style="width:20% !important;">Price</th>
                         <th style="width:10% !important;">Disc Rs</th>
                         <th style="width:10% !important;">Disc %</th>
                         <th style="width:20% !important;">Total</th>
-
+                        
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of myPrintTableData index as index">
+                    <tr class="fs-11" *ngFor="let item of myPrintTableData index as index" >
                         <td colspan="5" class="text-start">
                             &nbsp;{{index +1}}. <b> {{item.productTitle}}</b>
                             <table class="table-garment-sale-2 w-100">
                                 <tr>
-                                    <td class="text-center" style="width:10% !important;">{{item.quantity
-                                        |number:'1.0-2'}}</td>
-                                    <td class="text-end" style="width:20% !important;">{{item.salePrice
-                                        |number:'1.0-2'}}</td>
-                                    <td class="text-end" style="width:10% !important;">{{myDiscInR|number:'1.0-2'}}</td>
-                                    <td class="text-end" style="width:10% !important;">{{myDiscInP|number:'1.0-2'}}</td>
-                                    <td class="text-end" style="width:20% !important;">{{(item.quantity *
-                                        item.salePrice) - (item.DiscInR * item.quantity) |number:'1.0-2'}}</td>
+                                    <td class="text-center" style="width:10% !important;">{{item.quantity |number:'1.0-2'}}</td>
+                                    <td class="text-end" style="width:20% !important;">{{item.salePrice |number:'1.0-2'}}</td>
+                                    <td class="text-end" style="width:10% !important;">{{item.discInR|number:'1.0-2'}}</td>
+                                    <td class="text-end" style="width:10% !important;">{{item.discInP|number:'1.0-2'}}</td>
+                                    <td class="text-end" style="width:20% !important;">{{(item.quantity * item.salePrice) - (item.discInR * item.quantity) |number:'1.0-2'}}</td>
                                 </tr>
                             </table>
                         </td>
-
-
+                        
+    
                     </tr>
-                    <tr>
+                    <tr class="fs-11">
                         <td colspan="2">Total Items</td>
                         <td class="fw-bold">{{myQtyTotal | number:'1.0-2'}}</td>
                         <td colspan="3"></td>
                     </tr>
                 </tbody>
             </table>
-
-
-
-            <table class="w-100  text-uppercase">
-                <tbody>
-                    <tr class="text-center">
-                        <td width="40%" rowspan="7" style="font-size: 10px;">
-                            <img [src]="global.thankyouImage" height="80" width="80" /><br />
-                            FOR VISITING US.
-                        </td>
-                    </tr>
-                    <tr class="text-end">
-
-                        <td></td>
-                        <td class="fw-bold">Sub Total</td>
-                        <td class="fs-20 fw-bold">{{mySubTotal |number:'1.0-1'}}</td>
-
-                    </tr>
-                    <tr class="text-end" *ngIf="myOtherCharges > 0">
-                        <td></td>
-                        <td class="fw-bold">Other Charges</td>
-                        <td class="fs-20 fw-bold"> {{myOtherCharges|number:'1.0-1'}}</td>
-
-                    </tr>
-                    <tr class="text-end" *ngIf="myDiscount > 0">
-                        <td></td>
-                        <td class="fw-bold">Discount</td>
-                        <td class="fs-20 fw-bold">{{myDiscount|number:'1.0-1'}}</td>
-
-                    </tr>
-
-                    <tr class="text-end">
-                        <td></td>
-                        <td class="fw-bold">Net Total</td>
-                        <td class="fs-20 fw-bold">{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</td>
-
-                    </tr>
-                    <tr class="text-end" *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
-                        <td></td>
-                        <td class="fw-bold">Cash</td>
-                        <td class="fs-20 fw-bold">{{myCash|number:'1.0-1'}}</td>
-
-                    </tr>
-                    <tr class="text-end" *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
-                        <td></td>
-                        <td class="fw-bold">Bank</td>
-                        <td class="fs-20 fw-bold">{{myBank|number:'1.0-1'}}</td>
-
-                    </tr>
-                    <tr class="text-end" *ngIf="myChange > 0">
-                        <td></td>
-                        <td class="fw-bold">Change</td>
-                        <td class="fs-20 fw-bold">{{myChange|number:'1.0-1'}}</td>
-
-                    </tr>
-
-                </tbody>
-            </table>
-
-
-
+    
+    
+    
+           <table class="w-100  text-uppercase">
+            <tbody class="fs-16 fw-bold">
+                <!-- <tr class="text-center">
+                    <td width="40%" rowspan="7" style="font-size: 10px;" >
+                        <img [src]="global.thankyouImage" height="80" width="80" /><br />
+                        FOR VISITING US.
+                    </td>
+                </tr> -->
+                <tr class="text-end">
+                  
+                    <td></td>
+                    <td >Sub Total</td>
+                    <td  >{{mySubTotal |number:'1.0-1'}}</td>
+             
+                </tr>
+                <tr class="text-end"    *ngIf="myOtherCharges > 0">
+                    <td></td>
+                    <td   >Other Charges</td>
+                    <td > {{myOtherCharges|number:'1.0-1'}}</td>
+             
+                </tr>
+                <tr class="text-end" *ngIf="myOfferDiscount > 0">
+                    <td></td>
+                    <td >Offer Disc</td>
+                    <td >{{myOfferDiscount|number:'1.0-1'}}</td>
+    
+                </tr>
+                <tr class="text-end" *ngIf="myDiscount - myOfferDiscount > 0">
+                    <td></td>
+                    <td >Disc</td>
+                    <td >{{myDiscount - myOfferDiscount|number:'1.0-1'}}</td>
+             
+                </tr>
+             
+                <tr class="text-end">
+                    <td></td>
+                    <td >Net Total</td>
+                    <td >{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</td>
+             
+                </tr>
+                <tr class="text-end" *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
+                    <td></td>
+                    <td >Cash</td>
+                    <td >{{myCash|number:'1.0-1'}}</td>
+             
+                </tr>
+                <tr class="text-end" *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
+                    <td></td>
+                    <td >Bank</td>
+                    <td >{{myBank|number:'1.0-1'}}</td>
+             
+                </tr>
+                <tr class="text-end" *ngIf="myChange > 0">
+                    <td></td>
+                    <td >Change</td>
+                    <td >{{myChange|number:'1.0-1'}}</td>
+             
+                </tr>
+                
+            </tbody>
+        </table>
+    
+    
+    
             <hr>
-            <div>
+           <table>
+            <tr class="fs-11">
+                <th >Remarks:- </th>
+                <td >{{myRemarks}}</td>
+            </tr>
+           </table>
+            <div class="fs-11">
                 <p>Wish to Serve You Again!</p>
             </div>
+    
+        </div>
 
+    </div>
+    <div id="cncBillPrint2" class="d-none">
+        <div class="text-center">
+            <img *ngIf="companyLogo" [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
+            <h3 class="text-uppercase" >{{companyName}}</h3>
+            <p style="margin-top: -10px;" class="fs-11 text-uppercase">{{companyAddress}}</p>
+            <p style="margin-top: -20px;" class="fs-11">{{CompanyMobile}}</p>
+    
+        </div>
+    
+    
+        <div >
+          <table class="table-logix2">
+            <thead>
+                <tr>
+                    <th>Inv #</th>
+                    <th>Date</th>
+                    <th>Counter</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                <tr>
+                    <td>{{myInvoiceNo}}</td>
+                    <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
+                    <td>{{myCounterName}}</td>
+                </tr>
+               
+            </tbody>
+          </table>
+    
+      <table>
+        <tr *ngIf="myCustomerName != null">
+            <th class="fs-12">Customer:-</th>
+            <td class="ms-2 fs-11">{{myCustomerName}}</td>
+        </tr>
+        <tr *ngIf="myBookerName != null">
+            <th class="fs-12">Booker:- </th>
+            <td class="ms-2 fs-11">{{myBookerName}}</td>
+        </tr>
+     
+        
+      </table>
+        </div>
+        <p class="border border-dark text-center">Counter Copy</p>
+        <p *ngIf="myPaymentType == 'Complimentary'" class="border border-dark text-center">Complimentary</p>
+        <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center">Duplicate</p>
+    
+        <div>
+            <table class="w-100 table-garment-sale">
+                <thead >
+                    <tr class="fs-12">
+                        <th style="width:10% !important;">Qty</th>
+                        <th style="width:20% !important;">Price</th>
+                        <th style="width:10% !important;">Disc Rs</th>
+                        <th style="width:10% !important;">Disc %</th>
+                        <th style="width:20% !important;">Total</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="fs-11" *ngFor="let item of myPrintTableData index as index" >
+                        <td colspan="5" class="text-start">
+                            &nbsp;{{index +1}}. <b> {{item.productTitle}}</b>
+                            <table class="table-garment-sale-2 w-100">
+                                <tr>
+                                    <td class="text-center" style="width:10% !important;">{{item.quantity |number:'1.0-2'}}</td>
+                                    <td class="text-end" style="width:20% !important;">{{item.salePrice |number:'1.0-2'}}</td>
+                                    <td class="text-end" style="width:10% !important;">{{item.discInR|number:'1.0-2'}}</td>
+                                    <td class="text-end" style="width:10% !important;">{{item.discInP|number:'1.0-2'}}</td>
+                                    <td class="text-end" style="width:20% !important;">{{(item.quantity * item.salePrice) - (item.discInR * item.quantity) |number:'1.0-2'}}</td>
+                                </tr>
+                            </table>
+                        </td>
+                        
+    
+                    </tr>
+                    <tr class="fs-11">
+                        <td colspan="2">Total Items</td>
+                        <td class="fw-bold">{{myQtyTotal | number:'1.0-2'}}</td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tbody>
+            </table>
+    
+    
+    
+           <table class="w-100  text-uppercase">
+            <tbody class="fs-16 fw-bold">
+                <!-- <tr class="text-center">
+                    <td width="40%" rowspan="7" style="font-size: 10px;" >
+                        <img [src]="global.thankyouImage" height="80" width="80" /><br />
+                        FOR VISITING US.
+                    </td>
+                </tr> -->
+                <tr class="text-end">
+                  
+                    <td></td>
+                    <td >Sub Total</td>
+                    <td  >{{mySubTotal |number:'1.0-1'}}</td>
+             
+                </tr>
+                <tr class="text-end"    *ngIf="myOtherCharges > 0">
+                    <td></td>
+                    <td   >Other Charges</td>
+                    <td > {{myOtherCharges|number:'1.0-1'}}</td>
+             
+                </tr>
+                <tr class="text-end" *ngIf="myOfferDiscount > 0">
+                    <td></td>
+                    <td >Offer Disc</td>
+                    <td >{{myOfferDiscount|number:'1.0-1'}}</td>
+    
+                </tr>
+                <tr class="text-end" *ngIf="myDiscount - myOfferDiscount > 0">
+                    <td></td>
+                    <td >Disc</td>
+                    <td >{{myDiscount - myOfferDiscount|number:'1.0-1'}}</td>
+             
+                </tr>
+             
+                <tr class="text-end">
+                    <td></td>
+                    <td >Net Total</td>
+                    <td >{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</td>
+             
+                </tr>
+                <tr class="text-end" *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
+                    <td></td>
+                    <td >Cash</td>
+                    <td >{{myCash|number:'1.0-1'}}</td>
+             
+                </tr>
+                <tr class="text-end" *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
+                    <td></td>
+                    <td >Bank</td>
+                    <td >{{myBank|number:'1.0-1'}}</td>
+             
+                </tr>
+                <tr class="text-end" *ngIf="myChange > 0">
+                    <td></td>
+                    <td >Change</td>
+                    <td >{{myChange|number:'1.0-1'}}</td>
+             
+                </tr>
+                
+            </tbody>
+        </table>
+    
+    
+    
+            <hr>
+           <table>
+            <tr class="fs-11">
+                <th >Remarks:- </th>
+                <td >{{myRemarks}}</td>
+            </tr>
+           </table>
+            <div class="fs-11">
+                <p>Wish to Serve You Again!</p>
+            </div>
+    
         </div>
 
     </div>
@@ -591,6 +775,32 @@
                     <div class="modal-footer bg-mf-blue">
                         <button class="btn btn-success" data-bs-dismiss="modal"
                             (click)="editDiscP(discp.value);discp.value = ''">Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+     <!------------------------- Modal Window for Total Amount Change =----------------->
+
+     <div class="modal fade" id="totalChangeModal" tabindex="-1" aria-labelledby="totalChangeModalLabel">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-sm">
+            <div class="modal-content">
+
+                <form action="" method="post">
+                    <div class="modal-body">
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>Amount</mat-label>
+                            <input matInput #totalAmnt id="totalAmnt" (keydown)="global.handleNumKeys($event)" />
+                        </mat-form-field>
+
+                    </div>
+
+                    <div class="modal-footer bg-mf-blue">
+                        <button class="btn btn-success" data-bs-dismiss="modal"
+                            (click)="editTotal(totalAmnt.value);totalAmnt.value = ''">Save</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </form>

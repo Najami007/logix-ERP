@@ -151,11 +151,12 @@
                     <th>S#</th>
                     <th>Bill No</th>
                     <th>Date</th>
-                    <th>Booker</th>
-                    <th>Location</th>
-                    <th>Party</th>
                     <th>Type</th>
-                    <th >Net Total</th>
+                    <th>Booker</th>
+                    <th>Type</th>
+                    <th>Net Total</th>
+                    <th>Disc</th>
+                    <th>Net Total</th>
                     <th>Entered By</th>
 
                 </tr>
@@ -168,10 +169,10 @@
                     <td [ngClass]="item.invType == 'PR' ? 'text-danger' : ''" class="text-center">{{item.invBillNo}}</td>
                     <td>{{item.invDate |date:'dd-MM-yyyy'}}</td>
                     <td>{{item.bookerName}}</td>
-                    <td>{{item.locationTitle}}</td>
-                    <td>{{item.partyName}}</td>
                     <td >{{item.paymentType}}</td>
                     <td [ngClass]="item.invType == 'PR' ? 'bg-danger text-white' : ''" class="text-end">{{item.netTotal + item.overHeadAmount +item.billDiscount |number:'1.0-0'}}</td>
+                    <td>{{item.billDiscount}}</td>
+                    <td>{{item.netTotal}}</td>
                     <td>{{item.entryUser}}</td>
                 </tr>
                 <tr>

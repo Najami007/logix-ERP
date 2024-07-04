@@ -27,6 +27,7 @@ import { FilterPipe } from 'src/app/Shared/pipes/filter/filter.pipe';
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 import { ListOfCustomersComponent } from './CmpReports/list-of-customers/list-of-customers.component';
 import { ListOfSuppliersComponent } from './CmpReports/list-of-suppliers/list-of-suppliers.component';
+import { BookerComponent } from './booker/booker.component';
 
 
 
@@ -43,6 +44,7 @@ export const companyRoutes: Route[] = [
   {path:'party', component:PartyComponent,canActivate:[AuthGuard]  },
   {path:'loc', component:ListOfCustomersComponent,canActivate:[AuthGuard]  },
   {path:'los', component:ListOfSuppliersComponent,canActivate:[AuthGuard]  },
+  {path:'bkr', component:BookerComponent,canActivate:[AuthGuard]  },
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
 
@@ -67,6 +69,7 @@ export const companyRoutes: Route[] = [
     AddpartyComponent,
     ListOfCustomersComponent,
     ListOfSuppliersComponent,
+    BookerComponent,
     
   
   ],

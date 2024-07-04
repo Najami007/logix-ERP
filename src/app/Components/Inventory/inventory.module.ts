@@ -84,6 +84,7 @@ import { InvAuditComponent } from './inv-audit/inv-audit.component';
 
 
 
+
 export const inventoryRoutes: Route[] = [
 
   {
@@ -334,6 +335,7 @@ export const inventoryRoutes: Route[] = [
     GarmentSavedBillComponent,
     SaleReportCustomerwiseComponent,
     InvAuditComponent,
+    
   
     
    
