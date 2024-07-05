@@ -1,0 +1,72 @@
+<div class=" body">
+    
+    <div class="container pt-5">
+        <button mat-mini-fab color="primary" *ngIf="crudList.r" (click)="print()"><mat-icon>print</mat-icon></button>
+    </div>
+    
+    <div id="PrintDiv" class="container-fluid p-5">
+    
+     
+    
+        <!-------------------------    Top Logo Section -------------------->
+    
+    <div class="hide">
+     <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+         <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+             <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
+         </span>
+         <span >
+             
+    
+             <h1 class="companyName">{{item.companyName}}</h1>
+             
+             <p class="rptTitle" style="margin-top:-15px">Cusotmer Balance Report</p>
+                      
+         </span>
+         <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+             <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+         </span>
+    
+    
+     </div>
+    </div>
+    
+    <br>
+    
+        <table class="table table-logix ">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Name</th>
+                
+                    <th>Mobile No</th>
+                    <th>Debit</th>
+                    <th>Credit</th>
+                    <th>Balance</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of TableData index as index">
+                    <td class="text-center">{{index + 1}}</td>
+                    <td> {{item.partyName}}</td>
+                    
+                    <td>{{item.partyMobileNo}}</td>
+                    <td class="text-end">{{item.debit | number:'1.0-1'}}</td>
+                    <td class="text-end">{{item.credit | number:'1.0-1'}}</td>
+                    <td class="text-end">{{item.balance | number:'1.0-1'}}</td>
+                  
+                   
+                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+    
+    
+    
+        
+    
+    
+

@@ -9,13 +9,12 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 
-
 @Component({
-  selector: 'app-sale-report-customerwise',
-  templateUrl: './sale-report-customerwise.component.html',
-  styleUrls: ['./sale-report-customerwise.component.scss']
+  selector: 'app-sale-report-prod-customerwise',
+  templateUrl: './sale-report-prod-customerwise.component.html',
+  styleUrls: ['./sale-report-prod-customerwise.component.scss']
 })
-export class SaleReportCustomerwiseComponent implements OnInit {
+export class SaleReportProdCustomerwiseComponent implements OnInit {
 
 
 
@@ -38,14 +37,19 @@ export class SaleReportCustomerwiseComponent implements OnInit {
     this.global.getMenuList().subscribe((data) => {
       this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
     })
+
+
+    this.global.getProducts().subscribe(
+      (Response: any) => {
+        this.productList = Response;
+      }
+    )
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Sale Report (Customerwise)');
+    this.global.setHeaderTitle('Purchase Report(Prod & Customerwise)');
     this.getUsers();
-    this.getParty();
-    $('#detailTable').show();
-    $('#summaryTable').hide();
-
+    this.getSupplier();
+   
   }
 
 
@@ -53,10 +57,12 @@ export class SaleReportCustomerwiseComponent implements OnInit {
 
   partyList:any = [];
   partyID = 0;
-
+  productList:any = [];
+  productID = 0;
   userList: any = [];
   userID = 0;
   userName = '';
+  partyName = '';
 
   fromDate: Date = new Date();
   fromTime: any = '00:00';
@@ -64,8 +70,7 @@ export class SaleReportCustomerwiseComponent implements OnInit {
   toTime: any = '23:59';
 
   DetailList: any = [];
-  saleSummaryList:any = [];
-  saleRtnSummaryList:any = [];
+  summaryList:any = [];
   reportType: any;
 
 
@@ -82,7 +87,7 @@ export class SaleReportCustomerwiseComponent implements OnInit {
 
       },
       (error: any) => {
- 
+
         this.app.stopLoaderDark();
       }
     )
@@ -90,7 +95,7 @@ export class SaleReportCustomerwiseComponent implements OnInit {
   }
 
 
-  getParty(){
+  getSupplier(){
     this.http.get(environment.mainApi+this.global.companyLink+'getcustomer').subscribe(
       {
         next:value =>{
@@ -105,6 +110,10 @@ export class SaleReportCustomerwiseComponent implements OnInit {
   }
 
 
+  onPartySelected(){
+    this.partyName = this.partyList.find((e: any) => e.partyID == this.partyID).partyName;
+  
+  }
 
 
   onUserSelected() {
@@ -113,14 +122,9 @@ export class SaleReportCustomerwiseComponent implements OnInit {
   }
 
 
-  saleGrandTotal = 0;
-  saleBillTotal = 0;
-  saleDiscountTotal = 0;
-
-  saleRtnGrandTotal = 0;
-  saleRtnBillTotal = 0;
-  saleRtnDiscountTotal = 0;
+  grandTotal = 0;
   profitTotal = 0;
+
 
   getReport(type:any) {
 
@@ -128,27 +132,31 @@ export class SaleReportCustomerwiseComponent implements OnInit {
    
   if(this.partyID == 0 || this.partyID == undefined){
     this.msg.WarnNotify('Select Customer')
-  }else{
+  }else if(this.productID == 0 || this.productID == undefined){
+    this.msg.WarnNotify('Select Product')
+  }
+  else{
 
-   if(type == 'detail'){
-    $('#detailTable').show();
-    $('#summaryTable').hide();
+
+ 
     this.reportType = 'Detail';
-    this.http.get(environment.mainApi+this.global.inventoryLink + 'GetSaleDetailCustomerDateWise?reqUID='+this.userID+'&FromDate='+
-    this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime+'&PartyID='+this.partyID).subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleDetailCustomerAndProductDateWise?reqUID='+this.userID+
+    '&FromDate='+this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+
+    '&fromtime='+this.fromTime+'&totime='+this.toTime+'&PartyID='+this.partyID+'&ProductID='+ this.productID).subscribe(
       (Response: any) => {
-       // console.log(Response);
+        //console.log(Response);
+ 
         this.DetailList = Response;
-        this.saleGrandTotal = 0;
+        this.grandTotal = 0;
         this.profitTotal = 0;
         Response.forEach((e:any) => {
           if(e.invType == 'S'){
-            this.saleGrandTotal += (e.salePrice * e.quantity) - (e.discInR * e.quantity);
+            this.grandTotal += (e.salePrice * e.quantity) - (e.discInR * e.quantity);
             this.profitTotal += ((e.salePrice * e.quantity) - (e.discInR * e.quantity)) - (e.avgCostPrice * e.quantity);
           }
 
           if(e.invType == 'SR'){
-            this.saleGrandTotal -= (e.salePrice * e.quantity) - (e.discInR * e.quantity);
+            this.grandTotal -= (e.salePrice * e.quantity) - (e.discInR * e.quantity);
             this.profitTotal -= ((e.salePrice * e.quantity) - (e.discInR * e.quantity)) - (e.avgCostPrice * e.quantity);
           }
           
@@ -156,41 +164,9 @@ export class SaleReportCustomerwiseComponent implements OnInit {
 
       }
     )
-   }
+   
 
-   if(type == 'summary'){
-    $('#detailTable').hide();
-        $('#summaryTable').show();
-        this.reportType = 'Summary';
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleSummaryCustomerDateWise?reqUID='+this.userID+'&FromDate='+
-    this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime+'&PartyID='+this.partyID).subscribe(
-      (Response: any) => {
-       
-        this.saleSummaryList = Response.filter((e:any)=> e.invType == 'S');
-        this.saleRtnSummaryList = Response.filter((e:any)=> e.invType == 'SR');
-        this.saleGrandTotal = 0;
-        this.saleBillTotal = 0;
-        this.saleDiscountTotal=0;
-        this.saleRtnGrandTotal = 0;
-        this.saleRtnBillTotal = 0;
-        this.saleRtnDiscountTotal=0;
-        Response.forEach((e:any) => {
-          if(e.invType == 'S'){
-            this.saleGrandTotal += e.total - e.billDiscount ;
-            this.saleBillTotal += e.total;
-            this.saleDiscountTotal += e.billDiscount;
-          }
-          if(e.invType == 'SR'){
-            this.saleRtnGrandTotal += e.total - e.billDiscount ;
-            this.saleRtnBillTotal += e.total;
-            this.saleRtnDiscountTotal += e.billDiscount;
-          }
-            
-        });
-
-      }
-    )
-   }
+ 
     
 
   }

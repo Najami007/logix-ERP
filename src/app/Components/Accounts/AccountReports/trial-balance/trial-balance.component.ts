@@ -46,13 +46,15 @@ export class TrialBalanceComponent implements OnInit {
      }
 
   ngOnInit(): void {
+    $('#summary1').show();
+    $('#summary2').hide();
     this.globalData.getCompany();
     this.getProject();
     this.globalData.setHeaderTitle('Trial Balance');
     
     this.getNotes();
 
-    $('#summary2').hide();
+    
   }
 
   fromDate:any = new Date();

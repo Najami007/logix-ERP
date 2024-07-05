@@ -1,0 +1,178 @@
+<div class="body container-fluid">
+
+    <div class="row justify-content-between mt-2">
+
+   
+        <mat-form-field  appearance="outline" class="col-lg-3" >
+            <mat-label>From Date</mat-label>
+            <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
+            <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
+            <mat-datepicker #sDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="col-lg-3" appearance="outline" >
+            <mat-label>From Time</mat-label>         
+            <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+            <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #fTime></ngx-material-timepicker>
+        </mat-form-field>
+
+
+        <mat-form-field class="col-lg-3" appearance="outline">
+            <mat-label>To Date</mat-label>
+            <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
+            <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+            <mat-datepicker #eDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="col-lg-3" appearance="outline">
+            <mat-label>To Time</mat-label>
+                <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+                <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
+                <ngx-material-timepicker #tTime></ngx-material-timepicker>
+        </mat-form-field>
+
+    </div>
+    <div class="row">
+
+
+        <mat-form-field appearance="outline" class="col-lg-3 ">
+            <mat-label>User</mat-label>
+            <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
+                <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+            <mat-option [value]="0">All User</mat-option>
+                <mat-option *ngFor="let item of userList | filter:usearch.value"
+                    [value]="item.userID">{{item.userName}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-lg-3 ">
+            <mat-label>Proudct</mat-label>
+            <mat-select [(ngModel)]="productID" >
+                <mat-option><ngx-mat-select-search #prodsearch [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of productList | filter:prodsearch.value"
+                    [value]="item.productID">{{item.productTitle}} <b>({{item.barcode}})</b></mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-lg-3">
+            <mat-label>Customer</mat-label>
+            <mat-select [(ngModel)]="partyID" (selectionChange)="onPartySelected()">
+                <mat-option><ngx-mat-select-search #supSearch [placeholderLabel]="'Search...'"
+                    [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option  *ngFor="let item of partyList | filter:supSearch.value"
+                    [value]="item.partyID">{{item.partyName}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div class="col-lg-3 pb-2" *ngIf="crudList.r">
+          
+            <button class="btn btn-success btn-rpt col-lg-4  me-1" (click)="getReport('')">Get Report</button>
+            <button class="btn btn-primary btn-rpt col-lg-1" (click)="print()"><mat-icon>print</mat-icon></button>
+        </div>
+   
+    </div>
+
+
+
+
+    
+    <div id="PrintDiv">
+
+        <!-------------------------    Top Logo Section -------------------->
+
+        <div class="hide">
+            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
+                        [width]="item.logo1Width">
+                </span>
+                <span>
+
+
+                    <h1 class="companyName">{{item.companyName}}</h1>
+
+                    <p class="rptTitle" style="margin-top:-20px">Sale Report </p>
+                    <p style="margin-top: -15px;" *ngIf="userName != ''" > <b *ngIf="userName != ''">User: {{userName}} |</b>
+                        <b *ngIf="partyName != ''">Customer: {{partyName}}</b>  </p>
+                    <p style="margin-top:-15px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                        {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
+
+
+                </span>
+                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                        height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                </span>
+
+
+            </div>
+        </div>
+
+
+        <table class="table table-logix" id="detailTable">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Bill #</th>
+                    <th style="width: 200px;">Date</th>
+                    <th>Title</th>
+                    <th>Qty</th>
+                    <th style="width: 120px;">Cost</th>
+                    <th style="width: 150px;">Avg Cost</th>
+                    <th style="width: 120px;">Sale</th>
+                    <th style="width: 120px;">Disc Rs</th>
+                    <th style="width: 120px;">Disc %</th>
+                    <th style="width: 120px;">Total</th>
+                    <th style="width: 120px;">Profit</th>
+                    <th style="width: 120px;">Profit %</th>
+                    <th>Entered By</th>
+
+                </tr>
+
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of DetailList index as index">
+                    <td class="text-center">{{index + 1}}</td>
+                    <td  [ngClass]="item.invType == 'PR' ? 'text-danger' : ''" class="text-center cursorPointer ">{{item.invBillNo}}</td>
+                    <td>{{item.invDate |date:'dd-MM-yyyy'}} </td>
+                    <td >{{item.productTitle}}</td>
+                    <td class="text-center">{{item.quantity}}</td>
+                    <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
+                    <td class="text-end">{{item.avgCostPrice|number:'1.0-1'}}</td>
+                    <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
+                    <td class="text-end">{{item.discInR |number:'1.0-1'}}</td>
+                    <td class="text-end">{{item.discInP |number:'1.0-1'}}</td>
+                    <td [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''" class="text-end">{{(item.salePrice * item.quantity) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
+                    <td [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''" class="text-end">{{((item.salePrice * item.quantity) - (item.discInR * item.quantity)) - (item.avgCostPrice * item.quantity) |number:'1.0-1'}}</td>
+                    <td [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''" class="text-end">{{(((item.salePrice * item.quantity) - (item.discInR * item.quantity)) - (item.avgCostPrice * item.quantity)) / ((item.salePrice * item.quantity) - (item.discInR * item.quantity)) |percent:'1.0-1'}}</td>
+
+                    <td>{{item.entryUser}}</td>
+                </tr>
+                <tr>
+                    <td colspan="10"></td>
+                    <th class="text-end">{{grandTotal|number:'1.0-0'}}</th>
+                    <th class="text-end">{{profitTotal|number:'1.0-0'}}</th>
+                    
+                    <td></td>
+                </tr>
+            </tbody>
+          
+
+          
+        </table>
+
+    
+
+
+
+
+
+    </div>
+
+
+
+</div>
+
+

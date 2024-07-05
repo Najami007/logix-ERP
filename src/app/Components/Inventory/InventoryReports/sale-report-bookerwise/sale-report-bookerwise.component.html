@@ -14,12 +14,12 @@
             </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline" class="col-lg-2">
-            <mat-label>Customer</mat-label>
-            <mat-select [(ngModel)]="partyID">
+            <mat-label>Booker</mat-label>
+            <mat-select [(ngModel)]="bookerID">
                 <mat-option><ngx-mat-select-search #partySearch [placeholderLabel]="'Search...'"
                     [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                <mat-option  *ngFor="let item of partyList | filter:partySearch.value"
-                    [value]="item.partyID">{{item.partyName}}</mat-option>
+                <mat-option  *ngFor="let item of bookerList | filter:partySearch.value"
+                    [value]="item.bookerID">{{item.bookerName}}</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field  appearance="outline" class="col-lg-2" >
@@ -129,7 +129,7 @@
                 <tr *ngFor="let item of DetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
                     <td  [ngClass]="item.invType == 'SR' ? 'text-danger' : ''" class="text-center cursorPointer ">{{item.invBillNo}}</td>
-                    <td>{{item.invDate |date:'dd-MM-yyyy'}} ({{item.createdOn |date:'hh:mm:a'}})</td>
+                    <td>{{item.invDate |date:'dd-MM-yyyy'}}</td>
                     <td >{{item.productTitle}}</td>
                     <td class="text-center">{{item.quantity}}</td>
                     <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
@@ -146,7 +146,7 @@
                 <tr>
                     <td colspan="10"></td>
                     <th class="text-end">{{saleGrandTotal|number:'1.0-0'}}</th>
-                    <th class="text-end">{{profitTotal|number:'1.0-1'}}</th>
+                    <th class="text-end">{{profitTotal|number:'1.0-0'}}</th>
                     <td></td>
                 </tr>
             </tbody>
@@ -161,7 +161,7 @@
                     <th>S#</th>
                     <th>Bill No</th>
                     <th>Date</th>
-                    <th>Booker</th>
+                    <th>Party</th>
                     <th>Type</th>
                     <th>Total</th>
                     <th>Disc</th>
@@ -183,7 +183,7 @@
                     <td class="text-center">{{index + 1}}</td>
                     <td  class="text-center">{{item.invBillNo}}</td>
                     <td>{{item.invDate |date:'dd-MM-yyyy'}}</td>
-                    <td>{{item.bookerName}}</td>
+                    <td>{{item.partyName || "Walk In"}}</td>
                     <td >{{item.paymentType}}</td>
                     <td  class="text-end">{{item.total  |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.billDiscount|number:'1.0-0'}}</td>
@@ -250,4 +250,5 @@
 
 
 </div>
+
 

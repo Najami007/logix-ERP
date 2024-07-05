@@ -35,18 +35,16 @@ import { InvrptprodwiseComponent } from './InventoryReports/invrptprodwise/invrp
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { SalePurchaseRptdatewiseComponent } from './InventoryReports/sale-purchase-rptdatewise/sale-purchase-rptdatewise.component';
 import { TopLeastSaleQtyAmountwiseComponent } from './InventoryReports/top-least-sale-qty-amountwise/top-least-sale-qty-amountwise.component';
-import { RetailSaleComponent } from './retail-sale/retail-sale.component';
-import {ScrollingModule} from '@angular/cdk/scrolling';
-import { EnterQtyComponent } from './retail-sale/enter-qty/enter-qty.component';
-import { RtlSavedBillComponent } from './retail-sale/rtl-saved-bill/rtl-saved-bill.component';
-import { RetailSaleReturnComponent } from './retail-sale-return/retail-sale-return.component';
-import { VoidableSaleComponent } from './voidable-sale/voidable-sale.component';
 
-import { VsenterqtyComponent } from './voidable-sale/vsenterqty/vsenterqty.component';
-import { VssavedbillComponent } from './voidable-sale/vssavedbill/vssavedbill.component';
-import { VoidableSalertnComponent } from './voidable-salertn/voidable-salertn.component';
-import { VrtnenterqtyComponent } from './voidable-salertn/vrtnenterqty/vrtnenterqty.component';
-import { VrtnsavedbillComponent } from './voidable-salertn/vrtnsavedbill/vrtnsavedbill.component';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+import { EnterQtyComponent } from './Sale/retailer-sale/enter-qty/enter-qty.component';
+import { RtlSavedBillComponent } from './Sale/retailer-sale/rtl-saved-bill/rtl-saved-bill.component';
+
+
+import { VsenterqtyComponent } from './Sale/void-sale/vsenterqty/vsenterqty.component';
+import { VssavedbillComponent } from './Sale/void-sale/vssavedbill/vssavedbill.component';
+import { VrtnenterqtyComponent } from './Sale/void-sale-return/vrtnenterqty/vrtnenterqty.component';
+import { VrtnsavedbillComponent } from './Sale/void-sale-return/vrtnsavedbill/vrtnsavedbill.component';
 import { InvDashboardComponent } from './inv-dashboard/inv-dashboard.component';
 import { SaleRptPaymentTypewiseComponent } from './InventoryReports/sale-rpt-payment-typewise/sale-rpt-payment-typewise.component';
 import { ChartModule } from 'angular-highcharts';
@@ -59,8 +57,8 @@ import { VoidListReportComponent } from './InventoryReports/void-list-report/voi
 import { CashierClosingRptComponent } from './InventoryReports/cashier-closing-rpt/cashier-closing-rpt.component';
 
 import { NgxBarcodeModule } from 'ngx-barcode';
-import { RetailRtnSavedbillComponent } from './retail-sale-return/retail-rtn-savedbill/retail-rtn-savedbill.component';
-import { RetailRtnEnterQtyComponent } from './retail-sale-return/retail-rtn-enter-qty/retail-rtn-enter-qty.component';
+import { RetailRtnSavedbillComponent } from './Sale/retailer-sale-return/retail-rtn-savedbill/retail-rtn-savedbill.component';
+import { RetailRtnEnterQtyComponent } from './Sale/retailer-sale-return/retail-rtn-enter-qty/retail-rtn-enter-qty.component';
 
 
 import { PriceCheckerComponent } from './price-checker/price-checker.component';
@@ -68,10 +66,21 @@ import { PriceCheckerComponent } from './price-checker/price-checker.component';
 import { WholeSaleComponent } from './whole-sale/whole-sale.component';
 import { WhsSavedBillComponent } from './whole-sale/whs-saved-bill/whs-saved-bill.component';
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
-import { GarmentSaleComponent } from './garment-sale/garment-sale.component';
-import { GarmentSavedBillComponent } from './garment-sale/garment-saved-bill/garment-saved-bill.component';
+
+import { GarmentSavedBillComponent } from './Sale/garment-sale/garment-saved-bill/garment-saved-bill.component';
 import { SaleReportCustomerwiseComponent } from './InventoryReports/sale-report-customerwise/sale-report-customerwise.component';
 import { InvAuditComponent } from './inv-audit/inv-audit.component';
+import { GarmentSaleReturnComponent } from './Sale/garment-sale-return/garment-sale-return.component';
+import { GarmentRtnSavedBillComponent } from './Sale/garment-sale-return/garment-rtn-saved-bill/garment-rtn-saved-bill.component';
+import { GarmentSaleComponent } from './Sale/garment-sale/garment-sale.component';
+import { SaleReportBookerwiseComponent } from './InventoryReports/sale-report-bookerwise/sale-report-bookerwise.component';
+import { CustomerBalanceReportComponent } from './InventoryReports/customer-balance-report/customer-balance-report.component';
+import { SupplierBalanceReportComponent } from './InventoryReports/supplier-balance-report/supplier-balance-report.component';
+import { SaleReportProdCustomerwiseComponent } from './InventoryReports/sale-report-prod-customerwise/sale-report-prod-customerwise.component';
+import { RetailerSaleComponent } from './Sale/retailer-sale/retailer-sale.component';
+import { RetailerSaleReturnComponent } from './Sale/retailer-sale-return/retailer-sale-return.component';
+import { VoidSaleComponent } from './Sale/void-sale/void-sale.component';
+import { VoidSaleReturnComponent } from './Sale/void-sale-return/void-sale-return.component';
 
 
 
@@ -129,22 +138,22 @@ export const inventoryRoutes: Route[] = [
   },
   {
     path: 'vblsale',
-    component: VoidableSaleComponent,
+    component: VoidSaleComponent,
     canActivate: [AuthGuard]
   },
   {
     path: 'vblsalertn',
-    component: VoidableSalertnComponent,
+    component: VoidSaleReturnComponent,
     canActivate: [AuthGuard]
   },
   {
     path: 'retsl',
-    component: RetailSaleComponent,
+    component: RetailerSaleComponent,
     canActivate: [AuthGuard]
   },
   {
     path: 'retslrtn',
-    component: RetailSaleReturnComponent,
+    component: RetailerSaleReturnComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -267,6 +276,32 @@ export const inventoryRoutes: Route[] = [
     component: InvAuditComponent,
     canActivate: [AuthGuard]
   }, 
+  {
+    path: 'gmslrtn',
+    component: GarmentSaleReturnComponent,
+    canActivate: [AuthGuard]
+  }, 
+  {
+    path: 'cbrpt',
+    component: CustomerBalanceReportComponent,
+    canActivate: [AuthGuard]
+  }, 
+  {
+    path: 'sbrpt',
+    component: SupplierBalanceReportComponent,
+    canActivate: [AuthGuard]
+  }, 
+  {
+    path: 'srptbkrw',
+    component: SaleReportBookerwiseComponent,
+    canActivate: [AuthGuard]
+  }, 
+  {
+    path: 'srptprodcw',
+    component: SaleReportProdCustomerwiseComponent,
+    canActivate: [AuthGuard]
+  }, 
+
 
 
 
@@ -305,14 +340,12 @@ export const inventoryRoutes: Route[] = [
     InvrptprodwiseComponent,
     SalePurchaseRptdatewiseComponent,
     TopLeastSaleQtyAmountwiseComponent,
-    RetailSaleComponent,
+ 
     EnterQtyComponent,
     RtlSavedBillComponent,
-    RetailSaleReturnComponent,
-    VoidableSaleComponent,
     VsenterqtyComponent,
     VssavedbillComponent,
-    VoidableSalertnComponent,
+
     VrtnenterqtyComponent,
     VrtnsavedbillComponent,
     InvDashboardComponent,
@@ -335,6 +368,16 @@ export const inventoryRoutes: Route[] = [
     GarmentSavedBillComponent,
     SaleReportCustomerwiseComponent,
     InvAuditComponent,
+    GarmentSaleReturnComponent,
+    GarmentRtnSavedBillComponent,
+    SaleReportBookerwiseComponent,
+    CustomerBalanceReportComponent,
+    SupplierBalanceReportComponent,
+    SaleReportProdCustomerwiseComponent,
+    RetailerSaleComponent,
+    RetailerSaleReturnComponent,
+    VoidSaleComponent,
+    VoidSaleReturnComponent,
     
   
     

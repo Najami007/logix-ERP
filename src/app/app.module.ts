@@ -51,6 +51,7 @@ import { SharedFieldValidationModule } from './Shared/helper/shared-field-valida
 
 
 
+
 @NgModule({
   declarations: [   
     AppComponent, 
@@ -62,6 +63,7 @@ import { SharedFieldValidationModule } from './Shared/helper/shared-field-valida
     NumberInputComponent,
     SideNavbarComponent,
     ConfirmationAlertComponent,
+
    
     
     //LFilterPipe,
