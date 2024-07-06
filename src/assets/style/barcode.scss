@@ -1,0 +1,54 @@
+
+@font-face {
+    font-family: 'barcode128';
+    font-style: normal;
+    src: url('./assets/fonts/barcode/code128.ttf');
+  }
+  
+  @font-face {
+    font-family: 'barcode39';
+    src: url('./assets/fonts/barcode/BarCode39Lesbar-3yDM.ttf ');
+  }
+
+
+  .cmpName{
+    font-size: 12px !important;
+    margin-bottom: -1.5px;
+  }
+  
+  .font-barcode{
+    margin-top: -25px;
+    font-family:'code 128' !important;
+    font-size: 35px;
+    
+    
+    /* padding-top: 10px; */
+    /* border: 1px solid red; */
+    /* height: 40px; */
+  
+    overflow: hidden;
+  }
+
+
+  .bcodep{
+    
+    width: 50%;
+    font-weight: bold;
+    font-size: 12px;
+  }
+  
+  .bcodet{
+    width: 50%;
+    font-weight: 400;
+    font-size: 12px;
+  }
+  .bcodeC{
+    margin-top: -10px;
+    font-weight: bold;
+    font-size: 10px;
+  }
+
+  .barcodeName{
+    margin-top: -5px;
+  }
+  

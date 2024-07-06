@@ -849,7 +849,7 @@ export class GarmentSaleComponent implements OnInit {
       p.costPrice = parseFloat(p.costPrice);
 
       if (p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null) {
-        this.msg.WarnNotify('(' + p.productTitle + ') Cost Price is not Valid');
+        this.msg.WarnNotify('(' + p.productTitle + ') Cost Price greater than Sale Price');
         isValidFlag = false;
 
         return;

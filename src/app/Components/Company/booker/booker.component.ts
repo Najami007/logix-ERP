@@ -40,7 +40,7 @@ export class BookerComponent implements OnInit {
     bookerID:any;
   depSearch:any;
   bookerName:any;
-
+  BookerDescription:any;
 
 
   bookerList:any = [];
@@ -62,9 +62,12 @@ export class BookerComponent implements OnInit {
 
   save(){
      if(this.bookerName == '' || this.bookerName == undefined){
-      this.msg.WarnNotify('Enter Section Title')
+      this.msg.WarnNotify('Enter Booker Name')
     }else {
-      
+      if(this.BookerDescription == '' || this.BookerDescription == undefined){
+        this.BookerDescription = '-';
+      }
+
       if(this.btnType == 'Save'){
         this.insert();
       }else if(this.btnType == 'Update'){
@@ -83,6 +86,7 @@ export class BookerComponent implements OnInit {
     this.app.startLoaderDark();
     this.http.post(environment.mainApi+this.globaldata.inventoryLink+'insertBooker',{
       BookerName: this.bookerName,
+      BookerDescription:this.BookerDescription,
       UserID: this.globaldata.getUserID()
     }).subscribe(
       (Response:any)=>{
@@ -109,6 +113,7 @@ export class BookerComponent implements OnInit {
     this.http.post(environment.mainApi+this.globaldata.inventoryLink+'updateBooker',{
       BookerID:this.bookerID,
       BookerName: this.bookerName,
+      BookerDescription:this.BookerDescription,
       PinCode:pin,
       UserID: this.globaldata.getUserID()
     }).subscribe(
@@ -130,16 +135,17 @@ export class BookerComponent implements OnInit {
   }
 
 
-  editSection(row:any){
+  edit(row:any){
     
     this.bookerID = row.bookerID;
     this.bookerName = row.bookerName;
+    this.BookerDescription = row.bookerDescription;
     this.btnType = 'Update';
 
   }
 
 
-  deleteSection(row:any){
+  delete(row:any){
 
     this.globaldata.openPinCode().subscribe(pin=>{
       if(pin!= ''){
@@ -159,7 +165,7 @@ export class BookerComponent implements OnInit {
         this.app.startLoaderDark();
         
           this.http.post(environment.mainApi+this.globaldata.inventoryLink+'deletebooker',{
-            bookerID: row.bookerID,
+            BookerID: row.bookerID,
            PinCode:pin,
            UserID: this.globaldata.getUserID()
           }).subscribe(

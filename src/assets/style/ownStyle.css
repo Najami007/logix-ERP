@@ -208,41 +208,11 @@
 
 
 
-/******** Barcode Designing ****/
-/* 
-@font-face {
-  font-family: 'barcode128';
-  font-style: normal;
-  src: url('../../assets/fonts/barcode/Code39Azalea.ttf');
-} */
-
-
-.font-barcode{
-  font-family:'barcode128' !important;
-  font-size: 15px;
-  padding-top: 10px;
-  border: 1px solid red;
-  height: 40px;
-
-  overflow: hidden;
-}
 
 
 
-.bcodep{
-  width: 50%;
-  font-weight: bold;
-  font-size: 20px;
-}
 
-.bcodet{
-  width: 50%;
-  font-weight: 400;
-  font-size: 17px;
-}
-.bcodeC{
-  font-weight: bold;
-}
+
 
 
 

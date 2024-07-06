@@ -38,12 +38,12 @@
 
                 <div *ngFor="let item of curProduct" class="d-flex  justify-content-center">
                    <div id="PrintDiv" >
-                    <div style="padding-left: -3px;"> 
-                        <p style="margin-bottom: -5px;" class="fw-bold">{{companyName}}</p>
-                        <ngx-barcode [bc-font-size]="15"[bc-height]="60"   [bc-value]="item.barcode" [bc-display-value]="true"></ngx-barcode>
-                        <!-- <div class="font-barcode" >{{item.barcode}}</div> -->
-                        <!-- <div class="bcodeC">{{item.barcode}}</div> -->
-                        <div class="d-flex text-center">
+                    <div  > 
+                        <p  class="fw-bold cmpName text-center">{{companyName}}</p>
+                        <ngx-barcode6 [bc-format]="'CODE128'" [bc-font-size]="15"[bc-height]="60"   [bc-value]="item.barcode" [bc-display-value]="true"></ngx-barcode6>
+                        <!-- <div class="font-barcode" >*{{item.barcode}}*</div>
+                        <div class="bcodeC">{{item.barcode}}</div> -->
+                        <div class="d-flex text-center barcodeName">
                             <div class="bcodet" >{{item.productTitle}}</div>
                             <div class="bcodep text-start">Rs.{{item.salePrice}}</div>
                         </div>

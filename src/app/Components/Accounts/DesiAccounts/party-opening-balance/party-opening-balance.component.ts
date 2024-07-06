@@ -64,7 +64,7 @@ export class PartyOpeningBalanceComponent {
 
   
   getSavedData(){
-    this.http.get(environment.mainApi+this.globaldata.accountLink+'').subscribe(
+    this.http.get(environment.mainApi+this.globaldata.accountLink+'GetPayRec?reqType=opb').subscribe(
       (Response:any)=>{
         this.savedDataList = Response;
       },

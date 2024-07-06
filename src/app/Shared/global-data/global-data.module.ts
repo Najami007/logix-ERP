@@ -438,7 +438,7 @@ export class GlobalDataModule implements OnInit {
     frameDoc.document.write(
       //  '<link rel="stylesheet" href="../../styles.scss" type="text/scss" media="print"/>'+
       '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'+
-       '<link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>' 
+       '<link rel="stylesheet" href="../../assets/style/barcode.scss" type="text/css" media="print"/>' 
       
       
 

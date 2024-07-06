@@ -100,4 +100,8 @@ input:focus{
   ::ng-deep .cdk-overlay-container{
     z-index:2000;
   }
+
+  .billArea::-webkit-scrollbar-track {
+    background: rgb(218, 246, 243);
+  }
   

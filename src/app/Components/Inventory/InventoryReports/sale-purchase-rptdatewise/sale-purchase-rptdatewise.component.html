@@ -104,8 +104,8 @@
                     <th *ngIf="rptType == 'p' ||rptType == 'pr' || rptType == 's' || rptType == 'sr'">Party</th>
                     <th *ngIf="rptType == 'p' ||rptType == 'pr' || rptType == 's' || rptType == 'sr'">Booker</th>
                     <th style="width: 120px;">Total</th>
-                    <th *ngIf="rptType == 's'">Disc</th>
-                    <th *ngIf="rptType == 's'">Net Total</th>
+                    <th *ngIf="rptType == 's' || rptType == 'sr'">Disc</th>
+                    <th *ngIf="rptType == 's' || rptType == 'sr'">Net Total</th>
                     <th>Entered By</th>
 
                 </tr>
@@ -123,8 +123,8 @@
                     <td *ngIf="rptType == 'p' ||rptType == 'pr' || rptType == 's' || rptType == 'sr'">{{item.partyName}}</td>
                     <td *ngIf="rptType == 'p' ||rptType == 'pr' || rptType == 's' || rptType == 'sr'">{{item.bookerName }}</td>
                     <td class="text-end">{{item.billTotal + item.overHeadAmount  |number:'1.0-0'}}</td>
-                    <td  *ngIf="rptType == 's'" class="text-end">{{item.billDiscount |number:'1.0-0'}}</td>
-                    <td  *ngIf="rptType == 's'" class="text-end">{{item.netTotal  |number:'1.0-0'}}</td>
+                    <td  *ngIf="rptType == 's' || rptType == 'sr'" class="text-end">{{item.billDiscount |number:'1.0-0'}}</td>
+                    <td  *ngIf="rptType == 's' || rptType == 'sr'" class="text-end">{{item.netTotal  |number:'1.0-0'}}</td>
                     <td>{{item.entryUser}}</td>
                 </tr>
                 <tr>
@@ -134,8 +134,8 @@
                     <td *ngIf="rptType == 'I' || rptType == 'R' || rptType == 's' || rptType == 'sr'"></td>
                     <td *ngIf="rptType == 'p' ||rptType == 'pr' || rptType == 's' || rptType == 'sr'"></td>
                     <td class="fw-bold text-end">{{netGrandTotal |number:'1.0-0'}}</td>
-                    <td *ngIf="rptType == 's'" class="fw-bold text-end">{{discountTotal}}</td>
-                    <td *ngIf="rptType == 's'" class="fw-bold text-end">{{summaryNetTotal}}</td>
+                    <td *ngIf="rptType == 's' || rptType == 'sr'" class="fw-bold text-end">{{discountTotal}}</td>
+                    <td *ngIf="rptType == 's' || rptType == 'sr'" class="fw-bold text-end">{{summaryNetTotal}}</td>
                     <td></td>
                 </tr>
             </tbody>
@@ -158,8 +158,8 @@
                     <th style="width: 120px;">Cost Price</th>
                     <th style="width: 150px;">Avg Cost</th>
                     <th style="width: 120px;">Sale Price</th>
-                    <!-- <th *ngIf="rptType == 's'">Disc</th>
-                    <th *ngIf="rptType == 's'">Disc %</th> -->
+                    <th *ngIf="rptType == 's' || rptType == 'sr'">Disc</th>
+                    <th *ngIf="rptType == 's' || rptType == 'sr'">Disc %</th>
                     <th>Total</th>
                     <th *ngIf="rptType == 's'">Profit</th>
                     <th *ngIf="rptType == 's'">Profit %</th>
@@ -179,14 +179,14 @@
                     <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.avgCostPrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
-                    <!-- <td class="text-end">{{item.discInR |number:'1.0-1'}}</td>
-                    <td class="text-end">{{item.discInP |number:'1.0-1'}}</td> -->
-                    <td class="text-end" *ngIf="rptType == 's' || rptType == 'sr'">{{item.salePrice * item.quantity |number:'1.0-1'}}</td>
+                    <td class="text-end">{{item.discInR |number:'1.0-1'}}</td>
+                    <td class="text-end">{{item.discInP |number:'1.0-1'}}</td>
+                    <td class="text-end" *ngIf="rptType == 's' || rptType == 'sr'">{{(item.salePrice * item.quantity) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
                     <!-- <td class="text-end" *ngIf="rptType != 's' && rptType != 'sr'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td> -->
                     <td class="text-end" *ngIf="rptType == 'p' || rptType == 'pr'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td>
                     <td class="text-end" *ngIf="rptType == 'I' || rptType == 'R'|| rptType == 'AI'|| rptType == 'AO'|| rptType == 'DL'|| rptType == 'E'|| rptType == 'OS'">{{item.avgCostPrice * item.quantity |number:'1.0-1'}}</td>
-                    <td class="text-end" *ngIf="rptType == 's'">{{(item.salePrice * item.quantity) - (item.avgCostPrice * item.quantity) |number:'1.0-1'}}</td>
-                    <td class="text-end" *ngIf="rptType == 's'">{{(((item.salePrice * item.quantity) - (item.avgCostPrice * item.quantity)) / (item.salePrice * item.quantity)) * 100 |number:'1.0-1'}}%</td>
+                    <td class="text-end" *ngIf="rptType == 's'">{{((item.salePrice * item.quantity) - (item.discInR * item.quantity)) - (item.avgCostPrice * item.quantity) |number:'1.0-1'}}</td>
+                    <td class="text-end" *ngIf="rptType == 's'">{{(((item.salePrice * item.quantity) - (item.discInR * item.quantity)) - (item.avgCostPrice * item.quantity)) / ((item.salePrice * item.quantity) - (item.discInR * item.quantity)) |percent:'1.0-1'}}</td>
                   
                 </tr>
                 <tr>
@@ -198,6 +198,9 @@
                     <td ></td>                    
                     <td></td>
                     <td></td>
+                    <td *ngIf="rptType == 's' || rptType == 'sr'"></td>
+                    <td *ngIf="rptType == 's' || rptType == 'sr'"></td>
+                    
                     <td class="fw-bold text-end">{{detNetTotal |number:'1.0-0'}}</td>
                     <td *ngIf="rptType == 's'" class="fw-bold text-end">{{profitTotal |number:'1.0-0'}}</td>
                     <td *ngIf="rptType == 's'" class="fw-bold text-end">{{profitTotal / detNetTotal * 100 |number:'1.0-2'}}%</td>

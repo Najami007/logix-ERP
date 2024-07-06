@@ -1,1 +1,49 @@
-<p>add-balance works!</p>
+<div class="p-4">
+
+    <div class="row">
+    <mat-form-field appearance="outline"  class="col-lg-12">
+        <mat-label>Invoice Date</mat-label>
+        <input [(ngModel)]="invoiceDate"  readonly="true" matInput type="text" name="invDate"
+            [matDatepicker]="iDate">
+        <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
+        <mat-datepicker #iDate></mat-datepicker>
+    </mat-form-field>
+    
+
+
+    <mat-form-field   appearance="outline" class="col-lg-4">
+        <mat-label>Type</mat-label>
+        <mat-select  [(ngModel)]="partyType" (selectionChange)="getParty(); this.partyID = 0;">
+         <mat-option *ngFor="let item of partyTypeList" [value]="item.id">{{item.title}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+        <mat-form-field  appearance="outline" class="col-lg-8">
+        <mat-label>Supplier</mat-label>
+        <mat-select      id="supplier" [(ngModel)]="partyID" >
+            <mat-option><ngx-mat-select-search #supSerach [placeholderLabel]="'Search...'"
+                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+            <mat-option *ngFor="let item of partyList |filter:supSerach.value" [value]="item.partyID">{{item.partyName}}  ({{item.cityName}})</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+   
+
+    <mat-form-field appearance="outline" class="col-lg-12">
+        <mat-label>Amount</mat-label>
+       <input matInput [(ngModel)]="amount" (keydown)="global.handleNumKeys($event)" />
+    </mat-form-field>
+
+
+    <mat-form-field appearance="outline" class="col-lg-12">
+        <mat-label>Remarks</mat-label>
+       <textarea matInput [(ngModel)]="remarks" ></textarea>
+    </mat-form-field>
+</div>
+
+
+</div>
+
+<div class="bg-mf text-end p-3">
+    <button class="btn btn-success me-1" (click)="Save()">{{btnType}}</button>
+    <button class="btn btn-secondary" (click)="closeDialog()">Close</button>
+</div>

@@ -109,11 +109,11 @@ $my-theme-dark: mat.define-dark-theme((
 
 
 .font-barcode{
-  // font-family: 'Code 128' !important;
-  font-family: Code 128, Helvetica, sans-serif ;
-  font-size: 15px;
-  border: 1px solid red;
-  height: 50px;
+   font-family: 'code 128' !important;
+  //font-family: Code 128, Helvetica, sans-serif ;
+  font-size: 155px;
+  // border: 1px solid red;
+   height: 100px;
 
   overflow: hidden;
 }

@@ -56,7 +56,6 @@ import { SalePurchaseComparisonRptsupplierwiseComponent } from './InventoryRepor
 import { VoidListReportComponent } from './InventoryReports/void-list-report/void-list-report.component';
 import { CashierClosingRptComponent } from './InventoryReports/cashier-closing-rpt/cashier-closing-rpt.component';
 
-import { NgxBarcodeModule } from 'ngx-barcode';
 import { RetailRtnSavedbillComponent } from './Sale/retailer-sale-return/retail-rtn-savedbill/retail-rtn-savedbill.component';
 import { RetailRtnEnterQtyComponent } from './Sale/retailer-sale-return/retail-rtn-enter-qty/retail-rtn-enter-qty.component';
 
@@ -81,6 +80,7 @@ import { RetailerSaleComponent } from './Sale/retailer-sale/retailer-sale.compon
 import { RetailerSaleReturnComponent } from './Sale/retailer-sale-return/retailer-sale-return.component';
 import { VoidSaleComponent } from './Sale/void-sale/void-sale.component';
 import { VoidSaleReturnComponent } from './Sale/void-sale-return/void-sale-return.component';
+import { NgxBarcode6Module } from 'ngx-barcode6';
 
 
 
@@ -400,7 +400,8 @@ export const inventoryRoutes: Route[] = [
     NgxMaterialTimepickerModule,
     ScrollingModule,
     ChartModule,
-    NgxBarcodeModule,
+    
+    NgxBarcode6Module,
     PipesModule,
     
   ],

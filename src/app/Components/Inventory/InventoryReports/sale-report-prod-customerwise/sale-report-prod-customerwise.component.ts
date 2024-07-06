@@ -144,8 +144,6 @@ export class SaleReportProdCustomerwiseComponent implements OnInit {
     '&FromDate='+this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+
     '&fromtime='+this.fromTime+'&totime='+this.toTime+'&PartyID='+this.partyID+'&ProductID='+ this.productID).subscribe(
       (Response: any) => {
-        //console.log(Response);
- 
         this.DetailList = Response;
         this.grandTotal = 0;
         this.profitTotal = 0;

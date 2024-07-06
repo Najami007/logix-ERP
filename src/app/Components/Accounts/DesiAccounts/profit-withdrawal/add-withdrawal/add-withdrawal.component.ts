@@ -93,13 +93,13 @@ export class AddWithdrawalComponent {
           this.msg.WarnNotify('Enter Amount')
       }else{
 
-        if(this.bankReceiptNo == '' || this.bankReceiptNo == null || this.bankReceiptNo == undefined){
-          this.bankReceiptNo = '-';
-        }
+        // if(this.bankReceiptNo == '' || this.bankReceiptNo == null || this.bankReceiptNo == undefined){
+        //   this.bankReceiptNo = '-';
+        // }
         
-        if(this.discount == '' || this.discount == undefined || this.discount == null){
-          this.discount = 0;
-        }
+        // if(this.discount == '' || this.discount == undefined || this.discount == null){
+        //   this.discount = 0;
+        // }
 
         if(this.remarks == '' || this.remarks == undefined || this.remarks == null){
           this.remarks  = '-';

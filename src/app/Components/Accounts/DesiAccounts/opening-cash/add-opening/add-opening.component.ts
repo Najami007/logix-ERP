@@ -54,7 +54,7 @@ export class AddOpeningComponent {
   coaID = 0;
   remarks = '';
   projectID = 0;
-  paymentTypeList = [{value:'CPV',title:'Cash'},{value:'BPV',title:'Bank'},];
+  paymentTypeList = [{value:'CRV',title:'Cash'},{value:'BRV',title:'Bank'},];
 
   paymentType = '';
 

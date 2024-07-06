@@ -127,7 +127,6 @@ rptType:any = 's';
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
         this.SaleDetailList = [];
-       //console.log(Response);
        
         if(this.rptType == 'R'){
           Response.forEach((e:any)=>{
@@ -168,7 +167,7 @@ rptType:any = 's';
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryDetailDateWise_3?reqType='+this.rptType+'&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
-        //console.log(Response);
+     
         this.SaleDetailList = [];
         if(this.rptType == 'R'){
           Response.forEach((e:any)=>{

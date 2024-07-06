@@ -15,6 +15,7 @@
                     <th>S#</th>
                     <th>Date</th>
                     <th>Inv No.</th>
+                    <th>Party</th>
                     <th>Amount</th>
                     <th>Remarks</th>
                     <th>Action</th>
@@ -25,6 +26,7 @@
                     <td >{{index +1}}</td>
                     <td >{{item.invoiceDate | date:'dd-MM-YYYY'}}</td>
                     <td >{{item.invoiceNo }}</td>
+                    <td >{{item.partyName }}</td>
                     <td >{{item.amount |number:'1.0-1'}}</td>
                     <td>{{item.invoiceRemarks }}</td>
                     <td class="cursorPointer">
