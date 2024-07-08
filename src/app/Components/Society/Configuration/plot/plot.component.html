@@ -1,1 +1,105 @@
-<p>plot works!</p>
+<div class="row no-scroll">
+    <!-- Add / update -->
+    <div class="col-md-6 bg-white border">
+      <h2 class="pt-2 pb-2 ps-3 border-bottom">Add / Modify</h2>
+      <div class="row">
+        <div class="col-md-6 border-right-dark">
+          <div class="d-flex flex-column ps-3 pe-3">
+            <mat-form-field class="w-100">
+              <mat-label>Plot Name</mat-label>
+              <input matInput [(ngModel)]="plotName" />
+            </mat-form-field>
+            <mat-form-field class="w-100">
+              <mat-label>Plot Short Name</mat-label>
+              <input matInput [(ngModel)]="plotShortName" />
+            </mat-form-field>
+            <mat-form-field class="w-100">
+              <mat-label>Description</mat-label>
+              <input matInput [(ngModel)]="plotDescription" />
+            </mat-form-field>
+            <!-- <mat-form-field class="w-100">
+              <mat-label>Latitude</mat-label>
+              <input matInput [(ngModel)]="plotLateitude" />
+            </mat-form-field>
+            <mat-form-field class="w-100">
+              <mat-label>Longitude</mat-label>
+              <input matInput [(ngModel)]="plotLongitude" />
+            </mat-form-field> -->
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="d-flex flex-column ps-3 pe-3">
+            <mat-form-field>
+              <mat-label>Plot Category</mat-label>
+              <mat-select [(ngModel)]="plotCategoryId">
+                <!-- <mat-option>
+                    <ngx-mat-select-search [(ngModel)]="searchLocation" [placeholderLabel]="'Search...'"
+                      [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search>
+                  </mat-option> -->
+                <mat-option
+                  *ngFor="let item of plotCategoryList"
+                  [value]="item.plotCategoryId"
+                >
+                  {{ item.plotCategoryTitle }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Plot Type</mat-label>
+              <mat-select [(ngModel)]="plotTypeId">
+                <!-- <mat-option>
+                    <ngx-mat-select-search [(ngModel)]="searchLocation" [placeholderLabel]="'Search...'"
+                      [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search>
+                  </mat-option> -->
+                <mat-option
+                  *ngFor="let item of plotTypeList"
+                  [value]="item.plotTypeId"
+                >
+                  {{ item.plotTypeTitle }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Plot Nature</mat-label>
+              <mat-select [(ngModel)]="plotNatureId">
+                <!-- <mat-option>
+                    <ngx-mat-select-search [(ngModel)]="searchLocation" [placeholderLabel]="'Search...'"
+                      [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search>
+                  </mat-option> -->
+                <mat-option
+                  *ngFor="let item of plotNatureList"
+                  [value]="item.plotNatureID"
+                >
+                  {{ item.plotNatureTitle }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="w-100">
+              <mat-label>Plot Size</mat-label>
+              <input
+                matInput
+                [(ngModel)]="plotSize"
+                type="number"
+                min="0"
+              />
+            </mat-form-field>
+
+            
+          </div>
+        </div>
+
+        <div class="row justify-content-around">
+            <button class="btn btn-success w-25" *ngIf="crudList.u && btnType == 'Update'" (click)="save()">{{btnType}}</button>
+            <button class="btn btn-success w-25" *ngIf="crudList.c  && btnType == 'Save'" (click)="save()">{{btnType}}</button>
+            <button class="btn btn-danger w-25" (click)="reset()">Reset</button>
+        </div>
+      </div>
+    </div>
+    <!-- saved record -->
+    <div class="col-md-6 p-0">
+      <h2 class="pt-2 pb-2 ps-2 border-bottom">Saved Records</h2>
+      <div class="d-flex flex-column">
+        <app-plot-table (eventEmitter)="edit($event)"></app-plot-table>
+      </div>
+    </div>
+  </div>

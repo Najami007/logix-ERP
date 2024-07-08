@@ -58,7 +58,7 @@
             <div class="container-fluid pt-3 row " >
 
                 <div class="col-lg-9" >
-                    <mat-card class="shadow  m-1">
+                    <div class="m-1">
         
                         <table class="table text-center">
                             <thead class="border-bottom">
@@ -79,11 +79,11 @@
                                
                             </tbody>
                         </table>
-                    </mat-card>
+                    </div>
                 </div>
 
                 <div class="col-lg-3" >
-                    <mat-card class="p-3  shadow text-center m-1" >
+                    <div class="p-3 card text-center m-1" >
                           <h1 class=" mt-5 ">Total</h1>
 
                           <span class="mt-4 text-danger font-digit"  style="font-size: 3rem;">{{TotalAmount | number}}</span>
@@ -98,7 +98,7 @@
                           <button class="btn btn-success btn-save mt-4" *ngIf="crudList.c && btnText == 'Save'" (click)="SaveBudget()">{{btnText}}</button>
                           <button class="btn btn-danger btn-reset mt-4" (click)="reset()">Reset</button>
 
-                    </mat-card>
+                    </div>
                 </div>
             </div>
         </div>

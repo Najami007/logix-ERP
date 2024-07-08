@@ -14,6 +14,10 @@ import { ChartModule } from 'angular-highcharts';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 import { PlotCategoryTableComponent } from './Configuration/plot-category/plot-category-table/plot-category-table.component';
+import { PlotTypeTableComponent } from './Configuration/plot-type/plot-type-table/plot-type-table.component';
+import { PlotNatureTableComponent } from './Configuration/plot-nature/plot-nature-table/plot-nature-table.component';
+import { PlotTableComponent } from './Configuration/plot/plot-table/plot-table.component';
+
 
 
 
@@ -40,6 +44,10 @@ export const societyRoutes: Route[] = [
     PaymentPlanComponent,
     PlotComponent,
     PlotCategoryTableComponent,
+    PlotTypeTableComponent,
+    PlotNatureTableComponent,
+    PlotTableComponent,
+
   ],
   imports: [
     CommonModule,

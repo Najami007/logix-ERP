@@ -270,7 +270,7 @@ export class GarmentSaleComponent implements OnInit {
                   qty = qty / parseFloat(Response[0].salePrice);
 
                 }
-
+                   
                 this.tableDataList.push({
                   rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
                     : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1

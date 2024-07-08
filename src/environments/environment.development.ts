@@ -6,8 +6,8 @@ export const environment = {
     envName: 'dev',
     //apiUrl: 'https://localhost:7036/',
     //  apiUrl: 'http://localhost:8070/',  
-    apiUrl: 'https://localhost:7005/',
-
+   // apiUrl: 'https://localhost:7005/',
+      apiUrl: 'http://157.90.101.251:8050/',
 
        //mainApi: 'http://159.69.174.21:2010',
        //mainApi: 'http://159.69.174.21:2008', /////// Live Serve Demo ERP API
@@ -17,7 +17,7 @@ export const environment = {
       //mainApi: 'http://192.168.100.100:1001/',
       mainApi: 'http://192.168.10.100:1003/',    /////////// Local Server Office
 
-      
+     //mainApi: 'http://192.168.1.100:8081/',   ///Alsheikh Mall Wahcant
 
       //mainApi: 'http://localhost:1001/',  /////////// For All Customers Local
 

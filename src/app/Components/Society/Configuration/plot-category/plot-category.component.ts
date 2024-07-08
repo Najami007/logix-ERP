@@ -47,7 +47,7 @@ export class PlotCategoryComponent {
      
     }
 
-
+    btnType = 'Save';
     plotCategoryTitle:any = '';
     plotSize:any = '';
     unit:any = '';
@@ -57,6 +57,19 @@ export class PlotCategoryComponent {
 
     edit(item:any, obj:any){
 
+    }
+
+
+    save(){
+
+    }
+
+    reset(){
+      this.plotSize = '';
+      this.plotSize = '';
+      this.unit = '';
+      this.plotCategoryId = 0;
+      this.btnType = 'Save';
     }
 
 }

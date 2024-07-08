@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { SharedServicesDataModule } from 'src/app/Shared/helper/shared-services-data/shared-services-data.module';
@@ -11,7 +11,7 @@ import { AppComponent } from 'src/app/app.component';
   templateUrl: './plot-category-table.component.html',
   styleUrls: ['./plot-category-table.component.scss']
 })
-export class PlotCategoryTableComponent {
+export class PlotCategoryTableComponent implements OnInit {
 
   @Output() eventEmitter = new EventEmitter();
 
@@ -36,6 +36,9 @@ export class PlotCategoryTableComponent {
       });
 
     }
+  ngOnInit(): void {
+   
+  }
 
 
     tableData:any = [];
@@ -43,6 +46,16 @@ export class PlotCategoryTableComponent {
 
     edit(item:any , num:any){
       this.eventEmitter.emit({item,num});
+    }
+
+
+    getPlotCategory(){
+      this.dataService.getHttp('society-api/PlotCategory/getPlotCategory', '').subscribe(
+        (response: any) => {
+        this.tableData = response;
+      }, (error: any) => {
+        console.log(error);
+      });
     }
 
 }
