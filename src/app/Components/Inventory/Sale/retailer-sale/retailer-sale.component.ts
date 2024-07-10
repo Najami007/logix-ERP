@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -20,6 +20,8 @@ import { RtlSavedBillComponent } from './rtl-saved-bill/rtl-saved-bill.component
   styleUrls: ['./retailer-sale.component.scss']
 })
 export class RetailerSaleComponent implements OnInit {
+
+  
 
   companyProfile: any = [];
   companyLogo: any = '';

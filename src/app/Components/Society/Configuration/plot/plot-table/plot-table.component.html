@@ -16,10 +16,10 @@
           <td>{{item.plotShortName}}</td>
           <td>{{item.plotSize}}</td>
           <td class="text-center">
-            <span class="text-primary pe-2 cursorPointer border-right-dark" (click)="edit(item)">
+            <span *ngIf="crudList.u" class="text-primary pe-2 cursorPointer border-right-dark" (click)="edit(item)">
               <mat-icon>edit</mat-icon>
             </span>
-            <span class="text-danger cursorPointer ps-2 pe-2" (click)="delete(item)">
+            <span *ngIf="crudList.d" class="text-danger cursorPointer ps-2 pe-2" (click)="delete(item)">
               <mat-icon>delete</mat-icon>
             </span>
             <!-- <span class="ps-2" (click)="edit(item, '2')">

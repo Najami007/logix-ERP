@@ -6,7 +6,7 @@
           <th class="text-center">Sr#</th>
           <th>title</th>
           <th>size</th>
-          <th class="text-center">Actions</th>
+          <th class="text-center" >Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -14,11 +14,11 @@
           <td class="text-center">{{i+1}}</td>
           <td>{{item.plotCategoryTitle}}</td>
           <td>{{item.plotSize}}</td>
-          <td class="text-center">
-            <span class="text-primary pe-2 cursorPointer border-right-dark" (click)="edit(item, '1')">
+          <td class="text-center" >
+            <span *ngIf="crudList.u" class="text-primary pe-2 cursorPointer border-right-dark" (click)="edit(item, '1')">
               <mat-icon>edit</mat-icon>
             </span>
-            <span class="text-danger cursorPointer ps-2 pe-2" (click)="edit(item, '2')">
+            <span *ngIf="crudList.d" class="text-danger cursorPointer ps-2 pe-2" (click)="edit(item, '2')">
               <mat-icon>delete</mat-icon>
             </span>
            

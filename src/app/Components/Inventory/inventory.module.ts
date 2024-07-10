@@ -81,6 +81,7 @@ import { RetailerSaleReturnComponent } from './Sale/retailer-sale-return/retaile
 import { VoidSaleComponent } from './Sale/void-sale/void-sale.component';
 import { VoidSaleReturnComponent } from './Sale/void-sale-return/void-sale-return.component';
 import { NgxBarcode6Module } from 'ngx-barcode6';
+import { RtlBillPrintComponent } from './Sale/retailer-sale/rtl-bill-print/rtl-bill-print.component';
 
 
 
@@ -378,6 +379,7 @@ export const inventoryRoutes: Route[] = [
     RetailerSaleReturnComponent,
     VoidSaleComponent,
     VoidSaleReturnComponent,
+    RtlBillPrintComponent,
     
   
     

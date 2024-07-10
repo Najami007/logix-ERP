@@ -1,0 +1,56 @@
+<div class="row h-100 body no-scroll">
+    <div class="col-md-4 ps-3 border">
+      <h2 class="pt-2 ps-3 pe-3 border-bottom">Plot Info</h2>
+      <div class="row h-100 bg-white">
+        <div class="col-md-12">
+          <mat-form-field class="w-100">
+            <mat-label>File Name</mat-label>
+            <mat-select [(ngModel)]="FileID">
+              <mat-option *ngFor="let item of fileList;" [value]="item.fileID">
+                {{ item.fileName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <mat-label>Plot Name</mat-label>
+            <mat-select [(ngModel)]="PlotID">
+              <mat-option *ngFor="let item of plotList;" [value]="item.plotID">
+                {{ item.plotName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <h2 class="pt-2  ps-2 border-bottom">Saved Map Plots</h2>
+      <div class="d-flex flex-column">
+        <div class="table-responsive">
+            <div class="d-flex flex-row pe-3">
+              <div class="form-group has-search flex-grow-1">
+                <input type="text" class="form-control" [(ngModel)]="tblSearch" placeholder="Search record" />
+              </div>
+              <button mat-raised-button color="warn" (click)="tblSearch = ''">
+                Show All
+              </button>
+            </div>
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Plot Name</th>
+                  <th>File Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of tableData | filter: tblSearch; let i = index">
+                  <td>{{ item.plotName }}</td>
+                  <td>{{ item.fileName }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+      </div>
+    </div>
+  </div>
+  
