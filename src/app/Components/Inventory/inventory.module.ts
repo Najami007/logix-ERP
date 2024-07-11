@@ -65,12 +65,9 @@ import { PriceCheckerComponent } from './price-checker/price-checker.component';
 import { WholeSaleComponent } from './whole-sale/whole-sale.component';
 import { WhsSavedBillComponent } from './whole-sale/whs-saved-bill/whs-saved-bill.component';
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
-
-import { GarmentSavedBillComponent } from './Sale/garment-sale/garment-saved-bill/garment-saved-bill.component';
 import { SaleReportCustomerwiseComponent } from './InventoryReports/sale-report-customerwise/sale-report-customerwise.component';
 import { InvAuditComponent } from './inv-audit/inv-audit.component';
 import { GarmentSaleReturnComponent } from './Sale/garment-sale-return/garment-sale-return.component';
-import { GarmentRtnSavedBillComponent } from './Sale/garment-sale-return/garment-rtn-saved-bill/garment-rtn-saved-bill.component';
 import { GarmentSaleComponent } from './Sale/garment-sale/garment-sale.component';
 import { SaleReportBookerwiseComponent } from './InventoryReports/sale-report-bookerwise/sale-report-bookerwise.component';
 import { CustomerBalanceReportComponent } from './InventoryReports/customer-balance-report/customer-balance-report.component';
@@ -82,6 +79,7 @@ import { VoidSaleComponent } from './Sale/void-sale/void-sale.component';
 import { VoidSaleReturnComponent } from './Sale/void-sale-return/void-sale-return.component';
 import { NgxBarcode6Module } from 'ngx-barcode6';
 import { RtlBillPrintComponent } from './Sale/retailer-sale/rtl-bill-print/rtl-bill-print.component';
+import { SaleBillPrintComponent } from './Sale/sale-bill-print/sale-bill-print.component';
 
 
 
@@ -97,216 +95,50 @@ import { RtlBillPrintComponent } from './Sale/retailer-sale/rtl-bill-print/rtl-b
 
 export const inventoryRoutes: Route[] = [
 
-  {
-    path: 'pcat',
-    component: ProductCategoryComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'pscat',
-    component: ProductSubCategoryComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'pbrnd',
-    component: BrandComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'prac',
-    component: RacksComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'ploc',
-    component: LocationsComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'uom',
-    component: UnitOfMeasurementComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'prod',
-    component: ProductComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'pur',
-    component: PurchaseComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'vblsale',
-    component: VoidSaleComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'vblsalertn',
-    component: VoidSaleReturnComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'retsl',
-    component: RetailerSaleComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'retslrtn',
-    component: RetailerSaleReturnComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'purtn',
-    component: PurchaseReturnComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'isnc',
-    component: IssuanceComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'isncrtn',
-    component: IssueStockRerturnComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'stkadj',
-    component: StockAdjustmentComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'opnstk',
-    component: OpeningStockComponent,
-    canActivate: [AuthGuard]
-  },
+  {path: 'pcat',component: ProductCategoryComponent,canActivate: [AuthGuard]},
+  {path: 'pscat',component: ProductSubCategoryComponent,canActivate: [AuthGuard]},
+  {path: 'pbrnd',component: BrandComponent, canActivate: [AuthGuard]},
+  {path: 'prac',component: RacksComponent,canActivate: [AuthGuard]},
+  { path: 'ploc',component: LocationsComponent,canActivate: [AuthGuard]},
+  {path: 'uom',component: UnitOfMeasurementComponent,canActivate: [AuthGuard]},
+  {path: 'prod',component: ProductComponent,canActivate: [AuthGuard]},
+  {path: 'pur',component: PurchaseComponent,canActivate: [AuthGuard]},
+  {path: 'vblsale',component: VoidSaleComponent,canActivate: [AuthGuard]},
+  {path: 'vblsalertn',component: VoidSaleReturnComponent,canActivate: [AuthGuard]},
+  {path: 'retsl',component: RetailerSaleComponent,canActivate: [AuthGuard]},
+  {path: 'retslrtn',component: RetailerSaleReturnComponent,canActivate: [AuthGuard]},
+  {path: 'purtn',component: PurchaseReturnComponent,canActivate: [AuthGuard]},
+  {path: 'isnc',component: IssuanceComponent,canActivate: [AuthGuard]},
+  {path: 'isncrtn',component: IssueStockRerturnComponent,canActivate: [AuthGuard]},
+  {path: 'stkadj',component: StockAdjustmentComponent, canActivate: [AuthGuard]},
+  {path: 'opnstk',component: OpeningStockComponent,canActivate: [AuthGuard]},
 
-  {
-    path: 'invrpt',
-    component: InvreportcatwiseComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'invrptpw',
-    component: InvrptprodwiseComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'sprptdw',
-    component: SalePurchaseRptdatewiseComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'tlsrpt',
-    component: TopLeastSaleQtyAmountwiseComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'invdsbrd',
-    component: InvDashboardComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'isrptptw',
-    component: SaleRptPaymentTypewiseComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'prptsw',
-    component: PurchaseReportSupplierwiseComponent,
-    canActivate: [AuthGuard]
-  },
+  {path: 'invrpt',component: InvreportcatwiseComponent,canActivate: [AuthGuard]},
+  {path: 'invrptpw',component: InvrptprodwiseComponent,canActivate: [AuthGuard]},
+  {path: 'sprptdw',component: SalePurchaseRptdatewiseComponent,canActivate: [AuthGuard]},
+  {path: 'tlsrpt',component: TopLeastSaleQtyAmountwiseComponent,canActivate: [AuthGuard]},
+  {path: 'invdsbrd',component: InvDashboardComponent,canActivate: [AuthGuard]},
+  {path: 'isrptptw',component: SaleRptPaymentTypewiseComponent,canActivate: [AuthGuard]},
+  {path: 'prptsw',component: PurchaseReportSupplierwiseComponent,canActivate: [AuthGuard]},
 
-  {
-    path: 'prptpsw',
-    component: PurchaseReportProdSupplierwiseComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'spcrptdw',
-    component: SalePurchaseComparisonRptDatewiseComponent,
-    canActivate: [AuthGuard]
-  },
+  {path: 'prptpsw', component: PurchaseReportProdSupplierwiseComponent,canActivate: [AuthGuard]},
+  { path: 'spcrptdw',component: SalePurchaseComparisonRptDatewiseComponent,canActivate: [AuthGuard]},
 
-  {
-    path: 'spcrptsw',
-    component: SalePurchaseComparisonRptsupplierwiseComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'brpt',
-    component: BarcodeReportComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'vrptuw',
-    component: VoidListReportComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'ccrpt',
-    component: CashierClosingRptComponent,
-    canActivate: [AuthGuard]
-  },
+  {path: 'spcrptsw',component: SalePurchaseComparisonRptsupplierwiseComponent,canActivate: [AuthGuard]},
+  {path: 'brpt',component: BarcodeReportComponent,canActivate: [AuthGuard]},
+  {path: 'vrptuw',component: VoidListReportComponent, canActivate: [AuthGuard]},
+  {path: 'ccrpt',component: CashierClosingRptComponent,canActivate: [AuthGuard]},
   
-  {
-    path: 'pckr',
-    component: PriceCheckerComponent,
-    canActivate: [AuthGuard]
-  }, 
-     
-  {
-    path: 'whsl',
-    component: WholeSaleComponent,
-    canActivate: [AuthGuard]
-  },    
-  {
-    path: 'gmsale',
-    component: GarmentSaleComponent,
-    canActivate: [AuthGuard]
-  }, 
-  {
-    path: 'slrptcw',
-    component: SaleReportCustomerwiseComponent,
-    canActivate: [AuthGuard]
-  }, 
-  {
-    path: 'invadt',
-    component: InvAuditComponent,
-    canActivate: [AuthGuard]
-  }, 
-  {
-    path: 'gmslrtn',
-    component: GarmentSaleReturnComponent,
-    canActivate: [AuthGuard]
-  }, 
-  {
-    path: 'cbrpt',
-    component: CustomerBalanceReportComponent,
-    canActivate: [AuthGuard]
-  }, 
-  {
-    path: 'sbrpt',
-    component: SupplierBalanceReportComponent,
-    canActivate: [AuthGuard]
-  }, 
-  {
-    path: 'srptbkrw',
-    component: SaleReportBookerwiseComponent,
-    canActivate: [AuthGuard]
-  }, 
-  {
-    path: 'srptprodcw',
-    component: SaleReportProdCustomerwiseComponent,
-    canActivate: [AuthGuard]
-  }, 
-
-
-
-
-
+  {path: 'pckr',component: PriceCheckerComponent,canActivate: [AuthGuard]},  
+  {path: 'whsl', component: WholeSaleComponent,canActivate: [AuthGuard]},    
+  {path: 'gmsale',component: GarmentSaleComponent,canActivate: [AuthGuard]}, 
+  {path: 'slrptcw',component: SaleReportCustomerwiseComponent,canActivate: [AuthGuard]}, 
+  {path: 'invadt',component: InvAuditComponent,canActivate: [AuthGuard]}, 
+  {path: 'gmslrtn',component: GarmentSaleReturnComponent,canActivate: [AuthGuard]}, 
+  {path: 'cbrpt',component: CustomerBalanceReportComponent,canActivate: [AuthGuard]}, 
+  {path: 'sbrpt',component: SupplierBalanceReportComponent,canActivate: [AuthGuard]}, 
+  { path: 'srptbkrw',component: SaleReportBookerwiseComponent,canActivate: [AuthGuard]}, 
+  {path: 'srptprodcw',component: SaleReportProdCustomerwiseComponent,canActivate: [AuthGuard]}, 
 
 
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
@@ -366,11 +198,9 @@ export const inventoryRoutes: Route[] = [
     WholeSaleComponent,
     WhsSavedBillComponent,
     GarmentSaleComponent,
-    GarmentSavedBillComponent,
     SaleReportCustomerwiseComponent,
     InvAuditComponent,
     GarmentSaleReturnComponent,
-    GarmentRtnSavedBillComponent,
     SaleReportBookerwiseComponent,
     CustomerBalanceReportComponent,
     SupplierBalanceReportComponent,
@@ -380,6 +210,7 @@ export const inventoryRoutes: Route[] = [
     VoidSaleComponent,
     VoidSaleReturnComponent,
     RtlBillPrintComponent,
+    SaleBillPrintComponent,
     
   
     

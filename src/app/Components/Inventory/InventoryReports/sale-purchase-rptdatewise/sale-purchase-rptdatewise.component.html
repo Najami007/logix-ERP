@@ -115,7 +115,7 @@
             <tbody>
                 <tr *ngFor="let item of SaleDetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td class="text-center">{{item.invBillNo}}</td>
+                    <td class="text-center cursorPointer"  (click)="printBill(item)">{{item.invBillNo}}</td>
                     <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
                     <td  *ngIf="rptType == 'I' || rptType == 'R'">{{item.issueType}}</td>
                     <td  *ngIf="rptType == 's' || rptType == 'sr'">{{item.paymentType}}</td>
@@ -215,4 +215,7 @@
 
 </div>
 
+
+<app-sale-bill-print class="hide"
+id="print-Bill"> </app-sale-bill-print>
 

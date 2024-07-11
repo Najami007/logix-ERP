@@ -1,65 +1,4 @@
-
-<div >
-    <div class="text-end p-2">
-        <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Search...</mat-label>
-            <input matInput #searchBill  />
-        </mat-form-field>
-    </div>
-    <div class="p-2"  style="max-height: 400px;overflow-y: scroll;">
-
-      
-
-       <table class="table">
-           <thead>
-               <tr>
-                   <th>S#</th>
-                   <th>Bill #</th>
-                   <th>Date</th>
-                   <th>Type</th>
-                   <th>Counter</th>
-                   <th>Customer</th>
-                   <!-- <th>Amount</th> -->
-                   <th>Print</th>
-                   <th>Detail</th>
-               </tr>
-
-           </thead>
-           <tbody>
-               <tr *ngFor="let item of savedbillList|filter:searchBill.value index as index">
-                
-                   <td>{{index+1}}</td>
-                   <td>{{item.invBillNo}}</td>
-                   <td>{{item.invDate|date:'dd-MM-yyyy'}} ({{item.createdOn|date:'hh:mm:a'}})</td>
-                   <td>{{item.paymentType}}</td>
-                   <td>{{item.entryUser}}</td>
-                   <td>{{item.partyName || "Walk In"}}</td>
-                   <!-- <td>{{item.netTotal |number:'1.0-0'}}</td> -->
-                   <td class="text-primary cursorPointer"><mat-icon (click)="printDuplicateBill(item)">print</mat-icon></td>
-                   <td class="text-success cursorPointer"><mat-icon (click)="billDetails(item)">receipt</mat-icon></td>
-               </tr>
-           </tbody>
-           
-       </table>
-
-
-    </div>
-
-    <div class="text-end bg-mf-blue p-3">
-  
-        <button type="button" class="btn btn-secondary"  (click)="closeDialog()">Close</button>
-    </div>
-
-</div>
-
-
-
-
-<!------------------------------ Design For Bill Pirnt  --------------------->
-
-
-
-<div id="duplicate" class="d-none">
+<div>
     <div class="text-center">
         <img *ngIf="companyLogo" [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
         <h3 class="text-uppercase">{{companyName}}</h3>
@@ -101,7 +40,8 @@
     
   </table>
     </div>
-
+    <p class="border border-dark text-center mt-1" *ngIf="billType">{{billType}}</p>
+    <p class="border border-dark text-center">{{myInvType == 'S' ? 'Sale' : myInvType == 'SR' ?'Sale Return' :''}}</p>
     <p *ngIf="myPaymentType == 'Complimentary'" class="border border-dark text-center">Complimentary</p>
     <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center">Duplicate</p>
 
@@ -118,7 +58,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="fs-11" *ngFor="let item of myPrintData index as index" >
+                <tr class="fs-11" *ngFor="let item of myPrintTableData index as index" >
                     <td colspan="5" class="text-start">
                         &nbsp;{{index +1}}. <b> {{item.productTitle}}</b>
                         <table class="table-garment-sale-2 w-100">
@@ -222,12 +162,4 @@
     </div>
 
 </div>
-
-
-<!---------------------------------------------------------------------------------->
-
-
-
-
-
 

@@ -123,15 +123,15 @@ addCity(){
   btnType = "Save";
   curPartyId:any;
   partyType :any;
-  partyName :any;
-  partyCNIC :any;
-  passportNo:any;
-  partyPhoneno:any;
-  partyMobileno:any;
+  partyName :any = '';
+  partyCNIC  = '';
+  passportNo:any = '';
+  partyPhoneno = '';
+  partyMobileno = '';
   bankName:any;
   accountTitle:any;
   accountNo:any;
-  partyTelephoneno:any;
+  partyTelephoneno:any = '';
   City :any;
   partyAddress:any;
   description :any;
@@ -348,7 +348,6 @@ addCity(){
 
     this.globalData.openPinCode().subscribe(pin=>{
       if(pin != ''){
-        alert(pin);
         Swal.fire({
           title:'Alert!',
           text:'Confirm to Delete the Data',

@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Time } from 'highcharts';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
+import { SaleBillPrintComponent } from '../../Sale/sale-bill-print/sale-bill-print.component';
 
 @Component({
   selector: 'app-sale-purchase-rptdatewise',
@@ -14,6 +15,7 @@ import { environment } from 'src/environments/environment.development';
 })
 export class SalePurchaseRptdatewiseComponent implements OnInit {
 
+  @ViewChild(SaleBillPrintComponent)  billPrint:any;
   
   
   companyProfile:any = [];
@@ -126,6 +128,7 @@ rptType:any = 's';
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventorySummaryDateWise_2?reqType='+this.rptType+'&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
+       
         this.SaleDetailList = [];
        
         if(this.rptType == 'R'){
@@ -213,5 +216,15 @@ rptType:any = 's';
     this.global.printData('#PrintDiv')
    }
  
+   printBill(item:any){
+
+    if(item.invType == 'S' || item.invType == 'SR'){
+      this.billPrint.PrintBill(item.invBillNo);
+    this.billPrint.billType = 'Duplicate';
+    setTimeout(() => {
+      this.global.printData('#print-Bill');
+    }, 200);
+    }
+   }
 
 }

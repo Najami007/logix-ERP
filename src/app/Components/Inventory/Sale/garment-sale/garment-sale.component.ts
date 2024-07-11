@@ -14,7 +14,8 @@ import { Observable, retry } from 'rxjs';
 
 import { dateFormat } from 'highcharts';
 import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/addparty.component';
-import { GarmentSavedBillComponent } from './garment-saved-bill/garment-saved-bill.component';
+import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/sale/sale-bill-detail/sale-bill-detail.component';
+import { SaleBillPrintComponent } from '../sale-bill-print/sale-bill-print.component';
 
 
 @Component({
@@ -23,6 +24,8 @@ import { GarmentSavedBillComponent } from './garment-saved-bill/garment-saved-bi
   styleUrls: ['./garment-sale.component.scss']
 })
 export class GarmentSaleComponent implements OnInit {
+
+  @ViewChild(SaleBillPrintComponent) billPrint:any;
 
   companyProfile: any = [];
   companyLogo: any = '';
@@ -1001,12 +1004,6 @@ export class GarmentSaleComponent implements OnInit {
   }
 
 
-  openSavedBill() {
-    this.dialogue.open(GarmentSavedBillComponent, {
-      width: '70%',
-    }).afterClosed().subscribe()
-  }
-
 
 
 
@@ -1037,45 +1034,155 @@ export class GarmentSaleComponent implements OnInit {
   myBookerName = '';
   PrintAfterSave(InvNo: any) {
 
+    
+    this.billPrint.PrintBill(InvNo);
+    this.billPrint.billType = 'Customer Copy';
+    setTimeout(() => {   
+      this.global.printData('#print-bill')
+    }, 200);
+    
+    setTimeout(() => {
+      this.billPrint.billType = 'Counter Copy';
+     setTimeout(() => {
+      this.global.printData('#print-bill');
+     }, 100);
+    }, 200);
+   
 
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
-      (Response: any) => {
 
-        this.myPrintTableData = Response;
-        this.myInvoiceNo = InvNo;
-        this.myInvDate = Response[0].createdOn;
-        this.myCounterName = Response[0].entryUser;
-        this.mySubTotal = Response[0].billTotal;
-        this.myNetTotal = Response[0].netTotal;
-        this.myOtherCharges = Response[0].otherCharges;
-        this.myRemarks = Response[0].remarks;
-        this.myCash = Response[0].cashRec;
-        this.myBank = Response[0].netTotal - Response[0].cashRec;
-        this.myDiscount = Response[0].billDiscount;
-        this.myChange = Response[0].change;
-        this.myPaymentType = Response[0].paymentType;
-        this.myCustomerName = Response[0].partyName;
-        this.myBookerName = Response[0].bookerName;
+    // this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
+    //   (Response: any) => {
+
+    //     this.myPrintTableData = Response;
+    //     this.myInvoiceNo = InvNo;
+    //     this.myInvDate = Response[0].createdOn;
+    //     this.myCounterName = Response[0].entryUser;
+    //     this.mySubTotal = Response[0].billTotal;
+    //     this.myNetTotal = Response[0].netTotal;
+    //     this.myOtherCharges = Response[0].otherCharges;
+    //     this.myRemarks = Response[0].remarks;
+    //     this.myCash = Response[0].cashRec;
+    //     this.myBank = Response[0].netTotal - Response[0].cashRec;
+    //     this.myDiscount = Response[0].billDiscount;
+    //     this.myChange = Response[0].change;
+    //     this.myPaymentType = Response[0].paymentType;
+    //     this.myCustomerName = Response[0].partyName;
+    //     this.myBookerName = Response[0].bookerName;
          
 
-        this.myQtyTotal = 0;
-        Response.forEach((e: any) => {
-          this.myQtyTotal += e.quantity;
-          this.myOfferDiscount += e.discInR * e.quantity;
-        });
+    //     this.myQtyTotal = 0;
+    //     Response.forEach((e: any) => {
+    //       this.myQtyTotal += e.quantity;
+    //       this.myOfferDiscount += e.discInR * e.quantity;
+    //     });
 
-        setTimeout(() => {
-          this.global.printData('#cncBillPrint');
-          this.global.printData('#cncBillPrint2');
-        }, 2000);
+    //     setTimeout(() => {
+    //       this.global.printData('#cncBillPrint');
+    //       this.global.printData('#cncBillPrint2');
+    //     }, 2000);
 
-      }
-    )
+    //   }
+    // )
 
 
 
   }
 
+  printDuplicateBill(item:any){
 
+
+    $('#SavedBillModal').hide();
+
+    
+    this.global.openPassword('Password').subscribe(pin => {
+      if (pin !== '') {
+        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+          RestrictionCodeID: 5,
+          Password: pin,
+          UserID: this.global.getUserID()
+
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Password Matched Successfully') {
+
+          
+              $('#SavedBillModal').show();
+            this.billPrint.PrintBill(item.invBillNo);
+            this.billPrint.billType = 'Duplicate';
+            setTimeout(() => {
+              this.global.printData('#print-bill')
+            }, 200);
+              
+             
+             
+            } else {
+              this.msg.WarnNotify(Response.msg);
+            }
+          }
+        )
+      }
+    })
+  
+  
+  }
+
+  billDetails(item:any){
+
+
+    $('#SavedBillModal').hide();
+    // $('#paymentMehtod').hide();
+    // $('.modal-backdrop').remove();
+    
+    this.global.openPassword('Password').subscribe(pin => {
+      if (pin !== '') {
+        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+          RestrictionCodeID: 5,
+          Password: pin,
+          UserID: this.global.getUserID()
+
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Password Matched Successfully') {
+              $('#SavedBillModal').show();
+              this.dialogue.open(SaleBillDetailComponent,{
+                width:'50%',
+                data:item,
+                disableClose:true,
+              }).afterClosed().subscribe(value=>{
+                
+              })
+            } else {
+              this.msg.WarnNotify(Response.msg);
+            }
+          }
+        )
+      }
+    })
+
+   
+  }
+
+
+  getSavedBill(){
+
+
+    
+
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetOpenDaySale').subscribe(
+      (Response:any)=>{
+       
+        this.savedbillList = [];
+        Response.forEach((e:any) => {
+          if(e.invType == 'S'){
+            this.savedbillList.push(e);
+          }
+          
+          
+        });
+     
+      }
+    )
+
+  }
 
 }

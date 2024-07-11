@@ -23,7 +23,8 @@
                 
                 <mat-form-field class="col-lg-6 " appearance="outline">
                     <mat-label>Party CNIC</mat-label>
-                    <input [(ngModel)]="partyCNIC" [textMask]="{mask:cnicMask}"    matInput type="text">
+                    <input [(ngModel)]="partyCNIC" [textMask]="{mask:cnicMask}" maxlength="15"   matInput type="text">
+                    <mat-hint>{{partyCNIC.length}} / 15</mat-hint>
                 </mat-form-field>
                 
                 <mat-form-field class="col-lg-6 " appearance="outline">
@@ -32,11 +33,13 @@
                 </mat-form-field>
                 <mat-form-field class="col-lg-6 " appearance="outline">
                     <mat-label>Mobile no.</mat-label>
-                    <input [(ngModel)]="partyMobileno" [textMask]="{mask:mobileMask}"  matInput type="text">
+                    <input [(ngModel)]="partyMobileno" maxlength="12"  [textMask]="{mask:mobileMask}"  matInput type="text">
+                    <mat-hint>{{partyMobileno.length}} / 12</mat-hint>
                 </mat-form-field>
                 <mat-form-field class="col-lg-6 " appearance="outline">
                     <mat-label>Telephone no.</mat-label>
-                    <input  [(ngModel)]="partyTelephoneno" [textMask]="{mask:telephoneMask}"  matInput type="text">
+                    <input  [(ngModel)]="partyTelephoneno" maxlength="11"  [textMask]="{mask:telephoneMask}"  matInput type="text">
+                    <mat-hint>{{partyTelephoneno.length}} / 11</mat-hint>
                 </mat-form-field>
 
                 <mat-form-field class="col-lg-6 " appearance="outline">
