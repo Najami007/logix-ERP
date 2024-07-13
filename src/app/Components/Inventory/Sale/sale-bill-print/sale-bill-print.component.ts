@@ -14,7 +14,8 @@ import { environment } from 'src/environments/environment.development';
 })
 export class SaleBillPrintComponent implements OnInit {
 
-
+  discFeature = this.global.getFeature('');
+  BookerFeature = this.global.getFeature('');
 
   companyProfile: any = [];
   companyLogo: any = '';

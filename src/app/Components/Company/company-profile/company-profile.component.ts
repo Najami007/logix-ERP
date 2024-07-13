@@ -98,7 +98,7 @@ export class CompanyProfileComponent implements OnInit {
 
   onLogo1Selected(event:any) {
 
-  if(this.global.getExtension(event.target.value) == 'png'){
+  if(this.global.getExtension(event.target.value) == 'png' ||this.global.getExtension(event.target.value) == 'jpg' ||this.global.getExtension(event.target.value) == 'jpeg'){
     let targetEvent = event.target;
 
     let file:File = targetEvent.files[0];
@@ -117,14 +117,14 @@ export class CompanyProfileComponent implements OnInit {
     
       event.target.value = '';
       this.CompanyLogo1 = '';
-      this.msg.WarnNotify('File Must Be in png formate Only');
+      this.msg.WarnNotify('File Must Be in png / jpg / jpeg formate Only');
    
     }
   }
 
   onLogo2Selected(event:any) {
 
-    if(this.global.getExtension(event.target.value) == 'png'){
+    if(this.global.getExtension(event.target.value) == 'png' ||this.global.getExtension(event.target.value) == 'jpg' ||this.global.getExtension(event.target.value) == 'jpeg'){
     let targetEvent = event.target;
 
     let file:File = targetEvent.files[0];
@@ -139,7 +139,7 @@ export class CompanyProfileComponent implements OnInit {
     fileReader.readAsDataURL(file);
   }else{
 
-      this.msg.WarnNotify('File Must Be in png formate Only');
+      this.msg.WarnNotify('File Must Be in png / jpg / jpeg formate Only');
       event.target.value = '';
       this.CompanyLogo2 = '';
     }
@@ -147,7 +147,7 @@ export class CompanyProfileComponent implements OnInit {
 
   onLogo3Selected(event:any) {
 
-    if(this.global.getExtension(event.target.value) == 'png'){
+    if(this.global.getExtension(event.target.value) == 'png' ||this.global.getExtension(event.target.value) == 'jpg' ||this.global.getExtension(event.target.value) == 'jpeg'){
     let targetEvent = event.target;
 
     let file:File = targetEvent.files[0];
@@ -163,7 +163,7 @@ export class CompanyProfileComponent implements OnInit {
 
   }else{
 
-      this.msg.WarnNotify('File Must Be in png formate Only');
+      this.msg.WarnNotify('File Must Be in png / jpg / jpeg formate Only');
       event.target.value = '';
       this.CompanyLogo3 = '';
     }

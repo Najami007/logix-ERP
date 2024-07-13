@@ -175,13 +175,12 @@ export class InvAuditComponent implements OnInit {
 
 
 
-    if(this.tempProdRow != ''){
+    if(this.tempProdRow != '' && event.target.value > 0){
+     
       if(event.keyCode == 13){
-
-        var row =  this.productList.find((p:any)=> p.barcode == this.PBarcode);
-  
-        if(row !== undefined){
-          var condition = this.tableDataList.find((x: any) => x.productID == row.productID);
+       
+          
+          var condition = this.tableDataList.find((x: any) => x.productID == this.tempProdRow.productID);
         
           var index = this.tableDataList.indexOf(condition);
   
@@ -222,7 +221,7 @@ export class InvAuditComponent implements OnInit {
             this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
             this.productImage = this.tableDataList[index].productImage;
           }
-  }
+       
        
         this.PBarcode = '';
         $('#searchProduct').trigger('focus');
@@ -249,7 +248,9 @@ export class InvAuditComponent implements OnInit {
 
       this.global.getProdDetail(data.productID,'').subscribe(
         (Response:any)=>{
+          
           this.tempProdRow = Response;
+     
           $('#qtyInput').trigger('focus');
         }
       )
@@ -257,6 +258,8 @@ export class InvAuditComponent implements OnInit {
     this.tempProdRow = condition;
     $('#qtyInput').trigger('focus');
   }
+
+
 
   }
 
@@ -504,136 +507,136 @@ export class InvAuditComponent implements OnInit {
       }
 
       if(isValidFlag == true){
-        if(type == 'hold'){
-          if(this.holdBtnType == 'Hold'){
-           this.app.startLoaderDark();
-           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertIssueStock',{
-           InvType: "HI",
-           InvDate: this.global.dateFormater(this.invoiceDate,'-'),
-           LocationID: this.locationID,
-           LocationTitle:this.locationTitle,
-           ProjectID: this.projectID,
-           IssueType:this.IssueType,
-           IssueStatus:'A',
-           BillTotal: this.subTotal,
-           NetTotal: this.subTotal ,
-           Remarks: this.invRemarks,
-           InvoiceDocument: "-",
-           LocationTwoID:this.locationTwoID,
-           LocationTwoTitle:this.locationTwoTitle,
+        // if(type == 'hold'){
+        //   if(this.holdBtnType == 'Hold'){
+        //    this.app.startLoaderDark();
+        //    this.http.post(environment.mainApi+this.global.inventoryLink+'InsertIssueStock',{
+        //    InvType: "HI",
+        //    InvDate: this.global.dateFormater(this.invoiceDate,'-'),
+        //    LocationID: this.locationID,
+        //    LocationTitle:this.locationTitle,
+        //    ProjectID: this.projectID,
+        //    IssueType:this.IssueType,
+        //    IssueStatus:'A',
+        //    BillTotal: this.subTotal,
+        //    NetTotal: this.subTotal ,
+        //    Remarks: this.invRemarks,
+        //    InvoiceDocument: "-",
+        //    LocationTwoID:this.locationTwoID,
+        //    LocationTwoTitle:this.locationTwoTitle,
        
-           InvDetail: JSON.stringify(this.tableDataList),
+        //    InvDetail: JSON.stringify(this.tableDataList),
        
-           UserID: this.global.getUserID()
-           }).subscribe(
-             (Response:any)=>{
-               if(Response.msg == 'Data Saved Successfully'){
-                 this.msg.SuccessNotify(Response.msg);
-                 this.reset(); 
-                 this.app.stopLoaderDark();
+        //    UserID: this.global.getUserID()
+        //    }).subscribe(
+        //      (Response:any)=>{
+        //        if(Response.msg == 'Data Saved Successfully'){
+        //          this.msg.SuccessNotify(Response.msg);
+        //          this.reset(); 
+        //          this.app.stopLoaderDark();
                 
-               }else{
-                 this.msg.WarnNotify(Response.msg);
-                 this.app.stopLoaderDark();
-               }
-             },
-             (Error:any)=>{
-              this.msg.WarnNotify(Error);
-              this.app.stopLoaderDark();
-             }
-           )
-          }else if(this.holdBtnType == 'ReHold'){
-            this.global.openPinCode().subscribe(pin=>{
-             if(pin != ''){
-               this.app.startLoaderDark();
+        //        }else{
+        //          this.msg.WarnNotify(Response.msg);
+        //          this.app.stopLoaderDark();
+        //        }
+        //      },
+        //      (Error:any)=>{
+        //       this.msg.WarnNotify(Error);
+        //       this.app.stopLoaderDark();
+        //      }
+        //    )
+        //   }else if(this.holdBtnType == 'ReHold'){
+        //     this.global.openPinCode().subscribe(pin=>{
+        //      if(pin != ''){
+        //        this.app.startLoaderDark();
           
-           this.http.post(environment.mainApi+this.global.inventoryLink+'UpdateHoldedIssueInvoice',{
-           InvBillNo: this.holdInvNo,
-           InvDate: this.global.dateFormater(this.invoiceDate,'-'),
-           LocationID: this.locationID,
-           LocationTitle:this.locationTitle,
-           ProjectID: this.projectID,
-           IssueType:this.IssueType,
-           IssueStatus:'A',
-           BillTotal: this.subTotal,
-           NetTotal: this.subTotal ,
-           Remarks: this.invRemarks,
-           InvoiceDocument: "-",
-           LocationTwoID:this.locationTwoID,
-           LocationTwoTitle:this.locationTwoTitle,
-           PinCode:pin,
-           InvDetail: JSON.stringify(this.tableDataList),
+        //    this.http.post(environment.mainApi+this.global.inventoryLink+'UpdateHoldedIssueInvoice',{
+        //    InvBillNo: this.holdInvNo,
+        //    InvDate: this.global.dateFormater(this.invoiceDate,'-'),
+        //    LocationID: this.locationID,
+        //    LocationTitle:this.locationTitle,
+        //    ProjectID: this.projectID,
+        //    IssueType:this.IssueType,
+        //    IssueStatus:'A',
+        //    BillTotal: this.subTotal,
+        //    NetTotal: this.subTotal ,
+        //    Remarks: this.invRemarks,
+        //    InvoiceDocument: "-",
+        //    LocationTwoID:this.locationTwoID,
+        //    LocationTwoTitle:this.locationTwoTitle,
+        //    PinCode:pin,
+        //    InvDetail: JSON.stringify(this.tableDataList),
        
-           UserID: this.global.getUserID()
-           }).subscribe(
-             (Response:any)=>{
-               if(Response.msg == 'Data Updated Successfully'){
-                 this.msg.SuccessNotify(Response.msg);
-                 this.reset(); 
-                 this.app.stopLoaderDark();
+        //    UserID: this.global.getUserID()
+        //    }).subscribe(
+        //      (Response:any)=>{
+        //        if(Response.msg == 'Data Updated Successfully'){
+        //          this.msg.SuccessNotify(Response.msg);
+        //          this.reset(); 
+        //          this.app.stopLoaderDark();
                 
-               }else{
-                 this.msg.WarnNotify(Response.msg);
-                 this.app.stopLoaderDark();
-               }
-             },
-             (Error:any)=>{
-              this.msg.WarnNotify(Error);
-              this.app.stopLoaderDark();
-             }
-           )
-             }
-           })
-          }
+        //        }else{
+        //          this.msg.WarnNotify(Response.msg);
+        //          this.app.stopLoaderDark();
+        //        }
+        //      },
+        //      (Error:any)=>{
+        //       this.msg.WarnNotify(Error);
+        //       this.app.stopLoaderDark();
+        //      }
+        //    )
+        //      }
+        //    })
+        //   }
      
-         }else if(type == 'issue'){
+        //  }else if(type == 'issue'){
 
-          this.global.confirmAlert().subscribe(
-            (Response:any)=>{
-              if(Response == true){
-                this.app.startLoaderDark();
-                this.http.post(environment.mainApi+this.global.inventoryLink+'InsertIssueStock',{
-                 InvType: "I",
-                 InvDate: this.global.dateFormater(this.invoiceDate,'-'),
-                 LocationID: this.locationID,
-                 LocationTitle:this.locationTitle,
-                 ProjectID: this.projectID,
-                 IssueType:this.IssueType,
-                 IssueStatus:'A',
-                 BillTotal: this.subTotal,
-                 NetTotal: this.subTotal ,
-                 Remarks: this.invRemarks,
-                 InvoiceDocument: "-",
-                 LocationTwoID:this.locationTwoID,
-                 LocationTwoTitle:this.locationTwoTitle,
+        //   this.global.confirmAlert().subscribe(
+        //     (Response:any)=>{
+        //       if(Response == true){
+        //         this.app.startLoaderDark();
+        //         this.http.post(environment.mainApi+this.global.inventoryLink+'InsertIssueStock',{
+        //          InvType: "I",
+        //          InvDate: this.global.dateFormater(this.invoiceDate,'-'),
+        //          LocationID: this.locationID,
+        //          LocationTitle:this.locationTitle,
+        //          ProjectID: this.projectID,
+        //          IssueType:this.IssueType,
+        //          IssueStatus:'A',
+        //          BillTotal: this.subTotal,
+        //          NetTotal: this.subTotal ,
+        //          Remarks: this.invRemarks,
+        //          InvoiceDocument: "-",
+        //          LocationTwoID:this.locationTwoID,
+        //          LocationTwoTitle:this.locationTwoTitle,
              
-                 InvDetail: JSON.stringify(this.tableDataList),
+        //          InvDetail: JSON.stringify(this.tableDataList),
              
-                 UserID: this.global.getUserID(),
-                 HoldInvNo:this.holdInvNo,
-                }).subscribe(
-                  (Response:any)=>{
-                    if(Response.msg == 'Data Saved Successfully'){
-                      this.msg.SuccessNotify(Response.msg);
-                      this.reset(); 
-                      this.app.stopLoaderDark();
+        //          UserID: this.global.getUserID(),
+        //          HoldInvNo:this.holdInvNo,
+        //         }).subscribe(
+        //           (Response:any)=>{
+        //             if(Response.msg == 'Data Saved Successfully'){
+        //               this.msg.SuccessNotify(Response.msg);
+        //               this.reset(); 
+        //               this.app.stopLoaderDark();
                      
-                    }else{
-                      this.msg.WarnNotify(Response.msg);
-                      this.app.stopLoaderDark();
-                    }
-                  },
-                  (Error:any)=>{
-                    this.msg.WarnNotify(Error);
-                    this.app.stopLoaderDark();
-                   }
-                )
-              }
-            }
-          )
+        //             }else{
+        //               this.msg.WarnNotify(Response.msg);
+        //               this.app.stopLoaderDark();
+        //             }
+        //           },
+        //           (Error:any)=>{
+        //             this.msg.WarnNotify(Error);
+        //             this.app.stopLoaderDark();
+        //            }
+        //         )
+        //       }
+        //     }
+        //   )
          
          
-         }
+        //  }
      
       }
     

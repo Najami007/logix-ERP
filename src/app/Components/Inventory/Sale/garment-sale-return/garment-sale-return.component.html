@@ -45,7 +45,7 @@
                         </p>
                     </div>
 
-                    <div class="pt-2 d-flex justify-content-between">
+                    <div *ngIf="discFeature" class="pt-2 d-flex justify-content-between">
                         <p style="font-size: 1rem;color: rgb(0, 0, 0);">DISCOUNT</p>
                         <p style="font-size: 2rem;color: rgb(31, 29, 29);" class="font-digit text-end">{{offerDiscount
                             |number:'1.0-1'}}
@@ -111,8 +111,8 @@
                                 <th>Title</th>
                                 <th>Qty</th>
                                 <th>Price</th>
-                                <th>Disc Rs</th>
-                                <th>Disc %</th>
+                                <th *ngIf="discFeature">Disc Rs</th>
+                                <th *ngIf="discFeature">Disc %</th>
                                 <th>Total</th>
                                 <th>Action</th>
                             </tr>
@@ -138,10 +138,10 @@
                                     (click)="tempProdData = item;editSP(item)">{{item.salePrice
                                     |number:'1.0-3'}}</td>
 
-                                <td class="text-end cursorPointer" 
+                                <td *ngIf="discFeature" class="text-end cursorPointer" 
                                     (click)="tempProdData = item;editDR(item)">{{item.discInR
                                     |number:'1.0-3'}}</td>
-                                <td class="text-end cursorPointer" 
+                                <td *ngIf="discFeature" class="text-end cursorPointer" 
                                     (click)="tempProdData = item;editDP(item)">{{item.discInP
                                     |number:'1.0-3'}}</td>
 
@@ -156,8 +156,8 @@
                                 <td colspan="2"></td>
                                 <th>{{qtyTotal |number:'1.0-3'}}</th>
                                 <td></td>
-                                <td></td>
-                                <td></td>
+                                <td *ngIf="discFeature"></td>
+                                <td *ngIf="discFeature"></td>
                                 <td></td>
                                 <td class="text-center text-danger cursorPointer"><mat-icon
                                         (click)="emptyBill()">delete</mat-icon></td>
@@ -174,14 +174,14 @@
     </div>
 
     <div style="position: fixed;bottom: 3%;left: 25%;">
-        <mat-form-field style="width: 110px;">
+        <mat-form-field *ngIf="discFeature" style="width: 110px;">
             <mat-label>Disc</mat-label>
             <mat-select [(ngModel)]="billDiscount" name="billDiscount" (selectionChange)="applyDiscount()">
                 <mat-option *ngFor="let item of discountList" [value]="item.value">{{item.value}}%</mat-option>
             </mat-select>
         </mat-form-field>
 
-        <mat-form-field class="w-50">
+        <mat-form-field *ngIf="BookerFeature" class="w-50">
             <mat-label>Booker</mat-label>
             <mat-select [(ngModel)]="bookerID" name="billDiscount" >
                 <mat-option *ngFor="let item of bookerList" [value]="item.bookerID">{{item.bookerName}}</mat-option>
@@ -277,7 +277,7 @@
                                 number:'1.0-1'}}</b></h2>
                     </div>
 
-                    <mat-form-field appearance="outline" class="w-100">
+                    <mat-form-field appearance="outline" *ngIf="!global.disableSaleDate" class="w-100">
                         <mat-label>Invoice Date</mat-label>
                         <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
                             [matDatepicker]="voucherDate">

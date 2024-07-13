@@ -23,6 +23,10 @@ import { SaleBillPrintComponent } from '../sale-bill-print/sale-bill-print.compo
 })
 export class GarmentSaleReturnComponent implements OnInit {
 
+  discFeature = this.global.getFeature('');
+  BookerFeature = this.global.getFeature('');
+  editSalePriceFeature = this.global.getFeature('');
+
   @ViewChild(SaleBillPrintComponent) billPrint:any;
 
   companyProfile: any = [];
@@ -292,8 +296,8 @@ export class GarmentSaleReturnComponent implements OnInit {
                   batchStatus: '-',
                   uomID: Response[0].uomID,
                   packing: 1,
-                  discInP: Response[0].discRupees,
-                  discInR: Response[0].discPercentage,
+                  discInP: Response[0].discPercentage,
+                  discInR: Response[0].discRupees,
                   aq: Response[0].aq,
                   total:(Response[0].salePrice * qty) - (Response[0].discRupees * qty),
 
@@ -320,7 +324,110 @@ export class GarmentSaleReturnComponent implements OnInit {
             this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
             this.productImage = this.tableDataList[index].productImage;
           }
-        } else {
+        } else if(row == undefined && barcode.length > 10) {
+          //////////////// For Special Barcode setting /////////////////////////
+
+          var txtBCode = barcode;
+          var reqQty:any = 0;
+          var reqQtyDot:any = 0;
+          var prodQty:any = 0; 
+          var tmpPrice:any = 0;
+
+          txtBCode = txtBCode.substring(2, 7);  /////////// extracting product barcode from special barcode
+          txtBCode = parseInt(txtBCode);
+          txtBCode = txtBCode.toString();
+
+          /////////// verifying whether exists in product list or not
+          var prodDetail = this.productList.find((p: any) => p.barcode == txtBCode);
+
+          if(prodDetail == '' || prodDetail == undefined){
+            this.msg.WarnNotify('Product Not Fount')
+          }else{
+            
+
+            /////////// extracting price from special barcode based on UOM
+            if(prodDetail.uomTitle == 'price'){
+              reqQty = barcode.substring(12 - 5);
+              reqQtyDot = reqQty.substring(0,5);
+              tmpPrice = reqQtyDot;
+            }else{
+                /////////// extracting quantity from special barcode based on UOM
+              reqQty = barcode.substring(12 - 5);
+              reqQtyDot = reqQty.substring(6 - 4);
+              reqQtyDot = reqQtyDot.substring(0, 3);
+              reqQty = reqQty.substring(0, 2);
+              prodQty = parseFloat(reqQty + '.' + reqQtyDot);
+            }
+
+            /////////// verifying exists in already scanned products or not
+            var condition = this.tableDataList.find(
+              (x: any) => x.productID == prodDetail.productID
+            );
+  
+            var index = this.tableDataList.indexOf(condition);
+  
+            if(condition == undefined ){
+
+              /////////// inserting data into tableDataList
+              this.global.getProdDetail(0, txtBCode).subscribe(
+                (Response: any) => {
+                   this.tableDataList.push({
+                    rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
+                      : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
+                        : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
+                    productID: Response[0].productID,
+                    productTitle: Response[0].productTitle,
+                    barcode: Response[0].barcode,
+                    productImage: Response[0].productImage,
+                    quantity: prodQty || 1,
+                    wohCP: Response[0].costPrice,
+                    avgCostPrice: Response[0].avgCostPrice,
+                    costPrice: Response[0].costPrice,
+                    salePrice: tmpPrice || Response[0].salePrice,
+                    ovhPercent: 0,
+                    ovhAmount: 0,
+                    expiryDate: this.global.dateFormater(new Date(), '-'),
+                    batchNo: '-',
+                    batchStatus: '-',
+                    uomID: Response[0].uomID,
+                    packing: 1,
+                    discInP: Response[0].discPercentage,
+                    discInR: Response[0].discRupees,
+                    aq: Response[0].aq,
+                    total:(Response[0].salePrice * qty) - (Response[0].discRupees * qty),
+    
+                  });
+    
+                  //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
+                  this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+                  this.getTotal();
+    
+    
+                  this.productImage = Response[0].productImage;
+                }
+              )
+            }else{
+            /////////// changing qty if product already scanned
+              if(prodDetail.uomTitle == 'price'){
+                this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+              }else{
+                this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + parseFloat(prodQty);
+              }
+              
+              this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
+              this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+              this.productImage = this.tableDataList[index].productImage;
+  
+            }
+
+
+          }
+
+         
+         
+
+        }else{
+
           this.msg.WarnNotify('Product Not Found')
         }
 
@@ -373,8 +480,8 @@ export class GarmentSaleReturnComponent implements OnInit {
             batchStatus: '-',
             uomID: Response[0].uomID,
             packing: 1,
-            discInP: Response[0].discRupees,
-            discInR: Response[0].discPercentage,
+            discInP: Response[0].discPercentage,
+            discInR: Response[0].discRupees,
             aq: Response[0].aq,
             total:(Response[0].salePrice * 1) - (Response[0].discRupees),
 
@@ -894,7 +1001,7 @@ export class GarmentSaleReturnComponent implements OnInit {
         this.msg.WarnNotify('Cash Amount is Not Valid')
       } else if (this.paymentType == 'Split' && this.bankCash <= 0) {
         this.msg.WarnNotify('Bank Amount is Not Valid')
-      }else if (this.bookerID == 0 || this.bookerID == undefined) {
+      }else if ((this.bookerID == 0 || this.bookerID == undefined) && this.BookerFeature) {
         this.msg.WarnNotify('Select Booker')
       }else if(this.paymentType == 'Credit' && this.partyID == 0){
         this.msg.WarnNotify('Select Customer');
@@ -915,7 +1022,7 @@ export class GarmentSaleReturnComponent implements OnInit {
           ProjectID: this.projectID,
           BookerID: this.bookerID,
           PaymentType: paymentType,
-          Remarks: this.billRemarks,
+          Remarks: this.billRemarks || '-',
           OrderType: "Take Away",
           BillTotal: this.subTotal,
           BillDiscount: parseFloat(this.discount) + parseFloat(this.offerDiscount),

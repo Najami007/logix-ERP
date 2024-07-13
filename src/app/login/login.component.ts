@@ -14,7 +14,9 @@ export class LoginComponent implements OnInit {
 
 
 companyProfile:any = [];
-companyLog = '';
+companyLogo = '';
+logoHeight = 0;
+logoWidth = 0;
 
   constructor(private msg:NotificationService,
                private rout : Router,
@@ -27,7 +29,9 @@ companyLog = '';
         if(data == '' || data == undefined || data == null){
 
         }else{
-          this.companyLog = data[0].companyLogo1;
+          this.companyLogo = data[0].companyLogo1;
+          this.logoHeight = data[0].logo1Height / 2;
+          this.logoWidth = data[0].logo1Width / 2;
         }
         // console.log(data);
       });

@@ -201,6 +201,14 @@
                     <h2 class="text-center text-danger">Change: {{ change | number:'1.0-1'}}</h2>
                 </div>
 
+                <mat-form-field appearance="outline" *ngIf="!global.disableSaleDate" class="w-100">
+                    <mat-label>Invoice Date</mat-label>
+                    <input [(ngModel)]="InvDate"  readonly="true" matInput type="text" name="voucherDate"
+                        [matDatepicker]="voucherDate">
+                    <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
+                    <mat-datepicker #voucherDate></mat-datepicker>
+                </mat-form-field>
+
                 <mat-form-field appearance="outline" class="col-lg-6 pe-1">
                     <mat-label>Customer Name</mat-label>
                     <input type="text" matInput [(ngModel)]="customerName" />

@@ -35,6 +35,7 @@ export class GlobalDataModule implements OnInit {
 
   thankyouImage = '../../assets/Images/thankyou.png';
   DisableDate = true;
+  disableSaleDate = true;
 
   InvProjectID = 6;
   parkProjectID = 6;
@@ -99,14 +100,17 @@ export class GlobalDataModule implements OnInit {
   header_title$ = this._headerTitleSource.asObservable();
 
 
+
+  getFeature(value:any){
+
+    return true;
+  }
+
   //////////////sets the header title ////////////////////////
   setHeaderTitle(title: string) {
     this._headerTitleSource.next(title.toUpperCase());
 
   }
-
-
-
 
 
 
@@ -128,13 +132,6 @@ export class GlobalDataModule implements OnInit {
   }
 
 
-  // setCompanyProfile(item:any){
-  //   this.comapnayProfile.next(item);
-  // }
-
-  // getCompanyProfile(): Observable<any>{
-  //   return this.comapnayProfile.asObservable();
-  // }
 
   //////////////////////// will provide logged in userID
   getUserID() {
@@ -345,13 +342,6 @@ export class GlobalDataModule implements OnInit {
     )
 
   }
-
-
-
-
-
-
-
 
 
 
@@ -717,6 +707,9 @@ export class GlobalDataModule implements OnInit {
     return [/\d/, /\d/];
   }
 
+
+
+  //////////////////////////////////////////////////
 
   getProdImage(prodID:any){
    return this.http.get(environment.mainApi+this.inventoryLink+'GetProductImage?ProductID='+prodID).pipe(retry(3));

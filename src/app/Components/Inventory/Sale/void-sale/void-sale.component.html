@@ -225,6 +225,13 @@
                     <h2 class="text-center text-success">Bill Total: <b class="font-digit">{{netTotal | number:'1.0-1'}}</b></h2>
                     <h2 class="text-center text-danger">Change: <b class="font-digit">{{ change | number:'1.0-1'}}</b></h2>
                 </div>
+                <mat-form-field appearance="outline" *ngIf="!global.disableSaleDate" class="w-100">
+                    <mat-label>Invoice Date</mat-label>
+                    <input [(ngModel)]="InvDate"  readonly="true" matInput type="text" name="voucherDate"
+                        [matDatepicker]="voucherDate">
+                    <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
+                    <mat-datepicker #voucherDate></mat-datepicker>
+                </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-lg-6 pe-1">
                     <mat-label>Customer Name</mat-label>
