@@ -11,7 +11,7 @@
                                 <mat-option><ngx-mat-select-search [(ngModel)]="txtSearch"
                                     [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
                                     name="search"></ngx-mat-select-search></mat-option>
-                                <mat-option *ngFor="let item of CoaList | filter:txtSearch " value="{{item.coaID}}">{{item.coaTitle}}- ({{item.accountCode}})</mat-option>
+                                <mat-option *ngFor="let item of CoaList | filter:txtSearch | slice:0:20 " value="{{item.coaID}}">{{item.coaTitle}}- ({{item.accountCode}})</mat-option>
                             </mat-select>
                         </mat-form-field>
 

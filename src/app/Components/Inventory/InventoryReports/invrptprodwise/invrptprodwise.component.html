@@ -53,7 +53,7 @@
             <mat-select [(ngModel)]="productID" >
                 <mat-option><ngx-mat-select-search #prodsearch [placeholderLabel]="'Search...'"
                         [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                <mat-option *ngFor="let item of productList | filter:prodsearch.value"
+                <mat-option *ngFor="let item of productList | filter:prodsearch.value | slice:0:25"
                     [value]="item.productID">{{item.productTitle}} <b>({{item.barcode}})</b></mat-option>
             </mat-select>
         </mat-form-field>

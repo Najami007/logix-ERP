@@ -91,15 +91,9 @@ export class SaleComponent implements OnInit {
   ngOnInit(): void {
     this.global.setHeaderTitle('Sale');
     this.getCategories();
- 
-
     this.getTable();
     this.getHoldBills();
     this.getBankList();
-
-    
-
-
   }
 
 

@@ -69,6 +69,7 @@ export class AddrecipeCategoryComponent implements OnInit {
               this.recipe.getCategories();
               this.categoryTitle = '';
               this.app.stopLoaderDark();
+              this.reset();
               
             }else {
               this.msg.WarnNotify(Response.msg);
@@ -97,6 +98,7 @@ export class AddrecipeCategoryComponent implements OnInit {
                   this.recipe.getCategories();
                   this.categoryTitle = '';
                   this.app.stopLoaderDark();
+                  this.reset();
                   
                 }else {
                   this.msg.WarnNotify(Response.msg);

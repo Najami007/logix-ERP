@@ -101,7 +101,7 @@
                                 <mat-option><ngx-mat-select-search [(ngModel)]="coaSearch"
                                     [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
                                         ></ngx-mat-select-search></mat-option>
-                                <mat-option *ngFor="let item of CoaList | filter:coaSearch "
+                                <mat-option *ngFor="let item of CoaList | filter:coaSearch | slice:0:5"
                                     [value]="item.coaID">{{item.coaTitle}} - ({{item.accountCode}})</mat-option>
                             </mat-select>
                         </mat-form-field>

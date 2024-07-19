@@ -167,7 +167,7 @@
     
                             <div class="SearchConatiner cursorPointer"
                                 *ngIf="productName != '' && productName != undefined">
-                                <mat-card class="card" *ngFor="let item of productList | filter:productName     index as index"
+                                <mat-card class="card" *ngFor="let item of productList | filter:productName | slice:0:25    index as index"
                                     (click)="holdDataFunction(item)">
                                     <button data-bs-dismiss="modal"
                                         style="height: 40px; background: none;text-align: left;"
