@@ -13,7 +13,9 @@
 
   .cmpName{
     font-size: 12px !important;
-    margin-bottom: -1.5px;
+    margin-bottom: -3.5px;
+    text-transform: uppercase;
+    
   }
   
   .font-barcode{
@@ -21,26 +23,27 @@
     font-family:'code 128' !important;
     font-size: 35px;
     
-    
     /* padding-top: 10px; */
     /* border: 1px solid red; */
     /* height: 40px; */
-  
     overflow: hidden;
   }
 
 
   .bcodep{
     
-    width: 50%;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 17px;
+   
   }
   
   .bcodet{
-    width: 50%;
-    font-weight: 400;
-    font-size: 12px;
+ 
+    font-weight: 500;
+    font-size: 15px;
+    word-spacing: -2px;
+    line-height: 20px;
+    
   }
   .bcodeC{
     margin-top: -10px;
@@ -52,3 +55,13 @@
     margin-top: -5px;
   }
   
+
+  .w-50{
+    width: 50% !important;
+  }
+
+  .w-80{
+    width: 80% !important;
+  }
+
+ 

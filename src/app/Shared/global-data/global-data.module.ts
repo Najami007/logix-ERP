@@ -103,6 +103,10 @@ export class GlobalDataModule implements OnInit {
 
   getFeature(value:any){
 
+    if(value == 'cmpName'){
+      return false;
+    }
+
     return true;
   }
 

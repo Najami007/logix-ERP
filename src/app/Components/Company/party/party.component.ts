@@ -118,7 +118,7 @@ addCity(){
 //////////////////////////////////////////////
 
 
-
+  autoEmpty = true; 
   searchtxt:any;
   btnType = "Save";
   curPartyId:any;
@@ -392,19 +392,27 @@ addCity(){
 
 
   reset(){
-   this.partyType = '';
-   this.partyName = '';
-   this.partyCNIC = '';
-   this.bankName = '';
-   this.accountNo = '';
-   this.accountTitle = '';
-   this.partyTelephoneno = '';
-   this.partyMobileno = '';
-   this.City = '';
-   this.passportNo = '';
-   this.partyAddress="";
-   this.description = '';
-   this.btnType = "Save";
+   
+   if(!this.autoEmpty){
+    this.partyName = '';
+    this.partyMobileno = '';
+    this.partyCNIC = '';
+    this.btnType = "Save";
+   }else{
+    this.partyType = '';
+    this.partyName = '';
+    this.partyCNIC = '';
+    this.bankName = '';
+    this.accountNo = '';
+    this.accountTitle = '';
+    this.partyTelephoneno = '';
+    this.partyMobileno = '';
+    this.City = '';
+    this.passportNo = '';
+    this.partyAddress="";
+    this.description = '';
+    this.btnType = "Save";
+   }
   }
 
 

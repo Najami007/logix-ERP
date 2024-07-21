@@ -124,14 +124,15 @@ getNotes(){
         this.description = '-';
       }
 
-      if(this.CoaTypeID == 2 ){this.globaldata.getCashBankCoa('EXP').subscribe((Response: any) => {this.level1 = Response.length+1;})}
-      
-
-      if(this.CoaTypeID == 3 ){this.globaldata.getCashBankCoa('INC').subscribe((Response: any) => {this.level1 = Response.length+1;})}
+     
 
 
       if(this.btnType == 'Save'){
-        this.insert();
+        if(this.CoaTypeID == 2 ){this.globaldata.getCashBankCoa('EXP').subscribe((Response: any) => {this.level1 = Response.length+1; this.insert();})}
+      
+
+        if(this.CoaTypeID == 3 ){this.globaldata.getCashBankCoa('INC').subscribe((Response: any) => {this.level1 = Response.length+1; this.insert();})}
+        
       }else if(this.btnType == 'Update'){
         this.update();
 
@@ -143,6 +144,7 @@ getNotes(){
 
 
   insert(){
+
     this.app.startLoaderDark();
     this.http.post(environment.mainApi+this.globaldata.accountLink+'InsertChartOfAccount',{
     CoaTitle: this.coaTitle,

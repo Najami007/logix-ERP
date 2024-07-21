@@ -87,6 +87,7 @@
         <Button class="btn btn-success btn-save m-2 w-25" *ngIf="crudList.c && btnType == 'Save'" (click)="saveParty()">{{btnType}}</Button>
         <Button class="btn btn-success btn-save m-2 w-25" *ngIf="crudList.u && btnType == 'Update'" (click)="saveParty()">{{btnType}}</Button>
         <Button class="btn btn-danger btn-reset m-2 w-25" (click)="reset()">Reset</Button>
+        <mat-checkbox [(ngModel)]="autoEmpty">Auto Empty</mat-checkbox>
        </div>
     </div>
 

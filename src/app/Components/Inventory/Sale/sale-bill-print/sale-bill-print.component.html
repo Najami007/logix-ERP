@@ -60,7 +60,7 @@
             <tbody>
                 <tr class="fs-11" *ngFor="let item of myPrintTableData index as index" >
                     <td [colSpan]="discFeature ? '5' : '3'" class="text-start">
-                        &nbsp;{{index +1}}. <b> {{item.productTitle}}</b>
+                        &nbsp;{{index +1}}. <b> {{item.productTitle}}</b>  {{item.barcode}}
                         <table class="table-garment-sale-2 w-100">
                             <tr>
                                 <td class="text-center" style="width:10% !important;">{{item.quantity |number:'1.0-2'}}</td>

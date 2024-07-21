@@ -46,7 +46,7 @@
                     <mat-card-footer class="text-center"
                         style="font-size: x-small;"><strong>{{item.recipeTitle}}</strong></mat-card-footer>
                     <mat-card-footer class="text-center text-success "
-                        style="font-size: 20px;">{{item.recipeSalePrice}}</mat-card-footer>
+                        style="font-size: 20px;">{{item.recipeSalePrice | number}}</mat-card-footer>
 
 
                 </mat-card>
@@ -300,14 +300,16 @@
 
     <div id="mergePrint" class="d-none">
         <div class="text-center">
-            <img [src]="companyLogo" [height]="100" [width]="100">
-            <h2>{{companyName}}</h2>
-            <p style="margin-top: -15px;">{{companyAddress}}</p>
-            <p style="margin-top: -15px;">{{CompanyMobile}}</p>
+            <img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
+            <h2 *ngIf="showCmpNameFeature">{{companyName}}</h2>
+            <h2 *ngIf="!showCmpNameFeature"></h2>
+            <p style="margin-top: -10px;" class="fs-11 text-uppercase">{{companyAddress}}</p>
+            <p style="margin-top: -20px;" class="fs-11">{{CompanyMobile}}</p>
 
         </div>
 
 
+       <div class="p-1">
         <div>
             <table class="table table-logix2">
                 <thead>
@@ -403,7 +405,9 @@
                     </div>
                 </div> -->
         </div>
-
+        <hr>
+        <p>Wish To Serve You Again!</p>
+       </div>
     </div>
 
 
@@ -417,15 +421,17 @@
 
     <div id="billPrint" class="d-none">
         <div class="text-center">
-            <img [src]="companyLogo" [height]="100" [width]="100">
-            <h2>{{companyName}}</h2>
-            <p style="margin-top: -15px;">{{companyAddress}}</p>
-            <p style="margin-top: -15px;">{{CompanyMobile}}</p>
+            <img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
+            <h2 *ngIf="showCmpNameFeature">{{companyName}}</h2>
+            <h2 *ngIf="!showCmpNameFeature"></h2>
+            <p style="margin-top: -10px;" class="fs-11 text-uppercase">{{companyAddress}}</p>
+            <p style="margin-top: -20px;" class="fs-11">{{CompanyMobile}}</p>
 
         </div>
 
 
-        <div>
+      <div class="p-1">
+        <div >
             <table class="table table-logix2">
                 <thead>
                     <tr>
@@ -526,6 +532,10 @@
             </table>
 
         </div>
+
+        <hr>
+        <p>Wish To Serve You Again!</p>
+      </div>
 
     </div>
 
@@ -772,12 +782,18 @@
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-body">
 
+                    <mat-form-field class="w-100" appearance="outline">
+                        <mat-label>Search...</mat-label>
+                        <input matInput #searchBill />
+                    </mat-form-field>
+
                     <table>
                         <tbody class="">
                             <tr style="display: inline-flex; " class="cursorPointer "
-                                *ngFor="let item of holdBillList ">
+                                *ngFor="let item of holdBillList |filter:searchBill.value ">
                                 <mat-card class="btblbtn justify-content-center" (click)="getBillDetail(item)">
                                     <span>{{item.tableTitle}}</span>
+                                    <span *ngIf="item.tableTitle == 'Take Away' || item.tableTitle == 'Home Delivery'">({{item.invBillNo}})</span>
                                 </mat-card>
                             </tr>
                         </tbody>

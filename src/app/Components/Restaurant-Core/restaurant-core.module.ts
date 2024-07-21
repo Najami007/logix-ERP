@@ -39,6 +39,8 @@ import { RecipeDetailComponent } from './recipe/recipe-detail/recipe-detail.comp
 import { VoidReportComponent } from './restaurantReports/void-report/void-report.component';
 import { RecipeComparisonComponent } from './restaurantReports/recipe-list/recipe-comparison/recipe-comparison.component';
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
+import { RestSaleBillPrintComponent } from './sale/rest-sale-bill-print/rest-sale-bill-print.component';
+import { AddSoundComponent } from './add-sound/add-sound.component';
 
 
 
@@ -66,6 +68,7 @@ export const restCore: Route[] = [
   {path:'tbsale', component:TabletSaleComponent, canActivate:[AuthGuard] },
   {path:'lorecp', component:RecipeListComponent, canActivate:[AuthGuard] },
   {path:'vrpt', component:VoidReportComponent, canActivate:[AuthGuard] },
+  {path:'snd', component:AddSoundComponent, },
 
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
@@ -105,6 +108,8 @@ export const restCore: Route[] = [
     RecipeDetailComponent,
     VoidReportComponent,
     RecipeComparisonComponent,
+    RestSaleBillPrintComponent,
+    AddSoundComponent,
     
    
    

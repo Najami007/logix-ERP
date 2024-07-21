@@ -84,7 +84,7 @@ export class SaleBillPrintComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
       (Response: any) => {
         
-
+        
         this.myPrintTableData = Response;
         this.myInvoiceNo = InvNo;
         this.myInvDate = Response[0].createdOn;
@@ -104,6 +104,7 @@ export class SaleBillPrintComponent implements OnInit {
          
 
         this.myQtyTotal = 0;
+        this.myOfferDiscount=0;
         Response.forEach((e: any) => {
           this.myQtyTotal += e.quantity;
           this.myOfferDiscount += e.discInR * e.quantity;

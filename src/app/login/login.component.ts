@@ -30,8 +30,8 @@ logoWidth = 0;
 
         }else{
           this.companyLogo = data[0].companyLogo1;
-          this.logoHeight = data[0].logo1Height / 2;
-          this.logoWidth = data[0].logo1Width / 2;
+          this.logoHeight = data[0].logo1Height ;
+          this.logoWidth = data[0].logo1Width ;
         }
         // console.log(data);
       });

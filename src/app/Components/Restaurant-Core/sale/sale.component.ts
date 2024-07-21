@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -10,6 +10,7 @@ import { PincodeComponent } from '../../User/pincode/pincode.component';
 import Swal from 'sweetalert2';
 import { SaleBillDetailComponent } from './sale-bill-detail/sale-bill-detail.component';
 import { SavedBillComponent } from './saved-bill/saved-bill.component';
+import { RestSaleBillPrintComponent } from './rest-sale-bill-print/rest-sale-bill-print.component';
 
 
 
@@ -21,6 +22,10 @@ import { SavedBillComponent } from './saved-bill/saved-bill.component';
 })
 export class SaleComponent implements OnInit {
   @HostListener('document:visibilitychange', ['$event'])
+
+  // @ViewChild(RestSaleBillPrintComponent) billPrint:any;
+
+  showCmpNameFeature = this.global.getFeature('cmpName');
 
   appVisibility() {
     if (document.hidden) { 
@@ -37,6 +42,8 @@ export class SaleComponent implements OnInit {
   crudList: any = [];
   companyProfile: any = [];
   companyLogo: any = '';
+  logoHeight:any = 100;
+  logoWidth:any = 100;
   companyAddress: any = '';
   CompanyMobile: any = '';
   companyName: any = '';
@@ -57,6 +64,8 @@ export class SaleComponent implements OnInit {
       this.CompanyMobile = data[0].companyMobile;
       this.companyAddress = data[0].companyAddress;
       this.companyName = data[0].companyName;
+      this.logoHeight = data[0].logo1Height;
+      this.logoWidth = data[0].logo1Width;
     });
 
     this.global.getMenuList().subscribe((data) => {
@@ -108,7 +117,7 @@ export class SaleComponent implements OnInit {
 
   categoriesList: any = [];
 
-  serviceCharges = 5.5;
+  serviceCharges = 0;
   bankCoaID = 0;
   OtherCharges: any = 0;
   billDiscount: any = 0;
@@ -616,6 +625,7 @@ export class SaleComponent implements OnInit {
 
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetHoldBills').subscribe(
       (Response: any) => {
+        
         this.holdBillList = Response;
       },
       (Error:any)=>{
@@ -951,6 +961,7 @@ export class SaleComponent implements OnInit {
       //   this.global.printData('#billPrint');
       // }, 200);
 
+    
      
       this.http.get(environment.mainApi+this.global.restaurentLink+'GetHoldedBillDetail?BillNo='+this.invBillNo).subscribe(
         (Response:any)=>{

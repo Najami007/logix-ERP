@@ -1,10 +1,6 @@
 <div class="body text-center ">
 
-    <!-- <input  accept=".wav"  (change)="onDocSelected($event)"  #vDoc type="file" id="vDoc"  class="border border-dark">
-
-    <audio  id="boom" >
-        <source src="../../../../assets/Sounds/beep.wav" type="audio">
-       </audio> -->
+   
       
 <div class="d-flex w-100 p-1 justify-content-between">
     <mat-card   style="height: 84vh;width: 24.5%; background-color: azure;margin-left: 5px; overflow-y:auto;">
@@ -16,7 +12,8 @@
                 <tr>
                     <th>S#</th>
                     <th>Table</th>
-                    <th>Time</th>
+                    <th>Bill #</th>
+                    <!-- <th>Time</th> -->
                     <th>Title</th>
                     <th>Qty</th>
                     <th>Action</th>
@@ -26,7 +23,11 @@
                 <tr *ngFor="let item of newOrderList index as index">
                     <td>{{index+1}}</td>
                     <td>{{item.tableTitle}}</td>
-                    <td>{{item.createdOn | date:'hh:mm:a'}}</td>
+                    <td><div class="d-flex flex-column">
+                        <span>{{item.invBillNo}}</span>
+                        <span>{{item.createdOn | date:'hh:mm:a'}}</span>
+                    </div></td>
+                    <!-- <td>{{item.createdOn | date:'hh:mm:a'}}</td> -->
                     <td>{{item.productTitle}}</td>
                     <td>{{item.quantity }}</td>
                     <td><button mat-mini-fab class="btn-size" (click)="approveOrder(item)"><mat-icon>done_outline</mat-icon></button></td>
@@ -45,7 +46,8 @@
                 <tr>
                     <th>S#</th>
                     <th>Table</th>
-                    <th>Time</th>
+                    <th>Bill #</th>
+                    <!-- <th>Time</th> -->
                     <th>Title</th>
                     <th>Qty</th>
                     <th>Action</th>
@@ -55,7 +57,11 @@
                 <tr *ngFor="let item of PendingOrderList index as index">
                     <td>{{index+1}}</td>
                     <td>{{item.tableTitle}}</td>
-                    <td>{{item.reqConfirmationTime | date:'hh:mm:a'}}</td>
+                    <td><div class="d-flex flex-column">
+                        <span>{{item.invBillNo}}</span>
+                        <span>{{item.reqConfirmationTime | date:'hh:mm:a'}}</span>
+                    </div></td>
+                    <!-- <td>{{item.reqConfirmationTime | date:'hh:mm:a'}}</td> -->
                     <td>{{item.productTitle}}</td>
                     <td>{{item.quantity }}</td>
                     <td><button mat-mini-fab class="btn-size" (click)="ApproveDelivery(item)"><mat-icon>done_outline</mat-icon></button></td>
@@ -74,7 +80,8 @@
                 <tr>
                     <th>S#</th>
                     <th>Table</th>
-                    <th>Time</th>
+                    <th>Bill #</th>
+                    <!-- <th>Time</th> -->
                     <th>Title</th>
                     <th>Qty</th>
 
@@ -84,7 +91,11 @@
                 <tr *ngFor="let item of deliveredOrderList index as index">
                     <td>{{index+1}}</td>
                     <td>{{item.tableTitle}}</td>
-                    <td>{{item.dTime | date:'hh:mm:a'}}</td>
+                    <td><div class="d-flex flex-column">
+                        <span>{{item.invBillNo}}</span>
+                        <span>{{item.dTime | date:'hh:mm:a'}}</span>
+                    </div></td>
+                    <!-- <td>{{item.dTime | date:'hh:mm:a'}}</td> -->
                     <td>{{item.productTitle}}</td>
                     <td>{{item.quantity }}</td>
                 
@@ -110,7 +121,8 @@
                 <tr>
                     <th>S#</th>
                     <th>Table</th>
-                    <th>Time</th>
+                    <th>Bill #</th>
+                    <!-- <th>Time</th> -->
                     <th>Title</th>
                     <th>Qty</th>
                     <th>Action</th>
@@ -120,7 +132,11 @@
                 <tr *ngFor="let item of voidOrderList index as index">
                     <td>{{index+1}}</td>
                     <td>{{item.tableTitle}}</td>
-                    <td>{{item.createdOn | date:'hh:mm:a'}}</td>
+                    <td><div class="d-flex flex-column">
+                        <span>{{item.invBillNo}}</span>
+                        <span>{{item.createdOn | date:'hh:mm:a'}}</span>
+                    </div></td>
+                    <!-- <td>{{item.createdOn | date:'hh:mm:a'}}</td> -->
                     <td>{{item.productTitle}}</td>
                     <td>{{item.quantity }}</td>
                     <td><button mat-mini-fab class="btn-size" *ngIf="item.reqStatus == false" (click)="approveOrder(item)"><mat-icon>done_outline</mat-icon></button></td>
@@ -133,6 +149,10 @@
 </div>
 
 
+<!-- <input  accept=".wav"  (change)="onDocSelected($event)"  #vDoc type="file" id="vDoc"  class="border border-dark"> -->
 
+<!-- <audio  id="boom" >
+    <source src="../../../../assets/Sounds/beep.wav" type="audio">
+   </audio> -->
 
 </div>

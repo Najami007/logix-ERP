@@ -53,7 +53,8 @@ export class BarcodeReportComponent implements OnInit {
 
 
 
-
+  hidePrice = false;
+  hideBarcode = false;
   productList:any = [];
 
 

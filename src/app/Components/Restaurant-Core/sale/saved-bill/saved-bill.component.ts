@@ -13,8 +13,12 @@ import { SaleBillDetailComponent } from '../sale-bill-detail/sale-bill-detail.co
 })
 export class SavedBillComponent {
 
+  showCmpNameFeature = this.global.getFeature('cmpName');
+
   companyProfile: any = [];
   companyLogo: any = '';
+  logoHeight:any = 100;
+  logoWidth:any = 100;
   companyAddress: any = '';
   CompanyMobile: any = '';
   companyName: any = '';
@@ -35,6 +39,8 @@ export class SavedBillComponent {
       this.CompanyMobile = data[0].companyMobile;
       this.companyAddress = data[0].companyAddress;
       this.companyName = data[0].companyName;
+      this.logoHeight = data[0].logo1Height;
+      this.logoWidth = data[0].logo1Width;
     });
   }
 
