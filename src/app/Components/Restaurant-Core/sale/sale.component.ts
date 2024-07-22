@@ -9,7 +9,6 @@ import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import Swal from 'sweetalert2';
 import { SaleBillDetailComponent } from './sale-bill-detail/sale-bill-detail.component';
-import { SavedBillComponent } from './saved-bill/saved-bill.component';
 import { RestSaleBillPrintComponent } from './rest-sale-bill-print/rest-sale-bill-print.component';
 
 
@@ -23,9 +22,9 @@ import { RestSaleBillPrintComponent } from './rest-sale-bill-print/rest-sale-bil
 export class SaleComponent implements OnInit {
   @HostListener('document:visibilitychange', ['$event'])
 
-  // @ViewChild(RestSaleBillPrintComponent) billPrint:any;
+  @ViewChild(RestSaleBillPrintComponent) billPrint:any;
 
-  showCmpNameFeature = this.global.getFeature('cmpName');
+  showCmpNameFeature:any = this.global.getFeature('cmpName');
 
   appVisibility() {
     if (document.hidden) { 
@@ -103,6 +102,7 @@ export class SaleComponent implements OnInit {
     this.getTable();
     this.getHoldBills();
     this.getBankList();
+    this.getSavedBill();
   }
 
 
@@ -116,7 +116,7 @@ export class SaleComponent implements OnInit {
   ]
 
   categoriesList: any = [];
-
+  tmpInvBillNO = '';
   serviceCharges = 0;
   bankCoaID = 0;
   OtherCharges: any = 0;
@@ -428,6 +428,7 @@ export class SaleComponent implements OnInit {
           OrderType: this.orderType,
           CoverOf: this.coverOf,
           OtherCharges: this.OtherCharges,
+          BillDiscount: this.billDiscount,
 
 
           SaleDetail: JSON.stringify(this.tableData),
@@ -435,8 +436,10 @@ export class SaleComponent implements OnInit {
           UserID: this.global.getUserID()
         }).subscribe(
           (Response: any) => {
+            console.log(Response);
          
             if (Response.msg == 'Data Saved Successfully') {
+              this.tmpInvBillNO = Response.invNo;
               this.msg.SuccessNotify(Response.msg);
               this.getTable()
               this.onCatSelected(this.categoriesList[0]);
@@ -473,6 +476,7 @@ export class SaleComponent implements OnInit {
           OrderType: this.orderType,
           CoverOf: this.coverOf,
           OtherCharges: this.OtherCharges,
+          BillDiscount: this.billDiscount,
 
           SaleDetail: JSON.stringify(this.tableData),
 
@@ -900,86 +904,45 @@ export class SaleComponent implements OnInit {
 
 
   printAfterSave(invNo: any) {
-    this.myDuplicateFlag = false;
-   
-      this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+invNo).subscribe(
-        (Response:any)=>{
-         
-          this.myInvoiceNo = Response[0].invBillNo;
-          this.myInvDate = Response[0].invDate;
-          this.myOrderType =Response[0].orderType;
-          this.mySubTotal = Response[0].billTotal;
-          this.myNetTotal = Response[0].netTotal;
-          this.myOtherCharges = Response[0].otherCharges;
-          this.myRemarks = Response[0].remarks;
-          this.myCash = Response[0].cashRec;
-          // this.myBank = Response[0].bankCash;
-          this.myDiscount = Response[0].billDiscount;
-          this.myChange = Response[0].change;
-          this.myPaymentType = Response[0].paymentType;
-          this.mytableNo = Response[0].tableTitle;
-          this.myCounterName = Response[0].entryUser;
-          this.myInvTime = Response[0].createdOn;
-          
-          if(this.myPaymentType == 'Bank'){
-            this.myBank = this.myNetTotal;
-          }
-          if(this.myPaymentType == 'Split'){
-            this.myBank = this.myNetTotal - this.myCash;
-          }
 
-          this.myPrintData =Response;
-          setTimeout(() => {
-            this.global.printData('#billPrint');
-          }, 500);
-        }
-      )
+    this.billPrint.printBill(invNo);
+    setTimeout(() => {
+      this.global.printData('#print-bill');
+    }, 200);
+   
 
   }
 
   HOldandPrint(type: any) {
 
+   this.myOrderType = this.orderType;
+    if (this.tableData != '') {
+      if (this.invBillNo != '') {
+        this.myInvoiceNo = this.invBillNo;
+        this.save('rehold');
 
-    if (this.invBillNo != '') {
-      this.myDuplicateFlag = false;
-      this.myInvoiceNo = this.invBillNo;
-      this.myInvDate = this.invoiceDate;
-     
-      this.myOrderType = this.orderType;
-      this.mySubTotal = this.subTotal;
-      this.myNetTotal = this.netTotal;
-      this.myOtherCharges = this.OtherCharges;
-      this.myRemarks = this.billRemarks;
-      this.myCash = this.cash;
-      this.myBank = this.bankCash;
-      this.myDiscount = this.billDiscount;
-      this.myChange = this.change;
-      this.myPaymentType = this.paymentType;
-      this.myPrintData  = this.tableData;
-      this.myPrintData = this.tableData;
-      // setTimeout(() => {
-      //   this.global.printData('#billPrint');
-      // }, 200);
+        this.billPrint.HOldandPrint(this.orderType,this.invBillNo);
 
+        setTimeout(() => {
+          this.global.printData('#print-bill');
+        }, 200);
     
-     
-      this.http.get(environment.mainApi+this.global.restaurentLink+'GetHoldedBillDetail?BillNo='+this.invBillNo).subscribe(
-        (Response:any)=>{
+      }else{
         
-        this.mytableNo = Response[0].tableTitle;
-        this.myCounterName = Response[0].entryUser;
-        this.myInvTime = Response[0].createdOn;
-
-        //  this.myPrintData = Response;
-        if (type == 'rehold') {
-          this.save('rehold');
-        }
+        this.save('hold');
+        setTimeout(() => {
+          this.myInvoiceNo = this.tmpInvBillNO;
+         if(this.tmpInvBillNO != ''){
+          this.billPrint.HOldandPrint(this.orderType,this.tmpInvBillNO);
 
           setTimeout(() => {
-            this.global.printData('#billPrint');
+            this.global.printData('#print-bill');
           }, 200);
-        })
-
+          this.tmpInvBillNO = '';
+         }
+        }, 200);
+      }
+      this.myDuplicateFlag = false;
   
     } else {
       this.msg.WarnNotify('No Bill Retrieved')
@@ -1097,18 +1060,6 @@ export class SaleComponent implements OnInit {
 
   savedbillList:any = [];
 
-  getSavedBill(){
-
-    this.dialogue.open(SavedBillComponent,{
-      width:'60%',
-    }).afterClosed().subscribe()
-  }
-
-
-
-
-
-
   mergeBillNo1 = '';
   mergeBillNo2 = '';
 
@@ -1160,5 +1111,87 @@ export class SaleComponent implements OnInit {
       this.tempQty -= 1;
     }
   }
+
+
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  getSavedBill(){
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetOpenDaySale').subscribe(
+      (Response:any)=>{
+    
+          this.savedbillList = Response;
+      }
+    )
+
+   
+  }
+
+
+
+  printDuplicateBill(item:any){
+    $('#SavedBillModal').hide();
+    this.global.openPassword('Password').subscribe(pin => {
+      if (pin !== '') {
+        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+          RestrictionCodeID: 5,
+          Password: pin,
+          UserID: this.global.getUserID()
+
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Password Matched Successfully') {
+              $('#SavedBillModal').show();
+             
+          this.billPrint.printBill(item.invBillNo);
+          this.billPrint.myDuplicateFlag = true;
+
+          setTimeout(() => {
+            this.global.printData('#print-bill');
+          }, 500);
+    
+            } else {
+              this.msg.WarnNotify(Response.msg);
+              $('#SavedBillModal').show();
+            }
+          }
+        )
+      }
+    })
+   
+  }
+
+  billDetails(item:any){
+    this.global.openPassword('Password').subscribe(pin => {
+      if (pin !== '') {
+        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+          RestrictionCodeID: 5,
+          Password: pin,
+          UserID: this.global.getUserID()
+
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Password Matched Successfully') {
+              this.dialogue.open(SaleBillDetailComponent,{
+                width:'50%',
+                data:item,
+                disableClose:true,
+              }).afterClosed().subscribe(value=>{
+                
+              })
+            } else {
+              this.msg.WarnNotify(Response.msg);
+            }
+          }
+        )
+      }
+    })
+   
+   
+  }
+
+
+ 
+
 
 }

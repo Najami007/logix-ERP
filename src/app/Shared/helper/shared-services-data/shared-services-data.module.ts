@@ -21,7 +21,7 @@ import { ToastrService } from 'ngx-toastr';
 
 export class SharedServicesDataModule { 
 
-  private baseURL = environment.apiUrl;
+  private baseURL = environment.mainApi;
 
   destroy$: Subject<boolean> = new Subject<boolean>();
 

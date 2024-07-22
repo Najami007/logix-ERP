@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
 })
 export class RestSaleBillPrintComponent {
 
-
+  showCmpNameFeature:any = this.global.getFeature('cmpName');
 
   crudList: any = [];
   companyProfile: any = [];
@@ -23,13 +23,15 @@ export class RestSaleBillPrintComponent {
   companyAddress: any = '';
   CompanyMobile: any = '';
   companyName: any = '';
+  logoHeight:any = 100;
+  logoWidth:any = 100;
 
   mobileMask = this.global.mobileMask;
 
   constructor(
     private http: HttpClient,
     private msg: NotificationService,
-    private app: AppComponent,
+    
     public global: GlobalDataModule,
     private dialogue: MatDialog,
     private route: Router
@@ -40,6 +42,9 @@ export class RestSaleBillPrintComponent {
       this.CompanyMobile = data[0].companyMobile;
       this.companyAddress = data[0].companyAddress;
       this.companyName = data[0].companyName;
+      this.logoHeight = data[0].logo1Height;
+      this.logoWidth = data[0].logo1Width;
+
     });
 
     this.global.getMenuList().subscribe((data) => {
@@ -79,11 +84,13 @@ export class RestSaleBillPrintComponent {
 
 
   printBill(invNo: any) {
+    this.EmptyBill();
     this.myDuplicateFlag = false;
    
       this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+invNo).subscribe(
         (Response:any)=>{
          
+          this.myPrintData =Response;
           this.myInvoiceNo = Response[0].invBillNo;
           this.myInvDate = Response[0].invDate;
           this.myOrderType =Response[0].orderType;
@@ -107,13 +114,66 @@ export class RestSaleBillPrintComponent {
             this.myBank = this.myNetTotal - this.myCash;
           }
 
-          this.myPrintData =Response;
-          setTimeout(() => {
-            this.global.printData('#print-bill');
-          }, 500);
+        
+        
         }
       )
 
   }
 
-}
+
+  HOldandPrint(orderType: any,invoiceNo:any) {
+    this.EmptyBill();
+    this.myOrderType = orderType;
+    this.myInvoiceNo = invoiceNo;
+    this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+invoiceNo).subscribe(
+      (Response:any)=>{
+
+        this.myPrintData  = Response;
+       
+      this.mytableNo = Response[0].tableTitle;
+      this.myCounterName = Response[0].entryUser;
+      this.myInvTime = Response[0].createdOn;
+      this.myInvDate = Response[0].invDate;
+      
+      this.myOtherCharges = Response[0].otherCharges;
+      this.myRemarks = Response[0].remarks;
+      
+        this.mySubTotal = 0;
+      Response.forEach((e:any) => {
+        this.mySubTotal += e.salePrice * e.quantity;
+      });
+  
+        
+      })
+       this.myDuplicateFlag = false;
+   
+     } 
+
+
+     EmptyBill(){
+      this.myPrintData = [];
+      this.myInvoiceNo = '';
+      this.mytableNo = '';
+      this.myCounterName = '';
+      this.myInvDate = '';
+      this.myInvTime = '';
+      this.myOrderType = '';
+      this.mySubTotal = 0;
+      this.myNetTotal = 0;
+      this.myOtherCharges = 0;
+      this.myRemarks = '';
+      this.myDiscount = 0;
+      this.myCash = 0;
+      this.myChange = 0;
+      this.myBank = 0;
+      this.myPaymentType = '';
+      this.myDuplicateFlag = false;
+      this.myTime;
+      this.myCounter = '';
+     }
+ 
+   }
+ 
+
+

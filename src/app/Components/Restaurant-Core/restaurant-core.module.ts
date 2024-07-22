@@ -31,7 +31,6 @@ import { SaleRptTablewiseComponent } from './restaurantReports/sale-rpt-tablewis
 import { SaleRptRecipeCatwiseComponent } from './restaurantReports/sale-rpt-recipe-catwise/sale-rpt-recipe-catwise.component';
 import { SaleRptPaymentTypewiseComponent } from './restaurantReports/sale-rpt-payment-typewise/sale-rpt-payment-typewise.component';
 import { SaleBillDetailComponent } from './sale/sale-bill-detail/sale-bill-detail.component';
-import { SavedBillComponent } from './sale/saved-bill/saved-bill.component';
 import { RestDashboardComponent } from './rest-dashboard/rest-dashboard.component';
 import { TabletSaleComponent } from './tablet-sale/tablet-sale.component';
 import { RecipeListComponent } from './restaurantReports/recipe-list/recipe-list.component';
@@ -41,6 +40,7 @@ import { RecipeComparisonComponent } from './restaurantReports/recipe-list/recip
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 import { RestSaleBillPrintComponent } from './sale/rest-sale-bill-print/rest-sale-bill-print.component';
 import { AddSoundComponent } from './add-sound/add-sound.component';
+import { ConsumptionReportComponent } from './restaurantReports/consumption-report/consumption-report.component';
 
 
 
@@ -101,7 +101,7 @@ export const restCore: Route[] = [
     SaleRptRecipeCatwiseComponent,
     SaleRptPaymentTypewiseComponent,
     SaleBillDetailComponent,
-    SavedBillComponent,
+   
     RestDashboardComponent,
     TabletSaleComponent,
     RecipeListComponent,
@@ -110,6 +110,7 @@ export const restCore: Route[] = [
     RecipeComparisonComponent,
     RestSaleBillPrintComponent,
     AddSoundComponent,
+    ConsumptionReportComponent,
     
    
    

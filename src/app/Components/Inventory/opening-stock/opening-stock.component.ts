@@ -8,7 +8,6 @@ import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { Router } from '@angular/router';
 import { Observable, retry } from 'rxjs';
-import { SavedBillComponent } from '../../Restaurant-Core/sale/saved-bill/saved-bill.component';
 
 @Component({
   selector: 'app-opening-stock',

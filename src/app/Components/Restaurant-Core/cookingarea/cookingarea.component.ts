@@ -51,18 +51,18 @@ export class CookingareaComponent implements OnInit {
   menuSearch:any;
 
   getCookingArea(){
-    // this.http.get(environment.mainApi+this.global.restaurentLink+'GetCookingAria').subscribe(
-    //   (Response:any)=>{
-    //     this.cookingAreaList = Response;
-        
-    //   }
-    // )
-
-    this.dataService.getHttp(this.global.restaurentLink+'GetCookingAria','').subscribe(
+    this.http.get(environment.mainApi+this.global.restaurentLink+'GetCookingAria').subscribe(
       (Response:any)=>{
         this.cookingAreaList = Response;
+        
       }
     )
+
+    // this.dataService.getHttp(this.global.restaurentLink+'GetCookingAria','').subscribe(
+    //   (Response:any)=>{
+    //     this.cookingAreaList = Response;
+    //   }
+    // )
 
 
   }
@@ -99,7 +99,7 @@ export class CookingareaComponent implements OnInit {
     this.global.openPinCode().subscribe(pin=>{
       if(pin != ''){
         this.app.startLoaderDark();
-        this.dataService.deleteHttp(this.global.restaurentLink+'deleteCookingAria',{
+        this.http.post(environment.mainApi+this.global.restaurentLink+'deleteCookingAria',{
           CookingAriaID:item.cookingAriaID,
           PinCode:pin,
           UserID:this.global.getUserID()

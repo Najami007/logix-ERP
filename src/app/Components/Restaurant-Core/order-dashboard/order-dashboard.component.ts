@@ -94,6 +94,7 @@ export class OrderDashboardComponent implements OnInit {
       
 
         if (this.tempVoidList != '' && (this.voidOrderList.length > this.tempVoidList.length)) {
+   
           this.beep();
         }
 
@@ -151,7 +152,7 @@ export class OrderDashboardComponent implements OnInit {
 
       
         if (this.newOrderList.length > this.tempOrderList.length) {
-       
+      
           this.beep();
         }
   

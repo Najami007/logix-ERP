@@ -181,7 +181,7 @@
                         class="m-1 text-white btn bg-primary col-lg-5" (click)="HOldandPrint('rehold')" accesskey="p"><u>P</u>rint</button>
 
                     <button accesskey="u" mat-raised-button matTooltip="Retreiving Saved Bills" matTooltipPosition="right" class="m-1 btn  col-lg-5 "
-                        (click)="getSavedBill()" >D<u>u</u>plicate</button>
+                    data-bs-toggle="modal"  data-bs-target="#SavedBillModal" (click)="this.getSavedBill()">D<u>u</u>plicate</button>
             
                     <button mat-raised-button matTooltip="Void Full Bill" matTooltipPosition="left" class="m-1 text-white btn bg-info col-lg-5"
                         (click)="voidBill()" accesskey="v"><u>V</u>oid Bill</button>
@@ -417,8 +417,8 @@
 
     <!------------------------------ Design For Bill Pirnt  --------------------->
 
-
-
+    <app-rest-sale-bill-print id="print-bill" class="hide"></app-rest-sale-bill-print>
+<!-- 
     <div id="billPrint" class="d-none">
         <div class="text-center">
             <img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
@@ -537,7 +537,7 @@
         <p>Wish To Serve You Again!</p>
       </div>
 
-    </div>
+    </div> -->
 
 
     <!---------------------------------------------------------------------------------->
@@ -630,7 +630,7 @@
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-header">
                     <h2 class="modal-title" id="paymentMehtodLabel">Payment Method</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body">
 
@@ -812,6 +812,85 @@
 
     <!---------------------------------------------------------->
 
+   <!------------------------- Modal Window for Saved Bill =----------------->
+
+
+   <div class="modal fade" id="SavedBillModal" tabindex="-1" aria-labelledby="SavedBillModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-xl">
+        <div class="modal-content">
+
+          
+<div >
+    
+        <div class="text-end p-2">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Search...</mat-label>
+                <input matInput #searchBill  />
+            </mat-form-field>
+        </div>
+        <div class="p-2"  style="max-height: 400px;overflow-y: scroll;">
+           <table class="table">
+               <thead>
+                   <tr>
+                       <th>S#</th>
+                       <th>Bill #</th>
+                       <th>Date</th>
+                       <th>Table No</th>
+                       <th>Type</th>
+                       <th>Amount</th>
+                       <th>Print</th>
+                       <th>Detail</th>
+                   </tr>
+
+               </thead>
+               <tbody>
+                   <tr *ngFor="let item of savedbillList |filter:searchBill.value index as index">
+                       <td>{{index+1}}</td>
+                       <td>{{item.invBillNo}}</td>
+                       <td>{{item.invDate|date:'dd-MM-yyyy'}} ({{item.createdOn|date:'hh:mm:a'}})</td>
+                       <td>{{item.tableTitle}}</td>
+                       <td>{{item.paymentType}}</td>
+                       <td>{{item.netTotal |number:'1.0-0'}}</td>
+                       <td class="text-primary cursorPointer"><mat-icon (click)="printDuplicateBill(item)">print</mat-icon></td>
+                       <td class="text-success cursorPointer"><mat-icon (click)="billDetails(item)">receipt</mat-icon></td>
+                   </tr>
+               </tbody>
+               
+           </table>
+
+
+        </div>
+
+        <div class="text-end bg-mf-blue p-3">
+            <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
+        </div>
+
+  
+
+
+<!------------------------------ Design For Bill Pirnt  --------------------->
+
+<app-rest-sale-bill-print id="print-bill" class="hide"></app-rest-sale-bill-print>
+
+
+<!---------------------------------------------------------------------------------->
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+</div>
 
 
 

@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from './Shared/global-data/global-data.module';
 import { TimelineLite, Back, Power1,  } from 'gsap'
@@ -17,6 +17,22 @@ import { gsap } from 'gsap/all';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
+
+  ////////////// will Log OUt all Tabs When user LogOUt /////////////
+  @HostListener('document:visibilitychange', ['$event'])
+
+  appVisibility() {
+    if (document.hidden ) { 
+
+     } 
+     else {
+    
+     if(localStorage.getItem('curVal') == null || localStorage.getItem('curVal') == '' ){
+      this.route.navigate(['']);
+    }
+     }
+ }
 
 
  loaderAnimation():void{
