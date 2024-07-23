@@ -6,6 +6,7 @@
     <mat-card   style="height: 84vh;width: 24.5%; background-color: azure;margin-left: 5px; overflow-y:auto;">
         <div class="text-center">
             <h2>New Order</h2>
+            <input placeholder="search.." type="text" #newOrderSearch class="w-100 " style="background-color: azure;">
         </div>
         <table class="table">
             <thead>
@@ -20,7 +21,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of newOrderList index as index">
+                <tr *ngFor="let item of newOrderList | filter:newOrderSearch.value index as index">
                     <td>{{index+1}}</td>
                     <td>{{item.tableTitle}}</td>
                     <td><div class="d-flex flex-column">
@@ -40,6 +41,7 @@
     <mat-card style="height: 84vh;width: 24.5%;background-color: rgb(238, 248, 217);margin-left: 5px;overflow-y:auto;">
         <div class="text-center">
             <h2>Pending Order</h2>
+            <input placeholder="search.." type="text" #pendingOrderSearch class="w-100" style="background-color: rgb(238, 248, 217);">
         </div>
         <table class="table">
             <thead>
@@ -54,7 +56,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of PendingOrderList index as index">
+                <tr *ngFor="let item of PendingOrderList|filter:pendingOrderSearch.value index as index">
                     <td>{{index+1}}</td>
                     <td>{{item.tableTitle}}</td>
                     <td><div class="d-flex flex-column">
@@ -74,6 +76,7 @@
     <mat-card  style="height: 84vh;width: 24.5%;background-color: rgb(240, 240, 255);margin-left: 5px;overflow-y:auto;">
         <div class="text-center">
             <h2>Delivered Order</h2>
+            <input placeholder="search.." type="text" #deliveredOrderSearch class="w-100" style="background-color:rgb(240, 240, 255);">
         </div>
         <table class="table">
             <thead>
@@ -88,7 +91,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of deliveredOrderList index as index">
+                <tr *ngFor="let item of deliveredOrderList|filter:deliveredOrderSearch.value index as index">
                     <td>{{index+1}}</td>
                     <td>{{item.tableTitle}}</td>
                     <td><div class="d-flex flex-column">
@@ -107,13 +110,16 @@
 
     <mat-card  style="height: 84vh;width: 24.5%;background-color: rgb(255, 240, 244);margin-left: 5px;overflow-y:auto;">
        
-        <div class="text-center d-flex ">
-            <h2 class="col-lg-8 text-end">Canceled Order</h2>
-            <div class="col-lg-4 text-end">
-                <select  [(ngModel)]="locationID" class="w-75 border-0"  (change)="getOrderList();getVoidList()">
+        <div class="text-center ">
+            <h2 class=" text-center">Canceled Order</h2>
+            
+            <div class="col-lg-12 text-end">
+
+                <input placeholder="search.." type="text" #voidOrderSearch class="w-100" style="background-color:rgb(255, 240, 244);">
+                <!-- <select  [(ngModel)]="locationID" class="w-25 border-0"  (change)="getOrderList();getVoidList()">
                     <option [value]="0">All</option>
                     <option *ngFor="let item of cookingAreaList" [value]="item.cookingAriaID" >{{item.cookingAriaTitle}}</option>
-                    </select>
+                    </select> -->
             </div>
         </div>
         <table class="table">
@@ -129,7 +135,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of voidOrderList index as index">
+                <tr *ngFor="let item of voidOrderList|filter:voidOrderSearch.value index as index">
                     <td>{{index+1}}</td>
                     <td>{{item.tableTitle}}</td>
                     <td><div class="d-flex flex-column">

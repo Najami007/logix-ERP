@@ -8,12 +8,13 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 
+
 @Component({
-  selector: 'app-rest-sale-bill-print',
-  templateUrl: './rest-sale-bill-print.component.html',
-  styleUrls: ['./rest-sale-bill-print.component.scss']
+  selector: 'app-rest-kot-print',
+  templateUrl: './rest-kot-print.component.html',
+  styleUrls: ['./rest-kot-print.component.scss']
 })
-export class RestSaleBillPrintComponent {
+export class RestKotPrintComponent {
 
   showCmpNameFeature:any = this.global.getFeature('cmpName');
 
@@ -77,23 +78,20 @@ export class RestSaleBillPrintComponent {
   myChange = 0;
   myBank = 0;
   myPaymentType = '';
-  myDuplicateFlag = false;
+  voidFlag = false;
   myTime:any;
   myCounter:any = '';
   myOrderNo = 0;
 
 
 
-  printBill(invNo: any) {
-    this.EmptyBill();
-    this.myDuplicateFlag = false;
+  printBill(invNo: any,voidFlag:any) {
+    this.voidFlag = voidFlag;
    
       this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+invNo).subscribe(
         (Response:any)=>{
-          console.log(Response);
          
-          this.myPrintData =Response;
-          this.myInvoiceNo = Response[0].invBillNo;
+         this.myInvoiceNo = Response[0].invBillNo;
           this.myInvDate = Response[0].invDate;
           this.myOrderType =Response[0].orderType;
           this.mySubTotal = Response[0].billTotal;
@@ -107,7 +105,7 @@ export class RestSaleBillPrintComponent {
           this.myPaymentType = Response[0].paymentType;
           this.mytableNo = Response[0].tableTitle;
           this.myCounterName = Response[0].entryUser;
-          this.myInvTime = Response[0].createdOn;
+          this.myInvTime = new Date();
           this.myOrderNo = Response[0].orderNo;
           
           if(this.myPaymentType == 'Bank'){
@@ -124,36 +122,6 @@ export class RestSaleBillPrintComponent {
 
   }
 
-
-  HOldandPrint(orderType: any,invoiceNo:any) {
-    this.EmptyBill();
-    this.myOrderType = orderType;
-    this.myInvoiceNo = invoiceNo;
-    this.http.get(environment.mainApi+this.global.restaurentLink+'GetHoldedBillDetail?BillNo='+invoiceNo).subscribe(
-      (Response:any)=>{
-        
-
-        this.myPrintData  = Response;
-       
-      this.mytableNo = Response[0].tableTitle;
-      this.myCounterName = Response[0].entryUser;
-      this.myInvTime = Response[0].createdOn;
-      this.myInvDate = Response[0].invDate;
-      
-      this.myOtherCharges = Response[0].otherCharges;
-      this.myRemarks = Response[0].remarks;
-      this.myOrderNo = Response[0].orderNo;
-      
-        this.mySubTotal = 0;
-      Response.forEach((e:any) => {
-        this.mySubTotal += e.salePrice * e.quantity;
-      });
-  
-        
-      })
-       this.myDuplicateFlag = false;
-   
-     } 
 
 
      EmptyBill(){
@@ -173,12 +141,10 @@ export class RestSaleBillPrintComponent {
       this.myChange = 0;
       this.myBank = 0;
       this.myPaymentType = '';
-      this.myDuplicateFlag = false;
+      this.voidFlag = false;
       this.myTime;
       this.myCounter = '';
      }
  
    }
  
-
-

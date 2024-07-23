@@ -178,7 +178,7 @@
 
 
                     <button matTooltip="Print  Current Bill" matTooltipPosition="left" mat-raised-button 
-                        class="m-1 text-white btn bg-primary col-lg-5" (click)="HOldandPrint('rehold')" accesskey="p"><u>P</u>rint</button>
+                        class="m-1 text-white btn bg-primary col-lg-5" (click)="HOldandPrint('rehold')" accesskey="p">H & <u>P</u>rint</button>
 
                     <button accesskey="u" mat-raised-button matTooltip="Retreiving Saved Bills" matTooltipPosition="right" class="m-1 btn  col-lg-5 "
                     data-bs-toggle="modal"  data-bs-target="#SavedBillModal" (click)="this.getSavedBill()">D<u>u</u>plicate</button>
@@ -418,126 +418,7 @@
     <!------------------------------ Design For Bill Pirnt  --------------------->
 
     <app-rest-sale-bill-print id="print-bill" class="hide"></app-rest-sale-bill-print>
-<!-- 
-    <div id="billPrint" class="d-none">
-        <div class="text-center">
-            <img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
-            <h2 *ngIf="showCmpNameFeature">{{companyName}}</h2>
-            <h2 *ngIf="!showCmpNameFeature"></h2>
-            <p style="margin-top: -10px;" class="fs-11 text-uppercase">{{companyAddress}}</p>
-            <p style="margin-top: -20px;" class="fs-11">{{CompanyMobile}}</p>
-
-        </div>
-
-
-      <div class="p-1">
-        <div >
-            <table class="table table-logix2">
-                <thead>
-                    <tr>
-                        <th>Inv #</th>
-                        <th>Date</th>
-                        <th>Counter</th>
-                        <th>Table</th>
-                    </tr>
-                </thead>
-                <tbody class="text-center">
-                    <tr>
-                        <td>{{myInvoiceNo}}</td>
-                        <td>{{myInvDate | date:'dd-MM-yyyy '}} ({{myInvTime|date:'hh:mm:ss:a'}})</td>
-                        <td>{{myCounterName}}</td>
-                        <td>{{mytableNo}}</td>
-                    </tr>
-
-                </tbody>
-            </table>
-
-            <tr>
-                <th>Remarks:-</th>
-                <td class="ms-2">{{myRemarks}}</td>
-            </tr>
-        </div>
-
-        <h2 *ngIf="myPaymentType == 'Complimentary'" class="border border-dark w-100 text-center">Complimentary</h2>
-        <h2 *ngIf="myDuplicateFlag == true" class="border border-dark w-100 text-center">Duplicate</h2>
-
-        <div>
-            <table class="w-100 table-logix2">
-                <thead>
-                    <tr>
-                        <th>S#</th>
-                        <th>Title</th>
-                        <th>Qty</th>
-                        <th>Price</th>
-                        <th>Total</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of myPrintData index as index">
-                        <td>{{index +1}}</td>
-                        <td class="text-start">{{item.productTitle}}</td>
-                        <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
-                        <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
-                        <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
-
-                    </tr>
-                </tbody>
-            </table>
-
-
-
-            <table class="w-100 text-end mt-2">
-                <tbody>
-                    <tr>
-                        <th>Sub Total</th>
-                        <td>{{mySubTotal |number:'1.0-0'}}</td>
-
-                    </tr>
-                    <tr *ngIf="myOtherCharges > 0">
-                        <th *ngIf="myOrderType == 'Dine In'">Service Charges</th>
-                        <th *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</th>
-                        <th *ngIf="myOrderType == 'Take Away'">Other Charges</th>
-                        <td>{{myOtherCharges|number:'1.0-0'}}</td>
-
-                    </tr>
-                    <tr *ngIf="myDiscount > 0">
-                        <th>Discount</th>
-                        <td>{{myDiscount|number:'1.0-0'}}</td>
-
-                    </tr>
-
-                    <tr>
-                        <th>Net Total</th>
-                        <td>{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-0'}}</td>
-
-                    </tr>
-                    <tr *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
-                        <th>Cash</th>
-                        <td>{{myCash|number:'1.0-0'}}</td>
-
-                    </tr>
-                    <tr *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
-                        <th>Bank</th>
-                        <td>{{myBank|number:'1.0-0'}}</td>
-
-                    </tr>
-                    <tr *ngIf="myChange > 0">
-                        <th>Change</th>
-                        <td>{{myChange|number:'1.0-0'}}</td>
-
-                    </tr>
-
-                </tbody>
-            </table>
-
-        </div>
-
-        <hr>
-        <p>Wish To Serve You Again!</p>
-      </div>
-
-    </div> -->
+    <app-rest-kot-print id="print-Kot" class="hide"></app-rest-kot-print>
 
 
     <!---------------------------------------------------------------------------------->

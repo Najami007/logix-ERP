@@ -1,0 +1,55 @@
+<div id="print-bill">
+    <div class="text-center p-1">
+        <h2 class="border border-dark text-center" >KOT</h2>
+        <h2 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">ORDER NO: {{myOrderNo}}</h2>   
+      
+    </div>
+
+   
+
+  <div class="p-1">
+    <h2  *ngIf="voidFlag" class="border border-dark text-center" >Void Item</h2>
+    <div >
+        <table class="w-100 table" style="font-size: 10px;">
+            <thead>
+                <tr>
+                    <th>Inv #</th>
+                    <th>Date</th>
+                    <th>Counter</th>
+                    <th>Table</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                <tr>
+                    <td>{{myInvoiceNo}}</td>
+                    <td>{{myInvDate | date:'dd-MM-yyyy '}} ({{myInvTime|date:'hh:mm:ss:a'}})</td>
+                    <td>{{myCounterName}}</td>
+                    <td>{{mytableNo}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <table class="w-100 table-restaurant-sale" >
+            <thead >
+                <tr>
+                    <!-- <th>S#</th> -->
+                    <th>Product Name</th>
+                    <th>Qty</th>
+                
+                </tr>
+            </thead>
+            <tbody [ngClass]="voidFlag ? 'dark' : ''">
+                <tr *ngFor="let item of myPrintData index as index">
+                    <!-- <td>{{index +1}}</td> -->
+                    <td >{{item.productTitle}}</td>
+                    <td >{{item.quantity |number:'1.0-2'}}</td>
+
+                </tr>
+            </tbody>
+        </table>
+   </div>
+  </div>
+
+</div>

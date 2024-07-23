@@ -41,6 +41,8 @@ import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 import { RestSaleBillPrintComponent } from './sale/rest-sale-bill-print/rest-sale-bill-print.component';
 import { AddSoundComponent } from './add-sound/add-sound.component';
 import { ConsumptionReportComponent } from './restaurantReports/consumption-report/consumption-report.component';
+import { RestKotPrintComponent } from './sale/rest-kot-print/rest-kot-print.component';
+
 
 
 
@@ -111,6 +113,7 @@ export const restCore: Route[] = [
     RestSaleBillPrintComponent,
     AddSoundComponent,
     ConsumptionReportComponent,
+    RestKotPrintComponent,
     
    
    

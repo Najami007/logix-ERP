@@ -37,7 +37,6 @@ export class OrderDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.global.setHeaderTitle('Kitchen DashBoard');
-   
     this.getVoidList();
     this.getOrderList();
     this.getCookingArea();
@@ -46,7 +45,7 @@ export class OrderDashboardComponent implements OnInit {
 
   }
 
-  locationID = 0;
+  locationID = this.global.getOrderDsbLocation() == '' ? 0 : this.global.getOrderDsbLocation();
   curDate = new Date()
 
   voidOrderList: any = [];

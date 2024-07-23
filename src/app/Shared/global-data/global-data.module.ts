@@ -117,7 +117,13 @@ export class GlobalDataModule implements OnInit {
   }
 
 
+  getKOTApproval(){
+  return JSON.parse(localStorage.getItem('rKtF') || '0');
+  }
 
+  getOrderDsbLocation(){
+    return JSON.parse(localStorage.getItem('odsbdepID') || '0');
+    }
 
   getModuleID() {
     var moduleID = JSON.parse(localStorage.getItem('mid') || '{}');

@@ -1,7 +1,34 @@
-<div class="text-center row justify-content-center body">
 
+
+
+
+<div class="text-center row justify-content-center body mt-5 p-5">
+
+   <div class="d-flex justify-content-between w-50">
     <input  accept=".wav"  (change)="onDocSelected($event)"  #vDoc type="file" id="vDoc"  class="border border-dark">
 
+    <mat-form-field appearance="outline" class="w-50">
+        <mat-label>Print KOT</mat-label>
+        <mat-select [(ngModel)]="kotFlag" (selectionChange)="onKotSelection(kotFlag)">
+            <mat-option [value]="true">True</mat-option>
+            <mat-option [value]="false">False</mat-option>
+        </mat-select>
+    </mat-form-field>
+   </div>
+
+
+   <div class="d-flex justify-content-between w-50">
+ 
+
+    <mat-form-field appearance="outline" class="w-50">
+        <mat-label>Dashboard Department</mat-label>
+        <mat-select [(ngModel)]="locationID" (selectionChange)="onDeparmentSelection(locationID)">
+            <mat-option [value]="0">All</mat-option>
+            <mat-option *ngFor="let item of cookingAreaList"  [value]="item.cookingAriaID">{{item.cookingAriaTitle}}</mat-option>
+            
+        </mat-select>
+    </mat-form-field>
+   </div>
 
 </div>
 

@@ -1,5 +1,137 @@
 <div id="print-bill">
     <div class="text-center">
+        <p style="font-family:Arial, Helvetica, sans-serif">Welcome To {{companyName}}</p>
+        <p style="margin-top: -20px;" class="fs-11 text-uppercase">{{companyAddress}}</p>
+        <p style="margin-top: -20px;"  class="fs-11">{{CompanyMobile}}</p>
+        <img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
+
+        <h2 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">ORDER NO: {{myOrderNo}}</h2>
+        
+    </div>
+
+
+  <div class="p-1">
+    <div >
+        <table class="w-100" style="font-size: 10px;">
+            
+                <tr>
+                    <td>Inv #</td>
+                    <td>{{myInvoiceNo}}</td>            
+                </tr>          
+               <tr>
+                    <td>Date</td>
+                    <td>{{myInvDate | date:'dd-MM-yyyy '}} ({{myInvTime|date:'hh:mm:ss:a'}})</td>          
+                </tr>
+                <tr>
+                    <td>Cashier</td>
+                    <td>{{myCounterName}}</td>
+                </tr>
+                <tr>
+                    <td>Table</td>    
+                    <td>{{mytableNo}}</td>
+                </tr>
+                <tr>
+                    <td>Remarks:-</td>
+                    <td >{{myRemarks}}</td>
+                </tr>
+          
+        </table>
+
+        
+    </div>
+
+    <h2 *ngIf="myPaymentType == 'Complimentary'" class="w-100 text-center">Complimentary</h2>
+    <h2 *ngIf="myDuplicateFlag == true" class=" w-100 text-center">Duplicate</h2>
+
+    <div>
+        <table class="w-100 table-restaurant-sale" >
+            <thead >
+                <tr>
+                    <th>S#</th>
+                    <th>Product Name</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                    <th>Total</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of myPrintData index as index">
+                    <td>{{index +1}}</td>
+                    <td >{{item.productTitle}}</td>
+                    <td >{{item.quantity |number:'1.0-2'}}</td>
+                    <td >{{item.salePrice |number:'1.0-2'}}</td>
+                    <td >{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
+
+                </tr>
+            </tbody>
+        </table>
+
+
+
+        <table class="w-100 mt-2" style="font-size: 10px;">
+            <tbody>
+                <tr>
+                    <td>Sub Total</td>
+                    <td>{{mySubTotal |number:'1.0-0'}}</td>
+
+                </tr>
+                <tr *ngIf="myOtherCharges > 0">
+                    <td *ngIf="myOrderType == 'Dine In'">Service Charges</td>
+                    <td *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</td>
+                    <td *ngIf="myOrderType == 'Take Away'">Other Charges</td>
+                    <td>{{myOtherCharges|number:'1.0-0'}}</td>
+
+                </tr>
+                <tr *ngIf="myDiscount > 0">
+                    <td>Discount</td>
+                    <td>{{myDiscount|number:'1.0-0'}}</td>
+
+                </tr>
+
+                <tr>
+                    <td>Net Total</td>
+                    <td>{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-0'}}</td>
+
+                </tr>
+                <tr *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
+                    <td>Cash</td>
+                    <td>{{myCash|number:'1.0-0'}}</td>
+
+                </tr>
+                <tr *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
+                    <td>Bank</td>
+                    <td>{{myBank|number:'1.0-0'}}</td>
+
+                </tr>
+                <tr *ngIf="myChange > 0">
+                    <td>Change</td>
+                    <td>{{myChange|number:'1.0-0'}}</td>
+
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+    <br>
+    <div style="border-top:1px dotted;">
+    <p style="font-size: 10px;">Wish To Serve You Again!</p>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- <div id="print-bill">
+    <div class="text-center">
         <img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
         <h2 *ngIf="showCmpNameFeature">{{companyName}}</h2>
         <h2 *ngIf="!showCmpNameFeature"></h2>
@@ -115,4 +247,4 @@
     <p>Wish To Serve You Again!</p>
   </div>
 
-</div>
+</div> -->

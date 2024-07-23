@@ -10,6 +10,7 @@ import { PincodeComponent } from '../../User/pincode/pincode.component';
 import Swal from 'sweetalert2';
 import { SaleBillDetailComponent } from './sale-bill-detail/sale-bill-detail.component';
 import { RestSaleBillPrintComponent } from './rest-sale-bill-print/rest-sale-bill-print.component';
+import { RestKotPrintComponent } from './rest-kot-print/rest-kot-print.component';
 
 
 
@@ -23,6 +24,7 @@ export class SaleComponent implements OnInit {
   @HostListener('document:visibilitychange', ['$event'])
 
   @ViewChild(RestSaleBillPrintComponent) billPrint:any;
+  @ViewChild(RestKotPrintComponent) KotPrint:any;
 
   showCmpNameFeature:any = this.global.getFeature('cmpName');
 
@@ -248,7 +250,7 @@ export class SaleComponent implements OnInit {
   onCatSelected(item: any) {
     // alert(item.recipeCatID);
     this.categoryID = item.recipeCatID;
-    this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipesCatWise?CatID=' + item.recipeCatID + '&reqFlag=' + item.prodFlag).subscribe(
+    this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipesCatWise?CatID=' + this.categoryID + '&reqFlag=' + item.prodFlag).subscribe(
       (Response: any) => {
         this.RecipeList = Response;
         
@@ -266,11 +268,12 @@ export class SaleComponent implements OnInit {
       (Response: any) => {
         this.categoriesList = Response;
         // this.categoryID = this.categoriesList[0].recipeCatID;
+       
    
        if(Response != '' && Response != null){
-        this.onCatSelected(Response[0]);
+        this.onCatSelected({recipeCatID:0,prodFlag:false});
        }
-      
+
         this.app.stopLoaderDark();
       },
       (Error:any)=>{
@@ -436,10 +439,10 @@ export class SaleComponent implements OnInit {
           UserID: this.global.getUserID()
         }).subscribe(
           (Response: any) => {
-            console.log(Response);
          
             if (Response.msg == 'Data Saved Successfully') {
               this.tmpInvBillNO = Response.invNo;
+              this.printKOT(Response.invNo);   /////// Will Print KOT ////////////////
               this.msg.SuccessNotify(Response.msg);
               this.getTable()
               this.onCatSelected(this.categoriesList[0]);
@@ -485,6 +488,7 @@ export class SaleComponent implements OnInit {
           (Response: any) => {
           
             if (Response.msg == 'Data Updated Successfully') {
+              this.printKOT(Response.invNo); /////// Will Print KOT ////////////////
               this.msg.SuccessNotify(Response.msg);
               this.getTable()
               this.reset();
@@ -520,6 +524,7 @@ export class SaleComponent implements OnInit {
               }).subscribe(
                 (Response: any) => {
                   if (Response.msg == 'Password Matched Successfully') {
+                   
                     this.cash = 0;
                     this.bankCash = 0;
                     this.change = 0;
@@ -548,6 +553,21 @@ export class SaleComponent implements OnInit {
       }
 
     }
+  }
+
+
+  printKOT(invNo:any){
+    var printData = this.tableData.filter((e:any)=>e.entryType == 'New');
+    if(printData.length > 0 && this.global.getKOTApproval() == true){
+      
+      this.KotPrint.myPrintData =  printData;
+      this.KotPrint.printBill(invNo,false);
+
+      setTimeout(() => {
+        this.global.printData('#print-Kot');
+      }, 200);
+    }
+     
   }
 
 //////////////////////////////////////////////////////////////////
@@ -597,6 +617,7 @@ export class SaleComponent implements OnInit {
     }).subscribe(
       (Response: any) => {
         if (Response.msg == 'Data Saved Successfully') {
+          this.printKOT(Response.invNo); /////// Will Print KOT ////////////////
           this.msg.SuccessNotify(Response.msg);
 
           this.printAfterSave(Response.invNo);
@@ -753,6 +774,21 @@ export class SaleComponent implements OnInit {
                       (Response: any) => {
                         if (Response.msg == 'Data Saved Successfully') {
                           this.msg.SuccessNotify('Item Void');
+
+                          /////// Will Print KOT ////////////////
+                          if(this.global.getKOTApproval() == true){
+                            this.KotPrint.myPrintData =   [{
+                              productTitle: item.productTitle,
+                              quantity: voidQty,
+                            }];
+                            this.KotPrint.printBill(this.invBillNo,true);
+                            
+                            setTimeout(() => {
+                              this.global.printData('#print-Kot');
+                            }, 200);
+                          }
+                          
+
                           if (item.quantity <= 1 || voidQty == item.quantity) {
                             var index = this.tableData.indexOf(item);
                             this.tableData.splice(index, 1);
@@ -788,6 +824,89 @@ export class SaleComponent implements OnInit {
     }
 
     
+  }
+
+  //////////////////////////////////////////////////////////////
+
+  voidBill() {
+    if (this.invBillNo != '') {
+      Swal.fire({
+        title: 'Alert!',
+        text: 'Confirm to Void Full Bill',
+        position: 'center',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Confirm',
+      }).then((result) => {
+
+        if (result.isConfirmed) {
+          this.global.openPassword('Password').subscribe(pin => {
+            if (pin !== '') {
+              this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+                RestrictionCodeID: 1,
+                Password: pin,
+                UserID: this.global.getUserID()
+
+              }).subscribe(
+                (Response: any) => {
+                  if (Response.msg == 'Password Matched Successfully') {
+                    this.app.startLoaderDark();
+                    this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertVoidFullBill', {
+                      InvBillNo: this.invBillNo,
+                      TableID: this.tableID,
+                      TmpTableID: this.tableID,
+                      SaleDetail: JSON.stringify(this.tableData),
+                      UserID: this.global.getUserID()
+                    }).subscribe(
+                      (Response: any) => {
+                        if (Response.msg == 'Data Saved Successfully') {
+
+                          /////// Will Print KOT ////////////////
+                          if(this.global.getKOTApproval() == true){
+                            this.KotPrint.myPrintData =  this.tableData;
+                            this.KotPrint.printBill(this.invBillNo,true);
+                             
+                            setTimeout(() => {
+                              this.global.printData('#print-Kot');
+                            }, 200);
+                          }
+                 
+
+                          this.msg.SuccessNotify('Bill Void');
+                          this.getTotal();
+                          this.reset();
+                          this.getHoldBills();
+                          this.getTable()
+
+                        } else {
+                          this.msg.WarnNotify(Response.msg);
+                        }
+                        this.app.stopLoaderDark();
+                      }
+                    )
+
+                  } else {
+                    this.msg.WarnNotify(Response.msg);
+                  }
+                },
+                (Error:any)=>{
+                  this.msg.WarnNotify(Error);
+                  this.app.stopLoaderDark();
+                 }
+              )
+
+
+
+            }
+          })
+        }
+
+
+      })
+    }
+
   }
 
 
@@ -988,74 +1107,7 @@ export class SaleComponent implements OnInit {
   /////////////////////////////////////////////////
 
 
-  voidBill() {
-    if (this.invBillNo != '') {
-      Swal.fire({
-        title: 'Alert!',
-        text: 'Confirm to Void Full Bill',
-        position: 'center',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Confirm',
-      }).then((result) => {
-
-        if (result.isConfirmed) {
-          this.global.openPassword('Password').subscribe(pin => {
-            if (pin !== '') {
-              this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
-                RestrictionCodeID: 1,
-                Password: pin,
-                UserID: this.global.getUserID()
-
-              }).subscribe(
-                (Response: any) => {
-                  if (Response.msg == 'Password Matched Successfully') {
-                    this.app.startLoaderDark();
-                    this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertVoidFullBill', {
-                      InvBillNo: this.invBillNo,
-                      TableID: this.tableID,
-                      TmpTableID: this.tableID,
-                      SaleDetail: JSON.stringify(this.tableData),
-                      UserID: this.global.getUserID()
-                    }).subscribe(
-                      (Response: any) => {
-                        if (Response.msg == 'Data Saved Successfully') {
-                          this.msg.SuccessNotify('Bill Void');
-                          this.getTotal();
-                          this.reset();
-                          this.getHoldBills();
-                          this.getTable()
-
-                        } else {
-                          this.msg.WarnNotify(Response.msg);
-                        }
-                        this.app.stopLoaderDark();
-                      }
-                    )
-
-                  } else {
-                    this.msg.WarnNotify(Response.msg);
-                  }
-                },
-                (Error:any)=>{
-                  this.msg.WarnNotify(Error);
-                  this.app.stopLoaderDark();
-                 }
-              )
-
-
-
-            }
-          })
-        }
-
-
-      })
-    }
-
-  }
+  
 
 
   savedbillList:any = [];

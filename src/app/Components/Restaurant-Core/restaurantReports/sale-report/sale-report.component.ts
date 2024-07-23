@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Time } from 'highcharts';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -8,6 +8,7 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { SaleBillDetailComponent } from '../../sale/sale-bill-detail/sale-bill-detail.component';
 import { MatDialog } from '@angular/material/dialog';
+import { RestSaleBillPrintComponent } from '../../sale/rest-sale-bill-print/rest-sale-bill-print.component';
 
 @Component({
   selector: 'app-sale-report',
@@ -16,7 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class SaleReportComponent implements OnInit {
 
-
+  @ViewChild(RestSaleBillPrintComponent) billPrint:any;
 
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -208,5 +209,13 @@ export class SaleReportComponent implements OnInit {
   }
 
 
+  printBill(item:any){
+    this.billPrint.printBill(item.invBillNo);
+          this.billPrint.myDuplicateFlag = true;
+
+          setTimeout(() => {
+            this.global.printData('#print-bill');
+          }, 500);
+  }
 
 }
