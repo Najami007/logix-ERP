@@ -40,36 +40,13 @@
                 <ngx-material-timepicker #tTime></ngx-material-timepicker>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="col-lg-4 ">
-            <mat-label>Proudct</mat-label>
-            <mat-select [(ngModel)]="productID" >
-                <mat-option><ngx-mat-select-search #prodsearch [placeholderLabel]="'Search...'"
-                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                <mat-option *ngFor="let item of productList | filter:prodsearch.value | slice:0:25"
-                    [value]="item.productID">{{item.productTitle}} <b>({{item.barcode}})</b></mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col-lg-4    ">
-            <mat-label>Recipe</mat-label>
-            <mat-select [(ngModel)]="recipeID" (selectionChange)="OnRecipeSelected()">
-                <mat-option><ngx-mat-select-search #recSearch [placeholderLabel]="'Search...'"
-                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                <mat-option  *ngFor="let item of RecipeList | filter:recSearch.value"
-                    [value]="item.recipeID">{{item.recipeTitle}}</mat-option>
-            </mat-select>
-        </mat-form-field>
-
-        <div class="col-lg-4  mb-2 " *ngIf="crudList.r">
-   
-            <button class="btn btn-success btn-rpt col-lg-3  me-1" (click)="getReport()">Summary</button>
-            <button class="btn btn-success btn-rpt col-lg-3 me-1" (click)="getDetail()">Productwise</button>
-            <button class="btn btn-success btn-rpt col-lg-3 me-1" (click)="getDetail()">Recipewise</button>
-            <button class="btn btn-primary btn-rpt col-lg-1" (click)="print()"><mat-icon>print</mat-icon></button>
-        </div>
-
     </div>
 
-    
+    <div class="row mb-2 text-center" *ngIf="crudList.r">
+        <button class="btn btn-success btn-rpt col-lg-2  me-1" (click)="getReport()">Summary</button>
+        <button class="btn btn-success btn-rpt col-lg-2 me-1" (click)="getReport()">Detail</button>
+        <button class="btn btn-primary btn-rpt col-lg-1" (click)="print()"><mat-icon>print</mat-icon></button>
+    </div>
 
     <div id="PrintDiv">
 
@@ -104,63 +81,32 @@
 
     
 
-        <table class="table table-logix" id="summaryTable" >
+        <table class="table table-logix" id="summaryTable">
             <thead>
                 <tr>
                     <th>S#</th>
-                    <th>Title</th>
-                    <th>Qty</th>
-                    <th>Cost</th>
-                    <th>Total</th>
-                
+                    <th>Bill #</th>
+                    <th>Date</th>
+                    <th>Table</th>
+                    <th style="width: 120px;">Bill</th>
+                    <th style="width: 150px;">Charges</th>
+                    <th style="width: 150px;">Discount</th>
+                    <th style="width: 120px;">Total</th>
+                    <th>Entered By</th>
 
                 </tr>
 
 
             </thead>
             <tbody>
-                <tr *ngFor="let item of ConsumptionList index as index">
+                <tr *ngFor="Let item of ConsumptionList index as index">
                     <td>{{index +1}}</td>
-                    <td>{{item.productTitle}}</td>
-                    <td>{{item.quantity | number:'0.0-3'}}</td>
-                    <td>{{item.avgCostPriceTotal | number:'0.0-2'}}</td>
-                    <td>{{ item.quantity  * item.avgCostPriceTotal | number:'0.0-2'}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
 
                 </tr>
-               
-               
-            </tbody>
-
-          
-        </table>
-
-
-           
-
-        <table class="table table-logix" id="detailTable" >
-            <thead>
-                <tr>
-                    <th>S#</th>
-                    <th>Title</th>
-                    <th>Qty</th>
-                    <th>Cost</th>
-                    <th>Total</th>
-                
-
-                </tr>
-
-
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of ConsumptionList index as index">
-                    <td>{{index +1}}</td>
-                    <td>{{item.productTitle}}</td>
-                    <td>{{item.quantity | number:'0.0-3'}}</td>
-                    <td>{{item.avgCostPriceTotal | number:'0.0-2'}}</td>
-                    <td>{{ item.quantity  * item.avgCostPriceTotal | number:'0.0-2'}}</td>
-
-                </tr>
-               
                
             </tbody>
 

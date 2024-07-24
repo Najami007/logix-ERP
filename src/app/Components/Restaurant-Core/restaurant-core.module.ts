@@ -40,8 +40,9 @@ import { RecipeComparisonComponent } from './restaurantReports/recipe-list/recip
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 import { RestSaleBillPrintComponent } from './sale/rest-sale-bill-print/rest-sale-bill-print.component';
 import { AddSoundComponent } from './add-sound/add-sound.component';
-import { ConsumptionReportComponent } from './restaurantReports/consumption-report/consumption-report.component';
 import { RestKotPrintComponent } from './sale/rest-kot-print/rest-kot-print.component';
+import { ConsumptionReportComponent } from './restaurantReports/consumption-report/consumption-report.component';
+import { RestConsumptionReportComponent } from './restaurantReports/rest-consumption-report/rest-consumption-report.component';
 
 
 
@@ -70,6 +71,8 @@ export const restCore: Route[] = [
   {path:'tbsale', component:TabletSaleComponent, canActivate:[AuthGuard] },
   {path:'lorecp', component:RecipeListComponent, canActivate:[AuthGuard] },
   {path:'vrpt', component:VoidReportComponent, canActivate:[AuthGuard] },
+  
+  {path:'conrpt', component:ConsumptionReportComponent, canActivate:[AuthGuard] },
   {path:'snd', component:AddSoundComponent, },
 
   
@@ -112,8 +115,9 @@ export const restCore: Route[] = [
     RecipeComparisonComponent,
     RestSaleBillPrintComponent,
     AddSoundComponent,
-    ConsumptionReportComponent,
     RestKotPrintComponent,
+    ConsumptionReportComponent,
+    RestConsumptionReportComponent
     
    
    

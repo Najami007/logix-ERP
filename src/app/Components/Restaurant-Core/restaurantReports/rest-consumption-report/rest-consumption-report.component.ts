@@ -8,11 +8,11 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { environment } from 'src/environments/environment.development';
 
 @Component({
-  selector: 'app-consumption-report',
-  templateUrl: './consumption-report.component.html',
-  styleUrls: ['./consumption-report.component.scss']
+  selector: 'app-rest-consumption-report',
+  templateUrl: './rest-consumption-report.component.html',
+  styleUrls: ['./rest-consumption-report.component.scss']
 })
-export class ConsumptionReportComponent {
+export class RestConsumptionReportComponent  {
 
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -35,28 +35,18 @@ export class ConsumptionReportComponent {
     this.global.getMenuList().subscribe((data) => {
       this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
     })
-
-
-    
-    this.global.getProducts().subscribe(
-      (Response: any) => {
-        this.productList = Response;
-      }
-    )
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Consumption Report');
+    this.global.setHeaderTitle('Sale Report (Datewise)');
     this.getUsers();
-    this.getAllRecipe();
-    $('#detailTable').hide();
-    $('#summaryTable').show();
+    $('#detailTable').show();
+    $('#summaryTable').hide();
 
   }
 
 
 
-  productList:any = [];
-  productID = 0;
+
   userList: any = [];
   userID = 0;
   userName = '';
@@ -70,10 +60,8 @@ export class ConsumptionReportComponent {
 
 
   ConsumptionList:any = [];
-  tempRecipeTitle = '';
-  recipeID = 0;
-  recipeTitle = '';
-  RecipeList: any = [];
+
+
 
 
   getUsers() {
@@ -99,58 +87,21 @@ export class ConsumptionReportComponent {
     this.userName = curUser.userName;
   }
 
-  getAllRecipe() {
-    this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipes').subscribe(
-      (Response: any) => {
-        this.RecipeList = Response;
-
-      }
-    )
-  }
-
-  OnRecipeSelected(){
-    var title = this.RecipeList.find((e: any) => e.recipeID == this.recipeID);
-    this.tempRecipeTitle = title.recipeTitle;
-  }
 
 
   getReport(){
-    $('#detailTable').hide();
-    $('#summaryTable').show();
-    this.ConsumptionList = [];
+
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetConsumptionRptDateWise?reqUID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response:any)=>{
-          
-            this.ConsumptionList = Response;
-
-          }
-        )
-
-  }
-
-
-  getDetail(){
-    $('#detailTable').show();
-    $('#summaryTable').hide();
-    if(this.productID == 0 || this.productID == undefined){
-      this.msg.WarnNotify('Select Product')
-    }else{
-      this.ConsumptionList = [];
-      console.log(this.productID)
-      this.http.get(environment.mainApi+this.global.inventoryLink+'GetConsumptionRptIngredientAndDateWise?reqUID=' + this.userID + '&FromDate=' +
-        this.global.dateFormater(this.fromDate, '-') + '&ToDate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime+
-      '&ProductID='+this.productID).subscribe(
-          (Response:any)=>{
             console.log(Response);
             this.ConsumptionList = Response;
-  
+
           }
         )
-    }
 
-  
   }
+
 
 
 
@@ -162,3 +113,4 @@ export class ConsumptionReportComponent {
 
 
 }
+

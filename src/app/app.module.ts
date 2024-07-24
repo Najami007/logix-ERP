@@ -34,6 +34,7 @@ import { SideNavbarComponent } from './Components/Layout/side-navbar/side-navbar
 import { ConfirmationAlertComponent } from './Components/Common/confirmation-alert/confirmation-alert.component';
 import { SharedServicesDataModule } from './Shared/helper/shared-services-data/shared-services-data.module';
 import { SharedFieldValidationModule } from './Shared/helper/shared-field-validation/shared-field-validation.module';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -74,6 +75,7 @@ import { SharedFieldValidationModule } from './Shared/helper/shared-field-valida
 
   ],
   imports: [
+    CommonModule,
     ChartModule,  
     BrowserModule,
     BrowserAnimationsModule,

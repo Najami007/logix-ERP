@@ -689,7 +689,7 @@ export class SaleComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetHoldedBillDetail?BillNo=' + item.invBillNo).subscribe(
       (Response: any) => {
         this.tableData = [];
-
+        this.orderNo = Response[0].orderNo;
         Response.forEach((e: any) => {
           this.tableData.push({
             productID: e.productID,

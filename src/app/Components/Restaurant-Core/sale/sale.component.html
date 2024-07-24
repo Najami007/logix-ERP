@@ -665,13 +665,13 @@
 
                     <mat-form-field class="w-100" appearance="outline">
                         <mat-label>Search...</mat-label>
-                        <input matInput #searchBill />
+                        <input matInput #searchHoldBill />
                     </mat-form-field>
 
                     <table>
                         <tbody class="">
                             <tr style="display: inline-flex; " class="cursorPointer "
-                                *ngFor="let item of holdBillList |filter:searchBill.value ">
+                                *ngFor="let item of holdBillList |filter:searchHoldBill.value ">
                                 <mat-card class="btblbtn justify-content-center" (click)="getBillDetail(item)">
                                     <span>{{item.tableTitle}}</span>
                                     <span *ngIf="item.tableTitle == 'Take Away' || item.tableTitle == 'Home Delivery'">({{item.invBillNo}})</span>
@@ -706,7 +706,7 @@
         <div class="text-end p-2">
             <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Search...</mat-label>
-                <input matInput #searchBill  />
+                <input matInput type="text" #searchSavedBill  />
             </mat-form-field>
         </div>
         <div class="p-2"  style="max-height: 400px;overflow-y: scroll;">
@@ -715,6 +715,7 @@
                    <tr>
                        <th>S#</th>
                        <th>Bill #</th>
+                       <th>Order</th>
                        <th>Date</th>
                        <th>Table No</th>
                        <th>Type</th>
@@ -725,9 +726,10 @@
 
                </thead>
                <tbody>
-                   <tr *ngFor="let item of savedbillList |filter:searchBill.value index as index">
+                   <tr *ngFor="let item of savedbillList |filter:searchSavedBill.value index as index">
                        <td>{{index+1}}</td>
                        <td>{{item.invBillNo}}</td>
+                       <td>{{item.orderNo}}</td>
                        <td>{{item.invDate|date:'dd-MM-yyyy'}} ({{item.createdOn|date:'hh:mm:a'}})</td>
                        <td>{{item.tableTitle}}</td>
                        <td>{{item.paymentType}}</td>
