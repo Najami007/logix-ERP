@@ -18,9 +18,11 @@ export const environment = {
       // mainApi: 'http://192.168.10.100:1003/',    /////////// Local Server Office
 
       //mainApi: 'http://192.168.1.100:8081/',   ///Alsheikh Mall Wahcant
-      mainApi : 'http://localhost:8081/'
+
+      //mainApi : 'http://localhost:8081/'
 
       //mainApi: 'http://localhost:1001/',  /////////// For All Customers Local
 
      // mainApi: 'http://192.168.1.200:1001/',  /////////// For All Customers Sharing
+     mainApi: 'http://159.69.174.21:2010/',  ////////// live Server for Alsheikh
 };

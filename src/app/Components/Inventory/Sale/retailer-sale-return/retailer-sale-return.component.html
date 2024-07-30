@@ -16,7 +16,7 @@
                     <div class="col-lg-9  d-flex flex-column pb-2">
                         <mat-label class="text-secondary">Search Barcode / Product</mat-label>
                         <input type="text" #pbarcode [(ngModel)]="PBarcode" id="searchBarcode"
-                            (keydown)="searchByCode($event);changeFocus($event,'.prodRow');focusTo($event,'#disc')"
+                            (keydown)="searchByCode($event);changeFocus($event,'.prodRow');focusTo($event,'#cash')"
                             class="p-1 ps-2 mb-2 searchProduct" placeholder="Alt + b" (focus)="rowFocused = -1"
                             autocomplete="off" accesskey="b">
 

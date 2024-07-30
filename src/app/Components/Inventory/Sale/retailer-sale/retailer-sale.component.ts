@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, HostListener, OnInit, Output } from '@angular/core';
+import { Component, HostListener, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -12,6 +12,7 @@ import * as $ from 'jquery';
 
 import { Observable, retry } from 'rxjs';
 import { RtlSavedBillComponent } from './rtl-saved-bill/rtl-saved-bill.component';
+import { SaleBillPrintComponent } from '../sale-bill-print/sale-bill-print.component';
 
 
 @Component({
@@ -21,7 +22,7 @@ import { RtlSavedBillComponent } from './rtl-saved-bill/rtl-saved-bill.component
 })
 export class RetailerSaleComponent implements OnInit {
 
-  
+  @ViewChild(SaleBillPrintComponent) billPrint:any;
 
   companyProfile: any = [];
   companyLogo: any = '';
@@ -899,7 +900,13 @@ export class RetailerSaleComponent implements OnInit {
       }
     )
 
-
+    // this.billPrint.PrintBill(InvNo);
+    // // this.billPrint.billType = 'Customer Copy';
+    // setTimeout(() => {   
+    //   this.global.printData('#print-bill')
+    // }, 200);
+    
+   
   
   }
 

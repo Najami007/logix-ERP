@@ -9,7 +9,7 @@
 
                 <div class="col-lg-12 d-flex">
                     <input type="text"  [(ngModel)]="PBarcode"
-                        (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event);focusto('#disc',$event);"
+                        (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event);focusto('#cash',$event);"
                         id="psearchProduct" class="searchProduct ps-2" placeholder="Scan Barcode (Alt + b)" (focus)="rowFocused = -1"
                         autofocus autocomplete="off" accesskey="b">
 
@@ -275,10 +275,10 @@ aria-labelledby="paymentMehtodLabel">
 
 <!------------------------------ Design For Bill Pirnt  --------------------->
 
+<!-- <app-sale-bill-print id="print-bill" class="hide"></app-sale-bill-print> -->
+<!-- <app-rtl-bill-print id="cncBillPrint" class="d-none"></app-rtl-bill-print> -->
 
-<app-rtl-bill-print id="cncBillPrint" class="d-none"></app-rtl-bill-print>
-
-<!-- <div id="cncBillPrint" class="d-none">
+<div id="cncBillPrint" class="d-none">
     <div class="text-center">
         <img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
         <h2>{{companyName}}</h2>
@@ -336,6 +336,11 @@ aria-labelledby="paymentMehtodLabel">
                     <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
                     <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
 
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td class="fw-bold">{{myQtyTotal | number:'1.0-2'}}</td>
+                    <td colspan="3"></td>
                 </tr>
             </tbody>
         </table>
@@ -407,7 +412,7 @@ aria-labelledby="paymentMehtodLabel">
 
     </div>
 
-</div> -->
+</div>
 
 
 <!---------------------------------------------------------------------------------->

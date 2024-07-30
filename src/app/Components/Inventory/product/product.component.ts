@@ -486,6 +486,7 @@ export class ProductComponent implements OnInit {
     this.Barcode = '';
     this.productImg = '';
     this.btnType = 'Save';
+    this.salePercent = '';
    if(this.autoEmpty == true || type == 'btn'){
     this.CategoryID = '';
     this.SubCategoryID = '';
@@ -510,6 +511,7 @@ export class ProductComponent implements OnInit {
     this.prodBarcodeType = 'auto'
     this.barcodeType = 'Basic';
     this.prodTypeID = '';
+ 
     //this.btnType = 'Save';
     // this.productImg= '';
    }
@@ -754,6 +756,16 @@ export class ProductComponent implements OnInit {
     }
  
     
+  }
+
+
+  salePercent = '';
+
+  generatePrice(e:any){
+    
+    if(e.keyCode == 13 || e == 'generate'){
+      this.SalePrice = parseFloat(this.CostPrice) + (parseFloat(this.CostPrice) * parseFloat(this.salePercent) / 100);
+    }
   }
 
 
