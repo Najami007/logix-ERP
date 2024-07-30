@@ -445,7 +445,7 @@ export class SaleComponent implements OnInit {
               this.printKOT(Response.invNo);   /////// Will Print KOT ////////////////
               this.msg.SuccessNotify(Response.msg);
               this.getTable()
-              this.onCatSelected(this.categoriesList[0]);
+              this.onCatSelected({recipeCatID:0,prodFlag:false});
               this.reset();
               this.getHoldBills();
 
@@ -622,7 +622,7 @@ export class SaleComponent implements OnInit {
 
           this.printAfterSave(Response.invNo);
           this.getTable();
-          this.onCatSelected(this.categoriesList[0]);
+          this.onCatSelected({recipeCatID:0,prodFlag:false});
           this.getHoldBills();
          setTimeout(() => {
           this.reset();
@@ -1214,6 +1214,7 @@ export class SaleComponent implements OnInit {
   }
 
   billDetails(item:any){
+    $('#SavedBillModal').hide();
     this.global.openPassword('Password').subscribe(pin => {
       if (pin !== '') {
         this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
@@ -1224,6 +1225,8 @@ export class SaleComponent implements OnInit {
         }).subscribe(
           (Response: any) => {
             if (Response.msg == 'Password Matched Successfully') {
+              $('#SavedBillModal').show();
+
               this.dialogue.open(SaleBillDetailComponent,{
                 width:'50%',
                 data:item,

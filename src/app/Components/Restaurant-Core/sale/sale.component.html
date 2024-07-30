@@ -674,7 +674,7 @@
                                 *ngFor="let item of holdBillList |filter:searchHoldBill.value ">
                                 <mat-card class="btblbtn justify-content-center" (click)="getBillDetail(item)">
                                     <span>{{item.tableTitle}}</span>
-                                    <span *ngIf="item.tableTitle == 'Take Away' || item.tableTitle == 'Home Delivery'">({{item.invBillNo}})</span>
+                                    <span >Ord:({{item.orderNo}})</span>
                                 </mat-card>
                             </tr>
                         </tbody>

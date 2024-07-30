@@ -430,7 +430,7 @@
                    <th>Type</th>
                    <th>Counter</th>
                    <th>Customer</th>
-                   <!-- <th>Amount</th> -->
+                   <th>Amount</th>
                    <th>Print</th>
                    <th>Detail</th>
                </tr>
@@ -445,7 +445,7 @@
                    <td>{{item.paymentType}}</td>
                    <td>{{item.entryUser}}</td>
                    <td>{{item.partyName || "Walk In"}}</td>
-                   <!-- <td>{{item.netTotal |number:'1.0-0'}}</td> -->
+                   <td>{{item.netTotal |number:'1.0-0'}}</td>
                    <td class="text-primary cursorPointer"><mat-icon (click)="printDuplicateBill(item)">print</mat-icon></td>
                    <td class="text-success cursorPointer"><mat-icon (click)="billDetails(item)">receipt</mat-icon></td>
                </tr>

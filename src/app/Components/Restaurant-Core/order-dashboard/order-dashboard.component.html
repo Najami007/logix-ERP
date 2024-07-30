@@ -13,24 +13,27 @@
                 <tr>
                     <th>S#</th>
                     <th>Table</th>
-                    <th>Bill #</th>
-                    <!-- <th>Time</th> -->
-                    <th>Title</th>
-                    <th>Qty</th>
+                    <th>Order #</th>
+                    <th>Time</th>
+                    <!-- <th>Title</th>
+                    <th>Qty</th> -->
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of newOrderList | filter:newOrderSearch.value index as index">
+                <tr *ngFor="let item of filterNewOrderList | filter:newOrderSearch.value index as index">
                     <td>{{index+1}}</td>
                     <td>{{item.tableTitle}}</td>
-                    <td><div class="d-flex flex-column">
-                        <span>{{item.invBillNo}}</span>
+                    <td data-bs-toggle="modal" data-bs-target="#OrderDetail" (click)="getOrderDetail('new',item)" class="cursorPointer">
+                          <button mat-mini-fab color="primary" style="height: 35px;width: 35px;">{{item.orderNo}}</button>
+                        </td>
+                    <!-- <td><div class="d-flex flex-column">
+                        <span>Ord:({{item.orderNo}})</span>
                         <span>{{item.createdOn | date:'hh:mm:a'}}</span>
-                    </div></td>
-                    <!-- <td>{{item.createdOn | date:'hh:mm:a'}}</td> -->
-                    <td>{{item.productTitle}}</td>
-                    <td>{{item.quantity }}</td>
+                    </div></td> -->
+                    <td>{{item.createdOn | date:'hh:mm:a'}}</td>
+                    <!-- <td>{{item.productTitle}}</td>
+                    <td>{{item.quantity }}</td> -->
                     <td><button mat-mini-fab class="btn-size" (click)="approveOrder(item)"><mat-icon>done_outline</mat-icon></button></td>
                 </tr>
             </tbody>
@@ -48,24 +51,27 @@
                 <tr>
                     <th>S#</th>
                     <th>Table</th>
-                    <th>Bill #</th>
-                    <!-- <th>Time</th> -->
-                    <th>Title</th>
-                    <th>Qty</th>
+                    <th>Order #</th>
+                    <th>Time</th>
+                    <!-- <th>Title</th>
+                    <th>Qty</th> -->
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of PendingOrderList|filter:pendingOrderSearch.value index as index">
+                <tr *ngFor="let item of filterPendingOrderList|filter:pendingOrderSearch.value index as index">
                     <td>{{index+1}}</td>
                     <td>{{item.tableTitle}}</td>
-                    <td><div class="d-flex flex-column">
-                        <span>{{item.invBillNo}}</span>
+                    <td class="cursorPointer" data-bs-toggle="modal" data-bs-target="#OrderDetail" (click)="getOrderDetail('pending',item)">
+                        <button mat-mini-fab color="primary" style="height: 35px;width: 35px;">{{item.orderNo}}</button>
+                    </td>
+                    <!-- <td><div class="d-flex flex-column">
+                        <span>Ord:({{item.orderNo}})</span>
                         <span>{{item.reqConfirmationTime | date:'hh:mm:a'}}</span>
-                    </div></td>
-                    <!-- <td>{{item.reqConfirmationTime | date:'hh:mm:a'}}</td> -->
-                    <td>{{item.productTitle}}</td>
-                    <td>{{item.quantity }}</td>
+                    </div></td> -->
+                    <td>{{item.reqConfirmationTime | date:'hh:mm:a'}}</td>
+                    <!-- <td>{{item.productTitle}}</td>
+                    <td>{{item.quantity }}</td> -->
                     <td><button mat-mini-fab class="btn-size" (click)="ApproveDelivery(item)"><mat-icon>done_outline</mat-icon></button></td>
                 </tr>
             </tbody>
@@ -83,24 +89,27 @@
                 <tr>
                     <th>S#</th>
                     <th>Table</th>
-                    <th>Bill #</th>
-                    <!-- <th>Time</th> -->
-                    <th>Title</th>
-                    <th>Qty</th>
+                    <th>Order #</th>
+                    <th>Time</th>
+                    <!-- <th>Title</th>
+                    <th>Qty</th> -->
 
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of deliveredOrderList|filter:deliveredOrderSearch.value index as index">
+                <tr *ngFor="let item of filterDeliveredOrderList|filter:deliveredOrderSearch.value index as index">
                     <td>{{index+1}}</td>
                     <td>{{item.tableTitle}}</td>
-                    <td><div class="d-flex flex-column">
-                        <span>{{item.invBillNo}}</span>
+                    <td class="cursorPointer" data-bs-toggle="modal" data-bs-target="#OrderDetail" (click)="getOrderDetail('deliver',item)">
+                          <button mat-mini-fab color="primary" style="height: 35px;width: 35px;">{{item.orderNo}}</button>
+                        </td>
+                    <!-- <td><div class="d-flex flex-column">
+                        <span>Ord:({{item.orderNo}})</span>
                         <span>{{item.dTime | date:'hh:mm:a'}}</span>
-                    </div></td>
-                    <!-- <td>{{item.dTime | date:'hh:mm:a'}}</td> -->
-                    <td>{{item.productTitle}}</td>
-                    <td>{{item.quantity }}</td>
+                    </div></td> -->
+                    <td>{{item.dTime | date:'hh:mm:a'}}</td>
+                    <!-- <td>{{item.productTitle}}</td>
+                    <td>{{item.quantity }}</td> -->
                 
                 </tr>
             </tbody>
@@ -127,24 +136,27 @@
                 <tr>
                     <th>S#</th>
                     <th>Table</th>
-                    <th>Bill #</th>
-                    <!-- <th>Time</th> -->
-                    <th>Title</th>
-                    <th>Qty</th>
+                    <th>Order #</th>
+                    <th>Time</th>
+                    <!-- <th>Title</th>
+                    <th>Qty</th> -->
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of voidOrderList|filter:voidOrderSearch.value index as index">
+                <tr *ngFor="let item of filterVoidOrderList|filter:voidOrderSearch.value index as index">
                     <td>{{index+1}}</td>
                     <td>{{item.tableTitle}}</td>
-                    <td><div class="d-flex flex-column">
-                        <span>{{item.invBillNo}}</span>
+                    <td class="cursorPointer" data-bs-toggle="modal" data-bs-target="#OrderDetail" (click)="getOrderDetail('void',item)">  
+                        <button mat-mini-fab color="primary" style="height: 35px;width: 35px;">{{item.orderNo}}</button>
+                    </td>
+                    <!-- <td ><div class="d-flex flex-column">
+                        <span>Ord:({{item.orderNo}})</span>
                         <span>{{item.createdOn | date:'hh:mm:a'}}</span>
-                    </div></td>
-                    <!-- <td>{{item.createdOn | date:'hh:mm:a'}}</td> -->
-                    <td>{{item.productTitle}}</td>
-                    <td>{{item.quantity }}</td>
+                    </div></td> -->
+                    <td>{{item.createdOn | date:'hh:mm:a'}}</td>
+                    <!-- <td>{{item.productTitle}}</td>
+                    <td>{{item.quantity }}</td> -->
                     <td><button mat-mini-fab class="btn-size" *ngIf="item.reqStatus == false" (click)="approveOrder(item)"><mat-icon>done_outline</mat-icon></button></td>
 
                 </tr>
@@ -152,6 +164,45 @@
         </table>
 
     </mat-card>
+</div>
+
+
+<div class="modal fade" id="OrderDetail" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+aria-labelledby="OrderDetailLabel">
+<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-l">
+    <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+        <div class="modal-body">
+            <table class="table">
+                <thead>
+                    <tr >
+                        <th colspan="3" class="text-capitalize">{{detailType}} (Order # {{detailOrderNo}})</th>
+                    </tr>
+                    <tr>
+                        <th>S#</th>
+                        <th>Title</th>
+                        <th>Qty</th>
+                    </tr>
+                </thead>
+                <tbody >
+                    <tr *ngFor="let item of orderDetailList index as index">
+                        <td>{{index +1}}</td>
+                        <td>{{item.productTitle}}</td>
+                        <td>{{item.quantity}}</td>
+
+                    </tr>
+                  
+                </tbody>
+            </table>
+
+
+        </div>
+
+        <div class="modal-footer bg-mf-blue">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+
+    </div>
+</div>
 </div>
 
 

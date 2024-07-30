@@ -130,19 +130,38 @@ export class ConsumptionReportComponent {
   }
 
 
-  getDetail(){
+  getIngredientwise(){
     $('#detailTable').show();
     $('#summaryTable').hide();
     if(this.productID == 0 || this.productID == undefined){
       this.msg.WarnNotify('Select Product')
     }else{
       this.ConsumptionList = [];
-      console.log(this.productID)
       this.http.get(environment.mainApi+this.global.inventoryLink+'GetConsumptionRptIngredientAndDateWise?reqUID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&ToDate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime+
       '&ProductID='+this.productID).subscribe(
           (Response:any)=>{
-            console.log(Response);
+            this.ConsumptionList = Response;
+  
+          }
+        )
+    }
+
+  
+  }
+
+
+  getRecipewise(){
+    $('#detailTable').show();
+    $('#summaryTable').hide();
+    if(this.recipeID == 0 || this.recipeID == undefined){
+      this.msg.WarnNotify('Select Recipe')
+    }else{
+      this.ConsumptionList = [];
+      this.http.get(environment.mainApi+this.global.inventoryLink+'GetConsumptionRptRecipeAndDateWise?reqUID=' + this.userID + '&FromDate=' +
+        this.global.dateFormater(this.fromDate, '-') + '&ToDate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime+
+      '&RecipeID='+this.recipeID).subscribe(
+          (Response:any)=>{
             this.ConsumptionList = Response;
   
           }
