@@ -110,9 +110,9 @@ export class AddUserComponent implements OnInit {
       this.msg.WarnNotify('Enter Mobile No.')
     }else if(this.RoleID == '' || this.RoleID == undefined){
       this.msg.WarnNotify('Select Role ')
-    }else if(this.password == '' || this.password == undefined && this.btnType == 'Save'){
+    }else if((this.password == '' || this.password == undefined) && this.btnType == 'Save'){
       this.msg.WarnNotify('Enter Password')
-    }else if(this.confirmPassword == '' || this.confirmPassword == undefined && this.btnType == 'Save'){
+    }else if((this.confirmPassword == '' || this.confirmPassword == undefined) && this.btnType == 'Save'){
       this.msg.WarnNotify('Enter Confirm Password')
     }else {
 

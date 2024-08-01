@@ -42,10 +42,10 @@
 
                 <div *ngFor="let item of curProduct" class="d-flex  justify-content-center">
                    <div id="PrintDiv" >
-                    <div  > 
+                    <div  class="text-center"> 
                     
                         <p  class="fw-bold cmpName text-center">{{companyName}}</p>
-                        <ngx-barcode6 *ngIf="!hideBarcode" [bc-format]="'CODE128'" [bc-font-size]="15"[bc-height]="40"   [bc-value]="item.barcode" [bc-display-value]="true"></ngx-barcode6>
+                        <ngx-barcode6 *ngIf="!hideBarcode" [bc-format]="'CODE128'" [bc-font-size]="15"[bc-height]="40" [bc-margin-top]="-15" [bc-background]="'none'"  [bc-value]="item.barcode" [bc-display-value]="true"></ngx-barcode6>
                  
                         <!-- <div class="font-barcode" >*{{item.barcode}}*</div>
                         <div class="bcodeC">{{item.barcode}}</div> -->

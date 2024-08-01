@@ -450,7 +450,7 @@ export class RetailerSaleComponent implements OnInit {
     if(cls == '#charges' && e.keyCode == 13 ){
       $(cls).trigger('focus');
     }
-    if(cls == '#cash' && e.keyCode == 13 ){
+    if(cls == '#cash' && e.keyCode == 13 && e.target.value == '' ){
       $(cls).trigger('focus');
       
     }

@@ -16,6 +16,8 @@ export class SaleBillPrintComponent implements OnInit {
 
   discFeature = this.global.getFeature('');
   BookerFeature = this.global.getFeature('');
+  showCompanyName = this.global.getFeature('cmpName');
+  showCompanyLogo = this.global.getFeature('cmpLogo');
 
   companyProfile: any = [];
   companyLogo: any = '';
@@ -78,9 +80,6 @@ export class SaleBillPrintComponent implements OnInit {
 
   PrintBill(InvNo: any) {
 
-    
-
-
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
       (Response: any) => {
         
@@ -122,6 +121,33 @@ export class SaleBillPrintComponent implements OnInit {
 
   }
 
+
+  emptyBill(){
+     this.billType = '';
+
+    this.myPrintTableData = [];
+    this.myInvoiceNo = '';
+    this.mytableNo = '';
+    this.myCounterName = '';
+    this.myCustomerName = '';
+    this.myInvDate = new Date();
+    this.myOrderType = '';
+    this.mySubTotal = 0;
+    this.myNetTotal = 0;
+    this.myOtherCharges = 0;
+    this.myRemarks = '';
+    this.myDiscount = 0;
+    this.myCash = 0;
+    this.myChange = 0;
+    this.myBank = 0;
+    this.myPaymentType = '';
+    this.myDuplicateFlag = false;
+    this.myTime = '';
+    this.myQtyTotal = 0;
+    this.myOfferDiscount=0;
+    this.myBookerName = '';
+    this.myInvType ='';
+  }
 
 
 }
