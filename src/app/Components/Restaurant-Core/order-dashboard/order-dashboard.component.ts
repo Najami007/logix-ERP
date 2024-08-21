@@ -177,11 +177,13 @@ export class OrderDashboardComponent implements OnInit {
 
   detailType = '';
   detailOrderNo  = '';
+  myRemarks = '';
   getOrderDetail(type:any,item:any){
 
     this.orderDetailList = [];
     this.detailType = type + ' Order';
     this.detailOrderNo = item.orderNo;
+    this.myRemarks = item.remarks;
 
     if(type == 'new'){
       this.orderDetailList = this.newOrderList.filter((e:any)=> e.orderNo == item.orderNo);

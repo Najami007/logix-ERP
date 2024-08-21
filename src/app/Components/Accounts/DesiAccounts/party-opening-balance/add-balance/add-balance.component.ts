@@ -29,7 +29,7 @@ export class AddBalanceComponent {
 
     if(this.editData){
       this.invoiceNo = this.editData.invoiceNo;
-      this.invoiceDate = this.editData.invoiceDate;
+      this.invoiceDate = new Date(this.editData.invoiceDate);
       this.partyType = this.editData.type;
      
       this.amount = this.editData.amount;
@@ -111,7 +111,7 @@ export class AddBalanceComponent {
   insert(){
     $('.loaderDark').show();
     this.http.post(environment.mainApi+this.global.accountLink+'InsertOpeningBalance',{
-      InvoiceDate: this.invoiceDate,
+      InvoiceDate: this.global.dateFormater(this.invoiceDate,'-'),
       Type: this.partyType,
       InvoiceRemarks: this.remarks,
       BankReceiptNo: this.bankReceiptNo,
@@ -146,7 +146,7 @@ export class AddBalanceComponent {
         $('.loaderDark').show();
         this.http.post(environment.mainApi+this.global.accountLink+'UpdateOpeningBalance',{
           InvoiceNo:this.invoiceNo,
-          InvoiceDate: this.invoiceDate,
+          InvoiceDate: this.global.dateFormater(this.invoiceDate,'-'),
           InvoiceRemarks: this.remarks,
           BankReceiptNo: this.bankReceiptNo,
           Type:this.partyType,

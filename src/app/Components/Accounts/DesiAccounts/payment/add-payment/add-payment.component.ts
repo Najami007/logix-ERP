@@ -28,7 +28,7 @@ export class AddPaymentComponent {
 
     if(this.editData){
       this.invoiceNo = this.editData.invoiceNo;
-      this.invoiceDate = this.editData.invoiceDate;
+      this.invoiceDate = new Date(this.editData.invoiceDate);
       this.partyID = this.editData.partyID;
       this.paymentType = this.editData.type;
       this.coaID = this.editData.coaid;
@@ -139,7 +139,7 @@ export class AddPaymentComponent {
     insert(){
       $('.loaderDark').show();
       this.http.post(environment.mainApi+this.global.accountLink+'InsertPayment',{
-        InvoiceDate: this.invoiceDate,
+        InvoiceDate: this.global.dateFormater(this.invoiceDate,'-'),
         PartyID: this.partyID, 
         Type: this.paymentType,
         InvoiceRemarks: this.remarks,
@@ -176,7 +176,7 @@ export class AddPaymentComponent {
           $('.loaderDark').show();
           this.http.post(environment.mainApi+this.global.accountLink+'UpdatePayment',{
             InvoiceNo:this.invoiceNo,
-            InvoiceDate: this.invoiceDate,
+            InvoiceDate: this.global.dateFormater(this.invoiceDate,'-'),
             PartyID: this.partyID, 
             InvoiceRemarks: this.remarks,
             BankReceiptNo: this.bankReceiptNo,

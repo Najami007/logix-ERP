@@ -85,12 +85,12 @@ export class RestSaleBillPrintComponent {
 
 
   printBill(invNo: any) {
-    this.EmptyBill();
+    // this.EmptyBill();
     this.myDuplicateFlag = false;
    
       this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+invNo).subscribe(
         (Response:any)=>{
-          console.log(Response);
+          // console.log(Response);
          
           this.myPrintData =Response;
           this.myInvoiceNo = Response[0].invBillNo;
@@ -117,7 +117,9 @@ export class RestSaleBillPrintComponent {
             this.myBank = this.myNetTotal - this.myCash;
           }
 
-        
+          setTimeout(() => {
+            this.global.printData('#printRestBill');
+          }, 200);
         
         }
       )
@@ -126,13 +128,13 @@ export class RestSaleBillPrintComponent {
 
 
   HOldandPrint(orderType: any,invoiceNo:any) {
-    this.EmptyBill();
+    // this.EmptyBill();
     this.myOrderType = orderType;
     this.myInvoiceNo = invoiceNo;
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetHoldedBillDetail?BillNo='+invoiceNo).subscribe(
       (Response:any)=>{
         
-
+        // console.log(Response);
         this.myPrintData  = Response;
        
       this.mytableNo = Response[0].tableTitle;
@@ -151,6 +153,9 @@ export class RestSaleBillPrintComponent {
   
         
       })
+      setTimeout(() => {
+        this.global.printData('#printRestBill');
+      }, 2000);
        this.myDuplicateFlag = false;
    
      } 

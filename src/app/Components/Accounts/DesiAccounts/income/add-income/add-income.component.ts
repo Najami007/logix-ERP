@@ -30,7 +30,7 @@ export class AddIncomeComponent  implements OnInit {
 
     if(this.editData){
       this.invoiceNo = this.editData.invoiceNo;
-      this.invoiceDate = this.editData.invoiceDate;
+      this.invoiceDate = new Date(this.editData.invoiceDate);
       this.partyID = this.editData.partyID;
       this.refCoaID = this.editData.refCOAID;
       this.coaID = this.editData.coaid;
@@ -145,7 +145,7 @@ export class AddIncomeComponent  implements OnInit {
   insert(){
     $('.loaderDark').show();
     this.http.post(environment.mainApi+this.global.accountLink+'InsertIncome',{
-    InvoiceDate: this.invoiceDate,
+    InvoiceDate: this.global.dateFormater(this.invoiceDate,'-'),
     Type: "JV",
     InvoiceRemarks: this.remarks,
     BankReceiptNo: this.bankReceiptNo,
@@ -181,7 +181,7 @@ export class AddIncomeComponent  implements OnInit {
         $('.loaderDark').show();
         this.http.post(environment.mainApi+this.global.accountLink+'UpdateIncome',{
         InvoiceNo: this.invoiceNo,
-        InvoiceDate: this.invoiceDate,
+        InvoiceDate: this.global.dateFormater(this.invoiceDate,'-'),
         InvoiceRemarks: this.remarks,
         BankReceiptNo: this.bankReceiptNo,
         COAID: this.coaID,

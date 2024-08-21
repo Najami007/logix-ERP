@@ -109,6 +109,12 @@ export class GlobalDataModule implements OnInit {
     if(value == 'cmpLogo'){
       return true;
     }
+    if(value == 'disc'){
+      return true;
+    }
+    if(value == 'bkr'){
+      return true;
+    }
 
     return true;
   }

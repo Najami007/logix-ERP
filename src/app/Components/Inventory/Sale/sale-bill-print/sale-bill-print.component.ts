@@ -14,8 +14,8 @@ import { environment } from 'src/environments/environment.development';
 })
 export class SaleBillPrintComponent implements OnInit {
 
-  discFeature = this.global.getFeature('');
-  BookerFeature = this.global.getFeature('');
+  discFeature = this.global.getFeature('disc');
+  BookerFeature = this.global.getFeature('bkr');
   showCompanyName = this.global.getFeature('cmpName');
   showCompanyLogo = this.global.getFeature('cmpLogo');
 
@@ -109,6 +109,9 @@ export class SaleBillPrintComponent implements OnInit {
           this.myOfferDiscount += e.discInR * e.quantity;
         });
 
+        setTimeout(() => {
+          this.global.printData('#billPrint');
+        }, 2000);
         // setTimeout(() => {
         //   this.global.printData('#cncBillPrint');
         //   this.global.printData('#cncBillPrint2');

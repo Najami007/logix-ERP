@@ -136,7 +136,7 @@ export class AdddwComponent implements OnInit {
   insert(){
     $('.loaderDark').show();
     this.http.post(environment.mainApi+this.global.accountLink+'InsertDepositWithdrawal',{
-    InvoiceDate: this.invoiceDate,
+    InvoiceDate:this.global.dateFormater(this.invoiceDate,'-'),
     Type: "JV",
     SubType: this.subType,
     InvoiceRemarks: this.remarks,

@@ -30,7 +30,7 @@ export class AddReceiptComponent implements OnInit {
 
     if(this.editData){
        this.invoiceNo = this.editData.invoiceNo;
-      this.invoiceDate = this.editData.invoiceDate;
+      this.invoiceDate = new Date(this.editData.invoiceDate);
       this.partyID = this.editData.partyID;
       this.paymentType = this.editData.type;
       this.coaID = this.editData.coaid;
@@ -143,7 +143,7 @@ export class AddReceiptComponent implements OnInit {
     insert(){
       $('.loaderDark').show();
       this.http.post(environment.mainApi+this.global.accountLink+'InsertReceipt',{
-        InvoiceDate: this.invoiceDate,
+        InvoiceDate: this.global.dateFormater(this.invoiceDate,'-'),
         PartyID: this.partyID, 
         Type: this.paymentType,
         InvoiceRemarks: this.remarks,
@@ -180,7 +180,7 @@ export class AddReceiptComponent implements OnInit {
           $('.loaderDark').show();
           this.http.post(environment.mainApi+this.global.accountLink+'UpdateReceipt',{
             InvoiceNo:this.invoiceNo,
-            InvoiceDate: this.invoiceDate,
+            InvoiceDate: this.global.dateFormater(this.invoiceDate,'-'),
             PartyID: this.partyID, 
             InvoiceRemarks: this.remarks,
             BankReceiptNo: this.bankReceiptNo,

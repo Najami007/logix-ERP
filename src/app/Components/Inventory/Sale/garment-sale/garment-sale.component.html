@@ -156,8 +156,8 @@
                                 <td colspan="2"></td>
                                 <th>{{qtyTotal |number:'1.0-3'}}</th>
                                 <td></td>
-                                <td *ngIf="global.getFeature('discPer')"></td>
-                                <td *ngIf="global.getFeature('discPer')"></td>
+                                <td *ngIf="discFeature"></td>
+                                <td *ngIf="discFeature"></td>
                                 <td></td>
                                 <td class="text-center text-danger cursorPointer"><mat-icon
                                         (click)="emptyBill()">delete</mat-icon></td>

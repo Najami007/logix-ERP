@@ -26,8 +26,8 @@ import { SaleBillPrintComponent } from '../sale-bill-print/sale-bill-print.compo
 export class GarmentSaleComponent implements OnInit {
 
 
-  discFeature = this.global.getFeature('');
-  BookerFeature = this.global.getFeature('');
+  discFeature = this.global.getFeature('disc');
+  BookerFeature = this.global.getFeature('bkr');
 
   @ViewChild(SaleBillPrintComponent) billPrint:any;
 
@@ -1148,17 +1148,17 @@ export class GarmentSaleComponent implements OnInit {
 
     
     this.billPrint.PrintBill(InvNo);
-    this.billPrint.billType = 'Customer Copy';
-    setTimeout(() => {   
-      this.global.printData('#print-bill')
-    }, 200);
+    this.billPrint.billType = '';
+    // setTimeout(() => {   
+    //   this.global.printData('#print-bill')
+    // }, 200);
     
-    setTimeout(() => {
-      this.billPrint.billType = 'Counter Copy';
-     setTimeout(() => {
-      this.global.printData('#print-bill');
-     }, 100);
-    }, 200);
+    // setTimeout(() => {
+    //   this.billPrint.billType = 'Counter Copy';
+    //  setTimeout(() => {
+    //   this.global.printData('#print-bill');
+    //  }, 100);
+    // }, 200);
    
 
 
@@ -1221,9 +1221,9 @@ export class GarmentSaleComponent implements OnInit {
               $('#SavedBillModal').show();
             this.billPrint.PrintBill(item.invBillNo);
             this.billPrint.billType = 'Duplicate';
-            setTimeout(() => {
-              this.global.printData('#print-bill')
-            }, 200);
+            // setTimeout(() => {
+            //   this.global.printData('#print-bill')
+            // }, 200);
               
              
              

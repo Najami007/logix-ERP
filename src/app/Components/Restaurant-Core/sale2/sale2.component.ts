@@ -8,19 +8,17 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import Swal from 'sweetalert2';
-import { SaleBillDetailComponent } from './sale-bill-detail/sale-bill-detail.component';
-import { RestSaleBillPrintComponent } from './rest-sale-bill-print/rest-sale-bill-print.component';
-import { RestKotPrintComponent } from './rest-kot-print/rest-kot-print.component';
-
-
+import { RestSaleBillPrintComponent } from '../sale/rest-sale-bill-print/rest-sale-bill-print.component';
+import { RestKotPrintComponent } from '../sale/rest-kot-print/rest-kot-print.component';
+import { SaleBillDetailComponent } from '../sale/sale-bill-detail/sale-bill-detail.component';
 
 
 @Component({
-  selector: 'app-sale',
-  templateUrl: './sale.component.html',
-  styleUrls: ['./sale.component.scss']
+  selector: 'app-sale2',
+  templateUrl: './sale2.component.html',
+  styleUrls: ['./sale2.component.scss']
 })
-export class SaleComponent implements OnInit {
+export class Sale2Component implements OnInit {
   @HostListener('document:visibilitychange', ['$event'])
 
   @ViewChild(RestSaleBillPrintComponent) billPrint:any;
@@ -252,7 +250,14 @@ export class SaleComponent implements OnInit {
     this.categoryID = item.recipeCatID;
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipesCatWise?CatID=' + this.categoryID + '&reqFlag=' + item.prodFlag).subscribe(
       (Response: any) => {
-        this.RecipeList = Response;
+        
+        for(var i = 0;i < 70; i++){
+          this.RecipeList.push(Response[0]) ;
+         
+        }
+    
+
+        // this.RecipeList = Response;
         
       }
     )
@@ -726,7 +731,7 @@ export class SaleComponent implements OnInit {
   tempDeleteRow:any = [];
 
   deleteRow(item: any,voidQty:any) {
-    if (item.entryType == 'New') {
+    if (item.entryType == 'New' || item.entryType == 'Saved') {
       var index = this.tableData.indexOf(item);
       this.tableData.splice(index, 1);
       this.getTotal();
@@ -1252,3 +1257,4 @@ export class SaleComponent implements OnInit {
 
 
 }
+

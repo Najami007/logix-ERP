@@ -115,7 +115,9 @@ export class RestKotPrintComponent {
             this.myBank = this.myNetTotal - this.myCash;
           }
 
-        
+          setTimeout(() => {
+            this.global.printData('#printKOT');
+          }, 200);
         
         }
       )

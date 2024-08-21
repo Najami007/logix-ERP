@@ -27,7 +27,7 @@ export class AddOpeningComponent {
 
     if(this.editData){
       this.invoiceNo = this.editData.invoiceNo;
-      this.invoiceDate = this.editData.invoiceDate;
+      this.invoiceDate = new Date(this.editData.invoiceDate);
       this.paymentType = this.editData.type;
       this.coaID = this.editData.coaid;
       this.amount = this.editData.amount;
@@ -120,7 +120,7 @@ export class AddOpeningComponent {
     insert(){
       $('.loaderDark').show();
       this.http.post(environment.mainApi+this.global.accountLink+'InsertOpeningCash',{
-        InvoiceDate: this.invoiceDate,
+        InvoiceDate: this.global.dateFormater(this.invoiceDate,'-'),
         Type: this.paymentType,
         InvoiceRemarks: this.remarks,
         BankReceiptNo: this.bankReceiptNo,
@@ -154,7 +154,7 @@ export class AddOpeningComponent {
         if(pin != ''){
           $('.loaderDark').show();
           this.http.post(environment.mainApi+this.global.accountLink+'UpdateOpeningCash',{
-            InvoiceNo:this.invoiceNo,
+            InvoiceNo:this.global.dateFormater(this.invoiceDate,'-'),
             InvoiceDate: this.invoiceDate,
             InvoiceRemarks: this.remarks,
             BankReceiptNo: this.bankReceiptNo,

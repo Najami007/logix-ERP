@@ -43,6 +43,7 @@ import { AddSoundComponent } from './add-sound/add-sound.component';
 import { RestKotPrintComponent } from './sale/rest-kot-print/rest-kot-print.component';
 import { ConsumptionReportComponent } from './restaurantReports/consumption-report/consumption-report.component';
 import { RestConsumptionReportComponent } from './restaurantReports/rest-consumption-report/rest-consumption-report.component';
+import { Sale2Component } from './sale2/sale2.component';
 
 
 
@@ -56,6 +57,7 @@ import { RestConsumptionReportComponent } from './restaurantReports/rest-consump
 export const restCore: Route[] = [
 
   {path:'sale', component:SaleComponent, canActivate:[AuthGuard] },
+  {path:'sale2', component:Sale2Component },
   {path:'tbl', component:TableComponent, canActivate:[AuthGuard] },
   {path:'rcp', component:RecipeComponent, canActivate:[AuthGuard] },
   {path:'recCat', component:RecipeCategoryComponent, canActivate:[AuthGuard] },
@@ -74,6 +76,7 @@ export const restCore: Route[] = [
   
   {path:'conrpt', component:ConsumptionReportComponent, canActivate:[AuthGuard] },
   {path:'snd', component:AddSoundComponent, },
+  
 
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
@@ -117,7 +120,8 @@ export const restCore: Route[] = [
     AddSoundComponent,
     RestKotPrintComponent,
     ConsumptionReportComponent,
-    RestConsumptionReportComponent
+    RestConsumptionReportComponent,
+    Sale2Component,
     
    
    
