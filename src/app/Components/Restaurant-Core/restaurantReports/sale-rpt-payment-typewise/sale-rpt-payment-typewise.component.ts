@@ -7,7 +7,7 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
-import { SaleBillDetailComponent } from '../../sale/sale-bill-detail/sale-bill-detail.component';
+import { SaleBillDetailComponent } from '../../Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 
 @Component({
   selector: 'app-sale-rpt-payment-typewise',

@@ -6,9 +6,9 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
-import { SaleBillDetailComponent } from '../../sale/sale-bill-detail/sale-bill-detail.component';
+import { SaleBillDetailComponent } from '../../Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 import { MatDialog } from '@angular/material/dialog';
-import { RestSaleBillPrintComponent } from '../../sale/rest-sale-bill-print/rest-sale-bill-print.component';
+import { RestSaleBillPrintComponent } from '../../Sales/sale1/rest-kot-print/rest-sale-bill-print/rest-sale-bill-print.component';
 
 @Component({
   selector: 'app-sale-report',

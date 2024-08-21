@@ -13,7 +13,7 @@ import * as $ from 'jquery';
 import { Observable, retry } from 'rxjs';
 
 import { dateFormat } from 'highcharts';
-import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/addparty.component';import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/sale/sale-bill-detail/sale-bill-detail.component';
+import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/addparty.component';import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 import { SaleBillPrintComponent } from '../sale-bill-print/sale-bill-print.component';
 
 @Component({

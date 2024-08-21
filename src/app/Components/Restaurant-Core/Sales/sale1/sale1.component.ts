@@ -6,21 +6,20 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
-import { PincodeComponent } from '../../User/pincode/pincode.component';
-import Swal from 'sweetalert2';
-import { SaleBillDetailComponent } from './sale-bill-detail/sale-bill-detail.component';
-import { RestSaleBillPrintComponent } from './rest-sale-bill-print/rest-sale-bill-print.component';
-import { RestKotPrintComponent } from './rest-kot-print/rest-kot-print.component';
 
+import Swal from 'sweetalert2';
+import { RestSaleBillPrintComponent } from './rest-kot-print/rest-sale-bill-print/rest-sale-bill-print.component';
+import { RestKotPrintComponent } from './rest-kot-print/rest-kot-print.component';
+import { SaleBillDetailComponent } from './sale-bill-detail/sale-bill-detail.component';
 
 
 
 @Component({
-  selector: 'app-sale',
-  templateUrl: './sale.component.html',
-  styleUrls: ['./sale.component.scss']
+  selector: 'app-sale1',
+  templateUrl: './sale1.component.html',
+  styleUrls: ['./sale1.component.scss']
 })
-export class SaleComponent implements OnInit {
+export class Sale1Component implements OnInit {
   @HostListener('document:visibilitychange', ['$event'])
 
   @ViewChild(RestSaleBillPrintComponent) billPrint:any;

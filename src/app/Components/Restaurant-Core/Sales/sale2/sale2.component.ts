@@ -6,11 +6,11 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
-import { PincodeComponent } from '../../User/pincode/pincode.component';
+import { PincodeComponent } from '../../../User/pincode/pincode.component';
 import Swal from 'sweetalert2';
-import { RestSaleBillPrintComponent } from '../sale/rest-sale-bill-print/rest-sale-bill-print.component';
-import { RestKotPrintComponent } from '../sale/rest-kot-print/rest-kot-print.component';
-import { SaleBillDetailComponent } from '../sale/sale-bill-detail/sale-bill-detail.component';
+import { RestSaleBillPrintComponent } from '../sale1/rest-kot-print/rest-sale-bill-print/rest-sale-bill-print.component';
+import { RestKotPrintComponent } from '../sale1/rest-kot-print/rest-kot-print.component';
+import { SaleBillDetailComponent } from '../sale1/sale-bill-detail/sale-bill-detail.component';
 
 
 @Component({

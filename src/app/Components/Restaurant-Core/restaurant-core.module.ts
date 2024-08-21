@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Route, RouterModule } from '@angular/router';
-import { SaleComponent } from './sale/sale.component';
 import { AuthGuard } from 'src/app/auth.guard';
 import { MaterialModule } from 'src/app/Shared/material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -30,7 +29,7 @@ import { SaleRptOrderTypewiseComponent } from './restaurantReports/sale-rpt-orde
 import { SaleRptTablewiseComponent } from './restaurantReports/sale-rpt-tablewise/sale-rpt-tablewise.component';
 import { SaleRptRecipeCatwiseComponent } from './restaurantReports/sale-rpt-recipe-catwise/sale-rpt-recipe-catwise.component';
 import { SaleRptPaymentTypewiseComponent } from './restaurantReports/sale-rpt-payment-typewise/sale-rpt-payment-typewise.component';
-import { SaleBillDetailComponent } from './sale/sale-bill-detail/sale-bill-detail.component';
+import { SaleBillDetailComponent } from './Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 import { RestDashboardComponent } from './rest-dashboard/rest-dashboard.component';
 import { TabletSaleComponent } from './tablet-sale/tablet-sale.component';
 import { RecipeListComponent } from './restaurantReports/recipe-list/recipe-list.component';
@@ -38,12 +37,13 @@ import { RecipeDetailComponent } from './recipe/recipe-detail/recipe-detail.comp
 import { VoidReportComponent } from './restaurantReports/void-report/void-report.component';
 import { RecipeComparisonComponent } from './restaurantReports/recipe-list/recipe-comparison/recipe-comparison.component';
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
-import { RestSaleBillPrintComponent } from './sale/rest-sale-bill-print/rest-sale-bill-print.component';
+import { RestSaleBillPrintComponent } from './Sales/sale1/rest-kot-print/rest-sale-bill-print/rest-sale-bill-print.component';
 import { AddSoundComponent } from './add-sound/add-sound.component';
-import { RestKotPrintComponent } from './sale/rest-kot-print/rest-kot-print.component';
+import { RestKotPrintComponent } from './Sales/sale1/rest-kot-print/rest-kot-print.component';
 import { ConsumptionReportComponent } from './restaurantReports/consumption-report/consumption-report.component';
 import { RestConsumptionReportComponent } from './restaurantReports/rest-consumption-report/rest-consumption-report.component';
-import { Sale2Component } from './sale2/sale2.component';
+import { Sale2Component } from './Sales/sale2/sale2.component';
+import { Sale1Component } from './Sales/sale1/sale1.component';
 
 
 
@@ -56,7 +56,7 @@ import { Sale2Component } from './sale2/sale2.component';
 
 export const restCore: Route[] = [
 
-  {path:'sale', component:SaleComponent, canActivate:[AuthGuard] },
+  {path:'sale', component:Sale1Component, canActivate:[AuthGuard] },
   {path:'sale2', component:Sale2Component },
   {path:'tbl', component:TableComponent, canActivate:[AuthGuard] },
   {path:'rcp', component:RecipeComponent, canActivate:[AuthGuard] },
@@ -87,7 +87,6 @@ export const restCore: Route[] = [
 
 @NgModule({
   declarations: [
-    SaleComponent,
     MenuComponent,
     RecipeComponent,
     AddMenuComponent,
@@ -122,6 +121,7 @@ export const restCore: Route[] = [
     ConsumptionReportComponent,
     RestConsumptionReportComponent,
     Sale2Component,
+    Sale1Component,
     
    
    
