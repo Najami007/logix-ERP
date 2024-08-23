@@ -8,9 +8,9 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 
 import Swal from 'sweetalert2';
-import { RestSaleBillPrintComponent } from './rest-kot-print/rest-sale-bill-print/rest-sale-bill-print.component';
-import { RestKotPrintComponent } from './rest-kot-print/rest-kot-print.component';
+import { RestKotPrintComponent } from '../rest-kot-print/rest-kot-print.component';
 import { SaleBillDetailComponent } from './sale-bill-detail/sale-bill-detail.component';
+import { RestSaleBillPrintComponent } from '../rest-sale-bill-print/rest-sale-bill-print.component';
 
 
 
@@ -1035,6 +1035,7 @@ export class Sale1Component implements OnInit {
 
    this.myOrderType = this.orderType;
     if (this.tableData != '') {
+    
       if (this.invBillNo != '') {
         this.myInvoiceNo = this.invBillNo;
         this.save('rehold');

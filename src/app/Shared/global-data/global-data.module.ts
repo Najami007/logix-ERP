@@ -914,5 +914,19 @@ public getCashBankCoa(type:any): Observable<any>{
  }
 
 
+ public filterUniqueValues<T>(array: T[]): T[] {
+  const uniqueSet = new Set<string>();
+  const uniqueArray: T[] = [];
+
+  array.forEach(item => {
+    const key = JSON.stringify(item);
+    if (!uniqueSet.has(key)) {
+      uniqueSet.add(key);
+      uniqueArray.push(item);
+    }
+  });
+
+  return uniqueArray;
+}
 
 }

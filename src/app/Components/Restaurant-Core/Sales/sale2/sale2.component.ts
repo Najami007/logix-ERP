@@ -8,9 +8,9 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../../User/pincode/pincode.component';
 import Swal from 'sweetalert2';
-import { RestSaleBillPrintComponent } from '../sale1/rest-kot-print/rest-sale-bill-print/rest-sale-bill-print.component';
-import { RestKotPrintComponent } from '../sale1/rest-kot-print/rest-kot-print.component';
+import { RestKotPrintComponent } from '../rest-kot-print/rest-kot-print.component';
 import { SaleBillDetailComponent } from '../sale1/sale-bill-detail/sale-bill-detail.component';
+import { RestSaleBillPrintComponent } from '../rest-sale-bill-print/rest-sale-bill-print.component';
 
 
 @Component({
@@ -251,13 +251,13 @@ export class Sale2Component implements OnInit {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipesCatWise?CatID=' + this.categoryID + '&reqFlag=' + item.prodFlag).subscribe(
       (Response: any) => {
         
-        for(var i = 0;i < 70; i++){
-          this.RecipeList.push(Response[0]) ;
+        // for(var i = 0;i < 70; i++){
+        //   this.RecipeList.push(Response[0]) ;
          
-        }
+        // }
     
 
-        // this.RecipeList = Response;
+        this.RecipeList = Response;
         
       }
     )

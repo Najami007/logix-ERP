@@ -220,10 +220,8 @@ rptType:any = 's';
 
     if(item.invType == 'S' || item.invType == 'SR'){
       this.billPrint.PrintBill(item.invBillNo);
-    this.billPrint.billType = 'Duplicate';
-    setTimeout(() => {
-      this.global.printData('#print-Bill');
-    }, 200);
+       this.billPrint.billType = 'Duplicate';
+  
     }
    }
 

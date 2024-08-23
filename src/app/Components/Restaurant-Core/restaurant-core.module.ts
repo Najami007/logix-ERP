@@ -37,13 +37,13 @@ import { RecipeDetailComponent } from './recipe/recipe-detail/recipe-detail.comp
 import { VoidReportComponent } from './restaurantReports/void-report/void-report.component';
 import { RecipeComparisonComponent } from './restaurantReports/recipe-list/recipe-comparison/recipe-comparison.component';
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
-import { RestSaleBillPrintComponent } from './Sales/sale1/rest-kot-print/rest-sale-bill-print/rest-sale-bill-print.component';
 import { AddSoundComponent } from './add-sound/add-sound.component';
-import { RestKotPrintComponent } from './Sales/sale1/rest-kot-print/rest-kot-print.component';
+import { RestKotPrintComponent } from './Sales/rest-kot-print/rest-kot-print.component';
 import { ConsumptionReportComponent } from './restaurantReports/consumption-report/consumption-report.component';
 import { RestConsumptionReportComponent } from './restaurantReports/rest-consumption-report/rest-consumption-report.component';
 import { Sale2Component } from './Sales/sale2/sale2.component';
 import { Sale1Component } from './Sales/sale1/sale1.component';
+import { RestSaleBillPrintComponent } from './Sales/rest-sale-bill-print/rest-sale-bill-print.component';
 
 
 

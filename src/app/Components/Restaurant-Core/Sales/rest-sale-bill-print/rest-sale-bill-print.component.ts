@@ -68,6 +68,7 @@ export class RestSaleBillPrintComponent {
   myInvDate: any = '';
   myInvTime:any = '';
   myOrderType = '';
+  myGst = 0;
   mySubTotal = 0;
   myNetTotal = 0;
   myOtherCharges = 0;
@@ -81,6 +82,7 @@ export class RestSaleBillPrintComponent {
   myTime:any;
   myCounter:any = '';
   myOrderNo = 0;
+  type:any = '';
 
 
 
@@ -129,6 +131,7 @@ export class RestSaleBillPrintComponent {
 
   HOldandPrint(orderType: any,invoiceNo:any) {
     // this.EmptyBill();
+    this.type = 'hold';
     this.myOrderType = orderType;
     this.myInvoiceNo = invoiceNo;
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetHoldedBillDetail?BillNo='+invoiceNo).subscribe(
@@ -155,8 +158,10 @@ export class RestSaleBillPrintComponent {
       })
       setTimeout(() => {
         this.global.printData('#printRestBill');
+      
       }, 2000);
        this.myDuplicateFlag = false;
+       
    
      } 
 
@@ -181,6 +186,7 @@ export class RestSaleBillPrintComponent {
       this.myDuplicateFlag = false;
       this.myTime;
       this.myCounter = '';
+      this.type = '';
      }
  
    }
