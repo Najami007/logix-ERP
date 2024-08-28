@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import { RestKotPrintComponent } from '../rest-kot-print/rest-kot-print.component';
 import { SaleBillDetailComponent } from './sale-bill-detail/sale-bill-detail.component';
 import { RestSaleBillPrintComponent } from '../rest-sale-bill-print/rest-sale-bill-print.component';
+import { exec } from 'child_process';
 
 
 
@@ -58,6 +59,28 @@ export class Sale1Component implements OnInit {
     private dialogue: MatDialog,
     private route: Router
   ) {
+
+    // function getPCName(): Promise<string> {
+    //   return new Promise((resolve, reject) => {
+    //     const exec = require('child_process').exec;
+    //     exec('hostname', (error:any, stdout:any, stderr:any) => {
+    //       if (error) {
+    //         reject(error);
+    //       } else {
+    //         resolve(stdout.trim());
+    //       }
+    //     });
+    //   });
+    // }
+    
+    // getPCName().then((pcName) => {
+    //   console.log('PC Name:', pcName);
+    // }).catch((error) => {
+    //   console.error('Error getting PC name:', error);
+    // });
+
+
+
     this.global.getCompany().subscribe((data) => {
       this.companyProfile = data;
       this.companyLogo = data[0].companyLogo1;

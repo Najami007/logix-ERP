@@ -57,7 +57,7 @@ import { RestSaleBillPrintComponent } from './Sales/rest-sale-bill-print/rest-sa
 export const restCore: Route[] = [
 
   {path:'sale', component:Sale1Component, canActivate:[AuthGuard] },
-  {path:'sale2', component:Sale2Component },
+  {path:'sale2', component:Sale2Component, canActivate:[AuthGuard] },
   {path:'tbl', component:TableComponent, canActivate:[AuthGuard] },
   {path:'rcp', component:RecipeComponent, canActivate:[AuthGuard] },
   {path:'recCat', component:RecipeCategoryComponent, canActivate:[AuthGuard] },

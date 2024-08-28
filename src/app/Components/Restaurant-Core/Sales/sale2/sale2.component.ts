@@ -731,7 +731,7 @@ export class Sale2Component implements OnInit {
   tempDeleteRow:any = [];
 
   deleteRow(item: any,voidQty:any) {
-    if (item.entryType == 'New' || item.entryType == 'Saved') {
+    if (item.entryType == 'New' ) {
       var index = this.tableData.indexOf(item);
       this.tableData.splice(index, 1);
       this.getTotal();
@@ -792,14 +792,20 @@ export class Sale2Component implements OnInit {
                             //   this.global.printData('#print-Kot');
                             // }, 200);
                           }
+
+                         
                           
 
                           if (item.quantity <= 1 || voidQty == item.quantity) {
+                            // this.getBillDetail(item);
                             var index = this.tableData.indexOf(item);
+                            console.log(index); 
                             this.tableData.splice(index, 1);
                           } else {
                             item.quantity -= voidQty;
                           }
+
+                          
                           this.tempDeleteRow = [];
                           this.getTotal()
   
@@ -876,6 +882,7 @@ export class Sale2Component implements OnInit {
                             // setTimeout(() => {
                             //   this.global.printData('#print-Kot');
                             // }, 200);
+
                           }
                  
 

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -9,6 +9,8 @@ import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 import { RetailRtnEnterQtyComponent } from './retail-rtn-enter-qty/retail-rtn-enter-qty.component';
 import { RetailRtnSavedbillComponent } from './retail-rtn-savedbill/retail-rtn-savedbill.component';
+import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
+import { SaleBillPrintComponent } from '../sale-bill-print/sale-bill-print.component';
 
 
 @Component({
@@ -18,7 +20,7 @@ import { RetailRtnSavedbillComponent } from './retail-rtn-savedbill/retail-rtn-s
 })
 export class RetailerSaleReturnComponent implements OnInit {
 
-
+  @ViewChild(SaleBillPrintComponent) billPrint:any;
     
   
   companyProfile: any = [];
@@ -661,25 +663,7 @@ export class RetailerSaleReturnComponent implements OnInit {
  
   //////////////////////////////////////////////////////////////////////////////////
   tempProdData:any = [];
-  editPrice(amount:any){
-     
-   if(amount < this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].costPrice){
-     this.msg.WarnNotify('Price is Less than Cost');
-   }else{
-     this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice = amount;
-     this.getTotal();
-     this.tempProdData = [];
-     $('#priceChangeModal').hide();
-     // $('.modal').remove();
-     // $('body').removeClass('modal-open');
-     $('.modal-backdrop').remove();
-    
-   }
- 
- 
- 
- }
- 
+
  
  
  //////////////////////////////////////////////////////////////////////////////////
@@ -693,6 +677,106 @@ export class RetailerSaleReturnComponent implements OnInit {
        this.productImage = this.tableDataList[index].productImage;
      
      }
+
+
+
+     
+  editSP(item:any){
+    if(this.crudList.u){
+     Swal.fire({
+       title:"Enter Total Amount",
+       input:"text",
+       showCancelButton:true,
+       confirmButtonText:'Save',
+       showLoaderOnConfirm:true,
+       preConfirm: (value )=>{
+         
+         if(value == ""){
+         return  Swal.showValidationMessage("Enter Valid Amount");
+         }
+ 
+         if(isNaN(value)){
+           return  Swal.showValidationMessage("Enter Valid Amount");
+         }
+ 
+         if(value <= 0){
+           return  Swal.showValidationMessage("Enter Valid Amount");
+         }
+ 
+         if(value < this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].costPrice){
+           return  Swal.showValidationMessage("Sale Price Is Less Then Cost Price");
+         }
+         
+         this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice = value;
+         this.getTotal();
+         this.tempProdData = [];
+       }
+     }).then((result)=>{
+         if(result.isConfirmed){
+           Swal.fire({
+             title: "Sale Price Updated",
+             timer:500,
+            });
+         }
+     })
+    }
+   }
+
+   editTotal(amount:any){
+
+
+    
+    if(this.crudList.u){
+
+      Swal.fire({
+        title:"Enter Discount Percent",
+        input:"text",
+        showCancelButton:true,
+        confirmButtonText:'Save',
+        showLoaderOnConfirm:true,
+        preConfirm: (value )=>{
+          
+          if(value == ""){
+          return  Swal.showValidationMessage("Enter Valid Amount");
+          }
+  
+          if(isNaN(value)){
+            return  Swal.showValidationMessage("Enter Valid Amount");
+          }
+  
+          if(value < 0){
+            return  Swal.showValidationMessage("Enter Valid Amount");
+          }
+  
+          
+          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].total = value;
+          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].quantity = (value / (this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice - this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR));
+      
+          
+          this.getTotal();
+          this.tempProdData = [];
+        }
+      }).then((result)=>{
+          if(result.isConfirmed){
+            Swal.fire({
+              title: "Discount Updated",
+              timer:500,
+             });
+          }
+      })
+
+
+      this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].total = amount;
+    this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].quantity = (amount / (this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice - this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR));
+
+    this.getTotal();
+    this.tempProdData = [];
+    }
+
+
+   
+
+  }
  
    //////////////////////////////////////////////////////////////////////////////////
  
@@ -839,34 +923,111 @@ export class RetailerSaleReturnComponent implements OnInit {
    myTime:any;
  
    PrintAfterSave(InvNo:any){
- 
+    
+    this.billPrint.PrintBill(InvNo);
+    this.billPrint.billType = '';
+   
+  
+  }
+
+
+  printDuplicateBill(item:any){
+
+
+    $('#SavedBillModal').hide();
+
+    
+    this.global.openPassword('Password').subscribe(pin => {
+      if (pin !== '') {
+        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+          RestrictionCodeID: 5,
+          Password: pin,
+          UserID: this.global.getUserID()
+
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Password Matched Successfully') {
+
+          
+              $('#SavedBillModal').show();
+            this.billPrint.PrintBill(item.invBillNo);
+            this.billPrint.billType = 'Duplicate';
+            // setTimeout(() => {
+            //   this.global.printData('#print-bill')
+            // }, 200);
+              
+             
+             
+            } else {
+              this.msg.WarnNotify(Response.msg);
+            }
+          }
+        )
+      }
+    })
+  
+  
+  }
+
+  billDetails(item:any){
+
+
+    $('#SavedBillModal').hide();
+    // $('#paymentMehtod').hide();
+    // $('.modal-backdrop').remove();
+    
+    this.global.openPassword('Password').subscribe(pin => {
+      if (pin !== '') {
+        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+          RestrictionCodeID: 5,
+          Password: pin,
+          UserID: this.global.getUserID()
+
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Password Matched Successfully') {
+              $('#SavedBillModal').show();
+              this.dialogue.open(SaleBillDetailComponent,{
+                width:'50%',
+                data:item,
+                disableClose:true,
+              }).afterClosed().subscribe(value=>{
+                
+              })
+            } else {
+              this.msg.WarnNotify(Response.msg);
+            }
+          }
+        )
+      }
+    })
+
+   
+  }
+
+
+  getSavedBill(){
+
+
+    
+
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetOpenDaySale').subscribe(
+      (Response:any)=>{
+       
+        this.savedbillList = [];
+        Response.forEach((e:any) => {
+          if(e.invType == 'SR'){
+            this.savedbillList.push(e);
+          }
+          
+          
+        });
      
- 
-     this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+InvNo).subscribe(
-       (Response:any)=>{
-         this.myInvoiceNo = InvNo;
-         this.myInvDate = Response[0].createdOn ;
-         this.myCounterName = Response[0].entryUser;
-         this.mySubTotal = Response[0].billTotal;
-         this.myNetTotal = Response[0].netTotal;
-         this.myOtherCharges = Response[0].otherCharges;
-         this.myRemarks = Response[0].remarks;
-         this.myCash = Response[0].cashRec;
-         this.myBank = Response[0].netTotal - Response[0].cashRec;
-         this.myDiscount = Response[0].billDiscount;
-         this.myChange = Response[0].change;
-         this.myPaymentType = Response[0].paymentType;
-      
-         this.myPrintData = Response;
-         setTimeout(() => {
-           this.global.printData('#printBill');
-         }, 500);  
-       }
-     )
- 
- 
- 
-   }
+      }
+    )
+
+  }
+
  
  
  }

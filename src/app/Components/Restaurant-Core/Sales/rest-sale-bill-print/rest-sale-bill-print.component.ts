@@ -158,7 +158,7 @@ export class RestSaleBillPrintComponent {
       })
       setTimeout(() => {
         this.global.printData('#printRestBill');
-      
+        this.type = '';
       }, 2000);
        this.myDuplicateFlag = false;
        

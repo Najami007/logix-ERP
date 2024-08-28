@@ -5,7 +5,9 @@
 <div class="d-flex w-100 p-1 justify-content-between">
     <mat-card   style="height: 84vh;width: 24.5%; background-color: azure;margin-left: 5px; overflow-y:auto;">
         <div class="text-center">
-            <h2>New Order</h2>
+        <h2>New Order <button class="btn-size" mat-mini-fab (click)="approveAllNewOrder()"><mat-icon>done_outline</mat-icon></button> </h2>
+                
+ 
             <input placeholder="search.." type="text" #newOrderSearch class="w-100 " style="background-color: azure;">
         </div>
         <table class="table">
@@ -24,7 +26,7 @@
                 <tr *ngFor="let item of filterNewOrderList | filter:newOrderSearch.value index as index">
                     <td>{{index+1}}</td>
                     <td>{{item.tableTitle}}</td>
-                    <td data-bs-toggle="modal" data-bs-target="#OrderDetail" (click)="getOrderDetail('new',item)" class="cursorPointer">
+                    <td data-bs-toggle="modal"  data-bs-target="#OrderDetail" (click)="getOrderDetail('new',item)" class="cursorPointer ">
                           <button mat-mini-fab color="primary" style="height: 35px;width: 35px;">{{item.orderNo}}</button>
                         </td>
                     <!-- <td><div class="d-flex flex-column">
@@ -34,7 +36,7 @@
                     <td>{{item.createdOn | date:'hh:mm:a'}}</td>
                     <!-- <td>{{item.productTitle}}</td>
                     <td>{{item.quantity }}</td> -->
-                    <td><button mat-mini-fab class="btn-size" (click)="approveOrder(item)"><mat-icon>done_outline</mat-icon></button></td>
+                    <td><button mat-mini-fab class="btn-size" (click)="approveNewOrderFull(item)"><mat-icon>done_outline</mat-icon></button></td>
                 </tr>
             </tbody>
         </table>
@@ -43,7 +45,7 @@
 
     <mat-card style="height: 84vh;width: 24.5%;background-color: rgb(238, 248, 217);margin-left: 5px;overflow-y:auto;">
         <div class="text-center">
-            <h2>Pending Order</h2>
+            <h2>Pending Order <button class="btn-size" mat-mini-fab color="primary" (click)="approveAllPending()"><mat-icon>done_outline</mat-icon></button> </h2>
             <input placeholder="search.." type="text" #pendingOrderSearch class="w-100" style="background-color: rgb(238, 248, 217);">
         </div>
         <table class="table">
@@ -72,7 +74,7 @@
                     <td>{{item.reqConfirmationTime | date:'hh:mm:a'}}</td>
                     <!-- <td>{{item.productTitle}}</td>
                     <td>{{item.quantity }}</td> -->
-                    <td><button mat-mini-fab class="btn-size" (click)="ApproveDelivery(item)"><mat-icon>done_outline</mat-icon></button></td>
+                    <td><button mat-mini-fab class="btn-size" (click)="approvePendingFull(item)"><mat-icon>done_outline</mat-icon></button></td>
                 </tr>
             </tbody>
         </table>
@@ -120,7 +122,7 @@
     <mat-card  style="height: 84vh;width: 24.5%;background-color: rgb(255, 240, 244);margin-left: 5px;overflow-y:auto;">
        
         <div class="text-center ">
-            <h2 class=" text-center">Canceled Order</h2>
+            <h2 class=" text-center">Canceled Order <button class="btn-size" mat-mini-fab color="warn" (click)="approveAllvoid()"><mat-icon>done_outline</mat-icon></button></h2>
             
             <div class="col-lg-12 text-end">
 
@@ -157,7 +159,7 @@
                     <td>{{item.createdOn | date:'hh:mm:a'}}</td>
                     <!-- <td>{{item.productTitle}}</td>
                     <td>{{item.quantity }}</td> -->
-                    <td><button mat-mini-fab class="btn-size" *ngIf="item.reqStatus == false" (click)="approveOrder(item)"><mat-icon>done_outline</mat-icon></button></td>
+                    <td><button mat-mini-fab class="btn-size" *ngIf="item.reqStatus == false" (click)="approveVoidFull(item)"><mat-icon>done_outline</mat-icon></button></td>
 
                 </tr>
             </tbody>
@@ -184,9 +186,9 @@ aria-labelledby="OrderDetailLabel">
                     </tr>
                 </thead>
                 <tbody >
-                    <tr *ngFor="let item of orderDetailList index as index">
+                    <tr  *ngFor="let item of orderDetailList index as index">
                         <td>{{index +1}}</td>
-                        <td>{{item.productTitle}}</td>
+                        <td [ngClass]="item.reqStatus ? '' : 'text-danger'">{{item.productTitle}}</td>
                         <td>{{item.quantity}}</td>
 
                     </tr>

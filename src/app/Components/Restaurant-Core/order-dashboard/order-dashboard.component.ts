@@ -126,13 +126,9 @@ export class OrderDashboardComponent implements OnInit {
   }
 
   getOrderList() {
-    // if (this.newOrderList != '') {
-    //   this.tempOrderList = this.newOrderList;
-    // }else{
-    //   this.tempOrderList = [];
-    // }
+   
     this.tempOrderList = this.newOrderList;
-    // alert(this.tempOrderList.length);
+  
 
     var type = '';
     if(this.locationID == 0){
@@ -244,7 +240,7 @@ export class OrderDashboardComponent implements OnInit {
 
 
 
-  approveOrder(item: any) {
+  approveOrderSingle(item: any) {
     this.app.startLoaderDark();
     this.http.post(environment.mainApi + this.global.restaurentLink + 'ApproveOrderVoidRequest', {
       AutoInvDetID: item.autoInvDetID,
@@ -265,7 +261,6 @@ export class OrderDashboardComponent implements OnInit {
     )
   }
 
-
   ApproveDelivery(item: any) {
     this.app.startLoaderDark();
     this.http.post(environment.mainApi+this.global.restaurentLink+'UpdateDeliveryStatus', {
@@ -285,5 +280,170 @@ export class OrderDashboardComponent implements OnInit {
       }
     )
   }
+
+
+
+
+
+  ////////////////// Will Approve Order by orderNo //////////////////
+
+  approveNewOrderFull(item:any){
+
+    this.newOrderList.filter((e:any)=> e.orderNo == item.orderNo).forEach((j:any) => {
+      this.http.post(environment.mainApi + this.global.restaurentLink + 'ApproveOrderVoidRequest', {
+        AutoInvDetID: j.autoInvDetID,
+        UserID: this.global.getUserID()
+      }).subscribe(
+        (Response: any) => {
+          if (Response.msg == 'Approved Successfully') {
+            this.msg.SuccessNotify('Accepted');
+  
+            this.getOrderList();
+            this.getVoidList();
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+  
+          this.app.stopLoaderDark();
+        }
+      )
+    });
+
+  }
+
+  approvePendingFull(item:any){
+
+    this.PendingOrderList.filter((e:any)=> e.orderNo == item.orderNo).forEach((j:any) => {
+      this.http.post(environment.mainApi+this.global.restaurentLink+'UpdateDeliveryStatus', {
+        AutoInvDetID: j.autoInvDetID,
+        UserID: this.global.getUserID()
+      }).subscribe(
+        (Response: any) => {
+          if (Response.msg == 'Deliver Successfully') {
+            this.msg.SuccessNotify('Order Delivered');
+  
+            this.getOrderList();
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+  
+          this.app.stopLoaderDark();
+        }
+      )
+    });
+
+  }
+
+  approveVoidFull(item:any){
+
+    this.voidOrderList.filter((e:any)=> e.orderNo == item.orderNo).forEach((j:any) => {
+      this.http.post(environment.mainApi + this.global.restaurentLink + 'ApproveOrderVoidRequest', {
+        AutoInvDetID: j.autoInvDetID,
+        UserID: this.global.getUserID()
+      }).subscribe(
+        (Response: any) => {
+          if (Response.msg == 'Approved Successfully') {
+            this.msg.SuccessNotify('Accepted');
+  
+            this.getOrderList();
+            this.getVoidList();
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+  
+          this.app.stopLoaderDark();
+        }
+      )
+    });
+
+  }
+
+  ////////////////////////////////////////////////////////////////
+
+
+  ////////////////// Will Approve all Orders list By Loop //////////////////
+
+  approveAllNewOrder(){
+    if(this.newOrderList.length == 0){
+      this.msg.WarnNotify('No Order Available');
+       }else{
+
+   this.newOrderList.forEach((e:any) => {
+    this.http.post(environment.mainApi + this.global.restaurentLink + 'ApproveOrderVoidRequest', {
+      AutoInvDetID: e.autoInvDetID,
+      UserID: this.global.getUserID()
+    }).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Approved Successfully') {
+         this.getOrderList();
+        } else {
+          this.msg.WarnNotify(Response.msg);
+        }
+
+        this.app.stopLoaderDark();
+      }
+    )
+
+   });
+  }
+
+  }
+
+  approveAllPending(){
+
+   if(this.PendingOrderList.length == 0){
+    this.msg.WarnNotify('No Order Pending');
+   }else{
+    this.PendingOrderList.forEach((e:any) => {
+      this.http.post(environment.mainApi+this.global.restaurentLink+'UpdateDeliveryStatus', {
+        AutoInvDetID: e.autoInvDetID,
+        UserID: this.global.getUserID()
+      }).subscribe(
+        (Response: any) => {
+          if (Response.msg == 'Deliver Successfully') {
+            this.msg.SuccessNotify('Order Delivered');
+  
+            this.getOrderList();
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+  
+          this.app.stopLoaderDark();
+        }
+      )
+ 
+   });
+   }
+  }
+
+  approveAllvoid(){
+
+    if(this.voidOrderList.filter((e:any)=>e.reqStatus == false) == 0){
+    this.msg.WarnNotify('All Void Already accepted');
+     }else{
+    this.voidOrderList.forEach((e:any) => {
+     this.http.post(environment.mainApi + this.global.restaurentLink + 'ApproveOrderVoidRequest', {
+       AutoInvDetID: e.autoInvDetID,
+       UserID: this.global.getUserID()
+     }).subscribe(
+       (Response: any) => {
+         if (Response.msg == 'Approved Successfully') {
+          this.getVoidList();
+         } else {
+           this.msg.WarnNotify(Response.msg);
+         }
+ 
+         this.app.stopLoaderDark();
+       }
+     )
+ 
+    });
+ 
+   }
+  }
+
+
+  /////////////////////////////////////////////////////////////////////////////
+
 
 }

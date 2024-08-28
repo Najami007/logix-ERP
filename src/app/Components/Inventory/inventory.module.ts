@@ -38,7 +38,7 @@ import { TopLeastSaleQtyAmountwiseComponent } from './InventoryReports/top-least
 
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { EnterQtyComponent } from './Sale/retailer-sale/enter-qty/enter-qty.component';
-import { RtlSavedBillComponent } from './Sale/retailer-sale/rtl-saved-bill/rtl-saved-bill.component';
+
 
 
 import { VsenterqtyComponent } from './Sale/void-sale/vsenterqty/vsenterqty.component';
@@ -62,8 +62,7 @@ import { RetailRtnEnterQtyComponent } from './Sale/retailer-sale-return/retail-r
 
 import { PriceCheckerComponent } from './price-checker/price-checker.component';
 
-import { WholeSaleComponent } from './whole-sale/whole-sale.component';
-import { WhsSavedBillComponent } from './whole-sale/whs-saved-bill/whs-saved-bill.component';
+
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 import { SaleReportCustomerwiseComponent } from './InventoryReports/sale-report-customerwise/sale-report-customerwise.component';
 import { InvAuditComponent } from './inv-audit/inv-audit.component';
@@ -78,8 +77,10 @@ import { RetailerSaleReturnComponent } from './Sale/retailer-sale-return/retaile
 import { VoidSaleComponent } from './Sale/void-sale/void-sale.component';
 import { VoidSaleReturnComponent } from './Sale/void-sale-return/void-sale-return.component';
 import { NgxBarcode6Module } from 'ngx-barcode6';
-import { RtlBillPrintComponent } from './Sale/retailer-sale/rtl-bill-print/rtl-bill-print.component';
+
 import { SaleBillPrintComponent } from './Sale/sale-bill-print/sale-bill-print.component';
+import { WholeSaleComponent } from './Sale/whole-sale/whole-sale.component';
+import { WhsSavedBillComponent } from './Sale/whole-sale/whs-saved-bill/whs-saved-bill.component';
 
 
 
@@ -175,7 +176,6 @@ export const inventoryRoutes: Route[] = [
     TopLeastSaleQtyAmountwiseComponent,
  
     EnterQtyComponent,
-    RtlSavedBillComponent,
     VsenterqtyComponent,
     VssavedbillComponent,
 
@@ -209,7 +209,6 @@ export const inventoryRoutes: Route[] = [
     RetailerSaleReturnComponent,
     VoidSaleComponent,
     VoidSaleReturnComponent,
-    RtlBillPrintComponent,
     SaleBillPrintComponent,
     
   
