@@ -34,9 +34,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { NgxPaginationModule } from 'ngx-pagination';
-
-
-
+import {HotelDatePickerModule} from 'vue-hotel-datepicker';
+import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
+import {MatChipsModule} from '@angular/material/chips';
 
 
 
@@ -77,7 +77,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
     MatSortModule,
     MatProgressBarModule,
     NgxPaginationModule,
-  
+    NgxDaterangepickerMd.forRoot({
+      separator: ' - ',
+      applyLabel: 'Okay',
+  }),
+  MatChipsModule
+    
 
   ],
   exports: [
@@ -111,6 +116,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     MatSortModule,
     MatProgressBarModule,
     NgxPaginationModule,
+    NgxDaterangepickerMd,
+    MatChipsModule
    
     
   ],

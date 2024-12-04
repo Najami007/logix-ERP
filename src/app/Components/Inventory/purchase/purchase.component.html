@@ -58,7 +58,7 @@
             <div class="row prod">
                 <div class="col-lg-8 d-flex">
                     <input type="text"  [(ngModel)]="PBarcode"
-                        (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event);focusto('ovhd',$event)"
+                        (keydown)="focusto('#ovhd',$event);changeFocus($event,'.prodRow');searchByCode($event);"
                         id="psearchProduct" class="searchProduct ps-2" placeholder="Scan Barcode (Alt + b)" (focus)="rowFocused = -1"
                         autofocus autocomplete="off" accesskey="b">
 
@@ -70,9 +70,9 @@
 
 
                 <div class="col-lg-3 ms-1">
-                    <button *ngIf="crudList.c" style="height: 50px;" class=" col-lg-5 btn btn-primary me-1" matTooltip="Hold Bill"
+                    <button *ngIf="crudList.c" style="height: 50px;" class=" col-lg-5 btnhold me-1" matTooltip="Hold Bill"
                     (click)="SaveBill('hold')">{{holdBtnType}}</button>
-                    <button  class=" col-lg-5 btn btn-danger me-1"  data-bs-toggle="modal" style="height: 50px;" matTooltip="Retrieve Bill" 
+                    <button  class=" col-lg-5 btnreset me-1"  data-bs-toggle="modal" style="height: 50px;" matTooltip="Retrieve Bill" 
                         data-bs-target="#holdModal">Retrieve</button>
                 
 
@@ -196,13 +196,13 @@
                     <p style="font-size: 15px;color: gainsboro">OVERHEAD</p>
                     <input class="bg-transparent border-0 text-end text-white font-digit w-100" id="ovhd"
                         style="font-size: 50px;" type="text" [(ngModel)]="overHead" (keyup)="getTotal()"
-                        (keydown)="getTotal();focusto('disc',$event);this.global.handleNumKeys($event)" />
+                        (keydown)="getTotal();focusto('#disc',$event);this.global.handleNumKeys($event)" />
                 </div>
                 <div class="">
                     <p style="font-size: 15px;color: gainsboro">DISCOUNT</p>
                     <input class="bg-transparent border-0 text-warning text-end font-digit w-100" id="disc"
                         style="font-size: 50px;" type="text" [(ngModel)]="discount" (keyup)="getTotal()"
-                        (keydown)="getTotal();focusto('savebtn',$event);this.global.handleNumKeys($event);this.global.avoidMinus($event)" />
+                        (keydown)="getTotal();focusto('#savebtn',$event);this.global.handleNumKeys($event);this.global.avoidMinus($event)" />
                 </div>
                 <div class="">
                     <p style="font-size: 15px;color: gainsboro">NET TOTAL</p>
@@ -212,7 +212,7 @@
             </div>
 
             <div class="mt-2 text-center">
-                <button class=" w-50 btn btn-success" id="savebtn" *ngIf="crudList.c" (click)="SaveBill('purchase')">Save</button>
+                <button class=" w-50 btnsave" id="savebtn" *ngIf="crudList.c" (click)="SaveBill('purchase')">Save</button>
             </div>
         </mat-card>
     </div>

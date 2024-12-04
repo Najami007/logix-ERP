@@ -47,7 +47,7 @@
         
                             <div class="col-lg-1 ">
                                 
-                                <button class="btn btn-success btn-rpt" (click)="save()"><mat-icon>save</mat-icon></button>
+                                <button class="btnsave btn-rpt" (click)="save()"><mat-icon>save</mat-icon></button>
                             </div>
                         
         
@@ -94,9 +94,9 @@
                             <textarea matInput type="number" [(ngModel)]="description"></textarea>
 
                         </mat-form-field>
-                        <button class="btn btn-success btn-save mt-4" *ngIf="crudList.u && btnText == 'Update'" (click)="SaveBudget()">{{btnText}}</button>
-                          <button class="btn btn-success btn-save mt-4" *ngIf="crudList.c && btnText == 'Save'" (click)="SaveBudget()">{{btnText}}</button>
-                          <button class="btn btn-danger btn-reset mt-4" (click)="reset()">Reset</button>
+                        <button class="btnsave mt-4" *ngIf="crudList.u && btnText == 'Update'" (click)="SaveBudget()">{{btnText}}</button>
+                          <button class="btnsave mt-4" *ngIf="crudList.c && btnText == 'Save'" (click)="SaveBudget()">{{btnText}}</button>
+                          <button class="btnreset mt-4" (click)="reset()">Reset</button>
 
                     </div>
                 </div>

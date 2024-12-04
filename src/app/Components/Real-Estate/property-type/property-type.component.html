@@ -1,0 +1,69 @@
+<div  class="row no-scroll vh-100 bg-gra body ">
+
+    <div class="col-lg-4 bg-white p-5 border">
+        <h2 class="border-bottom">Property Type Detail's</h2>
+
+
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Type Title</mat-label>
+            <input matInput type="text" [(ngModel)]="PropertyTypeTitle" >
+        </mat-form-field>
+
+    
+
+    
+
+        <div class="row justify-content-around">
+            <button class="btnsave w-25" *ngIf="crudList.u && btnType == 'Update'" (click)="save()">{{btnType}}</button>
+            <button class="btnsave w-25" *ngIf="crudList.c && btnType == 'Save'" (click)="save()">{{btnType}}</button>
+            <button class="btnreset w-25" (click)="reset()">Reset</button>
+        </div>
+        
+
+    </div>
+
+    <div class="col-lg-8 p-4" style="min-height: 90vh;max-height: 90vh;overflow-y: scroll;">
+
+
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label class="ps-5">Search.....</mat-label>
+            <input  matInput type="search" class="text-secondary" #savedSearch>
+            <mat-icon matPrefix class="text-secondary">search</mat-icon>
+        </mat-form-field>
+
+
+        <div>
+            <table class="table-logix2" *ngIf="crudList.r">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Title</th>
+                        <th *ngIf="crudList.u">Edit</th>
+                        <th *ngIf="crudList.d">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of SavedDataList | filter:savedSearch.value index as index">
+                        <td>{{index +1 }}</td>
+                        <td>{{item.propertyTypeTitle}}</td>
+                        <td><mat-icon class="text-success cursorPointer" (click)="edit(item)">edit</mat-icon></td>
+                        <td><mat-icon class="text-danger cursorPointer" (click)="delete(item)">delete</mat-icon></td>
+                    </tr>
+                 
+                </tbody>
+            </table>
+        </div>
+    
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+

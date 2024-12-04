@@ -62,7 +62,7 @@ export class AddModuleComponent implements OnInit {
       this.msg.WarnNotify('Enter Module Description')
     }else{
 
-      this.dataServie.saveHttp(this.global.userLink + funcLink , {
+      this.dataServie.saveHttp(this.global.contorlPanelLink + funcLink , {
         ModuleID : this.editData.moduleID,
         ModuleTitle:this.moduleTitle,
         ModuleIcon :this.moduleIcon,

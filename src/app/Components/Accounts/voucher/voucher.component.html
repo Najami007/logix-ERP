@@ -133,7 +133,7 @@
 
                         <!-- -------------------Save Icon Button-------------- -->
                         <div class="form-field col-lg-1 text-start ">
-                            <button style="height: 60px; width: 50px;" class="btn btn-success" type="button" (click)="save()">
+                            <button style="height: 60px; width: 50px;" class="btnsave" type="button" (click)="save()">
                                 <mat-icon class="mat-icon-rtl-mirror" >save</mat-icon>
                             </button>
                            
@@ -199,8 +199,8 @@
                     </span>
                 </div>
                 <div class="text-center row justify-content-center" >
-                    <button  class="btn btn-success btn-save  col-lg-3 me-2" *ngIf="crudList.c" (click)="insertVoucher()"> Save</button>
-                    <button   class="btn btn-danger btn-reset  col-lg-3 "  (click)="reset()"> Reset</button>
+                    <button  class="btnsave  col-lg-3 me-2" *ngIf="crudList.c" (click)="insertVoucher()"> Save</button>
+                    <button   class="btnreset  col-lg-3 "  (click)="reset()"> Reset</button>
                 </div>
             </div>
             

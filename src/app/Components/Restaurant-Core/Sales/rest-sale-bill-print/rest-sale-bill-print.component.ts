@@ -16,6 +16,7 @@ import Swal from 'sweetalert2';
 export class RestSaleBillPrintComponent {
 
   showCmpNameFeature:any = this.global.getFeature('cmpName');
+  waiterFeature = this.global.getFeature('Waiter');
 
   crudList: any = [];
   companyProfile: any = [];
@@ -83,6 +84,7 @@ export class RestSaleBillPrintComponent {
   myCounter:any = '';
   myOrderNo = 0;
   type:any = '';
+  myBookerName  ='';
 
 
 
@@ -111,6 +113,7 @@ export class RestSaleBillPrintComponent {
           this.myCounterName = Response[0].entryUser;
           this.myInvTime = Response[0].createdOn;
           this.myOrderNo = Response[0].orderNo;
+          this.myBookerName = Response[0].bookerName;
           
           if(this.myPaymentType == 'Bank'){
             this.myBank = this.myNetTotal;
@@ -148,6 +151,7 @@ export class RestSaleBillPrintComponent {
       this.myOtherCharges = Response[0].otherCharges;
       this.myRemarks = Response[0].remarks;
       this.myOrderNo = Response[0].orderNo;
+      this.myBookerName = Response[0].bookerName;
       
         this.mySubTotal = 0;
       Response.forEach((e:any) => {
@@ -187,6 +191,7 @@ export class RestSaleBillPrintComponent {
       this.myTime;
       this.myCounter = '';
       this.type = '';
+      this.myBookerName = '';
      }
  
    }

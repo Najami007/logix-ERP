@@ -37,17 +37,22 @@ export class GlobalDataModule implements OnInit {
   DisableDate = true;
   disableSaleDate = true;
 
-  InvProjectID = 6;
-  parkProjectID = 6;
+  InvProjectID = 1;
+  parkProjectID = 1;
 
   inventoryLink = 'inv/';
   userLink = 'user/';
   accountLink = 'acc/';
   companyLink = 'cmp/';
+  contorlPanelLink = 'cpl/';
   coreLink = 'core/';
   parkLink = 'park/';
   restaurentLink = 'res/';
-  societyLink = '';
+  societyLink = 'prp/';
+  propertyLink = 'prp/';
+
+
+  Currency = 'AED';
 
 
   glbMenulist: any = [];
@@ -102,22 +107,33 @@ export class GlobalDataModule implements OnInit {
 
 
   getFeature(value:any){
+    var returnStatus = false;
+    var credentials = JSON.parse(localStorage.getItem('ftr') || '{}');
+  
 
-    if(value == 'cmpName'){
-      return true;
-    }
-    if(value == 'cmpLogo'){
-      return true;
-    }
-    if(value == 'disc'){
-      return true;
-    }
-    if(value == 'bkr'){
-      return true;
-    }
+    var FearturesList:any = credentials.flt;
+   
+    var row:any = FearturesList.find((e:any)=> atob(atob(e.ttl)) == value);
 
-    return true;
+    if(row != undefined){
+      var status:any =atob(atob(row.sts));
+      returnStatus =  status == 'True' ? true : false
+    }
+    return returnStatus;
   }
+
+  getBillPrintType(){
+    var value = '';
+    var credentials = localStorage.getItem('BillPrint');
+    if(credentials == null){
+      value = 'english';
+    }else{
+      value = credentials;
+    }
+    
+    return value;
+  }
+
 
   //////////////sets the header title ////////////////////////
   setHeaderTitle(title: string) {
@@ -273,14 +289,19 @@ export class GlobalDataModule implements OnInit {
       LoginName: Email,
       Password: password,
     }).subscribe({
-      next: (value: any) => {
-        // console.log(value);
+      next: (Value: any) => {
         var curDate:Date = new Date();
-        var userID = value._culId;
+        var userID = Value._culId;
+        var value = {msg:Value.msg,_cuLnk:Value._cuLnk,_culId:Value._culId,_culName:Value._culName};
+        var flt:any = [];
+        ///Encripting The Features List
+         Value._reqFeatures.forEach((e:any) => {
+          flt.push({ttl:btoa(btoa(e.featureTitle)),sts:btoa(btoa(e.featureStatus))});
+        });
+        
         localStorage.setItem('curVal', JSON.stringify({ value }));
-         this.cookie.set('ui',value._culId);
-         this.cookie.set('un',value._culName);
-         this.cookie.set('ul',value._cuLnk);
+        localStorage.setItem('ftr', JSON.stringify({ flt }));
+     
       
 
         if (value.msg == 'Logged in Successfully') {
@@ -293,10 +314,7 @@ export class GlobalDataModule implements OnInit {
 
               localStorage.setItem('mid', JSON.stringify(Response[0].moduleID));
               this.setMenuItem(Response[0].moduleID);
-              this.cookie.set('mid',Response[0].moduleID);
-             
-              // console.log(Response);
-            }
+                         }
           )
           this.getCompany();
 
@@ -340,11 +358,9 @@ export class GlobalDataModule implements OnInit {
 
 
           localStorage.removeItem('curVal');
+          localStorage.removeItem('ftr');
           localStorage.removeItem('mid');
-          document.cookie = 'ui=';
-          document.cookie = 'un=';
-          document.cookie = 'ul=';
-          document.cookie = 'mid=';
+      
           // localStorage.removeItem('cmpnyVal');
           this.rout.navigate(['login']);
           $('.loaderDark').fadeOut(500);
@@ -362,6 +378,39 @@ export class GlobalDataModule implements OnInit {
 
   }
 
+
+  openTill(){
+
+    
+  
+      var frame1: any = $('<iframe />');
+      frame1[0].name = 'frame1';
+      frame1.css({ position: 'absolute', top: '-1000000px' });
+      $('body').append(frame1);
+      var frameDoc = frame1[0].contentWindow
+        ? frame1[0].contentWindow
+        : frame1[0].contentDocument.document
+          ? frame1[0].contentDocument.document
+          : frame1[0].contentDocument;
+      frameDoc.document.open();
+  
+    
+      frameDoc.document.write('</head><body>');
+  
+      //Append the DIV contents.
+      frameDoc.document.write('Till Open');
+      frameDoc.document.write('</body></html>');
+  
+      frameDoc.document.close();
+  
+        window.frames[0].focus();
+        window.frames[0].print();
+  
+        frame1.remove();
+      
+  
+    
+  }
 
 
 
@@ -421,6 +470,108 @@ export class GlobalDataModule implements OnInit {
 
   }
 
+
+  printBill(printSection: string,focusClass:any) {
+    var contents = $(printSection).html();
+
+    var frame1: any = $('<iframe />');
+    frame1[0].name = 'frame1';
+    frame1.css({ position: 'absolute', top: '-1000000px' });
+    $('body').append(frame1);
+    var frameDoc = frame1[0].contentWindow
+      ? frame1[0].contentWindow
+      : frame1[0].contentDocument.document
+        ? frame1[0].contentDocument.document
+        : frame1[0].contentDocument;
+    frameDoc.document.open();
+
+    //Create a new HTML document.
+    // frameDoc.document.write(
+    //   "<html><head><title>DIV Contents</title>" +
+    //     "<style>" +
+    //     printCss +
+    //     "</style>"
+    // );
+
+    //Append the external CSS file. <link rel="stylesheet" href="../../../styles.scss" /> <link rel="stylesheet" href="../../../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    // frameDoc.document.write(
+    //   '<style type="text/css" media="print">@page { size: portrait; }</style>'
+    // );
+    frameDoc.document.write(
+
+      '<link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>'
+      + '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'
+      + '<link rel="stylesheet" href="../../assets/style/barcode.scss" type="text/css" media="print"/>'
+      //+'<style type="text/css" media="print">/*@page { size: landscape; }*/</style>'
+      // '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css.map" type="text/css" />'+
+
+      // '<link rel="stylesheet" href="../css/bootstrap.css" type="text/css"  media="print"/>'
+    );
+    frameDoc.document.write('</head><body>');
+
+    //Append the DIV contents.
+    frameDoc.document.write(contents);
+    frameDoc.document.write('</body></html>');
+
+    frameDoc.document.close();
+
+    setTimeout(function () {
+      window.frames[0].focus();
+      window.frames[0].print();
+
+      frame1.remove();
+      $(focusClass).trigger('focus');
+    }, 500);
+
+  }
+
+  printToSpecificPrinter(printerName:any,printSection:any) {
+    var contents = $(printSection).html();
+
+    var printDialog: any = $('<iframe />');
+    printDialog[0].name = 'frame1';
+    printDialog.css({ position: 'absolute', top: '-1000000px' });
+    $('body').append(printDialog);
+    var frameDoc = printDialog[0].contentWindow
+      ? printDialog[0].contentWindow
+      : printDialog[0].contentDocument.document
+        ? printDialog[0].contentDocument.document
+        : printDialog[0].contentDocument;
+        frameDoc.window.open();
+    // var printDialog:any = window.open("", "PrintDialog", "width=500,height=300");
+    // printDialog.document.write("<html><head><title>Print Command</title></head><body><script>window.print();</script></body></html>");
+    printDialog.document.write(
+
+      '<link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>'
+      + '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'
+      + '<link rel="stylesheet" href="../../assets/style/barcode.scss" type="text/css" media="print"/>'
+      //+'<style type="text/css" media="print">/*@page { size: landscape; }*/</style>'
+      // '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css.map" type="text/css" />'+
+
+      // '<link rel="stylesheet" href="../css/bootstrap.css" type="text/css"  media="print"/>'
+    );
+    printDialog.document.write('</head><body>');
+
+    //Append the DIV contents.
+    printDialog.document.write(contents);
+    printDialog.document.write('</body></html>');
+    printDialog.document.close();
+  
+    // Simulate a click event on the print button to trigger the print dialog
+    const printButton = printDialog.document.querySelector('button[name="print"]');
+    if (printButton) {
+      printButton.click();
+    } else {
+      // If the print button is not found, try alternative methods
+      printDialog.focus();
+      printDialog.print();
+    }
+  
+    // Close the print dialog after a delay to avoid conflicts
+    setTimeout(() => {
+      printDialog.close();
+    }, 1000);
+  }
   printBarcode(printSection: string) {
     var contents = $(printSection).html();
 
@@ -635,7 +786,6 @@ export class GlobalDataModule implements OnInit {
   /////////////////////////////////// will validate the numonly field
   numberOnly() {
     $('.numOnly').on('keypress keyup blur', (event: any) => {
-      // console.log(event.which);
       event.target.value.replace(/[^\d].+/, "");
       if (event.which < 48 || event.which > 57) {
         event.preventDefault();
@@ -742,7 +892,6 @@ export class GlobalDataModule implements OnInit {
 
       this.http.get(environment.mainApi+this.inventoryLink+'GetProductImage?ProductID='+prodID).subscribe(
         (Response:any)=>{
-          // console.log(Response);
           this.dialog.open(ProductImgComponent, {
             width: '30%',
             data: Response[0].productImage

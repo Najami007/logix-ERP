@@ -68,6 +68,12 @@ import('./Components/hrms/hrms.module').then((m)=>m.HRMSModule),
   import('./Components/Society/society.module').then((m)=>m.SocietyModule),
   
   },
+  {path:'rest', 
+    component:MainComponent,
+    loadChildren:()=> 
+    import('./Components/Real-Estate/real-estate.module').then((m)=>m.RealEstateModule),
+    
+    },
 { path: '**', redirectTo: 'login', pathMatch: 'full' },
  
 
@@ -77,7 +83,9 @@ import('./Components/hrms/hrms.module').then((m)=>m.HRMSModule),
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   
-  exports: [RouterModule,
+  exports: [
+    
+    RouterModule,
    ]
 })
 export class AppRoutingModule { }

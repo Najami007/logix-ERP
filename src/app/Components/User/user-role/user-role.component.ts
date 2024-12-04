@@ -463,4 +463,16 @@ export class UserRoleComponent implements OnInit {
 
   }
 
+  SelectAllMenu(){
+    this.menuList.forEach((e:any) => {
+        if(e.moduleID == this.moduleID){
+          e.c = !e.c;
+          e.r = !e.r;
+          e.u = !e.u;
+          e.d = !e.d;
+          e.a = !e.a;
+        }
+    });
+  }
+
 }

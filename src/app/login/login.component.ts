@@ -33,8 +33,7 @@ logoWidth = 0;
           this.logoHeight = data[0].logo1Height / 2 ;
           this.logoWidth = data[0].logo1Width / 2;
         }
-        // console.log(data);
-      });
+            });
     }
 
 
@@ -64,8 +63,6 @@ logoWidth = 0;
       this.msg.WarnNotify('Please Enter Password')
     }else{
      
-      //console.log(this.userEmail,this.userPassword)
-
 
       this.global.login(this.userEmail,this.userPassword);
 

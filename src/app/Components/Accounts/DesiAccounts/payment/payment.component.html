@@ -1,7 +1,7 @@
 <div class="body container">
 
     <div class="p-2 row justify-content-center">
-        <button type="button" mat-fab color="primary" *ngIf="crudList.c" autofocus (click)="addPayment()"><mat-icon>add</mat-icon></button>
+        <button type="button" mat-fab class="btnadd" *ngIf="crudList.c" autofocus (click)="addPayment()"><mat-icon>add</mat-icon></button>
         <mat-form-field appearance="outline" [ngClass]="crudList.c == false ? 'col-lg-12' : 'col-lg-11' ">
             <mat-label>Search....</mat-label>
             <input matInput #search  />

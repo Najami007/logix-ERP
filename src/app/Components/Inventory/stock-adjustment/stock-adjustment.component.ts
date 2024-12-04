@@ -266,7 +266,9 @@ export class StockAdjustmentComponent implements OnInit {
       
       if(this.tableDataList.length >= 1 ){ 
         this.rowFocused = 0; 
-         $('.qty0').trigger('focus');
+        e.preventDefault();
+        $('.qty0').trigger('select');
+        $('.qty0').trigger('focus');
 
       }
      }
@@ -275,6 +277,7 @@ export class StockAdjustmentComponent implements OnInit {
       /////move down
       if(e.keyCode == 40){
         if(this.productList.length >= 1 ){  
+          e.preventDefault();
           $('.prodRow0').trigger('focus');
        }  
      }}
@@ -303,9 +306,9 @@ export class StockAdjustmentComponent implements OnInit {
      } else {
          var clsName = cls + this.prodFocusedRow;    
         //  alert(clsName);
-         $(clsName).trigger('focus');
-         e.which = 9;   
-         $(clsName).trigger(e)       
+        e.preventDefault();
+        $(clsName).trigger('focus');
+              
      }}
    }
  
@@ -314,7 +317,8 @@ export class StockAdjustmentComponent implements OnInit {
       if (e.keyCode == 38) {
  
        if (this.prodFocusedRow == 0) {
-           $(endFocus).trigger('focus');
+        e.preventDefault();
+        $(endFocus).trigger('focus');
            this.prodFocusedRow = 0;
   
        }
@@ -324,7 +328,7 @@ export class StockAdjustmentComponent implements OnInit {
            this.prodFocusedRow -= 1;
  
            var clsName = cls + this.prodFocusedRow;
-          //  alert(clsName);
+           e.preventDefault();
            $(clsName).trigger('focus');
            
  
@@ -365,7 +369,9 @@ export class StockAdjustmentComponent implements OnInit {
         this.rowFocused -= 1  
     } else {
         var clsName = cls + this.rowFocused;    
-        $(clsName).trigger('focus');    
+        e.preventDefault();  
+        $(clsName).trigger('select');    
+        $(clsName).trigger('focus'); 
     }}
   }
 
@@ -374,6 +380,8 @@ export class StockAdjustmentComponent implements OnInit {
      if (e.keyCode == 38) {
 
       if (this.rowFocused == 0) {
+        e.preventDefault();  
+        $(".searchProduct").trigger('select');
           $(".searchProduct").trigger('focus');
           this.rowFocused = 0;
  
@@ -384,7 +392,10 @@ export class StockAdjustmentComponent implements OnInit {
           this.rowFocused -= 1;
 
           var clsName = cls + this.rowFocused;
-          $(clsName).trigger('focus');
+          
+           e.preventDefault(); 
+           $(clsName).trigger('select'); 
+           $(clsName).trigger('focus');
           
 
       }
@@ -409,8 +420,14 @@ export class StockAdjustmentComponent implements OnInit {
         var index = this.tableDataList.indexOf(item);
         this.tableDataList.splice(index, 1);
         this.getTotal();
-        this.rowFocused = index - 1;
-        $('.qty'+this.rowFocused).trigger('focus');
+        if (index == 0) {
+          $('#searchProduct').trigger('select'); 
+          $('#searchProduct').trigger('focus');
+        } else {
+          this.rowFocused = index - 1;
+          $('.qty'+this.rowFocused).trigger('select');
+          $('.qty'+this.rowFocused).trigger('focus');
+        }
     }
    }
    )

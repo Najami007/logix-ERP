@@ -5,7 +5,6 @@ import { COAComponent } from '../coa.component';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { environment } from 'src/environments/environment.development';
-import { PincodeComponent } from 'src/app/Components/User/pincode/pincode.component';
 
 @Component({
   selector: 'app-update-coa',

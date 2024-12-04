@@ -1,74 +1,79 @@
 <mat-tab-group mat-align-tabs="center" class="h-100 body" [selectedIndex]="tabIndex"
-    (selectedIndexChange)="changeTabHeader($event)">
-    <mat-tab label="ADD Role" class="h-100">
-        <div class="container-fluid ">
+  (selectedIndexChange)="changeTabHeader($event)">
+  <mat-tab label="ADD Role" class="h-100">
+    <div class="container-fluid ">
 
-            <div class="row pt-3">
-                <mat-form-field class="col-lg-4 p-2" appearance="outline">
-                    <mat-label>Role Title</mat-label>
-                    <input matInput type="text" [(ngModel)]="roleTitle">
-                </mat-form-field>
+      <div class="row pt-3">
+        <mat-form-field class="col-lg-4 p-2" appearance="outline">
+          <mat-label>Role Title</mat-label>
+          <input matInput type="text" [(ngModel)]="roleTitle">
+        </mat-form-field>
 
-                <mat-form-field class="col-lg-6 p-2" appearance="outline">
-                    <mat-label>Role Description</mat-label>
-                    <input matInput type="text" [(ngModel)]="roleDescription">
-                </mat-form-field>
+        <mat-form-field class="col-lg-6 p-2" appearance="outline">
+          <mat-label>Role Description</mat-label>
+          <input matInput type="text" [(ngModel)]="roleDescription">
+        </mat-form-field>
 
-                <div class="col-lg-2 p-2">
-                  <button mat-raised-button class="bg-success text-white col-lg-6 me-1" style="height: 55px;"
-                      *ngIf="crudList.u && btnType == 'Update'"   (click)="save()">{{btnType}}</button>
-                    <button mat-raised-button class="bg-success text-white col-lg-6 me-1" style="height: 55px;"
-                      *ngIf="crudList.c && btnType == 'Save'"   (click)="save()">{{btnType}}</button>
-                    <button mat-raised-button class="bg-danger text-white col-lg-5" style="height: 55px;"
-                        (click)="reset()"> Reset</button>
-                </div>
-
-
-            </div>
-
-            <div class="row ">
-
-                <div class="col-lg-4 h-100 border  p-2  bg-white" style="min-height: 500px;">
-
-                    <mat-form-field class="w-100">
-                        <mat-label>Select Module</mat-label>
-                        <mat-select [(ngModel)]="moduleID">
-                            <mat-option *ngFor="let item of moduleList"
-                                [value]="item.moduleID">{{item.moduleTitle}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-
-                    <table class="table-logix2"  >
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Write</th>
-                                <th>Read</th>
-                                <th>Update</th>
-                                <th>Delete</th>
-                                <th>All</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let item of menuList index as index">
-                                <td *ngIf="item.moduleID == moduleID" class="text-start">{{item.menuTitle}}</td>
-                                <td *ngIf="item.moduleID == moduleID"><input type="checkbox" (change)="addToSelectedModule(item,index,'')" [(ngModel)]="item.c"></td>
-                                <td *ngIf="item.moduleID == moduleID"><input type="checkbox" (change)="addToSelectedModule(item,index,'')" [(ngModel)]="item.r"></td>
-                                <td *ngIf="item.moduleID == moduleID"><input type="checkbox" (change)="addToSelectedModule(item,index,'')" [(ngModel)]="item.u"></td>
-                                <td *ngIf="item.moduleID == moduleID"><input type="checkbox" (change)="addToSelectedModule(item,index,'')" [(ngModel)]="item.d"></td>
-                                <td *ngIf="item.moduleID == moduleID"><input type="checkbox"  
-                                        (change)="addToSelectedModule(item,index,'a');"
-                                         [(ngModel)]="item.a"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
-
-                <div class="col-lg-8">
+        <div class="col-lg-2 p-2">
+          <button mat-raised-button class="bg-success text-white col-lg-6 me-1" style="height: 55px;"
+            *ngIf="crudList.u && btnType == 'Update'" (click)="save()">{{btnType}}</button>
+          <button mat-raised-button class="bg-success text-white col-lg-6 me-1" style="height: 55px;"
+            *ngIf="crudList.c && btnType == 'Save'" (click)="save()">{{btnType}}</button>
+          <button mat-raised-button class="bg-danger text-white col-lg-5" style="height: 55px;" (click)="reset()">
+            Reset</button>
+        </div>
 
 
-                  <!-- <div class=" w-50 h-50 " *ngFor="let module of moduleList" style="margin-bottom: 5px;">
+      </div>
+
+      <div class="row ">
+
+        <div class="col-lg-4 h-100 border  p-2  bg-white" style="min-height: 500px;">
+
+          <mat-form-field class="w-100">
+            <mat-label>Select Module</mat-label>
+            <mat-select [(ngModel)]="moduleID">
+              <mat-option *ngFor="let item of moduleList" [value]="item.moduleID">{{item.moduleTitle}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <table class="table-logix2">
+
+            <thead>
+              <tr><th colspan="6" class="text-end"><button mat-mini-fab (click)="SelectAllMenu()">ALL</button></th></tr>
+              <tr>
+                <th>Name</th>
+                <th>Write</th>
+                <th>Read</th>
+                <th>Update</th>
+                <th>Delete</th>
+                <th>All</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr *ngFor="let item of menuList index as index">
+                <td *ngIf="item.moduleID == moduleID" class="text-start">{{item.menuTitle}}</td>
+                <td *ngIf="item.moduleID == moduleID"><input type="checkbox"
+                    (change)="addToSelectedModule(item,index,'')" [(ngModel)]="item.c"></td>
+                <td *ngIf="item.moduleID == moduleID"><input type="checkbox"
+                    (change)="addToSelectedModule(item,index,'')" [(ngModel)]="item.r"></td>
+                <td *ngIf="item.moduleID == moduleID"><input type="checkbox"
+                    (change)="addToSelectedModule(item,index,'')" [(ngModel)]="item.u"></td>
+                <td *ngIf="item.moduleID == moduleID"><input type="checkbox"
+                    (change)="addToSelectedModule(item,index,'')" [(ngModel)]="item.d"></td>
+                <td *ngIf="item.moduleID == moduleID"><input type="checkbox"
+                    (change)="addToSelectedModule(item,index,'a');" [(ngModel)]="item.a"></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+        <div class="col-lg-8">
+
+
+          <!-- <div class=" w-50 h-50 " *ngFor="let module of moduleList" style="margin-bottom: 5px;">
                     <div class="card w-100 h-100 p-2" data-simplebar>
                       <div class="card-header w-100">
                         {{ module.moduleTitle }}
@@ -108,95 +113,91 @@
                     </div>
                   </div> -->
 
-                    <div *ngFor="let module of TempModuleList" style="margin-bottom: 5px;">
-                        <div class="card w-100 h-25" data-simplebar>
-                          <div class="card-header w-100">
-                            {{ module.moduleTitle }}
-                          </div>
-                          <div class="card-body d-flex flex-wrap">
-                            <div
-                              *ngFor="let item of module.tempMenuList"
-                              class="me-5 pb-2 pt-3"
-                            >
-                              <div
-                                *ngIf="
+          <div *ngFor="let module of TempModuleList" style="margin-bottom: 5px;">
+            <div class="card w-100 h-25" data-simplebar>
+              <div class="card-header w-100">
+                {{ module.moduleTitle }}
+              </div>
+              <div class="card-body d-flex flex-wrap">
+                <div *ngFor="let item of module.tempMenuList" class="me-5 pb-2 pt-3">
+                  <div *ngIf="
                                   item.c || item.r || item.u || item.d
-                                "
-                              >
-                                <div
-                                  class="d-flex flex-row pb-2 justify-content-around"
-                                >
-                                  <div *ngIf="item.c ">
-                                    <span matBadge="c"   matBadgeColor="accent"  matBadgeOverlap="true"></span>
-                                  </div>
-                                  <div *ngIf="item.r ">
-                                    <span matBadge="r"  matBadgeColor="primary" matBadgeOverlap="true"></span>
-                                  </div>
-                                  <div *ngIf="item.u ">
-                                    <span matBadge="u" matBadgeColor="accent" matBadgeOverlap="true"></span>
-                                  </div>
-                                  <div *ngIf="item.d ">
-                                    <span matBadge="d" matBadgeColor="warn" matBadgeOverlap="true"></span>
-                                  </div>
-                                </div>
-                                <div class="ps-3 pe-3 pt-1 pb-1 rounded cardTxtYellow text-center mat-elevation-z5" style="min-width: 100px;">
-                                  <small>{{ item.menuTitle }}</small>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                                ">
+                    <div class="d-flex flex-row pb-2 justify-content-around">
+                      <div *ngIf="item.c ">
+                        <span matBadge="c" matBadgeColor="accent" matBadgeOverlap="true"></span>
                       </div>
-
-
-                   
-
+                      <div *ngIf="item.r ">
+                        <span matBadge="r" matBadgeColor="primary" matBadgeOverlap="true"></span>
+                      </div>
+                      <div *ngIf="item.u ">
+                        <span matBadge="u" matBadgeColor="accent" matBadgeOverlap="true"></span>
+                      </div>
+                      <div *ngIf="item.d ">
+                        <span matBadge="d" matBadgeColor="warn" matBadgeOverlap="true"></span>
+                      </div>
+                    </div>
+                    <div class="ps-3 pe-3 pt-1 pb-1 rounded cardTxtYellow text-center mat-elevation-z5"
+                      style="min-width: 100px;">
+                      <small>{{ item.menuTitle }}</small>
+                    </div>
+                  </div>
                 </div>
-
-
+              </div>
             </div>
+          </div>
 
 
 
 
         </div>
 
-    </mat-tab>
 
-    <mat-tab label="Saved Record " class="h-100">
-
-
-        <div class="container-fluid p-4">
-            <mat-form-field class="w-100" appearance="outline">
-                <mat-label>Search.....</mat-label>
-                <input [(ngModel)]="txtSearch" matInput type="text" #input>
-                <mat-icon matSuffix class="text-secondary">search</mat-icon>
-            </mat-form-field>
-
-
-            <table class="table-logix2 cursorPointer" *ngIf="crudList.r" >
-                <thead>
-                    <tr>
-                        <th>S#</th>
-                        <th>Role Title</th>
-                        <th>Role Description</th>
-                        <th *ngIf="crudList.u" >Edit</th>
-                        <th *ngIf="crudList.d" >Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of rolesList|filter:txtSearch index as i">
-                        <td>{{i + 1}}</td>
-                        <td>{{item.roleTitle}}</td>
-                        <td>{{item.roleDescription}}</td>
-                        <td *ngIf="crudList.u" ><button mat-mini-fab class="text-white bg-success h30px w30px" (click)="editRole(item)" ><mat-icon  >edit</mat-icon></button></td>
-                        <td *ngIf="crudList.d" > <button mat-mini-fab class="text-white bg-danger h30px w30px"   (click)="deleteRole(item)"><mat-icon>delete</mat-icon></button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+      </div>
 
 
 
-    </mat-tab>
+
+    </div>
+
+  </mat-tab>
+
+  <mat-tab label="Saved Record " class="h-100">
+
+
+    <div class="container-fluid p-4">
+      <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Search.....</mat-label>
+        <input [(ngModel)]="txtSearch" matInput type="text" #input>
+        <mat-icon matSuffix class="text-secondary">search</mat-icon>
+      </mat-form-field>
+
+
+      <table class="table-logix2 cursorPointer" *ngIf="crudList.r">
+        <thead>
+          <tr>
+            <th>S#</th>
+            <th>Role Title</th>
+            <th>Role Description</th>
+            <th *ngIf="crudList.u">Edit</th>
+            <th *ngIf="crudList.d">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of rolesList|filter:txtSearch index as i">
+            <td>{{i + 1}}</td>
+            <td>{{item.roleTitle}}</td>
+            <td>{{item.roleDescription}}</td>
+            <td *ngIf="crudList.u"><button mat-mini-fab class="text-white bg-success h30px w30px"
+                (click)="editRole(item)"><mat-icon>edit</mat-icon></button></td>
+            <td *ngIf="crudList.d"> <button mat-mini-fab class="text-white bg-danger h30px w30px"
+                (click)="deleteRole(item)"><mat-icon>delete</mat-icon></button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
+  </mat-tab>
 </mat-tab-group>

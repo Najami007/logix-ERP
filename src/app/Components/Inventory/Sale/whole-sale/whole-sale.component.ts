@@ -26,8 +26,11 @@ import { SaleBillPrintComponent } from '../sale-bill-print/sale-bill-print.compo
 export class WholeSaleComponent implements OnInit {
 
 
-  discFeature = this.global.getFeature('disc');
-  BookerFeature = this.global.getFeature('bkr');
+  discFeature = this.global.getFeature('Discount');
+  BookerFeature = this.global.getFeature('Booker');
+  gstFeature = this.global.getFeature('GST');
+  editSpFeature = this.global.getFeature('EditSp');
+  editDiscFeature = this.global.getFeature('EditDisc');
 
   @ViewChild(SaleBillPrintComponent) billPrint:any;
 
@@ -124,7 +127,7 @@ export class WholeSaleComponent implements OnInit {
 
   tempProdData: any = [];
 
-
+  btnType = 'Save';
   sortType = 'desc';
   invoiceDate = new Date();
   partyID = 0;
@@ -133,8 +136,11 @@ export class WholeSaleComponent implements OnInit {
 
   tableDataList: any = [];
   tempTableDataList: any = [];
+  invoiceNo:any ='';
   InvDate = new Date();
   PBarcode: any = '';
+  AdvTaxValue = 0;
+  AdvTaxAmount = 0;
   productImage = '';
   productName: any = '';
   discount: any = 0;
@@ -157,6 +163,12 @@ export class WholeSaleComponent implements OnInit {
   bankCoaList: any = [];
   partyList: any = [];
   bookerList:any = [];
+  advanceTaxList:any = [{value:0},{value:0.5},{value:2.5},]
+
+  billPrintType:any = this.global.getBillPrintType();
+  setBillType(e:any){
+    localStorage.setItem('BillPrint',this.billPrintType);
+  }
 
   getBooker(){
     this.http.get(environment.mainApi + this.global.inventoryLink + 'getBooker').subscribe(
@@ -296,6 +308,8 @@ export class WholeSaleComponent implements OnInit {
                   batchNo: '-',
                   batchStatus: '-',
                   uomID: Response[0].uomID,
+                  gst: this.gstFeature ? Response[0].gst : 0,
+                  et:Response[0].et,
                   packing: 1,
                   discInP: this.discFeature ?  Response[0].discPercentage : 0,
                   discInR: this.discFeature ?  Response[0].discRupees  : 0,
@@ -396,6 +410,8 @@ export class WholeSaleComponent implements OnInit {
                     batchNo: '-',
                     batchStatus: '-',
                     uomID: Response[0].uomID,
+                    gst: this.gstFeature ? Response[0].gst : 0,
+                    et:Response[0].et,
                     packing: 1,
                     discInP: this.discFeature ?  Response[0].discPercentage : 0,
                     discInR: this.discFeature ?  Response[0].discRupees  : 0,
@@ -484,6 +500,8 @@ export class WholeSaleComponent implements OnInit {
             batchNo: '-',
             batchStatus: '-',
             uomID: Response[0].uomID,
+            gst: this.gstFeature ? Response[0].gst : 0,
+            et:Response[0].et,
             packing: 1,
             discInP: this.discFeature ?  Response[0].discPercentage : 0,
             discInR: this.discFeature ?  Response[0].discRupees  : 0,
@@ -529,23 +547,33 @@ export class WholeSaleComponent implements OnInit {
     }
 
     if (cls == '#disc' && e.keyCode == 13 && e.target.value == '') {
-      $(cls).trigger('focus');
+      e.preventDefault();
+        $(cls).trigger('select');
+        $(cls).trigger('focus');
     }
     if (cls == '#charges' && e.keyCode == 13) {
+      e.preventDefault();
+      $(cls).trigger('select');
       $(cls).trigger('focus');
     }
     if (cls == '#cash' && e.keyCode == 13 && e.target.value == '') {
+      e.preventDefault();
+      $(cls).trigger('select');
       $(cls).trigger('focus');
 
     }
 
     if (cls == '#save' && e.keyCode == 13) {
+      e.preventDefault();
+      // $(cls).trigger('select');
       $(cls).trigger('focus');
 
     }
 
     if (cls == '#vsrtnsearchProduct' && e.keyCode == 13) {
-      $(cls).trigger('focus');
+      e.preventDefault();
+        $(cls).trigger('select');
+        $(cls).trigger('focus');
     }
 
 
@@ -580,8 +608,8 @@ export class WholeSaleComponent implements OnInit {
     }
 
 
-
-    this.netTotal = this.subTotal - parseFloat(this.discount) - parseFloat(this.offerDiscount);
+    this.AdvTaxAmount = (this.subTotal * this.AdvTaxValue) /100;
+    this.netTotal = (this.subTotal - parseFloat(this.discount) - parseFloat(this.offerDiscount)) + this.AdvTaxAmount;
     this.change = parseFloat(this.cash) - this.netTotal;
 
     if (this.paymentType == 'Split') {
@@ -615,6 +643,7 @@ export class WholeSaleComponent implements OnInit {
 
         if (this.tableDataList.length >= 1) {
           this.rowFocused = 0;
+          $('.qty0').trigger('select');
           $('.qty0').trigger('focus');
 
         }
@@ -697,6 +726,7 @@ export class WholeSaleComponent implements OnInit {
       this.rowFocused = index - 1;
     }
     if (e.keyCode == 13) {
+      $('#psearchProduct').trigger('select');
       $('#psearchProduct').trigger('focus');
     }
 
@@ -716,7 +746,9 @@ export class WholeSaleComponent implements OnInit {
           this.rowFocused -= 1
         } else {
           var clsName = cls + this.rowFocused;
-          $(clsName).trigger('focus');
+          e.preventDefault();
+          $(clsName).trigger('select');   
+          $(clsName).trigger('focus');    
         }
       }
     }
@@ -736,6 +768,8 @@ export class WholeSaleComponent implements OnInit {
         this.rowFocused -= 1;
 
         var clsName = cls + this.rowFocused;
+        e.preventDefault();
+        $(clsName).trigger('select'); 
         $(clsName).trigger('focus');
 
 
@@ -762,10 +796,12 @@ export class WholeSaleComponent implements OnInit {
           this.getTotal();
 
           if (index == 0) {
+            $('#psearchProduct').trigger('select'); 
             $('#psearchProduct').trigger('focus');
           } else {
             this.rowFocused = index - 1;
-            $('.qty' + this.rowFocused).trigger('focus');
+            $('.qty'+this.rowFocused).trigger('select');
+            $('.qty'+this.rowFocused).trigger('focus');
           }
         }
       }
@@ -803,7 +839,7 @@ export class WholeSaleComponent implements OnInit {
   }
 
   editSP(item:any){
-   if(this.crudList.u){
+   if(this.editSpFeature){
     Swal.fire({
       title:"Enter Total Amount",
       input:"text",
@@ -846,6 +882,7 @@ export class WholeSaleComponent implements OnInit {
   
   editDR(item:any){
 
+  if(this.editDiscFeature){
     Swal.fire({
       title:"Enter Discount Amount",
       input:"text",
@@ -883,10 +920,13 @@ export class WholeSaleComponent implements OnInit {
            });
         }
     })
+  }
 
   }
   editDP(item:any){
 
+    if(this.editDiscFeature){
+      
     Swal.fire({
       title:"Enter Discount Percent",
       input:"text",
@@ -924,12 +964,13 @@ export class WholeSaleComponent implements OnInit {
            });
         }
     })
+    }
 
   }
  
 
   editTotal(amount:any){
-    if(this.crudList.u){
+    if(this.editSpFeature){
       this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].total = amount;
     this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].quantity = (amount / (this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice - this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR));
 
@@ -1021,6 +1062,8 @@ export class WholeSaleComponent implements OnInit {
         
 
 
+        if(this.btnType == 'Save'){
+          
         this.app.startLoaderDark();
         this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', {
           InvDate: this.global.dateFormater(this.InvDate, '-'),
@@ -1037,6 +1080,8 @@ export class WholeSaleComponent implements OnInit {
           NetTotal: this.netTotal,
           CashRec: this.cash,
           Change: this.change,
+          AdvTaxAmount : this.AdvTaxAmount,
+          AdvTaxValue : this.AdvTaxValue,
           BankCoaID: this.bankCoaID,
           BankCash: this.bankCash,
           CusContactNo: this.customerMobileno || '-',
@@ -1067,6 +1112,12 @@ export class WholeSaleComponent implements OnInit {
             this.app.stopLoaderDark();
           }
         )
+        }
+
+        if(this.btnType == 'Update'){
+
+        }
+
       }
 
     }
@@ -1095,6 +1146,8 @@ export class WholeSaleComponent implements OnInit {
     this.billDiscount = 0;
     this.offerDiscount = 0;
     this.bookerID = 0;
+    this.customerMobileno = '';
+    this.customerName = '';
 
 
   }
@@ -1116,6 +1169,73 @@ export class WholeSaleComponent implements OnInit {
   }
 
 
+  editBill(item:any){
+    this.app.startLoaderDark();
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + item.invBillNo).subscribe(
+      (Response: any) => {
+        
+        
+        // this.tableDataList = Response;
+        this.invoiceNo = Response[0].invBillNo;
+        this.InvDate = new Date(Response[0].invDate);
+        this.AdvTaxValue = Response[0].advTaxValue;
+        this.subTotal = Response[0].billTotal;
+        this.netTotal = Response[0].netTotal;
+        this.otherCharges = Response[0].otherCharges;
+        this.billRemarks = Response[0].remarks;
+        this.cash = Response[0].cashRec;
+        this.bankCash = Response[0].netTotal - Response[0].cashRec;
+        this.discount = Response[0].billDiscount;
+        this.change = Response[0].change;
+        this.paymentType = Response[0].paymentType;
+        this.bookerID =Response[0].bookerID;  
+        this.partyID = Response[0].partyID;
+        this.getTotal();
+        
+  
+         
+
+        this.qtyTotal = 0;
+        this.offerDiscount=0;
+        Response.forEach((e: any) => {
+
+          this.tableDataList.push({
+            rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
+              : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
+                : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
+            productID: e.productID,
+            productTitle: e.productTitle,
+            barcode: e.barcode,
+            productImage: e.productImage,
+            quantity: e.quantity,
+            wohCP: e.costPrice,
+            avgCostPrice: e.avgCostPrice,
+            costPrice: e.costPrice,
+            salePrice:  e.salePrice,
+            ovhPercent: 0,
+            ovhAmount: 0,
+            expiryDate: this.global.dateFormater(new Date(), '-'),
+            batchNo: '-',
+            batchStatus: '-',
+            uomID: e.uomID,
+            packing: 1,
+            discInP:   e.discInP ,
+            discInR:  e.discInR ,
+            aq: e.aq,
+            total:(e.salePrice * e.quantity) - (e.discInR * e.quantity),
+
+          });
+          
+          
+          this.qtyTotal += e.quantity;
+          this.offerDiscount += e.discInR * e.quantity;
+        });
+        $('#SavedBillModal').hide();
+        this.app.stopLoaderDark();
+      }
+    )
+
+  }
 
 
 

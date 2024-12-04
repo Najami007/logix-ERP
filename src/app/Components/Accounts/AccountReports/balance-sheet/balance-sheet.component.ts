@@ -130,6 +130,7 @@ export class BalanceSheetComponent implements OnInit {
   
       this.http.get(environment.mainApi+this.globalData.accountLink+'GetMainBalanceSheet?todate='+this.globalData.dateFormater(this.toDate,'-')+'&projectid='+this.projectID).subscribe(
         (Response:any)=>{
+           
           this.assetList = [];
           this.liabilityList = [];
           this.capitalList = [];

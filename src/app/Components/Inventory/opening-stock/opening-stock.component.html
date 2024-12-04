@@ -52,7 +52,7 @@
                </div>
            </div>
            <div class="col-lg-3 text-start ms-1 pt-3 mt-1">
-               <button mat-raised-button class="bg-primary text-white w-50 " style="height: 40px;"  (click)="ngOnInit()">Load</button>
+               <button  class="btnload w-50 " style="height: 40px;"  (click)="ngOnInit()">Load</button>
            </div>
 
        </div>
@@ -150,11 +150,11 @@
 
        <div class="mt-4 text-center">
         <!-- <button mat-raised-button class="bg-primary text-white w-25" (click)="SaveBill('hold')">{{holdBtnType}}</button> -->
-        <button mat-raised-button *ngIf="crudList.c" class="bg-success text-white w-50" (click)="SaveBill('issue')">{{btnType}}</button>
+        <button  *ngIf="crudList.c" class="btnsave w-50" (click)="SaveBill('issue')">{{btnType}}</button>
         
        </div>
        <div class="mt-4 text-center">
-        <button mat-raised-button class="bg-danger text-white w-50" data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>
+        <button  class="btnreset w-50" data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>
 
 
        

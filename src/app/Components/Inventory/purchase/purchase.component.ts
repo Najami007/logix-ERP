@@ -157,24 +157,34 @@ export class PurchaseComponent implements OnInit{
 
   focusto(cls:any,e:any){ 
 
-   setTimeout(() => {
-    $(cls).trigger('focus');
-   }, 500);
+   if(cls == '#prodName'){
+    setTimeout(() => {
+      e.preventDefault();
+      $(cls).trigger('focus');
+     }, 500);
+   }
 
-   if(cls == 'ovhd' && e.keyCode == 13 ){
+   if(cls == '#ovhd' && e.keyCode == 13 ){
     if(e.target.value == ''){
-      $('#ovhd').trigger('focus');
+      // alert();
+      e.preventDefault();
+      $(cls).trigger('select');
+      $(cls).trigger('focus');
      
     }
    }
 
-   if(cls == 'disc' && e.keyCode == 13){
-    $('#disc').trigger('focus');
+   if(cls == '#disc' && e.keyCode == 13){
+    e.preventDefault();
+        $(cls).trigger('select');
+        $(cls).trigger('focus');
     
    }
 
-   if(cls == 'savebtn' && e.keyCode == 13  ){
-    $('#savebtn').trigger('focus');
+   if(cls == '#savebtn' && e.keyCode == 13  ){
+    e.preventDefault();
+    // $(cls).trigger('select');
+    $(cls).trigger('focus');
 
    }
 
@@ -339,8 +349,15 @@ export class PurchaseComponent implements OnInit{
     var index = this.tableDataList.indexOf(item);
     this.tableDataList.splice(index, 1);
     this.getTotal();
-    this.rowFocused = index - 1;
-        $('.qty'+this.rowFocused).trigger('focus');
+    
+    if (index == 0) {
+      $('#psearchProduct').trigger('select'); 
+      $('#psearchProduct').trigger('focus');
+    } else {
+      this.rowFocused = index - 1;
+      $('.qty'+this.rowFocused).trigger('select');
+      $('.qty'+this.rowFocused).trigger('focus');
+    }
 
     }
    }
@@ -381,8 +398,9 @@ export class PurchaseComponent implements OnInit{
   if(e.target.value == ''){
     if(e.keyCode == 40){  
       if(this.tableDataList.length >= 1 ){ 
-        this.rowFocused = 0; 
-         $('.qty0').focus();
+        e.preventDefault();
+        $('.qty0').trigger('select');
+        $('.qty0').trigger('focus');
       }
      }
   }else{
@@ -390,7 +408,8 @@ export class PurchaseComponent implements OnInit{
       /////move down
       if(e.keyCode == 40){
         if(this.productList.length >= 1 ){  
-          $('.prodRow0').focus();
+          e.preventDefault();
+          $('.prodRow0').trigger('focus');
           // e.which = 9;   
           // $('.prodRow0').trigger(e)  ;
        }  
@@ -421,6 +440,7 @@ export class PurchaseComponent implements OnInit{
      } else {
          var clsName = cls + this.prodFocusedRow;    
         //  alert(clsName);
+        e.preventDefault();
          $(clsName).trigger('focus');
         //  e.keyCode = 9;    
       
@@ -494,6 +514,8 @@ export class PurchaseComponent implements OnInit{
 
     ////////// focusing to product search
   if(e.keyCode == 13){
+    e.preventDefault();
+    $('#psearchProduct').trigger('select');
     $('#psearchProduct').trigger('focus');
    }
 
@@ -515,7 +537,9 @@ export class PurchaseComponent implements OnInit{
         var clsName = cls + this.rowFocused; 
         // alert(clsName);   
         // e.which = e.ctrlKey + 97;
-        $(clsName).trigger('focus');  
+        e.preventDefault();
+        $(clsName).trigger('select');   
+        $(clsName).trigger('focus'); 
         // $(clsName).trigger(e);  
     }}
   }
@@ -525,6 +549,8 @@ export class PurchaseComponent implements OnInit{
      if (e.keyCode == 38) {
 
       if (this.rowFocused == 0) {
+        e.preventDefault();
+        $(".searchProduct").trigger('select');
           $(".searchProduct").trigger('focus');
           this.rowFocused = 0;
  
@@ -535,8 +561,9 @@ export class PurchaseComponent implements OnInit{
           this.rowFocused -= 1;
 
           var clsName = cls + this.rowFocused;
-          // alert(clsName);
-          $(clsName).trigger('focus');
+          e.preventDefault();
+          $(clsName).trigger('select');   
+          $(clsName).trigger('focus');    
           
 
       }

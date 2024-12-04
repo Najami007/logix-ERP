@@ -345,8 +345,15 @@ export class PurchaseReturnComponent implements OnInit{
         var index = this.tableDataList.indexOf(item);
         this.tableDataList.splice(index, 1);
         this.getTotal();
-        this.rowFocused = index - 1;
-        $('.qty'+this.rowFocused).trigger('focus');
+      
+        if (index == 0) {
+          $('#psearchProduct').trigger('select'); 
+          $('#psearchProduct').trigger('focus');
+        } else {
+          this.rowFocused = index - 1;
+          $('.qty'+this.rowFocused).trigger('select');
+          $('.qty'+this.rowFocused).trigger('focus');
+        }
     }
    }
    )
@@ -366,21 +373,30 @@ export class PurchaseReturnComponent implements OnInit{
 
   focusto(cls:any,e:any){ 
 
-    setTimeout(() => {
-     $(cls).trigger('focus');
-    }, 500);
- 
+    if(cls == '#prodName'){
+      setTimeout(() => {
+        e.preventDefault();
+        $(cls).trigger('select');
+        $(cls).trigger('focus');
+       }, 500);
+     }
+     
     if(cls == 'ovhd' && e.keyCode == 13 ){
      if(e.target.value == ''){
+      e.preventDefault();
+      $('#ovhd').trigger('select')
        $('#ovhd').trigger('focus')
      }
     }
  
     if(cls == 'disc' && e.keyCode == 13){
+      e.preventDefault();
+      $('#disc').trigger('select')
      $('#disc').trigger('focus');
     }
  
     if(cls == 'savebtn' && e.keyCode == 13  ){
+      e.preventDefault();
      $('#savebtn').trigger('focus');
     }
  
@@ -398,9 +414,11 @@ export class PurchaseReturnComponent implements OnInit{
       
       if(this.tableDataList.length >= 1 ){ 
         this.rowFocused = 0; 
+        e.preventDefault();
+        $('.qty0').trigger('select');
          $('.qty0').trigger('focus');
-         e.which = 9;   
-         $('.qty0').trigger(e) ; 
+        //  e.which = 9;   
+        //  $('.qty0').trigger(e) ; 
 
       }
      }
@@ -409,6 +427,7 @@ export class PurchaseReturnComponent implements OnInit{
       /////move down
       if(e.keyCode == 40){
         if(this.productList.length >= 1 ){  
+          e.preventDefault();
           $('.prodRow0').trigger('focus');
        }  
      }}
@@ -438,9 +457,10 @@ export class PurchaseReturnComponent implements OnInit{
      } else {
          var clsName = cls + this.prodFocusedRow;    
         //  alert(clsName);
-         $(clsName).trigger('focus');
-         e.which = 9;   
-         $(clsName).trigger(e)       
+        e.preventDefault();
+        $(clsName).trigger('focus');
+        //  e.which = 9;   
+        //  $(clsName).trigger(e)       
      }}
    }
  
@@ -449,7 +469,8 @@ export class PurchaseReturnComponent implements OnInit{
       if (e.keyCode == 38) {
  
        if (this.prodFocusedRow == 0) {
-           $(endFocus).trigger('focus');
+        e.preventDefault();
+        $(endFocus).trigger('focus');
            this.prodFocusedRow = 0;
   
        }
@@ -460,6 +481,7 @@ export class PurchaseReturnComponent implements OnInit{
  
            var clsName = cls + this.prodFocusedRow;
           //  alert(clsName);
+          e.preventDefault();
            $(clsName).trigger('focus');
            
  
@@ -510,6 +532,8 @@ export class PurchaseReturnComponent implements OnInit{
 
 
   if(e.keyCode == 13){
+    e.preventDefault();
+    $('#searchProduct').trigger('select');
     $('#searchProduct').trigger('focus');
    }
 
@@ -529,7 +553,9 @@ export class PurchaseReturnComponent implements OnInit{
         this.rowFocused -= 1  
     } else {
         var clsName = cls + this.rowFocused;    
-        $(clsName).focus();
+        e.preventDefault();
+        $(clsName).trigger('select');   
+        $(clsName).trigger('focus');  
         // e.when = 9;
         // $(clsName).trigger(e)    ;
     }}
@@ -540,6 +566,8 @@ export class PurchaseReturnComponent implements OnInit{
      if (e.keyCode == 38) {
 
       if (this.rowFocused == 0) {
+        e.preventDefault();
+        $(".searchProduct").trigger('select');
           $(".searchProduct").trigger('focus');
           this.rowFocused = -1;
  
@@ -550,7 +578,9 @@ export class PurchaseReturnComponent implements OnInit{
           this.rowFocused -= 1;
 
           var clsName = cls + this.rowFocused;
-          $(clsName).trigger('focus');
+          e.preventDefault();
+        $(clsName).trigger('select');   
+        $(clsName).trigger('focus'); 
           
 
       }

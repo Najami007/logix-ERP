@@ -157,6 +157,7 @@
                     <th>Type</th>
                     <th >Net Total</th>
                     <th>Entered By</th>
+                    <th>Remarks</th>
 
                 </tr>
 
@@ -173,6 +174,7 @@
                     <td >{{item.paymentType}}</td>
                     <td [ngClass]="item.invType == 'PR' ? 'bg-danger text-white' : ''" class="text-end">{{item.netTotal + item.overHeadAmount +item.billDiscount |number:'1.0-0'}}</td>
                     <td>{{item.entryUser}}</td>
+                    <td>{{item.remarks}}</td>
                 </tr>
                 <tr>
                     <td colspan="7"></td>

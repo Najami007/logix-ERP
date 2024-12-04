@@ -1,0 +1,70 @@
+<div  class="row container-fluid vh-100 bg-gray body">
+
+    <div class="col-lg-4 bg-white p-5 ">
+        <h2 class="border-bottom">Rout Detail's</h2>
+        
+
+
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Rout Title</mat-label>
+            <input matInput type="text" [(ngModel)]="routTitle" >
+        </mat-form-field>
+
+
+        
+
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea matInput type="text" [(ngModel)]="description"  ></textarea>
+        </mat-form-field>
+
+        <div class="row justify-content-around">
+            <button class="btnsave w-25" *ngIf="crudList.u && actionbtn == 'Update'" (click)="save()">{{actionbtn}}</button>
+            <button class="btnsave w-25" *ngIf="crudList.c && actionbtn == 'Save'" (click)="save()">{{actionbtn}}</button>
+            <button class="btnreset w-25" (click)="reset()">Reset</button>
+        </div>
+        
+
+    </div>
+
+    <div class="col-lg-8 p-4">
+
+
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-label class="ps-5">Search.....</mat-label>
+            <input [(ngModel)]="txtSearch" matInput type="search" class="text-secondary">
+            <mat-icon matPrefix class="text-secondary">search</mat-icon>
+        </mat-form-field>
+
+
+        <div>
+            <table class="table-logix2" *ngIf="crudList.r">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th *ngIf="crudList.u">Edit</th>
+                        <th *ngIf="crudList.d">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of departmentList | filter:txtSearch index as index">
+                        <td>{{index+1}}</td>
+                        <td>{{item.routTitle}}</td>
+                        <td>{{item.routDescription}}</td>
+                        <td *ngIf="crudList.u" ><button  mat-mini-fab   class="bg-success text-white h30px w30px " (click)="edit(item)"><mat-icon  >edit</mat-icon></button></td>
+                        <td *ngIf="crudList.d"><button  mat-mini-fab  color="warn" class="h30px w30px"  (click)="delete(item)"><mat-icon>delete</mat-icon></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    
+
+
+    </div>
+
+
+</div>
+
+

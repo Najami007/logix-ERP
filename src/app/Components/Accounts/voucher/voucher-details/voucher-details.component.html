@@ -9,6 +9,12 @@
         <p>{{lblProjectName}}</p>
 
     </div>
+    <div class="d-flex ">
+        <p  class="pe-5 fw-bold">Narration:</p>
+        <p>{{lblRemarks}}</p>
+
+    </div>
+   
 
     <table class="table">
         <thead class="border-bottom ">
@@ -17,6 +23,7 @@
             <th>Description</th>
             <th>Debit</th>
             <th>Credit</th>
+            <th>Narration</th>
         
         </thead>
         <tbody>
@@ -25,6 +32,7 @@
                 <td>{{item.coaTitle}} ({{item.accountCode}})</td>
                 <td>{{item.debit |number:'1.0-0'}}</td>
                 <td>{{item.credit |number:'1.0-0'}}</td>
+                <td>{{item.invoiceRemarks}}</td>
             </tr>
             <tr>
                 <td></td>

@@ -57,31 +57,17 @@ export class AddCodeComponent  implements OnInit{
 
   Save(){
 
-    if(this.ID == '' || this.ID == undefined ){
-      this.msg.WarnNotify('Enter ID')
-    }else if(this.Code == '' || this.Code == undefined){
-      this.msg.WarnNotify('Enter COA Code')
-    }else if(this.Type == '' || this.Type == undefined){
-      this.msg.WarnNotify('Enter Type')
-    }else if(this.Title == '' || this.Title == undefined){
-      this.msg.WarnNotify('Enter Title')
-    }else if(this.TableName == '' || this.TableName == undefined){
-      this.msg.WarnNotify('Enter Table Name')
-    }else if(this.Module == '' || this.Module == undefined){
-      this.msg.WarnNotify('Enter Module Name')
-    }else if(this.Remarks == '' || this.Remarks == undefined){
-      this.msg.WarnNotify('Enter Remarks')
-    }else{
+   
     
       if(this.btnType == 'Save'){
-        this.dataServie.saveHttp(this.global.companyLink+'insertCode',{
-          ID : this.ID,
-          Code : this.Code,
-          Type : this.Type,
-          Title: this.Title,
-          Remarks : this.Remarks,
-          TableName : this.TableName,
-          Module : this.Module,
+        this.dataServie.saveHttp(this.global.contorlPanelLink+'insertCode',{
+          ID : this.ID || 0,
+          Code : this.Code || '',
+          Type : this.Type || '',
+          Title: this.Title || '',
+          Remarks : this.Remarks || '',
+          TableName : this.TableName || '',
+          Module : this.Module || '',
         }).subscribe(
           (Response:any)=>{
             if(Response.msg == 'Data Saved Successfully'){
@@ -93,15 +79,15 @@ export class AddCodeComponent  implements OnInit{
           }
         )
       }else if(this.btnType == 'Update'){
-        this.dataServie.saveHttp(this.global.companyLink+'updateCode',{
+        this.dataServie.saveHttp(this.global.contorlPanelLink+'updateCode',{
           AutoID:this.editData.autoID,
-          ID : this.ID,
-          Code : this.Code,
-          Type : this.Type,
-          Title: this.Title,
-          Remarks : this.Remarks,
-          TableName : this.TableName,
-          Module : this.Module,
+          ID : this.ID || 0,
+          Code : this.Code || '',
+          Type : this.Type || '',
+          Title: this.Title || '',
+          Remarks : this.Remarks || '',
+          TableName : this.TableName || '',
+          Module : this.Module || '',
         }).subscribe(
           (Response:any)=>{
             if(Response.msg == 'Data Updated Successfully'){
@@ -113,10 +99,7 @@ export class AddCodeComponent  implements OnInit{
           }
         )
       }
-    }
-
-   
-
+    
 
   }
 

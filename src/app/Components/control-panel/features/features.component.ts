@@ -64,7 +64,7 @@ export class FeaturesComponent {
 
 
   getFeatureList(){
-    this.dataService.getHttp(this.globaldata.companyLink+ 'getFeatures','').subscribe(
+    this.dataService.getHttp(this.globaldata.contorlPanelLink+ 'getFeatures','').subscribe(
       (Response:any)=>{
           this.featureList = Response;
                   
@@ -87,7 +87,7 @@ export class FeaturesComponent {
 
 
   ActivateModule(item:any){
-    this.dataService.saveHttp(this.globaldata.companyLink+ 'activateFeature',{
+    this.dataService.saveHttp(this.globaldata.contorlPanelLink+ 'activateFeature',{
       FeatureID : item.featureID,
       FeatureStatus : !item.featureStatus,
       UserID :this.UserId,

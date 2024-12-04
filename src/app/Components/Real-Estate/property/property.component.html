@@ -1,0 +1,67 @@
+<div class="bg-white p-5">
+    
+    <div class="text-center p-5 bg-light  pt-5">
+        <div class="row p-2">
+            <button autofocus class="col-lg-1 btnadd" mat-fab  (click)="add()" ><mat-icon>add</mat-icon></button>
+            <mat-form-field class="col-lg-11 " appearance="outline">
+                <mat-label>Search</mat-label>
+                <input #search matInput type="text">
+            </mat-form-field>
+        </div>
+            <br>
+        <table class="table table-hover h-100"> 
+            <thead>
+                <th>S#</th>
+                <th>Property Title</th>
+                <th>Code</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Rent /Day </th>
+                <th>Detail</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </thead>
+            <tbody >
+                <tr *ngFor="let item of PropertyList|filter:search.value |paginate:{
+                    itemsPerPage : tableSize,
+                    currentPage : page,
+                    totalItems :    count,
+                }  ;  index as index">
+
+                    <td>{{index+1}}</td>
+                    <td>{{item.propertyTitle | slice:0:35}}....</td>
+                    <td>{{item.propertyCode}}</td>
+                    <td>{{item.propertyTypeTitle}}</td>
+                    <td>{{item.propertyStatusTitle}}</td>
+                    <td>{{item.rentPerDay | number}}</td>
+                    <td><mat-icon class="text-dark cursorPointer" (click)="gerPropertyDetail(item)">receipt</mat-icon></td>
+
+                    <td><mat-icon class="text-success cursorPointer" (click)="editRoom(item)">edit</mat-icon></td>
+                    <td><mat-icon class="text-danger cursorPointer" (click)="deleteRoom(item)">delete</mat-icon></td>
+                </tr>
+               
+            </tbody>
+        </table>
+
+        <div class="d-flex" >
+            <!-- <mat-hint class="me-1 text-secondary">Total Rows : ({{RoomData.length}})    </mat-hint> -->
+            <pagination-controls
+            previousLabel="Prev"
+            nextLabel="Next"
+            (pageChange)="onTableDataChange($event)"
+            ></pagination-controls>
+            
+
+            <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+            <select class="text-white"  style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);" (change)="onTableSizeChange($event)">
+                <option *ngFor=" let item of tableSizes">{{item}}</option>
+            </select>
+            
+        </div>
+    
+    </div>
+
+</div>
+
+
+

@@ -19,6 +19,8 @@ import { SaleBillPrintComponent } from '../sale-bill-print/sale-bill-print.compo
   styleUrls: ['./retailer-sale-return.component.scss']
 })
 export class RetailerSaleReturnComponent implements OnInit {
+  gstFeature = this.global.getFeature('GST');
+
 
   @ViewChild(SaleBillPrintComponent) billPrint:any;
     
@@ -111,6 +113,8 @@ export class RetailerSaleReturnComponent implements OnInit {
    cash:any = 0;
    bankCash:any = 0;
    bankCoaID = 0;
+   AdvTaxValue = 0;
+  AdvTaxAmount = 0;
  
    subTotal = 0;
    netTotal = 0;
@@ -224,6 +228,8 @@ export class RetailerSaleReturnComponent implements OnInit {
                     batchNo:'-',
                     batchStatus:'-',
                     uomID:Response[0].uomID,
+                    gst: this.gstFeature ? Response[0].gst : 0,
+                    et:Response[0].et,
                     packing:1,
                     discInP:0,
                     discInR:0,
@@ -320,6 +326,8 @@ export class RetailerSaleReturnComponent implements OnInit {
                     batchNo: '-',
                     batchStatus: '-',
                     uomID: Response[0].uomID,
+                    gst: this.gstFeature ? Response[0].gst : 0,
+                    et:Response[0].et,
                     packing: 1,
                     discInP: Response[0].discRupees,
                     discInR: Response[0].discPercentage,
@@ -408,6 +416,8 @@ export class RetailerSaleReturnComponent implements OnInit {
                batchNo:'-',
                batchStatus:'-',
                uomID:Response[0].uomID,
+               gst: this.gstFeature ? Response[0].gst : 0,
+               et:Response[0].et,
                packing:1,
                discInP:0,
                discInR:0,
@@ -531,7 +541,9 @@ export class RetailerSaleReturnComponent implements OnInit {
            
            if(this.tableDataList.length >= 1 ){ 
              this.rowFocused = 0; 
-              $('.qty0').trigger('focus');
+             e.preventDefault();
+             $('.qty0').trigger('select');
+             $('.qty0').trigger('focus');
      
            }
           }
@@ -540,6 +552,7 @@ export class RetailerSaleReturnComponent implements OnInit {
            /////move down
            if(e.keyCode == 40){
              if(this.productList.length >= 1 ){  
+
                $('.prodRow0').trigger('focus');
             }  
           }}
@@ -550,26 +563,37 @@ export class RetailerSaleReturnComponent implements OnInit {
  
         
  
-     focusTo(e:any,cls:string){
+     focusTo(e:any,cls:any){
        if(cls == '#disc' && e.keyCode == 13 && e.target.value == ''){
-         $(cls).trigger('focus');
+        e.preventDefault();
+        $(cls).trigger('select');
+        $(cls).trigger('focus');
        }
        if(cls == '#charges' && e.keyCode == 13 ){
-         $(cls).trigger('focus');
+        e.preventDefault();
+        $(cls).trigger('select');
+        $(cls).trigger('focus');
        }
        if(cls == '#cash' && e.keyCode == 13  && e.target.value == ''){
-         $(cls).trigger('focus');
+        e.preventDefault();
+        $(cls).trigger('select');
+        $(cls).trigger('focus');
          
        }
        
        if(cls == '#save' && e.keyCode == 13 ){
-         $(cls).trigger('focus');
+          e.preventDefault();
+      // document.querySelector(cls).select();
+      document.querySelector(cls).focus();
+
        //  var elem = document.getElementById('save');
        //  elem?.focus();
        }
  
        if(cls == '#vsrtnsearchProduct' && e.keyCode == 13 ){
-         $(cls).trigger('focus');
+        e.preventDefault();
+        $(cls).trigger('select');
+        $(cls).trigger('focus');
        }
      
      }
@@ -603,7 +627,9 @@ export class RetailerSaleReturnComponent implements OnInit {
            this.rowFocused -= 1  
        } else {
            var clsName = cls + this.rowFocused;    
-           $(clsName).trigger('focus');    
+           e.preventDefault();
+            $(clsName).trigger('select');   
+            $(clsName).trigger('focus');    
        }}
      }
    
@@ -612,7 +638,9 @@ export class RetailerSaleReturnComponent implements OnInit {
         if (e.keyCode == 38) {
    
          if (this.rowFocused == 0) {
-             $(".searchProduct").trigger('focus');
+          e.preventDefault();
+          $(".searchProduct").trigger('select');  
+            $(".searchProduct").trigger('focus');
              this.rowFocused = 0;
     
          }
@@ -622,7 +650,9 @@ export class RetailerSaleReturnComponent implements OnInit {
              this.rowFocused -= 1;
    
              var clsName = cls + this.rowFocused;
-             $(clsName).trigger('focus');
+             e.preventDefault();
+          $(clsName).trigger('select'); 
+          $(clsName).trigger('focus');
              
    
          }
@@ -650,8 +680,17 @@ export class RetailerSaleReturnComponent implements OnInit {
        var index = this.tableDataList.indexOf(item);
        this.tableDataList.splice(index, 1);
        this.getTotal();
-       this.rowFocused = index - 1;
-       $('.qty'+this.rowFocused).trigger('focus');
+       
+       if(index == 0){
+          
+        $('#psearchProduct').trigger('select'); 
+        $('#psearchProduct').trigger('focus');
+      }else{
+        this.rowFocused = index - 1;
+        $('.qty'+this.rowFocused).trigger('select');
+        $('.qty'+this.rowFocused).trigger('focus');
+      }
+       
    }
   }
   )
@@ -809,6 +848,8 @@ export class RetailerSaleReturnComponent implements OnInit {
            NetTotal:this.netTotal,
            CashRec:this.cash,
            Change:this.change,
+           AdvTaxAmount : this.AdvTaxAmount,
+           AdvTaxValue : this.AdvTaxValue,
            BankCoaID: this.bankCoaID,
            BankCash: this.bankCash,      
            CusContactNo: this.customerMobileno,

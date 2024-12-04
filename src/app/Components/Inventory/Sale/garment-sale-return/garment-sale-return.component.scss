@@ -102,9 +102,11 @@ input:focus{
   }
 
   .billArea::-webkit-scrollbar-track {
-    background: rgb(218, 246, 243);
+    background: #fdf4e8;
   }
-  
+  .totalArea ::-webkit-scrollbar-track {
+    background: #fdf4e8;
+  }
 
   .hide{
     display: none;

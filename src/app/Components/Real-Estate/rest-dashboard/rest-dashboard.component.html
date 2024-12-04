@@ -1,0 +1,84 @@
+<div class="body">
+   
+        <div class="d-flex mt-2 justify-content-center cursorPointer">
+            <div class="row">
+                <mat-form-field appearance="outline" class="col-lg-4">
+                    <mat-label>Room No</mat-label>
+                    <mat-select [(ngModel)]="propertyID" (selectionChange)="getPropertyRates()">
+                        <mat-option><ngx-mat-select-search #propertySearch
+                            [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                            name="search"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of PropertyList | filter:propertySearch.value" [value]="item.propertyID">{{item.propertyCode}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-lg-4">
+                    <mat-label>Months</mat-label>
+                    <mat-select (selectionChange)="ngOnInit()" [(ngModel)]="curMonth">
+                        <mat-option *ngFor="let item of monthsList" [value]="item.id"> {{item.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-lg-4">
+                    <mat-label>Year</mat-label>
+                    <mat-select (selectionChange)="ngOnInit()" [(ngModel)]="curYear">
+                        <mat-option *ngFor="let item of listOfYear" [value]="item.year"> {{item.year}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <h3 class="text-center" style="letter-spacing: 5px;">{{monthsList[curMonth].name}} , {{curYear}}</h3>
+
+            </div>
+        </div>
+  
+    <div class="">
+
+        <div class="weekDays">
+            <ul class=" d-flex flex-wrap w-100">
+                <li [ngClass]="date.getMonth() == curMonth && date.getFullYear() == curYear && item.value == curDay ? 'bg-golden ' : ''"
+                    *ngFor=" let item of WeekDaysList">{{item.name}}</li>
+            </ul>
+        </div>
+        <div class="monthDays cursorPointer">
+            <ul class=" d-flex flex-wrap w-100">
+                <li class="date" [ngClass]="item.date == 'none' ? 'bg-dark' : item.fullDate == global.dateFormater(date,'-') ? 'bg-golden today': 'bg-dark'  "
+                    *ngFor="let item of monthDaysList" (click)="showRateModal(item)" >
+                    <time [dateTime]="item.fullDate" *ngIf="item.date != 'none'">{{item.date}}</time>{{item.fullDate}}
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="PropertyRateModal" tabindex="-1" aria-labelledby="PropertyRateModalLabel">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-x">
+            <div class="modal-content">
+                <div class="modal-body">
+                    
+                   <table class="w-100 mb-2">
+                    <tbody>
+                        <tr>
+                            <th>Date</th>
+                            <td> {{tmpPropertyData.fullDate}}</td>
+                            <th>Prev Rate</th>
+                            <td>{{tmpPropertyData.propertyRate}}</td>
+
+                        </tr>
+                    </tbody>
+                   </table>
+
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Enter Rate</mat-label>
+                        <input matInput      [(ngModel)]="tmpPropertyRate"  />
+                    </mat-form-field>
+    
+                </div>
+            
+                <div class="modal-footer bg-mf-blue">
+                    <button class="btn btn-success" (click)="insertAdditionalRate()">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+          
+        </div>
+    </div>
+
+
+</div>

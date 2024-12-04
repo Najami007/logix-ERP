@@ -1,6 +1,6 @@
 <div >
 
-    <div class="text-center  mt-3 d-flex justify-content-between p-3"><p class="dialogueTitle">ADD NOTE</p><mat-icon class="cursorPointer" (click)="closeDialogue('')">cancel</mat-icon></div>
+    <div class="text-center  mt-3 d-flex justify-content-between p-3"><p class="dialogueTitle">ADD NOTE</p></div>
 
     <div class="text-center container-fluid " >
         <mat-form-field class="w-100" appearance="outline">
@@ -23,7 +23,7 @@
         
     </div>
     <div class="text-end p-3 bg-mf" >
-        <button class="btn btn-success btn-save m-1" (click)="Save()"> {{actionbtn}} </button>
-        <button class="btn btn-danger btn-reset m-1 " (click)="reset()"> Reset </button>
+        <button class="btnsave m-1" (click)="Save()"> {{actionbtn}} </button>
+        <button class="btnclose m-1 " (click)="closeDialogue('')"> Close </button>
     </div>
 </div>

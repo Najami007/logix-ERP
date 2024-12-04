@@ -14,11 +14,12 @@ import { environment } from 'src/environments/environment.development';
 })
 export class SaleBillPrintComponent implements OnInit {
 
-  discFeature = this.global.getFeature('disc');
-  BookerFeature = this.global.getFeature('bkr');
-  showCompanyName = this.global.getFeature('cmpName');
-  showCompanyLogo = this.global.getFeature('cmpLogo');
-
+  discFeature = this.global.getFeature('Discount');
+  BookerFeature = this.global.getFeature('Booker');
+  showCompanyName = this.global.getFeature('CmpName');
+  showCompanyLogo = this.global.getFeature('CmpLogo');
+  gstFeature = this.global.getFeature('GST');
+  billPrintType:any = '';;
   companyProfile: any = [];
   companyLogo: any = '';
   logoHeight: any = 0;
@@ -34,7 +35,7 @@ export class SaleBillPrintComponent implements OnInit {
     private route: Router
   ) {
    
-
+    
     this.global.getCompany().subscribe((data) => {
       this.companyProfile = data;
       this.companyLogo = data[0].companyLogo1;
@@ -70,6 +71,7 @@ export class SaleBillPrintComponent implements OnInit {
   myCash = 0;
   myChange = 0;
   myBank = 0;
+  myBalanceData = 0;
   myPaymentType = '';
   myDuplicateFlag = false;
   myTime: any;
@@ -77,13 +79,16 @@ export class SaleBillPrintComponent implements OnInit {
   myOfferDiscount=0;
   myBookerName = '';
   myInvType ='';
+  myGstTotal = 0;
+  myAdvTaxAmount = 0;
+  myAdvTaxValue = 0;
 
   PrintBill(InvNo: any) {
-
+    this.billPrintType = this.global.getBillPrintType();
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
       (Response: any) => {
         
-        
+       // console.log(Response);
         this.myPrintTableData = Response;
         this.myInvoiceNo = InvNo;
         this.myInvDate = Response[0].createdOn;
@@ -100,18 +105,30 @@ export class SaleBillPrintComponent implements OnInit {
         this.myCustomerName = Response[0].partyName;
         this.myBookerName = Response[0].bookerName;
         this.myInvType = Response[0].invType;
+        this.myAdvTaxAmount = Response[0].advTaxAmount;
+        this.myAdvTaxValue = Response[0].advTaxValue;
          
 
         this.myQtyTotal = 0;
         this.myOfferDiscount=0;
+        this.myGstTotal = 0;
         Response.forEach((e: any) => {
           this.myQtyTotal += e.quantity;
           this.myOfferDiscount += e.discInR * e.quantity;
+          this.myGstTotal += (e.salePrice -(e.salePrice / ((e.gst / 100) + 1))) * e.quantity ;
         });
 
         setTimeout(() => {
-          this.global.printData('#billPrint');
-        }, 2000);
+          if(this.billPrintType == 'english'){
+            this.global.printBill('#billEnglish','.searchProduct');
+          }
+          if(this.billPrintType == 'urdu'){
+            this.global.printBill('#BillUrdu','.searchProduct');
+          }
+          
+          
+          //this.global.printToSpecificPrinter('XP-80C','#billPrint');
+        }, 100);
         // setTimeout(() => {
         //   this.global.printData('#cncBillPrint');
         //   this.global.printData('#cncBillPrint2');

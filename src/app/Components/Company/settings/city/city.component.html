@@ -1,7 +1,7 @@
 <div  class="row container-fluid vh-100 bg-gray body">
 
     <div class="col-lg-4 bg-white p-5 ">
-        <h2 class="border-bottom">Section Detail's</h2>
+        <h2 class="border-bottom">City Detail's</h2>
         
 
         <mat-form-field class="w-100 pe-1" appearance="outline">
@@ -24,9 +24,9 @@
     
 
         <div class="row justify-content-around">
-            <button class="btn btn-success w-25" *ngIf="crudList.u  && btnType == 'Update'" (click)="addCity()">{{btnType}}</button>
-            <button class="btn btn-success w-25" *ngIf="crudList.c  && btnType == 'Save'" (click)="addCity()">{{btnType}}</button>
-            <button class="btn btn-danger w-25" (click)="reset()">Reset</button>
+            <button class="btnsave w-25" *ngIf="crudList.u  && btnType == 'Update'" (click)="addCity()">{{btnType}}</button>
+            <button class="btnsave w-25" *ngIf="crudList.c  && btnType == 'Save'" (click)="addCity()">{{btnType}}</button>
+            <button class="btnreset w-25" (click)="reset()">Reset</button>
         </div>
         
 

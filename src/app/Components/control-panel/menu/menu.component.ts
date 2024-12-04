@@ -44,7 +44,7 @@ export class MenuComponent {
 
 
     ngOnInit(): void {
-      this.globaldata.setHeaderTitle('Modules');
+      this.globaldata.setHeaderTitle('Menu');
       this.getMenuList();
      
     }
@@ -65,7 +65,7 @@ export class MenuComponent {
 
 
   getMenuList(){
-    this.dataService.getHttp(this.globaldata.userLink+ 'getMenu','').subscribe(
+    this.dataService.getHttp(this.globaldata.contorlPanelLink+ 'getMenu','').subscribe(
       (Response:any)=>{
           this.moduleList = Response;
          
@@ -88,7 +88,7 @@ export class MenuComponent {
 
 
   ActivateModule(item:any){
-    this.dataService.saveHttp(this.globaldata.userLink+ 'deleteMenu',{
+    this.dataService.saveHttp(this.globaldata.contorlPanelLink+ 'deleteMenu',{
       MenuID : item.menuID,
       IsActive : !item.isActive,
       UserID :this.UserId,

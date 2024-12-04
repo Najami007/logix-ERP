@@ -64,7 +64,7 @@ export class ModuleComponent {
 
 
   getModuleList(){
-    this.dataService.getHttp(this.globaldata.userLink+ 'getModule','').subscribe(
+    this.dataService.getHttp(this.globaldata.contorlPanelLink+ 'getModule','').subscribe(
       (Response:any)=>{
           this.moduleList = Response;
         
@@ -86,9 +86,9 @@ export class ModuleComponent {
 
 
   ActivateModule(item:any){
-    this.dataService.saveHttp(this.globaldata.userLink+ 'activateModule',{
+    this.dataService.saveHttp(this.globaldata.contorlPanelLink+ 'activateModule',{
       ModuleID : item.moduleID,
-      ActiveStatus : false,
+      ActiveStatus : !item.activeStatus,
       UserID :this.UserId,
     }).subscribe(
     (Response:any)=>{
@@ -109,7 +109,7 @@ export class ModuleComponent {
 
   
   delete(item:any){
-     this.dataService.deleteHttp(this.globaldata.userLink+ 'deleteModule',{
+     this.dataService.deleteHttp(this.globaldata.contorlPanelLink+ 'deleteModule',{
       ModuleID : item.moduleID,
       UserID :this.UserId,
     }).subscribe(

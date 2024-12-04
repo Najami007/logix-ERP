@@ -1,0 +1,222 @@
+
+<div class="p-3" style="max-height: 600px !important; overflow-y: scroll;">
+
+    <div class="d-flex container-fluid justify-content-between">
+        <p class="dialogueTitle">ADD Property DETAILS</p>
+    </div>
+
+     
+    <div class="row container-fluid">
+
+        <mat-label class="border-bottom mb-2 fw-bold">Room Details</mat-label>
+   
+
+        <mat-form-field class=" col-lg-4 " appearance="outline">
+            <mat-label>Property Type</mat-label>
+            <mat-select [(ngModel)]="PropertyTypeID">
+                <mat-option><ngx-mat-select-search #searchPType
+                    [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                    name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of peopertyTypeList | filter:searchPType.value" [value]="item.propertyTypeID">{{item.propertyTypeTitle}}</mat-option>
+        
+            </mat-select> 
+        </mat-form-field>
+    
+        <mat-form-field class="col-lg-8" appearance="outline">
+            <mat-label>Property Title</mat-label>
+            <input matInput type="text" [(ngModel)]="PropertyTitle" >
+        </mat-form-field>
+
+        <mat-form-field class="col-lg-4" appearance="outline">
+            <mat-label>Short Name</mat-label>
+            <input matInput type="text" [(ngModel)]="PropertyCode">
+        </mat-form-field>
+      
+        <mat-form-field class="col-lg-2" appearance="outline">
+            <mat-label>Property Size(Sq ft.)</mat-label>
+            <input matInput type="number" [(ngModel)]="PropertySize">
+        </mat-form-field>
+
+        <mat-form-field class="col-lg-2 " appearance="outline">
+            <mat-label>No of Rooms</mat-label>
+            <input matInput type="text"  [(ngModel)]="NoOfRooms" >
+        </mat-form-field>
+
+        <mat-form-field class="col-lg-2 " appearance="outline">
+            <mat-label>Adults</mat-label>
+            <input matInput type="text" [(ngModel)]="Adult" >
+        </mat-form-field>
+        
+        <mat-form-field class="col-lg-2 " appearance="outline">
+            <mat-label>Children</mat-label>
+            <input matInput type="text" [(ngModel)]="Children"  >
+        </mat-form-field>
+
+        <mat-form-field class="col-lg-2 " appearance="outline">
+            <mat-label>Bedrooms</mat-label>
+            <input matInput type="text"  [(ngModel)]="Bedroom">
+        </mat-form-field>
+      
+        <mat-form-field class="col-lg-2 " appearance="outline">
+            <mat-label>Bathrooms</mat-label>
+            <input matInput type="text" [(ngModel)]="Bathroom" >
+        </mat-form-field>
+       
+      
+        <mat-form-field class="col-lg-2" appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select [(ngModel)]="PropertyStatusID">
+                <mat-option *ngFor="let item of peopertyStatusList" [value]="item.propertyStatusID">{{item.propertyStatusTitle}}</mat-option>
+            </mat-select> 
+        </mat-form-field>            
+    
+
+    </div>
+
+    <div class="row container-fluid">
+
+        <mat-label class="border-bottom mb-2 fw-bold">Location Details</mat-label>
+   
+
+        <mat-form-field class=" col-lg-3 " appearance="outline">
+            <mat-label>Country</mat-label>
+            <mat-select [(ngModel)]="CountryID" (selectionChange)="getCity()">
+                <mat-option><ngx-mat-select-search #countrySearch
+                    [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                    name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of countryList |filter:countrySearch.value" [value]="item.countryID">{{item.countryName}}</mat-option>
+            </mat-select> 
+        </mat-form-field>
+    
+        <mat-form-field class=" col-lg-3 " appearance="outline">
+            <mat-label>City</mat-label>
+            <mat-select [(ngModel)]="CityID" (selectionChange)="getAreaList()">
+                <mat-option><ngx-mat-select-search #citySearch
+                    [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                    name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of citiesList |filter:citySearch.value" [value]="item.cityID">{{item.cityName}}</mat-option>
+                </mat-select> 
+        </mat-form-field>
+        <mat-form-field class=" col-lg-2 " appearance="outline">
+            <mat-label>Area</mat-label>
+            <mat-select [(ngModel)]="AreaID">
+                <mat-option><ngx-mat-select-search #areaSearch
+                    [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
+                    name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of areaList |filter:areaSearch.value" [value]="item.areaID" >{{item.areaTitle}}</mat-option>
+                </mat-select> 
+        </mat-form-field>
+        <mat-form-field class="col-lg-2 " appearance="outline">
+            <mat-label>Longitude</mat-label>
+            <input matInput type="text" [(ngModel)]="LocLongitude" >
+        </mat-form-field>
+       
+        <mat-form-field class="col-lg-2 " appearance="outline">
+            <mat-label>Latitude</mat-label>
+            <input matInput type="text" [(ngModel)]="LocLatitude" >
+        </mat-form-field>
+       
+        <mat-form-field class="col-lg-12" appearance="outline">
+            <mat-label>Address</mat-label>
+            <textarea  matInput type="text" [(ngModel)]="PropertyAddress"></textarea>
+        </mat-form-field>
+
+
+    </div>
+
+
+    <div class="row container-fluid">
+
+        <mat-label class="border-bottom mb-2 fw-bold">Price Details</mat-label>
+   
+        <mat-form-field class="col-lg-4" appearance="outline">
+            <mat-label>Rent Amount /Day</mat-label>
+            <input matInput type="number" [(ngModel)]="RentPerDay">
+        </mat-form-field>
+
+        <mat-form-field class="col-lg-4" appearance="outline">
+            <mat-label>Security Deposit</mat-label>
+            <input matInput type="number" [(ngModel)]="SecurityDeposit">
+        </mat-form-field>
+
+
+        <mat-form-field class="col-lg-4" appearance="outline">
+            <mat-label>Tax</mat-label>
+            <input matInput type="number">
+        </mat-form-field>
+    </div>
+
+  
+
+    <div class="container-fluid row">
+        <br>
+        <div class="d-flex justify-content-between border-bottom">
+            <mat-label class="fw-bold mt-3">Room Features</mat-label>
+            <mat-checkbox class="" (change)="onCheckAll('','all')" [(ngModel)]="selectAllStatus">Select ALL</mat-checkbox>
+        </div>
+        <div *ngFor="let item of featureCatList"  class="w-50 ">
+            <mat-label class="fw-bold w-100">{{item.propertyCategoryTitle}}</mat-label>
+            
+          
+            <div *ngFor="let row of FeaturesList index as index" class="w-50">
+                <mat-checkbox   *ngIf="item.propertyCategoryID == row.propertyCategoryID" style="height: 10px;"  [(ngModel)]="row.status">{{row.propertyFeatureTitle}}</mat-checkbox>     
+        </div>
+        
+            
+
+        </div>
+        
+    </div>
+    <div class="row container-fluid">
+        <mat-label class="border-bottom mb-2 fw-bold">Room Description</mat-label>
+
+        <mat-form-field class="col-lg-12 " appearance="outline">
+            <mat-label>Property Description</mat-label>
+            <textarea matInput type="number" rows="5" [(ngModel)]="PropertyDescription" ></textarea>
+        </mat-form-field>
+        <mat-form-field class="col-lg-12 " appearance="outline">
+            <mat-label>Building Description</mat-label>
+            <textarea matInput type="number" rows="5" [(ngModel)]="BuildingDescription" ></textarea>
+        </mat-form-field>
+        <mat-form-field class="col-lg-12 " appearance="outline">
+            <mat-label>Area Description</mat-label>
+            <textarea matInput type="number" rows="5"  [(ngModel)]="AreaDescription"></textarea>
+        </mat-form-field>
+    </div>
+
+    <div class="border row col-lg-11 p-2 ms-3">
+        <mat-label class="border-bottom mb-2 fw-bold">Select Images</mat-label>
+        <span>
+            <input type="file" name="images" (change)="selectImages($event)" id="images" multiple="multiple" accept="image/jpg,image/jpeg,image/png">
+        </span>
+        <mat-card id="result" class="d-flex border m-1 p-1 col-lg-2 bg-mute cursorPointer" style="width: 250px !important;" *ngFor="let item of imagesList"  >
+            <!-- <img [src]="item.propertyImage"  class="thumbnail" alt="Image Not Found" (click)="global.showProductImage(item.propertyImage,0);"> -->
+            <div class="thumbnail ">
+                <div id="img" [ngStyle]="{ 'background-image': 'url(' + item.propertyImage + ')' }" (click)="global.showProductImage(item.propertyImage,0);"></div>
+              </div>
+            <mat-card-footer class="d-flex justify-content-between border-top pb-1">
+                <mat-icon  (click)="deleteImage(item)">close</mat-icon>
+                <div class="d-flex flex-column">
+                <span style="font-size: 10px;">Size : {{item.sizeInMB}} MB</span>
+                <span style="font-size: 8px; margin-top: -10px;">{{item.name}}</span>
+                </div>
+            </mat-card-footer>
+        </mat-card>
+
+    </div>
+   
+</div>
+
+<div class="text-end bg-mf p-3"> 
+    <button class=" btnsave m-1" accesskey="s" (click)="Save()"  >{{btnType}} </button>
+    <button class=" btnclose m-1 " (click)="closeDialogue()"> Close </button>
+    <mat-checkbox  class="rounded" style="background-color: white !important;" [(ngModel)]="autoEmpty">Auto Empty</mat-checkbox>
+
+</div>
+
+
+
+
+
+
+

@@ -42,6 +42,7 @@ invoiceDetails:any =[];
 lblDebitTotal:any = 0;
 
 lblCreditTotal:any = 0;
+lblRemarks = '';
 
 lblProjectName :any;
 projectID :any;
@@ -72,8 +73,9 @@ getInvoiceDetail(invoiceNo:any){
   
   this.http.get(environment.mainApi+'acc/GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
     (Response:any)=>{
-      // console.log(Response);
+      //console.log(Response);
       this.invoiceDetails = Response;
+      this.lblRemarks = Response[0].detailNarration;
       if(Response != ''){
        
         Response.forEach((e:any) => {

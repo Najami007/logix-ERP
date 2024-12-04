@@ -64,7 +64,7 @@ export class CodesComponent {
 
 
   getCodesList(){
-    this.dataService.getHttp(this.globaldata.companyLink+ 'getCodes','').subscribe(
+    this.dataService.getHttp(this.globaldata.contorlPanelLink+ 'getCodes','').subscribe(
       (Response:any)=>{
           this.codeList = Response;
         

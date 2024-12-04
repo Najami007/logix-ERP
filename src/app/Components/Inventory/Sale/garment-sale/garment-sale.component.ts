@@ -26,8 +26,13 @@ import { SaleBillPrintComponent } from '../sale-bill-print/sale-bill-print.compo
 export class GarmentSaleComponent implements OnInit {
 
 
-  discFeature = this.global.getFeature('disc');
-  BookerFeature = this.global.getFeature('bkr');
+  discFeature = this.global.getFeature('Discount');
+  BookerFeature = this.global.getFeature('Booker');
+  gstFeature = this.global.getFeature('GST');
+  customerFeature = this.global.getFeature('Customer');
+  tillOpenFeature = this.global.getFeature('TillOpen');
+  editSpFeature = this.global.getFeature('EditSp');
+  editDiscFeature = this.global.getFeature('EditDisc');
 
   @ViewChild(SaleBillPrintComponent) billPrint:any;
 
@@ -149,6 +154,8 @@ export class GarmentSaleComponent implements OnInit {
   customerName = '';
   customerMobileno = '';
   bookerID = 0;
+  AdvTaxValue = 0;
+  AdvTaxAmount = 0;
 
   qtyTotal = 0;
   subTotal: any = 0;
@@ -157,6 +164,11 @@ export class GarmentSaleComponent implements OnInit {
   bankCoaList: any = [];
   partyList: any = [];
   bookerList:any = [];
+
+  billPrintType:any = this.global.getBillPrintType();
+  setBillType(e:any){
+    localStorage.setItem('BillPrint',this.billPrintType);
+  }
 
   getBooker(){
     this.http.get(environment.mainApi + this.global.inventoryLink + 'getBooker').subscribe(
@@ -296,6 +308,8 @@ export class GarmentSaleComponent implements OnInit {
                   batchNo: '-',
                   batchStatus: '-',
                   uomID: Response[0].uomID,
+                  gst: this.gstFeature ? Response[0].gst : 0,
+                  et:Response[0].et,
                   packing: 1,
                   discInP: this.discFeature ?  Response[0].discPercentage : 0,
                   discInR: this.discFeature ?  Response[0].discRupees  : 0,
@@ -347,7 +361,8 @@ export class GarmentSaleComponent implements OnInit {
           var prodDetail = this.productList.find((p: any) => p.barcode == txtBCode);
 
           if(prodDetail == '' || prodDetail == undefined){
-            this.msg.WarnNotify('Product Not Fount')
+            this.msg.WarnNotify('Product Not Fount');
+           
           }else{
             
 
@@ -396,6 +411,8 @@ export class GarmentSaleComponent implements OnInit {
                     batchNo: '-',
                     batchStatus: '-',
                     uomID: Response[0].uomID,
+                    gst: this.gstFeature ? Response[0].gst : 0,
+                    et:Response[0].et,
                     packing: 1,
                     discInP: this.discFeature ?  Response[0].discPercentage : 0,
                     discInR: this.discFeature ?  Response[0].discRupees  : 0,
@@ -433,7 +450,8 @@ export class GarmentSaleComponent implements OnInit {
          
 
         }else{
-          this.msg.WarnNotify('Product Not Found')
+          this.msg.WarnNotify('Product Not Found');
+          
         }
 
 
@@ -484,6 +502,8 @@ export class GarmentSaleComponent implements OnInit {
             batchNo: '-',
             batchStatus: '-',
             uomID: Response[0].uomID,
+            gst: this.gstFeature ? Response[0].gst : 0,
+            et:Response[0].et,
             packing: 1,
             discInP: this.discFeature ?  Response[0].discPercentage : 0,
             discInR: this.discFeature ?  Response[0].discRupees  : 0,
@@ -529,22 +549,32 @@ export class GarmentSaleComponent implements OnInit {
     }
 
     if (cls == '#disc' && e.keyCode == 13 && e.target.value == '') {
+      e.preventDefault();
+      $(cls).trigger('select');
       $(cls).trigger('focus');
     }
     if (cls == '#charges' && e.keyCode == 13) {
-      $(cls).trigger('focus');
+      e.preventDefault();
+        $(cls).trigger('select');
+        $(cls).trigger('focus');
     }
     if (cls == '#cash' && e.keyCode == 13 && e.target.value == '') {
-      $(cls).trigger('focus');
+      e.preventDefault();
+        $(cls).trigger('select');
+        $(cls).trigger('focus');
 
     }
 
     if (cls == '#save' && e.keyCode == 13) {
-      $(cls).trigger('focus');
+      e.preventDefault();
+        // $(cls).trigger('select');
+        $(cls).trigger('focus');
 
     }
 
     if (cls == '#vsrtnsearchProduct' && e.keyCode == 13) {
+      e.preventDefault();
+      $(cls).trigger('select');
       $(cls).trigger('focus');
     }
 
@@ -615,6 +645,8 @@ export class GarmentSaleComponent implements OnInit {
 
         if (this.tableDataList.length >= 1) {
           this.rowFocused = 0;
+          e.preventDefault();
+          $('.qty0').trigger('select');
           $('.qty0').trigger('focus');
 
         }
@@ -654,6 +686,7 @@ export class GarmentSaleComponent implements OnInit {
         } else {
           var clsName = cls + this.prodFocusedRow;
           //  alert(clsName);
+          e.preventDefault();
           $(clsName).trigger('focus');
           //  e.which = 9;   
           //  $(clsName).trigger(e)       
@@ -666,6 +699,7 @@ export class GarmentSaleComponent implements OnInit {
     if (e.keyCode == 38) {
 
       if (this.prodFocusedRow == 0) {
+        e.preventDefault();
         $(endFocus).trigger('focus');
         this.prodFocusedRow = 0;
 
@@ -677,6 +711,7 @@ export class GarmentSaleComponent implements OnInit {
 
         var clsName = cls + this.prodFocusedRow;
         //  alert(clsName);
+        e.preventDefault();
         $(clsName).trigger('focus');
 
 
@@ -697,6 +732,8 @@ export class GarmentSaleComponent implements OnInit {
       this.rowFocused = index - 1;
     }
     if (e.keyCode == 13) {
+      e.preventDefault();
+      $('#psearchProduct').trigger('select');
       $('#psearchProduct').trigger('focus');
     }
 
@@ -716,7 +753,9 @@ export class GarmentSaleComponent implements OnInit {
           this.rowFocused -= 1
         } else {
           var clsName = cls + this.rowFocused;
-          $(clsName).trigger('focus');
+          e.preventDefault();
+            $(clsName).trigger('select');   
+            $(clsName).trigger('focus');    
         }
       }
     }
@@ -726,7 +765,9 @@ export class GarmentSaleComponent implements OnInit {
     if (e.keyCode == 38) {
 
       if (this.rowFocused == 0) {
-        $(".searchProduct").trigger('focus');
+        e.preventDefault();
+        $(".searchProduct").trigger('select');  
+          $(".searchProduct").trigger('focus');
         this.rowFocused = 0;
 
       }
@@ -736,6 +777,8 @@ export class GarmentSaleComponent implements OnInit {
         this.rowFocused -= 1;
 
         var clsName = cls + this.rowFocused;
+        e.preventDefault();
+        $(clsName).trigger('select'); 
         $(clsName).trigger('focus');
 
 
@@ -762,10 +805,12 @@ export class GarmentSaleComponent implements OnInit {
           this.getTotal();
 
           if (index == 0) {
+            $('#psearchProduct').trigger('select'); 
             $('#psearchProduct').trigger('focus');
           } else {
             this.rowFocused = index - 1;
-            $('.qty' + this.rowFocused).trigger('focus');
+            $('.qty'+this.rowFocused).trigger('select');
+            $('.qty'+this.rowFocused).trigger('focus');
           }
         }
       }
@@ -803,7 +848,7 @@ export class GarmentSaleComponent implements OnInit {
   }
 
   editSP(item:any){
-   if(this.crudList.u){
+   if(this.editSpFeature){
     Swal.fire({
       title:"Enter Total Amount",
       input:"text",
@@ -846,6 +891,8 @@ export class GarmentSaleComponent implements OnInit {
   
   editDR(item:any){
 
+    if(this.editDiscFeature){
+      
     Swal.fire({
       title:"Enter Discount Amount",
       input:"text",
@@ -883,53 +930,59 @@ export class GarmentSaleComponent implements OnInit {
            });
         }
     })
+    }
+
 
   }
+
   editDP(item:any){
-
-    Swal.fire({
-      title:"Enter Discount Percent",
-      input:"text",
-      showCancelButton:true,
-      confirmButtonText:'Save',
-      showLoaderOnConfirm:true,
-      preConfirm: (value )=>{
-        
-        if(value == ""){
-        return  Swal.showValidationMessage("Enter Valid Amount");
-        }
-
-        if(isNaN(value)){
+    if(this.editDiscFeature){
+      Swal.fire({
+        title:"Enter Discount Percent",
+        input:"text",
+        showCancelButton:true,
+        confirmButtonText:'Save',
+        showLoaderOnConfirm:true,
+        preConfirm: (value )=>{
+          
+          if(value == ""){
           return  Swal.showValidationMessage("Enter Valid Amount");
+          }
+  
+          if(isNaN(value)){
+            return  Swal.showValidationMessage("Enter Valid Amount");
+          }
+  
+          if(value < 0){
+            return  Swal.showValidationMessage("Enter Valid Amount");
+          }
+  
+          if(item.salePrice - ((item.salePrice * value) / 100 ) < item.costPrice){
+            return  Swal.showValidationMessage("Discount % Not Valid");
+          }
+          
+          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInP = value;
+          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR = (item.salePrice * value) / 100;
+          this.getTotal();
+          this.tempProdData = [];
         }
+      }).then((result)=>{
+          if(result.isConfirmed){
+            Swal.fire({
+              title: "Discount Updated",
+              timer:500,
+             });
+          }
+      })
+    }
 
-        if(value < 0){
-          return  Swal.showValidationMessage("Enter Valid Amount");
-        }
-
-        if(item.salePrice - ((item.salePrice * value) / 100 ) < item.costPrice){
-          return  Swal.showValidationMessage("Discount % Not Valid");
-        }
-        
-        this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInP = value;
-        this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR = (item.salePrice * value) / 100;
-        this.getTotal();
-        this.tempProdData = [];
-      }
-    }).then((result)=>{
-        if(result.isConfirmed){
-          Swal.fire({
-            title: "Discount Updated",
-            timer:500,
-           });
-        }
-    })
+   
 
   }
  
 
   editTotal(amount:any){
-    if(this.crudList.u){
+    if(this.editSpFeature){
       this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].total = amount;
     this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].quantity = (amount / (this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice - this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR));
 
@@ -1037,6 +1090,8 @@ export class GarmentSaleComponent implements OnInit {
           NetTotal: this.netTotal,
           CashRec: this.cash,
           Change: this.change,
+          AdvTaxAmount : this.AdvTaxAmount,
+          AdvTaxValue : this.AdvTaxValue,
           BankCoaID: this.bankCoaID,
           BankCash: this.bankCash,
           CusContactNo: this.customerMobileno || '-',
@@ -1046,6 +1101,9 @@ export class GarmentSaleComponent implements OnInit {
         }).subscribe(
           (Response: any) => {
             if (Response.msg == 'Data Saved Successfully') {
+              if(this.tillOpenFeature){
+                this.global.openTill();
+              }
               this.msg.SuccessNotify(Response.msg);
               this.reset();
               this.PrintAfterSave(Response.invNo);
@@ -1095,6 +1153,8 @@ export class GarmentSaleComponent implements OnInit {
     this.billDiscount = 0;
     this.offerDiscount = 0;
     this.bookerID = 0;
+    this.customerMobileno = '';
+    this.customerName = '';
 
 
   }

@@ -377,23 +377,31 @@ export class VoidSaleReturnComponent implements OnInit {
 
     focusTo(e:any,cls:string){
       if(cls == '#disc' && e.keyCode == 13 && e.target.value == ''){
+        e.preventDefault();
+        $(cls).trigger('select');
         $(cls).trigger('focus');
       }
       if(cls == '#charges' && e.keyCode == 13 ){
+        e.preventDefault();
+        $(cls).trigger('select');
         $(cls).trigger('focus');
       }
       if(cls == '#cash' && e.keyCode == 13 ){
+        e.preventDefault();
+        $(cls).trigger('select');
         $(cls).trigger('focus');
         
       }
       
       if(cls == '#save' && e.keyCode == 13 ){
+        e.preventDefault();
+        // $(cls).trigger('select');
         $(cls).trigger('focus');
-      //  var elem = document.getElementById('save');
-      //  elem?.focus();
       }
 
       if(cls == '#vsrtnsearchProduct' && e.keyCode == 13 ){
+        e.preventDefault();
+        $(cls).trigger('select');
         $(cls).trigger('focus');
       }
     

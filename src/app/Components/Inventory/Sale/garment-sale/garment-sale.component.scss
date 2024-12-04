@@ -105,3 +105,16 @@ input:focus{
   .hide{
     display: none;
   }
+
+
+  
+  .delBtn{
+    background-color:transparent;
+    border-radius: 5px;
+  }
+
+  .delBtn:focus{
+    background-color: black !important;
+    color: white !important;
+  }
+  

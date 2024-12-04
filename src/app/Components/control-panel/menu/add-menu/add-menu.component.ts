@@ -50,7 +50,7 @@ export class AddMenuComponent implements OnInit {
   parentMenuList: any = [];
 
   getParentMenuList() {
-    this.dataServie.getHttp(this.global.userLink + 'getMenu', '').subscribe(
+    this.dataServie.getHttp(this.global.contorlPanelLink + 'getMenu', '').subscribe(
       (Response: any) => {
         this.parentMenuList = Response.filter((e: any) => e.isParentMenu == true);
         // console.log(this.parentMenuList);
@@ -87,7 +87,7 @@ export class AddMenuComponent implements OnInit {
 
       if (this.btnType == 'Save') {
 
-        this.dataServie.saveHttp(this.global.userLink + 'insertMenu', {
+        this.dataServie.saveHttp(this.global.contorlPanelLink + 'insertMenu', {
           ModuleID: this.moduleID,
           MenuTitle: this.menuTitle,
           SerialNo: this.serialNo,
@@ -107,7 +107,7 @@ export class AddMenuComponent implements OnInit {
         )
       } else if (this.btnType == 'Update') {
 
-        this.dataServie.saveHttp(this.global.userLink + 'updateMenu', {
+        this.dataServie.saveHttp(this.global.contorlPanelLink + 'updateMenu', {
           MenuID: this.editData.menuID,
           ModuleID: this.moduleID,
           MenuTitle: this.menuTitle,

@@ -396,20 +396,30 @@ export class VoidSaleComponent implements OnInit {
 
   focusTo(e:any,cls:any){
     if(cls == '#disc' && e.keyCode == 13 ){
-      $(cls).trigger('focus');
+      e.preventDefault();
+        $(cls).trigger('select');
+        $(cls).trigger('focus');
     }
     if(cls == '#charges' && e.keyCode == 13 ){
+      e.preventDefault();
+      $(cls).trigger('select');
       $(cls).trigger('focus');
     }
     if(cls == '#cash' && e.keyCode == 13 && e.target.value == '' ){
+      e.preventDefault();
+      $(cls).trigger('select');
       $(cls).trigger('focus');
     }
     
     if(cls == '#save' && e.keyCode == 13 ){
+      e.preventDefault();
+      // $(cls).trigger('select');
       $(cls).trigger('focus');
     }
 
     if(cls == '#vssearchProduct' && e.keyCode == 13 ){
+      e.preventDefault();
+      $(cls).trigger('select');
       $(cls).trigger('focus');
     }
   

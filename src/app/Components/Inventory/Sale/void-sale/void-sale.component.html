@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <div class="col-lg-3 text-start ms-1 pt-3 mt-1">
-                        <button mat-raised-button class="bg-primary text-white w-50 " style="height: 40px;"
+                        <button  class="btnload w-50 " style="height: 40px;"
                             (click)="ngOnInit()">Load</button>
                     </div>
 
@@ -138,16 +138,16 @@
                 <div class="text-center d-flex pt-4 me-1">
                     <button class="col-lg-2 me-1 delBtn" matTooltip="Void Full Bill"
                         (click)="voidBill()"><mat-icon>delete_outline</mat-icon></button>
-                    <button class="btn col-lg-10 text-center btn-success" accesskey="s" id="save"
+                    <button class="btnsave col-lg-10 text-center " accesskey="s" id="save"
                         (click)="save('Cash')"><u>S</u>ave</button>
 
 
                 </div>
                 <div class="mt-2 d-flex justify-content-between">
-                    <div class="pe-1"><button class="btn btn-danger " accesskey="u" 
+                    <div class="pe-1"><button class="btnduplicate" accesskey="u" 
                             (click)="openSavedBill()">D<u>u</u>plicate</button></div>
 
-                    <button accesskey="o" class="btn w-75  d-flex justify-content-between btn-primary"
+                    <button accesskey="o" class="btnload pt-2 w-75  d-flex justify-content-between btn-primary"
                         data-bs-toggle="modal" data-bs-target="#paymentMehtod" (click)="cash = 0;this.getTotal()">
                         <span><u>O</u>ther</span> <mat-icon>keyboard_arrow_right</mat-icon>
                     </button>
@@ -191,8 +191,8 @@
             </div>
 
             <div class="modal-footer bg-mf-blue">
-                <button class="btn btn-success" data-bs-dismiss="modal" (click)="EnterDiscount(tempDisc)">Save</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button class="btnsave" data-bs-dismiss="modal" (click)="EnterDiscount(tempDisc)">Save</button>
+                <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
             </div>
 
 
@@ -281,8 +281,8 @@
             </div>
 
             <div class="modal-footer bg-mf-blue">
-                <button class="btn btn-success" (click)="save(pType.value)">Save</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button class="btnsave" (click)="save(pType.value)">Save</button>
+                <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
             </div>
 
 

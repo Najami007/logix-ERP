@@ -81,6 +81,8 @@ import { NgxBarcode6Module } from 'ngx-barcode6';
 import { SaleBillPrintComponent } from './Sale/sale-bill-print/sale-bill-print.component';
 import { WholeSaleComponent } from './Sale/whole-sale/whole-sale.component';
 import { WhsSavedBillComponent } from './Sale/whole-sale/whs-saved-bill/whs-saved-bill.component';
+import { WholeSaleReturnComponent } from './Sale/whole-sale-return/whole-sale-return.component';
+import { SalePurchaseRptcatwiseComponent } from './InventoryReports/sale-purchase-rptcatwise/sale-purchase-rptcatwise.component';
 
 
 
@@ -132,6 +134,7 @@ export const inventoryRoutes: Route[] = [
   
   {path: 'pckr',component: PriceCheckerComponent,canActivate: [AuthGuard]},  
   {path: 'whsl', component: WholeSaleComponent,canActivate: [AuthGuard]},    
+  {path: 'whslrtn', component: WholeSaleReturnComponent,canActivate: [AuthGuard]},    
   {path: 'gmsale',component: GarmentSaleComponent,canActivate: [AuthGuard]}, 
   {path: 'slrptcw',component: SaleReportCustomerwiseComponent,canActivate: [AuthGuard]}, 
   {path: 'invadt',component: InvAuditComponent,canActivate: [AuthGuard]}, 
@@ -140,6 +143,7 @@ export const inventoryRoutes: Route[] = [
   {path: 'sbrpt',component: SupplierBalanceReportComponent,canActivate: [AuthGuard]}, 
   { path: 'srptbkrw',component: SaleReportBookerwiseComponent,canActivate: [AuthGuard]}, 
   {path: 'srptprodcw',component: SaleReportProdCustomerwiseComponent,canActivate: [AuthGuard]}, 
+  {path: 'sprptcw',component: SalePurchaseRptcatwiseComponent,canActivate: [AuthGuard]}, 
 
 
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
@@ -210,6 +214,8 @@ export const inventoryRoutes: Route[] = [
     VoidSaleComponent,
     VoidSaleReturnComponent,
     SaleBillPrintComponent,
+    WholeSaleReturnComponent,
+    SalePurchaseRptcatwiseComponent,
     
   
     

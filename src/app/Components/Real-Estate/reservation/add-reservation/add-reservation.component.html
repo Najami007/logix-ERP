@@ -1,0 +1,169 @@
+<div class="p-3" style="max-height: 600px; overflow-y: scroll;">
+
+    <div class="d-flex container-fluid justify-content-between text-uppercase">
+        <p class="dialogueTitle">ADD Reservation DETAILS</p>
+    </div>
+
+    <div class="container-fluid row ">
+        <div class="row col-lg-5">
+            <mat-label class="fw-bold mb-2">Booking Details</mat-label>
+
+
+            <mat-form-field class="col-lg-6 " appearance="outline">
+                <mat-label>Booking Date</mat-label>
+                <input readonly="true" matInput [(ngModel)]="bookingDate" [matDatepicker]="bdate">
+                <mat-datepicker-toggle matPrefix [for]="bdate"></mat-datepicker-toggle>
+                <mat-datepicker #bdate></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-lg-6 ">
+                <mat-label>Room</mat-label>
+                <mat-select [(ngModel)]="RoomID">
+                    <mat-option><ngx-mat-select-search [(ngModel)]="searchRoom" [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of RoomList |filter:searchRoom"
+                        [value]="item.roomID">{{item.roomTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-lg-12">
+                <mat-label>Check In / Out</mat-label>
+                <!-- <input readonly="true" matInput [matDatepickerFilter]="myFilter"  [matDatepicker]="CIpicker" > -->
+                <mat-date-range-input [ariaSelected]="getTotalDays()"  [min]="minDate"  [dateFilter]="myFilteredDates"  [rangePicker]="CIpicker" >
+                  <input readonly="true"  matStartDate  [(ngModel)]="arrivalDate" placeholder="Start date">
+                  <input readonly="true" matEndDate [(ngModel)]="DepartureDate" placeholder="End date">
+                </mat-date-range-input>
+                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconPrefix [for]="CIpicker"></mat-datepicker-toggle>
+                <mat-icon matIconSuffix class="cursorPointer" (click)="clearDate()">close</mat-icon>
+                <mat-date-range-picker touchUi #CIpicker>
+                    <mat-datepicker-actions>
+                        <button mat-button matDatepickerCancel>Cancel</button>
+                        <button mat-raised-button matDatepickerApply>Apply</button>
+                      </mat-datepicker-actions>
+                </mat-date-range-picker>
+                
+              
+        
+              </mat-form-field>
+              
+
+            <!-- <mat-form-field class="col-lg-6 " appearance="outline">
+                <mat-label>Check In Date</mat-label>
+                <input readonly="true" matInput (dateChange)="getTotalDays()" [(ngModel)]="arrivalDate" [matDatepicker]="ADate">
+                <mat-datepicker-toggle matSuffix [for]="ADate"></mat-datepicker-toggle>
+                <mat-datepicker #ADate></mat-datepicker>
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline" class="col-lg-6 ">
+                <mat-label>Check In Time</mat-label>
+                <input type="time" matInput [(ngModel)]="arrivalTime" name="week" min="00:00:00" max="24:00:00" />
+            </mat-form-field>
+
+            <mat-form-field class="col-lg-6 " appearance="outline">
+                <mat-label>Check Out Date</mat-label>
+                <input readonly="true" (dateChange)="getTotalDays()" matInput [(ngModel)]="DepartureDate" [matDatepicker]="DDate">
+                <mat-datepicker-toggle matSuffix [for]="DDate"></mat-datepicker-toggle>
+                <mat-datepicker #DDate></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-lg-6 ">
+                <mat-label>Check Out time</mat-label>
+                <input type="time"  matInput [(ngModel)]="DepartureTime" name="week" min="00:00:00" max="24:00:00" />
+            </mat-form-field> -->
+
+            <mat-form-field appearance="outline" class="col-lg-4 ">
+                <mat-label>Rent Per Day</mat-label>
+                <input matInput type="number" min="0" class="numOnly" [(ngModel)]="rentPerDay">
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline" class="col-lg-4 ">
+                <mat-label>Booking Channel</mat-label>
+               <mat-select>
+                <mat-option value="Application">Application</mat-option>
+                <mat-option value="WalkIn">WalkIn</mat-option>
+               </mat-select>
+
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-lg-4 ">
+                <mat-label>Guests</mat-label>
+                <mat-select  [(ngModel)]="numberOfPersons" >
+                    <mat-option><ngx-mat-select-search #personSearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of listOfGuestNo | filter:personSearch.value" [value]="item.id">{{item.title}}</mat-option>
+
+                </mat-select>
+
+            </mat-form-field>
+
+            <!-- <mat-form-field appearance="outline" class="col-lg-4 ">
+                <mat-label>Total Nights</mat-label>
+                <input type="number" min="0" class="numOnly" matInput [(ngModel)]="TotalNights" />
+
+            </mat-form-field> -->
+
+            <mat-form-field appearance="outline" class="col-lg-12">
+                <mat-label>Description</mat-label>
+                <textarea type="Text" matInput [(ngModel)]="bookingDescription"></textarea>
+            </mat-form-field>
+
+        </div>
+
+        <div class="row col-lg-5 h-50">
+            <mat-label class="fw-bold mb-2">Customer Details</mat-label>
+
+
+            <mat-form-field appearance="outline" class="col-lg-6 ">
+                <mat-label>First Name</mat-label>
+                <input type="text" matInput name="firstName" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-lg-6 ">
+                <mat-label>Last Name</mat-label>
+                <input type="text" matInput name="lastName" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-lg-12 ">
+                <mat-label>Email</mat-label>
+                <input type="text" matInput name="Email" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-lg-12 ">
+                <mat-label>Phone No</mat-label>
+                <input type="text" matInput name="phoneNo" />
+            </mat-form-field>
+
+
+        </div>
+
+        <div class="row col-lg-2">
+
+            <table class="w-100 table ">
+                <tbody>
+                    <tr>
+                        <td class="fw-bold">{{currency}} {{rentPerDay}} x {{TotalNights}} nights </td>
+                        <td> {{rentPerDay * TotalNights}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">5% VAT </td>
+                        <td> {{((rentPerDay * TotalNights) * 5) /100 }}</td>
+                    </tr>
+
+                    <tr>
+                        <td class="fw-bold">Total </td>
+                        <td> {{(rentPerDay * TotalNights)+(((rentPerDay * TotalNights) * 5) / 100) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<div class="text-end bg-mf p-3">
+    <button class="btnsave btn-save m-1" accesskey="s">{{actionbtn}} </button>
+    <button class="btnclose btn-reset m-1 " (click)="closeDialogue()"> Close </button>
+</div>

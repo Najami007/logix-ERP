@@ -1,6 +1,4 @@
-mat-nav-list{
-    background-color: rgb(26, 26, 26);
-}
+
 .navHeader {
     text-align: center;
    
@@ -8,6 +6,12 @@ mat-nav-list{
 }
 .navHeader img {
     height: 80px;
+}
+.sideNav{
+    background-color: rgb(6, 2, 68) !important;
+    .list-item {
+    color: white;
+    }
 }
 
 
@@ -18,7 +22,7 @@ mat-nav-list{
 }
 
 .list-item {
-    color: #ffffff !important;
+  /*  color: #070707 !important; */ 
     font-size: 0.8rem;
     height: 44px !important;
     margin-bottom: 4px ;

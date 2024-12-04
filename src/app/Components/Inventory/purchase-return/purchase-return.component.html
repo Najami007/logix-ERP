@@ -7,7 +7,7 @@
             <div class="row pt-4 justify-content-between col-lg-11" >
                 <div class="col-lg-8 d-flex ">
                     <input type="text" #pbarcode [(ngModel)]="PBarcode"
-                        (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event);"
+                        (keydown)="changeFocus($event,'.prodRow');searchByCode($event);focusto('#ovhd',$event);"
                         id="searchProduct" class="searchProduct ps-1" placeholder="Scan Barcode (Alt + b)" (focus)="rowFocused = -1"
                         autofocus autocomplete="off" accesskey="b">
 
@@ -19,9 +19,9 @@
 
 
                 <div class="col-lg-4 ps-1">
-                    <button class=" w-25 btn btn-primary me-1  " *ngIf="crudList.c" style="height: 50px;"
+                    <button class=" w-25 btnhold me-1  " *ngIf="crudList.c" style="height: 50px;"
                     (click)="SaveBill('hold')">{{holdBtnType}}</button>
-                    <button class="w-25 btn btn-danger me-1" style="height: 50px;"
+                    <button class="w-25 btnreset me-1" style="height: 50px;"
                         data-bs-toggle="modal"  data-bs-target="#purRtnholdModal">Retrieve</button>
                     
                 </div>
@@ -234,7 +234,7 @@
                     <h1 style="font-size: 50px;" class="text-danger">{{subTotal || 0 |number:'1.0-2'}}</h1>
                 </div>
             <div class="text-center">
-                <button class=" w-50 btn btn-success " style="height: 50px;" *ngIf="crudList.c" (click)="SaveBill('purchase')">Save</button>
+                <button class=" w-50 btnsave " style="height: 50px;" *ngIf="crudList.c" (click)="SaveBill('purchase')">Save</button>
 
             </div>
 

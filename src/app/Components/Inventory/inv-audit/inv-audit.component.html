@@ -15,7 +15,7 @@
              <div class="col-lg-9  d-flex flex-column">
                  <mat-label class="text-primary">Search Barcode / Product</mat-label> 
                 <input type="text"  #pbarcode [(ngModel)]="PBarcode"  
-                     (keydown)="searchByCode($event);this.changeFocus($event,'.prodRow')" id="searchProduct"
+                     (keydown)="searchByCode($event);changeFocus($event,'.prodRow')" id="searchProduct"
                      class="p-1 ps-2 mb-2 searchProduct" placeholder="Alt + b" autofocus
                      autocomplete="off" accesskey="b">
      
@@ -65,7 +65,7 @@
                        <td>{{item.barcode}}</td>
                        <td>{{item.productTitle}}</td>
                        <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
-                         (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
+                         (keydown)="handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
                          (keyup)="changeValue(item);getTotal();showImg(item);"
                          class="qty{{index}} text-center" style="width: 80px;"></td>
                              <td class="text-end">{{item.avgCostPrice | number:'1.0-2'}}</td>
@@ -141,13 +141,13 @@
   
   
         <div class="mt-1 d-flex justify-content-around">
-         <button mat-raised-button *ngIf="crudList.c" class="bg-primary text-white w-25" (click)="SaveBill('hold')">{{holdBtnType}}</button>
-         <button mat-raised-button class="bg-danger text-white w-25"  data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>
+         <button  *ngIf="crudList.c" class="btnhold w-25" (click)="SaveBill('hold')">{{holdBtnType}}</button>
+         <button  class="btnreset w-25"  data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>
          
         </div>
         <div class="mt-4 d-flex justify-content-around">
          
-         <button mat-raised-button *ngIf="crudList.c" class="bg-success text-white w-25" (click)="SaveBill('issue')">Save</button>
+         <button *ngIf="crudList.c" class="btnsave w-25" (click)="SaveBill('issue')">Save</button>
   
   
         

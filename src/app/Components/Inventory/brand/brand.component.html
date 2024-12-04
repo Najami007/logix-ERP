@@ -23,9 +23,9 @@
     
 
         <div class="row justify-content-around">
-            <button class="btn btn-success w-25" *ngIf="crudList.u && btnType == 'Update'" (click)="save()">{{btnType}}</button>
-            <button class="btn btn-success w-25" *ngIf="crudList.c && btnType == 'Save'" (click)="save()">{{btnType}}</button>
-            <button class="btn btn-danger w-25" (click)="reset()">Reset</button>
+            <button class="btnsave w-25" *ngIf="crudList.u && btnType == 'Update'" (click)="save()">{{btnType}}</button>
+            <button class="btnsave w-25" *ngIf="crudList.c && btnType == 'Save'" (click)="save()">{{btnType}}</button>
+            <button class="btnreset w-25" (click)="reset()">Reset</button>
         </div>
         
 

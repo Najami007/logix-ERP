@@ -12,6 +12,7 @@ import { RestKotPrintComponent } from '../rest-kot-print/rest-kot-print.componen
 import { SaleBillDetailComponent } from './sale-bill-detail/sale-bill-detail.component';
 import { RestSaleBillPrintComponent } from '../rest-sale-bill-print/rest-sale-bill-print.component';
 import { exec } from 'child_process';
+import * as bootstrap from 'bootstrap';
 
 
 
@@ -27,6 +28,7 @@ export class Sale1Component implements OnInit {
   @ViewChild(RestKotPrintComponent) KotPrint:any;
 
   showCmpNameFeature:any = this.global.getFeature('cmpName');
+  waiterFeature = this.global.getFeature('Waiter');
 
   appVisibility() {
     if (document.hidden) { 
@@ -127,6 +129,7 @@ export class Sale1Component implements OnInit {
     this.getHoldBills();
     this.getBankList();
     this.getSavedBill();
+    this.getBookerList();
   }
 
 
@@ -148,9 +151,9 @@ export class Sale1Component implements OnInit {
   invBillNo = '';
   prevTableID = 0;
   orderNo = 0;
-  coverOf: any;
+  coverOf: any = 0;
   billRemarks = '';
-  BookerID = 1;
+  BookerID = 0;
   ProjectID = this.global.InvProjectID;
   PartyID = 0;
   invoiceDate: Date = new Date();
@@ -184,6 +187,19 @@ export class Sale1Component implements OnInit {
   holdBillList: any = [];
 
   tableList: any = [];
+  bookerList:any = [];
+
+  getBookerList(){
+    this.http.get(environment.mainApi+this.global.inventoryLink+'getBooker').subscribe(
+      (Response)=>{
+        this.bookerList = Response;
+        //console.log(Response);
+      },
+      (Error)=>{
+        this.msg.WarnNotify('Error Occured')
+      }
+    )
+  }
 
 
   focusTo(id:any){
@@ -426,6 +442,8 @@ export class Sale1Component implements OnInit {
       this.msg.WarnNotify('Bank Amount is Not Valid')
     }else if(type == 'sale' && (this.customerName !='' && this.customerMobileno == '')){
       this.msg.WarnNotify('Enter Customer Name')
+    }else if((this.BookerID == 0 || this.BookerID == undefined) && this.waiterFeature == true){
+      this.msg.WarnNotify('Select Waiter')
     }
     else {
 
@@ -447,7 +465,7 @@ export class Sale1Component implements OnInit {
           PartyID: this.PartyID,
           InvType: "HS",
           ProjectID: this.ProjectID,
-          BookerID: this.BookerID,
+          BookerID: this.waiterFeature ? this.BookerID : 1,
           PaymentType: this.paymentType,
           Remarks: this.billRemarks,
           OrderType: this.orderType,
@@ -495,7 +513,7 @@ export class Sale1Component implements OnInit {
           PartyID: this.PartyID,
           InvType: "HS",
           ProjectID: this.ProjectID,
-          BookerID: this.BookerID,
+          BookerID: this.waiterFeature ? this.BookerID : 1,
           PaymentType: this.paymentType,
           Remarks: this.billRemarks,
           OrderType: this.orderType,
@@ -593,6 +611,7 @@ export class Sale1Component implements OnInit {
   }
 
 //////////////////////////////////////////////////////////////////
+validSaleFlag = true;
 
   InsertSale() {
 
@@ -607,6 +626,8 @@ export class Sale1Component implements OnInit {
     }
 
     this.app.startLoaderDark()
+  if(this.validSaleFlag){
+    this.validSaleFlag = false;
     this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertSale', {
       HoldInvNo: this.invBillNo,
       OrderNo: this.orderNo,
@@ -616,7 +637,7 @@ export class Sale1Component implements OnInit {
       PartyID: this.PartyID,
       InvType: "S",
       ProjectID: this.ProjectID,
-      BookerID: this.BookerID,
+      BookerID: this.waiterFeature ? this.BookerID : 1,
       PaymentType: this.paymentType,
       Remarks: this.billRemarks,
       OrderType: this.orderType,
@@ -639,6 +660,7 @@ export class Sale1Component implements OnInit {
     }).subscribe(
       (Response: any) => {
         if (Response.msg == 'Data Saved Successfully') {
+          this.validSaleFlag = true;
           this.printKOT(Response.invNo); /////// Will Print KOT ////////////////
           this.msg.SuccessNotify(Response.msg);
 
@@ -654,15 +676,18 @@ export class Sale1Component implements OnInit {
           $('.modal-backdrop').remove();
 
         } else {
+          this.validSaleFlag = true;
           this.msg.WarnNotify(Response.msg);
         }
         this.app.stopLoaderDark();
       },
       (Error:any)=>{
+        this.validSaleFlag = true;
         this.msg.WarnNotify(Error);
         this.app.stopLoaderDark();
        }
     )
+  }
   }
 
   /////////////////////////////////////////////////////////////////
@@ -968,7 +993,7 @@ export class Sale1Component implements OnInit {
     this.orderNo = 0;
     this.coverOf = '';
     this.billRemarks = '';
-    this.BookerID = 1;
+    this.BookerID = 0;
     this.ProjectID = this.global.InvProjectID;
     this.PartyID = 0;
     this.invoiceDate = new Date();
@@ -1269,6 +1294,26 @@ export class Sale1Component implements OnInit {
    
    
   }
+
+
+  
+  OpenSaveModal(){
+    if(this.tableData != ''){
+      const myModal = new bootstrap.Modal('#paymentMehtod',{keyboard: false});
+    myModal.show();
+    }  
+
+   }
+
+
+ openModal(modalID:any,condition:any){
+ if(condition){
+  const myModal = new bootstrap.Modal(modalID,{keyboard: false});
+  myModal.show();
+  
+ }
+ }
+
 
 
  

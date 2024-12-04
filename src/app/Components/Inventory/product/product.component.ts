@@ -300,11 +300,13 @@ export class ProductComponent implements OnInit {
       this.msg.WarnNotify('Select SubCategory')
     }else if(this.ProductName == '' || this.ProductName == undefined){
       this.msg.WarnNotify('Enter Product Name')
-    }else if(this.productNameOthLanguage == '' || this.productNameOthLanguage == undefined){
+    }
+    else if(this.productNameOthLanguage == '' || this.productNameOthLanguage == undefined){
       this.msg.WarnNotify('Enter Product Name In Other Language')
     }else if(this.productCode == '' || this.productCode == undefined){
       this.msg.WarnNotify('Enter Product Code')
-    }else if(this.prodBarcodeType == 'manual' && (this.Barcode == '' || this.Barcode == undefined)){
+    }
+    else if(this.prodBarcodeType == 'manual' && (this.Barcode == '' || this.Barcode == undefined)){
       this.msg.WarnNotify('Enter Barcode')
     }else if(this.BrandID == '' || this.BrandID == undefined){
       this.msg.WarnNotify('Select Brand')

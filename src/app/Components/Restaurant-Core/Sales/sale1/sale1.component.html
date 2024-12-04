@@ -58,36 +58,181 @@
 
     </div>
 
-
-    <div class="col-lg-4 bg-gray billArea  border-0 border-start"
-        style="right: 0%; height: 100vh;position:fixed;overflow: scroll;">
+    <div class="col-lg-4 bg-gray billArea  border-0 border-start" style="right: 0%; height: 100vh;position:fixed;overflow: scroll;">
 
         <!-----------   Table Side First Row ------------------->
-
+    
         <div class=" d-flex ">
             <div class="col-lg-3  text-center pt-3 tn  border">
                 <p style="font-size: 20px;"><strong>{{tableTitle}}</strong></p>
             </div>
-
+    
             <div class="col-lg-7 pt-3 text-center ot border">
       
                     <p style="font-size: 20px;"><strong>{{orderType}}</strong></p>
                 <!-- <select class="w-100 border-0 bg-gray" disabled="true" [(ngModel)]="orderType">
                     <option *ngFor="let item of orderTypeList" [value]="item.val">{{item.title}}</option>
                 </select> -->
-
+    
             </div>
             <div class="col-lg-2 chng p-1 text-center  border">
                 <button class="btn btn-warning" [disabled]="orderType == ''" data-bs-toggle="modal"
                     data-bs-target="#NewBill">Change</button>
-
+    
             </div>
         </div>
-
+    
         <div style="min-height: 400px;" class="p-2">
+    
+            <!-----------   Bill Area ------------------->
+            <div class="billTable" style="height: 47vh;">
+    
+                <table class="table-logix cursorPointer">
+                    <thead>
+                        <tr>
+                            <th>S#</th>
+                            <th class="col-lg-4">Title</th>
+                            <th class="col-lg-2">Price</th>
+                            <th class="col-lg-2">Qty</th>
+                            <th class="col-lg-2">Total</th>
+                            <th>Del</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of tableData index as index">
+                            <td class="text-center">{{index +1}}</td>
+                            <td>{{item.productTitle}}</td>
+                            <td class="text-center">{{item.salePrice |number:'1.0-1'}}</td>
+                            <td class="text-center">{{item.quantity}}</td>
+                            <td class="text-center">{{item.salePrice * item.quantity |number:'1.0-1'}}</td>
+                            <td class="text-center"><mat-icon class="text-danger" *ngIf="item.entryType == 'New'"(click)="deleteRow(item,'')">delete</mat-icon>
+    
+                                <!-------------- will Open void Qty modal when void button click ------------------->
+                            <mat-icon class="text-danger" data-bs-toggle="modal" data-bs-target="#voidQtyModal" *ngIf="item.entryType == 'Saved'" (click)="tempDeleteRow = item">indeterminate_check_box</mat-icon>
+                                    </td>
+    
+                        </tr>
+                    </tbody>
+                </table>
+    
+            </div>
+    
+    
+    
+            <!-----------   Bill Total Amount Section ------------------->
+            <div class="d-flex bg-white border-top p-1 col-lg-4 btas" style="position: fixed;bottom: 6%;right: 0%;">
+    
+    
+                <div class="justify-content-between p-1 w-50 border-end">
+    
+                    <div class="d-flex justify-content-between w-100">
+                        <mat-label class="w-50 text-primary cursorPointer" data-bs-toggle="modal" (click)="focusTo('#discInput')"
+                            data-bs-target="#disc" accesskey="t"><strong>ADD DISCOUN<u>T</u></strong></mat-label>
+                        <p class="text-center font-digit" style="font-size: 30px;">{{billDiscount |number:'1.0-2'}}</p>
+                        <!-- <input disabled="true" [(ngModel)]="billDiscount" class="w-50 text-end" (keyup)="getTotal();"
+                            (keydown)="getTotal();this.global.handleNumKeys($event)" /> -->
+                    </div>
+    
+                    <div class="d-flex justify-content-between w-100 pt-1">
+                        <mat-label class="w-50"><strong>SERVICE CHARGES</strong></mat-label>
+                        <p class="text-center font-digit" *ngIf="orderType == 'Dine In' || orderType == '' || orderType == 'Take Away'" style="font-size: 30px;">{{OtherCharges |number:'1.0-1'}}</p>
+                        <input *ngIf="orderType == 'Home Delivery'"[(ngModel)]="OtherCharges" class="w-50 text-end" (keyup)="getTotal();"
+                            (keydown)="getTotal();this.global.handleNumKeys($event)" />
+                    </div>
+    
+                    <div class="d-flex justify-content-between w-100 pt-1">
+                        <mat-label><strong>SUB TOTAL</strong></mat-label>
+                        <p class="text-center font-digit" style="font-size: 30px;">{{subTotal |number:'1.0-1'}}</p>
+                    </div>
+                    <div class="d-flex justify-content-between  w-100">
+                        <mat-label><strong>NET TOTAL</strong></mat-label>
+                        <p class="text-center font-digit" style="font-size: 30px;">{{netTotal |number:'1.0-1'}}</p>
+                    </div>
+                    <mat-form-field appearance="outline" class="col-lg-12 " *ngIf="waiterFeature">
+                        <mat-label>Waiter</mat-label>
+                        <mat-select [(ngModel)]="BookerID">
+                            <mat-option><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of bookerList | filter:bookerSearch.value" [value]="item.bookerID">{{item.bookerName}}</mat-option>
+                        </mat-select>
+    
+                    </mat-form-field>
+    
+                    <mat-form-field  class="w-100" appearance="outline" *ngIf="!waiterFeature">
+                        <mat-label>Remar<u>k</u>s</mat-label>
+                        <textarea rows="1" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
+                    </mat-form-field>
+                   
+                </div>
+    
+    
+    
+                <div class="w-50 text-center">
+    
+                    <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5" *ngIf="holdbtnType == 'hold'"
+                        matTooltip="Hold Current Bill"  matTooltipPosition="left" (click)="save('hold')" accesskey="h">HOLD</button>
+    
+                    <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5"
+                        *ngIf="holdbtnType == 'rehold'" matTooltipPosition="left" matTooltip="ReHold Current Bill"(click)="save('rehold')">ReHold</button>
+    
+                    <button mat-raised-button class="m-1 btn text-white bg-danger col-lg-5" matTooltip="Retrieve Hold Bills" 
+                    matTooltipPosition="right" (click)="openModal('#retrieveBill',true);getHoldBills();" accesskey="r"><u>R</u>etrieve</button>
+    
+    
+                    <button mat-raised-button class="m-1 btn text-white bg-warning col-lg-5" accesskey="n" matTooltip="New bill (Alt + n)" matTooltipPosition="left"
+                         [disabled]="tableData != ''" (click)="reset();openModal('#NewBill',true)"><u>N</u>ew Bill</button>
+    
+                     <button mat-raised-button class="m-1 btn text-white bg-success col-lg-5" matTooltipPosition="right"
+                         matTooltip="Save Current Bill" (click)="openModal('#paymentMehtod',this.tableData != '')" accesskey="s"><u>S</u>ave</button>
+    
+    
+                    <button matTooltip="Print  Current Bill" matTooltipPosition="left" mat-raised-button 
+                        class="m-1 text-white btn bg-primary col-lg-5" (click)="HOldandPrint('rehold')" accesskey="p">H & <u>P</u>rint</button>
+    
+                    <button accesskey="u" mat-raised-button matTooltip="Retreiving Saved Bills" matTooltipPosition="right" class="m-1 btn  col-lg-5 "
+                     (click)="openModal('#SavedBillModal',true);this.getSavedBill()">D<u>u</u>plicate</button>
+            
+                    <button mat-raised-button matTooltip="Void Full Bill" matTooltipPosition="left" class="m-1 text-white btn bg-info col-lg-5"
+                        (click)="voidBill()" accesskey="v"><u>V</u>oid Bill</button>
+    
+                    <button matTooltip="Merge Two Bills" matTooltipPosition="right" (click)="openModal('#mergeBill',true)"
+                        mat-raised-button class="m-1 text-white btn col-lg-5" style="background-color: pink;" accesskey="m"><u>M</u>erge Bill</button>
+                       
+                        <mat-form-field class="w-100 ps-4 pe-4 pt-1" appearance="outline" *ngIf="waiterFeature">
+                            <mat-label>Remar<u>k</u>s</mat-label>
+                            <textarea rows="1" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
+                        </mat-form-field>
+    
+                </div>    
+            </div>
+        </div>   
+    </div>
+
+    <div class="hide col-lg-4 bg-gray billArea  border-0 border-start" style="right: 0%; height: 100vh;position:fixed;overflow: scroll;">
+
+        <!-----------   Table Side First Row ------------------->
+
+        <div class=" d-flex p-1 justify-content-between">
+            
+                <div class="box " *ngIf="tableTitle != ''" (click)="openModal('#NewBill',true)">
+                    <span><small>Table #</small>  </span>
+                    <span><strong>{{tableTitle}}</strong></span>
+                </div>
+                <div class="box " *ngIf="coverOf != 0" (click)="openModal('#NewBill',true)">
+                    <span><small>Cover</small>  </span>
+                    <span><strong>{{coverOf}}</strong></span>
+                </div>
+                <div class="box" *ngIf="orderType !=''">
+                    <span><small>Order Type</small>  </span>
+                    <span><strong>{{orderType}}</strong></span>
+                </div>
+           
+        </div>
+
+        <div style="min-height: 300px;" class="p-2">
 
             <!-----------   Bill Area ------------------->
-            <div class="billTable" style="height: 52vh;">
+            <div class="billTable" style="height: 40vh;">
 
                 <table class="table-logix cursorPointer">
                     <thead>
@@ -120,91 +265,95 @@
             </div>
 
 
+            <div class=" bg-white border-top p-1 col-lg-4 btas" style="position: fixed;bottom: 6%;right: 0%;">
+                
+                <table class="table w-100 ">
+                    <tbody>
+                        <tr>
+                            <th>SUB TOTAL</th>
+                            <td class="text-end font-digit fs-30px">{{subTotal |number:'1.0-1'}}</td>
+                        </tr>
+                        <tr>
+                            <th >ADD DISCOUN<u>T</u></th>
+                            <td class="text-end font-digit fs-30px">{{billDiscount |number:'1.0-2'}}</td>
+                        </tr>
+                        <tr>
+                            <th>SERVICE CHARGES</th>
+                            <td class="text-end font-digit fs-30px">  <p class="text-end font-digit" *ngIf="orderType == 'Dine In' || orderType == '' || orderType == 'Take Away'" style="font-size: 30px;">{{OtherCharges |number:'1.0-1'}}</p>
+                                <input *ngIf="orderType == 'Home Delivery'"[(ngModel)]="OtherCharges" class="w-50 text-end" (keyup)="getTotal();"
+                                    (keydown)="getTotal();this.global.handleNumKeys($event)" />
+                        </td>
+                        </tr>
+                    
+                        <tr>
+                            <th>NET TOTAL</th>
+                            <td class="text-end font-digit fs-40px">{{netTotal |number:'1.0-1'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-            <!-----------   Bill Total Amount Section ------------------->
-            <div class="d-flex bg-white border-top p-1 col-lg-4 btas" style="position: fixed;bottom: 6%;right: 0%;">
+               <div class="row" style="padding-bottom: 10px;">
+                <div class="text-center  w-50" >
+
+                    <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5 btnHeight" *ngIf="holdbtnType == 'hold'" 
+                    (click)="save('hold')" accesskey="h">HOLD</button>
+
+                    <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5 btnHeight" 
+                    *ngIf="holdbtnType == 'rehold'" (click)="save('rehold')">ReHold</button>
 
 
-                <div class="justify-content-between p-1 w-50 border-end">
+                    <button  mat-raised-button  class="m-1 text-white btn bg-primary col-lg-5 btnHeight" (click)="HOldandPrint('rehold')" accesskey="p">H & <u>P</u>rint</button>
+                    
+                    <button mat-raised-button class="m-1 btn text-white bg-danger col-lg-5 btnHeight" 
+                        (click)="openModal('#retrieveBill',true);getHoldBills()" accesskey="r"><u>R</u>etrieve</button>
 
-                    <div class="d-flex justify-content-between w-100">
-                        <mat-label class="w-50 text-primary cursorPointer" data-bs-toggle="modal" (click)="focusTo('#discInput')"
-                            data-bs-target="#disc" accesskey="t"><strong>ADD DISCOUN<u>T</u></strong></mat-label>
-                        <p class="text-center font-digit" style="font-size: 30px;">{{billDiscount |number:'1.0-2'}}</p>
-                        <!-- <input disabled="true" [(ngModel)]="billDiscount" class="w-50 text-end" (keyup)="getTotal();"
-                            (keydown)="getTotal();this.global.handleNumKeys($event)" /> -->
-                    </div>
+                    <button mat-raised-button class="m-1 btn text-white bg-warning col-lg-5 btnHeight" accesskey="n" 
+                     [disabled]="tableData != ''" (click)="reset();openModal('#NewBill',true)"><u>N</u>ew Bill</button>
 
-                    <div class="d-flex justify-content-between w-100 pt-1">
-                        <mat-label class="w-50"><strong>SERVICE CHARGES</strong></mat-label>
-                        <p class="text-center font-digit" *ngIf="orderType == 'Dine In' || orderType == '' || orderType == 'Take Away'" style="font-size: 30px;">{{OtherCharges |number:'1.0-1'}}</p>
-                        <input *ngIf="orderType == 'Home Delivery'"[(ngModel)]="OtherCharges" class="w-50 text-end" (keyup)="getTotal();"
-                            (keydown)="getTotal();this.global.handleNumKeys($event)" />
-                    </div>
+                </div>
 
-                    <div class="d-flex justify-content-between w-100 pt-1">
-                        <mat-label><strong>SUB TOTAL</strong></mat-label>
-                        <p class="text-center font-digit" style="font-size: 30px;">{{subTotal |number:'1.0-1'}}</p>
-                    </div>
-                    <div class="d-flex justify-content-between  w-100">
-                        <mat-label><strong>NET TOTAL</strong></mat-label>
-                        <p class="text-center font-digit" style="font-size: 30px;">{{netTotal |number:'1.0-1'}}</p>
-                    </div>
-                    <mat-form-field class="w-100" appearance="outline">
-                        <mat-label>Remar<u>k</u>s</mat-label>
-                        <textarea rows="1" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
+                <div class="w-50 row">
+
+                    <mat-form-field appearance="outline" class="col-lg-12 " *ngIf="waiterFeature">
+                        <mat-label>Waiter</mat-label>
+                        <mat-select [(ngModel)]="BookerID">
+                            <mat-option><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of bookerList | filter:bookerSearch.value" [value]="item.bookerID">{{item.bookerName}}</mat-option>
+                        </mat-select>
+
                     </mat-form-field>
-                </div>
-
-
-
-                <div class="w-50 text-center">
-
-                    <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5" *ngIf="holdbtnType == 'hold'"
-                        matTooltip="Hold Current Bill"  matTooltipPosition="left" (click)="save('hold')" accesskey="h">HOLD</button>
-
-                    <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5"
-                        *ngIf="holdbtnType == 'rehold'" matTooltipPosition="left" matTooltip="ReHold Current Bill"(click)="save('rehold')">ReHold</button>
-
-                    <button mat-raised-button class="m-1 btn text-white bg-danger col-lg-5" data-bs-toggle="modal"
-                        matTooltip="Retrieve Hold Bills" matTooltipPosition="right" data-bs-target="#retrieveBill"(click)="getHoldBills()" accesskey="r"><u>R</u>etrieve</button>
-  
-
-                    <button mat-raised-button class="m-1 btn text-white bg-warning col-lg-5" accesskey="n" matTooltip="New bill (Alt + n)" matTooltipPosition="left"
-                         data-bs-toggle="modal"  data-bs-target="#NewBill" [disabled]="tableData != ''" (click)="reset()"><u>N</u>ew Bill</button>
-
-                     <button mat-raised-button class="m-1 btn text-white bg-success col-lg-5" data-bs-toggle="modal" matTooltipPosition="right"
-                         matTooltip="Save Current Bill" data-bs-target="#paymentMehtod" accesskey="s"><u>S</u>ave</button>
-
-
-                    <button matTooltip="Print  Current Bill" matTooltipPosition="left" mat-raised-button 
-                        class="m-1 text-white btn bg-primary col-lg-5" (click)="HOldandPrint('rehold')" accesskey="p">H & <u>P</u>rint</button>
-
-                    <button accesskey="u" mat-raised-button matTooltip="Retreiving Saved Bills" matTooltipPosition="right" class="m-1 btn  col-lg-5 "
-                    data-bs-toggle="modal"  data-bs-target="#SavedBillModal" (click)="this.getSavedBill()">D<u>u</u>plicate</button>
-            
-                    <button mat-raised-button matTooltip="Void Full Bill" matTooltipPosition="left" class="m-1 text-white btn bg-info col-lg-5"
-                        (click)="voidBill()" accesskey="v"><u>V</u>oid Bill</button>
-
-                    <button data-bs-toggle="modal" matTooltip="Merge Two Bills" matTooltipPosition="right" data-bs-target="#mergeBill"
-                        mat-raised-button class="m-1 text-white btn col-lg-5" style="background-color: pink;" accesskey="m"><u>M</u>erge Bill</button>
+                    
+                    <mat-form-field class="w-100" appearance="outline" >
+                        <mat-label>Remar<u>k</u>s</mat-label>
+                        <textarea [rows]="waiterFeature ? '1' : '2'" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
+                    </mat-form-field>
 
                 </div>
+               </div>
+                
 
-
+                <div class="col-lg-4" style="position: fixed;bottom: 6%;right: 0%;">
+                    <table class="btn-table cursorPointer">
+                        <tbody>
+                            <tr>
+                                <td (click)="openModal('#paymentMehtod',this.tableData != '')" class="w-25"> <u>S</u>ave</td>
+                                <td  (click)="openModal('#SavedBillModal',true);this.getSavedBill()"  class="w-25" >D<u>u</u>plicate</td>
+                               <td  (click)="voidBill()" class="w-25"><u>V</u>oid Bill</td>
+                                <td (click)="openModal('#mergeBill',true)"  class="w-25"><u>M</u>erge Bill</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                   
+                </div>
             </div>
-
-
-
-
-
-
 
         </div>
 
 
     </div>
 
+  
 
 
 
@@ -526,6 +675,7 @@
                         <mat-datepicker-toggle matSuffix [for]="invDate"></mat-datepicker-toggle>
                         <mat-datepicker #invDate></mat-datepicker>
                     </mat-form-field>
+                    
                     <mat-form-field appearance="outline" class="col-lg-6 pe-1">
                         <mat-label>Customer Name</mat-label>
                         <input type="text" matInput [(ngModel)]="customerName" />
@@ -622,7 +772,7 @@
 
                             <mat-radio-group name="orderType" aria-label="Select an option" [(ngModel)]="tempOrderType">
                                 <mat-radio-button *ngFor="let item of orderTypeList"
-                                    [disabled]="invBillNo !== '' || orderType != ''"
+                                    [disabled]="invBillNo !== '' || tableData != ''"
                                     (change)="onOrderTypeSelected(item.val)"
                                     [value]="item.val">{{item.title}}</mat-radio-button>
                             </mat-radio-group>

@@ -23,6 +23,9 @@ import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sale
 })
 export class RetailerSaleComponent implements OnInit {
 
+  gstFeature = this.global.getFeature('GST');
+
+
   @ViewChild(SaleBillPrintComponent) billPrint:any;
 
   companyProfile: any = [];
@@ -87,9 +90,9 @@ export class RetailerSaleComponent implements OnInit {
    this.global.setHeaderTitle('Sale');
    this.getBankList();
  
-   setTimeout(() => {
+
     $('#psearchProduct').trigger('focus');
-   }, 200);
+  
    
    this.global.getProducts().subscribe(
     (data:any)=>{this.productList = data;})
@@ -115,6 +118,10 @@ export class RetailerSaleComponent implements OnInit {
   bankCoaID = 0;
   billRemarks = '';
   otherCharges = 0;
+  customerMobileno = '';
+  customerName = '';
+  AdvTaxValue = 0;
+  AdvTaxAmount = 0;
 
   qtyTotal = 0;
   subTotal:any = 0;
@@ -220,6 +227,8 @@ export class RetailerSaleComponent implements OnInit {
                     batchNo:'-',
                     batchStatus:'-',
                     uomID:Response[0].uomID,
+                    gst: this.gstFeature ? Response[0].gst : 0,
+                    et:Response[0].et,
                     packing:1,
                     discInP:0,
                     discInR:0,
@@ -315,6 +324,8 @@ export class RetailerSaleComponent implements OnInit {
                     batchNo: '-',
                     batchStatus: '-',
                     uomID: Response[0].uomID,
+                    gst: this.gstFeature ? Response[0].gst : 0,
+                    et:Response[0].et,
                     packing: 1,
                     discInP: Response[0].discRupees,
                     discInR: Response[0].discPercentage,
@@ -367,6 +378,8 @@ export class RetailerSaleComponent implements OnInit {
    
   }
 
+  
+
   holdDataFunction(data:any){
  
 
@@ -403,6 +416,8 @@ export class RetailerSaleComponent implements OnInit {
               batchNo:'-',
               batchStatus:'-',
               uomID:Response[0].uomID,
+              gst: this.gstFeature ? Response[0].gst : 0,
+              et:Response[0].et,
               packing:1,
               discInP:0,
               discInR:0,
@@ -446,22 +461,32 @@ export class RetailerSaleComponent implements OnInit {
     }
  
     if(cls == '#disc' && e.keyCode == 13 && e.target.value == ''){
-      $(cls).trigger('focus');
+      e.preventDefault();
+        $(cls).trigger('select');
+        $(cls).trigger('focus');
     }
     if(cls == '#charges' && e.keyCode == 13 ){
-      $(cls).trigger('focus');
+      e.preventDefault();
+        $(cls).trigger('select');
+        $(cls).trigger('focus');
     }
     if(cls == '#cash' && e.keyCode == 13 && e.target.value == '' ){
-      $(cls).trigger('focus');
+      e.preventDefault();
+        $(cls).trigger('select');
+        $(cls).trigger('focus');
       
     }
     
     if(cls == '#save' && e.keyCode == 13 ){
+      e.preventDefault();
+      // $(cls).trigger('select');
       $(cls).trigger('focus');
     
     }
 
     if(cls == '#vsrtnsearchProduct' && e.keyCode == 13 ){
+      e.preventDefault();
+      $(cls).trigger('select');
       $(cls).trigger('focus');
     }
  
@@ -515,6 +540,8 @@ export class RetailerSaleComponent implements OnInit {
       
       if(this.tableDataList.length >= 1 ){ 
         this.rowFocused = 0; 
+        e.preventDefault();
+        $('.qty0').trigger('select');
          $('.qty0').trigger('focus');
 
       }
@@ -523,7 +550,8 @@ export class RetailerSaleComponent implements OnInit {
     this.prodFocusedRow = 0;
       /////move down
       if(e.keyCode == 40){
-        if(this.productList.length >= 1 ){  
+        if(this.productList.length >= 1 ){ 
+          e.preventDefault();
           $('.prodRow0').trigger('focus');
        }  
      }}
@@ -552,10 +580,10 @@ export class RetailerSaleComponent implements OnInit {
          this.prodFocusedRow -= 1  
      } else {
          var clsName = cls + this.prodFocusedRow;    
-        //  alert(clsName);
+         
+       
          $(clsName).trigger('focus');
-        //  e.which = 9;   
-        //  $(clsName).trigger(e)       
+      
      }}
    }
  
@@ -574,7 +602,7 @@ export class RetailerSaleComponent implements OnInit {
            this.prodFocusedRow -= 1;
  
            var clsName = cls + this.prodFocusedRow;
-          //  alert(clsName);
+         
            $(clsName).trigger('focus');
            
  
@@ -583,6 +611,8 @@ export class RetailerSaleComponent implements OnInit {
    }
 
   }
+
+ 
 
   handleUpdown(item:any ,e:any,cls:string,index:any){
 
@@ -595,6 +625,8 @@ export class RetailerSaleComponent implements OnInit {
     this.rowFocused = index - 1;
    }
    if(e.keyCode == 13){
+    e.preventDefault();
+    $('#psearchProduct').trigger('select');
     $('#psearchProduct').trigger('focus');
    }
 
@@ -613,7 +645,9 @@ export class RetailerSaleComponent implements OnInit {
       if (this.rowFocused >= this.tableDataList.length) {      
         this.rowFocused -= 1  
     } else {
-        var clsName = cls + this.rowFocused;    
+        var clsName = cls + this.rowFocused; 
+        e.preventDefault();
+        $(clsName).trigger('select');   
         $(clsName).trigger('focus');    
     }}
   }
@@ -623,6 +657,8 @@ export class RetailerSaleComponent implements OnInit {
      if (e.keyCode == 38) {
 
       if (this.rowFocused == 0) {
+        e.preventDefault();
+        $(".searchProduct").trigger('select');  
           $(".searchProduct").trigger('focus');
           this.rowFocused = 0;
  
@@ -633,6 +669,8 @@ export class RetailerSaleComponent implements OnInit {
           this.rowFocused -= 1;
 
           var clsName = cls + this.rowFocused;
+          e.preventDefault();
+          $(clsName).trigger('select'); 
           $(clsName).trigger('focus');
           
 
@@ -659,9 +697,12 @@ export class RetailerSaleComponent implements OnInit {
         this.getTotal();
       
         if(index == 0){
+          
+          $('#psearchProduct').trigger('select'); 
           $('#psearchProduct').trigger('focus');
         }else{
           this.rowFocused = index - 1;
+          $('.qty'+this.rowFocused).trigger('select');
           $('.qty'+this.rowFocused).trigger('focus');
         }
     }
@@ -757,7 +798,7 @@ export class RetailerSaleComponent implements OnInit {
   }
 
 
-  save(paymentType:any){
+  save(paymentType:any,printFlag:any){
 
     var isValidFlag = true;
     this.tableDataList.forEach((p:any) => {
@@ -808,6 +849,10 @@ export class RetailerSaleComponent implements OnInit {
      else if ( paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
       this.msg.WarnNotify('Enter Valid Amount')
     }else {
+      
+      console.log(this.global.dateFormater(this.InvDate,'-'),this.projectID,paymentType,this.billRemarks,this.subTotal,
+      this.discount,this.otherCharges,this.netTotal,this.cash,this.change,this.bankCoaID,this.bankCash,this.tableDataList,this.global.getUserID())
+      
       this.app.startLoaderDark();
         this.http.post(environment.mainApi+this.global.inventoryLink+'InsertCashAndCarrySale',{
         InvDate: this.global.dateFormater(this.InvDate,'-'),
@@ -824,27 +869,38 @@ export class RetailerSaleComponent implements OnInit {
         NetTotal:this.netTotal,
         CashRec:this.cash,
         Change:this.change,
+        AdvTaxAmount : this.AdvTaxAmount,
+        AdvTaxValue : this.AdvTaxValue,
         BankCoaID: this.bankCoaID,
-        BankCash: this.bankCash,     
+        BankCash: this.bankCash,  
+        CusContactNo: this.customerMobileno || '-',
+          CusName: this.customerName || '-',    
         SaleDetail: JSON.stringify(this.tableDataList),
         UserID:this.global.getUserID()
       }).subscribe(
         (Response:any)=>{
           if(Response.msg == 'Data Saved Successfully'){
+            // $('#psearchProduct').trigger('focus');
             this.msg.SuccessNotify(Response.msg);
             this.reset();
-            this.PrintAfterSave(Response.invNo);
+            if(printFlag){
+              this.PrintAfterSave(Response.invNo);
+              // setTimeout(() => {
+              //   $('#psearchProduct').trigger('focus');
+              // }, 100);
+            }
             
             if(paymentType != 'Cash'){
-            $('#searchProduct').trigger('focus');
+            $('#psearchProduct').trigger('focus');
             $('#paymentMehtod').hide();
             $('.modal-backdrop').remove();
           }
-           
+          
           }else{
             this.msg.WarnNotify(Response.msg);
           }
           this.app.stopLoaderDark();
+          
         },
         (Error:any)=>{
           this.msg.WarnNotify(Error);
@@ -874,6 +930,8 @@ export class RetailerSaleComponent implements OnInit {
     this.InvDate = new Date();
     this.billRemarks = '';
     this.otherCharges = 0;
+    this.customerMobileno = '';
+    this.customerName = '';
     
   }
 

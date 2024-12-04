@@ -71,8 +71,11 @@
                 </div>
             </div>
 
-            <div class="pt-1 pb-1 text-center">
-                 <button class="w-100  btn btn-success" id="save" (click)="save('Cash')" accesskey="S" ><u>S</u>ave</button>
+            <div class="pt-1 pb-1 text-center d-flex justify-content-between">
+                 <span class="pe-1 w-25">
+                    <button class="w-100  btn btn-success" id="saveP" (click)="save('Cash',false)" accesskey="S" ><u>S</u>ave</button>
+                 </span>
+                 <button class="w-75  btn btn-success" id="save" (click)="save('Cash',true)" accesskey="P" ><u>S</u>ave & Print</button>
             </div>
             <div class="d-flex justify-content-between">
                 <div class="pe-1 w-25"><button class="btn btn-danger w-100" accesskey="u" data-bs-toggle="modal"
@@ -96,7 +99,9 @@
                         <th class="cursorPointer" (click)="changeOrder()">S#</th>
                         <th>Title</th>
                         <th>Qty</th>
-                        <th>Price</th>
+                        <th *ngIf="gstFeature">Price Exc Gst</th>
+                        <th *ngIf="gstFeature">Price Inc Gst</th>
+                        <th *ngIf="!gstFeature">Price</th>
                         <th>Total</th>
                         <th>Action</th>
                     </tr>
@@ -110,7 +115,9 @@
                             (keyup)="getTotal();showImg(item);changeValue(item)"
                             (click)="rowFocused = index"    
                             class="qty{{index}} text-center" style="width: 80px;"></td>
-                        <td class="text-end">{{item.salePrice |number:'1.0-3'}}</td>
+                            <td class="text-end cursorPointer" *ngIf="gstFeature">{{item.salePrice / ((item.gst / 100) + 1) |number:'1.0-1'}}</td>
+
+                        <td class="text-end cursorPointer" (click)="tempProdData = item;editSP(item)">{{item.salePrice |number:'1.0-3'}}</td>
                         <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-3'}}</td>
                         <td class="cursorPointer text-danger text-center"><mat-icon (click)="delRow(item)">close</mat-icon></td>
                     </tr>
@@ -118,6 +125,7 @@
                         <td colspan="2"></td>
                         <th>{{qtyTotal |number:'1.0-3'}}</th>
                         <td colspan="2"></td>
+                        <td *ngIf="gstFeature"></td>
                         <td class="text-center text-danger cursorPointer"><mat-icon (click)="emptyBill()">delete</mat-icon></td>
                     </tr>
                 </tbody>
@@ -262,7 +270,7 @@ aria-labelledby="paymentMehtodLabel">
         </div>
 
         <div class="modal-footer bg-mf-blue">
-            <button class="btn btn-success" (click)="save(pType.value)">Save</button>
+            <button class="btn btn-success" (click)="save(pType.value,true)">Save</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
 

@@ -46,7 +46,7 @@ export class AddFeatureComponent implements OnInit {
 
       if (this.btnType == 'Save') {
 
-        this.dataServie.saveHttp(this.global.companyLink + 'insertFeatures', {
+        this.dataServie.saveHttp(this.global.contorlPanelLink + 'insertFeatures', {
           FeatureTitle: this.FeatureTitle,
           FeatureDescription: this.FeatureDescription,
           UserID: this.UserID,
@@ -61,7 +61,7 @@ export class AddFeatureComponent implements OnInit {
           }
         )
       } else if (this.btnType == 'Update') {
-        this.dataServie.saveHttp(this.global.companyLink + 'updateFeatures', {
+        this.dataServie.saveHttp(this.global.contorlPanelLink + 'updateFeatures', {
           FeatureID: this.editData.featureID,
           FeatureTitle: this.FeatureTitle,
           FeatureDescription: this.FeatureDescription,

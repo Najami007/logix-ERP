@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="col-lg-3 text-start ms-1 pt-3 mt-1">
-                        <button mat-raised-button class="bg-primary text-white w-50 " style="height: 40px;"
+                        <button  class="btnload w-50 " style="height: 40px;"
                             (click)="ngOnInit()">Load</button>
                     </div>
 
@@ -150,12 +150,12 @@
                 <div class="text-center d-flex ">
                     <button class="col-lg-2 delBtn" style="background-color:transparent;border-radius: 5px;margin-right: 1px;"
                         (click)="voidBill()"><mat-icon>delete_outline</mat-icon></button>
-                    <button class="btn col-lg-10 text-center btn-success" id="save" accesskey="s" (click)="save()"><u>S</u>ave</button>
+                    <button class="btnsave col-lg-10 text-center" id="save" accesskey="s" (click)="save()"><u>S</u>ave</button>
 
 
                 </div>
                 <div class="pt-2">
-                    <button class="btn col-lg-12 btn-danger  " accesskey="u"
+                    <button class="btnduplicate col-lg-12   " accesskey="u"
                         (click)="openSavedBill()">D<u>u</u>plicate</button>
                     <!-- <button class="btn col-lg-12 d-flex justify-content-between btn-primary me-1 pt-3" data-bs-toggle="modal" data-bs-target="#paymentMehtod">
                     <p>Other Payment</p> <mat-icon>keyboard_arrow_right</mat-icon></button> -->
