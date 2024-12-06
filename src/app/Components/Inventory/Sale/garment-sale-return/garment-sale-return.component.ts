@@ -26,9 +26,10 @@ export class GarmentSaleReturnComponent implements OnInit {
   discFeature = this.global.getFeature('Discount');
   BookerFeature = this.global.getFeature('Booker');
   gstFeature = this.global.getFeature('GST');
+  customerFeature = this.global.getFeature('Customer');
   editSpFeature = this.global.getFeature('EditSp');
   editDiscFeature = this.global.getFeature('EditDisc');
-
+  tillOpenFeature = this.global.getFeature('TillOpen');
 
   @ViewChild(SaleBillPrintComponent) billPrint:any;
 
@@ -1048,7 +1049,9 @@ export class GarmentSaleReturnComponent implements OnInit {
 
         
 
-
+        if(this.tillOpenFeature){
+          this.global.openTill();
+        }
         this.app.startLoaderDark();
         this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySaleRtn', {
           InvDate: this.global.dateFormater(this.InvDate, '-'),

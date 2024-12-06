@@ -25,7 +25,6 @@ export class PropertyDetailComponent implements OnInit {
   ngOnInit(): void {
 
     if(this.editData){
-      console.log(this.editData)
       this.myPropertyID = this.editData.data.propertyID;
       this.myPropertyType = this.editData.data.propertyTypeTitle;
       this.myPropertyStatus = this.editData.data.propertyStatusTitle;
@@ -88,6 +87,7 @@ export class PropertyDetailComponent implements OnInit {
 
   myImagesList:any = [];
   myFeaturesList:any = [];
+  myFeatureCatList:any = [];
 
 
   getPropertImages(id:any){
@@ -97,19 +97,32 @@ export class PropertyDetailComponent implements OnInit {
         Response.forEach((e:any) => {
           this.myImagesList.push({image:e.propertyImage,alt:'Img Not Found',thumbImage:e.propertyImage});
         });
-       
-        //console.log(Response);
-      }
+             }
     )
   }
 
   getPropertFeatures(id:any){
     this.http.get(environment.mainApi + this.global.propertyLink + 'GetPropertyFeaturesDetail?PropertyID='+id).subscribe(
       (Response:any) => {
-        console.log(Response);
         this.myFeaturesList = Response;
+       this.myFeatureCatList = this.filterUniqueValues(Response);
        }
     )
+  }
+
+  public filterUniqueValues<T>(array: any): T[] {
+    const uniqueSet = new Set<string>();
+    const uniqueArray: T[] = [];
+  
+    array.forEach(item => {
+      const key = JSON.stringify(item.propertyCategoryTitle);
+      if (!uniqueSet.has(key)) {
+        uniqueSet.add(key);
+        uniqueArray.push(item);
+      }
+    });
+  
+    return uniqueArray;
   }
 
 

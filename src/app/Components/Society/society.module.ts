@@ -31,17 +31,17 @@ import { TextMaskModule } from 'angular2-text-mask';
 
 export const societyRoutes: Route[] = [
 
-  {path:'plt', component:PlotComponent,  canActivate:[AuthGuard] },
-  {path:'pltcat', component:PlotCategoryComponent,  canActivate:[AuthGuard]},
-  {path:'pltntr', component:PlotNatureComponent,  canActivate:[AuthGuard]},
-  {path:'plttype', component:PlotTypeComponent,  canActivate:[AuthGuard]},
-  {path:'pmtpln', component:PaymentPlanComponent,  canActivate:[AuthGuard]},
-  {path:'socdshbrd', component:SocietyDashboardComponent,  canActivate:[AuthGuard]},
-  {path:'mmbrprof', component:MemberProfileComponent,  canActivate:[AuthGuard]},
-  {path:'file', component:FileComponent,  canActivate:[AuthGuard]},
-  {path:'mplt', component:MapPlotComponent,  canActivate:[AuthGuard]},
-  {path:'fltrnsfr', component:FileTransferComponent,  canActivate:[AuthGuard]},
-  {path:'flownrshp', component:FileOwnershipComponent,  canActivate:[AuthGuard]},
+  {path:'plt', component:PlotComponent,data: { title: 'Add Plot' },  canActivate:[AuthGuard] },
+  {path:'pltcat', component:PlotCategoryComponent,data: { title: 'Plot Category' },  canActivate:[AuthGuard]},
+  {path:'pltntr', component:PlotNatureComponent,data: { title: 'Plot Nature' },  canActivate:[AuthGuard]},
+  {path:'plttype', component:PlotTypeComponent,data: { title: 'Plot Type' },  canActivate:[AuthGuard]},
+  {path:'pmtpln', component:PaymentPlanComponent,data: { title: 'Payment Plan' },  canActivate:[AuthGuard]},
+  {path:'socdshbrd', component:SocietyDashboardComponent,data: { title: 'Dashboard' },  canActivate:[AuthGuard]},
+  {path:'mmbrprof', component:MemberProfileComponent,data: { title: 'Member Profile' },  canActivate:[AuthGuard]},
+  {path:'file', component:FileComponent,data: { title: 'Add File' },  canActivate:[AuthGuard]},
+  {path:'mplt', component:MapPlotComponent,data: { title: 'Map Plot' },  canActivate:[AuthGuard]},
+  {path:'fltrnsfr', component:FileTransferComponent,data: { title: 'File Transfer' },  canActivate:[AuthGuard]},
+  {path:'flownrshp', component:FileOwnershipComponent,data: { title: 'File Ownership' },  canActivate:[AuthGuard]},
  
   {path:'**', redirectTo:'home',pathMatch:'full'}
 

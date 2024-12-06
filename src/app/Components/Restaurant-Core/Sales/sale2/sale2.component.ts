@@ -227,13 +227,7 @@ export class Sale2Component implements OnInit {
         this.tableTitle = this.tableList.find((e: any) => e.tableID == this.tableID).tableTitle;
       }
       this.orderType = this.tempOrderType;
-
-      $('#NewBill').hide();
-      // $('.modal').remove();
-      // $('body').removeClass('modal-open');
-      $('.modal-backdrop').remove();
-
-
+      this.global.closeBootstrapModal('#NewBill',true);
 
     }
 
@@ -259,23 +253,26 @@ export class Sale2Component implements OnInit {
 
   ///////////////////////////////////////////////////////////
 
-  onCatSelected(item: any) {
+  getRecipeList(item: any) {
     // alert(item.recipeCatID);
     this.categoryID = item.recipeCatID;
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipesCatWise?CatID=' + this.categoryID + '&reqFlag=' + item.prodFlag).subscribe(
       (Response: any) => {
-        
-        // for(var i = 0;i < 70; i++){
-        //   this.RecipeList.push(Response[0]) ;
-         
-        // }
-    
-
         this.RecipeList = Response;
+        this.tempRecipeList = Response;
         
       }
     )
+  }
 
+  OnCatChange(item:any){
+    this.categoryID = item.recipeCatID;
+    if(item.recipeCatID > 0){
+      this.RecipeList = this.tempRecipeList.filter((e:any)=> e.recipeCatID == item.recipeCatID);
+    }else{
+      this.RecipeList = this.tempRecipeList;
+    }
+   
   }
 
 
@@ -290,7 +287,7 @@ export class Sale2Component implements OnInit {
        
    
        if(Response != '' && Response != null){
-        this.onCatSelected({recipeCatID:0,prodFlag:false});
+        this.getRecipeList({recipeCatID:0,prodFlag:false});
        }
 
         this.app.stopLoaderDark();
@@ -466,7 +463,7 @@ export class Sale2Component implements OnInit {
               this.printKOT(Response.invNo);   /////// Will Print KOT ////////////////
               this.msg.SuccessNotify(Response.msg);
               this.getTable()
-              this.onCatSelected({recipeCatID:0,prodFlag:false});
+              this.OnCatChange({recipeCatID:0,prodFlag:false});
               this.reset();
               this.getHoldBills();
 
@@ -532,9 +529,8 @@ export class Sale2Component implements OnInit {
       if (type == 'sale') {
 
         if (this.paymentType == 'Complimentary') {
+          this.global.closeBootstrapModal('#paymentMehtod',true);
 
-          $('#paymentMehtod').hide();
-          $('.modal-backdrop').remove();
           this.global.openPassword('Password').subscribe(pin => {
             if (pin !== '') {
               this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
@@ -647,14 +643,14 @@ validSaleFlag = true;
   
             this.printAfterSave(Response.invNo);
             this.getTable();
-            this.onCatSelected({recipeCatID:0,prodFlag:false});
+            this.OnCatChange({recipeCatID:0,prodFlag:false});
             this.getHoldBills();
            setTimeout(() => {
             this.reset();
            }, 200);
             /////////// will hide the modal window ///////////
-            $('#paymentMehtod').hide();
-            $('.modal-backdrop').remove();
+            this.global.closeBootstrapModal('#paymentMehtod',true);
+
   
           } else {
             this.validSaleFlag = true;
@@ -1114,6 +1110,7 @@ validSaleFlag = true;
     if (disc > this.netTotal){
       this.msg.WarnNotify('Discount is not valid!')
     } else{
+      this.global.closeBootstrapModal('#disc',true);
       this.global.openPassword('Password').subscribe(pin => {
         if (pin !== '') {
           this.app.startLoaderDark();
@@ -1125,10 +1122,12 @@ validSaleFlag = true;
           }).subscribe(
             (Response: any) => {
               if (Response.msg == 'Password Matched Successfully') {
+               
                 this.billDiscount = disc;
                 this.getTotal();
               } else {
                 this.msg.WarnNotify(Response.msg);
+                this.global.openBootstrapModal('#disc',true);
               }
               this.app.stopLoaderDark();
             },
@@ -1160,7 +1159,7 @@ validSaleFlag = true;
   }else{
     this.http.get(environment.mainApi+this.global.restaurentLink+'MergeAndPrintBill?BillNo='+this.mergeBillNo1+'&BillNo2='+this.mergeBillNo2).subscribe(
       (Response:any)=>{
-        
+      this.global.closeBootstrapModal('#mergeBill',true);
     this.myInvoiceNo = Response[0].invBillNo;
     this.myInvDate = Response[0].invDate;
     this.myOrderType = Response[0].orderType;
@@ -1181,7 +1180,9 @@ validSaleFlag = true;
 
 
        setTimeout(() => {
+       
         this.global.printData('#mergePrint');
+
        }, 500);
 
       

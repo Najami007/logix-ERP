@@ -39,7 +39,7 @@
         </div>
         <div class="monthDays cursorPointer">
             <ul class=" d-flex flex-wrap w-100">
-                <li class="date" [ngClass]="item.date == 'none' ? 'bg-dark' : item.fullDate == global.dateFormater(date,'-') ? 'bg-golden today': 'bg-dark'  "
+                <li class="date" [ngClass]=" item.fullDate == global.dateFormater(today,'-') ? 'bg-golden today': 'bg-dark' "
                     *ngFor="let item of monthDaysList" (click)="showRateModal(item)" >
                     <time [dateTime]="item.fullDate" *ngIf="item.date != 'none'">{{item.date}}</time>{{item.fullDate}}
                 </li>

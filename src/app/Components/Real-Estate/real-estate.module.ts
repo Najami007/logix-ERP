@@ -26,13 +26,13 @@ import { NgImageSliderModule } from 'ng-image-slider';
 
 export const realEstateRoutes: Route[] = [
 
-  {path:'restdsbrd', component:RestDashboardComponent,  canActivate:[AuthGuard] },
-  {path:'prprty', component:PropertyComponent,  canActivate:[AuthGuard] },
-  {path:'rsrvtn', component:ReservationComponent,  canActivate:[AuthGuard] },
-  {path:'chkin', component:CheckInComponent,  canActivate:[AuthGuard] },
-  {path:'ftrs', component:FeaturesComponent,  canActivate:[AuthGuard] },
-  {path:'ftrcat', component:FeatureCategoryComponent,  canActivate:[AuthGuard] },
-  {path:'prptytyp', component:PropertyTypeComponent,  canActivate:[AuthGuard] },
+  {path:'restdsbrd', component:RestDashboardComponent,data: { title: 'Dashboard' },  canActivate:[AuthGuard] },
+  {path:'prprty', component:PropertyComponent,data: { title: 'Add Property' },  canActivate:[AuthGuard] },
+  {path:'rsrvtn', component:ReservationComponent,data: { title: 'Reservation' },  canActivate:[AuthGuard] },
+  {path:'chkin', component:CheckInComponent,data: { title: 'Check In' },  canActivate:[AuthGuard] },
+  {path:'ftrs', component:FeaturesComponent,data: { title: 'Features' },  canActivate:[AuthGuard] },
+  {path:'ftrcat', component:FeatureCategoryComponent,data: { title: 'Feature Category' },  canActivate:[AuthGuard] },
+  {path:'prptytyp', component:PropertyTypeComponent,data: { title: 'Property Type' },  canActivate:[AuthGuard] },
  
   {path:'**', redirectTo:'home',pathMatch:'full'}
 

@@ -27,11 +27,11 @@ import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 
 export const userRoutes: Route[] = [
   
-  {path:'adduser', component:AddUserComponent,canActivate:[AuthGuard]  },
-  {path:'usrl', component:UserRoleComponent,canActivate:[AuthGuard]  },
-  {path:'respwd', component:RestrictpwdComponent,canActivate:[AuthGuard]  },
-  {path:'doc', component:DayopencloseComponent, canActivate:[AuthGuard] },
-  {path:'rptdoc', component:DayOpencloseRptComponent, canActivate:[AuthGuard] },
+  {path:'adduser', component:AddUserComponent,data: { title: 'Add User' },canActivate:[AuthGuard]  },
+  {path:'usrl', component:UserRoleComponent,data: { title: 'User Role' },canActivate:[AuthGuard]  },
+  {path:'respwd', component:RestrictpwdComponent,data: { title: 'Codes' },canActivate:[AuthGuard]  },
+  {path:'doc', component:DayopencloseComponent,data: { title: 'Day Open Close' }, canActivate:[AuthGuard] },
+  {path:'rptdoc', component:DayOpencloseRptComponent,data: { title: 'DOC Rpt' }, canActivate:[AuthGuard] },
 
   {path:'**', redirectTo:'home',pathMatch:'full'}
 

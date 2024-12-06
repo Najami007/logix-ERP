@@ -17,9 +17,9 @@ import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 
 export const hrmsRoutes: Route[] = [
 
-  {path:'empprof', component:EmployeeProfileComponent,  canActivate:[AuthGuard] },
-  {path:'dep', component:DepartmentComponent,  canActivate:[AuthGuard]},
-  {path:'dsgntn', component:DesignationComponent,  canActivate:[AuthGuard]},
+  {path:'empprof', component:EmployeeProfileComponent,data: { title: 'Employ Profile' },  canActivate:[AuthGuard] },
+  {path:'dep', component:DepartmentComponent,data: { title: 'Hr Department' },  canActivate:[AuthGuard]},
+  {path:'dsgntn', component:DesignationComponent,data: { title: 'Designation' },  canActivate:[AuthGuard]},
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
 

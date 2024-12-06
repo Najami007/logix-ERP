@@ -1,16 +1,18 @@
-<div class="p-3 container" style="max-height: 600px !important; overflow-y: scroll;white-space:pre-wrap;" >
+<div class="p-3 container" style="max-height: 600px !important; overflow-y: scroll;white-space:pre-wrap;">
 
     <div class="mb-2">
         <h3 style="letter-spacing: 5px;">{{myPropertyTitle}}</h3>
         <div class="d-flex">
-            <span><p>{{myPropertyType}}</p></span>
-            <h6><span  class="badge badge-info bg-info">{{myPropertyStatus}}</span></h6>
+            <span>
+                <p>{{myPropertyType}}</p>
+            </span>
+            <h6><span class="badge badge-info bg-info">{{myPropertyStatus}}</span></h6>
         </div>
     </div>
 
     <div class="row  text-center justify-content-center w-100 mb-4">
         <ng-image-slider class="w-50" [images]="myImagesList" #nav></ng-image-slider>
-    </div> 
+    </div>
 
 
     <div class="mb-4">
@@ -33,18 +35,18 @@
     <div class="mb-4">
         <mat-card>
             <mat-card-header class="fw-bold">Price Detail's</mat-card-header>
-           <mat-card-actions>
-            <table class="w-50 table">
-                <tbody>
-                    <tr>
-                        <th>Rent Per Day</th>
-                        <td>{{myRentPerDay}}</td>
-    
-                    </tr>
-                   
-                </tbody>
-            </table>
-           </mat-card-actions>
+            <mat-card-actions>
+                <table class="w-50 table">
+                    <tbody>
+                        <tr>
+                            <th>Rent Per Day</th>
+                            <td>{{myRentPerDay}}</td>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+            </mat-card-actions>
         </mat-card>
 
     </div>
@@ -52,39 +54,39 @@
     <div class="mb-4">
         <mat-card>
             <mat-card-header class="fw-bold">Detail's</mat-card-header>
-           <mat-card-actions>
-            <table class="w-100 table">
-                <tbody>
-                    <tr>
-                        <th>Property Title</th>
-                        <td>{{myPropertyTitle}}</td>
-                        <th>Property Type</th>
-                        <td>{{myPropertyType}}</td>
-                    
-                    </tr>
-                    <tr>
-                        <th>Property Size</th>
-                        <td>{{myPropertySize}}sqft.</td>
-                        <th>Rooms</th>
-                        <td>{{myNoOfRooms}}</td>
-                    
-                    </tr>
-                    <tr>
-                        <th>Bedrooms</th>
-                        <td> {{myBedroom}}</td>
-                        <th>Bathrooms</th>
-                        <td>{{myBathroom}}</td>
-                      
-                    </tr>
-                    <tr>
-                        <th>Children</th>
-                        <td>{{myChildren}}</td>
-                        <th>Adult</th>
-                        <td>{{myAdult}}</td>
-                    </tr>
-                </tbody>
-            </table>
-           </mat-card-actions>
+            <mat-card-actions>
+                <table class="w-100 table">
+                    <tbody>
+                        <tr>
+                            <th>Property Title</th>
+                            <td>{{myPropertyTitle}}</td>
+                            <th>Property Type</th>
+                            <td>{{myPropertyType}}</td>
+
+                        </tr>
+                        <tr>
+                            <th>Property Size</th>
+                            <td>{{myPropertySize}}sqft.</td>
+                            <th>Rooms</th>
+                            <td>{{myNoOfRooms}}</td>
+
+                        </tr>
+                        <tr>
+                            <th>Bedrooms</th>
+                            <td> {{myBedroom}}</td>
+                            <th>Bathrooms</th>
+                            <td>{{myBathroom}}</td>
+
+                        </tr>
+                        <tr>
+                            <th>Children</th>
+                            <td>{{myChildren}}</td>
+                            <th>Adult</th>
+                            <td>{{myAdult}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </mat-card-actions>
         </mat-card>
 
     </div>
@@ -92,59 +94,62 @@
     <div class="mb-4">
         <mat-card>
             <mat-card-header class="fw-bold">Location Detail's</mat-card-header>
-           <mat-card-actions>
-            <table class="w-100 table">
-                <tbody>
-                    <tr>
-                        <th>Country</th>
-                        <td>{{myCountryName}}</td>
-                        <th>City</th>
-                        <td> {{myCityName}}</td>
-                    </tr>
-                    <tr>
-                        <th>Area</th>
-                        <td>{{myAreaName}}</td>
-                        <th>Address</th>
-                        <td>{{myPropertyAddress}}</td>
-                    </tr>
-                </tbody>
-            </table>
-           </mat-card-actions>
+            <mat-card-actions>
+                <table class="w-100 table">
+                    <tbody>
+                        <tr>
+                            <th>Country</th>
+                            <td>{{myCountryName}}</td>
+                            <th>City</th>
+                            <td> {{myCityName}}</td>
+                        </tr>
+                        <tr>
+                            <th>Area</th>
+                            <td>{{myAreaName}}</td>
+                            <th>Address</th>
+                            <td>{{myPropertyAddress}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </mat-card-actions>
         </mat-card>
 
     </div>
 
-    
-   
+
+
 
     <div class="mb-4">
         <mat-card>
             <mat-card-header class="fw-bold">Features</mat-card-header>
-           <mat-card-actions>
-            <!-- <mat-chip-listbox *ngFor="let item of myFeaturesList" class="mat-mdc-chip-set-stacked" aria-label="Cutest dog breeds">
+            <mat-card-content>
+                <!-- <mat-chip-listbox *ngFor="let item of myFeaturesList" class="mat-mdc-chip-set-stacked" aria-label="Cutest dog breeds">
               
                   <mat-chip-option selected></mat-chip-option>
                 
               </mat-chip-listbox> -->
+                <div *ngFor="let item of myFeatureCatList" class="d-flex flex-column">
+                    <h4>{{item.propertyCategoryTitle}}</h4>
 
-              <mat-chip-set aria-label="Fish selection" >
-                <mat-chip *ngFor="let item of myFeaturesList">
-                    
-                    <div>
-                        <span>{{item.propertyFeatureTitle}}</span>
-                    </div>
-                    </mat-chip>
-             
-              </mat-chip-set>
-           </mat-card-actions>
+                    <mat-chip-set aria-label="Fish selection">
+                        <div *ngFor="let f of myFeaturesList">
+                            <div *ngIf="f.propertyCategoryTitle == item.propertyCategoryTitle">
+                                <mat-chip>{{f.propertyFeatureTitle}}</mat-chip>
+                            </div>
+                            </div>
+
+                    </mat-chip-set>
+
+
+                </div>
+            </mat-card-content>
         </mat-card>
 
     </div>
 
 
 </div>
-<div class="text-end bg-mf p-3"> 
+<div class="text-end bg-mf p-3">
     <button class="btnclose m-1 " (click)="closeDialogue()"> Close </button>
 
 </div>
-

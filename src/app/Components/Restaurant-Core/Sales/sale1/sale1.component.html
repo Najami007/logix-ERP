@@ -19,10 +19,10 @@
 
 
             <div class="scrollContainer">
-                <button (click)="onCatSelected({recipeCatID:0,prodFlag:false})" [ngClass]="categoryID == 0  ? 'bg-blue' : ''"
+                <button (click)="OnCatChange({recipeCatID:0,prodFlag:false})" [ngClass]="categoryID == 0  ? 'bg-blue' : ''"
                 class="border item text-center m-1 p-1">ALL</button>
                 <button *ngFor="let item of categoriesList|filter:catSearch.value"
-                    (click)="onCatSelected(item);catSearch.value = ''"
+                    (click)="OnCatChange(item);catSearch.value = '';"
                     [ngClass]="item.recipeCatID == categoryID  ? 'bg-blue' : ''"
                     class="border item text-center m-1 p-1">{{item.recipeCatTitle}}</button>
             </div>
@@ -34,8 +34,8 @@
         </div>
         <!-----------   Products Area ------------------->
         <div class="row cursorPointer">
-            <div *ngFor="let item of RecipeList |filter:recipeSearch.value" style="width: 200px;">
-                <mat-card style="width:180px; height: 200px;" class="m-1 shadow recipecard" data-bs-toggle="modal"
+            <div *ngFor="let item of RecipeList |filter:recipeSearch.value"  style="width: 200px;">
+                <mat-card  style="width:180px; height: 200px;"  class="m-1 shadow recipecard" data-bs-toggle="modal"
                     data-bs-target="#qtyModal" (click)="tempProdRow = item;this.global.focusTo('.prodQty')">
 
                     <!-- <div style="height: 150px;width: 170px;background-size: cover;" [ngStyle]="{ 'background-image': 'url(' + item.recipeImage + ')' }"></div> -->
@@ -58,7 +58,7 @@
 
     </div>
 
-    <div class="col-lg-4 bg-gray billArea  border-0 border-start" style="right: 0%; height: 100vh;position:fixed;overflow: scroll;">
+    <div class=" col-lg-4 bg-gray billArea  border-0 border-start" style="right: 0%; height: 100vh;position:fixed;overflow: scroll;">
 
         <!-----------   Table Side First Row ------------------->
     
@@ -176,26 +176,26 @@
                         *ngIf="holdbtnType == 'rehold'" matTooltipPosition="left" matTooltip="ReHold Current Bill"(click)="save('rehold')">ReHold</button>
     
                     <button mat-raised-button class="m-1 btn text-white bg-danger col-lg-5" matTooltip="Retrieve Hold Bills" 
-                    matTooltipPosition="right" (click)="openModal('#retrieveBill',true);getHoldBills();" accesskey="r"><u>R</u>etrieve</button>
+                    matTooltipPosition="right" (click)="global.openBootstrapModal('#retrieveBill',true);getHoldBills();" accesskey="r"><u>R</u>etrieve</button>
     
     
                     <button mat-raised-button class="m-1 btn text-white bg-warning col-lg-5" accesskey="n" matTooltip="New bill (Alt + n)" matTooltipPosition="left"
-                         [disabled]="tableData != ''" (click)="reset();openModal('#NewBill',true)"><u>N</u>ew Bill</button>
+                         [disabled]="tableData != ''" (click)="reset();global.openBootstrapModal('#NewBill',true)"><u>N</u>ew Bill</button>
     
                      <button mat-raised-button class="m-1 btn text-white bg-success col-lg-5" matTooltipPosition="right"
-                         matTooltip="Save Current Bill" (click)="openModal('#paymentMehtod',this.tableData != '')" accesskey="s"><u>S</u>ave</button>
+                         matTooltip="Save Current Bill" (click)="global.openBootstrapModal('#paymentMehtod',this.tableData != '')" accesskey="s"><u>S</u>ave</button>
     
     
                     <button matTooltip="Print  Current Bill" matTooltipPosition="left" mat-raised-button 
                         class="m-1 text-white btn bg-primary col-lg-5" (click)="HOldandPrint('rehold')" accesskey="p">H & <u>P</u>rint</button>
     
                     <button accesskey="u" mat-raised-button matTooltip="Retreiving Saved Bills" matTooltipPosition="right" class="m-1 btn  col-lg-5 "
-                     (click)="openModal('#SavedBillModal',true);this.getSavedBill()">D<u>u</u>plicate</button>
+                     (click)="global.openBootstrapModal('#SavedBillModal',true);this.getSavedBill()">D<u>u</u>plicate</button>
             
                     <button mat-raised-button matTooltip="Void Full Bill" matTooltipPosition="left" class="m-1 text-white btn bg-info col-lg-5"
                         (click)="voidBill()" accesskey="v"><u>V</u>oid Bill</button>
     
-                    <button matTooltip="Merge Two Bills" matTooltipPosition="right" (click)="openModal('#mergeBill',true)"
+                    <button matTooltip="Merge Two Bills" matTooltipPosition="right" (click)="global.openBootstrapModal('#mergeBill',true)"
                         mat-raised-button class="m-1 text-white btn col-lg-5" style="background-color: pink;" accesskey="m"><u>M</u>erge Bill</button>
                        
                         <mat-form-field class="w-100 ps-4 pe-4 pt-1" appearance="outline" *ngIf="waiterFeature">
@@ -214,11 +214,11 @@
 
         <div class=" d-flex p-1 justify-content-between">
             
-                <div class="box " *ngIf="tableTitle != ''" (click)="openModal('#NewBill',true)">
+                <div class="box " *ngIf="tableTitle != ''" (click)="global.openBootstrapModal('#NewBill',true)">
                     <span><small>Table #</small>  </span>
                     <span><strong>{{tableTitle}}</strong></span>
                 </div>
-                <div class="box " *ngIf="coverOf != 0" (click)="openModal('#NewBill',true)">
+                <div class="box " *ngIf="coverOf != 0" (click)="global.openBootstrapModal('#NewBill',true)">
                     <span><small>Cover</small>  </span>
                     <span><strong>{{coverOf}}</strong></span>
                 </div>
@@ -305,10 +305,10 @@
                     <button  mat-raised-button  class="m-1 text-white btn bg-primary col-lg-5 btnHeight" (click)="HOldandPrint('rehold')" accesskey="p">H & <u>P</u>rint</button>
                     
                     <button mat-raised-button class="m-1 btn text-white bg-danger col-lg-5 btnHeight" 
-                        (click)="openModal('#retrieveBill',true);getHoldBills()" accesskey="r"><u>R</u>etrieve</button>
+                        (click)="global.openBootstrapModal('#retrieveBill',true);getHoldBills()" accesskey="r"><u>R</u>etrieve</button>
 
                     <button mat-raised-button class="m-1 btn text-white bg-warning col-lg-5 btnHeight" accesskey="n" 
-                     [disabled]="tableData != ''" (click)="reset();openModal('#NewBill',true)"><u>N</u>ew Bill</button>
+                     [disabled]="tableData != ''" (click)="reset();global.openBootstrapModal('#NewBill',true)"><u>N</u>ew Bill</button>
 
                 </div>
 
@@ -337,10 +337,10 @@
                     <table class="btn-table cursorPointer">
                         <tbody>
                             <tr>
-                                <td (click)="openModal('#paymentMehtod',this.tableData != '')" class="w-25"> <u>S</u>ave</td>
-                                <td  (click)="openModal('#SavedBillModal',true);this.getSavedBill()"  class="w-25" >D<u>u</u>plicate</td>
+                                <td (click)="global.openBootstrapModal('#paymentMehtod',this.tableData != '')" class="w-25"> <u>S</u>ave</td>
+                                <td  (click)="global.openBootstrapModal('#SavedBillModal',true);this.getSavedBill()"  class="w-25" >D<u>u</u>plicate</td>
                                <td  (click)="voidBill()" class="w-25"><u>V</u>oid Bill</td>
-                                <td (click)="openModal('#mergeBill',true)"  class="w-25"><u>M</u>erge Bill</td>
+                                <td (click)="global.openBootstrapModal('#mergeBill',true)"  class="w-25"><u>M</u>erge Bill</td>
                             </tr>
                         </tbody>
                     </table>

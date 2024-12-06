@@ -7,10 +7,11 @@ import { HomeComponent } from './Components/home/home.component';
 
 
 export const routes: Route[]= [
-  {path:'login', component:LoginComponent },
+  {path:'login', component:LoginComponent,data: { title: 'Login' }, },
   {
     path: 'home',
     component: MainComponent,
+    data: { title: 'Home' },
     children: [{ path: '', component: HomeComponent }],
   },
   {path:'acc', 

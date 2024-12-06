@@ -353,9 +353,11 @@ export class AddPropertyComponent implements OnInit {
         
         // Only process image files (optional check)
         if (file.type.startsWith('image/')) {
+          console.log(file.type);
             const reader = new FileReader();
             var list:any = [];
             reader.onload = function (e:any) {
+            
                 // Create an image element to get the dimensions
                 const img = new Image();
                 img.onload = function () {
@@ -385,10 +387,11 @@ export class AddPropertyComponent implements OnInit {
        
     }    
    setTimeout(() => {
+    
     list.forEach((e:any) => {
         this.imagesList.push({propertyImage:e.imgUrl,name:e.name,width:e.width,height:e.height,sizeInMB:e.sizeInMB,fileName:e.fileName});
       });
-   }, 200);
+   }, 1000);
     
     }
     else{

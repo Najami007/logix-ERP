@@ -8,6 +8,7 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import Swal from 'sweetalert2';
+import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-brand',
   templateUrl: './brand.component.html',
@@ -22,7 +23,8 @@ export class BrandComponent implements OnInit{
     private dialogue: MatDialog,
     private globaldata:GlobalDataModule,
     private app:AppComponent,
-    private route:Router
+    private route:Router,
+    private titleService: Title
     
     ){
       
@@ -35,7 +37,8 @@ export class BrandComponent implements OnInit{
     }
   ngOnInit(): void {
     this.globaldata.setHeaderTitle('Brand');
-    this.getBrandList()
+    this.getBrandList();
+    
    
   }
 

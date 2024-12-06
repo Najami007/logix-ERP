@@ -7,16 +7,14 @@ import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@a
 import { NotificationService } from '../service/notification.service';
 import { userInterface } from '../Interfaces/login-user-interface';
 import { BehaviorSubject, Observable, Observer, from, retry } from 'rxjs';
-import Swal from 'sweetalert2';
 import * as $ from 'jquery';
-import * as b64 from 'base64-js/index.js';
-import { AppComponent } from 'src/app/app.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductImgComponent } from 'src/app/Components/Inventory/product/product-img/product-img.component';
 import { PincodeComponent } from 'src/app/Components/User/pincode/pincode.component';
 
 import { CookieService } from 'ngx-cookie-service';
 import { ConfirmationAlertComponent } from 'src/app/Components/Common/confirmation-alert/confirmation-alert.component';
+import * as bootstrap from 'bootstrap';
 
 
 
@@ -362,7 +360,8 @@ export class GlobalDataModule implements OnInit {
           localStorage.removeItem('mid');
       
           // localStorage.removeItem('cmpnyVal');
-          this.rout.navigate(['login']);
+          window.location.reload();
+          // this.rout.navigate(['login']);
           $('.loaderDark').fadeOut(500);
         } else {
           this.msg.WarnNotify(Response.msg);
@@ -1077,5 +1076,30 @@ public getCashBankCoa(type:any): Observable<any>{
 
   return uniqueArray;
 }
+
+
+
+openBootstrapModal(modalID: any, condition: any) {
+  if (condition) {
+    const myModal = new bootstrap.Modal(modalID, { keyboard: false });
+    myModal.show();
+
+  }
+}
+
+closeBootstrapModal(modalID: any, condition: any) {
+  if (condition) {
+    
+      $(modalID).hide();
+      // $('.modal').remove();
+      // $('body').removeClass('modal-open');
+      $('.modal-backdrop').remove();
+    // const myModal = new bootstrap.Modal(modalID);
+    // alert();
+    // myModal.hide()
+
+  }
+}
+
 
 }

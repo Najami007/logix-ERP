@@ -1072,7 +1072,9 @@ export class GarmentSaleComponent implements OnInit {
       } else {
 
         
-
+        if(this.tillOpenFeature){
+          this.global.openTill();
+        }
 
         this.app.startLoaderDark();
         this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', {
@@ -1101,17 +1103,15 @@ export class GarmentSaleComponent implements OnInit {
         }).subscribe(
           (Response: any) => {
             if (Response.msg == 'Data Saved Successfully') {
-              if(this.tillOpenFeature){
-                this.global.openTill();
-              }
+              
               this.msg.SuccessNotify(Response.msg);
               this.reset();
               this.PrintAfterSave(Response.invNo);
 
               if (paymentType != 'Cash') {
                 $('#searchProduct').trigger('focus');
-                $('#paymentMehtod').hide();
-                $('.modal-backdrop').remove();
+                this.global.closeBootstrapModal('#paymentMehtod',true);
+
               }
 
             } else {

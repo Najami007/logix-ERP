@@ -29,16 +29,16 @@ import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 
 export const parkRoutes: Route[] = [
 
-  {path:'addswng', component:AddSwingComponent,canActivate:[AuthGuard] },
-  {path:'psale', component:ParkSaleComponent,canActivate:[AuthGuard] },
-  {path:'pcs', component:ParkClosingSheetComponent,canActivate:[AuthGuard] },
-  {path:'srptsw', component:SaleRptswingWiseComponent,canActivate:[AuthGuard] },
-  {path:'srptdw', component:SalerptdaywiseComponent,canActivate:[AuthGuard] },
-  {path:'sdrptdw', component:SaledetailrptdatewiseComponent,canActivate:[AuthGuard] },
-  {path:'ssrptduw', component:SalesummarydateuserwiseComponent,canActivate:[AuthGuard] },
-  {path:'ssrptdsw', component:SalesummaryrptswingwiseComponent,canActivate:[AuthGuard] },
-  {path:'prkdshbrd', component:ParkDashBoardComponent,canActivate:[AuthGuard] },
-  {path:'amrpt', component:ActiveMemberRptComponent,canActivate:[AuthGuard] },
+  {path:'addswng', component:AddSwingComponent,data: { title: 'Swing' },canActivate:[AuthGuard] },
+  {path:'psale', component:ParkSaleComponent,data: { title: 'Sale' },canActivate:[AuthGuard] },
+  {path:'pcs', component:ParkClosingSheetComponent,data: { title: 'Closing Sheet' },canActivate:[AuthGuard] },
+  {path:'srptsw', component:SaleRptswingWiseComponent,data: { title: 'Sale Rpt Swing' },canActivate:[AuthGuard] },
+  {path:'srptdw', component:SalerptdaywiseComponent,data: { title: 'Sale Rpt Daywise' },canActivate:[AuthGuard] },
+  {path:'sdrptdw', component:SaledetailrptdatewiseComponent,data: { title: 'Sale Detail Datewise' },canActivate:[AuthGuard] },
+  {path:'ssrptduw', component:SalesummarydateuserwiseComponent,data: { title: 'Sale Summary Datewise' },canActivate:[AuthGuard] },
+  {path:'ssrptdsw', component:SalesummaryrptswingwiseComponent,data: { title: 'Sale Summary Swingwise' },canActivate:[AuthGuard] },
+  {path:'prkdshbrd', component:ParkDashBoardComponent,data: { title: 'Park Dashboard' },canActivate:[AuthGuard] },
+  {path:'amrpt', component:ActiveMemberRptComponent,data: { title: 'Active Member List' },canActivate:[AuthGuard] },
 
   
   {path:'**', redirectTo:'home',pathMatch:'full'}

@@ -1,4 +1,44 @@
 
+
+@media only screen and (max-width:1000px){
+
+    .main{
+      display: flex;
+      flex-direction: column;
+    }
+
+    .prodArea{
+      width: 50%;
+    }
+
+    .billArea{
+      width: 50%;
+
+        .tn{
+              width: 20%;
+            }
+          .ot{
+            width: 50%;
+          }
+
+          .chng{
+            width: 30%;
+          }
+
+          .btas{
+            width: 50%;
+
+            .btn{
+              width: 100px;
+            }
+
+     }
+     
+    }
+
+ 
+ }
+
 .btn-table{
     height: 60px;
     width: 200px;

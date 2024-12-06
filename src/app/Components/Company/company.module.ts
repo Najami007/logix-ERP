@@ -36,19 +36,19 @@ import { AreaComponent } from './area/area.component';
 
 export const companyRoutes: Route[] = [
 
-  {path:'cmpprof', component:CompanyProfileComponent, canActivate:[AuthGuard] },
-  {path:'prtnr', component:PartnersComponent,  canActivate:[AuthGuard]},
-  {path:'city', component:CityComponent,canActivate:[AuthGuard]  },
-  {path:'cntry', component:CountryComponent, canActivate:[AuthGuard] },
-  {path:'adep', component:DepartmentComponent,canActivate:[AuthGuard]  },
-  {path:'asec', component:SectionComponent,canActivate:[AuthGuard]  },
-  {path:'proj', component:ProjectComponent,canActivate:[AuthGuard]  },
-  {path:'party', component:PartyComponent,canActivate:[AuthGuard]  },
-  {path:'loc', component:ListOfCustomersComponent,canActivate:[AuthGuard]  },
-  {path:'los', component:ListOfSuppliersComponent,canActivate:[AuthGuard]  },
-  {path:'bkr', component:BookerComponent,canActivate:[AuthGuard]  },
-  {path:'root', component:RootComponent,canActivate:[AuthGuard]  },
-  {path:'area', component:AreaComponent,canActivate:[AuthGuard]  },
+  {path:'cmpprof', component:CompanyProfileComponent,data: { title: 'Company Profile' }, canActivate:[AuthGuard] },
+  {path:'prtnr', component:PartnersComponent,data: { title: 'Partner' },  canActivate:[AuthGuard]},
+  {path:'city', component:CityComponent,data: { title: 'City' },canActivate:[AuthGuard]  },
+  {path:'cntry', component:CountryComponent,data: { title: 'Country' }, canActivate:[AuthGuard] },
+  {path:'adep', component:DepartmentComponent,data: { title: 'Department' },canActivate:[AuthGuard]  },
+  {path:'asec', component:SectionComponent,data: { title: 'Section' },canActivate:[AuthGuard]  },
+  {path:'proj', component:ProjectComponent,data: { title: 'Project' },canActivate:[AuthGuard]  },
+  {path:'party', component:PartyComponent,data: { title: 'Party' },canActivate:[AuthGuard]  },
+  {path:'loc', component:ListOfCustomersComponent,data: { title: 'List Of Customer' },canActivate:[AuthGuard]  },
+  {path:'los', component:ListOfSuppliersComponent,data: { title: 'List Of Supplier' },canActivate:[AuthGuard]  },
+  {path:'bkr', component:BookerComponent,data: { title: 'Booker' },canActivate:[AuthGuard]  },
+  {path:'root', component:RootComponent,data: { title: 'Root' },canActivate:[AuthGuard]  },
+  {path:'area', component:AreaComponent,data: { title: 'Area' },canActivate:[AuthGuard]  },
   
   {path:'**', redirectTo:'home',pathMatch:'full'}
 

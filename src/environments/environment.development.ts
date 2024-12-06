@@ -18,7 +18,7 @@ export const environment = {
       //mainApi: 'http://192.168.100.250:1007/',  ////////// live Server Dani System
        //mainApi: 'http://192.168.10.100:1003/',    /////////// Local Server Office
 
-      //mainApi: 'http://159.69.174.21:2008/', /////// Live Serve Demo ERP API
+      mainApi: 'http://159.69.174.21:2008/', /////// Live Serve Demo ERP API
       //mainApi: 'http://192.168.10.100:2001/', /////// Shama Royal City Server
        //mainApi: 'http://159.69.174.21:2006/',  ////////// live Server Mehria Brands
       //mainApi: 'http://159.69.174.21:2007/',  ////////// live Server Balck Gold Restaurant
@@ -32,7 +32,7 @@ export const environment = {
     //mainApi: 'http://192.168.1.100:8081/',    /////////// Cake Corner Rwp
      // mainApi: 'http://159.69.174.21:2013/',  ////////// Shama Royal City
     // mainApi: 'http://192.168.10.180:8081/', /////// Lasani Traders Fateh Jang local System
-     mainApi: 'http://159.69.174.21:2016/', /////// Erp Demo Live
+    // mainApi: 'http://159.69.174.21:2016/', /////// Erp Demo Live
 
 
 

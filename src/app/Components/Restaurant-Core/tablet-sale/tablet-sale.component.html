@@ -94,8 +94,8 @@
         <div class="w-100 d-flex justify-content-around">
 
       
-            <button mat-fab class="m-1 text-white bg-danger col-lg-5" data-bs-toggle="modal"
-                matTooltip="Retrieve Hold Bills" data-bs-target="#retrieveBill"(click)="getHoldBills()">Retrieve</button>
+            <button mat-fab class="m-1 text-white bg-danger col-lg-5" matTooltip="Retrieve Hold Bills"
+             (click)="global.openBootstrapModal('#retrieveBill',true);getHoldBills()">Retrieve</button>
 
                 
             <button mat-fab class="m-1 text-white bg-primary col-lg-5" *ngIf="holdbtnType == 'hold'"
@@ -106,7 +106,7 @@
 
 
             <button mat-fab class="m-1 text-white bg-warning col-lg-5" accesskey="n" matTooltip="New bill (Alt + n)"
-                 data-bs-toggle="modal" data-bs-target="#NewBill" [disabled]="tableData != ''" (click)="reset()"><mat-icon>add</mat-icon></button>
+            [disabled]="tableData != ''" (click)="global.openBootstrapModal('#NewBill',true);reset()"><mat-icon>add</mat-icon></button>
 
         </div>
 
@@ -217,8 +217,8 @@
                     </div>
 
                     <div class="text-center d-flex justify-content-between ">
-                        <button class="btn btn-success" data-bs-dismiss="modal"
-                            (click)="deleteRow(tempDeleteRow,voidQty.value)">Save</button>
+                        <button class="btn btn-success"
+                            (click)="global.closeBootstrapModal('#voidQtyModal',true);deleteRow(tempDeleteRow,voidQty.value)">Save</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                             (click)="tempQty = 1">Close</button>
                     </div>

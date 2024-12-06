@@ -24,29 +24,29 @@ import * as bootstrap from 'bootstrap';
 export class Sale1Component implements OnInit {
   @HostListener('document:visibilitychange', ['$event'])
 
-  @ViewChild(RestSaleBillPrintComponent) billPrint:any;
-  @ViewChild(RestKotPrintComponent) KotPrint:any;
+  @ViewChild(RestSaleBillPrintComponent) billPrint: any;
+  @ViewChild(RestKotPrintComponent) KotPrint: any;
 
-  showCmpNameFeature:any = this.global.getFeature('cmpName');
+  showCmpNameFeature: any = this.global.getFeature('cmpName');
   waiterFeature = this.global.getFeature('Waiter');
 
   appVisibility() {
-    if (document.hidden) { 
+    if (document.hidden) {
 
-     } 
-     else {
-       this.getHoldBills();
-     
-     }
- }
+    }
+    else {
+      this.getHoldBills();
+
+    }
+  }
 
   holdbtnType = 'hold';
 
   crudList: any = [];
   companyProfile: any = [];
   companyLogo: any = '';
-  logoHeight:any = 100;
-  logoWidth:any = 100;
+  logoHeight: any = 100;
+  logoWidth: any = 100;
   companyAddress: any = '';
   CompanyMobile: any = '';
   companyName: any = '';
@@ -74,7 +74,7 @@ export class Sale1Component implements OnInit {
     //     });
     //   });
     // }
-    
+
     // getPCName().then((pcName) => {
     //   console.log('PC Name:', pcName);
     // }).catch((error) => {
@@ -101,9 +101,9 @@ export class Sale1Component implements OnInit {
     ///////////// will Check day is opened or not
 
     this.global.getCurrentOpenDay().subscribe(
-      (Response:any)=>{
+      (Response: any) => {
         // alert(Response)
-        if(Response == null || Response == ''){
+        if (Response == null || Response == '') {
           Swal.fire({
             title: 'Alert!',
             text: 'Day Is Currently Closed',
@@ -117,7 +117,7 @@ export class Sale1Component implements OnInit {
         }
       }
     )
-    
+
   }
 
 
@@ -160,8 +160,8 @@ export class Sale1Component implements OnInit {
   categoryID: any = 0;
   orderType = '';
   paymentType = '';
-  cash:any = 0;
-  bankCash:any = 0;
+  cash: any = 0;
+  bankCash: any = 0;
   change = 0;
   bankCoaList: any = [];
 
@@ -170,13 +170,13 @@ export class Sale1Component implements OnInit {
   tempOrderType = '';
   tableTitle: any = '';
 
-  customerName= '';
+  customerName = '';
   customerMobileno = '';
-  invDocument:any = '';
+  invDocument: any = '';
 
 
   tempProdRow: any = [];
-  tempQty = 1 ;
+  tempQty = 1;
   tempIndex: any;
 
   tableData: any = [];
@@ -187,22 +187,22 @@ export class Sale1Component implements OnInit {
   holdBillList: any = [];
 
   tableList: any = [];
-  bookerList:any = [];
+  bookerList: any = [];
 
-  getBookerList(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'getBooker').subscribe(
-      (Response)=>{
+  getBookerList() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'getBooker').subscribe(
+      (Response) => {
         this.bookerList = Response;
         //console.log(Response);
       },
-      (Error)=>{
+      (Error) => {
         this.msg.WarnNotify('Error Occured')
       }
     )
   }
 
 
-  focusTo(id:any){
+  focusTo(id: any) {
     setTimeout(() => {
       $(id).trigger('focus');
     }, 500);
@@ -254,10 +254,8 @@ export class Sale1Component implements OnInit {
       }
       this.orderType = this.tempOrderType;
 
-      $('#NewBill').hide();
-      // $('.modal').remove();
-      // $('body').removeClass('modal-open');
-      $('.modal-backdrop').remove();
+      this.global.closeBootstrapModal('#NewBill',true);
+
 
 
 
@@ -278,23 +276,34 @@ export class Sale1Component implements OnInit {
         }, 200);
       },
       (Error) => {
-        
+
       }
     )
   }
 
   ///////////////////////////////////////////////////////////
 
-  onCatSelected(item: any) {
+  getRecipeList(item: any) {
     // alert(item.recipeCatID);
     this.categoryID = item.recipeCatID;
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipesCatWise?CatID=' + this.categoryID + '&reqFlag=' + item.prodFlag).subscribe(
       (Response: any) => {
+        this.tempRecipeList = Response;
         this.RecipeList = Response;
-        
+
       }
     )
 
+  }
+
+  OnCatChange(item:any){
+    this.categoryID = item.recipeCatID;
+    if(item.recipeCatID > 0){
+      this.RecipeList = this.tempRecipeList.filter((e:any)=> e.recipeCatID == item.recipeCatID);
+    }else{
+      this.RecipeList = this.tempRecipeList;
+    }
+   
   }
 
 
@@ -306,15 +315,15 @@ export class Sale1Component implements OnInit {
       (Response: any) => {
         this.categoriesList = Response;
         // this.categoryID = this.categoriesList[0].recipeCatID;
-       
-   
-       if(Response != '' && Response != null){
-        this.onCatSelected({recipeCatID:0,prodFlag:false});
-       }
+
+
+        if (Response != '' && Response != null) {
+          this.getRecipeList({ recipeCatID: 0, prodFlag: false });
+        }
 
         this.app.stopLoaderDark();
       },
-      (Error:any)=>{
+      (Error: any) => {
         this.app.stopLoaderDark();
       }
     )
@@ -339,13 +348,13 @@ export class Sale1Component implements OnInit {
     if (this.orderType == 'Dine In') {
       this.OtherCharges = this.subTotal * (this.serviceCharges / 100);
     }
- 
+
     this.netTotal = (this.subTotal + parseFloat(this.OtherCharges)) - parseFloat(this.billDiscount);
 
-    if(this.paymentType == 'Split'){
+    if (this.paymentType == 'Split') {
       this.bankCash = this.netTotal - parseFloat(this.cash);
     }
-    if(this.paymentType == 'Bank'){
+    if (this.paymentType == 'Bank') {
       this.bankCash = this.netTotal;
     }
     this.change = (parseFloat(this.cash) + parseFloat(this.bankCash)) - this.netTotal;
@@ -363,7 +372,7 @@ export class Sale1Component implements OnInit {
       this.msg.WarnNotify('Enter Valid Quantity')
     } else {
       var index = this.tableData.findIndex((e: any) => e.recipeID == item.recipeID);
-      
+
       this.tableData.push({
         productID: item.productID,
         productTitle: item.recipeTitle,
@@ -393,32 +402,32 @@ export class Sale1Component implements OnInit {
 
 
 
-  onDocSelected(event:any) {
-
-  
-    if(this.global.getExtension(event.target.value) == 'pdf'){
-    let targetEvent = event.target;
-
-    let file:File = targetEvent.files[0];
-
-    let fileReader:FileReader = new FileReader();
+  onDocSelected(event: any) {
 
 
-    fileReader.onload =(e)=>{
-      this.invDocument = fileReader.result;
-    }
+    if (this.global.getExtension(event.target.value) == 'pdf') {
+      let targetEvent = event.target;
 
-    fileReader.readAsDataURL(file);
+      let file: File = targetEvent.files[0];
 
-    }else{
+      let fileReader: FileReader = new FileReader();
+
+
+      fileReader.onload = (e) => {
+        this.invDocument = fileReader.result;
+      }
+
+      fileReader.readAsDataURL(file);
+
+    } else {
       this.msg.WarnNotify('File Must Be pdf Only');
       event.target.value = '';
       this.invDocument = '';
-    } 
-}
+    }
+  }
 
 
-/////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
 
   save(type: any) {
 
@@ -434,15 +443,15 @@ export class Sale1Component implements OnInit {
       this.msg.WarnNotify('Enter Valid Amount')
     } else if (type == 'sale' && this.paymentType == 'Bank' && (this.bankCash < this.netTotal)) {
       this.msg.WarnNotify('Enter Valid Amount')
-    }else if(type == 'sale' && (this.customerName =='' && this.customerMobileno != '')){
+    } else if (type == 'sale' && (this.customerName == '' && this.customerMobileno != '')) {
       this.msg.WarnNotify('Enter Customer Name')
-    }else if(type == 'sale' && this.paymentType == 'Split' && this.cash <= 0 ){
+    } else if (type == 'sale' && this.paymentType == 'Split' && this.cash <= 0) {
       this.msg.WarnNotify('Cash Amount is Not Valid')
-     }else if(type == 'sale' && this.paymentType == 'Split' && this.bankCash <= 0 ){
+    } else if (type == 'sale' && this.paymentType == 'Split' && this.bankCash <= 0) {
       this.msg.WarnNotify('Bank Amount is Not Valid')
-    }else if(type == 'sale' && (this.customerName !='' && this.customerMobileno == '')){
+    } else if (type == 'sale' && (this.customerName != '' && this.customerMobileno == '')) {
       this.msg.WarnNotify('Enter Customer Name')
-    }else if((this.BookerID == 0 || this.BookerID == undefined) && this.waiterFeature == true){
+    } else if ((this.BookerID == 0 || this.BookerID == undefined) && this.waiterFeature == true) {
       this.msg.WarnNotify('Select Waiter')
     }
     else {
@@ -479,13 +488,13 @@ export class Sale1Component implements OnInit {
           UserID: this.global.getUserID()
         }).subscribe(
           (Response: any) => {
-         
+
             if (Response.msg == 'Data Saved Successfully') {
               this.tmpInvBillNO = Response.invNo;
               this.printKOT(Response.invNo);   /////// Will Print KOT ////////////////
               this.msg.SuccessNotify(Response.msg);
               this.getTable()
-              this.onCatSelected({recipeCatID:0,prodFlag:false});
+              this.getRecipeList({ recipeCatID: 0, prodFlag: false });
               this.reset();
               this.getHoldBills();
 
@@ -494,10 +503,10 @@ export class Sale1Component implements OnInit {
             }
             this.app.stopLoaderDark();
           },
-          (Error:any)=>{
+          (Error: any) => {
             this.msg.WarnNotify(Error);
             this.app.stopLoaderDark();
-           }
+          }
         )
       }
 
@@ -526,7 +535,7 @@ export class Sale1Component implements OnInit {
           UserID: this.global.getUserID()
         }).subscribe(
           (Response: any) => {
-          
+
             if (Response.msg == 'Data Updated Successfully') {
               this.printKOT(Response.invNo); /////// Will Print KOT ////////////////
               this.msg.SuccessNotify(Response.msg);
@@ -539,10 +548,10 @@ export class Sale1Component implements OnInit {
             }
             this.app.stopLoaderDark();
           },
-          (Error:any)=>{
+          (Error: any) => {
             this.msg.WarnNotify(Error);
             this.app.stopLoaderDark();
-           }
+          }
         )
 
 
@@ -551,9 +560,8 @@ export class Sale1Component implements OnInit {
       if (type == 'sale') {
 
         if (this.paymentType == 'Complimentary') {
+          this.global.closeBootstrapModal('#paymentMehtod',true);
 
-          $('#paymentMehtod').hide();
-          $('.modal-backdrop').remove();
           this.global.openPassword('Password').subscribe(pin => {
             if (pin !== '') {
               this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
@@ -564,7 +572,7 @@ export class Sale1Component implements OnInit {
               }).subscribe(
                 (Response: any) => {
                   if (Response.msg == 'Password Matched Successfully') {
-                   
+
                     this.cash = 0;
                     this.bankCash = 0;
                     this.change = 0;
@@ -577,10 +585,10 @@ export class Sale1Component implements OnInit {
                     this.msg.WarnNotify(Response.msg);
                   }
                 },
-                (Error:any)=>{
+                (Error: any) => {
                   this.msg.WarnNotify(Error);
                   this.app.stopLoaderDark();
-                 }
+                }
               )
             }
           })
@@ -596,98 +604,98 @@ export class Sale1Component implements OnInit {
   }
 
 
-  printKOT(invNo:any){
-    var printData = this.tableData.filter((e:any)=>e.entryType == 'New');
-    if(printData.length > 0 && this.global.getKOTApproval() == true){
-      
-      this.KotPrint.myPrintData =  printData;
-      this.KotPrint.printBill(invNo,false);
+  printKOT(invNo: any) {
+    var printData = this.tableData.filter((e: any) => e.entryType == 'New');
+    if (printData.length > 0 && this.global.getKOTApproval() == true) {
+
+      this.KotPrint.myPrintData = printData;
+      this.KotPrint.printBill(invNo, false);
 
       // setTimeout(() => {
       //   this.global.printData('#print-Kot');
       // }, 200);
     }
-     
+
   }
 
-//////////////////////////////////////////////////////////////////
-validSaleFlag = true;
+  //////////////////////////////////////////////////////////////////
+  validSaleFlag = true;
 
   InsertSale() {
 
-    if(this.customerMobileno == '' || this.customerMobileno == undefined){
+    if (this.customerMobileno == '' || this.customerMobileno == undefined) {
       this.customerMobileno = '0000-0000000';
     }
-    if(this.customerName == '' || this.customerName == undefined){
+    if (this.customerName == '' || this.customerName == undefined) {
       this.customerName = '-';
     }
-    if(this.invDocument =='' || this.invDocument == undefined){
+    if (this.invDocument == '' || this.invDocument == undefined) {
       this.invDocument = '-';
     }
 
     this.app.startLoaderDark()
-  if(this.validSaleFlag){
-    this.validSaleFlag = false;
-    this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertSale', {
-      HoldInvNo: this.invBillNo,
-      OrderNo: this.orderNo,
-      InvDate: this.global.dateFormater(this.invoiceDate, '-'),
-      TableID: this.tableID,
-      TmpTableID: this.prevTableID,
-      PartyID: this.PartyID,
-      InvType: "S",
-      ProjectID: this.ProjectID,
-      BookerID: this.waiterFeature ? this.BookerID : 1,
-      PaymentType: this.paymentType,
-      Remarks: this.billRemarks,
-      OrderType: this.orderType,
-      CoverOf: this.coverOf,
+    if (this.validSaleFlag) {
+      this.validSaleFlag = false;
+      this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertSale', {
+        HoldInvNo: this.invBillNo,
+        OrderNo: this.orderNo,
+        InvDate: this.global.dateFormater(this.invoiceDate, '-'),
+        TableID: this.tableID,
+        TmpTableID: this.prevTableID,
+        PartyID: this.PartyID,
+        InvType: "S",
+        ProjectID: this.ProjectID,
+        BookerID: this.waiterFeature ? this.BookerID : 1,
+        PaymentType: this.paymentType,
+        Remarks: this.billRemarks,
+        OrderType: this.orderType,
+        CoverOf: this.coverOf,
 
-      BillTotal: this.subTotal,
-      BillDiscount: this.billDiscount,
-      OtherCharges: this.OtherCharges,
-      NetTotal: this.netTotal,
-      CashRec: this.cash,
-      Change: this.change,
-      BankCoaID: this.bankCoaID,
-      BankCash: this.bankCash,
-      InvoiceDocument:this.invDocument,
-      CusContactNo:this.customerMobileno,
-      CusName:this.customerName,
+        BillTotal: this.subTotal,
+        BillDiscount: this.billDiscount,
+        OtherCharges: this.OtherCharges,
+        NetTotal: this.netTotal,
+        CashRec: this.cash,
+        Change: this.change,
+        BankCoaID: this.bankCoaID,
+        BankCash: this.bankCash,
+        InvoiceDocument: this.invDocument,
+        CusContactNo: this.customerMobileno,
+        CusName: this.customerName,
 
-      SaleDetail: JSON.stringify(this.tableData),
-      UserID: this.global.getUserID()
-    }).subscribe(
-      (Response: any) => {
-        if (Response.msg == 'Data Saved Successfully') {
+        SaleDetail: JSON.stringify(this.tableData),
+        UserID: this.global.getUserID()
+      }).subscribe(
+        (Response: any) => {
+          if (Response.msg == 'Data Saved Successfully') {
+            this.validSaleFlag = true;
+            this.printKOT(Response.invNo); /////// Will Print KOT ////////////////
+            this.msg.SuccessNotify(Response.msg);
+
+            this.printAfterSave(Response.invNo);
+            this.getTable();
+            this.getRecipeList({ recipeCatID: 0, prodFlag: false });
+            this.getHoldBills();
+            setTimeout(() => {
+              this.reset();
+            }, 200);
+            /////////// will hide the modal window ///////////
+            this.global.closeBootstrapModal('#paymentMehtod',true);
+
+
+          } else {
+            this.validSaleFlag = true;
+            this.msg.WarnNotify(Response.msg);
+          }
+          this.app.stopLoaderDark();
+        },
+        (Error: any) => {
           this.validSaleFlag = true;
-          this.printKOT(Response.invNo); /////// Will Print KOT ////////////////
-          this.msg.SuccessNotify(Response.msg);
-
-          this.printAfterSave(Response.invNo);
-          this.getTable();
-          this.onCatSelected({recipeCatID:0,prodFlag:false});
-          this.getHoldBills();
-         setTimeout(() => {
-          this.reset();
-         }, 200);
-          /////////// will hide the modal window ///////////
-          $('#paymentMehtod').hide();
-          $('.modal-backdrop').remove();
-
-        } else {
-          this.validSaleFlag = true;
-          this.msg.WarnNotify(Response.msg);
+          this.msg.WarnNotify(Error);
+          this.app.stopLoaderDark();
         }
-        this.app.stopLoaderDark();
-      },
-      (Error:any)=>{
-        this.validSaleFlag = true;
-        this.msg.WarnNotify(Error);
-        this.app.stopLoaderDark();
-       }
-    )
-  }
+      )
+    }
   }
 
   /////////////////////////////////////////////////////////////////
@@ -697,13 +705,13 @@ validSaleFlag = true;
 
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetHoldBills').subscribe(
       (Response: any) => {
-        
+
         this.holdBillList = Response;
       },
-      (Error:any)=>{
+      (Error: any) => {
         this.msg.WarnNotify(Error);
-        
-       }
+
+      }
     )
   }
 
@@ -759,10 +767,10 @@ validSaleFlag = true;
 
 
       },
-      (Error:any)=>{
+      (Error: any) => {
         this.msg.WarnNotify(Error);
-      
-       }
+
+      }
     )
 
 
@@ -770,19 +778,19 @@ validSaleFlag = true;
 
   ///////////////////////////////////////////////////////////////
 
-  tempDeleteRow:any = [];
+  tempDeleteRow: any = [];
 
-  deleteRow(item: any,voidQty:any) {
+  deleteRow(item: any, voidQty: any) {
     if (item.entryType == 'New') {
       var index = this.tableData.indexOf(item);
       this.tableData.splice(index, 1);
       this.getTotal();
     }
 
-    if(voidQty > item.quantity){
+    if (voidQty > item.quantity) {
       this.msg.WarnNotify('Void Quantity is not Valid');
       return;
-    }else{
+    } else {
       if (item.entryType == 'Saved') {
 
 
@@ -795,11 +803,11 @@ validSaleFlag = true;
                 RestrictionCodeID: 1,
                 Password: pin,
                 UserID: this.global.getUserID()
-  
+
               }).subscribe(
                 (Response: any) => {
                   if (Response.msg == 'Password Matched Successfully') {
-  
+
                     this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertVoidItem', {
                       InvBillNo: this.invBillNo,
                       ProductID: item.productID,
@@ -814,7 +822,7 @@ validSaleFlag = true;
                       RequestType: 'Void',
                       EntryType: item.entryType,
                       ReqRefNo: item.autoInvDetID,
-  
+
                       PinCode: pin,
                       UserID: this.global.getUserID()
                     }).subscribe(
@@ -823,18 +831,18 @@ validSaleFlag = true;
                           this.msg.SuccessNotify('Item Void');
 
                           /////// Will Print KOT ////////////////
-                          if(this.global.getKOTApproval() == true){
-                            this.KotPrint.myPrintData =   [{
+                          if (this.global.getKOTApproval() == true) {
+                            this.KotPrint.myPrintData = [{
                               productTitle: item.productTitle,
                               quantity: voidQty,
                             }];
-                            this.KotPrint.printBill(this.invBillNo,true);
-                            
+                            this.KotPrint.printBill(this.invBillNo, true);
+
                             // setTimeout(() => {
                             //   this.global.printData('#print-Kot');
                             // }, 200);
                           }
-                          
+
 
                           if (item.quantity <= 1 || voidQty == item.quantity) {
                             var index = this.tableData.indexOf(item);
@@ -844,33 +852,33 @@ validSaleFlag = true;
                           }
                           this.tempDeleteRow = [];
                           this.getTotal()
-  
+
                         } else {
                           this.msg.WarnNotify(Response.msg);
                         }
                       },
-                      (Error:any)=>{
+                      (Error: any) => {
                         this.msg.WarnNotify(Error);
-                       
-                       }
+
+                      }
                     )
-  
+
                   } else {
                     this.msg.WarnNotify(Response.msg);
                   }
                 }
               )
-  
-  
-  
+
+
+
             }
           })
         }
       }
-  
+
     }
 
-    
+
   }
 
   //////////////////////////////////////////////////////////////
@@ -911,15 +919,15 @@ validSaleFlag = true;
                         if (Response.msg == 'Data Saved Successfully') {
 
                           /////// Will Print KOT ////////////////
-                          if(this.global.getKOTApproval() == true){
-                            this.KotPrint.myPrintData =  this.tableData;
-                            this.KotPrint.printBill(this.invBillNo,true);
-                             
+                          if (this.global.getKOTApproval() == true) {
+                            this.KotPrint.myPrintData = this.tableData;
+                            this.KotPrint.printBill(this.invBillNo, true);
+
                             // setTimeout(() => {
                             //   this.global.printData('#print-Kot');
                             // }, 200);
                           }
-                 
+
 
                           this.msg.SuccessNotify('Bill Void');
                           this.getTotal();
@@ -938,10 +946,10 @@ validSaleFlag = true;
                     this.msg.WarnNotify(Response.msg);
                   }
                 },
-                (Error:any)=>{
+                (Error: any) => {
                   this.msg.WarnNotify(Error);
                   this.app.stopLoaderDark();
-                 }
+                }
               )
 
 
@@ -1024,7 +1032,7 @@ validSaleFlag = true;
 
   }
 
-  resetPrint(){
+  resetPrint() {
     this.myPrintData = [];
     this.myInvoiceNo = '';
     this.mytableNo = '';
@@ -1053,7 +1061,7 @@ validSaleFlag = true;
   mytableNo = '';
   myCounterName = '';
   myInvDate: any = '';
-  myInvTime:any = '';
+  myInvTime: any = '';
   myOrderType = '';
   mySubTotal = 0;
   myNetTotal = 0;
@@ -1065,8 +1073,8 @@ validSaleFlag = true;
   myBank = 0;
   myPaymentType = '';
   myDuplicateFlag = false;
-  myTime:any;
-  myCounter:any = '';
+  myTime: any;
+  myCounter: any = '';
 
 
   printAfterSave(invNo: any) {
@@ -1075,44 +1083,44 @@ validSaleFlag = true;
     // setTimeout(() => {
     //   this.global.printData('#print-bill');
     // }, 200);
-   
+
 
   }
 
   HOldandPrint(type: any) {
 
-   this.myOrderType = this.orderType;
+    this.myOrderType = this.orderType;
     if (this.tableData != '') {
-    
+
       if (this.invBillNo != '') {
         this.myInvoiceNo = this.invBillNo;
         this.save('rehold');
 
         setTimeout(() => {
-          this.billPrint.HOldandPrint(this.orderType,this.myInvoiceNo);
+          this.billPrint.HOldandPrint(this.orderType, this.myInvoiceNo);
         }, 1000);
 
         // setTimeout(() => {
         //   this.global.printData('#print-bill');
         // }, 200);
-    
-      }else{
-        
+
+      } else {
+
         this.save('hold');
         setTimeout(() => {
           this.myInvoiceNo = this.tmpInvBillNO;
-         if(this.tmpInvBillNO != ''){
-          this.billPrint.HOldandPrint(this.orderType,this.tmpInvBillNO);
+          if (this.tmpInvBillNO != '') {
+            this.billPrint.HOldandPrint(this.orderType, this.tmpInvBillNO);
 
-          // setTimeout(() => {
-          //   this.global.printData('#print-bill');
-          // }, 200);
-          this.tmpInvBillNO = '';
-         }
+            // setTimeout(() => {
+            //   this.global.printData('#print-bill');
+            // }, 200);
+            this.tmpInvBillNO = '';
+          }
         }, 2000);
       }
       this.myDuplicateFlag = false;
-  
+
     } else {
       this.msg.WarnNotify('No Bill Retrieved')
     }
@@ -1124,9 +1132,9 @@ validSaleFlag = true;
   ////////////////////////////////////////////////////////////
 
   verifyDiscount(disc: any,) {
-    if (disc > this.netTotal){
+    if (disc > this.netTotal) {
       this.msg.WarnNotify('Discount is not valid!')
-    } else{
+    } else {
       this.global.openPassword('Password').subscribe(pin => {
         if (pin !== '') {
           this.app.startLoaderDark();
@@ -1145,10 +1153,10 @@ validSaleFlag = true;
               }
               this.app.stopLoaderDark();
             },
-            (Error:any)=>{
+            (Error: any) => {
               this.msg.WarnNotify(Error);
               this.app.stopLoaderDark();
-             }
+            }
           )
         }
       })
@@ -1157,59 +1165,59 @@ validSaleFlag = true;
   /////////////////////////////////////////////////
 
 
-  
 
 
-  savedbillList:any = [];
+
+  savedbillList: any = [];
 
   mergeBillNo1 = '';
   mergeBillNo2 = '';
 
-  mergeBills(){
+  mergeBills() {
     // alert(this.mergeBillNo1)
     // alert(this.mergeBillNo2)
-  if(this.mergeBillNo1 == '' || this.mergeBillNo2 == ''){
-    this.msg.WarnNotify('Select Both Bill 1 and 2')
-  }else{
-    this.http.get(environment.mainApi+this.global.restaurentLink+'MergeAndPrintBill?BillNo='+this.mergeBillNo1+'&BillNo2='+this.mergeBillNo2).subscribe(
-      (Response:any)=>{
-        
-    this.myInvoiceNo = Response[0].invBillNo;
-    this.myInvDate = Response[0].invDate;
-    this.myOrderType = Response[0].orderType;
-    this.myRemarks = Response[0].billRemarks;
-    this.myCounter =  Response[0].entryUser;
-    
-        
-       this.myPrintData = Response;
-       this.mySubTotal = 0;
-       this.OtherCharges = 0;
-       this.myOtherCharges = this.holdBillList.find((e:any)=>e.invBillNo == this.mergeBillNo1).otherCharges + 
-        this.holdBillList.find((e:any)=>e.invBillNo == this.mergeBillNo2).otherCharges;
-       Response.forEach((e:any) => {
-          this.mySubTotal += e.quantity * e.salePrice;
-       });
+    if (this.mergeBillNo1 == '' || this.mergeBillNo2 == '') {
+      this.msg.WarnNotify('Select Both Bill 1 and 2')
+    } else {
+      this.http.get(environment.mainApi + this.global.restaurentLink + 'MergeAndPrintBill?BillNo=' + this.mergeBillNo1 + '&BillNo2=' + this.mergeBillNo2).subscribe(
+        (Response: any) => {
 
-     
+          this.myInvoiceNo = Response[0].invBillNo;
+          this.myInvDate = Response[0].invDate;
+          this.myOrderType = Response[0].orderType;
+          this.myRemarks = Response[0].billRemarks;
+          this.myCounter = Response[0].entryUser;
 
 
-       setTimeout(() => {
-        this.global.printData('#mergePrint');
-       }, 500);
+          this.myPrintData = Response;
+          this.mySubTotal = 0;
+          this.OtherCharges = 0;
+          this.myOtherCharges = this.holdBillList.find((e: any) => e.invBillNo == this.mergeBillNo1).otherCharges +
+            this.holdBillList.find((e: any) => e.invBillNo == this.mergeBillNo2).otherCharges;
+          Response.forEach((e: any) => {
+            this.mySubTotal += e.quantity * e.salePrice;
+          });
 
-      
-      }
-    )
+
+
+
+          setTimeout(() => {
+            this.global.printData('#mergePrint');
+          }, 500);
+
+
+        }
+      )
+    }
   }
-  }
 
 
-  increment(type:any,value:any){
-    if(type == 'add'){
+  increment(type: any, value: any) {
+    if (type == 'add') {
       this.tempQty += 1;
     }
 
-    if(type == 'minus'){
+    if (type == 'minus') {
       this.tempQty -= 1;
     }
   }
@@ -1218,20 +1226,20 @@ validSaleFlag = true;
 
   /////////////////////////////////////////////////////////////////////////////
 
-  getSavedBill(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetOpenDaySale').subscribe(
-      (Response:any)=>{
-    
-          this.savedbillList = Response;
+  getSavedBill() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetOpenDaySale').subscribe(
+      (Response: any) => {
+
+        this.savedbillList = Response;
       }
     )
 
-   
+
   }
 
 
 
-  printDuplicateBill(item:any){
+  printDuplicateBill(item: any) {
     $('#SavedBillModal').hide();
     this.global.openPassword('Password').subscribe(pin => {
       if (pin !== '') {
@@ -1244,14 +1252,14 @@ validSaleFlag = true;
           (Response: any) => {
             if (Response.msg == 'Password Matched Successfully') {
               $('#SavedBillModal').show();
-             
-          this.billPrint.printBill(item.invBillNo);
-          this.billPrint.myDuplicateFlag = true;
 
-          // setTimeout(() => {
-          //   this.global.printData('#print-bill');
-          // }, 500);
-    
+              this.billPrint.printBill(item.invBillNo);
+              this.billPrint.myDuplicateFlag = true;
+
+              // setTimeout(() => {
+              //   this.global.printData('#print-bill');
+              // }, 500);
+
             } else {
               this.msg.WarnNotify(Response.msg);
               $('#SavedBillModal').show();
@@ -1260,10 +1268,10 @@ validSaleFlag = true;
         )
       }
     })
-   
+
   }
 
-  billDetails(item:any){
+  billDetails(item: any) {
     $('#SavedBillModal').hide();
     this.global.openPassword('Password').subscribe(pin => {
       if (pin !== '') {
@@ -1277,12 +1285,12 @@ validSaleFlag = true;
             if (Response.msg == 'Password Matched Successfully') {
               $('#SavedBillModal').show();
 
-              this.dialogue.open(SaleBillDetailComponent,{
-                width:'50%',
-                data:item,
-                disableClose:true,
-              }).afterClosed().subscribe(value=>{
-                
+              this.dialogue.open(SaleBillDetailComponent, {
+                width: '50%',
+                data: item,
+                disableClose: true,
+              }).afterClosed().subscribe(value => {
+
               })
             } else {
               this.msg.WarnNotify(Response.msg);
@@ -1291,32 +1299,14 @@ validSaleFlag = true;
         )
       }
     })
-   
-   
+
+
   }
 
 
-  
-  OpenSaveModal(){
-    if(this.tableData != ''){
-      const myModal = new bootstrap.Modal('#paymentMehtod',{keyboard: false});
-    myModal.show();
-    }  
-
-   }
-
-
- openModal(modalID:any,condition:any){
- if(condition){
-  const myModal = new bootstrap.Modal(modalID,{keyboard: false});
-  myModal.show();
-  
- }
- }
 
 
 
- 
 
 
 }

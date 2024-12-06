@@ -19,8 +19,7 @@
 
             </div>
             <div class="col-lg-3 chng p-1 text-center  border">
-                <button class="btn btn-warning" [disabled]="orderType == ''" data-bs-toggle="modal"
-                    data-bs-target="#NewBill">Change</button>
+                <button class="btn btn-warning" [disabled]="orderType == ''" (click)="global.openBootstrapModal('#NewBill',true)" >Change</button>
 
             </div>
         </div>
@@ -52,9 +51,8 @@
                                     (click)="deleteRow(item,'')">delete</mat-icon>
 
                                 <!-------------- will Open void Qty modal when void button click ------------------->
-                                <mat-icon class="text-danger" data-bs-toggle="modal" data-bs-target="#voidQtyModal"
-                                    *ngIf="item.entryType == 'Saved'"
-                                    (click)="tempDeleteRow = item">indeterminate_check_box</mat-icon>
+                                <mat-icon class="text-danger" *ngIf="item.entryType == 'Saved'"
+                                    (click)="tempDeleteRow = item;global.openBootstrapModal('#voidQtyModal',true)">indeterminate_check_box</mat-icon>
                             </td>
 
                         </tr>
@@ -100,11 +98,11 @@
 
 
             <div class="scrollContainer">
-                <button (click)="onCatSelected({recipeCatID:0,prodFlag:false})"
+                <button (click)="OnCatChange({recipeCatID:0,prodFlag:false})"
                     [ngClass]="categoryID == 0  ? 'bg-blue' : ''" class="border item text-center m-1 p-1"
                     style="height: 40px !important;">ALL</button>
                 <button *ngFor="let item of categoriesList|filter:catSearch.value"
-                    (click)="onCatSelected(item);catSearch.value = ''" style="height: 40px !important;"
+                    (click)="OnCatChange(item);catSearch.value = ''" style="height: 40px !important;"
                     [ngClass]="item.recipeCatID == categoryID  ? 'bg-blue' : ''"
                     class="border item text-center m-1 p-1">{{item.recipeCatTitle}}</button>
             </div>
@@ -118,8 +116,7 @@
         <!-----------   Products Area ------------------->
         <div class="row cursorPointer p-1" style="height: 45vh;overflow-y: scroll;">
             <!-- <div *ngFor="let item of RecipeList |filter:recipeSearch.value" style="width: 200px;">
-                <mat-card style="width:180px; height: 200px;" class="m-1 shadow recipecard" data-bs-toggle="modal"
-                    data-bs-target="#qtyModal" (click)="tempProdRow = item;this.global.focusTo('.prodQty')">
+                <mat-card style="width:180px; height: 200px;" class="m-1 shadow recipecard"  (click)="global.openBootstrapModal('#qtyModal',true);tempProdRow = item;this.global.focusTo('.prodQty')">
 
                     <div class="text-center">
                         <img *ngIf="item.recipeImage" [src]="item.recipeImage" alt="" height="150px" width="170px">
@@ -140,8 +137,8 @@
                 <tbody>
                     <tr style="display: inline-flex; " class="cursorPointer "
                         *ngFor="let item of RecipeList |filter:recipeSearch.value">
-                        <mat-card data-bs-toggle="modal" data-bs-target="#qtyModal" class="justify-content-center"
-                            (click)="tempProdRow = item;this.global.focusTo('.prodQty')" style=" width: 120px;
+                        <mat-card  class="justify-content-center"
+                            (click)="global.openBootstrapModal('#qtyModal',true);tempProdRow = item;this.global.focusTo('.prodQty')" style=" width: 120px;
                         height: 120px;
                         text-align: center;
                       
@@ -170,8 +167,8 @@
         <div class=" row justify-content-between p-1  border-end">
 
             <div class="d-flex col-lg-3 justify-content-between ">
-                <mat-label class="w-50 text-primary cursorPointer" data-bs-toggle="modal"
-                    (click)="focusTo('#discInput')" data-bs-target="#disc"  style="font-size: 20px;"
+                <mat-label class="w-50 text-primary cursorPointer" 
+                    (click)="global.openBootstrapModal('#disc',true);focusTo('#discInput');"  style="font-size: 20px;"
                     accesskey="t"><strong>DISCOUN<u>T</u></strong></mat-label>
                 <p class="text-center font-digit " style="font-size: 35px;">{{billDiscount |number:'1.0-2'}}</p>
                 <!-- <input disabled="true" [(ngModel)]="billDiscount" class="w-50 text-end" (keyup)="getTotal();"
@@ -216,8 +213,8 @@
                     </td>
                     <td>
                         <button mat-raised-button class=" btn-table m-1 btn text-white bg-danger col-lg-5"
-                            data-bs-toggle="modal" matTooltip="Retrieve Hold Bills" matTooltipPosition="right"
-                            data-bs-target="#retrieveBill" (click)="getHoldBills()"
+                            matTooltip="Retrieve Hold Bills" matTooltipPosition="right"
+                            (click)="global.openBootstrapModal('#retrieveBill',true);getHoldBills();"
                             accesskey="r"><u>R</u>etrieve</button>
 
                     </td>
@@ -225,14 +222,13 @@
 
                         <button mat-raised-button class=" btn-table m-1 btn text-white bg-warning col-lg-5"
                             accesskey="n" matTooltip="New bill (Alt + n)" matTooltipPosition="left"
-                            data-bs-toggle="modal" data-bs-target="#NewBill" [disabled]="tableData != ''"
-                            (click)="reset()"><u>N</u>ew Bill</button>
+                           [disabled]="tableData != ''" (click)="global.openBootstrapModal('#NewBill',true);reset();"><u>N</u>ew Bill</button>
 
                     </td>
                     <td rowspan="2">
                         <button mat-raised-button style="height: 130px;width: 200px;"
-                            class=" btn text-white bg-success col-lg-5" data-bs-toggle="modal"
-                            matTooltipPosition="right" matTooltip="Save Current Bill" data-bs-target="#paymentMehtod"
+                            class=" btn text-white bg-success col-lg-5" (click)="global.openBootstrapModal('#paymentMehtod',tableData != '')"
+                            matTooltipPosition="right" matTooltip="Save Current Bill" 
                             accesskey="s"><u>S</u>ave</button>
                     </td>
                     <td rowspan="2">
@@ -263,9 +259,8 @@
 
                     </td>
                     <td>
-                        <button accesskey="u" mat-raised-button matTooltip="Retreiving Saved Bills"
-                            matTooltipPosition="right" class="btn-table m-1 btn  col-lg-5 " data-bs-toggle="modal"
-                            data-bs-target="#SavedBillModal" (click)="this.getSavedBill()">D<u>u</u>plicate</button>
+                        <button accesskey="u" mat-raised-button matTooltip="Retreiving Saved Bills" matTooltipPosition="right" 
+                        class="btn-table m-1 btn col-lg-5"(click)="global.openBootstrapModal('#SavedBillModal',true);this.getSavedBill()">D<u>u</u>plicate</button>
 
                     </td>
                     <td>
@@ -278,18 +273,8 @@
             </table>
 
 
-
-
-
-
-
-
-
-
-
-
             <!-- 
-            <button data-bs-toggle="modal" matTooltip="Merge Two Bills" matTooltipPosition="right" data-bs-target="#mergeBill"
+            <button (click)="global.openBootstrapModal('#qtyModal',true);" matTooltip="Merge Two Bills" matTooltipPosition="right"
                 mat-raised-button class="m-1 text-white btn col-lg-5" style="background-color: pink;" accesskey="m"><u>M</u>erge Bill</button> -->
 
         </div>
@@ -376,8 +361,7 @@
                 </div>
 
                 <div class="modal-footer bg-mf-blue">
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal"
-                        (click)="mergeBills()">Print</button>
+                    <button type="button" class="btn btn-success" (click)="mergeBills()">Print</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
 
@@ -543,7 +527,7 @@
 
                     </div>
                     <div class="modal-footer text-end p-3 bg-mf">
-                        <button class="btn btn-success" data-bs-dismiss="modal"
+                        <button class="btn btn-success"
                             (click)="verifyDiscount(bDisc.value);bDisc.value =''">Save</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>

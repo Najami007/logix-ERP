@@ -1,11 +1,11 @@
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd  } from '@angular/router';
 import { GlobalDataModule } from './Shared/global-data/global-data.module';
-import { TimelineLite, Back, Power1,  } from 'gsap'
 
 import { gsap } from 'gsap/all';
+import { Title } from '@angular/platform-browser';
 
-
+import { filter, map } from 'rxjs/operators';
 
 
 
@@ -99,7 +99,28 @@ export class AppComponent {
 
   
   title = 'ERP';
-constructor( private route:Router,private global:GlobalDataModule){
+constructor(
+   private route:Router,
+   private global:GlobalDataModule,
+   private titleService: Title,
+   private activatedRoute: ActivatedRoute
+  ){
+    this.route.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        map(() => {
+          let route = this.activatedRoute;
+          while (route.firstChild) {
+            route = route.firstChild;
+          }
+          return route.snapshot.data['title'];
+        })
+      )
+      .subscribe((title: string) => {
+        if (title) {
+          this.titleService.setTitle('ERP: '+title);
+        }
+      });
 
 }
   
@@ -110,9 +131,9 @@ constructor( private route:Router,private global:GlobalDataModule){
     setTimeout(() => {
       this.stopLoaderDark();  
     }, 500);
-    // if(localStorage.getItem('curVal') == null || localStorage.getItem('curVal') == '' ){
-    //   this.route.navigate(['']);
-    // }
+    if(localStorage.getItem('curVal') == null || localStorage.getItem('curVal') == '' ){
+      this.route.navigate(['']);
+    }
    
   }
 

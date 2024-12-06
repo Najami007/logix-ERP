@@ -90,11 +90,11 @@
                     <button class="w-100 btnsave" id="save" (click)="save('Cash')" accesskey="S"><u>S</u>ave</button>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <div class="pe-1 w-25"><button class="btnduplicate w-100" accesskey="u" data-bs-toggle="modal"
-                        data-bs-target="#SavedBillModal" (click)="getSavedBill()">D<u>u</u>plicate</button></div>
+                    <div class="pe-1 w-25"><button class="btnduplicate w-100" accesskey="u" 
+                         (click)="global.openBootstrapModal('#SavedBillModal',true);getSavedBill()">D<u>u</u>plicate</button></div>
 
                     <button accesskey="o" class="btnload pt-2 w-75  d-flex justify-content-between"
-                        data-bs-toggle="modal" data-bs-target="#paymentMehtod" (click)="cash = 0;this.getTotal()">
+                        (click)="global.openBootstrapModal('#paymentMehtod',true);cash = 0;this.getTotal()">
                         <span><u>O</u>ther</span> <mat-icon>keyboard_arrow_right</mat-icon>
                     </button>
                 </div>
