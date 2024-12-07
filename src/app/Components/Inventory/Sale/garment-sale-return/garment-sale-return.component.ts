@@ -30,6 +30,7 @@ export class GarmentSaleReturnComponent implements OnInit {
   editSpFeature = this.global.getFeature('EditSp');
   editDiscFeature = this.global.getFeature('EditDisc');
   tillOpenFeature = this.global.getFeature('TillOpen');
+  prodDetailFeature = this.global.getFeature('ProdDetail');
 
   @ViewChild(SaleBillPrintComponent) billPrint:any;
 
@@ -308,6 +309,7 @@ export class GarmentSaleReturnComponent implements OnInit {
                   discInR: Response[0].discRupees,
                   aq: Response[0].aq,
                   total:(Response[0].salePrice * qty) - (Response[0].discRupees * qty),
+                  productDetail:'',
 
                 });
 
@@ -405,6 +407,7 @@ export class GarmentSaleReturnComponent implements OnInit {
                     discInR: Response[0].discRupees,
                     aq: Response[0].aq,
                     total:(Response[0].salePrice * qty) - (Response[0].discRupees * qty),
+                    productDetail:'',
     
                   });
     
@@ -496,6 +499,7 @@ export class GarmentSaleReturnComponent implements OnInit {
             discInR: Response[0].discRupees,
             aq: Response[0].aq,
             total:(Response[0].salePrice * 1) - (Response[0].discRupees),
+            productDetail:'',
 
           });
           // this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);

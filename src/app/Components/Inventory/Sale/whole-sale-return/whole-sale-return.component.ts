@@ -31,6 +31,7 @@ export class WholeSaleReturnComponent implements OnInit {
   gstFeature = this.global.getFeature('GST');
   editSpFeature = this.global.getFeature('EditSp');
   editDiscFeature = this.global.getFeature('EditDisc');
+  prodDetailFeature = this.global.getFeature('ProdDetail');
 
   @ViewChild(SaleBillPrintComponent) billPrint:any;
 
@@ -310,6 +311,8 @@ export class WholeSaleReturnComponent implements OnInit {
                   discInR: this.discFeature ?  Response[0].discRupees  : 0,
                   aq: Response[0].aq,
                   total:(Response[0].salePrice * qty) - (Response[0].discRupees * qty),
+                  productDetail:'',
+
 
                 });
 
@@ -412,6 +415,8 @@ export class WholeSaleReturnComponent implements OnInit {
                     discInR: this.discFeature ?  Response[0].discRupees  : 0,
                     aq: Response[0].aq,
                     total:(Response[0].salePrice * qty) - (Response[0].discRupees * qty),
+                    productDetail:'',
+
     
                   });
     
@@ -502,6 +507,8 @@ export class WholeSaleReturnComponent implements OnInit {
             discInR: this.discFeature ?  Response[0].discRupees  : 0,
             aq: Response[0].aq,
             total:(Response[0].salePrice * 1) - (Response[0].discRupees),
+            productDetail:'',
+
 
           });
           // this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);

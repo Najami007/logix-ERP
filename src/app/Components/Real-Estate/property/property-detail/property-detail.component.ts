@@ -25,6 +25,8 @@ export class PropertyDetailComponent implements OnInit {
   ngOnInit(): void {
 
     if(this.editData){
+      this.getPropertImages(this.editData.data.propertyID);
+      this.getPropertFeatures(this.editData.data.propertyID);
       this.myPropertyID = this.editData.data.propertyID;
       this.myPropertyType = this.editData.data.propertyTypeTitle;
       this.myPropertyStatus = this.editData.data.propertyStatusTitle;
@@ -48,8 +50,6 @@ export class PropertyDetailComponent implements OnInit {
       this.myLocLatitude = this.editData.data.locLatitude;
       this.myLocLongitude = this.editData.data.locLongitude;
     
-      this.getPropertImages(this.editData.data.propertyID);
-      this.getPropertFeatures(this.editData.data.propertyID);
            }
         }
 

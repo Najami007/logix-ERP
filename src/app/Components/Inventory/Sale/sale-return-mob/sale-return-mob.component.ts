@@ -9,26 +9,23 @@ import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 
 import * as $ from 'jquery';
-
-import { Observable, retry } from 'rxjs';
-
-import { AddpartyComponent } from '../../../Company/party/addparty/addparty.component';
-import { dateFormat } from 'highcharts';
-import { WhsSavedBillComponent } from './whs-saved-bill/whs-saved-bill.component';
+import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/addparty.component';
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 import { SaleBillPrintComponent } from '../sale-bill-print/sale-bill-print.component';
 
 @Component({
-  selector: 'app-whole-sale',
-  templateUrl: './whole-sale.component.html',
-  styleUrls: ['./whole-sale.component.scss']
+  selector: 'app-sale-return-mob',
+  templateUrl: './sale-return-mob.component.html',
+  styleUrls: ['./sale-return-mob.component.scss']
 })
-export class WholeSaleComponent implements OnInit {
+export class SaleReturnMobComponent implements OnInit {
 
 
   discFeature = this.global.getFeature('Discount');
   BookerFeature = this.global.getFeature('Booker');
   gstFeature = this.global.getFeature('GST');
+  customerFeature = this.global.getFeature('Customer');
+  tillOpenFeature = this.global.getFeature('TillOpen');
   editSpFeature = this.global.getFeature('EditSp');
   editDiscFeature = this.global.getFeature('EditDisc');
   prodDetailFeature = this.global.getFeature('ProdDetail');
@@ -128,7 +125,7 @@ export class WholeSaleComponent implements OnInit {
 
   tempProdData: any = [];
 
-  btnType = 'Save';
+
   sortType = 'desc';
   invoiceDate = new Date();
   partyID = 0;
@@ -136,12 +133,10 @@ export class WholeSaleComponent implements OnInit {
   projectID = this.global.InvProjectID;
 
   tableDataList: any = [];
+  productDetail:any = [];     
   tempTableDataList: any = [];
-  invoiceNo:any ='';
   InvDate = new Date();
   PBarcode: any = '';
-  AdvTaxValue = 0;
-  AdvTaxAmount = 0;
   productImage = '';
   productName: any = '';
   discount: any = 0;
@@ -156,6 +151,8 @@ export class WholeSaleComponent implements OnInit {
   customerName = '';
   customerMobileno = '';
   bookerID = 0;
+  AdvTaxValue = 0;
+  AdvTaxAmount = 0;
 
   qtyTotal = 0;
   subTotal: any = 0;
@@ -164,7 +161,6 @@ export class WholeSaleComponent implements OnInit {
   bankCoaList: any = [];
   partyList: any = [];
   bookerList:any = [];
-  advanceTaxList:any = [{value:0},{value:0.5},{value:2.5},]
 
   billPrintType:any = this.global.getBillPrintType();
   setBillType(e:any){
@@ -240,57 +236,28 @@ export class WholeSaleComponent implements OnInit {
 
   searchByCode(e: any) {
 
-    var barcode = this.PBarcode;
-    var qty: number = 1;
-    var type = '';
-
     if (this.PBarcode !== '') {
       if (e.keyCode == 13) {
 
-        /// Seperating by / and coverting to Qty
-        if (this.PBarcode.split("/")[1] != undefined) {
-          barcode = this.PBarcode.split("/")[0];
-          qty = parseFloat(this.PBarcode.split("/")[1]);
-          type = 'price';
+        // this.app.startLoaderDark();
+        this.global.getProdDetail(0, this.PBarcode).subscribe(
+          (Response: any) => {
+            if (Response == '') {
+              this.msg.WarnNotify('Product Not Found')
+            } else {
 
+              var condition = this.tableDataList.find(
+                (x: any) => x.productID == Response[0].productID
+              );
 
-        }
-        /// Seperating by - and coverting to Qty 
-        if (this.PBarcode.split("-")[1] != undefined) {
-          barcode = this.PBarcode.split("-")[0];
-          qty = parseFloat(this.PBarcode.split("-")[1]);
-          type = 'qty';
+              var index = this.tableDataList.indexOf(condition);
 
-        }
+              if (condition == undefined) {
 
+              
 
-            /////verifying product in product list by barcode
-        var row = this.productList.find((p: any) => p.barcode == barcode);
-       
-
-         //////////// For Normal Barcode
-        if (row !== undefined) {
-          /////// check already present in the table or not
-          var condition = this.tableDataList.find(
-            (x: any) => x.productID == row.productID
-          );
-
-          var index = this.tableDataList.indexOf(condition);
-
-          //// push the data using index
-          if (condition == undefined) {
-
-
-            // this.app.startLoaderDark();
-            this.global.getProdDetail(0, barcode).subscribe(
-              (Response: any) => {
-
-                if (type == 'price') {
-                  qty = qty / parseFloat(Response[0].salePrice);
-
-                }
-                   
                 this.tableDataList.push({
+            
                   rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
                     : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
                       : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
@@ -298,10 +265,10 @@ export class WholeSaleComponent implements OnInit {
                   productTitle: Response[0].productTitle,
                   barcode: Response[0].barcode,
                   productImage: Response[0].productImage,
-                  quantity: qty,
+                  quantity: Response[0].productOtherDetDescription != '' ? 1 : 0 ,
                   wohCP: Response[0].costPrice,
-                  avgCostPrice: Response[0].avgCostPrice,
                   costPrice: Response[0].costPrice,
+                  avgCostPrice: Response[0].avgCostPrice,
                   salePrice: Response[0].salePrice,
                   ovhPercent: 0,
                   ovhAmount: 0,
@@ -315,148 +282,55 @@ export class WholeSaleComponent implements OnInit {
                   discInP: this.discFeature ?  Response[0].discPercentage : 0,
                   discInR: this.discFeature ?  Response[0].discRupees  : 0,
                   aq: Response[0].aq,
-                  total:(Response[0].salePrice * qty) - (Response[0].discRupees * qty),
-                  productDetail:'',
-
-
+                  total:(Response[0].salePrice * 1) - (Response[0].discRupees),
+      
                 });
 
-                //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
+                if(Response[0].productOtherDetDescription != ''){
+                  var tmpRow = this.productDetail.find((e:any)=> e.productOtherDetDescription == Response[0].productOtherDetDescription);
+                  if(tmpRow == undefined){
+                    this.productDetail.push({ productID: Response[0].productID, productOtherDetDescription: Response[0].productOtherDetDescription });
+                   
+                  }else{
+                    this.msg.WarnNotify('IMEI Already Entered');
+                    return;
+                  }               
+               }
+
                 this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
                 this.getTotal();
 
 
                 this.productImage = Response[0].productImage;
+
+              } else {
+                // this.tableDataList[index].Quantity = parseFloat(this.tableDataList[index].Quantity) + 1;
+                // this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length -1].rowIndex + 1 ;
+                if(Response[0].productOtherDetDescription != ''){
+                  var tmpRow = this.productDetail.find((e:any)=> e.productOtherDetDescription == Response[0].productOtherDetDescription);
+                  if(tmpRow == undefined){
+                    this.productDetail.push({ productID: Response[0].productID, productOtherDetDescription: Response[0].productOtherDetDescription });
+                    this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+                  }else{
+                    this.msg.WarnNotify('IMEI Already Entered');
+                    return;
+                  }               
+               }else{
+                 this.msg.WarnNotify('Product Already Exist in Table');
+               }
+
+                this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+                // this.msg.WarnNotify('Product Already Exist in Table');
+                this.productImage = this.tableDataList[index].productImage;
               }
-            )
 
 
 
-          } else {
-
-
-            if (this.PBarcode.split("/")[1] != undefined) {
-              qty = this.PBarcode.split("/")[1] / this.tableDataList[index].salePrice;
-            }
-            this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + qty;
-           
-             /////// Sorting Table
-            this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
-            this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-            this.productImage = this.tableDataList[index].productImage;
-          }
-        }
-        //////////// For Special Barcode
-        else if(row == undefined && barcode.length > 10) {
-          //////////////// For Special Barcode setting /////////////////////////
-
-          var txtBCode = barcode;
-          var reqQty:any = 0;
-          var reqQtyDot:any = 0;
-          var prodQty:any = 0; 
-          var tmpPrice:any = 0;
-
-          txtBCode = txtBCode.substring(2, 7);  /////////// extracting product barcode from special barcode
-          txtBCode = parseInt(txtBCode);
-          txtBCode = txtBCode.toString();
-
-          /////////// verifying whether exists in product list or not
-          var prodDetail = this.productList.find((p: any) => p.barcode == txtBCode);
-
-          if(prodDetail == '' || prodDetail == undefined){
-            this.msg.WarnNotify('Product Not Fount')
-          }else{
-            
-
-            /////////// extracting price from special barcode based on UOM
-            if(prodDetail.uomTitle == 'price'){
-              reqQty = barcode.substring(12 - 5);
-              reqQtyDot = reqQty.substring(0,5);
-              tmpPrice = reqQtyDot;
-            }else{
-                /////////// extracting quantity from special barcode based on UOM
-              reqQty = barcode.substring(12 - 5);
-              reqQtyDot = reqQty.substring(6 - 4);
-              reqQtyDot = reqQtyDot.substring(0, 3);
-              reqQty = reqQty.substring(0, 2);
-              prodQty = parseFloat(reqQty + '.' + reqQtyDot);
-            }
-
-            /////////// verifying exists in already scanned products or not
-            var condition = this.tableDataList.find(
-              (x: any) => x.productID == prodDetail.productID
-            );
-  
-            var index = this.tableDataList.indexOf(condition);
-  
-            if(condition == undefined ){
-
-              /////////// inserting data into tableDataList
-              this.global.getProdDetail(0, txtBCode).subscribe(
-                (Response: any) => {
-                   this.tableDataList.push({
-                    rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
-                      : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
-                        : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
-                    productID: Response[0].productID,
-                    productTitle: Response[0].productTitle,
-                    barcode: Response[0].barcode,
-                    productImage: Response[0].productImage,
-                    quantity: prodQty || 1,
-                    wohCP: Response[0].costPrice,
-                    avgCostPrice: Response[0].avgCostPrice,
-                    costPrice: Response[0].costPrice,
-                    salePrice: tmpPrice || Response[0].salePrice,
-                    ovhPercent: 0,
-                    ovhAmount: 0,
-                    expiryDate: this.global.dateFormater(new Date(), '-'),
-                    batchNo: '-',
-                    batchStatus: '-',
-                    uomID: Response[0].uomID,
-                    gst: this.gstFeature ? Response[0].gst : 0,
-                    et:Response[0].et,
-                    packing: 1,
-                    discInP: this.discFeature ?  Response[0].discPercentage : 0,
-                    discInR: this.discFeature ?  Response[0].discRupees  : 0,
-                    aq: Response[0].aq,
-                    total:(Response[0].salePrice * qty) - (Response[0].discRupees * qty),
-                    productDetail:'',
-
-    
-                  });
-    
-                  //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
-                  this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-                  this.getTotal();
-    
-    
-                  this.productImage = Response[0].productImage;
-                }
-              )
-            }else{
-            /////////// changing qty if product already scanned
-              if(prodDetail.uomTitle == 'price'){
-                this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
-              }else{
-                this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + parseFloat(prodQty);
-              }
-              
-              this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
-              this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-              this.productImage = this.tableDataList[index].productImage;
-  
             }
 
 
           }
-
-         
-         
-
-        }else{
-          this.msg.WarnNotify('Product Not Found')
-        }
-
+        )
 
         this.PBarcode = '';
         this.getTotal();
@@ -494,7 +368,7 @@ export class WholeSaleComponent implements OnInit {
             productTitle: Response[0].productTitle,
             barcode: Response[0].barcode,
             productImage: Response[0].productImage,
-            quantity: 1,
+            quantity: 0,
             wohCP: Response[0].costPrice,
             costPrice: Response[0].costPrice,
             avgCostPrice: Response[0].avgCostPrice,
@@ -512,10 +386,8 @@ export class WholeSaleComponent implements OnInit {
             discInR: this.discFeature ?  Response[0].discRupees  : 0,
             aq: Response[0].aq,
             total:(Response[0].salePrice * 1) - (Response[0].discRupees),
-            productDetail:'',
-
-
           });
+
           // this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
           this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
           this.getTotal();
@@ -525,9 +397,12 @@ export class WholeSaleComponent implements OnInit {
         }
       )
     } else {
-      this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
-      this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
+      // this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+      // this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
+   
       this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+      this.msg.WarnNotify('Product Already Exist in Table');
+
       this.productImage = this.tableDataList[index].productImage;
 
     }
@@ -555,32 +430,32 @@ export class WholeSaleComponent implements OnInit {
 
     if (cls == '#disc' && e.keyCode == 13 && e.target.value == '') {
       e.preventDefault();
-        $(cls).trigger('select');
-        $(cls).trigger('focus');
+      $(cls).trigger('select');
+      $(cls).trigger('focus');
     }
     if (cls == '#charges' && e.keyCode == 13) {
       e.preventDefault();
-      $(cls).trigger('select');
-      $(cls).trigger('focus');
+        $(cls).trigger('select');
+        $(cls).trigger('focus');
     }
     if (cls == '#cash' && e.keyCode == 13 && e.target.value == '') {
       e.preventDefault();
-      $(cls).trigger('select');
-      $(cls).trigger('focus');
+        $(cls).trigger('select');
+        $(cls).trigger('focus');
 
     }
 
     if (cls == '#save' && e.keyCode == 13) {
       e.preventDefault();
-      // $(cls).trigger('select');
-      $(cls).trigger('focus');
+        // $(cls).trigger('select');
+        $(cls).trigger('focus');
 
     }
 
     if (cls == '#vsrtnsearchProduct' && e.keyCode == 13) {
       e.preventDefault();
-        $(cls).trigger('select');
-        $(cls).trigger('focus');
+      $(cls).trigger('select');
+      $(cls).trigger('focus');
     }
 
 
@@ -615,8 +490,8 @@ export class WholeSaleComponent implements OnInit {
     }
 
 
-    this.AdvTaxAmount = (this.subTotal * this.AdvTaxValue) /100;
-    this.netTotal = (this.subTotal - parseFloat(this.discount) - parseFloat(this.offerDiscount)) + this.AdvTaxAmount;
+
+    this.netTotal = this.subTotal - parseFloat(this.discount) - parseFloat(this.offerDiscount);
     this.change = parseFloat(this.cash) - this.netTotal;
 
     if (this.paymentType == 'Split') {
@@ -650,6 +525,7 @@ export class WholeSaleComponent implements OnInit {
 
         if (this.tableDataList.length >= 1) {
           this.rowFocused = 0;
+          e.preventDefault();
           $('.qty0').trigger('select');
           $('.qty0').trigger('focus');
 
@@ -690,6 +566,7 @@ export class WholeSaleComponent implements OnInit {
         } else {
           var clsName = cls + this.prodFocusedRow;
           //  alert(clsName);
+          e.preventDefault();
           $(clsName).trigger('focus');
           //  e.which = 9;   
           //  $(clsName).trigger(e)       
@@ -702,6 +579,7 @@ export class WholeSaleComponent implements OnInit {
     if (e.keyCode == 38) {
 
       if (this.prodFocusedRow == 0) {
+        e.preventDefault();
         $(endFocus).trigger('focus');
         this.prodFocusedRow = 0;
 
@@ -713,6 +591,7 @@ export class WholeSaleComponent implements OnInit {
 
         var clsName = cls + this.prodFocusedRow;
         //  alert(clsName);
+        e.preventDefault();
         $(clsName).trigger('focus');
 
 
@@ -733,6 +612,7 @@ export class WholeSaleComponent implements OnInit {
       this.rowFocused = index - 1;
     }
     if (e.keyCode == 13) {
+      e.preventDefault();
       $('#psearchProduct').trigger('select');
       $('#psearchProduct').trigger('focus');
     }
@@ -754,8 +634,8 @@ export class WholeSaleComponent implements OnInit {
         } else {
           var clsName = cls + this.rowFocused;
           e.preventDefault();
-          $(clsName).trigger('select');   
-          $(clsName).trigger('focus');    
+            $(clsName).trigger('select');   
+            $(clsName).trigger('focus');    
         }
       }
     }
@@ -765,7 +645,9 @@ export class WholeSaleComponent implements OnInit {
     if (e.keyCode == 38) {
 
       if (this.rowFocused == 0) {
-        $(".searchProduct").trigger('focus');
+        e.preventDefault();
+        $(".searchProduct").trigger('select');  
+          $(".searchProduct").trigger('focus');
         this.rowFocused = 0;
 
       }
@@ -889,7 +771,8 @@ export class WholeSaleComponent implements OnInit {
   
   editDR(item:any){
 
-  if(this.editDiscFeature){
+    if(this.editDiscFeature){
+      
     Swal.fire({
       title:"Enter Discount Amount",
       input:"text",
@@ -927,51 +810,53 @@ export class WholeSaleComponent implements OnInit {
            });
         }
     })
-  }
-
-  }
-  editDP(item:any){
-
-    if(this.editDiscFeature){
-      
-    Swal.fire({
-      title:"Enter Discount Percent",
-      input:"text",
-      showCancelButton:true,
-      confirmButtonText:'Save',
-      showLoaderOnConfirm:true,
-      preConfirm: (value )=>{
-        
-        if(value == ""){
-        return  Swal.showValidationMessage("Enter Valid Amount");
-        }
-
-        if(isNaN(value)){
-          return  Swal.showValidationMessage("Enter Valid Amount");
-        }
-
-        if(value < 0){
-          return  Swal.showValidationMessage("Enter Valid Amount");
-        }
-
-        if(item.salePrice - ((item.salePrice * value) / 100 ) < item.costPrice){
-          return  Swal.showValidationMessage("Discount % Not Valid");
-        }
-        
-        this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInP = value;
-        this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR = (item.salePrice * value) / 100;
-        this.getTotal();
-        this.tempProdData = [];
-      }
-    }).then((result)=>{
-        if(result.isConfirmed){
-          Swal.fire({
-            title: "Discount Updated",
-            timer:500,
-           });
-        }
-    })
     }
+
+
+  }
+
+  editDP(item:any){
+    if(this.editDiscFeature){
+      Swal.fire({
+        title:"Enter Discount Percent",
+        input:"text",
+        showCancelButton:true,
+        confirmButtonText:'Save',
+        showLoaderOnConfirm:true,
+        preConfirm: (value )=>{
+          
+          if(value == ""){
+          return  Swal.showValidationMessage("Enter Valid Amount");
+          }
+  
+          if(isNaN(value)){
+            return  Swal.showValidationMessage("Enter Valid Amount");
+          }
+  
+          if(value < 0){
+            return  Swal.showValidationMessage("Enter Valid Amount");
+          }
+  
+          if(item.salePrice - ((item.salePrice * value) / 100 ) < item.costPrice){
+            return  Swal.showValidationMessage("Discount % Not Valid");
+          }
+          
+          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInP = value;
+          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR = (item.salePrice * value) / 100;
+          this.getTotal();
+          this.tempProdData = [];
+        }
+      }).then((result)=>{
+          if(result.isConfirmed){
+            Swal.fire({
+              title: "Discount Updated",
+              timer:500,
+             });
+          }
+      })
+    }
+
+   
 
   }
  
@@ -1067,15 +952,14 @@ export class WholeSaleComponent implements OnInit {
       } else {
 
         
-
-
-        if(this.btnType == 'Save'){
-          
+        if(this.tillOpenFeature){
+          this.global.openTill();
+        }
         this.app.startLoaderDark();
-        this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', {
+        this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertMobileShopSaleRtn', {
           InvDate: this.global.dateFormater(this.InvDate, '-'),
           PartyID: this.partyID,
-          InvType: "S",
+          InvType: "SR",
           ProjectID: this.projectID,
           BookerID: this.bookerID,
           PaymentType: paymentType,
@@ -1094,18 +978,20 @@ export class WholeSaleComponent implements OnInit {
           CusContactNo: this.customerMobileno || '-',
           CusName: this.customerName || '-',   
           SaleDetail: JSON.stringify(this.tableDataList),
+          ProductDetail:JSON.stringify(this.productDetail),
           UserID: this.global.getUserID()
         }).subscribe(
           (Response: any) => {
             if (Response.msg == 'Data Saved Successfully') {
+              
               this.msg.SuccessNotify(Response.msg);
               this.reset();
               this.PrintAfterSave(Response.invNo);
 
               if (paymentType != 'Cash') {
                 $('#searchProduct').trigger('focus');
-                $('#paymentMehtod').hide();
-                $('.modal-backdrop').remove();
+                this.global.closeBootstrapModal('#paymentMehtod',true);
+
               }
 
             } else {
@@ -1119,12 +1005,6 @@ export class WholeSaleComponent implements OnInit {
             this.app.stopLoaderDark();
           }
         )
-        }
-
-        if(this.btnType == 'Update'){
-
-        }
-
       }
 
     }
@@ -1139,6 +1019,7 @@ export class WholeSaleComponent implements OnInit {
     this.productName = '';
     this.productImage = '';
     this.tableDataList = [];
+    this.productDetail = [];
     this.cash = 0;
     this.discount = 0;
     this.netTotal = 0;
@@ -1176,75 +1057,6 @@ export class WholeSaleComponent implements OnInit {
   }
 
 
-  editBill(item:any){
-    this.app.startLoaderDark();
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + item.invBillNo).subscribe(
-      (Response: any) => {
-        
-        
-        // this.tableDataList = Response;
-        this.invoiceNo = Response[0].invBillNo;
-        this.InvDate = new Date(Response[0].invDate);
-        this.AdvTaxValue = Response[0].advTaxValue;
-        this.subTotal = Response[0].billTotal;
-        this.netTotal = Response[0].netTotal;
-        this.otherCharges = Response[0].otherCharges;
-        this.billRemarks = Response[0].remarks;
-        this.cash = Response[0].cashRec;
-        this.bankCash = Response[0].netTotal - Response[0].cashRec;
-        this.discount = Response[0].billDiscount;
-        this.change = Response[0].change;
-        this.paymentType = Response[0].paymentType;
-        this.bookerID =Response[0].bookerID;  
-        this.partyID = Response[0].partyID;
-        this.getTotal();
-        
-  
-         
-
-        this.qtyTotal = 0;
-        this.offerDiscount=0;
-        Response.forEach((e: any) => {
-
-          this.tableDataList.push({
-            rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
-              : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
-                : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
-            productID: e.productID,
-            productTitle: e.productTitle,
-            barcode: e.barcode,
-            productImage: e.productImage,
-            quantity: e.quantity,
-            wohCP: e.costPrice,
-            avgCostPrice: e.avgCostPrice,
-            costPrice: e.costPrice,
-            salePrice:  e.salePrice,
-            ovhPercent: 0,
-            ovhAmount: 0,
-            expiryDate: this.global.dateFormater(new Date(), '-'),
-            batchNo: '-',
-            batchStatus: '-',
-            uomID: e.uomID,
-            packing: 1,
-            discInP:   e.discInP ,
-            discInR:  e.discInR ,
-            aq: e.aq,
-            total:(e.salePrice * e.quantity) - (e.discInR * e.quantity),
-            productDetail:'',
-
-
-          });
-          
-          
-          this.qtyTotal += e.quantity;
-          this.offerDiscount += e.discInR * e.quantity;
-        });
-        $('#SavedBillModal').hide();
-        this.app.stopLoaderDark();
-      }
-    )
-
-  }
 
 
 
@@ -1405,16 +1217,12 @@ export class WholeSaleComponent implements OnInit {
 
 
   getSavedBill(){
-
-
-    
-
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetOpenDaySale').subscribe(
       (Response:any)=>{
        
         this.savedbillList = [];
         Response.forEach((e:any) => {
-          if(e.invType == 'S'){
+          if(e.invType == 'SR'){
             this.savedbillList.push(e);
           }
           
@@ -1423,6 +1231,82 @@ export class WholeSaleComponent implements OnInit {
      
       }
     )
+
+  }
+
+
+  
+  addProdDetail(item: any) {
+    this.global.openBootstrapModal('#ProdDetailModal', true);
+    this.tmpProdDetial = item;
+
+    setTimeout(() => {
+      $('#prodOthDetDesc').trigger('focus');
+    }, 500);
+  }
+
+
+
+  tmpProdDetial: any = [];
+  tmpProductOhterDetDescription = '';
+
+  onEnterPressed(e: any) {
+    if (e.keyCode == 13) {
+      this.insertProdDetail(this.tmpProductOhterDetDescription);
+    }
+
+  }
+
+
+  insertProdDetail(value: any) {
+
+    if ((value !== '' || value !== undefined)) {
+      // this.productDetail.push({ productID: this.tmpProdDetial.ProductID, productOtherDetDescription: value });
+      var tmpRow = this.productDetail.find((e: any) => e.productOtherDetDescription == value);
+      if (tmpRow == undefined) {
+        ///////////////////pushing Detail into tmp Array ///////
+        this.productDetail.push({ productID: this.tmpProdDetial.productID, productOtherDetDescription: value });
+        ////////////////// Changing Qty ///////
+        this.tmpProdDetial.quantity = this.productDetail.filter((e:any)=> e.productID == this.tmpProdDetial.productID).length;
+     
+        this.tableDataList.forEach((e: any) => {
+          ////////////////// Assigning tmpProdDetial value to Maing TableDataLIst ///////
+          if (e.productID == this.tmpProdDetial.productID) {
+            e = this.tmpProdDetial;
+            
+          }
+        });
+        this.getTotal();
+
+        this.tmpProductOhterDetDescription = '';
+
+      } else {
+        this.msg.WarnNotify('Already Exist!');
+      }
+      $('#prodOthDetDesc').trigger('focus');
+      $('#prodOthDetDesc').trigger('select');
+
+    }
+
+  }
+
+  editProdDetail(item: any) {
+
+    this.tmpProductOhterDetDescription = item.productOhterDetDescription;
+
+    this.deleteProdDetail(item);
+
+
+  }
+
+
+  deleteProdDetail(item: any) {
+
+    var index = this.productDetail.indexOf(item);
+    this.productDetail.splice(index, 1);
+    this.tmpProdDetial.quantity = this.productDetail.filter((e:any)=> e.productID == this.tmpProdDetial.productID).length;
+    this.getTotal();
+
 
   }
 

@@ -153,6 +153,7 @@
                                 <th *ngIf="discFeature">Disc %</th>
                                 <th>Total</th>
                                 <th>AQ</th>
+                                <th *ngIf="prodDetailFeature">Desc</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -190,6 +191,8 @@
                                 data-bs-target="#totalChangeModal"
                                 (click)="tempProdData = item;global.focusTo('#totalAmnt')">{{item.total |number:'1.0-3'}}</td>
                                 <td class="text-end">{{item.aq |number:'1.0-3'}}</td>
+                                <td *ngIf="prodDetailFeature" style="padding: 0px !important;"><textarea [(ngModel)]="item.productDetail" style="height: 45px;border: 0px solid black !important;" class="w-100"></textarea></td>
+
                                 <td class="cursorPointer text-danger text-center"><mat-icon
                                         (click)="delRow(item)">close</mat-icon></td>
                             </tr>
@@ -201,6 +204,7 @@
                                 <td *ngIf="discFeature"></td>
                                 <td></td>
                                 <td></td>
+                                <td *ngIf="prodDetailFeature"></td>
                                 <td class="text-center text-danger cursorPointer"><mat-icon
                                         (click)="emptyBill()">delete</mat-icon></td>
                             </tr>

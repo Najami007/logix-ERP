@@ -12,7 +12,7 @@
 
 
        <div class="col-lg-2 ms-1">
-        <button mat-raised-button data-bs-toggle="modal" data-bs-target="#credential" color="primary" class="btn-rpt " (click)="openDialog()">Get Report</button>
+        <button  data-bs-toggle="modal" data-bs-target="#credential"  class="btn-rpt btn-rpt-success" (click)="openDialog()">Get Report</button>
         <mat-checkbox [(ngModel)]="minusOnly">Minus Only</mat-checkbox>
 
        </div>
@@ -257,8 +257,8 @@
                     </div>
     
                     <div class="modal-footer bg-mf">
-                        <button class="btn btn-success" data-bs-dismiss="modal" (click)="getReport()">Get Report</button>
-                        <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal"  >Close </button>
+                        <button class="btnsave" data-bs-dismiss="modal" (click)="getReport()">Get Report</button>
+                        <button type="button" class="btnclose"  data-bs-dismiss="modal"  >Close </button>
                       </div>
                     
                 

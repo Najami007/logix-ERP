@@ -7,20 +7,18 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
-import { PincodeComponent } from '../../User/pincode/pincode.component';
+import { PincodeComponent } from '../../../User/pincode/pincode.component';
 
 import * as $ from 'jquery';
 import Swal from 'sweetalert2';
-import { AddpartyComponent } from '../../Company/party/addparty/addparty.component';
-import { MatSelect } from '@angular/material/select';
-
+import { AddpartyComponent } from '../../../Company/party/addparty/addparty.component';
 
 @Component({
-  selector: 'app-purchase',
-  templateUrl: './purchase.component.html',
-  styleUrls: ['./purchase.component.scss']
+  selector: 'app-purchase-return',
+  templateUrl: './purchase-return.component.html',
+  styleUrls: ['./purchase-return.component.scss']
 })
-export class PurchaseComponent implements OnInit{
+export class PurchaseReturnComponent implements OnInit{
   companyProfile:any = [];
   crudList:any = {c:true,r:true,u:true,d:true};
   constructor(
@@ -33,6 +31,7 @@ export class PurchaseComponent implements OnInit{
   ){
     this.global.getMenuList().subscribe((data)=>{
       this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+   
     })
 
     this.global.getCompany().subscribe((data)=>{
@@ -40,32 +39,34 @@ export class PurchaseComponent implements OnInit{
     });
 
 
+   
 
   }
 
   
   ngOnInit(): void {
-    this.global.setHeaderTitle('Purchase');
-    // this.getProducts();
+    this.global.setHeaderTitle('Purchase Return');
     this.getBooker();
     this.getLocation();
-    this.getSuppliers();  
-      $('.searchBarcode').trigger('focus');
+    this.getSuppliers();
+    $('.searchProduct').trigger('focus');
+    this.global.getProducts().subscribe(
+      (data:any)=>{
+        this.productList = data;
+      }
+    )
 
-      this.global.getProducts().subscribe(
-        (data:any)=>{this.productList = data;})
-    
+   
   }
 
-
   hideTotalFlag = true;
+  productName = '';
 
-  projectID = this.global.InvProjectID;
   holdBtnType:any ='Hold';
   tabIndex:any;
   Date:Date = new Date()
   productImage:any;
-  productName = '';
+  projectID = this.global.InvProjectID;
   PBarcode:string = '';   /// for Search barcode field
   productsData:any;   //// for showing the products
   tableDataList: any = [];          //////will hold data temporarily
@@ -88,7 +89,7 @@ export class PurchaseComponent implements OnInit{
 
 
   change(){
-    
+
   }
 
   sortType = 'desc';
@@ -109,12 +110,13 @@ export class PurchaseComponent implements OnInit{
   BookerList:any = [];
 
 
-
   changeOrder(){
     this.sortType = this.sortType == 'desc' ? 'asc' :'desc';
     this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
 
   }
+
+
    /////// to change the tab on edit
 
    changeTab(tabNum: any) {
@@ -139,6 +141,27 @@ export class PurchaseComponent implements OnInit{
   }
 
 
+  hide(type:any){
+
+    if(type == 'hide'){
+      $('#totalRow').hide(500);
+      setTimeout(() => {
+        this.hideTotalFlag = false;
+      }, 400);
+
+    }
+
+    if(type == 'unhide'){
+      $('#totalRow').show(500);
+        setTimeout(() => {
+          this.hideTotalFlag = true;
+        }, 500);
+    }
+      
+   
+   
+  }
+
 
 
   getSuppliers(){
@@ -154,43 +177,6 @@ export class PurchaseComponent implements OnInit{
       )
   }
 
-
-  focusto(cls:any,e:any){ 
-
-   if(cls == '#prodName'){
-    setTimeout(() => {
-      e.preventDefault();
-      $(cls).trigger('focus');
-     }, 500);
-   }
-
-   if(cls == '#ovhd' && e.keyCode == 13 ){
-    if(e.target.value == ''){
-      // alert();
-      e.preventDefault();
-      $(cls).trigger('select');
-      $(cls).trigger('focus');
-     
-    }
-   }
-
-   if(cls == '#disc' && e.keyCode == 13){
-    e.preventDefault();
-        $(cls).trigger('select');
-        $(cls).trigger('focus');
-    
-   }
-
-   if(cls == '#savebtn' && e.keyCode == 13  ){
-    e.preventDefault();
-    // $(cls).trigger('select');
-    $(cls).trigger('focus');
-
-   }
-
-   
-
-  }
 
   searchByCode(e:any){
 
@@ -240,6 +226,7 @@ export class PurchaseComponent implements OnInit{
               
                   });
 
+                  //////////sorting data table base on sort type
                   this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
                   this.getTotal();
             
@@ -263,7 +250,7 @@ export class PurchaseComponent implements OnInit{
 
        this.PBarcode = '';
        this.getTotal();
-       $('#psearchProduct').trigger('focus');
+       $('#searchProduct').trigger('focus');
    
        }
     }
@@ -272,7 +259,8 @@ export class PurchaseComponent implements OnInit{
   }
 
   holdDataFunction(data:any){
- 
+  
+    
 
     var condition = this.tableDataList.find(
       (x: any) => x.ProductID == data.productID
@@ -288,8 +276,6 @@ export class PurchaseComponent implements OnInit{
 
       this.global.getProdDetail(data.productID,'').subscribe(
         (Response:any)=>{
-       
-
           
             this.tableDataList.push({
               rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1 
@@ -318,7 +304,7 @@ export class PurchaseComponent implements OnInit{
 
             this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
             this.getTotal();
-           
+
           
          this.productImage = Response[0].productImage;
         }
@@ -330,35 +316,44 @@ export class PurchaseComponent implements OnInit{
     this.productImage = this.tableDataList[index].productImage;
   }
   this.app.stopLoaderDark();
+
     this.productName = '';
     this.getTotal();
-   setTimeout(() => {
-    $('#psearchProduct').trigger('focus');
-   }, 500);
-
+    setTimeout(() => {
+      $('#searchProduct').trigger('focus');
+     }, 500);
+  
   }
 
 
- 
+  getTotal() {
+    this.subTotal = 0;
+    this.myTotalQty = 0;
+    for (var i = 0; i < this.tableDataList.length; i++) {
+   
+      this.subTotal += (parseFloat(this.tableDataList[i].Quantity) * parseFloat(this.tableDataList[i].CostPrice)) - this.discount;
+      this.myTotalQty += parseFloat(this.tableDataList[i].Quantity);
+    
+    }
+  }
 
   delRow(item: any) {
     this.global.confirmAlert().subscribe(
       (Response:any)=>{
         if(Response == true){
    
-    var index = this.tableDataList.indexOf(item);
-    this.tableDataList.splice(index, 1);
-    this.getTotal();
-    
-    if (index == 0) {
-      $('#psearchProduct').trigger('select'); 
-      $('#psearchProduct').trigger('focus');
-    } else {
-      this.rowFocused = index - 1;
-      $('.qty'+this.rowFocused).trigger('select');
-      $('.qty'+this.rowFocused).trigger('focus');
-    }
-
+        var index = this.tableDataList.indexOf(item);
+        this.tableDataList.splice(index, 1);
+        this.getTotal();
+      
+        if (index == 0) {
+          $('#psearchProduct').trigger('select'); 
+          $('#psearchProduct').trigger('focus');
+        } else {
+          this.rowFocused = index - 1;
+          $('.qty'+this.rowFocused).trigger('select');
+          $('.qty'+this.rowFocused).trigger('focus');
+        }
     }
    }
    )
@@ -367,40 +362,64 @@ export class PurchaseComponent implements OnInit{
     
   }
 
-  EmptyData(){
-    this.global.confirmAlert().subscribe(
-      (Response:any)=>{
-        if(Response == true){
-          this.reset();
 
-        }})
-  }
 
 
   showImg(item:any){
-
-    // this.global.getProdImage(item.productID).subscribe((data:any)=>{
-    //   this.productImage = data[0].productImage;
-      
-    // });
-
     var index = this.tableDataList.findIndex((e:any)=> e.ProductID == item.ProductID);
     this.productImage = this.tableDataList[index].productImage;
-
   }
 
- 
 
-   rowFocused = -1;
+  focusto(cls:any,e:any){ 
+
+    if(cls == '#prodName'){
+      setTimeout(() => {
+        e.preventDefault();
+        $(cls).trigger('select');
+        $(cls).trigger('focus');
+       }, 500);
+     }
+     
+    if(cls == 'ovhd' && e.keyCode == 13 ){
+     if(e.target.value == ''){
+      e.preventDefault();
+      $('#ovhd').trigger('select')
+       $('#ovhd').trigger('focus')
+     }
+    }
+ 
+    if(cls == 'disc' && e.keyCode == 13){
+      e.preventDefault();
+      $('#disc').trigger('select')
+     $('#disc').trigger('focus');
+    }
+ 
+    if(cls == 'savebtn' && e.keyCode == 13  ){
+      e.preventDefault();
+     $('#savebtn').trigger('focus');
+    }
+ 
+    
+ 
+   }
+
+
+  rowFocused = -1;
   prodFocusedRow= 0;
    changeFocus(e:any, cls:any){
 
   if(e.target.value == ''){
-    if(e.keyCode == 40){  
+    if(e.keyCode == 40){
+      
       if(this.tableDataList.length >= 1 ){ 
+        this.rowFocused = 0; 
         e.preventDefault();
         $('.qty0').trigger('select');
-        $('.qty0').trigger('focus');
+         $('.qty0').trigger('focus');
+        //  e.which = 9;   
+        //  $('.qty0').trigger(e) ; 
+
       }
      }
   }else{
@@ -410,25 +429,23 @@ export class PurchaseComponent implements OnInit{
         if(this.productList.length >= 1 ){  
           e.preventDefault();
           $('.prodRow0').trigger('focus');
-          // e.which = 9;   
-          // $('.prodRow0').trigger(e)  ;
        }  
      }}
    }
 
-  handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[]){
+   handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[]){
     
-   
    /////// increment in prodfocus on tab click
-   if(e.keyCode == 9 && !e.shiftKey){
-    this.prodFocusedRow += 1;
+    if(e.keyCode == 9 && !e.shiftKey){
+      this.prodFocusedRow += 1;
 
-  }
-  /////// decrement in prodfocus on shift tab click
-  if(e.shiftKey && e.keyCode == 9){
-    this.prodFocusedRow -= 1;
+    }
+    /////// decrement in prodfocus on shift tab click
+    if(e.shiftKey && e.keyCode == 9){
+      this.prodFocusedRow -= 1;
 
-  }
+    }
+
     /////move down
     if(e.keyCode == 40){
 
@@ -436,16 +453,15 @@ export class PurchaseComponent implements OnInit{
       if(prodList.length > 1 ){
        this.prodFocusedRow += 1;
        if (this.prodFocusedRow >= prodList.length) {      
-         this.prodFocusedRow -= 1  ;
+         this.prodFocusedRow -= 1  
      } else {
          var clsName = cls + this.prodFocusedRow;    
         //  alert(clsName);
         e.preventDefault();
-         $(clsName).trigger('focus');
-        //  e.keyCode = 9;    
-      
+        $(clsName).trigger('focus');
+        //  e.which = 9;   
+        //  $(clsName).trigger(e)       
      }}
-    //  alert(this.prodFocusedRow);
    }
  
  
@@ -453,7 +469,8 @@ export class PurchaseComponent implements OnInit{
       if (e.keyCode == 38) {
  
        if (this.prodFocusedRow == 0) {
-           $(endFocus).trigger('focus');
+        e.preventDefault();
+        $(endFocus).trigger('focus');
            this.prodFocusedRow = 0;
   
        }
@@ -464,6 +481,7 @@ export class PurchaseComponent implements OnInit{
  
            var clsName = cls + this.prodFocusedRow;
           //  alert(clsName);
+          e.preventDefault();
            $(clsName).trigger('focus');
            
  
@@ -473,29 +491,29 @@ export class PurchaseComponent implements OnInit{
 
   }
 
- 
+
    changeValue(item:any){
     var myIndex = this.tableDataList.indexOf(item);
-   
-    var myQty = this.tableDataList[myIndex].Quantity;
-    var myCP = this.tableDataList[myIndex].CostPrice;
-    var mySP = this.tableDataList[myIndex].SalePrice;
-    if(myCP == null || myCP == '' || myCP == undefined){
-     
-      this.tableDataList[myIndex].CostPrice = 0;
-    }else if(myQty == null || myQty == '' || myQty == undefined){
-      this.tableDataList[myIndex].Quantity = 0;
-    }else if(mySP == null || mySP == '' || mySP == undefined){
-      this.tableDataList[myIndex].SalePrice = 0;
-    }
+
+   var myQty = this.tableDataList[myIndex].Quantity;
+   var myCP = this.tableDataList[myIndex].CostPrice;
+   var mySP = this.tableDataList[myIndex].SalePrice;
+   if(myCP == null || myCP == '' || myCP == undefined){
     
+     this.tableDataList[myIndex].CostPrice = 0;
+   }else if(myQty == null || myQty == '' || myQty == undefined){
+     this.tableDataList[myIndex].Quantity = 0;
+   }else if(mySP == null || mySP == '' || mySP == undefined){
+     this.tableDataList[myIndex].SalePrice = 0;
+   }
    }
 
    handleUpdown(item:any ,e:any,cls:string,index:any){
 
+    
   //   if(e.keyCode == 9){
-  //     if(cls == '.sp'){
-  //       this.rowFocused = index + 1;
+  //     if(cls == '.expDate'){
+  //       this.rowFocused = index ;
   //     }else{
   //       this.rowFocused = index ;
   //     }
@@ -505,18 +523,18 @@ export class PurchaseComponent implements OnInit{
     
   //  if(e.shiftKey && e.keyCode == 9 ){
   
-  //   if(cls == '.qty'){
-  //     this.rowFocused = index - 1;
+  //   if(cls == '.expDate'){
+  //     this.rowFocused = index;
   //   }else{
   //     this.rowFocused = index ;
   //   }
   //  }
 
-    ////////// focusing to product search
+
   if(e.keyCode == 13){
     e.preventDefault();
-    $('#psearchProduct').trigger('select');
-    $('#psearchProduct').trigger('focus');
+    $('#searchProduct').trigger('select');
+    $('#searchProduct').trigger('focus');
    }
 
     if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
@@ -534,13 +552,12 @@ export class PurchaseComponent implements OnInit{
       if (this.rowFocused >= this.tableDataList.length) {      
         this.rowFocused -= 1  
     } else {
-        var clsName = cls + this.rowFocused; 
-        // alert(clsName);   
-        // e.which = e.ctrlKey + 97;
+        var clsName = cls + this.rowFocused;    
         e.preventDefault();
         $(clsName).trigger('select');   
-        $(clsName).trigger('focus'); 
-        // $(clsName).trigger(e);  
+        $(clsName).trigger('focus');  
+        // e.when = 9;
+        // $(clsName).trigger(e)    ;
     }}
   }
 
@@ -552,7 +569,7 @@ export class PurchaseComponent implements OnInit{
         e.preventDefault();
         $(".searchProduct").trigger('select');
           $(".searchProduct").trigger('focus');
-          this.rowFocused = 0;
+          this.rowFocused = -1;
  
       }
 
@@ -562,8 +579,8 @@ export class PurchaseComponent implements OnInit{
 
           var clsName = cls + this.rowFocused;
           e.preventDefault();
-          $(clsName).trigger('select');   
-          $(clsName).trigger('focus');    
+        $(clsName).trigger('select');   
+        $(clsName).trigger('focus'); 
           
 
       }
@@ -579,6 +596,7 @@ export class PurchaseComponent implements OnInit{
 
   }
 
+  
 
 
   onPartySelected(){
@@ -587,7 +605,6 @@ export class PurchaseComponent implements OnInit{
   }
 
   @ViewChild('supplier') myParty:any;
-
   addParty(){
     setTimeout(() => {
       this.myParty.close()
@@ -604,33 +621,34 @@ export class PurchaseComponent implements OnInit{
 
 
 
+
   SaveBill(type:any){
     var isValidFlag = true;
   this.tableDataList.forEach((p:any) => {
     p.Quantity = parseFloat(p.Quantity);
     p.SalePrice = parseFloat(p.SalePrice);
     p.CostPrice = parseFloat(p.CostPrice);
-        
-      if(p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null ){
-        this.msg.WarnNotify('('+p.ProductTitle+') Cost Price is not Valid');
-         isValidFlag = false;
-
-         return;
-      }
-
-      if( p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null ){
-        this.msg.WarnNotify('('+p.ProductTitle+') Sale Price is not Valid');
-         isValidFlag = false;
-  
-         return;
-      }
-
-      if(p.Quanity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == ''){
-        this.msg.WarnNotify('('+p.ProductTitle+') Quantity is not Valid');
-         isValidFlag = false;
-         return;
-      }
+    
+    if(p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null ){
+      this.msg.WarnNotify('('+p.ProductTitle+') Cost Price is not Valid');
+       isValidFlag = false;
       
+       return;
+    }
+
+    if( p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null ){
+      this.msg.WarnNotify('('+p.ProductTitle+') Sale Price is not Valid');
+       isValidFlag = false;
+      
+       return;
+    }
+
+    if(p.Quanity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == ''){
+      this.msg.WarnNotify('('+p.ProductTitle+') Quantity is not Valid');
+       isValidFlag = false;
+       return;
+    }
+    
      
    
     });
@@ -640,14 +658,14 @@ export class PurchaseComponent implements OnInit{
        
     if(this.tableDataList == ''){
       this.msg.WarnNotify('Atleast One Product Must Be Selected')
+    }else if(this.locationID == '' || this.locationID == undefined || this.locationID == 0){
+      this.msg.WarnNotify('Select Warehouse Location')
     }else if(this.bookerID == 0 || this.bookerID == undefined){
       this.msg.WarnNotify("Select Purchaser")
     }else if(this.refInvNo == '' || this.refInvNo == undefined){
       this.msg.WarnNotify('Enter Reference Invoice No')
     }else if(this.partyID == '' || this.partyID == 0 || this.partyID == undefined){
       this.msg.WarnNotify('Select Supplier Party')
-    }else if(this.locationID == '' || this.locationID == undefined || this.locationID == 0){
-      this.msg.WarnNotify('Select Warehouse Location')
     }else {
 
     
@@ -665,8 +683,8 @@ export class PurchaseComponent implements OnInit{
         if(type == 'hold'){
           if(this.holdBtnType == 'Hold'){
            this.app.startLoaderDark();
-           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertPurchase',{
-           InvType: "HP",
+           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertPurchaseRtn',{
+           InvType: "HPR",
            InvDate: this.global.dateFormater(this.invoiceDate,'-'),
            RefInvoiceNo: this.refInvNo,
            PartyID: this.partyID,
@@ -696,8 +714,9 @@ export class PurchaseComponent implements OnInit{
                }
              },
              (Error:any)=>{
-              this.app.stopLoaderDark();
-             }
+               this.msg.WarnNotify(Error);
+               this.app.stopLoaderDark();
+              }
            )
           }else if(this.holdBtnType == 'ReHold'){
             this.global.openPinCode().subscribe(pin=>{
@@ -735,8 +754,9 @@ export class PurchaseComponent implements OnInit{
                }
              },
              (Error:any)=>{
-              this.app.stopLoaderDark();
-             }
+               this.msg.WarnNotify(Error);
+               this.app.stopLoaderDark();
+              }
            )
              }
            })
@@ -747,51 +767,44 @@ export class PurchaseComponent implements OnInit{
           this.global.confirmAlert().subscribe(
             (Response:any)=>{
               if(Response == true){
-   
-              this.app.startLoaderDark();
-              this.http.post(environment.mainApi+this.global.inventoryLink+'InsertPurchase',{
-              InvType: "P",
-              InvDate: this.global.dateFormater(this.invoiceDate,'-'),
-              RefInvoiceNo: this.refInvNo,
-              PartyID: this.partyID,
-              LocationID: this.locationID,
-              ProjectID: this.projectID,
-              BookerID: this.bookerID,
-              BillTotal: this.subTotal,
-              BillDiscount: this.discount,
-              OverHeadAmount: this.overHead,
-              NetTotal: this.subTotal - this.discount,
-              Remarks: this.invRemarks,
-              InvoiceDocument: "-",
-              HoldInvNo:this.holdInvNo,
-          
-              InvDetail: JSON.stringify(this.tableDataList),
-          
-              UserID: this.global.getUserID()
-              }).subscribe(
-                (Response:any)=>{
-                  if(Response.msg == 'Data Saved Successfully'){
-                    this.msg.SuccessNotify(Response.msg);
-                    this.reset(); 
-                    this.app.stopLoaderDark();
-                   
-                  }else{
-                    this.msg.WarnNotify(Response.msg);
-                    this.app.stopLoaderDark();
-                  }
-                },
-                (Error:any)=>{
-                  this.app.stopLoaderDark();
-                }
-              )
-      
-          }
-         }
-         )
-          
-
-          
-        
+           this.app.startLoaderDark();
+           this.http.post(environment.mainApi+this.global.inventoryLink+'InsertPurchaseRtn',{
+           InvType: "PR",
+           InvDate: this.global.dateFormater(this.invoiceDate,'-'),
+           RefInvoiceNo: this.refInvNo,
+           PartyID: this.partyID,
+           LocationID: this.locationID,
+           ProjectID: this.projectID,
+           BookerID: this.bookerID,
+           BillTotal: this.subTotal,
+           BillDiscount: this.discount,
+           OverHeadAmount: this.overHead,
+           NetTotal: this.subTotal - this.discount,
+           Remarks: this.invRemarks,
+           InvoiceDocument: "-",
+           HoldInvNo:this.holdInvNo,
+       
+           InvDetail: JSON.stringify(this.tableDataList),
+       
+           UserID: this.global.getUserID()
+           }).subscribe(
+             (Response:any)=>{
+               if(Response.msg == 'Data Saved Successfully'){
+                 this.msg.SuccessNotify(Response.msg);
+                 this.reset(); 
+                 this.app.stopLoaderDark();
+                
+               }else{
+                 this.msg.WarnNotify(Response.msg);
+                 this.app.stopLoaderDark();
+               }
+             },
+             (Error:any)=>{
+               this.msg.WarnNotify(Error);
+               this.app.stopLoaderDark();
+              }
+           )
+            }})
          }
      
       }
@@ -823,42 +836,18 @@ export class PurchaseComponent implements OnInit{
     this.invRemarks = '';
     this.holdBtnType = 'Hold';
     this.holdBillList = [];
-    this.netTotal = 0;
-    
+    this.supplierDetail = [];
+
 
 
   }
 
 
-  netTotal = 0;
-
-  getTotal() {
-   
-    // alert(this.overHead);
-    // alert(this.discount);
-    this.subTotal = 0;
-    this.myTotalQty = 0;
-    this.netTotal = 0;
-  
-    if(this.discount == '' ){
-      this.discount = 0;
-    }
-    if(this.overHead == ''){
-      this.overHead = 0;
-    }
-
-    for (var i = 0; i < this.tableDataList.length; i++) {
-   
-      this.subTotal += (parseFloat(this.tableDataList[i].Quantity) * parseFloat(this.tableDataList[i].CostPrice));
-      this.myTotalQty += parseFloat(this.tableDataList[i].Quantity);
-    
-     
-    }
-    this.netTotal =( this.subTotal + parseFloat(this.overHead)) - parseFloat(this.discount)
-  
-   
+  distributeOverHead(){
+    var amount = this.overHead / this.myTotalQty;
+    for(var i=0; i<this.tableDataList.length;i++){this.tableDataList[i].CostPrice = parseFloat(this.tableDataList[i].wohCP) + amount}    
+    this.getTotal();
   }
-
 
   myInvoiceNo:any;
   myInvoiceDate:any;
@@ -873,6 +862,7 @@ export class PurchaseComponent implements OnInit{
   myTableDataList:any = [];
   myBillTotalQty = 0;
   mywohCPTotal = 0;
+  myWCPTotal = 0;
   myCPTotal = 0;
   mySPTotal = 0;
   myBillStatus = false;
@@ -892,12 +882,14 @@ export class PurchaseComponent implements OnInit{
     this.mySubTotal = item.billTotal;
     this.myBillStatus = item.approvedStatus;
 
+
     this.getBillDetail(item.invBillNo).subscribe(
       (Response:any)=>{
         var totalQty = 0 ;
         var overhead = 0
         this.myBillTotalQty = 0;
         this.mywohCPTotal = 0;
+        this.myWCPTotal = 0;
         this.myCPTotal = 0;
         this.mySPTotal = 0;
        
@@ -905,10 +897,11 @@ export class PurchaseComponent implements OnInit{
 
        if(item.overHeadAmount > 0){
         Response.forEach((j:any) => {
-          totalQty += j.quantity;
+          totalQty += j.quantity
         });
      
          overhead = item.overHeadAmount / totalQty;
+      
  
        }
 
@@ -937,7 +930,6 @@ export class PurchaseComponent implements OnInit{
             })
           });
 
-
           setTimeout(() => {
             this.global.printData('#printDiv')
           }, 200);
@@ -949,10 +941,8 @@ export class PurchaseComponent implements OnInit{
 
   }
 
-  cpTotal = 0;
-  wohCPTotal = 0;
   retriveBill(item:any){
-
+ 
     this.tableDataList = [];
     this.holdBtnType = 'ReHold'
     this.invoiceDate = new Date(item.invDate);
@@ -964,16 +954,15 @@ export class PurchaseComponent implements OnInit{
     this.holdInvNo = item.invBillNo;
     this.bookerID = item.bookerID;
     this.partyID = item.partyID;
+    this.subTotal = item.billTotal;
     this.onPartySelected();
 
     this.getBillDetail(item.invBillNo).subscribe(
       (Response:any)=>{
-       
-        this.myTotalQty = 0;
+        var totalQty = 0 ;
         this.productImage = Response[Response.length - 1].productImage;
 
           Response.forEach((e:any) => {
-            
             this.myTotalQty += e.quantity;
             this.tableDataList.push({
               rowIndex:this.tableDataList.length + 1,
@@ -996,9 +985,11 @@ export class PurchaseComponent implements OnInit{
             })
           });
 
-          this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
-          this.getTotal();
-
+            //////////sorting data table base on sort type
+            this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
+                  
+            // console.log(this.tableDataList);
+          // this.getTotal();
         
       }
     )
@@ -1013,32 +1004,47 @@ export class PurchaseComponent implements OnInit{
 
 
   findHoldBills(type:any){
-    if(type == 'hp'){
+    if(type == 'hpr'){
       $('#edit').show();
     }
 
-    if(type == 'p'){
+    if(type == 'pr'){
       $('#edit').hide()
     }
 
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryBillSingleDate?Type='+type+'&creationdate='+this.global.dateFormater(this.Date,'-')).subscribe(
       (Response:any)=>{
-      
-         this.holdBillList = [];
-         if(type == 'hp'){
-           Response.forEach((e:any) => {
-             if(e.approvedStatus == false){
-               this.holdBillList.push(e);
-             }
-           });
-         }
-         if(type == 'p'){
-           this.holdBillList = Response;
-         }
+        this.holdBillList = [];
+        
+        if(type == 'hpr'){
+          Response.forEach((e:any) => {
+            if(e.approvedStatus == false){
+              this.holdBillList.push(e);
+            }
+          });
+        }
+        if(type == 'pr'){
+          this.holdBillList = Response;
+        }
       }
     )
   }
 
 
+  emptyBill(){
+   if(this.tableDataList != ''){
+    this.global.confirmAlert().subscribe(
+      (Response:any)=>{
+        if(Response == true){
+   
+        this.reset();
+    
+
+    }
+   }
+   )
+    
+   }
+  }
 
 }

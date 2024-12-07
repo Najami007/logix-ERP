@@ -7,7 +7,7 @@
    
         <div class="col-lg-1 " *ngIf="crudList.r">
 
-            <button mat-fab color="primary" (click)="print()"><mat-icon>print</mat-icon></button>
+            <button mat-fab class="bg-primary text-white" (click)="print()"><mat-icon>print</mat-icon></button>
         </div>
 
         <mat-form-field appearance="outline" class="col-lg-5">
@@ -30,7 +30,7 @@
 
         <div class="col-lg-3 " *ngIf="crudList.r">
 
-            <button class="btn-rpt w-100"  mat-raised-button color="primary" (click)="getReport()">Get Report</button>
+            <button class="btn-rpt btn-rpt-success w-100"  (click)="getReport()">Get Report</button>
         </div>
    
     </div>

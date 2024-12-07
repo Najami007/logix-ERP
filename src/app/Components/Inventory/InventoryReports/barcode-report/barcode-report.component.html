@@ -24,7 +24,7 @@
 
             </div>
             <div class="col-lg-3 text-start pt-3 mt-1">
-                <button mat-raised-button class="bg-primary text-white w-50 " style="height: 40px;"  (click)="ngOnInit()">Load</button>
+                <button  class="btnload w-50 " style="height: 40px;"  (click)="ngOnInit()">Load</button>
             
             </div>
 
@@ -38,7 +38,7 @@
         <div class="col-lg-12 row text-center justify-content-center">
 
             <div class="pt-1 card w-75" style="height: 400px;width: 600px;" >
-                <div class="text-start" ><button mat-mini-fab (click)="print()"><mat-icon>print</mat-icon></button></div>
+                <div class="text-start" ><button mat-mini-fab class="bg-primary text-white " (click)="print()"><mat-icon>print</mat-icon></button></div>
 
                 <div *ngFor="let item of curProduct" class="d-flex  justify-content-center">
                    <div id="PrintDiv" >

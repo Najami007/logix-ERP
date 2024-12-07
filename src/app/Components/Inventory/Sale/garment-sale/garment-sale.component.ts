@@ -9,10 +9,6 @@ import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 
 import * as $ from 'jquery';
-
-import { Observable, retry } from 'rxjs';
-
-import { dateFormat } from 'highcharts';
 import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/addparty.component';
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 import { SaleBillPrintComponent } from '../sale-bill-print/sale-bill-print.component';
@@ -33,6 +29,7 @@ export class GarmentSaleComponent implements OnInit {
   tillOpenFeature = this.global.getFeature('TillOpen');
   editSpFeature = this.global.getFeature('EditSp');
   editDiscFeature = this.global.getFeature('EditDisc');
+  prodDetailFeature = this.global.getFeature('ProdDetail');
 
   @ViewChild(SaleBillPrintComponent) billPrint:any;
 
@@ -241,7 +238,7 @@ export class GarmentSaleComponent implements OnInit {
 
     var barcode = this.PBarcode;
     var qty: number = 1;
-    var type = '';
+    var BType = '';
 
     if (this.PBarcode !== '') {
       if (e.keyCode == 13) {
@@ -250,7 +247,7 @@ export class GarmentSaleComponent implements OnInit {
         if (this.PBarcode.split("/")[1] != undefined) {
           barcode = this.PBarcode.split("/")[0];
           qty = parseFloat(this.PBarcode.split("/")[1]);
-          type = 'price';
+          BType = 'price';
 
 
         }
@@ -258,7 +255,7 @@ export class GarmentSaleComponent implements OnInit {
         if (this.PBarcode.split("-")[1] != undefined) {
           barcode = this.PBarcode.split("-")[0];
           qty = parseFloat(this.PBarcode.split("-")[1]);
-          type = 'qty';
+          BType = 'qty';
 
         }
 
@@ -284,7 +281,7 @@ export class GarmentSaleComponent implements OnInit {
             this.global.getProdDetail(0, barcode).subscribe(
               (Response: any) => {
 
-                if (type == 'price') {
+                if (BType == 'price') {
                   qty = qty / parseFloat(Response[0].salePrice);
 
                 }
@@ -315,6 +312,7 @@ export class GarmentSaleComponent implements OnInit {
                   discInR: this.discFeature ?  Response[0].discRupees  : 0,
                   aq: Response[0].aq,
                   total:(Response[0].salePrice * qty) - (Response[0].discRupees * qty),
+                  productDetail:[],
 
                 });
 
@@ -418,6 +416,7 @@ export class GarmentSaleComponent implements OnInit {
                     discInR: this.discFeature ?  Response[0].discRupees  : 0,
                     aq: Response[0].aq,
                     total:(Response[0].salePrice * qty) - (Response[0].discRupees * qty),
+                    productDetail:'',
     
                   });
     
@@ -509,6 +508,7 @@ export class GarmentSaleComponent implements OnInit {
             discInR: this.discFeature ?  Response[0].discRupees  : 0,
             aq: Response[0].aq,
             total:(Response[0].salePrice * 1) - (Response[0].discRupees),
+            productDetail:'',
 
           });
           // this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
@@ -1075,7 +1075,6 @@ export class GarmentSaleComponent implements OnInit {
         if(this.tillOpenFeature){
           this.global.openTill();
         }
-
         this.app.startLoaderDark();
         this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', {
           InvDate: this.global.dateFormater(this.InvDate, '-'),

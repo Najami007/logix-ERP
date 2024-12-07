@@ -24,6 +24,7 @@
   --warn: #ffc107;
   --danger : #dc3545;
   --primary:#0d6efd;
+  --btn-focus-text:#e0e0e0;
   /** --nha-light-blue: green;**/
 }
 body,
@@ -1100,7 +1101,7 @@ z-index: 5;
   border-radius: 8px;
   border: none;
     &:hover{
-    color: rgb(213, 211, 211);  
+    color: var(--btn-focus-text);  
     border: 1px solid var(--success);
  }
  
@@ -1116,7 +1117,7 @@ z-index: 5;
   border-radius: 8px;
   border: none;
     &:hover{
-    color: rgb(213, 211, 211);  
+    color: var(--btn-focus-text);  
     border: 1px solid var(--danger);
  }
  
@@ -1131,7 +1132,7 @@ z-index: 5;
   border-radius: 8px;
   border: none;
     &:hover{
-    color: rgb(213, 211, 211);  
+    color: var(--btn-focus-text);  
     border: 1px solid var(--grey);
   }
  }
@@ -1143,7 +1144,7 @@ z-index: 5;
     border-radius: 8px;
     border: none;
       &:hover{
-      color: rgb(213, 211, 211);  
+      color: var(--btn-focus-text);  
       border: 1px solid var(--danger);
     }
  
@@ -1156,7 +1157,7 @@ z-index: 5;
   border-radius: 8px;
   border: none;
     &:hover{
-    color: rgb(213, 211, 211);  
+    color: var(--btn-focus-text);  
     border: 1px solid var(--primary);
   }
  
@@ -1170,11 +1171,41 @@ z-index: 5;
   border-radius: 8px;
   border: none;
     &:hover{
-    color: rgb(213, 211, 211);  
+    color:var(--btn-focus-text);  
     border: 1px solid var(--primary);
   }
  
  }
+
+ .btn-rpt-success {
+  min-height: 56px !important;
+  min-width: 100px !important;
+  background-color: var(--success);
+  color: var(--white);
+  border-radius: 8px;
+  border: none;
+    &:hover{
+    color: var(--btn-focus-text);  
+    border: 1px solid var(--success);
+  }
+}
+
+.btn-rpt-primary {
+  min-height: 56px !important;
+  min-width: 100px !important;
+  background-color: var(--primary);
+  color: var(--white);
+  border-radius: 8px;
+  border: none;
+    &:hover{
+    color: var(--btn-focus-text);  
+    border: 1px solid var(--primary);
+  }
+}
+
+
+
+
 
  .btnadd{
   background-color: var(--primary) !important;

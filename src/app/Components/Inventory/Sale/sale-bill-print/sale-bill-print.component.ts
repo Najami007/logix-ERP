@@ -19,6 +19,9 @@ export class SaleBillPrintComponent implements OnInit {
   showCompanyName = this.global.getFeature('CmpName');
   showCompanyLogo = this.global.getFeature('CmpLogo');
   gstFeature = this.global.getFeature('GST');
+  prodDetailFeature = this.global.getFeature('ProdDetail');
+
+
   billPrintType:any = '';;
   companyProfile: any = [];
   companyLogo: any = '';
@@ -82,14 +85,29 @@ export class SaleBillPrintComponent implements OnInit {
   myGstTotal = 0;
   myAdvTaxAmount = 0;
   myAdvTaxValue = 0;
+  myProductDetail:any = [];
+
 
   PrintBill(InvNo: any) {
     this.billPrintType = this.global.getBillPrintType();
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
       (Response: any) => {
-        
-       // console.log(Response);
         this.myPrintTableData = Response;
+        // this.http.get(environment.mainApi + this.global.inventoryLink + 'BillOtherDetail?BillNo=' + InvNo).subscribe(
+        //   (Response: any) => {
+        //     this.myProductDetail = Response;
+        //     Response.forEach((e:any) => {
+        //       this.myPrintTableData.forEach((j:any) => {
+        //           if(e.productID  == j.ProductID){
+        //             j.productDetail.push(e);
+        //           }
+        //       });
+        //     });
+         
+
+
+        //   })
+
         this.myInvoiceNo = InvNo;
         this.myInvDate = Response[0].createdOn;
         this.myCounterName = Response[0].entryUser;

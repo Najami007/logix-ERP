@@ -72,17 +72,32 @@ export class RestDashboardComponent implements OnInit {
     this.getMonthDays();
     this.getListOfYears(this.curYear);
     this.getPropertyList();
-    this.getPropertyRates();
   }
 
 
 
   getPropertyRates() {
+    $('.loaderDark').show();
     this.http.get(environment.mainApi + this.global.propertyLink + 'GetAdditionalRates?PropertyID=' + this.propertyID + '&AdditionalRateDate=' + (this.curYear + '-' + (this.curMonth + 1) + '-' + '01')).subscribe(
       (Response: any) => {
 
-        console.log((this.curYear + '-' + (this.curMonth + 1) + '-' + '01'), this.propertyID);
-        console.log(Response);
+        
+      if(Response != '' || Response != null){
+        Response.forEach((j:any) => {
+
+          this.monthDaysList.forEach((e:any) => {
+            // console.log(this.global.dateFormater(new Date(j.additionalRateDate),'-'),e.fullDate)
+            if(this.global.dateFormater(new Date(j.additionalRateDate),'-') == e.fullDate){
+              e.additionalRate = j.additionalRate;
+
+            }
+          
+        });
+          
+        });
+      }
+      $('.loaderDark').fadeOut(200);
+       
       }
     )
   }
@@ -132,7 +147,10 @@ export class RestDashboardComponent implements OnInit {
         newDate = i.toString();
       }
 
-      this.monthDaysList.push({ date: i, fullDate: this.curYear + '-' + (this.curMonth + 1) + '-' + newDate, propertyRate: '' });
+   
+      
+
+      this.monthDaysList.push({ date: i, fullDate: this.curYear + '-' +( (this.curMonth + 1) < 10 ? '0'+(this.curMonth + 1) : this.curMonth + 1) + '-' + newDate, additionalRate: '' });
     }
 
     this.lastDayOfMonth = new Date(this.curYear, this.curMonth + 1, 0).getDay();
@@ -171,11 +189,14 @@ export class RestDashboardComponent implements OnInit {
 
   showRateModal(item: any) {
     // $('#PropertyRateModal').show();
-    if (item.date != '') {
-      const myModal = new bootstrap.Modal('#PropertyRateModal', { keyboard: false });
-      myModal.show();
+    if (item.date != '' && this.propertyID > 0) {
+  
+      this.global.openBootstrapModal('#PropertyRateModal',true);
       this.tmpPropertyData = item;
       sessionStorage.setItem('data',item);
+      setTimeout(() => {
+        $('#tmpPropRate').trigger('focus');
+      }, 500);
     }
     // bootstrap.modal.getOrCreateInstance('#PropertyRateModal').show();
 
@@ -186,6 +207,7 @@ export class RestDashboardComponent implements OnInit {
     if (this.propertyID == 0) {
       this.msg.WarnNotify('Select Property')
     } else {
+      $('.loaderDark').show();
       this.http.post(environment.mainApi + this.global.propertyLink + 'InsertAdditionalRates', {
 
         PropertyID: this.propertyID,
@@ -195,16 +217,18 @@ export class RestDashboardComponent implements OnInit {
         UserID: this.global.getUserID()
       }).subscribe(
         (Response: any) => {
-          if (Response.msg == 'Data Saved Successfully') {
+          if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
+            this.getPropertyRates();
             this.msg.SuccessNotify(Response.msg);
             this.tmpPropertyData = [];
             this.tmpPropertyRate = '';
-            $('#PropertyRateModal').hide();
-            $('.modal-backdrop').remove();
+            this.global.closeBootstrapModal('#PropertyRateModal',true);
 
           } else {
             this.msg.WarnNotify(Response.msg);
           }
+
+          $('.loaderDark').fadeOut(200);
         }
       )
     }

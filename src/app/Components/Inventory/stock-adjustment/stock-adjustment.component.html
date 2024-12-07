@@ -154,16 +154,12 @@
 
             <div class="mt-4 text-center">
                 <!-- <button mat-raised-button class="bg-primary text-white w-25" (click)="SaveBill('hold')">{{holdBtnType}}</button> -->
-                <button  *ngIf="crudList.c" class="btnsave w-50"click)="SaveBill('issue')">Save</button>
+                <button  *ngIf="crudList.c" class="btnsave w-50" (click)="SaveBill('issue')">Save</button>
 
             </div>
             <div class="mt-4 text-center">
                 <button *ngIf="crudList.r" class="btnreset w-50" data-bs-toggle="modal"
                     data-bs-target="#holdModal">Retrieve</button>
-
-
-
-
 
             </div>
 
