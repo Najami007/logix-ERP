@@ -1,12 +1,16 @@
-<div class="p-3" style="max-height: 600px; overflow-y: scroll;">
+<div class="p-3" style="max-height: 600px;min-height: 600px; overflow-y: scroll;">
 
-    <div class="d-flex container-fluid justify-content-between text-uppercase">
-        <p class="dialogueTitle">ADD Reservation DETAILS</p>
+
+    <div class="container-fluid text-uppercase border-bottom">
+        <h4 style="letter-spacing: 5px !important;">{{propertyTitle}}</h4>
+        <p>Code: {{propertyCode}}</p>
     </div>
-
     <div class="container-fluid row ">
+
+     
+        
         <div class="row col-lg-5">
-            <mat-label class="fw-bold mb-2">Booking Details</mat-label>
+            <mat-label class="fw-bold mb-3">Booking Details</mat-label>
 
 
             <mat-form-field class="col-lg-6 " appearance="outline">
@@ -17,21 +21,21 @@
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="col-lg-6 ">
-                <mat-label>Room</mat-label>
-                <mat-select [(ngModel)]="RoomID">
-                    <mat-option><ngx-mat-select-search [(ngModel)]="searchRoom" [placeholderLabel]="'Search...'"
+                <mat-label>Property</mat-label>
+                <mat-select [(ngModel)]="PropertyID">
+                    <mat-option><ngx-mat-select-search [placeholderLabel]="'Search...'" #propertySearch
                             [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                    <mat-option *ngFor="let item of RoomList |filter:searchRoom"
-                        [value]="item.roomID">{{item.roomTitle}}</mat-option>
+                    <mat-option *ngFor="let item of PropertyList | filter:propertySearch.value"
+                        [value]="item.propertyID">{{item.propertyCode}}</mat-option>
                 </mat-select>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="col-lg-12">
                 <mat-label>Check In / Out</mat-label>
                 <!-- <input readonly="true" matInput [matDatepickerFilter]="myFilter"  [matDatepicker]="CIpicker" > -->
-                <mat-date-range-input [ariaSelected]="getTotalDays()"  [min]="minDate"  [dateFilter]="myFilteredDates"  [rangePicker]="CIpicker" >
-                  <input readonly="true"  matStartDate  [(ngModel)]="arrivalDate" placeholder="Start date">
-                  <input readonly="true" matEndDate [(ngModel)]="DepartureDate" placeholder="End date">
+                <mat-date-range-input  [ariaSelected]="getTotalDays()"  [min]="minDate"  [dateFilter]="myFilteredDates"  [rangePicker]="CIpicker" >
+                  <input readonly="true" (change)="getTotalDays()"  matStartDate  [(ngModel)]="arrivalDate" placeholder="Start date">
+                  <input readonly="true" (change)="getTotalDays()"  matEndDate [(ngModel)]="DepartureDate" placeholder="End date">
                 </mat-date-range-input>
                 <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matIconPrefix [for]="CIpicker"></mat-datepicker-toggle>
@@ -73,22 +77,22 @@
                 <input type="time"  matInput [(ngModel)]="DepartureTime" name="week" min="00:00:00" max="24:00:00" />
             </mat-form-field> -->
 
-            <mat-form-field appearance="outline" class="col-lg-4 ">
+            <mat-form-field appearance="outline" class="col-lg-6 ">
                 <mat-label>Rent Per Day</mat-label>
                 <input matInput type="number" min="0" class="numOnly" [(ngModel)]="rentPerDay">
             </mat-form-field>
 
 
-            <mat-form-field appearance="outline" class="col-lg-4 ">
+            <!-- <mat-form-field appearance="outline" class="col-lg-6 ">
                 <mat-label>Booking Channel</mat-label>
                <mat-select>
                 <mat-option value="Application">Application</mat-option>
                 <mat-option value="WalkIn">WalkIn</mat-option>
                </mat-select>
 
-            </mat-form-field>
+            </mat-form-field> -->
 
-            <mat-form-field appearance="outline" class="col-lg-4 ">
+            <mat-form-field appearance="outline" class="col-lg-6 ">
                 <mat-label>Guests</mat-label>
                 <mat-select  [(ngModel)]="numberOfPersons" >
                     <mat-option><ngx-mat-select-search #personSearch [placeholderLabel]="'Search...'"
@@ -113,7 +117,7 @@
         </div>
 
         <div class="row col-lg-5 h-50">
-            <mat-label class="fw-bold mb-2">Customer Details</mat-label>
+            <mat-label class="fw-bold mb-3">Customer Details</mat-label>
 
 
             <mat-form-field appearance="outline" class="col-lg-6 ">
@@ -136,7 +140,7 @@
                 <input type="text" matInput name="phoneNo" />
             </mat-form-field>
 
-
+            <mat-checkbox >Save For Future Use</mat-checkbox>
         </div>
 
         <div class="row col-lg-2">

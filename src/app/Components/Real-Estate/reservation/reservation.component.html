@@ -1,11 +1,50 @@
-<div class="body">
+<div class="body" >
+    <mat-tab-group>
+        <mat-tab label="Properties">
+
+           <div class="m-2"> 
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Search</mat-label>
+                <input matInput #searchProperty >
+            </mat-form-field>
+           <div class="d-flex flex-wrap">
+            <div class="col-md-12 m-1" *ngFor="let item of PropertyList | filter:searchProperty.value; index as index" style="width: 49%;">
+                <div class="card overflow-hidden">
+                  <div class="card-content">
+                    <div class="card-body cleartfix" style="min-height: 120px !important;">
+                      <div class="row align-items-stretch">
+                   
+                        <div class="media-body col-md-8">
+                          <h4 style="letter-spacing: 5px;">{{item.propertyTitle}}</h4>
+                          <span>Code: {{item.propertyCode}}</span>
+                        </div>
+                        <div class="align-self-center col-md-4">
+                          <h1>{{item.rentPerDay}} /Day</h1>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-success" (click)="addReservation(item)">Reserve Property</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+      
+           </div>
+           </div>
+        
+        
+    
+        </mat-tab>
 
 
+        <mat-tab label="Saved Reservations">
 
+            
         <div class="container-fluid bg-light ">
             <div class="row p-2">
-                <button mat-fab class="col-lg-1" (click)="addReservation()" color="primary"><mat-icon>add</mat-icon></button>
-                <mat-form-field appearance="outline" class="col-lg-7">
+                <!-- <button mat-fab class="col-lg-1" (click)="addReservation()" color="primary"><mat-icon>add</mat-icon></button> -->
+                <mat-form-field appearance="outline" class="col-lg-8">
                     <mat-label>Search.....</mat-label>
                     <input type="text" matInput #search>
                 </mat-form-field>
@@ -92,199 +131,9 @@
 
          
         </div>
+        </mat-tab>
+    </mat-tab-group>
 
-
-        <!---------------------- Model Window for entering Advance Amount ------------------>
-
-        <div class="modal fade h-100 bg-light " id="cancelBookingModel" tabindex="-1" aria-labelledby="cancelBookingLabel" aria-hidden="true" data-bs-backdrop="false">
-            <div class="modal-dialog modal-xl modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h2 class="modal-title" id="cancelBookingLabel">Cancel Booking</h2>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-               
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>Cancellation Remarks</mat-label>
-                        <textarea matInput type="number" [(ngModel)]="cancelRemarks"></textarea>
-                    </mat-form-field>
-                   
-        
-        
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" (click)="cancelBooking()" data-bs-dismiss="modal">Cancel Booking</button>
-                    <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
-                  </div>
-                
-              </div>
-            </div>
-          </div>
-
-
-
-          <!---------------------- print Area for Booking Voucher ------------------>
-
-
-          <div class="d-none " id="printDiv">
-            <!-- <div class="text-end ">{{lblVoucherPrintDate |date:'short'}}</div> -->
-            <div class="mt-2">
-                
-                <!-------------------------    Top Logo Section -------------------->
-                <div class="text-center border-bottom d-flex justify-content-between">
-                    <span>
-                        <img src="{{logo}}" style="color: black;" alt="" srcset="" height="100"
-                            width="100">
-                    </span>
-                    <span class="mt-3">
-                        <h3 >{{CompanyName}}</h3>
-                            <p class="w-75 text-end" style="margin-top: -15;" >{{CompanyName2}}</p>
-                        <p style="margin-top: -20;" >{{companyAddress}}</p>
-                        <p style="margin-top: -15;">{{companyPhone}}  - {{companyMobileno}}</p>
-                        <p style="margin-top: -15;">{{companyEmail}}</p>
-                    </span>
-                    <span>
-                        <img src="{{logo1}}" style="color: black;" alt="" srcset="" height="100"
-                            width="100">
-                    </span>
-            
-            
-                </div>
-        
-
-                <!-------------------------- Headers Area   ----------------------->
-               <div class="d-flex">
-                <div class="row mt-5"  >
-
-                    <span class="w-50 row ">
-                        <h6 class="w-50 fw-bold border-dark">Booking No :</h6>
-                        <p class="w-50">{{lblBookingNo}}</p>
-                    </span>
-
-                    <span class="w-50 row ">
-                        <h6 class="w-50 fw-bold">Booking Date :</h6>
-                            <p class="w-50">{{lblBookingDate |date:'yyyy-MM-dd'}}</p>
-                    </span >
-
-                    <span class="w-50 row" *ngIf="lblBookingStatus === 'Confirmed' || lblBookingStatus === 'Refunded'|| lblBookingStatus === 'Visited'">
-                        <h6 class="w-50 fw-bold">Advance Voucher # :</h6>
-                        <p class="w-50">{{lblAdvanceJvNo}}</p>
-                    </span>
-
-                    <span class="w-50 row" *ngIf="lblBookingStatus === 'Refunded'" >
-                        <h6 class="w-50 fw-bold">Refund Voucher # :</h6>
-                        <p class="w-50">{{lblRefundJvNo}}</p>
-                    </span>
-
-                    <span class="w-50 row">
-                        <h6 class="w-50  fw-bold">Booking Status :</h6>
-                            <p class="w-50">{{lblBookingStatus}}</p>
-                    </span>
-                   
-                    <span class="w-50 row">
-                        <h6 class="w-50 fw-bold">Booking Through :</h6>
-                        <p class="w-50">{{lblBookingChannel}}</p>
-                    </span>
-
-                    <span class="w-50 row">
-                        <h6 class="w-50 fw-bold">Customer Name :</h6>
-                            <p class="w-50">{{lblCustomerName}}</p>
-                    </span>
-
-                    <span class="w-50 row">
-                        <h6 class="w-50 fw-bold">Customer CNIC :</h6>
-                            <p class="w-50">{{lblPartyCNIC}}</p>
-                    </span>
-
-                    <span class="w-50 row">
-                        <h6 class="w-50 fw-bold">Arrival Date :</h6>
-                            <p class="w-50">{{lblArrivalDate |date:'yyyy-MM-dd'}}</p>
-    
-                    </span>
-                    <span class="w-50 row">
-                        <h6 class="w-50 fw-bold">Arrival Time :</h6>
-                            <p class="w-50">{{lblArrivalTime}}</p>
-    
-                    </span>
-    
-                    <span class="w-50 row">
-                        <h6 class="w-50 fw-bold">Departure Date :</h6>
-                            <p class="w-50">{{lblDepartureDate |date:'yyyy-MM-dd'}}</p>
-                    </span>
-                    <span class="w-50 row">
-                        <h6 class="w-50 fw-bold">Departure Time :</h6>
-                            <p class="w-50">{{lblDepartureTime}}</p>
-                    </span>
-
-                    <span class="w-50 row"> 
-                        <h6 class="w-50 fw-bold">Confirmation Date :</h6>
-                        <p class="w-50">{{lblConfirmationDate |date:'yyyy-MM-dd'}}</p>
-                    </span>
-
-                    <span class="w-50 row" *ngIf="lblReference == ''"> 
-                        <h6 class="w-50 fw-bold">Refrence :</h6>
-                        <p class="w-50">{{lblReference }}</p>
-                    </span>
-    
-                    <span class="w-50 row" *ngIf="lblPersons != 0"> 
-                        <h6 class="w-50 fw-bold">Persons :</h6>
-                        <p class="w-50">{{lblPersons }}</p>
-                    </span>
-
-                    <span class="w-50 row">
-                        <h6 class="w-50 fw-bold">Remarks :</h6>
-                        <p class="w-50">{{lblBookingRemarks}}</p>
-                    </span>
-
-
-                </div>
-                
-               </div>
-               <hr>
-
-               <!-----------------------   Print Table Area --------------------->
-
-               <div>
-                <table class="table">
-                    <thead>
-                        
-                        <th>Description</th>
-                        <th>Rent</th>
-                        <th>Days</th>
-                        <th>Total Rent</th>
-                        <th>Advance</th>
-                        <th>Remaining</th>
-                        
-                    
-                    </thead>
-
-                    <tbody>
-                        <tr>
-                            <td>{{lblRoomTitle}}</td>
-                            <td>{{lblRentPerDay |number:'1.0-0'}}</td>
-                            <td>{{lblTotalDays}}</td>
-                            <td>{{lblTotalDays * lblRentPerDay |number:'1.0-0'}}</td>
-                            <td>{{lblPaidAmount |number:'1.0-0'}}</td>
-                            <td>{{(lblTotalDays * lblRentPerDay) -lblPaidAmount |number:'1.0-0'}}</td>
-                        </tr>
-                    </tbody>
-                   
-                </table>
-               </div>
-
-
-               <div class="d-flex justify-content-between  mt-5 pt-5">
-                <h6 class="border-bottom fw-bold border-dark">Account Officer</h6>
-                <h6 class="border-bottom fw-bold border-dark">Front Desk Officer</h6>
-                <h6 class="border-bottom fw-bold border-dark">Guest Signature</h6>
-               </div>
-        
-        
-        
-            </div>
-        </div>
 
 
 

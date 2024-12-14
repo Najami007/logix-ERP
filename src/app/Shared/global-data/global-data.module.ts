@@ -15,6 +15,7 @@ import { PincodeComponent } from 'src/app/Components/User/pincode/pincode.compon
 import { CookieService } from 'ngx-cookie-service';
 import { ConfirmationAlertComponent } from 'src/app/Components/Common/confirmation-alert/confirmation-alert.component';
 import * as bootstrap from 'bootstrap';
+import { ExcelExportService } from '../service/ExcelExportService/excel-export.service';
 
 
 
@@ -77,7 +78,8 @@ export class GlobalDataModule implements OnInit {
     private rout: Router,
     private msg: NotificationService,
     private dialog: MatDialog,
-    private cookie:CookieService
+    private cookie:CookieService,
+    public ExportExcel:ExcelExportService
     
     // public app: AppComponent,
 
@@ -1099,6 +1101,15 @@ closeBootstrapModal(modalID: any, condition: any) {
     // myModal.hide()
 
   }
+}
+
+
+ExportDatatoExcel(data:any,fileName:any){
+  this.ExportExcel.exportDataToExcel(data,fileName);
+}
+
+ExportHTMLTabletoExcel(data:any,fileName:any){
+  this.ExportExcel.exportTableToExcel(data,fileName);
 }
 
 

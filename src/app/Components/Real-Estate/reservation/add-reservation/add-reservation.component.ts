@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import * as dayjs from 'dayjs';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
+import { environment } from 'src/environments/environment.development';
 
 
 
@@ -29,7 +30,14 @@ export class AddReservationComponent implements OnInit {
 
   }
   ngOnInit(): void {
-   this.getTotalDays();
+   this.getPropertyList();
+
+   if(this.editData.type == 'insert'){
+      this.PropertyID = this.editData.data.propertyID;
+      this.propertyCode = this.editData.data.propertyCode;
+      this.propertyTitle = this.editData.data.propertyTitle;
+   }
+
   }
 
 
@@ -41,12 +49,12 @@ export class AddReservationComponent implements OnInit {
 
   minDate = new Date();
 
-  searchRoom:any;
-  searchParty:any;
-  searchBooking:any;
+
   today = new Date();
 
-  RoomID:any;
+  PropertyID:any;
+  propertyTitle = '';
+  propertyCode ='';
   partyID:any;
   bookingDate:any = new Date();
   rentPerDay = 0;
@@ -93,18 +101,83 @@ export class AddReservationComponent implements OnInit {
   }
 
 
-  getSavedData(){
-
-  }
+  
 
 
-  dateSelected(){
-    // var input = document.getElementById('checkInDate');
-    // var datepicker = require('hotel-datepicker')(input, {
-    // maxNights: 5
-    // }); 
-  }
+   //////////////////////////////////////
+    PropertyList:any = [];
+    getPropertyList(){
+      this.http.get(environment.mainApi+this.global.propertyLink+'GetProperty').subscribe(
+        (Response:any)=>{
+          this.PropertyList = Response;
+        }
+      )
+  
+    }
 
+
+    save(){
+
+    }
+
+    insert(){
+      this.http.post(environment.mainApi+this.global.propertyLink+'InsertBooking',{
+        PropertyID: this.PropertyID,
+        BookerID: 1,
+        BookingChannelID: 1,
+        BookingStatusID: 1,
+        BookingDate: this.global.dateFormater(this.bookingDate,'-'),
+        DateOfArrival: this.global.dateFormater(this.arrivalDate,'-'),
+        TimeOfArrival: "13:15:11",
+        DateOfDeparture: this.global.dateFormater(this.DepartureDate,'-'),
+        TimeOfDeparture: "11:11:00",
+        RentPerDay: this.rentPerDay,
+        TotalDays: this.TotalNights,
+        BookingDescription: this.bookingDescription,
+        Reference: this.refrenceName,
+        Persons: this.numberOfPersons,
+        UserID: this.global.getUserID()
+      }).subscribe(
+        (Response:any)=>{
+          if(Response.msg == 'Data Saved Successfully'){
+            this.msg.SuccessNotify(Response.msg);
+            this.dialogRef.close('Update');
+
+          }else{
+            this.msg.WarnNotify(Response.msg);
+          }
+        }
+      )
+    }
+    update(){
+      this.http.post(environment.mainApi+this.global.propertyLink+'UpdateBooking',{
+        PropertyID: this.PropertyID,
+        BookerID: 1,
+        BookingChannelID: 1,
+        BookingStatusID: 1,
+        BookingDate: this.global.dateFormater(this.bookingDate,'-'),
+        DateOfArrival: this.global.dateFormater(this.arrivalDate,'-'),
+        TimeOfArrival: "13:15:11",
+        DateOfDeparture: this.global.dateFormater(this.DepartureDate,'-'),
+        TimeOfDeparture: "11:11:00",
+        RentPerDay: this.rentPerDay,
+        TotalDays: this.TotalNights,
+        BookingDescription: this.bookingDescription,
+        Reference: this.refrenceName,
+        Persons: this.numberOfPersons,
+        UserID: this.global.getUserID()
+      }).subscribe(
+        (Response:any)=>{
+          if(Response.msg == 'Data Updated Successfully'){
+            this.msg.SuccessNotify(Response.msg);
+            this.dialogRef.close('Update');
+
+          }else{
+            this.msg.WarnNotify(Response.msg);
+          }
+        }
+      )
+    }
 
 
   getTotalDays(){
@@ -123,7 +196,7 @@ export class AddReservationComponent implements OnInit {
      }else {
       this.TotalNights = Math.round(days);
      }
- 
+     console.log(this.TotalNights);
    }
   
 /////////////////// will give the difference of arrival and departure date

@@ -65,7 +65,7 @@ export class ReservationComponent implements OnInit{
   ngOnInit(): void {
 
     this.global.setHeaderTitle('Booking');
-    this.getRoom();
+    this.getPropertyList();
     this.getParty();
     this.getBookings();
     this.global.numberOnly();
@@ -165,11 +165,14 @@ export class ReservationComponent implements OnInit{
   ]
 
 
-  addReservation(){
+  addReservation(item:any){
     this.dialogue.open(AddReservationComponent,{
       width:'80%',
-    }).afterClosed().subscribe(()=>{
-      
+      data:{data:item,type:'insert'}
+    }).afterClosed().subscribe((value)=>{
+      if(value == 'Update'){
+        
+      }
     })
   }
   
@@ -218,15 +221,16 @@ export class ReservationComponent implements OnInit{
 
 
   //////////////////////////////////////
-  
-  getRoom(){
-    this.http.get(environment.mainApi+'GetRoom').subscribe(
+  PropertyList:any = [];
+  getPropertyList(){
+    this.http.get(environment.mainApi+this.global.propertyLink+'GetProperty').subscribe(
       (Response:any)=>{
-        this.RoomList = Response;
+        this.PropertyList = Response;
       }
     )
 
   }
+
 
 
 

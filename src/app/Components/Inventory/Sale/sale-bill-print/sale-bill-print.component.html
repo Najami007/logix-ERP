@@ -46,10 +46,10 @@
     
   </table>
     </div>
-    <p class="border border-dark text-center mt-1" *ngIf="billType">{{billType}}</p>
-    <p class="border border-dark text-center">{{myInvType == 'S' ? 'Sale' : myInvType == 'SR' ?'Sale Return' :''}}</p>
-    <p *ngIf="myPaymentType == 'Complimentary'" class="border border-dark text-center">Complimentary</p>
-    <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center">Duplicate</p>
+    <p class="border border-dark text-center mt-1 fw-bold" *ngIf="billType">{{billType}}</p>
+    <p class="border border-dark text-center fw-bold">{{myInvType == 'S' ? 'Sale' : myInvType == 'SR' ?'Sale Return' :''}}</p>
+    <p *ngIf="myPaymentType == 'Complimentary'" class="border border-dark text-center fw-bold">Complimentary</p>
+    <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center fw-bold">Duplicate</p>
 
     <div>
         <table class="w-100 table-garment-sale">
@@ -228,9 +228,9 @@
         </tr>
        </table> -->
         <div class="fs-11 ">
-            <span><b>Goods Once Sold Can Not be Replaced or Refunded. </b></span>
+            <!-- <span><b>Goods Once Sold Can Not be Replaced or Refunded. </b></span> -->
             <b></b>
-            <!-- <span><b>Wish to Serve You Again.</b></span> -->
+            <span><b>Thank You for your visit.</b></span>
         </div>
 
     </div>

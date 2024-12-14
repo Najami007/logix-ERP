@@ -232,8 +232,6 @@ export class GarmentSaleComponent implements OnInit {
     )
   }
 
-
-
   searchByCode(e: any) {
 
     var barcode = this.PBarcode;
@@ -312,7 +310,7 @@ export class GarmentSaleComponent implements OnInit {
                   discInR: this.discFeature ?  Response[0].discRupees  : 0,
                   aq: Response[0].aq,
                   total:(Response[0].salePrice * qty) - (Response[0].discRupees * qty),
-                  productDetail:[],
+                  productDetail:'',
 
                 });
 
@@ -508,7 +506,6 @@ export class GarmentSaleComponent implements OnInit {
             discInR: this.discFeature ?  Response[0].discRupees  : 0,
             aq: Response[0].aq,
             total:(Response[0].salePrice * 1) - (Response[0].discRupees),
-            productDetail:'',
 
           });
           // this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);

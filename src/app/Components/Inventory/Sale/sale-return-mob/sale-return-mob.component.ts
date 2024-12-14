@@ -91,7 +91,7 @@ export class SaleReturnMobComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Sale');
+    this.global.setHeaderTitle('Sale Return');
     this.getBankList();
     this.getPartyList();
     this.getBooker();
@@ -311,6 +311,7 @@ export class SaleReturnMobComponent implements OnInit {
                   if(tmpRow == undefined){
                     this.productDetail.push({ productID: Response[0].productID, productOtherDetDescription: Response[0].productOtherDetDescription });
                     this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+                    this.getTotal();
                   }else{
                     this.msg.WarnNotify('IMEI Already Entered');
                     return;
@@ -1248,19 +1249,20 @@ export class SaleReturnMobComponent implements OnInit {
 
 
   tmpProdDetial: any = [];
-  tmpProductOhterDetDescription = '';
+  tmpProductOtherDetDescription = '';
 
   onEnterPressed(e: any) {
     if (e.keyCode == 13) {
-      this.insertProdDetail(this.tmpProductOhterDetDescription);
+      this.insertProdDetail(this.tmpProductOtherDetDescription);
     }
 
   }
 
 
   insertProdDetail(value: any) {
-
-    if ((value !== '' || value !== undefined)) {
+    if(value == ''|| value == undefined){
+      this.msg.WarnNotify('Enter value');
+    } else { 
       // this.productDetail.push({ productID: this.tmpProdDetial.ProductID, productOtherDetDescription: value });
       var tmpRow = this.productDetail.find((e: any) => e.productOtherDetDescription == value);
       if (tmpRow == undefined) {
@@ -1278,7 +1280,7 @@ export class SaleReturnMobComponent implements OnInit {
         });
         this.getTotal();
 
-        this.tmpProductOhterDetDescription = '';
+        this.tmpProductOtherDetDescription = '';
 
       } else {
         this.msg.WarnNotify('Already Exist!');
@@ -1292,7 +1294,7 @@ export class SaleReturnMobComponent implements OnInit {
 
   editProdDetail(item: any) {
 
-    this.tmpProductOhterDetDescription = item.productOhterDetDescription;
+    this.tmpProductOtherDetDescription = item.productOtherDetDescription;
 
     this.deleteProdDetail(item);
 

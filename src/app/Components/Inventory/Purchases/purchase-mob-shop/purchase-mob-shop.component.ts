@@ -740,13 +740,9 @@ export class PurchaseMobShopComponent implements OnInit {
         } else if (type == 'purchase') {
 
        
-          // console.log(this.tableDataList);
           this.global.confirmAlert().subscribe(
             (Response: any) => {
               if (Response == true) {
-
-
-                console.log(this.global.dateFormater(this.invoiceDate, '-'), this.refInvNo,this.partyID,this.locationID, this.bookerID,this.subTotal,this.discount,JSON.stringify(this.tableDataList))
                 this.app.startLoaderDark();
                 this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertMobileShopPurchase', {
                   InvType: "P",
@@ -1056,11 +1052,11 @@ export class PurchaseMobShopComponent implements OnInit {
 
 
   tmpProdDetial: any = [];
-  tmpProductOhterDetDescription = '';
+  tmpProductOtherDetDescription = '';
 
   onEnterPressed(e: any) {
     if (e.keyCode == 13) {
-      this.insertProdDetail(this.tmpProductOhterDetDescription);
+      this.insertProdDetail(this.tmpProductOtherDetDescription);
     }
 
   }
@@ -1068,7 +1064,9 @@ export class PurchaseMobShopComponent implements OnInit {
 
   insertProdDetail(value: any) {
 
-    if ((value !== '' || value !== undefined)) {
+    if(value == ''|| value == undefined){
+      this.msg.WarnNotify('Enter value');
+    } else {
       // this.productDetail.push({ productID: this.tmpProdDetial.ProductID, productOtherDetDescription: value });
       var tmpRow = this.productDetail.find((e: any) => e.productOtherDetDescription == value );
       if (tmpRow == undefined) {
@@ -1085,9 +1083,7 @@ export class PurchaseMobShopComponent implements OnInit {
           }
         });
         this.getTotal();
-        console.log(this.tableDataList);
-        console.log(this.productDetail);
-        this.tmpProductOhterDetDescription = '';
+        this.tmpProductOtherDetDescription = '';
 
       } else {
         this.msg.WarnNotify('Already Exist!');
@@ -1101,7 +1097,7 @@ export class PurchaseMobShopComponent implements OnInit {
 
   editProdDetail(item: any) {
 
-    this.tmpProductOhterDetDescription = item.productOhterDetDescription;
+    this.tmpProductOtherDetDescription = item.productOtherDetDescription;
 
     this.deleteProdDetail(item);
 

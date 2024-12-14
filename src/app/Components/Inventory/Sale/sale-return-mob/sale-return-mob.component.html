@@ -1,6 +1,6 @@
-<div class="body">
+<div class="body" style="background-color: rgb(249, 241, 229);">
 
-    <div class="d-flex">
+    <div class="d-flex" >
 
         <div class="p-1 col-lg-3 " style="height: 87vh;overflow-y: scroll;overflow-x: hidden;">
             <div class="p-2" style="background-color: rgb(21, 21, 64);">
@@ -215,10 +215,10 @@
                         <div class="row">
                             <mat-form-field appearance="outline" class="w-75"  >
                                 <mat-label>Description</mat-label>
-                                <input matInput id="prodOthDetDesc" maxlength="50" [(ngModel)]="tmpProductOhterDetDescription" (keydown)="onEnterPressed($event)" />
-                                <mat-hint class="text-end">{{tmpProductOhterDetDescription.length}} / 50</mat-hint>
+                                <input matInput id="prodOthDetDesc" maxlength="50" [(ngModel)]="tmpProductOtherDetDescription" (keydown)="onEnterPressed($event)" />
+                                <mat-hint class="text-end">{{tmpProductOtherDetDescription.length}} / 50</mat-hint>
                             </mat-form-field>
-                            <button class="w-25 btn btn-success " style="height: 55px !important;" (click)="insertProdDetail(tmpProductOhterDetDescription)">Insert</button>
+                            <button class="w-25 btn btn-success " style="height: 55px !important;" (click)="insertProdDetail(tmpProductOtherDetDescription)">Insert</button>
                             
                         </div>
                         <div>

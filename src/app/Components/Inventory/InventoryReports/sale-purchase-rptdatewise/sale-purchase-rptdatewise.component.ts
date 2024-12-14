@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Time } from 'highcharts';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { SaleBillPrintComponent } from '../../Sale/sale-bill-print/sale-bill-print.component';
+
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-sale-purchase-rptdatewise',
@@ -24,9 +26,8 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
-    private global:GlobalDataModule,
-    private route:Router
-    
+    public global:GlobalDataModule,
+    private route:Router    
   ){
 
     this.global.getCompany().subscribe((data)=>{
@@ -43,6 +44,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     $('#detailTable').show();
     $('#summaryTable').hide();
   }
+
 
 
 

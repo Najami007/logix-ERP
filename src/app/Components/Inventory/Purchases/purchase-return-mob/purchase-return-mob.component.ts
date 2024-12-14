@@ -992,8 +992,7 @@ export class PurchaseReturnMobComponent implements OnInit{
 
             //////////sorting data table base on sort type
             this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
-                  
-            // console.log(this.tableDataList);
+
           // this.getTotal();
         
       }
@@ -1060,11 +1059,11 @@ export class PurchaseReturnMobComponent implements OnInit{
 
 
   tmpProdDetial: any = [];
-  tmpProductOhterDetDescription = '';
+  tmpProductOtherDetDescription = '';
 
   onEnterPressed(e: any) {
     if (e.keyCode == 13) {
-      this.insertProdDetail(this.tmpProductOhterDetDescription);
+      this.insertProdDetail(this.tmpProductOtherDetDescription);
     }
 
   }
@@ -1072,7 +1071,9 @@ export class PurchaseReturnMobComponent implements OnInit{
 
   insertProdDetail(value: any) {
 
-    if ((value !== '' || value !== undefined)) {
+    if(value == ''|| value == undefined){
+      this.msg.WarnNotify('Enter value');
+    } else {
       // this.productDetail.push({ productID: this.tmpProdDetial.ProductID, productOtherDetDescription: value });
       var tmpRow = this.productDetail.find((e: any) => e.productOtherDetDescription == value );
       if (tmpRow == undefined) {
@@ -1089,9 +1090,7 @@ export class PurchaseReturnMobComponent implements OnInit{
           }
         });
         this.getTotal();
-        console.log(this.tableDataList);
-        console.log(this.productDetail);
-        this.tmpProductOhterDetDescription = '';
+        this.tmpProductOtherDetDescription = '';
 
       } else {
         this.msg.WarnNotify('Already Exist!');
@@ -1105,7 +1104,7 @@ export class PurchaseReturnMobComponent implements OnInit{
 
   editProdDetail(item: any) {
 
-    this.tmpProductOhterDetDescription = item.productOhterDetDescription;
+    this.tmpProductOtherDetDescription = item.productOtherDetDescription;
 
     this.deleteProdDetail(item);
 
