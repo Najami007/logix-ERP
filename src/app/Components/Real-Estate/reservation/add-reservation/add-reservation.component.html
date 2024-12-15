@@ -1,26 +1,29 @@
 <div class="p-3" style="max-height: 600px;min-height: 600px; overflow-y: scroll;">
 
 
-    <div class="container-fluid text-uppercase border-bottom">
-        <h4 style="letter-spacing: 5px !important;">{{propertyTitle}}</h4>
-        <p>Code: {{propertyCode}}</p>
+    <div class="container-fluid text-uppercase border-bottom d-flex flex-column">
+        <span ><h2 style="letter-spacing: 5px !important;">{{propertyTitle}}</h2></span>
+        <span>Code: {{propertyCode}} </span>
+        <span>{{country}} / {{city}} /{{area}}</span>
+
     </div>
-    <div class="container-fluid row ">
+   <div class="row">
+    <div class="row col-lg-10 container-fluid  ">
 
      
         
-        <div class="row col-lg-5">
+        <div class="row col-lg-6">
             <mat-label class="fw-bold mb-3">Booking Details</mat-label>
 
 
-            <mat-form-field class="col-lg-6 " appearance="outline">
+            <mat-form-field class="col-lg-12 " appearance="outline">
                 <mat-label>Booking Date</mat-label>
                 <input readonly="true" matInput [(ngModel)]="bookingDate" [matDatepicker]="bdate">
                 <mat-datepicker-toggle matPrefix [for]="bdate"></mat-datepicker-toggle>
                 <mat-datepicker #bdate></mat-datepicker>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="col-lg-6 ">
+            <!-- <mat-form-field appearance="outline" class="col-lg-6 ">
                 <mat-label>Property</mat-label>
                 <mat-select [(ngModel)]="PropertyID">
                     <mat-option><ngx-mat-select-search [placeholderLabel]="'Search...'" #propertySearch
@@ -28,7 +31,7 @@
                     <mat-option *ngFor="let item of PropertyList | filter:propertySearch.value"
                         [value]="item.propertyID">{{item.propertyCode}}</mat-option>
                 </mat-select>
-            </mat-form-field>
+            </mat-form-field> -->
 
             <mat-form-field appearance="outline" class="col-lg-12">
                 <mat-label>Check In / Out</mat-label>
@@ -116,7 +119,7 @@
 
         </div>
 
-        <div class="row col-lg-5 h-50">
+        <div class="row col-lg-6 h-50">
             <mat-label class="fw-bold mb-3">Customer Details</mat-label>
 
 
@@ -143,31 +146,34 @@
             <mat-checkbox >Save For Future Use</mat-checkbox>
         </div>
 
-        <div class="row col-lg-2">
-
-            <table class="w-100 table ">
-                <tbody>
-                    <tr>
-                        <td class="fw-bold">{{currency}} {{rentPerDay}} x {{TotalNights}} nights </td>
-                        <td> {{rentPerDay * TotalNights}}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">5% VAT </td>
-                        <td> {{((rentPerDay * TotalNights) * 5) /100 }}</td>
-                    </tr>
-
-                    <tr>
-                        <td class="fw-bold">Total </td>
-                        <td> {{(rentPerDay * TotalNights)+(((rentPerDay * TotalNights) * 5) / 100) }}</td>
-                    </tr>
-                </tbody>
-            </table>
-
-        </div>
+   
     </div>
+
+    <div class="col-lg-2 bg-gray ">
+
+        <table class="w-100 table ">
+            <tbody>
+                <tr>
+                    <td class="fw-bold">{{currency}} {{rentPerDay}} x {{TotalNights}} nights </td>
+                    <td class="font-digit fw-bold   fs-18px"> {{rentPerDay * TotalNights}}</td>
+                </tr>
+                <tr>
+                    <td class="fw-bold">5% VAT </td>
+                    <td class="font-digit fw-bold fs-18px"> {{((rentPerDay * TotalNights) * 5) /100 }}</td>
+                </tr>
+
+                <tr>
+                    <td class="fw-bold">Total </td>
+                    <td class="font-digit fw-bold fs-18px"> {{(rentPerDay * TotalNights)+(((rentPerDay * TotalNights) * 5) / 100) }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+   </div>
 </div>
 
 <div class="text-end bg-mf p-3">
-    <button class="btnsave btn-save m-1" accesskey="s">{{actionbtn}} </button>
+    <button class="btnsave btn-save m-1" (click)="save()" accesskey="s">{{actionbtn}} </button>
     <button class="btnclose btn-reset m-1 " (click)="closeDialogue()"> Close </button>
 </div>

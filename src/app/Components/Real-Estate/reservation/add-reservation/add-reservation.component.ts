@@ -36,8 +36,22 @@ export class AddReservationComponent implements OnInit {
       this.PropertyID = this.editData.data.propertyID;
       this.propertyCode = this.editData.data.propertyCode;
       this.propertyTitle = this.editData.data.propertyTitle;
+      this.rentPerDay = this.editData.data.rentPerDay;
+      this.city = this.editData.data.cityName;
+      this.country = this.editData.data.countryName;
+      this.area = this.editData.data.areaTitle;
    }
 
+  }
+
+  currentForm = 1; // Start with Form 1
+
+  nextForm() {
+    this.currentForm = 2; // Switch to Form 2
+  }
+
+  previousForm() {
+    this.currentForm = 1; // Switch back to Form 1
   }
 
 
@@ -51,7 +65,9 @@ export class AddReservationComponent implements OnInit {
 
 
   today = new Date();
-
+  city ='';
+  country = '';
+  area = '';
   PropertyID:any;
   propertyTitle = '';
   propertyCode ='';
@@ -118,6 +134,14 @@ export class AddReservationComponent implements OnInit {
 
     save(){
 
+      if(this.actionbtn == 'Save'){
+        this.insert();
+      }
+
+      if(this.actionbtn == 'Update'){
+        this.update()
+      }
+
     }
 
     insert(){
@@ -149,6 +173,7 @@ export class AddReservationComponent implements OnInit {
         }
       )
     }
+
     update(){
       this.http.post(environment.mainApi+this.global.propertyLink+'UpdateBooking',{
         PropertyID: this.PropertyID,
