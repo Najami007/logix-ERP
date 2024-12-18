@@ -40,11 +40,11 @@
         
         </div>
         <div class="col-lg-12 mb-2 text-center" *ngIf="crudList.r">
-            <button class="btn btn-success btn-rpt col-lg-2 me-1 " *ngIf="crudList.r"
+            <button class="btn-rpt-success col-lg-2 me-1 " *ngIf="crudList.r"
                 (click)="getReport('detail')">Detail</button>
-            <button class="btn btn-success btn-rpt col-lg-2 me-1 " *ngIf="crudList.r"
+            <button class="btn-rpt-success col-lg-2 me-1 " *ngIf="crudList.r"
                 (click)="getReport('summary')">Summary</button>
-            <button class="btn btn-primary btn-rpt col-lg-2" *ngIf="crudList.r" (click)="print()">Print</button>
+            <button class="btn-rpt-primary col-lg-2" *ngIf="crudList.r" (click)="print()">Print</button>
         </div>
 
         <div id="PrintDiv">

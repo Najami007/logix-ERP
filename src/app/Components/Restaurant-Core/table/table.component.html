@@ -4,12 +4,11 @@
         <h2>ADD TABLE</h2>
 
         <div class="row">
-         <button mat-fab class="col-sm-1 ms-1" *ngIf="crudList.c" (click)="addTable()"><mat-icon>add</mat-icon></button>
+         <button mat-mini-fab class="col-sm-1 ms-1" *ngIf="crudList.c" (click)="addTable()"><mat-icon>add</mat-icon></button>
  
          <mat-form-field class="col-sm-11 ps-1" appearance="outline">
              <mat-label class="ps-5">Search.....</mat-label>
              <input #tableSearch matInput type="search" class="text-secondary">
-             <mat-icon matPrefix class="text-secondary">search</mat-icon>
          </mat-form-field>
         </div>
  

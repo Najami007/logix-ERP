@@ -4,39 +4,39 @@
   
   <!----------- Column 1 Company Info Area-->
 
-  <div class="col-lg-4 row   p-4 pt-1 bg-white " >
+  <div class="row col-lg-4    p-4 bg-white " >
     <h2 class="border-bottom">Company INFO</h2>
-    <mat-form-field class="col-lg-6 p-1" appearance="outline">
+    <mat-form-field class="col-lg-6 " appearance="outline">
       <mat-label>Company Name</mat-label>
       <input matInput type="text" [(ngModel)]="CompanyName">
     </mat-form-field>
 
-    <mat-form-field class="col-lg-6 p-1" appearance="outline">
+    <mat-form-field class="col-lg-6" appearance="outline">
       <mat-label>Email</mat-label>
       <input matInput type="text" [(ngModel)]="CompanyEmail">
     </mat-form-field>
 
-    <mat-form-field class="col-lg-6 p-1" appearance="outline">
+    <mat-form-field class="col-lg-6 " appearance="outline">
       <mat-label>Mobile</mat-label>
       <input matInput type="text" [textMask]="{mask: mobilemask}" [(ngModel)]="CompanyMobile">
     </mat-form-field>
-    <mat-form-field class="col-lg-6 p-1" appearance="outline">
+    <mat-form-field class="col-lg-6 " appearance="outline">
       <mat-label>Phone</mat-label>
       <input matInput type="text" [textMask]="{mask: phonemask}" [(ngModel)]="CompanyPhone">
     </mat-form-field>
 
    
-    <mat-form-field class="col-lg-6 p-1" appearance="outline">
+    <mat-form-field class="col-lg-6" appearance="outline">
       <mat-label>NTN No.</mat-label>
       <input matInput type="text" [(ngModel)]="NTNNo">
     </mat-form-field>
 
-    <mat-form-field class="col-lg-6 p-1" appearance="outline">
+    <mat-form-field class="col-lg-6 " appearance="outline">
       <mat-label>Strn No.</mat-label>
       <input matInput type="text" [(ngModel)]="STRNNo">
     </mat-form-field>
 
-    <mat-form-field class="col-lg-6 p-1" appearance="outline">
+    <mat-form-field class="col-lg-6 " appearance="outline">
       <mat-label>Registration Date</mat-label>
       <input readonly="true" matInput   [(ngModel)]="RegistrationDate"
           [matDatepicker]="picker" >
@@ -44,7 +44,7 @@
       <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
-    <mat-form-field class="col-lg-6 p-1" appearance="outline">
+    <mat-form-field class="col-lg-6 " appearance="outline">
       <mat-label>Registraion No.</mat-label>
       <input matInput type="text"  [(ngModel)]="RegistrationNo">
   </mat-form-field>
@@ -105,12 +105,12 @@
       <!----------- Height And Width Area ------------->
       <div class="row col-lg-4">
 
-        <mat-form-field class="w-100 p-2">
+        <mat-form-field class="w-100">
           <mat-label>Height</mat-label>
           <input matInput type="number" [(ngModel)]="Logo1Height">
         </mat-form-field>
 
-        <mat-form-field class="w-100 p-2">
+        <mat-form-field class="w-100">
           <mat-label>Width</mat-label>
           <input matInput type="number" [(ngModel)]="Logo1Width">
         </mat-form-field>
@@ -137,12 +137,12 @@
       <!----------- Height And Width Area ------------->
       <div class="row col-lg-4">
 
-        <mat-form-field class="w-100 p-2">
+        <mat-form-field class="w-100 ">
           <mat-label>Height</mat-label>
           <input matInput type="number" [(ngModel)]="Logo2Height">
         </mat-form-field>
 
-        <mat-form-field class="w-100 p-2">
+        <mat-form-field class="w-100 ">
           <mat-label>Width</mat-label>
           <input matInput type="number" [(ngModel)]="Logo2Width">
         </mat-form-field>
@@ -168,12 +168,12 @@
       <!----------- Height And Width Area ------------->
       <div class="row col-lg-4">
 
-        <mat-form-field class="w-100 p-2">
+        <mat-form-field class="w-100 ">
           <mat-label>Height</mat-label>
           <input matInput type="number" [(ngModel)]="Logo3Height">
         </mat-form-field>
 
-        <mat-form-field class="w-100 p-2">
+        <mat-form-field class="w-100 ">
           <mat-label>Width</mat-label>
           <input matInput type="number" [(ngModel)]="Logo3Width">
         </mat-form-field>

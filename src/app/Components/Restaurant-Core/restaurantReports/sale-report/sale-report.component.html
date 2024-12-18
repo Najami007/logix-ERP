@@ -52,19 +52,19 @@
             <input  matInput type="text" [(ngModel)]="endVal" class="text-secondary">
         </mat-form-field>
        <div class="col-lg-1">
-        <button class=" btn-rpt btn btn-primary" (click)="filterRecipe(startVal,endVal,'perc')">%<mat-icon>filter_list</mat-icon></button>
+        <button class="btn-rpt-primary" (click)="filterRecipe(startVal,endVal,'perc')">%<mat-icon>filter_list</mat-icon></button>
        </div>
        <div class="col-lg-1">
-        <button class=" btn-rpt btn btn-primary" (click)="filterRecipe(startVal,endVal,'cost')">Cost<mat-icon>filter_list</mat-icon></button>
+        <button class="btn-rpt-primary" (click)="filterRecipe(startVal,endVal,'cost')">Cost<mat-icon>filter_list</mat-icon></button>
        </div>
        <div class="col-lg-1">
-        <button class=" btn-rpt btn btn-primary" (click)="filterRecipe(startVal,endVal,'sale')">Sale<mat-icon>filter_list</mat-icon></button>
+        <button class="btn-rpt-primary" (click)="filterRecipe(startVal,endVal,'sale')">Sale<mat-icon>filter_list</mat-icon></button>
        </div>
         <div class="col-lg-4 pb-2" *ngIf="crudList.r">
-            <button class="btn btn-success btn-rpt col-lg-3  me-1" (click)="getReport('summary')">Summary</button>
-            <button class="btn btn-success btn-rpt col-lg-3 me-1" (click)="getReport('detail')">Detail</button>
-            <button class="btn btn-success btn-rpt col-lg-3 me-1" (click)="getReport('qsm')">Qty Summary</button>
-            <button class="btn btn-primary btn-rpt col-lg-2" (click)="print()"><mat-icon>print</mat-icon></button>
+            <button class="btn-rpt-success col-lg-3  me-1" (click)="getReport('summary')">Summary</button>
+            <button class="btn-rpt-success col-lg-3 me-1" (click)="getReport('detail')">Detail</button>
+            <button class="btn-rpt-success col-lg-3 me-1" (click)="getReport('qsm')">Qty Summary</button>
+            <button class="btn-rpt-primary col-lg-2" (click)="print()">Print</button>
         </div>
     </div>
 

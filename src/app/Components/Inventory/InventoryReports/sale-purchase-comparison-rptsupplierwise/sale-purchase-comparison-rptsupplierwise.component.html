@@ -1,7 +1,7 @@
 <div class="body container-fluid">
 
     <div class="row justify-content-between mt-2">
-        <mat-form-field appearance="outline" class="col-lg-4">
+        <mat-form-field appearance="outline" class="col-lg-4 matsmall">
             <mat-label>Supplier</mat-label>
             <mat-select [(ngModel)]="partyID" (selectionChange)="onSupplierSelected()">
                 <mat-option><ngx-mat-select-search #supSearch [placeholderLabel]="'Search...'"
@@ -11,13 +11,13 @@
             </mat-select>
         </mat-form-field>
    
-        <mat-form-field  appearance="outline" class="col-lg-2" >
+        <mat-form-field  appearance="outline" class="col-lg-2 matsmall" >
             <mat-label>From Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
             <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
             <mat-datepicker #sDate></mat-datepicker>
         </mat-form-field>
-        <mat-form-field class="col-lg-2" appearance="outline" >
+        <mat-form-field class="col-lg-2 matsmall" appearance="outline" >
             <mat-label>From Time</mat-label>         
             <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
             <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
@@ -25,13 +25,13 @@
         </mat-form-field>
 
 
-        <mat-form-field class="col-lg-2" appearance="outline">
+        <mat-form-field class="col-lg-2 matsmall"  appearance="outline">
             <mat-label>To Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
             <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
             <mat-datepicker #eDate></mat-datepicker>
         </mat-form-field>
-        <mat-form-field class="col-lg-2" appearance="outline">
+        <mat-form-field class="col-lg-2 matsmall" appearance="outline">
             <mat-label>To Time</mat-label>
                 <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
                 <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>

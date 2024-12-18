@@ -9,11 +9,10 @@
 
 
 
-            <mat-form-field class="w-25 m-1" appearance="outline"
-                style="min-height: 55px; min-width: 150px;border-radius: 10px ;">
+            <mat-form-field class="w-25 m-1" appearance="outline">
                 <mat-label>Search.....</mat-label>
                 <input #catSearch matInput type="search" class="text-secondary">
-                <mat-icon matPrefix class="text-secondary">search</mat-icon>
+                <!-- <mat-icon matPrefix class="text-secondary">search</mat-icon> -->
             </mat-form-field>
 
 
@@ -35,17 +34,17 @@
         <!-----------   Products Area ------------------->
       
         <div class="row cursorPointer">
-            <div *ngFor="let item of RecipeList|filter:recipeSearch.value" style="width: 170px;">
-                <mat-card style="width:160px; height: 160px;" class="m-1 shadow recipecard" data-bs-toggle="modal"
+            <div *ngFor="let item of RecipeList|filter:recipeSearch.value" style="width: 150px;">
+                <mat-card style="width:140px; height: 140px;" class="m-1 shadow recipecard" data-bs-toggle="modal"
                     data-bs-target="#qtyModal" (click)="tempProdRow = item;this.global.focusTo('.prodQty')">
 
                     <!-- <div style="height: 150px;width: 170px;background-size: cover;" [ngStyle]="{ 'background-image': 'url(' + item.recipeImage + ')' }"></div> -->
                     <div class="text-center">
-                        <img *ngIf="item.recipeImage" [src]="item.recipeImage" alt="" height="120px" width="150px">
+                        <img *ngIf="item.recipeImage" [src]="item.recipeImage" alt="" height="100px" width="130px">
                     </div>
 
                   <div class="text-center" style="height: 40px;background-color: orange;"> 
-                         <p class="text-white"> {{item.recipeTitle |slice:0:17}}...</p>
+                         <p class="text-white fs-12px"> {{item.recipeTitle |slice:0:17}}...</p>
                         <p style="margin-top: -15px;"><b>{{item.recipeSalePrice |number}}</b></p>
                     <!-- <mat-card-footer class="text-center"
                     style="font-size: x-small;"></mat-card-footer>

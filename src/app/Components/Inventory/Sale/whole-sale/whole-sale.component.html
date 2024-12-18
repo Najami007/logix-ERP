@@ -15,7 +15,7 @@
 
                     <button accesskey="n" class="bg-primary text-white " data-bs-toggle="modal"
                         data-bs-target="#prodModal" matTooltip="Search Product By Name (alt + n)"
-                        style="height: 50px;width: 50px;border: 1px solid rgb(13, 110, 253);border-radius: 0px 5px 5px 0px;"
+                        style="height: 40px;width: 40px;border: 1px solid rgb(13, 110, 253);border-radius: 0px 5px 5px 0px;"
                         (click)="focusto('#prodName',$event)"><mat-icon>search</mat-icon></button>
                 </div>
 
@@ -23,60 +23,60 @@
 
             </div>
 
-            <div style="height: 200px;">
+            <div style="height: 150px;">
 
-                <mat-card class="p-1 w-100" style="height: 200px;">
+                <mat-card class="p-1 w-100" style="height: 150px;">
                     <div class="text-center w-100" *ngIf="tableDataList != ''" accesskey="i"
                         (click)="this.global.showProductImage(this.productImage,0)">
-                        <img [src]="productImage" alt="Img not Found" height="195px" width="200px">
+                        <img [src]="productImage" alt="Img not Found" height="140px" >
                     </div>
                 </mat-card>
 
 
             </div>
 
-            <div class="pt-3">
+            <div class="pt-2">
 
                 <div class="border-bottom ">
                     <div class="pt-2 d-flex justify-content-between">
-                        <p style="font-size: 15px;color: rgb(0, 0, 0);">TOTAL</p>
-                        <p style="font-size: 3rem;color: rgb(255, 0, 0);" class="font-digit text-end">{{subTotal
+                        <p style="font-size: 12px;color: rgb(0, 0, 0);">TOTAL</p>
+                        <p style="font-size: 2.5rem;color: rgb(255, 0, 0);" class="font-digit text-end">{{subTotal
                             |number:'1.0-1'}}
                         </p>
                     </div>
 
                     <div *ngIf="discFeature" class="pt-2 d-flex justify-content-between">
-                        <p style="font-size: 15px;color: rgb(0, 0, 0);">DISCOUNT</p>
+                        <p style="font-size: 12px;color: rgb(0, 0, 0);">DISCOUNT</p>
                         <p style="font-size: 2rem;color: rgb(31, 29, 29);" class="font-digit text-end">{{offerDiscount
                             |number:'1.0-1'}}
                         </p>
                     </div>
 
-                    <div class="pt-2 d-flex justify-content-between">
-                        <p style="font-size: 15px;color: rgb(6, 6, 6)" class="w-50 pt-3 text-uppercase">Other DISCOUN<u>T</u></p>
+                    <div class="pt-1 d-flex justify-content-between">
+                        <p style="font-size: 12px;color: rgb(6, 6, 6)" class="w-50 pt-3 text-uppercase">Other DISCOUN<u>T</u></p>
                         <input class="bg-transparent border-0  text-dark text-end font-digit w-100" autocomplete="false"
                             id="disc" accesskey="t" style="font-size: 2rem;" type="text" [(ngModel)]="discount"
                             (keyup)="getTotal()"
                             (keydown)="getTotal();this.global.handleNumKeys($event);focusto('#cash',$event)" />
                     </div>
 
-                    <div class="pt-2 d-flex justify-content-between">
-                        <p style="font-size: 15px;color: rgb(6, 6, 6)" class="w-50 pt-3"><u>C</u>ASH</p>
+                    <div class="pt-1 d-flex justify-content-between">
+                        <p style="font-size: 12px;color: rgb(6, 6, 6)" class="w-50 pt-3"><u>C</u>ASH</p>
                         <input class="bg-transparent border-0  text-success text-end font-digit w-100"
                             [disabled]="paymentType !== 'Cash'"
-                            autocomplete="false" id="cash" accesskey="c" style="font-size: 3rem;" type="text"
+                            autocomplete="false" id="cash" accesskey="c" style="font-size: 2rem;" type="text"
                             [(ngModel)]="cash" (keyup)="getTotal()"
                             (keydown)="getTotal();this.global.handleNumKeys($event);focusto('#save',$event)" />
                     </div>
                     <div>
-                        <div class="pt-3 d-flex justify-content-between">
-                            <p style="font-size: 15px;color: rgb(3, 3, 3)" class="mt-1">NET TOTAL</p>
-                            <p style="font-size: 3rem;color: rgb(19, 83, 27);" class="font-digit pt-1 text-end">
+                        <div class="pt-1 d-flex justify-content-between">
+                            <p style="font-size: 12px;color: rgb(3, 3, 3)" class="mt-1">NET TOTAL</p>
+                            <p style="font-size: 2rem;color: rgb(19, 83, 27);" class="font-digit pt-1 text-end">
                                 {{netTotal || 0|number:'1.0-1'}}</p>
                         </div>
-                        <div class="pt-3 d-flex justify-content-between">
-                            <p style="font-size: 15px;color: rgb(3, 3, 3)" class="mt-1">CHANGE</p>
-                            <p style="font-size: 3rem;color: rgb(0, 0, 0);" class="font-digit pt-1 text-end">{{change
+                        <div class="pt-2 d-flex justify-content-between">
+                            <p style="font-size: 12px;color: rgb(3, 3, 3)" class="mt-1">CHANGE</p>
+                            <p style="font-size: 2rem;color: rgb(0, 0, 0);" class="font-digit pt-1 text-end">{{change
                                 ||0|number:'1.0-1'}}</p>
                         </div>
                     </div>
@@ -106,20 +106,20 @@
         <div class="col-lg-9 border-dark border-start " >
             <div class=" p-2" style="height: 87vh;">
                 <div class="row">
-                    <mat-form-field appearance="outline"  class="col-lg-2">
+                    <mat-form-field appearance="outline"  class="col-lg-2 matsmall">
                         <mat-label>Invoice Date</mat-label>
                         <input [(ngModel)]="invoiceDate"  readonly="true" matInput type="text" name="voucherDate"
                             [matDatepicker]="voucherDate">
                         <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
                         <mat-datepicker #voucherDate></mat-datepicker>
                     </mat-form-field>
-                    <mat-form-field *ngIf="BookerFeature"  class="col-lg-2" appearance="outline">
+                    <mat-form-field *ngIf="BookerFeature"  class="col-lg-2 matsmall" appearance="outline">
                         <mat-label>Booker</mat-label>
                         <mat-select [(ngModel)]="bookerID" name="billDiscount" >
                             <mat-option *ngFor="let item of bookerList" [value]="item.bookerID">{{item.bookerName}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="col-lg-3">
+                    <mat-form-field appearance="outline" class="col-lg-3 matsmall">
                         <mat-label>Customer</mat-label>
                         <mat-select  [(ngModel)]="partyID" (selectionChange)="partySelect()" #supplier name="customer">
                             <mat-option [value]="0">WalkIn Customer</mat-option>
@@ -129,13 +129,13 @@
                         </mat-select>
                         <mat-icon class="cursorPointer" (click)="addParty()" matSuffix>add</mat-icon>
                     </mat-form-field>
-                    <mat-form-field  class="col-lg-2" appearance="outline">
+                    <mat-form-field  class="col-lg-2 matsmall" appearance="outline">
                         <mat-label>Adv Tax</mat-label>
                         <mat-select [(ngModel)]="AdvTaxValue" name="advTax" (selectionChange)="getTotal()">
                             <mat-option *ngFor="let item of advanceTaxList" [value]="item.value">{{item.value}}%</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="col-lg-3">
+                    <mat-form-field appearance="outline" class="col-lg-3 matsmall">
                         <mat-label>Remarks</mat-label>
                         <textarea matInput rows="1" [(ngModel)]="billRemarks"></textarea>
                     </mat-form-field>
@@ -143,7 +143,7 @@
                 </div>
 
                 <div style="height: 70vh;overflow-y: scroll;">
-                    <table class="table table-logix">
+                    <table class="table-logix" >
                         <thead>
                             <tr>
                                 <th class="cursorPointer" (click)="changeOrder()">S#</th>
@@ -160,8 +160,8 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr *ngFor="let item of tableDataList index as index"
+                        <tbody> 
+                            <tr *ngFor="let item of tableDataList index as index" (click)="showImg(item)"
                                 [ngClass]="index == rowFocused ? 'bg-dg' : ''">
                                 <td class="text-center cursorPointer">{{index+1}}</td>
                                 <td class="text-end">{{item.costPrice}}</td>
@@ -222,7 +222,7 @@
 
     </div>
 
-    <div style="position: fixed;bottom: 2.5%;left: 25%;">
+    <div style="position: fixed;bottom: 3.5%;left: 25%;">
         <mat-form-field *ngIf="discFeature" style="width: 110px;">
             <mat-label>Disc</mat-label>
             <mat-select [(ngModel)]="billDiscount" name="billDiscount" (selectionChange)="applyDiscount()">

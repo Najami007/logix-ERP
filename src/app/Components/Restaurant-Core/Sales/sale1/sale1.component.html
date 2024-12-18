@@ -9,11 +9,9 @@
 
 
 
-            <mat-form-field class="w-25 m-1" appearance="outline"
-                style="min-height: 55px; min-width: 150px;border-radius: 10px ;">
-                <mat-label>Search.....</mat-label>
+            <mat-form-field class="w-25 m-1" appearance="outline">
+                <mat-label>Search...</mat-label>
                 <input #catSearch matInput type="search" class="text-secondary">
-                <mat-icon matPrefix class="text-secondary">search</mat-icon>
             </mat-form-field>
 
 
@@ -34,19 +32,19 @@
         </div>
         <!-----------   Products Area ------------------->
         <div class="row cursorPointer">
-            <div *ngFor="let item of RecipeList |filter:recipeSearch.value"  style="width: 200px;">
-                <mat-card  style="width:180px; height: 200px;"  class="m-1 shadow recipecard" data-bs-toggle="modal"
+            <div *ngFor="let item of RecipeList |filter:recipeSearch.value"  style="width: 160px;">
+                <mat-card  style="width:140px; height: 160px;"  class="m-1 shadow recipecard" data-bs-toggle="modal"
                     data-bs-target="#qtyModal" (click)="tempProdRow = item;this.global.focusTo('.prodQty')">
 
                     <!-- <div style="height: 150px;width: 170px;background-size: cover;" [ngStyle]="{ 'background-image': 'url(' + item.recipeImage + ')' }"></div> -->
                     <div class="text-center">
-                        <img *ngIf="item.recipeImage" [src]="item.recipeImage" alt="" height="150px" width="170px">
+                        <img *ngIf="item.recipeImage" [src]="item.recipeImage" alt="" height="110px" width="130px">
                     </div>
 
                     <mat-card-footer class="text-center"
-                        style="font-size: x-small;"><strong>{{item.recipeTitle}}</strong></mat-card-footer>
+                        style="font-size: x-small;" [matTooltip]="item.recipeTitle"><strong>{{ item.recipeTitle  | slice:0:22 }}</strong></mat-card-footer>
                     <mat-card-footer class="text-center text-success "
-                        style="font-size: 20px;">{{item.recipeSalePrice | number}}</mat-card-footer>
+                        style="font-size: 18px;">{{item.recipeSalePrice | number}}</mat-card-footer>
 
 
                 </mat-card>
@@ -120,32 +118,32 @@
     
     
             <!-----------   Bill Total Amount Section ------------------->
-            <div class="d-flex bg-white border-top p-1 col-lg-4 btas" style="position: fixed;bottom: 6%;right: 0%;">
+            <div class="d-flex bg-white border-top p-1 col-lg-4 btas" style="position: fixed;bottom: 4%;right: 0%;">
     
     
                 <div class="justify-content-between p-1 w-50 border-end">
     
                     <div class="d-flex justify-content-between w-100">
-                        <mat-label class="w-50 text-primary cursorPointer" data-bs-toggle="modal" (click)="focusTo('#discInput')"
-                            data-bs-target="#disc" accesskey="t"><strong>ADD DISCOUN<u>T</u></strong></mat-label>
-                        <p class="text-center font-digit" style="font-size: 30px;">{{billDiscount |number:'1.0-2'}}</p>
+                        <p class="w-50 text-primary cursorPointer" style="font-size: 12px;" data-bs-toggle="modal" (click)="focusTo('#discInput')"
+                            data-bs-target="#disc" accesskey="t">ADD DISCOUN<u>T</u></p>
+                        <p class="text-center font-digit" style="font-size: 2rem;">{{billDiscount |number:'1.0-2'}}</p>
                         <!-- <input disabled="true" [(ngModel)]="billDiscount" class="w-50 text-end" (keyup)="getTotal();"
                             (keydown)="getTotal();this.global.handleNumKeys($event)" /> -->
                     </div>
     
                     <div class="d-flex justify-content-between w-100 pt-1">
-                        <mat-label class="w-50"><strong>SERVICE CHARGES</strong></mat-label>
-                        <p class="text-center font-digit" *ngIf="orderType == 'Dine In' || orderType == '' || orderType == 'Take Away'" style="font-size: 30px;">{{OtherCharges |number:'1.0-1'}}</p>
+                        <p class="w-50 fw-bold" style="font-size: 12px;">SERVICE CHARGES</p>
+                        <p class="text-center font-digit" *ngIf="orderType == 'Dine In' || orderType == '' || orderType == 'Take Away'" style="font-size: 2rem;">{{OtherCharges |number:'1.0-1'}}</p>
                         <input *ngIf="orderType == 'Home Delivery'"[(ngModel)]="OtherCharges" class="w-50 text-end" (keyup)="getTotal();"
                             (keydown)="getTotal();this.global.handleNumKeys($event)" />
                     </div>
     
                     <div class="d-flex justify-content-between w-100 pt-1">
-                        <mat-label><strong>SUB TOTAL</strong></mat-label>
+                        <p class="fw-bold" style="font-size: 12px;">SUB TOTAL</p>
                         <p class="text-center font-digit" style="font-size: 30px;">{{subTotal |number:'1.0-1'}}</p>
                     </div>
                     <div class="d-flex justify-content-between  w-100">
-                        <mat-label><strong>NET TOTAL</strong></mat-label>
+                        <p class="fw-bold" style="font-size: 12px;">NET TOTAL</p>
                         <p class="text-center font-digit" style="font-size: 30px;">{{netTotal |number:'1.0-1'}}</p>
                     </div>
                     <mat-form-field appearance="outline" class="col-lg-12 " *ngIf="waiterFeature">
@@ -169,36 +167,36 @@
     
                 <div class="w-50 text-center">
     
-                    <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5" *ngIf="holdbtnType == 'hold'"
+                    <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5 fs-12px" *ngIf="holdbtnType == 'hold'"
                         matTooltip="Hold Current Bill"  matTooltipPosition="left" (click)="save('hold')" accesskey="h">HOLD</button>
     
-                    <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5"
+                    <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5 fs-12px"
                         *ngIf="holdbtnType == 'rehold'" matTooltipPosition="left" matTooltip="ReHold Current Bill"(click)="save('rehold')">ReHold</button>
     
-                    <button mat-raised-button class="m-1 btn text-white bg-danger col-lg-5" matTooltip="Retrieve Hold Bills" 
+                    <button mat-raised-button class="m-1 btn text-white bg-danger col-lg-5 fs-12px" matTooltip="Retrieve Hold Bills" 
                     matTooltipPosition="right" (click)="global.openBootstrapModal('#retrieveBill',true);getHoldBills();" accesskey="r"><u>R</u>etrieve</button>
     
     
-                    <button mat-raised-button class="m-1 btn text-white bg-warning col-lg-5" accesskey="n" matTooltip="New bill (Alt + n)" matTooltipPosition="left"
+                    <button mat-raised-button class="m-1 btn text-white bg-warning col-lg-5 fs-12px" accesskey="n" matTooltip="New bill (Alt + n)" matTooltipPosition="left"
                          [disabled]="tableData != ''" (click)="reset();global.openBootstrapModal('#NewBill',true)"><u>N</u>ew Bill</button>
     
-                     <button mat-raised-button class="m-1 btn text-white bg-success col-lg-5" matTooltipPosition="right"
+                     <button mat-raised-button class="m-1 btn text-white bg-success col-lg-5 fs-12px" matTooltipPosition="right"
                          matTooltip="Save Current Bill" (click)="global.openBootstrapModal('#paymentMehtod',this.tableData != '')" accesskey="s"><u>S</u>ave</button>
     
     
                     <button matTooltip="Print  Current Bill" matTooltipPosition="left" mat-raised-button 
-                        class="m-1 text-white btn bg-primary col-lg-5" (click)="HOldandPrint('rehold')" accesskey="p">H & <u>P</u>rint</button>
+                        class="m-1 text-white btn bg-primary col-lg-5 fs-12px" (click)="HOldandPrint('rehold')" accesskey="p">H & <u>P</u>rint</button>
     
-                    <button accesskey="u" mat-raised-button matTooltip="Retreiving Saved Bills" matTooltipPosition="right" class="m-1 btn  col-lg-5 "
+                    <button accesskey="u" mat-raised-button matTooltip="Retreiving Saved Bills" matTooltipPosition="right" class="m-1 btn  col-lg-5 fs-12px"
                      (click)="global.openBootstrapModal('#SavedBillModal',true);this.getSavedBill()">D<u>u</u>plicate</button>
             
-                    <button mat-raised-button matTooltip="Void Full Bill" matTooltipPosition="left" class="m-1 text-white btn bg-info col-lg-5"
+                    <button mat-raised-button matTooltip="Void Full Bill" matTooltipPosition="left" class="m-1 text-white btn bg-info col-lg-5 fs-12px"
                         (click)="voidBill()" accesskey="v"><u>V</u>oid Bill</button>
     
                     <button matTooltip="Merge Two Bills" matTooltipPosition="right" (click)="global.openBootstrapModal('#mergeBill',true)"
-                        mat-raised-button class="m-1 text-white btn col-lg-5" style="background-color: pink;" accesskey="m"><u>M</u>erge Bill</button>
+                        mat-raised-button class="m-1 text-white btn col-lg-5 fs-12px" style="background-color: pink;" accesskey="m"><u>M</u>erge Bill</button>
                        
-                        <mat-form-field class="w-100 ps-4 pe-4 pt-1" appearance="outline" *ngIf="waiterFeature">
+                        <mat-form-field class="w-100 ps-3 pe-3 pt-1" appearance="outline" *ngIf="waiterFeature">
                             <mat-label>Remar<u>k</u>s</mat-label>
                             <textarea rows="1" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
                         </mat-form-field>

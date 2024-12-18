@@ -6,7 +6,7 @@
 
         <div class="col-lg-10 ">
 
-            <div class="card shadow" style="border-radius: 5px 5px 5px 5px;height: 87vh;">
+            <div class="card shadow" style="border-radius: 5px 5px 5px 5px;height: 84vh;">
 
                 <!------------------------- Search Bar Area ------------------>
                 <div class="ps-1 d-flex" style="background-color: rgb(237, 233, 233);">
@@ -78,28 +78,28 @@
         <!------------------ column 2 Amount side area ---------------->
         <div class="col-lg-2 ">
             <div class=" card p-2 totalArea"
-                style=" overflow-y: scroll; border-radius: 5px 5px 5px 5px;min-height: 87vh;max-height:87vh; background-color: rgb(240, 247, 245);">
+                style=" overflow-y: scroll; border-radius: 5px 5px 5px 5px;min-height: 84vh;max-height:84vh; background-color: rgb(240, 247, 245);">
                 <div class="w-100">
-                    <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
+                    <mat-card class="p-1 w-100 " style="height: 150px;width: 380px;">
                         <div class="text-center" *ngIf="tableDataList != ''">
-                            <img [src]="productImage || ''" alt="" height="190" width="200" alt="Img not Found" accesskey="i"
+                            <img [src]="productImage || ''" alt="" height="140" width="200" alt="Img not Found" accesskey="i"
                                 (click)="this.global.showProductImage(this.productImage,0)">
                         </div>
                     </mat-card>
                 </div>
                 
-                <div class="d-flex pb-2 flex-column border-bottom">
+                <div class="d-flex pb-1 flex-column border-bottom">
                     <div class=" pt-3 d-flex justify-content-between">
-                        <p style="font-size: 15px;color: rgb(0, 0, 0);">TOTAL</p>
-                        <p style="font-size: 40px;color: rgb(255, 0, 0);" class="font-digit text-end">{{subTotal
+                        <p style="font-size: 12px;color: rgb(0, 0, 0);">TOTAL</p>
+                        <p style="font-size: 2.5rem;color: rgb(255, 0, 0);" class="font-digit text-end">{{subTotal
                             |number:'1.0-1'}}
                         </p>
                     </div>
 
                     <div class="d-flex justify-content-between">
                         <div class="d-flex justify-content-between col-lg-12">
-                            <p class="text-primary cursorPointer" accesskey="t" data-bs-toggle="modal" data-bs-target="#discountModal">ADD DISCOUN<u>T</u></p>
-                            <p style="font-size: 40px;color: rgb(9, 9, 9);" class="font-digit text-end">{{discount |number:'1.0-1'}}
+                            <p class="text-primary cursorPointer" style="font-size: 12px;" accesskey="t" data-bs-toggle="modal" data-bs-target="#discountModal">ADD DISCOUN<u>T</u></p>
+                            <p style="font-size: 2rem;color: rgb(9, 9, 9);" class="font-digit text-end">{{discount |number:'1.0-1'}}
                         </div>
                         <!-- <div class=" col-lg-6">
                         <p style="font-size: 15px;color: rgb(6, 6, 6)" class="text-end">SERVICE CHARGES</p>
@@ -109,21 +109,21 @@
                     </div> -->
                     </div>
                     <div class=" col-lg-12  pt-1">
-                        <p style="font-size: 15px;color: rgb(6, 6, 6)" class="w-100"><u>C</u>ASH</p>
+                        <p style="font-size: 12px;color: rgb(6, 6, 6)" class="w-100"><u>C</u>ASH</p>
                         <input class="bg-success border-0  text-white text-end font-digit w-100" autocomplete="false" id="cash" accesskey="c"
-                            style="font-size: 30px;" type="text" [(ngModel)]="cash" (keyup)="getTotal()"
+                            style="font-size: 2rem;" type="text" [(ngModel)]="cash" (keyup)="getTotal()"
                             (keydown)="getTotal();this.global.handleNumKeys($event);focusTo($event,'#save')" />
                     </div>
                     <div class="">
                         <div class="w-100">
-                            <p style="font-size: 15px;color: rgb(3, 3, 3)">NET TOTAL</p>
-                            <p style="font-size: 40px;color: rgb(19, 83, 27);" class="font-digit pt-1 text-end">
+                            <p style="font-size: 12px;color: rgb(3, 3, 3)">NET TOTAL</p>
+                            <p style="font-size: 2rem;color: rgb(19, 83, 27);" class="font-digit pt-1 text-end">
                                 {{netTotal || 0
                                 |number:'1.0-1'}}</p>
                         </div>
                         <div class="w-100">
-                            <p style="font-size: 15px;color: rgb(3, 3, 3)">CHANGE</p>
-                            <p style="font-size: 40px;color: rgb(0, 0, 0);" class="font-digit pt-1 text-end">{{change ||
+                            <p style="font-size: 12px;color: rgb(3, 3, 3)">CHANGE</p>
+                            <p style="font-size: 2rem;color: rgb(0, 0, 0);" class="font-digit pt-1 text-end">{{change ||
                                 0
                                 |number:'1.0-1'}}</p>
                         </div>
@@ -135,7 +135,7 @@
                     <textarea matInput accesskey="r" rows="1" [(ngModel)]="billRemarks"></textarea>
                 </mat-form-field>
 
-                <div class="text-center d-flex pt-4 me-1">
+                <div class="text-center d-flex pt-1 me-1">
                     <button class="col-lg-2 me-1 delBtn" matTooltip="Void Full Bill"
                         (click)="voidBill()"><mat-icon>delete_outline</mat-icon></button>
                     <button class="btnsave col-lg-10 text-center " accesskey="s" id="save"

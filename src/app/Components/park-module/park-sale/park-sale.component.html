@@ -6,17 +6,17 @@
 
         <!-----------   categories Row ------------------->
 
-      <div class="d-flex border-bottom mt-1 "  >
+      <div class="row border-bottom mt-1 "  >
 
         
 
-        <mat-form-field class="col-lg-10 " appearance="outline" style="min-height: 55px; min-width: 150px;border-radius: 10px ;" >
+        <mat-form-field class="col-lg-9 " appearance="outline"  >
             <mat-label >Search.....</mat-label>
             <input [(ngModel)]="searchSwing"  matInput type="search" class="text-secondary" >
             <mat-icon matPrefix class="text-secondary">search</mat-icon>
         </mat-form-field>
 
-        <button  mat-raised-button class="ms-1 col-lg-2 btn-rpt bg-primary text-white" data-bs-toggle="modal" data-bs-target="#rtnModel">Find Ticket</button>
+        <button  class="btn-rpt-primary  col-lg-3  " style="height: 48px;" data-bs-toggle="modal" data-bs-target="#rtnModel">Find Ticket</button>
 
 
 
@@ -34,10 +34,10 @@
        <!-----------   Products Area ------------------->
   <div class="row cursorPointer">
     <div *ngFor="let item of swingsList | filter:searchSwing"  style="width: 200px;"  >
-        <mat-card  style="width:180px; height: 200px;" class="m-1 p-1 swingCard" (click)="onSwingSelected(item)" >
+        <mat-card  style="width:140px; height: 160px;" class="m-1 p-1 swingCard" (click)="onSwingSelected(item)" >
           
                 <!-- <img *ngIf="item.img" [src]="item.swingImage" alt="" height="150px" width="170px"> -->
-                <div style="height: 150px;width: 170px;background-size: cover;" [ngStyle]="{ 'background-image': 'url(' + item.swingImage + ')' }">
+                <div style="height: 110px;width: 130px;background-size: cover;" [ngStyle]="{ 'background-image': 'url(' + item.swingImage + ')' }">
                 <div class=" ">
                     <p class="text-center align-content-center mt-1 me-1"
                      style="padding-top: 2px; font-size: 15px; float: right; border: 1px solid rgb(9, 9, 9); 

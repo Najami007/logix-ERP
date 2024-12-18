@@ -29,17 +29,17 @@
                     
 
                     <div class="col-lg-4" *ngIf="crudList.r">
-                        <button class="btn btn-success w-25  btn-rpt me-1" (click)="getReport('R1','project')" >
+                        <button class="btn-rpt-success w-25  me-1" (click)="getReport('R1','project')" >
                             ProjectWise
                         </button>  
-                        <button class="btn btn-success w-25 btn-rpt me-1" (click)="getReport('R1','all')" >
+                        <button class="btn-rpt-success w-25 me-1" (click)="getReport('R1','all')" >
                             All Report
                         </button>   
                         <!-- <button class=" btn btn-primary w-25 btn-rpt me-2" (click)="getReport('R2','')" >
                             Summary 2
                         </button>    -->
                     
-                        <button class=" btn btn-primary  btn-rpt" (click)="PrintTable()">
+                        <button class=" btn-rpt-primary" (click)="PrintTable()">
                            Print
                         </button>
                     </div>
@@ -48,7 +48,7 @@
 
             <hr>
                 <!------------------- Table Area ---------------------- -->
-        <div id="printDiv"  class="container printRpt p-3" >
+        <div id="printDiv"  class="container printRpt p-3 pt-0" >
 
             <!------------------- Logo Section --------------------------------->
             <div class="hide">

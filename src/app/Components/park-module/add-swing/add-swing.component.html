@@ -2,7 +2,7 @@
 
     <div class="col-lg-4 ">
 
-        <h1 class="border-bottom p-2">Add Swing Detail's</h1>
+        <h4 class="border-bottom p-2">Add Swing Detail's</h4>
 
 
         <div class=" d-flex">
@@ -36,7 +36,7 @@
                 <div class="avatar-del">
                     <label (click)="productImg = ''"><mat-icon class=" mt-1">delete</mat-icon></label>
                 </div>
-                <div class="avatar-preview">
+                <div class="avatar-preview" (click)="global.showProductImage(productImg,0)">
                     <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + productImg + ')' }"></div>
                 </div>
             </div>
@@ -56,12 +56,12 @@
         </mat-form-field>
 
 
-        <div class="p-5 ">
-            <button #toggleBtn class="btn btn-success me-5 w-25" accesskey="s"
+        <div class="pt-2 text-center">
+            <button #toggleBtn class="btnsave me-5 w-25" accesskey="s"
                 (click)="save() " *ngIf="crudList.c && btnType == 'Save'">{{btnType}}</button>
-                <button #toggleBtn class="btn btn-success me-5 w-25" accesskey="s"
+                <button #toggleBtn class="btnsave me-5 w-25" accesskey="s"
                 (click)="save() " *ngIf="crudList.u && btnType == 'Update'">{{btnType}}</button>
-            <button class="btn btn-danger w-25" (click)="reset()">Reset</button>
+            <button class="btnreset w-25" (click)="reset()">Reset</button>
         </div>
 
     </div>
@@ -78,7 +78,7 @@
             <input type="text" #swingSearch matInput>
         </mat-form-field>
         <hr>
-        <table class="table table-hover" *ngIf="crudList.r">
+        <table class="table table-hover fs-12px" *ngIf="crudList.r">
             <thead>
                 <th>S#</th>
                 <th>Title</th>
@@ -99,7 +99,7 @@
                     <td>{{index+1}}</td>
                     <td>{{item.swingTitle}}</td>
                     <td>{{item.ticketPrice}}</td>
-                    <td><div style="height: 40px;width: 40px;background-size: cover;" [ngStyle]="{ 'background-image': 'url(' + item.swingImage + ')' }"></div></td>
+                    <td><div style="height: 30px;width: 30px;background-size: cover;" [ngStyle]="{ 'background-image': 'url(' + item.swingImage + ')' }"></div></td>
                     <td>{{item.entryUser}}</td>
                     <td *ngIf="crudList.u"><button mat-mini-fab class="bg-success h30px w30px"  (click)="editswing(item)"><mat-icon  >edit</mat-icon></button></td>
                     <td *ngIf="crudList.u"><button mat-mini-fab  class="bg-warning h30px w30px"  *ngIf="item.activeStatus == false "   (click)="changeStatus(item)"  ><mat-icon>block</mat-icon></button>

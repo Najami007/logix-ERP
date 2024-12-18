@@ -3,7 +3,7 @@
 
     <div class="ps-1 d-flex  pt-2  border-bottom" >
 
-        <mat-form-field appearance="outline" class="col-lg-10">
+        <mat-form-field appearance="outline" class="col-lg-10 matsmall">
             <mat-label>Report Type</mat-label>
             <mat-select [(ngModel)]="reportType" (selectionChange)="emptyField()" >
                 <mat-option *ngFor="let item of reportTypeList index as index" [value]="item.val">{{index+1}} - {{item.title}}</mat-option>
@@ -11,8 +11,8 @@
         </mat-form-field>
 
 
-       <div class="col-lg-2 ms-1">
-        <button  data-bs-toggle="modal" data-bs-target="#credential"  class="btn-rpt btn-rpt-success" (click)="openDialog()">Get Report</button>
+       <div class="col-lg-2 ms-1 ">
+        <button  data-bs-toggle="modal" data-bs-target="#credential"  class="btn-rpt-success" (click)="openDialog()">Get Report</button>
         <mat-checkbox [(ngModel)]="minusOnly">Minus Only</mat-checkbox>
 
        </div>
@@ -20,12 +20,12 @@
 
     </div>
     <div class="p-1 d-flex justify-content-between">
-        <mat-form-field class="col-lg-11 pe-1" appearance="outline">
+        <mat-form-field class="col-lg-11 pe-1 matsmall" appearance="outline">
             <mat-label><u>S</u>earch...</mat-label>
             <input matInput #InvSearch accesskey="s" />
         </mat-form-field>
         <div class="col-lg-1 ">
-            <button mat-fab class=" " color="primary" (click)="print()"><mat-icon>print</mat-icon></button>
+            <button mat-mini-fab class=" " color="primary" (click)="print()"><mat-icon>print</mat-icon></button>
         </div>
     </div>
     
@@ -219,7 +219,7 @@
                             <option *ngFor="let item of CategoriesList |filter:cat.value" value="{{item.categoryID}}">{{item.categoryTitle}}</option>
                         </select> -->
     
-                        <mat-form-field appearance="outline" *ngIf="catFlag" class="w-100 cat">
+                        <mat-form-field appearance="outline" *ngIf="catFlag" class="w-100 cat matsmall">
                             <mat-label>Category</mat-label>
                             <mat-select [(ngModel)]="categoryID"  (selectionChange)="onSelection('cat',$event);getSubCategory()" >
                             
@@ -227,26 +227,26 @@
                             </mat-select>
                          </mat-form-field>
     
-                         <mat-form-field appearance="outline" *ngIf="subCatFlag" class="w-100 subcat">
+                         <mat-form-field appearance="outline" *ngIf="subCatFlag" class="w-100 subcat matsmall">
                             <mat-label>Sub Category</mat-label>
                             <mat-select [(ngModel)]="subCategoryID" (selectionChange)="onSelection('subcat',$event)">
                                 <mat-option *ngFor="let item of SubCategoriesList " [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
                             </mat-select>
                          </mat-form-field>
-                         <mat-form-field appearance="outline" class="w-100 brand" *ngIf="brandFlag">
+                         <mat-form-field appearance="outline" class="w-100 brand matsmall" *ngIf="brandFlag">
                             <mat-label>Brand</mat-label>
                             <mat-select [(ngModel)]="brandID" (selectionChange)="onSelection('brand',$event)">
                                 <mat-option *ngFor="let item of BrandList " [value]="item.brandID">{{item.brandTitle}}</mat-option>
                             </mat-select>
                          </mat-form-field>
-                         <mat-form-field appearance="outline" class="w-100 type" *ngIf="typeFlag"> 
+                         <mat-form-field appearance="outline" class="w-100 type matsmall" *ngIf="typeFlag"> 
                             <mat-label>Type</mat-label>
                             <mat-select [(ngModel)]="typeID" (selectionChange)="onSelection('type',$event)">
                                 <mat-option *ngFor="let item of ProductTypeList " [value]="item.productTypeID">{{item.productTypeTitle}}</mat-option>
                             </mat-select>
                          </mat-form-field>
         
-                     <mat-form-field appearance="outline" class="w-100 loc" *ngIf="locFlag">
+                     <mat-form-field appearance="outline" class="w-100 loc matsmall" *ngIf="locFlag">
                         <mat-label>Location</mat-label>
                         <mat-select [(ngModel)]="locationID" (selectionChange)="onSelection('location',$event)">
                             <mat-option *ngFor="let item of locationList " [value]="item.locationID">{{item.locationTitle}}</mat-option>

@@ -31,7 +31,7 @@ import { SaleRptRecipeCatwiseComponent } from './restaurantReports/sale-rpt-reci
 import { SaleRptPaymentTypewiseComponent } from './restaurantReports/sale-rpt-payment-typewise/sale-rpt-payment-typewise.component';
 import { SaleBillDetailComponent } from './Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 import { RestDashboardComponent } from './rest-dashboard/rest-dashboard.component';
-import { TabletSaleComponent } from './tablet-sale/tablet-sale.component';
+import { TabletSaleComponent } from './Sales/tablet-sale/tablet-sale.component';
 import { RecipeListComponent } from './restaurantReports/recipe-list/recipe-list.component';
 import { RecipeDetailComponent } from './recipe/recipe-detail/recipe-detail.component';
 import { VoidReportComponent } from './restaurantReports/void-report/void-report.component';

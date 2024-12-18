@@ -30,10 +30,10 @@
 
     <div class="col-lg-4" *ngIf="crudList.r">
         
-        <button class=" btn btn-success w-25   me-1 btn-rpt" (click)="getDetailReport('project')">ProjectWise </button>
-        <button class=" btn btn-success w-25   me-1 btn-rpt" (click)="getDetailReport('all')"> Get All </button>
+        <button class="btn-rpt-success w-25   me-1 " (click)="getDetailReport('project')">ProjectWise </button>
+        <button class="btn-rpt-success w-25   me-1 " (click)="getDetailReport('all')"> Get All </button>
         <!-- <button class=" btn btn-success  me-1 btn-rpt" style="width: 150px;" (click)="getSummary()">Get Summary </button> -->
-        <button class=" btn btn-primary  btn-rpt" (click)="print()"> Print</button>
+        <button class="btn-rpt-primary  " (click)="print()"> Print</button>
     </div>
 </div>
 <div  id="printRpt">

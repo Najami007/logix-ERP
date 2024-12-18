@@ -89,11 +89,11 @@
                   
 
                     <div class="justify-content-around d-flex">
-                        <button #toggleBtn class="btn btn-success w-25"  (click)="save() "
+                        <button #toggleBtn class="btnsave w-25"  (click)="save() "
                             *ngIf="crudList.c && btnType == 'Save'">{{btnType}}</button>
-                        <button #toggleBtn class="btn btn-success  w-25"  (click)="save() "
+                        <button #toggleBtn class="btnsave  w-25"  (click)="save() "
                             *ngIf="crudList.u && btnType == 'Update'">{{btnType}}</button>
-                        <button class="btn btn-danger w-25" accesskey="r" (click)="reset()"><u>R</u>eset</button>
+                        <button class="btnreset w-25" accesskey="r" (click)="reset()"><u>R</u>eset</button>
                         <mat-checkbox [(ngModel)]="autoEmptyFlag">Auto Empty</mat-checkbox>
 
                         <!-- <button *ngIf="crudList.c" class="btn btn-warning w-25 text-white" (click)="MapProdWithCategory()">Map / Unmap Product</button> -->
@@ -135,7 +135,7 @@
                     <div class="card"  style="min-height: 68vh;max-height: 68vh;overflow-y:scroll; background-color: rgba(225, 244, 236, 0.816);">
 
 
-                        <table class="table table-hover">
+                        <table class="table table-hover txtsm">
                             <thead>
                                 <tr>
                                     <th>S#</th>
@@ -198,7 +198,7 @@
                     <mat-icon matPrefix class="text-secondary">search</mat-icon>
                 </mat-form-field>
 
-                <table class="table">
+                <table class="table txtsm">
                     <thead>
                         <tr>
                             <th>S#</th>

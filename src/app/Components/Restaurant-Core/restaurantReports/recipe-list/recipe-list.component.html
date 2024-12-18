@@ -17,10 +17,10 @@
         <input  matInput type="text" [(ngModel)]="endPerc" class="text-secondary">
     </mat-form-field>
    <div class="col-lg-1">
-    <button class=" btn-rpt btn btn-primary" (click)="filterRecipeByPercentage()">%</button>
+    <button class="btn-rpt-primary" (click)="filterRecipeByPercentage()">%</button>
    </div>
    <div class="col-lg-1">
-    <button class=" btn-rpt btn btn-primary" (click)="openComparison()">Comparison</button>
+    <button class="btn-rpt-primary" (click)="openComparison()">Comparison</button>
    </div>
     
     <mat-form-field class="col-lg-3" appearance="outline">
@@ -32,7 +32,7 @@
         <mat-option *ngFor="let item of categoriesList |filter:catSearch.value" [value]="item.recipeCatID">{{item.recipeCatTitle}}</mat-option>
     </mat-select>
     </mat-form-field>
-    <button mat-fab color="primary" class="col-lg-1" (click)="print()"><mat-icon>print</mat-icon></button>
+    <button mat-mini-fab color="primary" class="col-lg-1" (click)="print()"><mat-icon>print</mat-icon></button>
    </div>
 
   <div>

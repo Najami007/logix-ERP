@@ -8,36 +8,7 @@
 }
 
 
-.scrollContainer{
-  overflow-x: auto;
-    max-height: 80px;
-    // border: 1px solid black;
-    display: flex;
-   
-}
-.scrollContainer:hover::-webkit-scrollbar-thumb{
-    background: #d0d0d0;
-}
 
-.scrollContainer::-webkit-scrollbar {
-    height: 5px !important;  
-}
-
-.scrollContainer::-webkit-scrollbar-thumb {
-    background: #f5f5f5;
-    border-radius: 20px;
-  }
-
-.scrollContainer::-webkit-scrollbar-track {
-    background: #f5f5f5;
-  }
-
-.scrollContainer .item{
-    height: 55px;
-     min-width: 150px;
-    //  line-height: 55px;
-     border-radius: 10px ;
-}
 
 .recipecard:hover{
   transform: translateY(6px);

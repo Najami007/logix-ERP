@@ -1,7 +1,7 @@
 <div class="container-fluid body" >
 
   
-      <div class=" row  mt-2">
+      <div class="row  mt-2">
         <mat-form-field appearance="outline" class="col-lg-4">
             <mat-label >Swing</mat-label>
             <mat-select [(ngModel)]="swingID" >
@@ -46,8 +46,8 @@
 
    <div class=" row justify-content-around">
     <div class=" col-lg-4 mb-2" *ngIf="crudList.r">
-        <button class="btn btn-success btn-rpt col-lg-4 me-1 " *ngIf="crudList.r" (click)="getReport()">Get Report</button>
-        <button class="btn btn-primary btn-rpt col-lg-2" *ngIf="crudList.r" (click)="print()">Print</button>
+        <button class="btn-rpt-success col-lg-4 me-1 " *ngIf="crudList.r" (click)="getReport()">Get Report</button>
+        <button class="btn-rpt-primary col-lg-2" *ngIf="crudList.r" (click)="print()">Print</button>
     </div>
    </div>
 

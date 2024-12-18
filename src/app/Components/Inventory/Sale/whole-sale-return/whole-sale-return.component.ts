@@ -113,7 +113,7 @@ export class WholeSaleReturnComponent implements OnInit {
   }
 
   discountList: any = [];
-  billDiscount: any;
+  billDiscount: any = 0;
 
   applyDiscount() {
 

@@ -113,7 +113,7 @@ export class WholeSaleComponent implements OnInit {
   }
 
   discountList: any = [];
-  billDiscount: any;
+  billDiscount: any = 0;
 
   applyDiscount() {
 
