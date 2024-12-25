@@ -57,6 +57,8 @@ export class PurchaseComponent implements OnInit {
     this.getLocation();
     this.getSuppliers();
     $('.searchBarcode').trigger('focus');
+    this.global.getProducts().subscribe(
+      (data: any) => { this.productList = data; });
 
   }
 
@@ -201,7 +203,7 @@ export class PurchaseComponent implements OnInit {
       if (e.keyCode == 13) {
         ///// check the product in product list by barcode
         var row = this.productList.find((p: any) => p.barcode == this.PBarcode);
-
+        console.log(row);
         /////// check already present in the table or not
         if (row !== undefined) {
           var condition = this.tableDataList.find(
@@ -508,26 +510,7 @@ export class PurchaseComponent implements OnInit {
   }
 
   handleUpdown(item: any, e: any, cls: string, index: any) {
-
-    //   if(e.keyCode == 9){
-    //     if(cls == '.sp'){
-    //       this.rowFocused = index + 1;
-    //     }else{
-    //       this.rowFocused = index ;
-    //     }
-
-    //   }
-
-
-    //  if(e.shiftKey && e.keyCode == 9 ){
-
-    //   if(cls == '.qty'){
-    //     this.rowFocused = index - 1;
-    //   }else{
-    //     this.rowFocused = index ;
-    //   }
-    //  }
-
+    const container = $(".table-logix");
     ////////// focusing to product search
     if (e.keyCode == 13) {
       e.preventDefault();
@@ -542,51 +525,42 @@ export class PurchaseComponent implements OnInit {
       e.preventDefault();
     }
 
-    /////move down
-    if (e.keyCode == 40) {
+    
 
+    /////move down
+    if (e.keyCode === 40) {
       if (this.tableDataList.length > 1) {
-        this.rowFocused += 1;
-        if (this.rowFocused >= this.tableDataList.length) {
-          this.rowFocused -= 1
-        } else {
-          var clsName = cls + this.rowFocused;
-          // alert(clsName);   
-          // e.which = e.ctrlKey + 97;
+          this.rowFocused = Math.min(this.rowFocused + 1, this.tableDataList.length - 1);
+          const clsName = cls + this.rowFocused;
+          this.global.scrollToRow(clsName, container);
           e.preventDefault();
-          $(clsName).trigger('select');
-          $(clsName).trigger('focus');
-          // $(clsName).trigger(e);  
-        }
+            $(clsName).trigger('select');
+            $(clsName).trigger('focus');
+         
       }
-    }
+  }
 
 
     //Move up
-    if (e.keyCode == 38) {
 
-      if (this.rowFocused == 0) {
-        e.preventDefault();
-        $(".searchProduct").trigger('select');
-        $(".searchProduct").trigger('focus');
-        $(".searchProduct").trigger('scroll');
-        this.rowFocused = 0;
+      if (e.keyCode === 38) {
+        if (this.rowFocused > 0) {
+          
+            this.rowFocused -= 1;
+            const clsName = cls + this.rowFocused;
+            this.global.scrollToRow(clsName, container);
+            e.preventDefault();
+            $(clsName).trigger('select');
+            $(clsName).trigger('focus');
 
-      }
-
-      if (this.tableDataList.length > 1) {
-
-        this.rowFocused -= 1;
-
-        var clsName = cls + this.rowFocused;
-        e.preventDefault();
-        $(clsName).trigger('select');
-        $(clsName).trigger('focus');
-
-
-      }
-
+        } else {
+            e.preventDefault();
+            $(".searchProduct").trigger('select');
+            $(".searchProduct").trigger('focus');
+        }
     }
+
+ 
 
     ////removeing row
     if (e.keyCode == 46) {
@@ -597,6 +571,7 @@ export class PurchaseComponent implements OnInit {
 
   }
 
+  
 
 
   onPartySelected() {

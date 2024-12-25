@@ -1,41 +1,43 @@
-<div class="d-flex flex-column p-3" style="height: 600px;overflow-y: scroll;">
-    <div class="row">
-        <mat-form-field appearance="outline" class="col-lg-10">
-            <input type="text" matInput #pName [(ngModel)]="productName" id="prodName"
-                (keydown)="this.changeFocus($event,'.fintProd')"
-                placeholder="Search Barcode / Name (Alt + a)" class="fintProd prodName"
-                autocomplete="off" accesskey="a">
-
-        </mat-form-field>
-        <div class="col-lg-2">
-            <button class="btnload w-100  btn-rpt" (click)="ngOnInit()">Load</button>
+<div>
+    <div class="d-flex flex-column p-3" >
+        <div class="row">
+            <mat-form-field appearance="outline" class="col-lg-10">
+                <input type="text" matInput #pName [(ngModel)]="productName" id="prodName"
+                    (keydown)="this.changeFocus($event,'.fintProd')"
+                    placeholder="Search Barcode / Name (Alt + a)" class="fintProd prodName"
+                    autocomplete="off" accesskey="a">
+    
+            </mat-form-field>
+            <div class="col-lg-2">
+                <button class="btnload w-100  btn-rpt" (click)="ngOnInit()">Load</button>
+            </div>
+    
+    
         </div>
-
-
+    
+        <div class="SearchConatiner cursorPointer"
+            *ngIf="productName != '' && productName != undefined">
+            <mat-card class="card"
+                *ngFor="let item of productList  | filter:productName | slice:0:25    index as index"
+                (click)="selectProduct(item)">
+                <button  style="height: 40px; background: none;text-align: left;"
+                    class="prodRow{{index}} prodBtn border-0 border-bottom border-dark"
+                    (keydown)="handleProdFocus(item,$event,'.prodRow','.prodName',productList)">
+                    <div class="justify-content-between d-flex">
+                        <div> {{item.productTitle}} <b>({{item.salePrice}})</b></div>
+                        <div><b>({{item.barcode}})</b></div>
+                    </div>
+                </button>
+            </mat-card>
+        </div>
+    
+    
     </div>
-
-    <div class="SearchConatiner cursorPointer"
-        *ngIf="productName != '' && productName != undefined">
-        <mat-card class="card"
-            *ngFor="let item of productList  | filter:productName | slice:0:25    index as index"
-            (click)="selectProduct(item)">
-            <button  style="height: 40px; background: none;text-align: left;"
-                class="prodRow{{index}} prodBtn border-0 border-bottom border-dark"
-                (keydown)="handleProdFocus(item,$event,'.prodRow','.prodName',productList)">
-                <div class="justify-content-between d-flex">
-                    <div> {{item.productTitle}} <b>({{item.salePrice}})</b></div>
-                    <div><b>({{item.barcode}})</b></div>
-                </div>
-            </button>
-        </mat-card>
+    
+    <div class="text-end bg-mf p-3">
+           
+        <button class="btnclose col-lg-2" (click)="closeDialogue()">Close</button>
     </div>
-
-
-</div>
-
-<div class="text-end bg-mf p-3">
-       
-    <button class="btnclose col-lg-2" (click)="closeDialogue()">Close</button>
 </div>
 
 

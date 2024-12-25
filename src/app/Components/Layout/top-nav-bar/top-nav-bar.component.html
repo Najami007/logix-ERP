@@ -29,9 +29,9 @@
                 class="sideicon mb-1">arrow_drop_down</mat-icon></a>
   
             <div >
-              <mat-menu  #menu="matMenu" [scrollLeft]="false"  class="dropdown-content">
-                <span  *ngFor="let row of menuList" >
-                  <a *ngIf="item.menuID == row.parentMenuID  " style="min-width: 200px !important;" class="list-itm"
+              <mat-menu #menu="matMenu" [scrollLeft]="false"class="dropdown-content">
+                <span  *ngFor="let row of menuList"  >
+                  <a *ngIf="item.menuID == row.parentMenuID" style="min-width: 200px !important;" class="list-itm"
                     routerLink="/{{row.moduleLink}}/{{row.menuLink}}" routerLinkActive="active">{{row.menuTitle}}</a>
                 </span>
   

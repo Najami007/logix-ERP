@@ -1118,6 +1118,26 @@ ExportHTMLTabletoExcel(data:any,fileName:any){
 }
 
 
+////////////////// Make Table Scroll with the focus Change ////////////////
+
+scrollToRow(clsName: string, container: JQuery<HTMLElement>) {
+    const rowElement = $(clsName);
+    if (rowElement.length && container.length) {
+        const rowTop = rowElement.offset()?.top || 0;
+        const containerTop = container.offset()?.top || 0;
+        const containerHeight = container.height()!;
+
+        if (rowTop < containerTop) {
+            container.scrollTop(container.scrollTop()! - (containerTop - rowTop));
+        } else if (rowTop > containerTop + containerHeight) {
+            container.scrollTop(container.scrollTop()! + (rowTop - (containerTop + containerHeight)));
+        }
+
+        rowElement.addClass('focused-row').siblings().removeClass('focused-row');
+        rowElement.trigger('focus').trigger('select');
+    }
+}
+
 
 
 }

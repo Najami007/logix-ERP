@@ -55,6 +55,9 @@ export class PurchaseReturnMobComponent implements OnInit{
     this.getLocation();
     this.getSuppliers();
     $('.searchProduct').trigger('focus');
+
+    this.global.getProducts().subscribe(
+      (data: any) => { this.productList = data; });
    
   }
 
@@ -520,93 +523,68 @@ export class PurchaseReturnMobComponent implements OnInit{
    }
    }
 
-   handleUpdown(item:any ,e:any,cls:string,index:any){
-
-    
-  //   if(e.keyCode == 9){
-  //     if(cls == '.expDate'){
-  //       this.rowFocused = index ;
-  //     }else{
-  //       this.rowFocused = index ;
-  //     }
-      
-  //   }
-
-    
-  //  if(e.shiftKey && e.keyCode == 9 ){
-  
-  //   if(cls == '.expDate'){
-  //     this.rowFocused = index;
-  //   }else{
-  //     this.rowFocused = index ;
-  //   }
-  //  }
-
-
-  if(e.keyCode == 13){
-    e.preventDefault();
-    $('#searchProduct').trigger('select');
-    $('#searchProduct').trigger('focus');
-   }
+   handleUpdown(item: any, e: any, cls: string, index: any) {
+    const container = $(".table-logix");
+    ////////// focusing to product search
+    if (e.keyCode == 13) {
+      e.preventDefault();
+      $('#psearchProduct').trigger('select');
+      $('#psearchProduct').trigger('focus');
+    }
 
     if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
       // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
-  }
-  else {
+    }
+    else {
       e.preventDefault();
-  }
+    }
 
-  /////move down
-    if(e.keyCode == 40){
-     
-     if(this.tableDataList.length > 1 ){
-      this.rowFocused += 1;
-      if (this.rowFocused >= this.tableDataList.length) {      
-        this.rowFocused -= 1  
-    } else {
-        var clsName = cls + this.rowFocused;    
-        e.preventDefault();
-        $(clsName).trigger('select');   
-        $(clsName).trigger('focus');  
-        // e.when = 9;
-        // $(clsName).trigger(e)    ;
-    }}
-  }
+    
 
-
-     //Move up
-     if (e.keyCode == 38) {
-
-      if (this.rowFocused == 0) {
-        e.preventDefault();
-        $(".searchProduct").trigger('select');
-          $(".searchProduct").trigger('focus');
-          this.rowFocused = -1;
- 
-      }
-
+    /////move down
+    if (e.keyCode === 40) {
       if (this.tableDataList.length > 1) {
-
-          this.rowFocused -= 1;
-
-          var clsName = cls + this.rowFocused;
+          this.rowFocused = Math.min(this.rowFocused + 1, this.tableDataList.length - 1);
+          const clsName = cls + this.rowFocused;
+          this.global.scrollToRow(clsName, container);
           e.preventDefault();
-        $(clsName).trigger('select');   
-        $(clsName).trigger('focus'); 
-          
-
+            $(clsName).trigger('select');
+            $(clsName).trigger('focus');
+         
       }
-
   }
+
+
+    //Move up
+
+      if (e.keyCode === 38) {
+        if (this.rowFocused > 0) {
+          
+            this.rowFocused -= 1;
+            const clsName = cls + this.rowFocused;
+            this.global.scrollToRow(clsName, container);
+            e.preventDefault();
+            $(clsName).trigger('select');
+            $(clsName).trigger('focus');
+
+        } else {
+            e.preventDefault();
+            $(".searchProduct").trigger('select');
+            $(".searchProduct").trigger('focus');
+        }
+    }
+
+ 
 
     ////removeing row
     if (e.keyCode == 46) {
 
       this.delRow(item);
       this.rowFocused = 0;
-  }
+    }
 
   }
+
 
   
 

@@ -549,6 +549,7 @@ export class GarmentSaleComponent implements OnInit {
   searchProductByName(){
     this.dialogue.open(ProductModalComponent,{
       width:'80%',
+      height:'90%'
     }).afterClosed().subscribe(val=>{
       if(val != '' && val != undefined){
         this.holdDataFunction(val.data);
@@ -741,8 +742,9 @@ export class GarmentSaleComponent implements OnInit {
 
   }
 
-  handleUpdown(item: any, e: any, cls: string, index: any) {
+   handleUpdown(item: any, e: any, cls: string, index: any) {
 
+    const container = $(".table-logix"); 
     if (e.keyCode == 9) {
       this.rowFocused = index + 1;
     }
@@ -765,47 +767,33 @@ export class GarmentSaleComponent implements OnInit {
     }
 
     /////move down
-    if (e.keyCode == 40) {
 
-      if (this.tableDataList.length > 1) {
-        this.rowFocused += 1;
-        if (this.rowFocused >= this.tableDataList.length) {
-          this.rowFocused -= 1
-        } else {
-          var clsName = cls + this.rowFocused;
-          e.preventDefault();
-            $(clsName).trigger('select');   
-            $(clsName).trigger('focus');    
-        }
-      }
-    }
-
+    if (e.keyCode === 40) {
+              if (this.tableDataList.length > 1) {
+                  this.rowFocused = Math.min(this.rowFocused + 1, this.tableDataList.length - 1);
+                  const clsName = cls + this.rowFocused;
+                  this.global.scrollToRow(clsName, container);
+                  e.preventDefault();
+                  $(clsName).trigger('select');
+                  $(clsName).trigger('focus');
+              }
+          }
 
     //Move up
-    if (e.keyCode == 38) {
-
-      if (this.rowFocused == 0) {
-        e.preventDefault();
-        $(".searchProduct").trigger('select');  
+    if (e.keyCode === 38) {
+      if (this.rowFocused > 0) {
+          this.rowFocused -= 1;
+          const clsName = cls + this.rowFocused;
+          this.global.scrollToRow(clsName, container);
+          e.preventDefault();
+          $(clsName).trigger('select');
+          $(clsName).trigger('focus');
+      } else {
+          e.preventDefault();
+          $(".searchProduct").trigger('select');
           $(".searchProduct").trigger('focus');
-        this.rowFocused = 0;
-
       }
-
-      if (this.tableDataList.length > 1) {
-
-        this.rowFocused -= 1;
-
-        var clsName = cls + this.rowFocused;
-        e.preventDefault();
-        $(clsName).trigger('select'); 
-        $(clsName).trigger('focus');
-
-
-      }
-
-    }
-
+  }
     ////removeing row
     if (e.keyCode == 46) {
 
@@ -814,6 +802,8 @@ export class GarmentSaleComponent implements OnInit {
     }
 
   }
+
+
 
   delRow(item: any) {
     this.global.confirmAlert().subscribe(
