@@ -8,11 +8,11 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { error } from 'jquery';
-import { AddBrandComponent } from '../brand/add-brand/add-brand.component';
-import { AddRackComponent } from '../racks/add-rack/add-rack.component';
-import { AddUOMComponent } from '../unit-of-measurement/add-uom/add-uom.component';
-import { AddCategoryComponent } from '../product-category/add-category/add-category.component';
-import { AddProdSubCategoryComponent } from '../product-sub-category/add-prod-sub-category/add-prod-sub-category.component';
+import { AddBrandComponent } from '../Configurations/brand/add-brand/add-brand.component';
+import { AddRackComponent } from '../Configurations/racks/add-rack/add-rack.component';
+import { AddUOMComponent } from '../Configurations/unit-of-measurement/add-uom/add-uom.component';
+import { AddCategoryComponent } from '../Configurations/product-category/add-category/add-category.component';
+import { AddProdSubCategoryComponent } from '../Configurations/product-sub-category/add-prod-sub-category/add-prod-sub-category.component';
 import { retry } from 'rxjs';
 import Swal from 'sweetalert2';
 import { MatPaginator } from '@angular/material/paginator';
@@ -138,6 +138,18 @@ export class ProductComponent implements OnInit {
       this.productList =this.activeFilterID == '-' ? this.productList = this.tempProdList : this.tempProdList.filter((e:any)=> e.activeStatus == this.activeFilterID);
     }
 
+    if(type == 'disc'){
+
+      if(this.discFilterID == 0){
+        this.productList = this.tempProdList;
+      }else if(this.discFilterID == 1){
+        this.productList = this.tempProdList.filter((e:any)=> e.discPercentage > 0);
+      }else if(this.discFilterID == 2){
+        this.productList = this.tempProdList.filter((e:any)=> e.discPercentage == 0);
+      }
+
+    }
+
  
   }
 
@@ -175,8 +187,12 @@ export class ProductComponent implements OnInit {
   UOMID: any;
   prodTypeID:any;
 
-
-
+  discFilterID = 0;
+  DiscFilterList:any = [
+    {val:0,title:'All'},
+    {val:1,title:'Disc'},
+    {val:2,title:'W/O Disc'},
+  ]
 
 
   productNameOthLanguage: any;
@@ -201,11 +217,6 @@ export class ProductComponent implements OnInit {
       (Response:any)=>{
         this.productList = Response;
         this.tempProdList = Response;
-
-        // this.dataSource = new MatTableDataSource(Response);
-        //  this.dataSource.paginator = this.paginator;
-        //  this.dataSource.sort = this.sort;  
-       
       }
     )
   }

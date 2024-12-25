@@ -12,7 +12,7 @@ import * as $ from 'jquery';
 
 import { Observable, retry } from 'rxjs';
 
-import { SaleBillPrintComponent } from '../sale-bill-print/sale-bill-print.component';
+import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bill-print.component';
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 
 

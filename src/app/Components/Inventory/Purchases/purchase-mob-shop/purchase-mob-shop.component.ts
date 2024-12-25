@@ -13,6 +13,8 @@ import * as $ from 'jquery';
 import Swal from 'sweetalert2';
 import { AddpartyComponent } from '../../../Company/party/addparty/addparty.component';
 import { MatSelect } from '@angular/material/select';
+import { ProductModalComponent } from '../../Sale/SaleComFiles/product-modal/product-modal.component';
+import { PurchaseBillPrintComponent } from '../purchase-bill-print/purchase-bill-print.component';
 
 
 @Component({
@@ -21,6 +23,9 @@ import { MatSelect } from '@angular/material/select';
   styleUrls: ['./purchase-mob-shop.component.scss']
 })
 export class PurchaseMobShopComponent implements OnInit {
+
+  @ViewChild(PurchaseBillPrintComponent) billPrint:any;
+    
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
   constructor(
@@ -52,14 +57,11 @@ export class PurchaseMobShopComponent implements OnInit {
     this.getSuppliers();
     $('.searchBarcode').trigger('focus');
 
-    this.global.getProducts().subscribe(
-      (data: any) => { this.productList = data; })
-
   }
 
 
   hideTotalFlag = true;
- 
+
   projectID = this.global.InvProjectID;
   holdBtnType: any = 'Hold';
   tabIndex: any;
@@ -69,7 +71,7 @@ export class PurchaseMobShopComponent implements OnInit {
   PBarcode: string = '';   /// for Search barcode field
   productsData: any;   //// for showing the products
   tableDataList: any = [];  //////will hold Products data temporarily
-  productDetail:any = [];       //////will hold IMEI Detail data temporarily 
+  productDetail: any = [];       //////will hold IMEI Detail data temporarily 
   suppliersList: any;      //////  will shows the supplier list
   supplierDetail: any = [];
 
@@ -232,7 +234,7 @@ export class PurchaseMobShopComponent implements OnInit {
                   discInP: 0,
                   discInR: 0,
                   AQ: Response[0].aq,
-                
+
 
                 });
 
@@ -336,6 +338,16 @@ export class PurchaseMobShopComponent implements OnInit {
       $('#psearchProduct').trigger('focus');
     }, 500);
 
+  }
+
+  searchProductByName() {
+    this.dialogue.open(ProductModalComponent, {
+      width: '80%',
+    }).afterClosed().subscribe(val => {
+      if (val != '' && val != undefined) {
+        this.holdDataFunction(val.data);
+      }
+    })
   }
 
 
@@ -654,7 +666,7 @@ export class PurchaseMobShopComponent implements OnInit {
       this.msg.WarnNotify('Select Warehouse Location')
     } else {
 
- 
+
 
       if (isValidFlag == true) {
         if (type == 'hold') {
@@ -739,7 +751,7 @@ export class PurchaseMobShopComponent implements OnInit {
 
         } else if (type == 'purchase') {
 
-       
+
           this.global.confirmAlert().subscribe(
             (Response: any) => {
               if (Response == true) {
@@ -878,75 +890,7 @@ export class PurchaseMobShopComponent implements OnInit {
 
 
   printBill(item: any) {
-    this.myTableDataList = [];
-    this.myInvoiceNo = item.invBillNo;
-    this.myInvoiceDate = new Date(item.invDate);
-    this.myLocation = item.locationTitle;
-    this.myRefInvNo = item.refInvoiceNo;
-    this.mydiscount = item.billDiscount;
-    this.myOverHeadAmount = item.overHeadAmount;
-    this.myInvRemarks = item.remarks;
-    this.myBookerName = item.bookerName;
-    this.myPartyName = item.partyName;
-    this.mySubTotal = item.billTotal;
-    this.myBillStatus = item.approvedStatus;
-
-    this.getBillDetail(item.invBillNo).subscribe(
-      (Response: any) => {
-        var totalQty = 0;
-        var overhead = 0
-        this.myBillTotalQty = 0;
-        this.mywohCPTotal = 0;
-        this.myCPTotal = 0;
-        this.mySPTotal = 0;
-
-        this.productImage = Response[Response.length - 1].productImage;
-
-        if (item.overHeadAmount > 0) {
-          Response.forEach((j: any) => {
-            totalQty += j.quantity;
-          });
-
-          overhead = item.overHeadAmount / totalQty;
-
-        }
-
-        Response.forEach((e: any) => {
-          this.myBillTotalQty += e.quantity;
-          this.mywohCPTotal += (e.costPrice - overhead) * e.quantity;
-          this.myCPTotal += e.costPrice * e.quantity;
-          this.mySPTotal += e.salePrice * e.quantity;
-
-          this.myTableDataList.push({
-            ProductID: e.productID,
-            ProductTitle: e.productTitle,
-            barcode: e.barcode,
-            productImage: e.productImage,
-            Quantity: e.quantity,
-            wohCP: (e.costPrice - overhead),
-            CostPrice: e.costPrice,
-            SalePrice: e.salePrice,
-            ExpiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
-            BatchNo: e.batchNo,
-            BatchStatus: e.batchStatus,
-            UomID: e.uomID,
-            Packing: e.packing,
-            discInP: e.discInP,
-            discInR: e.discInR,
-
-          })
-        });
-
-
-        setTimeout(() => {
-          this.global.printData('#printDiv')
-        }, 200);
-
-      }
-    )
-
-
-
+    this.billPrint.printBill(item);
   }
 
   cpTotal = 0;
@@ -1064,22 +1008,22 @@ export class PurchaseMobShopComponent implements OnInit {
 
   insertProdDetail(value: any) {
 
-    if(value == ''|| value == undefined){
+    if (value == '' || value == undefined) {
       this.msg.WarnNotify('Enter value');
     } else {
       // this.productDetail.push({ productID: this.tmpProdDetial.ProductID, productOtherDetDescription: value });
-      var tmpRow = this.productDetail.find((e: any) => e.productOtherDetDescription == value );
+      var tmpRow = this.productDetail.find((e: any) => e.productOtherDetDescription == value);
       if (tmpRow == undefined) {
         ///////////////////pushing Detail into tmp Array ///////
         this.productDetail.push({ productID: this.tmpProdDetial.ProductID, productOtherDetDescription: value });
         ////////////////// Changing Qty ///////
-        this.tmpProdDetial.Quantity = this.productDetail.filter((e:any)=> e.productID == this.tmpProdDetial.ProductID).length;
-     
+        this.tmpProdDetial.Quantity = this.productDetail.filter((e: any) => e.productID == this.tmpProdDetial.ProductID).length;
+
         this.tableDataList.forEach((e: any) => {
           ////////////////// Assigning tmpProdDetial value to Maing TableDataLIst ///////
           if (e.productID == this.tmpProdDetial.productID) {
             e = this.tmpProdDetial;
-            
+
           }
         });
         this.getTotal();
@@ -1109,7 +1053,7 @@ export class PurchaseMobShopComponent implements OnInit {
 
     var index = this.productDetail.indexOf(item);
     this.productDetail.splice(index, 1);
-    this.tmpProdDetial.Quantity = this.productDetail.filter((e:any)=> e.productID == this.tmpProdDetial.ProductID).length;
+    this.tmpProdDetial.Quantity = this.productDetail.filter((e: any) => e.productID == this.tmpProdDetial.ProductID).length;
     this.getTotal();
 
 

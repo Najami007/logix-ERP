@@ -16,6 +16,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { ConfirmationAlertComponent } from 'src/app/Components/Common/confirmation-alert/confirmation-alert.component';
 import * as bootstrap from 'bootstrap';
 import { ExcelExportService } from '../service/ExcelExportService/excel-export.service';
+import { ProductModalComponent } from 'src/app/Components/Inventory/Sale/SaleComFiles/product-modal/product-modal.component';
 
 
 
@@ -984,8 +985,12 @@ export class GlobalDataModule implements OnInit {
 
   ///////////////// func to get products
  public getProducts(): Observable<any>{
-  return  this.http.get(environment.mainApi+this.inventoryLink+'GetActiveProduct').pipe(retry(3));
+  return  this.http.get(environment.mainApi+this.inventoryLink+'GetActiveProduct?reqCatFlag=0').pipe(retry(3));
   }
+
+  public getFastFoodProducts(): Observable<any>{
+    return  this.http.get(environment.mainApi+this.inventoryLink+'GetActiveProduct?reqCatFlag=1').pipe(retry(3));
+    }
 
   //////////// func to get product Detail
  public getProdDetail(id:any, barcode:any): Observable<any>{
@@ -1083,7 +1088,7 @@ public getCashBankCoa(type:any): Observable<any>{
 
 openBootstrapModal(modalID: any, condition: any) {
   if (condition) {
-    const myModal = new bootstrap.Modal(modalID, { keyboard: false });
+    const myModal = new bootstrap.Modal(modalID, { keyboard: false ,backdrop:false});
     myModal.show();
 
   }
@@ -1111,6 +1116,8 @@ ExportDatatoExcel(data:any,fileName:any){
 ExportHTMLTabletoExcel(data:any,fileName:any){
   this.ExportExcel.exportTableToExcel(data,fileName);
 }
+
+
 
 
 }

@@ -13,8 +13,9 @@ import * as $ from 'jquery';
 import { Observable, retry } from 'rxjs';
 
 import { dateFormat } from 'highcharts';
-import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/addparty.component';import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
-import { SaleBillPrintComponent } from '../sale-bill-print/sale-bill-print.component';
+import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/addparty.component'; import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
+import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bill-print.component';
+import { ProductModalComponent } from '../SaleComFiles/product-modal/product-modal.component';
 
 @Component({
   selector: 'app-garment-sale-return',
@@ -32,7 +33,7 @@ export class GarmentSaleReturnComponent implements OnInit {
   tillOpenFeature = this.global.getFeature('TillOpen');
   prodDetailFeature = this.global.getFeature('ProdDetail');
 
-  @ViewChild(SaleBillPrintComponent) billPrint:any;
+  @ViewChild(SaleBillPrintComponent) billPrint: any;
 
   companyProfile: any = [];
   companyLogo: any = '';
@@ -161,14 +162,14 @@ export class GarmentSaleReturnComponent implements OnInit {
 
   bankCoaList: any = [];
   partyList: any = [];
-  bookerList:any = [];
+  bookerList: any = [];
 
-  getBooker(){
+  getBooker() {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'getBooker').subscribe(
       {
         next: value => {
           this.bookerList = value;
-          
+
         },
         error: error => {
           this.msg.WarnNotify('Error Occured While Loading Data')
@@ -303,13 +304,13 @@ export class GarmentSaleReturnComponent implements OnInit {
                   batchStatus: '-',
                   uomID: Response[0].uomID,
                   gst: this.gstFeature ? Response[0].gst : 0,
-                  et:Response[0].et,
+                  et: Response[0].et,
                   packing: 1,
                   discInP: Response[0].discPercentage,
                   discInR: Response[0].discRupees,
                   aq: Response[0].aq,
-                  total:(Response[0].salePrice * qty) - (Response[0].discRupees * qty),
-                  productDetail:'',
+                  total: (Response[0].salePrice * qty) - (Response[0].discRupees * qty),
+                  productDetail: '',
 
                 });
 
@@ -334,14 +335,14 @@ export class GarmentSaleReturnComponent implements OnInit {
             this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
             this.productImage = this.tableDataList[index].productImage;
           }
-        } else if(row == undefined && barcode.length > 10) {
+        } else if (row == undefined && barcode.length > 10) {
           //////////////// For Special Barcode setting /////////////////////////
 
           var txtBCode = barcode;
-          var reqQty:any = 0;
-          var reqQtyDot:any = 0;
-          var prodQty:any = 0; 
-          var tmpPrice:any = 0;
+          var reqQty: any = 0;
+          var reqQtyDot: any = 0;
+          var prodQty: any = 0;
+          var tmpPrice: any = 0;
 
           txtBCode = txtBCode.substring(2, 7);  /////////// extracting product barcode from special barcode
           txtBCode = parseInt(txtBCode);
@@ -350,18 +351,18 @@ export class GarmentSaleReturnComponent implements OnInit {
           /////////// verifying whether exists in product list or not
           var prodDetail = this.productList.find((p: any) => p.barcode == txtBCode);
 
-          if(prodDetail == '' || prodDetail == undefined){
+          if (prodDetail == '' || prodDetail == undefined) {
             this.msg.WarnNotify('Product Not Fount')
-          }else{
-            
+          } else {
+
 
             /////////// extracting price from special barcode based on UOM
-            if(prodDetail.uomTitle == 'price'){
+            if (prodDetail.uomTitle == 'price') {
               reqQty = barcode.substring(12 - 5);
-              reqQtyDot = reqQty.substring(0,5);
+              reqQtyDot = reqQty.substring(0, 5);
               tmpPrice = reqQtyDot;
-            }else{
-                /////////// extracting quantity from special barcode based on UOM
+            } else {
+              /////////// extracting quantity from special barcode based on UOM
               reqQty = barcode.substring(12 - 5);
               reqQtyDot = reqQty.substring(6 - 4);
               reqQtyDot = reqQtyDot.substring(0, 3);
@@ -373,15 +374,15 @@ export class GarmentSaleReturnComponent implements OnInit {
             var condition = this.tableDataList.find(
               (x: any) => x.productID == prodDetail.productID
             );
-  
+
             var index = this.tableDataList.indexOf(condition);
-  
-            if(condition == undefined ){
+
+            if (condition == undefined) {
 
               /////////// inserting data into tableDataList
               this.global.getProdDetail(0, txtBCode).subscribe(
                 (Response: any) => {
-                   this.tableDataList.push({
+                  this.tableDataList.push({
                     rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
                       : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
                         : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
@@ -401,45 +402,45 @@ export class GarmentSaleReturnComponent implements OnInit {
                     batchStatus: '-',
                     uomID: Response[0].uomID,
                     gst: this.gstFeature ? Response[0].gst : 0,
-                    et:Response[0].et,
+                    et: Response[0].et,
                     packing: 1,
                     discInP: Response[0].discPercentage,
                     discInR: Response[0].discRupees,
                     aq: Response[0].aq,
-                    total:(Response[0].salePrice * qty) - (Response[0].discRupees * qty),
-                    productDetail:'',
-    
+                    total: (Response[0].salePrice * qty) - (Response[0].discRupees * qty),
+                    productDetail: '',
+
                   });
-    
+
                   //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
                   this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
                   this.getTotal();
-    
-    
+
+
                   this.productImage = Response[0].productImage;
                 }
               )
-            }else{
-            /////////// changing qty if product already scanned
-              if(prodDetail.uomTitle == 'price'){
+            } else {
+              /////////// changing qty if product already scanned
+              if (prodDetail.uomTitle == 'price') {
                 this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
-              }else{
+              } else {
                 this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + parseFloat(prodQty);
               }
-              
+
               this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
               this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
               this.productImage = this.tableDataList[index].productImage;
-  
+
             }
 
 
           }
 
-         
-         
 
-        }else{
+
+
+        } else {
 
           this.msg.WarnNotify('Product Not Found')
         }
@@ -471,9 +472,9 @@ export class GarmentSaleReturnComponent implements OnInit {
 
       this.global.getProdDetail(data.productID, '').subscribe(
         (Response: any) => {
-          
+
           this.tableDataList.push({
-            
+
             rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
               : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
                 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
@@ -493,13 +494,13 @@ export class GarmentSaleReturnComponent implements OnInit {
             batchStatus: '-',
             uomID: Response[0].uomID,
             gst: this.gstFeature ? Response[0].gst : 0,
-            et:Response[0].et,
+            et: Response[0].et,
             packing: 1,
             discInP: Response[0].discPercentage,
             discInR: Response[0].discRupees,
             aq: Response[0].aq,
-            total:(Response[0].salePrice * 1) - (Response[0].discRupees),
-            productDetail:'',
+            total: (Response[0].salePrice * 1) - (Response[0].discRupees),
+            productDetail: '',
 
           });
           // this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
@@ -527,6 +528,16 @@ export class GarmentSaleReturnComponent implements OnInit {
 
   }
 
+  searchProductByName() {
+    this.dialogue.open(ProductModalComponent, {
+      width: '80%',
+    }).afterClosed().subscribe(val => {
+      if (val != '' && val != undefined) {
+        this.holdDataFunction(val.data);
+      }
+    })
+  }
+
   focusto(cls: any, e: any) {
 
     // setTimeout(() => {
@@ -541,8 +552,8 @@ export class GarmentSaleReturnComponent implements OnInit {
 
     if (cls == '#disc' && e.keyCode == 13 && e.target.value == '') {
       e.preventDefault();
-        $(cls).trigger('select');
-        $(cls).trigger('focus');
+      $(cls).trigger('select');
+      $(cls).trigger('focus');
     }
     if (cls == '#charges' && e.keyCode == 13) {
       e.preventDefault();
@@ -551,8 +562,8 @@ export class GarmentSaleReturnComponent implements OnInit {
     }
     if (cls == '#cash' && e.keyCode == 13 && e.target.value == '') {
       e.preventDefault();
-        $(cls).trigger('select');
-        $(cls).trigger('focus');
+      $(cls).trigger('select');
+      $(cls).trigger('focus');
 
     }
 
@@ -581,9 +592,9 @@ export class GarmentSaleReturnComponent implements OnInit {
     this.offerDiscount = 0;
 
     this.tableDataList.forEach((e: any) => {
-      if(this.billDiscount > 0){
+      if (this.billDiscount > 0) {
         e.discInP = this.billDiscount;
-        e.discInR = (e.salePrice * this.billDiscount) / 100 
+        e.discInR = (e.salePrice * this.billDiscount) / 100
       }
       e.total = (parseFloat(e.salePrice) * parseFloat(e.quantity)) - (parseFloat(e.discInR) * parseFloat(e.quantity));
       this.qtyTotal += parseFloat(e.quantity);
@@ -613,13 +624,13 @@ export class GarmentSaleReturnComponent implements OnInit {
       this.bankCash = this.netTotal;
     }
 
-    if(this.paymentType == 'Credit'){
+    if (this.paymentType == 'Credit') {
       this.cash = 0;
       this.bankCoaID = 0;
       this.bankCash = 0;
     }
 
-    if(this.paymentType !== 'Credit'){
+    if (this.paymentType !== 'Credit') {
       this.partyID = 0;
     }
 
@@ -740,8 +751,8 @@ export class GarmentSaleReturnComponent implements OnInit {
         } else {
           var clsName = cls + this.rowFocused;
           e.preventDefault();
-            $(clsName).trigger('select');   
-            $(clsName).trigger('focus');   
+          $(clsName).trigger('select');
+          $(clsName).trigger('focus');
         }
       }
     }
@@ -752,8 +763,8 @@ export class GarmentSaleReturnComponent implements OnInit {
 
       if (this.rowFocused == 0) {
         e.preventDefault();
-        $(".searchProduct").trigger('select');  
-          $(".searchProduct").trigger('focus');
+        $(".searchProduct").trigger('select');
+        $(".searchProduct").trigger('focus');
         this.rowFocused = 0;
 
       }
@@ -764,7 +775,7 @@ export class GarmentSaleReturnComponent implements OnInit {
 
         var clsName = cls + this.rowFocused;
         e.preventDefault();
-        $(clsName).trigger('select'); 
+        $(clsName).trigger('select');
         $(clsName).trigger('focus');
 
 
@@ -791,12 +802,12 @@ export class GarmentSaleReturnComponent implements OnInit {
           this.getTotal();
 
           if (index == 0) {
-            $('#psearchProduct').trigger('select'); 
+            $('#psearchProduct').trigger('select');
             $('#psearchProduct').trigger('focus');
           } else {
             this.rowFocused = index - 1;
-            $('.qty'+this.rowFocused).trigger('select');
-            $('.qty'+this.rowFocused).trigger('focus');
+            $('.qty' + this.rowFocused).trigger('select');
+            $('.qty' + this.rowFocused).trigger('focus');
           }
         }
       }
@@ -833,155 +844,155 @@ export class GarmentSaleReturnComponent implements OnInit {
 
   }
 
-  editSP(item:any){
-    if(this.editSpFeature){
-    Swal.fire({
-      title:"Enter Total Amount",
-      input:"text",
-      showCancelButton:true,
-      confirmButtonText:'Save',
-      showLoaderOnConfirm:true,
-      preConfirm: (value )=>{
-        
-        if(value == ""){
-        return  Swal.showValidationMessage("Enter Valid Amount");
-        }
+  editSP(item: any) {
+    if (this.editSpFeature) {
+      Swal.fire({
+        title: "Enter Total Amount",
+        input: "text",
+        showCancelButton: true,
+        confirmButtonText: 'Save',
+        showLoaderOnConfirm: true,
+        preConfirm: (value) => {
 
-        if(isNaN(value)){
-          return  Swal.showValidationMessage("Enter Valid Amount");
-        }
+          if (value == "") {
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
 
-        if(value <= 0){
-          return  Swal.showValidationMessage("Enter Valid Amount");
-        }
+          if (isNaN(value)) {
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
 
-        // if(value < this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].costPrice){
-        //   return  Swal.showValidationMessage("Sale Price Is Less Then Cost Price");
-        // }
-        
-        this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice = value;
-        this.getTotal();
-        this.tempProdData = [];
-      }
-    }).then((result)=>{
-        if(result.isConfirmed){
+          if (value <= 0) {
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
+
+          // if(value < this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].costPrice){
+          //   return  Swal.showValidationMessage("Sale Price Is Less Then Cost Price");
+          // }
+
+          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice = value;
+          this.getTotal();
+          this.tempProdData = [];
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
           Swal.fire({
             title: "Sale Price Updated",
-            timer:500,
-           });
+            timer: 500,
+          });
         }
-    })
+      })
+    }
   }
-  }
 
-  
-  editDR(item:any){
 
-   if(this.editDiscFeature){
-    Swal.fire({
-      title:"Enter Discount Amount",
-      input:"text",
-      showCancelButton:true,
-      confirmButtonText:'Save',
-      showLoaderOnConfirm:true,
-      preConfirm: (value )=>{
-        
-        if(value == ""){
-        return  Swal.showValidationMessage("Enter Valid Amount");
+  editDR(item: any) {
+
+    if (this.editDiscFeature) {
+      Swal.fire({
+        title: "Enter Discount Amount",
+        input: "text",
+        showCancelButton: true,
+        confirmButtonText: 'Save',
+        showLoaderOnConfirm: true,
+        preConfirm: (value) => {
+
+          if (value == "") {
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
+
+          if (isNaN(value)) {
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
+
+          if (value < 0) {
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
+
+          if (item.salePrice - value < item.costPrice) {
+            return Swal.showValidationMessage("Discount Price Not Valid");
+          }
+
+          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR = value;
+          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInP = (value / item.salePrice) * 100;
+          this.getTotal();
+          this.tempProdData = [];
         }
-
-        if(isNaN(value)){
-          return  Swal.showValidationMessage("Enter Valid Amount");
-        }
-
-        if(value < 0){
-          return  Swal.showValidationMessage("Enter Valid Amount");
-        }
-
-        if(item.salePrice - value < item.costPrice){
-          return  Swal.showValidationMessage("Discount Price Not Valid");
-        }
-        
-        this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR = value;
-        this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInP = (value / item.salePrice) * 100;
-        this.getTotal();
-        this.tempProdData = [];
-      }
-    }).then((result)=>{
-        if(result.isConfirmed){
+      }).then((result) => {
+        if (result.isConfirmed) {
           Swal.fire({
             title: "Discount Updated",
-            timer:500,
-           });
+            timer: 500,
+          });
         }
-    })
-   }
-
-  }
-  editDP(item:any){
-
-   if(this.editDiscFeature){
-    Swal.fire({
-      title:"Enter Discount Percent",
-      input:"text",
-      showCancelButton:true,
-      confirmButtonText:'Save',
-      showLoaderOnConfirm:true,
-      preConfirm: (value )=>{
-        
-        if(value == ""){
-        return  Swal.showValidationMessage("Enter Valid Amount");
-        }
-
-        if(isNaN(value)){
-          return  Swal.showValidationMessage("Enter Valid Amount");
-        }
-
-        if(value < 0){
-          return  Swal.showValidationMessage("Enter Valid Amount");
-        }
-
-        if(item.salePrice - ((item.salePrice * value) / 100 ) < item.costPrice){
-          return  Swal.showValidationMessage("Discount % Not Valid");
-        }
-        
-        this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInP = value;
-        this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR = (item.salePrice * value) / 100;
-        this.getTotal();
-        this.tempProdData = [];
-      }
-    }).then((result)=>{
-        if(result.isConfirmed){
-          Swal.fire({
-            title: "Discount Updated",
-            timer:500,
-           });
-        }
-    })
-   }
-
-  }
-  
-  editTotal(amount:any){
-    if(this.editSpFeature){
-    this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].total = amount;
-    this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].quantity = (amount / (this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice - this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR));
-
-    this.getTotal();
-    this.tempProdData = [];
+      })
     }
 
-   
+  }
+  editDP(item: any) {
+
+    if (this.editDiscFeature) {
+      Swal.fire({
+        title: "Enter Discount Percent",
+        input: "text",
+        showCancelButton: true,
+        confirmButtonText: 'Save',
+        showLoaderOnConfirm: true,
+        preConfirm: (value) => {
+
+          if (value == "") {
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
+
+          if (isNaN(value)) {
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
+
+          if (value < 0) {
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
+
+          if (item.salePrice - ((item.salePrice * value) / 100) < item.costPrice) {
+            return Swal.showValidationMessage("Discount % Not Valid");
+          }
+
+          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInP = value;
+          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR = (item.salePrice * value) / 100;
+          this.getTotal();
+          this.tempProdData = [];
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Discount Updated",
+            timer: 500,
+          });
+        }
+      })
+    }
 
   }
 
-  partySelect(){
-    if(this.partyID > 0){
+  editTotal(amount: any) {
+    if (this.editSpFeature) {
+      this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].total = amount;
+      this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].quantity = (amount / (this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice - this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR));
+
+      this.getTotal();
+      this.tempProdData = [];
+    }
+
+
+
+  }
+
+  partySelect() {
+    if (this.partyID > 0) {
       this.paymentType = 'Credit';
-      
-    }else{
+
+    } else {
       this.paymentType = 'Cash';
-      }
+    }
     this.getTotal();
   }
 
@@ -1031,7 +1042,7 @@ export class GarmentSaleReturnComponent implements OnInit {
       if (this.tableDataList == '') {
         this.msg.WarnNotify('No Product Seleted')
       }
-       else if (paymentType == 'Cash' && this.partyID == 0 && (this.cash == 0 || this.cash == undefined || this.cash == null)) {
+      else if (paymentType == 'Cash' && this.partyID == 0 && (this.cash == 0 || this.cash == undefined || this.cash == null)) {
         this.msg.WarnNotify('Enter Cash')
       } else if (paymentType == 'Cash' && this.partyID == 0 && this.cash < this.netTotal) {
         this.msg.WarnNotify('Entered Cash is not Valid')
@@ -1041,19 +1052,19 @@ export class GarmentSaleReturnComponent implements OnInit {
         this.msg.WarnNotify('Cash Amount is Not Valid')
       } else if (this.paymentType == 'Split' && this.bankCash <= 0) {
         this.msg.WarnNotify('Bank Amount is Not Valid')
-      }else if ((this.bookerID == 0 || this.bookerID == undefined) && this.BookerFeature) {
+      } else if ((this.bookerID == 0 || this.bookerID == undefined) && this.BookerFeature) {
         this.msg.WarnNotify('Select Booker')
-      }else if(this.paymentType == 'Credit' && this.partyID == 0){
+      } else if (this.paymentType == 'Credit' && this.partyID == 0) {
         this.msg.WarnNotify('Select Customer');
       }
-      
+
       else if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
         this.msg.WarnNotify('Enter Valid Amount')
       } else {
 
-        
 
-        if(this.tillOpenFeature){
+
+        if (this.tillOpenFeature) {
           this.global.openTill();
         }
         this.app.startLoaderDark();
@@ -1068,12 +1079,12 @@ export class GarmentSaleReturnComponent implements OnInit {
           OrderType: "Take Away",
           BillTotal: this.subTotal,
           BillDiscount: parseFloat(this.discount) + parseFloat(this.offerDiscount),
-          OtherCharges: this.otherCharges ,
+          OtherCharges: this.otherCharges,
           NetTotal: this.netTotal,
           CashRec: this.cash,
           Change: this.change,
-          AdvTaxAmount : this.AdvTaxAmount,
-          AdvTaxValue : this.AdvTaxValue,
+          AdvTaxAmount: this.AdvTaxAmount,
+          AdvTaxValue: this.AdvTaxValue,
           BankCoaID: this.bankCoaID,
           BankCash: this.bankCash,
           SaleDetail: JSON.stringify(this.tableDataList),
@@ -1098,7 +1109,7 @@ export class GarmentSaleReturnComponent implements OnInit {
           },
           (Error: any) => {
             this.msg.WarnNotify(Error);
-           
+
             this.app.stopLoaderDark();
           }
         )
@@ -1181,26 +1192,26 @@ export class GarmentSaleReturnComponent implements OnInit {
   myDuplicateFlag = false;
   myTime: any;
   myQtyTotal = 0;
-  myOfferDiscount=0;
+  myOfferDiscount = 0;
   myBookerName = '';
   PrintAfterSave(InvNo: any) {
 
-    
+
     this.billPrint.PrintBill(InvNo);
     this.billPrint.billType = '';
     //     setTimeout(() => {   
     //   this.global.printData('#print-bill')
     // }, 200);
-   
-   
+
+
   }
 
-  printDuplicateBill(item:any){
+  printDuplicateBill(item: any) {
 
 
     $('#SavedBillModal').hide();
 
-    
+
     this.global.openPassword('Password').subscribe(pin => {
       if (pin !== '') {
         this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
@@ -1212,16 +1223,16 @@ export class GarmentSaleReturnComponent implements OnInit {
           (Response: any) => {
             if (Response.msg == 'Password Matched Successfully') {
 
-          
+
               $('#SavedBillModal').show();
-            this.billPrint.PrintBill(item.invBillNo);
-            this.billPrint.billType = 'Duplicate';
-            // setTimeout(() => {
-            //   this.global.printData('#print-bill')
-            // }, 200);
-              
-             
-             
+              this.billPrint.PrintBill(item.invBillNo);
+              this.billPrint.billType = 'Duplicate';
+              // setTimeout(() => {
+              //   this.global.printData('#print-bill')
+              // }, 200);
+
+
+
             } else {
               this.msg.WarnNotify(Response.msg);
             }
@@ -1229,17 +1240,17 @@ export class GarmentSaleReturnComponent implements OnInit {
         )
       }
     })
-  
-  
+
+
   }
 
-  billDetails(item:any){
+  billDetails(item: any) {
 
 
     $('#SavedBillModal').hide();
     // $('#paymentMehtod').hide();
     // $('.modal-backdrop').remove();
-    
+
     this.global.openPassword('Password').subscribe(pin => {
       if (pin !== '') {
         this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
@@ -1251,12 +1262,12 @@ export class GarmentSaleReturnComponent implements OnInit {
           (Response: any) => {
             if (Response.msg == 'Password Matched Successfully') {
               $('#SavedBillModal').show();
-              this.dialogue.open(SaleBillDetailComponent,{
-                width:'50%',
-                data:item,
-                disableClose:true,
-              }).afterClosed().subscribe(value=>{
-                
+              this.dialogue.open(SaleBillDetailComponent, {
+                width: '50%',
+                data: item,
+                disableClose: true,
+              }).afterClosed().subscribe(value => {
+
               })
             } else {
               this.msg.WarnNotify(Response.msg);
@@ -1266,27 +1277,27 @@ export class GarmentSaleReturnComponent implements OnInit {
       }
     })
 
-   
+
   }
 
 
-  getSavedBill(){
+  getSavedBill() {
 
 
-    
 
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetOpenDaySale').subscribe(
-      (Response:any)=>{
-       
+
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetOpenDaySale').subscribe(
+      (Response: any) => {
+
         this.savedbillList = [];
-        Response.forEach((e:any) => {
-          if(e.invType == 'SR'){
+        Response.forEach((e: any) => {
+          if (e.invType == 'SR') {
             this.savedbillList.push(e);
           }
-          
-          
+
+
         });
-     
+
       }
     )
 
@@ -1296,7 +1307,7 @@ export class GarmentSaleReturnComponent implements OnInit {
 
 
 
-  
+
 
 
 

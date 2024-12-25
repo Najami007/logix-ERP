@@ -11,7 +11,8 @@ import Swal from 'sweetalert2';
 import * as $ from 'jquery';
 import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/addparty.component';
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
-import { SaleBillPrintComponent } from '../sale-bill-print/sale-bill-print.component';
+import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bill-print.component';
+import { ProductModalComponent } from '../SaleComFiles/product-modal/product-modal.component';
 
 
 @Component({
@@ -366,8 +367,19 @@ export class GarmentSaleComponent implements OnInit {
             if(prodDetail.uomTitle == 'price'){
               reqQty = barcode.substring(12 - 5);
               reqQtyDot = reqQty.substring(0,5);
-              tmpPrice = reqQtyDot;
-            }else{
+              tmpPrice = reqQtyDot; 
+ 
+            }else if(prodDetail.uomTitle == 'piece'){
+              reqQty = barcode.substring(12 - 5);
+              reqQtyDot = reqQty.substring(6 - 4);
+              reqQtyDot = reqQtyDot.substring(0, 3);
+              console.log(reqQtyDot);
+              reqQty = reqQty.substring(0, 5);
+              console.log(reqQty);
+              prodQty = parseFloat(reqQty);
+ 
+            }
+            else{
                 /////////// extracting quantity from special barcode based on UOM
               reqQty = barcode.substring(12 - 5);
               reqQtyDot = reqQty.substring(6 - 4);
@@ -400,7 +412,8 @@ export class GarmentSaleComponent implements OnInit {
                     wohCP: Response[0].costPrice,
                     avgCostPrice: Response[0].avgCostPrice,
                     costPrice: Response[0].costPrice,
-                    salePrice: tmpPrice || Response[0].salePrice,
+                    //salePrice: (tmpPrice / Response[0].salePrice) || Response[0].salePrice,
+                    salePrice: tmpPrice  || Response[0].salePrice,
                     ovhPercent: 0,
                     ovhAmount: 0,
                     expiryDate: this.global.dateFormater(new Date(), '-'),
@@ -531,6 +544,16 @@ export class GarmentSaleComponent implements OnInit {
       $('#psearchProduct').trigger('focus');
     }, 500);
 
+  }
+
+  searchProductByName(){
+    this.dialogue.open(ProductModalComponent,{
+      width:'80%',
+    }).afterClosed().subscribe(val=>{
+      if(val != '' && val != undefined){
+        this.holdDataFunction(val.data);
+      }
+    })
   }
 
   focusto(cls: any, e: any) {

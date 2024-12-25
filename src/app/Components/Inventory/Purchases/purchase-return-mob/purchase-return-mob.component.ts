@@ -12,6 +12,8 @@ import { PincodeComponent } from '../../../User/pincode/pincode.component';
 import * as $ from 'jquery';
 import Swal from 'sweetalert2';
 import { AddpartyComponent } from '../../../Company/party/addparty/addparty.component';
+import { ProductModalComponent } from '../../Sale/SaleComFiles/product-modal/product-modal.component';
+import { PurchaseBillPrintComponent } from '../purchase-bill-print/purchase-bill-print.component';
 
 @Component({
   selector: 'app-purchase-return-mob',
@@ -19,6 +21,9 @@ import { AddpartyComponent } from '../../../Company/party/addparty/addparty.comp
   styleUrls: ['./purchase-return-mob.component.scss']
 })
 export class PurchaseReturnMobComponent implements OnInit{
+
+  @ViewChild(PurchaseBillPrintComponent) billPrint:any;
+   
   companyProfile:any = [];
   crudList:any = {c:true,r:true,u:true,d:true};
   constructor(
@@ -50,12 +55,6 @@ export class PurchaseReturnMobComponent implements OnInit{
     this.getLocation();
     this.getSuppliers();
     $('.searchProduct').trigger('focus');
-    this.global.getProducts().subscribe(
-      (data:any)=>{
-        this.productList = data;
-      }
-    )
-
    
   }
 
@@ -327,6 +326,17 @@ export class PurchaseReturnMobComponent implements OnInit{
 
   }
 
+  searchProductByName() {
+      this.dialogue.open(ProductModalComponent, {
+        width: '80%',
+      }).afterClosed().subscribe(val => {
+        if (val != '' && val != undefined) {
+          this.holdDataFunction(val.data);
+        }
+      })
+    }
+  
+  
 
   getTotal() {
     this.subTotal = 0;
@@ -874,75 +884,7 @@ export class PurchaseReturnMobComponent implements OnInit{
 
 
   printBill(item:any){
-    this.myTableDataList = [];
-    this.myInvoiceNo = item.invBillNo;
-    this.myInvoiceDate = new Date(item.invDate);
-    this.myLocation = item.locationTitle;
-    this.myRefInvNo = item.refInvoiceNo;
-    this.mydiscount = item.billDiscount;
-    this.myOverHeadAmount = item.overHeadAmount;
-    this.myInvRemarks = item.remarks;
-    this.myBookerName = item.bookerName;
-    this.myPartyName = item.partyName;
-    this.mySubTotal = item.billTotal;
-    this.myBillStatus = item.approvedStatus;
-
-
-    this.getBillDetail(item.invBillNo).subscribe(
-      (Response:any)=>{
-        var totalQty = 0 ;
-        var overhead = 0
-        this.myBillTotalQty = 0;
-        this.mywohCPTotal = 0;
-        this.myWCPTotal = 0;
-        this.myCPTotal = 0;
-        this.mySPTotal = 0;
-       
-        this.productImage = Response[Response.length - 1].productImage;
-
-       if(item.overHeadAmount > 0){
-        Response.forEach((j:any) => {
-          totalQty += j.quantity
-        });
-     
-         overhead = item.overHeadAmount / totalQty;
-      
- 
-       }
-
-          Response.forEach((e:any) => {
-            this.myBillTotalQty += e.quantity;
-            this.mywohCPTotal += (e.costPrice - overhead)* e.quantity;
-            this.myCPTotal += e.costPrice * e.quantity;
-            this.mySPTotal += e.salePrice * e.quantity;
-
-            this.myTableDataList.push({
-              ProductID:e.productID,
-              ProductTitle:e.productTitle,
-              barcode:e.barcode,
-              productImage:e.productImage,
-              Quantity:e.quantity,
-              wohCP:(e.costPrice - overhead) ,
-              CostPrice:e.costPrice,
-              SalePrice:e.salePrice,
-              ExpiryDate:this.global.dateFormater(new Date(e.expiryDate),'-'),
-              BatchNo:e.batchNo,
-              BatchStatus:e.batchStatus,
-              UomID:e.uomID,
-              Packing:e.packing,
-              discInP:e.discInP,
-              discInR:e.discInR,
-            })
-          });
-
-          setTimeout(() => {
-            this.global.printData('#printDiv')
-          }, 200);
-        
-      }
-    )
-
-
+    this.billPrint.printBill(item);
 
   }
 

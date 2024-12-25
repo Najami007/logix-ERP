@@ -275,8 +275,8 @@
     <div id="ticketPrint" class="d-none" >
         <div *ngFor="let item of printDetails" class="p-1 w-100" >
             <div class="text-center">
-                <img src="../../../../assets/Images/playtorium.png" height="50" width="250">
-                <p>Mehria Mall & Residencia, Attock</p>
+                <img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
+                <p>{{companyName}}</p>
                 <!-- <h2>Playtorium</h2> -->
             </div>
     

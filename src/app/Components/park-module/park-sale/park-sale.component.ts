@@ -24,6 +24,12 @@ export class ParkSaleComponent {
 
   crudList:any = [];
   companyProfile:any = [];
+  companyLogo: any = '';
+  logoHeight: any = 0;
+  logoWidth: any = 0;
+  companyAddress: any = '';
+  CompanyMobile: any = '';
+  companyName: any = '';
 
   constructor(
     private http:HttpClient,
@@ -40,7 +46,16 @@ export class ParkSaleComponent {
 
     this.global.getMenuList().subscribe((data)=>{
       this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-    })
+    });
+    this.global.getCompany().subscribe((data) => {
+      this.companyProfile = data;
+      this.companyLogo = data[0].companyLogo1;
+      this.CompanyMobile = data[0].companyMobile;
+      this.companyAddress = data[0].companyAddress;
+      this.companyName = data[0].companyName;
+      this.logoHeight = data[0].logo1Height;
+      this.logoWidth = data[0].logo1Width;
+    });
   }
 
   

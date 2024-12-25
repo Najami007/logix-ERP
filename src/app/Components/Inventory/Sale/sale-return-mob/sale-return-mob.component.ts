@@ -11,7 +11,8 @@ import Swal from 'sweetalert2';
 import * as $ from 'jquery';
 import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/addparty.component';
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
-import { SaleBillPrintComponent } from '../sale-bill-print/sale-bill-print.component';
+import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bill-print.component';
+import { ProductModalComponent } from '../SaleComFiles/product-modal/product-modal.component';
 
 @Component({
   selector: 'app-sale-return-mob',
@@ -416,6 +417,17 @@ export class SaleReturnMobComponent implements OnInit {
     }, 500);
 
   }
+
+   searchProductByName() {
+      this.dialogue.open(ProductModalComponent, {
+        width: '80%',
+      }).afterClosed().subscribe(val => {
+        if (val != '' && val != undefined) {
+          this.holdDataFunction(val.data);
+        }
+      })
+    }
+  
 
   focusto(cls: any, e: any) {
 

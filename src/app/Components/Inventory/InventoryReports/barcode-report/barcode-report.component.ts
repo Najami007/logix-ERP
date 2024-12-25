@@ -51,8 +51,9 @@ export class BarcodeReportComponent implements OnInit {
   }
 
 
-
-
+  manufactureDate = new Date();
+  expiryDate = new Date();
+  hideExpiry = true;
   hidePrice = false;
   hideBarcode = false;
   productList:any = [];

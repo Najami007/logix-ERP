@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 import { RetailRtnEnterQtyComponent } from './retail-rtn-enter-qty/retail-rtn-enter-qty.component';
 import { RetailRtnSavedbillComponent } from './retail-rtn-savedbill/retail-rtn-savedbill.component';
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
-import { SaleBillPrintComponent } from '../sale-bill-print/sale-bill-print.component';
+import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bill-print.component';
 
 
 @Component({

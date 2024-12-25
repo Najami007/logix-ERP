@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductCategoryComponent } from './product-category/product-category.component';
-import { ProductSubCategoryComponent } from './product-sub-category/product-sub-category.component';
-import { BrandComponent } from './brand/brand.component';
+import { ProductSubCategoryComponent } from './Configurations/product-sub-category/product-sub-category.component';
 import { Route, RouterModule } from '@angular/router';
 import { AuthGuard } from 'src/app/auth.guard';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,21 +9,18 @@ import { MaterialModule } from 'src/app/Shared/material/material.module';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { TextMaskModule } from 'angular2-text-mask';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
-import { LocationsComponent } from './locations/locations.component';
-import { RacksComponent } from './racks/racks.component';
-import { UnitOfMeasurementComponent } from './unit-of-measurement/unit-of-measurement.component';
+import { RacksComponent } from './Configurations/racks/racks.component';
 import { ProductComponent } from './product/product.component';
 import { PurchaseComponent } from './Purchases/purchase/purchase.component';
-import { AddBrandComponent } from './brand/add-brand/add-brand.component';
-import { AddRackComponent } from './racks/add-rack/add-rack.component';
-import { AddUOMComponent } from './unit-of-measurement/add-uom/add-uom.component';
-import { AddCategoryComponent } from './product-category/add-category/add-category.component';
-import { AddProdSubCategoryComponent } from './product-sub-category/add-prod-sub-category/add-prod-sub-category.component';
-import { IssuanceComponent } from './issuance/issuance.component';
+import { AddBrandComponent } from './Configurations/brand/add-brand/add-brand.component';
+import { AddRackComponent } from './Configurations/racks/add-rack/add-rack.component';
+import { AddUOMComponent } from './Configurations/unit-of-measurement/add-uom/add-uom.component';
+import { AddCategoryComponent } from './Configurations/product-category/add-category/add-category.component';
+import { AddProdSubCategoryComponent } from './Configurations/product-sub-category/add-prod-sub-category/add-prod-sub-category.component';
+
 import { PurchaseReturnComponent } from './Purchases/purchase-return/purchase-return.component';
-import { IssueStockRerturnComponent } from './issue-stock-rerturn/issue-stock-rerturn.component';
-import { StockAdjustmentComponent } from './stock-adjustment/stock-adjustment.component';
-import { OpeningStockComponent } from './opening-stock/opening-stock.component';
+import { StockAdjustmentComponent } from './InvAdjustment/stock-adjustment/stock-adjustment.component';
+
 import { ProductImgComponent } from './product/product-img/product-img.component';
 import { LimittoPipe } from 'src/app/Shared/pipes/limitto.pipe';
 import { InvreportcatwiseComponent } from './InventoryReports/invreportcatwise/invreportcatwise.component';
@@ -65,7 +60,7 @@ import { PriceCheckerComponent } from './price-checker/price-checker.component';
 
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 import { SaleReportCustomerwiseComponent } from './InventoryReports/sale-report-customerwise/sale-report-customerwise.component';
-import { InvAuditComponent } from './inv-audit/inv-audit.component';
+import { InvAuditComponent } from './InvAdjustment/inv-audit/inv-audit.component';
 import { GarmentSaleReturnComponent } from './Sale/garment-sale-return/garment-sale-return.component';
 import { GarmentSaleComponent } from './Sale/garment-sale/garment-sale.component';
 import { SaleReportBookerwiseComponent } from './InventoryReports/sale-report-bookerwise/sale-report-bookerwise.component';
@@ -78,7 +73,7 @@ import { VoidSaleComponent } from './Sale/void-sale/void-sale.component';
 import { VoidSaleReturnComponent } from './Sale/void-sale-return/void-sale-return.component';
 import { NgxBarcode6Module } from 'ngx-barcode6';
 
-import { SaleBillPrintComponent } from './Sale/sale-bill-print/sale-bill-print.component';
+import { SaleBillPrintComponent } from './Sale/SaleComFiles/sale-bill-print/sale-bill-print.component';
 import { WholeSaleComponent } from './Sale/whole-sale/whole-sale.component';
 import { WhsSavedBillComponent } from './Sale/whole-sale/whs-saved-bill/whs-saved-bill.component';
 import { WholeSaleReturnComponent } from './Sale/whole-sale-return/whole-sale-return.component';
@@ -87,6 +82,18 @@ import { PurchaseMobShopComponent } from './Purchases/purchase-mob-shop/purchase
 import { PurchaseReturnMobComponent } from './Purchases/purchase-return-mob/purchase-return-mob.component';
 import { SaleMobComponent } from './Sale/sale-mob/sale-mob.component';
 import { SaleReturnMobComponent } from './Sale/sale-return-mob/sale-return-mob.component';
+import { FastFoodSaleComponent } from './Sale/fast-food-sale/fast-food-sale.component';
+import { KOTPrintComponent } from './Sale/SaleComFiles/kotprint/kotprint.component';
+import { ProductModalComponent } from './Sale/SaleComFiles/product-modal/product-modal.component';
+import { PurchaseBillPrintComponent } from './Purchases/purchase-bill-print/purchase-bill-print.component';
+import { OpeningStockComponent } from './InvAdjustment/opening-stock/opening-stock.component';
+import { IssuanceComponent } from './InvAdjustment/issuance/issuance.component';
+import { IssueStockRerturnComponent } from './InvAdjustment/issue-stock-rerturn/issue-stock-rerturn.component';
+import { AdjBillPrintComponent } from './InvAdjustment/adj-bill-print/adj-bill-print.component';
+import { BrandComponent } from './Configurations/brand/brand.component';
+import { LocationsComponent } from './Configurations/locations/locations.component';
+import { ProductCategoryComponent } from './Configurations/product-category/product-category.component';
+import { UnitOfMeasurementComponent } from './Configurations/unit-of-measurement/unit-of-measurement.component';
 
 
 
@@ -126,6 +133,7 @@ export const inventoryRoutes: Route[] = [
   {path: 'retslrtn',component: RetailerSaleReturnComponent,data: { title: 'RT Sale Return' },canActivate: [AuthGuard]},
   {path: 'mobsl',component: SaleMobComponent,data: { title: 'Mob Sale' },canActivate: [AuthGuard]},
   {path: 'mobslrtn',component: SaleReturnMobComponent,data: { title: 'Mob Sale Return' },canActivate: [AuthGuard]},
+  {path: 'ffsl',component: FastFoodSaleComponent,data: { title: 'Fast Food Sale' },canActivate: [AuthGuard]},
 
     //////// Purchase Pages////////////////////
 
@@ -241,6 +249,11 @@ export const inventoryRoutes: Route[] = [
     PurchaseReturnMobComponent,
     SaleMobComponent,
     SaleReturnMobComponent,
+    FastFoodSaleComponent,
+    KOTPrintComponent,
+    ProductModalComponent,
+    PurchaseBillPrintComponent,
+    AdjBillPrintComponent,
     
   
     

@@ -1,19 +1,6 @@
 
-input:focus{
-  
-    outline: none;
-  }
-  
-  .prodBtn:focus{
-    outline: none;
-    color: rgb(255, 255, 255) !important;
-    background-color: black !important;
-    zoom: 1;
-   
-  }
-  
-  
-  
+
+
   #psearchProduct{
     font-size: 18px;
     font-weight: 400;
@@ -23,69 +10,11 @@ input:focus{
     border-radius: 5px 0px 0px 5px;
     width: 100%;
     color: white;
+
+    &:focus{
+      outline: none;
+    }
   }
-  
-  
-  a{
-    text-decoration: none;
-    display: flex;
-    flex-direction: row;
-    color: black;
-    text-align: center;
-    padding: 5px;
-  
-  }
-  
- 
-  .SearchConatiner{
-  // border: 0px solid rgb(180, 180, 180);
-  // background-color: rgb(249, 249, 249);
-  
-  // margin-top: 55px;
-  width: 100%;
-  // z-index:1000;
-  // position: absolute;
-  margin-top: -20px;
-  max-height: 45vh;
-  overflow: hidden;
-  
-  // max-width: 470px;
-  
-  
-  .SearchConatiner , .card{
-    background-color: rgb(247, 242, 242);
-    // padding: 10px;
-    // margin: 1px;
-    
-    
-  }
-  
-  
-  
-  .SearchConatiner, p{
-    padding: 10px;
-    text-decoration: none;
-    // color:rgb(255, 253, 253);
-    height: 30px;
-    display: block;
-    // border-bottom: 1px solid rgb(174, 174, 174);
-  }
-  
-  }
-  
-  .table-Card{
-    height: 340px;
-    overflow-y: scroll;
-    scroll-behavior: smooth;
-  }
-  
-  .tableHead{
-    background-color: rgb(244, 207, 140);
-    height: 40px;
-  }
-  
-  
-  
   
   ::ng-deep .cdk-overlay-container{
     z-index:2000;

@@ -241,7 +241,7 @@
 
             
 
-            <mat-form-field appearance="outline" class="col-lg-6 matsmall">
+            <mat-form-field appearance="outline" class="col-lg-5 matsmall">
                 <mat-label>Search.....</mat-label>
                 <input type="text" id="searchProduct" matInput #searchProd [(ngModel)]="searchProduct">
             </mat-form-field>
@@ -278,6 +278,15 @@
                     <mat-option  [value]="false">Deactive</mat-option>
                 </mat-select>
             </mat-form-field>
+            <mat-form-field appearance="outline" class="col-lg-1 matsmall">
+                <mat-label>Disc</mat-label>
+                
+                <mat-select [(ngModel)]="discFilterID"  (selectionChange)="filterProductList('disc')">
+                    
+                    <mat-option *ngFor="let item of DiscFilterList | filter:bfs.value"
+                        [value]="item.val">{{item.title}}</mat-option>
+                </mat-select>
+            </mat-form-field>
        
             <hr>
              
@@ -293,6 +302,7 @@
                    
                     <th>Cost Price</th>
                     <th>Sale Price</th>
+                    <th>Disc %</th>
                     <th>GST</th>
                     <th>Entered By</th>
                     <th>Edit</th>
@@ -315,6 +325,7 @@
                       
                         <td>{{item.costPrice}}</td>
                         <td>{{item.salePrice}}</td>
+                        <td>{{item.discPercentage}}%</td>
                         <td>{{item.gst}}%</td>
                         <td>{{item.entryUser}}</td>
                         <td><mat-icon class="text-success cursorPointer" (click)="edit(item)">edit</mat-icon></td>

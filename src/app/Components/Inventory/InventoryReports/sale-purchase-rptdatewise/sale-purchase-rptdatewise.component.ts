@@ -5,7 +5,7 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
-import { SaleBillPrintComponent } from '../../Sale/sale-bill-print/sale-bill-print.component';
+import { SaleBillPrintComponent } from '../../Sale/SaleComFiles/sale-bill-print/sale-bill-print.component';
 
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';

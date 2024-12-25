@@ -4,28 +4,51 @@
 
 
 :root{
+
+  
  
    mat-form-field{
     @include mat.form-field-density(-3);
-    --mat-form-field-container-text-size: 12px !important;
-    --mat-form-field-filled-label-text-size: 12px;
- 
-    // --mat-form-field-container-text-line-height: 16px !important;
-    // --mat-form-field-subscript-text-line-height: 20px !important; 
+    // @include mat.button-density(-1);
+    --mat-form-field-container-height: 16px !important;
+    --mat-form-field-container-vertical-padding: 8px !important;
+    // --mat-form-field-container-height : 16px !important;
+    // --mat-form-field-filled-label-display: block !important;
+    // --mat-form-field-container-vertical-padding: 5px !important;
+    // --mat-form-field-filled-with-label-container-padding-top: 5px !important;
+    // --mat-form-field-filled-with-label-container-padding-bottom: 5px !important;
+
+    // --mat-form-field-container-text-size: 12px !important;
+    // --mat-form-field-filled-label-text-size: 12px !important;
+    // // --mat-form-field-container-text-line-height: 30px !important;
+    // // --mat-form-field-subscript-text-line-height: 30px !important; 
+
+  
     mat-label{
-      font-size: 12px;
-    }
-    mat-select{
       font-size: 12px !important;
     }
-    mat-icon{
-      font-size: 20px !important;
+    mat-select{
+      font-size: 14px !important;
     }
-    ngx-material-timepicker-toggle{
-      font-size: 20px !important;
+    // input{
+    //   font-size:  12px;
+    // }
+    input {
+      padding-bottom: 2px !important;
+      font-size: 14px !important;
+  }
+    // mat-icon{
+    //   font-size: 20px !important;
+    // }
+    // ngx-material-timepicker-toggle{
+    //   font-size: 20px !important;
+    // }
+    mat-datepicker-toggle {
+      font-size: 10px !important;
     }
+
     mat-datepicker{
-      font-size: 15px !important;
+      font-size: 10px !important;
     }
    
    }
