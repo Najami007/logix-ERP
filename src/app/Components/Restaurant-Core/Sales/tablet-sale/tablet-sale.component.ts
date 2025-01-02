@@ -185,18 +185,13 @@ export class TabletSaleComponent implements OnInit {
   ////////////////////////////////////////////
 
   getBankList() {
-    this.http.get(environment.mainApi + 'acc/GetVoucherCBCOA?type=BRV').subscribe(
-      (Response: any) => {
-        this.bankCoaList = Response;
-        setTimeout(() => {
-          this.bankCoaID = Response[0].coaID;
-        }, 200);
-      },
-      (Error) => {
-   
-      }
-    )
-  }
+
+    this.global.getBankList().subscribe((data: any) => {
+       this.bankCoaList = data; 
+       setTimeout(() => {
+        this.bankCoaID = data[0].coaID;
+      }, 200);});
+}
 
   ///////////////////////////////////////////////////////////
 

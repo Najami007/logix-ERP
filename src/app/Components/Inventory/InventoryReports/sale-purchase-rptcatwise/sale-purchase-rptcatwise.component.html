@@ -195,7 +195,7 @@
              <tbody>
                  <tr *ngFor="let item of SaleDetailList index as index">
                      <td class="text-center">{{index + 1}}</td>
-                     <td class="text-center">{{item.invBillNo}}</td>
+                     <td class="text-center cursorPointer" (click)="printBill(item)"><u class="text-primary">{{item.invBillNo}}</u></td>
                      <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
                      <!-- <td *ngIf="rptType == 's'">{{item.tableTitle}}</td> -->
                      <td>{{item.productTitle}}</td>

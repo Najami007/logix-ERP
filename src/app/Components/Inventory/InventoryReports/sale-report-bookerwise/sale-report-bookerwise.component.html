@@ -17,20 +17,20 @@
             <mat-label>Booker</mat-label>
             <mat-select [(ngModel)]="bookerID">
                 <mat-option><ngx-mat-select-search #partySearch [placeholderLabel]="'Search...'"
-                    [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                <mat-option  *ngFor="let item of bookerList | filter:partySearch.value"
+                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of bookerList | filter:partySearch.value"
                     [value]="item.bookerID">{{item.bookerName}}</mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field  appearance="outline" class="col-lg-2 matsmall" >
+        <mat-form-field appearance="outline" class="col-lg-2 matsmall">
             <mat-label>From Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
             <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
             <mat-datepicker #sDate></mat-datepicker>
         </mat-form-field>
-        <mat-form-field class="col-lg-2 matsmall" appearance="outline" >
-            <mat-label>From Time</mat-label>         
-            <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+        <mat-form-field class="col-lg-2 matsmall" appearance="outline">
+            <mat-label>From Time</mat-label>
+            <input matInput [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
             <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
             <ngx-material-timepicker #fTime></ngx-material-timepicker>
         </mat-form-field>
@@ -44,9 +44,9 @@
         </mat-form-field>
         <mat-form-field class="col-lg-2 matsmall" appearance="outline">
             <mat-label>To Time</mat-label>
-                <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
-                <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
-                <ngx-material-timepicker #tTime></ngx-material-timepicker>
+            <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+            <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #tTime></ngx-material-timepicker>
         </mat-form-field>
 
     </div>
@@ -70,7 +70,7 @@
 
 
 
-    
+
     <div id="PrintDiv">
 
         <!-------------------------    Top Logo Section -------------------->
@@ -87,7 +87,8 @@
                     <h1 class="companyName">{{item.companyName}}</h1>
 
                     <p class="rptTitle" style="margin-top:-20px">Sale {{reportType}} Report </p>
-                    <p style="margin-top: -15px;" *ngIf="userName != ''" > <b *ngIf="userName != ''">User: {{userName}} |</b> </p>
+                    <p style="margin-top: -15px;" *ngIf="userName != ''"> <b *ngIf="userName != ''">User: {{userName}}
+                            |</b> </p>
                     <p style="margin-top:-15px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
 
@@ -128,18 +129,25 @@
             <tbody>
                 <tr *ngFor="let item of DetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td  [ngClass]="item.invType == 'SR' ? 'text-danger' : ''" class="text-center cursorPointer ">{{item.invBillNo}}</td>
+                    <td [ngClass]="item.invType == 'SR' ? 'text-danger' : ''" class="text-center cursorPointer ">
+                        {{item.invBillNo}}</td>
                     <td>{{item.invDate |date:'dd-MM-yyyy'}}</td>
-                    <td >{{item.productTitle}}</td>
+                    <td>{{item.productTitle}}</td>
                     <td class="text-center">{{item.quantity}}</td>
                     <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.avgCostPrice|number:'1.0-1'}}</td>
                     <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.discInR |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.discInP |number:'1.0-1'}}</td>
-                    <td [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''" class="text-end">{{(item.salePrice * item.quantity) - (item.discInR * item.quantity) |number:'1.0-0'}}</td>
-                    <td [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''" class="text-end">{{((item.salePrice * item.quantity) - (item.discInR * item.quantity)) - (item.avgCostPrice * item.quantity) |number:'1.0-1'}}</td>
-                    <td [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''" class="text-end">{{(((item.salePrice * item.quantity) - (item.discInR * item.quantity)) - (item.avgCostPrice * item.quantity)) / ((item.salePrice * item.quantity) - (item.discInR * item.quantity)) |percent:'1.0-1'}}</td>
+                    <td [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''" class="text-end">
+                        {{(item.salePrice * item.quantity) - (item.discInR * item.quantity) |number:'1.0-0'}}</td>
+                    <td [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''" class="text-end">
+                        {{((item.salePrice * item.quantity) - (item.discInR * item.quantity)) - (item.avgCostPrice *
+                        item.quantity) |number:'1.0-1'}}</td>
+                    <td [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''" class="text-end">
+                        {{(((item.salePrice * item.quantity) - (item.discInR * item.quantity)) - (item.avgCostPrice *
+                        item.quantity)) / ((item.salePrice * item.quantity) - (item.discInR * item.quantity))
+                        |percent:'1.0-1'}}</td>
 
                     <td>{{item.entryUser}}</td>
                 </tr>
@@ -150,9 +158,9 @@
                     <td></td>
                 </tr>
             </tbody>
-          
 
-          
+
+
         </table>
 
         <table class="table table-logix" id="summaryTable">
@@ -173,54 +181,54 @@
 
             </thead>
 
-           
+
             <tbody>
-                 <!--------------------- Sale Data Table ----------->
-                 <tr>
+                <!--------------------- Sale Data Table ----------->
+                <tr>
                     <td colspan="9" class="fw-bold text-center">Sale</td>
-                 </tr>
+                </tr>
                 <tr *ngFor="let item of saleSummaryList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td  class="text-center">{{item.invBillNo}}</td>
+                    <td class="text-center cursorPointer" (click)="printBill(item)"><u class="text-primary">{{item.invBillNo}}</u></td>
                     <td>{{item.invDate |date:'dd-MM-yyyy'}}</td>
                     <td>{{item.partyName || "Walk In"}}</td>
-                    <td >{{item.paymentType}}</td>
-                    <td  class="text-end">{{item.total  |number:'1.0-0'}}</td>
+                    <td>{{item.paymentType}}</td>
+                    <td class="text-end">{{item.total |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.billDiscount|number:'1.0-0'}}</td>
                     <td class="text-end">{{item.total - item.billDiscount|number:'1.0-0'}}</td>
                     <td>{{item.entryUser}}</td>
                 </tr>
                 <tr class="fw-bold text-end">
                     <td colspan="5"></td>
-                    <td >{{saleBillTotal|number:'1.0-0'}}</td>
+                    <td>{{saleBillTotal|number:'1.0-0'}}</td>
                     <td>{{saleDiscountTotal|number:'1.0-0'}}</td>
-                    <th class="text-end">{{saleGrandTotal|number:'1.0-0'}}</th> 
+                    <th class="text-end">{{saleGrandTotal|number:'1.0-0'}}</th>
                     <td></td>
                 </tr>
 
-                    <!--------------------- Sale Return Data Table ----------->
-                    <tr>
-                        <td colspan="9" class="fw-bold text-center">Sale Return</td>
-                     </tr>
+                <!--------------------- Sale Return Data Table ----------->
+                <tr>
+                    <td colspan="9" class="fw-bold text-center">Sale Return</td>
+                </tr>
                 <tr *ngFor="let item of saleRtnSummaryList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td  class="text-center">{{item.invBillNo}}</td>
+                    <td class="text-center cursorPointer" (click)="printBill(item)"><u class="text-primary">{{item.invBillNo}}</u></td>
                     <td>{{item.invDate |date:'dd-MM-yyyy'}}</td>
                     <td>{{item.bookerName}}</td>
-                    <td >{{item.paymentType}}</td>
-                    <td  class="text-end">{{item.total  |number:'1.0-0'}}</td>
+                    <td>{{item.paymentType}}</td>
+                    <td class="text-end">{{item.total |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.billDiscount|number:'1.0-0'}}</td>
                     <td class="text-end">{{item.total - item.billDiscount|number:'1.0-0'}}</td>
                     <td>{{item.entryUser}}</td>
                 </tr>
                 <tr class="fw-bold text-end">
                     <td colspan="5"></td>
-                    <td >{{saleRtnBillTotal|number:'1.0-0'}}</td>
-                    <td >{{saleRtnDiscountTotal|number:'1.0-0'}}</td>
-                    <th class="text-end">{{saleRtnGrandTotal|number:'1.0-0'}}</th> 
+                    <td>{{saleRtnBillTotal|number:'1.0-0'}}</td>
+                    <td>{{saleRtnDiscountTotal|number:'1.0-0'}}</td>
+                    <th class="text-end">{{saleRtnGrandTotal|number:'1.0-0'}}</th>
                     <td></td>
 
-                    
+
                 </tr>
                 <br>
 
@@ -228,27 +236,15 @@
                     <td colspan="5" class="text-center">Net Total</td>
                     <td class="text-end">{{saleBillTotal - saleRtnBillTotal|number:'1.0-0'}}</td>
                     <td class="text-end">{{saleDiscountTotal - saleRtnDiscountTotal|number:'1.0-0'}}</td>
-                    <th class="text-end">{{saleGrandTotal - saleRtnGrandTotal|number:'1.0-0'}}</th> 
+                    <th class="text-end">{{saleGrandTotal - saleRtnGrandTotal|number:'1.0-0'}}</th>
                     <td></td>
 
-                    
+
                 </tr>
             </tbody>
-        
-            
-
-          
         </table>
-
-
-
-
-
-
     </div>
-
-
-
 </div>
 
 
+<app-sale-bill-print class="hide" id="print-Bill"> </app-sale-bill-print>

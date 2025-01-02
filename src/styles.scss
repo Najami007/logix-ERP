@@ -2,12 +2,11 @@
 
 @include mat.core();
 
+// @include mat.form-field-outlined($min-container-height: 60px);
 
-:root{
+:root {
 
-  
- 
-   mat-form-field{
+  mat-form-field {
     @include mat.form-field-density(-3);
     // @include mat.button-density(-1);
     --mat-form-field-container-height: 16px !important;
@@ -23,20 +22,22 @@
     // // --mat-form-field-container-text-line-height: 30px !important;
     // // --mat-form-field-subscript-text-line-height: 30px !important; 
 
-  
-    mat-label{
+
+    mat-label {
       font-size: 12px !important;
     }
-    mat-select{
+
+    mat-select {
       font-size: 14px !important;
     }
+
     // input{
     //   font-size:  12px;
     // }
     input {
       padding-bottom: 2px !important;
       font-size: 14px !important;
-  }
+    }
     // mat-icon{
     //   font-size: 20px !important;
     // }
@@ -47,14 +48,12 @@
       font-size: 10px !important;
     }
 
-    mat-datepicker{
+    mat-datepicker {
       font-size: 10px !important;
     }
-   
-   }
-    
-   
-  
+
+  }
+
 }
 
 $my-primary: mat.define-palette(mat.$indigo-palette, 500);
@@ -63,158 +62,56 @@ $my-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 // The "warn" palette is optional and defaults to red if not specified.
 $my-warn: mat.define-palette(mat.$red-palette);
 
-$my-theme: mat.define-light-theme((
- color: (
-   primary: $my-primary,
-   accent: $my-accent,
-   warn: $my-warn,
- ),
+$my-theme: mat.define-light-theme((color: (primary: $my-primary,
+        accent: $my-accent,
+        warn: $my-warn,
+      ),
 
-));
+    ));
 
-$my-theme-dark: mat.define-dark-theme((
- color: (
-   primary: $my-primary,
-   accent: $my-accent,
-   warn: $my-warn,
- ),
- 
+$my-theme-dark: mat.define-dark-theme((color: (primary: $my-primary,
+        accent: $my-accent,
+        warn: $my-warn,
+      ),
 
-));
+
+    ));
+
 //@include mat.all-component-colors($my-theme-dark);
-.darkTheme{
+.darkTheme {
   @include mat.all-component-colors($my-theme-dark);
 }
 
-.lightTheme{
+.lightTheme {
   @include mat.all-component-colors($my-theme);
 }
 
 
-
-
-
-
-
 @import url('./assets/style/navbar.scss');
 @import url('./assets/style/common.scss');
+@import url('./assets/style/AngularMaterial.scss');
+@import url('./assets/style/fonts.scss');
 // @import url('./assets/style/logixDesign.css');
 // @import url('./assets/style/barcode.scss');
 @import '~material-design-icons/iconfont/material-icons.css';
 
 
+html,
+body {
+  margin: 0;
+  height: 100%;
+  font-family: sans-serif;
+  .modal-backdrop {
+    display: none;
+  }
 
+  .modal {
+    background: rgba(0, 0, 0, 0.5);
+  }
 
-
-:root {
-  /**  --dark : #484e4a; **/
-  --dark: #2a2829;
-  --dark-light: #c5c1bb;
-  --light: #eff0eb;
-  --orange: #f5b121;
-  --green: #1d6340;
-  --darktone1: #9fa8a3;
-  --sun-red: #d8705c;
-  --white: #ffffff;
-  --blue: #3c1874;
-  /** --nha-blue: #0041C2; **/
-  --royal-blue: #0041c2;
-  --nha-light-blue: #dff2fa;
-  --primary-color: #4758b8;
-  /** --nha-light-blue: green;**/
 }
 
-////***** Font Imports *//////////////
-@font-face {
-  font-family: 'digital';
-  src: url('./assets/fonts/digital/digital-7.ttf');
+.body {
+  padding-top: 65px !important;
+  padding-bottom: 45px !important;
 }
-@font-face {
-  font-family: 'ubuntu';
-  src: url('./assets/fonts/Ubuntu/Ubuntu-Regular.ttf');
-}
-@font-face {
-  font-family: 'roboto';
-  src: url('./assets/fonts/Roboto/Roboto-Regular.ttf');
-}
-
-// @font-face {
-//   font-family: 'barcode128';
-//   font-style: normal;
-//   src: url('./assets/fonts/barcode/code128.ttf');
-// }
-
-@font-face {
-  font-family: 'barcode128';
-  font-style: normal;
-  src: url('./assets/fonts/barcode/code128.ttf');
-}
-
-@font-face {
-  font-family: 'barcode39';
-  src: url('./assets/fonts/barcode/BarCode39Lesbar-3yDM.ttf ');
-}
-
-////***** Font Imports End *//////////////
-
-
-.font-barcode{
-   font-family: 'code 128' !important;
-  //font-family: Code 128, Helvetica, sans-serif ;
-  font-size: 155px;
-  // border: 1px solid red;
-   height: 100px;
-
-  overflow: hidden;
-}
-
-
-
-.bcodep{
-  width: 50%;
-  font-weight: bold;
-  font-size: 20px;
-}
-
-.bcodet{
-  width: 50%;
-  font-weight: 400;
-  font-size: 17px;
-}
-.bcodeC{
-  font-weight: bold;
-}
-
-
-html ,body {
-
- 
-
-    margin: 0;
-    height: 100%;
-    font-family: sans-serif;
-    
-  
-
-    .modal-backdrop {
-      display: none;
-    }
-    
-    .modal {
-      background: rgba(0,0,0,0.5);
-    }
-  
-    
-    
-}
-
-.body{
-  padding-top:65px !important;
-  padding-bottom: 45px !important;  
-}
-
-::ng-deep .matsmall {
-  @include mat.form-field-density(-5);
-}
-
-

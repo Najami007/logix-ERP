@@ -80,23 +80,8 @@ rptType:any = 's';
 
   reportType:any;
 
-  getUsers(){
- 
-    this.app.startLoaderDark()
-    this.http.get(environment.mainApi+this.global.userLink+'getuser').subscribe(
-      (Response)=>{
-        this.userList = Response;
-        
-        
-        this.app.stopLoaderDark();
-
-      },
-      (error:any)=>{
-        
-        this.app.stopLoaderDark();
-      }
-    )
-   
+  getUsers() {
+    this.global.getUserList().subscribe((data: any) => { this.userList = data; });
   }
   CategoriesList:any = [];
   SubCategoriesList:any = [];
@@ -125,19 +110,10 @@ rptType:any = 's';
   BrandList:any = [];
   BrandID = 0;
   getBrandList() {
-    this.http.get(environment.mainApi +this.global.inventoryLink+'GetBrand').subscribe(
-      (Response: any) => {
-        this.BrandList = Response;
-      },
-      (Error:any)=>{
-        this.msg.WarnNotify(Error);
-     
-       }
-    )
+      this.global.getBrandList().subscribe((data: any) => { this.BrandList = data; });
   }
 
 
-  
   onUserSelected(){
     var curUser =  this.userList.find((e:any)=> e.userID == this.userID);
      this.userName = curUser.userName;

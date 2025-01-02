@@ -127,7 +127,7 @@
                     <td  [ngClass]="item.invType == 'PR' ? 'text-danger' : ''" class="text-center cursorPointer ">{{item.invBillNo}}</td>
                     <td>{{item.invDate |date:'dd-MM-yyyy'}} ({{item.createdOn |date:'hh:mm:a'}})</td>
                     <td >{{item.productTitle}}</td>
-                    <td class="text-center">{{item.quantity}}</td>
+                    <td class="text-center">{{item.quantity |number:'1.0-3'}}</td>
                     <td class="text-end">{{item.costPrice |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.avgCostPrice|number:'1.0-0'}}</td>
                     <td class="text-end">{{item.salePrice |number:'1.0-0'}}</td>

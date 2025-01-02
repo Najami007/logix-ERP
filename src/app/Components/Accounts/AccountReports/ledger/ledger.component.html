@@ -5,7 +5,7 @@
 
                 <!----------------           Date Section ------------------------------->
                 <div class="row ">                    
-                        <mat-form-field class="col-lg-3 " appearance="outline">
+                        <mat-form-field class="col-lg-4 " appearance="outline">
                             <mat-label>Account Head</mat-label>
                             <mat-select [(ngModel)]="coaID">
                                 <mat-option><ngx-mat-select-search [(ngModel)]="txtSearch"
@@ -25,14 +25,14 @@
                             </mat-select>
                         </mat-form-field>
          
-                        <mat-form-field class="col-lg-2  " appearance="outline">
+                        <mat-form-field class="col-lg-3 " appearance="outline">
                             <mat-label>From Date</mat-label>
                             <input matInput type="text"  readonly="true" [(ngModel)]="startDate" [matDatepicker]="sDate">
                             <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
                             <mat-datepicker #sDate></mat-datepicker>
                         </mat-form-field>
 
-                        <mat-form-field class="col-lg-2 " appearance="outline">
+                        <mat-form-field class="col-lg-3 " appearance="outline">
                             <mat-label>To Date</mat-label>
                             <input matInput type="text" readonly="true" [(ngModel)]="EndDate"  [matDatepicker]="eDate">
                             <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
@@ -40,12 +40,14 @@
                         </mat-form-field>
                     
 
-                    <div class="col-lg-3 text-start" *ngIf="crudList.r">
-                        <button class=" col-lg-4 btn-rpt-success  me-1"  (click)="getLedgerReport('project')">ProjectWise</button>   
+                    <div class="col-lg-12 text-center" *ngIf="crudList.r">
+                        <button class=" col-lg-2 btn-rpt-success  me-1"  (click)="getLedgerReport('project')">ProjectWise</button>   
 
-                        <button class=" col-lg-3 btn-rpt-success  me-1" (click)="getLedgerReport('all')">All Report</button> 
+                        <button class=" col-lg-2 btn-rpt-success  me-1" (click)="getLedgerReport('all')">All Report</button> 
     
-                        <button class=" col-lg-2 btn-rpt-primary   " (click)="PrintTable()"> Print</button>
+                        <button class=" col-lg-1 btn-rpt-primary  me-1 " (click)="PrintTable()"> Print</button>
+
+                        <button class=" col-lg-1 btn-rpt-primary   " (click)="export()"> Export</button>
                     </div>
                 </div>
             </div>   
@@ -79,7 +81,7 @@
             </div>
            </div>
 
-            <table class="table table-logix">
+            <table class="table table-logix" id="ledger">
 
                 <thead >
                     <tr class="text-center">

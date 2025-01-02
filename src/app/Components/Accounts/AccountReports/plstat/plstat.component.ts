@@ -69,57 +69,13 @@ export class PLStatComponent implements OnInit {
   projectName:any;
   projectList:any = [];
 
-  ////////////////////////////////////////////////////////////////
 
+getProject(){
 
+  this.globalData.getProjectList().subscribe((data: any) => { this.projectList = data; });
 
-
-
-  
-//  getCrud(){
-//   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
-//     (Response:any)=>{
-//       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-//     }
-//   )
-// }
-
-
-
-
-
-
+}
  
-  getProject(){
-    this.http.get(environment.mainApi+this.globalData.companyLink+'getproject').subscribe(
-      (Response:any)=>{
-        this.projectList = Response;
-      }
-    )
-  }
- 
-
-
-  // getIncomeTotal(){
-  //   this.incDebitTotal = 0;
-  //   this.incCreditTotal = 0;
-  //   this.IncomeData.forEach((e:any) => {
-  //     this.incDebitTotal += e.debit;
-  //     this.incCreditTotal += e.credit;
-
-  //   });
-
-   
-  // }
-  // getExpenseTotal(){
-  //   this.expDebitTotal = 0;
-  //   this.expCreditTotal = 0;
-  //   this.ExpenseData.forEach((e:any) => {
-  //     this.expDebitTotal += e.debit;
-  //     this.expCreditTotal += e.credit;
-
-  //   });
-  // }
 
 
   getReport(reqFunc:any,param:any){
@@ -247,5 +203,9 @@ export class PLStatComponent implements OnInit {
    setTimeout(() => {
     this.globalData.printData('#printDiv');
    }, 200);
+  }
+
+  export(){
+    this.globalData.ExportHTMLTabletoExcel('printDiv','P&L '+'(' + this.fromDate.toLocaleDateString() + ' - ' + this.toDate.toLocaleDateString() +')')
   }
 }

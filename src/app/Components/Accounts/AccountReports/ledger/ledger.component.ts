@@ -32,7 +32,7 @@ export class LedgerComponent {
  
   
 
-  constructor( private globalData: GlobalDataModule,
+  constructor( public globalData: GlobalDataModule,
     private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
@@ -113,14 +113,11 @@ export class LedgerComponent {
 
 
 
- 
  getProject(){
-   this.http.get(environment.mainApi+this.globalData.companyLink+'getproject').subscribe(
-     (Response:any)=>{
-       this.projectList = Response;
-     }
-   )
- }
+
+  this.globalData.getProjectList().subscribe((data: any) => { this.projectList = data; });
+
+}
 
 
  ////////////////////////getting total of debit and credit Sides///////////
@@ -217,5 +214,9 @@ export class LedgerComponent {
     this.dialogue.open(VoucherDetailsComponent,{width:"40%",data:row,}).afterClosed().subscribe(val=>{ }) ;
   }
 
+
+  export(){
+    this.globalData.ExportHTMLTabletoExcel('printRpt','Ledger '+this.curCOATitle +'(' + this.startDate.toLocaleDateString() + ' - ' + this.EndDate.toLocaleDateString() +')')
+  }
 
 }

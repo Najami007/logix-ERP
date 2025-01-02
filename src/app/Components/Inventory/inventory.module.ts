@@ -5,7 +5,6 @@ import { Route, RouterModule } from '@angular/router';
 import { AuthGuard } from 'src/app/auth.guard';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MaterialModule } from 'src/app/Shared/material/material.module';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { TextMaskModule } from 'angular2-text-mask';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
@@ -25,7 +24,6 @@ import { ProductImgComponent } from './product/product-img/product-img.component
 import { LimittoPipe } from 'src/app/Shared/pipes/limitto.pipe';
 import { InvreportcatwiseComponent } from './InventoryReports/invreportcatwise/invreportcatwise.component';
 import { InvcredComponent } from './InventoryReports/invreportcatwise/invcred/invcred.component';
-import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { InvrptprodwiseComponent } from './InventoryReports/invrptprodwise/invrptprodwise.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { SalePurchaseRptdatewiseComponent } from './InventoryReports/sale-purchase-rptdatewise/sale-purchase-rptdatewise.component';
@@ -94,6 +92,9 @@ import { BrandComponent } from './Configurations/brand/brand.component';
 import { LocationsComponent } from './Configurations/locations/locations.component';
 import { ProductCategoryComponent } from './Configurations/product-category/product-category.component';
 import { UnitOfMeasurementComponent } from './Configurations/unit-of-measurement/unit-of-measurement.component';
+import { MaterialModule } from 'src/app/Shared/material/material.module';
+import { PurchaseOrderComponent } from './Purchases/purchase-order/purchase-order.component';
+import { StockTransferComponent } from './InvAdjustment/stock-transfer/stock-transfer.component';
 
 
 
@@ -141,6 +142,7 @@ export const inventoryRoutes: Route[] = [
   {path: 'purtn',component: PurchaseReturnComponent,data: { title: 'Purchase Return' },canActivate: [AuthGuard]},
   {path: 'purmob',component: PurchaseMobShopComponent,data: { title: 'Purchase Mob' },canActivate: [AuthGuard]},
   {path: 'purtnmob',component: PurchaseReturnMobComponent,data: { title: 'Purchase Return Mob' },canActivate: [AuthGuard]},
+  {path: 'purordr',component: PurchaseOrderComponent,data: { title: 'Purchase Order' },canActivate: [AuthGuard]},
 
 
  ////////////////////////// Adjustment Pages /////////////
@@ -149,6 +151,7 @@ export const inventoryRoutes: Route[] = [
   {path: 'isncrtn',component: IssueStockRerturnComponent,data: { title: 'Issue Return' },canActivate: [AuthGuard]},
   {path: 'stkadj',component: StockAdjustmentComponent,data: { title: 'Stock Adjustment' }, canActivate: [AuthGuard]},
   {path: 'opnstk',component: OpeningStockComponent,data: { title: 'Opening Stock' },canActivate: [AuthGuard]},
+  {path: 'stktrnsfr',component: StockTransferComponent,data: { title: 'Stock Transfer' },canActivate: [AuthGuard]},
 
 
   ////////////////////////// Reports Pages /////////////
@@ -254,6 +257,8 @@ export const inventoryRoutes: Route[] = [
     ProductModalComponent,
     PurchaseBillPrintComponent,
     AdjBillPrintComponent,
+    PurchaseOrderComponent,
+    StockTransferComponent,
     
   
     

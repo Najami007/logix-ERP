@@ -1,0 +1,37 @@
+
+
+::ng-deep .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {  
+    background-color: rgb(255, 207, 134);  
+}  
+
+// Change Icon Position  
+::ng-deep .mat-mdc-form-field-icon-suffix > .mat-icon {  
+    padding: 1px !important;  
+    top: 12px !important;  
+    right: 7px !important;  
+    position: absolute !important;  
+    z-index:5 !important;  
+    color: rgb(255, 81, 0);  
+    font-size: 20px;  
+}  
+
+
+.custom-form-field {
+    /* width: 300px; /* Adjust width as needed */ 
+    height: 20px !important; /* Adjust height as needed */
+    
+  }
+  
+  .custom-form-field .mat-form-field-wrapper {
+    height: 100%; /* Ensures the wrapper adjusts to the height */
+  }
+  
+  .custom-form-field .mat-form-field-flex {
+    height: 100%; /* Adjusts the internal flex container */
+    align-items: center; /* Centers the input vertically */
+  }
+  
+  .custom-form-field input {
+    height: 100%; /* Ensures the input takes up the full height */
+    box-sizing: border-box; /* Ensures padding does not overflow */
+  }

@@ -97,13 +97,12 @@ export class CashbookComponent implements OnInit{
 // }
 
  
- getProject(){
-   this.http.get(environment.mainApi+this.globalData.companyLink+'getproject').subscribe(
-     (Response:any)=>{
-       this.projectList = Response;
-     }
-   )
- }
+
+getProject(){
+
+  this.globalData.getProjectList().subscribe((data: any) => { this.projectList = data; });
+
+}
 
 
  getTotal(){

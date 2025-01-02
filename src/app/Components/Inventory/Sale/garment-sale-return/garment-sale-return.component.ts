@@ -24,14 +24,14 @@ import { ProductModalComponent } from '../SaleComFiles/product-modal/product-mod
 })
 export class GarmentSaleReturnComponent implements OnInit {
 
-  discFeature = this.global.getFeature('Discount');
-  BookerFeature = this.global.getFeature('Booker');
-  gstFeature = this.global.getFeature('GST');
-  customerFeature = this.global.getFeature('Customer');
-  editSpFeature = this.global.getFeature('EditSp');
-  editDiscFeature = this.global.getFeature('EditDisc');
-  tillOpenFeature = this.global.getFeature('TillOpen');
-  prodDetailFeature = this.global.getFeature('ProdDetail');
+  discFeature = this.global.discFeature;
+  BookerFeature = this.global.BookerFeature;
+  gstFeature = this.global.gstFeature;
+  customerFeature = this.global.customerFeature;
+  tillOpenFeature = this.global.tillOpenFeature;
+  editSpFeature = this.global.editSpFeature;
+  editDiscFeature = this.global.editDiscFeature;
+  prodDetailFeature = this.global.prodDetailFeature;
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
@@ -164,32 +164,26 @@ export class GarmentSaleReturnComponent implements OnInit {
   partyList: any = [];
   bookerList: any = [];
 
-  getBooker() {
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'getBooker').subscribe(
-      {
-        next: value => {
-          this.bookerList = value;
-
-        },
-        error: error => {
-          this.msg.WarnNotify('Error Occured While Loading Data')
-        }
-      }
-    )
+  getBooker(){
+    this.global.getBookerList().subscribe((data: any) => { this.bookerList = data; });
   }
 
   getPartyList() {
-    this.http.get(environment.mainApi + this.global.companyLink + 'getCustomer').subscribe(
-      {
-        next: value => {
-          this.partyList = value;
-        },
-        error: error => {
-          this.msg.WarnNotify('Error Occured While Loading Data')
-        }
-      }
-    )
+    this.global.getCustomerList().subscribe((data: any) => { this.partyList = data; });
   }
+
+    ////////////////////////////////////////////
+
+    getBankList() {
+
+      this.global.getBankList().subscribe((data: any) => { 
+        this.bankCoaList = data;
+        setTimeout(() => {
+          this.bankCoaID = data[0].coaID;
+        }, 200);
+       });
+    
+    }
 
   @ViewChild('supplier') myParty: any;
   addParty() {
@@ -212,24 +206,6 @@ export class GarmentSaleReturnComponent implements OnInit {
     this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
 
   }
-
-  ////////////////////////////////////////////
-
-  getBankList() {
-    this.http.get(environment.mainApi + 'acc/GetVoucherCBCOA?type=BRV').subscribe(
-      (Response: any) => {
-        this.bankCoaList = Response;
-        setTimeout(() => {
-          this.bankCoaID = Response[0].coaID;
-        }, 200);
-      },
-      (Error) => {
-
-      }
-    )
-  }
-
-
 
   searchByCode(e: any) {
 

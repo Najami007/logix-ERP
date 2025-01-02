@@ -53,12 +53,12 @@ export class PurchaseComponent implements OnInit {
   ngOnInit(): void {
     this.global.setHeaderTitle('Purchase');
     // this.getProducts();
-    this.getBooker();
-    this.getLocation();
-    this.getSuppliers();
+   this.getSuppliers();
     $('.searchBarcode').trigger('focus');
-    this.global.getProducts().subscribe(
-      (data: any) => { this.productList = data; });
+    this.global.getProducts().subscribe((data: any) => { this.productList = data; });
+    this.global.getBookerList().subscribe((data: any) => { this.BookerList = data; });
+    this.global.getWarehouseLocationList().subscribe((data: any) => { this.locationList = data; });
+
 
   }
 
@@ -74,7 +74,7 @@ export class PurchaseComponent implements OnInit {
   PBarcode: string = '';   /// for Search barcode field
   productsData: any;   //// for showing the products
   tableDataList: any = [];          //////will hold data temporarily
-  suppliersList: any;      //////  will shows the supplier list
+  suppliersList: any = [];      //////  will shows the supplier list
   supplierDetail: any = [];
 
   myTotalQty: any = 0;
@@ -104,7 +104,7 @@ export class PurchaseComponent implements OnInit {
   currentPartyCNIC: any;     /////////// will shows the current party CNIC on page
 
 
-  partyID: any;               /////// will get the party id for Api
+  partyID = 0;               /////// will get the party id for Api
   invoiceDate = new Date;    //////////// invoice date for api
 
 
@@ -127,36 +127,10 @@ export class PurchaseComponent implements OnInit {
 
   }
 
-  getBooker() {
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetBooker').subscribe(
-      (Response: any) => {
-        this.BookerList = Response;
-      }
-    )
-  }
-
-  getLocation() {
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'getlocation').subscribe(
-      (Response: any) => {
-        this.locationList = Response;
-      }
-    )
-  }
-
-
-
 
   getSuppliers() {
-    this.http.get(environment.mainApi + this.global.companyLink + 'getsupplier').subscribe(
-      {
-        next: value => {
-          this.suppliersList = value;
-        },
-        error: error => {
-          this.msg.WarnNotify('Error Occured While Loading Data')
-        }
-      }
-    )
+    this.global.getSupplierList().subscribe((data: any) => { this.suppliersList = data; });
+
   }
 
 
@@ -637,7 +611,7 @@ export class PurchaseComponent implements OnInit {
       this.msg.WarnNotify("Select Purchaser")
     } else if (this.refInvNo == '' || this.refInvNo == undefined) {
       this.msg.WarnNotify('Enter Reference Invoice No')
-    } else if (this.partyID == '' || this.partyID == 0 || this.partyID == undefined) {
+    } else if (this.partyID == 0 || this.partyID == 0 || this.partyID == undefined) {
       this.msg.WarnNotify('Select Supplier Party')
     } else if (this.locationID == '' || this.locationID == undefined || this.locationID == 0) {
       this.msg.WarnNotify('Select Warehouse Location')

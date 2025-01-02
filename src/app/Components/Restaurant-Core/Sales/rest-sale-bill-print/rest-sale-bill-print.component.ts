@@ -15,8 +15,9 @@ import Swal from 'sweetalert2';
 })
 export class RestSaleBillPrintComponent {
 
-  showCmpNameFeature:any = this.global.getFeature('cmpName');
-  waiterFeature = this.global.getFeature('Waiter');
+  showCmpNameFeature:any = this.global.showCmpNameFeature;
+  waiterFeature = this.global.waiterFeature;
+  showCompanyLogo = this.global.showCompanyLogo;
 
   crudList: any = [];
   companyProfile: any = [];

@@ -137,7 +137,7 @@
             <tbody>
                 <tr *ngFor="let item of invDetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td class="text-center">{{item.invBillNo}}</td>
+                    <td class="text-center cursorPointer" (click)="printBill(item)"><u class="text-primary">{{item.invBillNo}}</u></td>
                     <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
                     <td >{{item.productTitle}} <b *ngIf="item.barcode !== null">({{item.barcode}})</b></td>
                     <td >{{item.locationTitle }}</td>
@@ -170,4 +170,6 @@
 
 
 </div>
+
+<app-sale-bill-print class="hide" id="print-Bill"> </app-sale-bill-print>
 

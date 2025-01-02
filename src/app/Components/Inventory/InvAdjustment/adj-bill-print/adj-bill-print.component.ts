@@ -13,12 +13,12 @@ export class AdjBillPrintComponent {
 
   
 
-  discFeature = this.global.getFeature('Discount');
-    BookerFeature = this.global.getFeature('Booker');
-    showCompanyName = this.global.getFeature('CmpName');
-    showCompanyLogo = this.global.getFeature('CmpLogo');
-    gstFeature = this.global.getFeature('GST');
-    prodDetailFeature = this.global.getFeature('ProdDetail');
+  discFeature = this.global.discFeature;
+    BookerFeature = this.global.BookerFeature;
+    showCompanyName = this.global.showCmpNameFeature;
+    showCompanyLogo = this.global.showCompanyLogo;
+    gstFeature = this.global.gstFeature;
+    prodDetailFeature = this.global.prodDetailFeature;
   
   
     billPrintType:any = '';;

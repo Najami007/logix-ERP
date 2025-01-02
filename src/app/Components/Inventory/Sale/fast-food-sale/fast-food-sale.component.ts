@@ -18,14 +18,14 @@ export class FastFoodSaleComponent {
   
 
   
-  discFeature = this.global.getFeature('Discount');
-  BookerFeature = this.global.getFeature('Booker');
-  gstFeature = this.global.getFeature('GST');
-  customerFeature = this.global.getFeature('Customer');
-  tillOpenFeature = this.global.getFeature('TillOpen');
-  editSpFeature = this.global.getFeature('EditSp');
-  editDiscFeature = this.global.getFeature('EditDisc');
-  prodDetailFeature = this.global.getFeature('ProdDetail');
+  discFeature = this.global.discFeature;
+  BookerFeature = this.global.BookerFeature;
+  gstFeature = this.global.gstFeature;
+  customerFeature = this.global.customerFeature;
+  tillOpenFeature = this.global.tillOpenFeature;
+  editSpFeature = this.global.editSpFeature;
+  editDiscFeature = this.global.editDiscFeature;
+  prodDetailFeature = this.global.prodDetailFeature;
 
  @ViewChild(KOTPrintComponent) kotPrint:any;
 

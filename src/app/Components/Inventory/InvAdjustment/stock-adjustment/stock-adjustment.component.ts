@@ -50,8 +50,7 @@ export class StockAdjustmentComponent implements OnInit {
    this.global.setHeaderTitle('Stock Adjustment');
    this.getLocation();
    $('.searchProduct').trigger('focus');
-   this.global.getProducts().subscribe(
-    (data:any)=>{this.productList = data;})
+   this.global.getProducts().subscribe((data:any)=>{this.productList = data;})
   }
 
 
@@ -88,11 +87,7 @@ export class StockAdjustmentComponent implements OnInit {
 
 
   getLocation(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'getlocation').subscribe(
-      (Response:any)=>{
-        this.locationList = Response;
-      }
-    )
+    this.global.getWarehouseLocationList().subscribe((data: any) => { this.locationList = data; });
   }
 
 
@@ -342,6 +337,8 @@ export class StockAdjustmentComponent implements OnInit {
   }
   handleUpdown(item:any ,e:any,cls:string,index:any){
 
+    const container = $(".table-logix");
+
    if(e.keyCode == 9){
     this.rowFocused = index + 1;
    }
@@ -363,46 +360,35 @@ export class StockAdjustmentComponent implements OnInit {
       e.preventDefault();
   }
 
-  /////move down
-    if(e.keyCode == 40){
-     
-     if(this.tableDataList.length > 1 ){
-      this.rowFocused += 1;
-      if (this.rowFocused >= this.tableDataList.length) {      
-        this.rowFocused -= 1  
-    } else {
-        var clsName = cls + this.rowFocused;    
-        e.preventDefault();  
-        $(clsName).trigger('select');    
-        $(clsName).trigger('focus'); 
-    }}
-  }
 
-
-     //Move up
-     if (e.keyCode == 38) {
-
-      if (this.rowFocused == 0) {
-        e.preventDefault();  
-        $(".searchProduct").trigger('select');
-          $(".searchProduct").trigger('focus');
-          this.rowFocused = 0;
- 
-      }
-
-      if (this.tableDataList.length > 1) {
-
+   /////move down
+   if (e.keyCode === 40) {
+    if (this.tableDataList.length > 1) {
+        this.rowFocused = Math.min(this.rowFocused + 1, this.tableDataList.length - 1);
+        const clsName = cls + this.rowFocused;
+        this.global.scrollToRow(clsName, container);
+        e.preventDefault();
+          $(clsName).trigger('select');
+          $(clsName).trigger('focus');
+       
+    }
+}
+    //Move up
+    if (e.keyCode === 38) {
+      if (this.rowFocused > 0) {
+        
           this.rowFocused -= 1;
-
-          var clsName = cls + this.rowFocused;
-          
-           e.preventDefault(); 
-           $(clsName).trigger('select'); 
-           $(clsName).trigger('focus');
-          
-
+          const clsName = cls + this.rowFocused;
+          this.global.scrollToRow(clsName, container);
+          e.preventDefault();
+          $(clsName).trigger('select');
+          $(clsName).trigger('focus');
+  
+      } else {
+          e.preventDefault();
+          $(".searchProduct").trigger('select');
+          $(".searchProduct").trigger('focus');
       }
-
   }
 
     ////removeing row

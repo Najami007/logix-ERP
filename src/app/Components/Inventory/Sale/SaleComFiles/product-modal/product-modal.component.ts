@@ -1,8 +1,7 @@
 
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
-
 
 
 @Component({
@@ -19,8 +18,6 @@ export class ProductModalComponent implements OnInit {
       @Inject(MAT_DIALOG_DATA) public data : any,
     ) {
      
-  
-
   
     }
 

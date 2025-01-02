@@ -66,7 +66,7 @@ export class GlobalDataModule implements OnInit {
 
 
   paginationDefaultTalbeSize = 50;
-  paginationTableSizes: any = [10, 25, 50, 100,500,1000];
+  paginationTableSizes: any = [10, 25, 50, 100, 500, 1000];
 
 
   public currentUserSubject: BehaviorSubject<userInterface>;
@@ -79,9 +79,9 @@ export class GlobalDataModule implements OnInit {
     private rout: Router,
     private msg: NotificationService,
     private dialog: MatDialog,
-    private cookie:CookieService,
-    public ExportExcel:ExcelExportService
-    
+    private cookie: CookieService,
+    public ExportExcel: ExcelExportService
+
     // public app: AppComponent,
 
   ) {
@@ -99,6 +99,8 @@ export class GlobalDataModule implements OnInit {
 
 
 
+
+
   }
 
 
@@ -106,32 +108,177 @@ export class GlobalDataModule implements OnInit {
   header_title$ = this._headerTitleSource.asObservable();
 
 
-
-  getFeature(value:any){
-    var returnStatus = false;
-    var credentials = JSON.parse(localStorage.getItem('ftr') || '{}');
   
+  ///////////////////////////////////////////////////////////
+  /////////////////////login funciton///////////////////////
+  ////////////////////////////////////////////////////////
 
-    var FearturesList:any = credentials.flt;
-   
-    var row:any = FearturesList.find((e:any)=> atob(atob(e.ttl)) == value);
 
-    if(row != undefined){
-      var status:any =atob(atob(row.sts));
-      returnStatus =  status == 'True' ? true : false
-    }
-    return returnStatus;
+
+
+  login(Email: String, password: string) {
+    $('.loaderDark').show();
+
+    this.http.post(environment.mainApi + 'user/_userLogin', {
+      LoginName: Email,
+      Password: password,
+    }).subscribe({
+      next: (Value: any) => {
+        var curDate: Date = new Date();
+        var userID = Value._culId;
+        var value = { msg: Value.msg, _cuLnk: Value._cuLnk, _culId: Value._culId, _culName: Value._culName };
+        var flt: any = [];
+        ///Encripting The Features List
+        Value._reqFeatures.forEach((e: any) => {
+          flt.push({ ttl: btoa(btoa(e.featureTitle)), sts: btoa(btoa(e.featureStatus)) });
+        });
+
+        localStorage.setItem('curVal', JSON.stringify({ value }));
+        localStorage.setItem('ftr', JSON.stringify({ flt }));
+
+
+
+        if (value.msg == 'Logged in Successfully') {
+
+
+
+
+          this.http.get(environment.mainApi + 'user/getusermodule?userid=' + parseInt(atob(atob(value._culId)))).subscribe(
+            (Response: any) => {
+
+              localStorage.setItem('mid', JSON.stringify(Response[0].moduleID));
+              this.setMenuItem(Response[0].moduleID);
+            }
+          )
+          this.getCompany();
+          this.refreshFeatures();
+
+
+          this.rout.navigate(["home"]);
+          $('.loaderDark').fadeOut(500);
+
+
+        } else {
+          this.msg.WarnNotify(value.msg);
+          $('.loaderDark').fadeOut(500);
+        }
+      },
+      error: error => {
+
+        this.msg.WarnNotify('Error Occurred While Login Process')
+        $('.loaderDark').fadeOut(500);
+      }
+    })
+
+    // this.rout.navigate(["home"]);
+    // $('.loaderDark').fadeOut(500);
+
+
   }
 
-  getBillPrintType(){
+
+  ////////////////////////////////////////////////////
+  /////////////funtion to keep user log out/////////////////////
+  ///////////////////////////////////////////////////////////
+
+
+  logout() {
+    $('.loaderDark').show();
+    this.http.post(environment.mainApi + 'user/_userLogout', {
+      UserID: this.getUserID(),
+    }).subscribe(
+      (Response: any) => {
+        if (Response.msg = 'Logged Out Successfully') {
+          // this.msg.SuccessNotify(Response.msg);
+
+
+          localStorage.removeItem('curVal');
+          localStorage.removeItem('ftr');
+          localStorage.removeItem('mid');
+
+          // localStorage.removeItem('cmpnyVal');
+          window.location.reload();
+          // this.rout.navigate(['login']);
+          $('.loaderDark').fadeOut(500);
+        } else {
+          this.msg.WarnNotify(Response.msg);
+          $('.loaderDark').fadeOut(500);
+        }
+
+      },
+      (Error) => {
+        this.msg.WarnNotify('Error Occured Check Connection!');
+        $('.loaderDark').fadeOut(500);
+      }
+    )
+
+  }
+
+
+
+
+  /////////////////////// Features Section //////////////////////////////
+
+  discFeature = this.getFeature('Discount');
+  BookerFeature = this.getFeature('Booker');
+  gstFeature = this.getFeature('GST');
+  customerFeature = this.getFeature('Customer');
+  tillOpenFeature = this.getFeature('TillOpen');
+  editSpFeature = this.getFeature('EditSp');
+  editDiscFeature = this.getFeature('EditDisc');
+  prodDetailFeature = this.getFeature('ProdDetail');
+  showCmpNameFeature: any = this.getFeature('cmpName');
+  showCompanyLogo = this.getFeature('CmpLogo');
+  waiterFeature = this.getFeature('Waiter');
+  AutoFillNameFeature = this.getFeature('AutoFillName');
+  BankShortCutsFeature = this.getFeature('BankShortCuts');
+
+  refreshFeatures(){
+    this.discFeature = this.getFeature('Discount');
+    this.BookerFeature = this.getFeature('Booker');
+    this.gstFeature = this.getFeature('GST');
+    this.customerFeature = this.getFeature('Customer');
+    this.tillOpenFeature = this.getFeature('TillOpen');
+    this.editSpFeature = this.getFeature('EditSp');
+    this.editDiscFeature = this.getFeature('EditDisc');
+    this.prodDetailFeature = this.getFeature('ProdDetail');
+    this.showCmpNameFeature = this.getFeature('cmpName');
+    this.showCompanyLogo = this.getFeature('CmpLogo');
+    this.waiterFeature = this.getFeature('Waiter');
+    this.AutoFillNameFeature = this.getFeature('AutoFillName');
+    this.BankShortCutsFeature = this.getFeature('BankShortCuts');
+  }
+
+
+  getFeature(value: any) {
+   
+    var credentials = JSON.parse(localStorage.getItem('ftr') || '""');
+    var returnStatus = false;
+   if(credentials != ''){
+
+    var FearturesList: any = credentials.flt;
+
+    var row: any = FearturesList.find((e: any) => atob(atob(e.ttl)) == value);
+
+    if (row != undefined) {
+      var status: any = atob(atob(row.sts));
+      returnStatus = status == 'True' ? true : false
+    }
+   
+   }
+   return returnStatus;
+ 
+  }
+
+  getBillPrintType() {
     var value = '';
     var credentials = localStorage.getItem('BillPrint');
-    if(credentials == null){
+    if (credentials == null) {
       value = 'english';
-    }else{
+    } else {
       value = credentials;
     }
-    
+
     return value;
   }
 
@@ -143,13 +290,13 @@ export class GlobalDataModule implements OnInit {
   }
 
 
-  getKOTApproval(){
-  return JSON.parse(localStorage.getItem('rKtF') || '0');
+  getKOTApproval() {
+    return JSON.parse(localStorage.getItem('rKtF') || '0');
   }
 
-  getOrderDsbLocation(){
+  getOrderDsbLocation() {
     return JSON.parse(localStorage.getItem('odsbdepID') || '0');
-    }
+  }
 
   getModuleID() {
     var moduleID = JSON.parse(localStorage.getItem('mid') || '{}');
@@ -174,7 +321,7 @@ export class GlobalDataModule implements OnInit {
     var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
 
     return parseInt(atob(atob(credentials.value._culId)));
- 
+
     return parseInt(atob(atob(this.cookie.get('ui'))))
 
   }
@@ -271,147 +418,43 @@ export class GlobalDataModule implements OnInit {
 
 
   public getCurrentOpenDay(): Observable<any> {
-    return this.http.get(environment.mainApi + this.userLink+'GetOpenedDay').pipe(retry(2));
+    return this.http.get(environment.mainApi + this.userLink + 'GetOpenedDay').pipe(retry(2));
   }
 
 
 
-  ///////////////////////////////////////////////////////////
-  /////////////////////login funciton///////////////////////
-  ////////////////////////////////////////////////////////
+
+  openTill() {
 
 
 
-
-  login(Email: String, password: string) {
-    $('.loaderDark').show();
-
-    this.http.post(environment.mainApi + 'user/_userLogin', {
-      LoginName: Email,
-      Password: password,
-    }).subscribe({
-      next: (Value: any) => {
-        var curDate:Date = new Date();
-        var userID = Value._culId;
-        var value = {msg:Value.msg,_cuLnk:Value._cuLnk,_culId:Value._culId,_culName:Value._culName};
-        var flt:any = [];
-        ///Encripting The Features List
-         Value._reqFeatures.forEach((e:any) => {
-          flt.push({ttl:btoa(btoa(e.featureTitle)),sts:btoa(btoa(e.featureStatus))});
-        });
-        
-        localStorage.setItem('curVal', JSON.stringify({ value }));
-        localStorage.setItem('ftr', JSON.stringify({ flt }));
-     
-      
-
-        if (value.msg == 'Logged in Successfully') {
+    var frame1: any = $('<iframe />');
+    frame1[0].name = 'frame1';
+    frame1.css({ position: 'absolute', top: '-1000000px' });
+    $('body').append(frame1);
+    var frameDoc = frame1[0].contentWindow
+      ? frame1[0].contentWindow
+      : frame1[0].contentDocument.document
+        ? frame1[0].contentDocument.document
+        : frame1[0].contentDocument;
+    frameDoc.document.open();
 
 
+    frameDoc.document.write('</head><body>');
+
+    //Append the DIV contents.
+    frameDoc.document.write('Till Open');
+    frameDoc.document.write('</body></html>');
+
+    frameDoc.document.close();
+
+    window.frames[0].focus();
+    window.frames[0].print();
+
+    frame1.remove();
 
 
-          this.http.get(environment.mainApi + 'user/getusermodule?userid=' + parseInt(atob(atob(value._culId)))).subscribe(
-            (Response: any) => {
 
-              localStorage.setItem('mid', JSON.stringify(Response[0].moduleID));
-              this.setMenuItem(Response[0].moduleID);
-                         }
-          )
-          this.getCompany();
-
-
-          this.rout.navigate(["home"]);
-          $('.loaderDark').fadeOut(500);
-
-
-        } else {
-          this.msg.WarnNotify(value.msg);
-          $('.loaderDark').fadeOut(500);
-        }
-      },
-      error: error => {
-
-        this.msg.WarnNotify('Error Occurred While Login Process')
-        $('.loaderDark').fadeOut(500);
-      }
-    })
-
-    // this.rout.navigate(["home"]);
-    // $('.loaderDark').fadeOut(500);
-
-
-  }
-
-
-  ////////////////////////////////////////////////////
-  /////////////funtion to keep user log out/////////////////////
-  ///////////////////////////////////////////////////////////
-
-
-  logout() {
-    $('.loaderDark').show();
-    this.http.post(environment.mainApi + 'user/_userLogout', {
-      UserID: this.getUserID(),
-    }).subscribe(
-      (Response: any) => {
-        if (Response.msg = 'Logged Out Successfully') {
-          // this.msg.SuccessNotify(Response.msg);
-
-
-          localStorage.removeItem('curVal');
-          localStorage.removeItem('ftr');
-          localStorage.removeItem('mid');
-      
-          // localStorage.removeItem('cmpnyVal');
-          window.location.reload();
-          // this.rout.navigate(['login']);
-          $('.loaderDark').fadeOut(500);
-        } else {
-          this.msg.WarnNotify(Response.msg);
-          $('.loaderDark').fadeOut(500);
-        }
-
-      },
-      (Error) => {
-        this.msg.WarnNotify('Error Occured Check Connection!');
-        $('.loaderDark').fadeOut(500);
-      }
-    )
-
-  }
-
-
-  openTill(){
-
-    
-  
-      var frame1: any = $('<iframe />');
-      frame1[0].name = 'frame1';
-      frame1.css({ position: 'absolute', top: '-1000000px' });
-      $('body').append(frame1);
-      var frameDoc = frame1[0].contentWindow
-        ? frame1[0].contentWindow
-        : frame1[0].contentDocument.document
-          ? frame1[0].contentDocument.document
-          : frame1[0].contentDocument;
-      frameDoc.document.open();
-  
-    
-      frameDoc.document.write('</head><body>');
-  
-      //Append the DIV contents.
-      frameDoc.document.write('Till Open');
-      frameDoc.document.write('</body></html>');
-  
-      frameDoc.document.close();
-  
-        window.frames[0].focus();
-        window.frames[0].print();
-  
-        frame1.remove();
-      
-  
-    
   }
 
 
@@ -473,7 +516,7 @@ export class GlobalDataModule implements OnInit {
   }
 
 
-  printBill(printSection: string,focusClass:any) {
+  printBill(printSection: string, focusClass: any) {
     var contents = $(printSection).html();
 
     var frame1: any = $('<iframe />');
@@ -527,7 +570,7 @@ export class GlobalDataModule implements OnInit {
 
   }
 
-  printToSpecificPrinter(printerName:any,printSection:any) {
+  printToSpecificPrinter(printerName: any, printSection: any) {
     var contents = $(printSection).html();
 
     var printDialog: any = $('<iframe />');
@@ -539,7 +582,7 @@ export class GlobalDataModule implements OnInit {
       : printDialog[0].contentDocument.document
         ? printDialog[0].contentDocument.document
         : printDialog[0].contentDocument;
-        frameDoc.window.open();
+    frameDoc.window.open();
     // var printDialog:any = window.open("", "PrintDialog", "width=500,height=300");
     // printDialog.document.write("<html><head><title>Print Command</title></head><body><script>window.print();</script></body></html>");
     printDialog.document.write(
@@ -558,7 +601,7 @@ export class GlobalDataModule implements OnInit {
     printDialog.document.write(contents);
     printDialog.document.write('</body></html>');
     printDialog.document.close();
-  
+
     // Simulate a click event on the print button to trigger the print dialog
     const printButton = printDialog.document.querySelector('button[name="print"]');
     if (printButton) {
@@ -568,7 +611,7 @@ export class GlobalDataModule implements OnInit {
       printDialog.focus();
       printDialog.print();
     }
-  
+
     // Close the print dialog after a delay to avoid conflicts
     setTimeout(() => {
       printDialog.close();
@@ -591,7 +634,7 @@ export class GlobalDataModule implements OnInit {
     //Create a new HTML document.
     frameDoc.document.write(
       "<html><head><title>DIV Contents</title>"
-        
+
     );
 
     //Append the external CSS file. <link rel="stylesheet" href="../../../styles.scss" /> <link rel="stylesheet" href="../../../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
@@ -600,10 +643,10 @@ export class GlobalDataModule implements OnInit {
     // );
     frameDoc.document.write(
       //  '<link rel="stylesheet" href="../../styles.scss" type="text/scss" media="print"/>'+
-      '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'+
-       '<link rel="stylesheet" href="../../assets/style/barcode.scss" type="text/css" media="print"/>' 
-      
-      
+      '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>' +
+      '<link rel="stylesheet" href="../../assets/style/barcode.scss" type="text/css" media="print"/>'
+
+
 
       //  +'<style type="text/css" media="print">.font-barcode{font-family:"barcode128" !important;}</style>'
       // +"<style>" +
@@ -615,7 +658,7 @@ export class GlobalDataModule implements OnInit {
       // '<link rel="stylesheet" href="../css/bootstrap.css" type="text/css"  media="print"/>'
     );
     frameDoc.document.write('</head><body>');
-      //Append the DIV contents.
+    //Append the DIV contents.
     frameDoc.document.write(contents);
     frameDoc.document.write('</body></html>');
 
@@ -630,8 +673,8 @@ export class GlobalDataModule implements OnInit {
 
   }
 
-  
-  
+
+
 
   autoPrint(printSection: string) {
     var contents = $(printSection).html();
@@ -882,261 +925,292 @@ export class GlobalDataModule implements OnInit {
 
   //////////////////////////////////////////////////
 
-  getProdImage(prodID:any){
-   return this.http.get(environment.mainApi+this.inventoryLink+'GetProductImage?ProductID='+prodID).pipe(retry(3));
+  getProdImage(prodID: any) {
+    return this.http.get(environment.mainApi + this.inventoryLink + 'GetProductImage?ProductID=' + prodID).pipe(retry(3));
   }
 
 
   ///////// show img in modal window
-  showProductImage(img: any, prodID:number) {
-   
-    if(prodID != 0){
+  showProductImage(img: any, prodID: number) {
 
-      this.http.get(environment.mainApi+this.inventoryLink+'GetProductImage?ProductID='+prodID).subscribe(
-        (Response:any)=>{
+    if (prodID != 0) {
+
+      this.http.get(environment.mainApi + this.inventoryLink + 'GetProductImage?ProductID=' + prodID).subscribe(
+        (Response: any) => {
           this.dialog.open(ProductImgComponent, {
             width: '30%',
             data: Response[0].productImage
           }).afterClosed().subscribe()
         }
       )
-    }else{
-      if((img == undefined || img == '' || img == null || img == '-') && prodID == 0){
-    
-      }else  {
+    } else {
+      if ((img == undefined || img == '' || img == null || img == '-') && prodID == 0) {
+
+      } else {
         this.dialog.open(ProductImgComponent, {
           width: '30%',
           data: img,
-          disableClose:true,
+          disableClose: true,
         },).afterClosed().subscribe()
-      } 
+      }
     }
 
-    
+
   }
 
 
   /////// will allow only number keys
-  handleNumKeys(e:any){
+  handleNumKeys(e: any) {
 
 
     if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
       // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
-  }
-  else {
+    }
+    else {
       e.preventDefault();
-  }
+    }
 
-  
-  // if(e.target.value == '' ){
-  //  e.target.value = 0;
-  // }
+
+    // if(e.target.value == '' ){
+    //  e.target.value = 0;
+    // }
 
 
 
   }
 
   prodFocusedRow = 0;
-  handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[]){
-    
+  handleProdFocus(item: any, e: any, cls: any, endFocus: any, prodList: []) {
+
 
     /////move down
-    if(e.keyCode == 40|| e.keyCode == 9){
+    if (e.keyCode == 40 || e.keyCode == 9) {
 
- 
-      if(prodList.length > 1 ){
-       this.prodFocusedRow += 1;
-       if (this.prodFocusedRow >= prodList.length) {      
-         this.prodFocusedRow -= 1  
-     } else {
-         var clsName = cls + this.prodFocusedRow;    
-        //  alert(clsName);
-         $(clsName).trigger('focus');
-         e.which = 9;   
-         $(clsName).trigger(e)       
-     }}
-   }
- 
- 
-      //Move up
-      if (e.keyCode == 38) {
- 
-       if (this.prodFocusedRow == 0) {
-           $(endFocus).trigger('focus');
-           this.prodFocusedRow = 0;
-  
-       }
- 
-       if (prodList.length > 1) {
- 
-           this.prodFocusedRow -= 1;
- 
-           var clsName = cls + this.prodFocusedRow;
+
+      if (prodList.length > 1) {
+        this.prodFocusedRow += 1;
+        if (this.prodFocusedRow >= prodList.length) {
+          this.prodFocusedRow -= 1
+        } else {
+          var clsName = cls + this.prodFocusedRow;
           //  alert(clsName);
-           $(clsName).trigger('focus');
-           
- 
-       }
- 
-   }
+          $(clsName).trigger('focus');
+          e.which = 9;
+          $(clsName).trigger(e)
+        }
+      }
+    }
+
+
+    //Move up
+    if (e.keyCode == 38) {
+
+      if (this.prodFocusedRow == 0) {
+        $(endFocus).trigger('focus');
+        this.prodFocusedRow = 0;
+
+      }
+
+      if (prodList.length > 1) {
+
+        this.prodFocusedRow -= 1;
+
+        var clsName = cls + this.prodFocusedRow;
+        //  alert(clsName);
+        $(clsName).trigger('focus');
+
+
+      }
+
+    }
 
   }
 
 
   ///////////////// func to get products
- public getProducts(): Observable<any>{
-  return  this.http.get(environment.mainApi+this.inventoryLink+'GetActiveProduct?reqCatFlag=0').pipe(retry(3));
+  public getProducts(): Observable<any> {
+    return this.http.get(environment.mainApi + this.inventoryLink + 'GetActiveProduct?reqCatFlag=0').pipe(retry(3));
   }
 
-  public getFastFoodProducts(): Observable<any>{
-    return  this.http.get(environment.mainApi+this.inventoryLink+'GetActiveProduct?reqCatFlag=1').pipe(retry(3));
-    }
+  public getFastFoodProducts(): Observable<any> {
+    return this.http.get(environment.mainApi + this.inventoryLink + 'GetActiveProduct?reqCatFlag=1').pipe(retry(3));
+  }
 
   //////////// func to get product Detail
- public getProdDetail(id:any, barcode:any): Observable<any>{
-  
-   return this.http.get(environment.mainApi+this.inventoryLink+'GetSingleProductDetail?ProductID='+id+'&Barcode='+barcode).pipe(retry(3));
+  public getProdDetail(id: any, barcode: any): Observable<any> {
+
+    return this.http.get(environment.mainApi + this.inventoryLink + 'GetSingleProductDetail?ProductID=' + id + '&Barcode=' + barcode).pipe(retry(3));
   }
 
 
 
-  focusTo(cls:any){
-   setTimeout(() => {
-    $(cls).trigger('focus')
-   }, 500);
+  focusTo(cls: any) {
+    setTimeout(() => {
+      $(cls).trigger('focus')
+    }, 500);
   }
 
   ///////////// for opening pincode modal window
-  public openPinCode(): Observable<any>{
-    return  this.dialog.open(PincodeComponent,{
-      width:'30%',
-      enterAnimationDuration:500,
-      hasBackdrop:true,
-      disableClose:true,
+  public openPinCode(): Observable<any> {
+    return this.dialog.open(PincodeComponent, {
+      width: '30%',
+      enterAnimationDuration: 500,
+      hasBackdrop: true,
+      disableClose: true,
     }).afterClosed().pipe(retry(3));
-    }
-  
+  }
 
-      ///////////// for opening Password modal window
-  public openPassword(type:any): Observable<any>{
-    return  this.dialog.open(PincodeComponent,{
-      width:'30%',
-      enterAnimationDuration:500,
-      hasBackdrop:true,
-      disableClose:true,
-      data:type
+
+  ///////////// for opening Password modal window
+  public openPassword(type: any): Observable<any> {
+    return this.dialog.open(PincodeComponent, {
+      width: '30%',
+      enterAnimationDuration: 500,
+      hasBackdrop: true,
+      disableClose: true,
+      data: type
     }).afterClosed().pipe(retry(3));
+  }
+
+
+  public confirmAlert(): Observable<any> {
+    return this.dialog.open(ConfirmationAlertComponent, {
+      width: '30%',
+      enterAnimationDuration: 300,
+      hasBackdrop: true,
+      // disableClose:true,
+    }).afterClosed().pipe(retry(3));
+  }
+
+
+
+  showPassword(event: any, id: any) {
+    if ($(id).attr("type") == 'password') {
+      return $(id).attr("type", "text");
+    } else {
+
+      return $(id).attr("type", "password");
+
     }
+  }
 
 
-    public confirmAlert(): Observable<any>{
-      return  this.dialog.open(ConfirmationAlertComponent,{
-        width:'30%',
-        enterAnimationDuration:300,
-        hasBackdrop:true,
-        // disableClose:true,
-      }).afterClosed().pipe(retry(3));
-      }
-    
-    
+  public getCustomerList(): Observable<any> {
 
-    showPassword(event:any,id:any){
-        if( $(id).attr("type") == 'password'){
-         return $(id).attr("type" , "text");
-        }else{
-          
-          return $(id).attr("type" , "password");
-          
-        }
-      }
+    return this.http.get(environment.mainApi + this.companyLink + 'getcustomer').pipe(retry(3));
+  }
 
 
- public getCustomerList(): Observable<any>{
-  
-        return  this.http.get(environment.mainApi+this.companyLink+'getcustomer').pipe(retry(3));
-       }
-    
+  public getSupplierList(): Observable<any> {
 
-public getSupplierList(): Observable<any>{
-  
-        return  this.http.get(environment.mainApi+this.companyLink+'getsupplier').pipe(retry(3));
-       }
-
-       
-public getCashBankCoa(type:any): Observable<any>{
-  
-  return  this.http.get(environment.mainApi + 'acc/GetVoucherCBCOA?type='+type).pipe(retry(3));
- }
+    return this.http.get(environment.mainApi + this.companyLink + 'getsupplier').pipe(retry(3));
+  }
 
 
- public filterUniqueValues<T>(array: T[]): T[] {
-  const uniqueSet = new Set<string>();
-  const uniqueArray: T[] = [];
+  public getBookerList (): Observable<any> {
+    return this.http.get(environment.mainApi + this.inventoryLink + 'GetBooker').pipe(retry(3));
+  }
 
-  array.forEach(item => {
-    const key = JSON.stringify(item);
-    if (!uniqueSet.has(key)) {
-      uniqueSet.add(key);
-      uniqueArray.push(item);
-    }
-  });
+  public getWarehouseLocationList() : Observable<any> {
+    return this.http.get(environment.mainApi + this.inventoryLink + 'getlocation').pipe(retry(3));
+  }
 
-  return uniqueArray;
-}
+  public  getIssueTypesList() : Observable<any> {
+    return this.http.get(environment.mainApi+this.inventoryLink+'GetIssueType').pipe(retry(3));
+  }
 
-
-
-openBootstrapModal(modalID: any, condition: any) {
-  if (condition) {
-    const myModal = new bootstrap.Modal(modalID, { keyboard: false ,backdrop:false});
-    myModal.show();
+  public getUserList()  : Observable<any> {
+    return  this.http.get(environment.mainApi + this.userLink + 'getuser').pipe(retry(3));
 
   }
-}
 
-closeBootstrapModal(modalID: any, condition: any) {
-  if (condition) {
-    
+  public getBrandList() : Observable<any> {
+    return this.http.get(environment.mainApi +this.inventoryLink+'GetBrand').pipe(retry(3));
+  }
+
+  public  getProjectList() : Observable<any> {
+    return this.http.get(environment.mainApi+this.companyLink+'getproject').pipe(retry(3));
+  }
+
+
+  public getCashBankCoa(type: any): Observable<any> {
+
+    return this.http.get(environment.mainApi + 'acc/GetVoucherCBCOA?type=' + type).pipe(retry(3));
+  }
+
+  public  getBankList(): Observable<any>  {
+    return this.http.get(environment.mainApi + 'acc/GetVoucherCBCOA?type=BRV').pipe(retry(3));
+  }
+
+
+  public filterUniqueValues<T>(array: T[]): T[] {
+    const uniqueSet = new Set<string>();
+    const uniqueArray: T[] = [];
+
+    array.forEach(item => {
+      const key = JSON.stringify(item);
+      if (!uniqueSet.has(key)) {
+        uniqueSet.add(key);
+        uniqueArray.push(item);
+      }
+    });
+
+    return uniqueArray;
+  }
+
+
+
+  openBootstrapModal(modalID: any, condition: any) {
+    if (condition) {
+      const myModal = new bootstrap.Modal(modalID, { keyboard: false, backdrop: false });
+      myModal.show();
+
+    }
+  }
+
+  closeBootstrapModal(modalID: any, condition: any) {
+    if (condition) {
+
       $(modalID).hide();
       // $('.modal').remove();
       // $('body').removeClass('modal-open');
       $('.modal-backdrop').remove();
-    // const myModal = new bootstrap.Modal(modalID);
-    // alert();
-    // myModal.hide()
+      // const myModal = new bootstrap.Modal(modalID);
+      // alert();
+      // myModal.hide()
 
+    }
   }
-}
 
 
-ExportDatatoExcel(data:any,fileName:any){
-  this.ExportExcel.exportDataToExcel(data,fileName);
-}
+  ExportDatatoExcel(data: any, fileName: any) {
+    this.ExportExcel.exportDataToExcel(data, fileName);
+  }
 
-ExportHTMLTabletoExcel(data:any,fileName:any){
-  this.ExportExcel.exportTableToExcel(data,fileName);
-}
+  ExportHTMLTabletoExcel(tableID: any, fileName: any) {
+    this.ExportExcel.exportTableToExcel(tableID, fileName);
+  }
 
 
-////////////////// Make Table Scroll with the focus Change ////////////////
+  ////////////////// Make Table Scroll with the focus Change ////////////////
 
-scrollToRow(clsName: string, container: JQuery<HTMLElement>) {
+  scrollToRow(clsName: string, container: JQuery<HTMLElement>) {
     const rowElement = $(clsName);
     if (rowElement.length && container.length) {
-        const rowTop = rowElement.offset()?.top || 0;
-        const containerTop = container.offset()?.top || 0;
-        const containerHeight = container.height()!;
+      const rowTop = rowElement.offset()?.top || 0;
+      const containerTop = container.offset()?.top || 0;
+      const containerHeight = container.height()!;
 
-        if (rowTop < containerTop) {
-            container.scrollTop(container.scrollTop()! - (containerTop - rowTop));
-        } else if (rowTop > containerTop + containerHeight) {
-            container.scrollTop(container.scrollTop()! + (rowTop - (containerTop + containerHeight)));
-        }
+      if (rowTop < containerTop) {
+        container.scrollTop(container.scrollTop()! - (containerTop - rowTop));
+      } else if (rowTop > containerTop + containerHeight) {
+        container.scrollTop(container.scrollTop()! + (rowTop - (containerTop + containerHeight)));
+      }
 
-        rowElement.addClass('focused-row').siblings().removeClass('focused-row');
-        rowElement.trigger('focus').trigger('select');
+      rowElement.addClass('focused-row').siblings().removeClass('focused-row');
+      rowElement.trigger('focus').trigger('select');
     }
-}
+  }
 
 
 

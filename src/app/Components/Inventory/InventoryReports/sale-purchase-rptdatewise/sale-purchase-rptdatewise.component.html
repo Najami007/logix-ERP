@@ -117,7 +117,7 @@
             <tbody>
                 <tr *ngFor="let item of SaleDetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td class="text-center cursorPointer"  (click)="printBill(item)">{{item.invBillNo}}</td>
+                    <td class="text-center cursorPointer" (click)="printBill(item)">{{item.invBillNo}}</td>
                     <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
                     <td  *ngIf="rptType == 'I' || rptType == 'R'">{{item.issueType}}</td>
                     <td  *ngIf="rptType == 's' || rptType == 'sr'">{{item.paymentType}}</td>
@@ -137,8 +137,8 @@
                     <td *ngIf="rptType == 'I' || rptType == 'R' || rptType == 's' || rptType == 'sr'"></td>
                     <td *ngIf="rptType == 'p' ||rptType == 'pr' || rptType == 's' || rptType == 'sr'"></td>
                     <td class="fw-bold text-end">{{netGrandTotal |number:'1.0-0'}}</td>
-                    <td *ngIf="rptType == 's' || rptType == 'sr'" class="fw-bold text-end">{{discountTotal}}</td>
-                    <td *ngIf="rptType == 's' || rptType == 'sr'" class="fw-bold text-end">{{summaryNetTotal}}</td>
+                    <td *ngIf="rptType == 's' || rptType == 'sr'" class="fw-bold text-end">{{discountTotal |number:'1.0-0'}}</td>
+                    <td *ngIf="rptType == 's' || rptType == 'sr'" class="fw-bold text-end">{{summaryNetTotal |number:'1.0-0'}}</td>
                     <td></td>
                 </tr>
             </tbody>
@@ -219,6 +219,5 @@
 </div>
 
 
-<app-sale-bill-print class="hide"
-id="print-Bill"> </app-sale-bill-print>
+<app-sale-bill-print class="hide" id="print-Bill"> </app-sale-bill-print>
 

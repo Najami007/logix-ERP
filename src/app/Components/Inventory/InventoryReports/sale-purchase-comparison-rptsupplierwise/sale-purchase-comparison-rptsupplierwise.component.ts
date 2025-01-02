@@ -77,35 +77,12 @@ export class SalePurchaseComparisonRptsupplierwiseComponent  implements OnInit {
 
 
   getUsers() {
-
-    this.app.startLoaderDark()
-    this.http.get(environment.mainApi + this.global.userLink + 'getuser').subscribe(
-      (Response) => {
-        this.userList = Response;
-        this.app.stopLoaderDark();
-
-      },
-      (error: any) => {
-    
-        this.app.stopLoaderDark();
-      }
-    )
-
+    this.global.getUserList().subscribe((data: any) => { this.userList = data; });
   }
 
-
   getSupplier(){
-    this.http.get(environment.mainApi+this.global.companyLink+'getsupplier').subscribe(
-      {
-        next:value =>{
-          this.supplierList = value;       
-        },
-        error: error=>{
-          this.msg.WarnNotify('Error Occured While Loading Data')
-         
-        }         
-      }
-      )
+    this.global.getSupplierList().subscribe((data: any) => { this.supplierList = data; });
+
   }
 
   onSupplierSelected(){

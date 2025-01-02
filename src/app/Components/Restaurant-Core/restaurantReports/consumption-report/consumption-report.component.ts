@@ -74,23 +74,8 @@ export class ConsumptionReportComponent {
   recipeID = 0;
   recipeTitle = '';
   RecipeList: any = [];
-
-
   getUsers() {
-
-    this.app.startLoaderDark()
-    this.http.get(environment.mainApi + this.global.userLink + 'getuser').subscribe(
-      (Response) => {
-        this.userList = Response;
-        this.app.stopLoaderDark();
-
-      },
-      (error: any) => {
-     
-        this.app.stopLoaderDark();
-      }
-    )
-
+    this.global.getUserList().subscribe((data: any) => { this.userList = data; });
   }
 
 

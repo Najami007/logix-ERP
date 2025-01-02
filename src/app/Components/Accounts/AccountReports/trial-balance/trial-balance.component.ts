@@ -56,6 +56,7 @@ export class TrialBalanceComponent implements OnInit {
 
     
   }
+  rptType = '';
 
   fromDate:any = new Date();
   toDate:any =  new Date();
@@ -77,27 +78,11 @@ export class TrialBalanceComponent implements OnInit {
   projectList:any = [];
 
 
+getProject(){
 
-  
-//  getCrud(){
-//   this.http.get(environment.mainApi+'user/getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.globalData.getModuleID()).subscribe(
-//     (Response:any)=>{
-//       this.crudList =  Response.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-//     }
-//   )
-// }
+  this.globalData.getProjectList().subscribe((data: any) => { this.projectList = data; });
 
-  
-
- 
-  getProject(){
-    this.http.get(environment.mainApi+this.globalData.companyLink+'getproject').subscribe(
-      (Response:any)=>{
-        this.projectList = Response;
-      }
-    )
-  }
- 
+}
 
 
   getTrialBalance(param:any){
@@ -116,6 +101,7 @@ export class TrialBalanceComponent implements OnInit {
       this.projectName = this.projectList.find((e:any)=> e.projectID == this.projectID).projectTitle;
     }
     
+    this.rptType = 'summary1';
     $('#summary2').hide();
     $('#summary1').show();
 this.TrialBalanceData = [];
@@ -186,9 +172,11 @@ this.TrialBalanceData = [];
 
   getSummary2(param:any){
     if(param == 'sm1'){
+      this.rptType = 'summary1';
       $('#summary1').show();
       $('#summary2').hide();
     }else if(param == 'sm2'){
+      this.rptType = 'summary2';
       $('#summary1').hide();
       $('#summary2').show();
     }
@@ -240,6 +228,12 @@ this.TrialBalanceData = [];
   
     this.globalData.printData('#printReport');
   
+  }
+
+  export(){
+    if(this.rptType != ''){
+    this.globalData.ExportHTMLTabletoExcel(this.rptType,'Trial Balance '+'(' + this.fromDate.toLocaleDateString() + ' - ' + this.toDate.toLocaleDateString() +')');
+    }
   }
 
 }

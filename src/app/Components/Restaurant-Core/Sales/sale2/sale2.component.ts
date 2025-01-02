@@ -24,8 +24,8 @@ export class Sale2Component implements OnInit {
   @ViewChild(RestSaleBillPrintComponent) billPrint:any;
   @ViewChild(RestKotPrintComponent) KotPrint:any;
 
-  showCmpNameFeature:any = this.global.getFeature('cmpName');
-  waiterFeature = this.global.getFeature('Waiter');
+  showCmpNameFeature: any = this.global.showCmpNameFeature;
+  waiterFeature = this.global.showCmpNameFeature;
 
   appVisibility() {
     if (document.hidden) { 
@@ -165,15 +165,8 @@ export class Sale2Component implements OnInit {
   bookerList:any = [];
 
   getBookerList(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'getBooker').subscribe(
-      (Response)=>{
-        this.bookerList = Response;
-        //console.log(Response);
-      },
-      (Error)=>{
-        this.msg.WarnNotify('Error Occured')
-      }
-    )
+
+      this.global.getBookerList().subscribe((data: any) => { this.bookerList = data; });
   }
 
   focusTo(id:any){
@@ -238,17 +231,12 @@ export class Sale2Component implements OnInit {
   ////////////////////////////////////////////
 
   getBankList() {
-    this.http.get(environment.mainApi + 'acc/GetVoucherCBCOA?type=BRV').subscribe(
-      (Response: any) => {
-        this.bankCoaList = Response;
-        setTimeout(() => {
-          this.bankCoaID = Response[0].coaID;
-        }, 200);
-      },
-      (Error) => {
-        
-      }
-    )
+
+      this.global.getBankList().subscribe((data: any) => {
+         this.bankCoaList = data; 
+         setTimeout(() => {
+          this.bankCoaID = data[0].coaID;
+        }, 200);});
   }
 
   ///////////////////////////////////////////////////////////

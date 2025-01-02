@@ -57,19 +57,7 @@ export class CashierClosingRptComponent implements OnInit {
 
   getUsers() {
 
-    this.app.startLoaderDark()
-    this.http.get(environment.mainApi + this.global.userLink + 'getuser').subscribe(
-      (Response) => {
-        this.userList = Response;
-     
-
-        this.app.stopLoaderDark();
-
-      },
-      (error: any) => {
-        this.app.stopLoaderDark();
-      }
-    )
+    this.global.getUserList().subscribe((data: any) => { this.userList = data; });
 
   }
 
@@ -85,6 +73,7 @@ export class CashierClosingRptComponent implements OnInit {
   totalSaleReturn = 0;
   totalServiceCharges = 0;
   totalCash = 0;
+  totalCredit = 0;
   totalBank = 0;
   totalComplimentary = 0;
   totalDiscount = 0;
@@ -93,6 +82,7 @@ export class CashierClosingRptComponent implements OnInit {
   getReport() {   
           this.http.get(environment.mainApi + this.global.inventoryLink +'GetDayClosingRpt_9?reqDate='+this.global.dateFormater(this.Date,'-')).subscribe(
             (Response: any) => {
+              console.log(Response);
               this.TotalSales = 0
               this.totalSaleReturn = 0
               this.totalServiceCharges = 0
@@ -101,6 +91,7 @@ export class CashierClosingRptComponent implements OnInit {
               this.totalComplimentary= 0
               this.totalDiscount = 0
               this.totalHDCharges = 0;
+              this.totalCredit = 0;
               
               if(this.userID > 0){
                 this.ClosingDetail = Response.filter((e:any)=>e.userID == this.userID);
@@ -118,6 +109,7 @@ export class CashierClosingRptComponent implements OnInit {
                 this.totalComplimentary += e.complimentary;
                 this.totalDiscount += e.disocunt;
                 this.totalHDCharges += e.hdCharges;
+                this.totalCredit += e.creditSale;
               });
 
             }

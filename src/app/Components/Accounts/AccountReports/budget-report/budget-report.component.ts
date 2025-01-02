@@ -79,13 +79,12 @@ export class BudgetReportComponent implements OnInit{
 
 
  
- getProject(){
-   this.http.get(environment.mainApi+this.global.companyLink+'getproject').subscribe(
-     (Response:any)=>{
-       this.projectList = Response;
-     }
-   )
- }
+
+  getProject(){
+
+    this.global.getProjectList().subscribe((data: any) => { this.projectList = data; });
+
+}
 
 
   ////////////////////////////////////////////

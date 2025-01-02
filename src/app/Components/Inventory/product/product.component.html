@@ -40,15 +40,15 @@
 
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="col-lg-6 matsmall">
+                <mat-form-field  appearance="outline" class="col-lg-6 matsmall">
                     <mat-label>Product Title 2 </mat-label>
-                    <input matInput  [(ngModel)]="productNameOthLanguage" type="text">
+                    <input [disabled]="AutoFillProdNameFeature" matInput  [(ngModel)]="productNameOthLanguage" type="text">
  
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-lg-6 matsmall">
                     <mat-label>Code</mat-label>
-                    <input matInput [(ngModel)]="productCode" type="text">
+                    <input [disabled]="AutoFillProdNameFeature" matInput [(ngModel)]="productCode" type="text">
 
                 </mat-form-field>
 
@@ -295,7 +295,7 @@
                 <thead>
                     <th>S#</th>
                     <th>Product Title</th>
-                    <th>Product Title 2</th>
+                    <th *ngIf="!AutoFillProdNameFeature">Product Title 2</th>
                     <th>Product Barcode</th>
                     <th>Sub Category</th>
                     <th>Brand</th>
@@ -318,7 +318,7 @@
                     }  ;index as index">
                         <td>{{index +1}}</td>
                         <td > {{item.productTitle}}</td>
-                        <td> {{item.productTitleOtherLang}}</td>
+                        <td *ngIf="!AutoFillProdNameFeature"> {{item.productTitleOtherLang}}</td>
                         <td>{{item.barcode}}</td>
                         <td>{{item.subCategoryTitle}}</td>
                         <td>{{item.brandTitle}}</td>

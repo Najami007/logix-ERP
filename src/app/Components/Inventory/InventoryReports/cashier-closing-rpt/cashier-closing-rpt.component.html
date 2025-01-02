@@ -70,6 +70,7 @@
                             <th>Sale Return</th>
                             <th>Net Sale</th>
                             <th>Cash</th>
+                            <th>Credit</th>
                             <th>Bank</th>
                             <th>Complimentary</th>
                             <th>Discount</th>
@@ -83,6 +84,7 @@
                             <td>{{totalSaleReturn |number:'1.0-0'}}</td>
                             <td>{{TotalSales - totalSaleReturn |number:'1.0-0'}}</td>
                             <td>{{totalCash |number:'1.0-0'}}</td>
+                            <td>{{totalCredit |number:'1.0-0'}}</td>
                             <td>{{totalBank |number:'1.0-0'}}</td>
                             <td>{{totalComplimentary |number:'1.0-0'}}</td>
                             <td>{{totalDiscount |number:'1.0-0'}}</td>
@@ -120,6 +122,11 @@
                                 <td class="text-end">{{item.bank |number:'1.0-0'}}</td>
                             </tr>
                             <tr>
+                                <th class="text-start">Credit</th>
+                                <td class="text-end">{{item.creditSale |number:'1.0-0'}}</td>
+                               
+                            </tr>
+                            <tr>
                                 <th class="text-start"> Complimentary</th>
                                 <td class="text-end">{{item.complimentary|number:'1.0-0'}}</td>
                              
@@ -130,7 +137,7 @@
                             </tr>
                             <tr>
                                 <td class="text-start"><b>Total</b></td>
-                                <td class="text-end"><b>{{(item.cashIn - item.cashOut) + item.bank + item.complimentary + item.disocunt |number:'1.0-0'}}</b></td>
+                                <td class="text-end"><b>{{(item.cashIn - item.cashOut) + item.bank + item.complimentary + item.disocunt + item.creditSale |number:'1.0-0'}}</b></td>
                             </tr>
                             <!-- <tr>
                                 <td class="text-start"><b>Amount Received</b></td>

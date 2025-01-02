@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Time } from 'highcharts';
@@ -8,6 +8,7 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
+import { SaleBillPrintComponent } from '../../Sale/SaleComFiles/sale-bill-print/sale-bill-print.component';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { environment } from 'src/environments/environment.development';
 })
 export class SaleReportCustomerwiseComponent implements OnInit {
 
-
+  @ViewChild(SaleBillPrintComponent)  billPrint:any;
 
   companyProfile: any = [];
   crudList:any = {c:true,r:true,u:true,d:true};
@@ -73,35 +74,14 @@ export class SaleReportCustomerwiseComponent implements OnInit {
 
 
   getUsers() {
-
-    this.app.startLoaderDark()
-    this.http.get(environment.mainApi + this.global.userLink + 'getuser').subscribe(
-      (Response) => {
-        this.userList = Response;
-        this.app.stopLoaderDark();
-
-      },
-      (error: any) => {
- 
-        this.app.stopLoaderDark();
-      }
-    )
-
+    this.global.getUserList().subscribe((data: any) => { this.userList = data; });
   }
 
 
   getParty(){
-    this.http.get(environment.mainApi+this.global.companyLink+'getcustomer').subscribe(
-      {
-        next:value =>{
-          this.partyList = value;       
-        },
-        error: error=>{
-          this.msg.WarnNotify('Error Occured While Loading Data')
-         
-        }         
-      }
-      )
+   
+      this.global.getCustomerList().subscribe((data: any) => { this.partyList = data; });
+
   }
 
 
@@ -216,6 +196,15 @@ export class SaleReportCustomerwiseComponent implements OnInit {
       
     })
   }
+
+  printBill(item:any){
+
+    if(item.invType == 'S' || item.invType == 'SR'){
+      this.billPrint.PrintBill(item.invBillNo);
+       this.billPrint.billType = 'Duplicate';
+  
+    }
+   }
 
 
 }

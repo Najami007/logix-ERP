@@ -54,6 +54,8 @@ export class BalanceSheetComponent implements OnInit {
     $('#balanceSheet2').hide();
   }
 
+  rptType = '';
+
   toDate = new Date();
 
 
@@ -96,11 +98,9 @@ export class BalanceSheetComponent implements OnInit {
 
  
   getProject(){
-    this.http.get(environment.mainApi+this.globalData.companyLink+'getproject').subscribe(
-      (Response:any)=>{
-        this.projectList = Response;
-      }
-    )
+
+      this.globalData.getProjectList().subscribe((data: any) => { this.projectList = data; });
+
   }
  
   
@@ -202,13 +202,22 @@ export class BalanceSheetComponent implements OnInit {
 
 
   Summary1(){
+    this.rptType = 'balanceSheet1';
     $('#balanceSheet2').hide();
     $('#balanceSheet1').show();
   }
 
   summary2(){
+    this.rptType = 'balanceSheet2';
     $('#balanceSheet1').hide();
     $('#balanceSheet2').show();
+  }
+
+  export(){
+    if(this.rptType != ''){
+      this.globalData.ExportHTMLTabletoExcel(this.rptType,'Balance Sheet '+'(' + this.toDate.toLocaleDateString() +')')
+    }
+   
   }
 
  

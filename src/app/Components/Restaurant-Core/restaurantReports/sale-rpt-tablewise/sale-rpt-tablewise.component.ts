@@ -85,29 +85,9 @@ export class SaleRptTablewiseComponent implements OnInit {
     this.tableTitle = title.tableTitle;
   }
 
-
-
-
   getUsers() {
-
-    this.app.startLoaderDark()
-    this.http.get(environment.mainApi + this.global.userLink + 'getuser').subscribe(
-      (Response) => {
-        this.userList = Response;
-
-        this.app.stopLoaderDark();
-
-      },
-      (error: any) => {
-      
-        this.app.stopLoaderDark();
-      }
-    )
-
+    this.global.getUserList().subscribe((data: any) => { this.userList = data; });
   }
-
-
-
 
   onUserSelected() {
     var curUser = this.userList.find((e: any) => e.userID == this.userID);

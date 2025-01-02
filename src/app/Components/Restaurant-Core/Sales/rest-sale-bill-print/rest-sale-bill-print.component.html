@@ -1,9 +1,9 @@
 <div id="printRestBill">
     <div class="text-center">
-        <p style="font-family:Arial, Helvetica, sans-serif">Welcome To {{companyName}}</p>
+        <p *ngIf="showCmpNameFeature" style="font-family:Arial, Helvetica, sans-serif">Welcome To {{companyName}}</p>
         <p style="margin-top: -20px;" class="fs-11 text-uppercase">{{companyAddress}}</p>
         <p style="margin-top: -20px;"  class="fs-11">{{CompanyMobile}}</p>
-        <img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
+        <img *ngIf="showCompanyLogo" [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
 
         <h2 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">ORDER NO: {{myOrderNo}}</h2>
         

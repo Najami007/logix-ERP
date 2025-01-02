@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class RestKotPrintComponent {
 
-  showCmpNameFeature:any = this.global.getFeature('cmpName');
+  showCmpNameFeature:any = this.global.showCmpNameFeature;
 
   crudList: any = [];
   companyProfile: any = [];

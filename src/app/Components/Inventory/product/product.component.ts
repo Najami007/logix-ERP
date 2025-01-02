@@ -13,12 +13,9 @@ import { AddRackComponent } from '../Configurations/racks/add-rack/add-rack.comp
 import { AddUOMComponent } from '../Configurations/unit-of-measurement/add-uom/add-uom.component';
 import { AddCategoryComponent } from '../Configurations/product-category/add-category/add-category.component';
 import { AddProdSubCategoryComponent } from '../Configurations/product-sub-category/add-prod-sub-category/add-prod-sub-category.component';
-import { retry } from 'rxjs';
-import Swal from 'sweetalert2';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-product',
@@ -34,12 +31,11 @@ export class ProductComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  AutoFillProdNameFeature = this.global.AutoFillNameFeature;
 
   applyFilter() {
     // const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = this.searchProduct;
-    
-
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
@@ -386,8 +382,8 @@ export class ProductComponent implements OnInit {
       BrandID: this.BrandID,
       RackID: this.rackID,
       ProductTitle: this.ProductName,
-      ProductCode: this.productCode,
-      ProductTitleOtherLang: this.productNameOthLanguage,
+      ProductCode: this.AutoFillProdNameFeature ? this.ProductName : this.productCode,
+      ProductTitleOtherLang: this.AutoFillProdNameFeature ? this.ProductName : this.productNameOthLanguage,
       ProductDescription: this.Description,
       MinRol: this.minRol,
       MaxRol: this.maxRol,
@@ -441,8 +437,8 @@ export class ProductComponent implements OnInit {
           BrandID: this.BrandID,
           RackID: this.rackID,
           ProductTitle: this.ProductName,
-          ProductCode: this.productCode,
-          ProductTitleOtherLang: this.productNameOthLanguage,
+          ProductCode: this.AutoFillProdNameFeature ? this.ProductName : this.productCode,
+          ProductTitleOtherLang: this.AutoFillProdNameFeature ? this.ProductName : this.productNameOthLanguage,
           ProductDescription: this.Description,
           MinRol: this.minRol,
           MaxRol: this.maxRol,
