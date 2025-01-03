@@ -61,7 +61,8 @@
           
             <div class="text-center row justify-content-center" >
                 <button  class="btnsave  col-lg-3 me-2" *ngIf="crudList.c" (click)="insertVoucher()"> Save</button>
-                <button   class="btnreset  col-lg-3 "  (click)="reset()"> Reset</button>
+                <button   class="btnreset  col-lg-3 me-2"  (click)="reset()"> Reset</button>
+                <button   class="btnload  col-lg-3 "  (click)="ngOnInit()"> load</button>
             </div>
 
 
@@ -118,7 +119,7 @@
 
        
                     <div class="col-lg-1 text-start ">
-                        <button style="height: 60px;" class="btnsave" type="button" (click)="save()">
+                        <button style="height: 45px;" class="btnsave" type="button" (click)="save()">
                             <mat-icon class="mat-icon-rtl-mirror" >save</mat-icon>
                         </button>
                        

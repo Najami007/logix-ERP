@@ -66,7 +66,7 @@
                         <!-- <div class="font-barcode" >*{{item.barcode}}*</div>
                         <div class="bcodeC">{{item.barcode}}</div> -->
                         <div class="row text-center barcodeName" >
-                            <div class="bcodet" [ngClass]="hidePrice || hideBarcode ? 'w-80 text-center' : 'w-50'" >{{item.productTitle | slice:0:10}}</div>
+                            <div class="bcodet" [ngClass]="hidePrice || hideBarcode ? 'w-80 text-center' : 'w-50'" >{{item.productTitle}}</div>
                             <div *ngIf="!hidePrice" [ngClass]="hideBarcode? 'w-80 text-center' : 'w-50' " class="bcodep text-start" >Rs.{{item.salePrice|number}}</div>
                         </div>
                           

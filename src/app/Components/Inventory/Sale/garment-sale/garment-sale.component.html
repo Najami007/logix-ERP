@@ -104,8 +104,8 @@
 
                 <div *ngIf="BankShortCutsFeature">
                     <mat-radio-group name="bankSC">
-                        <mat-radio-button name="cashRadio" [(ngModel)]="paymentType" (change)="onCashSelected()">Cash</mat-radio-button>
-                        <mat-radio-button name="BankRadio" [(ngModel)]="bankCoaID" (change)="onBankSelected()" *ngFor="let item of bankCoaList" [value]="item.coaID">{{item.coaTitle}}</mat-radio-button>
+                        <mat-radio-button   [(ngModel)]="paymentType" (change)="onCashSelected()">Cash</mat-radio-button>
+                        <mat-radio-button   [(ngModel)]="bankCoaID" (change)="onBankSelected()" *ngFor="let item of bankCoaList" [value]="item.coaID">{{item.coaTitle}}</mat-radio-button>
                     </mat-radio-group>
                 </div>
 
@@ -424,16 +424,6 @@
 <!---------------------------------------------------------------------------------->
 
 </div>
-
-
-
-
-
-
-
-
-
-
 
 
             </div>
