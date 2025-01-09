@@ -5,10 +5,9 @@
        <div>
         <button mat-fab class="col-lg-1 me-2" *ngIf="crudList.c" (click)="addMenu()"><mat-icon>add</mat-icon></button>
 
-        <mat-form-field class="col-lg-11" appearance="outline">
-            <mat-label class="ps-5">Search.....</mat-label>
+        <mat-form-field class="col-lg-11 matSmall" appearance="outline">
+            <mat-label>Search.....</mat-label>
             <input [(ngModel)]="menuSearch" matInput type="search" class="text-secondary">
-            <mat-icon matPrefix class="text-secondary">search</mat-icon>
         </mat-form-field>
        </div>
 

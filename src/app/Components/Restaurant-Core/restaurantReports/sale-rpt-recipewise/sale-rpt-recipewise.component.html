@@ -3,7 +3,7 @@
     <div class="row mt-2">
 
 
-        <!-- <mat-form-field appearance="outline" class="col-lg-2">
+        <!-- <mat-form-field appearance="outline" class="col-lg-2 matSmall">
             <mat-label>User</mat-label>
             <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
                 <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
@@ -13,7 +13,7 @@
                     [value]="item.userID">{{item.userName}}</mat-option>
             </mat-select>
         </mat-form-field> -->
-        <mat-form-field appearance="outline" class="col-lg-4    ">
+        <mat-form-field appearance="outline" class="col-lg-4 matSmall   ">
             <mat-label>Recipe</mat-label>
             <mat-select [(ngModel)]="recipeID" (selectionChange)="OnRecipeSelected()">
                 <mat-option><ngx-mat-select-search #recSearch [placeholderLabel]="'Search...'"
@@ -22,13 +22,13 @@
                     [value]="item.recipeID">{{item.recipeTitle}}</mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field  appearance="outline" class="col-lg-2">
+        <mat-form-field  appearance="outline" class="col-lg-2 matSmall">
             <mat-label>From Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
             <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
             <mat-datepicker #sDate></mat-datepicker>
         </mat-form-field>
-        <mat-form-field  appearance="outline" class="col-lg-2">
+        <mat-form-field  appearance="outline" class="col-lg-2 matSmall">
             <mat-label>From Time</mat-label>    
             <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
             <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
@@ -36,13 +36,13 @@
         </mat-form-field>
 
 
-        <mat-form-field  appearance="outline" class="col-lg-2">
+        <mat-form-field  appearance="outline" class="col-lg-2 matSmall">
             <mat-label>To Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
             <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
             <mat-datepicker #eDate></mat-datepicker>
         </mat-form-field>
-        <mat-form-field  appearance="outline" class="col-lg-2">
+        <mat-form-field  appearance="outline" class="col-lg-2 matSmall">
             <mat-label>To Time</mat-label>
                 <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
                 <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
@@ -51,7 +51,7 @@
 
     </div>
     <div class="row">
-        <!-- <mat-form-field appearance="fill" class="col-lg-3 me-2">
+        <!-- <mat-form-field appearance="fill" class="col-lg-3 me-2 matSmall">
             <mat-label>Report Type</mat-label>
             <mat-select [(ngModel)]="rptType" >
                 <mat-option *ngFor="let item of reportList"
@@ -59,11 +59,11 @@
             </mat-select>
         </mat-form-field> -->
 
-        <mat-form-field class="col-lg-2" appearance="outline">
+        <mat-form-field class="col-lg-2 matSmall" appearance="outline">
             <mat-label>Start</mat-label>
             <input  matInput type="text" [(ngModel)]="startVal" class="text-secondary">
         </mat-form-field>
-        <mat-form-field class="col-lg-2" appearance="outline">
+        <mat-form-field class="col-lg-2 matSmall" appearance="outline">
             <mat-label>End</mat-label>
             <input  matInput type="text" [(ngModel)]="endVal" class="text-secondary">
         </mat-form-field>

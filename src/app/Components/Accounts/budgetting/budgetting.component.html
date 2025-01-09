@@ -7,7 +7,7 @@
            <!----------------           Date Section ------------------------------->
                     <div class=" container-fluid p-3 border-bottom row justify-content-center">
 
-                        <mat-form-field class="col-lg-2 " appearance="outline" >
+                        <mat-form-field class="col-lg-2 matSmall" appearance="outline" >
                             <mat-label>Project </mat-label>
                             <mat-select [(ngModel)]="projectID" >
                                 <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch"
@@ -18,7 +18,7 @@
                         </mat-form-field>
                       
 
-                        <mat-form-field class="col-lg-2" appearance="outline">
+                        <mat-form-field class="col-lg-2 matSmall" appearance="outline">
                             <mat-label>Date</mat-label>
                             <input  matInput   [(ngModel)]="BudgetMonth"
                                 [matDatepicker]="picker"  readonly="true" >
@@ -26,7 +26,7 @@
                             <mat-datepicker #picker></mat-datepicker>
                         </mat-form-field>
                         
-                            <mat-form-field class="col-lg-5 " appearance="outline">
+                            <mat-form-field class="col-lg-5 matSmall" appearance="outline">
                                 <mat-label>Select Account Head</mat-label>
                                 <mat-select [(ngModel)]="CoaID">
                                     <mat-option><ngx-mat-select-search [(ngModel)]="coaSearch"
@@ -37,7 +37,7 @@
                             </mat-form-field>
 
 
-                            <mat-form-field class="col-lg-2 " appearance="outline">
+                            <mat-form-field class="col-lg-2 matSmall" appearance="outline">
                                 <mat-label>Enter Amount</mat-label>
                                 <input matInput type="number" [(ngModel)]="amount">
 
@@ -89,7 +89,7 @@
                           <span class="mt-4 text-danger font-digit"  style="font-size: 3rem;">{{TotalAmount | number}}</span>
 
 
-                          <mat-form-field class="w-100 mt-5" appearance="outline">
+                          <mat-form-field class="w-100 mt-5 matSmall" appearance="outline">
                             <mat-label>Description</mat-label>
                             <textarea matInput type="number" [(ngModel)]="description"></textarea>
 
@@ -106,7 +106,7 @@
     <mat-tab label="Saved Record">
 
         <div class="container bg-light ">
-            <mat-form-field appearance="outline" class="w-100 pt-2">
+            <mat-form-field appearance="outline" class="w-100 pt-2 matSmall">
                 <mat-label>Search.....</mat-label>
                 <input type="text" matInput>
             </mat-form-field>

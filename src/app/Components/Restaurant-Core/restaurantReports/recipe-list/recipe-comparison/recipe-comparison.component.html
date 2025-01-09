@@ -1,13 +1,13 @@
 <div class="" style="overflow-x: hidden;">
     
   <div class="row p-3">
-    <mat-form-field appearance="outline" class="col-lg-5">
+    <mat-form-field appearance="outline" class="col-lg-5 matSmall">
         <mat-label>Recipe 1</mat-label>
         <mat-select [(ngModel)]="recipe1">
             <mat-option [disabled]="item.recipeID == recipe2" *ngFor="let item of recipeList" [value]="item.recipeID">{{item.recipeTitle}}</mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-form-field appearance="outline" class="col-lg-5">
+    <mat-form-field appearance="outline" class="col-lg-5 matSmall">
         <mat-label>Recipe 1</mat-label>
         <mat-select [(ngModel)]="recipe2">
             <mat-option [disabled]="item.recipeID == recipe1" *ngFor="let item of recipeList" [value]="item.recipeID">{{item.recipeTitle}}</mat-option>

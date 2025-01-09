@@ -52,7 +52,7 @@
     <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center fw-bold">Duplicate</p>
 
     <div>
-        <table class="w-100 table-garment-sale">
+        <table class="w-100 table-garment-sale" style="font-size: 15px;">
             <thead >
                 <tr class="fs-12">
                     <th style="width:10% !important;">Qty</th>
@@ -66,10 +66,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="fs-12" *ngFor="let item of myPrintTableData index as index" >
+                <tr  *ngFor="let item of myPrintTableData index as index" >
                     <td [colSpan]="discFeature ? '6' : '4'" class="text-start">
                         &nbsp;{{index +1}}. <b> {{item.productTitle}}</b>  {{item.barcode}}
-                        <table class="table-garment-sale-2 w-100 fs-12">
+                        <table class="table-garment-sale-2 w-100">
                             <tr>
                                 <td class="text-center" style="width:10% !important;">{{item.quantity |number:'1.0-2'}}</td>
                                 <td class="text-end" *ngIf="gstFeature" style="width:20% !important;">{{item.salePrice - (item.salePrice / ((item.gst / 100) + 1))   |number:'1.0-2'}}</td>

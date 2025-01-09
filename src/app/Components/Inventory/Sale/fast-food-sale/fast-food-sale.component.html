@@ -9,7 +9,7 @@
       <div class="row border-bottom mt-1 "  >
 
 
-        <mat-form-field class="col-lg-8 " appearance="outline"  >
+        <mat-form-field class="col-lg-8 matSmall" appearance="outline"  >
             <mat-label >Search.....</mat-label>
             <input  #prodSearch  matInput type="search" class="text-secondary" >
         </mat-form-field>
@@ -172,14 +172,15 @@
                             <p> SP: <b>{{item.salePrice  |number:'1.0-0'}}</b> - D: <b>{{item.discInR |number:'1.0-0'}}</b> x Q: <b>{{item.quantity |number:'1.0-2'}}</b> =  <b>{{(item.salePrice - item.discInR) * item.quantity |number:'1.0-0'}}</b></p>
                         </div>
 
-                        <mat-form-field appearance="outline" class="w-100">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
                             <mat-label>Price</mat-label>
                             <input class="prodQty text-center" [(ngModel)]="item.total" name="sp" (keyup)="OnSpChange(item)"
                                 (keydown)="this.global.handleNumKeys($event);OnSpChange(item)" type="number" min="0" matInput
                                 #prodSP />
                         </mat-form-field>
 
-                          <mat-form-field appearance="outline" class="w-100">
+                          <mat-form-field appearance="outline" class="w-100 matSmall
+                          ">
                               <mat-icon (click)="increment('add',item)" matPrefix>add</mat-icon>
 
                               <input class="prodQty text-center" [(ngModel)]="item.quantity" name="qty" (keyup)="OnQtyChange(item)"
@@ -212,7 +213,7 @@
           
 <div >
 <div class="text-end p-2">
-    <mat-form-field appearance="outline" class="w-100">
+    <mat-form-field appearance="outline" class="w-100 matSmall" >
         <mat-label>Search...</mat-label>
         <input matInput #searchBill name="searchBill" type="text" />
     </mat-form-field>

@@ -1,7 +1,7 @@
 <div >
 
 
-    <mat-form-field appearance="outline" *ngIf="reportType == 'cw'|| reportType == 'scw'" class="w-100 matsmall">
+    <mat-form-field appearance="outline" *ngIf="reportType == 'cw'|| reportType == 'scw'" class="w-100 matSmall">
         <mat-label>Category</mat-label>
         <mat-select [(ngModel)]="categoryID" >
             <mat-option><ngx-mat-select-search   #cat [placeholderLabel]="'Search...'"
@@ -10,7 +10,7 @@
         </mat-select>
      </mat-form-field>
 
-     <mat-form-field appearance="outline" *ngIf="reportType == 'scw' " class="w-100 matsmall">
+     <mat-form-field appearance="outline" *ngIf="reportType == 'scw' " class="w-100 matSmall">
         <mat-label>Sub Category</mat-label>
         <mat-select [(ngModel)]="subCategoryID">
             <mat-option><ngx-mat-select-search #subcat [placeholderLabel]="'Search...'"
@@ -18,7 +18,7 @@
             <mat-option *ngFor="let item of SubCategoriesList |filter:subcat.value" [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
         </mat-select>
      </mat-form-field>
-     <mat-form-field appearance="outline" class="w-100 matsmall" *ngIf="reportType == 'bw'">
+     <mat-form-field appearance="outline" class="w-100 matSmall" *ngIf="reportType == 'bw'">
         <mat-label>Brand</mat-label>
         <mat-select [(ngModel)]="brandID">
             <mat-option><ngx-mat-select-search #brand [placeholderLabel]="'Search...'"
@@ -26,7 +26,7 @@
             <mat-option *ngFor="let item of BrandList |filter:brand.value" [value]="item.brandID">{{item.brandTitle}}</mat-option>
         </mat-select>
      </mat-form-field>
-     <mat-form-field appearance="outline" class="w-100 matsmall" *ngIf="reportType == 'tw'"> 
+     <mat-form-field appearance="outline" class="w-100 matSmall" *ngIf="reportType == 'tw'"> 
         <mat-label>Type</mat-label>
         <mat-select [(ngModel)]="typeID">
             <mat-option><ngx-mat-select-search #type [placeholderLabel]="'Search...'"
@@ -35,7 +35,7 @@
         </mat-select>
      </mat-form-field>
 
- <mat-form-field appearance="outline" class="w-100 matsmall" *ngIf="reportType == 'lw'">
+ <mat-form-field appearance="outline" class="w-100 matSmall" *ngIf="reportType == 'lw'">
     <mat-label>Location</mat-label>
     <mat-select [(ngModel)]="locationID">
         <mat-option><ngx-mat-select-search #location [placeholderLabel]="'Search...'"

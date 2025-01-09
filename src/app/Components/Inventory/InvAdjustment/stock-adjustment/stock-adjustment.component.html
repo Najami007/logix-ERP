@@ -4,7 +4,7 @@
         <div class="col-lg-9 bg-white ">
 
             <div class="row ps-1 pe-1 pt-2 justify-content-between ">
-                <mat-form-field appearance="outline" *ngIf="global.DisableDate == false" class="col-lg-3">
+                <mat-form-field appearance="outline" *ngIf="global.DisableDate == false" class="col-lg-3 matSmall">
                     <mat-label>Select Invoice Date</mat-label>
                     <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput
                         type="text" name="invDate" [matDatepicker]="iDate">
@@ -12,7 +12,7 @@
                     <mat-datepicker #iDate></mat-datepicker>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="col-lg-3 ">
+                <mat-form-field appearance="outline" class="col-lg-3 matSmall">
                     <mat-label>Location</mat-label>
                     <mat-select [(ngModel)]="locationID" name="location">
                         <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
@@ -23,7 +23,7 @@
                 </mat-form-field>
 
 
-                <mat-form-field appearance="outline" class="col-lg-3">
+                <mat-form-field appearance="outline" class="col-lg-3 matSmall">
                     <mat-label>Adjustment Type</mat-label>
                     <mat-select [(ngModel)]="adjustmentType" name="location">
                         <mat-option value="AI">Stock In</mat-option>
@@ -33,7 +33,7 @@
                     </mat-select>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" [ngClass]="global.DisableDate == true ? 'col-lg-6' :'col-lg-3'">
+                <mat-form-field appearance="outline" class="matSmall" [ngClass]="global.DisableDate == true ? 'col-lg-6' :'col-lg-3'">
                     <mat-label>Remarks</mat-label>
                     <input matInput type="text" [(ngModel)]="invRemarks">
                 </mat-form-field>
@@ -179,7 +179,7 @@
                 <div class="modal-body">
 
                     <div class="d-flex justify-content-between">
-                        <mat-form-field class="col-lg-4" appearance="outline">
+                        <mat-form-field class="col-lg-4 matSmall" appearance="outline">
                             <mat-label>Date</mat-label>
                             <input matInput type="text" readonly="true" [(ngModel)]="Date" [matDatepicker]="hbDate">
                             <mat-datepicker-toggle matSuffix [for]="hbDate"></mat-datepicker-toggle>
@@ -190,7 +190,7 @@
                         <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt"
                             (click)="FindSavedBills('ai')">Get Invoices</button>
 
-                        <mat-form-field class="col-lg-3" appearance="outline">
+                        <mat-form-field class="col-lg-3 matSmall" appearance="outline">
                             <mat-label>Search.......</mat-label>
                             <input matInput #holdSearch type="text" class="col-lg-4">
                         </mat-form-field>

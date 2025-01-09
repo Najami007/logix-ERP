@@ -186,9 +186,9 @@ export class GarmentSaleComponent implements OnInit {
 
     this.global.getBankList().subscribe((data: any) => {
       this.bankCoaList = data;
-      setTimeout(() => {
-        this.bankCoaID = data[0].coaID;
-      }, 200);
+      // setTimeout(() => {
+      //   this.bankCoaID = data[0].coaID;
+      // }, 200);
     });
 
   }
@@ -1374,6 +1374,7 @@ export class GarmentSaleComponent implements OnInit {
     this.bookerID = 0;
     this.customerMobileno = '';
     this.customerName = '';
+    this.bankCoaID = 0;
 
 
   }

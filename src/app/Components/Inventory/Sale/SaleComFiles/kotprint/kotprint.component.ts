@@ -78,7 +78,7 @@ showCmpNameFeature:any = this.global.getFeature('cmpName');
   myTime:any;
   myCounter:any = '';
   myOrderNo = 0;
-
+  myDuplicateFlag = false;
 
 
   printBill(invNo: any) {
@@ -141,5 +141,6 @@ showCmpNameFeature:any = this.global.getFeature('cmpName');
       this.voidFlag = false;
       this.myTime;
       this.myCounter = '';
+      this.myDuplicateFlag = false;
      }
 }

@@ -2,7 +2,7 @@
 
     <div class="p-2 row justify-content-center">
         <button type="button" mat-mini-fab class="btnadd" *ngIf="crudList.c" autofocus (click)="add()"><mat-icon>add</mat-icon></button>
-        <mat-form-field appearance="outline" [ngClass]="crudList.c == false ? 'col-lg-12' : 'col-lg-11' ">
+        <mat-form-field appearance="outline" class="matSmall" [ngClass]="crudList.c == false ? 'col-lg-12' : 'col-lg-11' ">
             <mat-label>Search....</mat-label>
             <input matInput #search  />
         </mat-form-field>

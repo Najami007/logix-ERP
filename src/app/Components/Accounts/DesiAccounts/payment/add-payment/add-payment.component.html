@@ -6,7 +6,7 @@
     </div>
     <hr>
 <div class="row">
-    <mat-form-field appearance="outline"  class="col-lg-12">
+    <mat-form-field appearance="outline"  class="col-lg-12 matSmall">
         <mat-label>Invoice Date</mat-label>
         <input [(ngModel)]="invoiceDate"  readonly="true" matInput type="text" name="invDate"
             [matDatepicker]="iDate">
@@ -14,7 +14,7 @@
         <mat-datepicker #iDate></mat-datepicker>
     </mat-form-field>
     
-    <mat-form-field appearance="outline" class="col-lg-12">
+    <mat-form-field appearance="outline" class="col-lg-12 matSmall">
         <mat-label>Supplier</mat-label>
         <mat-select id="supplier" [(ngModel)]="partyID" (selectionChange)="getSupplierBalance()">
             <mat-option><ngx-mat-select-search #supSerach [placeholderLabel]="'Search...'"
@@ -23,31 +23,31 @@
         </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="col-lg-6">
+    <mat-form-field appearance="outline" class="col-lg-6 matSmall">
         <mat-label>Type</mat-label>
         <mat-select  [(ngModel)]="paymentType" (selectionChange)="getCoaList();coaID = 0">
          <mat-option *ngFor="let item of paymentTypeList" [value]="item.value">{{item.title}}</mat-option>
         </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="col-lg-6">
+    <mat-form-field appearance="outline" class="col-lg-6 matSmall">
         <mat-label>COA</mat-label>
         <mat-select   [(ngModel)]="coaID">
          <mat-option *ngFor="let item of coaList" [value]="item.coaID">{{item.coaTitle}}</mat-option>
         </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="col-lg-6">
+    <mat-form-field appearance="outline" class="col-lg-6 matSmall">
         <mat-label>Amount</mat-label>
        <input matInput [(ngModel)]="amount" (keydown)="global.handleNumKeys($event)" />
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="col-lg-6">
+    <mat-form-field appearance="outline" class="col-lg-6 matSmall">
         <mat-label>Discount</mat-label>
        <input matInput [(ngModel)]="discount" (keydown)="global.handleNumKeys($event)" />
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="col-lg-12">
+    <mat-form-field appearance="outline" class="col-lg-12 matSmall">
         <mat-label>Remarks</mat-label>
        <textarea matInput [(ngModel)]="remarks" ></textarea>
     </mat-form-field>

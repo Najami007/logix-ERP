@@ -142,7 +142,7 @@
                 </div>
                 
 
-                <mat-form-field appearance="outline" class="w-100">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
                     <mat-label><u>R</u>emarks</mat-label>
                     <textarea matInput accesskey="r" rows="1" [(ngModel)]="billRemarks"></textarea>
                 </mat-form-field>
@@ -195,18 +195,18 @@
                     <h2 class="text-center text-danger">Change: {{ change | number:'1.0-1'}}</h2>
                 </div>
 
-                <mat-form-field appearance="outline" class="col-lg-6 pe-1">
+                <mat-form-field appearance="outline" class="col-lg-6 pe-1 matSmall">
                     <mat-label>Customer Name</mat-label>
                     <input type="text" matInput [(ngModel)]="customerName" />
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="col-lg-6 w-50">
+                <mat-form-field appearance="outline" class="col-lg-6 w-50 matSmall">
                     <mat-label>Customer Mobile</mat-label>
                     <input matInput type="text" [textMask]="{mask:mobileMask}" [(ngModel)]="customerMobileno" />
                 </mat-form-field>
                 <label class="fw-bold">Add Document</label>
 
 
-                <mat-form-field appearance="outline" class="w-100">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
                     <mat-label>Payment Type</mat-label>
                     <mat-select [(ngModel)]="paymentType" (selectionChange)="cash = 0; bankCash = 0;getTotal()">
                         <!-- <mat-option value="Cash">Cash</mat-option> -->

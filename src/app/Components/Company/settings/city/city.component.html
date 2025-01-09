@@ -4,7 +4,7 @@
         <h2 class="border-bottom">City Detail's</h2>
         
 
-        <mat-form-field class="w-100 pe-1" appearance="outline">
+        <mat-form-field class="w-100 pe-1 matSmall" appearance="outline">
             <mat-label>Country</mat-label>
           <mat-select [(ngModel)]="countryID">
             <mat-option><ngx-mat-select-search [(ngModel)]="countrySearch"
@@ -15,7 +15,7 @@
         </mat-form-field>
 
 
-        <mat-form-field class="w-100" appearance="outline">
+        <mat-form-field class="w-100 matSmall" appearance="outline">
             <mat-label>City Name</mat-label>
             <input matInput type="text" [(ngModel)]="cityName" >
         </mat-form-field>
@@ -35,10 +35,9 @@
     <div class="col-lg-8 p-4">
 
 
-        <mat-form-field class="w-100" appearance="outline">
-            <mat-label class="ps-5">Search.....</mat-label>
+        <mat-form-field class="w-100 matSmall" appearance="outline">
+            <mat-label>Search.....</mat-label>
             <input [(ngModel)]="txtSearch" matInput type="search" class="text-secondary">
-            <mat-icon matPrefix class="text-secondary">search</mat-icon>
         </mat-form-field>
 
 

@@ -4,7 +4,7 @@
     
         <div class="mb-1 pt-2 border-bottom">
             <div class="row ">
-                <mat-form-field class="col-lg-4 "  appearance="outline">
+                <mat-form-field class="col-lg-4 matSmall"  appearance="outline">
                     <mat-label>Project </mat-label>
                     <mat-select [(ngModel)]="projectID" >
                         <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch"
@@ -14,14 +14,14 @@
                     </mat-select>
                 </mat-form-field>
      
-                    <mat-form-field class="col-lg-2 " appearance="outline">
+                    <mat-form-field class="col-lg-2 matSmall" appearance="outline">
                         <mat-label>From Date</mat-label>
                         <input matInput type="text"  readonly="true" [(ngModel)]="fromDate" [matDatepicker]="startDate">
                         <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
                         <mat-datepicker #startDate></mat-datepicker>
                     </mat-form-field>
 
-                    <mat-form-field class="col-lg-2" appearance="outline">
+                    <mat-form-field class="col-lg-2 matSmall" appearance="outline">
                         <mat-label>To Date</mat-label>
                         <input matInput type="text" readonly="true" [(ngModel)]="toDate"  [matDatepicker]="EndDate">
                         <mat-datepicker-toggle matSuffix [for]="EndDate"></mat-datepicker-toggle>

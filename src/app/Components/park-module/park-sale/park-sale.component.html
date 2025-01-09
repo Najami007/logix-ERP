@@ -10,7 +10,7 @@
 
         
 
-        <mat-form-field class="col-lg-9 " appearance="outline"  >
+        <mat-form-field class="col-lg-9 matSmall" appearance="outline"  >
             <mat-label >Search.....</mat-label>
             <input [(ngModel)]="searchSwing"  matInput type="search" class="text-secondary" >
             <mat-icon matPrefix class="text-secondary">search</mat-icon>
@@ -105,7 +105,7 @@
                     <p>Total</p>
                     <p class="font-digit" style="font-size: 30px;">{{subTotal |number:'1.0-0'}}</p>
                 </span>
-                <mat-form-field appearance="outline" class="w-100 mt-2">
+                <mat-form-field appearance="outline" class="w-100 mt-2 matSmall">
                     <mat-label>Remarks</mat-label>
                     <textarea matInput rows="1" [(ngModel)]="ticketRemarks" ></textarea>
                 </mat-form-field>
@@ -139,7 +139,7 @@
             <div class="modal-body">
 
                 <div class="d-flex justify-content-between">
-                    <mat-form-field class="col-lg-4" appearance="outline">
+                    <mat-form-field class="col-lg-4 matSmall" appearance="outline">
                         <mat-label>Date</mat-label>
                         <input matInput type="text" readonly="true" [(ngModel)]="TicketDate" [matDatepicker]="date">
                         <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
@@ -149,7 +149,7 @@
 
                     <button mat-raised-button *ngIf="crudList.r" class="btn-rpt col-lg-2" (click)="findTickets()" >Search</button>
 
-                   <mat-form-field class="col-lg-4" appearance="outline">
+                   <mat-form-field class="col-lg-4 matSmall" appearance="outline">
                     <mat-label>Search.......</mat-label>
                     <input matInput type="text" class="col-lg-4" [(ngModel)]="billSearch">
                    </mat-form-field>

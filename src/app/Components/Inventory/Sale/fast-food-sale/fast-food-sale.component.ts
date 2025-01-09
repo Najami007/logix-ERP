@@ -15,9 +15,9 @@ import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sale
   styleUrls: ['./fast-food-sale.component.scss']
 })
 export class FastFoodSaleComponent {
-  
 
-  
+
+
   discFeature = this.global.discFeature;
   BookerFeature = this.global.BookerFeature;
   gstFeature = this.global.gstFeature;
@@ -27,10 +27,10 @@ export class FastFoodSaleComponent {
   editDiscFeature = this.global.editDiscFeature;
   prodDetailFeature = this.global.prodDetailFeature;
 
- @ViewChild(KOTPrintComponent) kotPrint:any;
+  @ViewChild(KOTPrintComponent) kotPrint: any;
 
-  crudList:any = [];
-  companyProfile:any = [];
+  crudList: any = [];
+  companyProfile: any = [];
   companyLogo: any = '';
   logoHeight: any = 0;
   logoWidth: any = 0;
@@ -39,20 +39,20 @@ export class FastFoodSaleComponent {
   companyName: any = '';
 
   constructor(
-    private http:HttpClient,
-    private msg:NotificationService,
-    private app:AppComponent,
-    public global:GlobalDataModule,
-    private dialogue:MatDialog,
-    private route:Router,
-   
-  ){
+    private http: HttpClient,
+    private msg: NotificationService,
+    private app: AppComponent,
+    public global: GlobalDataModule,
+    private dialogue: MatDialog,
+    private route: Router,
+
+  ) {
     // this.global.getCompany().subscribe((data)=>{
     //   this.companyProfile = data;
     // });
 
-    this.global.getMenuList().subscribe((data)=>{
-      this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    this.global.getMenuList().subscribe((data) => {
+      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
     });
 
     this.global.getCompany().subscribe((data) => {
@@ -66,13 +66,13 @@ export class FastFoodSaleComponent {
     });
   }
 
-  
+
   ngOnInit(): void {
-    this.global.setHeaderTitle('Fast Food Sale'); 
+    this.global.setHeaderTitle('Fast Food Sale');
     this.getProducts();
     this.getSavedBill();
 
-    
+
   }
 
 
@@ -114,7 +114,7 @@ export class FastFoodSaleComponent {
 
   bankCoaList: any = [];
   partyList: any = [];
-  bookerList:any = [];
+  bookerList: any = [];
 
 
   ////////////////////////////////////
@@ -123,23 +123,24 @@ export class FastFoodSaleComponent {
 
 
   ///////////////////////////////////////////////////////////////
-  getProducts(){
-    
+  getProducts() {
+
     this.global.getFastFoodProducts().subscribe(
-      (data: any) => { this.productList = data; 
+      (data: any) => {
+        this.productList = data;
       });
   }
 
 
 
-  changeValue(item:any){
+  changeValue(item: any) {
     var myIndex = this.tableDataList.indexOf(item);
-   // console.log(this.tableDataList[myIndex]);
+    // console.log(this.tableDataList[myIndex]);
     var myQty = this.tableDataList[myIndex].TicketQuantity;
-     if(myQty == null || myQty == '' || myQty == undefined){
+    if (myQty == null || myQty == '' || myQty == undefined) {
       this.tableDataList[myIndex].TicketQuantity = 0;
     }
-   }
+  }
 
 
 
@@ -147,7 +148,7 @@ export class FastFoodSaleComponent {
   ///////////////////////////////////////////////////////////////
 
 
-  
+
   holdDataFunction(data: any) {
 
 
@@ -163,9 +164,9 @@ export class FastFoodSaleComponent {
 
       this.global.getProdDetail(data.productID, '').subscribe(
         (Response: any) => {
-           
+
           this.tableDataList.push({
-            
+
             rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
               : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
                 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
@@ -185,12 +186,12 @@ export class FastFoodSaleComponent {
             batchStatus: '-',
             uomID: Response[0].uomID,
             gst: this.gstFeature ? Response[0].gst : 0,
-            et:Response[0].et,
+            et: Response[0].et,
             packing: 1,
-            discInP: this.discFeature ?  Response[0].discPercentage : 0,
-            discInR: this.discFeature ?  Response[0].discRupees  : 0,
+            discInP: this.discFeature ? Response[0].discPercentage : 0,
+            discInR: this.discFeature ? Response[0].discRupees : 0,
             aq: Response[0].aq,
-            total:(Response[0].salePrice * 1) - (Response[0].discRupees),
+            total: (Response[0].salePrice * 1) - (Response[0].discRupees),
 
           });
           // this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
@@ -253,8 +254,8 @@ export class FastFoodSaleComponent {
         } else {
           var clsName = cls + this.rowFocused;
           e.preventDefault();
-            $(clsName).trigger('select');   
-            $(clsName).trigger('focus');    
+          $(clsName).trigger('select');
+          $(clsName).trigger('focus');
         }
       }
     }
@@ -262,8 +263,8 @@ export class FastFoodSaleComponent {
     if (e.keyCode == 38) {
       if (this.rowFocused == 0) {
         e.preventDefault();
-        $(".searchProduct").trigger('select');  
-          $(".searchProduct").trigger('focus');
+        $(".searchProduct").trigger('select');
+        $(".searchProduct").trigger('focus');
         this.rowFocused = 0;
       }
 
@@ -271,7 +272,7 @@ export class FastFoodSaleComponent {
         this.rowFocused -= 1;
         var clsName = cls + this.rowFocused;
         e.preventDefault();
-        $(clsName).trigger('select'); 
+        $(clsName).trigger('select');
         $(clsName).trigger('focus');
       }
     }
@@ -285,128 +286,128 @@ export class FastFoodSaleComponent {
 
   ///////////////////////////////////////////////////////////////
 
-  changeQty(type:any,index:any,list:any){
-  
-    if(type == 'add'){
+  changeQty(type: any, index: any, list: any) {
+
+    if (type == 'add') {
 
       list[index].quantity += 1;
 
     }
-    if(type == 'minus'){
-      if( list[index].quantity > 1){
+    if (type == 'minus') {
+      if (list[index].quantity > 1) {
         list[index].quantity -= 1;
       }
     }
-  
+
     this.getTotal();
   }
 
-focusto(cls: any, e: any) {
+  focusto(cls: any, e: any) {
 
-  // setTimeout(() => {
-  //  $(cls).trigger('focus');
-  // }, 500);
+    // setTimeout(() => {
+    //  $(cls).trigger('focus');
+    // }, 500);
 
-  if (cls == '#prodName') {
-    setTimeout(() => {
-      $(cls).trigger('focus');
-    }, 500);
-  }
+    if (cls == '#prodName') {
+      setTimeout(() => {
+        $(cls).trigger('focus');
+      }, 500);
+    }
 
-  if (cls == '#disc' && e.keyCode == 13 && e.target.value == '') {
-    e.preventDefault();
-    $(cls).trigger('select');
-    $(cls).trigger('focus');
-  }
-  if (cls == '#charges' && e.keyCode == 13) {
-    e.preventDefault();
+    if (cls == '#disc' && e.keyCode == 13 && e.target.value == '') {
+      e.preventDefault();
       $(cls).trigger('select');
       $(cls).trigger('focus');
-  }
-  if (cls == '#cash' && e.keyCode == 13 && e.target.value == '') {
-    e.preventDefault();
+    }
+    if (cls == '#charges' && e.keyCode == 13) {
+      e.preventDefault();
+      $(cls).trigger('select');
+      $(cls).trigger('focus');
+    }
+    if (cls == '#cash' && e.keyCode == 13 && e.target.value == '') {
+      e.preventDefault();
       $(cls).trigger('select');
       $(cls).trigger('focus');
 
-  }
+    }
 
-  if (cls == '#save' && e.keyCode == 13) {
-    e.preventDefault();
+    if (cls == '#save' && e.keyCode == 13) {
+      e.preventDefault();
       // $(cls).trigger('select');
       $(cls).trigger('focus');
 
+    }
+
+    if (cls == '#vsrtnsearchProduct' && e.keyCode == 13) {
+      e.preventDefault();
+      $(cls).trigger('select');
+      $(cls).trigger('focus');
+    }
+
+
+
   }
 
-  if (cls == '#vsrtnsearchProduct' && e.keyCode == 13) {
-    e.preventDefault();
-    $(cls).trigger('select');
-    $(cls).trigger('focus');
+  getTotal() {
+    this.qtyTotal = 0;
+    this.subTotal = 0;
+    this.netTotal = 0;
+    this.offerDiscount = 0;
+
+    this.tableDataList.forEach((e: any) => {
+
+      e.total = ((parseFloat(e.salePrice) - parseFloat(e.discInR)) * parseFloat(e.quantity));
+      this.qtyTotal += parseFloat(e.quantity);
+      this.subTotal += parseFloat(e.quantity) * parseFloat(e.salePrice);
+      this.offerDiscount += parseFloat(e.discInR) * parseFloat(e.quantity);
+
+    });
+
+    if (this.discount == '') {
+      this.discount = 0;
+    }
+
+    if (this.cash == '') {
+      this.cash = 0;
+    }
+
+
+
+    this.netTotal = this.subTotal - parseFloat(this.discount) - parseFloat(this.offerDiscount);
+    this.change = parseFloat(this.cash) - this.netTotal;
+
+    if (this.paymentType == 'Split') {
+
+      this.bankCash = this.netTotal - parseFloat(this.cash);
+    }
+    if (this.paymentType == 'Bank') {
+      this.bankCash = this.netTotal;
+    }
+
+    if (this.paymentType == 'Credit') {
+      this.cash = 0;
+      this.bankCoaID = 0;
+      this.bankCash = 0;
+    }
+
+    if (this.paymentType !== 'Credit') {
+      this.partyID = 0;
+    }
+
+  }
+
+
+  delRow(index: any) {
+    this.tableDataList.splice(index, 1);
+    this.getTotal();
   }
 
 
 
-}
-
-getTotal() {
-  this.qtyTotal = 0;
-  this.subTotal = 0;
-  this.netTotal = 0;
-  this.offerDiscount = 0;
-
-  this.tableDataList.forEach((e: any) => {
- 
-    e.total = ((parseFloat(e.salePrice) - parseFloat(e.discInR)) * parseFloat(e.quantity));
-    this.qtyTotal += parseFloat(e.quantity);
-    this.subTotal += parseFloat(e.quantity) * parseFloat(e.salePrice);
-    this.offerDiscount += parseFloat(e.discInR) * parseFloat(e.quantity);
-
-  });
-
-  if (this.discount == '') {
-    this.discount = 0;
-  }
-
-  if (this.cash == '') {
-    this.cash = 0;
-  }
+  ticketArray: any = [];
 
 
-
-  this.netTotal = this.subTotal - parseFloat(this.discount) - parseFloat(this.offerDiscount);
-  this.change = parseFloat(this.cash) - this.netTotal;
-
-  if (this.paymentType == 'Split') {
-
-    this.bankCash = this.netTotal - parseFloat(this.cash);
-  }
-  if (this.paymentType == 'Bank') {
-    this.bankCash = this.netTotal;
-  }
-
-  if(this.paymentType == 'Credit'){
-    this.cash = 0;
-    this.bankCoaID = 0;
-    this.bankCash = 0;
-  }
-
-  if(this.paymentType !== 'Credit'){
-    this.partyID = 0;
-  }
-
-}
-
-
-delRow(index:any){
-this.tableDataList.splice(index,1);
-this.getTotal();
-}
-
-
-
-ticketArray:any = [];
-
-
-  save(){
+  save() {
     var isValidFlag = true;
     this.tableDataList.forEach((p: any) => {
 
@@ -442,8 +443,8 @@ ticketArray:any = [];
       }
     });
 
-  
-    if(isValidFlag == true){
+
+    if (isValidFlag == true) {
 
       this.getTotal();
       this.app.startLoaderDark();
@@ -458,29 +459,30 @@ ticketArray:any = [];
         OrderType: "Take Away",
         BillTotal: this.subTotal,
         BillDiscount: parseFloat(this.discount) + parseFloat(this.offerDiscount),
-        OtherCharges: this.otherCharges ,
+        OtherCharges: this.otherCharges,
         NetTotal: this.netTotal,
         CashRec: this.netTotal,
         Change: this.change,
-        AdvTaxAmount : this.AdvTaxAmount,
-        AdvTaxValue : this.AdvTaxValue,
+        AdvTaxAmount: this.AdvTaxAmount,
+        AdvTaxValue: this.AdvTaxValue,
         BankCoaID: this.bankCoaID,
         BankCash: this.bankCash,
         CusContactNo: this.customerMobileno || '-',
-        CusName: this.customerName || '-',   
+        CusName: this.customerName || '-',
         SaleDetail: JSON.stringify(this.tableDataList),
         UserID: this.global.getUserID()
       }).subscribe(
         (Response: any) => {
           if (Response.msg == 'Data Saved Successfully') {
             this.kotPrint.printBill(Response.invNo);
+            this.kotPrint.myDuplicateFlag = false;
             this.msg.SuccessNotify(Response.msg);
             this.reset();
-           
+
 
             if (this.paymentType != 'Cash') {
               $('#searchProduct').trigger('focus');
-              this.global.closeBootstrapModal('#paymentMehtod',true);
+              this.global.closeBootstrapModal('#paymentMehtod', true);
 
             }
 
@@ -491,55 +493,86 @@ ticketArray:any = [];
         },
         (Error: any) => {
           this.msg.WarnNotify(Error);
-          
+
           this.app.stopLoaderDark();
         }
       )
     }
-    
-  
+
+
   }
 
 
   savedbillList: any = []
 
-  
-  printDuplicateBill(item:any){
-    
-    this.kotPrint.printBill(item.invBillNo);
-  
-  
+
+  printDuplicateBill(item: any) {
+    $('#SavedBillModal').hide();
+
+
+    this.global.openPassword('Password').subscribe(pin => {
+      if (pin !== '') {
+        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+          RestrictionCodeID: 5,
+          Password: pin,
+          UserID: this.global.getUserID()
+
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Password Matched Successfully') {
+
+
+              $('#SavedBillModal').show();
+              this.kotPrint.printBill(item.invBillNo);
+              this.kotPrint.myDuplicateFlag = true;
+              // setTimeout(() => {
+              //   this.global.printData('#print-bill')
+              // }, 200);
+
+
+
+            } else {
+              this.msg.WarnNotify(Response.msg);
+            }
+          }
+        )
+      }
+    })
+
+    // this.kotPrint.printBill(item.invBillNo);
+
+
   }
 
-  billDetails(item:any){
+  billDetails(item: any) {
 
 
     $('#SavedBillModal').hide();
     // $('#paymentMehtod').hide();
     // $('.modal-backdrop').remove();
-    
-    this.dialogue.open(SaleBillDetailComponent,{
-      width:'50%',
-      data:item,
-      disableClose:true,
-    }).afterClosed().subscribe(value=>{
-      
+
+    this.dialogue.open(SaleBillDetailComponent, {
+      width: '50%',
+      data: item,
+      disableClose: true,
+    }).afterClosed().subscribe(value => {
+
     })
 
-   
-  }
-  
 
-  getSavedBill(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetOpenDaySale').subscribe(
-      (Response:any)=>{
-       
+  }
+
+
+  getSavedBill() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetOpenDaySale').subscribe(
+      (Response: any) => {
+
         this.savedbillList = [];
-        Response.forEach((e:any) => {
-          if(e.invType == 'S'){
+        Response.forEach((e: any) => {
+          if (e.invType == 'S') {
             this.savedbillList.push(e);
-          }  
-        });   
+          }
+        });
       }
     )
 
@@ -574,73 +607,73 @@ ticketArray:any = [];
   increment(type: any, value: any) {
     if (type == 'add') {
       value.quantity += 1;
-    
+
     }
 
     if (type == 'minus') {
       value.quantity -= 1;
     }
-    value.total = (value.salePrice - value.discInR ) * value.quantity;
+    value.total = (value.salePrice - value.discInR) * value.quantity;
   }
 
 
   insertPorduct(data: any) {
 
     this.tableDataList = [];
-      this.global.getProdDetail(data.productID, '').subscribe(
-        (Response: any) => {
-           
-          this.tableDataList.push({
-            
-            rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
-              : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
-                : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
-            productID: Response[0].productID,
-            productTitle: Response[0].productTitle,
-            barcode: Response[0].barcode,
-            productImage: Response[0].productImage,
-            quantity: 1,
-            wohCP: Response[0].costPrice,
-            costPrice: Response[0].costPrice,
-            avgCostPrice: Response[0].avgCostPrice,
-            salePrice: Response[0].salePrice,
-            ovhPercent: 0,
-            ovhAmount: 0,
-            expiryDate: this.global.dateFormater(new Date(), '-'),
-            batchNo: '-',
-            batchStatus: '-',
-            uomID: Response[0].uomID,
-            gst: this.gstFeature ? Response[0].gst : 0,
-            et:Response[0].et,
-            packing: 1,
-            discInP: this.discFeature ?  Response[0].discPercentage : 0,
-            discInR: this.discFeature ?  Response[0].discRupees  : 0,
-            aq: Response[0].aq,
-            total:(Response[0].salePrice * 1) - (Response[0].discRupees),
+    this.global.getProdDetail(data.productID, '').subscribe(
+      (Response: any) => {
 
-          });
+        this.tableDataList.push({
+
+          rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
+            : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
+              : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
+          productID: Response[0].productID,
+          productTitle: Response[0].productTitle,
+          barcode: Response[0].barcode,
+          productImage: Response[0].productImage,
+          quantity: 1,
+          wohCP: Response[0].costPrice,
+          costPrice: Response[0].costPrice,
+          avgCostPrice: Response[0].avgCostPrice,
+          salePrice: Response[0].salePrice,
+          ovhPercent: 0,
+          ovhAmount: 0,
+          expiryDate: this.global.dateFormater(new Date(), '-'),
+          batchNo: '-',
+          batchStatus: '-',
+          uomID: Response[0].uomID,
+          gst: this.gstFeature ? Response[0].gst : 0,
+          et: Response[0].et,
+          packing: 1,
+          discInP: this.discFeature ? Response[0].discPercentage : 0,
+          discInR: this.discFeature ? Response[0].discRupees : 0,
+          aq: Response[0].aq,
+          total: (Response[0].salePrice * 1) - (Response[0].discRupees),
+
+        });
 
         this.getTotal();
 
-        }
-      )
-    
+      }
+    )
+
 
     this.getTotal();
 
   }
 
-  OnSpChange(item:any){
-    
+  OnSpChange(item: any) {
+
     item.quantity = item.total / item.salePrice;
 
   }
-  OnQtyChange(item:any){
-    
-    item.total = (item.salePrice - item.discInR ) * item.quantity;
+  OnQtyChange(item: any) {
+
+    item.total = (item.salePrice - item.discInR) * item.quantity;
 
   }
 
 
- 
+
 }

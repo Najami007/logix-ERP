@@ -4,38 +4,38 @@
         <h1>User Credentials</h1>
        
             
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 matSmall">
             <mat-label>User Name</mat-label>
             <input matInput type="text"  [(ngModel)]="UserName">
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 matSmall">
             <mat-label>Login Name</mat-label>
             <input matInput type="text" [(ngModel)]="loginName">
         </mat-form-field>
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 matSmall">
             <mat-label>User Email</mat-label>
             <input matInput type="email" [(ngModel)]="userEmail">
         </mat-form-field>
 
 
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 matSmall">
             <mat-label>Mobile No</mat-label>
             <input matInput type="text"  [textMask]="{mask: mobileMask}" [(ngModel)]="mobileNo">
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 matSmall">
             <mat-label>User Role</mat-label>
             <mat-select type="text" [(ngModel)]="RoleID">
                 <mat-option *ngFor="let item of rolesList" [value]="item.roleID">{{item.roleTitle}}</mat-option>
             </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 matSmall">
             <mat-label>Password</mat-label>
             <input [disabled]="btnType == 'Update'" matInput type="password" [(ngModel)]="password">
         </mat-form-field>
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 matSmall">
             <mat-label>Confirm Password</mat-label>
             <input [disabled]="btnType == 'Update'" matInput type="password" [(ngModel)]="confirmPassword">
         </mat-form-field>
@@ -56,10 +56,9 @@
     <div class="col-lg-9 p-3   h-100" >
         <h1>Saved Record</h1>
         
-        <mat-form-field class="w-100" appearance="outline">
+        <mat-form-field class="w-100 matSmall" appearance="outline">
             <mat-label>Search.....</mat-label>
             <input [(ngModel)]="txtSearch"  matInput type="text" #input >
-            <mat-icon matSuffix class="text-secondary">search</mat-icon>
         </mat-form-field>
 
 

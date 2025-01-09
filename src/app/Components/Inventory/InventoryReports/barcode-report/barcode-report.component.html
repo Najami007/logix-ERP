@@ -3,13 +3,13 @@
     <mat-card class="h-75 w-50 bg-white text-center row"
     style="position: fixed; margin-top: 5%; margin-left: 25%">
     <div class="col-lg-12 row justify-content-between p-2">
-        <mat-form-field  appearance="outline" class="col-lg-3 matsmall" >
+        <mat-form-field  appearance="outline" class="col-lg-3 matSmall" >
             <mat-label>Manufacture</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="manufactureDate" [matDatepicker]="mDate">
             <mat-datepicker-toggle matSuffix [for]="mDate"></mat-datepicker-toggle>
             <mat-datepicker #mDate></mat-datepicker>
         </mat-form-field>
-        <mat-form-field  appearance="outline" class="col-lg-3 matsmall" >
+        <mat-form-field  appearance="outline" class="col-lg-3 matSmall" >
             <mat-label>Expiry</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="expiryDate" [matDatepicker]="expDate">
             <mat-datepicker-toggle matSuffix [for]="expDate"></mat-datepicker-toggle>

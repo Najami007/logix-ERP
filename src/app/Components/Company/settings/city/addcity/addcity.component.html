@@ -4,7 +4,7 @@
 
     <div class="text-center row container-fluid " >
 
-        <mat-form-field class="col-lg-10 pe-1" appearance="outline">
+        <mat-form-field class="col-lg-10 pe-1 matSmall" appearance="outline">
             <mat-label>Select Country</mat-label>
             <mat-select [(ngModel)]="countryID">
                 <mat-option><ngx-mat-select-search [(ngModel)]="countrySearch"
@@ -18,7 +18,7 @@
             <button class="col-lg-2 btn btn-primary" style="height: 55px;" (click)="addCountry()"><mat-icon>add</mat-icon></button>
 
 
-        <mat-form-field class="w-100" appearance="outline">
+        <mat-form-field class="w-100 matSmall" appearance="outline">
         <mat-label>City Name</mat-label>
         <input matInput type="text" [(ngModel)]="cityName">
         </mat-form-field>

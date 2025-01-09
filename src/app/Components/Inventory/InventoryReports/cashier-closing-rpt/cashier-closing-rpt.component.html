@@ -4,7 +4,7 @@
     <div class="row pt-2">
 
 
-       <mat-form-field appearance="outline" class="col-lg-5 matsmall">
+       <mat-form-field appearance="outline" class="col-lg-5 matSmall">
             <mat-label>User</mat-label>
             <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
                 <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
@@ -15,7 +15,7 @@
             </mat-select>
         </mat-form-field>
 
-        <mat-form-field  appearance="outline" class="col-lg-3 matsmall" >
+        <mat-form-field  appearance="outline" class="col-lg-3 matSmall" >
             <mat-label>Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="Date" [matDatepicker]="sDate">
             <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>

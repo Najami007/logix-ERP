@@ -127,14 +127,14 @@
                 </mat-card>
             </div>
             <div class="pt-1">
-                <mat-form-field appearance="outline" *ngIf="global.DisableDate == false" class="w-100">
+                <mat-form-field appearance="outline" *ngIf="global.DisableDate == false" class="w-100 matSmall">
                     <mat-label>Invoice Date</mat-label>
                     <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput
                         type="text" name="invDate" [matDatepicker]="iDate">
                     <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
                     <mat-datepicker #iDate></mat-datepicker>
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="w-100">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
                     <mat-label>Location</mat-label>
                     <mat-select [(ngModel)]="locationID" name="location" (selectionChange)="onLocationSelected('l1')">
                         <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
@@ -144,7 +144,7 @@
                             [value]="item.locationID">{{item.locationTitle}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="w-100">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
                     <mat-label>Remarks</mat-label>
                     <textarea matInput type="text" [(ngModel)]="invRemarks"></textarea>
                 </mat-form-field>
@@ -181,7 +181,7 @@
                 <div class="modal-body">
 
                     <div class="d-flex justify-content-between">
-                        <mat-form-field class="col-lg-4" appearance="outline">
+                        <mat-form-field class="col-lg-4 matSmall" appearance="outline">
                             <mat-label>Date</mat-label>
                             <input matInput type="text" readonly="true" [(ngModel)]="Date" [matDatepicker]="hbDate">
                             <mat-datepicker-toggle matSuffix [for]="hbDate"></mat-datepicker-toggle>
@@ -194,7 +194,7 @@
                         <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt"
                             (click)="findHoldBills('I')">Issue Bill</button>
 
-                        <mat-form-field class="col-lg-3" appearance="outline">
+                        <mat-form-field class="col-lg-3 matSmall" appearance="outline">
                             <mat-label>Search.......</mat-label>
                             <input matInput #holdSearch type="text" class="col-lg-4">
                         </mat-form-field>

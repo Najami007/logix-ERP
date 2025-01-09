@@ -4,12 +4,12 @@
     <div class="container-fluid ">
 
       <div class="row pt-3">
-        <mat-form-field class="col-lg-4 p-2" appearance="outline">
+        <mat-form-field class="col-lg-4  matSmall" appearance="outline">
           <mat-label>Role Title</mat-label>
           <input matInput type="text" [(ngModel)]="roleTitle">
         </mat-form-field>
 
-        <mat-form-field class="col-lg-6 p-2" appearance="outline">
+        <mat-form-field class="col-lg-6 matSmall" appearance="outline">
           <mat-label>Role Description</mat-label>
           <input matInput type="text" [(ngModel)]="roleDescription">
         </mat-form-field>
@@ -30,7 +30,7 @@
 
         <div class="col-lg-4 h-100 border  p-2  bg-white" style="min-height: 500px;">
 
-          <mat-form-field class="w-100">
+          <mat-form-field class="w-100 matSmall">
             <mat-label>Select Module</mat-label>
             <mat-select [(ngModel)]="moduleID">
               <mat-option *ngFor="let item of moduleList" [value]="item.moduleID">{{item.moduleTitle}}</mat-option>
@@ -170,10 +170,9 @@
 
 
     <div class="container-fluid p-4">
-      <mat-form-field class="w-100" appearance="outline">
+      <mat-form-field class="w-100 matSmall" appearance="outline">
         <mat-label>Search.....</mat-label>
         <input [(ngModel)]="txtSearch" matInput type="text" #input>
-        <mat-icon matSuffix class="text-secondary">search</mat-icon>
       </mat-form-field>
 
 

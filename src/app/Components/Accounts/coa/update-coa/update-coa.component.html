@@ -1,14 +1,14 @@
 <div >
        
 <div class="p-5">
-    <mat-form-field appearance="outline" class="w-100">
+    <mat-form-field appearance="outline" class="w-100 matSmall">
         <mat-label>Select Note</mat-label>
         <mat-select [(ngModel)]="noteID" [disabled]="coaTypeID == 2 || this.coaTypeID == 3 || transactionAllowed == false">
             <mat-option  *ngFor="let item of notesList " [value]="item.noteID">{{item.noteTitle}}</mat-option>
         </mat-select>
     </mat-form-field>
 
-    <mat-form-field class="w-100" appearance="outline">
+    <mat-form-field class="w-100 matSmall" appearance="outline">
         <mat-label>Coa Title</mat-label>
         <input matInput type="text" [(ngModel)]="coaTitle" >
 

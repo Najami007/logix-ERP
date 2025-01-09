@@ -5,7 +5,7 @@
         <div class="col-lg-4">
 
            <div class="row">
-            <mat-form-field class="col-lg-12" appearance="outline">
+            <mat-form-field class="col-lg-12 matSmall" appearance="outline">
                 <mat-label>Voucher Type </mat-label>
                 <mat-select [(ngModel)]="vType" name="vType"  [disabled]="VoucherData != ''"
                     (selectionChange)=" getRefCoa()">
@@ -16,7 +16,7 @@
             </mat-form-field>
 
 
-            <mat-form-field class="col-lg-12" appearance="outline">
+            <mat-form-field class="col-lg-12 matSmall" appearance="outline">
                 <mat-label>Voucher Date</mat-label>
                 <input readonly="true" matInput   [(ngModel)]="invoiceDate"
                     [matDatepicker]="picker" >
@@ -24,14 +24,14 @@
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
 
-            <mat-form-field class="col-lg-12 " appearance="outline">
+            <mat-form-field class="col-lg-12 matSmall" appearance="outline">
                 <mat-label>Project </mat-label>
                 <mat-select [(ngModel)]="projectID" >
                     <mat-option *ngFor="let item of projectList " value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
                 </mat-select>
             </mat-form-field>
 
-            <mat-form-field class="col-lg-12 " appearance="outline">
+            <mat-form-field class="col-lg-12 matSmall" appearance="outline">
                 <mat-label>Refrence COA </mat-label>
                 <mat-select [(ngModel)]="refrenceCOA" [disabled]="vType == 'JV'">
                     <mat-option *ngFor="let item of refCoaList " value="{{item.coaID}}">{{item.coaTitle}}</mat-option>
@@ -39,15 +39,15 @@
             </mat-form-field>
 
             
-            <mat-form-field class=" col-lg-12 " appearance="outline">
+            <mat-form-field class=" col-lg-12 matSmall" appearance="outline">
                 <mat-label>Refrence No</mat-label>
                 <input matInput [(ngModel)]="bankReceiptNo" [defaultValue]="0" type="text">
             </mat-form-field>
 
             
-                <mat-form-field class="col-lg-12" appearance="outline">
+                <mat-form-field class="col-lg-12 matSmall" appearance="outline">
                     <mat-label>Narration</mat-label>
-                    <textarea matInput [(ngModel)]="narration" name="Narration" placeholder="Narration"></textarea>
+                    <textarea rows="1" matInput [(ngModel)]="narration" name="Narration" placeholder="Narration"></textarea>
                 </mat-form-field>
            </div>
 
@@ -83,7 +83,7 @@
                 </div>
          
                 <div class="row">
-                    <mat-form-field class="col-lg-3" appearance="outline">
+                    <mat-form-field class="col-lg-3 matSmall" appearance="outline">
                         <mat-label>COA Title </mat-label>
                         <mat-select id="cTitle" class="cTitle" [(ngModel)]="COATitleID" name="coaTitle"
                             accesskey="c">
@@ -97,13 +97,13 @@
 
 
                
-                    <mat-form-field class=" col-lg-4 " appearance="outline">
+                    <mat-form-field class=" col-lg-4 matSmall" appearance="outline">
 
                         <textarea  rows="1" matInput [(ngModel)]="detailNarration"  type="text"  ></textarea>
                     </mat-form-field>
 
 
-                    <mat-form-field class=" col-lg-2 " appearance="outline">
+                    <mat-form-field class=" col-lg-2 matSmall" appearance="outline">
 
                         <input class="text-end" matInput [(ngModel)]="DebitAmount" (keydown)="changeValue($event)" [defaultValue]="0"
                             type="number" min="0" [disabled]="vType == 'CRV' || vType == 'BRV' || vType == ''">
@@ -111,7 +111,7 @@
   
 
 
-                    <mat-form-field class=" col-lg-2 " appearance="outline">
+                    <mat-form-field class=" col-lg-2 matSmall" appearance="outline">
 
                         <input class="text-end" matInput [(ngModel)]="CreditAmount" [defaultValue]="0"
                             (keydown)="changeValue($event)" type="number" min="0" [disabled]="vType == 'CPV' || vType == 'BPV' || vType == ''">
@@ -119,8 +119,8 @@
 
        
                     <div class="col-lg-1 text-start ">
-                        <button style="height: 45px;" class="btnsave" type="button" (click)="save()">
-                            <mat-icon class="mat-icon-rtl-mirror" >save</mat-icon>
+                        <button class="btnsave" style="height: 45px;"  type="button" (click)="save()">
+                            <mat-icon>save</mat-icon>
                         </button>
                        
                     </div>
@@ -279,10 +279,9 @@
         <div class="container-fluid text-center p-2">
 
 
-            <mat-form-field class="w-100" appearance="outline">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
                 <mat-label>Search.....</mat-label>
                 <input [(ngModel)]="txtSearch"  matInput type="text" #input >
-                <mat-icon matSuffix class="text-secondary">search</mat-icon>
             </mat-form-field>
 
 

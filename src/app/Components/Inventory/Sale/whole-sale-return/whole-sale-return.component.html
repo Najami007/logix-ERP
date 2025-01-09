@@ -102,14 +102,14 @@
         <div class="col-lg-9 border-dark border-start " >
             <div class=" p-2" style="height: 82vh;">
                 <div class="row">
-                    <mat-form-field appearance="outline"  class="col-lg-2">
+                    <mat-form-field appearance="outline"  class="col-lg-2 matSmall">
                         <mat-label>Invoice Date</mat-label>
                         <input [(ngModel)]="invoiceDate"  readonly="true" matInput type="text" name="voucherDate"
                             [matDatepicker]="voucherDate">
                         <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
                         <mat-datepicker #voucherDate></mat-datepicker>
                     </mat-form-field>
-                    <mat-form-field *ngIf="BookerFeature"  class="col-lg-2" appearance="outline">
+                    <mat-form-field *ngIf="BookerFeature"  class="col-lg-2 matSmall" appearance="outline">
                         <mat-label>Booker</mat-label>
                         <mat-select [(ngModel)]="bookerID" name="billDiscount" >
                             <mat-option><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
@@ -117,7 +117,7 @@
                             <mat-option *ngFor="let item of bookerList | filter:bookerSearch.value | slice:0:25" [value]="item.bookerID">{{item.bookerName}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="col-lg-3">
+                    <mat-form-field appearance="outline" class="col-lg-3 matSmall">
                         <mat-label>Customer</mat-label>
                         <mat-select  [(ngModel)]="partyID" (selectionChange)="partySelect()" #supplier name="customer">
                             <mat-option><ngx-mat-select-search #customerSearch [placeholderLabel]="'Search...'"
@@ -129,13 +129,13 @@
                         </mat-select>
                         <mat-icon class="cursorPointer" (click)="addParty()" matSuffix>add</mat-icon>
                     </mat-form-field>
-                    <mat-form-field  class="col-lg-2" appearance="outline">
+                    <mat-form-field  class="col-lg-2 matSmall" appearance="outline">
                         <mat-label>Adv Tax</mat-label>
                         <mat-select [(ngModel)]="AdvTaxValue" name="advTax" (selectionChange)="getTotal()">
                             <mat-option *ngFor="let item of advanceTaxList" [value]="item.value">{{item.value}}%</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="col-lg-3">
+                    <mat-form-field appearance="outline" class="col-lg-3 matSmall">
                         <mat-label>Remarks</mat-label>
                         <textarea matInput rows="1" [(ngModel)]="billRemarks"></textarea>
                     </mat-form-field>
@@ -224,7 +224,7 @@
 
    
     <div *ngIf="discFeature" class="row w-75 p-1" style="position: fixed;bottom: 3.5%;left: 25.5%;background-color: rgb(218, 228, 231);">
-        <mat-form-field *ngIf="discFeature" class="col-lg-2" >
+        <mat-form-field *ngIf="discFeature" class="col-lg-2 matSmall" >
             <mat-label>Disc</mat-label>
             <mat-select [(ngModel)]="billDiscount" name="billDiscount" (selectionChange)="applyDiscount()">
                 <mat-option *ngFor="let item of discountList" [value]="item.value">{{item.value}}%</mat-option>
@@ -256,11 +256,11 @@
                     </div>
 
                    
-                    <mat-form-field appearance="outline" class="col-lg-6 pe-1">
+                    <mat-form-field appearance="outline" class="col-lg-6 pe-1 matSmall">
                         <mat-label>Customer Name</mat-label>
                         <input type="text" matInput [(ngModel)]="customerName" />
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="col-lg-6 w-50">
+                    <mat-form-field appearance="outline" class="col-lg-6 w-50 matSmall">
                         <mat-label>Customer Mobile</mat-label>
                         <input matInput type="text" maxlength="12" [textMask]="{mask:mobileMask}"
                             [(ngModel)]="customerMobileno" />
@@ -273,7 +273,7 @@
 
                    
 
-                    <mat-form-field appearance="outline" class="w-100">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
                         <mat-label>Payment Type</mat-label>
                         <mat-select #pType [(ngModel)]="paymentType" (selectionChange)="cash = 0;getTotal()">
                             <mat-option value="Credit">Credit</mat-option>
@@ -343,7 +343,7 @@
 
                 <form action="" method="post">
                     <div class="modal-body">
-                        <mat-form-field class="w-100" appearance="outline">
+                        <mat-form-field class="w-100 matSmall" appearance="outline">
                             <mat-label>Amount</mat-label>
                             <input matInput #totalAmnt id="totalAmnt" (keydown)="global.handleNumKeys($event)" />
                         </mat-form-field>
@@ -372,7 +372,7 @@
               
 <div >
     <div class="text-end p-2">
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 matSmall">
             <mat-label>Search...</mat-label>
             <input matInput #searchBill name="searchBill" type="text" />
         </mat-form-field>

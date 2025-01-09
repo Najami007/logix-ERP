@@ -2,28 +2,27 @@
 
   <div class="p-2">
    <div class="row">
-    <mat-form-field class="col-lg-4" appearance="outline">
-        <mat-label class="ps-5">Search.....</mat-label>
+    <mat-form-field class="col-lg-4 matSmall" appearance="outline">
+        <mat-label>Search.....</mat-label>
         <input #recipeSearch matInput type="search" class="text-secondary">
-        <mat-icon matPrefix class="text-secondary">search</mat-icon>
     </mat-form-field>
 
-    <mat-form-field class="col-lg-1" appearance="outline">
+    <mat-form-field class="col-lg-1 matSmall" appearance="outline">
         <mat-label>Start</mat-label>
         <input  matInput type="text" [(ngModel)]="startPerc" class="text-secondary">
     </mat-form-field>
-    <mat-form-field class="col-lg-1" appearance="outline">
+    <mat-form-field class="col-lg-1 matSmall" appearance="outline">
         <mat-label>End</mat-label>
         <input  matInput type="text" [(ngModel)]="endPerc" class="text-secondary">
     </mat-form-field>
-   <div class="col-lg-1">
+   <div class="col-lg-1 ">
     <button class="btn-rpt-primary" (click)="filterRecipeByPercentage()">%</button>
    </div>
    <div class="col-lg-1">
     <button class="btn-rpt-primary" (click)="openComparison()">Comparison</button>
    </div>
     
-    <mat-form-field class="col-lg-3" appearance="outline">
+    <mat-form-field class="col-lg-3 matSmall" appearance="outline">
     <mat-label>Category</mat-label>
     <mat-select [(ngModel)]="catID" (selectionChange)="getAllRecipe()">
         <mat-option><ngx-mat-select-search #catSearch [placeholderLabel]="'Search...'"

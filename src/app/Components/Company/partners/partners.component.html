@@ -3,27 +3,27 @@
     <div class="row container-fluid vh-100 w-100">
         <div class="col-lg-4 bg-white p-5  h-100">
             <h2 class="border-bottom">Partner's Detail</h2>
-            <mat-form-field class="w-100" appearance="outline">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
                 <mat-label>Partner Name</mat-label>
                 <input matInput type="text" [(ngModel)]="partnerName" >
             </mat-form-field>
     
-            <mat-form-field class="w-100" appearance="outline">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
                 <mat-label>CNIC</mat-label>
                 <input matInput type="text" [(ngModel)]="partnerCNIC" [textMask]="{mask:cnicMask}" >
             </mat-form-field>
     
-            <mat-form-field class="w-100" appearance="outline">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
                 <mat-label>Mobile No</mat-label>
                 <input matInput type="text" [(ngModel)]="partnerMobile" [textMask]="{mask:mobileMask}" >
             </mat-form-field>
     
-            <mat-form-field class="w-100" appearance="outline">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
                 <mat-label>Email Address</mat-label>
                 <input matInput type="text" [(ngModel)]="partnerEmail"  >
             </mat-form-field>
     
-            <mat-form-field class="w-100 " appearance="outline">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
                 <mat-label>City</mat-label>
               <mat-select [(ngModel)]="cityID" #city>
                 <mat-option><ngx-mat-select-search [(ngModel)]="citySearch"
@@ -38,7 +38,7 @@
             
             <!-- <button mat-raised-button color="primary" class="col-lg-4 "  style="height: 55px;" (click)="addCity()"><mat-icon>add</mat-icon></button> -->
     
-            <mat-form-field class="w-100" appearance="outline">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
                 <mat-label>Address</mat-label>
                 <textarea matInput type="text" [(ngModel)]="partnerAddress"  ></textarea>
             </mat-form-field>
@@ -55,10 +55,9 @@
         <div class="col-lg-8 p-4 h-100">
     
     
-            <mat-form-field class="w-100" appearance="outline">
-                <mat-label class="ps-5">Search.....</mat-label>
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label>Search.....</mat-label>
                 <input [(ngModel)]="txtSearch" matInput type="search" class="text-secondary">
-                <mat-icon matPrefix class="text-secondary">search</mat-icon>
             </mat-form-field>
     
     

@@ -5,7 +5,7 @@
          <div class="row">
  
  
-             <mat-form-field appearance="outline" class="col-lg-4 matsmall">
+             <mat-form-field appearance="outline" class="col-lg-4 matSmall">
                  <mat-label>User</mat-label>
                  <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
                      <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
@@ -15,13 +15,13 @@
                          [value]="item.userID">{{item.userName}}</mat-option>
                  </mat-select>
              </mat-form-field>
-             <mat-form-field class="col-lg-2 matsmall" appearance="outline">
+             <mat-form-field class="col-lg-2 matSmall" appearance="outline">
                  <mat-label>From Date</mat-label>
                  <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
                  <mat-datepicker-toggle matSuffix [for]="sDate" ></mat-datepicker-toggle>
                  <mat-datepicker #sDate></mat-datepicker>
              </mat-form-field>
-             <mat-form-field class="col-lg-2 matsmall" appearance="outline">
+             <mat-form-field class="col-lg-2 matSmall" appearance="outline">
                  <mat-label>From Time</mat-label>       
                  <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
                  <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
@@ -29,13 +29,13 @@
              </mat-form-field>
      
      
-             <mat-form-field class="col-lg-2 matsmall" appearance="outline">
+             <mat-form-field class="col-lg-2 matSmall" appearance="outline">
                  <mat-label>To Date</mat-label>
                  <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
                  <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
                  <mat-datepicker #eDate></mat-datepicker>
              </mat-form-field>
-             <mat-form-field class="col-lg-2 matsmall" appearance="outline">
+             <mat-form-field class="col-lg-2 matSmall" appearance="outline">
                  <mat-label>To Time</mat-label>
                      <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
                      <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
@@ -43,7 +43,7 @@
              </mat-form-field>
      
          
-             <mat-form-field  class="col-lg-2 matsmall" appearance="outline">
+             <mat-form-field  class="col-lg-2 matSmall" appearance="outline">
                  <mat-label>Reports</mat-label>
                  <mat-select [(ngModel)]="tmpRptType" >
                      <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
@@ -52,7 +52,7 @@
                          [value]="item.val">{{item.title}}</mat-option>
                  </mat-select>
              </mat-form-field>
-             <mat-form-field appearance="outline" class="col-lg-2 matsmall">
+             <mat-form-field appearance="outline" class="col-lg-2 matSmall">
                 <mat-label>Type</mat-label>
              
                 <mat-select [(ngModel)]="catType"  name="catType">
@@ -62,7 +62,7 @@
                     <mat-option value="brand">Brandwise</mat-option>
                 </mat-select>
             </mat-form-field>
-             <mat-form-field appearance="outline" class="col-lg-2 matsmall" *ngIf="catType == 'cat' || catType == 'subcat'">
+             <mat-form-field appearance="outline" class="col-lg-2 matSmall" *ngIf="catType == 'cat' || catType == 'subcat'">
                 <mat-label>Category</mat-label>
               
                 <mat-select [(ngModel)]="CategoryID" #category (selectionChange)="getSubCategory()" name="pCategory">
@@ -73,7 +73,7 @@
 
                 </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="outline" class="col-lg-2 matsmall" *ngIf="catType == 'subcat'">
+            <mat-form-field appearance="outline" class="col-lg-2 matSmall" *ngIf="catType == 'subcat'">
                 <mat-label>Sub Category</mat-label>
              
                 <mat-select [(ngModel)]="SubCategoryID" #subCategory name="pSubCategory">
@@ -84,7 +84,7 @@
                 </mat-select>
             </mat-form-field>
             
-            <mat-form-field appearance="outline" class="col-lg-2 matsmall" *ngIf="catType == 'brand'">
+            <mat-form-field appearance="outline" class="col-lg-2 matSmall" *ngIf="catType == 'brand'">
                 <mat-label>Brand</mat-label>
                 <mat-select [(ngModel)]="BrandID" #brand>
                     <mat-option><ngx-mat-select-search #brandSearch [placeholderLabel]="'Search...'"

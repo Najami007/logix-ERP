@@ -4,11 +4,11 @@
         <h2 class="border-bottom">Booker Detail's</h2>
 
 
-        <mat-form-field class="w-100" appearance="outline">
+        <mat-form-field class="w-100 matSmall" appearance="outline">
             <mat-label>Booker Name</mat-label>
             <input matInput type="text" [(ngModel)]="bookerName" >
         </mat-form-field>
-        <mat-form-field class="w-100" appearance="outline">
+        <mat-form-field class="w-100 matSmall" appearance="outline">
             <mat-label>Description</mat-label>
             <textarea matInput type="text" [(ngModel)]="BookerDescription" ></textarea>
         </mat-form-field>
@@ -28,10 +28,9 @@
     <div class="col-lg-8 p-4">
 
 
-        <mat-form-field class="w-100" appearance="outline">
-            <mat-label class="ps-5">Search.....</mat-label>
+        <mat-form-field class="w-100 matSmall" appearance="outline">
+            <mat-label >Search.....</mat-label>
             <input #Search matInput type="search" class="text-secondary">
-            <mat-icon matPrefix class="text-secondary">search</mat-icon>
         </mat-form-field>
 
 

@@ -11,17 +11,17 @@
 
 
             <div class="col-lg-9 row">
-                <mat-form-field appearance="outline" class="w-100 ">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
                     <mat-label>Swing Title</mat-label>
                     <input matInput [(ngModel)]="swingTitle" type="text">
                 </mat-form-field>
 
 
-                <mat-form-field appearance="outline" class="w-50 ">
+                <mat-form-field appearance="outline" class="w-50 matSmall">
                     <mat-label>Code</mat-label>
                     <input matInput [(ngModel)]="swingCode" type="text">
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="w-50 ">
+                <mat-form-field appearance="outline" class="w-50 matSmall">
                     <mat-label>Duration</mat-label>
                     <input matInput [(ngModel)]="swingDuration" type="text">
                 </mat-form-field>
@@ -44,13 +44,13 @@
 
         </div>
 
-        <mat-form-field appearance="outline" class="w-100  ">
+        <mat-form-field appearance="outline" class="w-100  matSmall">
             <mat-label>Ticket Price</mat-label>
             <input matInput type="number" [(ngModel)]="ticketPrice" (change)="global.avoidMinus($event)">
         </mat-form-field>
 
 
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 matSmall">
             <mat-label>Description</mat-label>
             <textarea matInput type="text" [(ngModel)]="Description"></textarea>
         </mat-form-field>
@@ -73,7 +73,7 @@
 
 
     <div class="col-lg-8 border-start container-fluid bg-light ">
-        <mat-form-field appearance="outline" class="w-100 pt-2">
+        <mat-form-field appearance="outline" class="w-100 pt-2 matSmall">
             <mat-label>Search.....</mat-label>
             <input type="text" #swingSearch matInput>
         </mat-form-field>

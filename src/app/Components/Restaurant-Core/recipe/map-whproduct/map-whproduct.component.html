@@ -2,7 +2,7 @@
     <div class="ps-4 pe-4 text-center border-bottom mb-3  mt-3 d-flex justify-content-between"><p class="dialogueTitle">Map / Unmap Product With Category</p><mat-icon class="cursorPointer" (click)="closeDialogue()">cancel</mat-icon></div>
 
     <div class="p-4">
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 matSmall">
             <mat-label>Products</mat-label>
             <mat-select [(ngModel)]="productID" name="location">
                 <mat-option><ngx-mat-select-search #prod [placeholderLabel]="'Search...'"
@@ -13,7 +13,7 @@
         </mat-form-field>
         
         
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" class="w-100 matSmall">
             <mat-label>Category</mat-label>
             <mat-select [(ngModel)]="categoryID" name="location">
                 <mat-option><ngx-mat-select-search #cat [placeholderLabel]="'Search...'"
@@ -22,7 +22,7 @@
                     [value]="item.recipeCatID">{{item.recipeCatTitle}}</mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field class="w-100" appearance="outline">
+        <mat-form-field class="w-100 matSmall" appearance="outline">
             <mat-label>Cooking Area</mat-label>
             <mat-select [(ngModel)]="cookingAriaID">
                 <mat-option><ngx-mat-select-search #arSearch [placeholderLabel]="'Search...'"

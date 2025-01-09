@@ -4,7 +4,7 @@
         <div class="col-lg-10 ps-1  pt-2">
 
             <div class="row">
-                <mat-form-field appearance="outline" *ngIf="global.DisableDate == false" class="col-lg-2">
+                <mat-form-field appearance="outline" *ngIf="global.DisableDate == false" class="col-lg-2 matSmall">
                     <mat-label>Invoice Date</mat-label>
                     <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput type="text" name="voucherDate"
                         [matDatepicker]="voucherDate">
@@ -12,7 +12,7 @@
                     <mat-datepicker #voucherDate></mat-datepicker>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="col-lg-2 ">
+                <mat-form-field appearance="outline" class="col-lg-2 matSmall">
                     <mat-label>Purchaser</mat-label>
                     <mat-select [(ngModel)]="bookerID" name="location">
                         <mat-option><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
@@ -21,13 +21,13 @@
                             [value]="item.bookerID">{{item.bookerName}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="col-lg-2 ">
+                <mat-form-field appearance="outline" class="col-lg-2 matSmall">
                     <mat-label>Ref Inv No.</mat-label>
                     <input matInput [(ngModel)]="refInvNo" type="text" name="refInvNo">
                 </mat-form-field>
 
 
-                <mat-form-field appearance="outline" class="col-lg-2 ">
+                <mat-form-field appearance="outline" class="col-lg-2 matSmall">
                     <mat-label>Supplier</mat-label>
                     <mat-select [(ngModel)]="partyID" #supplier (selectionChange)="onPartySelected()" name="customer">
                         <mat-option><ngx-mat-select-search #partySearch [placeholderLabel]="'Search...'"
@@ -38,7 +38,7 @@
                     </mat-select>
                     <mat-icon class="cursorPointer" (click)="addParty()" matSuffix>add</mat-icon>
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="col-lg-2 ">
+                <mat-form-field appearance="outline" class="col-lg-2 matSmall">
                     <mat-label>Location</mat-label>
                     <mat-select [(ngModel)]="locationID" name="location">
                         <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
@@ -48,7 +48,7 @@
                     </mat-select>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" [ngClass]="global.DisableDate == true ? 'col-lg-4' :'col-lg-2'" >
+                <mat-form-field appearance="outline" class="matSmall" [ngClass]="global.DisableDate == true ? 'col-lg-4' :'col-lg-2'" >
                     <mat-label>Remarks</mat-label>
                     <textarea matInput rows="1" [(ngModel)]="invRemarks" type="text" name="remarks"></textarea>
                 </mat-form-field>
@@ -239,7 +239,7 @@
                 <div class="modal-body" style="height: 60vh;">
                     
                     <div class="row">
-                        <mat-form-field appearance="outline" class="w-75"  >
+                        <mat-form-field appearance="outline" class="w-75 matSmall"  >
                             <mat-label>Description</mat-label>
                             <input matInput id="prodOthDetDesc" maxlength="50" [(ngModel)]="tmpProductOtherDetDescription" (keydown)="onEnterPressed($event)" />
                             <mat-hint class="text-end">{{tmpProductOtherDetDescription.length}} / 50</mat-hint>
@@ -283,7 +283,7 @@
                 <div class="modal-body">
 
                     <div class="d-flex justify-content-between">
-                        <mat-form-field class="col-lg-4" appearance="outline">
+                        <mat-form-field class="col-lg-4 matSmall" appearance="outline">
                             <mat-label>Date</mat-label>
                             <input matInput type="text" readonly="true" [(ngModel)]="Date" [matDatepicker]="hbDate">
                             <mat-datepicker-toggle matSuffix [for]="hbDate"></mat-datepicker-toggle>
@@ -297,7 +297,7 @@
                         <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt"
                             (click)="findHoldBills('p')">Pusrchase Bill</button>
 
-                        <mat-form-field class="col-lg-3" appearance="outline">
+                        <mat-form-field class="col-lg-3 matSmall" appearance="outline">
                             <mat-label>Search.......</mat-label>
                             <input matInput #holdSearch type="text" class="col-lg-4">
                         </mat-form-field>

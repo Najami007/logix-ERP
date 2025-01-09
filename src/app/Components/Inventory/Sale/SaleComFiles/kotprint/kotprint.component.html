@@ -1,9 +1,13 @@
-<div id="printKOT">
-    <div class="text-center p-1 dark " >
+<div id="printKOT" >
+  <div class="p-2">
+    <div class="text-center dark " >
         <h2 style="border: 1px solid black;text-align: center;text-transform: uppercase;"  >{{companyName}}</h2>
         <!-- <h2 >ORDER NO: {{myOrderNo}}</h2>    -->
     </div>
-  <div class="p-1">
+    <div>
+        <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center fw-bold">Duplicate</p>
+    </div>
+  <div >
    
         <table  class="table" style="font-size: 12px;width: 100%;">
             <thead>
@@ -42,6 +46,7 @@
             </tbody>
         </table>
   
+  </div>
   </div>
 
 </div>

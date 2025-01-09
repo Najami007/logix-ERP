@@ -9,7 +9,7 @@
 
 
 
-            <mat-form-field class="w-25 m-1" appearance="outline">
+            <mat-form-field class="w-25 m-1 matSmall" appearance="outline">
                 <mat-label>Search...</mat-label>
                 <input #catSearch matInput type="search" class="text-secondary">
             </mat-form-field>
@@ -146,7 +146,7 @@
                         <p class="fw-bold" style="font-size: 12px;">NET TOTAL</p>
                         <p class="text-center font-digit" style="font-size: 30px;">{{netTotal |number:'1.0-1'}}</p>
                     </div>
-                    <mat-form-field appearance="outline" class="col-lg-12 " *ngIf="waiterFeature">
+                    <mat-form-field appearance="outline" class="col-lg-12 matSmall" *ngIf="waiterFeature">
                         <mat-label>Waiter</mat-label>
                         <mat-select [(ngModel)]="BookerID">
                             <mat-option><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
@@ -156,7 +156,7 @@
     
                     </mat-form-field>
     
-                    <mat-form-field  class="w-100" appearance="outline" *ngIf="!waiterFeature">
+                    <mat-form-field  class="w-100 matSmall" appearance="outline" *ngIf="!waiterFeature">
                         <mat-label>Remar<u>k</u>s</mat-label>
                         <textarea rows="1" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
                     </mat-form-field>
@@ -196,7 +196,7 @@
                     <button matTooltip="Merge Two Bills" matTooltipPosition="right" (click)="global.openBootstrapModal('#mergeBill',true)"
                         mat-raised-button class="m-1 text-white btn col-lg-5 fs-12px" style="background-color: pink;" accesskey="m"><u>M</u>erge Bill</button>
                        
-                        <mat-form-field class="w-100 ps-3 pe-3 pt-1" appearance="outline" *ngIf="waiterFeature">
+                        <mat-form-field class="w-100 ps-3 pe-3 pt-1 matSmall" appearance="outline" *ngIf="waiterFeature">
                             <mat-label>Remar<u>k</u>s</mat-label>
                             <textarea rows="1" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
                         </mat-form-field>
@@ -312,7 +312,7 @@
 
                 <div class="w-50 row">
 
-                    <mat-form-field appearance="outline" class="col-lg-12 " *ngIf="waiterFeature">
+                    <mat-form-field appearance="outline" class="col-lg-12 matSmall" *ngIf="waiterFeature">
                         <mat-label>Waiter</mat-label>
                         <mat-select [(ngModel)]="BookerID">
                             <mat-option><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
@@ -322,7 +322,7 @@
 
                     </mat-form-field>
                     
-                    <mat-form-field class="w-100" appearance="outline" >
+                    <mat-form-field class="w-100 matSmall" appearance="outline" >
                         <mat-label>Remar<u>k</u>s</mat-label>
                         <textarea [rows]="waiterFeature ? '1' : '2'" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
                     </mat-form-field>
@@ -371,7 +371,7 @@
                     <mat-label class="text-center">Enter Void Quantity</mat-label>
                     <div class="d-flex">
 
-                        <mat-form-field appearance="outline" class="w-100">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
                             <input class="prodQty text-center" [value]="1"
                                 (keydown)="this.global.handleNumKeys($event)" type="text" min="0" matInput
                                 #voidQty />
@@ -409,14 +409,14 @@
                 <div class="modal-body">
 
 
-                    <mat-form-field appearance="outline" class="w-50 pe-2">
+                    <mat-form-field appearance="outline" class="w-50 pe-2 matSmall">
                         <mat-label>Bill No 1</mat-label>
                         <mat-select [(ngModel)]="mergeBillNo1">
                             <mat-option [disabled]="mergeBillNo2 == item.invBillNo" *ngFor="let item of holdBillList"
                                 [value]="item.invBillNo">{{item.tableTitle}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="w-50 ">
+                    <mat-form-field appearance="outline" class="w-50  matSmall">
                         <mat-label>Bill No 2</mat-label>
                         <mat-select [(ngModel)]="mergeBillNo2">
                             <mat-option [disabled]="mergeBillNo1 == item.invBillNo" *ngFor="let item of holdBillList"
@@ -584,7 +584,7 @@
                     
 
                         <div>
-                            <mat-form-field appearance="outline" class="w-100">
+                            <mat-form-field appearance="outline" class="w-100 matSmall">
                                 <mat-label>Discount</mat-label>
                                 <input class="prodQty" name="discount"  id="discInput" (keydown)="this.global.handleNumKeys($event)" type="number"
                                     min="0" matInput #bDisc />
@@ -620,7 +620,7 @@
                             <mat-label class="text-center">Enter Quantity</mat-label>
                             <div class="d-flex">
 
-                                <mat-form-field appearance="outline" class="w-100">
+                                <mat-form-field appearance="outline" class="w-100 matSmall">
                                     <mat-icon (click)="increment('add',tempQty)" matPrefix>add</mat-icon>
 
                                     <input class="prodQty text-center" [value]="tempQty"
@@ -667,18 +667,18 @@
                         <h2 class="text-center text-success">Bill Total: {{netTotal | number:'1.0-1'}}</h2>
                         <h2 class="text-center text-danger">Change: {{ change | number:'1.0-1'}}</h2>
                     </div>
-                    <mat-form-field  *ngIf="global.DisableDate == false" appearance="outline" class="col-lg-12">
+                    <mat-form-field  *ngIf="global.DisableDate == false" appearance="outline" class="col-lg-12 matSmall">
                         <mat-label>Date</mat-label>
                         <input matInput type="text" [disabled]="global.DisableDate"  readonly="true" [(ngModel)]="invoiceDate" [matDatepicker]="invDate">
                         <mat-datepicker-toggle matSuffix [for]="invDate"></mat-datepicker-toggle>
                         <mat-datepicker #invDate></mat-datepicker>
                     </mat-form-field>
                     
-                    <mat-form-field appearance="outline" class="col-lg-6 pe-1">
+                    <mat-form-field appearance="outline" class="col-lg-6 pe-1 matSmall">
                         <mat-label>Customer Name</mat-label>
                         <input type="text" matInput [(ngModel)]="customerName" />
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="col-lg-6 w-50">
+                    <mat-form-field appearance="outline" class="col-lg-6 w-50 matSmall">
                         <mat-label>Customer Mobile</mat-label>
                         <input matInput type="text" [textMask]="{mask:mobileMask}" [(ngModel)]="customerMobileno" />
                     </mat-form-field>
@@ -687,7 +687,7 @@
                         <input accept=".pdf" (change)="onDocSelected($event)" #vDoc type="file" id="vDoc" class=" mb-2">
                     </div>
 
-                    <mat-form-field appearance="outline" class="w-100">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
                         <mat-label>Payment Type</mat-label>
                         <mat-select [(ngModel)]="paymentType" (selectionChange)="cash = 0; bankCash = 0;getTotal()">
                             <mat-option value="Cash">Cash</mat-option>
@@ -699,7 +699,7 @@
 
                     <mat-card class=" p-2 bg-warning" *ngIf="paymentType !== ''">
 
-                        <div class="d-flex justify-content-between text-center mb-2"
+                        <div class="d-flex justify-content-between text-center mb-2 "
                             *ngIf="paymentType == 'Cash' || paymentType == 'Split'">
                             <mat-label style="font-size: 25px;">Cash:</mat-label>
                             <input type="number" style="font-size: 25px;width: 180px;"
@@ -775,7 +775,7 @@
                                     [value]="item.val">{{item.title}}</mat-radio-button>
                             </mat-radio-group>
 
-                            <mat-form-field  appearance="outline" class="w-100 pt-4">
+                            <mat-form-field  appearance="outline" class="w-100 pt-4 matSmall">
                                 <mat-label>Cover</mat-label>
                                 <input name="cover" type="number" (keydown)="this.global.handleNumKeys($event)" matInput
                                     [(ngModel)]="coverOf" />
@@ -811,7 +811,7 @@
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-body">
 
-                    <mat-form-field class="w-100" appearance="outline">
+                    <mat-form-field class="w-100 matSmall" appearance="outline">
                         <mat-label>Search...</mat-label>
                         <input matInput #searchHoldBill />
                     </mat-form-field>
@@ -852,7 +852,7 @@
 <div >
     
         <div class="text-end p-2">
-            <mat-form-field appearance="outline" class="w-100">
+            <mat-form-field appearance="outline" class="w-100 matSmall">
                 <mat-label>Search...</mat-label>
                 <input matInput type="text" #searchSavedBill  />
             </mat-form-field>

@@ -9,7 +9,7 @@
 
 
 
-            <mat-form-field class="w-25 m-1" appearance="outline">
+            <mat-form-field class="w-25 m-1 matSmall" appearance="outline">
                 <mat-label>Search.....</mat-label>
                 <input #catSearch matInput type="search" class="text-secondary">
                 <!-- <mat-icon matPrefix class="text-secondary">search</mat-icon> -->
@@ -207,7 +207,7 @@
                     <mat-label class="text-center">Enter Void Quantity</mat-label>
                     <div class="d-flex">
 
-                        <mat-form-field appearance="outline" class="w-100">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
                             <input class="prodQty text-center" [value]="1"
                                 (keydown)="this.global.handleNumKeys($event)" type="text" min="0" matInput
                                 #voidQty />
@@ -247,14 +247,14 @@
                 <div class="modal-body">
 
 
-                    <mat-form-field appearance="outline" class="w-50 pe-2">
+                    <mat-form-field appearance="outline" class="w-50 pe-2 matSmall">
                         <mat-label>Bill No 1</mat-label>
                         <mat-select [(ngModel)]="mergeBillNo1">
                             <mat-option [disabled]="mergeBillNo2 == item.invBillNo" *ngFor="let item of holdBillList"
                                 [value]="item.invBillNo">{{item.tableTitle}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="w-50 ">
+                    <mat-form-field appearance="outline" class="w-50 matSmall">
                         <mat-label>Bill No 2</mat-label>
                         <mat-select [(ngModel)]="mergeBillNo2">
                             <mat-option [disabled]="mergeBillNo1 == item.invBillNo" *ngFor="let item of holdBillList"
@@ -529,7 +529,7 @@
                     <form method="post">
 
                         <div>
-                            <mat-form-field appearance="outline" class="w-100">
+                            <mat-form-field appearance="outline" class="w-100 matSmall">
                                 <mat-label>Discount</mat-label>
                                 <input class="prodQty" (keydown)="this.global.handleNumKeys($event)" type="number"
                                     min="0" matInput #bDisc />
@@ -567,7 +567,7 @@
                             <mat-label class="text-center">Enter Quantity</mat-label>
                             <div class="d-flex">
 
-                                <mat-form-field appearance="outline" class="w-100">
+                                <mat-form-field appearance="outline" class="w-100 matSmall">
                                     <mat-icon (click)="increment('add',tempQty)" matPrefix>add</mat-icon>
 
                                     <input class="prodQty text-center" [value]="tempQty"
@@ -615,11 +615,11 @@
                         <h2 class="text-center text-danger">Change: {{ change | number:'1.0-1'}}</h2>
                     </div>
 
-                    <mat-form-field appearance="outline" class="col-lg-6 pe-1">
+                    <mat-form-field appearance="outline" class="col-lg-6 pe-1 matSmall">
                         <mat-label>Customer Name</mat-label>
                         <input type="text" matInput [(ngModel)]="customerName" />
                     </mat-form-field>
-                    <mat-form-field appearance="outline" class="col-lg-6 w-50">
+                    <mat-form-field appearance="outline" class="col-lg-6 w-50 matSmall">
                         <mat-label>Customer Mobile</mat-label>
                         <input matInput type="text" [textMask]="{mask:mobileMask}" [(ngModel)]="customerMobileno" />
                     </mat-form-field>
@@ -628,7 +628,7 @@
                         <input accept=".pdf" (change)="onDocSelected($event)" #vDoc type="file" id="vDoc" class=" mb-2">
                     </div>
 
-                    <mat-form-field appearance="outline" class="w-100">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
                         <mat-label>Payment Type</mat-label>
                         <mat-select [(ngModel)]="paymentType" (selectionChange)="cash = 0; bankCash = 0;getTotal()">
                             <mat-option value="Cash">Cash</mat-option>
@@ -715,7 +715,7 @@
                                         [value]="item.val">{{item.title}}</mat-radio-button>
                                 </mat-radio-group>
                                 
-                                <mat-form-field  appearance="outline" class="w-100 pt-4">
+                                <mat-form-field  appearance="outline" class="w-100 pt-4 matSmall">
                                     <mat-label>Cover</mat-label>
                                     <input name="tsCover" type="number" (keydown)="this.global.handleNumKeys($event)" matInput
                                         [(ngModel)]="coverOf" />
