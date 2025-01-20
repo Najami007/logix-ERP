@@ -23,7 +23,7 @@ export const environment = {
       //mainApi: 'http://192.168.10.100:2001/', /////// Shama Royal City Server
        //mainApi: 'http://159.69.174.21:2006/',  ////////// live Server Mehria Brands
       //mainApi: 'http://159.69.174.21:2007/',  ////////// live Server Balck Gold Restaurant
-      //mainApi: 'http://192.168.1.100:8081/',   ///Alsheikh Mall Wahcant
+     // mainApi: 'http://192.168.1.100:8081/',   ///Alsheikh Mall Wahcant
     //mainApi: 'http://159.69.174.21:2010/',  ////////// live Server for Alsheikh
       // mainApi: 'http://159.69.174.21:2012/',  ////////// live Server for Alsheikh HassanAbdal
       //mainApi: 'http://192.168.18.100:8081/',   ///Stylish Garment Wahcant

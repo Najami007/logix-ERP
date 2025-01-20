@@ -1,4 +1,4 @@
-<div class="body vh-100" style="background-color: #fdf4e8;">
+<div class="body vh-100" style="background-color: #f8b863;">
 
     <div class="row">
 
@@ -115,7 +115,9 @@
                                 <th class="cursorPointer" (click)="changeOrder()">S#</th>
                                 <th>Title</th>
                                 <th>Qty</th>
-                                <th>Price</th>
+                                <th *ngIf="gstFeature">Price Exc Gst</th>
+                                <th *ngIf="gstFeature">Price Inc Gst</th>
+                                <th *ngIf="!gstFeature">Price</th>
                                 <th *ngIf="discFeature">Disc Rs</th>
                                 <th *ngIf="discFeature">Disc %</th>
                                 <th>Total</th>
@@ -139,6 +141,8 @@
                                     (change)="getTotal()" class="sp{{index}} text-center"
                                     style="width: 80px;">
                             </td> -->
+                            <td class="text-end cursorPointer" *ngIf="gstFeature">{{item.salePrice / ((item.gst / 100) + 1) |number:'1.0-1'}}</td>
+
 
                                 <td class="text-end cursorPointer" 
                                     (click)="tempProdData = item;editSP(item)">{{item.salePrice
@@ -162,6 +166,7 @@
                             <tr>
                                 <td colspan="2"></td>
                                 <th>{{qtyTotal |number:'1.0-3'}}</th>
+                                <td *ngIf="gstFeature"></td>
                                 <td></td>
                                 <td *ngIf="discFeature"></td>
                                 <td *ngIf="discFeature"></td>
