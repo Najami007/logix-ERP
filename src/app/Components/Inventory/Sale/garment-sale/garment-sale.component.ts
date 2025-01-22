@@ -32,6 +32,7 @@ export class GarmentSaleComponent implements OnInit {
   editDiscFeature = this.global.editDiscFeature;
   prodDetailFeature = this.global.prodDetailFeature;
   BankShortCutsFeature = this.global.BankShortCutsFeature;
+  FBRFeature = this.global.FBRFeature;
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
@@ -162,6 +163,7 @@ export class GarmentSaleComponent implements OnInit {
   qtyTotal = 0;
   subTotal: any = 0;
   netTotal = 0;
+  PosFee = this.global.POSFee;
 
   bankCoaList: any = [];
   partyList: any = [];
@@ -849,8 +851,8 @@ export class GarmentSaleComponent implements OnInit {
     }
 
 
-
-    this.netTotal = this.subTotal - parseFloat(this.discount) - parseFloat(this.offerDiscount);
+    this.subTotal = this.subTotal + this.PosFee;
+    this.netTotal = this.subTotal  - parseFloat(this.discount) - parseFloat(this.offerDiscount);
     this.change = parseFloat(this.cash) - this.netTotal;
 
     if (this.paymentType == 'Split') {
@@ -1234,7 +1236,7 @@ export class GarmentSaleComponent implements OnInit {
   }
 
   isValidSale = true;
-  save(paymentType: any) {
+  save(paymentType: any,SendToFbr:any,printFlag:any) {
 
    
     this.tableDataList.forEach((p: any) => {
@@ -1292,7 +1294,7 @@ export class GarmentSaleComponent implements OnInit {
       else if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
         this.msg.WarnNotify('Enter Valid Amount')
       } else {
-
+        console.log(this.FBRFeature ? this.PosFee : 0,'POS FEE');
         this.isValidSale = false;
         this.app.startLoaderDark();
         this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', {
@@ -1302,6 +1304,8 @@ export class GarmentSaleComponent implements OnInit {
           ProjectID: this.projectID,
           BookerID: this.bookerID,
           PaymentType: paymentType,
+          SendToFbr: SendToFbr,
+          PosFee  : this.FBRFeature ? this.PosFee : 0,
           Remarks: this.billRemarks || '-',
           OrderType: "Take Away",
           BillTotal: this.subTotal,
@@ -1328,7 +1332,9 @@ export class GarmentSaleComponent implements OnInit {
 
               this.msg.SuccessNotify(Response.msg);
               this.reset();
-              this.PrintAfterSave(Response.invNo);
+              if(printFlag){
+                this.PrintAfterSave(Response.invNo);
+              }
 
               if (paymentType != 'Cash') {
                 $('#searchProduct').trigger('focus');
@@ -1581,6 +1587,22 @@ export class GarmentSaleComponent implements OnInit {
       }
     )
 
+  }
+
+  sendToFbr(item:any){
+    this.http.post(environment.mainApi+this.global.inventoryLink+'InvSendToFbr',{
+      InvBillNo:item.invBillNo,
+      UserID: this.global.getUserID()
+    }).subscribe(
+      (Response:any)=>{
+        if(Response.msg == 'Data Updated Successfully'){
+          this.msg.SuccessNotify(Response.msg);
+          this.getSavedBill();
+        }else{
+          this.msg.WarnNotify(Response.msg);
+        }
+      }
+    )
   }
 
   onBankSelected() {

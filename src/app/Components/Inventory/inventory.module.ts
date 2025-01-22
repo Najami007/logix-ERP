@@ -95,10 +95,7 @@ import { UnitOfMeasurementComponent } from './Configurations/unit-of-measurement
 import { MaterialModule } from 'src/app/Shared/material/material.module';
 import { PurchaseOrderComponent } from './Purchases/purchase-order/purchase-order.component';
 import { StockTransferComponent } from './InvAdjustment/stock-transfer/stock-transfer.component';
-
-
-
-
+import { QRCodeModule  } from 'angularx-qrcode';
 
 
 
@@ -261,8 +258,7 @@ export const inventoryRoutes: Route[] = [
     StockTransferComponent,
     
   
-    
-   
+  
     
 
  
@@ -281,9 +277,11 @@ export const inventoryRoutes: Route[] = [
     NgxMaterialTimepickerModule,
     ScrollingModule,
     ChartModule,
-    
     NgxBarcode6Module,
     PipesModule,
+    QRCodeModule,
+    
+
     
   ],
   exports: [

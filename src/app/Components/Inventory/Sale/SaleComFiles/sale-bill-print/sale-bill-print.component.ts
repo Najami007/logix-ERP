@@ -1,18 +1,23 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { environment } from 'src/environments/environment.development';
+declare var $:any;
+// import * as $ from 'jquery-qrcode';
+import html2canvas from 'html2canvas';
 
 
 @Component({
   selector: 'app-sale-bill-print',
+
   templateUrl: './sale-bill-print.component.html',
   styleUrls: ['./sale-bill-print.component.scss']
 })
-export class SaleBillPrintComponent implements OnInit {
+export class SaleBillPrintComponent implements OnInit  {
+  @ViewChild('qrCodeContainer', { static: true }) qrCodeContainer!: ElementRef;
 
   discFeature = this.global.discFeature;
   BookerFeature = this.global.BookerFeature;
@@ -20,11 +25,14 @@ export class SaleBillPrintComponent implements OnInit {
   showCompanyLogo = this.global.showCompanyLogo;
   gstFeature = this.global.gstFeature;
   prodDetailFeature = this.global.prodDetailFeature;
+  FBRFeature = this.global.FBRFeature;
 
 
   billPrintType:any = '';;
   companyProfile: any = [];
   companyLogo: any = '';
+  CompanyNTN  = '';
+  CompanySTRN = '';
   logoHeight: any = 0;
   logoWidth: any = 0;
   companyAddress: any = '';
@@ -40,6 +48,8 @@ export class SaleBillPrintComponent implements OnInit {
    
     
     this.global.getCompany().subscribe((data) => {
+      this.CompanyNTN = data[0].ntn;
+      this.CompanySTRN = data[0].strn;
       this.companyProfile = data;
       this.companyLogo = data[0].companyLogo1;
       this.CompanyMobile = data[0].companyMobile;
@@ -53,7 +63,17 @@ export class SaleBillPrintComponent implements OnInit {
   
 
   }
+
+  qrData: string = '1235678';
+
+ 
+
+
+
+
+
   ngOnInit(): void {
+ 
   
   }
 
@@ -86,27 +106,17 @@ export class SaleBillPrintComponent implements OnInit {
   myAdvTaxAmount = 0;
   myAdvTaxValue = 0;
   myProductDetail:any = [];
-
+  myFbrInvoiceNo ='';
+  myFbrStatus = false;
+  myFbrCode = '';
+  myFbrResponse = '';
+  myPOSFee = 0;
 
   PrintBill(InvNo: any) {
     this.billPrintType = this.global.getBillPrintType();
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
       (Response: any) => {
         this.myPrintTableData = Response;
-        // this.http.get(environment.mainApi + this.global.inventoryLink + 'BillOtherDetail?BillNo=' + InvNo).subscribe(
-        //   (Response: any) => {
-        //     this.myProductDetail = Response;
-        //     Response.forEach((e:any) => {
-        //       this.myPrintTableData.forEach((j:any) => {
-        //           if(e.productID  == j.ProductID){
-        //             j.productDetail.push(e);
-        //           }
-        //       });
-        //     });
-         
-
-
-        //   })
 
         this.myInvoiceNo = InvNo;
         this.myInvDate = Response[0].createdOn;
@@ -125,6 +135,11 @@ export class SaleBillPrintComponent implements OnInit {
         this.myInvType = Response[0].invType;
         this.myAdvTaxAmount = Response[0].advTaxAmount;
         this.myAdvTaxValue = Response[0].advTaxValue;
+        this.myFbrInvoiceNo = Response[0].fbrInvoiceNo;
+        this.myFbrStatus = Response[0].fbrStatus;
+        this.myFbrCode = Response[0].fbrCode;
+        this.myFbrResponse = Response[0].fbrResponse;
+        this.myPOSFee = Response[0].posFee;
          
 
         this.myQtyTotal = 0;
@@ -136,6 +151,9 @@ export class SaleBillPrintComponent implements OnInit {
           this.myGstTotal += (e.salePrice -(e.salePrice / ((e.gst / 100) + 1))) * e.quantity ;
         });
 
+       if(this.FBRFeature){
+        this.generateQRCode();
+       }
         setTimeout(() => {
           if(this.billPrintType == 'english'){
             this.global.printBill('#billEnglish','.searchProduct');
@@ -143,20 +161,53 @@ export class SaleBillPrintComponent implements OnInit {
           if(this.billPrintType == 'urdu'){
             this.global.printBill('#BillUrdu','.searchProduct');
           }
-          
-          
-          //this.global.printToSpecificPrinter('XP-80C','#billPrint');
+          this.qrCodeContainer;
         }, 100);
-        // setTimeout(() => {
-        //   this.global.printData('#cncBillPrint');
-        //   this.global.printData('#cncBillPrint2');
-        // }, 2000);
+        
+     
 
       }
     )
 
+  }
+ 
 
+  generateQRCode(): void {
 
+    // $('#qrCode').empty();
+    //   $('#qrCode').qrcode({
+    //     text: this.myFbrInvoiceNo || 'N/A',
+    //     width: 100,
+    //     height: 100
+    //   });
+
+        $('#output').qrcode({
+        text: this.myFbrInvoiceNo || 'N/A',
+      });
+      var canvas = $('#output canvas');
+      // const element = $('#output')[0];
+      var img = $(canvas)[0].toDataURL("image/png");
+      $('#output').empty();
+      $('.qr-code-generator').empty();
+      $('.qr-code-generator').prepend('<img src="' + img + '" width="80" height="80" />')
+
+      // // var img = canvas.get(0).toDataURL("image/png");
+      // html2canvas(element).then((canvas) => {
+      //   // Convert the canvas to a data URL (base64)
+      //   const imageData = canvas.toDataURL('image/png');
+  
+      //   // Set the image source to the generated data URL
+      //   // $('#output').attr('src', imageData);
+      //   $('#output').empty();
+      //   $('#qrCode').empty();
+      //   $('#qrCode').prepend('<img src="' + imageData + '" width="90" height="90" />')
+  
+      //   console.log('Image generated:', imageData);
+      // }).catch((error) => {
+      //   console.error('Error generating image:', error);
+      // });
+      // //or
+      
   }
 
 

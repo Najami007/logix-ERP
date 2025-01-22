@@ -36,9 +36,11 @@
               "src/styles.scss"
             ],
             "scripts": ["node_modules/jquery/dist/jquery.min.js",
+             "node_modules/jquery-qrcode/jquery.qrcode.min.js",
              "node_modules/bootstrap/dist/js/bootstrap.min.js",
-              "src/assets/Validations/validation.js",
-              "src/assets/connection/connection.js"
+             "node_modules/html2canvas/dist/html2canvas.min.js"
+
+ 
             
             ]
           },
@@ -112,7 +114,10 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "src/assets/connection/connection.js"
+              "node_modules/jquery-qrcode/jquery.min.js",
+              "node_modules/jquery-qrcode/jquery.qrcode.min.js",
+              "node_modules/html2canvas/dist/html2canvas.min.js"
+
              
             ]
           }

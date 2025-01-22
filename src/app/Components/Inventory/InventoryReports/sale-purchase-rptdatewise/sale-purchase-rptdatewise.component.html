@@ -2,10 +2,10 @@
 
    <div class=" p-2 mt-2">
   
-        <div class="row">
+        <div class="row ">
 
 
-            <mat-form-field appearance="outline" class="col-lg-4 matSmall">
+            <mat-form-field appearance="outline" class="col-lg-4  matSmall">
                 <mat-label>User</mat-label>
                 <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
                     <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
@@ -53,8 +53,9 @@
                 </mat-select>
             </mat-form-field>
             <div class="col-lg-6 pb-2" *ngIf="crudList.r">
-                <button class="btn-rpt-success col-lg-4  me-1" (click)="getReport('summary')">Summary</button>
-                <button class="btn-rpt-success col-lg-4 me-1" (click)="getReport('detail')">Detail</button>
+                <button class="btn-rpt-success col-lg-2  me-1" (click)="getReport('summary')">Summary</button>
+                <button class="btn-rpt-success col-lg-2  me-1" *ngIf="FBRFeature" (click)="getReport('taxSummary')">Tax Rpt</button>
+                <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('detail')">Detail</button>
                 <button class="btn-rpt-primary col-lg-2 me-1" (click)="print()">Print</button>
                 <!-- <button style="width: 60px;font-size: 20px;" class="btn-rpt-primary" (click)="global.ExportHTMLTabletoExcel('PrintDiv','Summary')"><i class="bi bi-filetype-xlsx"></i></button> -->
             </div>
@@ -146,6 +147,64 @@
           
         </table>
 
+        <table class="table-logix" id="TaxsummaryTable" *ngIf="FBRFeature">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Bill #</th>
+                    <th>Date</th>
+                    <th *ngIf="rptType == 'I' || rptType == 'R'|| rptType == 's' || rptType == 'sr'">Type</th>
+                    <!-- <th>Location</th> -->
+                    <th *ngIf="rptType == 'p' ||rptType == 'pr' || rptType == 's' || rptType == 'sr'">Party</th>
+                    <th *ngIf="rptType == 'p' ||rptType == 'pr' || rptType == 's' || rptType == 'sr'">Booker</th>
+                    <th style="width: 120px;">Total</th>
+                    <th *ngIf="rptType == 's' || rptType == 'sr'">Disc</th>
+                    <th *ngIf="rptType == 's' || rptType == 'sr'">Net Total</th>
+                    <th>Tax</th>
+                    <th>FBR</th>
+                    <th>Entered By</th>
+                    <th>Remarks</th>
+
+                </tr>
+
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of SaleDetailList index as index">
+                    <td class="text-center">{{index + 1}}</td>
+                    <td class="text-center cursorPointer" (click)="printBill(item)">{{item.invBillNo}}</td>
+                    <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
+                    <td  *ngIf="rptType == 'I' || rptType == 'R'">{{item.issueType}}</td>
+                    <td  *ngIf="rptType == 's' || rptType == 'sr'">{{item.paymentType}}</td>
+                    <!-- <td >{{item.locationTitle}}</td> -->
+                    <td *ngIf="rptType == 'p' ||rptType == 'pr' || rptType == 's' || rptType == 'sr'">{{item.partyName}}</td>
+                    <td *ngIf="rptType == 'p' ||rptType == 'pr' || rptType == 's' || rptType == 'sr'">{{item.bookerName }}</td>
+                    <td class="text-end">{{item.billTotal + item.overHeadAmount  |number:'1.0-0'}}</td>
+                    <td  *ngIf="rptType == 's' || rptType == 'sr'" class="text-end">{{item.billDiscount |number:'1.0-0'}}</td>
+                    <td  *ngIf="rptType == 's' || rptType == 'sr'" class="text-end">{{item.netTotal  |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.gstAmount |number:'1.0-2'}}</td>
+                    <td>{{item.fbrInvoiceNo}} <mat-icon class="cursorPointer"  *ngIf="!item.fbrStatus" (click)="sendToFbr(item)">send</mat-icon></td>
+                    
+                    <td>{{item.entryUser}}</td>
+                    <td>{{item.remarks}}</td>
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    
+                    <td *ngIf="rptType == 'p' ||rptType == 'pr' || rptType == 's' || rptType == 'sr'"></td>
+                    <td *ngIf="rptType == 'I' || rptType == 'R' || rptType == 's' || rptType == 'sr'"></td>
+                    <td *ngIf="rptType == 'p' ||rptType == 'pr' || rptType == 's' || rptType == 'sr'"></td>
+                    <td class="fw-bold text-end">{{netGrandTotal |number:'1.0-0'}}</td>
+                    <td *ngIf="rptType == 's' || rptType == 'sr'" class="fw-bold text-end">{{discountTotal |number:'1.0-0'}}</td>
+                    <td *ngIf="rptType == 's' || rptType == 'sr'" class="fw-bold text-end">{{summaryNetTotal |number:'1.0-0'}}</td>
+                    <td class="text-end fw-bold">{{myTaxTotal |number:'1.0-2'}}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+
+          
+        </table>
 
 
 
@@ -218,6 +277,5 @@
 
 </div>
 
-
-<app-sale-bill-print class="hide" id="print-Bill"> </app-sale-bill-print>
+<app-sale-bill-print  class="hide" id="print-Bill"> </app-sale-bill-print>
 

@@ -74,6 +74,7 @@
                             <th>Bank</th>
                             <th>Complimentary</th>
                             <th>Discount</th>
+                            <th *ngIf="FBRFeature">POS FEE</th>
                         </tr>
                     </thead>
                     <tbody >
@@ -88,6 +89,7 @@
                             <td>{{totalBank |number:'1.0-0'}}</td>
                             <td>{{totalComplimentary |number:'1.0-0'}}</td>
                             <td>{{totalDiscount |number:'1.0-0'}}</td>
+                            <td *ngIf="FBRFeature">{{totalPosFee |number:'1.0-0'}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -130,6 +132,10 @@
                                 <th class="text-start"> Complimentary</th>
                                 <td class="text-end">{{item.complimentary|number:'1.0-0'}}</td>
                              
+                            </tr>
+                            <tr *ngIf="FBRFeature">
+                                <th class="text-start">POS FEE</th>
+                                <td class="text-end">{{item.posFee |number:'1.0-0'}}</td>
                             </tr>
                             <tr>
                                 <th class="text-start">Discount</th>

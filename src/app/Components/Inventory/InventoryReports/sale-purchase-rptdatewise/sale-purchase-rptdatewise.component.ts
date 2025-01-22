@@ -18,6 +18,7 @@ import { saveAs } from 'file-saver';
 export class SalePurchaseRptdatewiseComponent implements OnInit {
 
   @ViewChild(SaleBillPrintComponent)  billPrint:any;
+  FBRFeature = this.global.FBRFeature;
   
   
   companyProfile:any = [];
@@ -101,21 +102,27 @@ rptType:any = 's';
    profitPercentTotal = 0;
    discountTotal=0;
    summaryNetTotal= 0;
+   myTaxTotal = 0;
 
    getReport(type:any){
 
    this.reportType = this.reportsList.find((e:any)=>e.val == this.rptType).title;
-  
 
+   if(type == 'taxSummary' && (this.rptType != 's')){
+    this.msg.WarnNotify('Tax Is Only For Sales')
+    return;
+   }
+  
+   this.app.startLoaderDark();
     this.rptType = this.tmpRptType;
    if(type == 'summary'){
     $('#detailTable').hide();
+    $('#TaxsummaryTable').hide();
     $('#summaryTable').show();
     // this.reportType = 'Summary';
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventorySummaryDateWise_2?reqType='+this.rptType+'&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
-       
         this.SaleDetailList = [];
        
         if(this.rptType == 'R'){
@@ -145,7 +152,49 @@ rptType:any = 's';
           this.summaryNetTotal += e.netTotal;
 
         });
-        
+        this.app.stopLoaderDark();
+      }
+    )
+   }
+   if(type == 'taxSummary'){
+    $('#detailTable').hide();
+    $('#summaryTable').hide();
+    $('#TaxsummaryTable').show();
+    // this.reportType = 'Summary';
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventorySummaryDateWise_2?reqType='+this.rptType+'&reqUserID='+this.userID+'&FromDate='+
+    this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
+      (Response:any)=>{
+        this.SaleDetailList = [];
+       
+        if(this.rptType == 'R'){
+          Response.forEach((e:any)=>{
+            if(e.issueType != 'Stock Transfer'){
+              this.SaleDetailList.push(e);
+            }
+          }
+           
+          )
+          // this.SaleDetailList = Response.fil;
+        }else{
+          this.SaleDetailList = Response;
+        }
+        this.billTotal = 0;
+        this.chargesTotal = 0;
+        this.netGrandTotal = 0;
+        this.discountTotal = 0;
+        this.summaryNetTotal = 0;
+
+        this.SaleDetailList.forEach((e:any) => {
+         
+          this.billTotal += e.billTotal;
+          this.chargesTotal += e.otherCharges;
+          this.netGrandTotal += e.billTotal + e.overHeadAmount;
+          this.discountTotal += e.billDiscount;
+          this.summaryNetTotal += e.netTotal;
+          this.myTaxTotal += e.gstAmount;
+
+        });
+        this.app.stopLoaderDark();
       }
     )
    }
@@ -153,6 +202,8 @@ rptType:any = 's';
    if(type == 'detail'){
     $('#detailTable').show();
     $('#summaryTable').hide();
+    $('#TaxsummaryTable').hide();
+
     // this.reportType = 'Detail';
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryDetailDateWise_3?reqType='+this.rptType+'&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
@@ -190,7 +241,8 @@ rptType:any = 's';
             this.detNetTotal += e.avgCostPrice * e.quantity;
           }
          });
-      }
+         this.app.stopLoaderDark();
+        }
     )
    }
 
@@ -202,14 +254,35 @@ rptType:any = 's';
    print(){
     this.global.printData('#PrintDiv')
    }
+
+   sendToFbr(item:any){
+    this.http.post(environment.mainApi+this.global.inventoryLink+'InvSendToFbr',{
+      InvBillNo:item.invBillNo,
+      UserID: this.global.getUserID()
+    }).subscribe(
+      (Response:any)=>{
+        if(Response.msg == 'Data Updated Successfully'){
+          this.msg.SuccessNotify(Response.msg);
+          item.fbrStatus = true;
+      
+        }else{
+          this.msg.WarnNotify(Response.msg);
+        }
+      }
+    )
+  }
  
    printBill(item:any){
 
     if(item.invType == 'S' || item.invType == 'SR'){
       this.billPrint.PrintBill(item.invBillNo);
+   
        this.billPrint.billType = 'Duplicate';
+      
   
     }
    }
+
+
 
 }

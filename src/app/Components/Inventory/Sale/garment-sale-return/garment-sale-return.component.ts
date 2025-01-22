@@ -1213,8 +1213,10 @@ export class GarmentSaleReturnComponent implements OnInit {
     this.getTotal();
   }
   isValidSale = true;
+ 
   save(paymentType: any) {
 
+    
     
     this.tableDataList.forEach((p: any) => {
 
@@ -1224,33 +1226,23 @@ export class GarmentSaleReturnComponent implements OnInit {
 
       if (p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null) {
         this.msg.WarnNotify('(' + p.productTitle + ') Cost Price is not Valid');
-      
-
         return;
       }
 
       if (p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null) {
         this.msg.WarnNotify('(' + p.productTitle + ') Sale Price is not Valid');
-        
-
         return;
       }
 
       if (p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '') {
         this.msg.WarnNotify('(' + p.productTitle + ') Quantity is not Valid');
-     
         return;
       }
 
       if (p.costPrice > (p.salePrice - p.discInR)) {
         this.msg.WarnNotify('(' + p.productTitle + ') Discount not valid');
-  
-
         return;
       }
-
-
-
 
     });
 
@@ -1293,6 +1285,7 @@ export class GarmentSaleReturnComponent implements OnInit {
           BillDiscount: parseFloat(this.discount) + parseFloat(this.offerDiscount),
           OtherCharges: this.otherCharges,
           NetTotal: this.netTotal,
+          SendToFbr: false,
           CashRec: this.cash,
           Change: this.change,
           AdvTaxAmount: this.AdvTaxAmount,

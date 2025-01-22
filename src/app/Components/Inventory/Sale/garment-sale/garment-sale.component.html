@@ -84,11 +84,15 @@
                         <mat-radio-button value="urdu">Urdu</mat-radio-button>
                       </mat-radio-group>
                 </div>
+                <div class="pt-1 pb-1 text-center d-flex justify-content-between">
+                    <span class="pe-1 w-25">
+                       <button class="w-100  btn btn-success" id="saveP" (click)="save(paymentType,true,false)" accesskey="S" ><u>S</u>ave</button>
+                    </span>
+                    <button class="w-75  btn btn-success" id="save" (click)="save(paymentType,true,true)" accesskey="P" ><u>S</u>ave & Print</button>
+                    <button class="w-100 btnsave d-none"  (click)="save(paymentType,false,true)"
+                    accesskey="."><u>S</u>ave</button>
+               </div>
 
-                <div class="pt-1 pb-1 text-center">
-                    <button class="w-100 btnsave" id="save" (click)="save(paymentType)"
-                        accesskey="S"><u>S</u>ave</button>
-                </div>
                 <div class="d-flex justify-content-between">
                     <div class="pe-1 w-25"><button class="btnduplicate w-100" accesskey="u"
                          (click)="global.openBootstrapModal('#SavedBillModal',true);getSavedBill()">D<u>u</u>plicate</button></div>
@@ -311,7 +315,7 @@
                 </div>
 
                 <div class="modal-footer bg-mf-blue">
-                    <button class="btnsave" (click)="save(pType.value)">Save</button>
+                    <button class="btnsave" (click)="save(pType.value,true,true)">Save</button>
                     <button type="button" class="btnclose" data-bs-dismiss="modal" (click)="paymentType = 'Cash';bankCoaID=0">Close</button>
                 </div>
 
@@ -403,7 +407,10 @@
                    <td>{{item.entryUser}}</td>
                    <td>{{item.partyName || "Walk In"}}</td>
                    <td>{{item.netTotal |number:'1.0-0'}}</td>
-                   <td class="text-primary cursorPointer"><mat-icon (click)="printDuplicateBill(item)">print</mat-icon></td>
+                   <td class="cursorPointer">
+                    <mat-icon class="text-primary " (click)="printDuplicateBill(item)">print</mat-icon>
+                    <mat-icon class="text-dark" *ngIf="!item.fbrStatus && FBRFeature" (click)="sendToFbr(item)">send</mat-icon>
+                    </td>
                    <td class="text-success cursorPointer"><mat-icon (click)="billDetails(item)">receipt</mat-icon></td>
                </tr>
            </tbody>

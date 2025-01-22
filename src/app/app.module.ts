@@ -51,8 +51,6 @@ import { ConnModule } from 'src/assets/conn/conn.module';
 
 
 
-
-
 @NgModule({
   declarations: [   
     AppComponent, 
@@ -64,7 +62,7 @@ import { ConnModule } from 'src/assets/conn/conn.module';
     NumberInputComponent,
     SideNavbarComponent,
     ConfirmationAlertComponent,
-
+    
    
     
     //LFilterPipe,
@@ -104,9 +102,7 @@ import { ConnModule } from 'src/assets/conn/conn.module';
     SharedServicesDataModule,
     SharedFieldValidationModule,
     ConnModule,
-    
-   
-   
+     
     
   
 

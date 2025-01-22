@@ -1,12 +1,21 @@
-<div id="billEnglish">
+<div id="billEnglish" >
+
+    <div class="p-1">
+        
+    <!--------------------- Company Detail Section Start------------------ -->
     <div class="text-center">
         <img *ngIf="companyLogo && showCompanyLogo" [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
         <h3 class="text-uppercase" *ngIf="showCompanyName">{{companyName}}</h3>
         <p   class="fs-11 text-uppercase">{{companyAddress}}</p>
         <p style="margin-top: -20px;" class="fs-11">{{CompanyMobile}}</p>
+       <div class="d-flex flex-column" style="margin-top: -15px;" >
+        <span *ngIf="FBRFeature && CompanyNTN != '-'" class="fs-11"><b>NTN:</b>{{CompanyNTN}} </span>
+        <span *ngIf="FBRFeature && CompanySTRN != '-'" class="fs-11"><b>STRN:</b> {{CompanySTRN}}</span>
+       </div>
+        
 
     </div>
-
+    <!--------------------- Company Detail Section  End------------------ -->
 
     <div >
       <table class="table-logix2 fs-13">
@@ -23,11 +32,16 @@
                 <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
                 <td>{{myCounterName}}</td>
             </tr>
+        
            
         </tbody>
       </table>
 
   <table>
+    <tr *ngIf="myFbrStatus">
+        <th class="fs-12">FBR Inv:-</th>
+        <td class="ms-2 fs-11">{{myFbrInvoiceNo}}</td>
+    </tr>
     <tr *ngIf="myCustomerName != null">
         <th class="fs-12">Customer:-</th>
         <td class="ms-2 fs-11">{{myCustomerName}}</td>
@@ -46,12 +60,17 @@
     
   </table>
     </div>
-    <p class="border border-dark text-center mt-1 fw-bold" *ngIf="billType">{{billType}}</p>
-    <p class="border border-dark text-center fw-bold">{{myInvType == 'S' ? 'Sale' : myInvType == 'SR' ?'Sale Return' :''}}</p>
-    <p *ngIf="myPaymentType == 'Complimentary'" class="border border-dark text-center fw-bold">Complimentary</p>
-    <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center fw-bold">Duplicate</p>
+
+    <div >
+        <p class="border border-dark text-center mt-1 fw-bold" *ngIf="billType">{{billType}}</p>
+        <p class="border border-dark text-center fw-bold">{{myInvType == 'S' ? 'Sale' : myInvType == 'SR' ?'Sale Return' :''}}</p>
+        <p *ngIf="myPaymentType == 'Complimentary'" class="border border-dark text-center fw-bold">Complimentary</p>
+        <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center fw-bold">Duplicate</p>
+    </div>
 
     <div>
+
+        <!---------------------- Bill Table Start------------------>
         <table class="w-100 table-garment-sale" style="font-size: 15px;">
             <thead >
                 <tr class="fs-12">
@@ -72,11 +91,11 @@
                         <table class="table-garment-sale-2 w-100">
                             <tr>
                                 <td class="text-center" style="width:10% !important;">{{item.quantity |number:'1.0-2'}}</td>
-                                <td class="text-end" *ngIf="gstFeature" style="width:20% !important;">{{item.salePrice - (item.salePrice / ((item.gst / 100) + 1))   |number:'1.0-2'}}</td>
-                                <td class="text-end" style="width:20% !important;">{{item.salePrice |number:'1.0-2'}}</td>
-                                <td class="text-end" *ngIf="discFeature" style="width:10% !important;">{{item.discInR|number:'1.0-2'}}</td>
-                                <td class="text-end"  *ngIf="discFeature"  style="width:10% !important;">{{item.discInP|number:'1.0-2'}}</td>
-                                <td class="text-end" style="width:20% !important;">{{(item.quantity * item.salePrice) - (item.discInR * item.quantity) |number:'1.0-2'}}</td>
+                                <td class="text-end" *ngIf="gstFeature" style="width:20% !important;">{{item.salePrice - (item.salePrice / ((item.gst + 100) / 100))   |number:'1.0-1'}}</td>
+                                <td class="text-end" style="width:20% !important;" >{{(item.salePrice / ((item.gst + 100) / 100))|number:'1.0-1'}}</td>
+                                <td class="text-end" *ngIf="discFeature" style="width:10% !important;">{{item.discInR|number:'1.0-1'}}</td>
+                                <td class="text-end"  *ngIf="discFeature"  style="width:10% !important;">{{item.discInP|number:'1.0-1'}}</td>
+                                <td class="text-end" style="width:20% !important;">{{(item.quantity * item.salePrice) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
                             </tr>
                         </table>
                     </td>
@@ -88,6 +107,7 @@
                     <td class="fw-bold fs-11">{{myQtyTotal | number:'1.0-2'}}</td>
                     <td colspan="2" *ngIf="discFeature"></td>
                 </tr>
+           
             </tbody>
         </table>
 
@@ -123,19 +143,35 @@
         </table> -->
 
       
+ <!---------------------- Bill Table End------------------>
 
 
+
+
+ <!--------------------------Bill Total Area Start ---------------------->
 
        <table class="w-100  text-uppercase">
         <tbody class="fs-16 fw-bold">
-                <tr class="text-center">
-                    <td width="40%" rowspan="7" style="font-size: 10px;" >
-                        <img [src]="global.thankyouImage" height="80" width="80" /><br />
-                        FOR VISITING US.
+            <tr class="text-end border border-dark" *ngIf="myPOSFee > 0">
+                <td></td>
+                <th colspan="2" >POS FEE</th>
+                <td>{{myPOSFee | number:'1.0-2'}}</td>
+            </tr>
+
+                <tr class="text-center" *ngIf="FBRFeature" >
+                    <td id="output" class="d-none"></td>
+                    <td id="qrCode" class="qr-code-generator" width="40%" rowspan="6" style="border: 0px solid black;"></td>
+                
+                </tr>
+                <tr class="text-center " *ngIf="!FBRFeature" >
+                  
+                    <td width="40%" rowspan="7"  style="font-size: 10px;" >
+                       <img [src]="global.thankyouImage" height="80" width="80" /><br />
+                        FOR VISITING US. 
                     </td>
                 </tr>
        
-            <tr class="text-end">
+            <tr class="text-end" >
               
                 <td></td>
                 <td >Sub Total</td>
@@ -218,7 +254,7 @@
         </tbody>
     </table>
 
-
+<!--------------------------Bill Total Area End ---------------------->
 
         <hr>
        <!-- <table>
@@ -234,13 +270,17 @@
         </div>
 
     </div>
+    </div>
 
   
 
 </div>
 
+
+
 <div id="BillUrdu" class="d-none" >
 
+   <div class="p-1">
     <div class="text-center">
         <img *ngIf="companyLogo && showCompanyLogo" [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
         <h3 class="text-uppercase" *ngIf="showCompanyName">{{companyName}}</h3>
@@ -288,10 +328,13 @@
     
   </table>
     </div>
+
+   <div>
     <p class="border border-dark text-center mt-1" *ngIf="billType">{{billType}}</p>
     <p class="border border-dark text-center">{{myInvType == 'S' ? 'Sale' : myInvType == 'SR' ?'Sale Return' :''}}</p>
     <p *ngIf="myPaymentType == 'Complimentary'" class="border border-dark text-center">Complimentary</p>
     <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center">Duplicate</p>
+   </div>
 
     <div>
         
@@ -436,6 +479,8 @@
     </table>
  </div>
 
+ </div>
+   </div>
  </div>
 
 

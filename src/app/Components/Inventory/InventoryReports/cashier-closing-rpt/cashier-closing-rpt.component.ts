@@ -14,7 +14,7 @@ import { environment } from 'src/environments/environment.development';
 })
 export class CashierClosingRptComponent implements OnInit {
 
-
+  FBRFeature = this.global.FBRFeature;
 
   companyProfile: any = [];
   crudList:any = {c:true,r:true,u:true,d:true};
@@ -78,6 +78,7 @@ export class CashierClosingRptComponent implements OnInit {
   totalComplimentary = 0;
   totalDiscount = 0;
   totalHDCharges = 0;
+  totalPosFee = 0;
 
   getReport() {   
           this.http.get(environment.mainApi + this.global.inventoryLink +'GetDayClosingRpt_9?reqDate='+this.global.dateFormater(this.Date,'-')).subscribe(
@@ -110,6 +111,7 @@ export class CashierClosingRptComponent implements OnInit {
                 this.totalDiscount += e.disocunt;
                 this.totalHDCharges += e.hdCharges;
                 this.totalCredit += e.creditSale;
+                this.totalPosFee += e.posFee;
               });
 
             }

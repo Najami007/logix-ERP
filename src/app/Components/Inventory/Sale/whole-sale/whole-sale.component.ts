@@ -35,6 +35,7 @@ export class WholeSaleComponent implements OnInit {
   editSpFeature = this.global.editSpFeature;
   editDiscFeature = this.global.editDiscFeature;
   prodDetailFeature = this.global.prodDetailFeature;
+  FBRFeature = this.global.FBRFeature;
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
@@ -163,6 +164,7 @@ export class WholeSaleComponent implements OnInit {
   qtyTotal = 0;
   subTotal: any = 0;
   netTotal = 0;
+  PosFee = this.global.POSFee;
 
   bankCoaList: any = [];
   partyList: any = [];
@@ -984,7 +986,7 @@ export class WholeSaleComponent implements OnInit {
     this.getTotal();
   }
 
-  save(paymentType: any) {
+  save(paymentType: any,SendToFbr:any) {
 
     var isValidFlag = true;
     this.tableDataList.forEach((p: any) => {
@@ -1063,6 +1065,8 @@ export class WholeSaleComponent implements OnInit {
             ProjectID: this.projectID,
             BookerID: this.bookerID,
             PaymentType: paymentType,
+            SendToFbr: SendToFbr,
+            PosFee  : this.FBRFeature ? this.PosFee : 0,
             Remarks: this.billRemarks || '-',
             OrderType: "Take Away",
             BillTotal: this.subTotal,

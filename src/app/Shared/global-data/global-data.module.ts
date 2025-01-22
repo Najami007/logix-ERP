@@ -17,13 +17,16 @@ import { ConfirmationAlertComponent } from 'src/app/Components/Common/confirmati
 import * as bootstrap from 'bootstrap';
 import { ExcelExportService } from '../service/ExcelExportService/excel-export.service';
 import { ProductModalComponent } from 'src/app/Components/Inventory/Sale/SaleComFiles/product-modal/product-modal.component';
+import { QRCodeModule } from 'angularx-qrcode';
+
 
 
 
 @NgModule({
   declarations: [],
   imports: [
-    CommonModule
+    CommonModule,
+    QRCodeModule
   ]
 })
 
@@ -37,6 +40,7 @@ export class GlobalDataModule implements OnInit {
   DisableDate = true;
   disableSaleDate = true;
 
+  POSFee = 1;
   InvProjectID = 1;
   parkProjectID = 1;
 
@@ -232,6 +236,7 @@ export class GlobalDataModule implements OnInit {
   waiterFeature = this.getFeature('Waiter');
   AutoFillNameFeature = this.getFeature('AutoFillName');
   BankShortCutsFeature = this.getFeature('BankShortCuts');
+  FBRFeature = this.getFeature('FBR');
 
   refreshFeatures(){
     this.discFeature = this.getFeature('Discount');
@@ -247,6 +252,7 @@ export class GlobalDataModule implements OnInit {
     this.waiterFeature = this.getFeature('Waiter');
     this.AutoFillNameFeature = this.getFeature('AutoFillName');
     this.BankShortCutsFeature = this.getFeature('BankShortCuts');
+    this.FBRFeature = this.getFeature('FBR');
   }
 
 
@@ -498,6 +504,7 @@ export class GlobalDataModule implements OnInit {
 
       // '<link rel="stylesheet" href="../css/bootstrap.css" type="text/css"  media="print"/>'
     );
+  
     frameDoc.document.write('</head><body>');
 
     //Append the DIV contents.
@@ -547,12 +554,14 @@ export class GlobalDataModule implements OnInit {
       '<link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>'
       + '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'
       + '<link rel="stylesheet" href="../../assets/style/barcode.scss" type="text/css" media="print"/>'
+      
       //+'<style type="text/css" media="print">/*@page { size: landscape; }*/</style>'
       // '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css.map" type="text/css" />'+
 
       // '<link rel="stylesheet" href="../css/bootstrap.css" type="text/css"  media="print"/>'
     );
-    frameDoc.document.write('</head><body>');
+    frameDoc.document.write('</head><body>'
+    );
 
     //Append the DIV contents.
     frameDoc.document.write(contents);
@@ -617,6 +626,8 @@ export class GlobalDataModule implements OnInit {
       printDialog.close();
     }, 1000);
   }
+
+
   printBarcode(printSection: string) {
     var contents = $(printSection).html();
 

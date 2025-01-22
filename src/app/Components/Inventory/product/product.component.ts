@@ -308,9 +308,9 @@ export class ProductComponent implements OnInit {
     }else if(this.ProductName == '' || this.ProductName == undefined){
       this.msg.WarnNotify('Enter Product Name')
     }
-    else if(this.productNameOthLanguage == '' || this.productNameOthLanguage == undefined){
+    else if(!this.AutoFillProdNameFeature && (this.productNameOthLanguage == '' || this.productNameOthLanguage == undefined) ){
       this.msg.WarnNotify('Enter Product Name In Other Language')
-    }else if(this.productCode == '' || this.productCode == undefined){
+    }else if( !this.AutoFillProdNameFeature && (this.productCode == '' || this.productCode == undefined)){
       this.msg.WarnNotify('Enter Product Code')
     }
     else if(this.prodBarcodeType == 'manual' && (this.Barcode == '' || this.Barcode == undefined)){
