@@ -8,7 +8,6 @@
         <div class="d-flex border-bottom">
 
 
-
             <mat-form-field class="w-25 m-1 matSmall" appearance="outline">
                 <mat-label>Search.....</mat-label>
                 <input #catSearch matInput type="search" class="text-secondary">
@@ -18,10 +17,10 @@
 
 
             <div class="scrollContainer">
-                <button (click)="onCatSelected({recipeCatID:0,prodFlag:false})" [ngClass]="categoryID == 0  ? 'bg-blue' : ''"
+                <button (click)="OnCatChange({recipeCatID:0,prodFlag:false})" [ngClass]="categoryID == 0  ? 'bg-blue' : ''"
                 class="border item text-center m-1 p-1">ALL</button>
                 <button *ngFor="let item of categoriesList|filter:catSearch.value"
-                    (click)="onCatSelected(item);catSearch.value = ''"
+                    (click)="OnCatChange(item);catSearch.value = ''"
                     [ngClass]="item.recipeCatID == categoryID  ? 'bg-blue' : ''"
                     class="border item text-center m-1 p-1">{{item.recipeCatTitle}}</button>
             </div>
@@ -34,17 +33,18 @@
         <!-----------   Products Area ------------------->
       
         <div class="row cursorPointer">
-            <div *ngFor="let item of RecipeList|filter:recipeSearch.value" style="width: 150px;">
-                <mat-card style="width:140px; height: 140px;" class="m-1 shadow recipecard" data-bs-toggle="modal"
+            
+            <div *ngFor="let item of RecipeList|filter:recipeSearch.value" style="width: 100px;">
+                <mat-card style="width:90px; height: 140px;" class="m-1 shadow recipecard" data-bs-toggle="modal"
                     data-bs-target="#qtyModal" (click)="tempProdRow = item;this.global.focusTo('.prodQty')">
 
                     <!-- <div style="height: 150px;width: 170px;background-size: cover;" [ngStyle]="{ 'background-image': 'url(' + item.recipeImage + ')' }"></div> -->
                     <div class="text-center">
-                        <img *ngIf="item.recipeImage" [src]="item.recipeImage" alt="" height="100px" width="130px">
+                        <img *ngIf="item.recipeImage" [src]="item.recipeImage" alt="" height="60px" width="80px">
                     </div>
 
-                  <div class="text-center" style="height: 40px;background-color: orange;"> 
-                         <p class="text-white fs-12px"> {{item.recipeTitle |slice:0:17}}...</p>
+                  <div class="text-center" style="height: 60px;background-color: orange;"> 
+                         <p class="text-white fs-12px" style="text-wrap: wrap;" > {{item.recipeTitle}}</p>
                         <p style="margin-top: -15px;"><b>{{item.recipeSalePrice |number}}</b></p>
                     <!-- <mat-card-footer class="text-center"
                     style="font-size: x-small;"></mat-card-footer>
@@ -105,7 +105,7 @@
 
 
             <button mat-fab class="m-1 text-white bg-warning col-lg-5" accesskey="n" matTooltip="New bill (Alt + n)"
-            [disabled]="tableData != ''" (click)="global.openBootstrapModal('#NewBill',true);reset()"><mat-icon>add</mat-icon></button>
+            [disabled]="tableData != ''" (click)="getTable();global.openBootstrapModal('#NewBill',true);reset()"><mat-icon>add</mat-icon></button>
 
         </div>
 
@@ -524,32 +524,42 @@
         aria-labelledby="discLabel">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+            <form method="post">
                 <div class="modal-body">
 
-                    <form method="post">
+                    
 
-                        <div>
-                            <mat-form-field appearance="outline" class="w-100 matSmall">
-                                <mat-label>Discount</mat-label>
-                                <input class="prodQty" (keydown)="this.global.handleNumKeys($event)" type="number"
-                                    min="0" matInput #bDisc />
+                        <div class="row">
+                            <mat-form-field appearance="outline" class="w-50 matSmall">
+                                <mat-label>Disc %</mat-label>
+                                <input class="prodQty" [(ngModel)]="discPer" name="discountPercent"  id="discInput" 
+                                (keydown)="this.global.handleNumKeys($event);genDisc('perc')" 
+                                (keyup)="genDisc('perc')"
+                                type="number" min="0" matInput #bDiscPer />
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="w-50 matSmall">
+                                <mat-label>Disc Amt</mat-label>
+                                <input class="prodQty" [(ngModel)]="discAmount" name="discountAmount"  id="discInput" 
+                                (keydown)="this.global.handleNumKeys($event);genDisc('amt')"
+                                (keyup)="genDisc('amt')"
+                                 type="number" min="0" matInput #bDiscAmt />
                             </mat-form-field>
                         </div>
-
-                        <div class="modal-footer text-end p-3 bg-mf">
-                            <button class="btn btn-success" data-bs-dismiss="modal"
-                                (click)="verifyDiscount(bDisc.value);bDisc.value =''">Save</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </form>
-
-
+                
+                   
                 </div>
-
+                <div class="modal-footer text-end p-3 bg-mf">
+                    <button class="btn btn-success" 
+                        (click)="verifyDiscount();">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
 
             </div>
         </div>
     </div>
+
+
 
 
 
@@ -686,12 +696,47 @@
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <form  method="post">
                     <div class="modal-body" >
-                        <div class="d-flex">
-                            <div class="col-lg-10" style="height: 50vh;overflow-y: scroll;">
-                                <table>
+                        <div class="d-flex flex-column">
+                            <div class="border-start p-1 row">
+                         
+                                <mat-radio-group name="tsOrderType" class="w-25" aria-label="Select an option" [(ngModel)]="tempOrderType">
+                                    <mat-radio-button *ngFor="let item of orderTypeList"
+                                        [disabled]="invBillNo !== '' || orderType != ''"
+                                        (change)="onOrderTypeSelected(item.val)"
+                                        [value]="item.val">{{item.title}}</mat-radio-button>
+                                </mat-radio-group>
+                                
+                                <mat-form-field  appearance="outline" class="w-25 matSmall">
+                                    <mat-label>Cover</mat-label>
+                                    <input name="tsCover" type="number" (keydown)="this.global.handleNumKeys($event)" matInput
+                                        [(ngModel)]="coverOf" />
+                                </mat-form-field>
+                            
+
+                                <mat-form-field appearance="outline" class="w-50 matSmall" *ngIf="waiterFeature">
+                                    <mat-label>Waiter</mat-label>
+                                    <mat-select [(ngModel)]="BookerID" name="waiter">
+                                        <mat-option class="d-none"><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
+                                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                        <mat-option *ngFor="let item of bookerList | filter:bookerSearch.value" [value]="item.bookerID">{{item.bookerName}}</mat-option>
+                                    </mat-select>
+            
+                                </mat-form-field>
+
+                                <mat-form-field class="matSmall w-100" >
+                                    <mat-label>Search Table</mat-label>
+                                    <input matInput #searchTable >
+                                </mat-form-field>
+    
+                            </div>
+                            <div style="height: 50vh;overflow-y: scroll;">
+
+                              
+                                 <table>
                                     <tbody class="">
+                                        
                                         <tr style="display: inline-flex; " class="cursorPointer "
-                                            *ngFor="let item of tableList ">
+                                            *ngFor="let item of tableList | filter:searchTable.value ">
                                             <mat-card name="tsTableNo" class="btblbtn justify-content-center"
                                                 *ngIf="item.tableStatus == false"
                                                 [ngClass]="item.tableID == tempTableID ? 'bg-primary text-white' : 'bg-white'"
@@ -706,22 +751,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-lg-2 border-start p-1">
-                         
-                                <mat-radio-group name="tsOrderType" aria-label="Select an option" [(ngModel)]="tempOrderType">
-                                    <mat-radio-button *ngFor="let item of orderTypeList"
-                                        [disabled]="invBillNo !== '' || orderType != ''"
-                                        (change)="onOrderTypeSelected(item.val)"
-                                        [value]="item.val">{{item.title}}</mat-radio-button>
-                                </mat-radio-group>
-                                
-                                <mat-form-field  appearance="outline" class="w-100 pt-4 matSmall">
-                                    <mat-label>Cover</mat-label>
-                                    <input name="tsCover" type="number" (keydown)="this.global.handleNumKeys($event)" matInput
-                                        [(ngModel)]="coverOf" />
-                                </mat-form-field>
-    
-                            </div>
+                        
                         </div>
     
     
@@ -755,8 +785,10 @@
                         <tbody class="">
                             <tr style="display: inline-flex; " class="cursorPointer "
                                 *ngFor="let item of holdBillList ">
-                                <mat-card *ngIf="item.orderType == 'Dine In'" class="btblbtn justify-content-center" (click)="getBillDetail(item)">
+                                <mat-card *ngIf="item.orderType == 'Dine In'" class="btblbtn justify-content-center d-flex flex-column" (click)="getBillDetail(item)">
                                     <span>{{item.tableTitle}}</span>
+                                    <span style="font-size: 8px;">({{item.createdOn | date:'hh:mm:a'}})</span>
+                                    <span *ngIf="waiterFeature" style="font-size: 8px;margin-top: -10px;">{{item.bookerName}}</span>
                                 </mat-card>
                             </tr>
                         </tbody>

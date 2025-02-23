@@ -226,8 +226,8 @@
     </div>
 
 
-    <div *ngIf="discFeature" class="row w-75 p-1 " style="position: fixed;bottom: 3.5%;left: 25.5%;background-color: rgb(218, 228, 231);">
-        <mat-form-field *ngIf="discFeature" class="col-lg-2 custom-form-field matSmall" >
+    <div *ngIf="discFeature" class="row w-75 p-1" style="position: fixed;bottom: 3.5%;left: 25.5%;background-color: rgb(218, 228, 231);">
+        <mat-form-field *ngIf="discFeature" class="col-lg-2 matSmall" >
             <mat-label>Disc</mat-label>
             <mat-select [(ngModel)]="billDiscount" name="billDiscount" (selectionChange)="applyDiscount()">
                 <mat-option *ngFor="let item of discountList" [value]="item.value">{{item.value}}%</mat-option>

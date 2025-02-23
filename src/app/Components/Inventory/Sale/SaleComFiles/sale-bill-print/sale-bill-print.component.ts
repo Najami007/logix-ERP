@@ -5,9 +5,10 @@ import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { environment } from 'src/environments/environment.development';
-declare var $:any;
+declare var $: any;
 // import * as $ from 'jquery-qrcode';
 import html2canvas from 'html2canvas';
+import { KOTPrintComponent } from '../kotprint/kotprint.component';
 
 
 @Component({
@@ -16,8 +17,9 @@ import html2canvas from 'html2canvas';
   templateUrl: './sale-bill-print.component.html',
   styleUrls: ['./sale-bill-print.component.scss']
 })
-export class SaleBillPrintComponent implements OnInit  {
+export class SaleBillPrintComponent implements OnInit {
   @ViewChild('qrCodeContainer', { static: true }) qrCodeContainer!: ElementRef;
+  @ViewChild(KOTPrintComponent) kotPrint: any;
 
   discFeature = this.global.discFeature;
   BookerFeature = this.global.BookerFeature;
@@ -26,12 +28,14 @@ export class SaleBillPrintComponent implements OnInit  {
   gstFeature = this.global.gstFeature;
   prodDetailFeature = this.global.prodDetailFeature;
   FBRFeature = this.global.FBRFeature;
+  printKotFeature = this.global.printKot;
 
 
-  billPrintType:any = '';;
+
+  billPrintType: any = '';;
   companyProfile: any = [];
   companyLogo: any = '';
-  CompanyNTN  = '';
+  CompanyNTN = '';
   CompanySTRN = '';
   logoHeight: any = 0;
   logoWidth: any = 0;
@@ -45,8 +49,8 @@ export class SaleBillPrintComponent implements OnInit  {
     public global: GlobalDataModule,
     private route: Router
   ) {
-   
-    
+
+
     this.global.getCompany().subscribe((data) => {
       this.CompanyNTN = data[0].ntn;
       this.CompanySTRN = data[0].strn;
@@ -60,24 +64,19 @@ export class SaleBillPrintComponent implements OnInit  {
     });
 
 
-  
+
 
   }
-
-  qrData: string = '1235678';
-
- 
-
-
-
-
 
   ngOnInit(): void {
- 
-  
+
+
   }
 
-  billType:any = '';
+  fastFoodCID = this.global.getFastFoodCID();
+  fastFoodSCID = this.global.getFastFoodSCID();
+
+  billType: any = '';
 
   myPrintTableData: any = [];
   myInvoiceNo = '';
@@ -99,24 +98,25 @@ export class SaleBillPrintComponent implements OnInit  {
   myDuplicateFlag = false;
   myTime: any;
   myQtyTotal = 0;
-  myOfferDiscount=0;
+  myOfferDiscount = 0;
   myBookerName = '';
-  myInvType ='';
+  myInvType = '';
   myGstTotal = 0;
   myAdvTaxAmount = 0;
   myAdvTaxValue = 0;
-  myProductDetail:any = [];
-  myFbrInvoiceNo ='';
+  myProductDetail: any = [];
+  myFbrInvoiceNo = '';
   myFbrStatus = false;
   myFbrCode = '';
   myFbrResponse = '';
   myPOSFee = 0;
-
+  myInvTime = new Date();
   PrintBill(InvNo: any) {
     this.billPrintType = this.global.getBillPrintType();
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
       (Response: any) => {
         this.myPrintTableData = Response;
+
 
         this.myInvoiceNo = InvNo;
         this.myInvDate = Response[0].createdOn;
@@ -140,37 +140,49 @@ export class SaleBillPrintComponent implements OnInit  {
         this.myFbrCode = Response[0].fbrCode;
         this.myFbrResponse = Response[0].fbrResponse;
         this.myPOSFee = Response[0].posFee;
-         
+        this.myInvTime = new Date();
+
 
         this.myQtyTotal = 0;
-        this.myOfferDiscount=0;
+        this.myOfferDiscount = 0;
         this.myGstTotal = 0;
         Response.forEach((e: any) => {
           this.myQtyTotal += e.quantity;
           this.myOfferDiscount += e.discInR * e.quantity;
-          this.myGstTotal += (e.salePrice -(e.salePrice / ((e.gst / 100) + 1))) * e.quantity ;
+          this.myGstTotal += (e.salePrice - (e.salePrice / ((e.gst + 100) / 100))) * e.quantity;
         });
 
-       if(this.FBRFeature){
-        this.generateQRCode();
-       }
+        if (this.FBRFeature) {
+          this.generateQRCode();
+        }
         setTimeout(() => {
-          if(this.billPrintType == 'english'){
-            this.global.printBill('#billEnglish','.searchProduct');
+          if (this.billPrintType == 'english') {
+            this.global.printBill('#billEnglish', '.searchProduct');
           }
-          if(this.billPrintType == 'urdu'){
-            this.global.printBill('#BillUrdu','.searchProduct');
+          if (this.billPrintType == 'urdu') {
+            this.global.printBill('#BillUrdu', '.searchProduct');
           }
           this.qrCodeContainer;
+
+
+          if (this.printKotFeature) {
+            var FastFoodProducts = Response.filter((e: any) => e.subCategoryID == this.fastFoodSCID);
+            this.PrintPartialKot(FastFoodProducts);
+            // this.kotPrint.PrintPartialKot(FastFoodProducts);
+          }
+
         }, 100);
-        
-     
+
+
+
+
+
 
       }
     )
 
   }
- 
+
 
   generateQRCode(): void {
 
@@ -181,38 +193,56 @@ export class SaleBillPrintComponent implements OnInit  {
     //     height: 100
     //   });
 
-        $('#output').qrcode({
-        text: this.myFbrInvoiceNo || 'N/A',
-      });
-      var canvas = $('#output canvas');
-      // const element = $('#output')[0];
-      var img = $(canvas)[0].toDataURL("image/png");
-      $('#output').empty();
-      $('.qr-code-generator').empty();
-      $('.qr-code-generator').prepend('<img src="' + img + '" width="80" height="80" />')
+    $('#output').qrcode({
+      text: this.myFbrInvoiceNo || 'N/A',
+    });
+    var canvas = $('#output canvas');
+    // const element = $('#output')[0];
+    var img = $(canvas)[0].toDataURL("image/png");
+    $('#output').empty();
+    $('.qr-code-generator').empty();
+    $('.qr-code-generator').prepend('<img src="' + img + '" width="80" height="80" />')
 
-      // // var img = canvas.get(0).toDataURL("image/png");
-      // html2canvas(element).then((canvas) => {
-      //   // Convert the canvas to a data URL (base64)
-      //   const imageData = canvas.toDataURL('image/png');
-  
-      //   // Set the image source to the generated data URL
-      //   // $('#output').attr('src', imageData);
-      //   $('#output').empty();
-      //   $('#qrCode').empty();
-      //   $('#qrCode').prepend('<img src="' + imageData + '" width="90" height="90" />')
-  
-      //   console.log('Image generated:', imageData);
-      // }).catch((error) => {
-      //   console.error('Error generating image:', error);
-      // });
-      // //or
-      
+    // // var img = canvas.get(0).toDataURL("image/png");
+    // html2canvas(element).then((canvas) => {
+    //   // Convert the canvas to a data URL (base64)
+    //   const imageData = canvas.toDataURL('image/png');
+
+    //   // Set the image source to the generated data URL
+    //   // $('#output').attr('src', imageData);
+    //   $('#output').empty();
+    //   $('#qrCode').empty();
+    //   $('#qrCode').prepend('<img src="' + imageData + '" width="90" height="90" />')
+
+    //   console.log('Image generated:', imageData);
+    // }).catch((error) => {
+    //   console.error('Error generating image:', error);
+    // });
+    // //or
+
   }
 
 
-  emptyBill(){
-     this.billType = '';
+  myPrintData: any = [];
+  PrintPartialKot(data: any) {
+    if (data.length > 0) {
+      // data.forEach((e) => {
+      //   this.myPrintData = [];
+      //   this.myPrintData.push(e);
+      //   console.log(this.myPrintData);
+      //   this.global.printFastFoodKOT('#printKOT');  
+      // });
+      this.myPrintData = data;
+      setTimeout(() => {
+        this.global.printBill('#printKOT', '');
+      }, 2);
+    }
+
+  }
+
+
+  emptyBill() {
+    this.billType = '';
 
     this.myPrintTableData = [];
     this.myInvoiceNo = '';
@@ -233,9 +263,9 @@ export class SaleBillPrintComponent implements OnInit  {
     this.myDuplicateFlag = false;
     this.myTime = '';
     this.myQtyTotal = 0;
-    this.myOfferDiscount=0;
+    this.myOfferDiscount = 0;
     this.myBookerName = '';
-    this.myInvType ='';
+    this.myInvType = '';
   }
 
 

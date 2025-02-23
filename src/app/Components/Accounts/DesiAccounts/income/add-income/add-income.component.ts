@@ -113,11 +113,12 @@ export class AddIncomeComponent  implements OnInit {
 
   save(){
     
-    if(this.coaID == 0 || this.coaID == undefined || this.coaID == null){
-      this.msg.WarnNotify('Select Expense Head')
-    }else if(this.refCoaID == 0 || this.refCoaID == undefined || this.refCoaID == null){
+    if(this.refCoaID == 0 || this.refCoaID == undefined || this.refCoaID == null){
+      this.msg.WarnNotify('Select Income Head')
+    }else if(this.coaID == 0 || this.coaID == undefined || this.coaID == null){
       this.msg.WarnNotify('Select Cash Or Bank')
-    }else if(this.amount == 0 || this.amount == undefined || this.amount == null){
+    }
+    else if(this.amount == 0 || this.amount == undefined || this.amount == null){
       this.msg.WarnNotify('Enter Amount')
     }else{
 

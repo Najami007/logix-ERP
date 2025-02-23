@@ -183,6 +183,7 @@ rptType:any = 's';
         this.netGrandTotal = 0;
         this.discountTotal = 0;
         this.summaryNetTotal = 0;
+        this.myTaxTotal = 0;
 
         this.SaleDetailList.forEach((e:any) => {
          
@@ -208,6 +209,7 @@ rptType:any = 's';
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryDetailDateWise_3?reqType='+this.rptType+'&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
+        console.log(Response);
      
         this.SaleDetailList = [];
         if(this.rptType == 'R'){

@@ -18,6 +18,7 @@ import * as bootstrap from 'bootstrap';
 import { ExcelExportService } from '../service/ExcelExportService/excel-export.service';
 import { ProductModalComponent } from 'src/app/Components/Inventory/Sale/SaleComFiles/product-modal/product-modal.component';
 import { QRCodeModule } from 'angularx-qrcode';
+import Swal from 'sweetalert2';
 
 
 
@@ -40,9 +41,28 @@ export class GlobalDataModule implements OnInit {
   DisableDate = true;
   disableSaleDate = true;
 
+
+  ///////////////Rest Service Charges Condition //////////
+  RestServiceCharges = 2;
+  validCharges(billTotal: any) {
+    if (billTotal > 3000) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
+  ////////////////////////
+
+
+  ResCardGst = 5;
+  ResCashGst = 16;
   POSFee = 1;
   InvProjectID = 1;
   parkProjectID = 1;
+
+  ////////////////////// API Module Start Points//////////////////
 
   inventoryLink = 'inv/';
   userLink = 'user/';
@@ -55,24 +75,24 @@ export class GlobalDataModule implements OnInit {
   societyLink = 'prp/';
   propertyLink = 'prp/';
 
-
+  ////////////////////// API Module Start Points//////////////////
   Currency = 'AED';
 
 
   glbMenulist: any = [];
 
 
+  /////////////// Pagination Global Size ///////////////
+  paginationDefaultTalbeSize = 50;
+  paginationTableSizes: any = [10, 25, 50, 100, 500, 1000];
+
+  /////////////// Pagination Global Size ///////////////
+
+
 
 
   public subject = new Subject<any>();
   public comapnayProfile = [];
-
-
-
-  paginationDefaultTalbeSize = 50;
-  paginationTableSizes: any = [10, 25, 50, 100, 500, 1000];
-
-
   public currentUserSubject: BehaviorSubject<userInterface>;
   public currentUser: Observable<userInterface>;
   curUserID: any;
@@ -112,7 +132,7 @@ export class GlobalDataModule implements OnInit {
   header_title$ = this._headerTitleSource.asObservable();
 
 
-  
+
   ///////////////////////////////////////////////////////////
   /////////////////////login funciton///////////////////////
   ////////////////////////////////////////////////////////
@@ -130,7 +150,7 @@ export class GlobalDataModule implements OnInit {
       next: (Value: any) => {
         var curDate: Date = new Date();
         var userID = Value._culId;
-        var value = { msg: Value.msg, _cuLnk: Value._cuLnk, _culId: Value._culId, _culName: Value._culName };
+        var value = { msg: Value.msg, _cuLnk: Value._cuLnk, _culId: Value._culId, _culName: Value._culName, _reqCID: Value._reqCID, _reqSCID: Value._reqSCID };
         var flt: any = [];
         ///Encripting The Features List
         Value._reqFeatures.forEach((e: any) => {
@@ -231,14 +251,17 @@ export class GlobalDataModule implements OnInit {
   editSpFeature = this.getFeature('EditSp');
   editDiscFeature = this.getFeature('EditDisc');
   prodDetailFeature = this.getFeature('ProdDetail');
-  showCmpNameFeature: any = this.getFeature('cmpName');
+  showCmpNameFeature: any = this.getFeature('CmpName');
   showCompanyLogo = this.getFeature('CmpLogo');
   waiterFeature = this.getFeature('Waiter');
   AutoFillNameFeature = this.getFeature('AutoFillName');
   BankShortCutsFeature = this.getFeature('BankShortCuts');
   FBRFeature = this.getFeature('FBR');
+  showOrderNo = this.getFeature('OrderNo');
+  printKot = this.getFeature('PrintKot');
 
-  refreshFeatures(){
+
+  refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
     this.BookerFeature = this.getFeature('Booker');
     this.gstFeature = this.getFeature('GST');
@@ -247,33 +270,34 @@ export class GlobalDataModule implements OnInit {
     this.editSpFeature = this.getFeature('EditSp');
     this.editDiscFeature = this.getFeature('EditDisc');
     this.prodDetailFeature = this.getFeature('ProdDetail');
-    this.showCmpNameFeature = this.getFeature('cmpName');
+    this.showCmpNameFeature = this.getFeature('CmpName');
     this.showCompanyLogo = this.getFeature('CmpLogo');
     this.waiterFeature = this.getFeature('Waiter');
     this.AutoFillNameFeature = this.getFeature('AutoFillName');
     this.BankShortCutsFeature = this.getFeature('BankShortCuts');
     this.FBRFeature = this.getFeature('FBR');
+    this.showOrderNo = this.getFeature('OrderNo');
+    this.printKot = this.getFeature('PrintKot');
   }
 
 
   getFeature(value: any) {
-   
+
     var credentials = JSON.parse(localStorage.getItem('ftr') || '""');
     var returnStatus = false;
-   if(credentials != ''){
+    if (credentials != '') {
 
-    var FearturesList: any = credentials.flt;
+      var FearturesList: any = credentials.flt;
 
-    var row: any = FearturesList.find((e: any) => atob(atob(e.ttl)) == value);
+      var row: any = FearturesList.find((e: any) => atob(atob(e.ttl)) == value);
+      if (row != undefined) {
+        var status: any = atob(atob(row.sts));
+        returnStatus = status == 'True' ? true : false
+      }
 
-    if (row != undefined) {
-      var status: any = atob(atob(row.sts));
-      returnStatus = status == 'True' ? true : false
     }
-   
-   }
-   return returnStatus;
- 
+    return returnStatus;
+
   }
 
   getBillPrintType() {
@@ -342,6 +366,27 @@ export class GlobalDataModule implements OnInit {
 
   }
 
+  ////////////////////// will provide the logged in user Name
+  getFastFoodCID() {
+    var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
+
+     return atob(atob(credentials.value._reqCID)).toString();
+    //return credentials.value._reqCID.toString();
+
+    // return atob(atob(this.cookie.get('un'))).toString();
+
+  }
+
+  ////////////////////// will provide the logged in user Name
+  getFastFoodSCID() {
+    var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
+
+     return atob(atob(credentials.value._reqSCID)).toString();
+    //return credentials.value._reqSCID.toString();
+    // return atob(atob(this.cookie.get('un'))).toString();
+
+  }
+
 
   getRoleId() {
     var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
@@ -380,8 +425,15 @@ export class GlobalDataModule implements OnInit {
     return differenceInHours;
   }
 
+  curDate = new Date();
+  SubscriptionExpired() {
+
+    var ExpiryDate = '2025-03-03';
+    var status = (this.dateFormater(this.curDate, '-') >= ExpiryDate);
+    return status;
 
 
+  }
 
   /////////////////////////////////////////////////////////////////////////////////
 
@@ -504,7 +556,7 @@ export class GlobalDataModule implements OnInit {
 
       // '<link rel="stylesheet" href="../css/bootstrap.css" type="text/css"  media="print"/>'
     );
-  
+
     frameDoc.document.write('</head><body>');
 
     //Append the DIV contents.
@@ -554,7 +606,7 @@ export class GlobalDataModule implements OnInit {
       '<link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>'
       + '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'
       + '<link rel="stylesheet" href="../../assets/style/barcode.scss" type="text/css" media="print"/>'
-      
+
       //+'<style type="text/css" media="print">/*@page { size: landscape; }*/</style>'
       // '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css.map" type="text/css" />'+
 
@@ -576,6 +628,45 @@ export class GlobalDataModule implements OnInit {
       frame1.remove();
       $(focusClass).trigger('focus');
     }, 500);
+
+  }
+
+  printFastFoodKOT(printSection: string) {
+    var contents = $(printSection).html();
+
+    var frame1: any = $('<iframe />');
+    frame1[0].name = 'frame1';
+    frame1.css({ position: 'absolute', top: '-1000000px' });
+    $('body').append(frame1);
+    var frameDoc = frame1[0].contentWindow
+      ? frame1[0].contentWindow
+      : frame1[0].contentDocument.document
+        ? frame1[0].contentDocument.document
+        : frame1[0].contentDocument;
+    frameDoc.document.open();
+    frameDoc.document.write(
+
+      '<link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>'
+      + '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'
+      + '<link rel="stylesheet" href="../../assets/style/barcode.scss" type="text/css" media="print"/>'
+
+    );
+    frameDoc.document.write('</head><body>'
+    );
+
+    //Append the DIV contents.
+    frameDoc.document.write(contents);
+    frameDoc.document.write('</body></html>');
+
+    frameDoc.document.close();
+
+    setTimeout(function () {
+      window.frames[0].focus();
+      window.frames[0].print();
+
+      frame1.remove();
+    }, 2);
+ 
 
   }
 
@@ -1118,29 +1209,34 @@ export class GlobalDataModule implements OnInit {
   }
 
 
-  public getBookerList (): Observable<any> {
+  public getPartyList(): Observable<any> {
+
+    return this.http.get(environment.mainApi + this.companyLink + 'getParty').pipe(retry(3));
+  }
+
+  public getBookerList(): Observable<any> {
     return this.http.get(environment.mainApi + this.inventoryLink + 'GetBooker').pipe(retry(3));
   }
 
-  public getWarehouseLocationList() : Observable<any> {
+  public getWarehouseLocationList(): Observable<any> {
     return this.http.get(environment.mainApi + this.inventoryLink + 'getlocation').pipe(retry(3));
   }
 
-  public  getIssueTypesList() : Observable<any> {
-    return this.http.get(environment.mainApi+this.inventoryLink+'GetIssueType').pipe(retry(3));
+  public getIssueTypesList(): Observable<any> {
+    return this.http.get(environment.mainApi + this.inventoryLink + 'GetIssueType').pipe(retry(3));
   }
 
-  public getUserList()  : Observable<any> {
-    return  this.http.get(environment.mainApi + this.userLink + 'getuser').pipe(retry(3));
+  public getUserList(): Observable<any> {
+    return this.http.get(environment.mainApi + this.userLink + 'getuser').pipe(retry(3));
 
   }
 
-  public getBrandList() : Observable<any> {
-    return this.http.get(environment.mainApi +this.inventoryLink+'GetBrand').pipe(retry(3));
+  public getBrandList(): Observable<any> {
+    return this.http.get(environment.mainApi + this.inventoryLink + 'GetBrand').pipe(retry(3));
   }
 
-  public  getProjectList() : Observable<any> {
-    return this.http.get(environment.mainApi+this.companyLink+'getproject').pipe(retry(3));
+  public getProjectList(): Observable<any> {
+    return this.http.get(environment.mainApi + this.companyLink + 'getproject').pipe(retry(3));
   }
 
 
@@ -1149,7 +1245,7 @@ export class GlobalDataModule implements OnInit {
     return this.http.get(environment.mainApi + 'acc/GetVoucherCBCOA?type=' + type).pipe(retry(3));
   }
 
-  public  getBankList(): Observable<any>  {
+  public getBankList(): Observable<any> {
     return this.http.get(environment.mainApi + 'acc/GetVoucherCBCOA?type=BRV').pipe(retry(3));
   }
 

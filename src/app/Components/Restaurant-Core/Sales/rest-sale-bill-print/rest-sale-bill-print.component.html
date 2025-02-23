@@ -1,128 +1,130 @@
+<!-------------------Bill Print Without GST -------------->
+
 <div id="printRestBill">
     <div class="text-center">
         <p *ngIf="showCmpNameFeature" style="font-family:Arial, Helvetica, sans-serif">Welcome To {{companyName}}</p>
-        <p style="margin-top: -20px;" class="fs-11 text-uppercase">{{companyAddress}}</p>
-        <p style="margin-top: -20px;"  class="fs-11">{{CompanyMobile}}</p>
+        <p *ngIf="companyAddress != '-'" style="margin-top: -20px;" class="fs-11 text-uppercase">{{companyAddress}}</p>
+        <p *ngIf="CompanyMobile != '-'" style="margin-top: -20px;" class="fs-11">{{CompanyMobile}}</p>
         <img *ngIf="showCompanyLogo" [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
 
-        <h2 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">ORDER NO: {{myOrderNo}}</h2>
-        
+        <h2 *ngIf="showOrderNo" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">ORDER NO: {{myOrderNo}}</h2>
+
     </div>
 
 
-  <div class="p-1">
-    <div >
-        <table class="w-100" style="font-size: 10px;">
-            
+    <div class="p-1">
+        <div>
+            <table class="w-100" style="font-size: 10px;">
+
                 <tr>
                     <td>Inv #</td>
-                    <td>{{myInvoiceNo}}</td>            
-                </tr>          
-               <tr>
+                    <td>{{myInvoiceNo}}</td>
+                </tr>
+                <tr>
                     <td>Date</td>
-                    <td>{{myInvDate | date:'dd-MM-yyyy '}} ({{myInvTime|date:'hh:mm:ss:a'}})</td>          
+                    <td>{{myInvDate | date:'dd-MM-yyyy '}} ({{myInvTime|date:'hh:mm:ss:a'}})</td>
                 </tr>
                 <tr>
                     <td>Cashier</td>
                     <td>{{myCounterName}}</td>
                 </tr>
                 <tr>
-                    <td>Table</td>    
+                    <td>Table</td>
                     <td>{{mytableNo}}</td>
                 </tr>
                 <tr *ngIf="waiterFeature">
-                    <td>Waiter</td>    
+                    <td>Waiter</td>
                     <td>{{myBookerName}}</td>
                 </tr>
                 <tr>
                     <td>Remarks:-</td>
-                    <td >{{myRemarks}}</td>
+                    <td>{{myRemarks}}</td>
                 </tr>
-          
-        </table>
 
-        
+            </table>
+
+
+        </div>
+
+        <h2 *ngIf="myPaymentType == 'Complimentary'" class="w-100 text-center">Complimentary</h2>
+        <h2 *ngIf="myDuplicateFlag == true" class=" w-100 text-center">Duplicate</h2>
+
+        <div>
+            <table class="w-100 table-restaurant-sale">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Product Name</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Total</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of myPrintData index as index">
+                        <td>{{index +1}}</td>
+                        <td>{{item.productTitle}}</td>
+                        <td>{{item.quantity |number:'1.0-2'}}</td>
+                        <td>{{item.salePrice |number:'1.0-2'}}</td>
+                        <td>{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+            <table class="w-100 mt-2" style="font-size: 10px;">
+                <tbody class="fw-bold">
+                    <tr>
+                        <td>Sub Total</td>
+                        <td>{{mySubTotal |number:'1.0-0'}}</td>
+
+                    </tr>
+                    <tr *ngIf="myOtherCharges > 0">
+                        <td *ngIf="myOrderType == 'Dine In'">Service Charges</td>
+                        <td *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</td>
+                        <td *ngIf="myOrderType == 'Take Away'">Other Charges</td>
+                        <td>{{myOtherCharges|number:'1.0-0'}}</td>
+
+                    </tr>
+                    <tr *ngIf="myDiscount > 0">
+                        <td>Discount</td>
+                        <td>{{myDiscount|number:'1.0-0'}}</td>
+
+                    </tr>
+
+                    <tr>
+                        <td>Net Total</td>
+                        <td>{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-0'}}</td>
+
+                    </tr>
+                    <tr *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
+                        <td>Cash</td>
+                        <td>{{myCash|number:'1.0-0'}}</td>
+
+                    </tr>
+                    <tr *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
+                        <td>Bank</td>
+                        <td>{{myBank|number:'1.0-0'}}</td>
+
+                    </tr>
+                    <tr *ngIf="myChange > 0">
+                        <td>Change</td>
+                        <td>{{myChange|number:'1.0-0'}}</td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+        <br>
+        <div style="border-top:1px dotted;">
+            <p style="font-size: 10px;">Wish To Serve You Again!</p>
+        </div>
     </div>
-
-    <h2 *ngIf="myPaymentType == 'Complimentary'" class="w-100 text-center">Complimentary</h2>
-    <h2 *ngIf="myDuplicateFlag == true" class=" w-100 text-center">Duplicate</h2>
-
-    <div>
-        <table class="w-100 table-restaurant-sale" >
-            <thead >
-                <tr>
-                    <th>S#</th>
-                    <th>Product Name</th>
-                    <th>Qty</th>
-                    <th>Price</th>
-                    <th>Total</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of myPrintData index as index">
-                    <td>{{index +1}}</td>
-                    <td >{{item.productTitle}}</td>
-                    <td >{{item.quantity |number:'1.0-2'}}</td>
-                    <td >{{item.salePrice |number:'1.0-2'}}</td>
-                    <td >{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
-
-                </tr>
-            </tbody>
-        </table>
-
-
-
-        <table class="w-100 mt-2" style="font-size: 10px;">
-            <tbody>
-                <tr>
-                    <td>Sub Total</td>
-                    <td>{{mySubTotal |number:'1.0-0'}}</td>
-
-                </tr>
-                <tr *ngIf="myOtherCharges > 0">
-                    <td *ngIf="myOrderType == 'Dine In'">Service Charges</td>
-                    <td *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</td>
-                    <td *ngIf="myOrderType == 'Take Away'">Other Charges</td>
-                    <td>{{myOtherCharges|number:'1.0-0'}}</td>
-
-                </tr>
-                <tr *ngIf="myDiscount > 0">
-                    <td>Discount</td>
-                    <td>{{myDiscount|number:'1.0-0'}}</td>
-
-                </tr>
-
-                <tr>
-                    <td>Net Total</td>
-                    <td>{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-0'}}</td>
-
-                </tr>
-                <tr *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
-                    <td>Cash</td>
-                    <td>{{myCash|number:'1.0-0'}}</td>
-
-                </tr>
-                <tr *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
-                    <td>Bank</td>
-                    <td>{{myBank|number:'1.0-0'}}</td>
-
-                </tr>
-                <tr *ngIf="myChange > 0">
-                    <td>Change</td>
-                    <td>{{myChange|number:'1.0-0'}}</td>
-
-                </tr>
-
-            </tbody>
-        </table>
-
-    </div>
-    <br>
-    <div style="border-top:1px dotted;">
-    <p style="font-size: 10px;">Wish To Serve You Again!</p>
-    </div>
-  </div>
 
 </div>
 
@@ -130,172 +132,194 @@
 
 
 <!--------------    Print For 5% and 16% Gst        ----------->
-<!-- 
-<div id="printRestBill">
-    <div class="text-center">
-        <p style="font-family:Arial, Helvetica, sans-serif">Welcome To {{companyName}}</p>
-        <p style="margin-top: -20px;" class="fs-11 text-uppercase">{{companyAddress}}</p>
-        <p style="margin-top: -20px;"  class="fs-11">{{CompanyMobile}}</p>
-        <img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
 
-        <h2 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">ORDER NO: {{myOrderNo}}</h2>
-        
+<div id="printGSTRestBill">
+    <div class=" d-flex flex-column text-center" *ngIf="type != 'hold'">
+        <span *ngIf="showCmpNameFeature" style="font-family:Arial, Helvetica, sans-serif">Welcome To {{companyName}}</span>
+        <span *ngIf="companyAddress != '-'"  class="fs-11 text-uppercase">{{companyAddress}}</span>
+        <span *ngIf="CompanyMobile != '-'"  class="fs-11">{{CompanyMobile}}</span>
+    
+        <span *ngIf="FBRFeature && CompanyNTN != '-'" class="fs-11"><b>NTN:</b>{{CompanyNTN}} </span>
+        <span *ngIf="FBRFeature && CompanySTRN != '-'" class="fs-11"><b>STRN:</b> {{CompanySTRN}}</span>
+    
+        <span class="w-100 text-center"><img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth"></span>
+
+        <h2 *ngIf="showOrderNo" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">ORDER NO: {{myOrderNo}}</h2>
+
+    </div>
+
+    <div class="text-center" *ngIf="type == 'hold'">
+        <h3>T.KOT</h3>
     </div>
 
 
-  <div class="p-1">
-    <div >
-        <table class="w-100" style="font-size: 10px;">
-            
+    <div class="p-1">
+        <div>
+            <table class="w-100" style="font-size: 10px;">
+
                 <tr>
                     <td>Inv #</td>
-                    <td>{{myInvoiceNo}}</td>            
-                </tr>          
-               <tr>
+                    <td>{{myInvoiceNo}}</td>
+                </tr>
+                <tr>
                     <td>Date</td>
-                    <td>{{myInvDate | date:'dd-MM-yyyy '}} ({{myInvTime|date:'hh:mm:ss:a'}})</td>          
+                    <td>{{myInvDate | date:'dd-MM-yyyy '}} ({{myInvTime|date:'hh:mm:ss:a'}})</td>
                 </tr>
                 <tr>
                     <td>Cashier</td>
                     <td>{{myCounterName}}</td>
                 </tr>
                 <tr>
-                    <td>Table</td>    
+                    <td>Table</td>
                     <td>{{mytableNo}}</td>
                 </tr>
                 <tr>
                     <td>Remarks:-</td>
-                    <td >{{myRemarks}}</td>
-                </tr>
-          
-        </table>
-
-        
-    </div>
-
-    <h2 *ngIf="myPaymentType == 'Complimentary'" class="w-100 text-center">Complimentary</h2>
-    <h2 *ngIf="myDuplicateFlag == true" class=" w-100 text-center">Duplicate</h2>
-
-    <div>
-        <table class="w-100 table-restaurant-sale" >
-            <thead >
-                <tr>
-                    <th>S#</th>
-                    <th>Product Name</th>
-                    <th>Qty</th>
-                    <th>Price</th>
-                    <th>Total</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of myPrintData index as index">
-                    <td>{{index +1}}</td>
-                    <td >{{item.productTitle}}</td>
-                    <td >{{item.quantity |number:'1.0-2'}}</td>
-                    <td >{{item.salePrice |number:'1.0-2'}}</td>
-                    <td >{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
-
-                </tr>
-            </tbody>
-        </table>
-
-
-
-        <table class="w-100 mt-2" style="font-size: 10px;">
-            <tbody>
-                <tr>
-                    <td>Sub Total</td>
-                    <td>{{mySubTotal |number:'1.0-0'}}</td>
-
-                </tr>
-                <tr *ngIf="myOtherCharges > 0">
-                    <td *ngIf="myOrderType == 'Dine In'">Service Charges</td>
-                    <td *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</td>
-                    <td *ngIf="myOrderType == 'Take Away'">Other Charges</td>
-                    <td>{{myOtherCharges|number:'1.0-0'}}</td>
-
-                </tr>
-                <tr *ngIf="myDiscount > 0">
-                    <td>Discount</td>
-                    <td>{{myDiscount|number:'1.0-0'}}</td>
-
-                </tr>
-                <tr *ngIf="myGst > 0">
-                    <td>GSt</td>
-                    <td>{{myGst|number:'1.0-0'}}</td>
-
+                    <td>{{myRemarks}}</td>
                 </tr>
 
-                <tr>
-                    <td>Net Total</td>
-                    <td>{{mySubTotal + myOtherCharges  + myGst - myDiscount|number:'1.0-0'}}</td>
-
-                </tr>
-                <tr *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
-                    <td>Cash</td>
-                    <td>{{myCash|number:'1.0-0'}}</td>
-
-                </tr>
-                <tr *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
-                    <td>Bank</td>
-                    <td>{{myBank|number:'1.0-0'}}</td>
-
-                </tr>
-                <tr *ngIf="myChange > 0">
-                    <td>Change</td>
-                    <td>{{myChange|number:'1.0-0'}}</td>
-
-                </tr>
-
-            </tbody>
-        </table>
-    
-
-        <div class="mt-3" *ngIf="type == 'hold'">
-
-            <table class=" table-restaurant-sale">
-                <tr>
-                    <th colspan="2">Tax For Card customer</th>
-                    <th colspan="2">Tax For Cash customer</th>
-                </tr>
-
-                <tr>
-                    <td>Amnt W/O Tax:</td>
-                    <td>{{mySubTotal + myOtherCharges - myDiscount |number:'1.0-0'}}</td>
-
-                    <td>Amnt W/O Tax:</td>
-                    <td>{{mySubTotal + myOtherCharges - myDiscount |number:'1.0-0'}}</td>   
-                </tr>
-
-                <tr>
-                    <td>Tax:</td>
-                    <td>{{((mySubTotal + myOtherCharges - myDiscount) * 5) / 100 |number:'1.0-0'}}</td>
-
-                    <td>Tax:</td>
-                    <td>{{((mySubTotal + myOtherCharges - myDiscount) * 16) / 100  |number:'1.0-0'}}</td>   
-                </tr>
-
-                <tr>
-                    <th>Amnt With Tax:</th>
-                    <th>{{(mySubTotal + myOtherCharges - myDiscount) +((mySubTotal + myOtherCharges - myDiscount) * 5) / 100 |number:'1.0-0'}}</th>
-
-                    <th>Amnt With Tax:</th>
-                    <th>{{(mySubTotal + myOtherCharges - myDiscount) +((mySubTotal + myOtherCharges - myDiscount) * 16) / 100  |number:'1.0-0'}}</th>   
-                </tr>
             </table>
+
 
         </div>
 
+        <h2 *ngIf="myPaymentType == 'Complimentary'" class="w-100 text-center">Complimentary</h2>
+        <h2 *ngIf="myDuplicateFlag == true" class=" w-100 text-center">Duplicate</h2>
 
-    </div>
-    <br>
-    <div style="border-top:1px dotted;">
-    <p style="font-size: 10px;">Wish To Serve You Again!</p>
-    </div>
-  </div>
+        <div>
+            <table class="w-100 table-restaurant-sale">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Product Name</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Total</th>
 
-</div> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of myPrintData index as index">
+                        <td>{{index +1}}</td>
+                        <td>{{item.productTitle}}</td>
+                        <td>{{item.quantity |number:'1.0-2'}}</td>
+                        <td>{{item.salePrice |number:'1.0-2'}}</td>
+                        <td>{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+            <table class="w-100 mt-2 " style="font-size: 10px;">
+                <tbody class="fw-bold">
+                    <tr class="text-center" *ngIf="FBRFeature" >
+                        <td id="output" class="d-none"></td>
+                        <td id="qrCode" class="qr-code-generator" width="40%" rowspan="6" style="border: 0px solid black;"></td>
+                    
+                    </tr>
+                    <tr>
+                        <td>Sub Total</td>
+                        <td>{{mySubTotal - myGstAmount |number:'1.0-0'}}</td>
+
+                    </tr>
+                    <tr *ngIf="myOtherCharges > 0">
+                        <td *ngIf="myOrderType == 'Dine In'">Service Charges</td>
+                        <td *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</td>
+                        <td *ngIf="myOrderType == 'Take Away'">Other Charges</td>
+                        <td>{{myOtherCharges|number:'1.0-0'}}</td>
+
+                    </tr>
+                    <tr *ngIf="myDiscount > 0">
+                        <td>Discount</td>
+                        <td>{{myDiscount|number:'1.0-0'}}</td>
+
+                    </tr>
+                    <tr *ngIf="myGstAmount > 0">
+                        <td>GSt ({{myGstValue}}%)</td>
+                        <td>{{myGstAmount|number:'1.0-0'}}</td>
+
+                    </tr>
+
+                    <tr>
+                        <td>Net Total</td>
+                        <td>{{mySubTotal + myOtherCharges + myGst - myDiscount|number:'1.0-0'}}</td>
+
+                    </tr>
+                    <tr *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
+                        <td>Cash</td>
+                        <td>{{myCash|number:'1.0-0'}}</td>
+
+                    </tr>
+                    <tr *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
+                        <td>Bank</td>
+                        <td>{{myBank|number:'1.0-0'}}</td>
+
+                    </tr>
+                    <tr *ngIf="myChange > 0">
+                        <td>Change</td>
+                        <td>{{myChange|number:'1.0-0'}}</td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+
+
+            <div class="mt-3" *ngIf="type == 'hold'">
+
+                <table class=" table-restaurant-sale">
+                    <tr>
+                        <th colspan="2">Tax For Card customer</th>
+                        <th colspan="2">Tax For Cash customer</th>
+                    </tr>
+
+                    <tr>
+                        <td>Amnt W/O Tax:</td>
+                        <td>{{mySubTotal + myOtherCharges - myDiscount |number:'1.0-0'}}</td>
+
+                        <td>Amnt W/O Tax:</td>
+                        <td>{{mySubTotal + myOtherCharges - myDiscount |number:'1.0-0'}}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Tax ({{cardGst}}%):</td>
+                        <td>{{((mySubTotal + myOtherCharges - myDiscount) * cardGst) / 100 |number:'1.0-0'}}</td>
+
+                        <td>Tax ({{cashGst}}%): </td>
+                        <td>{{((mySubTotal + myOtherCharges - myDiscount) * cashGst) / 100 |number:'1.0-0'}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Amnt With Tax:</th>
+                        <th>{{(mySubTotal + myOtherCharges - myDiscount) +((mySubTotal + myOtherCharges - myDiscount) *
+                            cardGst) / 100 |number:'1.0-0'}}</th>
+
+                        <th>Amnt With Tax:</th>
+                        <th>{{(mySubTotal + myOtherCharges - myDiscount) +((mySubTotal + myOtherCharges - myDiscount) *
+                            cashGst) / 100 |number:'1.0-0'}}</th>
+                    </tr>
+                </table>
+
+            </div>
+
+
+        </div>
+        <br>
+        <div class="d-flex flex-column text-center" style="border-top:1px dotted;" *ngIf="type != 'hold'">
+
+            <span style="font-size: 10px;">As per Pakistan Govt. Regulations 16% GST applied on Cash Payment, While 5% GST
+                is Charged on Card Transacion.</span>
+            <span style="font-size: 10px;">Wish To Serve You Again!</span>
+            <span style="font-size: 10px;">Powered By Logix Solutionz 0313-5300471</span>
+        </div>
+        <div style="border-top:1px dotted;" *ngIf="type == 'hold'">
+            <p style="font-size: 10px;">**This is not a Bill Please ask for the Bill**</p>
+        </div>
+    </div>
+
+</div>
 
 
 

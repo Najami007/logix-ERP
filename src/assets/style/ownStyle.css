@@ -407,5 +407,10 @@
 }
 
 
+.hide-in-print{
+  display: none;
+}
+
+
 
 

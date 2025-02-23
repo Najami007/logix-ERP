@@ -17,6 +17,8 @@ import { RestSaleBillPrintComponent } from '../../Sales/rest-sale-bill-print/res
 })
 export class SaleReportComponent implements OnInit {
 
+  FBRFeature = this.global.FBRFeature;
+
   @ViewChild(RestSaleBillPrintComponent) billPrint:any;
 
   companyProfile: any = [];
@@ -121,11 +123,13 @@ export class SaleReportComponent implements OnInit {
   detSaleTotal = 0;
   detCostTotal = 0;
   discountTotal = 0;
+  gstTotal = 0;
 
   getReport(type: any) {
 
-    if (type == 'summary') {
+    if (type == 'summary') {  
       $('#detailTable').hide();
+      $('#TaxSummaryTable').hide();
       $('#summaryTable').show();
       $('#qsmtable').hide();
       this.reportType = 'Summary';
@@ -153,9 +157,43 @@ export class SaleReportComponent implements OnInit {
         )
     }
 
+
+    if (type == 'taxSummary') {
+      $('#detailTable').hide();
+      $('#TaxSummaryTable').show();
+      $('#summaryTable').hide();
+      $('#qsmtable').hide();
+      this.reportType = 'Summary';
+      this.app.startLoaderDark();
+      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=s&reqUserID=' + this.userID + '&FromDate=' +
+        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
+          (Response: any) => {
+
+            this.saleSummaryList = Response;
+            this.billTotal = 0;
+            this.chargesTotal = 0;
+            this.netGrandTotal = 0;
+            this.discountTotal = 0;
+            this.gstTotal = 0;
+            Response.forEach((e: any) => {
+              this.billTotal += e.billTotal;
+              this.chargesTotal += e.otherCharges;
+              this.discountTotal += e.billDiscount;
+              this.netGrandTotal += e.netTotal;
+              this.gstTotal  += e.gstAmount;
+
+            });
+            this.app.stopLoaderDark();
+          },
+          (Error:any)=>{
+            this.app.stopLoaderDark();
+          }
+        )
+    }
     if (type == 'detail') {
       $('#detailTable').show();
       $('#summaryTable').hide();
+      $('#TaxSummaryTable').hide();
       $('#qsmtable').hide();
       this.reportType = 'Detail';
       this.app.startLoaderDark();
@@ -184,6 +222,7 @@ export class SaleReportComponent implements OnInit {
     if (type == 'qsm') {
       $('#detailTable').hide();
       $('#summaryTable').hide();
+      $('#TaxSummaryTable').hide();
       $('#qsmtable').show();
       this.reportType = 'Detail';
       this.app.startLoaderDark();

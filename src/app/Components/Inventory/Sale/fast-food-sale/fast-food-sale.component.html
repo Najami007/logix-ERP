@@ -128,7 +128,7 @@
                 <div class="d-flex justify-content-between pt-1">
                     <div class="pe-1 w-25"><button class="btnduplicate w-100" accesskey="u"
                         (click)="global.openBootstrapModal('#SavedBillModal',true)">D<u>u</u>plicate</button></div>
-                    <button class="w-75 btnsave" id="save" (click)="save()"
+                    <button class="w-75 btnsave" id="save" (click)="save('cash',true)"
                         accesskey="S"><u>S</u>ave</button>
                 </div>
                 <div class="d-flex justify-content-between">
@@ -183,7 +183,7 @@
                           ">
                               <mat-icon (click)="increment('add',item)" matPrefix>add</mat-icon>
 
-                              <input class="prodQty text-center" [(ngModel)]="item.quantity" name="qty" (keyup)="OnQtyChange(item)"
+                              <input id="ffQty" class="prodQty text-center" [(ngModel)]="item.quantity" name="qty" (keyup)="OnQtyChange(item)"
                                   (keydown)="this.global.handleNumKeys($event);OnQtyChange(item)" type="number" min="0" matInput
                                   #prodQty />
                               <mat-icon (click)="increment('minus',item)" matSuffix>remove</mat-icon>
@@ -192,8 +192,10 @@
                       </div>
 
                       <div class="text-center d-flex justify-content-between ">
-                          <button class="btn btn-success" data-bs-dismiss="modal"
-                              (click)="save()">Save</button>
+                          <button class="btn btn-success" data-bs-dismiss="modal" accesskey="s"
+                              (click)="save('cash',true)">Save</button>
+                              <button class="btn btn-success d-none" data-bs-dismiss="modal" accesskey="."
+                              (click)="save('cash',false)">Save</button>
                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
                       </div>
                   </form>

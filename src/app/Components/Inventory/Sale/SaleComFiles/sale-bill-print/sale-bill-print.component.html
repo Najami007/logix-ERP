@@ -1,119 +1,126 @@
-<div id="billEnglish" >
+<div id="billEnglish">
 
     <div class="p-1">
-        
-    <!--------------------- Company Detail Section Start------------------ -->
-    <div class="text-center">
-        <img *ngIf="companyLogo && showCompanyLogo" [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
-        <h3 class="text-uppercase" *ngIf="showCompanyName">{{companyName}}</h3>
-        <p   class="fs-11 text-uppercase">{{companyAddress}}</p>
-        <p style="margin-top: -20px;" class="fs-11">{{CompanyMobile}}</p>
-       <div class="d-flex flex-column" style="margin-top: -15px;" >
-        <span *ngIf="FBRFeature && CompanyNTN != '-'" class="fs-11"><b>NTN:</b>{{CompanyNTN}} </span>
-        <span *ngIf="FBRFeature && CompanySTRN != '-'" class="fs-11"><b>STRN:</b> {{CompanySTRN}}</span>
-       </div>
-        
 
-    </div>
-    <!--------------------- Company Detail Section  End------------------ -->
-
-    <div >
-      <table class="table-logix2 fs-13">
-        <thead>
-            <tr>
-                <th>Inv #</th>
-                <th>Date</th>
-                <th>Counter</th>
-            </tr>
-        </thead>
-        <tbody class="text-center">
-            <tr>
-                <td>{{myInvoiceNo}}</td>
-                <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
-                <td>{{myCounterName}}</td>
-            </tr>
-        
+        <!--------------------- Company Detail Section Start------------------ -->
+        <div class="text-center d-flex flex-column">
+           <span> <img *ngIf="companyLogo && showCompanyLogo" [src]="companyLogo" [height]="logoHeight" [width]="logoWidth"></span>
+            <span class="text-uppercase" *ngIf="showCompanyName">{{companyName}}</span>
+            <span class="fs-11 text-uppercase" *ngIf="companyAddress != '-'">{{companyAddress}}</span>
+            <span  *ngIf="CompanyMobile != '-'" class="fs-11">{{CompanyMobile}}</span>
            
-        </tbody>
-      </table>
-
-  <table>
-    <tr *ngIf="myFbrStatus">
-        <th class="fs-12">FBR Inv:-</th>
-        <td class="ms-2 fs-11">{{myFbrInvoiceNo}}</td>
-    </tr>
-    <tr *ngIf="myCustomerName != null">
-        <th class="fs-12">Customer:-</th>
-        <td class="ms-2 fs-11">{{myCustomerName}}</td>
-    </tr>
-    <tr *ngIf="myBookerName != null">
-        <th class="fs-12">Booker:- </th>
-        <td class="ms-2 fs-11">{{myBookerName}}</td>
-    </tr>
-   
-    <tr class="fs-11">
-        <th class="fs-12">Remarks:- </th>
-        <td class="ms-2 fs-11">{{myRemarks}}</td>
-    </tr>
-    
+                <span *ngIf="FBRFeature && CompanyNTN != '-'" class="fs-11"><b>NTN:</b>{{CompanyNTN}} </span>
+                <span *ngIf="FBRFeature && CompanySTRN != '-'" class="fs-11"><b>STRN:</b> {{CompanySTRN}}</span>
  
-    
-  </table>
-    </div>
 
-    <div >
-        <p class="border border-dark text-center mt-1 fw-bold" *ngIf="billType">{{billType}}</p>
-        <p class="border border-dark text-center fw-bold">{{myInvType == 'S' ? 'Sale' : myInvType == 'SR' ?'Sale Return' :''}}</p>
-        <p *ngIf="myPaymentType == 'Complimentary'" class="border border-dark text-center fw-bold">Complimentary</p>
-        <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center fw-bold">Duplicate</p>
-    </div>
 
-    <div>
+        </div>
+        <!--------------------- Company Detail Section  End------------------ -->
 
-        <!---------------------- Bill Table Start------------------>
-        <table class="w-100 table-garment-sale" style="font-size: 15px;">
-            <thead >
-                <tr class="fs-12">
-                    <th style="width:10% !important;">Qty</th>
-                    <th style="width:20% !important;" *ngIf="gstFeature">Gst</th>
-                    <th style="width:20% !important;">Price</th>
-                    <th style="width:10% !important;" *ngIf="discFeature">Disc Rs</th>
-                    <th style="width:10% !important;" *ngIf="discFeature">Disc %</th>
-                   
-                    <th style="width:20% !important;">Total</th>
-                    
+        <div>
+            <table class="table-logix2 fs-13">
+                <thead>
+                    <tr>
+                        <th>Inv #</th>
+                        <th>Date</th>
+                        <th>Counter</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr>
+                        <td>{{myInvoiceNo}}</td>
+                        <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
+                        <td>{{myCounterName}}</td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+
+            <table>
+                <tr *ngIf="myFbrStatus">
+                    <th class="fs-12">FBR Inv:-</th>
+                    <td class="ms-2 fs-11">{{myFbrInvoiceNo}}</td>
                 </tr>
-            </thead>
-            <tbody>
-                <tr  *ngFor="let item of myPrintTableData index as index" >
-                    <td [colSpan]="discFeature ? '6' : '4'" class="text-start">
-                        &nbsp;{{index +1}}. <b> {{item.productTitle}}</b>  {{item.barcode}}
-                        <table class="table-garment-sale-2 w-100">
-                            <tr>
-                                <td class="text-center" style="width:10% !important;">{{item.quantity |number:'1.0-2'}}</td>
-                                <td class="text-end" *ngIf="gstFeature" style="width:20% !important;">{{item.salePrice - (item.salePrice / ((item.gst + 100) / 100))   |number:'1.0-1'}}</td>
-                                <td class="text-end" style="width:20% !important;" >{{(item.salePrice / ((item.gst + 100) / 100))|number:'1.0-1'}}</td>
-                                <td class="text-end" *ngIf="discFeature" style="width:10% !important;">{{item.discInR|number:'1.0-1'}}</td>
-                                <td class="text-end"  *ngIf="discFeature"  style="width:10% !important;">{{item.discInP|number:'1.0-1'}}</td>
-                                <td class="text-end" style="width:20% !important;">{{(item.quantity * item.salePrice) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
-                            </tr>
-                        </table>
-                    </td>
-                    
-
+                <tr *ngIf="myCustomerName != null">
+                    <th class="fs-12">Customer:-</th>
+                    <td class="ms-2 fs-11">{{myCustomerName}}</td>
                 </tr>
+                <tr *ngIf="myBookerName != null">
+                    <th class="fs-12">Booker:- </th>
+                    <td class="ms-2 fs-11">{{myBookerName}}</td>
+                </tr>
+
                 <tr class="fs-11">
-                    <td colspan="2" class="fw-bold">Total Items</td>
-                    <td class="fw-bold fs-11">{{myQtyTotal | number:'1.0-2'}}</td>
-                    <td colspan="2" *ngIf="discFeature"></td>
+                    <th class="fs-12">Remarks:- </th>
+                    <td class="ms-2 fs-11">{{myRemarks}}</td>
                 </tr>
-           
-            </tbody>
-        </table>
 
 
 
-        <!-- <table class="table table-sale">
+            </table>
+        </div>
+
+        <div>
+            <p class="border border-dark text-center mt-1 fw-bold" *ngIf="billType">{{billType}}</p>
+            <p class="border border-dark text-center fw-bold">{{myInvType == 'S' ? 'Sale' : myInvType == 'SR' ?'SaleReturn' :''}}</p>
+            <p *ngIf="myPaymentType == 'Complimentary'" class="border border-dark text-center fw-bold">Complimentary</p>
+            <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center fw-bold">Duplicate</p>
+        </div>
+
+        <div>
+
+            <!---------------------- Bill Table Start------------------>
+            <table class="w-100 table-garment-sale">
+                <thead>
+                    <tr class="fs-12">
+                        <th style="width:10% !important;">Qty</th>
+                        <th style="width:20% !important;" *ngIf="gstFeature">Gst</th>
+                        <th style="width:20% !important;">Price</th>
+                        <th style="width:10% !important;" *ngIf="discFeature">Disc Rs</th>
+                        <th style="width:10% !important;" *ngIf="discFeature">Disc %</th>
+
+                        <th style="width:20% !important;">Total</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of myPrintTableData index as index" style="font-size: 12px !important;">
+                        <td [colSpan]="discFeature ? '6' : '4'" class="text-start">
+                            &nbsp;{{index +1}}. <b> {{item.productTitle}}</b> {{item.barcode}}
+                            <table class="table-garment-sale-2 w-100 " style="font-size: 12px !important;">
+                                <tr>
+                                    <td class="text-center" style="width:10% !important;">{{item.quantity
+                                        |number:'1.0-2'}}</td>
+                                    <td class="text-end" *ngIf="gstFeature" style="width:20% !important;">
+                                        {{item.salePrice - (item.salePrice / ((item.gst + 100) / 100)) |number:'1.0-1'}}
+                                    </td>
+                                    <td class="text-end" style="width:20% !important;">{{(item.salePrice / ((item.gst +
+                                        100) / 100))|number:'1.0-1'}}</td>
+                                    <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
+                                        {{item.discInR|number:'1.0-1'}}</td>
+                                    <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
+                                        {{item.discInP|number:'1.0-1'}}</td>
+                                    <td class="text-end" style="width:20% !important;">{{(item.quantity *
+                                        item.salePrice) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
+                                </tr>
+                            </table>
+                        </td>
+
+
+                    </tr>
+                    <tr class="fs-11">
+                        <td colspan="2" class="fw-bold">Total Items</td>
+                        <td class="fw-bold fs-11">{{myQtyTotal | number:'1.0-2'}}</td>
+                        <td colspan="2" *ngIf="discFeature"></td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+
+
+            <!-- <table class="table table-sale">
             <thead >
                 <tr>
                     <th>S#</th>
@@ -142,346 +149,355 @@
             </tbody>
         </table> -->
 
-      
- <!---------------------- Bill Table End------------------>
+
+            <!---------------------- Bill Table End------------------>
 
 
 
 
- <!--------------------------Bill Total Area Start ---------------------->
+            <!--------------------------Bill Total Area Start ---------------------->
 
-       <table class="w-100  text-uppercase">
-        <tbody class="fs-16 fw-bold">
-            <tr class="text-end border border-dark" *ngIf="myPOSFee > 0">
-                <td></td>
-                <th colspan="2" >POS FEE</th>
-                <td>{{myPOSFee | number:'1.0-2'}}</td>
-            </tr>
+            <table class="w-100  text-uppercase">
+                <tbody>
+                    <tr class="text-end border border-dark" *ngIf="myPOSFee > 0">
+                        <td></td>
+                        <th colspan="2">POS FEE</th>
+                        <td>{{myPOSFee | number:'1.0-2'}}</td>
+                    </tr>
 
-                <tr class="text-center" *ngIf="FBRFeature" >
-                    <td id="output" class="d-none"></td>
-                    <td id="qrCode" class="qr-code-generator" width="40%" rowspan="6" style="border: 0px solid black;"></td>
-                
-                </tr>
-                <tr class="text-center " *ngIf="!FBRFeature" >
-                  
-                    <td width="40%" rowspan="7"  style="font-size: 10px;" >
-                       <img [src]="global.thankyouImage" height="80" width="80" /><br />
-                        FOR VISITING US. 
-                    </td>
-                </tr>
-       
-            <tr class="text-end" >
-              
-                <td></td>
-                <td >Sub Total</td>
-                <td  >{{mySubTotal - myGstTotal |number:'1.0-1'}}</td>
-            
-            </tr>
-            <tr class="text-end" *ngIf="gstFeature && myGstTotal > 0">
-              
-                <td></td>
-                <td >Gst</td>
-                <td  >{{myGstTotal |number:'1.0-1'}}</td>
-            
-            </tr>
-            <tr class="text-end"    *ngIf="myAdvTaxAmount > 0">
-                <td></td>
-                <td >Adv Tax ({{myAdvTaxValue}}%)</td>
-                <td > {{myAdvTaxAmount|number:'1.0-1'}}</td>
-             
-            </tr>
-            <tr class="text-end"    *ngIf="myOtherCharges > 0">
-                <td></td>
-                <td >Other Charges</td>
-                <td > {{myOtherCharges|number:'1.0-1'}}</td>
-             
-            </tr>
-            <tr class="text-end" *ngIf="myOfferDiscount > 0">
-                <td></td>
-                <td >Offer Disc</td>
-                <td >{{myOfferDiscount|number:'1.0-1'}}</td>
-                
-            </tr>
-            <tr class="text-end" *ngIf="myDiscount - myOfferDiscount > 0">
-                <td></td>
-                <td >Disc</td>
-                <td >{{myDiscount - myOfferDiscount|number:'1.0-1'}}</td>
-                
-            </tr>
-         
-            <tr class="text-end">
-                <td></td>
-                <td >Net Total</td>
-                <td >{{myNetTotal|number:'1.0-1'}}</td>
-               
-            </tr>
-            <tr class="text-end" *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
-                <td></td>
-                <td >Cash</td>
-                <td >{{myCash|number:'1.0-1'}}</td>
-              
-            </tr>
-            <tr class="text-end" *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
-                <td></td>
-                <td >Bank</td>
-                <td >{{myBank|number:'1.0-1'}}</td>
-                <td></td>
-            </tr>
-            <tr class="text-end" *ngIf="myChange > 0">
-                <td></td>
-                <td >Change</td>
-                <td >{{myChange|number:'1.0-1'}}</td>
-                
-         
-            </tr>
+                    <tr class="text-center " style="margin-top:15px !important;" *ngIf="FBRFeature">
+                        <td id="output" class="d-none"></td>
+                        <td id="qrCode" class="qr-code-generator"  width="40%" rowspan="6"
+                            style="border: 0px solid black;"></td>
+
+                    </tr>
+                    <tr class="text-center " *ngIf="!FBRFeature">
+
+                        <td width="40%" rowspan="7" style="font-size: 10px;">
+                            <img [src]="global.thankyouImage" height="80" width="80" /><br />
+                            FOR VISITING US.
+                        </td>
+                    </tr>
+
+                    <tr class="text-end fw-bold fs-16">
+
+                        <td></td>
+                        <td>Sub Total</td>
+                        <td>{{mySubTotal |number:'1.0-1'}}</td>
+
+                    </tr>
+                    <tr class="text-end fs-14" *ngIf="gstFeature && myGstTotal > 0">
+
+                        <td></td>
+                        <td>Gst</td>
+                        <td>{{myGstTotal |number:'1.0-1'}}</td>
+
+                    </tr>
+                    <tr class="text-end fs-14" *ngIf="myAdvTaxValue > 0">
+                        <td></td>
+                        <td>Adv Tax ({{myAdvTaxValue}}%)</td>
+                        <td> {{myAdvTaxAmount|number:'1.0-1'}}</td>
+
+                    </tr>
+                    <tr class="text-end fs-14" *ngIf="myOtherCharges > 0">
+                        <td></td>
+                        <td>Other Charges</td>
+                        <td> {{myOtherCharges|number:'1.0-1'}}</td>
+
+                    </tr>
+                    <tr class="text-end fs-14" *ngIf="myOfferDiscount > 0">
+                        <td></td>
+                        <td>Offer Disc</td>
+                        <td>{{myOfferDiscount|number:'1.0-1'}}</td>
+
+                    </tr>
+                    <tr class="text-end fs-14" *ngIf="myDiscount - myOfferDiscount > 0">
+                        <td></td>
+                        <td>Disc</td>
+                        <td>{{myDiscount - myOfferDiscount|number:'1.0-1'}}</td>
+
+                    </tr>
+
+                    <tr class="text-end fw-bold fs-16">
+                        <td></td>
+                        <td>Net Total</td>
+                        <td>{{myNetTotal|number:'1.0-1'}}</td>
+
+                    </tr>
+                    <tr class="text-end fs-14" *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
+                        <td></td>
+                        <td>Cash</td>
+                        <td>{{myCash|number:'1.0-1'}}</td>
+
+                    </tr>
+                    <tr class="text-end fs-14" *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
+                        <td></td>
+                        <td>Bank</td>
+                        <td>{{myBank|number:'1.0-1'}}</td>
+                        <td></td>
+                    </tr>
+                    <tr class="text-end fs-14" *ngIf="myChange > 0">
+                        <td></td>
+                        <td>Change</td>
+                        <td>{{myChange|number:'1.0-1'}}</td>
 
 
-            <tr style="text-align:right;" *ngIf="myBalanceData > 0">
-                <td></td>
-                <td >prv Blnc</td>
-                <td *ngIf="myChange > 0"><b>{{myBalanceData | number}}</b></td>
-                <td *ngIf="myChange <= 0"><b>{{myBalanceData - (-1 * myChange) | number}}</b></td>
-                
-            </tr>
-            <tr  style="text-align:right;" *ngIf="myBalanceData > 0">
-                <td></td>
-                <td >Net Blnc</td>
-                <td><b>{{myBalanceData | number}}</b></td>
-              
-            </tr>
-            
-        </tbody>
-    </table>
+                    </tr>
 
-<!--------------------------Bill Total Area End ---------------------->
 
-        <hr>
-       <!-- <table>
+                    <tr style="text-align:right;" *ngIf="myBalanceData > 0">
+                        <td></td>
+                        <td>prv Blnc</td>
+                        <td *ngIf="myChange > 0"><b>{{myBalanceData | number}}</b></td>
+                        <td *ngIf="myChange <= 0"><b>{{myBalanceData - (-1 * myChange) | number}}</b></td>
+
+                    </tr>
+                    <tr style="text-align:right;" *ngIf="myBalanceData > 0">
+                        <td></td>
+                        <td>Net Blnc</td>
+                        <td><b>{{myBalanceData | number}}</b></td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <!--------------------------Bill Total Area End ---------------------->
+
+            <hr>
+            <!-- <table>
         <tr class="fs-11">
             <th >Remarks:- </th>
             <td >{{myRemarks}}</td>
         </tr>
        </table> -->
-        <div class="fs-11 ">
-            <!-- <span><b>Goods Once Sold Can Not be Replaced or Refunded. </b></span> -->
-            <b></b>
-            <span><b>Thank You for your visit.</b></span>
+            <div class="fs-11 ">
+                <!-- <span><b>Goods Once Sold Can Not be Replaced or Refunded. </b></span> -->
+                <b></b>
+                <span><b>Thank You for your visit.</b></span>
+            </div>
+
         </div>
-
-    </div>
     </div>
 
-  
+
 
 </div>
 
 
 
-<div id="BillUrdu" class="d-none" >
+<div id="BillUrdu" class="d-none">
 
-   <div class="p-1">
-    <div class="text-center">
-        <img *ngIf="companyLogo && showCompanyLogo" [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
-        <h3 class="text-uppercase" *ngIf="showCompanyName">{{companyName}}</h3>
-        <p   class="fs-11 text-uppercase">{{companyAddress}}</p>
-        <p style="margin-top: -20px;" class="fs-11">{{CompanyMobile}}</p>
+    <div class="p-1">
+        <div class="text-center">
+            <img *ngIf="companyLogo && showCompanyLogo" [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
+            <h3 class="text-uppercase" *ngIf="showCompanyName">{{companyName}}</h3>
+            <p class="fs-11 text-uppercase">{{companyAddress}}</p>
+            <p style="margin-top: -20px;" class="fs-11">{{CompanyMobile}}</p>
 
+        </div>
+
+
+        <div>
+            <table class="table-logix2 fs-13">
+                <thead>
+                    <tr>
+                        <th>Inv #</th>
+                        <th>Date</th>
+                        <th>Counter</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr>
+                        <td>{{myInvoiceNo}}</td>
+                        <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
+                        <td>{{myCounterName}}</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <table>
+                <tr *ngIf="myCustomerName != null">
+                    <th class="fs-12">Customer:-</th>
+                    <td class="ms-2 fs-11">{{myCustomerName}}</td>
+                </tr>
+                <tr *ngIf="myBookerName != null">
+                    <th class="fs-12">Booker:- </th>
+                    <td class="ms-2 fs-11">{{myBookerName}}</td>
+                </tr>
+
+                <tr class="fs-11">
+                    <th class="fs-12">Remarks:- </th>
+                    <td class="ms-2 fs-11">{{myRemarks}}</td>
+                </tr>
+
+
+
+            </table>
+        </div>
+
+        <div>
+            <p class="border border-dark text-center mt-1" *ngIf="billType">{{billType}}</p>
+            <p class="border border-dark text-center">{{myInvType == 'S' ? 'Sale' : myInvType == 'SR' ?'Sale Return'
+                :''}}</p>
+            <p *ngIf="myPaymentType == 'Complimentary'" class="border border-dark text-center">Complimentary</p>
+            <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center">Duplicate</p>
+        </div>
+
+        <div>
+
+            <table class="w-100 table-garment-sale-Urdu" dir="rtl">
+
+                <thead>
+                    <tr class="text-center">
+
+                        <th style="width:10% !important;"><b>تعداد</b></th>
+                        <th style="width:20% !important;"><b>قیمت</b></th>
+                        <th style="width:10% !important;" *ngIf="discFeature"><b>ڈسکاؤنٹ</b></th>
+                        <th style="width:10% !important;" *ngIf="discFeature"><b>% ڈسکاؤنٹ</b></th>
+                        <th style="width:20% !important;"><b>ٹوٹل</b></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="fs-11" *ngFor="let item of myPrintTableData index as index">
+                        <td [colSpan]="discFeature ? '5' : '3'" class="text-end">
+                            &nbsp;{{index +1}} . <b> {{item.productTitleOtherLang}}</b> {{item.barcode}} <b
+                                *ngIf="prodDetailFeature">(ڈیٹیل: {{item.productDetail}})</b>
+                            <table class="table-garment-sale-2 w-100">
+                                <tr>
+                                    <td class="text-center" style="width:10% !important;">{{item.quantity
+                                        |number:'1.0-2'}}</td>
+                                    <td class="text-end" style="width:20% !important;">{{item.salePrice
+                                        |number:'1.0-2'}}</td>
+                                    <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
+                                        {{item.discInR|number:'1.0-2'}}</td>
+                                    <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
+                                        {{item.discInP|number:'1.0-2'}}</td>
+                                    <td class="text-end" style="width:20% !important;">{{(item.quantity *
+                                        item.salePrice) - (item.discInR * item.quantity) |number:'1.0-2'}}</td>
+
+
+                                </tr>
+                            </table>
+                        </td>
+
+
+                    </tr>
+                    <tr class="fs-11">
+
+
+                        <td colspan="2">ٹوٹل ایٹم</td>
+                        <td class="fw-bold">{{myQtyTotal | number:'1.0-2'}}</td>
+                        <td colspan="3" *ngIf="discFeature"></td>
+
+                    </tr>
+                </tbody>
+
+            </table>
+
+
+            <table class="table-garment-sale-Urdu-Bottom " dir="rtl">
+                <tbody class="fs-16 fw-bold">
+
+                    <tr class="text-end">
+                        <td></td>
+                        <td>ٹوٹل</td>
+                        <td>{{mySubTotal |number:'1.0-1'}}</td>
+                    </tr>
+                    <tr class="text-end" *ngIf="myOtherCharges > 0">
+
+                        <td> {{myOtherCharges|number:'1.0-1'}}</td>
+                        <td></td>
+                    </tr>
+                    <tr class="text-end" *ngIf="myOfferDiscount > 0">
+                        <td></td>
+                        <!-- <td >Offer Disc</td> -->
+                        <td></td>
+                        <td class="urdu">ڈسکاؤنٹ</td>
+                        <td>{{myOfferDiscount|number:'1.0-1'}}</td>
+
+
+                    </tr>
+                    <tr class="text-end" *ngIf="myDiscount - myOfferDiscount > 0">
+                        <td></td>
+                        <td class="urdu">ڈسکاؤنٹ</td>
+                        <td>{{myDiscount - myOfferDiscount|number:'1.0-1'}}</td>
+
+                    </tr>
+
+                    <tr class="text-end">
+                        <td></td>
+                        <td class="urdu"><b>بل ٹوٹل</b></td>
+                        <td>{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</td>
+
+
+                    </tr>
+                    <tr class="text-end" *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
+
+                        <td></td>
+                        <td class="urdu">کیش</td>
+                        <td>{{myCash|number:'1.0-1'}}</td>
+
+                    </tr>
+                    <tr class="text-end" *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
+                        <td></td>
+                        <td>Bank</td>
+                        <td>{{myBank|number:'1.0-1'}}</td>
+                        <td></td>
+                    </tr>
+                    <tr class="text-end" *ngIf="myChange > 0">
+                        <td></td>
+                        <td class="urdu">بقایا</td>
+                        <td>{{myChange|number:'1.0-1'}}</td>
+
+
+
+                    </tr>
+
+
+                    <tr style="text-align:right;">
+                        <td></td>
+                        <td class="urdu">سابقا بقایا</td>
+                        <td *ngIf="myChange <= 0"><b>{{myBalanceData - (-1 * myChange) | number}}</b></td>
+                        <td *ngIf="myChange > 0"><b>{{myBalanceData | number}}</b></td>
+
+
+
+                    </tr>
+                    <tr style="text-align:right;">
+                        <td></td>
+                        <td class="urdu">ٹوٹل بقایا</td>
+                        <td><b>{{myBalanceData | number}}</b></td>
+
+
+                    </tr>
+
+
+
+                </tbody>
+            </table>
+
+            <hr>
+
+
+            <div class="w-100">
+                <table class="w-100 text-center">
+                    <tr>
+                        <td><label style="font-size:10px; font-family: urdu_noori;">تشریف لانے کا شکریہ</label></td>
+
+                    </tr>
+                    <tr>
+                        <td><label style="font-size:8px;">Software by Logix Solutions. Mob: <b>0313-5300471</b></label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
     </div>
-
-
-    <div >
-      <table class="table-logix2 fs-13">
-        <thead>
-            <tr>
-                <th>Inv #</th>
-                <th>Date</th>
-                <th>Counter</th>
-            </tr>
-        </thead>
-        <tbody class="text-center">
-            <tr>
-                <td>{{myInvoiceNo}}</td>
-                <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
-                <td>{{myCounterName}}</td>
-            </tr>
-           
-        </tbody>
-      </table>
-
-  <table>
-    <tr *ngIf="myCustomerName != null">
-        <th class="fs-12">Customer:-</th>
-        <td class="ms-2 fs-11">{{myCustomerName}}</td>
-    </tr>
-    <tr *ngIf="myBookerName != null">
-        <th class="fs-12">Booker:- </th>
-        <td class="ms-2 fs-11">{{myBookerName}}</td>
-    </tr>
-   
-    <tr class="fs-11">
-        <th class="fs-12">Remarks:- </th>
-        <td class="ms-2 fs-11">{{myRemarks}}</td>
-    </tr>
-    
- 
-    
-  </table>
-    </div>
-
-   <div>
-    <p class="border border-dark text-center mt-1" *ngIf="billType">{{billType}}</p>
-    <p class="border border-dark text-center">{{myInvType == 'S' ? 'Sale' : myInvType == 'SR' ?'Sale Return' :''}}</p>
-    <p *ngIf="myPaymentType == 'Complimentary'" class="border border-dark text-center">Complimentary</p>
-    <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center">Duplicate</p>
-   </div>
-
-    <div>
-        
-    <table class="w-100 table-garment-sale-Urdu"  dir="rtl">
- 
-     <thead >
-         <tr class="text-center">
-       
-             <th style="width:10% !important;"><b>تعداد</b></th>
-             <th style="width:20% !important;"><b>قیمت</b></th>
-             <th style="width:10% !important;" *ngIf="discFeature"><b>ڈسکاؤنٹ</b></th>
-             <th style="width:10% !important;" *ngIf="discFeature"><b>% ڈسکاؤنٹ</b></th>
-             <th style="width:20% !important;"><b>ٹوٹل</b></th>  
-             
-         </tr>
-     </thead>
-     <tbody>
-         <tr class="fs-11" *ngFor="let item of myPrintTableData index as index" >
-             <td [colSpan]="discFeature ? '5' : '3'" class="text-end">
-                &nbsp;{{index +1}} . <b> {{item.productTitleOtherLang}}</b>  {{item.barcode}}   <b *ngIf="prodDetailFeature">(ڈیٹیل: {{item.productDetail}})</b>
-                 <table class="table-garment-sale-2 w-100">
-                     <tr>
-                        <td class="text-center" style="width:10% !important;">{{item.quantity |number:'1.0-2'}}</td>
-                        <td class="text-end" style="width:20% !important;">{{item.salePrice |number:'1.0-2'}}</td>
-                        <td class="text-end" *ngIf="discFeature" style="width:10% !important;">{{item.discInR|number:'1.0-2'}}</td>
-                        <td class="text-end"  *ngIf="discFeature"  style="width:10% !important;">{{item.discInP|number:'1.0-2'}}</td>
-                         <td class="text-end" style="width:20% !important;">{{(item.quantity * item.salePrice) - (item.discInR * item.quantity) |number:'1.0-2'}}</td>                    
-          
-                        
-                     </tr>
-                 </table>
-             </td>
-             
-
-         </tr>
-         <tr class="fs-11">
-    
-             
-             <td colspan="2">ٹوٹل ایٹم</td>
-             <td class="fw-bold">{{myQtyTotal | number:'1.0-2'}}</td>
-             <td colspan="3" *ngIf="discFeature"></td>
-             
-         </tr>
-     </tbody>
-
-</table>
-
-
-<table class="table-garment-sale-Urdu-Bottom " dir="rtl">
- <tbody class="fs-16 fw-bold">
-    
-     <tr class="text-end">
-        <td></td>
-         <td >ٹوٹل</td>
-         <td  >{{mySubTotal |number:'1.0-1'}}</td>
-     </tr>
-     <tr class="text-end"    *ngIf="myOtherCharges > 0">
-         
-         <td > {{myOtherCharges|number:'1.0-1'}}</td>
-         <td></td>
-     </tr>
-     <tr class="text-end" *ngIf="myOfferDiscount > 0">
-         <td></td>
-         <!-- <td >Offer Disc</td> -->
-         <td></td>
-         <td class="urdu">ڈسکاؤنٹ</td>
-         <td >{{myOfferDiscount|number:'1.0-1'}}</td>
-       
-
-     </tr>
-     <tr class="text-end" *ngIf="myDiscount - myOfferDiscount > 0">
-        <td></td>
-        <td class="urdu">ڈسکاؤنٹ</td>
-         <td >{{myDiscount - myOfferDiscount|number:'1.0-1'}}</td>
-       
-     </tr>
-  
-     <tr class="text-end">
-        <td></td>
-        <td class="urdu"><b>بل ٹوٹل</b></td>
-         <td >{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</td>
-      
-
-     </tr>
-     <tr class="text-end" *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
-         
-        <td></td>
-        <td class="urdu">کیش</td>
-         <td >{{myCash|number:'1.0-1'}}</td>
-     
-     </tr>
-     <tr class="text-end" *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
-         <td></td>
-         <td >Bank</td>
-         <td >{{myBank|number:'1.0-1'}}</td>
-         <td></td>
-     </tr>
-     <tr class="text-end" *ngIf="myChange > 0">
-        <td></td>
-        <td class="urdu">بقایا</td>
-         <td >{{myChange|number:'1.0-1'}}</td>
-       
-    
-  
-     </tr>
-
-
-     <tr style="text-align:right;">
-        <td></td>
-        <td class="urdu">سابقا بقایا</td>
-        <td *ngIf="myChange <= 0"><b>{{myBalanceData - (-1 * myChange) | number}}</b></td>
-         <td *ngIf="myChange > 0"><b>{{myBalanceData | number}}</b></td>
-    
-        
-   
-     </tr>
-     <tr  style="text-align:right;">
-        <td></td>
-        <td class="urdu">ٹوٹل بقایا</td>
-         <td><b>{{myBalanceData | number}}</b></td>
-         
-
-     </tr>
-
-   
-     
- </tbody>
-</table>
-
-<hr>
-
-
- <div class="w-100">
-    <table class="w-100 text-center">
-     <tr  >
-         <td><label style="font-size:10px; font-family: urdu_noori;">تشریف لانے کا شکریہ</label></td>
-         
-     </tr>
-     <tr>
-         <td><label style="font-size:8px;">Software by Logix Solutions. Mob: <b>0313-5300471</b></label></td>
-     </tr>
-    </table>
- </div>
-
- </div>
-   </div>
- </div>
+</div>
 
 
 
@@ -492,3 +508,64 @@
     </td>
 </tr> -->
 
+
+
+
+
+
+<div id="printKOT" >
+    <div class="p-2">
+      <div class="text-center dark " >
+          <h2 style="border: 1px solid black;text-align: center;text-transform: uppercase;"  >{{companyName}}</h2>
+          <!-- <h2 >ORDER NO: {{myOrderNo}}</h2>    -->
+      </div>
+      <div>
+          <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center fw-bold">Duplicate</p>
+      </div>
+    <div >
+     
+          <table  class="table" style="font-size: 12px;width: 100%;">
+              <thead>
+                  <tr>
+                      <th>Inv #</th>
+                      <th>Date</th>
+                      <th>Counter</th>
+                  </tr>
+              </thead>
+              <tbody >
+                  <tr>
+                      <td>{{myInvoiceNo}}</td>
+                      <td>{{myInvDate | date:'dd-MM-yyyy '}} ({{myInvTime|date:'hh:mm:ss:a'}})</td>
+                      <td>{{myCounterName}}</td>
+                  </tr>
+  
+              </tbody>
+          </table>
+  
+          <table class="table table-bordered" >
+              <thead >
+                  <tr>
+                      <th>Product Name</th>
+                      <th>Qty</th>
+                      <th>Total</th>
+                  
+                  </tr>
+              </thead>
+              <tbody >
+                  <tr *ngFor="let item of myPrintData">
+                      <td >{{item.productTitle}}</td>
+                      <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
+                      <td class="text-center">{{item.salePrice * item.quantity |number:'1.0-2' }}</td>
+  
+                  </tr>
+              </tbody>
+          </table>
+    
+    </div>
+    </div>
+  
+  </div>
+
+
+  <app-kotprint class="d-none"></app-kotprint>
+  

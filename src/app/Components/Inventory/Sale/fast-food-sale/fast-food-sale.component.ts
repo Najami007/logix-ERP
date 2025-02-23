@@ -26,6 +26,8 @@ export class FastFoodSaleComponent {
   editSpFeature = this.global.editSpFeature;
   editDiscFeature = this.global.editDiscFeature;
   prodDetailFeature = this.global.prodDetailFeature;
+  BankShortCutsFeature = this.global.BankShortCutsFeature;
+  FBRFeature = this.global.FBRFeature;
 
   @ViewChild(KOTPrintComponent) kotPrint: any;
 
@@ -111,6 +113,7 @@ export class FastFoodSaleComponent {
   qtyTotal = 0;
   subTotal: any = 0;
   netTotal = 0;
+  PosFee = this.global.POSFee;
 
   bankCoaList: any = [];
   partyList: any = [];
@@ -372,7 +375,9 @@ export class FastFoodSaleComponent {
     }
 
 
-
+    if(this.FBRFeature){
+      this.subTotal = this.subTotal + this.PosFee;
+    }
     this.netTotal = this.subTotal - parseFloat(this.discount) - parseFloat(this.offerDiscount);
     this.change = parseFloat(this.cash) - this.netTotal;
 
@@ -406,9 +411,8 @@ export class FastFoodSaleComponent {
 
   ticketArray: any = [];
 
-
-  save() {
-    var isValidFlag = true;
+  isValidSale = true;
+  save(paymentType: any,SendToFbr:any) {
     this.tableDataList.forEach((p: any) => {
 
       p.quantity = parseFloat(p.quantity);
@@ -417,34 +421,27 @@ export class FastFoodSaleComponent {
 
       if (p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null) {
         this.msg.WarnNotify('(' + p.productTitle + ') Cost Price is not Valid');
-        isValidFlag = false;
-
         return;
       }
 
       if (p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null) {
         this.msg.WarnNotify('(' + p.productTitle + ') Sale Price is not Valid');
-        isValidFlag = false;
-
         return;
       }
 
       if (p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '') {
         this.msg.WarnNotify('(' + p.productTitle + ') Quantity is not Valid');
-        isValidFlag = false;
         return;
       }
 
       if (p.costPrice > (p.salePrice - p.discInR)) {
         this.msg.WarnNotify('(' + p.productTitle + ') Discount not valid');
-        isValidFlag = false;
-
         return;
       }
     });
 
 
-    if (isValidFlag == true) {
+    if (this.isValidSale == true) {
 
       this.getTotal();
       this.app.startLoaderDark();
@@ -455,6 +452,8 @@ export class FastFoodSaleComponent {
         ProjectID: this.projectID,
         BookerID: this.bookerID,
         PaymentType: this.paymentType,
+        SendToFbr: SendToFbr,
+        PosFee  : this.FBRFeature ? this.PosFee : 0,
         Remarks: this.billRemarks || '-',
         OrderType: "Take Away",
         BillTotal: this.subTotal,
@@ -485,14 +484,17 @@ export class FastFoodSaleComponent {
               this.global.closeBootstrapModal('#paymentMehtod', true);
 
             }
-
+            this.isValidSale = true;
           } else {
             this.msg.WarnNotify(Response.msg);
+            this.isValidSale = true;
           }
           this.app.stopLoaderDark();
         },
-        (Error: any) => {
-          this.msg.WarnNotify(Error);
+        (error: any) => {
+          this.isValidSale = true;
+          console.log(error);
+          this.msg.WarnNotify('Unable to Save Check Connection');
 
           this.app.stopLoaderDark();
         }
@@ -657,9 +659,12 @@ export class FastFoodSaleComponent {
 
       }
     )
-
-
     this.getTotal();
+
+    setTimeout(() => {
+      $('#ffQty').trigger('focus');
+    $('#ffQty').trigger('select');
+    }, 500);
 
   }
 

@@ -60,10 +60,11 @@
        <div class="col-lg-1">
         <button class="btn-rpt-primary" (click)="filterRecipe(startVal,endVal,'sale')">Sale<mat-icon>filter_list</mat-icon></button>
        </div>
-        <div class="col-lg-4 pb-2" *ngIf="crudList.r">
-            <button class="btn-rpt-success col-lg-3  me-1" (click)="getReport('summary')">Summary</button>
-            <button class="btn-rpt-success col-lg-3 me-1" (click)="getReport('detail')">Detail</button>
-            <button class="btn-rpt-success col-lg-3 me-1" (click)="getReport('qsm')">Qty Summary</button>
+        <div class="col-lg-5 pb-2" *ngIf="crudList.r">
+            <button class="btn-rpt-success col-lg-2  me-1" (click)="getReport('summary')">Summary</button>
+            <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('detail')">Detail</button>
+            <button *ngIf="FBRFeature" class="btn-rpt-success col-lg-2 me-1" (click)="getReport('taxSummary')">Tax Det</button>
+            <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('qsm')">Qty Summary</button>
             <button class="btn-rpt-primary col-lg-2" (click)="print()">Print</button>
         </div>
     </div>
@@ -149,6 +150,62 @@
 
           
         </table>
+
+
+
+
+
+
+        <table c class="table table-logix" id="TaxSummaryTable">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Bill #</th>
+                    <th>Order</th>
+                    <th>Date</th>
+                    <th>Table</th>
+                    <th>GST</th>
+                    <th style="width: 120px;">Bill</th>
+                    <th style="width: 150px;">Charges</th>
+                    <th style="width: 150px;">Discount</th>
+                    <th style="width: 120px;">Total</th>
+                    <th>FBR INV #</th>
+                    <th>Entered By</th>
+
+                </tr>
+
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of saleSummaryList index as index">
+                    <td class="text-center">{{index + 1}}</td>
+                    <td class="text-center cursorPointer " (click)="printBill(item)"><span class="text-primary border-bottom">{{item.invBillNo}}</span></td>
+                    <td class="text-center">{{item.orderNo}}</td>
+                    <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
+                    <td class="text-center">{{item.tableTitle}}</td>
+                    <td class="text-end">{{item.gstAmount |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.billTotal |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.otherCharges |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.billDiscount |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.netTotal |number:'1.0-0'}}</td>
+                    <td>{{item.fbrInvoiceNo}} <mat-icon class="hide-in-print" *ngIf="!item.fbrStatus">send</mat-icon></td>
+                    <td>{{item.entryUser}}</td>
+                </tr>
+                <tr>
+                    <td colspan="5"></td>
+                    <td class="fw-bold text-end">{{gstTotal |number:'1.0-0'}}</td>
+                    <td class="fw-bold text-end">{{billTotal |number:'1.0-0'}}</td>
+                    <td class="fw-bold text-end">{{chargesTotal |number:'1.0-0'}}</td>
+                    <td class="fw-bold text-end">{{discountTotal |number:'1.0-0'}}</td>
+                    <td class="fw-bold text-end">{{netGrandTotal |number:'1.0-0'}}</td>
+                    <td></td>
+                </tr>
+            </tbody>
+
+          
+        </table>
+
+
 
 
 

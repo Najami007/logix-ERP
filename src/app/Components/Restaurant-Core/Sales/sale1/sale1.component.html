@@ -124,8 +124,8 @@
                 <div class="justify-content-between p-1 w-50 border-end">
     
                     <div class="d-flex justify-content-between w-100">
-                        <p class="w-50 text-primary cursorPointer" style="font-size: 12px;" data-bs-toggle="modal" (click)="focusTo('#discInput')"
-                            data-bs-target="#disc" accesskey="t">ADD DISCOUN<u>T</u></p>
+                        <p class="w-50 text-primary cursorPointer" style="font-size: 12px;"(click)="global.openBootstrapModal('#disc',tableData.length > 0);focusTo('#discInput')"
+                         accesskey="t">ADD DISCOUN<u>T</u><small>({{(billDiscount / subTotal) * 100 || 0}}%)</small></p>
                         <p class="text-center font-digit" style="font-size: 2rem;">{{billDiscount |number:'1.0-2'}}</p>
                         <!-- <input disabled="true" [(ngModel)]="billDiscount" class="w-50 text-end" (keyup)="getTotal();"
                             (keydown)="getTotal();this.global.handleNumKeys($event)" /> -->
@@ -145,18 +145,8 @@
                     <div class="d-flex justify-content-between  w-100">
                         <p class="fw-bold" style="font-size: 12px;">NET TOTAL</p>
                         <p class="text-center font-digit" style="font-size: 30px;">{{netTotal |number:'1.0-1'}}</p>
-                    </div>
-                    <mat-form-field appearance="outline" class="col-lg-12 matSmall" *ngIf="waiterFeature">
-                        <mat-label>Waiter</mat-label>
-                        <mat-select [(ngModel)]="BookerID">
-                            <mat-option><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
-                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                            <mat-option *ngFor="let item of bookerList | filter:bookerSearch.value" [value]="item.bookerID">{{item.bookerName}}</mat-option>
-                        </mat-select>
-    
-                    </mat-form-field>
-    
-                    <mat-form-field  class="w-100 matSmall" appearance="outline" *ngIf="!waiterFeature">
+                    </div>    
+                    <mat-form-field  class="w-100 matSmall" appearance="outline" >
                         <mat-label>Remar<u>k</u>s</mat-label>
                         <textarea rows="1" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
                     </mat-form-field>
@@ -178,7 +168,7 @@
     
     
                     <button mat-raised-button class="m-1 btn text-white bg-warning col-lg-5 fs-12px" accesskey="n" matTooltip="New bill (Alt + n)" matTooltipPosition="left"
-                         [disabled]="tableData != ''" (click)="reset();global.openBootstrapModal('#NewBill',true)"><u>N</u>ew Bill</button>
+                         [disabled]="tableData != ''" (click)="reset();getTable();global.openBootstrapModal('#NewBill',true);"><u>N</u>ew Bill</button>
     
                      <button mat-raised-button class="m-1 btn text-white bg-success col-lg-5 fs-12px" matTooltipPosition="right"
                          matTooltip="Save Current Bill" (click)="global.openBootstrapModal('#paymentMehtod',this.tableData != '')" accesskey="s"><u>S</u>ave</button>
@@ -195,11 +185,6 @@
     
                     <button matTooltip="Merge Two Bills" matTooltipPosition="right" (click)="global.openBootstrapModal('#mergeBill',true)"
                         mat-raised-button class="m-1 text-white btn col-lg-5 fs-12px" style="background-color: pink;" accesskey="m"><u>M</u>erge Bill</button>
-                       
-                        <mat-form-field class="w-100 ps-3 pe-3 pt-1 matSmall" appearance="outline" *ngIf="waiterFeature">
-                            <mat-label>Remar<u>k</u>s</mat-label>
-                            <textarea rows="1" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
-                        </mat-form-field>
     
                 </div>    
             </div>
@@ -311,20 +296,10 @@
                 </div>
 
                 <div class="w-50 row">
-
-                    <mat-form-field appearance="outline" class="col-lg-12 matSmall" *ngIf="waiterFeature">
-                        <mat-label>Waiter</mat-label>
-                        <mat-select [(ngModel)]="BookerID">
-                            <mat-option><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
-                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                            <mat-option *ngFor="let item of bookerList | filter:bookerSearch.value" [value]="item.bookerID">{{item.bookerName}}</mat-option>
-                        </mat-select>
-
-                    </mat-form-field>
                     
                     <mat-form-field class="w-100 matSmall" appearance="outline" >
                         <mat-label>Remar<u>k</u>s</mat-label>
-                        <textarea [rows]="waiterFeature ? '1' : '2'" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
+                        <textarea rows="1" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
                     </mat-form-field>
 
                 </div>
@@ -583,19 +558,28 @@
 
                     
 
-                        <div>
-                            <mat-form-field appearance="outline" class="w-100 matSmall">
-                                <mat-label>Discount</mat-label>
-                                <input class="prodQty" name="discount"  id="discInput" (keydown)="this.global.handleNumKeys($event)" type="number"
-                                    min="0" matInput #bDisc />
+                        <div class="row">
+                            <mat-form-field appearance="outline" class="w-50 matSmall">
+                                <mat-label>Disc %</mat-label>
+                                <input class="prodQty" [(ngModel)]="discPer" name="discountPercent"  id="discInput" 
+                                (keydown)="this.global.handleNumKeys($event);genDisc('perc')" 
+                                (keyup)="genDisc('perc')"
+                                type="number" min="0" matInput #bDiscPer />
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="w-50 matSmall">
+                                <mat-label>Disc Amt</mat-label>
+                                <input class="prodQty" [(ngModel)]="discAmount" name="discountAmount"  id="discInput" 
+                                (keydown)="this.global.handleNumKeys($event);genDisc('amt')"
+                                (keyup)="genDisc('amt')"
+                                 type="number" min="0" matInput #bDiscAmt />
                             </mat-form-field>
                         </div>
                 
                    
                 </div>
                 <div class="modal-footer text-end p-3 bg-mf">
-                    <button class="btn btn-success" data-bs-dismiss="modal"
-                        (click)="verifyDiscount(bDisc.value);bDisc.value =''">Save</button>
+                    <button class="btn btn-success" 
+                        (click)="verifyDiscount();">Save</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </form>
@@ -664,8 +648,9 @@
 
 
                     <div class="d-flex justify-content-between">
-                        <h2 class="text-center text-success">Bill Total: {{netTotal | number:'1.0-1'}}</h2>
-                        <h2 class="text-center text-danger">Change: {{ change | number:'1.0-1'}}</h2>
+                        <h4 class="text-center text-success">Bill Total: {{netTotal + GstAmount | number:'1.0-1'}}</h4>
+                        <h4 class="text-center text-dark" *ngIf="FBRFeature">GST: {{GstAmount | number:'1.0-1'}}</h4>
+                        <h4 class="text-center text-danger">Change: {{ change | number:'1.0-1'}}</h4>
                     </div>
                     <mat-form-field  *ngIf="global.DisableDate == false" appearance="outline" class="col-lg-12 matSmall">
                         <mat-label>Date</mat-label>
@@ -689,7 +674,7 @@
 
                     <mat-form-field appearance="outline" class="w-100 matSmall">
                         <mat-label>Payment Type</mat-label>
-                        <mat-select [(ngModel)]="paymentType" (selectionChange)="cash = 0; bankCash = 0;getTotal()">
+                        <mat-select [(ngModel)]="paymentType" (selectionChange)="generateGst(); cash = 0; bankCash = 0;getTotal()">
                             <mat-option value="Cash">Cash</mat-option>
                             <mat-option value="Bank">Bank</mat-option>
                             <mat-option value="Split">Split</mat-option>
@@ -780,7 +765,16 @@
                                 <input name="cover" type="number" (keydown)="this.global.handleNumKeys($event)" matInput
                                     [(ngModel)]="coverOf" />
                             </mat-form-field>
-
+                            
+                            <mat-form-field appearance="outline" class="col-lg-12 matSmall" *ngIf="waiterFeature">
+                                <mat-label>Waiter</mat-label>
+                                <mat-select [(ngModel)]="BookerID" name="waiter">
+                                    <mat-option class="d-none"><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
+                                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                    <mat-option *ngFor="let item of bookerList | filter:bookerSearch.value" [value]="item.bookerID">{{item.bookerName}}</mat-option>
+                                </mat-select>
+        
+                            </mat-form-field>
                         </div>
                     </div>
               
@@ -823,6 +817,9 @@
                                 <mat-card class="btblbtn justify-content-center" (click)="getBillDetail(item)">
                                     <span>{{item.tableTitle}}</span>
                                     <span >Ord:({{item.orderNo}})</span>
+                                    <span style="font-size: 8px;">({{item.createdOn | date:'hh:mm:a'}})</span>
+                                    <span *ngIf="waiterFeature" style="font-size: 8px;margin-top: -10px;">{{item.bookerName}}</span>
+
                                 </mat-card>
                             </tr>
                         </tbody>

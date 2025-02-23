@@ -568,6 +568,12 @@ export class RecipeComponent implements OnInit {
 
         fileReader.readAsDataURL(file);
 
+
+        const input = event.target as HTMLInputElement;
+        if (input.files && input.files.length > 0) {
+          input.value = ''; // Reset input value
+        }
+
       } else {
 
         this.msg.WarnNotify('File Must Be in jpg or png formate');

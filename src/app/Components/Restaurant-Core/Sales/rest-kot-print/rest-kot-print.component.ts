@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class RestKotPrintComponent {
 
-  showCmpNameFeature:any = this.global.showCmpNameFeature;
+  showCmpNameFeature: any = this.global.showCmpNameFeature;
 
   crudList: any = [];
   companyProfile: any = [];
@@ -24,15 +24,15 @@ export class RestKotPrintComponent {
   companyAddress: any = '';
   CompanyMobile: any = '';
   companyName: any = '';
-  logoHeight:any = 100;
-  logoWidth:any = 100;
+  logoHeight: any = 100;
+  logoWidth: any = 100;
 
   mobileMask = this.global.mobileMask;
 
   constructor(
     private http: HttpClient,
     private msg: NotificationService,
-    
+
     public global: GlobalDataModule,
     private dialogue: MatDialog,
     private route: Router
@@ -53,7 +53,7 @@ export class RestKotPrintComponent {
     })
 
 
-  
+
   }
 
 
@@ -67,7 +67,7 @@ export class RestKotPrintComponent {
   mytableNo = '';
   myCounterName = '';
   myInvDate: any = '';
-  myInvTime:any = '';
+  myInvTime: any = '';
   myOrderType = '';
   mySubTotal = 0;
   myNetTotal = 0;
@@ -79,74 +79,74 @@ export class RestKotPrintComponent {
   myBank = 0;
   myPaymentType = '';
   voidFlag = false;
-  myTime:any;
-  myCounter:any = '';
+  myTime: any;
+  myCounter: any = '';
   myOrderNo = 0;
 
 
 
-  printBill(invNo: any,voidFlag:any) {
+  printBill(invNo: any, voidFlag: any) {
     this.voidFlag = voidFlag;
-   
-      this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+invNo).subscribe(
-        (Response:any)=>{
-         
-         this.myInvoiceNo = Response[0].invBillNo;
-          this.myInvDate = Response[0].invDate;
-          this.myOrderType =Response[0].orderType;
-          this.mySubTotal = Response[0].billTotal;
-          this.myNetTotal = Response[0].netTotal;
-          this.myOtherCharges = Response[0].otherCharges;
-          this.myRemarks = Response[0].remarks;
-          this.myCash = Response[0].cashRec;
-          // this.myBank = Response[0].bankCash;
-          this.myDiscount = Response[0].billDiscount;
-          this.myChange = Response[0].change;
-          this.myPaymentType = Response[0].paymentType;
-          this.mytableNo = Response[0].tableTitle;
-          this.myCounterName = Response[0].entryUser;
-          this.myInvTime = new Date();
-          this.myOrderNo = Response[0].orderNo;
-          
-          if(this.myPaymentType == 'Bank'){
-            this.myBank = this.myNetTotal;
-          }
-          if(this.myPaymentType == 'Split'){
-            this.myBank = this.myNetTotal - this.myCash;
-          }
 
-          setTimeout(() => {
-            this.global.printData('#printKOT');
-          }, 200);
-        
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + invNo).subscribe(
+      (Response: any) => {
+
+        this.myInvoiceNo = Response[0].invBillNo;
+        this.myInvDate = Response[0].invDate;
+        this.myOrderType = Response[0].orderType;
+        this.mySubTotal = Response[0].billTotal;
+        this.myNetTotal = Response[0].netTotal;
+        this.myOtherCharges = Response[0].otherCharges;
+        this.myRemarks = Response[0].remarks;
+        this.myCash = Response[0].cashRec;
+        // this.myBank = Response[0].bankCash;
+        this.myDiscount = Response[0].billDiscount;
+        this.myChange = Response[0].change;
+        this.myPaymentType = Response[0].paymentType;
+        this.mytableNo = Response[0].tableTitle;
+        this.myCounterName = Response[0].entryUser;
+        this.myInvTime = new Date();
+        this.myOrderNo = Response[0].orderNo;
+
+        if (this.myPaymentType == 'Bank') {
+          this.myBank = this.myNetTotal;
         }
-      )
+        if (this.myPaymentType == 'Split') {
+          this.myBank = this.myNetTotal - this.myCash;
+        }
+
+        setTimeout(() => {
+          this.global.printData('#printKOT');
+        }, 200);
+
+      }
+    )
 
   }
 
 
 
-     EmptyBill(){
-      this.myPrintData = [];
-      this.myInvoiceNo = '';
-      this.mytableNo = '';
-      this.myCounterName = '';
-      this.myInvDate = '';
-      this.myInvTime = '';
-      this.myOrderType = '';
-      this.mySubTotal = 0;
-      this.myNetTotal = 0;
-      this.myOtherCharges = 0;
-      this.myRemarks = '';
-      this.myDiscount = 0;
-      this.myCash = 0;
-      this.myChange = 0;
-      this.myBank = 0;
-      this.myPaymentType = '';
-      this.voidFlag = false;
-      this.myTime;
-      this.myCounter = '';
-     }
- 
-   }
- 
+  EmptyBill() {
+    this.myPrintData = [];
+    this.myInvoiceNo = '';
+    this.mytableNo = '';
+    this.myCounterName = '';
+    this.myInvDate = '';
+    this.myInvTime = '';
+    this.myOrderType = '';
+    this.mySubTotal = 0;
+    this.myNetTotal = 0;
+    this.myOtherCharges = 0;
+    this.myRemarks = '';
+    this.myDiscount = 0;
+    this.myCash = 0;
+    this.myChange = 0;
+    this.myBank = 0;
+    this.myPaymentType = '';
+    this.voidFlag = false;
+    this.myTime;
+    this.myCounter = '';
+  }
+
+}
+

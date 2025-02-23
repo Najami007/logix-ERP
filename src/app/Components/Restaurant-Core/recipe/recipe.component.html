@@ -1,13 +1,13 @@
 <div class="body h-100">
-    
-    <mat-tab-group mat-align-tabs="center" class="h-100"  [selectedIndex]="tabIndex"
+
+    <mat-tab-group mat-align-tabs="center" class="h-100" [selectedIndex]="tabIndex"
         (selectedIndexChange)="changeTab($event)">
         <mat-tab label="ADD / Modify" class="h-100">
             <div class="container-fluid p-1 row">
 
                 <!-------------     Column 1 Detail Area-->
 
-                <div class="col-lg-6 pt-2" >
+                <div class="col-lg-6 pt-2">
 
 
                     <div class="row text-center">
@@ -21,8 +21,10 @@
                                 <mat-label>Category</mat-label>
                                 <mat-select [(ngModel)]="categoryID">
                                     <mat-option><ngx-mat-select-search #catSearch [placeholderLabel]="'Search...'"
-                                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                                    <mat-option *ngFor="let item of categoriesList |filter:catSearch.value" [value]="item.recipeCatID">{{item.recipeCatTitle}}</mat-option>
+                                            [noEntriesFoundLabel]="'Not found'"
+                                            name="search"></ngx-mat-select-search></mat-option>
+                                    <mat-option *ngFor="let item of categoriesList |filter:catSearch.value"
+                                        [value]="item.recipeCatID">{{item.recipeCatTitle}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
 
@@ -38,18 +40,20 @@
 
                             <mat-form-field appearance="outline" class="col-lg-6 matSmall">
                                 <mat-label>Sale Price</mat-label>
-                                <input matInput [(ngModel)]="salePrice" (keydown)="getTotal();global.handleNumKeys($event)" type="text">
+                                <input matInput [(ngModel)]="salePrice"
+                                    (keydown)="getTotal();global.handleNumKeys($event)" type="text">
                             </mat-form-field>
 
 
-                    
+
 
 
                         </div>
 
-                       
-                        <div class="avatar-upload ps-2  col-lg-3   " (click)="this.global.showProductImage(recipeImg,0)">
-                            <div class="avatar-edit" >
+
+                        <div class="avatar-upload ps-2  col-lg-3   "
+                            (click)="this.global.showProductImage(recipeImg,0)">
+                            <div class="avatar-edit">
                                 <input type="file" id="prodimg" accept="" #prodimg (change)="onImgSelected($event)" />
                                 <label for="prodimg"><mat-icon class=" mt-1">edit</mat-icon></label>
                             </div>
@@ -57,27 +61,30 @@
                                 <label (click)="recipeImg = ''"><mat-icon class=" mt-1">delete</mat-icon></label>
                             </div>
                             <div class="avatar-preview">
-                                <div id="imagePreview" accesskey="i" [ngStyle]="{ 'background-image': 'url(' + recipeImg + ')' }">
+                                <div id="imagePreview" accesskey="i"
+                                    [ngStyle]="{ 'background-image': 'url(' + recipeImg + ')' }">
                                 </div>
                             </div>
                         </div>
-                     
+
 
 
                     </div>
 
-            
+
                     <div class="row">
                         <mat-form-field class="col-lg-3 matSmall" appearance="outline">
                             <mat-label>Cooking Time</mat-label>
-                        <input matInput [(ngModel)]="cookingTime" />
+                            <input matInput [(ngModel)]="cookingTime" />
                         </mat-form-field>
                         <mat-form-field class="col-lg-3 matSmall" appearance="outline">
                             <mat-label>Cooking Area</mat-label>
                             <mat-select [(ngModel)]="cookingAriaID">
                                 <mat-option><ngx-mat-select-search #arSearch [placeholderLabel]="'Search...'"
-                                    [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                                <mat-option *ngFor="let item of cookingAreaList |filter:arSearch.value" [value]="item.cookingAriaID">{{item.cookingAriaTitle}}</mat-option>
+                                        [noEntriesFoundLabel]="'Not found'"
+                                        name="search"></ngx-mat-select-search></mat-option>
+                                <mat-option *ngFor="let item of cookingAreaList |filter:arSearch.value"
+                                    [value]="item.cookingAriaID">{{item.cookingAriaTitle}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field appearance="outline" class="col-lg-6 matSmall">
@@ -86,12 +93,12 @@
                         </mat-form-field>
 
                     </div>
-                  
+
 
                     <div class="justify-content-around d-flex">
-                        <button #toggleBtn class="btnsave w-25"  (click)="save() "
+                        <button #toggleBtn class="btnsave w-25" (click)="save() "
                             *ngIf="crudList.c && btnType == 'Save'">{{btnType}}</button>
-                        <button #toggleBtn class="btnsave  w-25"  (click)="save() "
+                        <button #toggleBtn class="btnsave  w-25" (click)="save() "
                             *ngIf="crudList.u && btnType == 'Update'">{{btnType}}</button>
                         <button class="btnreset w-25" accesskey="r" (click)="reset()"><u>R</u>eset</button>
                         <mat-checkbox [(ngModel)]="autoEmptyFlag">Auto Empty</mat-checkbox>
@@ -103,36 +110,40 @@
                 </div>
 
                 <!-------------     Column 2 Ingedient Detail Area-->
-                <div class="col-lg-6" >
+                <div class="col-lg-6">
 
                     <div class="ps-1 row ">
 
                         <div class="col-lg-9  d-flex flex-column">
                             <mat-label class="text-primary">Search Barcode / Product</mat-label>
-                            <input type="text" #pbarcode [(ngModel)]="PBarcode"                                
-                              (keydown)="searchByCode($event);this.changeFocus($event,'.fintProd');" id="searchProduct"
-                                class="p-1 mb-2  searchProduct bg-transparent" placeholder="Alt + b" autofocus autocomplete="off"
-                                accesskey="b">
+                            <input type="text" #pbarcode [(ngModel)]="PBarcode"
+                                (keydown)="searchByCode($event);this.changeFocus($event,'.fintProd');"
+                                id="searchProduct" class="p-1 mb-2  searchProduct bg-transparent" placeholder="Alt + b"
+                                autofocus autocomplete="off" accesskey="b">
 
                             <div class="d-flex flex-column SearchConatiner cursorPointer"
                                 *ngIf="PBarcode != '' && PBarcode != undefined">
                                 <div class="card " *ngFor="let item of productList| filter:PBarcode index as index"
                                     (click)="holdDataFunction(item)">
-                                    <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn justify-content-between d-flex" 
-                                    (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)"><p>{{item.productTitle}}</p>
-                                        <p><strong>({{item.barcode}})</strong></p> </button>
+                                    <button style="height: 40px; background: none;border: none;text-align: left;"
+                                        class="prodRow{{index}} prodBtn justify-content-between d-flex"
+                                        (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">
+                                        <p>{{item.productTitle}}</p>
+                                        <p><strong>({{item.barcode}})</strong></p>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-3 text-center">
-                            <button mat-raised-button style="height: 40px;margin-top: 20px;" class="bg-primary text-white w-50"
-                                (click)="ngOnInit()">Load</button>
+                            <button mat-raised-button style="height: 40px;margin-top: 20px;"
+                                class="bg-primary text-white w-50" (click)="ngOnInit()">Load</button>
                         </div>
 
                     </div>
 
 
-                    <div class="card"  style="min-height: 68vh;max-height: 68vh;overflow-y:scroll; background-color: rgba(225, 244, 236, 0.816);">
+                    <div class="card"
+                        style="min-height: 68vh;max-height: 68vh;overflow-y:scroll; background-color: rgba(225, 244, 236, 0.816);">
 
 
                         <table class="table table-hover txtsm">
@@ -143,7 +154,7 @@
                                     <th>Quantity</th>
                                     <!-- <th>Avg Cost</th> -->
                                     <th>Cost</th>
-                                   
+
                                     <!-- <th>Avg Cost Total</th> -->
                                     <th>Total</th>
                                     <th>Action</th>
@@ -152,20 +163,20 @@
                             <tbody>
                                 <tr *ngFor="let item of menuProdList index as index" (click)="showImg(item)">
                                     <td>{{index+1}}</td>
-                                    <td >{{item.productTitle}}</td>
+                                    <td>{{item.productTitle}}</td>
                                     <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
                                             (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
                                             (keyup)="changeValue(item);getTotal();showImg(item);"
-                                            (click)="rowFocused = index"
-                                            class="qty{{index}} text-center" style="width: 80px;"></td>
+                                            (click)="rowFocused = index" class="qty{{index}} text-center"
+                                            style="width: 80px;"></td>
 
                                     <td>{{item.avgCostPrice | number:'1.0-2'}}</td>
                                     <!-- <td>{{item.costPrice | number:'1.0-2'}}</td> -->
-                              
+
 
                                     <!-- <td class="text-center">{{item.costPrice * item.quantity |number:'1.0-2'}}</td> -->
                                     <td class="text-center">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
-                                    
+
                                     <td class="cursorPointer"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
                                 </tr>
                                 <tr>
@@ -210,6 +221,7 @@
                             <!-- <th>Cur Cost Other</th> -->
                             <th>Sale</th>
                             <th>Category</th>
+                            <th>Cooking Area</th>
                             <th>Edit</th>
                             <th>Lock Status</th>
                             <th>Status</th>
@@ -231,14 +243,23 @@
                             <!-- <td>{{item.OtherRecipeCostPrice |number:'1.0-1'}}</td> -->
                             <td>{{item.recipeSalePrice |number:'1.0-0'}}</td>
                             <td>{{item.recipeCatTitle}}</td>
+                            <td>{{item.cookingAriaTitle}}</td>
                             <td class="cursorPointer"><mat-icon class="text-success"
                                     (click)="edit(item)">edit</mat-icon></td>
-                            <td ><mat-icon *ngIf="crudList.u" (click)="approveRecipe(item)">{{item.approvedStatus == true ? 'lock' :'lock_open'}}</mat-icon></td>
-                            <td class="cursorPointer"><mat-icon *ngIf="crudList.u" [ngClass]="item.activeStatus == false ?'text-danger': 'text-success'" (click)="activeRecipe(item)" >{{item.activeStatus == false ? 'indeterminate_check_box' :'check_box'}}</mat-icon></td>
-                            <td  class="cursorPointer"><mat-icon  (click)="getIngredient(item)">photo_filter</mat-icon></td>
-                            <td class="cursorPointer "><mat-icon data-bs-toggle="modal" data-bs-target="#otherRecipe" *ngIf="crudList.u" (click)="copyRecipe(item)">save</mat-icon></td>
-                            <td class="cursorPointer "><mat-icon (click)="getRecipeImage(item.recipeID,'show')">image</mat-icon></td>
-                            <td class="cursorPointer"><mat-icon class="text-danger" *ngIf="crudList.d" (click)="delete(item)">delete</mat-icon></td>
+                            <td><mat-icon *ngIf="crudList.u" (click)="approveRecipe(item)">{{item.approvedStatus == true
+                                    ? 'lock' :'lock_open'}}</mat-icon></td>
+                            <td class="cursorPointer"><mat-icon *ngIf="crudList.u"
+                                    [ngClass]="item.activeStatus == false ?'text-danger': 'text-success'"
+                                    (click)="activeRecipe(item)">{{item.activeStatus == false ?
+                                    'indeterminate_check_box' :'check_box'}}</mat-icon></td>
+                            <td class="cursorPointer"><mat-icon (click)="getIngredient(item)">photo_filter</mat-icon>
+                            </td>
+                            <td class="cursorPointer "><mat-icon data-bs-toggle="modal" data-bs-target="#otherRecipe"
+                                    *ngIf="crudList.u" (click)="copyRecipe(item)">save</mat-icon></td>
+                            <td class="cursorPointer "><mat-icon
+                                    (click)="getRecipeImage(item.recipeID,'show')">image</mat-icon></td>
+                            <td class="cursorPointer"><mat-icon class="text-danger" *ngIf="crudList.d"
+                                    (click)="delete(item)">delete</mat-icon></td>
 
                         </tr>
                     </tbody>
@@ -251,7 +272,7 @@
 
 
 
- 
+
 
 
 
@@ -259,105 +280,108 @@
     </mat-tab-group>
 
 
-    
-            <!------------------------ Modal Window for Making Other Recipe ------------------>
 
-            
+    <!------------------------ Modal Window for Making Other Recipe ------------------>
 
-            <div class="modal fade" id="otherRecipe" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-            aria-labelledby="otherRecipeLabel">
-            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" style="z-index: 100000;">
-                <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-                    <div class="modal-body">
-    
-                   
-    
-                            <div class="ps-1 d-flex ">
-        
-                                <div class="col-lg-9  d-flex flex-column">
-                                    <mat-label class="text-primary">Search Barcode / Product</mat-label>
-                                    <input type="text" #pbarcode [(ngModel)]="PBarcode"
-                                        
-                                        (keydown)="searchByCode($event);this.changeFocus($event,'.fintProd');" id="searchProduct"
-                                        class="p-1 mb-2 searchProduct bg-transparent" placeholder="Alt + s" autofocus autocomplete="off"
-                                        accesskey="s">
-        
-                                    <div class="w-100 d-flex flex-column SearchConatiner cursorPointer"
-                                        *ngIf="PBarcode != '' && PBarcode != undefined">
-                                        <div class="card " *ngFor="let item of productList| filter:PBarcode index as index"
-                                            (click)="holdDataFunction(item)">
-                                            <button (keydown)="this.global.handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)"
-                                             class="prodRow{{index}}"   style="background: none;border: none;text-align: left;">{{item.productTitle}}
-                                                (<b>{{item.barcode}}</b> )</button>
-                                        </div>
-                                    </div>
+
+
+    <div class="modal fade" id="otherRecipe" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="otherRecipeLabel">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" style="z-index: 100000;">
+            <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+                <div class="modal-body">
+
+
+
+                    <div class="ps-1 d-flex ">
+
+                        <div class="col-lg-9  d-flex flex-column">
+                            <mat-label class="text-primary">Search Barcode / Product</mat-label>
+                            <input type="text" #pbarcode [(ngModel)]="PBarcode"
+                                (keydown)="searchByCode($event);this.changeFocus($event,'.fintProd');"
+                                id="searchProduct" class="p-1 mb-2 searchProduct bg-transparent" placeholder="Alt + s"
+                                autofocus autocomplete="off" accesskey="s">
+
+                            <div class="w-100 d-flex flex-column SearchConatiner cursorPointer"
+                                *ngIf="PBarcode != '' && PBarcode != undefined">
+                                <div class="card " *ngFor="let item of productList| filter:PBarcode index as index"
+                                    (click)="holdDataFunction(item)">
+                                    <button
+                                        (keydown)="this.global.handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)"
+                                        class="prodRow{{index}}"
+                                        style="background: none;border: none;text-align: left;">{{item.productTitle}}
+                                        (<b>{{item.barcode}}</b> )</button>
                                 </div>
-                                <div class="col-lg-3 text-center">
-                                    <button mat-raised-button class="bg-primary text-white w-50 btn-rpt"
-                                        (click)="ngOnInit()">Load</button>
-                                </div>
-        
-                            </div>
-        
-                            <div class="card"
-                                style="max-height: 400px;height: 400px;overflow-y:scroll; background-color: rgba(225, 244, 236, 0.816);">
-        
-        
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>S#</th>
-                                            <th>Product Name</th>
-                                            <th>Quantity</th>
-                                            <th>Avg Cost</th>
-                                            <th>Cost</th>
-                                     
-                                            <th>Cost Total</th>
-                                            <th>Avg Cost Total</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of menuProdList index as index" (click)="showImg(item)">
-                                            <td>{{index+1}}</td>
-                                            <td >{{item.productTitle}}</td>
-                                            <td class="text-center"><input type="text" [disabled]="item.lockedStatus" [(ngModel)]="item.quantity" min="0"
-                                                    (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
-                                                    (keyup)="changeValue(item);getTotal();showImg(item);"
-                                                    (click)="rowFocused = index"
-                                                    class="qty{{index}} text-center" style="width: 80px;"></td>
-        
-                                            <td>{{item.avgCostPrice | number:'1.0-2'}}</td>
-                                            <td>{{item.costPrice | number:'1.0-2'}}</td>
-        
-                                            <td class="text-center">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
-                                            <td class="text-center">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
-                                            
-                                            <td class="cursorPointer" ><mat-icon   (click)="delRow(item)">delete</mat-icon></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2"></td>
-                                            <th class="text-center">{{totalQty|number:'1.0-2'}}</th>
-                                            <th colspan="2"></th>
-                                            <th class="text-center">{{costTotal|number:'1.0-2'}}</th>
-                                            <th class="text-center">{{avgCostTotal|number:'1.0-2'}}</th>
-                                            <th></th>
-                                        </tr>
-                                    </tbody>
-                                </table>
-        
-        
                             </div>
                         </div>
-                        <div class="modal-footer bg-mf">
-                            <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="save()">{{btnType}}</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="reset()">Close</button>
+                        <div class="col-lg-3 text-center">
+                            <button mat-raised-button class="bg-primary text-white w-50 btn-rpt"
+                                (click)="ngOnInit()">Load</button>
                         </div>
+
                     </div>
-                    
-                 
-    
+
+                    <div class="card"
+                        style="max-height: 400px;height: 400px;overflow-y:scroll; background-color: rgba(225, 244, 236, 0.816);">
+
+
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>S#</th>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
+                                    <th>Avg Cost</th>
+                                    <th>Cost</th>
+
+                                    <th>Cost Total</th>
+                                    <th>Avg Cost Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of menuProdList index as index" (click)="showImg(item)">
+                                    <td>{{index+1}}</td>
+                                    <td>{{item.productTitle}}</td>
+                                    <td class="text-center"><input type="text" [disabled]="item.lockedStatus"
+                                            [(ngModel)]="item.quantity" min="0"
+                                            (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
+                                            (keyup)="changeValue(item);getTotal();showImg(item);"
+                                            (click)="rowFocused = index" class="qty{{index}} text-center"
+                                            style="width: 80px;"></td>
+
+                                    <td>{{item.avgCostPrice | number:'1.0-2'}}</td>
+                                    <td>{{item.costPrice | number:'1.0-2'}}</td>
+
+                                    <td class="text-center">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
+                                    <td class="text-center">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
+
+                                    <td class="cursorPointer"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"></td>
+                                    <th class="text-center">{{totalQty|number:'1.0-2'}}</th>
+                                    <th colspan="2"></th>
+                                    <th class="text-center">{{costTotal|number:'1.0-2'}}</th>
+                                    <th class="text-center">{{avgCostTotal|number:'1.0-2'}}</th>
+                                    <th></th>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+                <div class="modal-footer bg-mf">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal"
+                        (click)="save()">{{btnType}}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        (click)="reset()">Close</button>
                 </div>
             </div>
+
+
+
+        </div>
+    </div>
 </div>
-    

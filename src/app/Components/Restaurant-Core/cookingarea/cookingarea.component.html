@@ -19,6 +19,7 @@
                     <th>S#</th>
                     <th>Title</th>
                     <th>Description</th>
+                    <th>Printer</th>
                     <th>Edit</th>
                     <th>Status</th>
                     <th>Delete</th>
@@ -29,6 +30,10 @@
                     <td>{{index +1}}</td>
                     <td>{{item.cookingAriaTitle}}</td>
                     <td>{{item.cookingAriaDescription}}</td>
+                    <td><div class="d-flex flex-column">
+                        <span>{{item.printerName}}</span>
+                        <span>{{item.printerPort}}</span>
+                    </div></td>
                     <td class="cursorPointer text-success"><button mat-icon-button *ngIf="crudList.u" (click)="editTable(item)"><mat-icon>edit</mat-icon></button></td>
                     <td class="cursorPointer"><button mat-icon-button (click)="activeCookingArea(item)">
                         <mat-icon class="text-danger" *ngIf="item.cookingAriaActiveStatus == true && crudList.u">block</mat-icon>

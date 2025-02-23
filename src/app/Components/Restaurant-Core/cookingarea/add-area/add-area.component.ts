@@ -30,6 +30,8 @@ export class AddAreaComponent implements OnInit{
       this.btntype = 'Update';
       this.cookingAreaTitle = this.data.cookingAriaTitle;
       this.description = this.data.cookingAriaDescription;
+      this.PrinterName = this.data.printerName;
+      this.PrinterPort = this.data.printerPort;
     }
   
   }
@@ -39,13 +41,20 @@ export class AddAreaComponent implements OnInit{
   cookingAreaTitle:any = '';
   description:any = '';
   
-
+  PrinterName = '';
+  PrinterPort = '';
 
 
   save(){
 
     if(this.cookingAreaTitle == '' || this.cookingAreaTitle == undefined){
       this.msg.WarnNotify('Enter Table Title')
+    }
+    if(this.PrinterName == '' || this.PrinterName == undefined){
+      this.msg.WarnNotify('Enter Printer Name')
+    }
+    if(this.PrinterPort == '' || this.PrinterPort == undefined){
+      this.msg.WarnNotify('Enter Printer Port')
     }else {
 
       if(this.description == ''){
@@ -60,6 +69,8 @@ export class AddAreaComponent implements OnInit{
       this.http.post(environment.mainApi+this.global.restaurentLink+'insertCookingAria',{
         CookingAriaTitle:this.cookingAreaTitle,
         CookingAriaDescription:this.description,
+        PrinterName : this.PrinterName,
+        PrinterPort : this.PrinterPort,
         UserID:this.global.getUserID(),
       }).subscribe(
         (Response:any)=>{
@@ -80,9 +91,11 @@ export class AddAreaComponent implements OnInit{
         if(pin != ''){
           $('.loaderDark').show();
         this.http.post(environment.mainApi+this.global.restaurentLink+'UpdateCookingAria',{
-          TableID:this.data.tableID,
+          CookingAriaID:this.data.cookingAriaID,
           CookingAriaTitle:this.cookingAreaTitle,
           CookingAriaDescription:this.description,
+          PrinterName : this.PrinterName,
+          PrinterPort : this.PrinterPort,
           PinCode:pin,  
           UserID:this.global.getUserID(),
         }).subscribe(
@@ -115,6 +128,8 @@ export class AddAreaComponent implements OnInit{
   reset(){
     this.cookingAreaTitle = '';
     this.description = '';
+    this.PrinterName = '';
+    this.PrinterPort = '';
     this.btntype = 'Save';
   }
 

@@ -63,7 +63,9 @@ export class AddPaymentComponent {
 
 
   getSupplierBalance(){
-    this.http.get(environment.mainApi+this.global.accountLink+'getcussupbalance?reqtype=sup&reqpartyid='+this.partyID).subscribe(
+    var partyType = this.supplierList.find((e:any)=> e.partyID == this.partyID).partyType;
+    var reqType = partyType == 'Supplier' ? 'sup' : 'cus';
+    this.http.get(environment.mainApi+this.global.accountLink+'getcussupbalance?reqtype='+reqType+'&reqpartyid='+this.partyID).subscribe(
       (Response:any)=>{
         this.supplierBalance = Response[0].amount;
       }
@@ -71,7 +73,7 @@ export class AddPaymentComponent {
   }
 
   getSupplier(){
-    this.global.getSupplierList().subscribe(
+    this.global.getPartyList().subscribe(
       (Response)=>{
         this.supplierList = Response;
       }

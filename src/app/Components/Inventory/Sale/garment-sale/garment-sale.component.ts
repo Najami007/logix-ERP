@@ -169,6 +169,9 @@ export class GarmentSaleComponent implements OnInit {
   partyList: any = [];
   bookerList: any = [];
 
+  tmpCash = 0;
+  tmpChange = 0;
+
   billPrintType: any = this.global.getBillPrintType();
   setBillType(e: any) {
     localStorage.setItem('BillPrint', this.billPrintType);
@@ -851,12 +854,13 @@ export class GarmentSaleComponent implements OnInit {
     }
 
 
-    this.subTotal = this.subTotal + this.PosFee;
+    if(this.FBRFeature){
+      this.subTotal = this.subTotal + this.PosFee;
+    }
     this.netTotal = this.subTotal  - parseFloat(this.discount) - parseFloat(this.offerDiscount);
     this.change = parseFloat(this.cash) - this.netTotal;
 
     if (this.paymentType == 'Split') {
-
       this.bankCash = this.netTotal - parseFloat(this.cash);
     }
     if (this.paymentType == 'Bank') {
@@ -1294,7 +1298,6 @@ export class GarmentSaleComponent implements OnInit {
       else if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
         this.msg.WarnNotify('Enter Valid Amount')
       } else {
-        console.log(this.FBRFeature ? this.PosFee : 0,'POS FEE');
         this.isValidSale = false;
         this.app.startLoaderDark();
         this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', {
@@ -1324,12 +1327,9 @@ export class GarmentSaleComponent implements OnInit {
           UserID: this.global.getUserID()
         }).subscribe(
           (Response: any) => {
-          
-
-
-
             if (Response.msg == 'Data Saved Successfully') {
-
+              this.tmpCash = this.cash;
+              this.tmpChange = this.change;
               this.msg.SuccessNotify(Response.msg);
               this.reset();
               if(printFlag){
@@ -1351,6 +1351,7 @@ export class GarmentSaleComponent implements OnInit {
           },
           (error: any) => {
             this.isValidSale = true;
+            console.log(error);
             this.msg.WarnNotify('Unable to Save Check Connection');
 
             this.app.stopLoaderDark();

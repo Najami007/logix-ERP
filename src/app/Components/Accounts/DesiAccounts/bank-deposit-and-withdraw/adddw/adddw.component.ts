@@ -106,7 +106,7 @@ export class AdddwComponent implements OnInit {
       this.msg.WarnNotify('Select Transaction Type');
     }else if(this.bankCoaID == 0 || this.bankCoaID == undefined || this.bankCoaID == null){
       this.msg.WarnNotify('Select Bank Head')
-    } if(this.cashCoaID == 0 || this.cashCoaID == undefined || this.cashCoaID == null){
+    }else if(this.cashCoaID == 0 || this.cashCoaID == undefined || this.cashCoaID == null){
       this.msg.WarnNotify('Select Cash Head')
     }else if(this.amount == 0 || this.amount == undefined || this.amount == null){
       this.msg.WarnNotify('Enter Amount')

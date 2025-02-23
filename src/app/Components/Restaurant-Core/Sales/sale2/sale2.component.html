@@ -19,7 +19,8 @@
 
             </div>
             <div class="col-lg-3 chng p-1 text-center  border">
-                <button class="btn btn-warning" [disabled]="orderType == ''" (click)="global.openBootstrapModal('#NewBill',true)" >Change</button>
+                <button class="btn btn-warning" [disabled]="orderType == ''"
+                    (click)="global.openBootstrapModal('#NewBill',true)">Change</button>
 
             </div>
         </div>
@@ -137,8 +138,9 @@
                 <tbody>
                     <tr style="display: inline-flex; " class="cursorPointer "
                         *ngFor="let item of RecipeList |filter:recipeSearch.value">
-                        <mat-card  class="justify-content-center"
-                            (click)="global.openBootstrapModal('#qtyModal',true);tempProdRow = item;this.global.focusTo('.prodQty')" style=" width: 120px;
+                        <mat-card class="justify-content-center"
+                            (click)="global.openBootstrapModal('#qtyModal',true);tempProdRow = item;this.global.focusTo('.prodQty')"
+                            style=" width: 120px;
                         height: 120px;
                         text-align: center;
                       
@@ -167,8 +169,8 @@
         <div class=" row justify-content-between p-1  border-end">
 
             <div class="d-flex col-lg-3 justify-content-between ">
-                <mat-label class="w-50 text-primary cursorPointer" 
-                    (click)="global.openBootstrapModal('#disc',true);focusTo('#discInput');"  style="font-size: 20px;"
+                <mat-label class="w-50 text-primary cursorPointer"
+                    (click)="global.openBootstrapModal('#disc',tableData.length > 0);focusTo('#discInput');" style="font-size: 20px;"
                     accesskey="t"><strong>DISCOUN<u>T</u></strong></mat-label>
                 <p class="text-center font-digit " style="font-size: 35px;">{{billDiscount |number:'1.0-2'}}</p>
                 <!-- <input disabled="true" [(ngModel)]="billDiscount" class="w-50 text-end" (keyup)="getTotal();"
@@ -176,7 +178,7 @@
             </div>
 
             <div class="d-flex justify-content-between col-lg-3 ">
-                <mat-label class="w-50"  style="font-size: 20px;"><strong>SERVICE CHARGES</strong></mat-label>
+                <mat-label class="w-50" style="font-size: 20px;"><strong>SERVICE CHARGES</strong></mat-label>
                 <p class="text-center font-digit"
                     *ngIf="orderType == 'Dine In' || orderType == '' || orderType == 'Take Away'"
                     style="font-size: 35px;">{{OtherCharges |number:'1.0-1'}}</p>
@@ -185,11 +187,11 @@
             </div>
 
             <div class="d-flex justify-content-between col-lg-3 ">
-                <mat-label class="text-success"  style="font-size: 20px;"><strong>SUB TOTAL</strong></mat-label>
+                <mat-label class="text-success" style="font-size: 20px;"><strong>SUB TOTAL</strong></mat-label>
                 <p class="text-center font-digit" style="font-size: 35px;">{{subTotal |number:'1.0-1'}}</p>
             </div>
             <div class="d-flex justify-content-between col-lg-3">
-                <mat-label class="text-danger"  style="font-size: 20px;"><strong>NET TOTAL</strong></mat-label>
+                <mat-label class="text-danger" style="font-size: 20px;"><strong>NET TOTAL</strong></mat-label>
                 <p class="text-center font-digit pt-2" style="font-size: 50px;">{{netTotal |number:'1.0-1'}}</p>
             </div>
 
@@ -222,32 +224,21 @@
 
                         <button mat-raised-button class=" btn-table m-1 btn text-white bg-warning col-lg-5"
                             accesskey="n" matTooltip="New bill (Alt + n)" matTooltipPosition="left"
-                           [disabled]="tableData != ''" (click)="global.openBootstrapModal('#NewBill',true);reset();"><u>N</u>ew Bill</button>
+                            [disabled]="tableData != ''"
+                            (click)="global.openBootstrapModal('#NewBill',true);reset();"><u>N</u>ew Bill</button>
 
                     </td>
                     <td rowspan="2">
                         <button mat-raised-button style="height: 130px;width: 200px;"
-                            class=" btn text-white bg-success col-lg-5" (click)="global.openBootstrapModal('#paymentMehtod',tableData != '')"
-                            matTooltipPosition="right" matTooltip="Save Current Bill" 
-                            accesskey="s"><u>S</u>ave</button>
+                            class=" btn text-white bg-success col-lg-5"
+                            (click)="global.openBootstrapModal('#paymentMehtod',tableData != '')"
+                            matTooltipPosition="right" matTooltip="Save Current Bill" accesskey="s"><u>S</u>ave</button>
                     </td>
                     <td rowspan="2">
                         <mat-form-field style="height: 130px;" class="w-100 matSmall" appearance="outline">
                             <mat-label>Remar<u>k</u>s</mat-label>
                             <textarea rows="4" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
                         </mat-form-field>
-                    </td>
-                    <td rowspan="2" *ngIf="waiterFeature">
-                        <mat-form-field appearance="outline"  class="col-lg-12 pb-5 matSmall">
-                            <mat-label>Waiter</mat-label>
-                            <mat-select [(ngModel)]="BookerID">
-                                <mat-option><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
-                                    [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                                <mat-option *ngFor="let item of bookerList | filter:bookerSearch.value" [value]="item.bookerID">{{item.bookerName}}</mat-option>
-                            </mat-select>
-    
-                        </mat-form-field>
-                        
                     </td>
                 </tr>
 
@@ -259,8 +250,9 @@
 
                     </td>
                     <td>
-                        <button accesskey="u" mat-raised-button matTooltip="Retreiving Saved Bills" matTooltipPosition="right" 
-                        class="btn-table m-1 btn col-lg-5"(click)="global.openBootstrapModal('#SavedBillModal',true);this.getSavedBill()">D<u>u</u>plicate</button>
+                        <button accesskey="u" mat-raised-button matTooltip="Retreiving Saved Bills"
+                            matTooltipPosition="right" class="btn-table m-1 btn col-lg-5"
+                            (click)="global.openBootstrapModal('#SavedBillModal',true);this.getSavedBill()">D<u>u</u>plicate</button>
 
                     </td>
                     <td>
@@ -515,20 +507,25 @@
 
 
 
-                        <div>
-                            <mat-form-field appearance="outline" class="w-100 matSmall">
-                                <mat-label>Discount</mat-label>
-                                <input class="prodQty" name="discount" id="discInput"
-                                    (keydown)="this.global.handleNumKeys($event)" type="number" min="0" matInput
-                                    #bDisc />
+                        <div class="row">
+                            <mat-form-field appearance="outline" class="w-50 matSmall">
+                                <mat-label>Disc %</mat-label>
+                                <input class="prodQty" [(ngModel)]="discPer" name="discountPercent" id="discInput"
+                                    (keydown)="this.global.handleNumKeys($event);genDisc('perc')"
+                                    (keyup)="genDisc('perc')" type="number" min="0" matInput #bDiscPer />
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="w-50 matSmall">
+                                <mat-label>Disc Amt</mat-label>
+                                <input class="prodQty" [(ngModel)]="discAmount" name="discountAmount" id="discInput"
+                                    (keydown)="this.global.handleNumKeys($event);genDisc('amt')"
+                                    (keyup)="genDisc('amt')" type="number" min="0" matInput #bDiscAmt />
                             </mat-form-field>
                         </div>
 
 
                     </div>
                     <div class="modal-footer text-end p-3 bg-mf">
-                        <button class="btn btn-success"
-                            (click)="verifyDiscount(bDisc.value);bDisc.value =''">Save</button>
+                        <button class="btn btn-success" (click)="verifyDiscount();">Save</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </form>
@@ -607,55 +604,54 @@
                         <mat-datepicker-toggle matSuffix [for]="invDate"></mat-datepicker-toggle>
                         <mat-datepicker #invDate></mat-datepicker>
                     </mat-form-field>
-                   
-                        <mat-form-field appearance="outline" class="col-lg-6 pe-1 matSmall">
-                            <mat-label>Customer Name</mat-label>
-                            <input type="text" matInput [(ngModel)]="customerName" />
-                        </mat-form-field>
-                        <mat-form-field appearance="outline" class="col-lg-6 w-50 matSmall">
-                            <mat-label>Customer Mobile</mat-label>
-                            <input matInput type="text" [textMask]="{mask:mobileMask}" [(ngModel)]="customerMobileno" />
-                        </mat-form-field>
-                        <label class="fw-bold">Add Document</label>
-                        <div>
-                            <input accept=".pdf" (change)="onDocSelected($event)" #vDoc type="file" id="vDoc"
-                                class=" mb-2">
+
+                    <mat-form-field appearance="outline" class="col-lg-6 pe-1 matSmall">
+                        <mat-label>Customer Name</mat-label>
+                        <input type="text" matInput [(ngModel)]="customerName" />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="col-lg-6 w-50 matSmall">
+                        <mat-label>Customer Mobile</mat-label>
+                        <input matInput type="text" [textMask]="{mask:mobileMask}" [(ngModel)]="customerMobileno" />
+                    </mat-form-field>
+                    <label class="fw-bold">Add Document</label>
+                    <div>
+                        <input accept=".pdf" (change)="onDocSelected($event)" #vDoc type="file" id="vDoc" class=" mb-2">
+                    </div>
+
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Payment Type</mat-label>
+                        <mat-select [(ngModel)]="paymentType" (selectionChange)="cash = 0; bankCash = 0;getTotal()">
+                            <mat-option value="Cash">Cash</mat-option>
+                            <mat-option value="Bank">Bank</mat-option>
+                            <mat-option value="Split">Split</mat-option>
+                            <mat-option value="Complimentary">Complimentary</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-card class=" p-2 bg-warning" *ngIf="paymentType !== ''">
+
+                        <div class="d-flex justify-content-between text-center mb-2"
+                            *ngIf="paymentType == 'Cash' || paymentType == 'Split'">
+                            <mat-label style="font-size: 25px;">Cash:</mat-label>
+                            <input type="number" style="font-size: 25px;width: 180px;"
+                                (keydown)="this.global.handleNumKeys($event);getTotal()" (keyup)="getTotal()"
+                                [(ngModel)]="cash" />
                         </div>
 
-                        <mat-form-field appearance="outline" class="w-100 matSmall">
-                            <mat-label>Payment Type</mat-label>
-                            <mat-select [(ngModel)]="paymentType" (selectionChange)="cash = 0; bankCash = 0;getTotal()">
-                                <mat-option value="Cash">Cash</mat-option>
-                                <mat-option value="Bank">Bank</mat-option>
-                                <mat-option value="Split">Split</mat-option>
-                                <mat-option value="Complimentary">Complimentary</mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                        <div class="d-flex justify-content-between  "
+                            *ngIf="paymentType == 'Bank' || paymentType == 'Split'">
+                            <mat-label style="font-size: 25px;">Bank:</mat-label>
+                            <select [(ngModel)]="bankCoaID " style="width: 150px;">
+                                <option *ngFor="let item of bankCoaList" [value]="item.coaID">{{item.coaTitle}}
+                                </option>
+                            </select>
+                            <input type="number" style="font-size: 25px;width: 180px;"
+                                [disabled]="paymentType == 'Split' || paymentType == 'Bank'"
+                                (keydown)="this.global.handleNumKeys($event);getTotal()" (keyup)="getTotal()"
+                                [(ngModel)]="bankCash" />
+                        </div>
 
-                        <mat-card class=" p-2 bg-warning" *ngIf="paymentType !== ''">
-
-                            <div class="d-flex justify-content-between text-center mb-2"
-                                *ngIf="paymentType == 'Cash' || paymentType == 'Split'">
-                                <mat-label style="font-size: 25px;">Cash:</mat-label>
-                                <input type="number" style="font-size: 25px;width: 180px;"
-                                    (keydown)="this.global.handleNumKeys($event);getTotal()" (keyup)="getTotal()"
-                                    [(ngModel)]="cash" />
-                            </div>
-
-                            <div class="d-flex justify-content-between  "
-                                *ngIf="paymentType == 'Bank' || paymentType == 'Split'">
-                                <mat-label style="font-size: 25px;">Bank:</mat-label>
-                                <select [(ngModel)]="bankCoaID " style="width: 150px;">
-                                    <option *ngFor="let item of bankCoaList" [value]="item.coaID">{{item.coaTitle}}
-                                    </option>
-                                </select>
-                                <input type="number" style="font-size: 25px;width: 180px;"
-                                    [disabled]="paymentType == 'Split' || paymentType == 'Bank'"
-                                    (keydown)="this.global.handleNumKeys($event);getTotal()" (keyup)="getTotal()"
-                                    [(ngModel)]="bankCash" />
-                            </div>
-
-                        </mat-card>
+                    </mat-card>
 
 
                 </div>
@@ -720,6 +716,14 @@
                                     <input name="cover" type="number" (keydown)="this.global.handleNumKeys($event)"
                                         matInput [(ngModel)]="coverOf" />
                                 </mat-form-field>
+                                <mat-form-field appearance="outline" class="col-lg-12 matSmall" *ngIf="waiterFeature">
+                                    <mat-label>Waiter</mat-label>
+                                    <mat-select [(ngModel)]="BookerID" name="waiter" >
+                                        <mat-option *ngFor="let item of bookerList"
+                                            [value]="item.bookerID">{{item.bookerName}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                              
 
                             </div>
                         </div>
@@ -762,7 +766,9 @@
                                 *ngFor="let item of holdBillList |filter:searchHoldBill.value ">
                                 <mat-card class="btblbtn justify-content-center" (click)="getBillDetail(item)">
                                     <span>{{item.tableTitle}}</span>
-                                    <span>Ord:({{item.orderNo}})</span>
+                                    <span >Ord:({{item.orderNo}})</span>
+                                    <span style="font-size: 8px;">({{item.createdOn | date:'hh:mm:a'}})</span>
+                                    <span *ngIf="waiterFeature" style="font-size: 8px;margin-top: -10px;">{{item.bookerName}}</span>
                                 </mat-card>
                             </tr>
                         </tbody>

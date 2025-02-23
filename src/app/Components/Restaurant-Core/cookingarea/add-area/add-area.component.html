@@ -10,6 +10,16 @@
     
         </mat-form-field>
         <mat-form-field class="w-100 matSmall" appearance="outline">
+            <mat-label>Printer Name</mat-label >
+            <input type="text" [(ngModel)]="PrinterName" matInput name="" id="">
+    
+        </mat-form-field>
+        <mat-form-field class="w-100 matSmall" appearance="outline">
+            <mat-label>Printer Port</mat-label >
+            <input type="text" [(ngModel)]="PrinterPort" matInput name="" id="">
+    
+        </mat-form-field>
+        <mat-form-field class="w-100 matSmall" appearance="outline">
             <mat-label>Description</mat-label>
             <textarea matInput [(ngModel)]="description" ></textarea>
         </mat-form-field>

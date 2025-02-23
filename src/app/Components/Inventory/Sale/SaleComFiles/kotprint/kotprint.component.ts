@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment.development';
   styleUrls: ['./kotprint.component.scss']
 })
 export class KOTPrintComponent {
-showCmpNameFeature:any = this.global.getFeature('cmpName');
+  showCmpNameFeature: any = this.global.getFeature('cmpName');
 
   crudList: any = [];
   companyProfile: any = [];
@@ -20,15 +20,15 @@ showCmpNameFeature:any = this.global.getFeature('cmpName');
   companyAddress: any = '';
   CompanyMobile: any = '';
   companyName: any = '';
-  logoHeight:any = 100;
-  logoWidth:any = 100;
+  logoHeight: any = 100;
+  logoWidth: any = 100;
 
   mobileMask = this.global.mobileMask;
 
   constructor(
     private http: HttpClient,
     private msg: NotificationService,
-    
+
     public global: GlobalDataModule,
     private dialogue: MatDialog,
     private route: Router
@@ -49,7 +49,7 @@ showCmpNameFeature:any = this.global.getFeature('cmpName');
     })
 
 
-  
+
   }
 
 
@@ -63,7 +63,7 @@ showCmpNameFeature:any = this.global.getFeature('cmpName');
   mytableNo = '';
   myCounterName = '';
   myInvDate: any = '';
-  myInvTime:any = '';
+  myInvTime: any = '';
   myOrderType = '';
   mySubTotal = 0;
   myNetTotal = 0;
@@ -75,72 +75,104 @@ showCmpNameFeature:any = this.global.getFeature('cmpName');
   myBank = 0;
   myPaymentType = '';
   voidFlag = false;
-  myTime:any;
-  myCounter:any = '';
+  myTime: any;
+  myCounter: any = '';
   myOrderNo = 0;
   myDuplicateFlag = false;
 
 
   printBill(invNo: any) {
 
-    this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+invNo).subscribe(
-        (Response:any)=>{
-         this.myPrintData = Response;
-         this.myInvoiceNo = Response[0].invBillNo;
-          this.myInvDate = Response[0].invDate;
-          this.myOrderType =Response[0].orderType;
-          this.mySubTotal = Response[0].billTotal;
-          this.myNetTotal = Response[0].netTotal;
-          this.myOtherCharges = Response[0].otherCharges;
-          this.myRemarks = Response[0].remarks;
-          this.myCash = Response[0].cashRec;
-          // this.myBank = Response[0].bankCash;
-          this.myDiscount = Response[0].billDiscount;
-          this.myChange = Response[0].change;
-          this.myPaymentType = Response[0].paymentType;
-          this.mytableNo = Response[0].tableTitle;
-          this.myCounterName = Response[0].entryUser;
-          this.myInvTime = new Date();
-          this.myOrderNo = Response[0].orderNo;
-          
-          if(this.myPaymentType == 'Bank'){
-            this.myBank = this.myNetTotal;
-          }
-          if(this.myPaymentType == 'Split'){
-            this.myBank = this.myNetTotal - this.myCash;
-          }
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + invNo).subscribe(
+      (Response: any) => {
+        this.myPrintData = Response;
+        this.myInvoiceNo = Response[0].invBillNo;
+        this.myInvDate = Response[0].invDate;
+        this.myOrderType = Response[0].orderType;
+        this.mySubTotal = Response[0].billTotal;
+        this.myNetTotal = Response[0].netTotal;
+        this.myOtherCharges = Response[0].otherCharges;
+        this.myRemarks = Response[0].remarks;
+        this.myCash = Response[0].cashRec;
+        // this.myBank = Response[0].bankCash;
+        this.myDiscount = Response[0].billDiscount;
+        this.myChange = Response[0].change;
+        this.myPaymentType = Response[0].paymentType;
+        this.mytableNo = Response[0].tableTitle;
+        this.myCounterName = Response[0].entryUser;
+        this.myInvTime = new Date();
+        this.myOrderNo = Response[0].orderNo;
 
-          setTimeout(() => {
-            this.global.printData('#printKOT');
-          }, 200);
-        
+        if (this.myPaymentType == 'Bank') {
+          this.myBank = this.myNetTotal;
         }
-      )
+        if (this.myPaymentType == 'Split') {
+          this.myBank = this.myNetTotal - this.myCash;
+        }
+
+        setTimeout(() => {
+          this.global.printData('#printKOT');
+        }, 200);
+
+      }
+    )
 
   }
 
 
+  PrintPartialKot(data:any){
+    this.myPrintData = data;
+    this.myInvoiceNo = data[0].invBillNo;
+    this.myInvDate = data[0].invDate;
+    this.myOrderType = data[0].orderType;
+    this.mySubTotal = data[0].billTotal;
+    this.myNetTotal = data[0].netTotal;
+    this.myOtherCharges = data[0].otherCharges;
+    this.myRemarks = data[0].remarks;
+    this.myCash = data[0].cashRec;
+    // this.myBank = Response[0].bankCash;
+    this.myDiscount = data[0].billDiscount;
+    this.myChange = data[0].change;
+    this.myPaymentType = data[0].paymentType;
+    this.mytableNo = data[0].tableTitle;
+    this.myCounterName = data[0].entryUser;
+    this.myInvTime = new Date();
+    this.myOrderNo = data[0].orderNo;
 
-     EmptyBill(){
-      this.myPrintData = [];
-      this.myInvoiceNo = '';
-      this.mytableNo = '';
-      this.myCounterName = '';
-      this.myInvDate = '';
-      this.myInvTime = '';
-      this.myOrderType = '';
-      this.mySubTotal = 0;
-      this.myNetTotal = 0;
-      this.myOtherCharges = 0;
-      this.myRemarks = '';
-      this.myDiscount = 0;
-      this.myCash = 0;
-      this.myChange = 0;
-      this.myBank = 0;
-      this.myPaymentType = '';
-      this.voidFlag = false;
-      this.myTime;
-      this.myCounter = '';
-      this.myDuplicateFlag = false;
-     }
+    if (this.myPaymentType == 'Bank') {
+      this.myBank = this.myNetTotal;
+    }
+    if (this.myPaymentType == 'Split') {
+      this.myBank = this.myNetTotal - this.myCash;
+    }
+
+     setTimeout(() => {
+      this.global.printData('#printKOT');
+     }, 200);
+
+  }
+
+
+  EmptyBill() {
+    this.myPrintData = [];
+    this.myInvoiceNo = '';
+    this.mytableNo = '';
+    this.myCounterName = '';
+    this.myInvDate = '';
+    this.myInvTime = '';
+    this.myOrderType = '';
+    this.mySubTotal = 0;
+    this.myNetTotal = 0;
+    this.myOtherCharges = 0;
+    this.myRemarks = '';
+    this.myDiscount = 0;
+    this.myCash = 0;
+    this.myChange = 0;
+    this.myBank = 0;
+    this.myPaymentType = '';
+    this.voidFlag = false;
+    this.myTime;
+    this.myCounter = '';
+    this.myDuplicateFlag = false;
+  }
 }

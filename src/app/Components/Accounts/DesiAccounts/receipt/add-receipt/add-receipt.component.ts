@@ -66,7 +66,9 @@ export class AddReceiptComponent implements OnInit {
 
 
   getSupplierBalance(){
-    this.http.get(environment.mainApi+this.global.accountLink+'getcussupbalance?reqtype=cus&reqpartyid='+this.partyID).subscribe(
+    var partyType = this.customerList.find((e:any)=> e.partyID == this.partyID).partyType;
+    var reqType = partyType == 'Supplier' ? 'sup' : 'cus';
+    this.http.get(environment.mainApi+this.global.accountLink+'getcussupbalance?reqtype='+reqType+'&reqpartyid='+this.partyID).subscribe(
       (Response:any)=>{
          this.customerBalance = Response[0].amount;
       }
@@ -74,7 +76,7 @@ export class AddReceiptComponent implements OnInit {
   }
 
   getSupplier(){
-    this.global.getCustomerList().subscribe(
+    this.global.getPartyList().subscribe(
       (Response)=>{
         this.customerList = Response;
       }
@@ -112,7 +114,7 @@ export class AddReceiptComponent implements OnInit {
       }else if(this.coaID == 0 || this.coaID == undefined){
         this.msg.WarnNotify('Select COA')
       }else if(this.amount == 0 || this.amount == undefined || this.amount == null){
-  
+        this.msg.WarnNotify('Enter Amount')
       }else{
 
         if(this.bankReceiptNo == '' || this.bankReceiptNo == null || this.bankReceiptNo == undefined){

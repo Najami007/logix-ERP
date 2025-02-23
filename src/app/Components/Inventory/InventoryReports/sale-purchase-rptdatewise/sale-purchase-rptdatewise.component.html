@@ -147,7 +147,7 @@
           
         </table>
 
-        <table class="table-logix" id="TaxsummaryTable" *ngIf="FBRFeature">
+        <table  class="table-logix" id="TaxsummaryTable" *ngIf="FBRFeature">
             <thead>
                 <tr>
                     <th>S#</th>
@@ -183,7 +183,7 @@
                     <td  *ngIf="rptType == 's' || rptType == 'sr'" class="text-end">{{item.billDiscount |number:'1.0-0'}}</td>
                     <td  *ngIf="rptType == 's' || rptType == 'sr'" class="text-end">{{item.netTotal  |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.gstAmount |number:'1.0-2'}}</td>
-                    <td>{{item.fbrInvoiceNo}} <mat-icon class="cursorPointer"  *ngIf="!item.fbrStatus" (click)="sendToFbr(item)">send</mat-icon></td>
+                    <td>{{item.fbrInvoiceNo}} <mat-icon class="cursorPointer hide-in-print"  *ngIf="!item.fbrStatus" (click)="sendToFbr(item)">send</mat-icon></td>
                     
                     <td>{{item.entryUser}}</td>
                     <td>{{item.remarks}}</td>

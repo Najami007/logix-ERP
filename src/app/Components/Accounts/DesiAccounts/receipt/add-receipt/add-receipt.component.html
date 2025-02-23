@@ -19,7 +19,7 @@
         <mat-select id="customer" [(ngModel)]="partyID" (selectionChange)="getSupplierBalance()">
             <mat-option><ngx-mat-select-search #supSerach [placeholderLabel]="'Search...'"
                 [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-            <mat-option *ngFor="let item of customerList |filter:supSerach.value" [value]="item.partyID">{{item.partyName}} ({{item.cityName}})</mat-option>
+            <mat-option *ngFor="let item of customerList |filter:supSerach.value" [value]="item.partyID">{{item.partyName}} ({{item.cityName}}) ({{item.partyType}})</mat-option>
         </mat-select>
     </mat-form-field>
 
