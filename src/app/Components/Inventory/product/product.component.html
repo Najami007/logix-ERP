@@ -294,15 +294,15 @@
             <table class="table table-hover" style="font-size: 12px;">
                 <thead>
                     <th>S#</th>
-                    <th>Product Title</th>
+                    <th class="cursorPointer" (click)="sortProds('productTitle')">Product Title</th>
                     <th *ngIf="!AutoFillProdNameFeature">Product Title 2</th>
-                    <th>Product Barcode</th>
+                    <th class="cursorPointer" (click)="sortProds('barcode')">Product Barcode</th>
                     <th>Sub Category</th>
                     <th>Brand</th>
                    
-                    <th>Cost Price</th>
-                    <th>Sale Price</th>
-                    <th>Disc %</th>
+                    <th class="cursorPointer" (click)="sortProds('costPrice')">Cost Price</th>
+                    <th class="cursorPointer" (click)="sortProds('salePrice')">Sale Price</th>
+                    <th class="cursorPointer" (click)="sortProds('discPercentage')">Disc %</th>
                     <th>GST</th>
                     <th>Entered By</th>
                     <th>Edit</th>

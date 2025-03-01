@@ -496,23 +496,23 @@ export class GarmentSaleComponent implements OnInit {
             if (Response == '' || Response == null || Response == undefined) {
               this.searchSpecialBarcode(barcode, qty);
               return;
-            }else{
+            } else {
 
               if (BType == 'price') {
                 qty = qty / parseFloat(Response[0].salePrice);
-  
+
               }
-  
+
               /////// check already present in the table or not
               var condition = this.tableDataList.find(
                 (x: any) => x.productID == Response[0].productID
               );
-  
+
               var index = this.tableDataList.indexOf(condition);
-  
+
               //// push the data using index
               if (condition == undefined) {
-  
+
                 this.tableDataList.push({
                   rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
                     : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
@@ -540,23 +540,23 @@ export class GarmentSaleComponent implements OnInit {
                   aq: Response[0].aq,
                   total: (Response[0].salePrice * qty) - (Response[0].discRupees * qty),
                   productDetail: '',
-  
+
                 });
-  
+
                 //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
                 this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
                 this.getTotal();
                 this.productImage = Response[0].productImage;
-  
-  
-  
-  
+
+
+
+
               } else {
                 if (this.PBarcode.split("/")[1] != undefined) {
                   qty = this.PBarcode.split("/")[1] / this.tableDataList[index].salePrice;
                 }
                 this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + qty;
-  
+
                 /////// Sorting Table
                 this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
                 this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
@@ -566,7 +566,7 @@ export class GarmentSaleComponent implements OnInit {
 
             }
 
-           
+
 
 
           }
@@ -603,7 +603,7 @@ export class GarmentSaleComponent implements OnInit {
 
     this.global.getProdDetail(0, txtBCode).subscribe(
       (Response: any) => {
-        
+
         if (Response == '' || Response == null || Response == undefined) {
           this.msg.WarnNotify('Product Not Found');
           return;
@@ -685,7 +685,7 @@ export class GarmentSaleComponent implements OnInit {
           this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
           this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
           this.productImage = this.tableDataList[index].productImage;
-   
+
         }
 
 
@@ -834,10 +834,10 @@ export class GarmentSaleComponent implements OnInit {
     this.offerDiscount = 0;
 
     this.tableDataList.forEach((e: any) => {
-      if (this.billDiscount > 0) {
-        e.discInP = this.billDiscount;
-        e.discInR = (e.salePrice * this.billDiscount) / 100
-      }
+      // if (this.billDiscount > 0) {
+      //   e.discInP = this.billDiscount;
+      //   e.discInR = (e.salePrice * this.billDiscount) / 100
+      // }
       e.total = ((parseFloat(e.salePrice) - parseFloat(e.discInR)) * parseFloat(e.quantity));
       this.qtyTotal += parseFloat(e.quantity);
       this.subTotal += parseFloat(e.quantity) * parseFloat(e.salePrice);
@@ -854,10 +854,10 @@ export class GarmentSaleComponent implements OnInit {
     }
 
 
-    if(this.FBRFeature){
+    if (this.FBRFeature) {
       this.subTotal = this.subTotal + this.PosFee;
     }
-    this.netTotal = this.subTotal  - parseFloat(this.discount) - parseFloat(this.offerDiscount);
+    this.netTotal = this.subTotal - parseFloat(this.discount) - parseFloat(this.offerDiscount);
     this.change = parseFloat(this.cash) - this.netTotal;
 
     if (this.paymentType == 'Split') {
@@ -1240,9 +1240,8 @@ export class GarmentSaleComponent implements OnInit {
   }
 
   isValidSale = true;
-  save(paymentType: any,SendToFbr:any,printFlag:any) {
-
-   
+  save(paymentType: any, SendToFbr: any, printFlag: any) {
+    this.isValidSale = true;
     this.tableDataList.forEach((p: any) => {
 
       p.quantity = parseFloat(p.quantity);
@@ -1251,27 +1250,21 @@ export class GarmentSaleComponent implements OnInit {
 
       if (p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null) {
         this.msg.WarnNotify('(' + p.productTitle + ') Cost Price greater than Sale Price');
+        this.isValidSale = false;
         return;
-      }
-
-      if (p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null) {
+      }else if (p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null) {
         this.msg.WarnNotify('(' + p.productTitle + ') Sale Price is not Valid');
+        this.isValidSale = false;
         return;
-      }
-
-      if (p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '') {
-        this.msg.WarnNotify('(' + p.productTitle + ') Quantity is not Valid');  
+      }else if (p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '') {
+        this.msg.WarnNotify('(' + p.productTitle + ') Quantity is not Valid');
+        this.isValidSale = false;
         return;
-      }
-
-      if (p.costPrice > (p.salePrice - p.discInR)) {
+      }else if (p.costPrice > (p.salePrice - p.discInR)) {
         this.msg.WarnNotify('(' + p.productTitle + ') Discount not valid');
+        this.isValidSale = false; 
         return;
       }
-
-
-
-
     });
 
     if (this.isValidSale == true) {
@@ -1293,9 +1286,7 @@ export class GarmentSaleComponent implements OnInit {
         this.msg.WarnNotify('Select Booker')
       } else if (this.paymentType == 'Credit' && this.partyID == 0) {
         this.msg.WarnNotify('Select Customer');
-      }
-
-      else if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
+      }else if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
         this.msg.WarnNotify('Enter Valid Amount')
       } else {
         this.isValidSale = false;
@@ -1308,7 +1299,7 @@ export class GarmentSaleComponent implements OnInit {
           BookerID: this.bookerID,
           PaymentType: paymentType,
           SendToFbr: SendToFbr,
-          PosFee  : this.FBRFeature ? this.PosFee : 0,
+          PosFee: this.FBRFeature ? this.PosFee : 0,
           Remarks: this.billRemarks || '-',
           OrderType: "Take Away",
           BillTotal: this.subTotal,
@@ -1332,7 +1323,7 @@ export class GarmentSaleComponent implements OnInit {
               this.tmpChange = this.change;
               this.msg.SuccessNotify(Response.msg);
               this.reset();
-              if(printFlag){
+              if (printFlag) {
                 this.PrintAfterSave(Response.invNo);
               }
 
@@ -1347,7 +1338,7 @@ export class GarmentSaleComponent implements OnInit {
               this.isValidSale = true;
             }
             this.app.stopLoaderDark();
-          
+
           },
           (error: any) => {
             this.isValidSale = true;
@@ -1590,16 +1581,16 @@ export class GarmentSaleComponent implements OnInit {
 
   }
 
-  sendToFbr(item:any){
-    this.http.post(environment.mainApi+this.global.inventoryLink+'InvSendToFbr',{
-      InvBillNo:item.invBillNo,
+  sendToFbr(item: any) {
+    this.http.post(environment.mainApi + this.global.inventoryLink + 'InvSendToFbr', {
+      InvBillNo: item.invBillNo,
       UserID: this.global.getUserID()
     }).subscribe(
-      (Response:any)=>{
-        if(Response.msg == 'Data Updated Successfully'){
+      (Response: any) => {
+        if (Response.msg == 'Data Updated Successfully') {
           this.msg.SuccessNotify(Response.msg);
           this.getSavedBill();
-        }else{
+        } else {
           this.msg.WarnNotify(Response.msg);
         }
       }

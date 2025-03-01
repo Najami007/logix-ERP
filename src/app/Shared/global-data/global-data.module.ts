@@ -148,14 +148,26 @@ export class GlobalDataModule implements OnInit {
       Password: password,
     }).subscribe({
       next: (Value: any) => {
+        console.log(Value);
         var curDate: Date = new Date();
         var userID = Value._culId;
-        var value = { msg: Value.msg, _cuLnk: Value._cuLnk, _culId: Value._culId, _culName: Value._culName, _reqCID: Value._reqCID, _reqSCID: Value._reqSCID };
+        var value = { 
+          msg: Value.msg,
+           _cuLnk: Value._cuLnk,
+            _culId: Value._culId,
+             _culName: Value._culName,
+              _reqCID: Value._reqCID,
+               _reqSCID: Value._reqSCID
+               };
         var flt: any = [];
         ///Encripting The Features List
-        Value._reqFeatures.forEach((e: any) => {
-          flt.push({ ttl: btoa(btoa(e.featureTitle)), sts: btoa(btoa(e.featureStatus)) });
-        });
+        console.log(Value._reqFeatures);
+        if(Value._reqFeatures ){
+          Value._reqFeatures.forEach((e: any) => {
+            flt.push({ ttl: btoa(btoa(e.featureTitle)), sts: btoa(btoa(e.featureStatus)) });
+          });
+        }
+        
 
         localStorage.setItem('curVal', JSON.stringify({ value }));
         localStorage.setItem('ftr', JSON.stringify({ flt }));
@@ -1319,6 +1331,16 @@ export class GlobalDataModule implements OnInit {
     }
   }
 
+
+
+
+  sortByKey(array, key, order = 'asc') {
+    return array.slice().sort((a, b) => {
+        if (a[key] < b[key]) return order === 'asc' ? -1 : 1;
+        if (a[key] > b[key]) return order === 'asc' ? 1 : -1;
+        return 0;
+    });
+}
 
 
 }

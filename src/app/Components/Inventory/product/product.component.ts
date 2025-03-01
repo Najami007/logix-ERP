@@ -149,6 +149,16 @@ export class ProductComponent implements OnInit {
  
   }
 
+
+  
+  
+
+  isAsc = false;
+  sortProds(key:any){
+    this.isAsc = !this.isAsc;
+    this.productList = this.global.sortByKey(this.productList,key, this.isAsc ? 'asc' : 'desc');
+  }
+
  
   tabIndex: any;
   Validation = true;

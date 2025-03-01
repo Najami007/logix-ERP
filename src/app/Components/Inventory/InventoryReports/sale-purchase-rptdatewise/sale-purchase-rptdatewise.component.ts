@@ -9,6 +9,7 @@ import { SaleBillPrintComponent } from '../../Sale/SaleComFiles/sale-bill-print/
 
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { PurchaseBillPrintComponent } from '../../Purchases/purchase-bill-print/purchase-bill-print.component';
 
 @Component({
   selector: 'app-sale-purchase-rptdatewise',
@@ -17,8 +18,10 @@ import { saveAs } from 'file-saver';
 })
 export class SalePurchaseRptdatewiseComponent implements OnInit {
 
-  @ViewChild(SaleBillPrintComponent)  billPrint:any;
+  @ViewChild(SaleBillPrintComponent)  saleBill:any;
+   @ViewChild(PurchaseBillPrintComponent) purchaseBill:any;
   FBRFeature = this.global.FBRFeature;
+  DiscFeature = this.global.discFeature;
   
   
   companyProfile:any = [];
@@ -101,6 +104,7 @@ rptType:any = 's';
    profitTotal = 0;
    profitPercentTotal = 0;
    discountTotal=0;
+   offerDiscTotal = 0;
    summaryNetTotal= 0;
    myTaxTotal = 0;
 
@@ -116,6 +120,7 @@ rptType:any = 's';
    this.app.startLoaderDark();
     this.rptType = this.tmpRptType;
    if(type == 'summary'){
+   
     $('#detailTable').hide();
     $('#TaxsummaryTable').hide();
     $('#summaryTable').show();
@@ -141,6 +146,7 @@ rptType:any = 's';
         this.chargesTotal = 0;
         this.netGrandTotal = 0;
         this.discountTotal = 0;
+        this.offerDiscTotal = 0;
         this.summaryNetTotal = 0;
 
         this.SaleDetailList.forEach((e:any) => {
@@ -148,7 +154,8 @@ rptType:any = 's';
           this.billTotal += e.billTotal;
           this.chargesTotal += e.otherCharges;
           this.netGrandTotal += e.billTotal + e.overHeadAmount;
-          this.discountTotal += e.billDiscount;
+          this.discountTotal += e.billDiscount - e.percentageDiscount;
+          this.offerDiscTotal += e.percentageDiscount;
           this.summaryNetTotal += e.netTotal;
 
         });
@@ -182,6 +189,7 @@ rptType:any = 's';
         this.chargesTotal = 0;
         this.netGrandTotal = 0;
         this.discountTotal = 0;
+        this.offerDiscTotal = 0;
         this.summaryNetTotal = 0;
         this.myTaxTotal = 0;
 
@@ -189,8 +197,8 @@ rptType:any = 's';
          
           this.billTotal += e.billTotal;
           this.chargesTotal += e.otherCharges;
-          this.netGrandTotal += e.billTotal + e.overHeadAmount;
-          this.discountTotal += e.billDiscount;
+          this.discountTotal += e.billDiscount - e.percentageDiscount;
+          this.offerDiscTotal += e.percentageDiscount;
           this.summaryNetTotal += e.netTotal;
           this.myTaxTotal += e.gstAmount;
 
@@ -209,8 +217,7 @@ rptType:any = 's';
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryDetailDateWise_3?reqType='+this.rptType+'&reqUserID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
-        console.log(Response);
-     
+    
         this.SaleDetailList = [];
         if(this.rptType == 'R'){
           Response.forEach((e:any)=>{
@@ -229,12 +236,14 @@ rptType:any = 's';
         this.detNetTotal = 0;
         this.profitPercentTotal = 0;
         this.profitTotal = 0;
+        this.discountTotal = 0;
          this.SaleDetailList.forEach((e:any) => {
           this.qtyTotal += e.quantity;
           if(this.rptType == 's' || this.rptType == 'sr'){
-            this.detNetTotal += e.salePrice * e.quantity;
-            this.profitTotal += (e.salePrice * e.quantity) - (e.avgCostPrice * e.quantity);
-            // this.profitPercentTotal += (((e.salePrice * e.quantity) - (e.avgCostPrice * e.quantity)) / (e.salePrice * e.quantity));
+            this.detNetTotal += (e.salePrice - e.discInR) * e.quantity ;
+            this.profitTotal += ((e.salePrice - e.discInR) * e.quantity) - (e.avgCostPrice * e.quantity);
+            this.discountTotal  += e.discInR * e.quantity;
+            //this.profitPercentTotal += ((e.salePrice - e.discInR) * e.quantity) - (e.avgCostPrice * e.quantity) / ;
           }
           else if(this.rptType == 'p' || this.rptType == 'pr'){
             this.detNetTotal += e.costPrice * e.quantity;
@@ -277,13 +286,18 @@ rptType:any = 's';
    printBill(item:any){
 
     if(item.invType == 'S' || item.invType == 'SR'){
-      this.billPrint.PrintBill(item.invBillNo);
+      this.saleBill.PrintBill(item.invBillNo);
    
-       this.billPrint.billType = 'Duplicate';
+       this.saleBill.billType = 'Duplicate';
       
-  
     }
+
+    if(item.invType == 'P' || item.invType == 'PR'){
+      this.purchaseBill.printBill(item);
+    }
+
    }
+
 
 
 

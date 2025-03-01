@@ -820,10 +820,10 @@ export class GarmentSaleReturnComponent implements OnInit {
     this.offerDiscount = 0;
 
     this.tableDataList.forEach((e: any) => {
-      if (this.billDiscount > 0) {
-        e.discInP = this.billDiscount;
-        e.discInR = (e.salePrice * this.billDiscount) / 100
-      }
+      // if (this.billDiscount > 0) {
+      //   e.discInP = this.billDiscount;
+      //   e.discInR = (e.salePrice * this.billDiscount) / 100
+      // }
       e.total = (parseFloat(e.salePrice) * parseFloat(e.quantity)) - (parseFloat(e.discInR) * parseFloat(e.quantity));
       this.qtyTotal += parseFloat(e.quantity);
       this.subTotal += parseFloat(e.quantity) * parseFloat(e.salePrice);
@@ -1216,7 +1216,7 @@ export class GarmentSaleReturnComponent implements OnInit {
  
   save(paymentType: any) {
 
-    
+    this.isValidSale = true;
     
     this.tableDataList.forEach((p: any) => {
 
@@ -1225,25 +1225,22 @@ export class GarmentSaleReturnComponent implements OnInit {
       p.costPrice = parseFloat(p.costPrice);
 
       if (p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null) {
-        this.msg.WarnNotify('(' + p.productTitle + ') Cost Price is not Valid');
+        this.msg.WarnNotify('(' + p.productTitle + ') Cost Price greater than Sale Price');
+        this.isValidSale = false;
         return;
-      }
-
-      if (p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null) {
+      }else if (p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null) {
         this.msg.WarnNotify('(' + p.productTitle + ') Sale Price is not Valid');
+        this.isValidSale = false;
         return;
-      }
-
-      if (p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '') {
+      }else if (p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '') {
         this.msg.WarnNotify('(' + p.productTitle + ') Quantity is not Valid');
+        this.isValidSale = false;
         return;
-      }
-
-      if (p.costPrice > (p.salePrice - p.discInR)) {
+      }else if (p.costPrice > (p.salePrice - p.discInR)) {
         this.msg.WarnNotify('(' + p.productTitle + ') Discount not valid');
+        this.isValidSale = false; 
         return;
       }
-
     });
 
 
