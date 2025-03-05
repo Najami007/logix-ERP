@@ -19,7 +19,7 @@ export const environment = {
       //mainApi: 'http://192.168.100.250:1007/',  ////////// live Server Dani System
        //mainApi: 'http://192.168.10.100:1003/',    /////////// Local Server Office
 
-      mainApi: 'http://159.69.174.21:2008/', /////// Live Serve Testing API General
+     // mainApi: 'http://159.69.174.21:2008/', /////// Live Serve Testing API General
       // mainApi: 'http://159.69.174.21:2019/', /////// Live Serve Testing API Property
       
       // mainApi: 'http://159.69.174.21:2018/', /////// Fix Prized Mobile Shop
@@ -49,11 +49,12 @@ export const environment = {
    //mainApi: 'http://192.168.1.100:8080/',    /////////// Jazeera Foods Saddar API
 
 
-   //mainApi: 'http://192.168.100.100:8090/',    /////////// Attock Kamra
-   //mainApi: 'http://localhost:8080/',    /////////// Attock Kamr
+   //mainApi: 'http://192.168.100.100:8090/',    /////////// Awani Mall Attock Kamra
+   //mainApi: 'http://localhost:8080/',    /////////// Awani Mall Attock Kamra
+   mainApi: 'http://159.69.174.21:2021/' //////////////// Awani Mall Live
 
     //mainApi: 'http://localhost:8080/',    /////////// Rahat Bakers Quetta
-   //mainApi: 'http://192.168.100.100:8090/',    /////////// Rahat Bakers Quetta
+   //mainApi: 'http://192.168.10.100:8090/',    /////////// Rahat Bakers Quetta
 
     //mainApi: 'http://159.69.174.21:2020/', /////// Sun Tech
 

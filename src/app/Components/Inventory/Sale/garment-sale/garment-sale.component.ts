@@ -1321,8 +1321,9 @@ export class GarmentSaleComponent implements OnInit {
             if (Response.msg == 'Data Saved Successfully') {
               this.tmpCash = this.cash;
               this.tmpChange = this.change;
-              this.msg.SuccessNotify(Response.msg);
               this.reset();
+              this.msg.SuccessNotify(Response.msg);
+            
               if (printFlag) {
                 this.PrintAfterSave(Response.invNo);
               }

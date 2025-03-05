@@ -1524,8 +1524,89 @@ export class GarmentSaleReturnComponent implements OnInit {
   }
 
 
+  saleBillDate = new Date();
+  SaleBillList:any = [];
+  saleBillDetail:any = [];
+  getSaleBill(){
+    this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventorySummaryDateWise_2?reqType=s&reqUserID=0&FromDate='+
+      this.global.dateFormater(this.saleBillDate,'-')+'&todate='+this.global.dateFormater(this.saleBillDate,'-')+'&fromtime=00:00&totime=23:59').subscribe(
+        (Response:any)=>{
+          this.SaleBillList = Response;
+         
+        
+          this.app.stopLoaderDark();
+        }
+      )
+  }
+
+  getSaleBillDetail(item:any){
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + item.invBillNo).subscribe(
+      (Response: any) => {
+        this.saleBillDetail = Response;
+      }
+    )
+  }
+
+  insertToTable(item:any){
+
+    var condition = this.tableDataList.find(
+      (x: any) => x.productID == item.productID
+    );
+
+    var index = this.tableDataList.indexOf(condition);
+
+    if(condition == undefined){
+      this.global.getProdDetail(item.productID, '').subscribe(
+        (Response: any) => {
+          this.tableDataList.push({
+            rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
+              : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
+                : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
+            productID: item.productID,
+            productTitle: item.productTitle,
+            barcode: Response[0].barcode,
+            productImage:Response[0].productImage,
+            quantity: 1,
+            wohCP: item.costPrice,
+            avgCostPrice: item.avgCostPrice,
+            costPrice: item.costPrice,
+            salePrice: item.salePrice,
+            ovhPercent: 0,
+            ovhAmount: 0,
+            expiryDate: this.global.dateFormater(new Date(), '-'),
+            batchNo: '-',
+            batchStatus: '-',
+            uomID: item.uomID,
+            gst: this.gstFeature ? item.gst : 0,
+            et: item.et,
+            packing: 1,
+            discInP: this.discFeature ? item.discInP : 0,
+            discInR: this.discFeature ? item.discInR : 0,
+            aq: Response[0].aq,
+            total: ((item.salePrice * item.quantity) - item.discInR * item.quantity),
+            productDetail: '',
+      
+          });
+          this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+          this.getTotal();
+    
+          console.log(this.tableDataList);
+          this.productImage = Response[0].productImage;
+  
+        })
+    }else{
+
+      this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+      this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
+      this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+      this.productImage = this.tableDataList[index].productImage;
+
+    }
 
 
+   
+    
+  }
 
 
 

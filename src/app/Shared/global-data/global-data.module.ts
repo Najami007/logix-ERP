@@ -440,7 +440,7 @@ export class GlobalDataModule implements OnInit {
   curDate = new Date();
   SubscriptionExpired() {
 
-    var ExpiryDate = '2025-03-03';
+    var ExpiryDate = '2025-04-03';
     var status = (this.dateFormater(this.curDate, '-') >= ExpiryDate);
     return status;
 

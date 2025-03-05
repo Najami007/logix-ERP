@@ -57,6 +57,7 @@
                 <button class="btn-rpt-success col-lg-2  me-1" *ngIf="FBRFeature" (click)="getReport('taxSummary')">Tax Rpt</button>
                 <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('detail')">Detail</button>
                 <button class="btn-rpt-primary col-lg-2 me-1" (click)="print()">Print</button>
+                <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
                 <!-- <button style="width: 60px;font-size: 20px;" class="btn-rpt-primary" (click)="global.ExportHTMLTabletoExcel('PrintDiv','Summary')"><i class="bi bi-filetype-xlsx"></i></button> -->
             </div>
         </div>

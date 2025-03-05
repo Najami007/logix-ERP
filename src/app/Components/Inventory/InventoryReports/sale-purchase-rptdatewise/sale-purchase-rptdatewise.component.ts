@@ -300,5 +300,11 @@ rptType:any = 's';
 
 
 
+   export(){
+    var type = this.reportsList.find((e:any)=> e.val == this.tmpRptType).title;
+    this.global.ExportHTMLTabletoExcel('PrintDiv',type+'(' + this.fromDate.toLocaleDateString() + ' - ' + this.toDate.toLocaleDateString() +')')
+  }
+
+
 
 }
