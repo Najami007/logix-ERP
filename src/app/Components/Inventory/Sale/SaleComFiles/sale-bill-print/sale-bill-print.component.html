@@ -71,7 +71,7 @@
         <div>
 
             <!---------------------- Bill Table Start------------------>
-            <table class="w-100 table-garment-sale">
+            <table class="w-100 table-garment-sale" *ngIf="billFormate1"   >
                 <thead>
                     <tr class="fs-12">
                         <th style="width:10% !important;">Qty</th>
@@ -120,34 +120,41 @@
 
 
 
-            <!-- <table class="table table-sale">
+            <table class="table table-sale"  *ngIf="billFormate2">
             <thead >
-                <tr>
+                <tr class="fs-10">
                     <th>S#</th>
-                    <th>Title</th>
+                    <th>Item</th>
                     <th>Qty</th>
                     <th>Price</th>
+                    <th style="width:10% !important;" *ngIf="discFeature">D Rs</th>
+                    <th style="width:10% !important;" *ngIf="discFeature">D %</th>
                     <th>Total</th>
 
                 </tr>
             </thead>
             <tbody>
                 
-                <tr *ngFor="let item of myPrintTableData index as index">
+                <tr *ngFor="let item of myPrintTableData index as index" class="fs-12">
                     <td>{{index +1}}</td>
                     <td class="text-start">{{item.productTitle}}</td>
                     <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
                     <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
-                    <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
+                    <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
+                        {{item.discInR|number:'1.0-1'}}</td>
+                    <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
+                        {{item.discInP|number:'1.0-1'}}</td>
+                    <td class="text-end" style="width:20% !important;">{{(item.quantity *
+                        item.salePrice) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
 
                 </tr>
                 <tr>
                     <td colspan="2"></td>
                     <td class="fw-bold">{{myQtyTotal | number:'1.0-2'}}</td>
-                    <td colspan="3"></td>
+                    <td colspan="5"></td>
                 </tr>
             </tbody>
-        </table> -->
+        </table>
 
 
             <!---------------------- Bill Table End------------------>
@@ -245,17 +252,17 @@
                     </tr>
 
 
-                    <tr style="text-align:right;" *ngIf="myBalanceData > 0">
+                    <tr style="text-align:right;" *ngIf="myCusBalance > 0" >
                         <td></td>
-                        <td>prv Blnc</td>
-                        <td *ngIf="myChange > 0"><b>{{myBalanceData | number}}</b></td>
-                        <td *ngIf="myChange <= 0"><b>{{myBalanceData - (-1 * myChange) | number}}</b></td>
+                        <td class="fw-bold">prv Blnc</td>
+                        <td class="fw-bold" *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
+                        <td class="fw-bold"*ngIf="myChange <= 0">{{myCusBalance - (-1 * myChange) | number:'1.0-1'}}</td>
 
                     </tr>
-                    <tr style="text-align:right;" *ngIf="myBalanceData > 0">
+                    <tr style="text-align:right;" *ngIf="myCusBalance > 0">
                         <td></td>
-                        <td>Net Blnc</td>
-                        <td><b>{{myBalanceData | number}}</b></td>
+                        <td class="fw-bold">Net Blnc</td>
+                        <td class="fw-bold">{{myCusBalance | number:'1.0-1'}}</td>
 
                     </tr>
 
@@ -459,17 +466,17 @@
 
                     <tr style="text-align:right;">
                         <td></td>
-                        <td class="urdu">سابقا بقایا</td>
-                        <td *ngIf="myChange <= 0"><b>{{myBalanceData - (-1 * myChange) | number}}</b></td>
-                        <td *ngIf="myChange > 0"><b>{{myBalanceData | number}}</b></td>
+                        <td  class="urdu fw-bold">سابقا بقایا</td>
+                        <td class="fw-bold" *ngIf="myChange <= 0">{{myCusBalance - (-1 * myChange) | number:'1.0-1'}}</td>
+                        <td class="fw-bold" *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
 
 
 
                     </tr>
                     <tr style="text-align:right;">
                         <td></td>
-                        <td class="urdu">ٹوٹل بقایا</td>
-                        <td><b>{{myBalanceData | number}}</b></td>
+                        <td class="urdu fw-bold">ٹوٹل بقایا</td>
+                        <td class="fw-bold">{{myCusBalance | number:'1.0-1'}}</td>
 
 
                     </tr>

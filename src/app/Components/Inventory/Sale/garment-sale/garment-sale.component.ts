@@ -33,6 +33,7 @@ export class GarmentSaleComponent implements OnInit {
   prodDetailFeature = this.global.prodDetailFeature;
   BankShortCutsFeature = this.global.BankShortCutsFeature;
   FBRFeature = this.global.FBRFeature;
+  LessToCostFeature = this.global.LessToCostFeature;
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
@@ -1103,7 +1104,7 @@ export class GarmentSaleComponent implements OnInit {
             return Swal.showValidationMessage("Enter Valid Amount");
           }
 
-          if (value < this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].costPrice) {
+          if (value < this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].costPrice && this.LessToCostFeature == false) {
             return Swal.showValidationMessage("Sale Price Is Less Then Cost Price");
           }
 

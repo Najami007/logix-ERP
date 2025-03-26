@@ -29,6 +29,8 @@ export class SaleBillPrintComponent implements OnInit {
   prodDetailFeature = this.global.prodDetailFeature;
   FBRFeature = this.global.FBRFeature;
   printKotFeature = this.global.printKot;
+  billFormate1 = this.global.BillFormate1Feature;
+  billFormate2 = this.global.BillFormate2Feature;
 
 
 
@@ -93,7 +95,7 @@ export class SaleBillPrintComponent implements OnInit {
   myCash = 0;
   myChange = 0;
   myBank = 0;
-  myBalanceData = 0;
+  myCusBalance = 0;
   myPaymentType = '';
   myDuplicateFlag = false;
   myTime: any;
@@ -115,6 +117,7 @@ export class SaleBillPrintComponent implements OnInit {
     this.billPrintType = this.global.getBillPrintType();
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
       (Response: any) => {
+        console.log(Response);
         this.myPrintTableData = Response;
 
 
@@ -140,6 +143,7 @@ export class SaleBillPrintComponent implements OnInit {
         this.myFbrCode = Response[0].fbrCode;
         this.myFbrResponse = Response[0].fbrResponse;
         this.myPOSFee = Response[0].posFee;
+        this.myCusBalance = Response[0].cusBalance;
         this.myInvTime = new Date();
 
 

@@ -27,6 +27,8 @@ export class Sale2Component implements OnInit {
   showCmpNameFeature: any = this.global.showCmpNameFeature;
   waiterFeature = this.global.waiterFeature;
   FBRFeature = this.global.FBRFeature;
+  serviceChargesFeature = this.global.serviceChargeFeature;
+
 
   appVisibility() {
     if (document.hidden) {
@@ -343,7 +345,7 @@ export class Sale2Component implements OnInit {
     }
     if (this.orderType == 'Dine In') {
       this.OtherCharges = 0;
-      if(this.global.validCharges(this.subTotal)){
+      if(this.global.validCharges(this.subTotal)  && this.serviceChargesFeature){
         this.OtherCharges = this.subTotal * (this.serviceCharges / 100);
       }
     }

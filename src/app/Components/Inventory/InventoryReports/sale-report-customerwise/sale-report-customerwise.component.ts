@@ -50,7 +50,9 @@ export class SaleReportCustomerwiseComponent implements OnInit {
   }
 
 
-
+  hideProfit = false;
+  hideCost = false;
+  
 
   partyList:any = [];
   partyID = 0;

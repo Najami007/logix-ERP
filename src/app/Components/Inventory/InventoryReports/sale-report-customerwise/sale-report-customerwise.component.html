@@ -58,11 +58,13 @@
                     [value]="item.val">{{item.title}}</mat-option>
             </mat-select>
         </mat-form-field> -->
-        <div class="col-lg-4 pb-2" *ngIf="crudList.r">
+        <div class="col-lg-8 pb-2" *ngIf="crudList.r">
 
-            <button class="btn-rpt-success col-lg-4 me-1" (click)="getReport('summary')">Summary</button>
-            <button class="btn-rpt-success col-lg-4 me-1" (click)="getReport('detail')">Detail</button>
+            <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('summary')">Summary</button>
+            <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('detail')">Detail</button>
             <button class="btn-rpt-primary col-lg-2" (click)="print()">Print</button>
+            <mat-checkbox [(ngModel)]="hideProfit">Hide Profit</mat-checkbox>
+            <mat-checkbox [(ngModel)]="hideCost">Hide Cost</mat-checkbox>
         </div>
     </div>
 
@@ -112,14 +114,14 @@
                     <th style="width: 200px;">Date</th>
                     <th>Title</th>
                     <th>Qty</th>
-                    <th style="width: 120px;">Cost</th>
-                    <th style="width: 150px;">Avg Cost</th>
+                    <th style="width: 120px;" *ngIf="!hideCost">Cost</th>
+                    <th style="width: 150px;" *ngIf="!hideCost">Avg Cost</th>
                     <th style="width: 120px;">Sale</th>
                     <th style="width: 120px;">Disc Rs</th>
                     <th style="width: 120px;">Disc %</th>
                     <th style="width: 120px;">Total</th>
-                    <th style="width: 120px;">Profit</th>
-                    <th style="width: 120px;">Profit %</th>
+                    <th style="width: 120px;" *ngIf="!hideProfit">Profit</th>
+                    <th style="width: 120px;" *ngIf="!hideProfit">Profit %</th>
                     <th>Entered By</th>
 
                 </tr>
@@ -134,17 +136,17 @@
                     <td>{{item.invDate |date:'dd-MM-yyyy'}} ({{item.createdOn |date:'hh:mm:a'}})</td>
                     <td>{{item.productTitle}}</td>
                     <td class="text-center">{{item.quantity}}</td>
-                    <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
-                    <td class="text-end">{{item.avgCostPrice|number:'1.0-1'}}</td>
+                    <td class="text-end" *ngIf="!hideCost">{{item.costPrice |number:'1.0-1'}}</td>
+                    <td class="text-end" *ngIf="!hideCost">{{item.avgCostPrice|number:'1.0-1'}}</td>
                     <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.discInR |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.discInP |number:'1.0-1'}}</td>
                     <td [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''" class="text-end">
                         {{(item.salePrice * item.quantity) - (item.discInR * item.quantity) |number:'1.0-0'}}</td>
-                    <td [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''" class="text-end">
+                    <td *ngIf="!hideProfit" [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''" class="text-end">
                         {{((item.salePrice * item.quantity) - (item.discInR * item.quantity)) - (item.avgCostPrice *
                         item.quantity) |number:'1.0-1'}}</td>
-                    <td [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''" class="text-end">
+                    <td  *ngIf="!hideProfit" [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''" class="text-end">
                         {{(((item.salePrice * item.quantity) - (item.discInR * item.quantity)) - (item.avgCostPrice *
                         item.quantity)) / ((item.salePrice * item.quantity) - (item.discInR * item.quantity))
                         |percent:'1.0-1'}}</td>
@@ -152,9 +154,12 @@
                     <td>{{item.entryUser}}</td>
                 </tr>
                 <tr>
-                    <td colspan="10"></td>
+                    <td colspan="5"></td>
+                    <td *ngIf="!hideCost"></td>
+                    <td *ngIf="!hideCost"></td>
+                    <td colspan="3"></td>
                     <th class="text-end">{{saleGrandTotal|number:'1.0-0'}}</th>
-                    <th class="text-end">{{profitTotal|number:'1.0-1'}}</th>
+                    <th class="text-end"  *ngIf="!hideProfit">{{profitTotal|number:'1.0-1'}}</th>
                     <td></td>
                 </tr>
             </tbody>

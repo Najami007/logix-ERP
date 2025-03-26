@@ -30,6 +30,7 @@ export class ParkSaleComponent {
   companyAddress: any = '';
   CompanyMobile: any = '';
   companyName: any = '';
+  playtoriumLogo:any = '../../../assets/Images/playtorium.png';
 
   constructor(
     private http:HttpClient,

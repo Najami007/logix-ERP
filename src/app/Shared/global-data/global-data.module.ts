@@ -43,9 +43,9 @@ export class GlobalDataModule implements OnInit {
 
 
   ///////////////Rest Service Charges Condition //////////
-  RestServiceCharges = 2;
+  RestServiceCharges = 5.5;
   validCharges(billTotal: any) {
-    if (billTotal > 3000) {
+    if (billTotal > 0) {
       return true;
     } else {
       return false;
@@ -271,6 +271,10 @@ export class GlobalDataModule implements OnInit {
   FBRFeature = this.getFeature('FBR');
   showOrderNo = this.getFeature('OrderNo');
   printKot = this.getFeature('PrintKot');
+  serviceChargeFeature = this.getFeature('ServiceCharges');
+  LessToCostFeature = this.getFeature('lessToCost');
+  BillFormate1Feature = this.getFeature('billFormat1');
+  BillFormate2Feature = this.getFeature('billFormat2');
 
 
   refreshFeatures() {
@@ -290,6 +294,10 @@ export class GlobalDataModule implements OnInit {
     this.FBRFeature = this.getFeature('FBR');
     this.showOrderNo = this.getFeature('OrderNo');
     this.printKot = this.getFeature('PrintKot');
+    this.serviceChargeFeature = this.getFeature('ServiceCharges');
+    this.LessToCostFeature = this.getFeature('lessToCost');
+    this.BillFormate1Feature = this.getFeature('billFormat1');
+    this.BillFormate2Feature = this.getFeature('billFormat2');
   }
 
 

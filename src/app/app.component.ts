@@ -163,4 +163,40 @@ constructor(
   
   public glbMenulist:any = [];
 
+
+
+
+
+
+
+
+
+  captureUrlParams(): void {
+    const urlParams = new URLSearchParams(window.location.search);
+    // console.log(urlParams);
+    const currentUserParam = urlParams.get('currentUser');
+    const moduleIdParam = urlParams.get('moduleId');
+
+    if (currentUserParam && moduleIdParam) {
+      try {
+        const currentUser = JSON.parse(decodeURIComponent(currentUserParam));
+        const moduleId = decodeURIComponent(moduleIdParam);
+
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        localStorage.setItem('moduleId', moduleId);
+
+        // console.log('Captured Data:', { currentUser, moduleId });
+
+        // Navigate to the home page after storing the data
+        this.route.navigate(['/home']);
+      } catch (e) {
+        console.error('Error parsing data:', e);
+      }
+    } else {
+      console.error('No data received');
+    }
+  }
+
+
+
 }

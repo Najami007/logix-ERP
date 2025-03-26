@@ -14,13 +14,13 @@ export const environment = {
 
 
        /// mainApi: 'http://localhost:5000/', 
-      // mainApi: 'http://localhost:8060/',           /////////// system own published API
+     //  mainApi: 'http://localhost:8060/',           /////////// system own published API
        // mainApi: 'http://192.168.100.12:8080/',  ////////// live Server Dani System
       //mainApi: 'http://192.168.100.250:1007/',  ////////// live Server Dani System
        //mainApi: 'http://192.168.10.100:1003/',    /////////// Local Server Office
 
-     // mainApi: 'http://159.69.174.21:2008/', /////// Live Serve Testing API General
-      // mainApi: 'http://159.69.174.21:2019/', /////// Live Serve Testing API Property
+    // mainApi: 'http://159.69.174.21:2008/', /////// Live Serve Testing API General
+     //  mainApi: 'http://159.69.174.21:2019/', /////// Live Serve Testing API Property
       
       // mainApi: 'http://159.69.174.21:2018/', /////// Fix Prized Mobile Shop
       //mainApi: 'http://192.168.10.100:2001/', /////// Shama Royal City Server
@@ -51,7 +51,7 @@ export const environment = {
 
    //mainApi: 'http://192.168.100.100:8090/',    /////////// Awani Mall Attock Kamra
    //mainApi: 'http://localhost:8080/',    /////////// Awani Mall Attock Kamra
-   mainApi: 'http://159.69.174.21:2021/' //////////////// Awani Mall Live
+   //mainApi: 'http://159.69.174.21:2021/' //////////////// Awani Mall Live
 
     //mainApi: 'http://localhost:8080/',    /////////// Rahat Bakers Quetta
    //mainApi: 'http://192.168.10.100:8090/',    /////////// Rahat Bakers Quetta
@@ -59,9 +59,21 @@ export const environment = {
     //mainApi: 'http://159.69.174.21:2020/', /////// Sun Tech
 
 
-  // mainApi: 'http://192.168.10.200:7000/',    /////////// Black Gold Restauratn
-   // mainApi: 'http://192.168.10.200:7003/',    /////////// Mehria Brands
+   //mainApi: 'http://192.168.20.100:7000/',    /////////// Black Gold Restauratn
+  // mainApi: 'http://192.168.20.99:7000/',    /////////// Black Gold Restauratn Hyper accounts
+  //mainApi: 'http://192.168.20.100:7003/',    /////////// Mehria Brands
 
+
+
+   // mainApi: 'http://159.69.174.21:2022/',  ////////// live Server City Bakers Rwp
+
+
+   //mainApi: 'http://localhost:8060/',   ///////////////// Bilal Sweets Peshawar
+   // mainApi: 'http://192.168.10.100:8060/',    /////////// Mehria Brands
+
+   // mainApi: 'http://159.69.174.21:2023/',  ////////// live Server Bake Inn Bakers Fateh Jang
+
+    mainApi: 'http://localhost:8060/',           /////////// Cake Corner Refreshment
 
 
 

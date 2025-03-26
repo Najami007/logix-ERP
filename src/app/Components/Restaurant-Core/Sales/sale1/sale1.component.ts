@@ -30,6 +30,7 @@ export class Sale1Component implements OnInit {
   showCmpNameFeature: any = this.global.showCmpNameFeature;
   waiterFeature = this.global.waiterFeature;
   FBRFeature = this.global.FBRFeature;
+  serviceChargesFeature = this.global.serviceChargeFeature;
 
   appVisibility() {
     if (document.hidden) {
@@ -241,7 +242,7 @@ export class Sale1Component implements OnInit {
       this.msg.WarnNotify('Select Order Type')
     } else if (this.tempOrderType == 'Dine In' && (this.coverOf == '' || this.coverOf == 0 || this.coverOf == undefined)) {
       this.msg.WarnNotify('Enter Cover oF')
-    } else if (this.BookerID == 0 && this.waiterFeature) {
+    } else if ( this.tempOrderType == 'Dine In' && this.BookerID == 0 && this.waiterFeature) {
       this.msg.WarnNotify('Select Waiter')
     } else {
 
@@ -345,7 +346,7 @@ export class Sale1Component implements OnInit {
     }
     if (this.orderType == 'Dine In') {
       this.OtherCharges = 0;
-      if(this.global.validCharges(this.subTotal)){
+      if(this.global.validCharges(this.subTotal) && this.serviceChargesFeature){
         this.OtherCharges = this.subTotal * (this.serviceCharges / 100);
       }
     }
@@ -468,7 +469,7 @@ export class Sale1Component implements OnInit {
       this.msg.WarnNotify('Bank Amount is Not Valid')
     } else if (type == 'sale' && (this.customerName != '' && this.customerMobileno == '')) {
       this.msg.WarnNotify('Enter Customer Name')
-    } else if ((this.BookerID == 0 || this.BookerID == undefined) && this.waiterFeature == true) {
+    } else if (this.orderType == 'Dine In'  &&  this.waiterFeature  && (this.BookerID == 0 || this.BookerID == undefined)) {
       this.msg.WarnNotify('Select Waiter')
     }
     else {
