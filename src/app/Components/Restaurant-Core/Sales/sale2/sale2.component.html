@@ -139,7 +139,7 @@
                     <tr style="display: inline-flex; " class="cursorPointer "
                         *ngFor="let item of RecipeList |filter:recipeSearch.value">
                         <mat-card class="justify-content-center"
-                            (click)="global.openBootstrapModal('#qtyModal',true);tempProdRow = item;this.global.focusTo('.prodQty')"
+                            (click)="global.openBootstrapModal('#qtyModal',true);tempProdRow = item;tmpTotalPrice = item.recipeSalePrice;this.global.focusTo('.prodQty')"
                             style=" width: 120px;
                         height: 120px;
                         text-align: center;
@@ -231,7 +231,7 @@
                     <td rowspan="2">
                         <button mat-raised-button style="height: 130px;width: 200px;"
                             class=" btn text-white bg-success col-lg-5"
-                            (click)="global.openBootstrapModal('#paymentMehtod',tableData != '')"
+                            (click)="global.openBootstrapModal('#paymentMehtod',tableData != '');focusTo('#cash')"
                             matTooltipPosition="right" matTooltip="Save Current Bill" accesskey="s"><u>S</u>ave</button>
                     </td>
                     <td rowspan="2">
@@ -548,15 +548,22 @@
                     <div>
                         <form method="post">
                             <mat-label class="text-center">Enter Quantity</mat-label>
-                            <div class="d-flex">
+                            <div class="row">
 
                                 <mat-form-field appearance="outline" class="w-100 matSmall">
                                     <mat-icon (click)="increment('add',tempQty)" matPrefix>add</mat-icon>
 
-                                    <input class="prodQty text-center" [value]="tempQty"
-                                        (keydown)="this.global.handleNumKeys($event)" type="number" min="0" matInput
+                                    <input class="prodQty text-center" (keyup)="onPriceChange('qty')" name="prodQty" [(ngModel)]="tempQty"
+                                        (keydown)="this.global.handleNumKeys($event);onPriceChange('qty')" type="number" min="0" matInput
                                         #prodQty />
                                     <mat-icon (click)="increment('minus',tempQty)" matSuffix>remove</mat-icon>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" class="w-100 matSmall">
+                                    <mat-label>Price</mat-label>
+                                    <input class="text-center" name="prodPrice" (keyup)="onPriceChange('price')" [(ngModel)]="tmpTotalPrice"
+                                        (keydown)="this.global.handleNumKeys($event);onPriceChange('price')" type="number" min="0" matInput
+                                        #prodPrice />
                                 </mat-form-field>
 
                             </div>
@@ -633,7 +640,7 @@
                         <div class="d-flex justify-content-between text-center mb-2"
                             *ngIf="paymentType == 'Cash' || paymentType == 'Split'">
                             <mat-label style="font-size: 25px;">Cash:</mat-label>
-                            <input type="number" style="font-size: 25px;width: 180px;"
+                            <input type="number" id="cash" style="font-size: 25px;width: 180px;"
                                 (keydown)="this.global.handleNumKeys($event);getTotal()" (keyup)="getTotal()"
                                 [(ngModel)]="cash" />
                         </div>
@@ -645,7 +652,7 @@
                                 <option *ngFor="let item of bankCoaList" [value]="item.coaID">{{item.coaTitle}}
                                 </option>
                             </select>
-                            <input type="number" style="font-size: 25px;width: 180px;"
+                            <input type="number" id="bank" style="font-size: 25px;width: 180px;"
                                 [disabled]="paymentType == 'Split' || paymentType == 'Bank'"
                                 (keydown)="this.global.handleNumKeys($event);getTotal()" (keyup)="getTotal()"
                                 [(ngModel)]="bankCash" />
@@ -657,9 +664,9 @@
                 </div>
 
                 <div class="modal-footer bg-mf-blue">
-                    <button class="btn btn-success" (click)="save('sale')">Save</button>
+                    <button class="btn btn-success" id="save" (click)="save('sale')">Save</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        (click)="paymentType = ''">Close</button>
+                        (click)="paymentType = 'Cash';cash = 0;bankCash = 0;">Close</button>
                 </div>
 
 

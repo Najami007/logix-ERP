@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { Router } from '@angular/router';
 import { VoucherDetailsComponent } from '../voucher/voucher-details/voucher-details.component';
+import { VoucherPrintComponent } from '../CommonComponent/voucher-print/voucher-print.component';
 
 @Component({
   selector: 'app-voucher2',
@@ -18,6 +19,9 @@ import { VoucherDetailsComponent } from '../voucher/voucher-details/voucher-deta
   styleUrls: ['./voucher2.component.scss']
 })
 export class Voucher2Component implements OnInit{
+
+
+  @ViewChild(VoucherPrintComponent) printVoucher:any;
 
   loadingBar = 'start';
 
@@ -559,8 +563,7 @@ downloadVoucherDocument(row:any){
   ///////////////////////////////////////////////////
 
   printBill(row:any){
-
-    
+      // this.printVoucher.printBill(row);
     this.lblInvoiceNo = row.invoiceNo;
     this.lblInvoiceDate = row.invoiceDate;
     this.lblRemarks = row.invoiceRemarks;

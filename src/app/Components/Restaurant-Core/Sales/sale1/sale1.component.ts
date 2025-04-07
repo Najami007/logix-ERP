@@ -14,6 +14,8 @@ import { RestSaleBillPrintComponent } from '../rest-sale-bill-print/rest-sale-bi
 import { exec } from 'child_process';
 import * as bootstrap from 'bootstrap';
 
+import * as $ from 'jquery';
+
 
 
 @Component({
@@ -123,8 +125,8 @@ export class Sale1Component implements OnInit {
   }
 
 
-
   ngOnInit(): void {
+    
     this.global.setHeaderTitle('Sale');
     this.getCategories();
     this.getTable();
@@ -161,7 +163,7 @@ export class Sale1Component implements OnInit {
   PartyID = 0;
   invoiceDate: Date = new Date();
   categoryID: any = 0;
-  orderType = '';
+  orderType = this.global.getRestOrderType() == '' ? '' : this.global.getRestOrderType();
   paymentType = 'Cash';
   cash: any = 0;
   bankCash: any = 0;
@@ -182,6 +184,7 @@ export class Sale1Component implements OnInit {
 
   tempProdRow: any = [];
   tempQty = 1;
+  tmpTotalPrice = 0;
   tempIndex: any;
 
   tableData: any = [];
@@ -204,11 +207,30 @@ export class Sale1Component implements OnInit {
     this.global.getBookerList().subscribe((data: any) => { this.bookerList = data; });
 }
 
+  onPriceChange(type:any){
+   if(type == 'price'){
+    this.tempQty = this.tmpTotalPrice / this.tempProdRow.recipeSalePrice;
+   }
+
+   if(type == 'qty'){
+    this.tmpTotalPrice = this.tempQty * this.tempProdRow.recipeSalePrice;
+   }
+    
+  }
+
+
 
   focusTo(id: any) {
     setTimeout(() => {
       $(id).trigger('focus');
+      $(id).trigger('select');
     }, 500);
+  }
+
+  changeFocus(id:any,e:any){
+    if(e.keyCode == 13){
+      $(id).trigger('focus');
+    }
   }
 
   ////////////////////////////////////////////////////////////
@@ -534,6 +556,7 @@ export class Sale1Component implements OnInit {
             this.app.stopLoaderDark();
           },
           (Error: any) => {
+            console.log(Error);
             this.msg.WarnNotify(Error);
             this.app.stopLoaderDark();
           }
@@ -580,6 +603,7 @@ export class Sale1Component implements OnInit {
             this.app.stopLoaderDark();
           },
           (Error: any) => {
+            console.log(Error);
             this.msg.WarnNotify(Error);
             this.app.stopLoaderDark();
           }
@@ -617,6 +641,7 @@ export class Sale1Component implements OnInit {
                   }
                 },
                 (Error: any) => {
+                  console.log(Error);
                   this.msg.WarnNotify(Error);
                   this.app.stopLoaderDark();
                 }
@@ -723,6 +748,7 @@ export class Sale1Component implements OnInit {
           this.app.stopLoaderDark();
         },
         (Error: any) => {
+          console.log(Error);
           this.validSaleFlag = true;
           this.msg.WarnNotify(Error);
           this.app.stopLoaderDark();
@@ -1022,6 +1048,8 @@ export class Sale1Component implements OnInit {
 
 
 
+
+
   ///////////////////////////////////////////////////////////////
 
   reset() {
@@ -1032,14 +1060,14 @@ export class Sale1Component implements OnInit {
     this.invBillNo = '';
     this.prevTableID = 0;
     this.orderNo = 0;
-    this.coverOf = '';
+    this.coverOf = 0;
     this.billRemarks = '';
     this.BookerID = 0;
     this.ProjectID = this.global.InvProjectID;
     this.PartyID = 0;
     this.invoiceDate = new Date();
-    this.orderType = '';
-    this.paymentType = '';
+    this.orderType = this.global.getRestOrderType() == '' ? '' : this.global.getRestOrderType();
+    this.paymentType = 'Cash';
     this.cash = 0;
     this.bankCash = 0;
 

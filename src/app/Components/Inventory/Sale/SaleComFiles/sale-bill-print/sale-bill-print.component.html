@@ -151,7 +151,9 @@
                 <tr>
                     <td colspan="2"></td>
                     <td class="fw-bold">{{myQtyTotal | number:'1.0-2'}}</td>
-                    <td colspan="5"></td>
+                    <td ></td>
+                    <td colspan="2" *ngIf="discFeature"></td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>

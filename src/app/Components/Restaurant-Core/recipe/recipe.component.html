@@ -75,7 +75,7 @@
                     <div class="row">
                         <mat-form-field class="col-lg-3 matSmall" appearance="outline">
                             <mat-label>Cooking Time</mat-label>
-                            <input matInput [(ngModel)]="cookingTime" />
+                            <input matInput [(ngModel)]="cookingTime" (keydown)="global.handleNumKeys($event)" />
                         </mat-form-field>
                         <mat-form-field class="col-lg-3 matSmall" appearance="outline">
                             <mat-label>Cooking Area</mat-label>

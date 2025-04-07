@@ -159,7 +159,7 @@ export class Sale2Component implements OnInit {
   PartyID = 0;
   invoiceDate: Date = new Date();
   categoryID: any = 0;
-  orderType = '';
+  orderType = this.global.getRestOrderType() == '' ? '' : this.global.getRestOrderType();;
   paymentType = 'Cash';
   cash: any = 0;
   bankCash: any = 0;
@@ -180,6 +180,7 @@ export class Sale2Component implements OnInit {
 
   tempProdRow: any = [];
   tempQty = 1;
+  tmpTotalPrice = 0;
   tempIndex: any;
 
   tableData: any = [];
@@ -203,12 +204,31 @@ export class Sale2Component implements OnInit {
      });
 }
 
-
-  focusTo(id: any) {
-    setTimeout(() => {
-      $(id).trigger('focus');
-    }, 500);
+onPriceChange(type:any){
+  if(type == 'price'){
+   this.tempQty = this.tmpTotalPrice / this.tempProdRow.recipeSalePrice;
   }
+
+  if(type == 'qty'){
+   this.tmpTotalPrice = this.tempQty * this.tempProdRow.recipeSalePrice;
+  }
+   
+ }
+
+
+  
+focusTo(id: any) {
+  setTimeout(() => {
+    $(id).trigger('focus');
+    $(id).trigger('select');
+  }, 500);
+}
+
+changeFocus(id:any,e:any){
+  if(e.keyCode == 13){
+    $(id).trigger('focus');
+  }
+}
 
   ////////////////////////////////////////////////////////////
 
@@ -1034,14 +1054,14 @@ export class Sale2Component implements OnInit {
     this.invBillNo = '';
     this.prevTableID = 0;
     this.orderNo = 0;
-    this.coverOf = '';
+    this.coverOf = 0;
     this.billRemarks = '';
     this.BookerID = 0;
     this.ProjectID = this.global.InvProjectID;
     this.PartyID = 0;
     this.invoiceDate = new Date();
-    this.orderType = '';
-    this.paymentType = '';
+    this.orderType = this.global.getRestOrderType() == '' ? '' : this.global.getRestOrderType();;
+    this.paymentType = 'Cash';
     this.cash = 0;
     this.bankCash = 0;
 

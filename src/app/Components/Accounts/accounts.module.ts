@@ -56,6 +56,7 @@ import { FilterPipe } from 'src/app/Shared/pipes/filter/filter.pipe';
 import { LFilterPipe } from 'src/app/Shared/Pipe/LFilter/lfilter.pipe';
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 import { AddBalanceComponent } from './DesiAccounts/party-opening-balance/add-balance/add-balance.component';
+import { VoucherPrintComponent } from './CommonComponent/voucher-print/voucher-print.component';
 
 
 
@@ -136,7 +137,8 @@ export const accountRountes: Route[] = [
     AddPaymentComponent,
     AddWithdrawalComponent,
     COAComponent,
-    AddBalanceComponent
+    AddBalanceComponent,
+    VoucherPrintComponent
    
     
     

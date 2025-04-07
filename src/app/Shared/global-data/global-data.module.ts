@@ -43,9 +43,11 @@ export class GlobalDataModule implements OnInit {
 
 
   ///////////////Rest Service Charges Condition //////////
-  RestServiceCharges = 5.5;
-  validCharges(billTotal: any) {
-    if (billTotal > 0) {
+   // RestServiceCharges = 0;
+   RestServiceCharges = 2;  //////////// Jazeerra Food Service Charges
+    validCharges(billTotal: any) {
+     if (billTotal > 3000) { ////////// Jazeera Foods Condition
+    //if (billTotal > 0) { ////////// Cake Corner Refreshment
       return true;
     } else {
       return false;
@@ -148,7 +150,6 @@ export class GlobalDataModule implements OnInit {
       Password: password,
     }).subscribe({
       next: (Value: any) => {
-        console.log(Value);
         var curDate: Date = new Date();
         var userID = Value._culId;
         var value = { 
@@ -161,7 +162,6 @@ export class GlobalDataModule implements OnInit {
                };
         var flt: any = [];
         ///Encripting The Features List
-        console.log(Value._reqFeatures);
         if(Value._reqFeatures ){
           Value._reqFeatures.forEach((e: any) => {
             flt.push({ ttl: btoa(btoa(e.featureTitle)), sts: btoa(btoa(e.featureStatus)) });
@@ -348,6 +348,10 @@ export class GlobalDataModule implements OnInit {
     return JSON.parse(localStorage.getItem('odsbdepID') || '0');
   }
 
+  getRestOrderType() {
+    return localStorage.getItem('ordtyp') || '';
+  }
+
   getModuleID() {
     var moduleID = JSON.parse(localStorage.getItem('mid') || '{}');
 
@@ -448,7 +452,7 @@ export class GlobalDataModule implements OnInit {
   curDate = new Date();
   SubscriptionExpired() {
 
-    var ExpiryDate = '2025-04-03';
+    var ExpiryDate = '2030-05-10';
     var status = (this.dateFormater(this.curDate, '-') >= ExpiryDate);
     return status;
 

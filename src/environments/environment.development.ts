@@ -74,9 +74,10 @@ export const environment = {
    // mainApi: 'http://159.69.174.21:2023/',  ////////// live Server Bake Inn Bakers Fateh Jang
 
     mainApi: 'http://localhost:8060/',           /////////// Cake Corner Refreshment
+    //mainApi: 'http://192.168.110.100:8060/',           /////////// Cake Corner Refreshment
 
-
-
+   // mainApi: 'http://159.69.174.21:2019/', /////// Property Management FMIS Dubai
+    //mainApi: 'http://159.69.174.21:2047/', /////// Property Management FMIS Dubai
 
      
 };

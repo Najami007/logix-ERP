@@ -24,6 +24,12 @@ export class AddSoundComponent implements OnInit {
 
 
 
+  orderTypeList: any = [
+    // { val: 'Dine In', title: 'Dine In' },
+    { val: 'Take Away', title: 'Take Away' },
+    { val: 'Home Delivery', title: 'Home Delivery' },
+  ]
+
   onDocSelected(event: any) {
 
 
@@ -67,6 +73,11 @@ export class AddSoundComponent implements OnInit {
 locationID = JSON.parse(localStorage.getItem('odsbdepID') || "0")   || 0;
   onDeparmentSelection(value:any){
     localStorage.setItem('odsbdepID', value);
+  }
+
+  orderType = localStorage.getItem('ordtyp') || '';
+  onOrderTypeSelection(value:any){
+    localStorage.setItem('ordtyp', value);
   }
 
   cookingAreaList: any = [];

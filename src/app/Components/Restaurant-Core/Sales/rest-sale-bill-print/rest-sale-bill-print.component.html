@@ -1,11 +1,13 @@
 <!-------------------Bill Print Without GST -------------->
 
 <div id="printRestBill">
-    <div class="text-center">
-        <p *ngIf="showCmpNameFeature" style="font-family:Arial, Helvetica, sans-serif">Welcome To {{companyName}}</p>
-        <p *ngIf="companyAddress != '-'" style="margin-top: -20px;" class="fs-11 text-uppercase">{{companyAddress}}</p>
-        <p *ngIf="CompanyMobile != '-'" style="margin-top: -20px;" class="fs-11">{{CompanyMobile}}</p>
-        <img *ngIf="showCompanyLogo" [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
+    <div class="text-center d-flex flex-column">
+        <span *ngIf="showCmpNameFeature" style="font-family:Arial, Helvetica, sans-serif">Welcome To {{companyName}}</span>
+        <span *ngIf="companyAddress != '-'"  class="fs-11 text-uppercase">{{companyAddress}}</span>
+        <span *ngIf="CompanyMobile != '-'"  class="fs-11">{{CompanyMobile}}</span>
+        <div *ngIf="showCompanyLogo" class="justify-content-center">
+            <img  [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
+        </div>
 
         <h2 *ngIf="showOrderNo" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">ORDER NO: {{myOrderNo}}</h2>
 

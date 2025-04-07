@@ -2,6 +2,28 @@
 
 :root {
   /**  --dark : #484e4a; **/
+
+  --primary: #0d6efd;
+  --primary-2:#DCD7C9;
+  --secondary: #FDF6E2;
+  --territory: #CBAA4A;
+  --text-primary: #736745;
+  --text-secondary: #a1a1a1;
+  --body-primary: #D1BC7E;
+  --body-secondary: #DCD7C9;
+
+  --btn-primary-default: #198754;
+  --btn-primary-hover: #20c997;
+  --btn-primary-press:#198754;
+
+  --btn-secondary-default: #0a58ca;
+  --btn-secondary-hover: #0d6efd;
+  --btn-secondary-press:#0a58ca;
+
+  --btn-territory-default: #495057;
+  --btn-territory-hover: #6c757d;
+  --btn-territory-press:#495057;
+  --btn-disable: #E1E1E1;
   
   --dark: #2a2829;
   --dark-light: #c5c1bb;
@@ -13,9 +35,8 @@
   --sun-red: #d8705c;
   --white: #ffffff;
   --nha-blue: #3c1874;
-  /** --nha-blue: #0041C2; **/
   --royal-blue: #0041c2;
-  --nha-light-blue: #dff2fa;
+  --light-blue: #dff2fa;
   --primary-color: #4758b8;
   --golden: rgba(204,174,104);
   --golden-hover: rgb(107, 89, 46);
@@ -23,9 +44,8 @@
   --info : #0dcaf0;
   --warn: #ffc107;
   --danger : #dc3545;
-  --primary:#0d6efd;
+  /* --primary:#0d6efd;*/
   --btn-focus-text:#e0e0e0;
-  /** --nha-light-blue: green;**/
 }
 body,
 html {
@@ -1257,6 +1277,78 @@ z-index: 5;
 
 .font-sm-1 {
   font-size: 10px !important;
+}
+
+
+.lgx-primary-bg{
+  background-color: var(--body-primary) !important;
+}
+
+.lgx-secondary-bg{
+  background-color: var(--body-secondary) !important;
+}
+
+.lgx-text-primary{
+  color: var(--text-primary);
+}
+
+.lgx-text-secondary{
+  color: var(--text-secondary);
+}
+
+
+.lgx-primary-btn{
+  background-color: var(--btn-primary-default);
+  color: black;
+  height: 32px;
+  border-radius: 5px;
+  font-size: 12px;
+  min-width: 80px !important;
+  &:hover{
+    background-color: var(--btn-primary-hover);
+  }
+  &:focus{
+    background-color: var(--btn-primary-press);
+  }
+  &:disabled{
+    background-color: var(--btn-disable);
+  }
+}
+
+.lgx-secondary-btn{
+  background-color: var(--btn-secondary-default);
+  height: 32px;
+  border-radius: 5px;
+  font-size: 12px;
+  min-width: 80px !important;
+  &:hover{
+    background-color: var(--btn-secondary-hover);
+  }
+  &:focus{
+    background-color: var(--btn-secondary-press);
+  }
+  &:disabled{
+    background-color: var(--btn-disable);
+  }
+}
+
+.lgx-territory-btn{
+  background-color: var(--btn-territory-default);
+  height: 32px;
+  border: 1px solid #736745 !important;
+  min-width: 80px !important;
+  color: #736745;
+  border-radius: 5px;
+  font-size: 12px;
+  &:hover{
+    background-color: var(--btn-territory-hover);
+  }
+  &:focus{
+    background-color: var(--btn-territory-press);
+  }
+  &:disabled{
+    background-color: var(--btn-disable);
+  }
 }
 
 
