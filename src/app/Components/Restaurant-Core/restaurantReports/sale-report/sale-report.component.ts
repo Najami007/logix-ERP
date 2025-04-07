@@ -168,7 +168,7 @@ export class SaleReportComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=s&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
-
+            console.log(Response);
             this.saleSummaryList = Response;
             this.billTotal = 0;
             this.chargesTotal = 0;

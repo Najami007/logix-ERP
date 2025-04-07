@@ -169,11 +169,11 @@
 
                     <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5 fs-12px"
                         *ngIf="holdbtnType == 'hold'" matTooltip="Hold Current Bill" matTooltipPosition="left"
-                        (click)="save('hold')" accesskey="h">HOLD</button>
+                        (click)="save('hold',false)" accesskey="h">HOLD</button>
 
                     <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5 fs-12px"
                         *ngIf="holdbtnType == 'rehold'" matTooltipPosition="left" matTooltip="ReHold Current Bill"
-                        (click)="save('rehold')">ReHold</button>
+                        (click)="save('rehold',false)">ReHold</button>
 
                     <button mat-raised-button class="m-1 btn text-white bg-danger col-lg-5 fs-12px"
                         matTooltip="Retrieve Hold Bills" matTooltipPosition="right"
@@ -188,7 +188,7 @@
 
                     <button mat-raised-button class="m-1 btn text-white bg-success col-lg-5 fs-12px"
                         matTooltipPosition="right" matTooltip="Save Current Bill"
-                        (click)="global.openBootstrapModal('#paymentMehtod',this.tableData != '');focusTo('#cash')"
+                        (click)="global.openBootstrapModal('#paymentMehtod',this.tableData != '');focusTo('#cash');generateGst()"
                         accesskey="s"><u>S</u>ave</button>
 
 
@@ -214,10 +214,9 @@
         </div>
     </div>
 
-    <div class="hide col-lg-4 bg-gray billArea  border-0 border-start"
+    <!-- <div class="hide col-lg-4 bg-gray billArea  border-0 border-start"
         style="right: 0%; height: 100vh;position:fixed;overflow: scroll;">
 
-        <!-----------   Table Side First Row ------------------->
 
         <div class=" d-flex p-1 justify-content-between">
 
@@ -238,7 +237,6 @@
 
         <div style="min-height: 300px;" class="p-2">
 
-            <!-----------   Bill Area ------------------->
             <div class="billTable" style="height: 40vh;">
 
                 <table class="table-logix cursorPointer">
@@ -262,7 +260,6 @@
                             <td class="text-center"><mat-icon class="text-danger" *ngIf="item.entryType == 'New'"
                                     (click)="deleteRow(item,'')">delete</mat-icon>
 
-                                <!-------------- will Open void Qty modal when void button click ------------------->
                                 <mat-icon class="text-danger" data-bs-toggle="modal" data-bs-target="#voidQtyModal"
                                     *ngIf="item.entryType == 'Saved'"
                                     (click)="tempDeleteRow = item">indeterminate_check_box</mat-icon>
@@ -310,10 +307,10 @@
                     <div class="text-center  w-50">
 
                         <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5 btnHeight"
-                            *ngIf="holdbtnType == 'hold'" (click)="save('hold')" accesskey="h">HOLD</button>
+                            *ngIf="holdbtnType == 'hold'" (click)="save('hold',false)" accesskey="h">HOLD</button>
 
                         <button mat-raised-button class="m-1 btn text-white bg-primary col-lg-5 btnHeight"
-                            *ngIf="holdbtnType == 'rehold'" (click)="save('rehold')">ReHold</button>
+                            *ngIf="holdbtnType == 'rehold'" (click)="save('rehold',false)">ReHold</button>
 
 
                         <button mat-raised-button class="m-1 text-white btn bg-primary col-lg-5 btnHeight"
@@ -361,7 +358,7 @@
         </div>
 
 
-    </div>
+    </div> -->
 
 
 
@@ -753,7 +750,8 @@
                 </div>
 
                 <div class="modal-footer bg-mf-blue">
-                    <button class="btn btn-success" id="save" (click)="save('sale')">Save</button>
+                    <button class="btn btn-success" id="save" (click)="save('sale',true)">Save</button>
+                    <button class="btn btn-success d-none" id="save2" accesskey="." (click)="save('sale',false)">Save</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                         (click)="paymentType = 'Cash';cash = 0; bankCash = 0">Close</button>
                 </div>
@@ -929,8 +927,10 @@
                                     <td>{{item.tableTitle}}</td>
                                     <td>{{item.paymentType}}</td>
                                     <td>{{item.netTotal |number:'1.0-0'}}</td>
-                                    <td class="text-primary cursorPointer"><mat-icon
-                                            (click)="printDuplicateBill(item)">print</mat-icon></td>
+                                    <td class="cursorPointer"><mat-icon class="text-primary "
+                                            (click)="printDuplicateBill(item)">print</mat-icon>
+                                        <mat-icon *ngIf="!item.fbrStatus && item.paymentType !== 'Complimentary'" (click)="sendToFbr(item)">send</mat-icon>
+                                        </td>
                                     <td class="text-success cursorPointer"><mat-icon
                                             (click)="billDetails(item)">receipt</mat-icon></td>
                                 </tr>

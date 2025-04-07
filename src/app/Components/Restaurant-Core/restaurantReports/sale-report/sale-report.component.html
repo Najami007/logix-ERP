@@ -169,6 +169,7 @@
                     <th style="width: 150px;">Charges</th>
                     <th style="width: 150px;">Discount</th>
                     <th style="width: 120px;">Total</th>
+                    <th>Pay Type</th>
                     <th>FBR INV #</th>
                     <th>Entered By</th>
 
@@ -188,7 +189,8 @@
                     <td class="text-end">{{item.otherCharges |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.billDiscount |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.netTotal |number:'1.0-0'}}</td>
-                    <td>{{item.fbrInvoiceNo}} <mat-icon class="hide-in-print" *ngIf="!item.fbrStatus">send</mat-icon></td>
+                    <td >{{item.paymentType}}</td>
+                    <td>{{item.fbrInvoiceNo}} <mat-icon class="hide-in-print" *ngIf="!item.fbrStatus && item.paymentType !== 'Complimentary'">send</mat-icon></td>
                     <td>{{item.entryUser}}</td>
                 </tr>
                 <tr>

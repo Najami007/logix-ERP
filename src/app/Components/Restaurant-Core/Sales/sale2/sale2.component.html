@@ -231,7 +231,7 @@
                     <td rowspan="2">
                         <button mat-raised-button style="height: 130px;width: 200px;"
                             class=" btn text-white bg-success col-lg-5"
-                            (click)="global.openBootstrapModal('#paymentMehtod',tableData != '');focusTo('#cash')"
+                            (click)="global.openBootstrapModal('#paymentMehtod',tableData != '');focusTo('#cash');generateGst()"
                             matTooltipPosition="right" matTooltip="Save Current Bill" accesskey="s"><u>S</u>ave</button>
                     </td>
                     <td rowspan="2">
@@ -601,8 +601,9 @@
 
 
                     <div class="d-flex justify-content-between">
-                        <h2 class="text-center text-success">Bill Total: {{netTotal | number:'1.0-1'}}</h2>
-                        <h2 class="text-center text-danger">Change: {{ change | number:'1.0-1'}}</h2>
+                        <h4 class="text-center text-success">Bill Total: {{netTotal | number:'1.0-1'}}</h4>
+                        <h4 class="text-center text-dark" *ngIf="FBRFeature">GST: {{GstAmount | number:'1.0-1'}}</h4>
+                        <h4 class="text-center text-danger">Change: {{ change | number:'1.0-1'}}</h4>
                     </div>
                     <mat-form-field *ngIf="global.DisableDate == false" appearance="outline" class="col-lg-12 matSmall">
                         <mat-label>Date</mat-label>
@@ -835,8 +836,10 @@
                                     <td>{{item.tableTitle}}</td>
                                     <td>{{item.paymentType}}</td>
                                     <td>{{item.netTotal |number:'1.0-0'}}</td>
-                                    <td class="text-primary cursorPointer"><mat-icon
-                                            (click)="printDuplicateBill(item)">print</mat-icon></td>
+                                    <td class=" cursorPointer"><mat-icon class="text-primary"
+                                            (click)="printDuplicateBill(item)">print</mat-icon>
+                                            <mat-icon *ngIf="!item.fbrStatus && item.paymentType !== 'Complimentary'" (click)="sendToFbr(item)">send</mat-icon>
+                                        </td>
                                     <td class="text-success cursorPointer"><mat-icon
                                             (click)="billDetails(item)">receipt</mat-icon></td>
                                 </tr>

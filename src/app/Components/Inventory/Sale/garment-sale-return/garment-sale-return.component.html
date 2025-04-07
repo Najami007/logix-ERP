@@ -251,7 +251,7 @@
                             12</mat-hint>
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline" class="w-100 matSmall" *ngIf="customerFeature">
+                    <!-- <mat-form-field appearance="outline" class="w-100 matSmall" *ngIf="customerFeature">
                         <mat-label>Customer</mat-label>
                         <mat-select class="w-100" [(ngModel)]="partyID" (selectionChange)="partySelect()" #supplier
                             name="customer">
@@ -261,7 +261,14 @@
 
                         </mat-select>
                         <mat-icon class="cursorPointer" (click)="addParty()" matSuffix>add</mat-icon>
-                    </mat-form-field>
+                    </mat-form-field> -->
+
+                    <div class="w-100 mb-3">
+                        <ng-select  class="w-100 custom" placeholder="Customer" appearance="outline" [(ngModel)]="partyID" (ngModelChange)="partySelect()" name="customer">
+                            <ng-option [value]="0">WalkIn Customer</ng-option>
+                            <ng-option *ngFor="let item of partyList " [value]="item.partyID"> {{item.partyName}}</ng-option>
+                        </ng-select>
+                     </div>
 
 
                     <mat-form-field appearance="outline" class="w-100 matSmall">

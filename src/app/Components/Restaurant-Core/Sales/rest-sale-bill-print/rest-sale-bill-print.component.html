@@ -1,8 +1,8 @@
 <!-------------------Bill Print Without GST -------------->
 
-<div id="printRestBill">
+<div id="printRestBill" *ngIf="!gstFeature">
     <div class="text-center d-flex flex-column">
-        <span *ngIf="showCmpNameFeature" style="font-family:Arial, Helvetica, sans-serif">Welcome To {{companyName}}</span>
+        <span *ngIf="showCmpNameFeature" style="font-family:Arial, Helvetica, sans-serif">{{companyName}}</span>
         <span *ngIf="companyAddress != '-'"  class="fs-11 text-uppercase">{{companyAddress}}</span>
         <span *ngIf="CompanyMobile != '-'"  class="fs-11">{{CompanyMobile}}</span>
         <div *ngIf="showCompanyLogo" class="justify-content-center">
@@ -56,7 +56,7 @@
                 <thead>
                     <tr>
                         <th>S#</th>
-                        <th>Product Name</th>
+                        <th>Item Name</th>
                         <th>Qty</th>
                         <th>Price</th>
                         <th>Total</th>
@@ -135,13 +135,13 @@
 
 <!--------------    Print For 5% and 16% Gst        ----------->
 
-<div id="printGSTRestBill">
+<div id="printGSTRestBill"  *ngIf="gstFeature">
     <div class=" d-flex flex-column text-center" *ngIf="type != 'hold'">
-        <span *ngIf="showCmpNameFeature" style="font-family:Arial, Helvetica, sans-serif">Welcome To {{companyName}}</span>
+        <span *ngIf="showCmpNameFeature" style="font-family:Arial, Helvetica, sans-serif">{{companyName}}</span>
         <span *ngIf="companyAddress != '-'"  class="fs-11 text-uppercase">{{companyAddress}}</span>
         <span *ngIf="CompanyMobile != '-'"  class="fs-11">{{CompanyMobile}}</span>
     
-        <span *ngIf="FBRFeature && CompanyNTN != '-'" class="fs-11"><b>NTN:</b>{{CompanyNTN}} </span>
+        <span *ngIf="FBRFeature && CompanyNTN != '-'" class="fs-11"><b>PNTN:</b>{{CompanyNTN}} </span>
         <span *ngIf="FBRFeature && CompanySTRN != '-'" class="fs-11"><b>STRN:</b> {{CompanySTRN}}</span>
     
         <span class="w-100 text-center"><img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth"></span>
@@ -150,8 +150,9 @@
 
     </div>
 
-    <div class="text-center" *ngIf="type == 'hold'">
-        <h3>T.KOT</h3>
+    <div class="text-center d-flex flex-column" *ngIf="type == 'hold'">
+        <span><u>{{myOrderType}}</u></span>
+        <span>T.KOT</span>
     </div>
 
 
@@ -160,23 +161,27 @@
             <table class="w-100" style="font-size: 10px;">
 
                 <tr>
-                    <td>Inv #</td>
+                    <th>Inv #</th>
                     <td>{{myInvoiceNo}}</td>
                 </tr>
                 <tr>
-                    <td>Date</td>
+                    <th>Date</th>
                     <td>{{myInvDate | date:'dd-MM-yyyy '}} ({{myInvTime|date:'hh:mm:ss:a'}})</td>
                 </tr>
                 <tr>
-                    <td>Cashier</td>
+                    <th>Cashier</th>
                     <td>{{myCounterName}}</td>
                 </tr>
                 <tr>
-                    <td>Table</td>
+                    <th>Table</th>
                     <td>{{mytableNo}}</td>
                 </tr>
+                <tr *ngIf="myFbrInvoiceNo">
+                    <th>Tax Inv#</th>
+                    <td>{{myFbrInvoiceNo}}</td>
+                </tr>
                 <tr>
-                    <td>Remarks:-</td>
+                    <th>Remarks:-</th>
                     <td>{{myRemarks}}</td>
                 </tr>
 
@@ -193,7 +198,7 @@
                 <thead>
                     <tr>
                         <th>S#</th>
-                        <th>Product Name</th>
+                        <th>Item Name</th>
                         <th>Qty</th>
                         <th>Price</th>
                         <th>Total</th>
@@ -238,8 +243,8 @@
                         <td>{{myDiscount|number:'1.0-0'}}</td>
 
                     </tr>
-                    <tr *ngIf="myGstAmount > 0">
-                        <td>GSt ({{myGstValue}}%)</td>
+                    <tr *ngIf="myGstValue > 0">
+                        <td>Sales Tax ({{myGstValue}}%)</td>
                         <td>{{myGstAmount|number:'1.0-0'}}</td>
 
                     </tr>
@@ -309,16 +314,21 @@
 
         </div>
         <br>
+
         <div class="d-flex flex-column text-center" style="border-top:1px dotted;" *ngIf="type != 'hold'">
 
-            <span style="font-size: 10px;">As per Pakistan Govt. Regulations 16% GST applied on Cash Payment, While 5% GST
+            <span style="font-size: 10px;">As per Pakistan Govt. Regulations {{cashGst}}% GST applied on Cash Payment, While {{cardGst}}% GST
                 is Charged on Card Transacion.</span>
             <span style="font-size: 10px;">Wish To Serve You Again!</span>
-            <span style="font-size: 10px;">Powered By Logix Solutionz 0313-5300471</span>
+           
         </div>
         <div style="border-top:1px dotted;" *ngIf="type == 'hold'">
-            <p style="font-size: 10px;">**This is not a Bill Please ask for the Bill**</p>
+            <span style="font-size: 10px;">**This is not a Bill Please ask for the Bill**</span>
         </div>
+        <div class="d-flex flex-column text-center">
+            <span style="font-size: 10px;">Powered By : <b>Logix Solutionz | Mobile# 0313-5300471</b></span>
+        </div>
+
     </div>
 
 </div>

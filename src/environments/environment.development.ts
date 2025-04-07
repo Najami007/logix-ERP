@@ -12,9 +12,9 @@ export const environment = {
    // apiUrl: 'https://localhost:7005/',
       apiUrl: 'http://localhost:8081/',
 
-
+      //mainApi: 'http://192.168.100.37:5000/',
        /// mainApi: 'http://localhost:5000/', 
-     //  mainApi: 'http://localhost:8060/',           /////////// system own published API
+        mainApi: 'http://localhost:8060/',           /////////// system own published API
        // mainApi: 'http://192.168.100.12:8080/',  ////////// live Server Dani System
       //mainApi: 'http://192.168.100.250:1007/',  ////////// live Server Dani System
        //mainApi: 'http://192.168.10.100:1003/',    /////////// Local Server Office
@@ -73,7 +73,7 @@ export const environment = {
 
    // mainApi: 'http://159.69.174.21:2023/',  ////////// live Server Bake Inn Bakers Fateh Jang
 
-    mainApi: 'http://localhost:8060/',           /////////// Cake Corner Refreshment
+    //mainApi: 'http://localhost:8060/',           /////////// Cake Corner Refreshment
     //mainApi: 'http://192.168.110.100:8060/',           /////////// Cake Corner Refreshment
 
    // mainApi: 'http://159.69.174.21:2019/', /////// Property Management FMIS Dubai

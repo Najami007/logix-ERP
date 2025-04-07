@@ -159,6 +159,7 @@ export class ReceiptComponent {
  lblDebitTotal:any;
  lblCreditTotal:any;
  lblVoucherPrintDate = new Date();
+ lblPartyBalance = 0;
 
 
    ///////////////////////////////////////////////////
@@ -172,6 +173,7 @@ export class ReceiptComponent {
     this.lblVoucherType = row.type;
     this.lblProjectName = row.projectTitle;
     this.getInvoiceDetail(row.invoiceNo);
+    this.getPartyBalance(row);
     
 
     
@@ -247,6 +249,17 @@ export class ReceiptComponent {
 
 
    
+  }
+
+
+  getPartyBalance(item:any){
+    
+    var reqType = 'cus';
+    this.http.get(environment.mainApi+this.global.accountLink+'getcussupbalance?reqtype='+reqType+'&reqpartyid='+item.partyID).subscribe(
+      (Response:any)=>{
+         this.lblPartyBalance = Response[0].amount;
+      }
+    )
   }
 
 }

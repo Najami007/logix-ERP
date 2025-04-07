@@ -462,12 +462,15 @@ export class Sale1Component implements OnInit {
       this.gstValue = this.global.ResCardGst;
       this.GstAmount = (this.subTotal * this.gstValue) / 100;
     }
+    if(this.FBRFeature && this.paymentType == 'Complimentary'){
+      this.gstValue = 0;
+      this.GstAmount = 0;
+    }
   }
 
-  save(type: any) {
+  save(type: any,SendToFbr:any) {
 
- 
-
+    
     if (this.orderType == 'Dine In' && (this.tableID == 0 || this.tableID == undefined)) {
       this.msg.WarnNotify('Select Table')
     } else if (this.orderType == '' || this.orderType == undefined) {
@@ -635,7 +638,7 @@ export class Sale1Component implements OnInit {
                     this.OtherCharges = 0;
                     this.bankCoaID = 0;
                     this.getTotal();
-                    this.InsertSale();
+                    this.InsertSale(false);
                   } else {
                     this.msg.WarnNotify(Response.msg);
                   }
@@ -652,7 +655,7 @@ export class Sale1Component implements OnInit {
 
 
         } else {
-          this.InsertSale()
+          this.InsertSale(SendToFbr)
         }
       }
 
@@ -677,7 +680,7 @@ export class Sale1Component implements OnInit {
   //////////////////////////////////////////////////////////////////
   validSaleFlag = true;
 
-  InsertSale() {
+  InsertSale(SendToFbr:any) {
 
     if (this.customerMobileno == '' || this.customerMobileno == undefined) {
       this.customerMobileno = '0000-0000000';
@@ -720,7 +723,7 @@ export class Sale1Component implements OnInit {
         InvoiceDocument: this.invDocument,
         CusContactNo: this.customerMobileno,
         CusName: this.customerName,
-
+        SendToFbr : SendToFbr,
         SaleDetail: JSON.stringify(this.tableData),
         UserID: this.global.getUserID()
       }).subscribe(
@@ -1155,7 +1158,7 @@ export class Sale1Component implements OnInit {
 
       if (this.invBillNo != '') {
         this.myInvoiceNo = this.invBillNo;
-        this.save('rehold');
+        this.save('rehold',false);
 
         setTimeout(() => {
           this.billPrint.HOldandPrint(this.orderType, this.myInvoiceNo);
@@ -1167,7 +1170,7 @@ export class Sale1Component implements OnInit {
 
       } else {
 
-        this.save('hold');
+        this.save('hold',false);
         setTimeout(() => {
           this.myInvoiceNo = this.tmpInvBillNO;
           if (this.tmpInvBillNO != '') {
@@ -1384,6 +1387,22 @@ export class Sale1Component implements OnInit {
   }
 
 
+
+  sendToFbr(item: any) {
+    this.http.post(environment.mainApi + this.global.restaurentLink + 'ResSendToPra', {
+      InvBillNo: item.invBillNo,
+      UserID: this.global.getUserID()
+    }).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Data Updated Successfully') {
+          this.msg.SuccessNotify(Response.msg);
+          this.getSavedBill();
+        } else {
+          this.msg.WarnNotify(Response.msg);
+        }
+      }
+    )
+  }
 
 
 

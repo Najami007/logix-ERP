@@ -22,6 +22,7 @@
     "@angular/platform-browser": "^16.2.10",
     "@angular/platform-browser-dynamic": "^16.2.10",
     "@angular/router": "^16.2.10",
+    "@ng-select/ng-select": "^11.1.1",
     "@techiediaries/ngx-qrcode": "^9.1.0",
     "@types/gsap": "^3.0.0",
     "angular-highcharts": "^16.0.0",

@@ -1242,6 +1242,9 @@ export class GarmentSaleComponent implements OnInit {
 
   isValidSale = true;
   save(paymentType: any, SendToFbr: any, printFlag: any) {
+
+
+
     this.isValidSale = true;
     this.tableDataList.forEach((p: any) => {
 

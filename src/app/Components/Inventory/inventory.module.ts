@@ -96,6 +96,7 @@ import { MaterialModule } from 'src/app/Shared/material/material.module';
 import { PurchaseOrderComponent } from './Purchases/purchase-order/purchase-order.component';
 import { StockTransferComponent } from './InvAdjustment/stock-transfer/stock-transfer.component';
 import { QRCodeModule  } from 'angularx-qrcode';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 
@@ -174,6 +175,7 @@ export const inventoryRoutes: Route[] = [
   {path: 'vrptuw',component: VoidListReportComponent,data: { title: 'Void List Rpt' }, canActivate: [AuthGuard]},
   {path: 'ccrpt',component: CashierClosingRptComponent,data: { title: 'Cashier Closing' },canActivate: [AuthGuard]},
 
+  
 
   { path: '**', redirectTo: 'home',data: { title: 'Home' }, pathMatch: 'full' }
 
@@ -280,6 +282,7 @@ export const inventoryRoutes: Route[] = [
     NgxBarcode6Module,
     PipesModule,
     QRCodeModule,
+    NgSelectModule
     
 
     

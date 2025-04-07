@@ -132,8 +132,11 @@ export class RestSaleBillPrintComponent {
         this.myInvTime = Response[0].createdOn;
         this.myOrderNo = Response[0].orderNo;
         this.myBookerName = Response[0].bookerName;
-        this.myGstAmount = Response[0].gstAmount;
+        this.myGstAmount = Response[0].gstAmount ||(this.mySubTotal * Response[0].gstValue) / 100;
         this.myGstValue = Response[0].gstValue;
+        this.myFbrInvoiceNo = Response[0].fbrInvoiceNo;
+        this.myFbrStatus = Response[0].fbrStatus;
+
 
         if (this.myPaymentType == 'Bank') {
           this.myBank = this.myNetTotal;
@@ -169,18 +172,22 @@ export class RestSaleBillPrintComponent {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetHoldedBillDetail?BillNo=' + invoiceNo).subscribe(
       (Response: any) => {
 
-        // console.log(Response);
+        console.log(Response);
         this.myPrintData = Response;
 
         this.mytableNo = Response[0].tableTitle;
         this.myCounterName = Response[0].entryUser;
         this.myInvTime = Response[0].createdOn;
         this.myInvDate = Response[0].invDate;
-
+        this.myOrderType = Response[0].orderType;
         this.myOtherCharges = Response[0].otherCharges;
         this.myRemarks = Response[0].remarks;
         this.myOrderNo = Response[0].orderNo;
         this.myBookerName = Response[0].bookerName;
+        this.myGstAmount =0;
+        this.myGstValue = 0;
+        this.myFbrInvoiceNo = '';
+        this.myFbrStatus = false;
 
         this.mySubTotal = 0;
         Response.forEach((e: any) => {

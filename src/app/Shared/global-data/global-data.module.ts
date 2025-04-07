@@ -44,7 +44,7 @@ export class GlobalDataModule implements OnInit {
 
   ///////////////Rest Service Charges Condition //////////
    // RestServiceCharges = 0;
-   RestServiceCharges = 2;  //////////// Jazeerra Food Service Charges
+   RestServiceCharges = this.getServiceCharges();  //////////// Jazeerra Food Service Charges
     validCharges(billTotal: any) {
      if (billTotal > 3000) { ////////// Jazeera Foods Condition
     //if (billTotal > 0) { ////////// Cake Corner Refreshment
@@ -58,10 +58,10 @@ export class GlobalDataModule implements OnInit {
   ////////////////////////
 
 
-  ResCardGst = 5;
-  ResCashGst = 16;
-  POSFee = 1;
-  InvProjectID = 1;
+  ResCardGst = this.getCardGst();
+  ResCashGst = this.getCashGst();
+  POSFee = this.getPosFee();
+  InvProjectID =  this.getProjectID();
   parkProjectID = 1;
 
   ////////////////////// API Module Start Points//////////////////
@@ -150,6 +150,7 @@ export class GlobalDataModule implements OnInit {
       Password: password,
     }).subscribe({
       next: (Value: any) => {
+        console.log(Value);
         var curDate: Date = new Date();
         var userID = Value._culId;
         var value = { 
@@ -158,7 +159,9 @@ export class GlobalDataModule implements OnInit {
             _culId: Value._culId,
              _culName: Value._culName,
               _reqCID: Value._reqCID,
-               _reqSCID: Value._reqSCID
+               _reqSCID: Value._reqSCID,
+               _reqCrG : Value._reqCrG,
+               _reqCsG : Value._reqCsG,
                };
         var flt: any = [];
         ///Encripting The Features List
@@ -369,6 +372,36 @@ export class GlobalDataModule implements OnInit {
   }
 
 
+  getProjectID(){
+    var val = 1;
+    return val;
+  }
+
+  
+  getCardGst(){
+    var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
+
+    return parseInt(atob(atob(credentials.value._reqCrG)));
+  }
+
+  getCashGst(){
+    var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
+
+    return parseInt(atob(atob(credentials.value._reqCsG)));
+  }
+
+  
+  getPosFee(){
+    var val = 1;
+    return val;
+  }
+
+  getServiceCharges(){
+    var val = 0;
+    return val;
+  }
+  
+
 
   //////////////////////// will provide logged in userID
   getUserID() {
@@ -376,7 +409,7 @@ export class GlobalDataModule implements OnInit {
 
     return parseInt(atob(atob(credentials.value._culId)));
 
-    return parseInt(atob(atob(this.cookie.get('ui'))))
+  //  return parseInt(atob(atob(this.cookie.get('ui'))))
 
   }
 
