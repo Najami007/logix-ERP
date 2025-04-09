@@ -1,0 +1,32 @@
+
+<div >
+
+    <form  method="post">
+     <div class="text-center  mt-3 d-flex justify-content-between p-3">
+         <p class="dialogueTitle">Subscription </p><mat-icon class="cursorPointer"
+             (click)="closeDialogue()">cancel</mat-icon>
+     </div>
+     <div class="container p-2">
+        <p *ngIf="message != ''" class="text-danger">{{message}}</p>
+         <mat-form-field class="w-100" appearance="outline">
+             <mat-label>Enter Token</mat-label>
+             <input matInput autofocus name="token" type="text"  #pin [(ngModel)]="token">
+         </mat-form-field>
+     </div>
+
+
+     <div class="bg-mf text-end p-3">
+         <button mat-raised-button class="bg-success text-white me-1" (click)="save()">Save</button>
+         <button mat-raised-button class="bg-secondary text-white" (click)="closeDialogue()">Close</button>
+     </div>
+     
+    
+    </form>
+ </div>
+
+
+
+
+
+
+

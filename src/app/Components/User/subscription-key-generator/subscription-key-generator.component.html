@@ -1,0 +1,31 @@
+<div class="mx-4 my-2 body text-center">
+
+    <div class="d-flex justify-content-center">
+        <div class="row col-6">
+            <mat-form-field class="col-lg-6" appearance="outline">
+                <mat-label>Date</mat-label>
+                <input readonly="false" matInput #SubsDate [(ngModel)]="SubscriptionDate" [matDatepicker]="picker">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="col-lg-6" appearance="outline">
+                <mat-label>Code</mat-label>
+                <input type="text" matInput [(ngModel)]="code">
+
+            </mat-form-field>
+
+            <div class="  col-12 ">
+                <p>key: {{token}}</p>
+
+                <button mat-raised-button class="bg-success text-white" (click)="getCode()">Generate</button>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+<!-- <div class="bg-mf text-end p-3 modal-footer gap-1">
+    <button mat-raised-button class="bg-success text-white" (click)="getCode()">Generate</button>
+    <button mat-raised-button class="bg-secondary text-white" >Close</button>
+</div> -->

@@ -8,7 +8,7 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { SaleBillDetailComponent } from '../../Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 import { MatDialog } from '@angular/material/dialog';
-import { RestSaleBillPrintComponent } from '../../Sales/rest-sale-bill-print/rest-sale-bill-print.component';
+import { RestSaleBillPrintComponent } from '../../Sales/SaleCommonComponent/rest-sale-bill-print/rest-sale-bill-print.component';
 
 @Component({
   selector: 'app-sale-report',

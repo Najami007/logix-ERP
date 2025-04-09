@@ -19,27 +19,27 @@
             <table class="w-100" style="font-size: 10px;">
 
                 <tr>
-                    <td>Inv #</td>
+                    <th>Inv #</th>
                     <td>{{myInvoiceNo}}</td>
                 </tr>
                 <tr>
-                    <td>Date</td>
+                    <th>Date</th>
                     <td>{{myInvDate | date:'dd-MM-yyyy '}} ({{myInvTime|date:'hh:mm:ss:a'}})</td>
                 </tr>
                 <tr>
-                    <td>Cashier</td>
+                    <th>Cashier</th>
                     <td>{{myCounterName}}</td>
                 </tr>
                 <tr>
-                    <td>Table</td>
+                    <th>Table</th>
                     <td>{{mytableNo}}</td>
                 </tr>
                 <tr *ngIf="waiterFeature">
-                    <td>Waiter</td>
+                    <th>Waiter</th>
                     <td>{{myBookerName}}</td>
                 </tr>
                 <tr>
-                    <td>Remarks:-</td>
+                    <th>Remarks:-</th>
                     <td>{{myRemarks}}</td>
                 </tr>
 

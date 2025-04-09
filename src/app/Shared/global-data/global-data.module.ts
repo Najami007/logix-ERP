@@ -19,6 +19,8 @@ import { ExcelExportService } from '../service/ExcelExportService/excel-export.s
 import { ProductModalComponent } from 'src/app/Components/Inventory/Sale/SaleComFiles/product-modal/product-modal.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import Swal from 'sweetalert2';
+import { UpdateSubscriptionComponent } from 'src/app/Components/User/update-subscription/update-subscription.component';
+import { SubscriptionKeyGeneratorComponent } from 'src/app/Components/User/subscription-key-generator/subscription-key-generator.component';
 
 
 
@@ -43,11 +45,11 @@ export class GlobalDataModule implements OnInit {
 
 
   ///////////////Rest Service Charges Condition //////////
-   // RestServiceCharges = 0;
-   RestServiceCharges = this.getServiceCharges();  //////////// Jazeerra Food Service Charges
-    validCharges(billTotal: any) {
-     if (billTotal > 3000) { ////////// Jazeera Foods Condition
-    //if (billTotal > 0) { ////////// Cake Corner Refreshment
+  // RestServiceCharges = 0;
+  RestServiceCharges = this.getServiceCharges();  //////////// Jazeerra Food Service Charges
+  validCharges(billTotal: any) {
+    if (billTotal > 3000) { ////////// Jazeera Foods Condition
+      //if (billTotal > 0) { ////////// Cake Corner Refreshment
       return true;
     } else {
       return false;
@@ -61,7 +63,7 @@ export class GlobalDataModule implements OnInit {
   ResCardGst = this.getCardGst();
   ResCashGst = this.getCashGst();
   POSFee = this.getPosFee();
-  InvProjectID =  this.getProjectID();
+  InvProjectID = this.getProjectID();
   parkProjectID = 1;
 
   ////////////////////// API Module Start Points//////////////////
@@ -153,24 +155,24 @@ export class GlobalDataModule implements OnInit {
         console.log(Value);
         var curDate: Date = new Date();
         var userID = Value._culId;
-        var value = { 
+        var value = {
           msg: Value.msg,
-           _cuLnk: Value._cuLnk,
-            _culId: Value._culId,
-             _culName: Value._culName,
-              _reqCID: Value._reqCID,
-               _reqSCID: Value._reqSCID,
-               _reqCrG : Value._reqCrG,
-               _reqCsG : Value._reqCsG,
-               };
+          _cuLnk: Value._cuLnk,
+          _culId: Value._culId,
+          _culName: Value._culName,
+          _reqCID: Value._reqCID,
+          _reqSCID: Value._reqSCID,
+          _reqCrG: Value._reqCrG,
+          _reqCsG: Value._reqCsG,
+        };
         var flt: any = [];
         ///Encripting The Features List
-        if(Value._reqFeatures ){
+        if (Value._reqFeatures) {
           Value._reqFeatures.forEach((e: any) => {
             flt.push({ ttl: btoa(btoa(e.featureTitle)), sts: btoa(btoa(e.featureStatus)) });
           });
         }
-        
+
 
         localStorage.setItem('curVal', JSON.stringify({ value }));
         localStorage.setItem('ftr', JSON.stringify({ flt }));
@@ -278,7 +280,7 @@ export class GlobalDataModule implements OnInit {
   LessToCostFeature = this.getFeature('lessToCost');
   BillFormate1Feature = this.getFeature('billFormat1');
   BillFormate2Feature = this.getFeature('billFormat2');
-
+  RestSimpleSaleFeature = this.getFeature('RestSimpleSale');
 
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
@@ -301,6 +303,7 @@ export class GlobalDataModule implements OnInit {
     this.LessToCostFeature = this.getFeature('lessToCost');
     this.BillFormate1Feature = this.getFeature('billFormat1');
     this.BillFormate2Feature = this.getFeature('billFormat2');
+    this.RestSimpleSaleFeature = this.getFeature('RestSimpleSale');
   }
 
 
@@ -372,35 +375,35 @@ export class GlobalDataModule implements OnInit {
   }
 
 
-  getProjectID(){
+  getProjectID() {
     var val = 1;
     return val;
   }
 
-  
-  getCardGst(){
-    var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
 
-    return parseInt(atob(atob(credentials.value._reqCrG)));
+  getCardGst() {
+    var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
+    console.log(typeof credentials);
+    return credentials > 0 ? parseInt(atob(atob(credentials.value._reqCrG))) : 0;
   }
 
-  getCashGst(){
+  getCashGst() {
     var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
 
-    return parseInt(atob(atob(credentials.value._reqCsG)));
+    return credentials > 0 ? parseInt(atob(atob(credentials.value._reqCsG))) : 0;
   }
 
-  
-  getPosFee(){
+
+  getPosFee() {
     var val = 1;
     return val;
   }
 
-  getServiceCharges(){
+  getServiceCharges() {
     var val = 0;
     return val;
   }
-  
+
 
 
   //////////////////////// will provide logged in userID
@@ -409,7 +412,7 @@ export class GlobalDataModule implements OnInit {
 
     return parseInt(atob(atob(credentials.value._culId)));
 
-  //  return parseInt(atob(atob(this.cookie.get('ui'))))
+    //  return parseInt(atob(atob(this.cookie.get('ui'))))
 
   }
 
@@ -427,7 +430,7 @@ export class GlobalDataModule implements OnInit {
   getFastFoodCID() {
     var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
 
-     return atob(atob(credentials.value._reqCID)).toString();
+    return atob(atob(credentials.value._reqCID)).toString();
     //return credentials.value._reqCID.toString();
 
     // return atob(atob(this.cookie.get('un'))).toString();
@@ -438,7 +441,7 @@ export class GlobalDataModule implements OnInit {
   getFastFoodSCID() {
     var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
 
-     return atob(atob(credentials.value._reqSCID)).toString();
+    return atob(atob(credentials.value._reqSCID)).toString();
     //return credentials.value._reqSCID.toString();
     // return atob(atob(this.cookie.get('un'))).toString();
 
@@ -723,7 +726,7 @@ export class GlobalDataModule implements OnInit {
 
       frame1.remove();
     }, 2);
- 
+
 
   }
 
@@ -1381,11 +1384,215 @@ export class GlobalDataModule implements OnInit {
 
   sortByKey(array, key, order = 'asc') {
     return array.slice().sort((a, b) => {
-        if (a[key] < b[key]) return order === 'asc' ? -1 : 1;
-        if (a[key] > b[key]) return order === 'asc' ? 1 : -1;
-        return 0;
+      if (a[key] < b[key]) return order === 'asc' ? -1 : 1;
+      if (a[key] > b[key]) return order === 'asc' ? 1 : -1;
+      return 0;
     });
-}
+  }
+
+
+
+
+  decodeSubscriptionCode(date: any) {
+
+    var value = atob((atob(date)));
+    //  value = value[0]+value[9]+value[1]+value[8]+'-'+value[2]+value[7]+'-'+value[3]+value[6]
+
+    if (value[4] + value[5] == '01') {
+      value = value[0] + value[9] + value[1] + value[8] + '-' + value[2] + value[7] + '-' + value[3] + value[6];
+
+      // 0918 27 36
+    } else if (value[4] + value[5] == '02') {
+      value = value[1] + value[8] + value[2] + value[7] + '-' + value[0] + value[9] + '-' + value[3] + value[6];
+
+      //1827 09 36
+
+    } else if (value[4] + value[5] == '03') {
+      value = value[1] + value[8] + value[2] + value[7] + '-' + value[3] + value[6] + '-' + value[0] + value[9];
+
+      // 1827 36 09
+
+    }
+    else if (value[4] + value[5] == '04') {
+      value = value[2] + value[7] + value[3] + value[6] + '-' + value[0] + value[1] + '-' + value[9] + value[8];
+
+      // 2736 01 98
+
+    }
+    else if (value[4] + value[5] == '05') {
+      value = value[2] + value[7] + value[3] + value[6] + '-' + value[1] + value[0] + '-' + value[8] + value[9];
+
+      //2736 10 89  
+
+    }
+    else if (value[4] + value[5] == '06') {
+      value = value[0] + value[2] + value[3] + value[6] + '-' + value[1] + value[9] + '-' + value[7] + value[8];
+
+      // 0236 19 78
+
+    }
+    else if (value[4] + value[5] == '07') {
+      value = value[6] + value[2] + value[8] + value[3] + '-' + value[1] + value[9] + '-' + value[7] + value[0];
+
+      // 6283 19 70
+
+    }
+    else if (value[4] + value[5] == '08') {
+      value = value[3] + value[9] + value[0] + value[7] + '-' + value[1] + value[6] + '-' + value[8] + value[2];
+
+      // 3907 16 82
+
+    }
+    else if (value[4] + value[5] == '09') {
+      value = value[9] + value[8] + value[7] + value[6] + '-' + value[3] + value[2] + '-' + value[1] + value[0];
+
+      // 9876 32 10
+
+
+    }
+
+    else if (value[4] + value[5] == '10') {
+      value = value[2] + value[7] + value[3] + value[6] + '-' + value[9] + value[8] + '-' + value[1] + value[0];
+
+      // 2736 98 10
+
+
+    }
+
+    else if (value[4] + value[5] == '11') {
+      value = value[3] + value[9] + value[6] + value[8] + '-' + value[1] + value[7] + '-' + value[2] + value[0];
+
+      // 3968 17 20
+
+    }
+
+    else if (value[4] + value[5] == '12') {
+      value = value[0] + value[7] + value[2] + value[8] + '-' + value[1] + value[9] + '-' + value[6] + value[3];
+
+      // 3968 17 20
+
+    }
+    // console.log(value);
+    return value;
+
+  }
+
+
+
+  encodeSubscriptionDate(date: Date, code: any) {
+    var day: any = date.getDate().toString();
+    var month: any = (date.getMonth() + 1).toString();
+    var year: any = date.getFullYear().toString();
+    if (day < 10) {
+      day = '0' + day;
+    }
+    if (month < 10) {
+      month = '0' + month;
+    }
+
+    //  var d =  year + '-' + month + '-' + day;
+    var value = '';
+    if (month == 1) {
+      value = year[0] + year[2] + month[0] + day[0] + 0 + 1 + day[1] + month[1] + year[3] + year[1];
+
+
+      // 0918 27 36
+    } else if (month == 2) {
+      value = month[0] + year[0] + year[2] + day[0] + 0 + 2 + day[1] + year[3] + year[1] + month[1];
+
+      //1827 09 36
+
+    } else if (month == 3) {
+      value = day[0] + year[0] + year[2] + month[0] + 0 + 3 + month[1] + year[3] + year[1] + day[1];
+
+      // 1827 36 09
+
+    }
+    else if (month == 4) {
+      value = month[0] + month[1] + year[0] + year[2] + 0 + 4 + year[3] + year[1] + day[1] + day[0];
+
+      // 2736 01 98
+
+    }
+    else if (month == 5) {
+      value = month[1] + month[0] + year[0] + year[2] + 0 + 5 + year[3] + year[1] + day[0] + day[1];
+
+      //2736 10 89  
+
+    }
+    else if (month == 6) {
+      value = year[0] + month[0] + year[1] + year[2] + 0 + 6 + year[3] + day[0] + day[1] + month[1];
+
+      // 0236 19 78
+
+    }
+    else if (month == 7) {
+      value = day[1] + month[0] + year[1] + year[3] + 0 + 7 + year[0] + day[0] + year[2] + month[1];
+
+      // 6283 19 70
+
+    }
+    else if (month == 8) {
+      value = year[2] + month[0] + day[1] + year[0] + 0 + 8 + month[1] + year[3] + day[0] + year[1];
+
+      // 3907 16 82
+
+    }
+    else if (month == 9) {
+      value = day[1] + day[0] + month[1] + month[0] + 0 + 9 + year[3] + year[2] + year[1] + year[0];
+
+      // 9876 32 10
+
+
+    }
+
+    else if (month == 10) {
+      value = day[1] + day[0] + year[0] + year[2] + 10 + year[3] + year[1] + month[1] + month[0];
+
+      // 2736 98 10
+
+
+    }
+
+    else if (month == 11) {
+      value = day[1] + month[0] + day[0] + year[0] + 11 + year[2] + month[1] + year[3] + year[1];
+
+      // 3968 17 20
+
+    }
+
+    else if (month == 12) {
+      value = year[0] + month[0] + year[2] + day[1] + 12 + day[0] + year[1] + year[3] + month[1];
+
+      // 0728 19 63
+
+    }
+    value = btoa(btoa(value + code));
+    //  console.log(value);
+    return value;
+  }
+
+
+  updateSubscription(data: any) {
+    this.dialog.open(UpdateSubscriptionComponent, {
+      width: "30%",
+      data: data,
+    }).afterClosed().subscribe(val => {
+
+
+    })
+  }
+
+
+  generateSubscriptionKey(data: any) {
+    this.dialog.open(SubscriptionKeyGeneratorComponent, {
+      width: "30%",
+      data: data,
+    }).afterClosed().subscribe(val => {
+
+
+    })
+  }
 
 
 }

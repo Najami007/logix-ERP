@@ -12,6 +12,7 @@ import { AppComponent } from 'src/app/app.component';
 import { MainComponent } from '../main/main.component';
 import { FormControl } from '@angular/forms';
 import { OverlayContainer } from 'ngx-toastr';
+import { UpdateSubscriptionComponent } from '../../User/update-subscription/update-subscription.component';
 
 @Component({
   selector: 'app-top-nav-bar',
@@ -25,6 +26,8 @@ export class TopNavBarComponent implements OnInit{
     moduleID?: string | null;
     
     
+
+    subscriptionFeature = this.globalData.getFeature('')
    
     @Output() toggleMySideBar : EventEmitter<any> = new EventEmitter();
     toggleControl: any;
@@ -214,6 +217,11 @@ export class TopNavBarComponent implements OnInit{
         
     
       }
-  
+
+
+      updateSubscription(){
+        this.globalData.updateSubscription({UserID:this.globalData.getUserID()})
+      }
+
   
   }

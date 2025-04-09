@@ -8,9 +8,9 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../../User/pincode/pincode.component';
 import Swal from 'sweetalert2';
-import { RestKotPrintComponent } from '../rest-kot-print/rest-kot-print.component';
+import { RestKotPrintComponent } from '../SaleCommonComponent/rest-kot-print/rest-kot-print.component';
 import { SaleBillDetailComponent } from '../sale1/sale-bill-detail/sale-bill-detail.component';
-import { RestSaleBillPrintComponent } from '../rest-sale-bill-print/rest-sale-bill-print.component';
+import { RestSaleBillPrintComponent } from '../SaleCommonComponent/rest-sale-bill-print/rest-sale-bill-print.component';
 
 
 @Component({

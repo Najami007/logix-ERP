@@ -114,6 +114,7 @@ export class RestSaleBillPrintComponent {
 
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + invNo).subscribe(
       (Response: any) => {
+
         this.myPrintData = Response;
         this.myInvoiceNo = Response[0].invBillNo;
         this.myInvDate = Response[0].invDate;

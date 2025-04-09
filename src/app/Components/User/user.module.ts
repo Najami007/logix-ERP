@@ -22,6 +22,8 @@ import { DayopencloseComponent } from './dayopenclose/dayopenclose.component';
 import { DayOpencloseRptComponent } from './day-openclose-rpt/day-openclose-rpt.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
+import { UpdateSubscriptionComponent } from './update-subscription/update-subscription.component';
+import { SubscriptionKeyGeneratorComponent } from './subscription-key-generator/subscription-key-generator.component';
 
 
 
@@ -32,6 +34,7 @@ export const userRoutes: Route[] = [
   {path:'respwd', component:RestrictpwdComponent,data: { title: 'Codes' },canActivate:[AuthGuard]  },
   {path:'doc', component:DayopencloseComponent,data: { title: 'Day Open Close' }, canActivate:[AuthGuard] },
   {path:'rptdoc', component:DayOpencloseRptComponent,data: { title: 'DOC Rpt' }, canActivate:[AuthGuard] },
+  {path:'keygen', component:SubscriptionKeyGeneratorComponent,data: { title: 'Key Generator' }},
 
   {path:'**', redirectTo:'home',pathMatch:'full'}
 
@@ -47,7 +50,9 @@ export const userRoutes: Route[] = [
     UserRoleComponent,
     RestrictpwdComponent,
     DayOpencloseRptComponent,
-    DayopencloseComponent,   
+    DayopencloseComponent,
+    UpdateSubscriptionComponent,
+    SubscriptionKeyGeneratorComponent,   
   ],
   
   imports: [
