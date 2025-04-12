@@ -27,6 +27,7 @@ export class Sale2Component implements OnInit {
   showCmpNameFeature: any = this.global.showCmpNameFeature;
   waiterFeature = this.global.waiterFeature;
   FBRFeature = this.global.FBRFeature;
+  gstFeature = this.global.gstFeature;
   serviceChargesFeature = this.global.serviceChargeFeature;
 
 
@@ -453,15 +454,15 @@ export class Sale2Component implements OnInit {
   /////////////////////////////////////////////////////////////////
 
   generateGst() {
-    if (this.FBRFeature && (this.paymentType == 'Cash' || this.paymentType == 'Split')) {
+    if (this.gstFeature && (this.paymentType == 'Cash' || this.paymentType == 'Split')) {
       this.gstValue = this.global.ResCashGst;
       this.GstAmount = (this.subTotal * this.gstValue) / 100;
     }
-    if (this.FBRFeature && this.paymentType == 'Bank') {
+    if (this.gstFeature && this.paymentType == 'Bank') {
       this.gstValue = this.global.ResCardGst;
       this.GstAmount = (this.subTotal * this.gstValue) / 100;
     }
-    if(this.FBRFeature && this.paymentType == 'Complimentary'){
+    if(this.gstFeature && this.paymentType == 'Complimentary'){
       this.gstValue = 0;
       this.GstAmount = 0;
     }

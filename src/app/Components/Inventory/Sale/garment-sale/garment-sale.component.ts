@@ -13,6 +13,7 @@ import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/add
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bill-print.component';
 import { ProductModalComponent } from '../SaleComFiles/product-modal/product-modal.component';
+import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-mehtod.component';
 
 
 @Component({
@@ -34,6 +35,8 @@ export class GarmentSaleComponent implements OnInit {
   BankShortCutsFeature = this.global.BankShortCutsFeature;
   FBRFeature = this.global.FBRFeature;
   LessToCostFeature = this.global.LessToCostFeature;
+  changePaymentMehtodFeature = this.global.changePaymentMehtodFeature;
+  onlySaveBillFeature = this.global.onlySaveBillFeature;
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
@@ -855,7 +858,7 @@ export class GarmentSaleComponent implements OnInit {
     }
 
 
-    if (this.FBRFeature) {
+    if (this.gstFeature) {
       this.subTotal = this.subTotal + this.PosFee;
     }
     this.netTotal = this.subTotal - parseFloat(this.discount) - parseFloat(this.offerDiscount);
@@ -1083,7 +1086,7 @@ export class GarmentSaleComponent implements OnInit {
   }
 
   editSP(item: any) {
-    if (this.editSpFeature) {
+    if (this.editSpFeature && this.crudList.u) {
       Swal.fire({
         title: "Enter Total Amount",
         input: "text",
@@ -1303,7 +1306,7 @@ export class GarmentSaleComponent implements OnInit {
           BookerID: this.bookerID,
           PaymentType: paymentType,
           SendToFbr: SendToFbr,
-          PosFee: this.FBRFeature ? this.PosFee : 0,
+          PosFee: this.gstFeature ? this.PosFee : 0,
           Remarks: this.billRemarks || '-',
           OrderType: "Take Away",
           BillTotal: this.subTotal,
@@ -1612,6 +1615,19 @@ export class GarmentSaleComponent implements OnInit {
     this.paymentType = 'Cash';
     this.getTotal();
 
+  }
+
+
+  changePayment(data:any){
+    $('#SavedBillModal').hide();
+    this.dialogue.open(PaymentMehtodComponent,{
+      width:'30%',
+      data:data
+    }).afterClosed().subscribe(val=>{
+      this.getSavedBill();
+      $('#SavedBillModal').show();
+    })
+  
   }
 
 }

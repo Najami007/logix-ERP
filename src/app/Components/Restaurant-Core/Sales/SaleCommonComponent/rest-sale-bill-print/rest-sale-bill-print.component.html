@@ -141,8 +141,8 @@
         <span *ngIf="companyAddress != '-'"  class="fs-11 text-uppercase">{{companyAddress}}</span>
         <span *ngIf="CompanyMobile != '-'"  class="fs-11">{{CompanyMobile}}</span>
     
-        <span *ngIf="FBRFeature && CompanyNTN != '-'" class="fs-11"><b>PNTN:</b>{{CompanyNTN}} </span>
-        <span *ngIf="FBRFeature && CompanySTRN != '-'" class="fs-11"><b>STRN:</b> {{CompanySTRN}}</span>
+        <span *ngIf="gstFeature && CompanyNTN != '-'" class="fs-11"><b>PNTN:</b>{{CompanyNTN}} </span>
+        <span *ngIf="gstFeature && CompanySTRN != '-'" class="fs-11"><b>STRN:</b> {{CompanySTRN}}</span>
     
         <span class="w-100 text-center"><img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth"></span>
 
@@ -169,8 +169,12 @@
                     <td>{{myInvDate | date:'dd-MM-yyyy '}} ({{myInvTime|date:'hh:mm:ss:a'}})</td>
                 </tr>
                 <tr>
-                    <th>Cashier</th>
+                    <th>Punched By</th>
                     <td>{{myCounterName}}</td>
+                </tr>
+                <tr *ngIf="waiterFeature">
+                    <th>Waiter</th>
+                    <td>{{myBookerName}}</td>
                 </tr>
                 <tr>
                     <th>Table</th>
@@ -221,7 +225,7 @@
 
             <table class="w-100 mt-2 " style="font-size: 10px;">
                 <tbody class="fw-bold">
-                    <tr class="text-center" *ngIf="FBRFeature" >
+                    <tr class="text-center" *ngIf="gstFeature" >
                         <td id="output" class="d-none"></td>
                         <td id="qrCode" class="qr-code-generator" width="40%" rowspan="6" style="border: 0px solid black;"></td>
                     

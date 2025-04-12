@@ -114,7 +114,6 @@ export class RestSaleBillPrintComponent {
 
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + invNo).subscribe(
       (Response: any) => {
-
         this.myPrintData = Response;
         this.myInvoiceNo = Response[0].invBillNo;
         this.myInvDate = Response[0].invDate;
@@ -133,7 +132,7 @@ export class RestSaleBillPrintComponent {
         this.myInvTime = Response[0].createdOn;
         this.myOrderNo = Response[0].orderNo;
         this.myBookerName = Response[0].bookerName;
-        this.myGstAmount = Response[0].gstAmount ||(this.mySubTotal * Response[0].gstValue) / 100;
+        this.myGstAmount = Response[0].gstAmount ;
         this.myGstValue = Response[0].gstValue;
         this.myFbrInvoiceNo = Response[0].fbrInvoiceNo;
         this.myFbrStatus = Response[0].fbrStatus;
@@ -145,7 +144,7 @@ export class RestSaleBillPrintComponent {
         if (this.myPaymentType == 'Split') {
           this.myBank = this.myNetTotal - this.myCash;
         }
-        if(this.FBRFeature){
+        if(this.gstFeature){
           this.generateQRCode();
         }
 
@@ -173,7 +172,6 @@ export class RestSaleBillPrintComponent {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetHoldedBillDetail?BillNo=' + invoiceNo).subscribe(
       (Response: any) => {
 
-        console.log(Response);
         this.myPrintData = Response;
 
         this.mytableNo = Response[0].tableTitle;

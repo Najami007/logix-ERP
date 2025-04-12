@@ -85,7 +85,7 @@ export class AddExpenseComponent implements OnInit {
         this.coaList = Response;
       },
       (Error) => {
-      
+        console.log(Error);
       }
     )
   }

@@ -168,7 +168,6 @@ export class SaleReportComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=s&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
-            console.log(Response);
             this.saleSummaryList = Response;
             this.billTotal = 0;
             this.chargesTotal = 0;
@@ -299,5 +298,24 @@ export class SaleReportComponent implements OnInit {
           //   this.global.printData('#print-bill');
           // }, 500);
   }
+
+
+
+    sendToFbr(item: any) {
+      this.http.post(environment.mainApi + this.global.restaurentLink + 'ResSendToPra', {
+        InvBillNo: item.invBillNo,
+        UserID: this.global.getUserID()
+      }).subscribe(
+        (Response: any) => {
+          if (Response.msg == 'Data Updated Successfully') {
+            this.msg.SuccessNotify(Response.msg);
+            this.getReport('taxSummary');
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+        }
+      )
+    }
+  
 
 }

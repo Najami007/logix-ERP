@@ -33,6 +33,8 @@ export class Sale1Component implements OnInit {
   showCmpNameFeature: any = this.global.showCmpNameFeature;
   waiterFeature = this.global.waiterFeature;
   FBRFeature = this.global.FBRFeature;
+  gstFeature = this.global.gstFeature;
+  
   serviceChargesFeature = this.global.serviceChargeFeature;
   RestSimpleSaleFeature = this.global.RestSimpleSaleFeature;
   BankShortCutsFeature = this.global.BankShortCutsFeature;
@@ -473,6 +475,8 @@ export class Sale1Component implements OnInit {
       }
     }
 
+
+
     this.netTotal = (this.subTotal + parseFloat(this.OtherCharges)) - parseFloat(this.billDiscount);
 
     if (this.paymentType == 'Split') {
@@ -482,6 +486,8 @@ export class Sale1Component implements OnInit {
       this.bankCash = this.netTotal + this.GstAmount;
     }
     this.change = (parseFloat(this.cash) + parseFloat(this.bankCash)) - (this.netTotal + this.GstAmount);
+
+  
   }
 
 
@@ -545,7 +551,8 @@ export class Sale1Component implements OnInit {
 
 
   editTotal(item: any) {
-    this.tempProdRow = item;
+    if(this.RestSimpleSaleFeature){
+      this.tempProdRow = item;
     Swal.fire({
       title: "Enter Total Amount",
       input: "text",
@@ -579,6 +586,7 @@ export class Sale1Component implements OnInit {
         });
       }
     })
+    }
 
   }
 
@@ -613,18 +621,35 @@ export class Sale1Component implements OnInit {
   /////////////////////////////////////////////////////////////////
 
   generateGst() {
-    if (this.FBRFeature && (this.paymentType == 'Cash' || this.paymentType == 'Split')) {
+    
+    
+    if (this.gstFeature && (this.paymentType == 'Cash' || this.paymentType == 'Split')) {
       this.gstValue = this.global.ResCashGst;
       this.GstAmount = (this.subTotal * this.gstValue) / 100;
     }
-    if (this.FBRFeature && this.paymentType == 'Bank') {
-      this.gstValue = this.global.ResCardGst;
+     if (this.gstFeature && this.paymentType == 'Bank' ) {
+      if(this.bankCoaID > 0){
+        var coaTitle = this.bankCoaList.filter((e:any)=> e.coaID == this.bankCoaID)[0].coaTitle;
+        
+        if(coaTitle == 'Card'){
+          this.gstValue = this.global.ResCardGst;
+        }else{
+          this.gstValue = this.global.ResCashGst;
+        }
+      }else{
+        this.gstValue = this.global.ResCardGst;
+      }
+    
       this.GstAmount = (this.subTotal * this.gstValue) / 100;
+      
     }
-    if (this.FBRFeature && this.paymentType == 'Complimentary') {
+
+
+     if (this.gstFeature && this.paymentType == 'Complimentary') {
       this.gstValue = 0;
       this.GstAmount = 0;
     }
+
   }
 
   save(type: any, SendToFbr: any) {
@@ -850,7 +875,6 @@ export class Sale1Component implements OnInit {
     if (this.invDocument == '' || this.invDocument == undefined) {
       this.invDocument = '-';
     }
-
 
     this.app.startLoaderDark()
     if (this.validSaleFlag) {
@@ -1584,7 +1608,7 @@ export class Sale1Component implements OnInit {
     this.dialogue.open(SaleSavedBillComponent,{
       width: '80%',
     }).afterClosed().subscribe(val=>{
-      
+
     })
 
   }

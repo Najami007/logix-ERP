@@ -40,7 +40,7 @@ import { SubscriptionKeyGeneratorComponent } from 'src/app/Components/User/subsc
 export class GlobalDataModule implements OnInit {
 
   thankyouImage = '../../assets/Images/thankyou.png';
-  DisableDate = true;
+  DisableDate = false;
   disableSaleDate = true;
 
 
@@ -60,8 +60,8 @@ export class GlobalDataModule implements OnInit {
   ////////////////////////
 
 
-  ResCardGst = this.getCardGst();
-  ResCashGst = this.getCashGst();
+  ResCardGst =  this.getCardGst();
+  ResCashGst =  this.getCashGst();
   POSFee = this.getPosFee();
   InvProjectID = this.getProjectID();
   parkProjectID = 1;
@@ -152,7 +152,6 @@ export class GlobalDataModule implements OnInit {
       Password: password,
     }).subscribe({
       next: (Value: any) => {
-        console.log(Value);
         var curDate: Date = new Date();
         var userID = Value._culId;
         var value = {
@@ -281,6 +280,8 @@ export class GlobalDataModule implements OnInit {
   BillFormate1Feature = this.getFeature('billFormat1');
   BillFormate2Feature = this.getFeature('billFormat2');
   RestSimpleSaleFeature = this.getFeature('RestSimpleSale');
+  changePaymentMehtodFeature = this.getFeature('chngPayMtd');
+  onlySaveBillFeature = this.getFeature('OnlySave');
 
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
@@ -304,6 +305,8 @@ export class GlobalDataModule implements OnInit {
     this.BillFormate1Feature = this.getFeature('billFormat1');
     this.BillFormate2Feature = this.getFeature('billFormat2');
     this.RestSimpleSaleFeature = this.getFeature('RestSimpleSale');
+    this.changePaymentMehtodFeature = this.getFeature('chngPayMtd');
+    this.onlySaveBillFeature = this.getFeature('OnlySave');
   }
 
 
@@ -382,15 +385,14 @@ export class GlobalDataModule implements OnInit {
 
 
   getCardGst() {
-    var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
-    console.log(typeof credentials);
-    return credentials > 0 ? parseInt(atob(atob(credentials.value._reqCrG))) : 0;
+    var credentials = JSON.parse(localStorage.getItem('curVal') || "0");
+    return credentials != 0 ? parseInt(atob(atob(credentials.value._reqCrG))) : 0;
   }
 
   getCashGst() {
-    var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
-
-    return credentials > 0 ? parseInt(atob(atob(credentials.value._reqCsG))) : 0;
+    var credentials = JSON.parse(localStorage.getItem('curVal') || "0");
+ 
+    return credentials != 0 ? parseInt(atob(atob(credentials.value._reqCsG))) : 0;
   }
 
 

@@ -86,7 +86,7 @@
                         accesskey="S"><u>S</u>ave</button>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <div class="pe-1 w-25"><button class="btnduplicate w-100" accesskey="u"
+                    <div class="pe-1 w-25"><button class="btnduplicate w-100" accesskey="u" *ngIf="crudList.u"
                             (click)="global.openBootstrapModal('#SavedBillModal',true);getSavedBill();getSaleBill()">D<u>u</u>plicate</button>
                     </div>
 

@@ -9,8 +9,8 @@
             <span class="fs-11 text-uppercase" *ngIf="companyAddress != '-'">{{companyAddress}}</span>
             <span  *ngIf="CompanyMobile != '-'" class="fs-11">{{CompanyMobile}}</span>
            
-                <span *ngIf="FBRFeature && CompanyNTN != '-'" class="fs-11"><b>NTN:</b>{{CompanyNTN}} </span>
-                <span *ngIf="FBRFeature && CompanySTRN != '-'" class="fs-11"><b>STRN:</b> {{CompanySTRN}}</span>
+                <span *ngIf="gstFeature && CompanyNTN != '-'" class="fs-11"><b>NTN:</b>{{CompanyNTN}} </span>
+                <span *ngIf="gstFeature && CompanySTRN != '-'" class="fs-11"><b>STRN:</b> {{CompanySTRN}}</span>
  
 
 
@@ -174,13 +174,13 @@
                         <td>{{myPOSFee | number:'1.0-2'}}</td>
                     </tr>
 
-                    <tr class="text-center " style="margin-top:15px !important;" *ngIf="FBRFeature">
+                    <tr class="text-center " style="margin-top:15px !important;" *ngIf="gstFeature">
                         <td id="output" class="d-none"></td>
                         <td id="qrCode" class="qr-code-generator"  width="40%" rowspan="6"
                             style="border: 0px solid black;"></td>
 
                     </tr>
-                    <tr class="text-center " *ngIf="!FBRFeature">
+                    <tr class="text-center " *ngIf="!gstFeature">
 
                         <td width="40%" rowspan="7" style="font-size: 10px;">
                             <img [src]="global.thankyouImage" height="80" width="80" /><br />

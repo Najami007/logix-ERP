@@ -117,7 +117,6 @@ export class SaleBillPrintComponent implements OnInit {
     this.billPrintType = this.global.getBillPrintType();
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
       (Response: any) => {
-        console.log(Response);
         this.myPrintTableData = Response;
 
 
@@ -156,7 +155,7 @@ export class SaleBillPrintComponent implements OnInit {
           this.myGstTotal += (e.salePrice - (e.salePrice / ((e.gst + 100) / 100))) * e.quantity;
         });
 
-        if (this.FBRFeature) {
+        if (this.gstFeature) {
           this.generateQRCode();
         }
         setTimeout(() => {

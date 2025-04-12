@@ -21,7 +21,7 @@ import { VoucherPrintComponent } from '../CommonComponent/voucher-print/voucher-
 export class Voucher2Component implements OnInit{
 
 
-  @ViewChild(VoucherPrintComponent) printVoucher:any;
+  // @ViewChild(VoucherPrintComponent) printVoucher:any;
 
   loadingBar = 'start';
 
@@ -579,7 +579,7 @@ downloadVoucherDocument(row:any){
         }else{
           this.msg.WarnNotify('Error Occured While Printing');
         }
-      }, 500);
+      }, 1000);
 
     
   

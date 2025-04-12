@@ -1,0 +1,80 @@
+<div class="p-3">
+
+    <div class="text-center">
+        <span class="border-bottom border-dark">{{invBillNo}}</span>
+    </div>
+    <div class="d-flex justify-content-between">
+        <h2 class="text-center text-success">Bill Total: <b class="font-digit">{{netTotal |
+                number:'1.0-1'}}</b></h2>
+        <h2 class="text-center text-danger">Change: <b class="font-digit">{{ change |
+                number:'1.0-1'}}</b></h2>
+    </div>
+
+    <mat-form-field appearance="outline" *ngIf="!global.disableSaleDate" class="w-100 matSmall">
+        <mat-label>Invoice Date</mat-label>
+        <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
+            [matDatepicker]="voucherDate">
+        <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
+        <mat-datepicker #voucherDate></mat-datepicker>
+    </mat-form-field>
+  
+
+    <div class="w-100 mb-3 d-none">
+        <ng-select class="w-100 custom" placeholder="Customer" appearance="outline"
+            [(ngModel)]="partyID" name="customer">
+            <ng-option [value]="0">WalkIn Customer</ng-option>
+        </ng-select>
+    </div>
+
+
+    <mat-form-field appearance="outline" class="w-100 matSmall d-none">
+        <mat-label>Remarks</mat-label>
+        <textarea matInput rows="1" [(ngModel)]="billRemarks"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100 matSmall">
+        <mat-label>Payment Type</mat-label>
+        <mat-select #pType [(ngModel)]="paymentType" (selectionChange)="cash = 0;getTotal()">
+            <!-- <mat-option value="Credit">Credit</mat-option> -->
+            <mat-option value="Cash">Cash</mat-option>
+            <mat-option value="Bank">Bank</mat-option>
+            <mat-option value="Split">Split</mat-option>
+
+        </mat-select>
+    </mat-form-field>
+
+    <mat-card class=" p-2 bg-warning" *ngIf="paymentType !== ''">
+
+        <div class="d-flex justify-content-between text-center mb-2"
+            *ngIf="paymentType == 'Cash' || paymentType == 'Split'">
+            <div style="width: 150px;"></div>
+            <mat-label style="font-size: 25px;" class="text-end">Cash:</mat-label>
+            <input type="text" style="font-size: 25px;width: 120px;" class="font-digit text-end"
+                (keydown)="this.global.handleNumKeys($event);getTotal()"  (keyup)="getTotal()"
+                [(ngModel)]="cash" />
+        </div>
+
+        <div class="d-flex justify-content-between  "
+            *ngIf="paymentType == 'Bank' || paymentType == 'Split'">
+            <select [(ngModel)]="bankCoaID " style="width: 150px;">
+                <option *ngFor="let item of bankCoaList" [value]="item.coaID">{{item.coaTitle}}</option>
+            </select>
+            <mat-label style="font-size: 25px;">Bank:</mat-label>
+
+            <input type="text" [disabled]="paymentType == 'Bank' || paymentType == 'Split'"
+                style="font-size: 25px;width: 120px;" class="font-digit text-end"
+                (keydown)="this.global.handleNumKeys($event);getTotal()" (keyup)="getTotal()" 
+                [(ngModel)]="bankCash" />
+        </div>
+
+    </mat-card>
+
+
+</div>
+
+<div class="modal-footer bg-mf-blue p-2 gap-1">
+    <button class="btnsave" (click)="save()">Save</button>
+    <button type="button" class="btnclose" data-bs-dismiss="modal"
+        (click)="close()">Close</button>
+</div>
+

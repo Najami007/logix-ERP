@@ -730,7 +730,9 @@
 
                     <div class="d-flex justify-content-between">
                         <h4 class="text-center text-success">Bill Total: {{netTotal + GstAmount | number:'1.0-1'}}</h4>
-                        <h4 class="text-center text-dark" *ngIf="FBRFeature">GST: {{GstAmount | number:'1.0-1'}}</h4>
+                        <h4 class="text-center text-dark" *ngIf="gstFeature">GST
+                            <small style="font-size: 10px;">({{gstValue | number:'1.0-1'}}%)</small>:
+                             {{GstAmount | number:'1.0-1'}}</h4>
                         <h4 class="text-center text-danger">Change: {{ change | number:'1.0-1'}}</h4>
                     </div>
                     <mat-form-field *ngIf="global.DisableDate == false" appearance="outline" class="col-lg-12 matSmall">
@@ -778,8 +780,8 @@
                         <div class="d-flex justify-content-between  "
                             *ngIf="paymentType == 'Bank' || paymentType == 'Split'">
                             <mat-label style="font-size: 25px;">Bank:</mat-label>
-                            <select [(ngModel)]="bankCoaID " style="width: 150px;">
-                                <option *ngFor="let item of bankCoaList" [value]="item.coaID">{{item.coaTitle}}</option>
+                            <select [(ngModel)]="bankCoaID " style="width: 150px;" (ngModelChange)="generateGst();getTotal()"> 
+                                <option *ngFor="let item of bankCoaList" [value]="item.coaID" >{{item.coaTitle}}</option>
                             </select>
                             <input type="number" style="font-size: 25px;width: 180px;" id="bank"
                                 [disabled]="paymentType == 'Split' || paymentType == 'Bank'"
@@ -972,7 +974,7 @@
                                     <td>{{item.netTotal |number:'1.0-0'}}</td>
                                     <td class="cursorPointer"><mat-icon class="text-primary "
                                             (click)="printDuplicateBill(item)">print</mat-icon>
-                                        <mat-icon *ngIf="FBRFeature && !item.fbrStatus && item.paymentType !== 'Complimentary'" (click)="sendToFbr(item)">send</mat-icon>
+                                        <mat-icon *ngIf="gstFeature && !item.fbrStatus && item.paymentType !== 'Complimentary'" (click)="sendToFbr(item)">send</mat-icon>
                                         </td>
                                     <td class="text-success cursorPointer"><mat-icon
                                             (click)="billDetails(item)">receipt</mat-icon></td>

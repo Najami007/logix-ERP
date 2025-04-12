@@ -97,6 +97,7 @@ import { PurchaseOrderComponent } from './Purchases/purchase-order/purchase-orde
 import { StockTransferComponent } from './InvAdjustment/stock-transfer/stock-transfer.component';
 import { QRCodeModule  } from 'angularx-qrcode';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { PaymentMehtodComponent } from './Sale/SaleComFiles/payment-mehtod/payment-mehtod.component';
 
 
 
@@ -258,6 +259,7 @@ export const inventoryRoutes: Route[] = [
     AdjBillPrintComponent,
     PurchaseOrderComponent,
     StockTransferComponent,
+    PaymentMehtodComponent,
     
   
   

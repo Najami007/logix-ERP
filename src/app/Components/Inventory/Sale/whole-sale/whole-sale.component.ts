@@ -832,7 +832,7 @@ export class WholeSaleComponent implements OnInit {
   }
 
   editSP(item: any) {
-    if (this.editSpFeature) {
+    if (this.editSpFeature && this.crudList.u) {
       Swal.fire({
         title: "Enter Total Amount",
         input: "text",
