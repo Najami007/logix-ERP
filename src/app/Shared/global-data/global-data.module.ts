@@ -60,8 +60,8 @@ export class GlobalDataModule implements OnInit {
   ////////////////////////
 
 
-  ResCardGst =  this.getCardGst();
-  ResCashGst =  this.getCashGst();
+  ResCardGst = 5; // this.getCardGst();
+  ResCashGst =  16 ; // this.getCashGst();
   POSFee = this.getPosFee();
   InvProjectID = this.getProjectID();
   parkProjectID = 1;
@@ -282,6 +282,7 @@ export class GlobalDataModule implements OnInit {
   RestSimpleSaleFeature = this.getFeature('RestSimpleSale');
   changePaymentMehtodFeature = this.getFeature('chngPayMtd');
   onlySaveBillFeature = this.getFeature('OnlySave');
+  coverOfFeature = this.getFeature('CoverOf');
 
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
@@ -307,6 +308,7 @@ export class GlobalDataModule implements OnInit {
     this.RestSimpleSaleFeature = this.getFeature('RestSimpleSale');
     this.changePaymentMehtodFeature = this.getFeature('chngPayMtd');
     this.onlySaveBillFeature = this.getFeature('OnlySave');
+    this.coverOfFeature = this.getFeature('CoverOf');
   }
 
 

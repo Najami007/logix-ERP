@@ -106,6 +106,7 @@ export class GarmentSaleComponent implements OnInit {
     this.getBankList();
     this.getPartyList();
     this.getBooker();
+    
 
     setTimeout(() => {
       $('#psearchProduct').trigger('focus');
@@ -1255,7 +1256,7 @@ export class GarmentSaleComponent implements OnInit {
       p.salePrice = parseFloat(p.salePrice);
       p.costPrice = parseFloat(p.costPrice);
 
-      if (p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null) {
+      if (!this.LessToCostFeature && (p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null)) {
         this.msg.WarnNotify('(' + p.productTitle + ') Cost Price greater than Sale Price');
         this.isValidSale = false;
         return;
@@ -1267,7 +1268,7 @@ export class GarmentSaleComponent implements OnInit {
         this.msg.WarnNotify('(' + p.productTitle + ') Quantity is not Valid');
         this.isValidSale = false;
         return;
-      }else if (p.costPrice > (p.salePrice - p.discInR)) {
+      }else if (!this.LessToCostFeature && (p.costPrice > (p.salePrice - p.discInR))) {
         this.msg.WarnNotify('(' + p.productTitle + ') Discount not valid');
         this.isValidSale = false; 
         return;

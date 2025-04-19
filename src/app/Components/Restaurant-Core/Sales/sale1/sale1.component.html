@@ -16,7 +16,7 @@
 
 
 
-            <div class="scrollContainer">
+            <div class="scrollContainer" (wheel)="onWheel($event)">
                 <button (click)="OnCatChange({recipeCatID:0,prodFlag:false})"
                     [ngClass]="categoryID == 0  ? 'bg-blue' : ''" class="border item text-center m-1 p-1">ALL</button>
                 <button *ngFor="let item of categoriesList|filter:catSearch.value"
@@ -34,7 +34,7 @@
         <!-----------   Products Area ------------------->
         <div class="row cursorPointer">
             <div *ngFor="let item of RecipeList |filter:recipeSearch.value" style="width: 160px;">
-                <mat-card style="width:140px; height: 160px;" class="m-1 shadow recipecard"  (click)="onProdClicked(item);">
+                <mat-card style="width:140px; height: 160px;" class="m-1 shadow recipecard"  (click)="productSelected(item,1);">
 
                     <!-- <div style="height: 150px;width: 170px;background-size: cover;" [ngStyle]="{ 'background-image': 'url(' + item.recipeImage + ')' }"></div> -->
                     <div class="text-center">
@@ -103,7 +103,7 @@
                             <td class="text-center">{{index +1}}</td>
                             <td>{{item.productTitle}}</td>
                             <td class="text-center">{{item.salePrice |number:'1.0-1'}}</td>
-                            <td class="text-center"  *ngIf="!RestSimpleSaleFeature">{{item.quantity}}</td>
+                            <td class="text-center" (click)="editQty(item,index)"  *ngIf="!RestSimpleSaleFeature">{{item.quantity}}</td>
                             <td class="text-center" *ngIf="RestSimpleSaleFeature">
                                 <input type="number" min="0" [(ngModel)]="item.quantity"
                                 (click)="rowFocused = index"
@@ -698,7 +698,7 @@
 
                             <div class="text-center d-flex justify-content-between ">
                                 <button class="btn btn-success" data-bs-dismiss="modal"
-                                    (click)="productSelected(tempProdRow,prodQty.value);prodQty.value = '1';tempQty = 1">Save</button>
+                                    (click)="changeQty(prodQty.value);prodQty.value = '1';tempQty = 1">Save</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                     (click)="tempQty = 1;recipeSearch.focus()">Close</button>
                             </div>
@@ -850,7 +850,7 @@
                                         [value]="item.val">{{item.title}}</mat-radio-button>
                                 </mat-radio-group>
 
-                                <mat-form-field appearance="outline" class="w-100 pt-4 matSmall">
+                                <mat-form-field appearance="outline" class="w-100 pt-4 matSmall" *ngIf="coverOfFeature">
                                     <mat-label>Cover</mat-label>
                                     <input name="cover" type="number" (keydown)="this.global.handleNumKeys($event)"
                                         matInput [(ngModel)]="coverOf" />

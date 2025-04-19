@@ -160,7 +160,9 @@ export class ReceiptComponent {
  lblCreditTotal:any;
  lblVoucherPrintDate = new Date();
  lblPartyBalance = 0;
-
+ lblPartyType = '';
+ lblInvAmount = 0;
+ lblPartyName = '';
 
    ///////////////////////////////////////////////////
 
@@ -172,8 +174,10 @@ export class ReceiptComponent {
     this.lblRemarks = row.invoiceRemarks;
     this.lblVoucherType = row.type;
     this.lblProjectName = row.projectTitle;
+    this.lblPartyType = row.partyType;
+    this.lblPartyName = row.partyName;
+    this.lblInvAmount = row.amount;
     this.getInvoiceDetail(row.invoiceNo);
-    this.getPartyBalance(row);
     
 
     
@@ -198,14 +202,13 @@ export class ReceiptComponent {
     this.lblDebitTotal = 0;
     this.lblCreditTotal = 0;
     this.lblInvoiceDetails = [];
-
+    this.lblPartyBalance = 0;
     
     this.http.get(environment.mainApi+this.global.accountLink+'GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
       (Response:any)=>{
-        
         this.lblInvoiceDetails = Response;
         if(Response != ''){
-         
+          this.lblPartyBalance = this.lblPartyType === 'Supplier' ? Response[0].supBalance : Response[0].cusBalance;
           Response.forEach((e:any) => {
             this.lblDebitTotal += e.debit;
             this.lblCreditTotal += e.credit;

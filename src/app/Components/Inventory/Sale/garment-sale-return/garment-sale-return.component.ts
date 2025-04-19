@@ -33,6 +33,7 @@ export class GarmentSaleReturnComponent implements OnInit {
   editDiscFeature = this.global.editDiscFeature;
   prodDetailFeature = this.global.prodDetailFeature;
   BankShortCutsFeature = this.global.BankShortCutsFeature;
+  LessToCostFeature = this.global.LessToCostFeature;
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
@@ -1224,7 +1225,7 @@ export class GarmentSaleReturnComponent implements OnInit {
       p.salePrice = parseFloat(p.salePrice);
       p.costPrice = parseFloat(p.costPrice);
 
-      if (p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null) {
+      if ( !this.LessToCostFeature && (p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null)) {
         this.msg.WarnNotify('(' + p.productTitle + ') Cost Price greater than Sale Price');
         this.isValidSale = false;
         return;
@@ -1236,7 +1237,7 @@ export class GarmentSaleReturnComponent implements OnInit {
         this.msg.WarnNotify('(' + p.productTitle + ') Quantity is not Valid');
         this.isValidSale = false;
         return;
-      }else if (p.costPrice > (p.salePrice - p.discInR)) {
+      }else if (!this.LessToCostFeature && ( p.costPrice > (p.salePrice - p.discInR))) {
         this.msg.WarnNotify('(' + p.productTitle + ') Discount not valid');
         this.isValidSale = false; 
         return;

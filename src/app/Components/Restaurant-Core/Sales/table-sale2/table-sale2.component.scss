@@ -1,0 +1,109 @@
+.billTable{
+    overflow-y: scroll;
+}
+
+.bg-blue{
+    background-color: rgb(68, 68, 177) !important;
+    color: white !important;
+}
+
+
+
+
+.recipecard:hover{
+  transform: translateY(6px);
+  z-index: 50;
+}
+
+
+
+::ng-deep .cdk-overlay-container{
+    z-index:2000;
+  }
+
+
+  .btblbtn{
+    width: 70px;
+     height: 70px;
+    //  border-radius: 5px;
+     text-align: center;
+    //  justify-content:right;
+     font-weight: bold;
+     font-size: 15px;
+     margin: 10px;
+     border: 1px solid Black;
+     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  
+   
+   }
+
+
+   .table2{
+    display: none;
+   }
+
+   
+   @media only screen and (max-width:1000px){
+
+      .main{
+        display: flex;
+        flex-direction: column;
+      }
+
+    
+      .prodArea{
+        width: 65%;
+      }
+
+      // .billArea{
+      //   width: 35%;
+
+      //   .table1{
+      //     display: none;
+      //   }
+  
+      //   .table2{
+      //     display: block;
+      //   }
+
+      //   table{
+         
+      //     tbody{
+      //       width: 100%;
+      //       tr{
+      //         border: 1px solid black;
+      //         // display: flex;
+      //         // flex-direction: column;
+      //         td{
+      //           border: 0;
+      //         }
+      //       }
+      //     }
+      //   }
+
+      //   .billHeader{
+      //     width: 100%;
+      //   }
+
+      //   .tn{
+      //     width: 20%;
+      //   }
+      //  .ot{
+      //   width: 50%;
+      //  }
+
+      //  .chng{
+      //   width: 30%;
+      //  }
+
+       
+      // }
+
+      
+
+
+
+
+    
+   }
+

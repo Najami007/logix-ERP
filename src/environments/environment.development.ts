@@ -14,10 +14,15 @@ export const environment = {
 
       //mainApi: 'http://192.168.100.37:5000/',
        /// mainApi: 'http://localhost:5000/', 
-       //mainApi: 'http://localhost:8060/',           /////////// system own published API
+       // mainApi: 'http://localhost:8060/',           /////////// system own published API
        // mainApi: 'http://192.168.160.98:8060/',  ////////// live Server Dani System
       //mainApi: 'http://192.168.100.250:1007/',  ////////// live Server Dani System
        //mainApi: 'http://192.168.10.100:1003/',    /////////// Local Server Office
+      // mainApi: 'http://192.168.18.206:8060/',
+
+
+
+
 
     // mainApi: 'http://159.69.174.21:2008/', /////// Live Serve Testing API General
      //  mainApi: 'http://159.69.174.21:2019/', /////// Live Serve Testing API Property
@@ -26,7 +31,7 @@ export const environment = {
       //mainApi: 'http://192.168.10.100:2001/', /////// Shama Royal City Server
        //mainApi: 'http://159.69.174.21:2006/',  ////////// live Server Mehria Brands
       //mainApi: 'http://159.69.174.21:2007/',  ////////// live Server Balck Gold Restaurant
-      mainApi: 'http://192.168.1.100:8081/',   ///Alsheikh Mall Wahcant
+     // mainApi: 'http://192.168.1.100:8081/',   ///Alsheikh Mall Wahcant
     //mainApi: 'http://159.69.174.21:2010/',    ////////// live Server for Alsheikh
       // mainApi: 'http://159.69.174.21:2012/',  ////////// live Server for Alsheikh HassanAbdal
       //mainApi: 'http://192.168.18.100:8081/',   ///Stylish Garment Wahcant
@@ -43,7 +48,7 @@ export const environment = {
     // mainApi: 'http://192.168.10.180:8081/',  /////// Lasani Traders Fateh Jang local System
     // mainApi: 'http://159.69.174.21:2016/',   /////// Erp Demo Live For Clients
    // mainApi: 'http://159.69.174.21:2019/',    /////// Ejaz And Sons Rawalpindi
-   //mainApi: 'http://localhost:8060/',           /////////// BAke INN Fateh Jang
+   mainApi: 'http://localhost:8060/',           /////////// BAke INN Fateh Jang
    //mainApi: 'http://192.168.10.100:8080/',   /////////// BAke INN Server Live
    //mainApi: 'http://192.168.18.100:8080/',    /////////// The Bucket Client
    //mainApi: 'http://192.168.1.100:8080/',    /////////// Jazeera Foods Saddar API
@@ -75,10 +80,14 @@ export const environment = {
    // mainApi: 'http://159.69.174.21:2023/',  ////////// live Server Bake Inn Bakers Fateh Jang
 
     //mainApi: 'http://localhost:8060/',           /////////// Cake Corner Refreshment
-    //mainApi: 'http://192.168.110.100:8060/',           /////////// Cake Corner Refreshment
+   // mainApi: 'http://192.168.110.100:8060/',           /////////// Cake Corner Refreshment
 
    // mainApi: 'http://159.69.174.21:2019/', /////// Property Management FMIS Dubai
     //mainApi: 'http://159.69.174.21:2047/', /////// Property Management FMIS Dubai
+
+
+   // mainApi: 'http://localhost:8060/', ////////Faraz sons mandi bahaudin
+    //mainApi: 'http://192.168.100.100:8060/',           /////////// Faraz Sons live
 
      
 };

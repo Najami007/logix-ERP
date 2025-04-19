@@ -29,7 +29,9 @@ export class Sale2Component implements OnInit {
   FBRFeature = this.global.FBRFeature;
   gstFeature = this.global.gstFeature;
   serviceChargesFeature = this.global.serviceChargeFeature;
-
+  RestSimpleSaleFeature = this.global.RestSimpleSaleFeature;
+  BankShortCutsFeature = this.global.BankShortCutsFeature;
+  coverOfFeature = this.global.coverOfFeature;
 
   appVisibility() {
     if (document.hidden) {
@@ -54,6 +56,14 @@ export class Sale2Component implements OnInit {
 
   mobileMask = this.global.mobileMask;
 
+
+  
+  onWheel(event: WheelEvent): void {
+    const container = event.currentTarget as HTMLElement;
+    container.scrollLeft += event.deltaY;
+    event.preventDefault(); // Prevent vertical scrolling
+  }
+  
   constructor(
     private http: HttpClient,
     private msg: NotificationService,
@@ -208,11 +218,11 @@ export class Sale2Component implements OnInit {
 
   onPriceChange(type: any) {
     if (type == 'price') {
-      this.tempQty = this.tmpTotalPrice / this.tempProdRow.recipeSalePrice;
+      this.tempQty = this.tmpTotalPrice / this.tempProdRow.salePrice;
     }
 
     if (type == 'qty') {
-      this.tmpTotalPrice = this.tempQty * this.tempProdRow.recipeSalePrice;
+      this.tmpTotalPrice = this.tempQty * this.tempProdRow.salePrice;
     }
 
   }
@@ -261,11 +271,16 @@ export class Sale2Component implements OnInit {
       this.msg.WarnNotify('Select Table')
     } else if (this.tempOrderType == '' || this.tempOrderType == undefined || this.tempOrderType == null) {
       this.msg.WarnNotify('Select Order Type')
-    } else if (this.tempOrderType == 'Dine In' && (this.coverOf == '' || this.coverOf == 0 || this.coverOf == undefined)) {
+    } else if (this.tempOrderType == 'Dine In' && this.coverOfFeature && (this.coverOf == '' || this.coverOf == 0 || this.coverOf == undefined)) {
       this.msg.WarnNotify('Enter Cover oF')
     } else if (this.BookerID == 0 && this.waiterFeature) {
       this.msg.WarnNotify('Select Waiter')
     } else {
+
+      
+      if(!this.coverOfFeature){
+        this.coverOf = 0;
+      }
 
 
       if (this.tempOrderType !== 'Dine In') {
@@ -287,6 +302,39 @@ export class Sale2Component implements OnInit {
 
     }
 
+
+  }
+
+  
+  tmpProdIndex = 0;
+  editQty(item: any, index: any) {
+   if(item.entryType == 'New'){
+    this.tempProdRow = item;
+    this.tmpTotalPrice = item.salePrice * item.quantity;
+    this.tmpProdIndex = index;
+    this.global.openBootstrapModal('#qtyModal',true);
+    setTimeout(() => {
+      $('.prodQty').trigger('focus');
+    $('.prodQty').trigger('select');
+    }, 500);
+
+   }
+
+
+    // var qty =  this.tableData[index].quantity;
+    // if (type == 'add') {
+
+    //   qty >= 0 ? this.tableData[index].quantity += 1 : ''
+    // }
+
+    // if (type == 'minus') {
+    //    qty > 0 ? this.tableData[index].quantity -= 1 : ''
+    // }
+  }
+
+  changeQty(qty:any){
+
+    this.tableData[this.tmpProdIndex].quantity = qty;
 
   }
 
@@ -395,22 +443,27 @@ export class Sale2Component implements OnInit {
     } else if (qty <= 0) {
       this.msg.WarnNotify('Enter Valid Quantity')
     } else {
-      var index = this.tableData.findIndex((e: any) => e.recipeID == item.recipeID);
+      var index = this.tableData.findIndex((e: any) => e.recipeID == item.recipeID && e.entryType == 'New');
 
-      this.tableData.push({
-        productID: item.productID,
-        productTitle: item.recipeTitle,
-        quantity: qty,
-        costPrice: item.recipeCostPrice,
-        avgCostPrice: item.avgCostPrice,
-        salePrice: item.recipeSalePrice,
-        recipeID: item.recipeID,
-        cookingAriaID: item.cookingAriaID,
-        cookingTime: item.cookingTime,
-        requestType: 'Order',
-        entryType: 'New',
-        autoInvDetID: 0,
-      });
+     
+      if (index >= 0 ) {
+        this.tableData[index].quantity += 1;
+      } else {
+        this.tableData.push({
+          productID: item.productID,
+          productTitle: item.recipeTitle,
+          quantity: qty,
+          costPrice: item.recipeCostPrice,
+          avgCostPrice: item.avgCostPrice,
+          salePrice: item.recipeSalePrice,
+          recipeID: item.recipeID,
+          cookingAriaID: item.cookingAriaID,
+          cookingTime: item.cookingTime,
+          requestType: 'Order',
+          entryType: 'New',
+          autoInvDetID: 0,
+        });
+      }
       // this.tableData.push({recipeID:item.recipeID,recipeTitle:item.recipeTitle,quantity:qty,recipeSalePrice:item.recipeSalePrice});
 
       // }
@@ -1027,26 +1080,7 @@ export class Sale2Component implements OnInit {
   }
 
 
-  ///////////////////////////////////////////////////////////////
 
-  changeQty(type: any, index: any) {
-    this.tempIndex = index;
-
-    if (type == 'add') {
-
-      this.tableData[index].quantity = (parseFloat(this.tableData[index].quantity) + 1);
-
-    }
-    if (type == 'minus') {
-      if (this.tableData[index].quantity > 1) {
-        this.tableData[index].quantity = (parseFloat(this.tableData[index].quantity) - 1);
-      }
-
-
-    }
-
-    this.getTotal();
-  }
 
 
 

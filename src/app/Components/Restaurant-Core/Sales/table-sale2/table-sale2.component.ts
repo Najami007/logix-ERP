@@ -9,22 +9,18 @@ import { environment } from 'src/environments/environment.development';
 
 import Swal from 'sweetalert2';
 import { RestKotPrintComponent } from '../SaleCommonComponent/rest-kot-print/rest-kot-print.component';
-import { SaleBillDetailComponent } from './sale-bill-detail/sale-bill-detail.component';
 import { RestSaleBillPrintComponent } from '../SaleCommonComponent/rest-sale-bill-print/rest-sale-bill-print.component';
 import { exec } from 'child_process';
 import * as bootstrap from 'bootstrap';
-
+import { SaleBillDetailComponent } from '../sale1/sale-bill-detail/sale-bill-detail.component';
 import * as $ from 'jquery';
-import { SaleSavedBillComponent } from '../SaleCommonComponent/sale-saved-bill/sale-saved-bill.component';
-
-
 
 @Component({
-  selector: 'app-sale1',
-  templateUrl: './sale1.component.html',
-  styleUrls: ['./sale1.component.scss']
+  selector: 'app-table-sale2',
+  templateUrl: './table-sale2.component.html',
+  styleUrls: ['./table-sale2.component.scss']
 })
-export class Sale1Component implements OnInit {
+export class TableSale2Component implements OnInit {
   @HostListener('document:visibilitychange', ['$event'])
 
   @ViewChild(RestSaleBillPrintComponent) billPrint: any;
@@ -33,13 +29,7 @@ export class Sale1Component implements OnInit {
   showCmpNameFeature: any = this.global.showCmpNameFeature;
   waiterFeature = this.global.waiterFeature;
   FBRFeature = this.global.FBRFeature;
-  gstFeature = this.global.gstFeature;
-  
-  serviceChargesFeature = this.global.serviceChargeFeature;
-  RestSimpleSaleFeature = this.global.RestSimpleSaleFeature;
-  BankShortCutsFeature = this.global.BankShortCutsFeature;
   coverOfFeature = this.global.coverOfFeature;
-
   appVisibility() {
     if (document.hidden) {
 
@@ -60,13 +50,6 @@ export class Sale1Component implements OnInit {
   companyAddress: any = '';
   CompanyMobile: any = '';
   companyName: any = '';
-
-
-  onWheel(event: WheelEvent): void {
-    const container = event.currentTarget as HTMLElement;
-    container.scrollLeft += event.deltaY;
-    event.preventDefault(); // Prevent vertical scrolling
-  }
 
   mobileMask = this.global.mobileMask;
 
@@ -138,8 +121,8 @@ export class Sale1Component implements OnInit {
   }
 
 
-  ngOnInit(): void {
 
+  ngOnInit(): void {
     this.global.setHeaderTitle('Sale');
     this.getCategories();
     this.getTable();
@@ -147,7 +130,7 @@ export class Sale1Component implements OnInit {
     this.getBankList();
     this.getSavedBill();
     this.getBookerList();
-
+    
   }
 
 
@@ -156,8 +139,8 @@ export class Sale1Component implements OnInit {
 
   orderTypeList: any = [
     { val: 'Dine In', title: 'Dine In' },
-    { val: 'Take Away', title: 'Take Away' },
-    { val: 'Home Delivery', title: 'Home Delivery' },
+    // { val: 'Take Away', title: 'Take Away' },
+    // { val: 'Home Delivery', title: 'Home Delivery' },
   ]
 
   categoriesList: any = [];
@@ -176,7 +159,7 @@ export class Sale1Component implements OnInit {
   PartyID = 0;
   invoiceDate: Date = new Date();
   categoryID: any = 0;
-  orderType = this.global.getRestOrderType() == '' ? '' : this.global.getRestOrderType();
+  orderType = '';
   paymentType = 'Cash';
   cash: any = 0;
   bankCash: any = 0;
@@ -187,7 +170,7 @@ export class Sale1Component implements OnInit {
 
   tableID = 0;
   tempTableID = 0;
-  tempOrderType = '';
+  tempOrderType = 'Dine In';
   tableTitle: any = '';
 
   customerName = '';
@@ -197,7 +180,6 @@ export class Sale1Component implements OnInit {
 
   tempProdRow: any = [];
   tempQty = 1;
-  tmpTotalPrice = 0;
   tempIndex: any;
 
   tableData: any = [];
@@ -215,131 +197,16 @@ export class Sale1Component implements OnInit {
   discPer = 0;
   discAmount = 0;
 
-  getBookerList() {
+  getBookerList(){
 
     this.global.getBookerList().subscribe((data: any) => { this.bookerList = data; });
-  }
-
-  onPriceChange(type: any) {
-    if (type == 'price') {
-      this.tempQty = this.tmpTotalPrice / this.tempProdRow.salePrice;
-    }
-
-    if (type == 'qty') {
-      this.tmpTotalPrice = this.tempQty * this.tempProdRow.salePrice;
-    }
-
-  }
+}
 
 
-  rowFocused = -1;
-  prodFocusedRow = 0;
-  handleUpdown(item: any, e: any, cls: string, index: any) {
-
-    const container = $(".table-logix");
-    if (e.keyCode == 9) {
-      this.rowFocused = index + 1;
-    }
-
-    if (e.shiftKey && e.keyCode == 9) {
-
-      this.rowFocused = index - 1;
-    }
-    if (e.keyCode == 13) {
-      e.preventDefault();
-      $('#cash2').trigger('select');
-      $('#cash2').trigger('focus');
-    }
-
-    if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
-      // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
-    }
-    else {
-      e.preventDefault();
-    }
-
-    /////move down
-
-    if (e.keyCode === 40) {
-      if (this.tableData.length > 1) {
-        this.rowFocused = Math.min(this.rowFocused + 1, this.tableData.length - 1);
-        const clsName = cls + this.rowFocused;
-        this.global.scrollToRow(clsName, container);
-        e.preventDefault();
-        $(clsName).trigger('select');
-        $(clsName).trigger('focus');
-      }
-    }
-
-    //Move up
-    if (e.keyCode === 38) {
-      if (this.rowFocused > 0) {
-        this.rowFocused -= 1;
-        const clsName = cls + this.rowFocused;
-        this.global.scrollToRow(clsName, container);
-        e.preventDefault();
-        $(clsName).trigger('select');
-        $(clsName).trigger('focus');
-      } else {
-        e.preventDefault();
-        $(".searchProduct").trigger('select');
-        $(".searchProduct").trigger('focus');
-      }
-    }
-    ////removeing row
-    if (e.keyCode == 46) {
-
-      this.deleteRow(item, 1);
-      this.rowFocused = 0;
-    }
-
-  }
-
-
-  focusTo(cls: any, e: any) {
-
-    if (cls == '#cash') {
-      setTimeout(() => {
-        $(cls).trigger('focus');
-        $(cls).trigger('select');
-      }, 500);
-    }
-
-
-
-    if (cls == '#disc' && e.keyCode == 13 && e.target.value == '') {
-      e.preventDefault();
-      $(cls).trigger('select');
-      $(cls).trigger('focus');
-    }
-    if (cls == '#charges' && e.keyCode == 13) {
-      e.preventDefault();
-      $(cls).trigger('select');
-      $(cls).trigger('focus');
-    }
-    if (cls == '#cash2' && e.keyCode == 13 && e.target.value == '') {
-      e.preventDefault();
-      $(cls).trigger('select');
-      $(cls).trigger('focus');
-
-    }
-
-    if (cls == '#save' && e.keyCode == 13) {
-      e.preventDefault();
-      // $(cls).trigger('select');
-      $(cls).trigger('focus');
-
-    }
-
-  }
-
-
-
-
-  changeFocus(id: any, e: any) {
-    if (e.keyCode == 13) {
+  focusTo(id: any) {
+    setTimeout(() => {
       $(id).trigger('focus');
-    }
+    }, 500);
   }
 
   ////////////////////////////////////////////////////////////
@@ -371,16 +238,18 @@ export class Sale1Component implements OnInit {
       this.msg.WarnNotify('Select Table')
     } else if (this.tempOrderType == '' || this.tempOrderType == undefined || this.tempOrderType == null) {
       this.msg.WarnNotify('Select Order Type')
-    } else if (this.tempOrderType == 'Dine In' && this.coverOfFeature && (this.coverOf == '' || this.coverOf == 0 || this.coverOf == undefined)) {
+    } 
+    else if (this.tempOrderType == 'Dine In' && this.coverOfFeature && (this.coverOf == '' || this.coverOf == 0 || this.coverOf == undefined)) {
       this.msg.WarnNotify('Enter Cover oF')
-    } else if ( this.BookerID == 0 && this.waiterFeature) {
+    }
+    else if (this.BookerID == 0 && this.waiterFeature) {
       this.msg.WarnNotify('Select Waiter')
     } else {
-
-
+      
       if(!this.coverOfFeature){
         this.coverOf = 0;
       }
+
 
       if (this.tempOrderType !== 'Dine In') {
         this.tempTableID = 0;
@@ -394,7 +263,7 @@ export class Sale1Component implements OnInit {
       }
       this.orderType = this.tempOrderType;
 
-      this.global.closeBootstrapModal('#NewBill', true);
+      this.global.closeBootstrapModal('#NewBill',true);
 
 
 
@@ -403,51 +272,17 @@ export class Sale1Component implements OnInit {
 
 
   }
-
-
-    tmpProdIndex = 0;
-    editQty(item: any, index: any) {
-     if(item.entryType == 'New'){
-      this.tempProdRow = item;
-      this.tmpTotalPrice = item.salePrice * item.quantity;
-      this.tmpProdIndex = index;
-      this.global.openBootstrapModal('#qtyModal',true);
-      setTimeout(() => {
-        $('.prodQty').trigger('focus');
-      $('.prodQty').trigger('select');
-      }, 500);
-  
-     }
-  
-  
-      // var qty =  this.tableData[index].quantity;
-      // if (type == 'add') {
-  
-      //   qty >= 0 ? this.tableData[index].quantity += 1 : ''
-      // }
-  
-      // if (type == 'minus') {
-      //    qty > 0 ? this.tableData[index].quantity -= 1 : ''
-      // }
-    }
-  
-    changeQty(qty:any){
-  
-      this.tableData[this.tmpProdIndex].quantity = qty;
-  
-    }
 
 
   ////////////////////////////////////////////
   getBankList() {
 
     this.global.getBankList().subscribe((data: any) => {
-      this.bankCoaList = data;
-      // setTimeout(() => {
-      //   this.bankCoaID = data[0].coaID;
-      // }, 200);
-    });
-  }
+       this.bankCoaList = data; 
+       setTimeout(() => {
+        this.bankCoaID = data[0].coaID;
+      }, 200);});
+}
 
   ///////////////////////////////////////////////////////////
 
@@ -464,14 +299,14 @@ export class Sale1Component implements OnInit {
 
   }
 
-  OnCatChange(item: any) {
+  OnCatChange(item:any){
     this.categoryID = item.recipeCatID;
-    if (item.recipeCatID > 0) {
-      this.RecipeList = this.tempRecipeList.filter((e: any) => e.recipeCatID == item.recipeCatID);
-    } else {
+    if(item.recipeCatID > 0){
+      this.RecipeList = this.tempRecipeList.filter((e:any)=> e.recipeCatID == item.recipeCatID);
+    }else{
       this.RecipeList = this.tempRecipeList;
     }
-
+   
   }
 
 
@@ -515,12 +350,10 @@ export class Sale1Component implements OnInit {
     }
     if (this.orderType == 'Dine In') {
       this.OtherCharges = 0;
-      if (this.global.validCharges(this.subTotal) && this.serviceChargesFeature) {
+      if(this.global.validCharges(this.subTotal)){
         this.OtherCharges = this.subTotal * (this.serviceCharges / 100);
       }
     }
-
-
 
     this.netTotal = (this.subTotal + parseFloat(this.OtherCharges)) - parseFloat(this.billDiscount);
 
@@ -531,29 +364,13 @@ export class Sale1Component implements OnInit {
       this.bankCash = this.netTotal + this.GstAmount;
     }
     this.change = (parseFloat(this.cash) + parseFloat(this.bankCash)) - (this.netTotal + this.GstAmount);
-
-
-
-  
   }
 
 
   ///////////////////////////////////////////////////////////////
 
-  onProdClicked(item: any) {
-
-    if (this.RestSimpleSaleFeature) {
-      this.productSelected(item, 1)
-    } else {
-      this.global.openBootstrapModal('#qtyModal', true);
-      this.global.focusTo('.prodQty');
-      this.tempProdRow = item;
-      this.tmpTotalPrice = item.recipeSalePrice;
-    }
-
-  }
-
   productSelected(item: any, qty: any) {
+    
     if (this.orderType == '') {
       this.msg.WarnNotify('Select The Order type')
     } else if (this.tableID == 0 && this.orderType == 'Dine In') {
@@ -563,11 +380,9 @@ export class Sale1Component implements OnInit {
     } else {
       var index = this.tableData.findIndex((e: any) => e.recipeID == item.recipeID && e.entryType == 'New');
 
-
-
       if (index >= 0 ) {
         this.tableData[index].quantity += 1;
-      } else {
+      }else{
         this.tableData.push({
           productID: item.productID,
           productTitle: item.recipeTitle,
@@ -583,6 +398,8 @@ export class Sale1Component implements OnInit {
           autoInvDetID: 0,
         });
       }
+
+     
       // this.tableData.push({recipeID:item.recipeID,recipeTitle:item.recipeTitle,quantity:qty,recipeSalePrice:item.recipeSalePrice});
 
       // }
@@ -591,50 +408,10 @@ export class Sale1Component implements OnInit {
     this.tempProdRow = [];
     this.tempQty = 1;
 
-    $('#recSearch').trigger('focus');
-    $('#recSearch').val('');
-  }
+    this.closeQtyModal();
 
-
-
-  editTotal(item: any) {
-    if(this.RestSimpleSaleFeature){
-      this.tempProdRow = item;
-    Swal.fire({
-      title: "Enter Total Amount",
-      input: "text",
-      showCancelButton: true,
-      confirmButtonText: 'Save',
-      showLoaderOnConfirm: true,
-      preConfirm: (value) => {
-
-        if (value == "") {
-          return Swal.showValidationMessage("Enter Valid Amount");
-        }
-
-        if (isNaN(value)) {
-          return Swal.showValidationMessage("Enter Valid Amount");
-        }
-
-        if (value <= 0) {
-          return Swal.showValidationMessage("Enter Valid Amount");
-        }
-
-        this.tableData[this.tableData.indexOf(this.tempProdRow)].quantity =
-          value / this.tableData[this.tableData.indexOf(this.tempProdRow)].salePrice;
-        this.getTotal();
-        this.tempProdRow = [];
-      }
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Sale Price Updated",
-          timer: 500,
-        });
-      }
-    })
-    }
-
+    // $('#recSearch').trigger('focus');
+    // $('#recSearch').val('');
   }
 
 
@@ -667,57 +444,35 @@ export class Sale1Component implements OnInit {
 
   /////////////////////////////////////////////////////////////////
 
-  generateGst() {
-    
-    
-    if (this.gstFeature && (this.paymentType == 'Cash' || this.paymentType == 'Split')) {
+  generateGst(){
+    if(this.FBRFeature &&  (this.paymentType == 'Cash' || this.paymentType == 'Split')){
       this.gstValue = this.global.ResCashGst;
       this.GstAmount = (this.subTotal * this.gstValue) / 100;
     }
-     if (this.gstFeature && this.paymentType == 'Bank' ) {
-      if(this.bankCoaID > 0){
-        var coaTitle = this.bankCoaList.filter((e:any)=> e.coaID == this.bankCoaID)[0].coaTitle;
-        
-        if(coaTitle == 'Card'){
-          this.gstValue = this.global.ResCardGst;
-        }else{
-          this.gstValue = this.global.ResCashGst;
-        }
-      }else{
-        this.gstValue = this.global.ResCardGst;
-      }
-    
+    if(this.FBRFeature && this.paymentType == 'Bank'){
+      this.gstValue = this.global.ResCardGst;
       this.GstAmount = (this.subTotal * this.gstValue) / 100;
-      
     }
-
-
-     if (this.gstFeature && this.paymentType == 'Complimentary') {
-      this.gstValue = 0;
-      this.GstAmount = 0;
-    }
-
-    this.getTotal();
-
   }
 
-  save(type: any, SendToFbr: any) {
+  save(type: any) {
 
+ 
 
     if (this.orderType == 'Dine In' && (this.tableID == 0 || this.tableID == undefined)) {
       this.msg.WarnNotify('Select Table')
     } else if (this.orderType == '' || this.orderType == undefined) {
       this.msg.WarnNotify('Select Order Type')
-    } else if (type == 'sale' && (this.paymentType == '' || this.paymentType == undefined)) {
+    }else if (type == 'sale' && (this.paymentType == '' || this.paymentType == undefined)) {
       this.msg.WarnNotify('Select Payment Type')
     }
-    else if (this.tableData == '' || this.tableData == undefined) {
+     else if (this.tableData == '' || this.tableData == undefined) {
       this.msg.WarnNotify('One Product must be Entered')
-    } else if (type == 'sale' && this.paymentType == 'Split' && ((this.cash + this.bankCash) > (this.netTotal + this.GstAmount) || (this.cash + this.bankCash) < this.netTotal)) {
+    } else if (type == 'sale' && this.paymentType == 'Split' && ((this.cash + this.bankCash) > (this.netTotal+this.GstAmount) || (this.cash + this.bankCash) < this.netTotal)) {
       this.msg.WarnNotify('Amount in Not Valid');
-    } else if (type == 'sale' && this.paymentType == 'Cash' && (this.cash < (this.netTotal + this.GstAmount))) {
+    } else if (type == 'sale' && this.paymentType == 'Cash' && (this.cash < (this.netTotal+this.GstAmount))) {
       this.msg.WarnNotify('Enter Valid Amount')
-    } else if (type == 'sale' && this.paymentType == 'Bank' && (this.bankCash < (this.netTotal + this.GstAmount))) {
+    } else if (type == 'sale' && this.paymentType == 'Bank' && (this.bankCash < (this.netTotal+this.GstAmount))) {
       this.msg.WarnNotify('Enter Valid Amount')
     } else if (type == 'sale' && (this.customerName == '' && this.customerMobileno != '')) {
       this.msg.WarnNotify('Enter Customer Name')
@@ -727,10 +482,8 @@ export class Sale1Component implements OnInit {
       this.msg.WarnNotify('Bank Amount is Not Valid')
     } else if (type == 'sale' && (this.customerName != '' && this.customerMobileno == '')) {
       this.msg.WarnNotify('Enter Customer Name')
-    } else if (this.orderType == 'Dine In' && this.waiterFeature && (this.BookerID == 0 || this.BookerID == undefined)) {
+    } else if ((this.BookerID == 0 || this.BookerID == undefined) && this.waiterFeature == true) {
       this.msg.WarnNotify('Select Waiter')
-    } else if (type == 'sale' && (this.paymentType == 'Bank' || this.paymentType == 'Split' ) && this.bankCoaID <= 0) {
-      this.msg.WarnNotify('Select Bank')
     }
     else {
 
@@ -742,7 +495,7 @@ export class Sale1Component implements OnInit {
         this.OtherCharges = 0;
       }
 
-      if (this.global.SubscriptionExpired()) {
+      if(this.global.SubscriptionExpired()){
         Swal.fire({
           title: 'Alert!',
           text: 'Subscription Expired Today',
@@ -770,8 +523,8 @@ export class Sale1Component implements OnInit {
           CoverOf: this.coverOf,
           OtherCharges: this.OtherCharges,
           BillDiscount: this.billDiscount,
-          GstAmount: 0,
-          GstValue: 0,
+          GstAmount:0,
+          GstValue:0,
 
           SaleDetail: JSON.stringify(this.tableData),
 
@@ -794,7 +547,6 @@ export class Sale1Component implements OnInit {
             this.app.stopLoaderDark();
           },
           (Error: any) => {
-            console.log(Error);
             this.msg.WarnNotify(Error);
             this.app.stopLoaderDark();
           }
@@ -820,8 +572,8 @@ export class Sale1Component implements OnInit {
           CoverOf: this.coverOf,
           OtherCharges: this.OtherCharges,
           BillDiscount: this.billDiscount,
-          GstAmount: 0,
-          GstValue: 0,
+          GstAmount:0,
+          GstValue:0,
           SaleDetail: JSON.stringify(this.tableData),
 
           UserID: this.global.getUserID()
@@ -841,7 +593,6 @@ export class Sale1Component implements OnInit {
             this.app.stopLoaderDark();
           },
           (Error: any) => {
-            console.log(Error);
             this.msg.WarnNotify(Error);
             this.app.stopLoaderDark();
           }
@@ -853,7 +604,7 @@ export class Sale1Component implements OnInit {
       if (type == 'sale') {
 
         if (this.paymentType == 'Complimentary') {
-          this.global.closeBootstrapModal('#paymentMehtod', true);
+          this.global.closeBootstrapModal('#paymentMehtod',true);
 
           this.global.openPassword('Password').subscribe(pin => {
             if (pin !== '') {
@@ -873,13 +624,12 @@ export class Sale1Component implements OnInit {
                     this.OtherCharges = 0;
                     this.bankCoaID = 0;
                     this.getTotal();
-                    this.InsertSale(false);
+                    this.InsertSale();
                   } else {
                     this.msg.WarnNotify(Response.msg);
                   }
                 },
                 (Error: any) => {
-                  console.log(Error);
                   this.msg.WarnNotify(Error);
                   this.app.stopLoaderDark();
                 }
@@ -890,7 +640,7 @@ export class Sale1Component implements OnInit {
 
 
         } else {
-          this.InsertSale(SendToFbr)
+          this.InsertSale()
         }
       }
 
@@ -915,7 +665,7 @@ export class Sale1Component implements OnInit {
   //////////////////////////////////////////////////////////////////
   validSaleFlag = true;
 
-  InsertSale(SendToFbr: any) {
+  InsertSale() {
 
     if (this.customerMobileno == '' || this.customerMobileno == undefined) {
       this.customerMobileno = '0000-0000000';
@@ -926,6 +676,7 @@ export class Sale1Component implements OnInit {
     if (this.invDocument == '' || this.invDocument == undefined) {
       this.invDocument = '-';
     }
+   
 
     this.app.startLoaderDark()
     if (this.validSaleFlag) {
@@ -944,8 +695,8 @@ export class Sale1Component implements OnInit {
         Remarks: this.billRemarks,
         OrderType: this.orderType,
         CoverOf: this.coverOf,
-        GstAmount: this.GstAmount,
-        GstValue: this.gstValue,
+        GstAmount:this.GstAmount,
+        GstValue:this.gstValue,
         BillTotal: this.subTotal + this.GstAmount,
         BillDiscount: this.billDiscount,
         OtherCharges: this.OtherCharges,
@@ -957,7 +708,7 @@ export class Sale1Component implements OnInit {
         InvoiceDocument: this.invDocument,
         CusContactNo: this.customerMobileno,
         CusName: this.customerName,
-        SendToFbr: SendToFbr,
+
         SaleDetail: JSON.stringify(this.tableData),
         UserID: this.global.getUserID()
       }).subscribe(
@@ -975,7 +726,7 @@ export class Sale1Component implements OnInit {
               this.reset();
             }, 200);
             /////////// will hide the modal window ///////////
-            this.global.closeBootstrapModal('#paymentMehtod', true);
+            this.global.closeBootstrapModal('#paymentMehtod',true);
 
 
           } else {
@@ -985,7 +736,6 @@ export class Sale1Component implements OnInit {
           this.app.stopLoaderDark();
         },
         (Error: any) => {
-          console.log(Error);
           this.validSaleFlag = true;
           this.msg.WarnNotify(Error);
           this.app.stopLoaderDark();
@@ -1038,7 +788,7 @@ export class Sale1Component implements OnInit {
 
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetHoldedBillDetail?BillNo=' + item.invBillNo).subscribe(
       (Response: any) => {
-
+       
         this.tableData = [];
         this.orderNo = Response[0].orderNo;
         Response.forEach((e: any) => {
@@ -1261,9 +1011,24 @@ export class Sale1Component implements OnInit {
   }
 
 
+  ///////////////////////////////////////////////////////////////
 
 
 
+  openQtyModal(){
+    this.global.openBootstrapModal('#qtyModal',true);
+    this.global.closeBootstrapModal('#prodModal',true);
+    setTimeout(() => {
+      $('.prodQty').trigger('focus');
+    $('.prodQty').trigger('select');
+    }, 500);
+
+  }
+
+  closeQtyModal(){
+    this.global.openBootstrapModal('#prodModal',true);
+    this.global.closeBootstrapModal('#qtyModal',true);
+  }
 
 
   ///////////////////////////////////////////////////////////////
@@ -1276,21 +1041,21 @@ export class Sale1Component implements OnInit {
     this.invBillNo = '';
     this.prevTableID = 0;
     this.orderNo = 0;
-    this.coverOf = 0;
+    this.coverOf = '';
     this.billRemarks = '';
     this.BookerID = 0;
     this.ProjectID = this.global.InvProjectID;
     this.PartyID = 0;
     this.invoiceDate = new Date();
-    this.orderType = this.global.getRestOrderType() == '' ? '' : this.global.getRestOrderType();
-    this.paymentType = 'Cash';
+    this.orderType = '';
+    this.paymentType = '';
     this.cash = 0;
     this.bankCash = 0;
 
     this.tableID = 0;
     this.tempTableID = 0;
     this.prevTableID = 0;
-    this.tempOrderType = '';
+    this.tempOrderType = 'Dine In';
     this.tableTitle = '';
     this.tempProdRow = [];
     this.tempQty = 1;
@@ -1371,7 +1136,7 @@ export class Sale1Component implements OnInit {
 
       if (this.invBillNo != '') {
         this.myInvoiceNo = this.invBillNo;
-        this.save('rehold', false);
+        this.save('rehold');
 
         setTimeout(() => {
           this.billPrint.HOldandPrint(this.orderType, this.myInvoiceNo);
@@ -1383,7 +1148,7 @@ export class Sale1Component implements OnInit {
 
       } else {
 
-        this.save('hold', false);
+        this.save('hold');
         setTimeout(() => {
           this.myInvoiceNo = this.tmpInvBillNO;
           if (this.tmpInvBillNO != '') {
@@ -1408,18 +1173,18 @@ export class Sale1Component implements OnInit {
 
   ////////////////////////////////////////////////////////////
 
-  genDisc(type: any) {
+  genDisc(type:any){
 
-    if (type == 'perc') {
-      this.discAmount = (this.subTotal * this.discPer) / 100;
+    if(type == 'perc'){
+      this.discAmount = (this.subTotal * this.discPer) /100;
     }
-    if (type == 'amt') {
+    if(type == 'amt'){
       this.discPer = (this.discAmount / this.subTotal) * 100;
     }
 
   }
 
-
+  
   verifyDiscount() {
     $('#disc').hide();
     if (this.discAmount > this.netTotal) {
@@ -1436,7 +1201,7 @@ export class Sale1Component implements OnInit {
           }).subscribe(
             (Response: any) => {
               if (Response.msg == 'Password Matched Successfully') {
-                this.global.closeBootstrapModal('#disc', true);
+                this.global.closeBootstrapModal('#disc',true);
                 this.billDiscount = this.discAmount;
                 this.getTotal();
                 this.discAmount = 0;
@@ -1445,7 +1210,7 @@ export class Sale1Component implements OnInit {
                 this.msg.WarnNotify(Response.msg);
                 $('#disc').show();
               }
-
+             
               this.app.stopLoaderDark();
             },
             (Error: any) => {
@@ -1518,6 +1283,38 @@ export class Sale1Component implements OnInit {
     }
   }
 
+  tmpProdIndex = 0;
+  editQty(item: any, index: any) {
+   if(item.entryType == 'New'){
+    this.tempProdRow = item;
+    this.tmpProdIndex = index;
+    this.global.openBootstrapModal('#qtyModal',true);
+    setTimeout(() => {
+      $('.prodQty').trigger('focus');
+    $('.prodQty').trigger('select');
+    }, 500);
+
+   }
+
+
+    // var qty =  this.tableData[index].quantity;
+    // if (type == 'add') {
+
+    //   qty >= 0 ? this.tableData[index].quantity += 1 : ''
+    // }
+
+    // if (type == 'minus') {
+    //    qty > 0 ? this.tableData[index].quantity -= 1 : ''
+    // }
+  }
+
+  changeQty(qty:any){
+
+    this.tableData[this.tmpProdIndex].quantity = qty;
+
+  }
+
+  
 
 
   /////////////////////////////////////////////////////////////////////////////
@@ -1525,6 +1322,7 @@ export class Sale1Component implements OnInit {
   getSavedBill() {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetOpenDaySale').subscribe(
       (Response: any) => {
+
         this.savedbillList = Response;
       }
     )
@@ -1600,49 +1398,10 @@ export class Sale1Component implements OnInit {
 
 
 
-  sendToFbr(item: any) {
-    this.http.post(environment.mainApi + this.global.restaurentLink + 'ResSendToPra', {
-      InvBillNo: item.invBillNo,
-      UserID: this.global.getUserID()
-    }).subscribe(
-      (Response: any) => {
-        if (Response.msg == 'Data Updated Successfully') {
-          this.msg.SuccessNotify(Response.msg);
-          this.getSavedBill();
-        } else {
-          this.msg.WarnNotify(Response.msg);
-        }
-      }
-    )
-  }
-
-
-  
-  onBankSelected() {
-    this.paymentType = 'Bank';
-    this.cash = 0;
-    this.getTotal();
-
-  }
-  onCashSelected() {
-    this.paymentType = 'Cash';
-    this.getTotal();
-
-  }
-
-
-
-  openSavedBill(){
-
-    this.dialogue.open(SaleSavedBillComponent,{
-      width: '80%',
-    }).afterClosed().subscribe(val=>{
-
-    })
-
-  }
 
 
 
 
 }
+
+

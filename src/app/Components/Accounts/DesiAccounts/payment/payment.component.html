@@ -67,8 +67,7 @@
   <!-------------------     Invoice Print Section ------------------------->
 
         <div class="d-none InvociePrint" id="InvociePrint">
-            <div class="text-end ">{{lblVoucherPrintDate |date:'short'}}</div>
-            <div class="mt-2">
+            <div class="mt-2 p-2">
                 
                 <!-------------------------    Top Logo Section -------------------->
                 <div class="text-center border-bottom d-flex justify-content-between" *ngFor="let item of companyProfile">
@@ -99,6 +98,7 @@
                     <h6>Invoice No:</h6>
                     <h6>Project:</h6>
                     <h6>Invoice Date:</h6>
+                    <h6>Party Name:</h6>
                     <h6>Narration:</h6>
                     </b>
 
@@ -108,6 +108,7 @@
                     <p>{{lblInvoiceNo}}</p>
                     <p>{{lblProjectName}}</p>
                     <p>{{lblInvoiceDate | date:'yyyy-MM-dd'}}</p>
+                    <p>{{lblPartyName}}</p>
                     <p>{{lblRemarks}}</p>
                     
 
@@ -146,14 +147,14 @@
                 </table>
                </div>
 
-               <!-- <div class="w-100 d-flex justify-content-end">
+               <div class="w-100 d-flex justify-content-end">
                 <span class="w-75 d-flex flex-column fw-bold text-end">
-                    <span >Prev Balance: {{  lblPartyBalance > 0 ? lblPartyBalance - lblDebitTotal : lblPartyBalance + lblDebitTotal |number}}</span>
-                    <span>Paid: {{lblDebitTotal |number}}</span>
+                    <span >Prev Balance: {{ lblPartyType === 'Supplier' ?  lblPartyBalance + lblInvAmount : lblPartyBalance - lblInvAmount |number}}</span>
+                    <span>Paid: {{lblInvAmount |number}}</span>
                     <span>Cur Balance: {{lblPartyBalance |number}}</span>
                 </span>
         
-               </div>    -->
+               </div>   
 
 
                <div class="d-flex justify-content-between mt-5 pt-5">

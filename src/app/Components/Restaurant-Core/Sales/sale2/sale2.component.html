@@ -46,7 +46,7 @@
                             <td class="text-center">{{index +1}}</td>
                             <td>{{item.productTitle}}</td>
                             <td class="text-center">{{item.salePrice |number:'1.0-1'}}</td>
-                            <td class="text-center">{{item.quantity}}</td>
+                            <td class="text-center" (click)="editQty(item,index)">{{item.quantity}}</td>
                             <td class="text-center">{{item.salePrice * item.quantity |number:'1.0-1'}}</td>
                             <td class="text-center"><mat-icon class="text-danger" *ngIf="item.entryType == 'New'"
                                     (click)="deleteRow(item,'')">delete</mat-icon>
@@ -98,7 +98,7 @@
 
 
 
-            <div class="scrollContainer">
+            <div class="scrollContainer" (wheel)="onWheel($event)">
                 <button (click)="OnCatChange({recipeCatID:0,prodFlag:false})"
                     [ngClass]="categoryID == 0  ? 'bg-blue' : ''" class="border item text-center m-1 p-1"
                     style="height: 40px !important;">ALL</button>
@@ -139,7 +139,7 @@
                     <tr style="display: inline-flex; " class="cursorPointer "
                         *ngFor="let item of RecipeList |filter:recipeSearch.value">
                         <mat-card class="justify-content-center"
-                            (click)="global.openBootstrapModal('#qtyModal',true);tempProdRow = item;tmpTotalPrice = item.recipeSalePrice;this.global.focusTo('.prodQty')"
+                            (click)="productSelected(item,1);"
                             style=" width: 120px;
                         height: 120px;
                         text-align: center;
@@ -570,7 +570,7 @@
 
                             <div class="text-center d-flex justify-content-between ">
                                 <button class="btn btn-success" data-bs-dismiss="modal"
-                                    (click)="productSelected(tempProdRow,prodQty.value);prodQty.value = '1';tempQty = 1">Save</button>
+                                    (click)="changeQty(prodQty.value);prodQty.value = '1';tempQty = 1">Save</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                     (click)="tempQty = 1;recipeSearch.focus()">Close</button>
                             </div>

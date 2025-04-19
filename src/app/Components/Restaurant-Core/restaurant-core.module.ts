@@ -45,6 +45,7 @@ import { Sale2Component } from './Sales/sale2/sale2.component';
 import { Sale1Component } from './Sales/sale1/sale1.component';
 import { RestSaleBillPrintComponent } from './Sales/SaleCommonComponent/rest-sale-bill-print/rest-sale-bill-print.component';
 import { SaleSavedBillComponent } from './Sales/SaleCommonComponent/sale-saved-bill/sale-saved-bill.component';
+import { TableSale2Component } from './Sales/table-sale2/table-sale2.component';
 
 
 
@@ -71,7 +72,7 @@ export const restCore: Route[] = [
   {path:'srptotw', component:SaleRptOrderTypewiseComponent,data: { title: 'Sale Rpt Orderwise' }, canActivate:[AuthGuard] },
   {path:'srptptw', component:SaleRptPaymentTypewiseComponent,data: { title: 'Sale Rpt Pay Typewise' }, canActivate:[AuthGuard] },
   {path:'restdsbrd', component:RestDashboardComponent,data: { title: 'Dashboard' }, canActivate:[AuthGuard] },
-  {path:'tbsale', component:TabletSaleComponent,data: { title: 'Tablet Sale' }, canActivate:[AuthGuard] },
+  {path:'tbsale', component:TableSale2Component,data: { title: 'Tablet Sale' }, canActivate:[AuthGuard] },
   {path:'lorecp', component:RecipeListComponent,data: { title: 'Recipe List' }, canActivate:[AuthGuard] },
   {path:'vrpt', component:VoidReportComponent,data: { title: 'Void Rpt' }, canActivate:[AuthGuard] },
   
@@ -124,6 +125,7 @@ export const restCore: Route[] = [
     Sale2Component,
     Sale1Component,
     SaleSavedBillComponent,
+    TableSale2Component,
     
    
    
