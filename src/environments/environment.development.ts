@@ -14,7 +14,7 @@ export const environment = {
 
       //mainApi: 'http://192.168.100.37:5000/',
        /// mainApi: 'http://localhost:5000/', 
-       // mainApi: 'http://localhost:8060/',           /////////// system own published API
+        //mainApi: 'http://localhost:8060/',           /////////// system own published API
        // mainApi: 'http://192.168.160.98:8060/',  ////////// live Server Dani System
       //mainApi: 'http://192.168.100.250:1007/',  ////////// live Server Dani System
        //mainApi: 'http://192.168.10.100:1003/',    /////////// Local Server Office
@@ -48,11 +48,12 @@ export const environment = {
     // mainApi: 'http://192.168.10.180:8081/',  /////// Lasani Traders Fateh Jang local System
     // mainApi: 'http://159.69.174.21:2016/',   /////// Erp Demo Live For Clients
    // mainApi: 'http://159.69.174.21:2019/',    /////// Ejaz And Sons Rawalpindi
-   mainApi: 'http://localhost:8060/',           /////////// BAke INN Fateh Jang
+   //mainApi: 'http://localhost:8060/',           /////////// BAke INN Fateh Jang
    //mainApi: 'http://192.168.10.100:8080/',   /////////// BAke INN Server Live
    //mainApi: 'http://192.168.18.100:8080/',    /////////// The Bucket Client
    //mainApi: 'http://192.168.1.100:8080/',    /////////// Jazeera Foods Saddar API
    //mainApi: 'http://192.168.18.200:8080/',    /////////// Jazeera Foods Commercial API
+   // mainApi: 'http://192.168.123.100:8060/',    /////////// Jazeera Foods Saddar API Branch 2
 
 
    //mainApi: 'http://192.168.100.100:8090/',    /////////// Awani Mall Attock Kamra
@@ -86,8 +87,9 @@ export const environment = {
     //mainApi: 'http://159.69.174.21:2047/', /////// Property Management FMIS Dubai
 
 
-   // mainApi: 'http://localhost:8060/', ////////Faraz sons mandi bahaudin
-    //mainApi: 'http://192.168.100.100:8060/',           /////////// Faraz Sons live
+   mainApi: 'http://localhost:8060/', ////////Fazil sons mandi bahaudin
+    //mainApi: 'http://192.168.100.100:8060/',           /////////// Fazil Sons live
+   // mainApi: 'http://159.69.174.21:2026/',           /////////// Fazil Sons live Server
 
      
 };

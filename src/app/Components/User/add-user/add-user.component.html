@@ -1,5 +1,5 @@
 <div class="row container-fluid vh-100 body bg-gray">
-    <div class="col-lg-3 bg-white  p-3" >
+    <div class="col-lg-3 bg-white  p-3 row" style="height: 85vh;overflow-y: auto;" >
 
         <h1>User Credentials</h1>
        
@@ -21,13 +21,20 @@
 
         <mat-form-field appearance="outline" class="w-100 matSmall">
             <mat-label>Mobile No</mat-label>
-            <input matInput type="text"  [textMask]="{mask: mobileMask}" [(ngModel)]="mobileNo">
+            <input matInput type="text" maxlength="12"  [textMask]="{mask: mobileMask}" [(ngModel)]="mobileNo">
+            <mat-hint >{{mobileNo.length}}/12</mat-hint>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="w-100 matSmall">
             <mat-label>User Role</mat-label>
             <mat-select type="text" [(ngModel)]="RoleID">
                 <mat-option *ngFor="let item of rolesList" [value]="item.roleID">{{item.roleTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100 matSmall">
+            <mat-label>Project</mat-label>
+            <mat-select type="text" [(ngModel)]="projectID">
+                <mat-option *ngFor="let item of projectList" [value]="item.projectID">{{item.projectTitle}}</mat-option>
             </mat-select>
         </mat-form-field>
 

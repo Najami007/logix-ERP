@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { AddcityComponent } from '../settings/city/addcity/addcity.component';
 import { Router } from '@angular/router';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-party',
@@ -50,7 +51,8 @@ export class PartyComponent implements OnInit{
     private msg : NotificationService,
     private app:AppComponent,
     private dialogue:MatDialog,
-    private route:Router
+    private route:Router,
+    public global:GlobalDataModule
     ){
       this.globalData.getMenuList().subscribe((data)=>{
         this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
@@ -118,7 +120,7 @@ addCity(){
 //////////////////////////////////////////////
 
 
-  autoEmpty = true; 
+  autoEmpty = false; 
   searchtxt:any;
   btnType = "Save";
   curPartyId:any;
@@ -128,13 +130,13 @@ addCity(){
   passportNo:any = '';
   partyPhoneno = '';
   partyMobileno = '';
-  bankName:any;
-  accountTitle:any;
-  accountNo:any;
+  bankName:any = '';
+  accountTitle:any = '';
+  accountNo:any = '';
   partyTelephoneno:any = '';
-  City :any;
-  partyAddress:any;
-  description :any;
+  City :any = 0;
+  partyAddress:any = '';
+  description :any = '';
  
   validate = true;
 
@@ -186,34 +188,16 @@ addCity(){
     }else if(this.partyName == "" || this.partyName == undefined){
       this.msg.WarnNotify("Enter The Party Name");
       
-    }else if(this.partyCNIC == "" || this.partyCNIC == undefined ){
-      this.msg.WarnNotify("Enter Party CNIC")
-    }
-    else if(this.passportNo == "" || this.passportNo == undefined ){
-      this.msg.WarnNotify("Enter PassPort No");
-    } else if(this.bankName == "" || this.bankName == undefined ){
-      this.msg.WarnNotify("Enter Bank Name");
-    } else if(this.accountTitle == "" || this.accountTitle == undefined ){
-      this.msg.WarnNotify("Enter Bank Account Title");
-    } else if(this.accountNo == "" || this.accountNo == undefined ){
-      this.msg.WarnNotify("Enter Bank Account No.");
-    }else if(this.partyMobileno == "" || this.partyMobileno == undefined){
-      this.msg.WarnNotify("Enter Party Mobile Number")
-    }
-    else if(this.partyTelephoneno == "" || this.partyTelephoneno == undefined){
-      this.msg.WarnNotify("Enter Party Telephone Number")
     }else if(this.City == "" || this.City == undefined){
       this.msg.WarnNotify("Select The City")
     }else if(this.partyAddress == "" || this.partyAddress == undefined){
       this.msg.WarnNotify("Enter The Party Address")
-    }else if(this.description == "" || this.description == undefined){
-    this.description = "-";
-  }else if(this.partyCNIC.length < 15){
+    }else if(this.partyCNIC.length > 1 && this.partyCNIC.length < 15){
     this.msg.WarnNotify("Please Enter the Valid CNIC No.")
-  }else if(this.partyMobileno.length < 12){
+  }else if(this.partyMobileno.length > 1 && this.partyMobileno.length < 12){
     this.msg.WarnNotify("Please Enter the Valid Mobile NO.")
   }
-  else if(this.partyTelephoneno.length < 11){
+  else if( this.partyTelephoneno.length > 1 && this.partyTelephoneno.length < 11){
     this.msg.WarnNotify("Please Enter the Valid Telephone NO.")
   }else{
 
@@ -224,15 +208,15 @@ addCity(){
         PartyType:this.partyType,
         PartyName:this.partyName,
         PartyAddress:this.partyAddress,
-        PartyCNIC:this.partyCNIC,
+        PartyCNIC:this.partyCNIC || '-',
         CityID:this.City,
-        PassportNo:this.passportNo,
-        BankName:this.bankName,
-        BankAccountTitle: this.accountTitle,
-        BankAccountNo: this.accountNo,
-        PartyMobileNo:this.partyMobileno,
-        TelephoneNo:this.partyTelephoneno,
-        PartyDescription:this.description,
+        PassportNo:this.passportNo || '-',
+        BankName:this.bankName || '-',
+        BankAccountTitle: this.accountTitle || '-',
+        BankAccountNo: this.accountNo || '-',
+        PartyMobileNo:this.partyMobileno || '-',
+        TelephoneNo:this.partyTelephoneno || '-',
+        PartyDescription:this.description || '-',
         UserID:this.globalData.getUserID(),
    
        }).subscribe(
@@ -242,6 +226,7 @@ addCity(){
             this.getParty();
             this.app.stopLoaderDark();
             this.reset();
+            this.focusPartyName();
           }else{
            
             this.msg.WarnNotify(Response.msg);
@@ -258,19 +243,19 @@ addCity(){
           this.http.post(environment.mainApi+this.globalData.companyLink+'updateparty',{
   
             PartyID:this.curPartyId,
-            PartyType:this.partyType,
+            PartyType:this.partyType ,
             PartyName:this.partyName,
             PartyAddress:this.partyAddress,
           
-            PartyCNIC:this.partyCNIC,
-            BankName:this.bankName,
-            BankAccountTitle: this.accountTitle,
-            BankAccountNo: this.accountNo,
+            PartyCNIC:this.partyCNIC || '-',
+            BankName:this.bankName|| '-',
+            BankAccountTitle: this.accountTitle|| '-',
+            BankAccountNo: this.accountNo|| '-',
             CityID:this.City,
-            PassportNo:this.passportNo,
-            PartyMobileNo:this.partyMobileno,
-            TelephoneNo:this.partyTelephoneno,
-            PartyDescription:this.description,
+            PassportNo:this.passportNo|| '-',
+            PartyMobileNo:this.partyMobileno|| '-',
+            TelephoneNo:this.partyTelephoneno|| '-',
+            PartyDescription:this.description|| '-',
             PinCode:pin,
             UserID:this.globalData.getUserID(),
           }).subscribe(
@@ -282,6 +267,7 @@ addCity(){
                 this.getParty();
                 this.app.stopLoaderDark();
                 this.reset();
+                this.focusPartyName();
               }else{
                 
                 this.msg.WarnNotify(Response.msg);
@@ -340,6 +326,9 @@ addCity(){
     this.City = item.cityID.toString();
     this.description = item.partyDescription;
     this.btnType = "Update";
+    this.focusPartyName();
+
+
 
   }
 
@@ -371,6 +360,7 @@ addCity(){
                   if(Response.msg == 'Data Deleted Successfully'){
                     this.msg.SuccessNotify(Response.msg);
                     this.getParty();
+                    this.focusPartyName();
                     
                   }else{
                     this.msg.WarnNotify(Response.msg);
@@ -413,6 +403,15 @@ addCity(){
     this.description = '';
     this.btnType = "Save";
    }
+  }
+
+
+  focusPartyName(){
+    
+    $('#partyName').trigger('focus');
+   setTimeout(() => {
+    $('#partyName').trigger('select');
+   }, 200);
   }
 
 

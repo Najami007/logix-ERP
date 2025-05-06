@@ -245,7 +245,7 @@
                         <td>{{myBank|number:'1.0-1'}}</td>
                         <td></td>
                     </tr>
-                    <tr class="text-end fs-14" *ngIf="myChange > 0">
+                    <tr class="text-end fs-14" >
                         <td></td>
                         <td>Change</td>
                         <td>{{myChange|number:'1.0-1'}}</td>
@@ -254,14 +254,14 @@
                     </tr>
 
 
-                    <tr style="text-align:right;" *ngIf="myCusBalance > 0" >
+                    <tr style="text-align:right;" *ngIf="myCusBalance !== 0" >
                         <td></td>
                         <td class="fw-bold">prv Blnc</td>
                         <td class="fw-bold" *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
-                        <td class="fw-bold"*ngIf="myChange <= 0">{{myCusBalance - (-1 * myChange) | number:'1.0-1'}}</td>
+                        <td class="fw-bold"*ngIf="myChange <= 0">{{myCusBalance -  ( -1 * myChange) | number:'1.0-1'}}</td>
 
                     </tr>
-                    <tr style="text-align:right;" *ngIf="myCusBalance > 0">
+                    <tr style="text-align:right;" *ngIf="myCusBalance !== 0">
                         <td></td>
                         <td class="fw-bold">Net Blnc</td>
                         <td class="fw-bold">{{myCusBalance | number:'1.0-1'}}</td>
@@ -280,10 +280,21 @@
             <td >{{myRemarks}}</td>
         </tr>
        </table> -->
-            <div class="fs-11 ">
+            <div class="fs-12px d-flex flex-column">
                 <!-- <span><b>Goods Once Sold Can Not be Replaced or Refunded. </b></span> -->
                 <b></b>
                 <span><b>Thank You for your visit.</b></span>
+                
+            </div>
+            <div class="fs-12px d-flex flex-column">
+                <!-- <span><b>Goods Once Sold Can Not be Replaced or Refunded. </b></span> -->
+                <b></b>
+                
+                <!-- <span><b>Without Bill no return acceptable.</b></span>
+                <span><b>Returns are acceptable within 3 days.</b></span>
+                <span><b>Exchange is acceptable within 7 days.</b></span>
+                <span><b>Specialy discounted items are not returnable.</b></span>
+                <span><b>No Gurantee for Woolen items.</b></span> -->
             </div>
 
         </div>

@@ -105,7 +105,7 @@
         <div class="col-lg-9 border-dark border-start " >
             <div class=" p-2" style="height: 82vh;">
                 <div class="row">
-                    <mat-form-field appearance="outline"  class="col-lg-2 matSmall">
+                    <mat-form-field appearance="outline" *ngIf="disableDate"  class="col-lg-2 matSmall">
                         <mat-label>Invoice Date</mat-label>
                         <input [(ngModel)]="invoiceDate"  readonly="true" matInput type="text" name="voucherDate"
                             [matDatepicker]="voucherDate">

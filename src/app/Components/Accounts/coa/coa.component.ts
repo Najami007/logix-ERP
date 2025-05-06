@@ -42,12 +42,18 @@ export class COAComponent  implements OnInit {
 
 
       
-  
+    filterCoaType = 0;
+
+    filterCOA(){
+      this.filterCoaType == 0 
+      ? this.ChartsofAccountsData = this.tmpCoaData 
+      :this.ChartsofAccountsData = this.tmpCoaData.filter((e:any)=>e.coaTypeID == this.filterCoaType);
+      
+    }
 
   ngOnInit(): void {
     this.globalData.setHeaderTitle('Charts Of Accounts');
     this.getCoaType();
-    this.GetChartOfAccount();
     this.globalData.numberOnly();
     this.getNotes();
 
@@ -196,17 +202,17 @@ onlevel3Change(){
 
   getCoaType(){
     this.http.get(environment.mainApi+this.globalData.accountLink+'getcoatype').subscribe(
-      {
-        next:value=>{
-          // console.log(value);
-          this.coaTypesList = value;
-         
-          
-        },
-        error:error=>{
+      (Response:any)=>{
+        this.coaTypesList = Response;
+        if(Response.length > 0){
+          this.filterCoaType = Response[0].coaTypeID;
+        }
+        this.GetChartOfAccount();
+      },
+       (error:any) =>{
           console.log(error);
         }
-      }
+      
     )
   }
 
@@ -225,14 +231,16 @@ onlevel3Change(){
   }
 
 
-
+  tmpCoaData:any = [];
   //////////////////////////////////////////////////////////
   GetChartOfAccount(){
     this.http.get(environment.mainApi+this.globalData.accountLink+'GetChartOfAccount').subscribe(
       {
         next:value=>{
-    
-          this.ChartsofAccountsData = value;
+          this.tmpCoaData = value;
+          setTimeout(() => {
+            this.filterCOA();
+          }, 200);
         },
         error:error=>{
           console.log(error);

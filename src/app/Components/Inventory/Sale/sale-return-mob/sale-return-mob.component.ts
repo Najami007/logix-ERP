@@ -30,6 +30,7 @@ export class SaleReturnMobComponent implements OnInit {
   editSpFeature = this.global.editSpFeature;
   editDiscFeature = this.global.editDiscFeature;
   prodDetailFeature = this.global.prodDetailFeature;
+  disableDate = this.global.DisableDateSale;
 
   @ViewChild(SaleBillPrintComponent) billPrint:any;
 

@@ -7,6 +7,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { SaleBillPrintComponent } from '../../Sale/SaleComFiles/sale-bill-print/sale-bill-print.component';
+import { PurchaseBillPrintComponent } from '../../Purchases/purchase-bill-print/purchase-bill-print.component';
 
 @Component({
   selector: 'app-invrptprodwise',
@@ -15,7 +16,8 @@ import { SaleBillPrintComponent } from '../../Sale/SaleComFiles/sale-bill-print/
 })
 export class InvrptprodwiseComponent implements OnInit {
 
- @ViewChild(SaleBillPrintComponent)  billPrint:any;
+ @ViewChild(SaleBillPrintComponent)  salebillPrint:any;
+ @ViewChild(PurchaseBillPrintComponent)  purchaseBillPrint:any;
 
   companyProfile: any = [];
   crudList:any = {c:true,r:true,u:true,d:true};
@@ -99,6 +101,8 @@ export class InvrptprodwiseComponent implements OnInit {
 
 
   QtyTotal = 0;
+  saleTotal = 0;
+  costTotal = 0;
 
   getReport(type: any) {
     this.reportType = this.reportsList.find((e:any)=>e.val == type).title;
@@ -113,18 +117,25 @@ export class InvrptprodwiseComponent implements OnInit {
           (Response: any) => {
             this.invDetailList = [];
             this.QtyTotal = 0;
+            this.saleTotal = 0;
+            this.costTotal = 0;
             if(type == 'R'){
               Response.forEach((e:any) => {
 
                 if(e.issueType != 'Stock Transfer'){
                   this.invDetailList.push(e);
                   this.QtyTotal += e.quantity;
+                  this.saleTotal += e.salePrice * e.quantity;
+                  this.costTotal += e.costPrice * e.quantity;
+                 
                 }
               });
             }else{
               this.invDetailList = Response;
               Response.forEach((e:any) => {
                 this.QtyTotal += e.quantity;
+                this.saleTotal += e.salePrice * e.quantity;
+                this.costTotal += e.costPrice * e.quantity;
             });
             }
 
@@ -150,9 +161,12 @@ export class InvrptprodwiseComponent implements OnInit {
   printBill(item:any){
 
     if(item.invType == 'S' || item.invType == 'SR'){
-      this.billPrint.PrintBill(item.invBillNo);
-       this.billPrint.billType = 'Duplicate';
-  
+      this.salebillPrint.PrintBill(item.invBillNo);
+       this.salebillPrint.billType = 'Duplicate';
+    }
+
+    if(item.invType == 'P' || item.invType == 'PR'){
+      this.purchaseBillPrint.printBill(item);
     }
    }
 

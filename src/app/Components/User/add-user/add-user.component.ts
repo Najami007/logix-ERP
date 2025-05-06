@@ -44,23 +44,37 @@ export class AddUserComponent implements OnInit {
     this.global.setHeaderTitle('Add User');
     this.getUsers();
     this.getRoles();
+    this.getProject();
   }
 
   btnType:any = 'Save';
 
   txtSearch:any;
-  userID:any;
-  UserName:any;
-  loginName:any;
-  mobileNo:any;
-  userEmail:any;
-  RoleID:any;
-  password:any;
-  confirmPassword:any;
-
+  userID:any = 0;
+  UserName:any = '';
+  loginName:any = '';
+  mobileNo:any = '';
+  userEmail:any = '';
+  RoleID:any = 0;
+  password:any = '';
+  confirmPassword:any = '';
+  projectID:any = 0;
 
   rolesList:any = [];
   userList:any = [];
+  projectList:any = [];
+
+   
+  getProject(){
+    this.http.get(environment.mainApi+'cmp/getproject').subscribe(
+      (Response:any)=>{
+        this.projectList = Response;
+       // console.log(Response);
+      
+      }
+    )
+  }
+ 
 
 
 
@@ -110,7 +124,11 @@ export class AddUserComponent implements OnInit {
       this.msg.WarnNotify('Enter Mobile No.')
     }else if(this.RoleID == '' || this.RoleID == undefined){
       this.msg.WarnNotify('Select Role ')
-    }else if((this.password == '' || this.password == undefined) && this.btnType == 'Save'){
+    }
+    else if(this.projectID == '' || this.projectID == undefined){
+      this.msg.WarnNotify('Select Project ')
+    }
+    else if((this.password == '' || this.password == undefined) && this.btnType == 'Save'){
       this.msg.WarnNotify('Enter Password')
     }else if((this.confirmPassword == '' || this.confirmPassword == undefined) && this.btnType == 'Save'){
       this.msg.WarnNotify('Enter Confirm Password')
@@ -148,6 +166,7 @@ export class AddUserComponent implements OnInit {
       UserEmail:this.userEmail,
       Password: this.password,
       RoleID: this.RoleID,
+      projectID:this.projectID,
       UserID: this.global.getUserID()
     }).subscribe(
       (Response:any)=>{
@@ -180,6 +199,7 @@ export class AddUserComponent implements OnInit {
       MobileNo: this.mobileNo,
       LoginName: this.loginName,
       RoleID: this.RoleID,
+      projectID:this.projectID,
       
       reqUserID: this.global.getUserID()
     }).subscribe(
@@ -210,6 +230,7 @@ export class AddUserComponent implements OnInit {
     this.mobileNo = row.mobileNo;
     this.RoleID = row.roleID;
     this.userEmail = row.userEmail;
+    this.projectID = row.projectID;
 
   }
 

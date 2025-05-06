@@ -27,7 +27,8 @@ export class AddpartyComponent implements OnInit {
     private dialogRef: MatDialogRef<AddcityComponent>,
     private http : HttpClient,
     private msg : NotificationService,
-    private dialogue:MatDialog
+    private dialogue:MatDialog,
+    public global:GlobalDataModule
     ){
 
   }
@@ -43,18 +44,18 @@ export class AddpartyComponent implements OnInit {
   
   searchtxt:any;
   btnType = "Save";
-  curPartyId:any;
+  curPartyId:any = 0;
   partyType :any;
-  partyName :any;
-  partyCNIC :any;
-  passportNo:any;
-  partyPhoneno:any;
-  partyMobileno:any;
-  bankName:any;
-  accountTitle:any;
-  accountNo:any;
-  partyTelephoneno:any;
-  City :any;
+  partyName :any = '';
+  partyCNIC :any = '';
+  passportNo:any = '';
+  partyPhoneno:any = '';
+  partyMobileno:any = '';
+  bankName:any = '';
+  accountTitle:any = '';
+  accountNo:any = '';
+  partyTelephoneno:any = '';
+  City :any ;
   partyAddress:any;
   description :any;
  
@@ -110,34 +111,16 @@ saveParty(){
   }else if(this.partyName == "" || this.partyName == undefined){
     this.msg.WarnNotify("Enter The Party Name");
     
-  }else if(this.partyCNIC == "" || this.partyCNIC == undefined ){
-    this.msg.WarnNotify("Enter Party CNIC")
-  }
-  else if(this.passportNo == "" || this.passportNo == undefined ){
-    this.msg.WarnNotify("Enter PassPort No");
-  } else if(this.bankName == "" || this.bankName == undefined ){
-    this.msg.WarnNotify("Enter Bank Name");
-  } else if(this.accountTitle == "" || this.accountTitle == undefined ){
-    this.msg.WarnNotify("Enter Bank Account Title");
-  } else if(this.accountNo == "" || this.accountNo == undefined ){
-    this.msg.WarnNotify("Enter Bank Account No.");
-  }else if(this.partyMobileno == "" || this.partyMobileno == undefined){
-    this.msg.WarnNotify("Enter Party Mobile Number")
-  }
-  else if(this.partyTelephoneno == "" || this.partyTelephoneno == undefined){
-    this.msg.WarnNotify("Enter Party Telephone Number")
   }else if(this.City == "" || this.City == undefined){
     this.msg.WarnNotify("Select The City")
   }else if(this.partyAddress == "" || this.partyAddress == undefined){
     this.msg.WarnNotify("Enter The Party Address")
-  }else if(this.description == "" || this.description == undefined){
-  this.description = "-";
-}else if(this.partyCNIC.length < 15){
+  }else if(this.partyCNIC.length > 1 &&  this.partyCNIC.length < 15){
   this.msg.WarnNotify("Please Enter the Valid CNIC No.")
-}else if(this.partyMobileno.length < 12){
+}else if(this.partyMobileno.length > 1 && this.partyMobileno.length < 12){
   this.msg.WarnNotify("Please Enter the Valid Mobile NO.")
 }
-else if(this.partyTelephoneno.length < 11){
+else if(this.partyTelephoneno.length > 1 && this.partyTelephoneno.length < 11){
   this.msg.WarnNotify("Please Enter the Valid Telephone NO.")
 }else{
 
@@ -148,15 +131,15 @@ else if(this.partyTelephoneno.length < 11){
       PartyType:this.partyType,
       PartyName:this.partyName,
       PartyAddress:this.partyAddress,
-      PartyCNIC:this.partyCNIC,
+      PartyCNIC:this.partyCNIC || '-',
       CityID:this.City,
-      PassportNo:this.passportNo,
-      BankName:this.bankName,
-      BankAccountTitle: this.accountTitle,
-      BankAccountNo: this.accountNo,
-      PartyMobileNo:this.partyMobileno,
-      TelephoneNo:this.partyTelephoneno,
-      PartyDescription:this.description,
+      PassportNo:this.passportNo || '-',
+      BankName:this.bankName || '-',
+      BankAccountTitle: this.accountTitle || '-',
+      BankAccountNo: this.accountNo || '-',
+      PartyMobileNo:this.partyMobileno || '-',
+      TelephoneNo:this.partyTelephoneno || '-',
+      PartyDescription:this.description || '-',
       UserID:this.globalData.getUserID(),
  
      }).subscribe(

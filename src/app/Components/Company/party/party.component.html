@@ -17,13 +17,13 @@
                 </mat-form-field>
                 <mat-form-field class="col-lg-6 matSmall" appearance="outline">
                     <mat-label>Party Name</mat-label>
-                    <input [(ngModel)]="partyName"  matInput type="text">
+                    <input [(ngModel)]="partyName" id="partyName"  matInput type="text">
                 </mat-form-field>
                 
                 
                 <mat-form-field class="col-lg-6 matSmall" appearance="outline">
                     <mat-label>Party CNIC</mat-label>
-                    <input [(ngModel)]="partyCNIC" [textMask]="{mask:cnicMask}" maxlength="15"   matInput type="text">
+                    <input [(ngModel)]="partyCNIC" (keydown)="global.handleAlphabet($event)" [textMask]="{mask:cnicMask}" maxlength="15"   matInput type="text">
                     <mat-hint>{{partyCNIC.length}} / 15</mat-hint>
                 </mat-form-field>
                 
@@ -33,12 +33,12 @@
                 </mat-form-field>
                 <mat-form-field class="col-lg-6 matSmall" appearance="outline">
                     <mat-label>Mobile no.</mat-label>
-                    <input [(ngModel)]="partyMobileno" maxlength="12"  [textMask]="{mask:mobileMask}"  matInput type="text">
+                    <input [(ngModel)]="partyMobileno" maxlength="12" (keydown)="global.handleAlphabet($event)"  [textMask]="{mask:mobileMask}"  matInput type="text">
                     <mat-hint>{{partyMobileno.length}} / 12</mat-hint>
                 </mat-form-field>
                 <mat-form-field class="col-lg-6 matSmall" appearance="outline">
                     <mat-label>Telephone no.</mat-label>
-                    <input  [(ngModel)]="partyTelephoneno" maxlength="11"  [textMask]="{mask:telephoneMask}"  matInput type="text">
+                    <input  [(ngModel)]="partyTelephoneno" maxlength="11" (keydown)="global.handleAlphabet($event)"  [textMask]="{mask:telephoneMask}"  matInput type="text">
                     <mat-hint>{{partyTelephoneno.length}} / 11</mat-hint>
                 </mat-form-field>
 
@@ -117,7 +117,7 @@
                 <thead>
                     <th >S.#</th>
                     <th >Party Name</th>
-                    <th >Type</th>
+                    <!-- <th >Type</th> -->
                 <th >CNIC</th>
                 <th >Mobile</th>
                 <th >City</th>
@@ -132,7 +132,7 @@
                     } ;index as index">
                         <td>{{index+1}}</td>
                         <td>{{item.partyName}}  </td>
-                        <td >{{item.partyType}}</td>
+                        <!-- <td >{{item.partyType}}</td> -->
                         <td>{{item.partyCNIC}}</td>
                         <td>{{item.partyMobileNo}}</td>
                         <td>{{item.cityName}}</td>

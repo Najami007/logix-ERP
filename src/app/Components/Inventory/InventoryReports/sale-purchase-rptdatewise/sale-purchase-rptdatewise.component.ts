@@ -107,6 +107,9 @@ rptType:any = 's';
    offerDiscTotal = 0;
    summaryNetTotal= 0;
    myTaxTotal = 0;
+   costPriceTotal = 0;
+   salePriceTotal = 0;
+   avgCostTotal = 0;
 
    getReport(type:any){
 
@@ -237,12 +240,18 @@ rptType:any = 's';
         this.profitPercentTotal = 0;
         this.profitTotal = 0;
         this.discountTotal = 0;
+        this.salePriceTotal = 0;
+        this.costPriceTotal = 0;
+        this.avgCostTotal = 0;
          this.SaleDetailList.forEach((e:any) => {
           this.qtyTotal += e.quantity;
           if(this.rptType == 's' || this.rptType == 'sr'){
             this.detNetTotal += (e.salePrice - e.discInR) * e.quantity ;
             this.profitTotal += ((e.salePrice - e.discInR) * e.quantity) - (e.avgCostPrice * e.quantity);
             this.discountTotal  += e.discInR * e.quantity;
+            this.salePriceTotal += e.quantity * e.salePrice;
+            this.costPriceTotal += e.quantity * e.costPrice;
+            this.avgCostTotal += e.quantity * e.avgCostPrice;
             //this.profitPercentTotal += ((e.salePrice - e.discInR) * e.quantity) - (e.avgCostPrice * e.quantity) / ;
           }
           else if(this.rptType == 'p' || this.rptType == 'pr'){

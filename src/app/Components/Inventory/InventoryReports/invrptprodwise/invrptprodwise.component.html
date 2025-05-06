@@ -153,11 +153,12 @@
                 <tr>
                     <td colspan="5"></td>
                     <td *ngIf="rptType == 'I' || rptType == 'R'"></td>
-                    <th>{{QtyTotal |number:'1.0-3'}}</th>
+                    <td class="text-center fw-bold">{{QtyTotal |number:'1.0-3'}}</td>
                     <td></td>
                     <td></td>
-                    <th></th>
-                    <th></th>
+                    <td></td>
+                    <td class="text-end fw-bold">{{costTotal |number:'1.0-0'}}</td>
+                    <td class="text-end fw-bold">{{saleTotal |number:'1.0-0'}}</td>
                     <td></td>
                 </tr>
             </tbody>
@@ -172,4 +173,5 @@
 </div>
 
 <app-sale-bill-print class="hide" id="print-Bill"> </app-sale-bill-print>
+<app-purchase-bill-print class="hide" id="print-Bill"></app-purchase-bill-print>
 

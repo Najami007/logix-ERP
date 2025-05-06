@@ -14,12 +14,12 @@
           <input matInput type="text" [(ngModel)]="roleDescription">
         </mat-form-field>
 
-        <div class="col-lg-2 p-2">
-          <button mat-raised-button class="bg-success text-white col-lg-6 me-1" style="height: 55px;"
+        <div class="col-lg-2 mt-1 ">
+          <button class="btnsave col-lg-6 me-1" 
             *ngIf="crudList.u && btnType == 'Update'" (click)="save()">{{btnType}}</button>
-          <button mat-raised-button class="bg-success text-white col-lg-6 me-1" style="height: 55px;"
+          <button  class="btnsave col-lg-6 me-1" 
             *ngIf="crudList.c && btnType == 'Save'" (click)="save()">{{btnType}}</button>
-          <button mat-raised-button class="bg-danger text-white col-lg-5" style="height: 55px;" (click)="reset()">
+          <button  class="btnreset col-lg-5"  (click)="reset()">
             Reset</button>
         </div>
 

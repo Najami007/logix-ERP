@@ -34,6 +34,7 @@ export class GarmentSaleReturnComponent implements OnInit {
   prodDetailFeature = this.global.prodDetailFeature;
   BankShortCutsFeature = this.global.BankShortCutsFeature;
   LessToCostFeature = this.global.LessToCostFeature;
+  disableDate = this.global.DisableDateSale;
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 

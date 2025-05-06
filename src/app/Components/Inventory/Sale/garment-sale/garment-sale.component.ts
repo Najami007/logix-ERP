@@ -37,6 +37,7 @@ export class GarmentSaleComponent implements OnInit {
   LessToCostFeature = this.global.LessToCostFeature;
   changePaymentMehtodFeature = this.global.changePaymentMehtodFeature;
   onlySaveBillFeature = this.global.onlySaveBillFeature;
+  disableDate = this.global.DisableDateSale;
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
@@ -1248,6 +1249,8 @@ export class GarmentSaleComponent implements OnInit {
   save(paymentType: any, SendToFbr: any, printFlag: any) {
 
 
+   
+
 
     this.isValidSale = true;
     this.tableDataList.forEach((p: any) => {
@@ -1297,6 +1300,24 @@ export class GarmentSaleComponent implements OnInit {
       }else if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
         this.msg.WarnNotify('Enter Valid Amount')
       } else {
+
+
+
+              if (this.global.SubscriptionExpired()) {
+                Swal.fire({
+                  title: 'Alert!',
+                  text: 'Unable To Save , Contact To Administrator!',
+                  position: 'center',
+                  icon: 'warning',
+                  showCancelButton: false,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'OK',
+                });
+                return;
+              }
+
+
         this.isValidSale = false;
         this.app.startLoaderDark();
         this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', {
@@ -1571,8 +1592,6 @@ export class GarmentSaleComponent implements OnInit {
   getSavedBill() {
 
 
-
-
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetOpenDaySale').subscribe(
       (Response: any) => {
 
@@ -1581,10 +1600,7 @@ export class GarmentSaleComponent implements OnInit {
           if (e.invType == 'S') {
             this.savedbillList.push(e);
           }
-
-
         });
-
       }
     )
 

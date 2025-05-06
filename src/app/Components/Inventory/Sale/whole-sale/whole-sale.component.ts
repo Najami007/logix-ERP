@@ -36,6 +36,7 @@ export class WholeSaleComponent implements OnInit {
   editDiscFeature = this.global.editDiscFeature;
   prodDetailFeature = this.global.prodDetailFeature;
   FBRFeature = this.global.FBRFeature;
+  disableDate = this.global.DisableDateSale;
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
@@ -113,7 +114,7 @@ export class WholeSaleComponent implements OnInit {
     for (let i = 0; i <= 100; i++) { this.discountList.push({ value: i }); }
 
 
-
+      console.log( this.global.DisableDateSale);
   }
 
   discountList: any = [];

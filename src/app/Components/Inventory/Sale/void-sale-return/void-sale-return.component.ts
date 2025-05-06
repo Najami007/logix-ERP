@@ -21,6 +21,8 @@ import { VrtnsavedbillComponent } from './vrtnsavedbill/vrtnsavedbill.component'
 })
 export class VoidSaleReturnComponent implements OnInit {
 
+  disableDate = this.global.DisableDateSale;
+
   ////////////////// will give the current tab visible status
     
   @HostListener('document:visibilitychange', ['$event'])

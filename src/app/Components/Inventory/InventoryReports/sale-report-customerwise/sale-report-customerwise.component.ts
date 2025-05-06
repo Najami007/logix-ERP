@@ -46,6 +46,7 @@ export class SaleReportCustomerwiseComponent implements OnInit {
     this.getParty();
     $('#detailTable').show();
     $('#summaryTable').hide();
+    $('#ledger').hide();
 
   }
 
@@ -104,6 +105,8 @@ export class SaleReportCustomerwiseComponent implements OnInit {
   saleRtnDiscountTotal = 0;
   profitTotal = 0;
 
+  ledgerDetailList:any = [];
+
   getReport(type:any) {
 
     // alert(this.recipeCatID);
@@ -114,6 +117,7 @@ export class SaleReportCustomerwiseComponent implements OnInit {
 
    if(type == 'detail'){
     $('#detailTable').show();
+    $('#ledger').hide();
     $('#summaryTable').hide();
     this.reportType = 'Detail';
     this.http.get(environment.mainApi+this.global.inventoryLink + 'GetSaleDetailCustomerDateWise?reqUID='+this.userID+'&FromDate='+
@@ -142,6 +146,7 @@ export class SaleReportCustomerwiseComponent implements OnInit {
 
    if(type == 'summary'){
     $('#detailTable').hide();
+    $('#ledger').hide();
         $('#summaryTable').show();
         this.reportType = 'Summary';
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleSummaryCustomerDateWise?reqUID='+this.userID+'&FromDate='+
@@ -170,6 +175,27 @@ export class SaleReportCustomerwiseComponent implements OnInit {
             
         });
 
+      }
+    )
+   }
+
+
+   if(type == 'ledger'){
+    $('#detailTable').hide();
+    $('#summaryTable').hide();
+    $('#ledger').show();
+    this.reportType = 'Detail';
+    this.http.get(environment.mainApi+this.global.inventoryLink + 'GetLedgerRpt_11?FromDate='+
+    this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime+'&PartyID='+this.partyID).subscribe(
+      (Response: any) => {
+        // console.log(Response);
+       this.ledgerDetailList = Response.map((e:any)=>{
+        if(e.billDetail != '-'){
+          (e.billDetailList = JSON.parse(e.billDetail))
+        }
+        return e;
+       })
+       console.log(this.ledgerDetailList);
       }
     )
    }

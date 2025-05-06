@@ -21,6 +21,8 @@ import { VoucherPrintComponent } from '../CommonComponent/voucher-print/voucher-
 export class Voucher2Component implements OnInit{
 
 
+ disableDate = this.globalData.DisableDateAcc;
+
   // @ViewChild(VoucherPrintComponent) printVoucher:any;
 
   loadingBar = 'start';

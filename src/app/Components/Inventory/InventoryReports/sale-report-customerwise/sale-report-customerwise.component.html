@@ -62,6 +62,7 @@
 
             <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('summary')">Summary</button>
             <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('detail')">Detail</button>
+            <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('ledger')">Ledger</button>
             <button class="btn-rpt-primary col-lg-2" (click)="print()">Print</button>
             <mat-checkbox [(ngModel)]="hideProfit">Hide Profit</mat-checkbox>
             <mat-checkbox [(ngModel)]="hideCost">Hide Cost</mat-checkbox>
@@ -143,10 +144,12 @@
                     <td class="text-end">{{item.discInP |number:'1.0-1'}}</td>
                     <td [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''" class="text-end">
                         {{(item.salePrice * item.quantity) - (item.discInR * item.quantity) |number:'1.0-0'}}</td>
-                    <td *ngIf="!hideProfit" [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''" class="text-end">
+                    <td *ngIf="!hideProfit" [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''"
+                        class="text-end">
                         {{((item.salePrice * item.quantity) - (item.discInR * item.quantity)) - (item.avgCostPrice *
                         item.quantity) |number:'1.0-1'}}</td>
-                    <td  *ngIf="!hideProfit" [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''" class="text-end">
+                    <td *ngIf="!hideProfit" [ngClass]="item.invType == 'SR' ? 'bg-danger text-white' : ''"
+                        class="text-end">
                         {{(((item.salePrice * item.quantity) - (item.discInR * item.quantity)) - (item.avgCostPrice *
                         item.quantity)) / ((item.salePrice * item.quantity) - (item.discInR * item.quantity))
                         |percent:'1.0-1'}}</td>
@@ -159,7 +162,7 @@
                     <td *ngIf="!hideCost"></td>
                     <td colspan="3"></td>
                     <th class="text-end">{{saleGrandTotal|number:'1.0-0'}}</th>
-                    <th class="text-end"  *ngIf="!hideProfit">{{profitTotal|number:'1.0-1'}}</th>
+                    <th class="text-end" *ngIf="!hideProfit">{{profitTotal|number:'1.0-1'}}</th>
                     <td></td>
                 </tr>
             </tbody>
@@ -194,7 +197,8 @@
                 </tr>
                 <tr *ngFor="let item of saleSummaryList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td class="text-center cursorPointer" (click)="printBill(item)"><u class="text-primary">{{item.invBillNo}}</u></td>
+                    <td class="text-center cursorPointer" (click)="printBill(item)"><u
+                            class="text-primary">{{item.invBillNo}}</u></td>
                     <td>{{item.invDate |date:'dd-MM-yyyy'}}</td>
                     <td>{{item.bookerName}}</td>
                     <td>{{item.paymentType}}</td>
@@ -217,7 +221,8 @@
                 </tr>
                 <tr *ngFor="let item of saleRtnSummaryList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td class="text-center cursorPointer" (click)="printBill(item)"><u class="text-primary">{{item.invBillNo}}</u></td>
+                    <td class="text-center cursorPointer" (click)="printBill(item)"><u
+                            class="text-primary">{{item.invBillNo}}</u></td>
                     <td>{{item.invDate |date:'dd-MM-yyyy'}}</td>
                     <td>{{item.bookerName}}</td>
                     <td>{{item.paymentType}}</td>
@@ -245,6 +250,68 @@
                     <td></td>
 
 
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-logix" id="ledger">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Date</th>
+                    <th>Inv No</th>
+                    <th>Particular</th>
+                    <th>Remarks</th>
+                    <th>Debit</th>
+                    <th>Credit</th>
+                    <th>Balance</th>
+
+                </tr>
+
+
+            </thead>
+
+
+            <tbody>
+
+                <tr *ngFor="let item of ledgerDetailList index as index">
+                    <td class="text-center">{{index + 1}}</td>
+                    <td>{{item.invoiceDate |date:'dd-MM-yyyy'}}</td>
+
+                    <td class="text-center cursorPointer">
+                        <div class="d-flex flex-column">
+                            <span  (click)="printBill(item)"><u >{{item.invBillNo}}</u></span>
+                            <span>{{item.invoiceNo}}</span>
+                        </div>
+                    </td>
+                    <td>{{item.particular}}</td>
+                    <td>
+                        <div>
+                            <span>{{item.invoiceRemarks}}</span>
+                            <span class="d-flex flex-column">
+                                <div *ngFor="let row of item.billDetailList">
+                                    <div *ngIf="row.ProductID > 0">
+                                        <span>{{row.ProductTitle}}
+                                            <b>({{row.SalePrice}} x {{row.Quantity}} = {{row.SalePrice *
+                                                row.Quantity}})</b>
+                                        </span>
+                                    </div>
+                                    <div class="fw-bold" *ngIf="row.ProductID == 0 
+                                     && (row.ProductTitle != 'CGS' && row.ProductTitle != 'Sales Income')">
+                                        <span>{{row.ProductTitle}}
+                                            <b>({{row.Debit + row.Credit}})</b>
+                                        </span>
+                                    </div>
+
+
+                                </div>
+                            </span>
+                        </div>
+
+                    </td>
+                    <td class="text-end">{{item.debit |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.credit |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.balance |number:'1.0-0'}}</td>
                 </tr>
             </tbody>
         </table>

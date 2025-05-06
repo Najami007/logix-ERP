@@ -745,7 +745,7 @@ export class Sale1Component implements OnInit {
       if (this.global.SubscriptionExpired()) {
         Swal.fire({
           title: 'Alert!',
-          text: 'Subscription Expired Today',
+          text: 'Unable to Save, Subscription Expired Today',
           position: 'center',
           icon: 'warning',
           showCancelButton: false,

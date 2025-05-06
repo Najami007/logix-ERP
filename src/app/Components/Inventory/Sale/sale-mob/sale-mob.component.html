@@ -263,7 +263,7 @@
                                 number:'1.0-1'}}</b></h2>
                     </div>
 
-                    <mat-form-field appearance="outline" *ngIf="!global.disableSaleDate" class="w-100 matSmall">
+                    <mat-form-field appearance="outline" *ngIf="disableDate" class="w-100 matSmall">
                         <mat-label>Invoice Date</mat-label>
                         <input [(ngModel)]="invoiceDate"  readonly="true" matInput type="text" name="voucherDate"
                             [matDatepicker]="voucherDate">
