@@ -56,7 +56,10 @@ export class PurchaseReturnComponent implements OnInit {
     $('.searchProduct').trigger('focus');
     this.global.getProducts().subscribe((data: any) => { this.productList = data; });
     this.global.getBookerList().subscribe((data: any) => { this.BookerList = data; });
-    this.global.getWarehouseLocationList().subscribe((data: any) => { this.locationList = data; });
+    this.global.getWarehouseLocationList().subscribe((data: any) => {
+       this.locationList = data;
+       if(data.length > 0){this.locationID = data[0].locationID}
+     });
    
   }
 

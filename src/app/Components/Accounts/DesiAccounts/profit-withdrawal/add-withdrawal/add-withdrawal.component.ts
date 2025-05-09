@@ -25,7 +25,7 @@ export class AddWithdrawalComponent {
     setTimeout(() => {
       $('#supplier').trigger('focus');
     }, 500);
-
+    this.getCoaList();
     if(this.editData){
       this.invoiceNo = this.editData.invoiceNo;
       this.invoiceDate = new Date(this.editData.invoiceDate);
@@ -40,6 +40,7 @@ export class AddWithdrawalComponent {
       }, 200);
       this.btnType = 'Update';
     }
+    this.getCoaList();
   }
 
 
@@ -57,7 +58,7 @@ export class AddWithdrawalComponent {
   projectID = 0;
   paymentTypeList = [{value:'CPV',title:'Cash'},{value:'BPV',title:'Bank'},];
 
-  paymentType = '';
+  paymentType = 'CPV';
 
 
  
@@ -71,9 +72,9 @@ export class AddWithdrawalComponent {
     this.global.getCashBankCoa(this.paymentType).subscribe(
       (Response: any) => {
         this.coaList = Response;
-      //  if(Response != '' && Response != null){
-      //   this.coaID = Response[0].coaID;
-      //  }
+       if(Response.length > 0){
+        this.coaID = Response[0].coaID;
+       }
       },
       (Error) => {
       

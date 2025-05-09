@@ -100,7 +100,7 @@
                 <tbody>
                     <tr *ngFor="let item of tableData let i=index" >
                         <td class="text-center" >{{i+1}}</td>
-                        <td >{{item.invoiceDate | date:'yyyy-MM-dd'}}</td>
+                        <td >{{item.invoiceDate | date:'dd-MM-yyyyy'}}</td>
                         <td class="  cursorPointer text-primary " 
                         (click)="VoucherDetails(item)"><span class="border-bottom">{{item.invoiceNo}}</span></td>
                         <td>{{item.projectTitle}}</td>

@@ -16,6 +16,7 @@ import { ProductModalComponent } from '../SaleComFiles/product-modal/product-mod
 import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-mehtod.component';
 
 
+
 @Component({
   selector: 'app-garment-sale',
   templateUrl: './garment-sale.component.html',
@@ -873,11 +874,7 @@ export class GarmentSaleComponent implements OnInit {
       this.bankCash = this.netTotal;
     }
 
-    if (this.paymentType == 'Credit') {
-      this.cash = 0;
-      this.bankCoaID = 0;
-      this.bankCash = 0;
-    }
+ 
 
     if (this.paymentType !== 'Credit') {
       this.partyID = 0;
@@ -1293,13 +1290,21 @@ export class GarmentSaleComponent implements OnInit {
         this.msg.WarnNotify('Cash Amount is Not Valid')
       } else if (this.paymentType == 'Split' && this.bankCash <= 0) {
         this.msg.WarnNotify('Bank Amount is Not Valid')
+      }else if (this.paymentType == 'Credit' && ((this.cash + this.bankCash) > this.netTotal))  {
+        this.msg.WarnNotify('Enter Valid Amount')
       } else if ((this.bookerID == 0 || this.bookerID == undefined) && this.BookerFeature) {
         this.msg.WarnNotify('Select Booker')
       } else if (this.paymentType == 'Credit' && this.partyID == 0) {
         this.msg.WarnNotify('Select Customer');
       }else if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
         this.msg.WarnNotify('Enter Valid Amount')
-      } else {
+      }
+      else if (paymentType == 'Bank'  && this.bankCoaID == 0) {
+        this.msg.WarnNotify('Select Bank')
+      } 
+      else if ( paymentType == 'Credit' && this.bankCash > 0 && this.bankCoaID == 0 ) {
+        this.msg.WarnNotify('Select Bank')
+      }else {
 
 
 
@@ -1594,7 +1599,7 @@ export class GarmentSaleComponent implements OnInit {
 
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetOpenDaySale').subscribe(
       (Response: any) => {
-
+        console.log(Response);
         this.savedbillList = [];
         Response.forEach((e: any) => {
           if (e.invType == 'S') {
@@ -1646,5 +1651,24 @@ export class GarmentSaleComponent implements OnInit {
     })
   
   }
+
+
+  postSaleBill(item:any){
+    if(!item.postedStatus){
+      this.global.postSaleInvoice(item).subscribe(
+        (Response: any) => {
+          if (Response.msg == 'Posted Successfully') {
+            this.msg.SuccessNotify(Response.msg);
+            this.getSavedBill();
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+        }
+      );
+    }
+  
+  }
+
+
 
 }

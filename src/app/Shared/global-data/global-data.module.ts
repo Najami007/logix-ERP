@@ -286,6 +286,11 @@ export class GlobalDataModule implements OnInit {
   coverOfFeature = this.getFeature('CoverOf');
   DisableDateSale = this.getFeature('showDateSale');
   DisableDateAcc = this.getFeature('showDateAcc');
+  DefaultOrderType = this.getFeature('DefaultOrderType');
+  DisableDiscPwd = this.getFeature('DisableDiscPwd');
+  DisablePrintPwd = this.getFeature('DisablePrintPwd');
+  AutoTableSelect = this.getFeature('AutoTableSelect');
+
 
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
@@ -314,6 +319,11 @@ export class GlobalDataModule implements OnInit {
     this.coverOfFeature = this.getFeature('CoverOf');
     this.DisableDateSale = this.getFeature('DisableDateSale');
     this.DisableDateAcc = this.getFeature('DisableDateAcc');
+    this.DefaultOrderType = this.getFeature('DefaultOrderType');
+    this.DisableDiscPwd = this.getFeature('DisableDiscPwd');
+    this.DisablePrintPwd = this.getFeature('DisablePrintPwd');
+    this.AutoTableSelect = this.getFeature('AutoTableSelect');
+
   }
 
 
@@ -968,7 +978,8 @@ export class GlobalDataModule implements OnInit {
   /////////////////////////////fotmate date in year-month-day formate///////
   /////////////////////////////////////////////////////////////////////
 
-  dateFormater(date: Date, separator: any) {
+  dateFormater(date: any, separator: any) {
+    // new Date(date);
     var day: any = date.getDate();
     // add +1 to month because getMonth() returns month from 0 to 11
     var month: any = date.getMonth() + 1;
@@ -1619,6 +1630,28 @@ export class GlobalDataModule implements OnInit {
 
 
     })
+  }
+
+
+
+  public postSaleInvoice(item:any){
+   return this.http.post(environment.mainApi + this.inventoryLink + 'PostInvoiceManual', {
+      InvBillNo: item.invBillNo,
+      partyID:item.partyID,
+      ProjectID:1,
+      UserID: this.getUserID()
+    }).pipe(retry(3));
+    
+    
+    // .subscribe(
+    //   (Response: any) => {
+    //     if (Response.msg == 'Data Updated Successfully') {
+    //       this.msg.SuccessNotify(Response.msg);
+    //     } else {
+    //       this.msg.WarnNotify(Response.msg);
+    //     }
+    //   }
+    // )
   }
 
 

@@ -31,6 +31,10 @@
                     <td>{{myCounterName}}</td>
                 </tr>
                 <tr>
+                    <th>Customer</th>
+                    <td>{{myPartyName}}</td>
+                </tr>
+                <tr>
                     <th>Table</th>
                     <td>{{mytableNo}}</td>
                 </tr>
@@ -81,42 +85,55 @@
                 <tbody class="fw-bold">
                     <tr>
                         <td>Sub Total</td>
-                        <td>{{mySubTotal |number:'1.0-0'}}</td>
+                        <td>&nbsp;{{mySubTotal |number:'1.0-0'}}</td>
 
                     </tr>
                     <tr *ngIf="myOtherCharges > 0">
                         <td *ngIf="myOrderType == 'Dine In'">Service Charges</td>
                         <td *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</td>
                         <td *ngIf="myOrderType == 'Take Away'">Other Charges</td>
-                        <td>{{myOtherCharges|number:'1.0-0'}}</td>
+                        <td>&nbsp;{{myOtherCharges|number:'1.0-0'}}</td>
 
                     </tr>
                     <tr *ngIf="myDiscount > 0">
                         <td>Discount</td>
-                        <td>{{myDiscount|number:'1.0-0'}}</td>
+                        <td>&nbsp;{{myDiscount|number:'1.0-0'}}</td>
 
                     </tr>
 
                     <tr>
                         <td>Net Total</td>
-                        <td>{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-0'}}</td>
+                        <td>&nbsp;{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-0'}}</td>
 
                     </tr>
-                    <tr *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
+                    <tr *ngIf="(myPaymentType == 'Cash' || myPaymentType == 'Split' || myPaymentType == 'Credit') && myCash > 0">
                         <td>Cash</td>
-                        <td>{{myCash|number:'1.0-0'}}</td>
+                        <td>&nbsp;{{myCash|number:'1.0-0'}}</td>
 
                     </tr>
-                    <tr *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
+                    <tr *ngIf="(myPaymentType == 'Bank' || myPaymentType == 'Split' || myPaymentType == 'Credit') && myBank > 0  ">
                         <td>Bank</td>
-                        <td>{{myBank|number:'1.0-0'}}</td>
+                        <td>&nbsp;{{myBank|number:'1.0-0'}}</td>
 
                     </tr>
-                    <tr *ngIf="myChange > 0">
+                    <tr *ngIf="myChange !== 0">
                         <td>Change</td>
                         <td>{{myChange|number:'1.0-0'}}</td>
 
                     </tr>
+
+                    <tr  *ngIf="myPartyBalance !== 0" >
+                        <td class="fw-bold">prv Blnc</td>
+                        <td class="fw-bold" *ngIf="myChange > 0">&nbsp;{{myPartyBalance | number:'1.0-1'}}</td>
+                        <td class="fw-bold"*ngIf="myChange <= 0">&nbsp;{{myPartyBalance -  ( -1 * myChange) | number:'1.0-1'}}</td>
+
+                    </tr>
+                    <tr  *ngIf="myPartyBalance !== 0">
+                        <td class="fw-bold">Net Blnc</td>
+                        <td class="fw-bold">&nbsp;{{myPartyBalance | number:'1.0-1'}}</td>
+
+                    </tr>
+
 
                 </tbody>
             </table>

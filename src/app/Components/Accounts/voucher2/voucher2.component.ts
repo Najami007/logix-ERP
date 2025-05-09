@@ -221,11 +221,13 @@ export class Voucher2Component implements OnInit{
       this.msg.WarnNotify('Select COA Head')
     }else if(this.detailNarration == '' || this.detailNarration == undefined){
       this.msg.WarnNotify('Enter the Head Narration')
-    }else if(findValue != undefined){
-      if(findValue.COAID == this.COATitleID){
-        this.msg.WarnNotify('Title Already Exists!');
-      } 
-    }else if(this.DebitAmount > 0 && this.CreditAmount > 0 )
+    }
+    // else if(findValue != undefined){
+    //   if(findValue.COAID == this.COATitleID){
+    //     this.msg.WarnNotify('Title Already Exists!');
+    //   } 
+    // }
+    else if(this.DebitAmount > 0 && this.CreditAmount > 0 )
     {
 
       this.msg.WarnNotify('One Side must be Zero')

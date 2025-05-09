@@ -98,8 +98,11 @@ export class AddExpenseComponent implements OnInit {
       (Response: any) => {
         Response.forEach((e:any) => {
           this.refCoaList.push(e);
-        });
         
+        });
+        if(Response.length > 0){
+          this.coaID = this.refCoaList[0].coaID;
+         }
       }
     )
 
@@ -107,6 +110,7 @@ export class AddExpenseComponent implements OnInit {
       (Response: any) => {
         Response.forEach((e:any) => {
           this.refCoaList.push(e);
+          
         });
         
       }

@@ -34,6 +34,21 @@ import { AreaComponent } from './area/area.component';
 
 
 
+import { DateAdapter, MAT_DATE_LOCALE , MAT_DATE_FORMATS } from '@angular/material/core';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+
+export const MY_DATE_FORMAT  = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
+
 export const companyRoutes: Route[] = [
 
   {path:'cmpprof', component:CompanyProfileComponent,data: { title: 'Company Profile' }, canActivate:[AuthGuard] },
@@ -99,6 +114,11 @@ export const companyRoutes: Route[] = [
   ],
   exports: [
     RouterModule
+  ],
+  providers: [
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
   ]
+
 })
 export class CompanyModule { }

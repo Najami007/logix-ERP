@@ -55,12 +55,12 @@ export class RecipeComponent implements OnInit {
   cookingAriaID = 0;
   btnType = 'Save';
   recipeID = 0;
-  recipeTitle: any;
-  recipeImg: any;
-  salePrice: any;
-  costPrice: any;
+  recipeTitle: any = '';
+  recipeImg: any = '';
+  salePrice: any = '';
+  costPrice: any = '';
   recipeRefID = 0;
-  Description: any;
+  Description: any = '';
   PBarcode: any;
   productImage: any;
   recipeType = 'Dine In';
@@ -68,6 +68,8 @@ export class RecipeComponent implements OnInit {
   costTotal: number = 0;
   avgCostTotal: number = 0;
   projectID = this.global.InvProjectID;
+
+  recipeCode:any = '';
 
   totalQty: any = 0;
   productList: any = [];
@@ -86,6 +88,9 @@ export class RecipeComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetCookingAria').subscribe(
       (Response: any) => {
         this.cookingAreaList = Response;
+        if(Response.length>0){
+          this.cookingAriaID = Response[0].cookingAriaID;
+        }
       }
     )
   }
@@ -363,7 +368,10 @@ export class RecipeComponent implements OnInit {
           this.rowFocused -= 1
         } else {
           var clsName = cls + this.rowFocused;
+          e.preventDefault();
+          $(clsName).trigger('select');
           $(clsName).trigger('focus');
+        
         }
       }
     }
@@ -373,7 +381,10 @@ export class RecipeComponent implements OnInit {
     if (e.keyCode == 38) {
 
       if (this.rowFocused == 0) {
+        e.preventDefault();
+        $(".searchProduct").trigger('select');
         $(".searchProduct").trigger('focus');
+     
         this.rowFocused = 0;
 
       }
@@ -383,8 +394,10 @@ export class RecipeComponent implements OnInit {
         this.rowFocused -= 1;
 
         var clsName = cls + this.rowFocused;
+        e.preventDefault();
+        $(clsName).trigger('select');
         $(clsName).trigger('focus');
-
+       
 
       }
 
@@ -473,6 +486,8 @@ export class RecipeComponent implements OnInit {
 
         if (this.menuProdList.length >= 1) {
           this.rowFocused = 0;
+          e.preventDefault();
+          $('.qty0').trigger('select');
           $('.qty0').trigger('focus');
 
         }
@@ -616,20 +631,14 @@ export class RecipeComponent implements OnInit {
       this.msg.WarnNotify('Select Recipe Image')
     } else if (this.categoryID == 0 || this.categoryID == undefined) {
       this.msg.WarnNotify('Select Category');
-    } else if (this.cookingAriaID == 0 || this.cookingAriaID == undefined) {
-      this.msg.WarnNotify('Select Cooking area');
     } else if (this.costPrice > this.salePrice) {
       this.msg.WarnNotify('Receipe Cost is not Valid')
     } else if (this.recipeType == '' || this.recipeType == undefined) {
       this.msg.WarnNotify('Select Recipe Type');
-    } else if (this.cookingTime == '' || this.cookingTime == '0' || this.cookingTime == undefined) {
-      this.msg.WarnNotify('Enter Recipe Cooking Time')
     }
     else {
 
-      if (this.Description == '' || this.Description == undefined) {
-        this.Description = '-';
-      }
+   
 
 
       if (isValidFlag) {
@@ -637,14 +646,15 @@ export class RecipeComponent implements OnInit {
           this.app.startLoaderDark();
           this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertRecipe', {
             RecipeTitle: this.recipeTitle,
-            RecipeDescription: this.Description,
+            recipeCode:this.recipeCode || this.recipeTitle,
+            RecipeDescription: this.Description || '-',
             RecipeCostPrice: this.costPrice,
             RecipeSalePrice: this.salePrice,
             RecipeCatID: this.categoryID,
             ProjectID: this.projectID,
             RecipeImage: this.recipeImg,
             RecipeType: this.recipeType,
-            CookingTime: this.cookingTime,
+            CookingTime: this.cookingTime || 10,
             CookingAriaID: this.cookingAriaID,
             RecipeDetail: JSON.stringify(this.menuProdList),
 
@@ -670,12 +680,13 @@ export class RecipeComponent implements OnInit {
               this.http.post(environment.mainApi + this.global.restaurentLink + 'UpdateRecipe', {
                 RecipeID: this.recipeID,
                 RecipeTitle: this.recipeTitle,
-                RecipeDescription: this.Description,
+                recipeCode:this.recipeCode || this.recipeTitle,
+                RecipeDescription: this.Description || '-',
                 RecipeCostPrice: this.costPrice,
                 RecipeSalePrice: this.salePrice,
                 RecipeType: this.recipeType,
                 RecipeRefID: this.recipeRefID,
-                CookingTime: this.cookingTime,
+                CookingTime: this.cookingTime || 10,
                 CookingAriaID: this.cookingAriaID,
                 RecipeCatID: this.categoryID,
                 ProjectID: this.projectID,
@@ -740,11 +751,11 @@ export class RecipeComponent implements OnInit {
     this.Description = item.recipeDescription;
     this.cookingTime = item.cookingTime;
     this.cookingAriaID = item.cookingAriaID;
+    this.recipeCode = item.recipeCode;
     
 
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetSingleRecipeDetail?recipeid=' + item.recipeID).subscribe(
       (Response: any) => {
-
         this.menuProdList = [];
         Response.forEach((e: any) => {
           this.menuProdList.push({
@@ -764,7 +775,6 @@ export class RecipeComponent implements OnInit {
             discInP: 0,
             discInR: 0,
             lockedStatus: e.lockedStatus,
-
           })
         });
 

@@ -373,8 +373,11 @@
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-xl">
             <div class="modal-content">
 
+                <app-saved-bill (changePaymentEmitter)="changePayment($event)"
+                (printDuplicateEmitter)="printDuplicateBill($event)" (billDetailEmitter)="billDetails($event)"
+                (postBillEmitter)="postSaleBill($event)" [savedbillList]="savedbillList"></app-saved-bill>
 
-                <div>
+                <!-- <div>
                     <mat-tab-group>
                         <mat-tab label="Sale Return">
                             <div class="text-end p-2">
@@ -523,18 +526,18 @@
                     </div>
 
 
+
+                </div> -->
+
+
+
+
+
                     <!------------------------------ Design For Bill Pirnt  --------------------->
 
                     <app-sale-bill-print id="print-bill" class="hide"></app-sale-bill-print>
 
                     <!---------------------------------------------------------------------------------->
-
-                </div>
-
-
-
-
-
 
 
 

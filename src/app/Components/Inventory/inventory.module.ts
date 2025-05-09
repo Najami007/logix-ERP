@@ -98,7 +98,22 @@ import { StockTransferComponent } from './InvAdjustment/stock-transfer/stock-tra
 import { QRCodeModule  } from 'angularx-qrcode';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PaymentMehtodComponent } from './Sale/SaleComFiles/payment-mehtod/payment-mehtod.component';
+import { SavedBillComponent } from './Sale/SaleComFiles/saved-bill/saved-bill.component';
 
+import { DateAdapter, MAT_DATE_LOCALE , MAT_DATE_FORMATS } from '@angular/material/core';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+
+export const MY_DATE_FORMAT  = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 
 
@@ -260,6 +275,7 @@ export const inventoryRoutes: Route[] = [
     PurchaseOrderComponent,
     StockTransferComponent,
     PaymentMehtodComponent,
+    SavedBillComponent,
     
   
   
@@ -292,7 +308,10 @@ export const inventoryRoutes: Route[] = [
   exports: [
     RouterModule
   ],
-  providers: []
+  providers: [
+    // { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    // { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
+  ]
 
 })
 export class InventoryModule { }

@@ -19,7 +19,8 @@ mat-hint{
   
   .avatar-upload {
     position: relative;
-    max-width: 205px;
+    max-width: 130px;
+    max-height: 140px;
     margin: 0px 0px;
   }
   .avatar-upload .avatar-edit {
@@ -70,7 +71,7 @@ mat-hint{
   }
   .avatar-upload .avatar-del {
     position: absolute;
-    right: 30px;
+    right: 0px;
     z-index: 1;
     // top: 10px;
     bottom: 10px;

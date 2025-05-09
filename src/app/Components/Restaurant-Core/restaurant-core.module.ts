@@ -46,9 +46,25 @@ import { Sale1Component } from './Sales/sale1/sale1.component';
 import { RestSaleBillPrintComponent } from './Sales/SaleCommonComponent/rest-sale-bill-print/rest-sale-bill-print.component';
 import { SaleSavedBillComponent } from './Sales/SaleCommonComponent/sale-saved-bill/sale-saved-bill.component';
 import { TableSale2Component } from './Sales/table-sale2/table-sale2.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 
+
+import { DateAdapter, MAT_DATE_LOCALE , MAT_DATE_FORMATS } from '@angular/material/core';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+
+export const MY_DATE_FORMAT  = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 
 
@@ -126,6 +142,7 @@ export const restCore: Route[] = [
     Sale1Component,
     SaleSavedBillComponent,
     TableSale2Component,
+   
     
    
    
@@ -144,11 +161,17 @@ export const restCore: Route[] = [
     NgxMatSelectSearchModule,
     TextMaskModule,
     NgxMaterialTimepickerModule,
-    PipesModule
+    PipesModule,
+    NgSelectModule
 
   ],
   exports: [
     RouterModule,
-  ]
+  ],
+  providers: [
+      // { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+      // { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
+    ]
+  
 })
 export class RestaurantCoreModule { }

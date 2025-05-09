@@ -186,7 +186,7 @@ export class ProductComponent implements OnInit {
   DiscRupee: any = 0;
   gst: any;
   Et: any;
-  allowMinus: any = false;
+  allowMinus: any = true;
   barcodeType: any = 'Basic';
   Description: any;
   pctCode: any;
@@ -232,7 +232,7 @@ export class ProductComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.inventoryLink+'GetProductType').subscribe(
       (Response: any) => {
         this.ProductTypeList = Response;
-     
+        if(Response.length > 0){ this.prodTypeID = Response[0].productTypeID;}
       },
       (Error:any)=>{
         this.msg.WarnNotify(Error);
@@ -262,6 +262,9 @@ export class ProductComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.inventoryLink+'getrack').subscribe(
       (Response: any) => {
         this.RacksList = Response;
+        if(this.RacksList.length > 0){
+          this.rackID = this.RacksList[0].rackID;
+        }
       },
       (Error:any)=>{
         this.msg.WarnNotify(Error);
@@ -276,6 +279,9 @@ export class ProductComponent implements OnInit {
     this.http.get(environment.mainApi +this.global.inventoryLink+'GetBrand').subscribe(
       (Response: any) => {
         this.BrandList = Response;
+        if(this.BrandList.length > 0){
+          this.BrandID = this.BrandList[0].brandID;
+        }
       },
       (Error:any)=>{
         this.msg.WarnNotify(Error);
@@ -318,11 +324,6 @@ export class ProductComponent implements OnInit {
     }else if(this.ProductName == '' || this.ProductName == undefined){
       this.msg.WarnNotify('Enter Product Name')
     }
-    else if(!this.AutoFillProdNameFeature && (this.productNameOthLanguage == '' || this.productNameOthLanguage == undefined) ){
-      this.msg.WarnNotify('Enter Product Name In Other Language')
-    }else if( !this.AutoFillProdNameFeature && (this.productCode == '' || this.productCode == undefined)){
-      this.msg.WarnNotify('Enter Product Code')
-    }
     else if(this.prodBarcodeType == 'manual' && (this.Barcode == '' || this.Barcode == undefined)){
       this.msg.WarnNotify('Enter Barcode')
     }else if(this.BrandID == '' || this.BrandID == undefined){
@@ -335,36 +336,13 @@ export class ProductComponent implements OnInit {
       this.msg.WarnNotify('Enter Cost Price')
     } else if(this.SalePrice == '' || this.SalePrice <= 0 || this.SalePrice == undefined){
       this.msg.WarnNotify('Enter Sale Price')
-    }else if(this.DiscPercent == null || this.DiscPercent < 0 || this.DiscPercent == undefined){
-      this.msg.WarnNotify('Enter Discount In Percentage')
-    }else if(this.DiscRupee == null || this.DiscRupee < 0 || this.DiscRupee == undefined){
-      this.msg.WarnNotify('Enter Discount In Rupees')
-    }else if(this.minRol == null || this.minRol < 0 || this.minRol == undefined){
-      this.msg.WarnNotify('Enter Minimun Reorder Level')
-    }else if(this.maxRol == null || this.maxRol < 0 || this.maxRol == undefined){
-      this.msg.WarnNotify('Enter Maximum Reorder Level')
-    }else if(this.gst == null || this.gst < 0 || this.gst == undefined){
-      this.msg.WarnNotify('Enter General Sales Tax')
-    }else if(this.Et == null || this.Et < 0 || this.Et == undefined){
-      this.msg.WarnNotify('Enter Extra Tax')
-    }else if(this.pctCode == '' || this.pctCode == undefined){
-      this.msg.WarnNotify('Enter PCT Code')
-    }else if( this.allowMinus == undefined){
-      
-      this.msg.WarnNotify('Select Allow Minus True or False')
     }else if( this.barcodeType == undefined){
       this.msg.WarnNotify('Select Barcode Type')
     }else if(this.SalePrice < this.CostPrice){
       this.msg.WarnNotify('Sale Price Is less Than Cost Price')
     }
     else {
-       if(this.productImg == '' || this.productImg == undefined){
-        this.productImg = '-'
-      }
-
-      if(this.Description == '' || this.Description == undefined){
-        this.Description = '-';
-      }
+     
 
       if(this.prodBarcodeType == 'auto' && ( this.Barcode == '' || this.Barcode == undefined || this.Barcode == null)){
         this.Barcode = '-';
@@ -391,15 +369,15 @@ export class ProductComponent implements OnInit {
       SubCategoryID: this.SubCategoryID,
       BrandID: this.BrandID,
       RackID: this.rackID,
-      ProductTitle: this.ProductName,
-      ProductCode: this.AutoFillProdNameFeature ? this.ProductName : this.productCode,
-      ProductTitleOtherLang: this.AutoFillProdNameFeature ? this.ProductName : this.productNameOthLanguage,
-      ProductDescription: this.Description,
-      MinRol: this.minRol,
-      MaxRol: this.maxRol,
-      GST: this.gst,
-      ET: this.Et,
-      PCTCode: this.pctCode,
+      ProductTitle: this.ProductName ,
+      ProductCode:  this.productCode || this.ProductName ,
+      ProductTitleOtherLang: this.productNameOthLanguage || this.ProductName ,
+      ProductDescription: this.Description || '-',
+      MinRol: this.minRol || 1,
+      MaxRol: this.maxRol || 2,
+      GST: this.gst || 0,
+      ET: this.Et || 0,
+      PCTCode: this.pctCode || '-',
       AllowMinus: this.allowMinus,
       CostPrice: this.CostPrice,
       SalePrice: this.SalePrice,
@@ -408,7 +386,7 @@ export class ProductComponent implements OnInit {
       UomID: this.UOMID,
       Barcode: this.Barcode,
       BarcodeType: this.barcodeType,
-      ProductImage:this.productImg,
+      ProductImage:this.productImg || '-',
       ProductTypeID:this.prodTypeID,
 
 
@@ -426,6 +404,7 @@ export class ProductComponent implements OnInit {
         }
       },
       (error:any)=>{
+        console.log(error);
         this.msg.WarnNotify(error);
         this.app.stopLoaderDark();
       }
@@ -446,15 +425,15 @@ export class ProductComponent implements OnInit {
           SubCategoryID: this.SubCategoryID,
           BrandID: this.BrandID,
           RackID: this.rackID,
-          ProductTitle: this.ProductName,
-          ProductCode: this.AutoFillProdNameFeature ? this.ProductName : this.productCode,
-          ProductTitleOtherLang: this.AutoFillProdNameFeature ? this.ProductName : this.productNameOthLanguage,
-          ProductDescription: this.Description,
-          MinRol: this.minRol,
-          MaxRol: this.maxRol,
-          GST: this.gst,
-          ET: this.Et,
-          PCTCode: this.pctCode,
+          ProductTitle: this.ProductName ,
+          ProductCode:  this.productCode || this.ProductName ,
+          ProductTitleOtherLang: this.productNameOthLanguage || this.ProductName ,
+          ProductDescription: this.Description || '-',
+          MinRol: this.minRol || 1,
+          MaxRol: this.maxRol || 2,
+          GST: this.gst || 0,
+          ET: this.Et || 0,
+          PCTCode: this.pctCode || '-',
           AllowMinus: this.allowMinus,
           CostPrice: this.CostPrice,
           SalePrice: this.SalePrice,
@@ -463,8 +442,7 @@ export class ProductComponent implements OnInit {
           UomID: this.UOMID,
           Barcode: this.Barcode,
           BarcodeType: this.barcodeType,
-          PinCode: pin,
-          ProductImage:this.productImg,
+          ProductImage:this.productImg || '-',
           ProductTypeID:this.prodTypeID,
 
           UserID: this.global.getUserID()
@@ -579,6 +557,42 @@ export class ProductComponent implements OnInit {
 
    }
 
+   copyProd(row: any) {
+    this.SubCategoryID = 0;
+    this.CategoryID = row.categoryID;
+    this.getSubCategory();
+    this.SubCategoryID = row.subCategoryID;
+    this.ProductName = row.productTitle;
+    this.productNameOthLanguage = row.productTitleOtherLang;
+    this.productCode = row.productCode;
+    this.BrandID = row.brandID;
+    this.rackID = row.rackID;
+    this.UOMID = row.uomID;
+    this.CostPrice = row.costPrice;
+    this.SalePrice = row.salePrice;
+    this.DiscPercent = row.discPercentage;
+    this.DiscRupee = row.discRupees;
+    this.gst = row.gst;
+    this.Et = row.et;
+    this.pctCode = row.pctCode;
+    this.minRol = row.minRol;
+    this.maxRol = row.maxRol;
+    this.allowMinus = row.allowMinus;
+    this.barcodeType = row.barcodeType;
+    this.Description = row.productDescription;
+    
+    this.prodTypeID = row.productTypeID;
+    this.tabIndex = 0;
+
+    this.global.getProdImage( row.productID).subscribe(
+      (Response:any)=>{
+        this.productImg = Response[0].productImage;
+      }
+    )
+    
+
+
+   }
 
   deleteProd(row: any) { 
 

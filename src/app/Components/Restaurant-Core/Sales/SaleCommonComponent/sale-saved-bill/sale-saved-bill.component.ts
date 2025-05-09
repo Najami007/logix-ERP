@@ -44,7 +44,7 @@ export class SaleSavedBillComponent implements OnInit {
   getSavedBill() {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetOpenDaySale').subscribe(
       (Response: any) => {
-
+        console.log(Response);
         this.savedbillList = Response;
       }
     )

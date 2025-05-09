@@ -117,7 +117,6 @@ export class SaleBillPrintComponent implements OnInit {
     this.billPrintType = this.global.getBillPrintType();
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
       (Response: any) => {
-        console.log(Response);
         this.myPrintTableData = Response;
 
 

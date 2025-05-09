@@ -43,7 +43,7 @@ export class AddReceiptComponent implements OnInit {
       }, 200);
       this.btnType = 'Update';
     }
-    
+    this.getCoaList();
   }
 
 
@@ -62,7 +62,7 @@ export class AddReceiptComponent implements OnInit {
   projectID = 0;
   paymentTypeList = [{value:'CRV',title:'Cash'},{value:'BRV',title:'Bank'},];
 
-  paymentType = '';
+  paymentType = 'CRV';
 
 
   getSupplierBalance(){
@@ -92,9 +92,9 @@ export class AddReceiptComponent implements OnInit {
     this.global.getCashBankCoa(this.paymentType).subscribe(
       (Response: any) => {
         this.coaList = Response;
-      //  if(Response != '' || Response != null){
-      //   this.coaID = Response[0].coaID;
-      //  }
+       if(Response.length > 0){
+        this.coaID = Response[0].coaID;
+       }
       },
       (Error) => {
       

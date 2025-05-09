@@ -5,7 +5,6 @@ import { MainComponent } from './Components/Layout/main/main.component';
 import { HomeComponent } from './Components/home/home.component';
 
 
-
 export const routes: Route[]= [
   {path:'login', component:LoginComponent,data: { title: 'Login' }, },
   {
@@ -87,6 +86,9 @@ import('./Components/hrms/hrms.module').then((m)=>m.HRMSModule),
   exports: [
     
     RouterModule,
+   ],
+   providers:[
+
    ]
 })
 export class AppRoutingModule { }

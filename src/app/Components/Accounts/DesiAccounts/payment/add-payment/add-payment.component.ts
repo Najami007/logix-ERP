@@ -41,6 +41,8 @@ export class AddPaymentComponent {
       }, 200);
       this.btnType = 'Update';
     }
+
+    this.getCoaList();
   }
 
 
@@ -59,7 +61,7 @@ export class AddPaymentComponent {
   projectID = 0;
   paymentTypeList = [{value:'CPV',title:'Cash'},{value:'BPV',title:'Bank'},];
 
-  paymentType = '';
+  paymentType = 'CPV';
 
 
   getSupplierBalance(){
@@ -89,9 +91,9 @@ export class AddPaymentComponent {
     this.global.getCashBankCoa(this.paymentType).subscribe(
       (Response: any) => {
         this.coaList = Response;
-      //  if(Response != '' && Response != null){
-      //   this.coaID = Response[0].coaID;
-      //  }
+       if(Response.length > 0){
+        this.coaID = Response[0].coaID;
+       }
       },
       (Error) => {
       

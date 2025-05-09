@@ -16,6 +16,7 @@ import { dateFormat } from 'highcharts';
 import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/addparty.component'; import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bill-print.component';
 import { ProductModalComponent } from '../SaleComFiles/product-modal/product-modal.component';
+import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-mehtod.component';
 
 @Component({
   selector: 'app-garment-sale-return',
@@ -35,6 +36,8 @@ export class GarmentSaleReturnComponent implements OnInit {
   BankShortCutsFeature = this.global.BankShortCutsFeature;
   LessToCostFeature = this.global.LessToCostFeature;
   disableDate = this.global.DisableDateSale;
+  disableDiscPwd = this.global.DisableDiscPwd;
+  disablePrintPwd = this.global.DisablePrintPwd;
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
@@ -1427,7 +1430,6 @@ export class GarmentSaleReturnComponent implements OnInit {
           RestrictionCodeID: 5,
           Password: pin,
           UserID: this.global.getUserID()
-
         }).subscribe(
           (Response: any) => {
             if (Response.msg == 'Password Matched Successfully') {
@@ -1609,6 +1611,38 @@ export class GarmentSaleReturnComponent implements OnInit {
    
     
   }
+
+  postSaleBill(item:any){
+    if(!item.postedStatus){
+      this.global.postSaleInvoice(item).subscribe(
+        (Response: any) => {
+          if (Response.msg == 'Posted Successfully') {
+            this.msg.SuccessNotify(Response.msg);
+            this.getSavedBill();
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+        }
+      );
+    }
+  
+  }
+
+
+  changePayment(data:any){
+      $('#SavedBillModal').hide();
+      this.dialogue.open(PaymentMehtodComponent,{
+        width:'30%',
+        data:data
+      }).afterClosed().subscribe(val=>{
+        this.getSavedBill();
+        $('#SavedBillModal').show();
+      })
+    
+    }
+  
+
+
 
 
 

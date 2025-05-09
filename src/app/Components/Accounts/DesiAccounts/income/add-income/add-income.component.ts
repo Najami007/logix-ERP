@@ -78,6 +78,7 @@ export class AddIncomeComponent  implements OnInit {
       (Response: any) => {
      
         this.coaList = Response;
+       
       },
       (Error) => {
       
@@ -94,7 +95,9 @@ export class AddIncomeComponent  implements OnInit {
         Response.forEach((e:any) => {
           this.refCoaList.push(e);
         });
-        
+        if(Response.length > 0){
+          this.coaID = this.refCoaList[0].coaID;
+         }
       }
     )
 

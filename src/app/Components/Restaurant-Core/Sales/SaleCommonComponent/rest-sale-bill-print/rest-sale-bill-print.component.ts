@@ -105,6 +105,8 @@ export class RestSaleBillPrintComponent {
   myFbrResponse = '';
   myPOSFee = 0;
   myFbrInvoiceNo ='';
+  myPartyName = '';
+  myPartyBalance = 0;
 
 
 
@@ -114,6 +116,7 @@ export class RestSaleBillPrintComponent {
 
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + invNo).subscribe(
       (Response: any) => {
+        console.log(Response);
         this.myPrintData = Response;
         this.myInvoiceNo = Response[0].invBillNo;
         this.myInvDate = Response[0].invDate;
@@ -136,6 +139,8 @@ export class RestSaleBillPrintComponent {
         this.myGstValue = Response[0].gstValue;
         this.myFbrInvoiceNo = Response[0].fbrInvoiceNo;
         this.myFbrStatus = Response[0].fbrStatus;
+        this.myPartyName = Response[0].partyName;
+        this.myPartyBalance = Response[0].cusBalance;
 
 
         if (this.myPaymentType == 'Bank') {

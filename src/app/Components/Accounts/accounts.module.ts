@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import {RouterModule, Route} from '@angular/router';
+import { RouterModule, Route } from '@angular/router';
 import { COAComponent } from './coa/coa.component';
 import { VoucherComponent } from './voucher/voucher.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -63,41 +63,56 @@ import { VoucherPrintComponent } from './CommonComponent/voucher-print/voucher-p
 
 
 
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+
+export const MY_DATE_FORMAT = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
+
 
 
 export const accountRountes: Route[] = [
-  
-    {path:'dashboard', component:DashboardComponent,data: { title: 'Dashboard' },  canActivate:[AuthGuard]},
-    {path:'coa', component:COAComponent, data: { title: 'COA' }, canActivate:[AuthGuard]},
-    {path:'voucher', component:Voucher2Component,data: { title: 'Voucher' },canActivate:[AuthGuard]  },
-    {path:'bdgtng', component:BudgettingComponent,data: { title: 'Budgeting' }, canActivate:[AuthGuard] },
-    {path:'setting', component:SettingsComponent,data: { title: 'Setting' }, canActivate:[AuthGuard] },
-    {path:'dtran', component:DayTransactionComponent,data: { title: 'Day Transaction' }, canActivate:[AuthGuard] },
-    {path:'spvn', component:VoucherSupervisionComponent,data: { title: 'Supervision' },canActivate:[AuthGuard]  },
-    {path:'ldgrrpt', component:LedgerComponent,data: { title: 'Ledger' }, canActivate:[AuthGuard] },
-    {path:'bdgrpt', component:BudgetReportComponent,data: { title: 'Budget Rpt' }, canActivate:[AuthGuard] },
-    {path:'bsrpt', component:BalanceSheetComponent,data: { title: 'Balance Sheet' }, canActivate:[AuthGuard] },
-    {path:'cbrpt', component:CashbookComponent,data: { title: 'Cash Book' }, canActivate:[AuthGuard] },
-    {path:'plrpt', component:PLStatComponent,data: { title: 'Profit & Loss' }, canActivate:[AuthGuard] },
-    {path:'tbrpt', component:TrialBalanceComponent,data: { title: 'Trial Balance' }, canActivate:[AuthGuard] },
 
-    /// Desi Accounts Imports
-    {path: 'pmt',component: PaymentComponent,data: { title: 'Payment' },canActivate: [AuthGuard]},
-    {path: 'exp',component: ExpenseComponent,data: { title: 'Expense' }, canActivate: [AuthGuard]}, 
-    {path: 'rcpt',component: ReceiptComponent,data: { title: 'Receipt' },canActivate: [AuthGuard]},
-    {path: 'inc',component: IncomeComponent,data: { title: 'Income' }, canActivate: [AuthGuard]},
-    {path: 'bdw',component: BankDepositAndWithdrawComponent,data: { title: 'Bank Deposit' },canActivate: [AuthGuard]},
-    {path: 'adbnk',component: AddBankComponent,data: { title: 'Bank' },canActivate: [AuthGuard]},
-    {path: 'acoa',component: AddCoaComponent,data: { title: 'Add COA' },canActivate: [AuthGuard]},
-    {path: 'pftwd',component: ProfitWithdrawalComponent,data: { title: 'Profit Withdrawal' },canActivate: [AuthGuard]},  
-    {path: 'opc',component: OpeningCashComponent,data: { title: 'Opening Balance' },canActivate: [AuthGuard]},
-    {path: 'accadj', component: AccountAdjustmentComponent,data: { title: 'Account Adjustment' },canActivate: [AuthGuard]},     
-    {path: 'pob',component: PartyOpeningBalanceComponent,data: { title: 'Party Opening Balance' },canActivate: [AuthGuard]},    
-  
-    {path:'**', redirectTo:'home',pathMatch:'full'}
-  
- 
-  ];
+  { path: 'dashboard', component: DashboardComponent, data: { title: 'Dashboard' }, canActivate: [AuthGuard] },
+  { path: 'coa', component: COAComponent, data: { title: 'COA' }, canActivate: [AuthGuard] },
+  { path: 'voucher', component: Voucher2Component, data: { title: 'Voucher' }, canActivate: [AuthGuard] },
+  { path: 'bdgtng', component: BudgettingComponent, data: { title: 'Budgeting' }, canActivate: [AuthGuard] },
+  { path: 'setting', component: SettingsComponent, data: { title: 'Setting' }, canActivate: [AuthGuard] },
+  { path: 'dtran', component: DayTransactionComponent, data: { title: 'Day Transaction' }, canActivate: [AuthGuard] },
+  { path: 'spvn', component: VoucherSupervisionComponent, data: { title: 'Supervision' }, canActivate: [AuthGuard] },
+  { path: 'ldgrrpt', component: LedgerComponent, data: { title: 'Ledger' }, canActivate: [AuthGuard] },
+  { path: 'bdgrpt', component: BudgetReportComponent, data: { title: 'Budget Rpt' }, canActivate: [AuthGuard] },
+  { path: 'bsrpt', component: BalanceSheetComponent, data: { title: 'Balance Sheet' }, canActivate: [AuthGuard] },
+  { path: 'cbrpt', component: CashbookComponent, data: { title: 'Cash Book' }, canActivate: [AuthGuard] },
+  { path: 'plrpt', component: PLStatComponent, data: { title: 'Profit & Loss' }, canActivate: [AuthGuard] },
+  { path: 'tbrpt', component: TrialBalanceComponent, data: { title: 'Trial Balance' }, canActivate: [AuthGuard] },
+
+  /// Desi Accounts Imports
+  { path: 'pmt', component: PaymentComponent, data: { title: 'Payment' }, canActivate: [AuthGuard] },
+  { path: 'exp', component: ExpenseComponent, data: { title: 'Expense' }, canActivate: [AuthGuard] },
+  { path: 'rcpt', component: ReceiptComponent, data: { title: 'Receipt' }, canActivate: [AuthGuard] },
+  { path: 'inc', component: IncomeComponent, data: { title: 'Income' }, canActivate: [AuthGuard] },
+  { path: 'bdw', component: BankDepositAndWithdrawComponent, data: { title: 'Bank Deposit' }, canActivate: [AuthGuard] },
+  { path: 'adbnk', component: AddBankComponent, data: { title: 'Bank' }, canActivate: [AuthGuard] },
+  { path: 'acoa', component: AddCoaComponent, data: { title: 'Add COA' }, canActivate: [AuthGuard] },
+  { path: 'pftwd', component: ProfitWithdrawalComponent, data: { title: 'Profit Withdrawal' }, canActivate: [AuthGuard] },
+  { path: 'opc', component: OpeningCashComponent, data: { title: 'Opening Balance' }, canActivate: [AuthGuard] },
+  { path: 'accadj', component: AccountAdjustmentComponent, data: { title: 'Account Adjustment' }, canActivate: [AuthGuard] },
+  { path: 'pob', component: PartyOpeningBalanceComponent, data: { title: 'Party Opening Balance' }, canActivate: [AuthGuard] },
+
+  { path: '**', redirectTo: 'home', pathMatch: 'full' }
+
+
+];
 
 @NgModule({
   declarations: [
@@ -139,12 +154,12 @@ export const accountRountes: Route[] = [
     COAComponent,
     AddBalanceComponent,
     VoucherPrintComponent
-   
-    
-    
-  
 
-    
+
+
+
+
+
   ],
   imports: [
     CommonModule,
@@ -153,23 +168,26 @@ export const accountRountes: Route[] = [
     PipesModule,
     FormsModule,
     ReactiveFormsModule,
- 
+
     //Ng2SearchPipeModule,
     MatFormFieldModule,
     ChartModule,
     NgxMatSelectSearchModule
-    
-    
-    
+
+
+
   ],
-  exports:[
+  exports: [
     RouterModule,
-  
-  
-    
-    
+
+
+
+
   ],
-  providers: [{ provide: HIGHCHARTS_MODULES, useFactory: () => [  ] }, NotificationService],
+  providers: [
+    // { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    // { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
+    { provide: HIGHCHARTS_MODULES, useFactory: () => [] }, NotificationService],
 
 })
 export class AccountsModule { }
