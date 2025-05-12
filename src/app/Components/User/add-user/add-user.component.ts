@@ -100,7 +100,7 @@ export class AddUserComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.userLink+'getuser').subscribe(
       (Response)=>{
         this.userList = Response;
-        // console.log(Response);
+          // console.log(Response);
         
         this.app.stopLoaderDark();
 
@@ -224,7 +224,7 @@ export class AddUserComponent implements OnInit {
 
   editUser(row:any){
     this.btnType = 'Update';
-    this.userID = row.userID;
+    this.userID = row.userID; 
     this.UserName = row.userName;
     this.loginName = row.loginName;
     this.mobileNo = row.mobileNo;
@@ -395,6 +395,7 @@ export class AddUserComponent implements OnInit {
     this.confirmPassword = '';
     this.btnType = 'Save';
     this.userEmail = '';
+    this.projectID = 0;
   }
 
 }

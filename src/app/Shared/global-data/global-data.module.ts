@@ -62,10 +62,10 @@ export class GlobalDataModule implements OnInit {
 
 
   ResCardGst = 5; // this.getCardGst();
-  ResCashGst =  16 ; // this.getCashGst();
+  ResCashGst = 16; // this.getCashGst();
   POSFee = this.getPosFee();
-  InvProjectID = this.getProjectID();
-  parkProjectID = 1;
+  InvProjectID = 1;
+  parkProjectID = 6;
 
   ////////////////////// API Module Start Points//////////////////
 
@@ -164,6 +164,7 @@ export class GlobalDataModule implements OnInit {
           _reqSCID: Value._reqSCID,
           _reqCrG: Value._reqCrG,
           _reqCsG: Value._reqCsG,
+          _reqPrjID: Value._reqPrjID,
         };
         var flt: any = [];
         ///Encripting The Features List
@@ -290,7 +291,7 @@ export class GlobalDataModule implements OnInit {
   DisableDiscPwd = this.getFeature('DisableDiscPwd');
   DisablePrintPwd = this.getFeature('DisablePrintPwd');
   AutoTableSelect = this.getFeature('AutoTableSelect');
-
+  postSale = this.getFeature('postSale');
 
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
@@ -323,6 +324,7 @@ export class GlobalDataModule implements OnInit {
     this.DisableDiscPwd = this.getFeature('DisableDiscPwd');
     this.DisablePrintPwd = this.getFeature('DisablePrintPwd');
     this.AutoTableSelect = this.getFeature('AutoTableSelect');
+    this.postSale = this.getFeature('postSale');
 
   }
 
@@ -395,10 +397,7 @@ export class GlobalDataModule implements OnInit {
   }
 
 
-  getProjectID() {
-    var val = 1;
-    return val;
-  }
+
 
 
   getCardGst() {
@@ -408,7 +407,7 @@ export class GlobalDataModule implements OnInit {
 
   getCashGst() {
     var credentials = JSON.parse(localStorage.getItem('curVal') || "0");
- 
+
     return credentials != 0 ? parseInt(atob(atob(credentials.value._reqCsG))) : 0;
   }
 
@@ -435,6 +434,14 @@ export class GlobalDataModule implements OnInit {
 
   }
 
+  getProjectID() {
+    var credentials = JSON.parse(localStorage.getItem('curVal') || '0');
+
+    return credentials != 0 ? parseInt(atob(atob(credentials.value._reqPrjID))) : 0;
+
+    // var val = 1;
+    // return val;
+  }
 
   ////////////////////// will provide the logged in user Name
   getUserName() {
@@ -506,10 +513,10 @@ export class GlobalDataModule implements OnInit {
 
   curDate = new Date();
   SubscriptionExpired() {
-                  ///// yyyy-MM-dd /////////////
-    var ExpiryDate = '2025-06-10';
+    ///// yyyy-MM-dd /////////////
+    var ExpiryDate = '2030-06-10';
     var status = (this.dateFormater(this.curDate, '-') >= ExpiryDate);
-    console.log(status,this.curDate,ExpiryDate);
+    console.log(status, this.curDate, ExpiryDate);
     return status;
 
 
@@ -1167,11 +1174,11 @@ export class GlobalDataModule implements OnInit {
 
 
     if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37
-       || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48
-        || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54
-         || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 
-         || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104
-          || e.keyCode == 105|| e.keyCode == 109|| e.keyCode == 173|| e.keyCode == 189)) {
+      || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48
+      || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54
+      || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98
+      || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104
+      || e.keyCode == 105 || e.keyCode == 109 || e.keyCode == 173 || e.keyCode == 189)) {
       // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
     }
     else {
@@ -1634,15 +1641,15 @@ export class GlobalDataModule implements OnInit {
 
 
 
-  public postSaleInvoice(item:any){
-   return this.http.post(environment.mainApi + this.inventoryLink + 'PostInvoiceManual', {
+  public postSaleInvoice(item: any) {
+    return this.http.post(environment.mainApi + this.inventoryLink + 'PostInvoiceManual', {
       InvBillNo: item.invBillNo,
-      partyID:item.partyID,
-      ProjectID:1,
+      partyID: item.partyID,
+      ProjectID: this.getProjectID(),
       UserID: this.getUserID()
     }).pipe(retry(3));
-    
-    
+
+
     // .subscribe(
     //   (Response: any) => {
     //     if (Response.msg == 'Data Updated Successfully') {

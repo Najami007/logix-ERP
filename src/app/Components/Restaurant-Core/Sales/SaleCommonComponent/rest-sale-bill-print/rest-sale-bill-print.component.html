@@ -30,7 +30,7 @@
                     <th>Cashier</th>
                     <td>{{myCounterName}}</td>
                 </tr>
-                <tr>
+                <tr *ngIf="customerFeature && myPartyName">
                     <th>Customer</th>
                     <td>{{myPartyName}}</td>
                 </tr>

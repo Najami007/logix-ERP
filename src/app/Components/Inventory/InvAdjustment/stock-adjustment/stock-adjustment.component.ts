@@ -57,7 +57,7 @@ export class StockAdjustmentComponent implements OnInit {
 
   sortType = 'desc';
 
-  projectID = this.global.InvProjectID;
+  projectID = this.global.getProjectID();
   Date:Date = new Date();
   holdInvNo = '-';
   holdBtnType = 'Hold';

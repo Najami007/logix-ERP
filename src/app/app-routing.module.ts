@@ -81,7 +81,9 @@ import('./Components/hrms/hrms.module').then((m)=>m.HRMSModule),
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    
+    RouterModule.forRoot(routes)],
   
   exports: [
     

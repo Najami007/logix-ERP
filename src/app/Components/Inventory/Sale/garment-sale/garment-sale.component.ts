@@ -39,6 +39,7 @@ export class GarmentSaleComponent implements OnInit {
   changePaymentMehtodFeature = this.global.changePaymentMehtodFeature;
   onlySaveBillFeature = this.global.onlySaveBillFeature;
   disableDate = this.global.DisableDateSale;
+    postBillFeature = this.global.postSale;
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
@@ -144,7 +145,7 @@ export class GarmentSaleComponent implements OnInit {
   invoiceDate = new Date();
   partyID = 0;
   productList: any = [];
-  projectID = this.global.InvProjectID;
+  projectID = this.global.getProjectID();
 
   tableDataList: any = [];
   tempTableDataList: any = [];

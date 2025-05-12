@@ -32,6 +32,13 @@ export class Sale2Component implements OnInit {
   RestSimpleSaleFeature = this.global.RestSimpleSaleFeature;
   BankShortCutsFeature = this.global.BankShortCutsFeature;
   coverOfFeature = this.global.coverOfFeature;
+  disableDate = this.global.disableSaleDate;
+  customerFeature = this.global.customerFeature;
+  defaultOrderTypeFeature = this.global.DefaultOrderType;
+  disableDiscPwd = this.global.DisableDiscPwd;
+  disablePrintPwd = this.global.DisablePrintPwd;
+  autoTableSelectFeature = this.global.AutoTableSelect;
+  postBillFeature = this.global.postSale;
 
   appVisibility() {
     if (document.hidden) {
@@ -57,13 +64,13 @@ export class Sale2Component implements OnInit {
   mobileMask = this.global.mobileMask;
 
 
-  
+
   onWheel(event: WheelEvent): void {
     const container = event.currentTarget as HTMLElement;
     container.scrollLeft += event.deltaY;
     event.preventDefault(); // Prevent vertical scrolling
   }
-  
+
   constructor(
     private http: HttpClient,
     private msg: NotificationService,
@@ -141,6 +148,7 @@ export class Sale2Component implements OnInit {
     this.getBankList();
     this.getSavedBill();
     this.getBookerList();
+    this.getPartyList();
 
   }
 
@@ -166,7 +174,7 @@ export class Sale2Component implements OnInit {
   coverOf: any = 0;
   billRemarks = '';
   BookerID = 0;
-  ProjectID = this.global.InvProjectID;
+  ProjectID = this.global.getProjectID();
   PartyID = 0;
   invoiceDate: Date = new Date();
   categoryID: any = 0;
@@ -203,7 +211,7 @@ export class Sale2Component implements OnInit {
 
   tableList: any = [];
   bookerList: any = [];
-
+  partyList: any = [];
 
   //////For Temp Use///////////
   discPer = 0;
@@ -214,6 +222,21 @@ export class Sale2Component implements OnInit {
     this.global.getBookerList().subscribe((data: any) => {
       this.bookerList = data;
     });
+  }
+
+
+  getPartyList() {
+    this.global.getCustomerList().subscribe((data: any) => { this.partyList = data; });
+  }
+
+  partySelect() {
+    if (this.PartyID > 0) {
+      this.paymentType = 'Credit';
+
+    } else {
+      this.paymentType = 'Cash';
+    }
+    this.getTotal();
   }
 
   onPriceChange(type: any) {
@@ -277,8 +300,8 @@ export class Sale2Component implements OnInit {
       this.msg.WarnNotify('Select Waiter')
     } else {
 
-      
-      if(!this.coverOfFeature){
+
+      if (!this.coverOfFeature) {
         this.coverOf = 0;
       }
 
@@ -305,20 +328,20 @@ export class Sale2Component implements OnInit {
 
   }
 
-  
+
   tmpProdIndex = 0;
   editQty(item: any, index: any) {
-   if(item.entryType == 'New'){
-    this.tempProdRow = item;
-    this.tmpTotalPrice = item.salePrice * item.quantity;
-    this.tmpProdIndex = index;
-    this.global.openBootstrapModal('#qtyModal',true);
-    setTimeout(() => {
-      $('.prodQty').trigger('focus');
-    $('.prodQty').trigger('select');
-    }, 500);
+    if (item.entryType == 'New') {
+      this.tempProdRow = item;
+      this.tmpTotalPrice = item.salePrice * item.quantity;
+      this.tmpProdIndex = index;
+      this.global.openBootstrapModal('#qtyModal', true);
+      setTimeout(() => {
+        $('.prodQty').trigger('focus');
+        $('.prodQty').trigger('select');
+      }, 500);
 
-   }
+    }
 
 
     // var qty =  this.tableData[index].quantity;
@@ -332,7 +355,7 @@ export class Sale2Component implements OnInit {
     // }
   }
 
-  changeQty(qty:any){
+  changeQty(qty: any) {
 
     this.tableData[this.tmpProdIndex].quantity = qty;
 
@@ -445,8 +468,8 @@ export class Sale2Component implements OnInit {
     } else {
       var index = this.tableData.findIndex((e: any) => e.recipeID == item.recipeID && e.entryType == 'New');
 
-     
-      if (index >= 0 ) {
+
+      if (index >= 0) {
         this.tableData[index].quantity += 1;
       } else {
         this.tableData.push({
@@ -515,7 +538,7 @@ export class Sale2Component implements OnInit {
       this.gstValue = this.global.ResCardGst;
       this.GstAmount = (this.subTotal * this.gstValue) / 100;
     }
-    if(this.gstFeature && this.paymentType == 'Complimentary'){
+    if (this.gstFeature && this.paymentType == 'Complimentary') {
       this.gstValue = 0;
       this.GstAmount = 0;
     }
@@ -523,7 +546,7 @@ export class Sale2Component implements OnInit {
 
 
 
-  save(type: any) {
+  save(type: any,printFlag?:any) {
 
 
 
@@ -542,6 +565,10 @@ export class Sale2Component implements OnInit {
       this.msg.WarnNotify('Enter Valid Amount')
     } else if (type == 'sale' && this.paymentType == 'Bank' && (this.bankCash < (this.netTotal + this.GstAmount))) {
       this.msg.WarnNotify('Enter Valid Amount')
+    } else if (type == 'sale' && this.paymentType == 'Credit' && (this.bankCash + this.cash > (this.netTotal + this.GstAmount))) {
+      this.msg.WarnNotify('Enter Valid Amount')
+    } else if (type == 'sale' && this.paymentType == 'Credit' && this.PartyID == 0) {
+      this.msg.WarnNotify('Select Customer')
     } else if (type == 'sale' && (this.customerName == '' && this.customerMobileno != '')) {
       this.msg.WarnNotify('Enter Customer Name')
     } else if (type == 'sale' && this.paymentType == 'Split' && this.cash <= 0) {
@@ -602,13 +629,17 @@ export class Sale2Component implements OnInit {
           (Response: any) => {
 
             if (Response.msg == 'Data Saved Successfully') {
-              this.tmpInvBillNO = Response.invNo;
+              // this.tmpInvBillNO = Response.invNo;
+                if(printFlag){
+              this.billPrint.HOldandPrint(this.orderType, Response.invNo);
+              }
               this.printKOT(Response.invNo);   /////// Will Print KOT ////////////////
               this.msg.SuccessNotify(Response.msg);
               this.getTable()
               this.getRecipeList({ recipeCatID: 0, prodFlag: false });
               this.reset();
               this.getHoldBills();
+            
 
             } else {
               this.msg.WarnNotify(Response.msg);
@@ -650,6 +681,9 @@ export class Sale2Component implements OnInit {
           (Response: any) => {
 
             if (Response.msg == 'Data Updated Successfully') {
+                if(printFlag){
+              this.billPrint.HOldandPrint(this.orderType, Response.invNo);
+              }
               this.printKOT(Response.invNo); /////// Will Print KOT ////////////////
               this.msg.SuccessNotify(Response.msg);
               this.getTable()
@@ -1098,7 +1132,6 @@ export class Sale2Component implements OnInit {
     this.coverOf = 0;
     this.billRemarks = '';
     this.BookerID = 0;
-    this.ProjectID = this.global.InvProjectID;
     this.PartyID = 0;
     this.invoiceDate = new Date();
     this.orderType = this.global.getRestOrderType() == '' ? '' : this.global.getRestOrderType();;
@@ -1176,44 +1209,15 @@ export class Sale2Component implements OnInit {
   printAfterSave(invNo: any) {
 
     this.billPrint.printBill(invNo);
-    // setTimeout(() => {
-    //   this.global.printData('#print-bill');
-    // }, 200);
-
-
   }
 
   HOldandPrint(type: any) {
-
-    this.myOrderType = this.orderType;
     if (this.tableData != '') {
 
       if (this.invBillNo != '') {
-        this.myInvoiceNo = this.invBillNo;
-        this.save('rehold');
-
-        setTimeout(() => {
-          this.billPrint.HOldandPrint(this.orderType, this.myInvoiceNo);
-        }, 1000);
-
-        // setTimeout(() => {
-        //   this.global.printData('#print-bill');
-        // }, 200);
-
+        this.save('rehold',true);
       } else {
-
-        this.save('hold');
-        setTimeout(() => {
-          this.myInvoiceNo = this.tmpInvBillNO;
-          if (this.tmpInvBillNO != '') {
-            this.billPrint.HOldandPrint(this.orderType, this.tmpInvBillNO);
-
-            // setTimeout(() => {
-            //   this.global.printData('#print-bill');
-            // }, 200);
-            this.tmpInvBillNO = '';
-          }
-        }, 2000);
+        this.save('hold',true);
       }
       this.myDuplicateFlag = false;
 
@@ -1437,6 +1441,24 @@ export class Sale2Component implements OnInit {
       }
     )
   }
+
+
+  postSaleBill(item: any) {
+    if (!item.postedStatus) {
+      this.global.postSaleInvoice(item).subscribe(
+        (Response: any) => {
+          if (Response.msg == 'Posted Successfully') {
+            this.msg.SuccessNotify(Response.msg);
+            this.getSavedBill();
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+        }
+      );
+    }
+
+  }
+
 
 
 }

@@ -64,7 +64,7 @@ export class PurchaseMobShopComponent implements OnInit {
 
   hideTotalFlag = true;
 
-  projectID = this.global.InvProjectID;
+  projectID = this.global.getProjectID();
   holdBtnType: any = 'Hold';
   tabIndex: any;
   Date: Date = new Date()

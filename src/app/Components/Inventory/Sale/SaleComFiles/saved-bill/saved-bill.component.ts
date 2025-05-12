@@ -41,6 +41,7 @@ export class SavedBillComponent {
   changePaymentMehtodFeature = this.global.changePaymentMehtodFeature;
   onlySaveBillFeature = this.global.onlySaveBillFeature;
   disableDate = this.global.DisableDateSale;
+   postBillFeature = this.global.postSale;
 
 
 

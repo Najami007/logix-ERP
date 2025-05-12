@@ -74,6 +74,7 @@
                 <tr>
                     <th>User Name</th>
                     <th>Login Name</th>
+                      <th>Project</th>
                     <th>Role</th>
                     <th>Mobile</th>
                     <th *ngIf="crudList.u">Edit</th>
@@ -87,6 +88,7 @@
                 <tr *ngFor="let item of userList | filter:txtSearch">
                     <td>{{item.userName}}</td>
                     <td>{{item.loginName}}</td>
+                     <td>{{item.projectTitle}}</td>
                     <td>{{item.roleTitle}}</td>
                     <td>{{item.mobileNo}}</td>
                     <td *ngIf="crudList.u"><button mat-mini-fab class="bg-success h30px w30px"  (click)="editUser(item)"><mat-icon  >edit</mat-icon></button></td>

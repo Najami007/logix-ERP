@@ -69,7 +69,7 @@ export class ParkSaleComponent {
     
   }
 
-  projectID = this.global.parkProjectID;
+  projectID = this.global.getProjectID();
   tempTicketNo:number = 0;
   billType:any = 'Sale';
   billSearch:any;

@@ -77,7 +77,7 @@ export class OpeningStockComponent implements OnInit {
   salePriceTotal = 0;
   CostTotal = 0;
 
-  projectID = this.global.InvProjectID;
+  projectID = this.global.getProjectID();
   bookerID = 1;
 
 

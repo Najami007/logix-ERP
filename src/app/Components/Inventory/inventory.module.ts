@@ -102,6 +102,7 @@ import { SavedBillComponent } from './Sale/SaleComFiles/saved-bill/saved-bill.co
 
 import { DateAdapter, MAT_DATE_LOCALE , MAT_DATE_FORMATS } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { SharedComponentsModule } from '../shared-components/shared-components.module';
 
 export const MY_DATE_FORMAT  = {
   parse: {
@@ -300,7 +301,8 @@ export const inventoryRoutes: Route[] = [
     NgxBarcode6Module,
     PipesModule,
     QRCodeModule,
-    NgSelectModule
+    NgSelectModule,
+    SharedComponentsModule
     
 
     

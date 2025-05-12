@@ -165,33 +165,33 @@ export class ProductComponent implements OnInit {
   btnType = 'Save';
   autoEmpty = false;
   searchProduct:any = '';
-  CategoriesList: any;
-  SubCategoriesList: any;
-  ProductID: any;
-  CategoryID: any;
-  SubCategoryID: any;
-  ProductName: any;
+  CategoriesList: any = [];
+  SubCategoriesList: any = [];
+  ProductID: any = 0;
+  CategoryID: any = 0;
+  SubCategoryID: any = 0;
+  ProductName: any = '';
   prodBarcodeType = 'auto';
-  Barcode: any;
-  CostPrice: any;
-  SalePrice: any;
-  productType: any;
-  productImg:any;
+  Barcode: any = '';
+  CostPrice: any = '';
+  SalePrice: any = '';
+  productType: any = 0;
+  productImg:any = '';
 
-  BrandID: any;
-  rackID: any;
-  minRol: any;
-  maxRol: any;
+  BrandID: any = 0;
+  rackID: any = 0;
+  minRol: any = '';
+  maxRol: any = '';
   DiscPercent: any = 0;
   DiscRupee: any = 0;
-  gst: any;
-  Et: any;
+  gst: any = '';
+  Et: any = '';
   allowMinus: any = true;
   barcodeType: any = 'Basic';
-  Description: any;
-  pctCode: any;
-  UOMID: any;
-  prodTypeID:any;
+  Description: any = '';
+  pctCode: any = '';
+  UOMID: any = 0;
+  prodTypeID:any = 0;
 
   discFilterID = 0;
   DiscFilterList:any = [
@@ -201,8 +201,8 @@ export class ProductComponent implements OnInit {
   ]
 
 
-  productNameOthLanguage: any;
-  productCode: any;
+  productNameOthLanguage: any = '';
+  productCode: any = '';
   BrandList: any = [];
   RacksList: any = [];
   ProductTypeList:any = [];
@@ -444,7 +444,7 @@ export class ProductComponent implements OnInit {
           BarcodeType: this.barcodeType,
           ProductImage:this.productImg || '-',
           ProductTypeID:this.prodTypeID,
-
+          PinCode:pin,
           UserID: this.global.getUserID()
         }).subscribe(
           (Response: any) => {
@@ -464,6 +464,7 @@ export class ProductComponent implements OnInit {
             this.openFlag = false;
           },
           (error:any)=>{
+             console.log(error);
             this.msg.WarnNotify(error);
             this.app.stopLoaderDark();
           }

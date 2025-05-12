@@ -1,67 +1,5 @@
 <div class="container-fluid body" ondblclick="return false;">
 
-    <div class="col-lg-8 prodArea d-none">
-
-
-        <div class="d-flex border-bottom">
-
-
-            <mat-form-field class="w-25 m-1 matSmall" appearance="outline">
-                <mat-label>Search.....</mat-label>
-                <input #catSearch matInput type="search" class="text-secondary">
-                <!-- <mat-icon matPrefix class="text-secondary">search</mat-icon> -->
-            </mat-form-field>
-
-
-
-            <div class="scrollContainer">
-                <button (click)="OnCatChange({recipeCatID:0,prodFlag:false})"
-                    [ngClass]="categoryID == 0  ? 'bg-blue' : ''" class="border item text-center m-1 p-1">ALL</button>
-                <button *ngFor="let item of categoriesList|filter:catSearch.value"
-                    (click)="OnCatChange(item);catSearch.value = ''"
-                    [ngClass]="item.recipeCatID == categoryID  ? 'bg-blue' : ''"
-                    class="border item text-center m-1 p-1">{{item.recipeCatTitle}}</button>
-            </div>
-        </div>
-
-        <div>
-            <input autocomplete="false" matInput id="recSearch" class="w-100 p-1 border" style="height: 40px;"
-                placeholder="Search Recipe...." #recipeSearch>
-
-        </div>
-        <!-----------   Products Area ------------------->
-
-        <div class="row cursorPointer">
-
-            <div *ngFor="let item of RecipeList|filter:recipeSearch.value" style="width: 100px;">
-                <mat-card style="width:90px; height: 140px;" class="m-1 shadow recipecard" data-bs-toggle="modal"
-                    data-bs-target="#qtyModal" (click)="tempProdRow = item;this.global.focusTo('.prodQty')">
-
-                    <!-- <div style="height: 150px;width: 170px;background-size: cover;" [ngStyle]="{ 'background-image': 'url(' + item.recipeImage + ')' }"></div> -->
-                    <div class="text-center">
-                        <img *ngIf="item.recipeImage" [src]="item.recipeImage" alt="" height="60px" width="80px">
-                    </div>
-
-                    <div class="text-center" style="height: 60px;background-color: orange;">
-                        <p class="text-white fs-12px" style="text-wrap: wrap;"> {{item.recipeTitle}}</p>
-                        <p style="margin-top: -15px;"><b>{{item.recipeSalePrice |number}}</b></p>
-                        <!-- <mat-card-footer class="text-center"
-                    style="font-size: x-small;"></mat-card-footer>
-                <mat-card-footer class="text-center text-success "
-                    style="font-size: 20px;"></mat-card-footer> -->
-                    </div>
-
-
-                </mat-card>
-            </div>
-        </div>
-
-
-
-
-
-    </div>
-
 
     <div class="col-lg-12">
 
@@ -82,22 +20,24 @@
         <div class="w-100 d-flex justify-content-around">
 
 
-            <button mat-fab class="m-1 text-white bg-danger col-lg-5" matTooltip="Retrieve Hold Bills"
+            <button mat-fab class="text-white bg-danger " matTooltip="Retrieve Hold Bills"
                 (click)="global.openBootstrapModal('#retrieveBill',true);getHoldBills()">Retrieve</button>
 
-
-            <button mat-fab class="m-1 text-white bg-primary col-lg-5" *ngIf="holdbtnType == 'hold'"
+            <button mat-fab class="text-white bg-primary " *ngIf="holdbtnType == 'hold'"
                 (click)="save('hold')">HOLD</button>
 
-            <button mat-fab class="m-1 text-white bg-primary col-lg-5" *ngIf="holdbtnType == 'rehold'"
+            <button mat-fab class="text-white bg-primary" *ngIf="holdbtnType == 'rehold'"
                 (click)="save('rehold')">ReHold</button>
 
 
-            <button mat-fab class="m-1 text-white bg-warning col-lg-5" accesskey="n" [disabled]="tableData != ''"
+            <button mat-fab class="text-white bg-warning" accesskey="n" [disabled]="tableData != ''"
                 (click)="getTable();global.openBootstrapModal('#NewBill',true);reset()"><mat-icon>add</mat-icon></button>
 
-            <button mat-fab class="m-1 text-white bg-warning col-lg-5" accesskey="n"
+            <button mat-fab class="text-white bg-warning" accesskey="n"
                 (click)="global.openBootstrapModal('#prodModal',true)"><mat-icon> restaurant_menu</mat-icon></button>
+
+            <button mat-fab class=" text-white bg-warning" accesskey="n"
+                (click)="global.openBootstrapModal('#holdedBillModal',true)"><mat-icon> comment</mat-icon></button>
 
         </div>
 
@@ -220,7 +160,7 @@
                                 [ngClass]="categoryID == 0  ? 'bg-blue' : ''"
                                 class="border item text-center m-1 p-1">ALL</button>
                             <button *ngFor="let item of categoriesList|filter:catSearch1.value"
-                                (click)="OnCatChange(item);catSearch.value = ''"
+                                (click)="OnCatChange(item);catSearch1.value = ''"
                                 [ngClass]="item.recipeCatID == categoryID  ? 'bg-blue' : ''"
                                 class="border item text-center m-1 p-1">{{item.recipeCatTitle}}</button>
                         </div>
@@ -491,7 +431,70 @@
     <!---------------------------------------------------------->
 
 
+    <!----------------Modal Window SavedBills for Comments ---------->
 
+
+
+    <div class="modal fade" id="holdedBillModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="retrieveBillLabel">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
+            <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+                <div class="modal-body">
+
+                    <table>
+                        <tbody class="">
+                            <tr style="display: inline-flex; " class="cursorPointer "
+                                *ngFor="let item of holdBillList ">
+                                <mat-card *ngIf="item.orderType == 'Dine In'"
+                                    class="btblbtn justify-content-center d-flex flex-column"
+                                    (click)="openCommentCard(item)">
+                                    <span>{{item.tableTitle}}</span>
+                                    <span style="font-size: 8px;">({{item.createdOn | date:'hh:mm:a'}})</span>
+                                    <span *ngIf="waiterFeature"
+                                        style="font-size: 8px;margin-top: -10px;">{{item.bookerName}}</span>
+                                </mat-card>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+                <div class="modal-footer bg-mf-blue">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!---------------------------------------------------------->
+
+
+    <!----------------Modal Window SavedBills for Comments ---------->
+
+
+
+    <div class="modal fade" id="commentCardModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="retrieveBillLabel">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
+            <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+                <div class="modal-body">
+
+                    <app-comment-card></app-comment-card>
+
+
+                </div>
+
+                <div class="modal-footer bg-mf-blue">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!---------------------------------------------------------->
 
 
 </div>

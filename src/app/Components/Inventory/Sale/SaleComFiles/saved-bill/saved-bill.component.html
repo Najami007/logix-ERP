@@ -23,7 +23,7 @@
                     <th>Amount</th>
                     <th>Print</th>
                     <th>Detail</th>
-                    <th>Post</th>
+                    <th *ngIf="postBillFeature">Post</th>
                 </tr>
 
             </thead>
@@ -37,17 +37,19 @@
                     <td>{{item.entryUser}}</td>
                     <td>{{item.partyName || "Walk In"}}</td>
                     <td>{{item.netTotal |number:'1.0-0'}}</td>
-                    <td class="cursorPointer d-flex gap-2">
-                        <mat-icon class="text-dark " *ngIf="changePaymentMehtodFeature && crudList.u"
+                    <td >
+                        <div class="cursorPointer d-flex gap-2">
+                            <mat-icon class="text-dark " *ngIf="changePaymentMehtodFeature && crudList.u"
                             (click)="changePayment(item)">payment</mat-icon>
                         <mat-icon class="text-primary "
                             (click)="printDuplicateBill(item)">print</mat-icon>
-                        <mat-icon class="text-dark" *ngIf="!item.fbrStatus && gstFeature"
+                        <mat-icon class="text-dark" *ngIf="!item.fbrStatus && gstFeature && item.invType == 'S'"
                             (click)="sendToFbr(item)">send</mat-icon>
+                        </div>
                     </td>
                     <td class="text-success cursorPointer"><mat-icon
                             (click)="billDetails(item)">receipt</mat-icon></td>
-                    <td class="text-success cursorPointer"><mat-icon 
+                    <td class="text-success cursorPointer" *ngIf="postBillFeature"><mat-icon 
                             (click)="postSaleBill(item)"> {{!item.postedStatus ? 'check_box_outline_blank' : 'check_box'}}</mat-icon></td>
                 </tr>
             </tbody>

@@ -73,15 +73,16 @@ getInvoiceDetail(invoiceNo:any){
   
   this.http.get(environment.mainApi+'acc/GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
     (Response:any)=>{
-      //console.log(Response);
-      this.invoiceDetails = Response;
+      console.log(Response);
+      if(Response.length> 0){
+        this.invoiceDetails = Response;
       this.lblRemarks = Response[0].detailNarration;
-      if(Response != ''){
        
         Response.forEach((e:any) => {
           this.lblDebitTotal += e.debit;
           this.lblCreditTotal += e.credit;
         });
+      
       }
       $('.loaderDark').fadeOut();
     },

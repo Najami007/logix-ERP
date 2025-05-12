@@ -132,7 +132,7 @@ export class SaleReturnMobComponent implements OnInit {
   invoiceDate = new Date();
   partyID = 0;
   productList: any = [];
-  projectID = this.global.InvProjectID;
+  projectID = this.global.getProjectID();
 
   tableDataList: any = [];
   productDetail:any = [];     

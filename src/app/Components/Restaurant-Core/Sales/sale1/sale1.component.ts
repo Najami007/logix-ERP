@@ -45,6 +45,7 @@ export class Sale1Component implements OnInit {
   disableDiscPwd = this.global.DisableDiscPwd;
   disablePrintPwd = this.global.DisablePrintPwd;
   autoTableSelectFeature = this.global.AutoTableSelect;
+  postBillFeature = this.global.postSale;
 
 
   appVisibility() {
@@ -180,11 +181,11 @@ export class Sale1Component implements OnInit {
   coverOf: any = 0;
   billRemarks = '';
   BookerID = 0;
-  ProjectID = this.global.InvProjectID;
+  ProjectID = this.global.getProjectID();
   PartyID = 0;
   invoiceDate: Date = new Date();
   categoryID: any = 0;
-  orderType =  this.defaultOrderTypeFeature ? 'Take Away' : 'Dine In' ;//this.global.getRestOrderType() == '' ? '' : this.global.getRestOrderType();
+  orderType =  this.defaultOrderTypeFeature ? 'Take Away' : '' ;//this.global.getRestOrderType() == '' ? '' : this.global.getRestOrderType();
   paymentType = 'Cash';
   cash: any = 0;
   bankCash: any = 0;
@@ -387,6 +388,7 @@ export class Sale1Component implements OnInit {
 
         //////////////// will Set the Default Table No by looping through available Tables //////////
         if(this.autoTableSelectFeature && !this.defaultOrderTypeFeature){
+          this.orderType = 'Dine In';
           this.setAutoTable();
         }
       }
@@ -757,7 +759,7 @@ export class Sale1Component implements OnInit {
 
   }
 
-  save(type: any, SendToFbr: any) {
+  save(type: any, SendToFbr: any,printFlag?:any) {
 
 
     if (this.orderType == 'Dine In' && (this.tableID == 0 || this.tableID == undefined)) {
@@ -840,7 +842,10 @@ export class Sale1Component implements OnInit {
           (Response: any) => {
 
             if (Response.msg == 'Data Saved Successfully') {
-              this.tmpInvBillNO = Response.invNo;
+              // this.tmpInvBillNO = Response.invNo;
+                if(printFlag){
+              this.billPrint.HOldandPrint(this.orderType, Response.invNo);
+              }
               this.printKOT(Response.invNo);   /////// Will Print KOT ////////////////
               this.msg.SuccessNotify(Response.msg);
               this.getTable()
@@ -891,6 +896,9 @@ export class Sale1Component implements OnInit {
           (Response: any) => {
 
             if (Response.msg == 'Data Updated Successfully') {
+              if(printFlag){
+              this.billPrint.HOldandPrint(this.orderType, Response.invNo);
+              }
               this.printKOT(Response.invNo); /////// Will Print KOT ////////////////
               this.msg.SuccessNotify(Response.msg);
               this.getTable()
@@ -1334,7 +1342,6 @@ export class Sale1Component implements OnInit {
     this.coverOf = 0;
     this.billRemarks = '';
     this.BookerID = 0;
-    this.ProjectID = this.global.InvProjectID;
     this.PartyID = 0;
     this.invoiceDate = new Date();
     this.orderType =this.defaultOrderTypeFeature ? 'Take Away' : 'Dine In' ;;
@@ -1419,37 +1426,13 @@ export class Sale1Component implements OnInit {
 
   }
 
-  HOldandPrint(type: any) {
-
-    this.myOrderType = this.orderType;
+ HOldandPrint(type: any) {
     if (this.tableData != '') {
 
       if (this.invBillNo != '') {
-        this.myInvoiceNo = this.invBillNo;
-        this.save('rehold', false);
-
-        setTimeout(() => {
-          this.billPrint.HOldandPrint(this.orderType, this.myInvoiceNo);
-        }, 1000);
-
-        // setTimeout(() => {
-        //   this.global.printData('#print-bill');
-        // }, 200);
-
+        this.save('rehold',false,true);
       } else {
-
-        this.save('hold', false);
-        setTimeout(() => {
-          this.myInvoiceNo = this.tmpInvBillNO;
-          if (this.tmpInvBillNO != '') {
-            this.billPrint.HOldandPrint(this.orderType, this.tmpInvBillNO);
-
-            // setTimeout(() => {
-            //   this.global.printData('#print-bill');
-            // }, 200);
-            this.tmpInvBillNO = '';
-          }
-        }, 2000);
+        this.save('hold',false,true);
       }
       this.myDuplicateFlag = false;
 
@@ -1459,7 +1442,6 @@ export class Sale1Component implements OnInit {
 
 
   }
-
 
   ////////////////////////////////////////////////////////////
 
@@ -1733,10 +1715,6 @@ export class Sale1Component implements OnInit {
     }
   
   }
-
-
-
-
 
 
 }

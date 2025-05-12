@@ -24,6 +24,7 @@ export class RestSaleBillPrintComponent {
   gstFeature = this.global.gstFeature;
   FBRFeature = this.global.FBRFeature;
   showOrderNo = this.global.showOrderNo;
+    customerFeature = this.global.customerFeature;
 
   crudList: any = [];
   companyProfile: any = [];
@@ -208,7 +209,7 @@ export class RestSaleBillPrintComponent {
       }
 
       this.type = '';
-    }, 2000);
+    }, 200);
     this.myDuplicateFlag = false;
 
 

@@ -1,0 +1,27 @@
+  <div class="modal-body">
+
+                    <mat-form-field class="w-100 matSmall" appearance="outline">
+                        <mat-label>Search...</mat-label>
+                        <input matInput #searchHoldBill />
+                    </mat-form-field>
+
+                    <table>
+                        <tbody class="">
+                            <tr style="display: inline-flex; " class="cursorPointer "
+                                *ngFor="let item of holdBillList |filter:searchHoldBill.value ">
+                                <mat-card class="btblbtn justify-content-center" (click)="getBillDetail(item)">
+                                    <span>{{item.tableTitle}}</span>
+                                    <span>Ord:({{item.orderNo}})</span>
+                                    <span style="font-size: 8px;">({{item.createdOn | date:'hh:mm:a'}})</span>
+                                    <span *ngIf="waiterFeature"
+                                        style="font-size: 8px;margin-top: -10px;">{{item.bookerName}}</span>
+
+                                    <span
+                                        style="font-size: 10px;margin-top: -5px;line-height: 11px;">{{item.remarks|slice:0:20}}</span>
+                                </mat-card>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>

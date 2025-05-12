@@ -733,7 +733,7 @@
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body">
-<!-- 
+                    <!-- 
 
                     <div class="d-flex justify-content-between fw-bold">
                         <h4 class="text-center text-success">Bill Total: {{netTotal + GstAmount | number:'1.0-1'}}</h4>
@@ -751,7 +751,7 @@
                         </div>
                         <mat-form-field *ngIf="!disableDate" appearance="outline" class="col-lg-12 matSmall">
                             <mat-label>Date</mat-label>
-                            <input matInput type="text" [disabled]="global.DisableDate" readonly="true"
+                            <input matInput type="text"  readonly="true"
                                 [(ngModel)]="invoiceDate" [matDatepicker]="invDate">
                             <mat-datepicker-toggle matSuffix [for]="invDate"></mat-datepicker-toggle>
                             <mat-datepicker #invDate></mat-datepicker>
@@ -780,7 +780,7 @@
                             <mat-label>Payment Type</mat-label>
                             <mat-select [(ngModel)]="paymentType"
                                 (selectionChange)="generateGst();PartyID = 0; cash = 0; bankCash = 0;getTotal()">
-                                <mat-option value="Credit">Credit</mat-option>
+                                <mat-option value="Credit" *ngIf="customerFeature">Credit</mat-option>
                                 <mat-option value="Cash">Cash</mat-option>
                                 <mat-option value="Bank">Bank</mat-option>
                                 <mat-option value="Split">Split</mat-option>
@@ -819,7 +819,7 @@
                                 <!-- [disabled]="paymentType == 'Split' || paymentType == 'Bank'" -->
 
                                 <input type="number" style="font-size: 25px;width: 180px;" id="bank"
-                                    [disabled]="paymentType == 'Split' || paymentType == 'Bank'"  class="text-end"
+                                    [disabled]="paymentType == 'Split' || paymentType == 'Bank'" class="text-end"
                                     (keydown)="this.global.handleNumKeys($event);getTotal();changeFocus('#save',$event)"
                                     (keyup)="getTotal()" [(ngModel)]="bankCash" />
                             </div>
@@ -935,34 +935,10 @@
         aria-labelledby="retrieveBillLabel">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-                <div class="modal-body">
-
-                    <mat-form-field class="w-100 matSmall" appearance="outline">
-                        <mat-label>Search...</mat-label>
-                        <input matInput #searchHoldBill />
-                    </mat-form-field>
-
-                    <table>
-                        <tbody class="">
-                            <tr style="display: inline-flex; " class="cursorPointer "
-                                *ngFor="let item of holdBillList |filter:searchHoldBill.value ">
-                                <mat-card class="btblbtn justify-content-center" (click)="getBillDetail(item)">
-                                    <span>{{item.tableTitle}}</span>
-                                    <span>Ord:({{item.orderNo}})</span>
-                                    <span style="font-size: 8px;">({{item.createdOn | date:'hh:mm:a'}})</span>
-                                    <span *ngIf="waiterFeature"
-                                        style="font-size: 8px;margin-top: -10px;">{{item.bookerName}}</span>
-
-                                    <span
-                                        style="font-size: 10px;margin-top: -5px;line-height: 11px;">{{item.remarks|slice:0:20}}</span>
-                                </mat-card>
-                            </tr>
-                        </tbody>
-                    </table>
 
 
-                </div>
-
+                <app-sale-holded-bill (billDetailEmitter)="getBillDetail($event)" [holdBillList]="holdBillList"></app-sale-holded-bill>
+          
                 <div class="modal-footer bg-mf-blue">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
@@ -979,9 +955,11 @@
     <div class="modal fade" id="SavedBillModal" tabindex="-1" aria-labelledby="SavedBillModalLabel">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-xl">
             <div class="modal-content">
+                <app-sale-saved-bill (sendToFbrEmitter)="sendToFbr($event)"
+                    (printDuplicateEmitter)="printDuplicateBill($event)" (billDetailEmitter)="billDetails($event)"
+                    (postBillEmitter)="postSaleBill($event)" [savedbillList]="savedbillList"></app-sale-saved-bill>
 
-
-                <div>
+                <!-- <div>
 
                     <div class="text-end p-2">
                         <mat-form-field appearance="outline" class="w-100 matSmall">
@@ -1003,7 +981,7 @@
                                     <th>Amount</th>
                                     <th>Print</th>
                                     <th>Detail</th>
-                                    <th>Post</th>
+                                    <th *ngIf="postBillFeature">Post</th>
                                 </tr>
 
                             </thead>
@@ -1025,7 +1003,7 @@
                                     </td>
                                     <td class="text-success cursorPointer"><mat-icon
                                             (click)="billDetails(item)">receipt</mat-icon></td>
-                                    <td class="text-success cursorPointer"><mat-icon (click)="postSaleBill(item)">
+                                    <td *ngIf="postBillFeature" class="text-success cursorPointer"><mat-icon (click)="postSaleBill(item)">
                                             {{!item.postedStatus ? 'check_box_outline_blank' : 'check_box'}}</mat-icon>
                                     </td>
                                 </tr>
@@ -1039,30 +1017,17 @@
                     <div class="text-end bg-mf-blue p-3">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
+                </div> -->
+
+                <!------------------------------ Design For Bill Pirnt  --------------------->
+
+                <app-rest-sale-bill-print id="print-bill" class="hide"></app-rest-sale-bill-print>
 
 
-
-
-                    <!------------------------------ Design For Bill Pirnt  --------------------->
-
-                    <app-rest-sale-bill-print id="print-bill" class="hide"></app-rest-sale-bill-print>
-
-
-                    <!---------------------------------------------------------------------------------->
-
+                <!---------------------------------------------------------------------------------->
+                <div class="text-end bg-mf-blue p-3">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
-
-
-
-
-
-
-
-
-
-
-
-
             </div>
         </div>
     </div>

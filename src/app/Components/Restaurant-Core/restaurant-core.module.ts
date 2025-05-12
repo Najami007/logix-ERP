@@ -53,6 +53,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 
 import { DateAdapter, MAT_DATE_LOCALE , MAT_DATE_FORMATS } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { SaleHoldedBillComponent } from './Sales/SaleCommonComponent/sale-holded-bill/sale-holded-bill.component';
+import { CommentCardComponent } from './Sales/SaleCommonComponent/comment-card/comment-card.component';
 
 export const MY_DATE_FORMAT  = {
   parse: {
@@ -142,6 +144,8 @@ export const restCore: Route[] = [
     Sale1Component,
     SaleSavedBillComponent,
     TableSale2Component,
+    SaleHoldedBillComponent,
+    CommentCardComponent,
    
     
    

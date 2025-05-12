@@ -1,0 +1,106 @@
+<div class="p-3">
+
+
+
+    <div class="row p-2">
+
+        <div class="col-md-4 justify-content-center">
+            <img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
+        </div>
+        <div class="col-md-6">
+
+            <h4 class="fw-bold">COMMENT CARD</h4>
+            <span>Thank You For Your feedback.</span>
+
+        </div>
+
+    </div>
+
+    <div>
+
+        <div class="row">
+            <mat-form-field class="matSmall w-50" appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput type="text">
+            </mat-form-field>
+            <mat-form-field class="matSmall w-50" appearance="outline">
+                <mat-label>Mobile</mat-label>
+                <input matInput type="text">
+            </mat-form-field>
+        </div>
+
+        <div class="py-2">
+            
+        <table class="w-100">
+            <thead>
+                <tr>
+                    <td></td>
+                    <td>Excellent</td>
+                    <td>Good</td>
+                    <td>Fair</td>
+                    <td>Bad</td>
+                </tr>
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of FeedbackList">
+                    <td class="text-uppercase">{{item.title}}</td>
+
+                    <td>
+                       <div class="border" style="width: 30px;height: 30px;"  (click)="onCheckBoxChecked(item,1)">
+                         <div class="excellentEmoji" *ngIf="item.level1" ></div>
+                       </div>
+                        <!-- <mat-checkbox (change)="onCheckBoxChecked($event,item,1)"
+                            [(ngModel)]="item.level1"></mat-checkbox> -->
+                    </td>
+                    <td>
+                        <div class="border" style="width: 30px;height: 30px;" (click)="onCheckBoxChecked(item,2)">
+                         <div class="GoodEmoji" *ngIf="item.level2" ></div>
+                       </div>
+                        <!-- <mat-checkbox (change)="onCheckBoxChecked($event,item,2)"
+                            [(ngModel)]="item.level2"></mat-checkbox> -->
+                    </td>
+                    <td>
+                        <div class="border" style="width: 30px;height: 30px;" (click)="onCheckBoxChecked(item,3)">
+                         <div class="FairEmoji" *ngIf="item.level3" ></div>
+                       </div>
+                        <!-- <mat-checkbox (change)="onCheckBoxChecked($event,item,3)"
+                            [(ngModel)]="item.level3"></mat-checkbox> -->
+                    </td>
+                    <td>
+                         <div class="border" style="width: 30px;height: 30px;"  (click)="onCheckBoxChecked(item,4)">
+                         <div class="badEmoji" *ngIf="item.level4" ></div>
+                       </div>
+                        <!-- <mat-checkbox (change)="onCheckBoxChecked($event,item,4)"
+                            [(ngModel)]="item.level4"></mat-checkbox> -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="row">
+        <mat-form-field class="matSmall w-100" appearance="outline">
+            <mat-label>Comments</mat-label>
+            <textarea matInput rows="2" type="text"></textarea>
+        </mat-form-field>
+
+        <mat-form-field class="matSmall w-100" appearance="outline">
+            <mat-label>Suggestion</mat-label>
+            <textarea matInput rows="2" type="text"></textarea>
+        </mat-form-field>
+
+    </div>
+
+</div>

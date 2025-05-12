@@ -55,7 +55,7 @@ export class IssueStockRerturnComponent implements OnInit {
     (data:any)=>{this.productList = data;})
   }
 
-  projectID = this.global.InvProjectID;
+  projectID = this.global.getProjectID();
   Date:Date = new Date();
   holdInvNo = '-';
   holdBtnType = 'Hold';

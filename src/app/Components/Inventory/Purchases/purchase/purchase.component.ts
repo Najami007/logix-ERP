@@ -15,6 +15,7 @@ import { AddpartyComponent } from '../../../Company/party/addparty/addparty.comp
 import { MatSelect } from '@angular/material/select';
 import { ProductModalComponent } from '../../Sale/SaleComFiles/product-modal/product-modal.component';
 import { PurchaseBillPrintComponent } from '../purchase-bill-print/purchase-bill-print.component';
+import { AddDocumentComponent } from 'src/app/Components/shared-components/add-document/add-document.component';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class PurchaseComponent implements OnInit {
 
 
    @ViewChild(PurchaseBillPrintComponent) billPrint:any;
+   @ViewChild(AddDocumentComponent) AddDocument:any;
 
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -70,7 +72,7 @@ export class PurchaseComponent implements OnInit {
 
   hideTotalFlag = true;
 
-  projectID = this.global.InvProjectID;
+  projectID = this.global.getProjectID();
   holdBtnType: any = 'Hold';
   tabIndex: any;
   Date: Date = new Date()
@@ -88,9 +90,9 @@ export class PurchaseComponent implements OnInit {
   myDue: any;
   holdBillList: any = [];
 
-  refInvNo: any;
-  invRemarks: any;
-  locationID: any;
+  refInvNo: any = '';
+  invRemarks: any = '';
+  locationID: any = 0;
   overHead: any = 0;
   discount: any = 0;
   holdInvNo: any = '-';
@@ -182,7 +184,6 @@ export class PurchaseComponent implements OnInit {
       if (e.keyCode == 13) {
         ///// check the product in product list by barcode
         var row = this.productList.find((p: any) => p.barcode == this.PBarcode);
-        console.log(row);
         /////// check already present in the table or not
         if (row !== undefined) {
           var condition = this.tableDataList.find(
@@ -930,6 +931,21 @@ export class PurchaseComponent implements OnInit {
     )
   }
 
+
+
+
+
+  docInvBillNo = '';
+  openDocumentModal(item:any){
+    this.docInvBillNo = item.invBillNo;
+    this.AddDocument.getDocument(item.invBillNo);
+    $('#holdModal').hide();
+    $('#DocumentModal').show();
+
+  }
+
+
+  
 
 
 }

@@ -68,7 +68,7 @@ export class PurchaseReturnMobComponent implements OnInit{
   tabIndex:any;
   Date:Date = new Date()
   productImage:any;
-  projectID = this.global.InvProjectID;
+  projectID = this.global.getProjectID();
   PBarcode:string = '';   /// for Search barcode field
   productsData:any;   //// for showing the products
   tableDataList: any = []; 

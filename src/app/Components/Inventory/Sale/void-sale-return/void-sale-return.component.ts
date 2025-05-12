@@ -106,7 +106,7 @@ export class VoidSaleReturnComponent implements OnInit {
 
   productList:any = [];
   bankCoaList:any =[];
-  projectID = this.global.InvProjectID;
+  projectID = this.global.getProjectID();
   InvDate = new Date();
   PBarcode:any = '';
   tableDataList:any = [];

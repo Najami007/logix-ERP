@@ -154,7 +154,7 @@ export class TabletSaleComponent implements OnInit {
   coverOf: any = 0;
   billRemarks = '';
   BookerID = 0;
-  ProjectID = this.global.InvProjectID;
+  ProjectID = this.global.getProjectID();
   PartyID = 0;
   invoiceDate: Date = new Date();
   categoryID: any = 0;
@@ -1032,7 +1032,6 @@ export class TabletSaleComponent implements OnInit {
     this.coverOf = '';
     this.billRemarks = '';
     this.BookerID = 0;
-    this.ProjectID = this.global.InvProjectID;
     this.PartyID = 0;
     this.invoiceDate = new Date();
     this.orderType = '';
@@ -1352,6 +1351,9 @@ export class TabletSaleComponent implements OnInit {
 
   }
 
+
+
+   
 
 
 

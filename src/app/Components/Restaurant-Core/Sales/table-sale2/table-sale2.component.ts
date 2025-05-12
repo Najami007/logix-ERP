@@ -155,7 +155,7 @@ export class TableSale2Component implements OnInit {
   coverOf: any = 0;
   billRemarks = '';
   BookerID = 0;
-  ProjectID = this.global.InvProjectID;
+  ProjectID = this.global.getProjectID();
   PartyID = 0;
   invoiceDate: Date = new Date();
   categoryID: any = 0;
@@ -1044,7 +1044,6 @@ export class TableSale2Component implements OnInit {
     this.coverOf = '';
     this.billRemarks = '';
     this.BookerID = 0;
-    this.ProjectID = this.global.InvProjectID;
     this.PartyID = 0;
     this.invoiceDate = new Date();
     this.orderType = '';
@@ -1399,6 +1398,10 @@ export class TableSale2Component implements OnInit {
 
 
 
+ openCommentCard(item:any){
+      this.global.closeBootstrapModal('#holdedBillModal',true)
+      this.global.openBootstrapModal('#commentCardModal',true)
+    }
 
 
 
