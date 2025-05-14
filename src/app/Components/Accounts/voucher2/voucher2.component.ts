@@ -26,7 +26,9 @@ export class Voucher2Component implements OnInit{
   // @ViewChild(VoucherPrintComponent) printVoucher:any;
 
   loadingBar = 'start';
-
+  curDate = new Date();
+   startDate:Date = new Date(this.curDate.getFullYear(),this.curDate.getMonth(),1);
+  endDate:Date = new Date(this.curDate.getFullYear(),this.curDate.getMonth() + 1,0);
 
   page:number = 1;
   count: number = 0;
@@ -264,9 +266,12 @@ export class Voucher2Component implements OnInit{
 
   getSavedVoucher(){
    
-    this.http.get(environment.mainApi+this.globalData.accountLink+'GetSavedVoucherDetail').subscribe(
+    var fromDate = this.globalData.dateFormater(this.startDate,'-');
+    var toDate = this.globalData.dateFormater(this.endDate,'-');
+
+    this.http.get(environment.mainApi+this.globalData.accountLink+'GetSavedVoucherDetail?startDate='+fromDate+'&endDate='+toDate).subscribe(
       (Response:any)=>{
-      //  console.log(Response);
+       console.log(Response);
         this.SavedVoucherData = Response;
         this.loadingBar = 'stop';
        

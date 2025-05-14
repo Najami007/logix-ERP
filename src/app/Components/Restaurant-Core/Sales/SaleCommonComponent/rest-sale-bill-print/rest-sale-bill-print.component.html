@@ -3,8 +3,8 @@
 <div id="printRestBill" *ngIf="!gstFeature">
     <div class="text-center d-flex flex-column">
         <span *ngIf="showCmpNameFeature" style="font-family:Arial, Helvetica, sans-serif">{{companyName}}</span>
-        <span *ngIf="companyAddress != '-'"  class="fs-11 text-uppercase">{{companyAddress}}</span>
-        <span *ngIf="CompanyMobile != '-'"  class="fs-11">{{CompanyMobile}}</span>
+        <span *ngIf="companyAddress != '-'"  class="fs-12 text-uppercase">{{companyAddress}}</span>
+        <span *ngIf="CompanyMobile != '-'"  class="fs-12">{{CompanyMobile}}</span>
         <div *ngIf="showCompanyLogo" class="justify-content-center">
             <img  [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
         </div>
@@ -16,7 +16,7 @@
 
     <div class="p-1">
         <div>
-            <table class="w-100" style="font-size: 10px;">
+            <table class="w-100" style="font-size: 12px;">
 
                 <tr>
                     <th>Inv #</th>
@@ -81,56 +81,56 @@
 
 
 
-            <table class="w-100 mt-2" style="font-size: 10px;">
+            <table class="w-100 mt-2" style="font-size: 12px;">
                 <tbody class="fw-bold">
                     <tr>
                         <td>Sub Total</td>
-                        <td>&nbsp;{{mySubTotal |number:'1.0-0'}}</td>
+                        <td class="text-end">&nbsp;{{mySubTotal |number:'1.0-0'}}</td>
 
                     </tr>
                     <tr *ngIf="myOtherCharges > 0">
                         <td *ngIf="myOrderType == 'Dine In'">Service Charges</td>
                         <td *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</td>
                         <td *ngIf="myOrderType == 'Take Away'">Other Charges</td>
-                        <td>&nbsp;{{myOtherCharges|number:'1.0-0'}}</td>
+                        <td class="text-end">&nbsp;{{myOtherCharges|number:'1.0-0'}}</td>
 
                     </tr>
                     <tr *ngIf="myDiscount > 0">
                         <td>Discount</td>
-                        <td>&nbsp;{{myDiscount|number:'1.0-0'}}</td>
+                        <td class="text-end">&nbsp;{{myDiscount|number:'1.0-0'}}</td>
 
                     </tr>
 
                     <tr>
                         <td>Net Total</td>
-                        <td>&nbsp;{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-0'}}</td>
+                        <td class="text-end">&nbsp;{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-0'}}</td>
 
                     </tr>
                     <tr *ngIf="(myPaymentType == 'Cash' || myPaymentType == 'Split' || myPaymentType == 'Credit') && myCash > 0">
                         <td>Cash</td>
-                        <td>&nbsp;{{myCash|number:'1.0-0'}}</td>
+                        <td class="text-end">&nbsp;{{myCash|number:'1.0-0'}}</td>
 
                     </tr>
                     <tr *ngIf="(myPaymentType == 'Bank' || myPaymentType == 'Split' || myPaymentType == 'Credit') && myBank > 0  ">
                         <td>Bank</td>
-                        <td>&nbsp;{{myBank|number:'1.0-0'}}</td>
+                        <td class="text-end">&nbsp;{{myBank|number:'1.0-0'}}</td>
 
                     </tr>
                     <tr *ngIf="myChange !== 0">
                         <td>Change</td>
-                        <td>{{myChange|number:'1.0-0'}}</td>
+                        <td class="text-end">{{myChange|number:'1.0-0'}}</td>
 
                     </tr>
 
                     <tr  *ngIf="myPartyBalance !== 0" >
                         <td class="fw-bold">prv Blnc</td>
-                        <td class="fw-bold" *ngIf="myChange > 0">&nbsp;{{myPartyBalance | number:'1.0-1'}}</td>
-                        <td class="fw-bold"*ngIf="myChange <= 0">&nbsp;{{myPartyBalance -  ( -1 * myChange) | number:'1.0-1'}}</td>
+                        <td class="fw-bold text-end" *ngIf="myChange > 0">&nbsp;{{myPartyBalance | number:'1.0-1'}}</td>
+                        <td class="fw-bold text-end"*ngIf="myChange <= 0">&nbsp;{{myPartyBalance -  ( -1 * myChange) | number:'1.0-1'}}</td>
 
                     </tr>
                     <tr  *ngIf="myPartyBalance !== 0">
                         <td class="fw-bold">Net Blnc</td>
-                        <td class="fw-bold">&nbsp;{{myPartyBalance | number:'1.0-1'}}</td>
+                        <td class="fw-bold text-end">&nbsp;{{myPartyBalance | number:'1.0-1'}}</td>
 
                     </tr>
 

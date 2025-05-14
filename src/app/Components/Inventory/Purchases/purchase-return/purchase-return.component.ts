@@ -24,6 +24,8 @@ export class PurchaseReturnComponent implements OnInit {
 
   @ViewChild(PurchaseBillPrintComponent) billPrint:any;
 
+    disableDateFeature = this.global.DisableInvDate;
+
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
   constructor(
@@ -902,7 +904,7 @@ export class PurchaseReturnComponent implements OnInit {
   }
 
 
-
+searchBillType:any = 'Date';
   findHoldBills(type: any) {
     if (type == 'hpr') {
       $('#edit').show();
@@ -911,8 +913,9 @@ export class PurchaseReturnComponent implements OnInit {
     if (type == 'pr') {
       $('#edit').hide()
     }
+     var date = this.searchBillType == 'Date' ?  this.global.dateFormater(this.Date,'-') : '';
 
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryBillSingleDate?Type=' + type + '&creationdate=' + this.global.dateFormater(this.Date, '-')).subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryBillSingleDate?Type=' + type + '&creationdate=' + date).subscribe(
       (Response: any) => {
         this.holdBillList = [];
 

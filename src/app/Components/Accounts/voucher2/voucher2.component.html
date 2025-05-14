@@ -1,191 +1,196 @@
 <mat-tab-group class="body ">
-    <mat-tab label="Voucher Form "  >
+    <mat-tab label="Voucher Form ">
 
-       <div class="row container-fluid  p-2">
-        <div class="col-lg-4">
+        <div class="row container-fluid  p-2">
+            <div class="col-lg-4">
 
-           <div class="row">
-            <mat-form-field class="col-lg-12 matSmall" appearance="outline">
-                <mat-label>Voucher Type </mat-label>
-                <mat-select [(ngModel)]="vType" name="vType"  [disabled]="VoucherData != ''"
-                    (selectionChange)=" getRefCoa()">
-                    <mat-option *ngFor="let item of voucherTypes "
-                        value="{{item.value}}">{{item.type}}</mat-option>
+                <div class="row">
+                    <mat-form-field class="col-lg-12 matSmall" appearance="outline">
+                        <mat-label>Voucher Type </mat-label>
+                        <mat-select [(ngModel)]="vType" name="vType" [disabled]="VoucherData != ''"
+                            (selectionChange)=" getRefCoa()">
+                            <mat-option *ngFor="let item of voucherTypes "
+                                value="{{item.value}}">{{item.type}}</mat-option>
 
-                </mat-select>
-            </mat-form-field>
+                        </mat-select>
+                    </mat-form-field>
 
 
-            <mat-form-field class="col-lg-12 matSmall"  appearance="outline">
-                <mat-label>Voucher Date</mat-label>
-                <input [disabled]="!disableDate"  matInput   [(ngModel)]="invoiceDate"
-                    [matDatepicker]="picker" >
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
+                    <mat-form-field class="col-lg-12 matSmall" appearance="outline">
+                        <mat-label>Voucher Date</mat-label>
+                        <input [disabled]="!disableDate" matInput [(ngModel)]="invoiceDate" [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
 
-            <mat-form-field class="col-lg-12 matSmall" appearance="outline">
-                <mat-label>Project </mat-label>
-                <mat-select [(ngModel)]="projectID" >
-                    <mat-option *ngFor="let item of projectList " value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
-                </mat-select>
-            </mat-form-field>
+                    <mat-form-field class="col-lg-12 matSmall" appearance="outline">
+                        <mat-label>Project </mat-label>
+                        <mat-select [(ngModel)]="projectID">
+                            <mat-option *ngFor="let item of projectList "
+                                value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
 
-            <mat-form-field class="col-lg-12 matSmall" appearance="outline">
-                <mat-label>Refrence COA </mat-label>
-                <mat-select [(ngModel)]="refrenceCOA" [disabled]="vType == 'JV'">
-                    <mat-option *ngFor="let item of refCoaList " value="{{item.coaID}}">{{item.coaTitle}}</mat-option>
-                </mat-select>
-            </mat-form-field>
+                    <mat-form-field class="col-lg-12 matSmall" appearance="outline">
+                        <mat-label>Refrence COA </mat-label>
+                        <mat-select [(ngModel)]="refrenceCOA" [disabled]="vType == 'JV'">
+                            <mat-option *ngFor="let item of refCoaList "
+                                value="{{item.coaID}}">{{item.coaTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
 
-            
-            <mat-form-field class=" col-lg-12 matSmall" appearance="outline">
-                <mat-label>Refrence No</mat-label>
-                <input matInput [(ngModel)]="bankReceiptNo" [defaultValue]="0" type="text">
-            </mat-form-field>
 
-            
-                <mat-form-field class="col-lg-12 matSmall" appearance="outline">
-                    <mat-label>Narration</mat-label>
-                    <textarea rows="1" matInput [(ngModel)]="narration" name="Narration" placeholder="Narration"></textarea>
-                </mat-form-field>
-           </div>
+                    <mat-form-field class=" col-lg-12 matSmall" appearance="outline">
+                        <mat-label>Refrence No</mat-label>
+                        <input matInput [(ngModel)]="bankReceiptNo" [defaultValue]="0" type="text">
+                    </mat-form-field>
+
+
+                    <mat-form-field class="col-lg-12 matSmall" appearance="outline">
+                        <mat-label>Narration</mat-label>
+                        <textarea rows="1" matInput [(ngModel)]="narration" name="Narration"
+                            placeholder="Narration"></textarea>
+                    </mat-form-field>
+                </div>
 
                 <span class="col-lg-12 ps-2 d-flex border-bottom pb-1">
-                    <button  type="button" mat-raised-button (click)="vDoc.click()">Choose File</button>
-                    <input  hidden accept=".pdf"  (change)="onDocSelected($event)"  #vDoc type="file" id="vDoc"  class="border border-dark">
+                    <button type="button" mat-raised-button (click)="vDoc.click()">Choose File</button>
+                    <input hidden accept=".pdf" (change)="onDocSelected($event)" #vDoc type="file" id="vDoc"
+                        class="border border-dark">
                     <p class="text-center text-secondary mt-1 p-2">{{vDoc.value}}</p>
-              
+
                 </span>
                 <mat-hint class="text-danger">File Must be PDF Only</mat-hint>
-          
-            <div class="text-center row justify-content-center" >
-                <button  class="btnsave  col-lg-3 me-2" *ngIf="crudList.c" (click)="insertVoucher()"> Save</button>
-                <button   class="btnreset  col-lg-3 me-2"  (click)="reset()"> Reset</button>
-                <button   class="btnload  col-lg-3 "  (click)="ngOnInit()"> load</button>
+
+                <div class="text-center row justify-content-center">
+                    <button class="btnsave  col-lg-3 me-2" *ngIf="crudList.c" (click)="insertVoucher()"> Save</button>
+                    <button class="btnreset  col-lg-3 me-2" (click)="reset()"> Reset</button>
+                    <button class="btnload  col-lg-3 " (click)="ngOnInit()"> load</button>
+                </div>
+
+
+
+
+
+
             </div>
 
-
-            
-
+            <div class="col-lg-8 border p-3" style="background-color: rgb(247, 251, 250);">
 
 
-        </div>
-
-        <div class="col-lg-8 border p-3" style="background-color: rgb(247, 251, 250);">
-
-        
                 <div class="row fw-bold">
                     <span class="col-lg-3 ">Account Title</span>
                     <span class="col-lg-4">Narration</span>
                     <span class="col-lg-2 text-end">Debit</span>
                     <span class="col-lg-2 text-end">Credit</span>
                 </div>
-         
+
                 <div class="row">
                     <mat-form-field class="col-lg-3 matSmall" appearance="outline">
                         <mat-label>COA Title </mat-label>
-                        <mat-select id="cTitle" class="cTitle" [(ngModel)]="COATitleID" name="coaTitle"
-                            accesskey="c">
-                            <mat-option><ngx-mat-select-search [(ngModel)]="coaSearch"
-                                [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
-                                    ></ngx-mat-select-search></mat-option>
+                        <mat-select id="cTitle" class="cTitle" [(ngModel)]="COATitleID" name="coaTitle" accesskey="c">
+                            <mat-option><ngx-mat-select-search [(ngModel)]="coaSearch" [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
                             <mat-option *ngFor="let item of CoaList | filter:coaSearch | slice:0:25"
                                 [value]="item.coaID">{{item.coaTitle}} - ({{item.accountCode}})</mat-option>
                         </mat-select>
                     </mat-form-field>
 
 
-               
+
                     <mat-form-field class=" col-lg-4 matSmall" appearance="outline">
 
-                        <textarea  rows="1" matInput [(ngModel)]="detailNarration"  type="text"  ></textarea>
+                        <textarea rows="1" matInput [(ngModel)]="detailNarration" type="text"></textarea>
                     </mat-form-field>
 
 
                     <mat-form-field class=" col-lg-2 matSmall" appearance="outline">
 
-                        <input class="text-end" matInput [(ngModel)]="DebitAmount" (keydown)="changeValue($event)" [defaultValue]="0"
-                            type="number" min="0" [disabled]="vType == 'CRV' || vType == 'BRV' || vType == ''">
+                        <input class="text-end" matInput [(ngModel)]="DebitAmount" (keydown)="changeValue($event)"
+                            [defaultValue]="0" type="number" min="0"
+                            [disabled]="vType == 'CRV' || vType == 'BRV' || vType == ''">
                     </mat-form-field>
-  
+
 
 
                     <mat-form-field class=" col-lg-2 matSmall" appearance="outline">
 
                         <input class="text-end" matInput [(ngModel)]="CreditAmount" [defaultValue]="0"
-                            (keydown)="changeValue($event)" type="number" min="0" [disabled]="vType == 'CPV' || vType == 'BPV' || vType == ''">
+                            (keydown)="changeValue($event)" type="number" min="0"
+                            [disabled]="vType == 'CPV' || vType == 'BPV' || vType == ''">
                     </mat-form-field>
 
-       
+
                     <div class="col-lg-1 text-start ">
-                        <button class="btnsave" style="height: 45px;"  type="button" (click)="save()">
+                        <button class="btnsave" style="height: 45px;" type="button" (click)="save()">
                             <mat-icon>save</mat-icon>
                         </button>
-                       
+
                     </div>
 
-       
-                        <div class="mt-3 " style="height: 62vh; overflow-y: scroll;">
-                            
-                            <table class="table  cursorPointer" >
 
-                                <thead>
-                                    <tr class="col-lg-12 font-size">
-                                        <th class="col-lg-1 ">S#</th>
-                                        <th class="col-lg-3 ">Title</th>
-                                        <th class="col-lg-3 ">Narration</th>
-                                        <th class="col-lg-2 ">Debit Amont</th>
-                                        <th class="col-lg-2 ">Credit Amount</th>
-                                        <th class="col-lg-1 ">Action</th>
+                    <div class="mt-3 " style="height: 62vh; overflow-y: scroll;">
 
-                                    </tr>
-                                </thead>
+                        <table class="table  cursorPointer">
+
+                            <thead>
+                                <tr class="col-lg-12 font-size">
+                                    <th class="col-lg-1 ">S#</th>
+                                    <th class="col-lg-3 ">Title</th>
+                                    <th class="col-lg-3 ">Narration</th>
+                                    <th class="col-lg-2 ">Debit Amont</th>
+                                    <th class="col-lg-2 ">Credit Amount</th>
+                                    <th class="col-lg-1 ">Action</th>
+
+                                </tr>
+                            </thead>
 
 
 
-                                <tbody>
+                            <tbody>
 
-                                    <tr *ngFor="let item of VoucherData, ;index as index ">
-                                        <td class="">{{index+1}}</td>
-                                        <td class="">{{item.title}}</td>
-                                        <td class="">{{item.DetailNarration}}</td>
-                                        <td class="">{{item.Debit |number}}</td>
-                                        <td class="">{{item.Credit |number}}</td>
-                                        <td class=" "><mat-icon class=" text-danger "
+                                <tr *ngFor="let item of VoucherData, ;index as index ">
+                                    <td class="">{{index+1}}</td>
+                                    <td class="">{{item.title}}</td>
+                                    <td class="">{{item.DetailNarration}}</td>
+                                    <td class="">{{item.Debit |number}}</td>
+                                    <td class="">{{item.Credit |number}}</td>
+                                    <td class=" "><mat-icon class=" text-danger "
                                             (click)="deleteRow(item)">delete</mat-icon></td>
 
-                                    </tr>
-                                    <tr *ngIf="VoucherData != ''" class="fw-bold bg-light">
-                                        <td></td>
-                                        <td> Total</td>
-                                        <td></td>
-                                        <td>{{debittotal |number}}</td>
-                                        <td>{{creditTotal |number}}</td>
-                                        <td></td>
+                                </tr>
+                                <tr *ngIf="VoucherData != ''" class="fw-bold bg-light">
+                                    <td></td>
+                                    <td> Total</td>
+                                    <td></td>
+                                    <td>{{debittotal |number}}</td>
+                                    <td>{{creditTotal |number}}</td>
+                                    <td></td>
 
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
 
-         
 
-        </div> 
-       </div>
-       
+
+            </div>
+        </div>
+
 
         <div class="d-none" id="afterSavePrint">
             <div class="text-end ">{{lblVoucherPrintDate |date:'short'}}</div>
-            <div >
-                
+            <div>
+
                 <!-------------------------    Top Logo Section -------------------->
-                <div class="text-center border-bottom d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <div class="text-center border-bottom d-flex justify-content-between"
+                    *ngFor="let item of companyProfile">
                     <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
-                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
-    
+                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset=""
+                            [height]="item.logo1Height" [width]="item.logo1Width">
+
                     </span>
                     <span class="mt-3">
                         <h3 class="companyName">{{item.companyName}}</h3>
@@ -194,77 +199,79 @@
                         <p style="margin-top: -20px;">{{item.companyEmail}}</p>
                     </span>
                     <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
-                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" [height]="item.logo2Height" [width]="item.logo2Width">
-    
+                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                            [height]="item.logo2Height" [width]="item.logo2Width">
+
                     </span>
-            
-            
+
+
                 </div>
 
                 <!-------------------------- Headers Area   ----------------------->
-               <div class="d-flex">
-                <div class="row mt-5"  >
+                <div class="d-flex">
+                    <div class="row mt-5">
 
-                    <b class="row">
-                     <h6>Narration:</h6>
-                     <h6>Project:</h6>
-                    <h6>Invoice Date:</h6>
-                    <h6>Narration:</h6>
-                    </b>
+                        <b class="row">
+                            <h6>Narration:</h6>
+                            <h6>Project:</h6>
+                            <h6>Invoice Date:</h6>
+                            <h6>Narration:</h6>
+                        </b>
 
+                    </div>
+                    <div class="row mt-5">
+
+                        <p>{{lblInvoiceNo}}</p>
+                        <p>{{lblProjectName}}</p>
+                        <p>{{lblInvoiceDate | date:'yyyy-MM-dd'}}</p>
+                        <p>{{lblRemarks}}</p>
+
+
+                    </div>
                 </div>
-                <div class="row mt-5" >
 
-                    <p>{{lblInvoiceNo}}</p>
-                    <p>{{lblProjectName}}</p>
-                    <p>{{lblInvoiceDate | date:'yyyy-MM-dd'}}</p>
-                    <p>{{lblRemarks}}</p>
-                    
+                <!-----------------------   Print Table Area --------------------->
 
+                <div>
+                    <table class="table table-logix">
+                        <thead>
+
+                            <th style="width: 30px;">S#</th>
+                            <th>Description</th>
+                            <th>Debit</th>
+                            <th>Credit</th>
+                            <th>Narration</th>
+
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of invoiceDetails; index as index">
+                                <td>{{index+1}}</td>
+                                <td>{{item.coaTitle}} ({{item.accountCode}})</td>
+                                <td class="text-end">{{item.debit |number}}</td>
+                                <td class="text-end">{{item.credit |number}}</td>
+                                <td>{{item.detailNarration}}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><b>Total</b></td>
+                                <td class="text-end"><b>{{lblDebitTotal |number}}</b></td>
+                                <td class="text-end"><b>{{lblCreditTotal |number}}</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-               </div>
-
-               <!-----------------------   Print Table Area --------------------->
-
-               <div>
-                <table class="table table-logix">
-                    <thead>
-                        
-                        <th style="width: 30px;">S#</th>
-                        <th >Description</th>
-                        <th  >Debit</th>
-                        <th  >Credit</th>
-                        <th  >Narration</th>   
-                    
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of invoiceDetails; index as index">
-                            <td>{{index+1}}</td>
-                            <td>{{item.coaTitle}} ({{item.accountCode}})</td>
-                            <td  class="text-end">{{item.debit |number}}</td>
-                            <td  class="text-end">{{item.credit |number}}</td>
-                            <td>{{item.detailNarration}}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><b>Total</b></td>
-                            <td  class="text-end"><b>{{lblDebitTotal |number}}</b></td>
-                            <td  class="text-end"><b>{{lblCreditTotal |number}}</b></td>
-                        </tr>
-                    </tbody>
-                </table>
-               </div>
 
 
-               <div class="d-flex justify-content-between mt-5 pt-5">
-                <h5 *ngIf="lblVoucherType == 'CPV' || lblVoucherType == 'BPV'" class="border-bottom border-dark">Received BY</h5>
-                <h5 class="border-bottom border-dark">Created BY</h5>
-                <h5 class="border-bottom border-dark">Approved BY</h5>
-                <h5 class="border-bottom border-dark">Checked BY</h5>
-               </div>
-        
-        
-        
+                <div class="d-flex justify-content-between mt-5 pt-5">
+                    <h5 *ngIf="lblVoucherType == 'CPV' || lblVoucherType == 'BPV'" class="border-bottom border-dark">
+                        Received BY</h5>
+                    <h5 class="border-bottom border-dark">Created BY</h5>
+                    <h5 class="border-bottom border-dark">Approved BY</h5>
+                    <h5 class="border-bottom border-dark">Checked BY</h5>
+                </div>
+
+
+
             </div>
         </div>
     </mat-tab>
@@ -274,15 +281,31 @@
 
 
 
-    <mat-tab label="Saved Record" >
+    <mat-tab label="Saved Record">
 
-        <div class="container-fluid text-center p-2">
+        <div class="container-fluid text-center">
 
 
-            <mat-form-field class="w-100 matSmall" appearance="outline">
-                <mat-label>Search.....</mat-label>
-                <input [(ngModel)]="txtSearch"  matInput type="text" #input >
-            </mat-form-field>
+
+
+            <div class="row mt-2">
+                <mat-form-field class="col-md-8 matSmall" appearance="outline">
+                    <mat-label>Search.....</mat-label>
+                    <input [(ngModel)]="txtSearch" matInput type="text" #input>
+                </mat-form-field>
+                <mat-form-field class="col-lg-2 matSmall" appearance="outline" >
+                    <mat-label>From Date</mat-label>
+                    <input (dateChange)="getSavedVoucher()"  matInput [(ngModel)]="startDate" [matDatepicker]="picker2">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+                    <mat-label>To Date</mat-label>
+                    <input (dateChange)="getSavedVoucher()"  matInput [(ngModel)]="endDate" [matDatepicker]="picker3">
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker>
+                </mat-form-field>
+            </div>
 
 
 
@@ -301,7 +324,7 @@
                         <th class="col-lg-1">Detail</th>
                         <th>Document</th>
                         <th class="col-lg-1" *ngIf="crudList.d || crudList.u || crudList.r">Actions</th>
-                   
+
 
                     </tr>
                 </thead>
@@ -319,44 +342,47 @@
                         <td>{{item.projectTitle}}</td>
                         <td>{{item.amount |number}}</td>
                         <td class="text-start">{{item.invoiceRemarks}}</td>
-                        <td ><mat-icon class="text-success"  
-                            (click)="VoucherDetails(item)" >receipt</mat-icon></td>
-                            <td>
-                                <mat-icon *ngIf="item.voucherDocument == '-'" (click)="insertDocument(item)" data-bs-toggle="modal" data-bs-target="#voucherDocument">add</mat-icon>
-                                <mat-icon *ngIf="item.voucherDocument != '-'" (click)="downloadVoucherDocument(item)">remove_red_eye</mat-icon>
-                            </td>
+                        <td><mat-icon class="text-success" (click)="VoucherDetails(item)">receipt</mat-icon></td>
+                        <td>
+                            <mat-icon *ngIf="item.voucherDocument == '-'" (click)="insertDocument(item)"
+                                data-bs-toggle="modal" data-bs-target="#voucherDocument">add</mat-icon>
+                            <mat-icon *ngIf="item.voucherDocument != '-'"
+                                (click)="downloadVoucherDocument(item)">remove_red_eye</mat-icon>
+                        </td>
                         <td *ngIf="crudList.r || crudList.d   || crudList.u  ">
-                        <mat-icon class="text-success"*ngIf="item.approvedStatus == false && crudList.u"   (click)="approveBill(item)">check</mat-icon>
-                        <mat-icon *ngIf="item.approvedStatus"  aria-label="Approved" class="text-success" >done_all</mat-icon>
-                        <mat-icon class="text-danger" *ngIf="crudList.d && item.approvedStatus == false" (click)="DeleteVoucher(item)">delete</mat-icon>
-                        <mat-icon class="text-primary" *ngIf="crudList.r" (click)="printBill(item)">print</mat-icon></td>
+                            <mat-icon class="text-success" *ngIf="item.approvedStatus == false && crudList.u"
+                                (click)="approveBill(item)">check</mat-icon>
+                            <mat-icon *ngIf="item.approvedStatus" aria-label="Approved"
+                                class="text-success">done_all</mat-icon>
+                            <mat-icon class="text-danger" *ngIf="crudList.d && item.approvedStatus == false"
+                                (click)="DeleteVoucher(item)">delete</mat-icon>
+                            <mat-icon class="text-primary" *ngIf="crudList.r" (click)="printBill(item)">print</mat-icon>
+                        </td>
 
                     </tr>
                 </tbody>
 
             </table>
 
-            <div class="d-flex" >
+            <div class="d-flex">
                 <!-- <mat-hint class="me-1 text-secondary">Total Rows : ({{SavedVoucherData.length || 0}})    </mat-hint> -->
-                <pagination-controls
-                previousLabel="Prev"
-                nextLabel="Next"
-                (pageChange)="onTableDataChange($event)"
-                ></pagination-controls>
-                
+                <pagination-controls previousLabel="Prev" nextLabel="Next"
+                    (pageChange)="onTableDataChange($event)"></pagination-controls>
+
 
                 <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
-                <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);" (change)="onTableSizeChange($event)">
+                <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);"
+                    (change)="onTableSizeChange($event)">
                     <option *ngFor=" let item of tableSizes">{{item}}</option>
                 </select>
-                
+
             </div>
 
         </div>
 
 
 
-      
+
 
         <!-------------------     Invoice Print Section ------------------------->
 
@@ -365,141 +391,128 @@
         <div class="d-none InvociePrint" id="InvociePrint">
             <div class="text-end ">{{lblVoucherPrintDate |date:'short'}}</div>
             <div class="mt-2">
-                
+
                 <!-------------------------    Top Logo Section -------------------->
-                <div class="text-center border-bottom d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <div class="text-center border-bottom d-flex justify-content-between"
+                    *ngFor="let item of companyProfile">
                     <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
-                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
-    
+                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset=""
+                            [height]="item.logo1Height" [width]="item.logo1Width">
+
                     </span>
                     <span class="mt-3">
                         <h3 class="companyName">{{item.companyName}}</h3>
                         <p style="margin-top: -15px;">{{item.companyAddress}}</p>
-                        <p style="margin-top: -20px;">{{item.companyMobile}}  </p> <!--051-5551631, 051-5555008-->
+                        <p style="margin-top: -20px;">{{item.companyMobile}} </p> <!--051-5551631, 051-5555008-->
                         <p style="margin-top: -20px;">{{item.companyEmail}}</p>
                     </span>
                     <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
-                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" [height]="item.logo2Height" [width]="item.logo2Width">
-    
+                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                            [height]="item.logo2Height" [width]="item.logo2Width">
+
                     </span>
-            
-            
+
+
                 </div>
-        
+
 
                 <!-------------------------- Headers Area   ----------------------->
-               <div class="d-flex">
-                <div class="row mt-5"  >
+                <div class="d-flex">
+                    <div class="row mt-5">
 
-                    <b class="row">
-                    <h6>Invoice No:</h6>
-                    <h6>Project:</h6>
-                    <h6>Invoice Date:</h6>
-                    <h6>Narration:</h6>
-                    </b>
+                        <b class="row">
+                            <h6>Invoice No:</h6>
+                            <h6>Project:</h6>
+                            <h6>Invoice Date:</h6>
+                            <h6>Narration:</h6>
+                        </b>
 
+                    </div>
+                    <div class="row mt-5">
+
+                        <p>{{lblInvoiceNo}}</p>
+                        <p>{{lblProjectName}}</p>
+                        <p>{{lblInvoiceDate | date:'yyyy-MM-dd'}}</p>
+                        <p>{{lblRemarks}}</p>
+
+
+                    </div>
                 </div>
-                <div class="row mt-5" >
 
-                    <p>{{lblInvoiceNo}}</p>
-                    <p>{{lblProjectName}}</p>
-                    <p>{{lblInvoiceDate | date:'yyyy-MM-dd'}}</p>
-                    <p>{{lblRemarks}}</p>
-                    
+                <!-----------------------   Print Table Area --------------------->
 
+                <div>
+                    <table class="table table-logix">
+                        <thead>
+
+                            <th style="width: 30px;">S#</th>
+                            <th>Description</th>
+                            <th>Debit</th>
+                            <th>Credit</th>
+                            <th>Narration</th>
+
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of invoiceDetails; index as index">
+                                <td>{{index+1}}</td>
+                                <td>{{item.coaTitle}} ({{item.accountCode}})</td>
+                                <td class="text-end">{{item.debit |number}}</td>
+                                <td class="text-end">{{item.credit |number}}</td>
+                                <td>{{item.detailNarration}}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><b>Total</b></td>
+                                <td class="text-end"><b>{{lblDebitTotal |number}}</b></td>
+                                <td class="text-end"><b>{{lblCreditTotal |number}}</b></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-               </div>
-
-               <!-----------------------   Print Table Area --------------------->
-
-               <div>
-                <table class="table table-logix">
-                    <thead>
-                        
-                        <th style="width: 30px;">S#</th>
-                        <th >Description</th>
-                        <th >Debit</th>
-                        <th >Credit</th>
-                        <th >Narration</th>
-                    
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of invoiceDetails; index as index">
-                            <td>{{index+1}}</td>
-                            <td>{{item.coaTitle}} ({{item.accountCode}})</td>
-                            <td class="text-end">{{item.debit |number}}</td>
-                            <td  class="text-end">{{item.credit |number}}</td>
-                            <td >{{item.detailNarration}}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><b>Total</b></td>
-                            <td  class="text-end"><b>{{lblDebitTotal |number}}</b></td>
-                            <td  class="text-end"><b>{{lblCreditTotal |number}}</b></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-               </div>
 
 
-               <div class="d-flex justify-content-between mt-5 pt-5">
-                <h5 *ngIf="lblVoucherType == 'CPV' || lblVoucherType == 'BPV'" class="border-bottom border-dark">Received BY</h5>
-                <h5 class="border-bottom border-dark">Created BY</h5>
-                <h5 class="border-bottom border-dark">Approved BY</h5>
-                <h5 class="border-bottom border-dark">Checked BY</h5>
-               </div>
-        
-        
-        
+                <div class="d-flex justify-content-between mt-5 pt-5">
+                    <h5 *ngIf="lblVoucherType == 'CPV' || lblVoucherType == 'BPV'" class="border-bottom border-dark">
+                        Received BY</h5>
+                    <h5 class="border-bottom border-dark">Created BY</h5>
+                    <h5 class="border-bottom border-dark">Approved BY</h5>
+                    <h5 class="border-bottom border-dark">Checked BY</h5>
+                </div>
+
+
+
             </div>
         </div>
 
 
 
         <!-- Modal for Add Document-->
-        <div class="modal fade" id="voucherDocument" tabindex="-1" aria-labelledby="voucherDocumentLabel" aria-hidden="true" data-bs-backdrop="false">
+        <div class="modal fade" id="voucherDocument" tabindex="-1" aria-labelledby="voucherDocumentLabel"
+            aria-hidden="true" data-bs-backdrop="false">
             <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="voucherDocumentLabel">Select PDF File</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="voucherDocumentLabel">Select PDF File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <span class="col-lg-12 d-flex row p-2">
+                            <button type="button" mat-raised-button (click)="vDoc.click()">Choose File</button>
+                            <input hidden accept=".pdf" (change)="onDocSelected($event)" #vDoc type="file" id="regDoc"
+                                class="border border-dark">
+                            <p class="text-center text-secondary mt-1 border-bottom">{{vDoc.value}}</p>
+                            <mat-hint class="text-danger">File Must be PDF Only</mat-hint>
+                        </span>
+                    </div>
+                    <div class="modal-footer bg-mf">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" (click)="insertVoucherDocument()">Save
+                            changes</button>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <span class="col-lg-12 d-flex row p-2">
-                        <button type="button" mat-raised-button (click)="vDoc.click()">Choose File</button>
-                        <input hidden accept=".pdf"  (change)="onDocSelected($event)" #vDoc type="file" id="regDoc"  class="border border-dark">
-                        <p class="text-center text-secondary mt-1 border-bottom">{{vDoc.value}}</p>
-                        <mat-hint class="text-danger">File Must be PDF Only</mat-hint>
-                    </span>
-                </div>
-                <div class="modal-footer bg-mf">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary" (click)="insertVoucherDocument()">Save changes</button>
-                </div>
-              </div>
             </div>
-          </div>
+        </div>
 
     </mat-tab>
 </mat-tab-group>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

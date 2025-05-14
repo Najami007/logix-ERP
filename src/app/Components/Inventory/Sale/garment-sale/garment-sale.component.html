@@ -78,8 +78,10 @@
                             <p style="font-size: 2rem;" class="font-digit pt-1 text-end">{{change
                                 ||0|number:'1.0-1'}}</p>
                         </div>
+
+                    
                     </div>
-                    <mat-radio-group class="hide" aria-label="Select an option" [(ngModel)]="billPrintType" #BillType
+                    <mat-radio-group *ngIf="urduBillFeature" aria-label="Select an option" [(ngModel)]="billPrintType" #BillType
                         (change)="setBillType($event)">
                         <mat-radio-button value="english">English</mat-radio-button>
                         <mat-radio-button value="urdu">Urdu</mat-radio-button>

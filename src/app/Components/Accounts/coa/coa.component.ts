@@ -25,7 +25,7 @@ export class COAComponent  implements OnInit {
     private app:AppComponent,
     private route:Router,
     private formBuilder: FormBuilder,
-    private globalData: GlobalDataModule,
+    public globalData: GlobalDataModule,
     private http:HttpClient,
     private dialogue:MatDialog
     ) { 
@@ -41,14 +41,20 @@ export class COAComponent  implements OnInit {
 
 
 
-      
+    filterTransactionType:any = 'all';
     filterCoaType = 0;
 
     filterCOA(){
+      if(this.filterTransactionType == 'all' ){
       this.filterCoaType == 0 
       ? this.ChartsofAccountsData = this.tmpCoaData 
       :this.ChartsofAccountsData = this.tmpCoaData.filter((e:any)=>e.coaTypeID == this.filterCoaType);
-      
+      }else{
+      this.filterCoaType == 0 
+      ? this.ChartsofAccountsData = this.tmpCoaData.filter((e:any)=>e.transactionAllowed == this.filterTransactionType) 
+      :this.ChartsofAccountsData = this.tmpCoaData.filter((e:any)=>e.coaTypeID == this.filterCoaType && e.transactionAllowed == this.filterTransactionType);
+      }
+    
     }
 
   ngOnInit(): void {
@@ -70,6 +76,7 @@ export class COAComponent  implements OnInit {
   error: any;
   coaSearch:any;
   actionbtn='Save';
+  alias:any = 'other';
 
   CoaType = 0; 
   coaLevel:any;
@@ -87,16 +94,16 @@ export class COAComponent  implements OnInit {
   
 
 
-  coaTypesList:any;
-  ChartsofAccountsData:any;
+  coaTypesList:any = [];
+  ChartsofAccountsData:any = [];
  
-  coaLevel1List:any;
-  coaLevel2List:any;
-  coaLevel3List:any;
-  coaLevel4List:any;
+  coaLevel1List:any = [];
+  coaLevel2List:any = [];
+  coaLevel3List:any = [];
+  coaLevel4List:any = [];
 
-  LevelList:any;
-  notesList:any;
+  LevelList:any = [];
+  notesList:any = [];
 
 
 
@@ -144,6 +151,14 @@ onCoaTypeChange(){
 
   ];
   this.getLevel1();
+  this.level1 = '';
+  this.level2 = '';
+  this.level3 = '';
+  this.level4 = '';
+  this.TransactionAllowed = false;
+  this.alias = 'other';
+  this.NoteID = 0;
+
   
 }
 
@@ -180,21 +195,6 @@ onlevel3Change(){
 
 
 //////////////////////////////////////////////////
-
-  noteEnable(){
-    this.disableNote = true;
-    this.NoteID = 0;
-    
-    if(this.CoaType == 1 && this.TransactionAllowed == true){
-      this.disableNote = false;
-    }else if(this.CoaType == 4 && this.TransactionAllowed == true){
-      this.disableNote = false;
-    }else if(this.CoaType == 5 && this.TransactionAllowed == true){
-      this.disableNote = false;
-    }else if(this.CoaType == 2 || this.CoaType == 3 ){
-      this.NoteID = 0;
-    }
-  }
 
 
 
@@ -319,6 +319,21 @@ onlevel3Change(){
 
   Save() {
 
+    var postData = {
+    CoaTitle: this.CoaTitle,
+    Alias :this.alias,
+    CoaTypeID: this.CoaType,
+    Level1: this.level1.toString(),
+    Level2: this.level2.toString(),
+    Level3:this.level3.toString(),
+    Level4:this.level4.toString(),
+    TransactionAllowed: this.TransactionAllowed,
+    Editable: false,
+    IsService: false,
+    noteID:this.NoteID,
+    UserID: this.globalData.getUserID(),
+    }
+
     if(this.CoaType == 0 || this.CoaType == undefined){
       this.msg.WarnNotify('Select the Charts Of Accouts Type')
     }else if(this.coaLevel == '' || this.coaLevel == undefined){
@@ -351,20 +366,8 @@ onlevel3Change(){
     }
     else{
       this.app.startLoaderDark();
-      this.http.post(environment.mainApi+this.globalData.accountLink+'InsertChartOfAccount',{
-    CoaTitle: this.CoaTitle,
-    CoaTypeID: this.CoaType,
-    Level1: this.level1.toString(),
-    Level2: this.level2.toString(),
-    Level3:this.level3.toString(),
-    Level4:this.level4.toString(),
-    TransactionAllowed: this.TransactionAllowed,
-    Editable: false,
-    IsService: false,
-    noteID:this.NoteID,
-    UserID: this.globalData.getUserID(),
-    
-      }).subscribe(
+      console.log(postData);
+      this.http.post(environment.mainApi+this.globalData.accountLink+'InsertChartOfAccount',postData).subscribe(
         (Response:any)=>{
           // console.log(this.TransactionAllowed);
           if(Response.msg == "Data Saved Successfully"){
@@ -460,6 +463,7 @@ onlevel3Change(){
   reset(){
     this.CoaType = 0;
     this.coaLevel = '';
+    this.alias = 'other';
     this.level1 = '';
     this.level2 = '';
     this.level3 = '';

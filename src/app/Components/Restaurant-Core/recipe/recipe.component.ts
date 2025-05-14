@@ -627,7 +627,7 @@ export class RecipeComponent implements OnInit {
     }
     else if (this.salePrice == 0 || this.salePrice == '' || this.salePrice == undefined) {
       this.msg.WarnNotify('Enter Receipe Sale Price')
-    } else if (this.recipeImg == '' || this.recipeImg == undefined) {
+    } else if (this.recipeType == 'Dine In' && ( this.recipeImg == '' || this.recipeImg == undefined)) {
       this.msg.WarnNotify('Select Recipe Image')
     } else if (this.categoryID == 0 || this.categoryID == undefined) {
       this.msg.WarnNotify('Select Category');
@@ -784,6 +784,9 @@ export class RecipeComponent implements OnInit {
       }
     )
 
+    setTimeout(() => {
+       $('#RecipeTitle').trigger('select');      
+    }, 200);
 
   }
 

@@ -40,6 +40,9 @@ export class GarmentSaleComponent implements OnInit {
   onlySaveBillFeature = this.global.onlySaveBillFeature;
   disableDate = this.global.DisableDateSale;
     postBillFeature = this.global.postSale;
+    urduBillFeature = this.global.urduBill;
+   disablePrintPwd = this.global.DisablePrintPwd;
+   
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
@@ -1525,8 +1528,11 @@ export class GarmentSaleComponent implements OnInit {
 
     $('#SavedBillModal').hide();
 
-
-    this.global.openPassword('Password').subscribe(pin => {
+    if(this.disablePrintPwd){
+    this.billPrint.PrintBill(item.invBillNo);
+    this.billPrint.billType = 'Duplicate';
+    }else{
+   this.global.openPassword('Password').subscribe(pin => {
       if (pin !== '') {
         this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
           RestrictionCodeID: 5,
@@ -1554,6 +1560,8 @@ export class GarmentSaleComponent implements OnInit {
         )
       }
     })
+    }
+ 
 
 
   }

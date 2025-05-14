@@ -36,7 +36,7 @@
             <button mat-fab class="text-white bg-warning" accesskey="n"
                 (click)="global.openBootstrapModal('#prodModal',true)"><mat-icon> restaurant_menu</mat-icon></button>
 
-            <button mat-fab class=" text-white bg-warning" accesskey="n"
+            <button mat-fab class=" text-white bg-warning" accesskey="n" *ngIf="CommentCardFeature"
                 (click)="global.openBootstrapModal('#holdedBillModal',true)"><mat-icon> comment</mat-icon></button>
 
         </div>
@@ -481,12 +481,13 @@
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-body">
 
-                    <app-comment-card></app-comment-card>
+                    <app-comment-card (saveEmitter)="global.closeBootstrapModal('#commentCardModal',true)"></app-comment-card>
 
 
                 </div>
 
                 <div class="modal-footer bg-mf-blue">
+                    <button type="button" class="btnsave" (click)="saveComments()">Save</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
 

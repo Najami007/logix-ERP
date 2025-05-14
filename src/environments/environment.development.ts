@@ -14,7 +14,7 @@ export const environment = {
 
       //mainApi: 'http://192.168.100.37:5000/',
        /// mainApi: 'http://localhost:5000/', 
-        mainApi: 'http://localhost:8060/',           /////////// system own published API
+       // mainApi: 'http://localhost:8060/',           /////////// system own published API
        // mainApi: 'http://192.168.160.98:8060/',  ////////// live Server Dani System
       //mainApi: 'http://192.168.100.250:1007/',  ////////// live Server Dani System
        //mainApi: 'http://192.168.10.100:1003/',    /////////// Local Server Office
@@ -67,7 +67,7 @@ export const environment = {
 
 
    //mainApi: 'http://192.168.20.100:7000/',    /////////// Black Gold Restauratn
-   //mainApi: 'http://192.168.20.99:7000/',    /////////// Black Gold Restauratn Hyper accounts
+   mainApi: 'http://192.168.20.99:7000/',    /////////// Black Gold Restauratn Hyper accounts
   //mainApi: 'http://192.168.20.100:7003/',    /////////// Mehria Brands
 
 

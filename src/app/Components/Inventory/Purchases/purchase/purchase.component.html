@@ -4,10 +4,10 @@
         <div class="col-lg-10 ps-1  pt-2">
 
             <div class="row">
-                <mat-form-field appearance="outline" *ngIf="global.DisableDate == false" class="col-lg-2 matSmall">
+                <mat-form-field appearance="outline" *ngIf="!disableDateFeature" class="col-lg-2 matSmall">
                     <mat-label>Invoice Date</mat-label>
-                    <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput
-                        type="text" name="voucherDate" [matDatepicker]="voucherDate">
+                    <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
+                        [matDatepicker]="voucherDate">
                     <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
                     <mat-datepicker #voucherDate></mat-datepicker>
                 </mat-form-field>
@@ -49,7 +49,7 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="matSmall"
-                    [ngClass]="global.DisableDate == true ? 'col-lg-4' :'col-lg-2'">
+                    [ngClass]="disableDateFeature ? 'col-lg-4' :'col-lg-2'">
                     <mat-label>Remarks</mat-label>
                     <textarea matInput rows="1" [(ngModel)]="invRemarks" type="text" name="remarks"></textarea>
                 </mat-form-field>
@@ -72,8 +72,8 @@
                 <div class="col-lg-3 ms-1">
                     <button *ngIf="crudList.c" style="height: 50px;" class=" col-lg-5 btnhold me-1"
                         matTooltip="Hold Bill" (click)="SaveBill('hold')">{{holdBtnType}}</button>
-                    <button class=" col-lg-5 btnreset me-1" (click)="global.openBootstrapModal('#holdModal',true)" style="height: 50px;"
-                        matTooltip="Retrieve Bill" >Retrieve</button>
+                    <button class=" col-lg-5 btnreset me-1" (click)="global.openBootstrapModal('#holdModal',true)"
+                        style="height: 50px;" matTooltip="Retrieve Bill">Retrieve</button>
 
 
                 </div>
@@ -262,6 +262,12 @@
 
                 </div>
 
+
+                <mat-radio-group [(ngModel)]="searchBillType" class="mt-2">
+                    <mat-radio-button value="all">All</mat-radio-button>
+                    <mat-radio-button value="Date">Datewise</mat-radio-button>
+                </mat-radio-group>
+
                 <table class="table table-logix">
                     <thead>
                         <tr>
@@ -274,7 +280,7 @@
                             <th>User</th>
                             <th *ngIf="crudList.r">Action</th>
                             <th *ngIf="crudList.u" id="edit">Retrive</th>
-                             <th  id="doc">Document</th>
+                            <th id="doc">Document</th>
                         </tr>
 
                     </thead>
@@ -308,17 +314,18 @@
 </div>
 
 
-<div class="modal" id="DocumentModal" tabindex="-1" data-bs-backdrop="true"
-    aria-labelledby="DocumentModalLabel">
+<div class="modal" id="DocumentModal" tabindex="-1" data-bs-backdrop="true" aria-labelledby="DocumentModalLabel">
     <div class="modal-dialog modal-dialog-scrollable modal-md">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title" id="DocumentModalLabel">Add Document</h2>
-                <button type="button" class="btn-close" (click)="global.closeBootstrapModal('#DocumentModal',true)" aria-label="Close"></button>
+                <button type="button" class="btn-close" (click)="global.closeBootstrapModal('#DocumentModal',true)"
+                    aria-label="Close"></button>
             </div>
             <div class="modal-body">
 
-                <app-add-document [billNo]="docInvBillNo" (UploadEmitter)="global.closeBootstrapModal('#DocumentModal',true)"></app-add-document>
+                <app-add-document [billNo]="docInvBillNo"
+                    (UploadEmitter)="global.closeBootstrapModal('#DocumentModal',true)"></app-add-document>
             </div>
         </div>
     </div>

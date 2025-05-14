@@ -14,6 +14,7 @@ import { exec } from 'child_process';
 import * as bootstrap from 'bootstrap';
 import { SaleBillDetailComponent } from '../sale1/sale-bill-detail/sale-bill-detail.component';
 import * as $ from 'jquery';
+import { CommentCardComponent } from '../SaleCommonComponent/comment-card/comment-card.component';
 
 @Component({
   selector: 'app-table-sale2',
@@ -25,11 +26,13 @@ export class TableSale2Component implements OnInit {
 
   @ViewChild(RestSaleBillPrintComponent) billPrint: any;
   @ViewChild(RestKotPrintComponent) KotPrint: any;
+  @ViewChild(CommentCardComponent) commentCard:any;
 
   showCmpNameFeature: any = this.global.showCmpNameFeature;
   waiterFeature = this.global.waiterFeature;
   FBRFeature = this.global.FBRFeature;
   coverOfFeature = this.global.coverOfFeature;
+  CommentCardFeature = this.global.CommentCard;
   appVisibility() {
     if (document.hidden) {
 
@@ -457,6 +460,8 @@ export class TableSale2Component implements OnInit {
 
   save(type: any) {
 
+
+   
  
 
     if (this.orderType == 'Dine In' && (this.tableID == 0 || this.tableID == undefined)) {
@@ -495,6 +500,29 @@ export class TableSale2Component implements OnInit {
         this.OtherCharges = 0;
       }
 
+       var postData = {
+          InvBillNo: this.invBillNo,
+          OrderNo: this.orderNo,
+          InvDate: this.global.dateFormater(this.invoiceDate, '-'),
+          TableID: this.tableID,
+          TmpTableID: this.prevTableID,
+          PartyID: this.PartyID,
+          InvType: "HS",
+          ProjectID: this.ProjectID,
+          BookerID: this.waiterFeature ? this.BookerID : 1,
+          PaymentType: this.paymentType,
+          Remarks: this.billRemarks,
+          OrderType: this.orderType,
+          CoverOf: this.coverOf,
+          OtherCharges: this.OtherCharges,
+          BillDiscount: this.billDiscount,
+          GstAmount:0,
+          GstValue:0,
+          SaleDetail: JSON.stringify(this.tableData),
+
+          UserID: this.global.getUserID()
+    };
+
       if(this.global.SubscriptionExpired()){
         Swal.fire({
           title: 'Alert!',
@@ -510,26 +538,7 @@ export class TableSale2Component implements OnInit {
       }
       if (type == 'hold') {
         this.app.startLoaderDark()
-        this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertHold', {
-          InvDate: this.global.dateFormater(this.invoiceDate, '-'),
-          TableID: this.tableID,
-          PartyID: this.PartyID,
-          InvType: "HS",
-          ProjectID: this.ProjectID,
-          BookerID: this.waiterFeature ? this.BookerID : 1,
-          PaymentType: this.paymentType,
-          Remarks: this.billRemarks,
-          OrderType: this.orderType,
-          CoverOf: this.coverOf,
-          OtherCharges: this.OtherCharges,
-          BillDiscount: this.billDiscount,
-          GstAmount:0,
-          GstValue:0,
-
-          SaleDetail: JSON.stringify(this.tableData),
-
-          UserID: this.global.getUserID()
-        }).subscribe(
+        this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertHold',postData).subscribe(
           (Response: any) => {
 
             if (Response.msg == 'Data Saved Successfully') {
@@ -556,28 +565,7 @@ export class TableSale2Component implements OnInit {
       if (type == 'rehold') {
 
         this.app.startLoaderDark()
-        this.http.post(environment.mainApi + this.global.restaurentLink + 'UpdateHold', {
-          InvBillNo: this.invBillNo,
-          OrderNo: this.orderNo,
-          InvDate: this.global.dateFormater(this.invoiceDate, '-'),
-          TableID: this.tableID,
-          TmpTableID: this.prevTableID,
-          PartyID: this.PartyID,
-          InvType: "HS",
-          ProjectID: this.ProjectID,
-          BookerID: this.waiterFeature ? this.BookerID : 1,
-          PaymentType: this.paymentType,
-          Remarks: this.billRemarks,
-          OrderType: this.orderType,
-          CoverOf: this.coverOf,
-          OtherCharges: this.OtherCharges,
-          BillDiscount: this.billDiscount,
-          GstAmount:0,
-          GstValue:0,
-          SaleDetail: JSON.stringify(this.tableData),
-
-          UserID: this.global.getUserID()
-        }).subscribe(
+        this.http.post(environment.mainApi + this.global.restaurentLink + 'UpdateHold', postData).subscribe(
           (Response: any) => {
 
             if (Response.msg == 'Data Updated Successfully') {
@@ -1397,12 +1385,20 @@ export class TableSale2Component implements OnInit {
 
 
 
-
+  
  openCommentCard(item:any){
+      this.commentCard.reset();
+      this.commentCard.getSavedData(item.invBillNo);
+      this.commentCard.invBillNo = item.invBillNo;
+      
       this.global.closeBootstrapModal('#holdedBillModal',true)
       this.global.openBootstrapModal('#commentCardModal',true)
     }
 
+
+    saveComments(){
+        this.commentCard.save();
+    }
 
 
 }

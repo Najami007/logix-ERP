@@ -4,9 +4,9 @@
         <div class="col-lg-9 bg-white ">
 
             <div class="row ps-1 pe-1 pt-2 justify-content-between ">
-                <mat-form-field appearance="outline" *ngIf="global.DisableDate == false" class="col-lg-3 matSmall">
+                <mat-form-field appearance="outline" *ngIf="!disableDateFeature"  class="col-lg-3 matSmall">
                     <mat-label>Select Invoice Date</mat-label>
-                    <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput
+                    <input [(ngModel)]="invoiceDate"  readonly="true" matInput
                         type="text" name="invDate" [matDatepicker]="iDate">
                     <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
                     <mat-datepicker #iDate></mat-datepicker>
@@ -33,7 +33,7 @@
                     </mat-select>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="matSmall" [ngClass]="global.DisableDate == true ? 'col-lg-6' :'col-lg-3'">
+                <mat-form-field appearance="outline" class="matSmall" [ngClass]="disableDateFeature ? 'col-lg-6' :'col-lg-3'">
                     <mat-label>Remarks</mat-label>
                     <input matInput type="text" [(ngModel)]="invRemarks">
                 </mat-form-field>

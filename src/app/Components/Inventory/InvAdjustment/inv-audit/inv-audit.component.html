@@ -127,9 +127,9 @@
                 </mat-card>
             </div>
             <div class="pt-1">
-                <mat-form-field appearance="outline" *ngIf="global.DisableDate == false" class="w-100 matSmall">
+                <mat-form-field appearance="outline" *ngIf="!disableDateFeature"  class="w-100 matSmall">
                     <mat-label>Invoice Date</mat-label>
-                    <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput
+                    <input [(ngModel)]="invoiceDate"  readonly="true" matInput
                         type="text" name="invDate" [matDatepicker]="iDate">
                     <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
                     <mat-datepicker #iDate></mat-datepicker>

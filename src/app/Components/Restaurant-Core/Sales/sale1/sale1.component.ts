@@ -171,7 +171,7 @@ export class Sale1Component implements OnInit {
 
   categoriesList: any = [];
   tmpInvBillNO = '';
-  serviceCharges = this.global.RestServiceCharges;
+  serviceCharges = this.global.getServiceCharges();
   bankCoaID = 0;
   OtherCharges: any = 0;
   billDiscount: any = 0;

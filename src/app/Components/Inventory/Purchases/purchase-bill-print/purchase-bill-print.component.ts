@@ -72,7 +72,7 @@ discFeature = this.global.getFeature('Discount');
   myCPTotal = 0;
   mySPTotal = 0;
   myBillStatus = false;
-
+  myInvType = '';
 
   printBill(item: any) {
     
@@ -92,6 +92,7 @@ discFeature = this.global.getFeature('Discount');
     this.getBillDetail(item.invBillNo).subscribe(
       (Response: any) => {
         this.setInvoiceTitle(Response[0].invType);
+        this.myInvType = Response[0].invType;
         var totalQty = 0;
         var overhead = 0
         this.myBillTotalQty = 0;
@@ -152,6 +153,11 @@ discFeature = this.global.getFeature('Discount');
       this.myInvoiceTitle = 'Goods Receive Note';
     }else if(type == 'HPR'){
       this.myInvoiceTitle = 'Goods Return Note';
+    }
+    if(type == 'HP'){
+      this.myInvoiceTitle = 'Goods Receive Note';
+    }else if(type == 'PO'){
+      this.myInvoiceTitle = 'Purchase Order';
     }
     
   }

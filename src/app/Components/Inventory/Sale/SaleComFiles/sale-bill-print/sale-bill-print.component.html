@@ -4,14 +4,15 @@
 
         <!--------------------- Company Detail Section Start------------------ -->
         <div class="text-center d-flex flex-column">
-           <span> <img *ngIf="companyLogo && showCompanyLogo" [src]="companyLogo" [height]="logoHeight" [width]="logoWidth"></span>
+            <span> <img *ngIf="companyLogo && showCompanyLogo" [src]="companyLogo" [height]="logoHeight"
+                    [width]="logoWidth"></span>
             <span class="text-uppercase" *ngIf="showCompanyName">{{companyName}}</span>
             <span class="fs-11 text-uppercase" *ngIf="companyAddress != '-'">{{companyAddress}}</span>
-            <span  *ngIf="CompanyMobile != '-'" class="fs-11">{{CompanyMobile}}</span>
-           
-                <span *ngIf="gstFeature && CompanyNTN != '-'" class="fs-11"><b>NTN:</b>{{CompanyNTN}} </span>
-                <span *ngIf="gstFeature && CompanySTRN != '-'" class="fs-11"><b>STRN:</b> {{CompanySTRN}}</span>
- 
+            <span *ngIf="CompanyMobile != '-'" class="fs-11">{{CompanyMobile}}</span>
+
+            <span *ngIf="gstFeature && CompanyNTN != '-'" class="fs-11"><b>NTN:</b>{{CompanyNTN}} </span>
+            <span *ngIf="gstFeature && CompanySTRN != '-'" class="fs-11"><b>STRN:</b> {{CompanySTRN}}</span>
+
 
 
         </div>
@@ -63,7 +64,8 @@
 
         <div>
             <p class="border border-dark text-center mt-1 fw-bold" *ngIf="billType">{{billType}}</p>
-            <p class="border border-dark text-center fw-bold">{{myInvType == 'S' ? 'Sale' : myInvType == 'SR' ?'SaleReturn' :''}}</p>
+            <p class="border border-dark text-center fw-bold">{{myInvType == 'S' ? 'Sale' : myInvType == 'SR'
+                ?'SaleReturn' :''}}</p>
             <p *ngIf="myPaymentType == 'Complimentary'" class="border border-dark text-center fw-bold">Complimentary</p>
             <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center fw-bold">Duplicate</p>
         </div>
@@ -71,7 +73,7 @@
         <div>
 
             <!---------------------- Bill Table Start------------------>
-            <table class="w-100 table-garment-sale" *ngIf="billFormate1"   >
+            <table class="w-100 table-garment-sale" *ngIf="billFormate1">
                 <thead>
                     <tr class="fs-12">
                         <th style="width:10% !important;">Qty</th>
@@ -120,43 +122,43 @@
 
 
 
-            <table class="table table-sale"  *ngIf="billFormate2">
-            <thead >
-                <tr class="fs-10">
-                    <th>S#</th>
-                    <th>Item</th>
-                    <th>Qty</th>
-                    <th>Price</th>
-                    <th style="width:10% !important;" *ngIf="discFeature">D Rs</th>
-                    <th style="width:10% !important;" *ngIf="discFeature">D %</th>
-                    <th>Total</th>
+            <table class="table table-sale" *ngIf="billFormate2">
+                <thead>
+                    <tr class="fs-10">
+                        <th>S#</th>
+                        <th>Item</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th style="width:10% !important;" *ngIf="discFeature">D Rs</th>
+                        <th style="width:10% !important;" *ngIf="discFeature">D %</th>
+                        <th>Total</th>
 
-                </tr>
-            </thead>
-            <tbody>
-                
-                <tr *ngFor="let item of myPrintTableData index as index" class="fs-12">
-                    <td>{{index +1}}</td>
-                    <td class="text-start">{{item.productTitle}}</td>
-                    <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
-                    <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
-                    <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
-                        {{item.discInR|number:'1.0-1'}}</td>
-                    <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
-                        {{item.discInP|number:'1.0-1'}}</td>
-                    <td class="text-end" style="width:20% !important;">{{(item.quantity *
-                        item.salePrice) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
+                    </tr>
+                </thead>
+                <tbody>
 
-                </tr>
-                <tr>
-                    <td colspan="2"></td>
-                    <td class="fw-bold">{{myQtyTotal | number:'1.0-2'}}</td>
-                    <td ></td>
-                    <td colspan="2" *ngIf="discFeature"></td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
+                    <tr *ngFor="let item of myPrintTableData index as index" class="fs-12">
+                        <td>{{index +1}}</td>
+                        <td class="text-start">{{item.productTitle}}</td>
+                        <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
+                        <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
+                            {{item.discInR|number:'1.0-1'}}</td>
+                        <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
+                            {{item.discInP|number:'1.0-1'}}</td>
+                        <td class="text-end" style="width:20% !important;">{{(item.quantity *
+                            item.salePrice) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td class="fw-bold">{{myQtyTotal | number:'1.0-2'}}</td>
+                        <td></td>
+                        <td colspan="2" *ngIf="discFeature"></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
 
 
             <!---------------------- Bill Table End------------------>
@@ -176,7 +178,7 @@
 
                     <tr class="text-center " style="margin-top:15px !important;" *ngIf="gstFeature">
                         <td id="output" class="d-none"></td>
-                        <td id="qrCode" class="qr-code-generator"  width="40%" rowspan="6"
+                        <td id="qrCode" class="qr-code-generator" width="40%" rowspan="6"
                             style="border: 0px solid black;"></td>
 
                     </tr>
@@ -245,7 +247,7 @@
                         <td>{{myBank|number:'1.0-1'}}</td>
                         <td></td>
                     </tr>
-                    <tr class="text-end fs-14" >
+                    <tr class="text-end fs-14">
                         <td></td>
                         <td>Change</td>
                         <td>{{myChange|number:'1.0-1'}}</td>
@@ -254,11 +256,12 @@
                     </tr>
 
 
-                    <tr style="text-align:right;" *ngIf="myCusBalance !== 0" >
+                    <tr style="text-align:right;" *ngIf="myCusBalance !== 0">
                         <td></td>
                         <td class="fw-bold">prv Blnc</td>
                         <td class="fw-bold" *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
-                        <td class="fw-bold"*ngIf="myChange <= 0">{{myCusBalance -  ( -1 * myChange) | number:'1.0-1'}}</td>
+                        <td class="fw-bold" *ngIf="myChange <= 0">{{myCusBalance - ( -1 * myChange) | number:'1.0-1'}}
+                        </td>
 
                     </tr>
                     <tr style="text-align:right;" *ngIf="myCusBalance !== 0">
@@ -284,12 +287,12 @@
                 <!-- <span><b>Goods Once Sold Can Not be Replaced or Refunded. </b></span> -->
                 <b></b>
                 <span><b>Thank You for your visit.</b></span>
-                
+
             </div>
             <div class="fs-12px d-flex flex-column">
                 <!-- <span><b>Goods Once Sold Can Not be Replaced or Refunded. </b></span> -->
                 <b></b>
-                
+
                 <!-- <span><b>Without Bill no return acceptable.</b></span>
                 <span><b>Returns are acceptable within 3 days.</b></span>
                 <span><b>Exchange is acceptable within 7 days.</b></span>
@@ -319,12 +322,12 @@
 
 
         <div>
-            <table class="table-logix2 fs-13">
+            <table class="table-logix2 fs-13 urdu" >
                 <thead>
                     <tr>
-                        <th>Inv #</th>
-                        <th>Date</th>
-                        <th>Counter</th>
+                        <th> بل نمبر </th>
+                        <th>تاریخ</th>
+                        <th>کاؤنٹر</th>
                     </tr>
                 </thead>
                 <tbody class="text-center">
@@ -337,19 +340,23 @@
                 </tbody>
             </table>
 
-            <table>
+            <table  dir="rtl" class="w-100 justify-content-start urdu">
                 <tr *ngIf="myCustomerName != null">
-                    <th class="fs-12">Customer:-</th>
-                    <td class="ms-2 fs-11">{{myCustomerName}}</td>
+                    
+                    <th class="fs-12"> کسٹمر :</th>
+                    <td class="ms-2 fs-11"> {{myCustomerName}}</td>
+                    <td></td>
                 </tr>
                 <tr *ngIf="myBookerName != null">
-                    <th class="fs-12">Booker:- </th>
-                    <td class="ms-2 fs-11">{{myBookerName}}</td>
+                    <th class="fs-12"> سیل مین :</th>
+                    <td class="ms-2 fs-11"> {{myBookerName}} </td>
+                    <td></td>
                 </tr>
 
-                <tr class="fs-11">
-                    <th class="fs-12">Remarks:- </th>
-                    <td class="ms-2 fs-11">{{myRemarks}}</td>
+                <tr class="fs-11" >
+                    <th class="fs-12"> ریمارکس : </th>
+                    <td class="ms-2 fs-11">{{myRemarks}} </td>
+                    <td></td>
                 </tr>
 
 
@@ -367,7 +374,7 @@
 
         <div>
 
-            <table class="w-100 table-garment-sale-Urdu" dir="rtl">
+            <table class="w-100 table-garment-sale-Urdu" dir="rtl" *ngIf="billFormate1">
 
                 <thead>
                     <tr class="text-center">
@@ -418,6 +425,46 @@
             </table>
 
 
+            <table class="table table-sale" dir="rtl" *ngIf="billFormate2">
+                <thead>
+                    <tr class="fs-10">
+                        
+                        <th >  نمبر </th>
+                        <th >  ائٹم </th>
+                        <th >تعداد</th>
+                        <th >قیمت</th>
+                        <th  *ngIf="discFeature">ڈسکاؤنٹ</th>
+                        <th  *ngIf="discFeature">% ڈسکاؤنٹ</th>
+                        <th >ٹوٹل</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr *ngFor="let item of myPrintTableData index as index" class="fs-12">
+                        <td>{{index +1}}</td>
+                        <td class="text-start">{{item.productTitleOtherLang}}</td>
+                        <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
+                        <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
+                            {{item.discInR|number:'1.0-1'}}</td>
+                        <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
+                            {{item.discInP|number:'1.0-1'}}</td>
+                        <td class="text-end" style="width:20% !important;">{{(item.quantity *
+                            item.salePrice) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td class="fw-bold">{{myQtyTotal | number:'1.0-2'}}</td>
+                        <td></td>
+                        <td colspan="2" *ngIf="discFeature"></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+
             <table class="table-garment-sale-Urdu-Bottom " dir="rtl">
                 <tbody class="fs-16 fw-bold">
 
@@ -463,7 +510,7 @@
                     </tr>
                     <tr class="text-end" *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
                         <td></td>
-                        <td>Bank</td>
+                        <td>بینک</td>
                         <td>{{myBank|number:'1.0-1'}}</td>
                         <td></td>
                     </tr>
@@ -477,16 +524,17 @@
                     </tr>
 
 
-                    <tr style="text-align:right;">
+                    <tr style="text-align:right; " *ngIf="myCusBalance !== 0">
                         <td></td>
-                        <td  class="urdu fw-bold">سابقا بقایا</td>
-                        <td class="fw-bold" *ngIf="myChange <= 0">{{myCusBalance - (-1 * myChange) | number:'1.0-1'}}</td>
+                        <td class="urdu fw-bold">سابقا بقایا</td>
+                        <td class="fw-bold" *ngIf="myChange <= 0">{{myCusBalance - (-1 * myChange) | number:'1.0-1'}}
+                        </td>
                         <td class="fw-bold" *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
 
 
 
                     </tr>
-                    <tr style="text-align:right;">
+                    <tr style="text-align:right;" *ngIf="myCusBalance !== 0">
                         <td></td>
                         <td class="urdu fw-bold">ٹوٹل بقایا</td>
                         <td class="fw-bold">{{myCusBalance | number:'1.0-1'}}</td>
@@ -533,59 +581,58 @@
 
 
 
-<div id="printKOT" >
+<div id="printKOT">
     <div class="p-2">
-      <div class="text-center dark " >
-          <h2 style="border: 1px solid black;text-align: center;text-transform: uppercase;"  >{{companyName}}</h2>
-          <!-- <h2 >ORDER NO: {{myOrderNo}}</h2>    -->
-      </div>
-      <div>
-          <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center fw-bold">Duplicate</p>
-      </div>
-    <div >
-     
-          <table  class="table" style="font-size: 12px;width: 100%;">
-              <thead>
-                  <tr>
-                      <th>Inv #</th>
-                      <th>Date</th>
-                      <th>Counter</th>
-                  </tr>
-              </thead>
-              <tbody >
-                  <tr>
-                      <td>{{myInvoiceNo}}</td>
-                      <td>{{myInvDate | date:'dd-MM-yyyy '}} ({{myInvTime|date:'hh:mm:ss:a'}})</td>
-                      <td>{{myCounterName}}</td>
-                  </tr>
-  
-              </tbody>
-          </table>
-  
-          <table class="table table-bordered" >
-              <thead >
-                  <tr>
-                      <th>Product Name</th>
-                      <th>Qty</th>
-                      <th>Total</th>
-                  
-                  </tr>
-              </thead>
-              <tbody >
-                  <tr *ngFor="let item of myPrintData">
-                      <td >{{item.productTitle}}</td>
-                      <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
-                      <td class="text-center">{{item.salePrice * item.quantity |number:'1.0-2' }}</td>
-  
-                  </tr>
-              </tbody>
-          </table>
-    
+        <div class="text-center dark ">
+            <h2 style="border: 1px solid black;text-align: center;text-transform: uppercase;">{{companyName}}</h2>
+            <!-- <h2 >ORDER NO: {{myOrderNo}}</h2>    -->
+        </div>
+        <div>
+            <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center fw-bold">Duplicate</p>
+        </div>
+        <div>
+
+            <table class="table" style="font-size: 12px;width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Inv #</th>
+                        <th>Date</th>
+                        <th>Counter</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{myInvoiceNo}}</td>
+                        <td>{{myInvDate | date:'dd-MM-yyyy '}} ({{myInvTime|date:'hh:mm:ss:a'}})</td>
+                        <td>{{myCounterName}}</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of myPrintData">
+                        <td>{{item.productTitle}}</td>
+                        <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
+                        <td class="text-center">{{item.salePrice * item.quantity |number:'1.0-2' }}</td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
     </div>
-    </div>
-  
-  </div>
+
+</div>
 
 
-  <app-kotprint class="d-none"></app-kotprint>
-  
+<app-kotprint class="d-none"></app-kotprint>

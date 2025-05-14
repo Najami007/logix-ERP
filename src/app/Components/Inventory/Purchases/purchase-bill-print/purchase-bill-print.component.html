@@ -31,15 +31,15 @@
                 <div class="row">
                     <label class="fw-bold">Date</label>
                     <label class="fw-bold">Inv No</label>
-                    <label class="fw-bold">Booker</label>
-                    <label class="fw-bold">Location</label>
+                    <label class="fw-bold" *ngIf="myBookerName">Booker</label>
+                    <label class="fw-bold" *ngIf="myLocation">Location</label>
 
                 </div>
                 <div class="row">
                     <label>{{myInvoiceDate | date:'dd-MM-yyyy'}}</label>
                     <label>{{myInvoiceNo}}</label>
-                    <label>{{myBookerName}}</label>
-                    <label>{{myLocation}}</label>
+                    <label *ngIf="myBookerName">{{myBookerName}}</label>
+                    <label *ngIf="myLocation">{{myLocation}}</label>
 
                 </div>
             </div>
@@ -68,9 +68,9 @@
                     <th class="text-center">Quantity</th>
                     <!-- <th class="text-center ">WOH CP</th> -->
                     <th class=" text-center">Cost Price</th>
-                    <th class=" text-center">Sale Price</th>
+                    <th class=" text-center" *ngIf="myInvType !== 'PO' ">Sale Price</th>
                     <th class=" text-center">Cost Total</th>
-                    <th class=" text-center">Sale Total</th>
+                    <th class=" text-center" *ngIf="myInvType !== 'PO' ">Sale Total</th>
 
                 </tr>
             </thead>
@@ -83,7 +83,7 @@
                             <span>{{item.ProductTitle}}</span>
                             <div class="d-flex">
                                 <span>({{item.barcode}})</span>
-                                <span>({{item.ExpiryDate}})</span>
+                                <span *ngIf="myInvType !== 'PO'">({{item.ExpiryDate}})</span>
                             </div>
                         </div>
                     </td>
@@ -91,9 +91,9 @@
                     <td class="text-center ">{{item.Quantity |number}}</td>
                     <!-- <td class="text-end">{{item.wohCP | number: '1.0-2'}}</td> -->
                     <td class="text-end ">{{item.CostPrice |number: '1.0-2'}}</td>
-                    <td class="text-end ">{{item.SalePrice |number: '1.0-2'}}</td>
+                    <td class="text-end " *ngIf="myInvType !== 'PO' ">{{item.SalePrice |number: '1.0-2'}}</td>
                     <td class="text-end ">{{item.CostPrice * item.Quantity |number: '1.0-2'}}</td>
-                    <td class="text-end ">{{item.SalePrice * item.Quantity |number: '1.0-2'}}</td>
+                    <td class="text-end " *ngIf="myInvType !== 'PO' ">{{item.SalePrice * item.Quantity |number: '1.0-2'}}</td>
 
 
                 </tr>
@@ -101,9 +101,9 @@
                     <th colspan="2"></th>
                     <th class="text-center">{{myBillTotalQty}}</th>
                     <th></th>
-                    <th></th>
+                    <th *ngIf="myInvType !== 'PO' "></th>
                     <th class="text-end">{{myCPTotal | number:'1.0-2'}}</th>
-                    <th class="text-end">{{mySPTotal | number:'1.0-2'}}</th>
+                    <th class="text-end" *ngIf="myInvType !== 'PO' ">{{mySPTotal | number:'1.0-2'}}</th>
 
                     <!-- <th></th>
                         <th></th> -->
@@ -113,7 +113,7 @@
         </table>
         <br>
 
-        <div class="d-flex text-end border border-dark" style="text-align: end;">
+        <div class="d-flex text-end border border-dark" style="text-align: end;" *ngIf="myInvType == 'P' || myInvType == 'HP' || myInvType == 'PR' || myInvType == 'HPR'">
 
             <div class="row w-75">
                 <label class="fw-bold">Total</label>

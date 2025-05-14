@@ -38,6 +38,8 @@ export class GarmentSaleReturnComponent implements OnInit {
   disableDate = this.global.DisableDateSale;
   disableDiscPwd = this.global.DisableDiscPwd;
   disablePrintPwd = this.global.DisablePrintPwd;
+  urduBillFeature = this.global.urduBill;
+
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
@@ -170,7 +172,14 @@ export class GarmentSaleReturnComponent implements OnInit {
   partyList: any = [];
   bookerList: any = [];
 
-  getBooker(){
+
+  billPrintType: any = this.global.getBillPrintType();
+  setBillType(e: any) {
+    localStorage.setItem('BillPrint', this.billPrintType);
+  }
+
+
+  getBooker() {
     this.global.getBookerList().subscribe((data: any) => { this.bookerList = data; });
   }
 
@@ -178,18 +187,18 @@ export class GarmentSaleReturnComponent implements OnInit {
     this.global.getCustomerList().subscribe((data: any) => { this.partyList = data; });
   }
 
-    ////////////////////////////////////////////
+  ////////////////////////////////////////////
 
-    getBankList() {
+  getBankList() {
 
-      this.global.getBankList().subscribe((data: any) => { 
-        this.bankCoaList = data;
-        // setTimeout(() => {
-        //   this.bankCoaID = data[0].coaID;
-        // }, 200);
-       });
-    
-    }
+    this.global.getBankList().subscribe((data: any) => {
+      this.bankCoaList = data;
+      // setTimeout(() => {
+      //   this.bankCoaID = data[0].coaID;
+      // }, 200);
+    });
+
+  }
 
   @ViewChild('supplier') myParty: any;
   addParty() {
@@ -455,7 +464,7 @@ export class GarmentSaleReturnComponent implements OnInit {
 
   // }
 
- 
+
   searchByCode(e: any) {
 
     var barcode = this.PBarcode;
@@ -487,23 +496,23 @@ export class GarmentSaleReturnComponent implements OnInit {
             if (Response == '' || Response == null || Response == undefined) {
               this.searchSpecialBarcode(barcode, qty);
               return;
-            }else{
+            } else {
 
               if (BType == 'price') {
                 qty = qty / parseFloat(Response[0].salePrice);
-  
+
               }
-  
+
               /////// check already present in the table or not
               var condition = this.tableDataList.find(
                 (x: any) => x.productID == Response[0].productID
               );
-  
+
               var index = this.tableDataList.indexOf(condition);
-  
+
               //// push the data using index
               if (condition == undefined) {
-  
+
                 this.tableDataList.push({
                   rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
                     : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
@@ -531,23 +540,23 @@ export class GarmentSaleReturnComponent implements OnInit {
                   aq: Response[0].aq,
                   total: (Response[0].salePrice * qty) - (Response[0].discRupees * qty),
                   productDetail: '',
-  
+
                 });
-  
+
                 //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
                 this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
                 this.getTotal();
                 this.productImage = Response[0].productImage;
-  
-  
-  
-  
+
+
+
+
               } else {
                 if (this.PBarcode.split("/")[1] != undefined) {
                   qty = this.PBarcode.split("/")[1] / this.tableDataList[index].salePrice;
                 }
                 this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + qty;
-  
+
                 /////// Sorting Table
                 this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
                 this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
@@ -557,7 +566,7 @@ export class GarmentSaleReturnComponent implements OnInit {
 
             }
 
-           
+
 
 
           }
@@ -676,7 +685,7 @@ export class GarmentSaleReturnComponent implements OnInit {
           this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
           this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
           this.productImage = this.tableDataList[index].productImage;
-   
+
         }
 
 
@@ -955,7 +964,7 @@ export class GarmentSaleReturnComponent implements OnInit {
 
   handleUpdown(item: any, e: any, cls: string, index: any) {
 
-    const container = $(".table-logix"); 
+    const container = $(".table-logix");
     if (e.keyCode == 9) {
       this.rowFocused = index + 1;
     }
@@ -980,31 +989,31 @@ export class GarmentSaleReturnComponent implements OnInit {
     /////move down
 
     if (e.keyCode === 40) {
-              if (this.tableDataList.length > 1) {
-                  this.rowFocused = Math.min(this.rowFocused + 1, this.tableDataList.length - 1);
-                  const clsName = cls + this.rowFocused;
-                  this.global.scrollToRow(clsName, container);
-                  e.preventDefault();
-                  $(clsName).trigger('select');
-                  $(clsName).trigger('focus');
-              }
-          }
+      if (this.tableDataList.length > 1) {
+        this.rowFocused = Math.min(this.rowFocused + 1, this.tableDataList.length - 1);
+        const clsName = cls + this.rowFocused;
+        this.global.scrollToRow(clsName, container);
+        e.preventDefault();
+        $(clsName).trigger('select');
+        $(clsName).trigger('focus');
+      }
+    }
 
     //Move up
     if (e.keyCode === 38) {
       if (this.rowFocused > 0) {
-          this.rowFocused -= 1;
-          const clsName = cls + this.rowFocused;
-          this.global.scrollToRow(clsName, container);
-          e.preventDefault();
-          $(clsName).trigger('select');
-          $(clsName).trigger('focus');
+        this.rowFocused -= 1;
+        const clsName = cls + this.rowFocused;
+        this.global.scrollToRow(clsName, container);
+        e.preventDefault();
+        $(clsName).trigger('select');
+        $(clsName).trigger('focus');
       } else {
-          e.preventDefault();
-          $(".searchProduct").trigger('select');
-          $(".searchProduct").trigger('focus');
+        e.preventDefault();
+        $(".searchProduct").trigger('select');
+        $(".searchProduct").trigger('focus');
       }
-  }
+    }
     ////removeing row
     if (e.keyCode == 46) {
 
@@ -1218,32 +1227,32 @@ export class GarmentSaleReturnComponent implements OnInit {
     this.getTotal();
   }
   isValidSale = true;
- 
+
   save(paymentType: any) {
 
     this.isValidSale = true;
-    
+
     this.tableDataList.forEach((p: any) => {
 
       p.quantity = parseFloat(p.quantity);
       p.salePrice = parseFloat(p.salePrice);
       p.costPrice = parseFloat(p.costPrice);
 
-      if ( !this.LessToCostFeature && (p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null)) {
+      if (!this.LessToCostFeature && (p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null)) {
         this.msg.WarnNotify('(' + p.productTitle + ') Cost Price greater than Sale Price');
         this.isValidSale = false;
         return;
-      }else if (p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null) {
+      } else if (p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null) {
         this.msg.WarnNotify('(' + p.productTitle + ') Sale Price is not Valid');
         this.isValidSale = false;
         return;
-      }else if (p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '') {
+      } else if (p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '') {
         this.msg.WarnNotify('(' + p.productTitle + ') Quantity is not Valid');
         this.isValidSale = false;
         return;
-      }else if (!this.LessToCostFeature && ( p.costPrice > (p.salePrice - p.discInR))) {
+      } else if (!this.LessToCostFeature && (p.costPrice > (p.salePrice - p.discInR))) {
         this.msg.WarnNotify('(' + p.productTitle + ') Discount not valid');
-        this.isValidSale = false; 
+        this.isValidSale = false;
         return;
       }
     });
@@ -1315,7 +1324,7 @@ export class GarmentSaleReturnComponent implements OnInit {
               this.isValidSale = true;
             }
             this.app.stopLoaderDark();
-         
+
           },
           (Error: any) => {
             this.isValidSale = true;
@@ -1423,34 +1432,40 @@ export class GarmentSaleReturnComponent implements OnInit {
 
     $('#SavedBillModal').hide();
 
-
-    this.global.openPassword('Password').subscribe(pin => {
-      if (pin !== '') {
-        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
-          RestrictionCodeID: 5,
-          Password: pin,
-          UserID: this.global.getUserID()
-        }).subscribe(
-          (Response: any) => {
-            if (Response.msg == 'Password Matched Successfully') {
-
-
-              $('#SavedBillModal').show();
-              this.billPrint.PrintBill(item.invBillNo);
-              this.billPrint.billType = 'Duplicate';
-              // setTimeout(() => {
-              //   this.global.printData('#print-bill')
-              // }, 200);
+    if (this.disablePrintPwd) {
+      this.billPrint.PrintBill(item.invBillNo);
+      this.billPrint.billType = 'Duplicate';
+    } else {
+      this.global.openPassword('Password').subscribe(pin => {
+        if (pin !== '') {
+          this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+            RestrictionCodeID: 5,
+            Password: pin,
+            UserID: this.global.getUserID()
+          }).subscribe(
+            (Response: any) => {
+              if (Response.msg == 'Password Matched Successfully') {
 
 
+                $('#SavedBillModal').show();
+                this.billPrint.PrintBill(item.invBillNo);
+                this.billPrint.billType = 'Duplicate';
+                // setTimeout(() => {
+                //   this.global.printData('#print-bill')
+                // }, 200);
 
-            } else {
-              this.msg.WarnNotify(Response.msg);
+
+
+              } else {
+                this.msg.WarnNotify(Response.msg);
+              }
             }
-          }
-        )
-      }
-    })
+          )
+        }
+      })
+    }
+
+
 
 
   }
@@ -1529,21 +1544,21 @@ export class GarmentSaleReturnComponent implements OnInit {
 
 
   saleBillDate = new Date();
-  SaleBillList:any = [];
-  saleBillDetail:any = [];
-  getSaleBill(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventorySummaryDateWise_2?reqType=s&reqUserID=0&FromDate='+
-      this.global.dateFormater(this.saleBillDate,'-')+'&todate='+this.global.dateFormater(this.saleBillDate,'-')+'&fromtime=00:00&totime=23:59').subscribe(
-        (Response:any)=>{
+  SaleBillList: any = [];
+  saleBillDetail: any = [];
+  getSaleBill() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=s&reqUserID=0&FromDate=' +
+      this.global.dateFormater(this.saleBillDate, '-') + '&todate=' + this.global.dateFormater(this.saleBillDate, '-') + '&fromtime=00:00&totime=23:59').subscribe(
+        (Response: any) => {
           this.SaleBillList = Response;
-         
-        
+
+
           this.app.stopLoaderDark();
         }
       )
   }
 
-  getSaleBillDetail(item:any){
+  getSaleBillDetail(item: any) {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + item.invBillNo).subscribe(
       (Response: any) => {
         this.saleBillDetail = Response;
@@ -1551,7 +1566,7 @@ export class GarmentSaleReturnComponent implements OnInit {
     )
   }
 
-  insertToTable(item:any){
+  insertToTable(item: any) {
 
     var condition = this.tableDataList.find(
       (x: any) => x.productID == item.productID
@@ -1559,7 +1574,7 @@ export class GarmentSaleReturnComponent implements OnInit {
 
     var index = this.tableDataList.indexOf(condition);
 
-    if(condition == undefined){
+    if (condition == undefined) {
       this.global.getProdDetail(item.productID, '').subscribe(
         (Response: any) => {
           this.tableDataList.push({
@@ -1569,7 +1584,7 @@ export class GarmentSaleReturnComponent implements OnInit {
             productID: item.productID,
             productTitle: item.productTitle,
             barcode: Response[0].barcode,
-            productImage:Response[0].productImage,
+            productImage: Response[0].productImage,
             quantity: 1,
             wohCP: item.costPrice,
             avgCostPrice: item.avgCostPrice,
@@ -1589,16 +1604,16 @@ export class GarmentSaleReturnComponent implements OnInit {
             aq: Response[0].aq,
             total: ((item.salePrice * item.quantity) - item.discInR * item.quantity),
             productDetail: '',
-      
+
           });
           this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
           this.getTotal();
-    
+
           console.log(this.tableDataList);
           this.productImage = Response[0].productImage;
-  
+
         })
-    }else{
+    } else {
 
       this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
       this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
@@ -1608,12 +1623,12 @@ export class GarmentSaleReturnComponent implements OnInit {
     }
 
 
-   
-    
+
+
   }
 
-  postSaleBill(item:any){
-    if(!item.postedStatus){
+  postSaleBill(item: any) {
+    if (!item.postedStatus) {
       this.global.postSaleInvoice(item).subscribe(
         (Response: any) => {
           if (Response.msg == 'Posted Successfully') {
@@ -1625,22 +1640,22 @@ export class GarmentSaleReturnComponent implements OnInit {
         }
       );
     }
-  
+
   }
 
 
-  changePayment(data:any){
-      $('#SavedBillModal').hide();
-      this.dialogue.open(PaymentMehtodComponent,{
-        width:'30%',
-        data:data
-      }).afterClosed().subscribe(val=>{
-        this.getSavedBill();
-        $('#SavedBillModal').show();
-      })
-    
-    }
-  
+  changePayment(data: any) {
+    $('#SavedBillModal').hide();
+    this.dialogue.open(PaymentMehtodComponent, {
+      width: '30%',
+      data: data
+    }).afterClosed().subscribe(val => {
+      this.getSavedBill();
+      $('#SavedBillModal').show();
+    })
+
+  }
+
 
 
 

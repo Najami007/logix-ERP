@@ -49,7 +49,7 @@ export class GlobalDataModule implements OnInit {
   // RestServiceCharges = 0;
   RestServiceCharges = this.getServiceCharges();  //////////// Jazeerra Food Service Charges
   validCharges(billTotal: any) {
-    if (billTotal > 3000) { ////////// Jazeera Foods Condition
+    if (billTotal > 0) { ////////// Jazeera Foods Condition
       //if (billTotal > 0) { ////////// Cake Corner Refreshment
       return true;
     } else {
@@ -292,6 +292,9 @@ export class GlobalDataModule implements OnInit {
   DisablePrintPwd = this.getFeature('DisablePrintPwd');
   AutoTableSelect = this.getFeature('AutoTableSelect');
   postSale = this.getFeature('postSale');
+  urduBill = this.getFeature('UrduPrint');
+  CommentCard = this.getFeature('CommentCard');
+  DisableInvDate = this.getFeature('DisableInvDate');
 
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
@@ -325,6 +328,9 @@ export class GlobalDataModule implements OnInit {
     this.DisablePrintPwd = this.getFeature('DisablePrintPwd');
     this.AutoTableSelect = this.getFeature('AutoTableSelect');
     this.postSale = this.getFeature('postSale');
+    this.urduBill = this.getFeature('UrduPrint');
+    this.CommentCard = this.getFeature('CommentCard');
+    this.DisableInvDate = this.getFeature('DisableInvDate');
 
   }
 
@@ -418,7 +424,7 @@ export class GlobalDataModule implements OnInit {
   }
 
   getServiceCharges() {
-    var val = 0;
+    var val = 5.5;
     return val;
   }
 

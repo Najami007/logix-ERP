@@ -11,73 +11,77 @@ import { environment } from 'src/environments/environment.development';
   templateUrl: './update-coa.component.html',
   styleUrls: ['./update-coa.component.scss']
 })
-export class UpdateCoaComponent implements OnInit{
+export class UpdateCoaComponent implements OnInit {
 
 
   constructor(
-    private http:HttpClient,
-    @Inject(MAT_DIALOG_DATA) public editData : any,
+    private http: HttpClient,
+    @Inject(MAT_DIALOG_DATA) public editData: any,
     private dialogRef: MatDialogRef<COAComponent>,
-    private global:GlobalDataModule,
-    private msg:NotificationService,
-    private dialogue:MatDialog
-  ){}
+    private global: GlobalDataModule,
+    private msg: NotificationService,
+    private dialogue: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.getNotes();
 
-    if(this.editData){
+    if (this.editData) {
       this.coaTitle = this.editData.coaTitle;
       this.noteID = this.editData.noteID;
       this.coaTypeID = this.editData.coaTypeID;
       this.transactionAllowed = this.editData.transactionAllowed;
-      
+      this.alias = this.editData.alias;
+
     }
-    
+
   }
 
 
-  notesList:any;
-  coaTitle:any;
-  noteID:any;
-  coaTypeID:any;
-  transactionAllowed:any;
-
-  getNotes(){
-    this.http.get(environment.mainApi+this.global.accountLink+'GetNote').subscribe(
-      (Response )=>{
+  notesList: any = [];
+  coaTitle: any = '';
+  noteID: any= 0;
+  coaTypeID: any = 0;
+  transactionAllowed: any;
+  alias: any = '';
+  getNotes() {
+    this.http.get(environment.mainApi + this.global.accountLink + 'GetNote').subscribe(
+      (Response) => {
         this.notesList = Response;
       }
-      
+
     )
   }
 
 
 
-  UpdateChartofAccount(){
-   if(this.coaTitle == '' || this.coaTitle == undefined){
+  UpdateChartofAccount() {
+    if (this.coaTitle == '' || this.coaTitle == undefined) {
       this.msg.WarnNotify('Enter Cao Title')
-    }else{
+    } else {
 
-
-      this.global.openPinCode().subscribe(pin=>{
-        if(pin != ''){
-          $('.loaderDark').show();
-      
-          this.http.post(environment.mainApi+this.global.accountLink+'UpdateChartofAccount',{
-            CoaID: this.editData.coaID,
+      var postData = {
+         CoaID: this.editData.coaID,
             CoaTitle: this.coaTitle,
-            NoteID:this.noteID,
-            pinCode:pin,
+            NoteID: this.noteID,
+            Alias : this.alias,
             UserID: this.global.getUserID()
-          }).subscribe(
-            (Response:any)=>{
-              if(Response.msg == 'Data Updated Successfully'){
+      };
+
+
+      this.global.openPinCode().subscribe(pin => {
+        if (pin != '') {
+          $('.loaderDark').show();
+          postData['PinCode'] = pin;
+          console.log(postData);
+          this.http.post(environment.mainApi + this.global.accountLink + 'UpdateChartofAccount',postData).subscribe(
+            (Response: any) => {
+              if (Response.msg == 'Data Updated Successfully') {
                 this.msg.SuccessNotify(Response.msg);
                 this.dialogRef.close('Update');
                 $('.loaderDark').fadeOut(500);
-      
-              }else{
+
+              } else {
                 this.msg.WarnNotify(Response.msg);
                 $('.loaderDark').fadeOut(500);
               }
@@ -85,14 +89,14 @@ export class UpdateCoaComponent implements OnInit{
           )
         }
       })
-     
+
     }
-   
+
   }
 
 
 
-  closeDialogue(){
+  closeDialogue() {
     this.dialogRef.close();
   }
 

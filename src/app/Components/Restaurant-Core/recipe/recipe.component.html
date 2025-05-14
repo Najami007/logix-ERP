@@ -14,7 +14,7 @@
                         <div class="col-lg-10 row">
                             <mat-form-field appearance="outline" class="col-lg-12 matSmall">
                                 <mat-label>Recipe Title</mat-label>
-                                <input matInput [(ngModel)]="recipeTitle" type="text">
+                                <input matInput id="RecipeTitle" [(ngModel)]="recipeTitle" type="text">
                             </mat-form-field>
                             <mat-form-field appearance="outline" class="col-lg-6 matSmall">
                                 <mat-label>Code</mat-label>
@@ -45,7 +45,7 @@
                             <mat-form-field appearance="outline" class="col-lg-6 matSmall">
                                 <mat-label>Sale Price</mat-label>
                                 <input matInput [(ngModel)]="salePrice"
-                                    (keydown)="getTotal();global.handleNumKeys($event)" type="text">
+                                    (keyup)="getTotal();global.handleNumKeys($event)" type="text">
                             </mat-form-field>
 
                             <mat-form-field class="col-lg-6 matSmall" appearance="outline">
@@ -102,10 +102,10 @@
 
 
                     <div class="justify-content-around d-flex">
-                        <button #toggleBtn class="btnsave w-25" (click)="save() "
-                            *ngIf="crudList.c && btnType == 'Save'">{{btnType}}</button>
+                        <button #toggleBtn class="btnsave w-25" accesskey="s" (click)="save() "
+                            *ngIf="crudList.c && btnType == 'Save'"><u>S</u>ave</button>
                         <button #toggleBtn class="btnsave  w-25" (click)="save() "
-                            *ngIf="crudList.u && btnType == 'Update'">{{btnType}}</button>
+                            *ngIf="crudList.u && btnType == 'Update'" accesskey="u"><u>U</u>pdate</button>
                         <button class="btnreset w-25" accesskey="r" (click)="reset()"><u>R</u>eset</button>
                         <mat-checkbox [(ngModel)]="autoEmptyFlag">Auto Empty</mat-checkbox>
 
@@ -149,7 +149,7 @@
 
 
                     <div class="card"
-                        style="min-height: 68vh;max-height: 68vh;overflow-y:scroll; background-color: rgba(225, 244, 236, 0.816);">
+                        style="min-height: 68vh;max-height: 68vh;overflow-y:auto; background-color: rgba(225, 244, 236, 0.816);">
 
 
                         <table class="table table-hover txtsm">

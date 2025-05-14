@@ -117,7 +117,6 @@ export class RestSaleBillPrintComponent {
 
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + invNo).subscribe(
       (Response: any) => {
-        console.log(Response);
         this.myPrintData = Response;
         this.myInvoiceNo = Response[0].invBillNo;
         this.myInvDate = Response[0].invDate;
@@ -177,14 +176,14 @@ export class RestSaleBillPrintComponent {
     this.myInvoiceNo = invoiceNo;
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetHoldedBillDetail?BillNo=' + invoiceNo).subscribe(
       (Response: any) => {
-
+        console.log(Response);
         this.myPrintData = Response;
 
         this.mytableNo = Response[0].tableTitle;
         this.myCounterName = Response[0].entryUser;
         this.myInvTime = Response[0].createdOn;
         this.myInvDate = Response[0].invDate;
-        this.myOrderType = Response[0].orderType;
+        // this.myOrderType = Response[0].orderType;
         this.myOtherCharges = Response[0].otherCharges;
         this.myRemarks = Response[0].remarks;
         this.myOrderNo = Response[0].orderNo;
