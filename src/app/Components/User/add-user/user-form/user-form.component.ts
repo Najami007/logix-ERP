@@ -23,7 +23,7 @@ export class UserFormComponent {
     ){
     }
   
-
+  userRoleTypeID = this.global.getRoleTypeID();
 
    mobileMask = this.global.mobileMask;
   txtSearch:any;
@@ -38,7 +38,7 @@ export class UserFormComponent {
   projectID:any = 0;
   roleTypeID:any = 0;
 
-  roleTypeList:any = [{roleTypeID:1,roleTypeTitle:'Super Admin'},{roleTypeID:2,roleTypeTitle:'Admin'},{roleTypeID:3,roleTypeTitle:'User'}]
+ @Input() roleTypeList:any = []
 
   @Input() rolesList:any = [];
   @Input() userList:any = [];

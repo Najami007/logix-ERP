@@ -18,6 +18,7 @@ import { UserFormComponent } from './user-form/user-form.component';
   styleUrls: ['./add-user.component.scss']
 })
 export class AddUserComponent implements OnInit {
+  userRoleTypeID = this.global.getRoleTypeID();
 
   @ViewChild(UserFormComponent) addUser:any;
 
@@ -47,9 +48,12 @@ export class AddUserComponent implements OnInit {
     this.getUsers();
     this.getRoles();
     this.getProject();
+    this.getRoleTypes();
   }
 
   btnType:any = 'Save';
+
+  
 
   txtSearch:any;
   userID:any = 0;
@@ -63,11 +67,29 @@ export class AddUserComponent implements OnInit {
   projectID:any = 0;
   roleTypeID:any = 0;
 
-  roleTypeList:any = [{roleTypeID:1,roleTypeTitle:'Super Admin'},{roleTypeID:2,roleTypeTitle:'Admin'},{roleTypeID:3,roleTypeTitle:'User'}]
+  roleTypeList:any =  [];
+  tmpRoleTypeList:any = [
+      {roleTypeID:1,roleTypeTitle:'Super Admin'},
+      {roleTypeID:2,roleTypeTitle:'Admin'},
+      {roleTypeID:3,roleTypeTitle:'User'}];
 
   rolesList:any = [];
   userList:any = [];
   projectList:any = [];
+
+
+  getRoleTypes(){
+    this.roleTypeList = this.tmpRoleTypeList;
+
+      if(this.userRoleTypeID == 2){
+       this.roleTypeList =  this.tmpRoleTypeList.filter((e:any)=> e.roleTypeID >= 2);
+      }
+      if(this.userRoleTypeID == 3){
+       this.roleTypeList =  this.tmpRoleTypeList.filter((e:any)=> e.roleTypeID > 2);
+      }
+
+
+  }
 
    
   getProject(){
@@ -103,8 +125,21 @@ export class AddUserComponent implements OnInit {
   getUsers(){
     this.app.startLoaderDark()
     this.http.get(environment.mainApi+this.global.userLink+'getuser').subscribe(
-      (Response)=>{
+      (Response:any)=>{
+
+        if(this.userRoleTypeID == 1){
         this.userList = Response;
+        }
+
+        
+        if(this.userRoleTypeID == 2){
+        this.userList = Response.filter((e:any)=> e.roleTypeID >= 2);
+        }
+        if(this.userRoleTypeID == 3){
+        this.userList = Response.filter((e:any)=> e.roleTypeID > 2);
+        }
+
+
           // console.log(Response);
         
         this.app.stopLoaderDark();

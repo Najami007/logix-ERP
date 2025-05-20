@@ -87,6 +87,7 @@
                     <th>Login Name</th>
                     <th>Project</th>
                     <th>Role</th>
+                    <th>Role Type</th>
                     <th>Mobile</th>
                     <th *ngIf="crudList.u">Edit</th>
                     <th *ngIf="crudList.u">Reset PIN</th>
@@ -101,6 +102,7 @@
                     <td>{{item.loginName}}</td>
                     <td>{{item.projectTitle}}</td>
                     <td>{{item.roleTitle}}</td>
+                     <td>{{tmpRoleTypeList[item.roleTypeID-1].roleTypeTitle}}</td>
                     <td>{{item.mobileNo}}</td>
                     <td *ngIf="crudList.u"><button mat-mini-fab class="bg-success h30px w30px"
                             (click)="editUser(item)"><mat-icon>edit</mat-icon></button></td>
@@ -135,7 +137,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <app-user-form [rolesList]="rolesList" [projectList]="projectList"></app-user-form>
+                <app-user-form [rolesList]="rolesList" [projectList]="projectList" [roleTypeList]="roleTypeList"></app-user-form>
             </div>
             <div class="modal-footer bg-mf">
                 <button type="button" class="btnsave" (click)="save()">{{btnType}}</button>

@@ -30,7 +30,7 @@
          <mat-form-field appearance="outline" class="col-md-6 matSmall">
             <mat-label>Role Type</mat-label>
             <mat-select type="text" [(ngModel)]="roleTypeID">
-                <mat-option *ngFor="let item of roleTypeList" [value]="item.roleTypeID">{{item.roleTypeTitle}}</mat-option>
+                <mat-option  *ngFor="let item of roleTypeList" [value]="item.roleTypeID">{{item.roleTypeTitle}}</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline" class="col-md-6 matSmall">
