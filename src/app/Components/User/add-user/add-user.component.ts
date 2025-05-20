@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { PincodeComponent } from '../pincode/pincode.component';
 import { Router } from '@angular/router';
 import { ChangePasswordComponent } from '../change-password/change-password.component';
+import { UserFormComponent } from './user-form/user-form.component';
 
 @Component({
   selector: 'app-add-user',
@@ -18,6 +19,7 @@ import { ChangePasswordComponent } from '../change-password/change-password.comp
 })
 export class AddUserComponent implements OnInit {
 
+  @ViewChild(UserFormComponent) addUser:any;
 
  mobileMask = this.global.mobileMask;
 
@@ -59,6 +61,9 @@ export class AddUserComponent implements OnInit {
   password:any = '';
   confirmPassword:any = '';
   projectID:any = 0;
+  roleTypeID:any = 0;
+
+  roleTypeList:any = [{roleTypeID:1,roleTypeTitle:'Super Admin'},{roleTypeID:2,roleTypeTitle:'Admin'},{roleTypeID:3,roleTypeTitle:'User'}]
 
   rolesList:any = [];
   userList:any = [];
@@ -116,35 +121,53 @@ export class AddUserComponent implements OnInit {
   //////////////////////////////////////////////////////////////
 
   save(){
-    if(this.UserName == '' || this.UserName == undefined){
-      this.msg.WarnNotify('Enter User Name')
-    }else if(this.loginName == '' || this.loginName == undefined){
-      this.msg.WarnNotify('Enter Login Name')
-    }else if(this.mobileNo == '' || this.mobileNo == undefined){
-      this.msg.WarnNotify('Enter Mobile No.')
-    }else if(this.RoleID == '' || this.RoleID == undefined){
-      this.msg.WarnNotify('Select Role ')
+
+   var postData:any ={
+      UserID:this.addUser.userID,
+      UserName: this.addUser.UserName,
+      UserEmail:this.addUser.userEmail,
+      MobileNo: this.addUser.mobileNo,
+      LoginName: this.addUser.loginName,
+      RoleID: this.addUser.RoleID,
+      projectID:this.addUser.projectID,
+      RoleTypeID:this.addUser.roleTypeID,
+      
+      reqUserID: this.global.getUserID()
     }
-    else if(this.projectID == '' || this.projectID == undefined){
+
+
+    if(this.addUser.UserName == '' || this.addUser.UserName == undefined){
+      this.msg.WarnNotify('Enter User Name')
+    }else if(this.addUser.loginName == '' || this.addUser.loginName == undefined){
+      this.msg.WarnNotify('Enter Login Name')
+    }else if(this.addUser.mobileNo == '' || this.addUser.mobileNo == undefined){
+      this.msg.WarnNotify('Enter Mobile No.')
+    }else if(this.addUser.RoleID == 0 || this.addUser.RoleID == undefined){
+      this.msg.WarnNotify('Select Role ')
+    }else if(this.addUser.roleTypeID == 0){
+      this.msg.WarnNotify('Select Role Type')
+    }
+    else if(this.addUser.projectID == 0 || this.addUser.projectID == undefined){
       this.msg.WarnNotify('Select Project ')
     }
-    else if((this.password == '' || this.password == undefined) && this.btnType == 'Save'){
+    else if((this.addUser.password == '' || this.addUser.password == undefined) && this.btnType == 'Save'){
       this.msg.WarnNotify('Enter Password')
-    }else if((this.confirmPassword == '' || this.confirmPassword == undefined) && this.btnType == 'Save'){
+    }else if((this.addUser.confirmPassword == '' || this.addUser.confirmPassword == undefined) && this.btnType == 'Save'){
       this.msg.WarnNotify('Enter Confirm Password')
     }else {
 
-      if(this.password !== this.confirmPassword && this.btnType == 'Save' ){
+      if(this.addUser.password !== this.addUser.confirmPassword && this.btnType == 'Save' ){
         this.msg.WarnNotify('Password Donot Match')
       }
       
+    
       if(this.btnType == 'Save'){
-        this.inserUser();
+        this.inserUser(postData);
       }else if(this.btnType == 'Update'){
 
         this.global.openPinCode().subscribe(pin=>{         
             if(pin != ''){
-              this.updateUser(pin);  
+              this.updateUser(postData,pin);  
             }
           
         })
@@ -157,24 +180,16 @@ export class AddUserComponent implements OnInit {
 
   //////////////////////////////////////////////////////////////
 
-  inserUser(){
+  inserUser(postData:any){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+this.global.userLink+'insertuser',{
-      UserName: this.UserName,
-      MobileNo: this.mobileNo,
-      LoginName: this.loginName,
-      UserEmail:this.userEmail,
-      Password: this.password,
-      RoleID: this.RoleID,
-      projectID:this.projectID,
-      UserID: this.global.getUserID()
-    }).subscribe(
+    this.http.post(environment.mainApi+this.global.userLink+'insertuser',postData).subscribe(
       (Response:any)=>{
         if(Response.msg == 'Data Saved Successfully'){
           this.msg.SuccessNotify(Response.msg);
           this.getUsers();
           this.reset();
           this.app.stopLoaderDark();
+          this.global.closeBootstrapModal('#addUser',true);
         }else{
           this.msg.WarnNotify(Response.msg);
           this.app.stopLoaderDark();
@@ -189,26 +204,17 @@ export class AddUserComponent implements OnInit {
 
   //////////////////////////////////////////////////////////////
 
-  updateUser(pinCode:any){
+  updateUser(postData:any, pinCode:any){
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+this.global.userLink+'updateuser',{
-      UserID:this.userID,
-      PinCode: pinCode,
-      UserName: this.UserName,
-      UserEmail:this.userEmail,
-      MobileNo: this.mobileNo,
-      LoginName: this.loginName,
-      RoleID: this.RoleID,
-      projectID:this.projectID,
-      
-      reqUserID: this.global.getUserID()
-    }).subscribe(
+    postData['pinCode'] = pinCode;
+    this.http.post(environment.mainApi+this.global.userLink+'updateuser',postData).subscribe(
       (Response:any)=>{
         if(Response.msg == 'Data Updated Successfully'){
           this.msg.SuccessNotify(Response.msg);
           this.reset();
           this.getUsers();
           this.app.stopLoaderDark();
+          this.global.closeBootstrapModal('#addUser',true);
         }else{
           this.msg.WarnNotify(Response.msg);
           this.app.stopLoaderDark();
@@ -223,14 +229,16 @@ export class AddUserComponent implements OnInit {
     //////////////////////////////////////////////////////////////
 
   editUser(row:any){
+    this.global.openBootstrapModal('#addUser',true);
     this.btnType = 'Update';
-    this.userID = row.userID; 
-    this.UserName = row.userName;
-    this.loginName = row.loginName;
-    this.mobileNo = row.mobileNo;
-    this.RoleID = row.roleID;
-    this.userEmail = row.userEmail;
-    this.projectID = row.projectID;
+    this.addUser.userID = row.userID; 
+    this.addUser.UserName = row.userName;
+    this.addUser.loginName = row.loginName;
+    this.addUser.mobileNo = row.mobileNo;
+    this.addUser.RoleID = row.roleID;
+    this.addUser.userEmail = row.userEmail;
+    this.addUser.projectID = row.projectID;
+    this.addUser.roleTypeID = row.roleTypeID;
 
   }
 
@@ -386,16 +394,24 @@ export class AddUserComponent implements OnInit {
 
 
   reset(){
-    this.userID = 0;
-    this.UserName = '';
-    this.loginName = '';
-    this.mobileNo = '';
-    this.RoleID = '';
-    this.password = '';
-    this.confirmPassword = '';
+    this.addUser.userID = 0;
+    this.addUser.UserName = '';
+    this.addUser.loginName = '';
+    this.addUser.mobileNo = '';
+    this.addUser.RoleID = 0;
+    this.addUser.roleTypeID = 0;
+
+    this.addUser.password = '';
+    this.addUser.confirmPassword = '';
     this.btnType = 'Save';
-    this.userEmail = '';
-    this.projectID = 0;
+    this.addUser.userEmail = '';
+    this.addUser.projectID = 0;
+  }
+
+
+  addNewUser(){
+    this.global.openBootstrapModal('#addUser',true);
+    this.reset();
   }
 
 }

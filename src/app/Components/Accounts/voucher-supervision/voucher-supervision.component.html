@@ -82,7 +82,7 @@
                     <mat-icon class="text-danger"  *ngIf="item.approvedStatus == false" (click)="approveBill(item)">check</mat-icon>
                 <mat-icon *ngIf="item.approvedStatus == true" aria-label="Approved" class="text-success" >done_all</mat-icon>
             </td>
-                <td *ngIf="crudList.d"> <mat-icon class="text-danger"  (click)="DeleteVoucher(item)">delete</mat-icon></td>
+                <td *ngIf="crudList.d"> <mat-icon class="text-danger" *ngIf="!item.approvedStatus"  (click)="DeleteVoucher(item)">delete</mat-icon></td>
                 <td *ngIf="crudList.r"><mat-icon class="text-primary"  (click)="printBill(item)">print</mat-icon></td>
 
             </tr>

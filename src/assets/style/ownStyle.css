@@ -171,8 +171,12 @@
 }
 
 .rptTitle{
-  font-size: 30px !important;
+  font-size: 20px !important;
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.rptPartyName{
+  font-size: 20px;
+  font-weight: bold;
 }
 
 
@@ -271,6 +275,7 @@
   border: 2px solid black !important;
 }
 .table-garment-sale-Urdu-Bottom{
+  font-family: Arial, Helvetica, sans-serif;
   width: 100%;
   text-transform: uppercase;
 }

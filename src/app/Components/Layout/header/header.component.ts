@@ -63,6 +63,7 @@ export class HeaderComponent implements OnInit {
 
     this.route.navigate(['home']);
     localStorage.setItem('mid',JSON.stringify(item.moduleID));
+    sessionStorage.setItem('mid',JSON.stringify(item.moduleID));
     this.globalData.setMenuItem(item.moduleID);
     // window.location.reload();
     

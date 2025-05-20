@@ -13,6 +13,13 @@
         <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
         <mat-datepicker #iDate></mat-datepicker>
     </mat-form-field>
+        <!-- <mat-form-field class="col-lg-12 matSmall" appearance="outline">
+            <mat-label>Project </mat-label>
+            <mat-select [(ngModel)]="projectID">
+                <mat-option *ngFor="let item of projectList "
+                    value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field> -->
     
     <mat-form-field appearance="outline" class="col-lg-12 matSmall">
         <mat-label>Customer</mat-label>

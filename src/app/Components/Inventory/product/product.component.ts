@@ -24,7 +24,7 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class ProductComponent implements OnInit {
 
-  crudList:any = {c:true,r:true,u:true,d:true};
+  crudList: any = { c: true, r: true, u: true, d: true };
 
   dataSource!: MatTableDataSource<any>;
 
@@ -45,13 +45,13 @@ export class ProductComponent implements OnInit {
   loadingBar = 'start';
 
 
-  page:number = 1;
+  page: number = 1;
   count: number = 0;
- 
-  tableSize: number = 0;
-  tableSizes : any = [];
 
-  onTableDataChange(event:any){
+  tableSize: number = 0;
+  tableSizes: any = [];
+
+  onTableDataChange(event: any) {
 
     this.page = event;
     this.getProductList();
@@ -60,9 +60,9 @@ export class ProductComponent implements OnInit {
     }, 500);
   }
 
-  onTableSizeChange(event:any):void{
+  onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
-    this.page =1;
+    this.page = 1;
     this.getProductList();
     setTimeout(() => {
       this.filterProductList(this.filterType);
@@ -104,67 +104,67 @@ export class ProductComponent implements OnInit {
   brandFilterID = 0;
   subCategoryFilterID = 0;
   categoryFilterID = 0;
-  activeFilterID:any = '-';
+  activeFilterID: any = '-';
 
   filterType = '';
 
-  subCategoryFilterList:any = [];
-  tempProdList:any= [];
+  subCategoryFilterList: any = [];
+  tempProdList: any = [];
 
-  filterProductList(type:any){
-    
+  filterProductList(type: any) {
+
     this.filterType = type;
 
-    if(type == 'brand'){
-      this.productList = this.brandFilterID == 0 ? this.productList = this.tempProdList : this.tempProdList.filter((e:any)=> e.brandID == this.brandFilterID);
+    if (type == 'brand') {
+      this.productList = this.brandFilterID == 0 ? this.productList = this.tempProdList : this.tempProdList.filter((e: any) => e.brandID == this.brandFilterID);
 
 
     }
 
-    if(type == 'subcat'){
-      
-      this.productList =this.subCategoryFilterID == 0 ? this.productList = this.tempProdList : this.tempProdList.filter((e:any)=> e.subCategoryID == this.subCategoryFilterID);
- 
-    }
-   
+    if (type == 'subcat') {
 
-    
-    if(type == 'status'){
+      this.productList = this.subCategoryFilterID == 0 ? this.productList = this.tempProdList : this.tempProdList.filter((e: any) => e.subCategoryID == this.subCategoryFilterID);
 
-      this.productList =this.activeFilterID == '-' ? this.productList = this.tempProdList : this.tempProdList.filter((e:any)=> e.activeStatus == this.activeFilterID);
     }
 
-    if(type == 'disc'){
 
-      if(this.discFilterID == 0){
+
+    if (type == 'status') {
+
+      this.productList = this.activeFilterID == '-' ? this.productList = this.tempProdList : this.tempProdList.filter((e: any) => e.activeStatus == this.activeFilterID);
+    }
+
+    if (type == 'disc') {
+
+      if (this.discFilterID == 0) {
         this.productList = this.tempProdList;
-      }else if(this.discFilterID == 1){
-        this.productList = this.tempProdList.filter((e:any)=> e.discPercentage > 0);
-      }else if(this.discFilterID == 2){
-        this.productList = this.tempProdList.filter((e:any)=> e.discPercentage == 0);
+      } else if (this.discFilterID == 1) {
+        this.productList = this.tempProdList.filter((e: any) => e.discPercentage > 0);
+      } else if (this.discFilterID == 2) {
+        this.productList = this.tempProdList.filter((e: any) => e.discPercentage == 0);
       }
 
     }
 
- 
+
   }
 
 
-  
-  
+
+
 
   isAsc = false;
-  sortProds(key:any){
+  sortProds(key: any) {
     this.isAsc = !this.isAsc;
-    this.productList = this.global.sortByKey(this.productList,key, this.isAsc ? 'asc' : 'desc');
+    this.productList = this.global.sortByKey(this.productList, key, this.isAsc ? 'asc' : 'desc');
   }
 
- 
+
   tabIndex: any;
   Validation = true;
   btnType = 'Save';
   autoEmpty = false;
-  searchProduct:any = '';
+  searchProduct: any = '';
   CategoriesList: any = [];
   SubCategoriesList: any = [];
   ProductID: any = 0;
@@ -176,7 +176,7 @@ export class ProductComponent implements OnInit {
   CostPrice: any = '';
   SalePrice: any = '';
   productType: any = 0;
-  productImg:any = '';
+  productImg: any = '';
 
   BrandID: any = 0;
   rackID: any = 0;
@@ -191,13 +191,13 @@ export class ProductComponent implements OnInit {
   Description: any = '';
   pctCode: any = '';
   UOMID: any = 0;
-  prodTypeID:any = 0;
+  prodTypeID: any = 0;
 
   discFilterID = 0;
-  DiscFilterList:any = [
-    {val:0,title:'All'},
-    {val:1,title:'Disc'},
-    {val:2,title:'W/O Disc'},
+  DiscFilterList: any = [
+    { val: 0, title: 'All' },
+    { val: 1, title: 'Disc' },
+    { val: 2, title: 'W/O Disc' },
   ]
 
 
@@ -205,95 +205,96 @@ export class ProductComponent implements OnInit {
   productCode: any = '';
   BrandList: any = [];
   RacksList: any = [];
-  ProductTypeList:any = [];
+  ProductTypeList: any = [];
   UOMList: any = [];
-  productList:any = [];
-  allowMinusList:any = [{value:true,title:'True'},{value:false,title:'false'},]
+  productList: any = [];
+  allowMinusList: any = [{ value: true, title: 'True' }, { value: false, title: 'false' },]
 
 
-  displayedColumns = ['Product Title', 'Product Title 2', 'Product Barcode', 'Sub Category', 
-  'Brand','UOM','Type', 'Cost Price', 'Average Cost' , 'Sale Price','GST', 'Entered By','Active Status','Image','Edit','Delete' ]
+  displayedColumns = ['Product Title', 'Product Title 2', 'Product Barcode', 'Sub Category',
+    'Brand', 'UOM', 'Type', 'Cost Price', 'Average Cost', 'Sale Price', 'GST', 'Entered By', 'Active Status', 'Image', 'Edit', 'Delete']
 
   applyDiscount() {
     this.DiscRupee = (this.SalePrice == '' || this.SalePrice == undefined || this.SalePrice == null ? 0 : this.SalePrice * this.DiscPercent) / 100
   }
-  
-  getProductList(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetProduct').subscribe(
-      (Response:any)=>{
+
+  getProductList() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProduct').subscribe(
+      (Response: any) => {
         this.productList = Response;
         this.tempProdList = Response;
+     
       }
     )
   }
 
 
-  getProductTypes(){
-    this.http.get(environment.mainApi + this.global.inventoryLink+'GetProductType').subscribe(
+  getProductTypes() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductType').subscribe(
       (Response: any) => {
         this.ProductTypeList = Response;
-        if(Response.length > 0){ this.prodTypeID = Response[0].productTypeID;}
+        if (Response.length > 0) { this.prodTypeID = Response[0].productTypeID; }
       },
-      (Error:any)=>{
+      (Error: any) => {
         this.msg.WarnNotify(Error);
-      
-       }
+
+      }
     )
   }
 
 
 
   getUOMList() {
-    this.http.get(environment.mainApi + this.global.inventoryLink+'GetUOM').subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetUOM').subscribe(
       (Response: any) => {
         this.UOMList = Response;
-     
+
       },
-      (Error:any)=>{
+      (Error: any) => {
         this.msg.WarnNotify(Error);
-      
-       }
+
+      }
     )
   }
 
 
 
   getRacksList() {
-    this.http.get(environment.mainApi + this.global.inventoryLink+'getrack').subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'getrack').subscribe(
       (Response: any) => {
         this.RacksList = Response;
-        if(this.RacksList.length > 0){
+        if (this.RacksList.length > 0) {
           this.rackID = this.RacksList[0].rackID;
         }
       },
-      (Error:any)=>{
+      (Error: any) => {
         this.msg.WarnNotify(Error);
-       
-       }
+
+      }
     )
   }
 
 
 
   getBrandList() {
-    this.http.get(environment.mainApi +this.global.inventoryLink+'GetBrand').subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetBrand').subscribe(
       (Response: any) => {
         this.BrandList = Response;
-        if(this.BrandList.length > 0){
+        if (this.BrandList.length > 0) {
           this.BrandID = this.BrandList[0].brandID;
         }
       },
-      (Error:any)=>{
+      (Error: any) => {
         this.msg.WarnNotify(Error);
-     
-       }
+
+      }
     )
   }
 
 
   getSubCategory() {
     this.SubCategoryID = 0;
-    this.http.get(environment.mainApi + this.global.inventoryLink+'GetSubCategory').subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSubCategory').subscribe(
       (Response: any) => {
         this.SubCategoriesList = Response.filter((e: any) => e.categoryID == this.CategoryID);
         this.subCategoryFilterList = Response;
@@ -305,7 +306,7 @@ export class ProductComponent implements OnInit {
 
 
   getCategory() {
-    this.http.get(environment.mainApi + this.global.inventoryLink+'GetCategory').subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetCategory').subscribe(
       (Response: any) => {
         this.CategoriesList = Response;
       }
@@ -317,81 +318,78 @@ export class ProductComponent implements OnInit {
   save() {
 
 
-    if(this.CategoryID == '' || this.CategoryID == undefined){
+    if (this.CategoryID == '' || this.CategoryID == undefined) {
       this.msg.WarnNotify('Select Category')
-    }else if(this.SubCategoryID == '' ||this.SubCategoryID == undefined){
+    } else if (this.SubCategoryID == '' || this.SubCategoryID == undefined) {
       this.msg.WarnNotify('Select SubCategory')
-    }else if(this.ProductName == '' || this.ProductName == undefined){
+    } else if (this.ProductName == '' || this.ProductName == undefined) {
       this.msg.WarnNotify('Enter Product Name')
     }
-    else if(this.prodBarcodeType == 'manual' && (this.Barcode == '' || this.Barcode == undefined)){
+    else if (this.prodBarcodeType == 'manual' && (this.Barcode == '' || this.Barcode == undefined)) {
       this.msg.WarnNotify('Enter Barcode')
-    }else if(this.BrandID == '' || this.BrandID == undefined){
+    } else if (this.BrandID == '' || this.BrandID == undefined) {
       this.msg.WarnNotify('Select Brand')
-    }else if(this.rackID == '' || this.rackID == undefined){
+    } else if (this.rackID == '' || this.rackID == undefined) {
       this.msg.WarnNotify('Select Rack ')
-    }else if(this.UOMID == '' || this.UOMID == undefined){
+    } else if (this.UOMID == '' || this.UOMID == undefined) {
       this.msg.WarnNotify('Select Unit of Measurement')
-    }else if(this.CostPrice == '' || this.CostPrice <= 0 || this.CostPrice == undefined){
+    } else if (this.CostPrice == '' || this.CostPrice <= 0 || this.CostPrice == undefined) {
       this.msg.WarnNotify('Enter Cost Price')
-    } else if(this.SalePrice == '' || this.SalePrice <= 0 || this.SalePrice == undefined){
+    } else if (this.SalePrice == '' || this.SalePrice <= 0 || this.SalePrice == undefined) {
       this.msg.WarnNotify('Enter Sale Price')
-    }else if( this.barcodeType == undefined){
+    } else if (this.barcodeType == undefined) {
       this.msg.WarnNotify('Select Barcode Type')
-    }else if(this.SalePrice < this.CostPrice){
+    } else if (this.SalePrice < this.CostPrice) {
       this.msg.WarnNotify('Sale Price Is less Than Cost Price')
     }
     else {
-     
 
-      if(this.prodBarcodeType == 'auto' && ( this.Barcode == '' || this.Barcode == undefined || this.Barcode == null)){
+
+      if (this.prodBarcodeType == 'auto' && (this.Barcode == '' || this.Barcode == undefined || this.Barcode == null)) {
         this.Barcode = '-';
       }
 
-      if(this.btnType == 'Save'){
-      
-        this.insert();
-      }else if(this.btnType == 'Update'){
-        this.update();
+      var postData = {
+        ProductID: this.ProductID,
+        CategoryID: this.CategoryID,
+        SubCategoryID: this.SubCategoryID,
+        BrandID: this.BrandID,
+        RackID: this.rackID,
+        ProductTitle: this.ProductName,
+        ProductCode: this.productCode || this.ProductName,
+        ProductTitleOtherLang: this.productNameOthLanguage || this.ProductName,
+        ProductDescription: this.Description || '-',
+        MinRol: this.minRol || 1,
+        MaxRol: this.maxRol || 2,
+        GST: this.gst || 0,
+        ET: this.Et || 0,
+        PCTCode: this.pctCode || '-',
+        AllowMinus: this.allowMinus,
+        CostPrice: this.CostPrice,
+        SalePrice: this.SalePrice,
+        DiscPercentage: this.DiscPercent,
+        DiscRupees: this.DiscRupee,
+        UomID: this.UOMID,
+        Barcode: this.Barcode,
+        BarcodeType: this.barcodeType,
+        ProductImage: this.productImg || '-',
+        ProductTypeID: this.prodTypeID,
+        UserID: this.global.getUserID()
+      };
+
+      if (this.btnType == 'Save') {
+        this.insert(postData);
+      } else if (this.btnType == 'Update') {
+        this.update(postData);
       }
-
-      
-
     }
 
-   }
+  }
 
 
-  insert() {
+  insert(postData: any) {
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi + this.global.inventoryLink+'InsertProduct', {
-      CategoryID: this.CategoryID,
-      SubCategoryID: this.SubCategoryID,
-      BrandID: this.BrandID,
-      RackID: this.rackID,
-      ProductTitle: this.ProductName ,
-      ProductCode:  this.productCode || this.ProductName ,
-      ProductTitleOtherLang: this.productNameOthLanguage || this.ProductName ,
-      ProductDescription: this.Description || '-',
-      MinRol: this.minRol || 1,
-      MaxRol: this.maxRol || 2,
-      GST: this.gst || 0,
-      ET: this.Et || 0,
-      PCTCode: this.pctCode || '-',
-      AllowMinus: this.allowMinus,
-      CostPrice: this.CostPrice,
-      SalePrice: this.SalePrice,
-      DiscPercentage: this.DiscPercent,
-      DiscRupees: this.DiscRupee,
-      UomID: this.UOMID,
-      Barcode: this.Barcode,
-      BarcodeType: this.barcodeType,
-      ProductImage:this.productImg || '-',
-      ProductTypeID:this.prodTypeID,
-
-
-      UserID: this.global.getUserID(),
-    }).subscribe(
+    this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertProduct', postData).subscribe(
       (Response: any) => {
         if (Response.msg == 'Data Saved Successfully') {
           this.msg.SuccessNotify(Response.msg);
@@ -403,7 +401,7 @@ export class ProductComponent implements OnInit {
           this.app.stopLoaderDark();
         }
       },
-      (error:any)=>{
+      (error: any) => {
         console.log(error);
         this.msg.WarnNotify(error);
         this.app.stopLoaderDark();
@@ -412,107 +410,81 @@ export class ProductComponent implements OnInit {
   }
 
   openFlag = false;
-  update() {
+  update(postData: any) {
 
-  if(this.openFlag == false){
-    this.openFlag = true;
-    this.global.openPinCode().subscribe(pin=>{
-      if(pin !== ''){
-        this.app.startLoaderDark();     
-        this.http.post(environment.mainApi + this.global.inventoryLink+'UpdateProduct', {
-          ProductID: this.ProductID,
-          CategoryID: this.CategoryID,
-          SubCategoryID: this.SubCategoryID,
-          BrandID: this.BrandID,
-          RackID: this.rackID,
-          ProductTitle: this.ProductName ,
-          ProductCode:  this.productCode || this.ProductName ,
-          ProductTitleOtherLang: this.productNameOthLanguage || this.ProductName ,
-          ProductDescription: this.Description || '-',
-          MinRol: this.minRol || 1,
-          MaxRol: this.maxRol || 2,
-          GST: this.gst || 0,
-          ET: this.Et || 0,
-          PCTCode: this.pctCode || '-',
-          AllowMinus: this.allowMinus,
-          CostPrice: this.CostPrice,
-          SalePrice: this.SalePrice,
-          DiscPercentage: this.DiscPercent,
-          DiscRupees: this.DiscRupee,
-          UomID: this.UOMID,
-          Barcode: this.Barcode,
-          BarcodeType: this.barcodeType,
-          ProductImage:this.productImg || '-',
-          ProductTypeID:this.prodTypeID,
-          PinCode:pin,
-          UserID: this.global.getUserID()
-        }).subscribe(
-          (Response: any) => {
-            if (Response.msg == 'Data Updated Successfully') {
-              this.msg.SuccessNotify(Response.msg);
-              this.getProductList();
-              this.reset('');
-              this.app.stopLoaderDark();
-              setTimeout(() => {
-                this.filterProductList(this.filterType);
-              }, 500);
-             
-            } else {
-              this.msg.WarnNotify(Response.msg);
+    if (this.openFlag == false) {
+      this.openFlag = true;
+      this.global.openPinCode().subscribe(pin => {
+        if (pin !== '') {
+          this.app.startLoaderDark();
+          postData['PinCode'] = pin;
+          this.http.post(environment.mainApi + this.global.inventoryLink + 'UpdateProduct', postData).subscribe(
+            (Response: any) => {
+              if (Response.msg == 'Data Updated Successfully') {
+                this.msg.SuccessNotify(Response.msg);
+                this.getProductList();
+                this.reset('');
+                this.app.stopLoaderDark();
+                setTimeout(() => {
+                  this.filterProductList(this.filterType);
+                }, 500);
+
+              } else {
+                this.msg.WarnNotify(Response.msg);
+                this.app.stopLoaderDark();
+              }
+              this.openFlag = false;
+            },
+            (error: any) => {
+              console.log(error);
+              this.msg.WarnNotify(error);
               this.app.stopLoaderDark();
             }
-            this.openFlag = false;
-          },
-          (error:any)=>{
-             console.log(error);
-            this.msg.WarnNotify(error);
-            this.app.stopLoaderDark();
-          }
-        )
-      }
+          )
+        }
 
-      if(pin == ''){
-        this.openFlag = false;
+        if (pin == '') {
+          this.openFlag = false;
+        }
       }
+      )
     }
-    )
-  }
   }
 
-  reset(type:any) {
-    this.ProductID = '';
+  reset(type: any) {
+    this.ProductID = 0;
     this.Barcode = '';
     this.productImg = '';
     this.btnType = 'Save';
     this.salePercent = '';
-   if(this.autoEmpty == true || type == 'btn'){
-    this.CategoryID = '';
-    this.SubCategoryID = '';
-    this.BrandID = '';
-    this.rackID = '';
-    this.ProductName = '';
-    this.productCode = '';
-    this.productNameOthLanguage = '',
-      this.Description = '';
-    this.minRol = '';
-    this.maxRol = '';
-    this.gst = '';
-    this.Et = '';
-    this.pctCode = '';
-    this.allowMinus = false;
-    this.CostPrice = '';
-    this.SalePrice = '';
-    this.DiscPercent = 0;
-    this.DiscRupee = 0;
-    this.UOMID = '';
-    // this.Barcode = '';
-    this.prodBarcodeType = 'auto'
-    this.barcodeType = 'Basic';
-    this.prodTypeID = '';
- 
-    //this.btnType = 'Save';
-    // this.productImg= '';
-   }
+    if (this.autoEmpty == true || type == 'btn') {
+      this.CategoryID = 0;
+      this.SubCategoryID = 0;
+      this.BrandID = 0;
+      this.rackID = 0;
+      this.ProductName = '';
+      this.productCode = '';
+      this.productNameOthLanguage = '',
+        this.Description = '';
+      this.minRol = '';
+      this.maxRol = '';
+      this.gst = '';
+      this.Et = '';
+      this.pctCode = '';
+      this.allowMinus = false;
+      this.CostPrice = '';
+      this.SalePrice = '';
+      this.DiscPercent = 0;
+      this.DiscRupee = 0;
+      this.UOMID = 0;
+      // this.Barcode = '';
+      this.prodBarcodeType = 'auto'
+      this.barcodeType = 'Basic';
+      this.prodTypeID = 0;
+
+      //this.btnType = 'Save';
+      // this.productImg= '';
+    }
 
 
   }
@@ -543,22 +515,22 @@ export class ProductComponent implements OnInit {
     this.allowMinus = row.allowMinus;
     this.barcodeType = row.barcodeType;
     this.Description = row.productDescription;
-    
+
     this.prodTypeID = row.productTypeID;
     this.tabIndex = 0;
     this.btnType = 'Update';
 
-    this.global.getProdImage( row.productID).subscribe(
-      (Response:any)=>{
+    this.global.getProdImage(row.productID).subscribe(
+      (Response: any) => {
         this.productImg = Response[0].productImage;
       }
     )
-    
 
 
-   }
 
-   copyProd(row: any) {
+  }
+
+  copyProd(row: any) {
     this.SubCategoryID = 0;
     this.CategoryID = row.categoryID;
     this.getSubCategory();
@@ -581,80 +553,82 @@ export class ProductComponent implements OnInit {
     this.allowMinus = row.allowMinus;
     this.barcodeType = row.barcodeType;
     this.Description = row.productDescription;
-    
+
     this.prodTypeID = row.productTypeID;
     this.tabIndex = 0;
 
-    this.global.getProdImage( row.productID).subscribe(
-      (Response:any)=>{
+    this.global.getProdImage(row.productID).subscribe(
+      (Response: any) => {
         this.productImg = Response[0].productImage;
       }
     )
-    
 
-
-   }
-
-  deleteProd(row: any) { 
-
-    this.global.openPinCode().subscribe(pin=>{
-
-     if(pin != ''){
-      this.app.startLoaderDark();
-
-      this.http.post(environment.mainApi+this.global.inventoryLink+'deleteProduct',{
-        ProductID: row.productID,
-        PinCode:pin,
-        UserID: this.global.getUserID()
-
-      }).subscribe(
-        (Response:any)=>{
-          if(Response.msg == 'Data Deleted Successfully'){
-            this.msg.SuccessNotify(Response.msg);
-            this.getProductList();
-            this.app.stopLoaderDark();
-          
-            
-          }else{
-            this.msg.WarnNotify(Response.msg);
-            this.app.stopLoaderDark();
-          }
-        },
-        (error:any)=>{
-          this.app.stopLoaderDark();
-        }
-      )
-
-     }})
 
 
   }
 
-  activeProduct(row:any){
-   
-    this.global.openPinCode().subscribe(pin=>{
-      if(pin != ''){
+  deleteProd(row: any) {
+
+    this.global.openPinCode().subscribe(pin => {
+
+      if (pin != '') {
         this.app.startLoaderDark();
-        this.http.post(environment.mainApi+this.global.inventoryLink+'ActiveProduct',{
+
+        var postData = {
           ProductID: row.productID,
-          ActiveStatus:!row.activeStatus,
           PinCode: pin,
-          UserID: this.global.getUserID(),
-          }).subscribe(
-            (Response:any)=>{
-              if(Response.msg == 'Data Updated Successfully'){
-                this.msg.SuccessNotify(Response.msg);
-                this.getProductList();
-                this.app.stopLoaderDark();
-              }else{
-                this.msg.WarnNotify(Response.msg);
-                this.app.stopLoaderDark();
-              }
-            },
-          (error:any)=>{
+          UserID: this.global.getUserID()
+        }
+
+        this.http.post(environment.mainApi + this.global.inventoryLink + 'deleteProduct', postData).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Data Deleted Successfully') {
+              this.msg.SuccessNotify(Response.msg);
+              this.getProductList();
+              this.app.stopLoaderDark();
+
+
+            } else {
+              this.msg.WarnNotify(Response.msg);
+              this.app.stopLoaderDark();
+            }
+          },
+          (error: any) => {
             this.app.stopLoaderDark();
           }
-          )
+        )
+
+      }
+    })
+
+
+  }
+
+  activeProduct(row: any) {
+
+    this.global.openPinCode().subscribe(pin => {
+      if (pin != '') {
+        this.app.startLoaderDark();
+        this.http.post(environment.mainApi + this.global.inventoryLink + 'ActiveProduct', {
+          ProductID: row.productID,
+          ActiveStatus: !row.activeStatus,
+          PinCode: pin,
+          UserID: this.global.getUserID(),
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Data Updated Successfully') {
+              this.msg.SuccessNotify(Response.msg);
+              this.getProductList();
+              this.app.stopLoaderDark();
+            } else {
+              this.msg.WarnNotify(Response.msg);
+              this.app.stopLoaderDark();
+            }
+          },
+          (error: any) => {
+            this.app.stopLoaderDark();
+          }
+        )
       }
     })
   }
@@ -667,82 +641,82 @@ export class ProductComponent implements OnInit {
 
   }
 
-  @ViewChild('brand') mybrand:any;
-  addBrand(){
+  @ViewChild('brand') mybrand: any;
+  addBrand() {
     setTimeout(() => {
       this.mybrand.close()
-   
+
     }, 200);
-    this.dialogue.open(AddBrandComponent,{
-      width:'40%'
-    }).afterClosed().subscribe(value=>{
-      if(value == 'Update'){
+    this.dialogue.open(AddBrandComponent, {
+      width: '40%'
+    }).afterClosed().subscribe(value => {
+      if (value == 'Update') {
         this.getBrandList();
       }
     })
   }
 
-  @ViewChild('rack') myrack:any; 
-  addRack(){
+  @ViewChild('rack') myrack: any;
+  addRack() {
     setTimeout(() => {
       this.myrack.close()
-   
+
     }, 200);
-    this.dialogue.open(AddRackComponent,{
-      width:'40%'
-    }).afterClosed().subscribe(value=>{
-      if(value == 'Update'){
+    this.dialogue.open(AddRackComponent, {
+      width: '40%'
+    }).afterClosed().subscribe(value => {
+      if (value == 'Update') {
         this.getRacksList();
       }
     })
   }
 
-  @ViewChild('uom') myUom:any;
-  addUOM(){
+  @ViewChild('uom') myUom: any;
+  addUOM() {
     setTimeout(() => {
       this.myUom.close()
-   
+
     }, 200);
-    this.dialogue.open(AddUOMComponent,{
-      width:'40%'
-    }).afterClosed().subscribe(value=>{
-      if(value == 'Update'){
+    this.dialogue.open(AddUOMComponent, {
+      width: '40%'
+    }).afterClosed().subscribe(value => {
+      if (value == 'Update') {
         this.getUOMList();
       }
     })
   }
 
-  @ViewChild('category') myCategory:any;
- 
-  addCategory(){
+  @ViewChild('category') myCategory: any;
+
+  addCategory() {
     // alert()
-    
+
     setTimeout(() => {
       this.myCategory.close()
-   
+
     }, 200);
-  
-    this.dialogue.open(AddCategoryComponent,{
-      width:'40%'
-    }).afterClosed().subscribe(value=>{
-      if(value == 'Update'){
+
+    this.dialogue.open(AddCategoryComponent, {
+      width: '40%'
+    }).afterClosed().subscribe(value => {
+      if (value == 'Update') {
         this.getCategory();
       }
     })
 
   }
 
-  @ViewChild('subCategory') mysubcat:any;
+  @ViewChild('subCategory') mysubcat: any;
 
-  addSubCategory(){
+  addSubCategory() {
     setTimeout(() => {
       this.mysubcat.close()
-   
+
     }, 200);
-    this.dialogue.open(AddProdSubCategoryComponent,{
-      width:'40%'
-    }).afterClosed().subscribe(value=>{
-      if(value == 'Update'){
+    this.dialogue.open(AddProdSubCategoryComponent, {
+      width: '40%'
+    }).afterClosed().subscribe(value => {
+      if (value == 'Update') {
         this.getSubCategory();
       }
     })
@@ -752,52 +726,52 @@ export class ProductComponent implements OnInit {
 
 
 
-  onImgSelected(event:any) {
+  onImgSelected(event: any) {
 
-  
-    var imgSize = event.target.files[0].size ;
-    var isConvert:number = parseFloat((imgSize / 1048576).toFixed(2));
 
-    if(isConvert > 2){
-      
-       this.msg.WarnNotify('File Size is more than 2MB');
+    var imgSize = event.target.files[0].size;
+    var isConvert: number = parseFloat((imgSize / 1048576).toFixed(2));
+
+    if (isConvert > 2) {
+
+      this.msg.WarnNotify('File Size is more than 2MB');
     }
-    else{
+    else {
 
-    ////////////// will check the file type ////////////////
-      if(this.global.getExtension(event.target.value) != 'pdf'){   
+      ////////////// will check the file type ////////////////
+      if (this.global.getExtension(event.target.value) != 'pdf') {
         let targetEvent = event.target;
 
-    /////////// assign the targeted file to file variable
-        let file:File = targetEvent.files[0];   
-    
-        let fileReader:FileReader = new FileReader();
-    
-     //////////////// if the file is other than pdf eill assign to product img varialb
-        fileReader.onload =(e)=>{
-          this.productImg = fileReader.result;          
-        }
-    
-        fileReader.readAsDataURL(file);
-    
-      }else{
-    
-          this.msg.WarnNotify('File Must Be in jpg or png formate');
-          event.target.value = '';
-          this.productImg = '';
+        /////////// assign the targeted file to file variable
+        let file: File = targetEvent.files[0];
+
+        let fileReader: FileReader = new FileReader();
+
+        //////////////// if the file is other than pdf eill assign to product img varialb
+        fileReader.onload = (e) => {
+          this.productImg = fileReader.result;
         }
 
+        fileReader.readAsDataURL(file);
+
+      } else {
+
+        this.msg.WarnNotify('File Must Be in jpg or png formate');
+        event.target.value = '';
+        this.productImg = '';
+      }
+
     }
- 
-    
+
+
   }
 
 
   salePercent = '';
 
-  generatePrice(e:any){
-    
-    if(e.keyCode == 13 || e == 'generate'){
+  generatePrice(e: any) {
+
+    if (e.keyCode == 13 || e == 'generate') {
       this.SalePrice = parseFloat(this.CostPrice) + (parseFloat(this.CostPrice) * parseFloat(this.salePercent) / 100);
     }
   }

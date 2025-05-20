@@ -108,6 +108,7 @@ export class RestSaleBillPrintComponent {
   myFbrInvoiceNo ='';
   myPartyName = '';
   myPartyBalance = 0;
+  myInvType = '';
 
 
 
@@ -141,6 +142,7 @@ export class RestSaleBillPrintComponent {
         this.myFbrStatus = Response[0].fbrStatus;
         this.myPartyName = Response[0].partyName;
         this.myPartyBalance = Response[0].cusBalance;
+        this.myInvType = Response[0].invType;
 
 
         if (this.myPaymentType == 'Bank') {
@@ -176,7 +178,6 @@ export class RestSaleBillPrintComponent {
     this.myInvoiceNo = invoiceNo;
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetHoldedBillDetail?BillNo=' + invoiceNo).subscribe(
       (Response: any) => {
-        console.log(Response);
         this.myPrintData = Response;
 
         this.mytableNo = Response[0].tableTitle;
@@ -188,6 +189,7 @@ export class RestSaleBillPrintComponent {
         this.myRemarks = Response[0].remarks;
         this.myOrderNo = Response[0].orderNo;
         this.myBookerName = Response[0].bookerName;
+          this.myInvType = Response[0].invType;
         this.myGstAmount =0;
         this.myGstValue = 0;
         this.myFbrInvoiceNo = '';

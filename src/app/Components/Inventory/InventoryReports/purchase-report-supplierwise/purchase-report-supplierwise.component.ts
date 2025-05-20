@@ -52,6 +52,7 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
 
   supplierList:any = [];
   partyID = 0;
+  partyName = '';
 
   userList: any = [];
   userID = 0;
@@ -97,6 +98,8 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
   if(this.partyID == 0 || this.partyID == undefined){
     this.msg.WarnNotify('Select Supplier')
   }else{
+        this.partyName = this.supplierList.find((e:any)=> e.partyID == this.partyID).partyName;
+
 
    if(type == 'detail'){
     $('#detailTable').show();

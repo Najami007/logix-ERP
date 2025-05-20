@@ -65,6 +65,7 @@ import { VoucherPrintComponent } from './CommonComponent/voucher-print/voucher-p
 
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { AddChartOfAccountComponent } from './coa/add-chart-of-account/add-chart-of-account.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -153,7 +154,8 @@ export const accountRountes: Route[] = [
     AddWithdrawalComponent,
     COAComponent,
     AddBalanceComponent,
-    VoucherPrintComponent
+    VoucherPrintComponent,
+    AddChartOfAccountComponent
 
 
 

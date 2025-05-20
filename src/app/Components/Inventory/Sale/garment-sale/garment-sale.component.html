@@ -287,7 +287,7 @@
                         <mat-icon class="cursorPointer" (click)="addParty()" matSuffix>add</mat-icon>
                     </mat-form-field> -->
 
-                    <div class="w-100 mb-3">
+                    <div class="w-100 mb-3" *ngIf="customerFeature">
                         <ng-select class="w-100 custom" placeholder="Customer" appearance="outline"
                             [(ngModel)]="partyID" (ngModelChange)="partySelect()" name="customer">
                             <ng-option [value]="0">WalkIn Customer</ng-option>
@@ -305,7 +305,7 @@
                     <mat-form-field appearance="outline" class="w-100 matSmall">
                         <mat-label>Payment Type</mat-label>
                         <mat-select #pType [(ngModel)]="paymentType" (selectionChange)="cash = 0;getTotal()">
-                            <mat-option value="Credit">Credit</mat-option>
+                            <mat-option value="Credit" *ngIf="customerFeature">Credit</mat-option>
                             <mat-option value="Cash">Cash</mat-option>
                             <mat-option value="Bank">Bank</mat-option>
                             <mat-option value="Split">Split</mat-option>

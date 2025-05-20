@@ -45,8 +45,8 @@
                         </mat-form-field>
                         <mat-form-field appearance="outline" *ngIf="coaLevel == 1" class=" col-lg-12 matSmall">
                             <mat-label>Enter Level 1</mat-label>
-                            <input (keydown)="globalData.handleNumKeys($event)" matInput type="text" min="1" #EnterLevel aria-label="level1"
-                                (keyup)="setvalue()" [(ngModel)]="level1">
+                            <input (keydown)="globalData.handleNumKeys($event)" matInput type="text" min="1" #EnterLevel
+                                aria-label="level1" (keyup)="setvalue()" [(ngModel)]="level1">
                             <mat-hint>Must Be a Number</mat-hint>
                         </mat-form-field>
 
@@ -66,8 +66,8 @@
 
                         <mat-form-field appearance="outline" *ngIf="coaLevel == 2" class="col-lg-12 matSmall">
                             <mat-label>Enter Level 2</mat-label>
-                            <input (keydown)="globalData.handleNumKeys($event)"  matInput type="text" min="1" #EnterLevel aria-label="level2"
-                                (keyup)="setvalue();" [(ngModel)]="level2">
+                            <input (keydown)="globalData.handleNumKeys($event)" matInput type="text" min="1" #EnterLevel
+                                aria-label="level2" (keyup)="setvalue();" [(ngModel)]="level2">
                             <mat-hint>Must Be a Number</mat-hint>
                         </mat-form-field>
 
@@ -84,8 +84,8 @@
                         </mat-form-field>
                         <mat-form-field appearance="outline" *ngIf="coaLevel == 3" class="col-lg-12 matSmall">
                             <mat-label>Enter Level 3</mat-label>
-                            <input (keydown)="globalData.handleNumKeys($event)"  matInput type="text" min="1" #EnterLevel aria-label="level3"
-                                (keyup)="setvalue();" [(ngModel)]="level3">
+                            <input (keydown)="globalData.handleNumKeys($event)" matInput type="text" min="1" #EnterLevel
+                                aria-label="level3" (keyup)="setvalue();" [(ngModel)]="level3">
                             <mat-hint>Must Be a Number</mat-hint>
                         </mat-form-field>
 
@@ -95,8 +95,8 @@
 
                         <mat-form-field appearance="outline" *ngIf="coaLevel == 4" class="col-lg-12 matSmall">
                             <mat-label>Enter Level 4</mat-label>
-                            <input (keydown)="globalData.handleNumKeys($event)"  matInput type="text" min="1" #EnterLevel aria-label="level4"
-                                (keyup)="setvalue();" [(ngModel)]="level4">
+                            <input (keydown)="globalData.handleNumKeys($event)" matInput type="text" min="1" #EnterLevel
+                                aria-label="level4" (keyup)="setvalue();" [(ngModel)]="level4">
                             <mat-hint>Must Be a Number</mat-hint>
                         </mat-form-field>
 
@@ -121,23 +121,24 @@
                         <div class="d-flex flex-column">
                             <h1 class="text-danger mt-3">Is Transaction Allowed in this head?</h1>
                             <mat-checkbox class="example-margin" [(ngModel)]="TransactionAllowed"
-                                *ngFor="let item of Allow" value="{{item.value}}" >
+                                *ngFor="let item of Allow" value="{{item.value}}">
                                 {{item.text}}
                             </mat-checkbox>
 
-                            <mat-radio-group [disabled]="CoaType !== 1"  [(ngModel)]="alias" name="cashBankCheck">
+                            <mat-radio-group [disabled]="CoaType !== 1" [(ngModel)]="alias" name="cashBankCheck">
                                 <mat-radio-button value="other">None</mat-radio-button>
-                                 <mat-radio-button value="cash">Cash</mat-radio-button>
-                                  <mat-radio-button  value="bank">Bank</mat-radio-button>
+                                <mat-radio-button value="cash">Cash</mat-radio-button>
+                                <mat-radio-button value="bank">Bank</mat-radio-button>
                             </mat-radio-group>
                         </div>
 
 
 
 
-                        <mat-form-field appearance="outline" class="w-100 mt-2 matSmall" *ngIf="(CoaType == 1 || CoaType == 4 || CoaType == 5) && TransactionAllowed ">
+                        <mat-form-field appearance="outline" class="w-100 mt-2 matSmall"
+                            *ngIf="(CoaType == 1 || CoaType == 4 || CoaType == 5) && TransactionAllowed ">
                             <mat-label>Enter Note</mat-label>
-                            <mat-select  [(ngModel)]="NoteID">
+                            <mat-select [(ngModel)]="NoteID">
                                 <mat-option [disabled]="item.coaTypeID != CoaType" *ngFor="let item of notesList"
                                     [value]="item.noteID">{{item.noteTitle}}</mat-option>
                             </mat-select>
@@ -174,26 +175,28 @@
                         <input #coaSearch name="search" matInput type="text" class="text-secondary">
                         <mat-icon matPrefix class="text-secondary">search</mat-icon>
                     </mat-form-field>
-                    
+
                     <mat-form-field appearance="outline" class="col-md-2 matSmall">
                         <mat-label>Select Type </mat-label>
                         <mat-select [(ngModel)]="filterCoaType" name="filterCoa" (selectionChange)="filterCOA()">
                             <mat-option [value]="0">ALL</mat-option>
 
-                            <mat-option *ngFor="let item of coaTypesList" [value]="item.coaTypeID">{{item.coaTypeTitle}}</mat-option>
+                            <mat-option *ngFor="let item of coaTypesList"
+                                [value]="item.coaTypeID">{{item.coaTypeTitle}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                     <mat-form-field appearance="outline" class="col-md-2 matSmall">
-                        <mat-label>Select Type </mat-label>
-                        <mat-select [(ngModel)]="filterTransactionType" name="filterCoa" (selectionChange)="filterCOA()">
+                    <mat-form-field appearance="outline" class="col-md-2 matSmall">
+                        <mat-label>Transaction Allowed </mat-label>
+                        <mat-select [(ngModel)]="filterTransactionType" name="filterCoa"
+                            (selectionChange)="filterCOA()">
                             <mat-option value="all">ALL</mat-option>
-                            <mat-option [value]="true">True</mat-option>
-                            <mat-option [value]="false">False</mat-option>
+                            <mat-option [value]="true">Yes</mat-option>
+                            <mat-option [value]="false">No</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
 
-                <table class="text-center table table-hover bg-light" *ngIf="crudList.r">
+                <table class="table table-hover bg-light" *ngIf="crudList.r">
                     <thead>
                         <tr>
                             <th>Sr.</th>
@@ -223,8 +226,8 @@
                                     class="text-danger">remove_circle</mat-icon></td>
                             <td *ngIf="crudList.d">
                                 <!-- <button class="btnTransparent text-success"><mat-icon >edit</mat-icon></button> -->
-                                <button class="btnTransparent text-danger"
-                                    (click)="deleteCoa(item)"><mat-icon>delete</mat-icon></button>
+                                <mat-icon class="text-dark cursorPointer" *ngIf="!item.level4" (click)="insertNewCoa(item)">add</mat-icon>
+                                <mat-icon class="text-danger cursorPointer" (click)="deleteCoa(item)">delete</mat-icon>
                             </td>
 
 
@@ -236,6 +239,30 @@
             </div>
 
 
+
+
+
+            <div class="modal fade" id="addCoaForm" tabindex="-1" aria-labelledby="voucherDocumentLabel"
+                aria-hidden="true" data-bs-backdrop="false">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span class="modal-title" id="voucherDocumentLabel">COA Details</span>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <app-add-chart-of-account [notesList]="notesList"></app-add-chart-of-account>
+
+                        </div>
+                        <div class="modal-footer bg-mf">
+                            <button type="button" class="btnsave" (click)="saveNewCoa()">Save</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
         </mat-tab>

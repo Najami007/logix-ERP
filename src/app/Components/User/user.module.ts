@@ -24,6 +24,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 import { UpdateSubscriptionComponent } from './update-subscription/update-subscription.component';
 import { SubscriptionKeyGeneratorComponent } from './subscription-key-generator/subscription-key-generator.component';
+import { UserFormComponent } from './add-user/user-form/user-form.component';
 
 
 
@@ -52,7 +53,8 @@ export const userRoutes: Route[] = [
     DayOpencloseRptComponent,
     DayopencloseComponent,
     UpdateSubscriptionComponent,
-    SubscriptionKeyGeneratorComponent,   
+    SubscriptionKeyGeneratorComponent,
+    UserFormComponent,   
   ],
   
   imports: [

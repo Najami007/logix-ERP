@@ -1014,7 +1014,7 @@ export class TableSale2Component implements OnInit {
   }
 
   closeQtyModal(){
-    this.global.openBootstrapModal('#prodModal',true);
+    // this.global.openBootstrapModal('#prodModal',true);
     this.global.closeBootstrapModal('#qtyModal',true);
   }
 

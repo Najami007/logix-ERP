@@ -24,6 +24,7 @@ export class AddReceiptComponent implements OnInit {
 
   ngOnInit(): void {
     this.getSupplier();
+    this.getProject();
     setTimeout(() => {
       $('#customer').trigger('focus');
     }, 500);
@@ -38,6 +39,7 @@ export class AddReceiptComponent implements OnInit {
       this.discount = this.editData.discount;
       this.remarks = this.editData.invoiceRemarks;
       this.bankReceiptNo = this.editData.bankReceiptNo;
+       this.projectID = this.editData.projectID;
       setTimeout(() => {
         this.getCoaList();
       }, 200);
@@ -63,6 +65,18 @@ export class AddReceiptComponent implements OnInit {
   paymentTypeList = [{value:'CRV',title:'Cash'},{value:'BRV',title:'Bank'},];
 
   paymentType = 'CRV';
+
+  projectList:any = [];
+
+  getProject(){
+    this.http.get(environment.mainApi+this.global.companyLink+'getproject').subscribe(
+      (Response:any)=>{
+        this.projectList = Response;
+       // console.log(Response);
+      
+      }
+    )
+  }
 
 
   getSupplierBalance(){

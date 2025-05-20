@@ -108,15 +108,25 @@ export class LedgerComponent {
 
  projectList:any = [];
 
-
-
-
-
-
  getProject(){
 
   this.globalData.getProjectList().subscribe((data: any) => { this.projectList = data; });
 
+}
+
+
+sortData(type:any){
+
+  if(type == 'date'){
+    this.tableData.sort((a:any,b:any)=>  a.invoiceDate - b.invoiceDate );
+  }
+
+  if(type =='invNo'){
+    
+     this.tableData.sort((a:any,b:any)=>  a.voucherNo - b.voucherNo );
+     //a.voucherNo - b.voucherNo
+  }
+  
 }
 
 
@@ -142,12 +152,35 @@ export class LedgerComponent {
 
   /////////////////////////////////////////////
 
+
+  onCoaChange() {
+    //  this.CoaList[this.CoaList.length].index + 1;
+    var index = this.CoaList.findIndex((e: any) => e.coaID == this.coaID);
+    this.CoaList[index].indexNo = this.CoaList[0].indexNo + 1;
+    this.CoaList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+  }
+
   getCoa(){
     this.app.startLoaderDark();
     this.http.get(environment.mainApi+this.globalData.accountLink+'GetVoucherCOA').subscribe(
-      (Response)=>{
+      (Response:any)=>{
         // console.log(Response);
-        this.CoaList = Response;
+       this.CoaList = [];
+        if (Response.length > 0) {
+          Response.forEach((e: any) => {
+            this.CoaList.push({
+              indexNo: this.CoaList.length == 0 ? this.CoaList.length + 1
+                : this.CoaList[0].indexNo + 1,
+              coaTitle: e.coaTitle,
+              accountCode: e.accountCode,
+              coaID: e.coaID
+            });
+          });
+        }
+
+
+
+        this.CoaList.sort((a: any, b: any) => b.indexNo - a.indexNo);
         this.app.stopLoaderDark();
       }
     )
@@ -183,9 +216,15 @@ export class LedgerComponent {
      
       this.http.get(environment.mainApi+this.globalData.accountLink+'GetLedgerRpt?coaid='+this.coaID +'&fromdate='
       +this.globalData.dateFormater(this.startDate,'-') +'&todate='+this.globalData.dateFormater(this.EndDate,'-')+'&projectID='+this.projectID).subscribe(
-        (Response)=>{
-          // console.log(Response);
-          this.tableData = Response;
+        (Response:any)=>{
+    
+          this.tableData = Response.map((e:any)=>{
+          (e.invoiceDate = new Date(e.invoiceDate))
+          return e;
+          }
+         
+        );
+          //console.log(this.tableData );
           this.getTotal();
           this.app.stopLoaderDark();
         },

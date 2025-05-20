@@ -46,19 +46,20 @@ export class TopNavBarComponent implements OnInit{
       this.clickEventSubscription = this.globalData
       .getMenuItem()
       .subscribe((value: any) => {
-        this.moduleID = value;
+        this.moduleID = this.globalData.getModuleID() || value; // value;
         this.getMenu();
        
       });
       
-
+      // this.moduleID = this.globalData.getModuleID();
+      // this.getMenu();
 
   }
 
    
   ngOnInit(): void {
 
-    this.moduleID = localStorage.getItem('mid');
+    this.moduleID = this.globalData.getModuleID();
     this.UserName = this.globalData.getUserName();
     this.getMenu();
     this.getCompany();

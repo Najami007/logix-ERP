@@ -81,18 +81,18 @@
                     <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
                         [width]="item.logo1Width">
                 </span>
-                <span>
+                <div class="d-flex flex-column">
 
 
-                    <h1 class="companyName">{{item.companyName}}</h1>
+                    <span class="companyName">{{item.companyName}}</span>
+                    <span class="rptPartyName" style="margin-top: -10px;">{{partyName}} </span>
+                    <span class="rptTitle" style="margin-top:-10px">Purchase {{reportType}} Report </span>
+                    <span style="margin-top: -10px;" *ngIf="userName != ''" > <b *ngIf="userName != ''">User: {{userName}} |</b> </span>
+                    <span style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                        {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
 
-                    <p class="rptTitle" style="margin-top:-20px">Purchase {{reportType}} Report </p>
-                    <p style="margin-top: -15px;" *ngIf="userName != ''" > <b *ngIf="userName != ''">User: {{userName}} |</b> </p>
-                    <p style="margin-top:-15px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
-                        {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
 
-
-                </span>
+                </div>
                 <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
                     <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
                         height="{{item.logo2Height}}" width="{{item.logo2Width}}">

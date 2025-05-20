@@ -6,8 +6,8 @@
                 <!----------------           Date Section ------------------------------->
                 <div class="row ">                    
                         <mat-form-field class="col-lg-4 matSmall" appearance="outline">
-                            <mat-label>Account Head</mat-label>
-                            <mat-select [(ngModel)]="coaID">
+                            <mat-label>Coa Title</mat-label>
+                            <mat-select [(ngModel)]="coaID" name="coaTitle" (selectionChange)="onCoaChange()">
                                 <mat-option><ngx-mat-select-search [(ngModel)]="txtSearch"
                                     [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
                                     name="search"></ngx-mat-select-search></mat-option>
@@ -17,7 +17,7 @@
 
                         <mat-form-field class="col-lg-2 matSmall" appearance="outline">
                             <mat-label>Project </mat-label>
-                            <mat-select [(ngModel)]="projectID" >
+                            <mat-select [(ngModel)]="projectID" name="project">
                                 <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch"
                                     [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
                                     name="search"></ngx-mat-select-search></mat-option>
@@ -86,8 +86,8 @@
                 <thead >
                     <tr class="text-center">
                         <th>S#</th>
-                        <th class="wide" >Date</th>
-                        <th class="wide">Inv #</th>
+                        <th class="wide cursorPointer" (click)="sortData('date')">Date</th>
+                        <th class="wide cursorPointer" (click)="sortData('invNo')">Inv #</th>
                         <th >Project</th>
                         <th >Particular</th>
                         <th >Narration</th>
@@ -100,7 +100,7 @@
                 <tbody>
                     <tr *ngFor="let item of tableData let i=index" >
                         <td class="text-center" >{{i+1}}</td>
-                        <td >{{item.invoiceDate | date:'dd-MM-yyyyy'}}</td>
+                        <td >{{item.invoiceDate | date:'dd-MM-yyyy'}}</td>
                         <td class="  cursorPointer text-primary " 
                         (click)="VoucherDetails(item)"><span class="border-bottom">{{item.invoiceNo}}</span></td>
                         <td>{{item.projectTitle}}</td>
@@ -126,58 +126,6 @@
                 
             </table>
         </div>
-
-
-
-
-
- <!--------------------------  Modal Window to check invoice Details ----------------------->
-
-
- <div class="modal fade h-100 bg-light " id="invoiceDetailModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title" id="exampleModalLabel">Voucher Details</h2>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-       <!----------------------- Table Area --------------------->
-
-       <div>
-        <table class="table">
-            <thead class="border-bottom">
-                
-                <th>S#</th>
-                <th>Description</th>
-                <th>Debit</th>
-                <th>Credit</th>
-            
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of invoiceDetails; index as index">
-                    <td>{{index+1}}</td>
-                    <td>{{item.coaTitle}} ({{item.accountCode}})</td>
-                    <td>{{item.debit |number}}</td>
-                    <td>{{item.credit |number}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Total</b></td>
-                    <td><b>{{lblDebitTotal |number}}</b></td>
-                    <td><b>{{lblCreditTotal |number}}</b></td>
-                </tr>
-            </tbody>
-        </table>
-       </div>
-           
-
-
-        </div>
-        
-      </div>
-    </div>
-  </div>
 
 
 

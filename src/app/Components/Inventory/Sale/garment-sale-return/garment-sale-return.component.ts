@@ -856,7 +856,6 @@ export class GarmentSaleReturnComponent implements OnInit {
 
 
     this.netTotal = this.subTotal - parseFloat(this.discount) - parseFloat(this.offerDiscount);
-    this.change = parseFloat(this.cash) - this.netTotal;
 
     if (this.paymentType == 'Split') {
 
@@ -875,6 +874,8 @@ export class GarmentSaleReturnComponent implements OnInit {
     if (this.paymentType !== 'Credit') {
       this.partyID = 0;
     }
+    this.change = (parseFloat(this.cash) + parseFloat(this.bankCash)) - this.netTotal;
+
 
   }
 

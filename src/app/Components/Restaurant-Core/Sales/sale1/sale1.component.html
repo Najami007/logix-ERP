@@ -27,8 +27,8 @@
         </div>
 
         <div>
-            <input matInput id="recSearch" class="w-100 p-1 border" style="height: 40px;" autofocus
-                placeholder="Search Recipe...." #recipeSearch (keyup)="searchByCode($event,recipeSearch.value)">
+            <input matInput id="recSearch" accesskey="f" autocomplete="off" class="w-100 p-1 border" style="height: 40px;" autofocus
+                placeholder="Search Recipe (ALT + f)" #recipeSearch (keyup)="searchByCode($event,recipeSearch.value)">
 
         </div>
         <br>
@@ -44,10 +44,9 @@
                         <img *ngIf="item.recipeImage" [src]="item.recipeImage" alt="" height="110px" width="130px">
                     </div>
 
-                    <mat-card-footer class="text-center" style="font-size: x-small;"
-                        [matTooltip]="item.recipeTitle"><strong>{{ item.recipeTitle | slice:0:22
-                            }}</strong></mat-card-footer>
-                    <mat-card-footer class="text-center text-success " style="font-size: 18px;">{{item.recipeSalePrice |
+                    <mat-card-footer class="text-center text-wrap fw-bold" style="line-height: 10px;font-size: 12px;padding-top: 5px;"
+                        [matTooltip]="item.recipeTitle">{{ item.recipeTitle |slice:0:30}}</mat-card-footer>
+                    <mat-card-footer class="text-center text-success  " style="font-size: 18px;">{{item.recipeSalePrice |
                         number}}</mat-card-footer>
 
 

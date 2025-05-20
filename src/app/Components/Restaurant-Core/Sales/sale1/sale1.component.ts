@@ -625,8 +625,12 @@ export class Sale1Component implements OnInit {
 
       if (index >= 0 ) {
         this.tableData[index].quantity += 1;
+         this.tableData[index].rowIndex  = this.tableData[0].rowIndex + 1;
       } else {
         this.tableData.push({
+           rowIndex: this.tableData.length == 0 ? this.tableData.length + 1
+              : this.tableData[0].rowIndex + 1,
+              
           productID: item.productID,
           productTitle: item.recipeTitle,
           quantity: qty,
@@ -644,15 +648,21 @@ export class Sale1Component implements OnInit {
       // this.tableData.push({recipeID:item.recipeID,recipeTitle:item.recipeTitle,quantity:qty,recipeSalePrice:item.recipeSalePrice});
 
       // }
+
+      this.orderDataTable()
       this.getTotal();
     }
     this.tempProdRow = [];
     this.tempQty = 1;
-
+ $('#recSearch').trigger('select');
     $('#recSearch').trigger('focus');
-    $('#recSearch').val('');
+    // $('#recSearch').val('');
   }
 
+  orderDataTable(){
+    this.tableData.sort((a: any, b: any) => b.rowIndex - a.rowIndex); 
+
+  }
 
 
   editTotal(item: any) {
@@ -1106,6 +1116,8 @@ export class Sale1Component implements OnInit {
         this.orderNo = Response[0].orderNo;
         Response.forEach((e: any) => {
           this.tableData.push({
+            rowIndex: this.tableData.length == 0 ?  1
+              : this.tableData[0].rowIndex + 1,
             productID: e.productID,
             productTitle: e.productTitle,
             quantity: e.quantity,
@@ -1122,7 +1134,8 @@ export class Sale1Component implements OnInit {
 
 
         });
-        this.getTotal()
+        this.getTotal();
+        this.orderDataTable();
 
 
       },
@@ -1344,7 +1357,7 @@ export class Sale1Component implements OnInit {
     this.BookerID = 0;
     this.PartyID = 0;
     this.invoiceDate = new Date();
-    this.orderType =this.defaultOrderTypeFeature ? 'Take Away' : 'Dine In' ;;
+    this.orderType =this.defaultOrderTypeFeature ? 'Take Away' : '' ;;
     this.paymentType = 'Cash';
     this.cash = 0;
     this.bankCash = 0;

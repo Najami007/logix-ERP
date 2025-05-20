@@ -21,7 +21,8 @@ logoWidth = 0;
   constructor(private msg:NotificationService,
                private rout : Router,
                private http : HttpClient,
-               public global:GlobalDataModule
+               public global:GlobalDataModule,
+                  private route:Router,
     ){
 
       this.global.getCompany().subscribe((data)=>{
@@ -40,7 +41,11 @@ logoWidth = 0;
 
   ngOnInit(): void {
    
-  
+  if(localStorage.getItem('curVal') == null || localStorage.getItem('curVal') == '' ){
+      this.route.navigate(['']);
+    }else{
+      this.route.navigate(['home']);
+    }
 
 
   }

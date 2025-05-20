@@ -1,0 +1,62 @@
+<div>
+
+    <div class="row">
+        <mat-form-field appearance="outline" class="w-100 matSmall">
+            <mat-label>Enter Head Title</mat-label>
+            <input matInput type="text" [(ngModel)]="CoaTitle" autofocus>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" *ngIf="coaLevel == 1" class=" col-lg-12 matSmall">
+            <mat-label>Enter Level 1</mat-label>
+            <input (keydown)="global.handleNumKeys($event)" matInput type="text"  #EnterLevel1 [(ngModel)]="level1">
+            <mat-hint>Must Be a Number</mat-hint>
+        </mat-form-field>
+         <mat-form-field appearance="outline" *ngIf="coaLevel == 2" class=" col-lg-12 matSmall">
+            <mat-label>Enter Level 2</mat-label>
+            <input (keydown)="global.handleNumKeys($event)" matInput type="text"  #EnterLevel2  [(ngModel)]="level2">
+            <mat-hint>Must Be a Number</mat-hint>
+        </mat-form-field>
+         <mat-form-field appearance="outline" *ngIf="coaLevel == 3" class=" col-lg-12 matSmall">
+            <mat-label>Enter Level 3</mat-label>
+            <input (keydown)="global.handleNumKeys($event)" matInput type="text"  #EnterLevel3  [(ngModel)]="level3">
+            <mat-hint>Must Be a Number</mat-hint>
+        </mat-form-field>
+         <mat-form-field appearance="outline" *ngIf="coaLevel == 4" class=" col-lg-12 matSmall">
+            <mat-label>Enter Level 4</mat-label>
+            <input (keydown)="global.handleNumKeys($event)" matInput type="text" #EnterLevel4 [(ngModel)]="level4">
+            <mat-hint>Must Be a Number</mat-hint>
+        </mat-form-field>
+
+
+
+        <div class="d-flex flex-column">
+            <h1 class="text-danger mt-3">Is Transaction Allowed in this head?</h1>
+            <mat-checkbox class="example-margin" [(ngModel)]="TransactionAllowed" *ngFor="let item of Allow"
+                value="{{item.value}}">
+                {{item.text}}
+            </mat-checkbox>
+
+            <mat-radio-group *ngIf="CoaType == 1 && TransactionAllowed " [(ngModel)]="alias" name="cashBankCheck">
+                <mat-radio-button value="other">None</mat-radio-button>
+                <mat-radio-button value="cash">Cash</mat-radio-button>
+                <mat-radio-button value="bank">Bank</mat-radio-button>
+            </mat-radio-group>
+        </div>
+
+        <mat-form-field appearance="outline" class="w-100 mt-2 matSmall"
+            *ngIf="(CoaType == 1 || CoaType == 4 || CoaType == 5) && TransactionAllowed ">
+            <mat-label>Enter Note</mat-label>
+            <mat-select [(ngModel)]="NoteID">
+                <mat-option [disabled]="item.coaTypeID != CoaType" *ngFor="let item of notesList"
+                    [value]="item.noteID">{{item.noteTitle}}</mat-option>
+            </mat-select>
+
+            <!-- <mat-hint>Must Be a Number</mat-hint> -->
+        </mat-form-field>
+
+
+
+    </div>
+
+</div>

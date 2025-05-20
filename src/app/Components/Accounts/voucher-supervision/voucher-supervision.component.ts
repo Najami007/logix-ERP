@@ -201,20 +201,7 @@ export class VoucherSupervisionComponent {
 
     this.globalData.openPinCode().subscribe(pin=>{
       if(pin!= ''){
-        Swal.fire({
-          title:'Alert!',
-          text:'Confirm To Approve Invoice',
-          position:'center',
-          icon:'success',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Confirm',
-        }).then((result)=>{
-          if(result.isConfirmed){
-    
-            //////on confirm button pressed the api will run
-            this.http.post(environment.mainApi+this.globalData.accountLink+'ApproveVoucher',{
+         this.http.post(environment.mainApi+this.globalData.accountLink+'ApproveVoucher',{
               InvoiceNo: row.invoiceNo,
               PinCode:pin,
             UserID: this.globalData.getUserID(),
@@ -230,8 +217,6 @@ export class VoucherSupervisionComponent {
                 
               }
             )
-          }
-        });
       }
     })
 

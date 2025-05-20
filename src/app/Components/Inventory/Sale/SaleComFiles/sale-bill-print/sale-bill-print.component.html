@@ -57,6 +57,7 @@
                     <td class="ms-2 fs-11">{{myRemarks}}</td>
                 </tr>
 
+                
 
 
             </table>
@@ -247,7 +248,7 @@
                         <td>{{myBank|number:'1.0-1'}}</td>
                         <td></td>
                     </tr>
-                    <tr class="text-end fs-14">
+                    <tr class="text-end fs-14" *ngIf="myChange !== 0">
                         <td></td>
                         <td>Change</td>
                         <td>{{myChange|number:'1.0-1'}}</td>
@@ -443,7 +444,7 @@
 
                     <tr *ngFor="let item of myPrintTableData index as index" class="fs-12">
                         <td>{{index +1}}</td>
-                        <td class="text-start">{{item.productTitleOtherLang}}</td>
+                        <td class="text-end">{{item.productTitleOtherLang}}</td>
                         <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
                         <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
                         <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
@@ -467,37 +468,44 @@
 
             <table class="table-garment-sale-Urdu-Bottom " dir="rtl">
                 <tbody class="fs-16 fw-bold">
+                      <tr class="text-center " *ngIf="!gstFeature">
+
+                        <td width="40%" rowspan="7" style="font-size: 10px;">
+                            <img [src]="global.thankyouImage" height="80" width="80" /><br />
+                            FOR VISITING US.
+                        </td>
+                    </tr>
 
                     <tr class="text-end">
                         <td></td>
                         <td>ٹوٹل</td>
-                        <td>{{mySubTotal |number:'1.0-1'}}</td>
+                        <td class="text-start">{{mySubTotal |number:'1.0-1'}}</td>
                     </tr>
                     <tr class="text-end" *ngIf="myOtherCharges > 0">
 
-                        <td> {{myOtherCharges|number:'1.0-1'}}</td>
+                        <td class="text-start"> {{myOtherCharges|number:'1.0-1'}}</td>
                         <td></td>
                     </tr>
                     <tr class="text-end" *ngIf="myOfferDiscount > 0">
                         <td></td>
                         <!-- <td >Offer Disc</td> -->
                         <td></td>
-                        <td class="urdu">ڈسکاؤنٹ</td>
-                        <td>{{myOfferDiscount|number:'1.0-1'}}</td>
+                        <td class="urdu"> آفر ڈسکاؤنٹ </td>
+                        <td class="text-start">{{myOfferDiscount|number:'1.0-1'}}</td>
 
 
                     </tr>
                     <tr class="text-end" *ngIf="myDiscount - myOfferDiscount > 0">
                         <td></td>
                         <td class="urdu">ڈسکاؤنٹ</td>
-                        <td>{{myDiscount - myOfferDiscount|number:'1.0-1'}}</td>
+                        <td class="text-start">{{myDiscount - myOfferDiscount|number:'1.0-1'}}</td>
 
                     </tr>
 
                     <tr class="text-end">
                         <td></td>
                         <td class="urdu"><b>بل ٹوٹل</b></td>
-                        <td>{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</td>
+                        <td class="text-start">{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</td>
 
 
                     </tr>
@@ -505,19 +513,18 @@
 
                         <td></td>
                         <td class="urdu">کیش</td>
-                        <td>{{myCash|number:'1.0-1'}}</td>
+                        <td class="text-start">{{myCash|number:'1.0-1'}}</td>
 
                     </tr>
                     <tr class="text-end" *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
                         <td></td>
                         <td>بینک</td>
-                        <td>{{myBank|number:'1.0-1'}}</td>
-                        <td></td>
+                        <td class="text-start">{{myBank|number:'1.0-1'}}</td>
                     </tr>
-                    <tr class="text-end" *ngIf="myChange > 0">
+                    <tr class="text-end" *ngIf="myChange !== 0">
                         <td></td>
                         <td class="urdu">بقایا</td>
-                        <td>{{myChange|number:'1.0-1'}}</td>
+                        <td class="text-start">{{myChange|number:'1.0-1'}}</td>
 
 
 
@@ -527,9 +534,9 @@
                     <tr style="text-align:right; " *ngIf="myCusBalance !== 0">
                         <td></td>
                         <td class="urdu fw-bold">سابقا بقایا</td>
-                        <td class="fw-bold" *ngIf="myChange <= 0">{{myCusBalance - (-1 * myChange) | number:'1.0-1'}}
+                        <td class="fw-bold text-start" *ngIf="myChange <= 0">{{myCusBalance - (-1 * myChange) | number:'1.0-1'}}
                         </td>
-                        <td class="fw-bold" *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
+                        <td class="fw-bold text-start" *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
 
 
 
@@ -537,7 +544,7 @@
                     <tr style="text-align:right;" *ngIf="myCusBalance !== 0">
                         <td></td>
                         <td class="urdu fw-bold">ٹوٹل بقایا</td>
-                        <td class="fw-bold">{{myCusBalance | number:'1.0-1'}}</td>
+                        <td class="fw-bold text-start">{{myCusBalance | number:'1.0-1'}}</td>
 
 
                     </tr>
@@ -550,15 +557,15 @@
             <hr>
 
 
-            <div class="w-100">
-                <table class="w-100 text-center">
+            <div class="w-100 ">
+                <table class="w-100 text-center fs-12px ">
                     <tr>
-                        <td><label style="font-size:10px; font-family: urdu_noori;">تشریف لانے کا شکریہ</label></td>
+                        <td><label style="font-family: urdu_noori;">تشریف لانے کا شکریہ</label></td>
 
                     </tr>
                     <tr>
-                        <td><label style="font-size:8px;">Software by Logix Solutions. Mob: <b>0313-5300471</b></label>
-                        </td>
+                        <!-- <td><label style="font-size:8px;">Software by Logix Solutions. Mob: <b>0313-5300471</b></label>
+                        </td> -->
                     </tr>
                 </table>
             </div>

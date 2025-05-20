@@ -15,7 +15,7 @@
 
         </mat-form-field>
 
-        <mat-radio-group [(ngModel)]="alias" [disabled]="coaTypeID == 3 || coaTypeID == 2">
+        <mat-radio-group [(ngModel)]="alias" [disabled]="coaTypeID == 3 || coaTypeID == 2 || transactionAllowed == false">
             <mat-radio-button value="other">None</mat-radio-button>
             <mat-radio-button value="cash">Cash</mat-radio-button>
             <mat-radio-button value="bank">Bank</mat-radio-button>

@@ -165,6 +165,7 @@ export class GlobalDataModule implements OnInit {
           _reqCrG: Value._reqCrG,
           _reqCsG: Value._reqCsG,
           _reqPrjID: Value._reqPrjID,
+          _reqRTID:Value._reqRTID,
         };
         var flt: any = [];
         ///Encripting The Features List
@@ -189,6 +190,7 @@ export class GlobalDataModule implements OnInit {
             (Response: any) => {
 
               localStorage.setItem('mid', JSON.stringify(Response[0].moduleID));
+              sessionStorage.setItem('mid', JSON.stringify(Response[0].moduleID));
               this.setMenuItem(Response[0].moduleID);
             }
           )
@@ -387,8 +389,11 @@ export class GlobalDataModule implements OnInit {
   }
 
   getModuleID() {
-    var moduleID = JSON.parse(localStorage.getItem('mid') || '{}');
-
+    var moduleID =  JSON.parse( sessionStorage.getItem('mid')  || localStorage.getItem('mid') || '{}');
+    if(sessionStorage.getItem('mid') == null){
+      sessionStorage.setItem('mid',moduleID);
+    }
+    console.log(sessionStorage.getItem('mid'));
     return moduleID;
 
   }
@@ -433,20 +438,17 @@ export class GlobalDataModule implements OnInit {
   //////////////////////// will provide logged in userID
   getUserID() {
     var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
-
     return parseInt(atob(atob(credentials.value._culId)));
-
-    //  return parseInt(atob(atob(this.cookie.get('ui'))))
-
   }
 
   getProjectID() {
     var credentials = JSON.parse(localStorage.getItem('curVal') || '0');
-
     return credentials != 0 ? parseInt(atob(atob(credentials.value._reqPrjID))) : 0;
+  }
 
-    // var val = 1;
-    // return val;
+   getRoleTypeID() {
+    var credentials = JSON.parse(localStorage.getItem('curVal') || '0');
+    return credentials != 0 ? parseInt(atob(atob(credentials.value._reqRTID))) : 0;
   }
 
   ////////////////////// will provide the logged in user Name
@@ -461,12 +463,7 @@ export class GlobalDataModule implements OnInit {
   ////////////////////// will provide the logged in user Name
   getFastFoodCID() {
     var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
-
     return atob(atob(credentials.value._reqCID)).toString();
-    //return credentials.value._reqCID.toString();
-
-    // return atob(atob(this.cookie.get('un'))).toString();
-
   }
 
   ////////////////////// will provide the logged in user Name

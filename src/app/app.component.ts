@@ -31,6 +31,7 @@ export class AppComponent {
      if(localStorage.getItem('curVal') == null || localStorage.getItem('curVal') == '' ){
       this.route.navigate(['']);
     }
+    
      }
  }
 
@@ -136,6 +137,8 @@ constructor(
     }
    
   }
+
+  
 
 
   startLoaderDark() {

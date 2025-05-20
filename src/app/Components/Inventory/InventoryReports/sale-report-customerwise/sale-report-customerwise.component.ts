@@ -57,6 +57,7 @@ export class SaleReportCustomerwiseComponent implements OnInit {
 
   partyList:any = [];
   partyID = 0;
+  partyName = '';
 
   userList: any = [];
   userID = 0;
@@ -115,11 +116,13 @@ export class SaleReportCustomerwiseComponent implements OnInit {
     this.msg.WarnNotify('Select Customer')
   }else{
 
+    this.partyName = this.partyList.find((e:any)=> e.partyID == this.partyID).partyName;
+
    if(type == 'detail'){
     $('#detailTable').show();
     $('#ledger').hide();
     $('#summaryTable').hide();
-    this.reportType = 'Detail';
+    this.reportType = 'Sale Detail';
     this.http.get(environment.mainApi+this.global.inventoryLink + 'GetSaleDetailCustomerDateWise?reqUID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime+'&PartyID='+this.partyID).subscribe(
       (Response: any) => {
@@ -148,7 +151,7 @@ export class SaleReportCustomerwiseComponent implements OnInit {
     $('#detailTable').hide();
     $('#ledger').hide();
         $('#summaryTable').show();
-        this.reportType = 'Summary';
+        this.reportType = 'Sale Summary';
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleSummaryCustomerDateWise?reqUID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime+'&PartyID='+this.partyID).subscribe(
       (Response: any) => {
@@ -184,7 +187,7 @@ export class SaleReportCustomerwiseComponent implements OnInit {
     $('#detailTable').hide();
     $('#summaryTable').hide();
     $('#ledger').show();
-    this.reportType = 'Detail';
+    this.reportType = ' Ledger';
     this.http.get(environment.mainApi+this.global.inventoryLink + 'GetLedgerRpt_11?FromDate='+
     this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime+'&PartyID='+this.partyID).subscribe(
       (Response: any) => {
@@ -195,7 +198,6 @@ export class SaleReportCustomerwiseComponent implements OnInit {
         }
         return e;
        })
-       console.log(this.ledgerDetailList);
       }
     )
    }

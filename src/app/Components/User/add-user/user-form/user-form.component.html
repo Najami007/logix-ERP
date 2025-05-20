@@ -1,0 +1,53 @@
+<div class="row">
+           
+        <mat-form-field appearance="outline" class="col-md-6 matSmall">
+            <mat-label>User Name</mat-label>
+            <input matInput type="text"  [(ngModel)]="UserName">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-6 matSmall">
+            <mat-label>Login Name</mat-label>
+            <input matInput type="text" [(ngModel)]="loginName">
+        </mat-form-field>
+        <!-- <mat-form-field appearance="outline" class="col-md-6 matSmall">
+            <mat-label>User Email</mat-label>
+            <input matInput type="email" [(ngModel)]="userEmail">
+        </mat-form-field> -->
+
+
+        <mat-form-field appearance="outline" class="col-md-6 matSmall">
+            <mat-label>Mobile No</mat-label>
+            <input matInput type="text" maxlength="12"  [textMask]="{mask: mobileMask}" [(ngModel)]="mobileNo">
+            <mat-hint >{{mobileNo.length}}/12</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-6 matSmall">
+            <mat-label>User Role</mat-label>
+            <mat-select type="text" [(ngModel)]="RoleID">
+                <mat-option *ngFor="let item of rolesList" [value]="item.roleID">{{item.roleTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+         <mat-form-field appearance="outline" class="col-md-6 matSmall">
+            <mat-label>Role Type</mat-label>
+            <mat-select type="text" [(ngModel)]="roleTypeID">
+                <mat-option *ngFor="let item of roleTypeList" [value]="item.roleTypeID">{{item.roleTypeTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-md-6 matSmall">
+            <mat-label>Project</mat-label>
+            <mat-select type="text" [(ngModel)]="projectID">
+                <mat-option *ngFor="let item of projectList" [value]="item.projectID">{{item.projectTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-6 matSmall">
+            <mat-label>Password</mat-label>
+            <input [disabled]="userID > 0" matInput type="password" [(ngModel)]="password">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-md-6 matSmall">
+            <mat-label>Confirm Password</mat-label>
+            <input [disabled]="userID > 0" matInput type="password" [(ngModel)]="confirmPassword">
+        </mat-form-field>
+
+
+</div>

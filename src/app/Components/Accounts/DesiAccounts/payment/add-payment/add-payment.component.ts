@@ -22,6 +22,7 @@ export class AddPaymentComponent {
 
   ngOnInit(): void {
     this.getSupplier();
+    this.getProject();
     setTimeout(() => {
       $('#supplier').trigger('focus');
     }, 500);
@@ -36,6 +37,7 @@ export class AddPaymentComponent {
       this.discount = this.editData.discount;
       this.remarks = this.editData.invoiceRemarks;
       this.bankReceiptNo = this.editData.bankReceiptNo;
+      this.projectID = this.editData.projectID;
       setTimeout(() => {
         this.getCoaList();
       }, 200);
@@ -43,6 +45,8 @@ export class AddPaymentComponent {
     }
 
     this.getCoaList();
+    // console.log(this.editData);
+
   }
 
 
@@ -62,6 +66,22 @@ export class AddPaymentComponent {
   paymentTypeList = [{value:'CPV',title:'Cash'},{value:'BPV',title:'Bank'},];
 
   paymentType = 'CPV';
+
+   projectList:any = [];
+
+
+  
+  
+  getProject(){
+    this.http.get(environment.mainApi+this.global.companyLink+'getproject').subscribe(
+      (Response:any)=>{
+        this.projectList = Response;
+       // console.log(Response);
+      
+      }
+    )
+  }
+ 
 
 
   getSupplierBalance(){
@@ -105,7 +125,10 @@ export class AddPaymentComponent {
     //////////////////////////////////////////
 
     Save(){
-      if(this.partyID == 0 || this.partyID == undefined){
+      // if(this.projectID == 0 || this.projectID == undefined){
+      //   this.msg.WarnNotify('Select Project')
+      // }else
+       if(this.partyID == 0 || this.partyID == undefined){
         this.msg.WarnNotify('Select Supplier')
       }else if(this.paymentType == '' || this.paymentType == undefined){
         this.msg.WarnNotify('Select Payment Type')

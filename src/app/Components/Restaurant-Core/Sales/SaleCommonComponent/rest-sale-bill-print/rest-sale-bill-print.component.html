@@ -16,7 +16,7 @@
 
     <div class="p-1">
         <div>
-            <table class="w-100" style="font-size: 12px;">
+            <table class="w-100 fs-12">
 
                 <tr>
                     <th>Inv #</th>
@@ -51,7 +51,7 @@
 
 
         </div>
-
+        <h2 *ngIf="myPaymentType !== 'Complimentary' && myInvType == 'S'" class="w-100 text-center border border-dark">PAID</h2>
         <h2 *ngIf="myPaymentType == 'Complimentary'" class="w-100 text-center">Complimentary</h2>
         <h2 *ngIf="myDuplicateFlag == true" class=" w-100 text-center">Duplicate</h2>
 
@@ -81,11 +81,19 @@
 
 
 
-            <table class="w-100 mt-2" style="font-size: 12px;">
+            <table class="w-100 mt-2 fs-12" >
                 <tbody class="fw-bold">
+                     <tr class="text-center " *ngIf="myInvType == 'S'">
+
+                        <td width="40%" rowspan="7" style="font-size: 10px;">
+                            <img [src]="global.thankyouImage" height="70" width="70" /><br />
+                            FOR VISITING US.
+                        </td>
+                    </tr>
                     <tr>
                         <td>Sub Total</td>
                         <td class="text-end">&nbsp;{{mySubTotal |number:'1.0-0'}}</td>
+                        <td></td>
 
                     </tr>
                     <tr *ngIf="myOtherCharges > 0">
@@ -93,32 +101,38 @@
                         <td *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</td>
                         <td *ngIf="myOrderType == 'Take Away'">Other Charges</td>
                         <td class="text-end">&nbsp;{{myOtherCharges|number:'1.0-0'}}</td>
+                        <td></td>
 
                     </tr>
                     <tr *ngIf="myDiscount > 0">
                         <td>Discount</td>
                         <td class="text-end">&nbsp;{{myDiscount|number:'1.0-0'}}</td>
+                        <td></td>
 
                     </tr>
 
                     <tr>
                         <td>Net Total</td>
                         <td class="text-end">&nbsp;{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-0'}}</td>
+                        <td></td>
 
                     </tr>
                     <tr *ngIf="(myPaymentType == 'Cash' || myPaymentType == 'Split' || myPaymentType == 'Credit') && myCash > 0">
                         <td>Cash</td>
                         <td class="text-end">&nbsp;{{myCash|number:'1.0-0'}}</td>
+                        <td></td>
 
                     </tr>
                     <tr *ngIf="(myPaymentType == 'Bank' || myPaymentType == 'Split' || myPaymentType == 'Credit') && myBank > 0  ">
                         <td>Bank</td>
                         <td class="text-end">&nbsp;{{myBank|number:'1.0-0'}}</td>
+                        <td></td>
 
                     </tr>
                     <tr *ngIf="myChange !== 0">
                         <td>Change</td>
                         <td class="text-end">{{myChange|number:'1.0-0'}}</td>
+                        <td></td>
 
                     </tr>
 
@@ -126,11 +140,12 @@
                         <td class="fw-bold">prv Blnc</td>
                         <td class="fw-bold text-end" *ngIf="myChange > 0">&nbsp;{{myPartyBalance | number:'1.0-1'}}</td>
                         <td class="fw-bold text-end"*ngIf="myChange <= 0">&nbsp;{{myPartyBalance -  ( -1 * myChange) | number:'1.0-1'}}</td>
-
+                        <td></td>
                     </tr>
                     <tr  *ngIf="myPartyBalance !== 0">
                         <td class="fw-bold">Net Blnc</td>
                         <td class="fw-bold text-end">&nbsp;{{myPartyBalance | number:'1.0-1'}}</td>
+                        <td></td>
 
                     </tr>
 
@@ -140,8 +155,8 @@
 
         </div>
         <br>
-        <div style="border-top:1px dotted;">
-            <p style="font-size: 10px;">Wish To Serve You Again!</p>
+        <div style="border-top:1px dotted;" class="fs-12">
+            <span >Wish To Serve You Again!</span>
         </div>
     </div>
 

@@ -868,9 +868,9 @@ export class GarmentSaleComponent implements OnInit {
     if (this.gstFeature) {
       this.subTotal = this.subTotal + this.PosFee;
     }
+ 
     this.netTotal = this.subTotal - parseFloat(this.discount) - parseFloat(this.offerDiscount);
-    this.change = parseFloat(this.cash) - this.netTotal;
-
+    
     if (this.paymentType == 'Split') {
       this.bankCash = this.netTotal - parseFloat(this.cash);
     }
@@ -883,6 +883,9 @@ export class GarmentSaleComponent implements OnInit {
     if (this.paymentType !== 'Credit') {
       this.partyID = 0;
     }
+       
+    this.change = (parseFloat(this.cash) + parseFloat(this.bankCash)) - this.netTotal;
+
 
   }
 
@@ -1305,8 +1308,8 @@ export class GarmentSaleComponent implements OnInit {
       }
       else if (paymentType == 'Bank'  && this.bankCoaID == 0) {
         this.msg.WarnNotify('Select Bank')
-      } 
-      else if ( paymentType == 'Credit' && this.bankCash > 0 && this.bankCoaID == 0 ) {
+      }
+      else if ( (paymentType == 'Credit' || paymentType == 'Split') && this.bankCash > 0 && this.bankCoaID == 0 ) {
         this.msg.WarnNotify('Select Bank')
       }else {
 
@@ -1608,7 +1611,7 @@ export class GarmentSaleComponent implements OnInit {
 
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetOpenDaySale').subscribe(
       (Response: any) => {
-        console.log(Response);
+        // console.log(Response);
         this.savedbillList = [];
         Response.forEach((e: any) => {
           if (e.invType == 'S') {

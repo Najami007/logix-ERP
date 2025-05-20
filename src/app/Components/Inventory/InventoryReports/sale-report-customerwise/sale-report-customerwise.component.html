@@ -84,19 +84,18 @@
                     <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
                         [width]="item.logo1Width">
                 </span>
-                <span>
+                <div class="d-flex flex-column">
 
 
-                    <h1 class="companyName">{{item.companyName}}</h1>
+                    <span class="companyName" >{{item.companyName}}</span>
+                    <span class="rptPartyName" style="margin-top: -10px;">{{partyName}} </span>
+                    <span class="rptTitle" style="margin-top: -10px;">{{reportType}} Report</span>
+                    <span  *ngIf="userName != ''"> <b *ngIf="userName != ''">User: {{userName}}|</b> </span>
+                    <span ><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                        {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
 
-                    <p class="rptTitle" style="margin-top:-20px">Sale {{reportType}} Report </p>
-                    <p style="margin-top: -15px;" *ngIf="userName != ''"> <b *ngIf="userName != ''">User: {{userName}}
-                            |</b> </p>
-                    <p style="margin-top:-15px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
-                        {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
 
-
-                </span>
+                </div>
                 <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
                     <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
                         height="{{item.logo2Height}}" width="{{item.logo2Width}}">
@@ -177,7 +176,7 @@
                     <th>S#</th>
                     <th>Bill No</th>
                     <th>Date</th>
-                    <th>Booker</th>
+                    <!-- <th>Booker</th> -->
                     <th>Type</th>
                     <th>Total</th>
                     <th>Disc</th>
@@ -200,7 +199,7 @@
                     <td class="text-center cursorPointer" (click)="printBill(item)"><u
                             class="text-primary">{{item.invBillNo}}</u></td>
                     <td>{{item.invDate |date:'dd-MM-yyyy'}}</td>
-                    <td>{{item.bookerName}}</td>
+                    <!-- <td>{{item.bookerName}}</td> -->
                     <td>{{item.paymentType}}</td>
                     <td class="text-end">{{item.total |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.billDiscount|number:'1.0-0'}}</td>
@@ -208,7 +207,7 @@
                     <td>{{item.entryUser}}</td>
                 </tr>
                 <tr class="fw-bold text-end">
-                    <td colspan="5"></td>
+                    <td colspan="4"></td>
                     <td>{{saleBillTotal|number:'1.0-0'}}</td>
                     <td>{{saleDiscountTotal|number:'1.0-0'}}</td>
                     <th class="text-end">{{saleGrandTotal|number:'1.0-0'}}</th>
@@ -224,7 +223,7 @@
                     <td class="text-center cursorPointer" (click)="printBill(item)"><u
                             class="text-primary">{{item.invBillNo}}</u></td>
                     <td>{{item.invDate |date:'dd-MM-yyyy'}}</td>
-                    <td>{{item.bookerName}}</td>
+                    <!-- <td>{{item.bookerName}}</td> -->
                     <td>{{item.paymentType}}</td>
                     <td class="text-end">{{item.total |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.billDiscount|number:'1.0-0'}}</td>
@@ -232,7 +231,7 @@
                     <td>{{item.entryUser}}</td>
                 </tr>
                 <tr class="fw-bold text-end">
-                    <td colspan="5"></td>
+                    <td colspan="4"></td>
                     <td>{{saleRtnBillTotal|number:'1.0-0'}}</td>
                     <td>{{saleRtnDiscountTotal|number:'1.0-0'}}</td>
                     <th class="text-end">{{saleRtnGrandTotal|number:'1.0-0'}}</th>
@@ -243,7 +242,7 @@
                 <br>
 
                 <tr class="fw-bold ">
-                    <td colspan="5" class="text-center">Net Total</td>
+                    <td colspan="4" class="text-center">Net Total</td>
                     <td class="text-end">{{saleBillTotal - saleRtnBillTotal|number:'1.0-0'}}</td>
                     <td class="text-end">{{saleDiscountTotal - saleRtnDiscountTotal|number:'1.0-0'}}</td>
                     <th class="text-end">{{saleGrandTotal - saleRtnGrandTotal|number:'1.0-0'}}</th>
