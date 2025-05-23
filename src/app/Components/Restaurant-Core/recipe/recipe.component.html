@@ -31,7 +31,7 @@
                                         [value]="item.recipeCatID">{{item.recipeCatTitle}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
-                           
+
                             <mat-form-field appearance="outline" class="col-lg-3 matSmall">
                                 <mat-label>Cost Price</mat-label>
                                 <input matInput [(ngModel)]="costPrice" type="text" disabled="true">
@@ -74,8 +74,7 @@
                         </div>
 
 
-                        <div class="avatar-upload col-lg-2   "
-                            (click)="this.global.showProductImage(recipeImg,0)">
+                        <div class="avatar-upload col-lg-2   " (click)="this.global.showProductImage(recipeImg,0)">
                             <div class="avatar-edit">
                                 <input type="file" id="prodimg" accept="" #prodimg (change)="onImgSelected($event)" />
                                 <label for="prodimg"><mat-icon class=" mt-1">edit</mat-icon></label>
@@ -96,7 +95,7 @@
 
 
                     <div class="row">
-                
+
 
                     </div>
 
@@ -206,19 +205,65 @@
 
 
         <mat-tab label="Saved Record" class="h-100">
-            <div class=" border-start h-100 p-2 min-600" style="background-color: rgb(248, 253, 253);">
+            <div class="container-fluid p-2" style="background-color: rgb(248, 253, 253);overflow-x: hidden ;">
 
 
-                <mat-form-field class="col-lg-12 matSmall" appearance="outline">
-                    <mat-label>Search.....</mat-label>
-                    <input #recipeSearch matInput type="search" class="text-secondary">
-                </mat-form-field>
+                <div class="row">
+                    <mat-form-field class="col-lg-4 matSmall" appearance="outline">
+                        <mat-label>Search.....</mat-label>
+                        <input #recipeSearch matInput type="search" class="text-secondary">
+                    </mat-form-field>
 
-                <table class="table txtsm">
+                    <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+                        <mat-label>Category</mat-label>
+                        <mat-select [(ngModel)]="filterCategoryID" (selectionChange)="filterRecipe('cat')">
+                            <mat-option><ngx-mat-select-search #filtCatSearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"
+                                    name="search"></ngx-mat-select-search></mat-option>
+                            <mat-option [value]="0">All</mat-option>
+                            <mat-option *ngFor="let item of categoriesList |filter:filtCatSearch.value"
+                                [value]="item.recipeCatID">{{item.recipeCatTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+                        <mat-label>Cooking Area</mat-label>
+                        <mat-select [(ngModel)]="filterCookingAreaID" (selectionChange)="filterRecipe('ca')">
+                            <mat-option><ngx-mat-select-search #filtArSearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"
+                                    name="search"></ngx-mat-select-search></mat-option>
+                            <mat-option [value]="0">All</mat-option>
+                            <mat-option *ngFor="let item of cookingAreaList |filter:filtArSearch.value"
+                                [value]="item.cookingAriaID">{{item.cookingAriaTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-1 matSmall" appearance="outline">
+                        <mat-label>Status</mat-label>
+                        <mat-select [(ngModel)]="filterStatus" (selectionChange)="filterRecipe('status')">
+                            <mat-option [value]="0">All</mat-option>
+                            <mat-option [value]="true">Locked</mat-option>
+                            <mat-option [value]="false">Unlocked</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="col-lg-1 matSmall" appearance="outline">
+                        <mat-label>Status</mat-label>
+                        <mat-select [(ngModel)]="filterActiveStatus" (selectionChange)="filterRecipe('activeStatus')">
+                            <mat-option [value]="0">All</mat-option>
+                            <mat-option [value]="true">Yes</mat-option>
+                            <mat-option [value]="false">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button style="height: 40px;" class="btn-rpt-primary  col-lg-1"
+                        (click)="global.printData('#printTable')">Print</button>
+
+
+                </div>
+                
+                <div id="printTable">
+                         <table class="table txtsm">
                     <thead>
                         <tr>
                             <th>S#</th>
-                            <th>Title</th>
+                            <th (click)="sortData('title')" class="cursorPointer">Title</th>
                             <th>Code</th>
                             <th>Type</th>
                             <th>Time</th>
@@ -229,13 +274,13 @@
                             <th>Sale</th>
                             <th>Category</th>
                             <th>Cooking Area</th>
-                            <th>Edit</th>
-                            <th>Lock Status</th>
-                            <th>Status</th>
-                            <th>Retrieve</th>
-                            <th>Copy</th>
-                            <th>Img</th>
-                            <th>Delete</th>
+                            <th class="hide-in-print">Edit</th>
+                            <th class="hide-in-print">Lock Status</th>
+                            <th class="hide-in-print">Status</th>
+                            <th class="hide-in-print">Retrieve</th>
+                            <th class="hide-in-print">Copy</th>
+                            <th class="hide-in-print">Img</th>
+                            <th class="hide-in-print">Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -252,21 +297,24 @@
                             <td>{{item.recipeSalePrice |number:'1.0-0'}}</td>
                             <td>{{item.recipeCatTitle}}</td>
                             <td>{{item.cookingAriaTitle}}</td>
-                            <td class="cursorPointer"><mat-icon class="text-success"
+                            <td class="cursorPointer hide-in-print"><mat-icon class="text-success"
                                     (click)="edit(item)">edit</mat-icon></td>
-                            <td><mat-icon *ngIf="crudList.u" (click)="approveRecipe(item)">{{item.approvedStatus == true
+                            <td class="hide-in-print"><mat-icon *ngIf="crudList.u"
+                                    (click)="approveRecipe(item)">{{item.approvedStatus == true
                                     ? 'lock' :'lock_open'}}</mat-icon></td>
-                            <td class="cursorPointer"><mat-icon *ngIf="crudList.u"
+                            <td class="cursorPointer hide-in-print"><mat-icon *ngIf="crudList.u"
                                     [ngClass]="item.activeStatus == false ?'text-danger': 'text-success'"
                                     (click)="activeRecipe(item)">{{item.activeStatus == false ?
                                     'indeterminate_check_box' :'check_box'}}</mat-icon></td>
-                            <td class="cursorPointer"><mat-icon (click)="getIngredient(item)">photo_filter</mat-icon>
+                            <td class="cursorPointer hide-in-print"><mat-icon
+                                    (click)="getIngredient(item)">photo_filter</mat-icon>
                             </td>
-                            <td class="cursorPointer "><mat-icon data-bs-toggle="modal" data-bs-target="#otherRecipe"
-                                    *ngIf="crudList.u" (click)="copyRecipe(item)">save</mat-icon></td>
-                            <td class="cursorPointer "><mat-icon
+                            <td class="cursorPointer hide-in-print"><mat-icon data-bs-toggle="modal"
+                                    data-bs-target="#otherRecipe" *ngIf="crudList.u"
+                                    (click)="copyRecipe(item)">save</mat-icon></td>
+                            <td class="cursorPointer hide-in-print"><mat-icon
                                     (click)="getRecipeImage(item.recipeID,'show')">image</mat-icon></td>
-                            <td class="cursorPointer"><mat-icon class="text-danger" *ngIf="crudList.d"
+                            <td class="cursorPointer hide-in-print"><mat-icon class="text-danger" *ngIf="crudList.d"
                                     (click)="delete(item)">delete</mat-icon></td>
 
                         </tr>
@@ -274,6 +322,7 @@
 
 
                 </table>
+                </div>
 
             </div>
 

@@ -23,7 +23,7 @@ export class Voucher2Component implements OnInit {
 
   disableDate = this.globalData.DisableDateAcc;
 
-  // @ViewChild(VoucherPrintComponent) printVoucher:any;
+  @ViewChild(VoucherPrintComponent) printVoucher:any;
 
   loadingBar = 'start';
   curDate = new Date();
@@ -605,23 +605,23 @@ export class Voucher2Component implements OnInit {
   ///////////////////////////////////////////////////
 
   printBill(row: any) {
-    // this.printVoucher.printBill(row);
-    this.lblInvoiceNo = row.invoiceNo;
-    this.lblInvoiceDate = row.invoiceDate;
-    this.lblRemarks = row.invoiceRemarks;
-    this.lblVoucherType = row.type;
-    this.lblProjectName = row.projectTitle;
-    this.getInvoiceDetail(row.invoiceNo);
+    this.printVoucher.printBill(row);
+    // this.lblInvoiceNo = row.invoiceNo;
+    // this.lblInvoiceDate = row.invoiceDate;
+    // this.lblRemarks = row.invoiceRemarks;
+    // this.lblVoucherType = row.type;
+    // this.lblProjectName = row.projectTitle;
+    // this.getInvoiceDetail(row.invoiceNo);
 
 
 
-    setTimeout(() => {
-      if (this.invoiceDetails != '') {
-        this.globalData.printData('#InvociePrint');
-      } else {
-        this.msg.WarnNotify('Error Occured While Printing');
-      }
-    }, 1000);
+    // setTimeout(() => {
+    //   if (this.invoiceDetails != '') {
+    //     this.globalData.printData('#InvociePrint');
+    //   } else {
+    //     this.msg.WarnNotify('Error Occured While Printing');
+    //   }
+    // }, 1000);
 
 
 

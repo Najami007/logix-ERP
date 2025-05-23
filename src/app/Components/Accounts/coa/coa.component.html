@@ -200,9 +200,9 @@
                     <thead>
                         <tr>
                             <th>Sr.</th>
-                            <th>Account Code</th>
-                            <th>Account Title</th>
-                            <th>Type</th>
+                            <th (click)="sortData('code')" class="cursorPointer">Account Code</th>
+                            <th (click)="sortData('title')" class="cursorPointer">Account Title</th>
+                            <th (click)="sortData('type')" class="cursorPointer">Type</th>
                             <th>Note</th>
                             <th>
                                 Transaction Allowed

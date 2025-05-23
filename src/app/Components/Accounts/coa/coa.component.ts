@@ -123,6 +123,19 @@ export class COAComponent implements OnInit {
 
   ///////////////////////////////
 
+  sortData(type: any) {
+    if (type == 'title') {
+      this.ChartsofAccountsData = this.globalData.sortByKey(this.ChartsofAccountsData, 'coaTitle', 'asc')
+    }
+    if (type == 'code') {
+      this.ChartsofAccountsData = this.globalData.sortByKey(this.ChartsofAccountsData, 'accountCode', 'asc')
+    }
+    if (type == 'type') {
+      this.ChartsofAccountsData = this.globalData.sortByKey(this.ChartsofAccountsData, 'coaTypeTitle', 'asc')
+    }
+
+  }
+
   setvalue() {
 
     if (this.coaLevel == 1) {
@@ -241,17 +254,17 @@ export class COAComponent implements OnInit {
       {
         next: value => {
           this.tmpCoaData = value;
-          this.tmpCoaData.forEach((e:any) => {
-              if(e.level1 == null){
+          this.tmpCoaData.forEach((e: any) => {
+            if (e.level1 == null) {
               e.level1 = '';
             }
-            if(e.level2 == null){
+            if (e.level2 == null) {
               e.level2 = '';
             }
-            if(e.level3 == null){
+            if (e.level3 == null) {
               e.level3 = '';
             }
-            if(e.level4 == null){
+            if (e.level4 == null) {
               e.level4 = '';
             }
           });
@@ -387,29 +400,29 @@ export class COAComponent implements OnInit {
 
   }
 
-  insertCOA(postData:any){
+  insertCOA(postData: any) {
     this.app.startLoaderDark();
-      this.http.post(environment.mainApi + this.globalData.accountLink + 'InsertChartOfAccount', postData).subscribe(
-        (Response: any) => {
-          // console.log(this.TransactionAllowed);
-          if (Response.msg == "Data Saved Successfully") {
-            this.msg.SuccessNotify(Response.msg);
-            this.GetChartOfAccount();
-            this.reset();
-            this.app.stopLoaderDark();
-            this.globalData.closeBootstrapModal('#addCoaForm',true);  
-          } else {
-            this.msg.WarnNotify(Response.msg);
-            this.app.stopLoaderDark();
-          }
+    this.http.post(environment.mainApi + this.globalData.accountLink + 'InsertChartOfAccount', postData).subscribe(
+      (Response: any) => {
+        // console.log(this.TransactionAllowed);
+        if (Response.msg == "Data Saved Successfully") {
+          this.msg.SuccessNotify(Response.msg);
+          this.GetChartOfAccount();
+          this.reset();
+          this.app.stopLoaderDark();
+          this.globalData.closeBootstrapModal('#addCoaForm', true);
+        } else {
+          this.msg.WarnNotify(Response.msg);
+          this.app.stopLoaderDark();
         }
+      }
 
-      )
+    )
 
   }
 
 
-  saveNewCoa(){
+  saveNewCoa() {
     var postData = {
       CoaTitle: this.addCoa.CoaTitle,
       Alias: this.addCoa.alias,
@@ -425,27 +438,27 @@ export class COAComponent implements OnInit {
       UserID: this.globalData.getUserID(),
     }
 
-    if(this.addCoa.CoaTitle == ''){
+    if (this.addCoa.CoaTitle == '') {
       this.msg.WarnNotify('Enter Coa Title');
-       return;
+      return;
     }
-    if(this.addCoa.alias == ''){
+    if (this.addCoa.alias == '') {
       this.msg.WarnNotify('Enter Alias');
-       return;
-    } 
-    if(this.addCoa.coaLevel == 1 && ( this.addCoa.level1 == '' || this.addCoa.level1 == undefined) ){
+      return;
+    }
+    if (this.addCoa.coaLevel == 1 && (this.addCoa.level1 == '' || this.addCoa.level1 == undefined)) {
       this.msg.WarnNotify('Enter Level 1');
-       return;
+      return;
     }
-     if(this.addCoa.coaLevel == 2 && ( this.addCoa.level2 == '' || this.addCoa.level2 == undefined) ){
+    if (this.addCoa.coaLevel == 2 && (this.addCoa.level2 == '' || this.addCoa.level2 == undefined)) {
       this.msg.WarnNotify('Enter Level 2');
-       return;
-    } 
-    if(this.addCoa.coaLevel == 3 &&( this.addCoa.level3 == '' || this.addCoa.level3 == undefined) ){
-      this.msg.WarnNotify('Enter Level 3');
-       return;
+      return;
     }
-   if(this.addCoa.coaLevel == 4 && (this.addCoa.level4 == '' || this.addCoa.level4 == undefined) ){
+    if (this.addCoa.coaLevel == 3 && (this.addCoa.level3 == '' || this.addCoa.level3 == undefined)) {
+      this.msg.WarnNotify('Enter Level 3');
+      return;
+    }
+    if (this.addCoa.coaLevel == 4 && (this.addCoa.level4 == '' || this.addCoa.level4 == undefined)) {
       this.msg.WarnNotify('Enter Level 4');
       return;
     }
@@ -454,7 +467,7 @@ export class COAComponent implements OnInit {
 
 
     this.insertCOA(postData);
-    
+
   }
 
 
@@ -492,16 +505,16 @@ export class COAComponent implements OnInit {
     this.addCoa.NoteID = 0;
     this.addCoa.TransactionAllowed = false;
     this.addCoa.alias = 'other';
-    if(item.level1 == ''){
+    if (item.level1 == '') {
       this.addCoa.coaLevel = 1;
     }
-    if(item.level2 == '' && item.level1 != '' ){
+    if (item.level2 == '' && item.level1 != '') {
       this.addCoa.coaLevel = 2;
     }
-    if(item.level3 == ''  && item.level2 != '' ){
+    if (item.level3 == '' && item.level2 != '') {
       this.addCoa.coaLevel = 3;
     }
-    if(item.level4 == ''  && item.level3 != '' ){
+    if (item.level4 == '' && item.level3 != '') {
       this.addCoa.coaLevel = 4;
     }
   }

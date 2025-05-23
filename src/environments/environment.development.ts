@@ -13,7 +13,7 @@ export const environment = {
       apiUrl: 'http://localhost:8081/',
 
       //mainApi: 'http://192.168.100.37:5000/',
-       /// mainApi: 'http://localhost:5000/', 
+      //mainApi: 'http://localhost:5000/', 
        //mainApi: 'http://localhost:8060/',           /////////// system own published API
        // mainApi: 'http://192.168.160.98:8060/',  ////////// live Server Dani System
       //mainApi: 'http://192.168.100.250:1007/',  ////////// live Server Dani System

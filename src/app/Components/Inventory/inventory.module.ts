@@ -103,6 +103,7 @@ import { SavedBillComponent } from './Sale/SaleComFiles/saved-bill/saved-bill.co
 import { DateAdapter, MAT_DATE_LOCALE , MAT_DATE_FORMATS } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { SharedComponentsModule } from '../shared-components/shared-components.module';
+import { PaymentComponent } from '../Accounts/DesiAccounts/payment/payment.component';
 
 export const MY_DATE_FORMAT  = {
   parse: {
@@ -135,7 +136,7 @@ export const inventoryRoutes: Route[] = [
   {path: 'uom',component: UnitOfMeasurementComponent,data: { title: 'UOM' },canActivate: [AuthGuard]},
   {path: 'prod',component: ProductComponent,data: { title: 'Product' },canActivate: [AuthGuard]},
   {path: 'pckr',component: PriceCheckerComponent,data: { title: 'Price Checker' },canActivate: [AuthGuard]},
-  
+   {path: 'suppay',component: PaymentComponent, data: { title: 'Payment' }, canActivate: [AuthGuard]},
   
   //////// Sale Pages////////////////////
 

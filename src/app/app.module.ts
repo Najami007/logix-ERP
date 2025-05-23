@@ -35,7 +35,6 @@ import { ConfirmationAlertComponent } from './Components/Common/confirmation-ale
 import { SharedServicesDataModule } from './Shared/helper/shared-services-data/shared-services-data.module';
 import { SharedFieldValidationModule } from './Shared/helper/shared-field-validation/shared-field-validation.module';
 import { CommonModule } from '@angular/common';
-import { ConnModule } from 'src/assets/conn/conn.module';
 
 
 
@@ -101,7 +100,6 @@ import { ConnModule } from 'src/assets/conn/conn.module';
     NgxPaginationModule,
     SharedServicesDataModule,
     SharedFieldValidationModule,
-    ConnModule,
     
   
 

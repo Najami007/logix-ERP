@@ -181,6 +181,7 @@ export const accountRountes: Route[] = [
   ],
   exports: [
     RouterModule,
+    PaymentComponent
 
 
 

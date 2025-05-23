@@ -152,25 +152,30 @@ export class GlobalDataModule implements OnInit {
       LoginName: Email,
       Password: password,
     }).subscribe({
-      next: (Value: any) => {
+      next: (Response: any) => {
         var curDate: Date = new Date();
-        var userID = Value._culId;
-        var value = {
-          msg: Value.msg,
-          _cuLnk: Value._cuLnk,
-          _culId: Value._culId,
-          _culName: Value._culName,
-          _reqCID: Value._reqCID,
-          _reqSCID: Value._reqSCID,
-          _reqCrG: Value._reqCrG,
-          _reqCsG: Value._reqCsG,
-          _reqPrjID: Value._reqPrjID,
-          _reqRTID:Value._reqRTID,
+        var userID = Response._culId;
+       
+
+
+        if (Response.msg == 'Logged in Successfully') {
+
+           var value = {
+          msg: Response.msg,
+          _cuLnk: Response._cuLnk,
+          _culId: Response._culId,
+          _culName: Response._culName,
+          _reqCID: Response._reqCID,
+          _reqSCID: Response._reqSCID,
+          _reqCrG: Response._reqCrG,
+          _reqCsG: Response._reqCsG,
+          _reqPrjID: Response._reqPrjID,
+          _reqRTID:Response._reqRTID,
         };
         var flt: any = [];
         ///Encripting The Features List
-        if (Value._reqFeatures) {
-          Value._reqFeatures.forEach((e: any) => {
+        if (Response._reqFeatures) {
+          Response._reqFeatures.forEach((e: any) => {
             flt.push({ ttl: btoa(btoa(e.featureTitle)), sts: btoa(btoa(e.featureStatus)) });
           });
         }
@@ -179,9 +184,6 @@ export class GlobalDataModule implements OnInit {
         localStorage.setItem('curVal', JSON.stringify({ value }));
         localStorage.setItem('ftr', JSON.stringify({ flt }));
 
-
-
-        if (value.msg == 'Logged in Successfully') {
 
 
 
@@ -203,7 +205,7 @@ export class GlobalDataModule implements OnInit {
 
 
         } else {
-          this.msg.WarnNotify(value.msg);
+          this.msg.WarnNotify(Response.msg);
           $('.loaderDark').fadeOut(500);
         }
       },

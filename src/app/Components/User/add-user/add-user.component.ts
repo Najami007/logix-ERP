@@ -56,16 +56,7 @@ export class AddUserComponent implements OnInit {
   
 
   txtSearch:any;
-  userID:any = 0;
-  UserName:any = '';
-  loginName:any = '';
-  mobileNo:any = '';
-  userEmail:any = '';
-  RoleID:any = 0;
-  password:any = '';
-  confirmPassword:any = '';
-  projectID:any = 0;
-  roleTypeID:any = 0;
+  
 
   roleTypeList:any =  [];
   tmpRoleTypeList:any = [
@@ -87,8 +78,6 @@ export class AddUserComponent implements OnInit {
       if(this.userRoleTypeID == 3){
        this.roleTypeList =  this.tmpRoleTypeList.filter((e:any)=> e.roleTypeID > 2);
       }
-
-
   }
 
    

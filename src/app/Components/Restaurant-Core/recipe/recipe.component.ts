@@ -49,6 +49,12 @@ export class RecipeComponent implements OnInit {
       (data: any) => { this.productList = data; })
   }
 
+
+  filterCategoryID:any = 0;
+  filterCookingAreaID:any = 0;
+  filterStatus:any = 0;
+  filterActiveStatus:any = 0;
+
   autoEmptyFlag = true;
   foodCost = 0;
 
@@ -77,6 +83,7 @@ export class RecipeComponent implements OnInit {
   menuProdList: any = [];
 
   RecipeList: any = [];
+  tmpRecipeList:any = [];
 
 
   categoryID: number = 0;
@@ -105,10 +112,45 @@ export class RecipeComponent implements OnInit {
     )
   }
 
+
+  filterRecipe(type:any){
+
+    if(type == 'cat'){
+      this.RecipeList = this.filterCategoryID == 0 ? this.tmpRecipeList : this.tmpRecipeList.filter((e:any)=> e.recipeCatID == this.filterCategoryID);
+    }
+
+    
+    if(type == 'ca'){
+      this.RecipeList = this.filterCookingAreaID == 0 ? this.tmpRecipeList : this.tmpRecipeList.filter((e:any)=> e.cookingAriaID == this.filterCookingAreaID);
+    }
+
+        
+    if(type == 'status'){
+      this.RecipeList = this.filterStatus == 0 ? this.tmpRecipeList : this.tmpRecipeList.filter((e:any)=> e.approvedStatus == this.filterStatus);
+    }
+
+     if(type == 'activeStatus'){
+      this.RecipeList = this.filterActiveStatus == 0 ? this.tmpRecipeList : this.tmpRecipeList.filter((e:any)=> e.activeStatus == this.filterActiveStatus);
+    }
+
+
+    console.log(this.RecipeList);
+
+
+  }
+
+
+  sortData(type:any){
+    if(type == 'title'){
+     this.RecipeList  = this.global.sortByKey(this.RecipeList,'recipeTitle','asc');
+    }
+  }
+
   getAllRecipe() {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipes').subscribe(
       (Response: any) => {
         this.RecipeList = Response;
+        this.tmpRecipeList = Response;
      
 
       }
