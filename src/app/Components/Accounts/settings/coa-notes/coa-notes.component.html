@@ -9,6 +9,7 @@
             <thead>
                 <th>S#</th>
                 <th>Title</th>
+                <th>Linked</th>
                 <th>Note</th>
                 <th>Coa Type</th>
                 <th  *ngIf="crudList.u">Edit</th>
@@ -18,8 +19,9 @@
                 <tr *ngFor="let item of notesData index as index">
                     <td>{{index+1}}</td>
                     <td>{{item.noteTitle}}</td>
+                    <td>{{item.linkedAccHeads}}</td>
                     <td>{{item.noteID}}</td>
-                    <td>{{item.CoaTypeTitle}}</td>
+                    <td>{{item.coaTypeTitle}}</td>
                     <td  *ngIf="crudList.u"><mat-icon class="text-success cursorPointer" (click)="editNote(item)">edit</mat-icon></td>
                     <td  *ngIf="crudList.d"><mat-icon class="text-danger cursorPointer" (click)="deleteNote(item)">delete</mat-icon></td>
                 </tr>

@@ -1150,6 +1150,16 @@ export class Sale1Component implements OnInit {
 
   ///////////////////////////////////////////////////////////////
 
+  voidQty = 1;
+  openVoidModal(){
+    this.global.openBootstrapModal('#voidQtyModal',true);
+    setTimeout(() => {
+       
+        $('.voidQuantity').trigger('focus');
+        $('.voidQuantity').trigger('select');
+    }, 500);
+  }
+
   tempDeleteRow: any = [];
 
   deleteRow(item: any, voidQty: any) {
@@ -1166,7 +1176,7 @@ export class Sale1Component implements OnInit {
       if (item.entryType == 'Saved') {
 
 
-        if (this.tableData.length == 1 && item.quantity <= 1) {
+        if (this.tableData.length == 1 && item.quantity == voidQty) {
           this.voidBill();
         } else {
           this.global.openPassword('Password').subscribe(pin => {

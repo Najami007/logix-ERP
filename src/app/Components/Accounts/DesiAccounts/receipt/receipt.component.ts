@@ -8,7 +8,7 @@ import { AppComponent } from 'src/app/app.component';
 import { AddReceiptComponent } from './add-receipt/add-receipt.component';
 import { environment } from 'src/environments/environment.development';
 import { error } from 'jquery';
-import { VoucherDetailsComponent } from 'src/app/Components/Accounts/voucher/voucher-details/voucher-details.component';
+import { VoucherDetailsComponent } from 'src/app/Components/Accounts/CommonComponent/voucher-details/voucher-details.component';
 
 @Component({
   selector: 'app-receipt',

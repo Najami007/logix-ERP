@@ -30,7 +30,7 @@ import { CashbookComponent } from './AccountReports/cashbook/cashbook.component'
 import { PLStatComponent } from './AccountReports/plstat/plstat.component';
 import { TrialBalanceComponent } from './AccountReports/trial-balance/trial-balance.component';
 import { DayTransactionComponent } from './day-transaction/day-transaction.component';
-import { VoucherDetailsComponent } from './voucher/voucher-details/voucher-details.component';
+import { VoucherDetailsComponent } from './CommonComponent/voucher-details/voucher-details.component';
 import { AuthGuard } from 'src/app/auth.guard';
 import { Voucher2Component } from './voucher2/voucher2.component';
 import { PriceCheckerComponent } from '../Inventory/price-checker/price-checker.component';
@@ -66,6 +66,7 @@ import { VoucherPrintComponent } from './CommonComponent/voucher-print/voucher-p
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { AddChartOfAccountComponent } from './coa/add-chart-of-account/add-chart-of-account.component';
+import { AccountSummaryReportComponent } from './AccountReports/account-summary-report/account-summary-report.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -96,6 +97,7 @@ export const accountRountes: Route[] = [
   { path: 'cbrpt', component: CashbookComponent, data: { title: 'Cash Book' }, canActivate: [AuthGuard] },
   { path: 'plrpt', component: PLStatComponent, data: { title: 'Profit & Loss' }, canActivate: [AuthGuard] },
   { path: 'tbrpt', component: TrialBalanceComponent, data: { title: 'Trial Balance' }, canActivate: [AuthGuard] },
+   { path: 'accSmryrpt', component: AccountSummaryReportComponent, data: { title: 'Account Summary' }, canActivate: [AuthGuard] },
 
   /// Desi Accounts Imports
   { path: 'pmt', component: PaymentComponent, data: { title: 'Payment' }, canActivate: [AuthGuard] },
@@ -155,7 +157,8 @@ export const accountRountes: Route[] = [
     COAComponent,
     AddBalanceComponent,
     VoucherPrintComponent,
-    AddChartOfAccountComponent
+    AddChartOfAccountComponent,
+    AccountSummaryReportComponent
 
 
 
@@ -188,8 +191,8 @@ export const accountRountes: Route[] = [
 
   ],
   providers: [
-    // { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    // { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
     { provide: HIGHCHARTS_MODULES, useFactory: () => [] }, NotificationService],
 
 })

@@ -17,7 +17,7 @@
         
         <mat-form-field class="w-100 matSmall" appearance="outline">
             <mat-label>Enter Note</mat-label>
-            <input matInput type="number" min="1" [(ngModel)]="note">
+            <input [disabled]="linkedAccHeads > 0" matInput type="number" min="1" [(ngModel)]="note">
             </mat-form-field>
 
         

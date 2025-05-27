@@ -85,11 +85,12 @@ export class VoucherPrintComponent {
       (Response: any) => {
         console.log(Response);
         this.invoiceDetails = Response;
+   
+        this.lblRemarks = Response[0].invoiceRemarks;
         // this.lblInvoiceNo = Response[0].invoiceNo;
         // this.lblInvoiceDate = Response[0].invoiceDate;
-        this.lblRemarks = Response[0].invoiceRemarks;
-        // this.lblVoucherType = row.type;
-        // this.lblProjectName = row.projectTitle; 
+        // this.lblVoucherType = Response[0].type;
+        // this.lblProjectName = Response[0].projectTitle; 
         // this.invoiceDetails = Response;
         if (Response != '') {
 

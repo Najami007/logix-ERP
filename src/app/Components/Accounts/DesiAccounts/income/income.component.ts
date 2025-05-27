@@ -8,7 +8,7 @@ import { AppComponent } from 'src/app/app.component';
 
 import { environment } from 'src/environments/environment.development';
 import { AddIncomeComponent } from './add-income/add-income.component';
-import { VoucherDetailsComponent } from 'src/app/Components/Accounts/voucher/voucher-details/voucher-details.component';
+import { VoucherDetailsComponent } from 'src/app/Components/Accounts/CommonComponent/voucher-details/voucher-details.component';
 
 
 @Component({

@@ -138,8 +138,8 @@
                                     <th class="col-lg-1 ">S#</th>
                                     <th class="col-lg-3 ">Title</th>
                                     <th class="col-lg-3 ">Narration</th>
-                                    <th class="col-lg-2 ">Debit Amont</th>
-                                    <th class="col-lg-2 ">Credit Amount</th>
+                                    <th class="col-lg-2 text-end">Debit</th>
+                                    <th class="col-lg-2 text-end">Credit</th>
                                     <th class="col-lg-1 ">Action</th>
 
                                 </tr>
@@ -153,8 +153,8 @@
                                     <td class="">{{index+1}}</td>
                                     <td class="">{{item.title}}</td>
                                     <td class="">{{item.DetailNarration}}</td>
-                                    <td class="">{{item.Debit |number}}</td>
-                                    <td class="">{{item.Credit |number}}</td>
+                                    <td class="text-end">{{item.Debit |number}}</td>
+                                    <td class="text-end">{{item.Credit |number}}</td>
                                     <td class=" "><mat-icon class=" text-danger "
                                             (click)="deleteRow(item)">delete</mat-icon></td>
 
@@ -163,8 +163,16 @@
                                     <td></td>
                                     <td> Total</td>
                                     <td></td>
-                                    <td>{{debittotal |number}}</td>
-                                    <td>{{creditTotal |number}}</td>
+                                    <td class="text-end"> {{debittotal |number}}</td>
+                                    <td class="text-end">{{creditTotal |number}}</td>
+                                    <td></td>
+
+                                </tr>
+                                 <tr *ngIf="vType == 'JV'" class="fw-bold bg-light">
+                                    
+                                    <td colspan="4" class="text-center">Balance</td>
+                             
+                                    <td class="text-center text-danger">{{debittotal - creditTotal | number}}</td>
                                     <td></td>
 
                                 </tr>

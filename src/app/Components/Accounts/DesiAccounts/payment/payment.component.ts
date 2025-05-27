@@ -8,7 +8,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { AppComponent } from 'src/app/app.component';
 import { AddPaymentComponent } from './add-payment/add-payment.component';
 import { environment } from 'src/environments/environment.development';
-import { VoucherDetailsComponent } from 'src/app/Components/Accounts/voucher/voucher-details/voucher-details.component';
+import { VoucherDetailsComponent } from 'src/app/Components/Accounts/CommonComponent/voucher-details/voucher-details.component';
 
 @Component({
   selector: 'app-payment',

@@ -429,16 +429,16 @@
                         <div class="d-flex">
 
                             <mat-form-field appearance="outline" class="w-100 matSmall">
-                                <input class="prodQty text-center" [value]="1"
-                                    (keydown)="this.global.handleNumKeys($event)" type="text" min="0" matInput
-                                    #voidQty />
+                                <input class="voidQuantity text-center" name="voidQuantity" [(ngModel)]="voidQty"
+                                    (keydown)="this.global.handleNumKeys($event)" type="number" min="0"  matInput
+                                    />
                             </mat-form-field>
 
                         </div>
 
                         <div class="text-center d-flex justify-content-between ">
                             <button class="btn btn-success" data-bs-dismiss="modal"
-                                (click)="deleteRow(tempDeleteRow,voidQty.value)">Save</button>
+                                (click)="deleteRow(tempDeleteRow,voidQty)">Save</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                 (click)="tempQty = 1">Close</button>
                         </div>

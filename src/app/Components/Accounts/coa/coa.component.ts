@@ -46,16 +46,37 @@ export class COAComponent implements OnInit {
 
   filterTransactionType: any = 'all';
   filterCoaType = 0;
+  filterNoteID = 0;
 
-  filterCOA() {
-    if (this.filterTransactionType == 'all') {
-      this.filterCoaType == 0
+  filterCOA(type:any) {
+
+    if(type == 'coaType'){
+       this.filterCoaType == 0
         ? this.ChartsofAccountsData = this.tmpCoaData
         : this.ChartsofAccountsData = this.tmpCoaData.filter((e: any) => e.coaTypeID == this.filterCoaType);
-    } else {
-      this.filterCoaType == 0
-        ? this.ChartsofAccountsData = this.tmpCoaData.filter((e: any) => e.transactionAllowed == this.filterTransactionType)
-        : this.ChartsofAccountsData = this.tmpCoaData.filter((e: any) => e.coaTypeID == this.filterCoaType && e.transactionAllowed == this.filterTransactionType);
+    }
+
+    if(type == 'transactionAllowed'){
+      this.filterTransactionType == 'all'
+        ? this.ChartsofAccountsData =  
+        this.filterCoaType > 0 
+        ? this.tmpCoaData.filter((e: any) => e.coaTypeID == this.filterCoaType) :  this.ChartsofAccountsData = this.tmpCoaData
+        : this.ChartsofAccountsData =
+        this.filterCoaType > 0 
+        ? this.tmpCoaData.filter((e: any) => e.coaTypeID == this.filterCoaType && e.transactionAllowed == this.filterTransactionType)
+        : this.tmpCoaData.filter((e: any) => e.transactionAllowed == this.filterTransactionType);
+    }
+
+    if(type == 'note'){
+      this.filterNoteID == 0
+        ? this.ChartsofAccountsData =
+        this.filterCoaType > 0 
+        ? this.tmpCoaData.filter((e: any) => e.coaTypeID == this.filterCoaType )
+        :this.ChartsofAccountsData = this.tmpCoaData
+        : this.filterCoaType > 0
+        ? this.ChartsofAccountsData = this.tmpCoaData.filter((e: any) => e.coaTypeID == this.filterCoaType && e.noteID == this.filterNoteID)
+        :this.ChartsofAccountsData = this.tmpCoaData.filter((e: any) =>  e.noteID == this.filterNoteID);
+
     }
 
   }
@@ -154,6 +175,8 @@ export class COAComponent implements OnInit {
     }
   }
 
+
+  
 
 
   /////////////////////////////
@@ -269,7 +292,7 @@ export class COAComponent implements OnInit {
             }
           });
           setTimeout(() => {
-            this.filterCOA();
+            this.filterCOA('coaType');
           }, 200);
         },
         error: error => {

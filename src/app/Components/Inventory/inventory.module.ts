@@ -312,8 +312,8 @@ export const inventoryRoutes: Route[] = [
     RouterModule
   ],
   providers: [
-    // { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    // { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
   ]
 
 })

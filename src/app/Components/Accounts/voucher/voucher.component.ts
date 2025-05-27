@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 import { AppComponent } from 'src/app/app.component';
 import { MatDialog } from '@angular/material/dialog';
-import { VoucherDetailsComponent } from './voucher-details/voucher-details.component';
+import { VoucherDetailsComponent } from '../CommonComponent/voucher-details/voucher-details.component';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { Router } from '@angular/router';
 

@@ -6,7 +6,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
-import { VoucherDetailsComponent } from '../voucher/voucher-details/voucher-details.component';
+import { VoucherDetailsComponent } from '../CommonComponent/voucher-details/voucher-details.component';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { Router } from '@angular/router';
 

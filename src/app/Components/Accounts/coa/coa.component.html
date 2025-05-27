@@ -170,15 +170,24 @@
             <div class="pt-4 container ">
                 <div class="row">
 
-                    <mat-form-field class="col-md-8 matSmall" appearance="outline">
+                    <mat-form-field class="col-md-6 matSmall" appearance="outline">
                         <mat-label class="ps-5">Search.....</mat-label>
                         <input #coaSearch name="search" matInput type="text" class="text-secondary">
                         <mat-icon matPrefix class="text-secondary">search</mat-icon>
                     </mat-form-field>
+                     <mat-form-field appearance="outline" class="col-md-2 matSmall">
+                            <mat-label>Note</mat-label>
+                            <mat-select [(ngModel)]="filterNoteID" (selectionChange)="filterCOA('note')">
+                                <mat-option [disabled]="item.coaTypeID !== filterCoaType && filterCoaType !== 0"  *ngFor="let item of notesList"
+                                    [value]="item.noteID">{{item.noteTitle}}</mat-option>
+                            </mat-select>
+
+                            <!-- <mat-hint>Must Be a Number</mat-hint> -->
+                        </mat-form-field>
 
                     <mat-form-field appearance="outline" class="col-md-2 matSmall">
                         <mat-label>Select Type </mat-label>
-                        <mat-select [(ngModel)]="filterCoaType" name="filterCoa" (selectionChange)="filterCOA()">
+                        <mat-select [(ngModel)]="filterCoaType" name="filterCoa" (selectionChange)="filterCOA('coaType')">
                             <mat-option [value]="0">ALL</mat-option>
 
                             <mat-option *ngFor="let item of coaTypesList"
@@ -188,7 +197,7 @@
                     <mat-form-field appearance="outline" class="col-md-2 matSmall">
                         <mat-label>Transaction Allowed </mat-label>
                         <mat-select [(ngModel)]="filterTransactionType" name="filterCoa"
-                            (selectionChange)="filterCOA()">
+                            (selectionChange)="filterCOA('transactionAllowed')">
                             <mat-option value="all">ALL</mat-option>
                             <mat-option [value]="true">Yes</mat-option>
                             <mat-option [value]="false">No</mat-option>
@@ -202,10 +211,10 @@
                             <th>Sr.</th>
                             <th (click)="sortData('code')" class="cursorPointer">Account Code</th>
                             <th (click)="sortData('title')" class="cursorPointer">Account Title</th>
-                            <th (click)="sortData('type')" class="cursorPointer">Type</th>
+                            <th *ngIf="filterCoaType === 0" (click)="sortData('type')" class="cursorPointer">Type</th>
                             <th>Note</th>
-                            <th>
-                                Transaction Allowed
+                            <th class="text-center">
+                               Trans Alwd
                             </th>
                             <th *ngIf="crudList.d">Action</th>
 
@@ -215,19 +224,19 @@
                     <tbody>
                         <tr *ngFor="let item of ChartsofAccountsData |filter:coaSearch.value ; index as index">
                             <td>{{index+1}}</td>
-                            <td class="cursorPointer" (click)="updateCoa(item)">{{item.accountCode}}</td>
-                            <td>{{item.coaTitle}}</td>
-                            <td>{{item.coaTypeTitle}}</td>
+                            <td class="cursorPointer text-right" (click)="updateCoa(item)">{{item.accountCode}}</td>
+                            <td class="text-right">{{item.coaTitle}}</td>
+                            <td *ngIf="filterCoaType === 0" class="text-right">{{item.coaTypeTitle}}</td>
                             <td>{{item.noteID}}</td>
 
-                            <td *ngIf="item.transactionAllowed == true"><mat-icon
-                                    class="text-success">remove_circle</mat-icon></td>
-                            <td *ngIf="item.transactionAllowed == false"><mat-icon
-                                    class="text-danger">remove_circle</mat-icon></td>
+                            <td   class="text-center"  ><mat-icon
+                                    [ngClass]=" item.transactionAllowed ? 'text-success' : 'text-danger'">{{item.transactionAllowed ? 'remove_circle' : 'remove_circle'}} </mat-icon></td>
+
                             <td *ngIf="crudList.d">
                                 <!-- <button class="btnTransparent text-success"><mat-icon >edit</mat-icon></button> -->
-                                <mat-icon class="text-dark cursorPointer" *ngIf="!item.level4" (click)="insertNewCoa(item)">add</mat-icon>
                                 <mat-icon class="text-danger cursorPointer" (click)="deleteCoa(item)">delete</mat-icon>
+                                 <mat-icon class="text-dark cursorPointer" *ngIf="!item.level4 && !item.transactionAllowed" (click)="insertNewCoa(item)">add</mat-icon>
+
                             </td>
 
 

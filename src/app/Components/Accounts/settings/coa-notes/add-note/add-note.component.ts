@@ -40,12 +40,13 @@ export class AddNoteComponent implements OnInit{
       this.CoaTypeID = this.editData.coaTypeID;
       this.noteTitle = this.editData.noteTitle;
       this.note = this.editData.noteID;
+      this.linkedAccHeads = this.editData.linkedAccHeads;
       this.actionbtn = 'Update';
     }
     
   }
 
-
+  linkedAccHeads:any = 0;
 
   //////////////////////////////////////////////////////////
 

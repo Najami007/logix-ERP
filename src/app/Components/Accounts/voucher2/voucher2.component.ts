@@ -10,7 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { Router } from '@angular/router';
-import { VoucherDetailsComponent } from '../voucher/voucher-details/voucher-details.component';
+import { VoucherDetailsComponent } from '../CommonComponent/voucher-details/voucher-details.component';
 import { VoucherPrintComponent } from '../CommonComponent/voucher-print/voucher-print.component';
 
 @Component({
@@ -23,7 +23,7 @@ export class Voucher2Component implements OnInit {
 
   disableDate = this.globalData.DisableDateAcc;
 
-  @ViewChild(VoucherPrintComponent) printVoucher:any;
+  @ViewChild(VoucherPrintComponent) printVoucher: any;
 
   loadingBar = 'start';
   curDate = new Date();
@@ -141,7 +141,7 @@ export class Voucher2Component implements OnInit {
   VoucherData: any = [];
   bankReceiptNo: any = '';
   invoiceDetails: any = [];
-  VoucherDocument: any;
+  VoucherDocument: any = '';
 
 
   debittotal: number = 0;
@@ -370,29 +370,23 @@ export class Voucher2Component implements OnInit {
     else {
 
 
-      if (this.narration == '' || this.narration == undefined) {
-        this.narration = '-';
-      }
 
-      if (this.VoucherDocument == '' || this.VoucherDocument == undefined) {
-        this.VoucherDocument = '-';
-      }
-
-
-
-
-      this.app.startLoaderDark();  ///////////// will start the loader
-      this.http.post(environment.mainApi + this.globalData.accountLink + 'InsertVoucher', {
+      var PostData = {
         InvoiceDate: this.globalData.dateFormater(this.invoiceDate, '-'),
         RefCOAID: this.refrenceCOA,
         Type: this.vType,
-        InvoiceRemarks: this.narration,
+        InvoiceRemarks: this.narration || '-',
         ProjectID: this.projectID,
         BankReceiptNo: this.bankReceiptNo,
-        VoucherDocument: this.VoucherDocument,
+        VoucherDocument: this.VoucherDocument || '-',
         InvoiceDetail: JSON.stringify(this.VoucherData),
         UserID: this.globalData.getUserID(),
-      }).subscribe(
+      };
+
+      console.log(PostData);
+
+      this.app.startLoaderDark();  ///////////// will start the loader
+      this.http.post(environment.mainApi + this.globalData.accountLink + 'InsertVoucher', PostData).subscribe(
         (Response: any) => {
           // console.log(Response);
           if (Response.msg == 'Data Saved Successfully') {

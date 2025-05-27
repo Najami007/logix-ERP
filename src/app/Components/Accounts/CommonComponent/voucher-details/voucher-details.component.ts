@@ -27,6 +27,7 @@ ngOnInit(): void {
   this.getProject();
 
   this.getInvoiceDetail(this.editData.invoiceNo);
+  this.lblInvoiceNo = this.editData.invoiceNo;
 //  if(this.editData.projectTitle != '-'){
 //   this.lblProjectName = this.editData.projectTitle;
 //  }
@@ -46,6 +47,7 @@ lblRemarks = '';
 
 lblProjectName :any;
 projectID :any;
+lblInvoiceNo:any ='';
 
 
 
@@ -73,10 +75,9 @@ getInvoiceDetail(invoiceNo:any){
   
   this.http.get(environment.mainApi+'acc/GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
     (Response:any)=>{
-      console.log(Response);
       if(Response.length> 0){
         this.invoiceDetails = Response;
-      this.lblRemarks = Response[0].detailNarration;
+        this.lblRemarks = Response[0].invoiceRemarks;
        
         Response.forEach((e:any) => {
           this.lblDebitTotal += e.debit;

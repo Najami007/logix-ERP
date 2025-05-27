@@ -85,13 +85,13 @@
                 <tr *ngFor="let item of assetList;index as index">
                     
                     <td>{{item.noteTitle}}</td>
-                    <td> {{item.noteID}}</td>
+                    <td class="text-center"> {{item.noteID}}</td>
                     <td class="text-end"> {{item.nTotal | number:'1.0-0'}}</td>
                 </tr>
                 
                 <tr>
                     <td colspan="2"></td>
-                    <th class="text-end text-danger"><h4>{{assetTotal |number:'1.0-0'}}</h4></th>
+                    <th class="text-end text-danger"><h1>{{assetTotal |number:'1.0-0'}}</h1></th>
                 </tr>
                 
            
@@ -108,7 +108,7 @@
                 <tr *ngFor="let item of liabilityList; index as index">
                   
                     <td>{{item.noteTitle}}</td>
-                    <td>{{item.noteID}}</td>
+                    <td class="text-center">{{item.noteID}}</td>
                     <td class="text-end"> {{item.nTotal |number:'1.0-0'}}</td>
                 </tr>
 
@@ -120,7 +120,7 @@
                 <tr *ngFor="let item of capitalList; index as index">
                     
                     <td>{{item.noteTitle}}</td>
-                    <td>{{item.noteID}}</td>
+                    <td class="text-center">{{item.noteID}}</td>
                     <td class="text-end"> {{item.nTotal |number:'1.0-0'}}</td>
                 </tr>
 
@@ -143,7 +143,7 @@
 
                 <tr>
                     <td colspan="2"></td>
-                    <th class="text-end text-danger"><h4>{{capitalTotal + liabilityTotal + accumulatedTotal | number:'1.0-0'}}</h4></th>
+                    <th class="text-end text-danger"><h1>{{capitalTotal + liabilityTotal + accumulatedTotal | number:'1.0-0'}}</h1></th>
                 </tr>
 
                
@@ -162,8 +162,8 @@
             <thead>
                 <tr>
                     <th colspan="3"></th>
-                    <th ><h2>{{previousYear}}</h2></th>
-                <th > <h2>{{currentYear}}</h2></th>
+                    <th ><h2>{{previousYear}} - {{previousYear + 1}}</h2></th>
+                <th > <h2>{{currentYear}} - {{currentYear + 1}}</h2></th>
                 </tr>
                 <tr>
                     <th>S#</th>
@@ -175,9 +175,9 @@
             </thead>
             <tbody class="h-50">
                 <tr *ngFor="let item of assetList;index as index">
-                    <td>{{index+1}}</td>
+                    <td class="text-center">{{index+1}}</td>
                     <td>{{item.noteTitle}}</td>
-                    <td> {{item.noteID}}</td>
+                    <td class="text-center"> {{item.noteID}}</td>
                     <td class="text-end"> {{item.oTotal | number:'1.0-0'}}</td>
                     <td class="text-end"> {{item.nTotal | number:'1.0-0'}}</td>
                 </tr>
@@ -203,7 +203,7 @@
                 <tr *ngFor="let item of liabilityList; index as index">
                     <td class="text-center">{{index+1}}</td>
                     <td>{{item.noteTitle}}</td>
-                    <td>{{item.noteID}}</td>
+                    <td class="text-center"> {{item.noteID}}</td>
                     <td class="text-end"> {{item.oTotal |number:'1.0-0'}}</td>
                     <td class="text-end"> {{item.nTotal |number:'1.0-0'}}</td>
                 </tr>

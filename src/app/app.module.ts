@@ -34,7 +34,7 @@ import { SideNavbarComponent } from './Components/Layout/side-navbar/side-navbar
 import { ConfirmationAlertComponent } from './Components/Common/confirmation-alert/confirmation-alert.component';
 import { SharedServicesDataModule } from './Shared/helper/shared-services-data/shared-services-data.module';
 import { SharedFieldValidationModule } from './Shared/helper/shared-field-validation/shared-field-validation.module';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 
 
@@ -108,6 +108,7 @@ import { CommonModule } from '@angular/common';
    
   ],
   providers: [
+    DatePipe,
     
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}}],
   // providers: [{ provide: HIGHCHARTS_MODULES, useFactory: () => [ more, exporting ] }, NotificationService,GlobalDataModule],

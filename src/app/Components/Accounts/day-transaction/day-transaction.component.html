@@ -4,7 +4,7 @@
     
         <div class="mb-1 pt-2 border-bottom">
             <div class="row ">
-                <mat-form-field class="col-lg-4 matSmall"  appearance="outline">
+                <mat-form-field class="col-lg-3 matSmall"  appearance="outline">
                     <mat-label>Project </mat-label>
                     <mat-select [(ngModel)]="projectID" >
                         <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch"
@@ -29,18 +29,19 @@
                     </mat-form-field>
                 
 
-                <div class="col-lg-4  " *ngIf="crudList.r">
-                    <button class="btn-rpt-success col-lg-4  me-1" (click)="getReport('project')" >
+                <div class="col-lg-5  " *ngIf="crudList.r">
+                    <button class="btn-rpt-success col-lg-3  me-1" (click)="getReport('project')" >
                         ProjectWise
                      </button>  
-                    <button class="btn-rpt-success col-lg-4 me-1" (click)="getReport('all')" >
+                    <button class="btn-rpt-success col-lg-3 me-1" (click)="getReport('all')" >
                        Get ALL
                     </button>   
                    
                 
-                    <button class="btn-rpt-primary  col-lg-3 " (click)="PrintTable()">
+                    <button class="btn-rpt-primary  col-lg-2 " (click)="PrintTable()">
                        Print
                     </button>
+                    <mat-checkbox class="col-lg-2 " (change)="onFilterChange($event)" [(ngModel)]="showDifferenceFilterOnly">Filter Diff</mat-checkbox>
                 </div>
             </div>
         </div>
@@ -88,9 +89,9 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of reportData;index as index">
-                        <td class="text-center">{{index+1}}</td>
+                        <td class="text-center" >{{index+1}}</td>
                         <td class="cursorPointer" 
-                        (click)="VoucherDetails(item)"><span style="color: blue;border-bottom: 1px solid blue;">{{item.invoiceNo}}</span></td>
+                        (click)="VoucherDetails(item)"><span [ngClass]="item.debit !== item.credit ? 'text-danger border-danger' :'text-primary border-primary'"  class="border-bottom">{{item.invoiceNo}}</span></td>
                         <td>{{item.invoiceDate |date:'yyyy-MM-dd'}}</td>
                         <td class="col-lg-4">{{item.invoiceRemarks}}</td>
                         <td class="text-end">{{item.amount |number:'1.0-0'}}</td>

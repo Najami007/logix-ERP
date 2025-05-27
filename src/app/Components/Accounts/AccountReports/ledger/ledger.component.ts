@@ -12,7 +12,7 @@ import { AppComponent } from 'src/app/app.component';
 import { Subscription } from 'rxjs';
 import { TopNavBarComponent } from 'src/app/Components/Layout/top-nav-bar/top-nav-bar.component';
 import { MatDialog } from '@angular/material/dialog';
-import { VoucherDetailsComponent } from '../../voucher/voucher-details/voucher-details.component';
+import { VoucherDetailsComponent } from '../../CommonComponent/voucher-details/voucher-details.component';
 import { Router } from '@angular/router';
 
 @Component({

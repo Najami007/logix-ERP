@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment.development';
 
 import * as $ from 'jquery';
 import { MatDialog } from '@angular/material/dialog';
-import { VoucherDetailsComponent } from '../../voucher/voucher-details/voucher-details.component';
+import { VoucherDetailsComponent } from '../../CommonComponent/voucher-details/voucher-details.component';
 import { Router } from '@angular/router';
 
 @Component({

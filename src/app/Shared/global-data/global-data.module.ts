@@ -1,5 +1,5 @@
 import { Injectable, NgModule, OnInit } from '@angular/core';
-import { AsyncPipe, CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
 import { Subject } from 'rxjs/internal/Subject';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.development';
@@ -109,7 +109,8 @@ export class GlobalDataModule implements OnInit {
     private msg: NotificationService,
     private dialog: MatDialog,
     private cookie: CookieService,
-    public ExportExcel: ExcelExportService
+    public ExportExcel: ExcelExportService,
+    public datePipe:DatePipe
 
     // public app: AppComponent,
 
@@ -516,11 +517,12 @@ export class GlobalDataModule implements OnInit {
     return differenceInHours;
   }
 
-  curDate = new Date();
-  SubscriptionExpired() {
+  curDate:any = new Date();
+  public SubscriptionExpired(): boolean {
     ///// yyyy-MM-dd /////////////
-    var ExpiryDate = '2030-06-10';
-    var status = (this.dateFormater(this.curDate, '-') >= ExpiryDate);
+    var ExpiryDate:any = '2025-05-27';
+    var curDate = this.datePipe.transform(this.curDate, 'yyyy-MM-dd')
+    var status:any = curDate! >= ExpiryDate;
     console.log(status, this.curDate, ExpiryDate);
     return status;
 
@@ -991,6 +993,8 @@ export class GlobalDataModule implements OnInit {
   /////////////////////////////////////////////////////////////////////
 
   dateFormater(date: any, separator: any) {
+
+    return this.datePipe.transform(date,'yyyy-MM-dd');
     // new Date(date);
     var day: any = date.getDate();
     // add +1 to month because getMonth() returns month from 0 to 11

@@ -56,12 +56,14 @@
                             <th class="cursorPointer" (click)="changeOrder()">S#</th>
                             <th>Barcode</th>
                             <th>Product Name</th>
-                            <th>Quantity</th>
+                            <th>Qty</th>
+                            <th>AQ</th>
+                             <th>Dif</th>
                             <th>Avg Cost</th>
                             <th>Cost</th>
                             <th>Avg Total</th>
                             <th>Cost Total</th>
-                            <th>AQ</th>
+
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -75,11 +77,13 @@
                                     (keydown)="handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
                                     (keyup)="changeValue(item);getTotal();showImg(item);"
                                     class="qty{{index}} text-center" style="width: 80px;"></td>
+                            <td class="text-center">{{item.aq |number:'1.0-3'}}</td>
+                             <td class="text-center">{{ item.quantity - item.aq |number:'1.0-3'}}</td>
                             <td class="text-end">{{item.avgCostPrice | number:'1.0-2'}}</td>
                             <td class="text-end">{{item.costPrice | number:'1.0-2'}}</td>
                             <td class="text-end">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
                             <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
-                            <td class="text-center">{{item.aq |number:'1.0-3'}}</td>
+
                             <td class="cursorPointer text-center  text-danger"><mat-icon
                                     (click)="delRow(item)">delete</mat-icon></td>
                         </tr>
@@ -87,10 +91,9 @@
                             <td colspan="3"></td>
 
                             <th class="">{{totalQty |number:'1.0-3'}}</th>
-                            <th colspan="2"></th>
+                            <th colspan="4"></th>
                             <th class="text-end">{{avgCostTotal |number:'1.0-2'}}</th>
                             <th class="text-end">{{CostTotal |number:'1.0-2'}}</th>
-                            <th></th>
                             <td class="text-center"><mat-icon class="cursorPointer "
                                     (click)="EmptyData()">delete</mat-icon></td>
 
@@ -127,10 +130,10 @@
                 </mat-card>
             </div>
             <div class="pt-1">
-                <mat-form-field appearance="outline" *ngIf="!disableDateFeature"  class="w-100 matSmall">
+                <mat-form-field appearance="outline" *ngIf="!disableDateFeature" class="w-100 matSmall">
                     <mat-label>Invoice Date</mat-label>
-                    <input [(ngModel)]="invoiceDate"  readonly="true" matInput
-                        type="text" name="invDate" [matDatepicker]="iDate">
+                    <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="invDate"
+                        [matDatepicker]="iDate">
                     <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
                     <mat-datepicker #iDate></mat-datepicker>
                 </mat-form-field>
@@ -228,7 +231,8 @@
                                 <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary"
                                         (click)="printBill(item)">print</mat-icon></td>
                                 <td class="text-center cursorPointer" *ngIf=" item.invType == 'HI' && crudList.u">
-                                    <mat-icon data-bs-dismiss="modal" (click)="retriveBill(item)">edit</mat-icon></td>
+                                    <mat-icon data-bs-dismiss="modal" (click)="retriveBill(item)">edit</mat-icon>
+                                </td>
 
                             </tr>
                         </tbody>

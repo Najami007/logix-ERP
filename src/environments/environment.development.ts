@@ -14,7 +14,7 @@ export const environment = {
 
       //mainApi: 'http://192.168.100.37:5000/',
       //mainApi: 'http://localhost:5000/', 
-       //mainApi: 'http://localhost:8060/',           /////////// system own published API
+       mainApi: 'http://localhost:8060/',           /////////// system own published API
        // mainApi: 'http://192.168.160.98:8060/',  ////////// live Server Dani System
       //mainApi: 'http://192.168.100.250:1007/',  ////////// live Server Dani System
        //mainApi: 'http://192.168.10.100:1003/',    /////////// Local Server Office
@@ -86,7 +86,7 @@ export const environment = {
     //mainApi: 'http://159.69.174.21:2047/', /////// Property Management FMIS Dubai
 
 
-   mainApi: 'http://localhost:8060/', ////////Fazil sons mandi bahaudin
+   //mainApi: 'http://localhost:8060/', ////////Fazil sons mandi bahaudin
     //mainApi: 'http://192.168.100.100:8060/',           /////////// Fazil Sons live
    // mainApi: 'http://159.69.174.21:2026/',           /////////// Fazil Sons live Server
 
