@@ -56,10 +56,10 @@
                 <th class="col-lg-1">Inv.#</th>
                 <th class="col-lg-1">Date</th>
 
-                <th class="col-lg-1">Party</th>
+                <th class="col-lg-1">Project</th>
                 <th class="col-lg-1">Amount</th>
-                <th class="col-lg-3">Narration</th>
-                <th class="col-lg-4">Action</th>
+                <th class="col-lg-4">Narration</th>
+                <th class="col-lg-2">Action</th>
             
            
 
@@ -72,8 +72,8 @@
                 <td>{{index+1}}</td>
                 <td> {{item.invoiceNo}}</td>
                 <td>{{item.invoiceDate | date:'yyyy-MM-dd'}}</td>
-                <td>{{item.partyName}}</td>
-                <td>{{item.amount |number}}</td>
+                <td>{{item.projectTitle}}</td>
+                <td class="text-end">{{item.amount |number}}</td>
                 <td class="text-start">{{item.invoiceRemarks}}</td>
                 <td >
                     <mat-icon class="text-success" (click)="VoucherDetails(item)" >receipt</mat-icon>

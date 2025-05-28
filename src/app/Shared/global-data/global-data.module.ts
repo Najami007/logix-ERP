@@ -520,7 +520,7 @@ export class GlobalDataModule implements OnInit {
   curDate:any = new Date();
   public SubscriptionExpired(): boolean {
     ///// yyyy-MM-dd /////////////
-    var ExpiryDate:any = '2025-05-27';
+    var ExpiryDate:any = '2025-07-10';
     var curDate = this.datePipe.transform(this.curDate, 'yyyy-MM-dd')
     var status:any = curDate! >= ExpiryDate;
     console.log(status, this.curDate, ExpiryDate);

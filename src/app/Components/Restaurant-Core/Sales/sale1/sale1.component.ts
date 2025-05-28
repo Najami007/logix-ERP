@@ -157,6 +157,8 @@ export class Sale1Component implements OnInit {
     this.getBookerList();
     this.getPartyList();
 
+    console.log(this.defaultOrderTypeFeature);
+
   }
 
 
@@ -185,7 +187,8 @@ export class Sale1Component implements OnInit {
   PartyID = 0;
   invoiceDate: Date = new Date();
   categoryID: any = 0;
-  orderType =  this.defaultOrderTypeFeature ? 'Take Away' : '' ;//this.global.getRestOrderType() == '' ? '' : this.global.getRestOrderType();
+ // orderType =  this.defaultOrderTypeFeature ? 'Take Away' : '' ;//this.global.getRestOrderType() == '' ? '' : this.global.getRestOrderType();
+  orderType = this.getOrderType(); //  this.global.getRestOrderType() == '' ? '' : this.defaultOrderTypeFeature ? 'Take Away' : this.global.getRestOrderType(); 
   paymentType = 'Cash';
   cash: any = 0;
   bankCash: any = 0;
@@ -223,6 +226,10 @@ export class Sale1Component implements OnInit {
   //////For Temp Use///////////
   discPer = 0;
   discAmount = 0;
+
+  getOrderType(){
+   return this.defaultOrderTypeFeature ? 'Take Away' : this.global.getRestOrderType() == '' ? '' :this.global.getRestOrderType()
+  }
 
   getBookerList() {
 
@@ -1367,7 +1374,7 @@ export class Sale1Component implements OnInit {
     this.BookerID = 0;
     this.PartyID = 0;
     this.invoiceDate = new Date();
-    this.orderType =this.defaultOrderTypeFeature ? 'Take Away' : '' ;;
+    this.orderType = this.getOrderType();
     this.paymentType = 'Cash';
     this.cash = 0;
     this.bankCash = 0;
