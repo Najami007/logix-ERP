@@ -13,46 +13,46 @@ import * as $ from 'jquery';
   templateUrl: './invreportcatwise.component.html',
   styleUrls: ['./invreportcatwise.component.scss']
 })
-export class InvreportcatwiseComponent implements OnInit {  
+export class InvreportcatwiseComponent implements OnInit {
 
-  page:number = 1;
+  page: number = 1;
   count: number = 0;
- 
-  tableSize: number = 25;
-  tableSizes : any = [10,25,50,100];
 
-  onTableDataChange(event:any){
+  tableSize: number = 25;
+  tableSizes: any = [10, 25, 50, 100];
+
+  onTableDataChange(event: any) {
 
     this.page = event;
     this.getReport();
   }
 
-  onTableSizeChange(event:any):void{
+  onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
-    this.page =1;
+    this.page = 1;
     this.getReport();
   }
 
 
 
-  companyProfile:any = [];
-  crudList:any = {c:true,r:true,u:true,d:true};
+  companyProfile: any = [];
+  crudList: any = { c: true, r: true, u: true, d: true };
 
   constructor(
-    private http:HttpClient,
-    private msg:NotificationService,
-    private app:AppComponent,
-    public global:GlobalDataModule,
-    private dialog:MatDialog,
-    private route:Router
-  ){
-    
-    this.global.getCompany().subscribe((data)=>{
+    private http: HttpClient,
+    private msg: NotificationService,
+    private app: AppComponent,
+    public global: GlobalDataModule,
+    private dialog: MatDialog,
+    private route: Router
+  ) {
+
+    this.global.getCompany().subscribe((data) => {
       this.companyProfile = data;
     });
 
-    this.global.getMenuList().subscribe((data)=>{
-      this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    this.global.getMenuList().subscribe((data) => {
+      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
     })
 
   }
@@ -66,30 +66,30 @@ export class InvreportcatwiseComponent implements OnInit {
   }
 
 
-  reportTypeList:any = [
-    {val:'full',title:'Full Report'},
-    {val:'cw',title:'Categorywise'},
-    {val:'scw',title:'Sub Categorywise'},
-    {val:'bw',title:'Brandwise'},
-    {val:'tw',title:'Typewise'},
-    {val:'lw',title:'Locationwise'},
-    {val:'cbw',title:'Category & Brandwise'},
-    {val:'scbw',title:'Sub-Category & Brand wise'},
-    {val:'ctw',title:'Category & Typewise'},
-    {val:'sctw',title:'subCategory & Typewise'},
-    {val:'cbtw',title:'Category, Brand & Typewise'},
-    {val:'scbtw',title:'SubCategorywise, Brand & Typewise'},
-    {val:'btw',title:'Brand & Typewise'},
-    {val:'lcw',title:'Location & Categorywise'},
-    {val:'lscw',title:'Location & Sub Categorywise'},
-    {val:'lcbw',title:'Location, Category & Brandwise'},
-    {val:'lscbw',title:'Location, Sub Category, Brandwise'},
-    {val:'lctw',title:'Location, Category & Typewise'},
-    {val:'lsctw',title:'Location, Sub Category & Typewise'},
-    {val:'lctbw',title:'Location, Category, Type & Brandwise'},
-    {val:'lsctbw',title:'Location, Sub-Category, Type & Brandwise'},
+  reportTypeList: any = [
+    { val: 'full', title: 'Full Report' },
+    { val: 'cw', title: 'Categorywise' },
+    { val: 'scw', title: 'Sub Categorywise' },
+    { val: 'bw', title: 'Brandwise' },
+    { val: 'tw', title: 'Typewise' },
+    { val: 'lw', title: 'Locationwise' },
+    { val: 'cbw', title: 'Category & Brandwise' },
+    { val: 'scbw', title: 'Sub-Category & Brand wise' },
+    { val: 'ctw', title: 'Category & Typewise' },
+    { val: 'sctw', title: 'subCategory & Typewise' },
+    { val: 'cbtw', title: 'Category, Brand & Typewise' },
+    { val: 'scbtw', title: 'SubCategorywise, Brand & Typewise' },
+    { val: 'btw', title: 'Brand & Typewise' },
+    { val: 'lcw', title: 'Location & Categorywise' },
+    { val: 'lscw', title: 'Location & Sub Categorywise' },
+    { val: 'lcbw', title: 'Location, Category & Brandwise' },
+    { val: 'lscbw', title: 'Location, Sub Category, Brandwise' },
+    { val: 'lctw', title: 'Location, Category & Typewise' },
+    { val: 'lsctw', title: 'Location, Sub Category & Typewise' },
+    { val: 'lctbw', title: 'Location, Category, Type & Brandwise' },
+    { val: 'lsctbw', title: 'Location, Sub-Category, Type & Brandwise' },
 
-    
+
   ]
 
 
@@ -98,27 +98,30 @@ export class InvreportcatwiseComponent implements OnInit {
   locFlag = false;
   brandFlag = false;
   typeFlag = false;
-  
+
 
   minusOnly = false;
+  hideZero = false;
+  zeroOnly = false;
   reportType = 'full';
   Title = 'Full';
 
-  inventoryList:any = [];
+  inventoryList: any = [];
+  tmpInventoryList: any = [];
 
-  SubCategoriesList:any = []
-  CategoriesList:any = [];
-  BrandList:any = [];
-  ProductTypeList:any =[];
-  locationList:any = [];
-  
+  SubCategoriesList: any = []
+  CategoriesList: any = [];
+  BrandList: any = [];
+  ProductTypeList: any = [];
+  locationList: any = [];
+
   categoryID = 0;
   subCategoryID = 0;
   locationID = 0;
   typeID = 0;
   brandID = 0;
 
-  
+
 
   costTotal = 0;
   avgCostTotal = 0;
@@ -132,194 +135,200 @@ export class InvreportcatwiseComponent implements OnInit {
   typeTitle = '';
   locationTitle = '';
 
-  chage(val:any){
+  chage(val: any) {
     alert(val);
   }
 
 
-  onSelection(type:any,event:any){
-    
+  onSelection(type: any, event: any) {
 
-    if(type == 'cat'){
-      this.categoryTitle = 'Cat: ' +  this.CategoriesList.find((e:any)=>e.categoryID == this.categoryID).categoryTitle; 
+
+    if (type == 'cat') {
+      this.categoryTitle = 'Cat: ' + this.CategoriesList.find((e: any) => e.categoryID == this.categoryID).categoryTitle;
     }
 
-    if(type == 'subcat'){
-      this.subCategoryTitle = 'Sub Cat: ' +  this.SubCategoriesList.find((e:any)=>e.subCategoryID == this.subCategoryID).subCategoryTitle;
+    if (type == 'subcat') {
+      this.subCategoryTitle = 'Sub Cat: ' + this.SubCategoriesList.find((e: any) => e.subCategoryID == this.subCategoryID).subCategoryTitle;
     }
 
-    if(type == 'brand'){
-      this.brandTitle = 'Brand: ' + this.BrandList.find((e:any)=>e.brandID == this.brandID).brandTitle;
+    if (type == 'brand') {
+      this.brandTitle = 'Brand: ' + this.BrandList.find((e: any) => e.brandID == this.brandID).brandTitle;
     }
 
-    if(type == 'type'){
-      this.typeTitle = 'Type: ' +   this.ProductTypeList.find((e:any)=>e.productTypeID == this.typeID).productTypeTitle;
+    if (type == 'type') {
+      this.typeTitle = 'Type: ' + this.ProductTypeList.find((e: any) => e.productTypeID == this.typeID).productTypeTitle;
     }
 
-    if(type == 'location'){
-      this.locationTitle = 'Loc: ' + this.locationList.find((e:any)=>e.locationID == this.locationID).locationTitle;
+    if (type == 'location') {
+      this.locationTitle = 'Loc: ' + this.locationList.find((e: any) => e.locationID == this.locationID).locationTitle;
     }
 
   }
 
-  getReport(){
+  getReport() {
 
     this.inventoryList = [];
-    var idType ='';
+    var idType = '';
 
-    if(this.reportType == 'cw'){
-      idType = '&cid='+this.categoryID;
-      this.Title =   this.categoryTitle;  
+    if (this.reportType == 'cw') {
+      idType = '&cid=' + this.categoryID;
+      this.Title = this.categoryTitle;
     }
 
-    if(this.reportType == 'scw'){
-      idType = '&cid='+this.categoryID+'&scid='+this.subCategoryID;
-      this.Title =  this.categoryTitle + ',' +  this.subCategoryTitle;
+    if (this.reportType == 'scw') {
+      idType = '&cid=' + this.categoryID + '&scid=' + this.subCategoryID;
+      this.Title = this.categoryTitle + ',' + this.subCategoryTitle;
     }
 
-    if(this.reportType == 'bw'){
-      idType = '&bid='+this.brandID;
-      this.Title =   this.brandTitle;
+    if (this.reportType == 'bw') {
+      idType = '&bid=' + this.brandID;
+      this.Title = this.brandTitle;
     }
 
-    if(this.reportType == 'lw'){
-      idType = '&lid='+this.locationID;
-      this.Title =   this.locationTitle;
+    if (this.reportType == 'lw') {
+      idType = '&lid=' + this.locationID;
+      this.Title = this.locationTitle;
     }
 
-    if(this.reportType == 'tw'){
-      idType = '&tid='+this.typeID;
-      this.Title =  this.typeTitle;
+    if (this.reportType == 'tw') {
+      idType = '&tid=' + this.typeID;
+      this.Title = this.typeTitle;
     }
 
-    if(this.reportType == 'cbw'){
-      idType = '&cid='+this.categoryID+'&bid='+this.brandID;
-      this.Title =   this.categoryTitle + ' , ' + this.brandTitle;
+    if (this.reportType == 'cbw') {
+      idType = '&cid=' + this.categoryID + '&bid=' + this.brandID;
+      this.Title = this.categoryTitle + ' , ' + this.brandTitle;
     }
 
-    if(this.reportType == 'scbw'){
-      idType = '&cid='+this.categoryID+'&scid='+this.subCategoryID+'&bid='+this.brandID;
-      this.Title =  this.categoryTitle+ ' , ' +this.subCategoryTitle+ ' , ' +this.brandTitle;
+    if (this.reportType == 'scbw') {
+      idType = '&cid=' + this.categoryID + '&scid=' + this.subCategoryID + '&bid=' + this.brandID;
+      this.Title = this.categoryTitle + ' , ' + this.subCategoryTitle + ' , ' + this.brandTitle;
     }
 
-    if(this.reportType == 'ctw'){
-      idType = '&cid='+this.categoryID+'&tid='+this.typeID;
-      this.Title =   this.categoryTitle+ ' , ' +this.typeTitle; 
-       
+    if (this.reportType == 'ctw') {
+      idType = '&cid=' + this.categoryID + '&tid=' + this.typeID;
+      this.Title = this.categoryTitle + ' , ' + this.typeTitle;
+
     }
 
-    if(this.reportType == 'sctw'){
-      idType = '&cid='+this.categoryID+'&scid='+this.subCategoryID+'&tid='+this.typeID;
-      this.Title =  this.categoryTitle+ ' , ' +this.subCategoryTitle+ ' , ' +this.typeTitle; 
-       
+    if (this.reportType == 'sctw') {
+      idType = '&cid=' + this.categoryID + '&scid=' + this.subCategoryID + '&tid=' + this.typeID;
+      this.Title = this.categoryTitle + ' , ' + this.subCategoryTitle + ' , ' + this.typeTitle;
+
     }
 
-    if(this.reportType == 'cbtw'){
-      idType = '&cid='+this.categoryID+'&bid='+this.brandID+'&tid='+this.typeID;
-      this.Title =  this.categoryTitle+ ' , ' +this.brandTitle+ ' , ' +this.typeTitle;
+    if (this.reportType == 'cbtw') {
+      idType = '&cid=' + this.categoryID + '&bid=' + this.brandID + '&tid=' + this.typeID;
+      this.Title = this.categoryTitle + ' , ' + this.brandTitle + ' , ' + this.typeTitle;
     }
 
-    if(this.reportType == 'scbtw'){
-      idType = '&cid='+this.categoryID+'&scid='+this.subCategoryID+'&bid='+this.brandID+'&tid='+this.typeID;
-      this.Title = this.categoryTitle+ ' , ' +this.subCategoryTitle+ ' , ' +this.brandTitle+ ' , ' +this.typeTitle;
+    if (this.reportType == 'scbtw') {
+      idType = '&cid=' + this.categoryID + '&scid=' + this.subCategoryID + '&bid=' + this.brandID + '&tid=' + this.typeID;
+      this.Title = this.categoryTitle + ' , ' + this.subCategoryTitle + ' , ' + this.brandTitle + ' , ' + this.typeTitle;
     }
 
 
-    if(this.reportType == 'btw'){
-      idType = '&bid='+this.brandID+'&tid='+this.typeID;
-      this.Title = this.brandTitle+ ' , ' +this.typeTitle;
+    if (this.reportType == 'btw') {
+      idType = '&bid=' + this.brandID + '&tid=' + this.typeID;
+      this.Title = this.brandTitle + ' , ' + this.typeTitle;
     }
 
-    if(this.reportType == 'lcw'){
-      idType = '&lid='+this.locationID+'&cid='+this.categoryID;
-      this.Title = this.locationTitle+ ' , ' +this.categoryTitle;
+    if (this.reportType == 'lcw') {
+      idType = '&lid=' + this.locationID + '&cid=' + this.categoryID;
+      this.Title = this.locationTitle + ' , ' + this.categoryTitle;
     }
 
-    if(this.reportType == 'lscw'){
-      idType = '&lid='+this.locationID+'&cid='+this.categoryID+'&scid='+this.subCategoryID;
-      this.Title = this.locationTitle+ ' , ' +this.categoryTitle+ ' , ' +this.subCategoryTitle;
+    if (this.reportType == 'lscw') {
+      idType = '&lid=' + this.locationID + '&cid=' + this.categoryID + '&scid=' + this.subCategoryID;
+      this.Title = this.locationTitle + ' , ' + this.categoryTitle + ' , ' + this.subCategoryTitle;
     }
 
-    if(this.reportType == 'lcbw'){
-      idType = '&lid='+this.locationID+'&cid='+this.categoryID+'&bid='+this.brandID;
-      this.Title = this.locationTitle+ ' , ' +this.categoryTitle+ ' , ' +this.brandTitle;
+    if (this.reportType == 'lcbw') {
+      idType = '&lid=' + this.locationID + '&cid=' + this.categoryID + '&bid=' + this.brandID;
+      this.Title = this.locationTitle + ' , ' + this.categoryTitle + ' , ' + this.brandTitle;
     }
 
-    if(this.reportType == 'lscbw'){
-      idType = '&lid='+this.locationID+'&cid='+this.categoryID+'&scid='+this.subCategoryID+'&bid='+this.brandID;
-      this.Title = this.locationTitle+ ' , ' +this.categoryTitle+ ' , ' +this.subCategoryTitle+' , '+this.brandTitle;
+    if (this.reportType == 'lscbw') {
+      idType = '&lid=' + this.locationID + '&cid=' + this.categoryID + '&scid=' + this.subCategoryID + '&bid=' + this.brandID;
+      this.Title = this.locationTitle + ' , ' + this.categoryTitle + ' , ' + this.subCategoryTitle + ' , ' + this.brandTitle;
     }
 
-    if(this.reportType == 'lctw'){
-      idType = '&lid='+this.locationID+'&cid='+this.categoryID+'&tid='+this.typeID;
-      this.Title = this.locationTitle+ ' , ' +this.categoryTitle+ ' , ' +this.typeTitle;
+    if (this.reportType == 'lctw') {
+      idType = '&lid=' + this.locationID + '&cid=' + this.categoryID + '&tid=' + this.typeID;
+      this.Title = this.locationTitle + ' , ' + this.categoryTitle + ' , ' + this.typeTitle;
     }
 
-    if(this.reportType == 'lsctw'){
-      idType = '&lid='+this.locationID+'&cid='+this.categoryID+ '&scid='+this.subCategoryID +'&tid='+this.typeID;
-      this.Title = this.locationTitle+ ' , ' +this.categoryTitle+ ' , '+this.subCategoryTitle + ' , ' +this.typeTitle;
+    if (this.reportType == 'lsctw') {
+      idType = '&lid=' + this.locationID + '&cid=' + this.categoryID + '&scid=' + this.subCategoryID + '&tid=' + this.typeID;
+      this.Title = this.locationTitle + ' , ' + this.categoryTitle + ' , ' + this.subCategoryTitle + ' , ' + this.typeTitle;
     }
 
-    if(this.reportType == 'lctbw'){
-      idType = '&lid='+this.locationID+'&cid='+this.categoryID+'&bid='+this.brandID+'&tid='+this.typeID;
-      this.Title = this.locationTitle+ ' , ' +this.categoryTitle+ ' , ' +this.brandTitle+' , '+this.typeTitle;
+    if (this.reportType == 'lctbw') {
+      idType = '&lid=' + this.locationID + '&cid=' + this.categoryID + '&bid=' + this.brandID + '&tid=' + this.typeID;
+      this.Title = this.locationTitle + ' , ' + this.categoryTitle + ' , ' + this.brandTitle + ' , ' + this.typeTitle;
     }
 
-    if(this.reportType == 'lsctbw'){
-      idType = '&lid='+this.locationID+'&cid='+this.categoryID+'&scid='+this.subCategoryID +'&bid='+this.brandID+'&tid='+this.typeID;
-      this.Title = this.locationTitle+ ' , ' +this.categoryTitle+ ' , '+this.subCategoryTitle + ' , ' +this.brandTitle+' , '+this.typeTitle;
+    if (this.reportType == 'lsctbw') {
+      idType = '&lid=' + this.locationID + '&cid=' + this.categoryID + '&scid=' + this.subCategoryID + '&bid=' + this.brandID + '&tid=' + this.typeID;
+      this.Title = this.locationTitle + ' , ' + this.categoryTitle + ' , ' + this.subCategoryTitle + ' , ' + this.brandTitle + ' , ' + this.typeTitle;
     }
 
-    
- 
 
-    if(this.reportType == 'cw' && this.categoryID == 0){
+
+
+    if (this.reportType == 'cw' && this.categoryID == 0) {
       this.msg.WarnNotify('Select Category')
-    }else if(this.reportType == 'scw' && (this.categoryID == 0 || this.subCategoryID == 0)){
+    } else if (this.reportType == 'scw' && (this.categoryID == 0 || this.subCategoryID == 0)) {
       this.msg.WarnNotify('Select Category and Sub Category')
-    }else if(this.reportType == 'bw' && this.brandID == 0 ){
+    } else if (this.reportType == 'bw' && this.brandID == 0) {
       this.msg.WarnNotify('Select Brand')
-    }else if(this.reportType == 'lw' && this.locationID == 0 ){
+    } else if (this.reportType == 'lw' && this.locationID == 0) {
       this.msg.WarnNotify('Select Location')
-    }else if(this.reportType == 'tw' && this.typeID == 0 ){
+    } else if (this.reportType == 'tw' && this.typeID == 0) {
       this.msg.WarnNotify('Select Type')
-    }else{
+    } else {
       this.app.startLoaderDark();
       // alert(this.reportType+idType);
-        this.http.get(environment.mainApi+this.global.inventoryLink+'GetInventoryRpt?rptType='+this.reportType+idType).subscribe(
-          (Response:any)=>{
+      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryRpt?rptType=' + this.reportType + idType).subscribe(
+        (Response: any) => {
 
-            if(this.minusOnly == false){
-              this.inventoryList = Response;
-            }else{
-              this.inventoryList = Response.filter((e:any)=> (e.qtyIn - e.qtyOut) < 0 );
-            }
-          
-            // this.inventoryList = Response;
-           
-            this.app.stopLoaderDark();
-            this.costTotal = 0;
-            this.avgCostTotal = 0;
-            this.saleTotal = 0;
-            this.balanceQtyTotal = 0;
+          this.inventoryList = Response;
+          this.tmpInventoryList = Response;
+          this.filterReport();
 
-         if(Response != null)
-         this.inventoryList.forEach((e:any) => {
-          this.costTotal += e.costPrice * (e.qtyIn - e.qtyOut);
-          this.avgCostTotal += e.avgCostPrice * (e.qtyIn - e.qtyOut);
-          this.saleTotal += e.salePrice * (e.qtyIn - e.qtyOut);
-          this.balanceQtyTotal += e.qtyIn - e.qtyOut;
-        });
-          }
-        )
-       
+          // this.inventoryList = Response;
+
+          this.app.stopLoaderDark();
+          this.costTotal = 0;
+          this.avgCostTotal = 0;
+          this.saleTotal = 0;
+          this.balanceQtyTotal = 0;
+
+          if (Response != null)
+            this.getTotal()
+        }
+      )
+
     }
 
 
   }
 
 
-  emptyField(){
+  getTotal() {
+    this.costTotal = 0;
+    this.avgCostTotal = 0;
+    this.saleTotal = 0;
+    this.balanceQtyTotal = 0;
+    this.inventoryList.forEach((e: any) => {
+      this.costTotal += e.costPrice * (e.qtyIn - e.qtyOut);
+      this.avgCostTotal += e.avgCostPrice * (e.qtyIn - e.qtyOut);
+      this.saleTotal += e.salePrice * (e.qtyIn - e.qtyOut);
+      this.balanceQtyTotal += e.qtyIn - e.qtyOut;
+    });
+  }
+
+  emptyField() {
     this.categoryID = 0;
     this.subCategoryID = 0;
     this.brandID = 0;
@@ -328,34 +337,33 @@ export class InvreportcatwiseComponent implements OnInit {
   }
 
 
-  openDialog(){
+  openDialog() {
 
-    
-    if(this.reportType == 'full'){
-     setTimeout(() => {
-      $('#credential').hide();
-      $('.modal-backdrop').remove();
-     }, 500);
+
+    if (this.reportType == 'full') {
       this.catFlag = false;
       this.subCatFlag = false;
       this.brandFlag = false;
       this.locFlag = false;
       this.typeFlag = false
       this.Title = 'Full'
-      this.getReport(); 
+      this.getReport();
+    } else {
+      this.global.openBootstrapModal('#credential', true);
     }
 
-    
-    if(this.reportType == 'cw'){
+
+    if (this.reportType == 'cw') {
+
       this.catFlag = true;
       this.subCatFlag = false;
       this.brandFlag = false;
       this.locFlag = false;
       this.typeFlag = false
- 
+
     }
 
-    if(this.reportType == 'scw'){
+    if (this.reportType == 'scw') {
       this.catFlag = true;
       this.subCatFlag = true;
       this.brandFlag = false;
@@ -363,7 +371,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.typeFlag = false
     }
 
-    if(this.reportType == 'bw'){
+    if (this.reportType == 'bw') {
       this.catFlag = false;
       this.subCatFlag = false;
       this.brandFlag = true;
@@ -371,7 +379,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.typeFlag = false
     }
 
-    if(this.reportType == 'lw'){
+    if (this.reportType == 'lw') {
       this.catFlag = false;
       this.subCatFlag = false;
       this.brandFlag = false;
@@ -379,7 +387,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.typeFlag = false
     }
 
-    if(this.reportType == 'tw'){
+    if (this.reportType == 'tw') {
       this.catFlag = false;
       this.subCatFlag = false;
       this.brandFlag = false;
@@ -387,7 +395,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.typeFlag = true;
     }
 
-    if(this.reportType == 'cbw'){
+    if (this.reportType == 'cbw') {
       this.catFlag = true;
       this.subCatFlag = false;
       this.brandFlag = true;
@@ -395,7 +403,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.typeFlag = false;
     }
 
-    if(this.reportType == 'scbw'){
+    if (this.reportType == 'scbw') {
       this.catFlag = true;
       this.subCatFlag = true;
       this.brandFlag = true;
@@ -403,7 +411,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.typeFlag = false;
     }
 
-    if(this.reportType == 'ctw'){
+    if (this.reportType == 'ctw') {
       this.catFlag = true;
       this.subCatFlag = false;
       this.brandFlag = false;
@@ -411,7 +419,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.typeFlag = true;
     }
 
-    if(this.reportType == 'sctw'){
+    if (this.reportType == 'sctw') {
       this.catFlag = true;
       this.subCatFlag = true;
       this.brandFlag = false;
@@ -419,7 +427,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.typeFlag = true;
     }
 
-    if(this.reportType == 'cbtw'){
+    if (this.reportType == 'cbtw') {
       this.catFlag = true;
       this.subCatFlag = false;
       this.brandFlag = true;
@@ -427,7 +435,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.typeFlag = true;
     }
 
-    if(this.reportType == 'scbtw'){
+    if (this.reportType == 'scbtw') {
       this.catFlag = true;
       this.subCatFlag = true;
       this.brandFlag = true;
@@ -436,7 +444,7 @@ export class InvreportcatwiseComponent implements OnInit {
     }
 
 
-    if(this.reportType == 'btw'){
+    if (this.reportType == 'btw') {
       this.catFlag = false;
       this.subCatFlag = false;
       this.brandFlag = true;
@@ -444,7 +452,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.typeFlag = true;
     }
 
-    if(this.reportType == 'lcw'){
+    if (this.reportType == 'lcw') {
       this.catFlag = true;
       this.subCatFlag = false;
       this.brandFlag = false;
@@ -452,7 +460,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.typeFlag = false;
     }
 
-    if(this.reportType == 'lscw'){
+    if (this.reportType == 'lscw') {
       this.catFlag = true;
       this.subCatFlag = true;
       this.brandFlag = false;
@@ -460,7 +468,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.typeFlag = false;
     }
 
-    if(this.reportType == 'lcbw'){
+    if (this.reportType == 'lcbw') {
       this.catFlag = true;
       this.subCatFlag = false;
       this.brandFlag = true;
@@ -468,7 +476,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.typeFlag = false;
     }
 
-    if(this.reportType == 'lscbw'){
+    if (this.reportType == 'lscbw') {
       this.catFlag = true;
       this.subCatFlag = true;
       this.brandFlag = true;
@@ -476,7 +484,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.typeFlag = false;
     }
 
-    if(this.reportType == 'lctw'){
+    if (this.reportType == 'lctw') {
       this.catFlag = true;
       this.subCatFlag = false;
       this.brandFlag = false;
@@ -484,7 +492,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.typeFlag = true;
     }
 
-    if(this.reportType == 'lsctw'){
+    if (this.reportType == 'lsctw') {
       this.catFlag = true;
       this.subCatFlag = true;
       this.brandFlag = false;
@@ -492,7 +500,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.typeFlag = true;
     }
 
-    if(this.reportType == 'lctbw'){
+    if (this.reportType == 'lctbw') {
       this.catFlag = true;
       this.subCatFlag = false;
       this.brandFlag = true;
@@ -500,25 +508,25 @@ export class InvreportcatwiseComponent implements OnInit {
       this.typeFlag = true;
     }
 
-    if(this.reportType == 'lsctbw'){
+    if (this.reportType == 'lsctbw') {
       this.catFlag = true;
       this.subCatFlag = true;
       this.brandFlag = true;
       this.locFlag = true;
       this.typeFlag = true;
     }
-    
+
   }
 
 
-  print(){
+  print() {
     this.global.printData('#printRpt')
   }
 
 
   getSubCategory() {
     this.subCategoryID = 0;
-    this.http.get(environment.mainApi + this.global.inventoryLink+'GetSubCategory').subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSubCategory').subscribe(
       (Response: any) => {
         this.SubCategoriesList = Response.filter((e: any) => e.categoryID == this.categoryID);
 
@@ -530,16 +538,16 @@ export class InvreportcatwiseComponent implements OnInit {
 
 
   getCategory() {
-    this.http.get(environment.mainApi + this.global.inventoryLink+'GetCategory').subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetCategory').subscribe(
       (Response: any) => {
         this.CategoriesList = Response;
       }
     )
   }
 
-  
+
   getBrandList() {
-    this.http.get(environment.mainApi +this.global.inventoryLink+'GetBrand').subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetBrand').subscribe(
       (Response: any) => {
         this.BrandList = Response;
       }
@@ -547,21 +555,60 @@ export class InvreportcatwiseComponent implements OnInit {
   }
 
 
-  getProductTypes(){
-    this.http.get(environment.mainApi + this.global.inventoryLink+'GetProductType').subscribe(
+  getProductTypes() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductType').subscribe(
       (Response: any) => {
         this.ProductTypeList = Response;
-     
+
       }
     )
   }
 
-  getLocation(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'getlocation').subscribe(
-      (Response:any)=>{
+  getLocation() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'getlocation').subscribe(
+      (Response: any) => {
         this.locationList = Response;
       }
     )
+  }
+
+  filterList: any = [
+    { id: 1, title: 'ALL' },
+    { id: 2, title: 'Minus Only' },
+    { id: 5, title: 'Plus Only' },
+    { id: 3, title: 'Hide Zero' },
+    { id: 4, title: 'Zero Only' },
+   
+  ]
+
+  filterID: any = 1;
+
+  filterReport() {
+
+    if (this.filterID == 1) {
+      this.inventoryList = this.tmpInventoryList;
+    }
+
+    if (this.filterID == 2) {
+      this.inventoryList = this.tmpInventoryList.filter((e: any) => (e.qtyIn - e.qtyOut) < 0)
+    }
+    if (this.filterID == 3) {
+      this.inventoryList = this.tmpInventoryList.filter((e: any) => (e.qtyIn - e.qtyOut) > 0 || (e.qtyIn - e.qtyOut) < 0)
+    }
+
+    if (this.filterID == 4) {
+      this.inventoryList = this.tmpInventoryList.filter((e: any) => (e.qtyIn - e.qtyOut) == 0)
+    }
+    
+    if (this.filterID == 5) {
+      this.inventoryList = this.tmpInventoryList.filter((e: any) => (e.qtyIn - e.qtyOut) > 0)
+    }
+
+
+    setTimeout(() => {
+      this.getTotal();
+    }, 200);
+
   }
 
 

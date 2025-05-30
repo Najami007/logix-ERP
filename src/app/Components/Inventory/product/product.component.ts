@@ -106,7 +106,7 @@ export class ProductComponent implements OnInit {
   categoryFilterID = 0;
   activeFilterID: any = '-';
 
-  filterType = '';
+  filterType = 'brand';
 
   subCategoryFilterList: any = [];
   tempProdList: any = [];
@@ -116,12 +116,18 @@ export class ProductComponent implements OnInit {
     this.filterType = type;
 
     if (type == 'brand') {
+      this.subCategoryFilterID = 0;
+      this.activeFilterID = '-';
+      this.discFilterID = 0;
       this.productList = this.brandFilterID == 0 ? this.productList = this.tempProdList : this.tempProdList.filter((e: any) => e.brandID == this.brandFilterID);
 
 
     }
 
     if (type == 'subcat') {
+      this.brandFilterID = 0;
+      this.activeFilterID = '-';
+      this.discFilterID = 0;
 
       this.productList = this.subCategoryFilterID == 0 ? this.productList = this.tempProdList : this.tempProdList.filter((e: any) => e.subCategoryID == this.subCategoryFilterID);
 
@@ -130,11 +136,18 @@ export class ProductComponent implements OnInit {
 
 
     if (type == 'status') {
-
-      this.productList = this.activeFilterID == '-' ? this.productList = this.tempProdList : this.tempProdList.filter((e: any) => e.activeStatus == this.activeFilterID);
+      this.subCategoryFilterID = 0;
+      this.brandFilterID = 0;
+      this.discFilterID = 0;
+      this.productList = this.activeFilterID == '-' 
+      ? this.productList = this.tempProdList 
+      : this.tempProdList.filter((e: any) => e.activeStatus == this.activeFilterID);
     }
 
     if (type == 'disc') {
+    this.subCategoryFilterID = 0;
+      this.brandFilterID = 0;
+       this.activeFilterID = '-';
 
       if (this.discFilterID == 0) {
         this.productList = this.tempProdList;
@@ -223,6 +236,7 @@ export class ProductComponent implements OnInit {
       (Response: any) => {
         this.productList = Response;
         this.tempProdList = Response;
+        this.filterProductList(this.filterType);
      
       }
     )

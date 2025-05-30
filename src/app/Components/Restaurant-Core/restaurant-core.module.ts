@@ -55,6 +55,7 @@ import { DateAdapter, MAT_DATE_LOCALE , MAT_DATE_FORMATS } from '@angular/materi
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { SaleHoldedBillComponent } from './Sales/SaleCommonComponent/sale-holded-bill/sale-holded-bill.component';
 import { CommentCardComponent } from './Sales/SaleCommonComponent/comment-card/comment-card.component';
+import { CashierClosingRptComponent } from '../Inventory/InventoryReports/cashier-closing-rpt/cashier-closing-rpt.component';
 
 export const MY_DATE_FORMAT  = {
   parse: {
@@ -96,6 +97,7 @@ export const restCore: Route[] = [
   
   {path:'conrpt', component:ConsumptionReportComponent,data: { title: 'Consumption Rpt' }, canActivate:[AuthGuard] },
   {path:'snd', component:AddSoundComponent,data: { title: 'Snd' }, },
+  {path: 'ccrpt',component: CashierClosingRptComponent,data: { title: 'Cashier Closing' },canActivate: [AuthGuard]},
   
 
   

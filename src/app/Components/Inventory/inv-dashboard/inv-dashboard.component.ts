@@ -27,7 +27,7 @@ export class InvDashboardComponent {
 
   ngOnInit(): void {
  
-    this.globalData.setHeaderTitle('Playtorium DashBoard');
+    this.globalData.setHeaderTitle('DashBoard');
   
     this.getSwingSale();
     this.barChart();

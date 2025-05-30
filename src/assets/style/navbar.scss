@@ -72,3 +72,21 @@
         }
     }*/
 }
+
+
+
+
+.menuTitle{
+    font-size: 18px; 
+    font-family: Arial,Helvetica, sans-serif;
+     letter-spacing:5px;
+}
+
+
+
+@media only screen and (max-width:700px){
+
+    .menuTitle{
+        display: none;
+    }
+  }

@@ -35,7 +35,7 @@ export class AddBalanceComponent {
       this.amount = this.editData.amount;
     
       this.remarks = this.editData.invoiceRemarks;
-    
+      this.projectID = this.editData.projectID;
       setTimeout(() => {
         this.getParty();
       }, 200);
@@ -59,7 +59,7 @@ export class AddBalanceComponent {
   remarks:any = '';
   bankReceiptNo:any = '';
   partyList:any = [];
-  projectID = 0;
+  projectID = this.global.getProjectID();
 
 
   getParty(){

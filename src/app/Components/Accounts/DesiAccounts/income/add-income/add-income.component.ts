@@ -57,7 +57,7 @@ export class AddIncomeComponent  implements OnInit {
   bankReceiptNo = '';
   remarks = '';
   partyID = 0;
-  projectID = 0;
+  projectID = this.global.getProjectID();
   paymentType = '';
 
 

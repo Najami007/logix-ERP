@@ -55,10 +55,17 @@ export class PurchaseMobShopComponent implements OnInit {
 
     this.getSuppliers();
     $('.searchBarcode').trigger('focus');
-    this.global.getProducts().subscribe((data: any) => { this.productList = data; });
+    this.getProducts()
     this.global.getBookerList().subscribe((data: any) => { this.BookerList = data; });
     this.global.getWarehouseLocationList().subscribe((data: any) => { this.locationList = data; });
 
+  }
+
+
+  
+  getProducts() {
+    this.global.getProducts().subscribe(
+      (data: any) => { this.productList = data; });
   }
 
 
@@ -309,21 +316,25 @@ export class PurchaseMobShopComponent implements OnInit {
     this.app.stopLoaderDark();
     this.productName = '';
     this.getTotal();
+    this.global.closeBootstrapModal('#prodModal',true);
     setTimeout(() => {
       $('#psearchProduct').trigger('focus');
     }, 500);
 
   }
 
+ 
+
   searchProductByName() {
-    this.dialogue.open(ProductModalComponent, {
-      width: '80%',
-    }).afterClosed().subscribe(val => {
-      if (val != '' && val != undefined) {
-        this.holdDataFunction(val.data);
-      }
-    })
+    this.global.openBootstrapModal('#prodModal', true);
+
+    setTimeout(() => {
+      $('#prodName').trigger('select');
+      $('#prodName').trigger('focus');
+    }, 500);
+
   }
+
 
 
 

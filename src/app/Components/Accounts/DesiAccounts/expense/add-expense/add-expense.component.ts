@@ -43,6 +43,7 @@ export class AddExpenseComponent implements OnInit {
       this.discount = this.editData.discount;
       this.remarks = this.editData.invoiceRemarks;
       this.bankReceiptNo = this.editData.bankReceiptNo;
+      this.projectID = this.editData.projectID;
       this.btnType = 'Update';
     }
   }
@@ -62,7 +63,7 @@ export class AddExpenseComponent implements OnInit {
   bankReceiptNo = '';
   remarks = '';
   partyID = 0;
-  projectID = 0;
+  projectID = this.global.getProjectID();
   paymentType = '';
 
 

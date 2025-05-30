@@ -14,34 +14,34 @@ import { environment } from 'src/environments/environment.development';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit{
-  
+export class DashboardComponent implements OnInit {
 
-  constructor(private globalData :GlobalDataModule,
-        private http:HttpClient,
-    
-    ){
+
+  constructor(private globalData: GlobalDataModule,
+    private http: HttpClient,
+
+  ) {
 
   }
 
   expenseIcon = '../../assets/Images/expIcon.png';
-  shopIcon ='../../assets/Images/shopIcons.png'
+  shopIcon = '../../assets/Images/shopIcons.png'
   incomeIcon = '../../assets/Images/incomeIcon.png';
 
 
-  income_expense_chart:Chart |undefined;
-  Acounts_Chart:Chart |undefined;
+  income_expense_chart: Chart | undefined;
+  Acounts_Chart: Chart | undefined;
 
-  profit_loss_chart:Chart |undefined;
-  profit_Line_Chart:Chart |undefined;
+  profit_loss_chart: Chart | undefined;
+  profit_Line_Chart: Chart | undefined;
 
-  budget_Chart:Chart | undefined;
-  Income_Detail_Chart:Chart | undefined;
-  Expense_Detail_Chart:Chart | undefined;
-  room_Booking_Chart:Chart | undefined;
+  budget_Chart: Chart | undefined;
+  Income_Detail_Chart: Chart | undefined;
+  Expense_Detail_Chart: Chart | undefined;
+  room_Booking_Chart: Chart | undefined;
 
-  
-  credentials :any;
+
+  credentials: any;
   ngOnInit(): void {
     this.getCardsData();
     this.getBudget();
@@ -50,55 +50,55 @@ export class DashboardComponent implements OnInit{
     this.getExpense();
     // this.getBookings();
     this.globalData.setHeaderTitle('Finance DashBoard');
-  
+
 
     this.AnnualProfitLoss();
-  
-   //this.getbudgetChart();
-   
-  
+
+    //this.getbudgetChart();
+
+
   }
 
-  budgetData:any;
+  budgetData: any;
   budgetMonth = new Date();
-  titleList:any = [];
-  budgetAmountList:any = [];
-  consumedAmountList:any = [];
+  titleList: any = [];
+  budgetAmountList: any = [];
+  consumedAmountList: any = [];
 
-   IncomeList:any = [];
-  ExpenseList:any = [];
-  MonthList:any = []
+  IncomeList: any = [];
+  ExpenseList: any = [];
+  MonthList: any = []
 
-  MonthNameList:any = ['Jan','Feb','Mar','Apr','May','Jun','July','Aug','Sep','Oct','Nov','Dec'];
+  MonthNameList: any = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 
 
-   date = new Date(Date.now());
-   
-   firstDay = new Date(this.date.getFullYear(), this.date.getMonth(), 1);
-   lastDay = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0);
+  date = new Date(Date.now());
 
-   priviousMonthFirstDay = new Date(this.date.getFullYear(), this.date.getMonth()-1, 1);
-   priviousMonthLastDay = new Date(this.date.getFullYear(), this.date.getMonth(), 0);
+  firstDay = new Date(this.date.getFullYear(), this.date.getMonth(), 1);
+  lastDay = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0);
 
-   IncomeHeadsList:any = [];
-   IncomeHeadsAmountList:any = [];
+  priviousMonthFirstDay = new Date(this.date.getFullYear(), this.date.getMonth() - 1, 1);
+  priviousMonthLastDay = new Date(this.date.getFullYear(), this.date.getMonth(), 0);
 
-   expenseHeadList:any = [];
-   ExpenseAmountList:any = []
-   
-  
-   cardsData:any = [{totalRooms:0,mappedRooms:0,totalExpense:0,totalIncome:0}]
+  IncomeHeadsList: any = [];
+  IncomeHeadsAmountList: any = [];
+
+  expenseHeadList: any = [];
+  ExpenseAmountList: any = []
+
+
+  cardsData: any = [{ totalRooms: 0, mappedRooms: 0, totalExpense: 0, totalIncome: 0 }]
 
   //////////////////////////////////
-  getCardsData(){
+  getCardsData() {
 
-    this.http.get(environment.mainApi+'acc/GetTotals').subscribe(
-      (Response:any)=>{
+    this.http.get(environment.mainApi + 'acc/GetTotals').subscribe(
+      (Response: any) => {
         //console.log(Response)
-       if(Response != null){
-        this.cardsData = Response;
-       }
+        if (Response != null) {
+          this.cardsData = Response;
+        }
         //console.log(Response);
 
       }
@@ -110,47 +110,56 @@ export class DashboardComponent implements OnInit{
 
   ////////////////////////////////////////////////
 
-  GetIncExp(){
-    this.http.get(environment.mainApi+'acc/GetIncExp').subscribe(
-      (Response:any)=>{
+  GetIncExp() {
+    this.http.get(environment.mainApi + 'acc/GetIncExp').subscribe(
+      (Response: any) => {
         //console.log(Response);
-       
-        Response.forEach((e:any) => {
 
-          if(e.coaTypeID == 2){
-            this.ExpenseList.push(e.amount);
-          }
 
-          if(e.coaTypeID == 3){
-            this.IncomeList.push(e.amount);
-          }   
-          this.MonthList.push(this.MonthNameList[e.month-1]);
-          this.incomeExpenseChart();
-        });
+
+        if (Response.length > 0) {
+          Response.forEach((e: any) => {
+
+            if (e.coaTypeID == 2) {
+              this.ExpenseList.push(e.amount);
+            }
+
+            if (e.coaTypeID == 3) {
+              this.IncomeList.push(e.amount);
+            }
+
+            this.incomeExpenseChart();
+          });
+          var monthList = this.globalData.filterUniqueValuesByKey(Response, 'month');
+          monthList.forEach((e: any) => {
+            this.MonthList.push(this.MonthNameList[e.month - 1]);
+          })
+        }
+
 
         this.incomeExpenseChart();
       }
     )
   }
-  
 
-  
+
+
   incomeExpenseChart() {
-      let chart =new Chart({
-        chart: {
-          type: 'column',
-        },
-        title: {
-          text: 'INCOME VS EXPENSE',
-        },
-        subtitle: {
-          text: 'CURRENT MONTH',
-        },
-        xAxis: {
-          categories: this.MonthList,
-          crosshair: true,
-        },
-        yAxis: {
+    let chart = new Chart({
+      chart: {
+        type: 'column',
+      },
+      title: {
+        text: 'INCOME VS EXPENSE',
+      },
+      subtitle: {
+        text: 'CURRENT MONTH',
+      },
+      xAxis: {
+        categories: this.MonthList,
+        crosshair: true,
+      },
+      yAxis: {
         min: 0,
         title: {
           text: 'Amount',
@@ -175,15 +184,15 @@ export class DashboardComponent implements OnInit{
         {
           name: 'Income',
           type: 'column',
-          
-          
+
+
 
           data: this.IncomeList,
         },
         {
           name: 'Expense',
           type: 'column',
-         
+
           data: this.ExpenseList,
         },
       ],
@@ -194,18 +203,18 @@ export class DashboardComponent implements OnInit{
 
   ////////////////////////////////////////////
 
-  getBudget(){
-    
+  getBudget() {
 
-    this.http.get(environment.mainApi+'acc/GetMonthlyBudget?BudgetDate='+this.globalData.dateFormater(this.budgetMonth,'-')).subscribe(
-      (Response:any)=>{
+
+    this.http.get(environment.mainApi + 'acc/GetMonthlyBudget?BudgetDate='+ this.globalData.dateFormater(this.budgetMonth, '-')).subscribe(
+      (Response: any) => {
         this.budgetData = Response;
-        
 
-        Response.forEach((e:any) => {
+        console.log(Response);
+        Response.forEach((e: any) => {
           this.titleList.push(e.coaTitle);
           this.budgetAmountList.push(e.budgetAmount);
-          this.consumedAmountList.push(e.consumedAmount);          
+          this.consumedAmountList.push(e.consumedAmount);
         });
 
         this.getbudgetChart();
@@ -217,31 +226,31 @@ export class DashboardComponent implements OnInit{
 
 
 
-  getbudgetChart(){
-    var chart = new Chart( {
+  getbudgetChart() {
+    var chart = new Chart({
       data: {
-          table: 'datatable'
+        table: 'datatable'
       },
       chart: {
-          type: 'column'
+        type: 'column'
       },
       title: {
-          text: 'BUDGET COMPARISON'
+        text: 'BUDGET COMPARISON'
       },
       subtitle: {
-          text: 'CURRENT MONTH'
-             
+        text: 'CURRENT MONTH'
+
       },
       xAxis: {
-          categories: this.titleList,
-          
+        categories: this.titleList,
+
       },
       yAxis: {
-        min : 0,
-          allowDecimals: false,
-          title: {
-              text: 'Amount'
-          }
+        min: 0,
+        allowDecimals: false,
+        title: {
+          text: 'Amount'
+        }
       },
       tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -262,8 +271,8 @@ export class DashboardComponent implements OnInit{
         {
           name: 'Budget Amount',
           type: 'column',
-          color:'green',
-         
+          color: 'green',
+
 
           data: this.budgetAmountList
           ,
@@ -271,31 +280,31 @@ export class DashboardComponent implements OnInit{
         {
           name: 'Consumed',
           type: 'column',
-          color:'red',
-          data:  this.consumedAmountList,
-          
+          color: 'red',
+          data: this.consumedAmountList,
+
         },
       ],
-  });
-  this.budget_Chart = chart;
-  
+    });
+    this.budget_Chart = chart;
+
   }
- 
+
 
   ////////////////////////////////////////////////////////
 
 
-  getIncome(){
-   
+  getIncome() {
+
     this.IncomeHeadsList = [];
     this.IncomeHeadsAmountList = [];
-  
 
-    this.http.get(environment.mainApi+'acc/GetProfitRpt?fromdate='+this.globalData.dateFormater(this.firstDay,'-')+'&todate='
-      +this.globalData.dateFormater(this.lastDay,'-')).subscribe(
-        (Response:any)=>{
 
-         // console.log(Response);
+    this.http.get(environment.mainApi + 'acc/GetProfitRpt?fromdate=' + this.globalData.dateFormater(this.firstDay, '-') + '&todate='
+      + this.globalData.dateFormater(this.lastDay, '-')).subscribe(
+        (Response: any) => {
+
+          // console.log(Response);
 
 
           // this.IncomeHeadsList = [
@@ -314,23 +323,23 @@ export class DashboardComponent implements OnInit{
           //   ['printing', 144.0, false],
           // ]
 
-        if(Response != null){
-          Response.forEach((obj:any) => {
+          if (Response != null) {
+            Response.forEach((obj: any) => {
 
-            var amount = (obj.credit - obj.debit).toFixed();
-            this.IncomeHeadsList.push(obj.coaTitle);
-            var tmpArry:any = [];
-            tmpArry.push(obj.coaTitle, parseFloat(amount), false);
-            this.IncomeHeadsAmountList.push(tmpArry);
-            
-          });
-        }
-          
-            this.IncomeDetailPieChart();
+              var amount = (obj.credit - obj.debit).toFixed();
+              this.IncomeHeadsList.push(obj.coaTitle);
+              var tmpArry: any = [];
+              tmpArry.push(obj.coaTitle, parseFloat(amount), false);
+              this.IncomeHeadsAmountList.push(tmpArry);
+
+            });
+          }
+
+          this.IncomeDetailPieChart();
 
         },
-        (Error)=>{
-          
+        (Error) => {
+
           this.IncomeDetailPieChart();
         }
       )
@@ -346,8 +355,8 @@ export class DashboardComponent implements OnInit{
       title: {
         text: 'INCOME ANALYSIS',
       },
-      subtitle:{
-        text:'CURRENT MONTH',
+      subtitle: {
+        text: 'CURRENT MONTH',
       },
       xAxis: {
         categories: this.IncomeHeadsList,
@@ -357,11 +366,11 @@ export class DashboardComponent implements OnInit{
         {
           type: 'pie',
           allowPointSelect: true,
-          
+
           keys: ['name', 'y', 'selected', 'sliced'],
           //keys: ['y', 'selected', 'sliced'],
-          data: this.IncomeHeadsAmountList ,   
-           showInLegend: true,
+          data: this.IncomeHeadsAmountList,
+          showInLegend: true,
         },
       ],
     });
@@ -371,17 +380,17 @@ export class DashboardComponent implements OnInit{
   ///////////////////////////////////////////////////////
 
 
-  getExpense(){
-   
+  getExpense() {
+
     this.expenseHeadList = [];
     this.ExpenseAmountList = [];
-    
 
 
-    this.http.get(environment.mainApi+'acc/GetLossRpt?fromdate='+this.globalData.dateFormater(this.firstDay,'-')+'&todate='
-      +this.globalData.dateFormater(this.lastDay,'-')).subscribe(
-        (Response:any)=>{
-        //  console.log(Response);
+
+    this.http.get(environment.mainApi + 'acc/GetLossRpt?fromdate=' + this.globalData.dateFormater(this.firstDay, '-') + '&todate='
+      + this.globalData.dateFormater(this.lastDay, '-')).subscribe(
+        (Response: any) => {
+          //  console.log(Response);
           // this.IncomeHeadsList = [
           //   'salaries',
           //   'medical',
@@ -398,25 +407,25 @@ export class DashboardComponent implements OnInit{
           //   ['printing', 144.0, false],
           // ]
 
-         if(Response != null){
-           Response.forEach((obj:any) => {
+          if (Response != null) {
+            Response.forEach((obj: any) => {
 
 
-            var amount = (obj.debit - obj.credit).toFixed();
-            this.expenseHeadList.push(obj.coaTitle);
-            var tmpArry:any = [];
-            tmpArry.push(obj.coaTitle, parseFloat(amount), false);
-            this.ExpenseAmountList.push(tmpArry);
-            
-            
-          });
-          
-         }
-         //console.log(this.ExpenseAmountList)
-            this.ExpenseDetailChart();
+              var amount = (obj.debit - obj.credit).toFixed();
+              this.expenseHeadList.push(obj.coaTitle);
+              var tmpArry: any = [];
+              tmpArry.push(obj.coaTitle, parseFloat(amount), false);
+              this.ExpenseAmountList.push(tmpArry);
+
+
+            });
+
+          }
+          //console.log(this.ExpenseAmountList)
+          this.ExpenseDetailChart();
 
         },
-        (Error)=>{
+        (Error) => {
           this.ExpenseDetailChart();
         }
       )
@@ -433,8 +442,8 @@ export class DashboardComponent implements OnInit{
       },
       subtitle: {
         text: 'Current MONTH'
-           
-    },
+
+      },
 
       xAxis: {
         categories: this.expenseHeadList,
@@ -444,11 +453,11 @@ export class DashboardComponent implements OnInit{
         {
           type: 'pie',
           allowPointSelect: true,
-          
+
           keys: ['name', 'y', 'selected', 'sliced'],
           //keys: ['y', 'selected', 'sliced'],
-          data: this.ExpenseAmountList ,   
-           showInLegend: true,
+          data: this.ExpenseAmountList,
+          showInLegend: true,
         },
       ],
     });
@@ -458,7 +467,7 @@ export class DashboardComponent implements OnInit{
 
   /////////////////////////////////////////////////////////////
 
- roomBookingsData = [
+  roomBookingsData = [
     { roomNo: 1, bookings: 10 },
     { roomNo: 2, bookings: 20 },
     { roomNo: 3, bookings: 30 },
@@ -467,7 +476,7 @@ export class DashboardComponent implements OnInit{
   ];
 
   // getRoomsBooking(){
-   
+
   //   const chart = new Chart( {
   //     chart: {
   //       type: 'columnrange'
@@ -498,33 +507,33 @@ export class DashboardComponent implements OnInit{
   // //         type: 'columnrange',
   // //         inverted: true
   // //     },
-  
-     
-  
+
+
+
   // //     title: {
   // //         text: 'Temperature variation by month'
   // //     },
-  
+
   // //     subtitle: {
   // //         text: 'Observed in Vik i Sogn, Norway, 2021 | ' +
   // //             'Source: <a href="https://www.vikjavev.no/ver/" target="_blank">Vikjavev</a>'
   // //     },
-  
+
   // //     xAxis: {
   // //         categories: ['01', '02', '03', '04', '05', '06',
   // //             '07', '08', '09', '10', '11', '12']
   // //     },
-  
+
   // //     yAxis: {
   // //         title: {
   // //             text: 'Temperature ( °C )'
   // //         }
   // //     },
-  
+
   // //     tooltip: {
   // //         valueSuffix: '°C'
   // //     },
-  
+
   // //     plotOptions: {
   // //         columnrange: {
   // //             borderRadius: '50%',
@@ -534,11 +543,11 @@ export class DashboardComponent implements OnInit{
   // //             }
   // //         }
   // //     },
-  
+
   // //     legend: {
   // //         enabled: false
   // //     },
-  
+
   // //     series: [{
   // //         type:'bar',
   // //         name: 'Temperatures',
@@ -557,7 +566,7 @@ export class DashboardComponent implements OnInit{
   // //             [11.5, 8.4]
   // //         ]
   // //     }]
-  
+
   // // });
 
   // // const chart = new Chart(
@@ -654,7 +663,7 @@ export class DashboardComponent implements OnInit{
   //     title: {
   //       text: 'Date'
   //     },
-      
+
   //   },
 
   //   // tooltip: {
@@ -684,20 +693,20 @@ export class DashboardComponent implements OnInit{
   //     ]
   //   }]
   // });
-    
-   
+
+
   // this.room_Booking_Chart = chart;
-  
+
   // }
 
 
-  
-  BookingsList:any = [];
+
+  BookingsList: any = [];
 
   // getBookings(){
   //   this.http.get(environment.mainApi+'acc/agetbooking').subscribe(
   //   (Response:any)=>{
-      
+
 
   //     this.BookingsList =Response.filter((e:any)=>e.bookingStatus == 'Confirmed');
   //     // console.log(this.BookingsList);
@@ -707,8 +716,8 @@ export class DashboardComponent implements OnInit{
   // }
 
 
-///////////////////////////////////////////////////////////////////
-  
+  ///////////////////////////////////////////////////////////////////
+
   AnnualProfitLoss() {
     let chart = new Chart({
       chart: {
@@ -721,7 +730,7 @@ export class DashboardComponent implements OnInit{
         text: '',
       },
       xAxis: {
-        categories:["abc"],
+        categories: ["abc"],
       },
       yAxis: {
         title: {
@@ -740,7 +749,7 @@ export class DashboardComponent implements OnInit{
         {
           name: 'Profit / Loss',
           type: 'line',
-          data: [0,1,2],
+          data: [0, 1, 2],
         },
       ],
     });

@@ -26,6 +26,7 @@ export class HeaderComponent implements OnInit {
     
   }
    title = 'Title';
+   moduleTitle = '';
    UserName = '';
    moduleList:any;
 
@@ -37,6 +38,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {   
     this.globalData.header_title$.subscribe((Response:string)=>{this.title = Response});
+     this.globalData.module_title$.subscribe((Response:string)=>{this.moduleTitle = Response});
     this.getModules();
     // alert(this.globalData.getUserID())
     // this.UserName = this.globalData.getUserName().toUpperCase();
@@ -44,7 +46,7 @@ export class HeaderComponent implements OnInit {
   
   Menu = "menu";
 
-  
+
 
 
   
@@ -54,6 +56,7 @@ export class HeaderComponent implements OnInit {
   this.http.get(environment.mainApi+this.globalData.userLink+'getusermodule?userid='+this.globalData.getUserID()).subscribe(
     (Response:any)=>{
       this.moduleList = Response;
+      this.moduleTitle = Response.find((e:any)=> e.moduleID == this.globalData.getModuleID()).moduleTitle.toUpperCase().split(" ")[0];
     //  console.log(Response);
     }
   )
@@ -65,6 +68,7 @@ export class HeaderComponent implements OnInit {
     localStorage.setItem('mid',JSON.stringify(item.moduleID));
     sessionStorage.setItem('mid',JSON.stringify(item.moduleID));
     this.globalData.setMenuItem(item.moduleID);
+    this.globalData.setModuleTitle(item.moduleTitle.split(" ")[0]);
     // window.location.reload();
     
 

@@ -1,5 +1,5 @@
 
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 
@@ -13,9 +13,8 @@ export class ProductModalComponent implements OnInit {
 
 
   constructor(
-      public global: GlobalDataModule,
-      private dialogRef: MatDialogRef<ProductModalComponent>,
-      @Inject(MAT_DIALOG_DATA) public data : any,
+      public global: GlobalDataModule
+ 
     ) {
      
   
@@ -23,14 +22,14 @@ export class ProductModalComponent implements OnInit {
 
 
   ngOnInit(): void {
-      this.global.getProducts().subscribe(
-      (data: any) => { this.productList = data; });
+      
   }
 
 
 
-  productList:any = [];
-
+ @Input() productList:any = [];
+ @Output() addProductEmitter = new EventEmitter();
+ @Output()  reloadProdEmitter = new EventEmitter();
   productName = '';
 
 
@@ -110,12 +109,13 @@ export class ProductModalComponent implements OnInit {
 
   selectProduct(item:any){
 
-    this.dialogRef.close({data:item});
+    this.addProductEmitter.emit(item);
 
   }
 
-  closeDialogue(){
-    this.dialogRef.close('');
+  reloadProducts(){
+    this.reloadProdEmitter.emit()
   }
+
 
 }

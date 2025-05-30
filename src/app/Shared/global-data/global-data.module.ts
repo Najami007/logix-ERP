@@ -110,7 +110,7 @@ export class GlobalDataModule implements OnInit {
     private dialog: MatDialog,
     private cookie: CookieService,
     public ExportExcel: ExcelExportService,
-    public datePipe:DatePipe
+    public datePipe: DatePipe
 
     // public app: AppComponent,
 
@@ -137,6 +137,20 @@ export class GlobalDataModule implements OnInit {
   private _headerTitleSource = new Subject<string>();
   header_title$ = this._headerTitleSource.asObservable();
 
+  private _moduleTitleSource = new Subject<string>();
+  module_title$ = this._moduleTitleSource.asObservable();
+
+
+    //////////////sets the header title ////////////////////////
+  setHeaderTitle(title: string) {
+    this._headerTitleSource.next(title.toUpperCase());
+  }
+
+    //////////////sets the header title ////////////////////////
+  setModuleTitle(title: string) {
+    this._moduleTitleSource.next(title.toUpperCase());
+  }
+
 
 
   ///////////////////////////////////////////////////////////
@@ -156,34 +170,34 @@ export class GlobalDataModule implements OnInit {
       next: (Response: any) => {
         var curDate: Date = new Date();
         var userID = Response._culId;
-       
+
 
 
         if (Response.msg == 'Logged in Successfully') {
 
-           var value = {
-          msg: Response.msg,
-          _cuLnk: Response._cuLnk,
-          _culId: Response._culId,
-          _culName: Response._culName,
-          _reqCID: Response._reqCID,
-          _reqSCID: Response._reqSCID,
-          _reqCrG: Response._reqCrG,
-          _reqCsG: Response._reqCsG,
-          _reqPrjID: Response._reqPrjID,
-          _reqRTID:Response._reqRTID,
-        };
-        var flt: any = [];
-        ///Encripting The Features List
-        if (Response._reqFeatures) {
-          Response._reqFeatures.forEach((e: any) => {
-            flt.push({ ttl: btoa(btoa(e.featureTitle)), sts: btoa(btoa(e.featureStatus)) });
-          });
-        }
+          var value = {
+            msg: Response.msg,
+            _cuLnk: Response._cuLnk,
+            _culId: Response._culId,
+            _culName: Response._culName,
+            _reqCID: Response._reqCID,
+            _reqSCID: Response._reqSCID,
+            _reqCrG: Response._reqCrG,
+            _reqCsG: Response._reqCsG,
+            _reqPrjID: Response._reqPrjID,
+            _reqRTID: Response._reqRTID,
+          };
+          var flt: any = [];
+          ///Encripting The Features List
+          if (Response._reqFeatures) {
+            Response._reqFeatures.forEach((e: any) => {
+              flt.push({ ttl: btoa(btoa(e.featureTitle)), sts: btoa(btoa(e.featureStatus)) });
+            });
+          }
 
 
-        localStorage.setItem('curVal', JSON.stringify({ value }));
-        localStorage.setItem('ftr', JSON.stringify({ flt }));
+          localStorage.setItem('curVal', JSON.stringify({ value }));
+          localStorage.setItem('ftr', JSON.stringify({ flt }));
 
 
 
@@ -372,11 +386,13 @@ export class GlobalDataModule implements OnInit {
   }
 
 
-  //////////////sets the header title ////////////////////////
-  setHeaderTitle(title: string) {
-    this._headerTitleSource.next(title.toUpperCase());
 
+  getModuleList(): Observable<any> {
+    return this.http.get(environment.mainApi + this.userLink + 'getusermodule?userid=' + this.getUserID()).pipe(retry(3))
   }
+
+
+
 
 
   getKOTApproval() {
@@ -392,9 +408,9 @@ export class GlobalDataModule implements OnInit {
   }
 
   getModuleID() {
-    var moduleID =  JSON.parse( sessionStorage.getItem('mid')  || localStorage.getItem('mid') || '{}');
-    if(sessionStorage.getItem('mid') == null){
-      sessionStorage.setItem('mid',moduleID);
+    var moduleID = JSON.parse(sessionStorage.getItem('mid') || localStorage.getItem('mid') || '{}');
+    if (sessionStorage.getItem('mid') == null) {
+      sessionStorage.setItem('mid', moduleID);
     }
     console.log(sessionStorage.getItem('mid'));
     return moduleID;
@@ -449,7 +465,7 @@ export class GlobalDataModule implements OnInit {
     return credentials != 0 ? parseInt(atob(atob(credentials.value._reqPrjID))) : 0;
   }
 
-   getRoleTypeID() {
+  getRoleTypeID() {
     var credentials = JSON.parse(localStorage.getItem('curVal') || '0');
     return credentials != 0 ? parseInt(atob(atob(credentials.value._reqRTID))) : 0;
   }
@@ -517,12 +533,12 @@ export class GlobalDataModule implements OnInit {
     return differenceInHours;
   }
 
-  curDate:any = new Date();
+  curDate: any = new Date();
   public SubscriptionExpired(): boolean {
     ///// yyyy-MM-dd /////////////
-    var ExpiryDate:any = '2025-07-10';
+    var ExpiryDate: any = '2025-07-10';
     var curDate = this.datePipe.transform(this.curDate, 'yyyy-MM-dd')
-    var status:any = curDate! >= ExpiryDate;
+    var status: any = curDate! >= ExpiryDate;
     console.log(status, this.curDate, ExpiryDate);
     return status;
 
@@ -994,7 +1010,7 @@ export class GlobalDataModule implements OnInit {
 
   dateFormater(date: any, separator: any) {
 
-    return this.datePipe.transform(date,'yyyy-MM-dd');
+    return this.datePipe.transform(date, 'yyyy-MM-dd');
     // new Date(date);
     var day: any = date.getDate();
     // add +1 to month because getMonth() returns month from 0 to 11
@@ -1379,7 +1395,20 @@ export class GlobalDataModule implements OnInit {
     return uniqueArray;
   }
 
+  public filterUniqueValuesByKey<T>(array: T[], key: keyof T): T[] {
+    const seen = new Set<any>();
+    const result: T[] = [];
 
+    for (const item of array) {
+      const keyValue = item[key];
+      if (!seen.has(keyValue)) {
+        seen.add(keyValue);
+        result.push(item);
+      }
+    }
+
+    return result;
+  }
 
   openBootstrapModal(modalID: any, condition: any) {
     if (condition) {

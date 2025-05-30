@@ -34,6 +34,7 @@ export class AddOpeningComponent {
       this.discount = this.editData.discount;
       this.remarks = this.editData.invoiceRemarks;
       this.bankReceiptNo = this.editData.bankReceiptNo;
+      this.projectID = this.editData.projectID;
       setTimeout(() => {
         this.getCoaList();
       }, 200);
@@ -54,7 +55,7 @@ export class AddOpeningComponent {
   coaList:any = [];
   coaID = 0;
   remarks = '';
-  projectID = 0;
+  projectID = this.global.getProjectID();
   paymentTypeList = [{value:'CRV',title:'Cash'},{value:'BRV',title:'Bank'},];
 
   paymentType = 'CRV';

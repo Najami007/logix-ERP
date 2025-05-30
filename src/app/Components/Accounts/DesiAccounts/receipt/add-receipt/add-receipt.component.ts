@@ -40,6 +40,7 @@ export class AddReceiptComponent implements OnInit {
       this.remarks = this.editData.invoiceRemarks;
       this.bankReceiptNo = this.editData.bankReceiptNo;
        this.projectID = this.editData.projectID;
+       
       setTimeout(() => {
         this.getCoaList();
       }, 200);
@@ -61,7 +62,7 @@ export class AddReceiptComponent implements OnInit {
   remarks = '';
   partyID = 0;
   bankReceiptNo = '';
-  projectID = 0;
+  projectID = this.global.getProjectID();
   paymentTypeList = [{value:'CRV',title:'Cash'},{value:'BRV',title:'Bank'},];
 
   paymentType = 'CRV';

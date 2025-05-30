@@ -35,6 +35,7 @@ export class AddWithdrawalComponent {
       this.discount = this.editData.discount;
       this.remarks = this.editData.invoiceRemarks;
       this.bankReceiptNo = this.editData.bankReceiptNo;
+      this.projectID = this.editData.projectID;
       setTimeout(() => {
         this.getCoaList();
       }, 200);
@@ -55,7 +56,7 @@ export class AddWithdrawalComponent {
   coaList:any = [];
   coaID = 0;
   remarks = '';
-  projectID = 0;
+  projectID = this.global.getProjectID();
   paymentTypeList = [{value:'CPV',title:'Cash'},{value:'BPV',title:'Bank'},];
 
   paymentType = 'CPV';

@@ -43,40 +43,64 @@ export class COAComponent implements OnInit {
 
 
 
-
+  filterHaveNoteID = 0;
   filterTransactionType: any = 'all';
   filterCoaType = 0;
   filterNoteID = 0;
 
-  filterCOA(type:any) {
+  filterCOA(type: any) {
 
-    if(type == 'coaType'){
-       this.filterCoaType == 0
+    if (type == 'coaType') {
+      this.filterNoteID = 0;
+      this.filterTransactionType = 'all';
+      this.filterHaveNoteID = 0;
+
+      this.filterCoaType == 0
         ? this.ChartsofAccountsData = this.tmpCoaData
         : this.ChartsofAccountsData = this.tmpCoaData.filter((e: any) => e.coaTypeID == this.filterCoaType);
     }
 
-    if(type == 'transactionAllowed'){
+    if (type == 'transactionAllowed') {
+      this.filterNoteID = 0;
       this.filterTransactionType == 'all'
-        ? this.ChartsofAccountsData =  
-        this.filterCoaType > 0 
-        ? this.tmpCoaData.filter((e: any) => e.coaTypeID == this.filterCoaType) :  this.ChartsofAccountsData = this.tmpCoaData
+        ? this.ChartsofAccountsData =
+        this.filterCoaType > 0
+          ? this.tmpCoaData.filter((e: any) => e.coaTypeID == this.filterCoaType) : this.ChartsofAccountsData = this.tmpCoaData
         : this.ChartsofAccountsData =
-        this.filterCoaType > 0 
-        ? this.tmpCoaData.filter((e: any) => e.coaTypeID == this.filterCoaType && e.transactionAllowed == this.filterTransactionType)
-        : this.tmpCoaData.filter((e: any) => e.transactionAllowed == this.filterTransactionType);
+        this.filterCoaType > 0
+          ? this.tmpCoaData.filter((e: any) => e.coaTypeID == this.filterCoaType && e.transactionAllowed == this.filterTransactionType)
+          : this.tmpCoaData.filter((e: any) => e.transactionAllowed == this.filterTransactionType);
     }
 
-    if(type == 'note'){
+    if (type == 'note') {
+      this.filterTransactionType = 'all';
+
       this.filterNoteID == 0
         ? this.ChartsofAccountsData =
-        this.filterCoaType > 0 
-        ? this.tmpCoaData.filter((e: any) => e.coaTypeID == this.filterCoaType )
-        :this.ChartsofAccountsData = this.tmpCoaData
+        this.filterCoaType > 0
+          ? this.tmpCoaData.filter((e: any) => e.coaTypeID == this.filterCoaType)
+          : this.ChartsofAccountsData = this.tmpCoaData
         : this.filterCoaType > 0
-        ? this.ChartsofAccountsData = this.tmpCoaData.filter((e: any) => e.coaTypeID == this.filterCoaType && e.noteID == this.filterNoteID)
-        :this.ChartsofAccountsData = this.tmpCoaData.filter((e: any) =>  e.noteID == this.filterNoteID);
+          ? this.ChartsofAccountsData = this.tmpCoaData.filter((e: any) => e.coaTypeID == this.filterCoaType && e.noteID == this.filterNoteID)
+          : this.ChartsofAccountsData = this.tmpCoaData.filter((e: any) => e.noteID == this.filterNoteID);
 
+    }
+
+    if (type == 'haveNote') {
+
+       this.filterNoteID = 0;
+      this.filterTransactionType = 'all';
+      this.filterCoaType = 0;
+      if (this.filterHaveNoteID == 0) {
+        this.ChartsofAccountsData = this.tmpCoaData
+      }
+      if (this.filterHaveNoteID == 1) {
+        this.ChartsofAccountsData = this.tmpCoaData.filter((e:any)=> e.noteID > 0)
+      }
+       if (this.filterHaveNoteID == 2) {
+        this.ChartsofAccountsData = this.tmpCoaData.filter((e:any)=> e.noteID == 0)
+      }
+      
     }
 
   }
@@ -176,7 +200,7 @@ export class COAComponent implements OnInit {
   }
 
 
-  
+
 
 
   /////////////////////////////

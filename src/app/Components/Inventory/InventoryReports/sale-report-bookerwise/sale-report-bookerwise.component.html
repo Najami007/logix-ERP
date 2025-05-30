@@ -133,7 +133,7 @@
                         {{item.invBillNo}}</td>
                     <td>{{item.invDate |date:'dd-MM-yyyy'}}</td>
                     <td>{{item.productTitle}}</td>
-                    <td class="text-center">{{item.quantity}}</td>
+                    <td class="text-center">{{item.quantity |number:"1.0-3"}}</td>
                     <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.avgCostPrice|number:'1.0-1'}}</td>
                     <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>

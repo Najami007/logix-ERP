@@ -12,7 +12,6 @@ import * as $ from 'jquery';
 import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/addparty.component';
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bill-print.component';
-import { ProductModalComponent } from '../SaleComFiles/product-modal/product-modal.component';
 import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-mehtod.component';
 
 
@@ -39,10 +38,10 @@ export class GarmentSaleComponent implements OnInit {
   changePaymentMehtodFeature = this.global.changePaymentMehtodFeature;
   onlySaveBillFeature = this.global.onlySaveBillFeature;
   disableDate = this.global.DisableDateSale;
-    postBillFeature = this.global.postSale;
-    urduBillFeature = this.global.urduBill;
-   disablePrintPwd = this.global.DisablePrintPwd;
-   
+  postBillFeature = this.global.postSale;
+  urduBillFeature = this.global.urduBill;
+  disablePrintPwd = this.global.DisablePrintPwd;
+
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
@@ -112,19 +111,23 @@ export class GarmentSaleComponent implements OnInit {
     this.getBankList();
     this.getPartyList();
     this.getBooker();
-    
+
 
     setTimeout(() => {
       $('#psearchProduct').trigger('focus');
     }, 200);
 
-    this.global.getProducts().subscribe(
-      (data: any) => { this.productList = data; });
 
+    this.getProducts();
     for (let i = 0; i <= 100; i++) { this.discountList.push({ value: i }); }
 
 
 
+  }
+
+  getProducts() {
+    this.global.getProducts().subscribe(
+      (data: any) => { this.productList = data; });
   }
 
   discountList: any = [];
@@ -232,250 +235,6 @@ export class GarmentSaleComponent implements OnInit {
 
   }
 
-
-
-  // searchByCode(e: any) {
-
-  //   var barcode = this.PBarcode;
-  //   var qty: number = 1;
-  //   var BType = '';
-
-  //   if (this.PBarcode !== '') {
-  //     if (e.keyCode == 13) {
-
-  //       /// Seperating by / and coverting to Qty
-  //       if (this.PBarcode.split("/")[1] != undefined) {
-  //         barcode = this.PBarcode.split("/")[0];
-  //         qty = parseFloat(this.PBarcode.split("/")[1]);
-  //         BType = 'price';
-
-
-  //       }
-  //       /// Seperating by - and coverting to Qty 
-  //       if (this.PBarcode.split("-")[1] != undefined) {
-  //         barcode = this.PBarcode.split("-")[0];
-  //         qty = parseFloat(this.PBarcode.split("-")[1]);
-  //         BType = 'qty';
-
-  //       }
-
-
-  //           /////verifying product in product list by barcode
-  //       var row = this.productList.find((p: any) => p.barcode == barcode);
-
-
-  //        //////////// For Normal Barcode
-  //       if (row !== undefined) {
-  //         /////// check already present in the table or not
-  //         var condition = this.tableDataList.find(
-  //           (x: any) => x.productID == row.productID
-  //         );
-
-  //         var index = this.tableDataList.indexOf(condition);
-
-  //         //// push the data using index
-  //         if (condition == undefined) {
-
-
-  //           // this.app.startLoaderDark();
-  //           this.global.getProdDetail(0, barcode).subscribe(
-  //             (Response: any) => {
-
-  //               if (BType == 'price') {
-  //                 qty = qty / parseFloat(Response[0].salePrice);
-
-  //               }
-
-  //               this.tableDataList.push({
-  //                 rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
-  //                   : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
-  //                     : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
-  //                 productID: Response[0].productID,
-  //                 productTitle: Response[0].productTitle,
-  //                 barcode: Response[0].barcode,
-  //                 productImage: Response[0].productImage,
-  //                 quantity: qty,
-  //                 wohCP: Response[0].costPrice,
-  //                 avgCostPrice: Response[0].avgCostPrice,
-  //                 costPrice: Response[0].costPrice,
-  //                 salePrice: Response[0].salePrice,
-  //                 ovhPercent: 0,
-  //                 ovhAmount: 0,
-  //                 expiryDate: this.global.dateFormater(new Date(), '-'),
-  //                 batchNo: '-',
-  //                 batchStatus: '-',
-  //                 uomID: Response[0].uomID,
-  //                 gst: this.gstFeature ? Response[0].gst : 0,
-  //                 et:Response[0].et,
-  //                 packing: 1,
-  //                 discInP: this.discFeature ?  Response[0].discPercentage : 0,
-  //                 discInR: this.discFeature ?  Response[0].discRupees  : 0,
-  //                 aq: Response[0].aq,
-  //                 total:(Response[0].salePrice * qty) - (Response[0].discRupees * qty),
-  //                 productDetail:'',
-
-  //               });
-
-  //               //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
-  //               this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-  //               this.getTotal();
-
-
-  //               this.productImage = Response[0].productImage;
-  //             }
-  //           )
-
-
-
-  //         } else {
-
-
-  //           if (this.PBarcode.split("/")[1] != undefined) {
-  //             qty = this.PBarcode.split("/")[1] / this.tableDataList[index].salePrice;
-  //           }
-  //           this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + qty;
-
-  //            /////// Sorting Table
-  //           this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
-  //           this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-  //           this.productImage = this.tableDataList[index].productImage;
-  //         }
-  //       }
-  //       //////////// For Special Barcode
-  //       else if(row == undefined && barcode.length > 10) {
-  //         //////////////// For Special Barcode setting /////////////////////////
-
-  //         var txtBCode = barcode;
-  //         var reqQty:any = 0;
-  //         var reqQtyDot:any = 0;
-  //         var prodQty:any = 0; 
-  //         var tmpPrice:any = 0;
-
-  //         txtBCode = txtBCode.substring(2, 7);  /////////// extracting product barcode from special barcode
-  //         txtBCode = parseInt(txtBCode);
-  //         txtBCode = txtBCode.toString();
-
-  //         /////////// verifying whether exists in product list or not
-  //         var prodDetail = this.productList.find((p: any) => p.barcode == txtBCode);
-
-  //         if(prodDetail == '' || prodDetail == undefined){
-  //           this.msg.WarnNotify('Product Not Fount');
-
-  //         }else{
-
-
-  //           /////////// extracting price from special barcode based on UOM
-  //           if(prodDetail.uomTitle == 'price'){
-  //             reqQty = barcode.substring(12 - 5);
-  //             reqQtyDot = reqQty.substring(0,5);
-  //             tmpPrice = reqQtyDot; 
-
-  //           }else if(prodDetail.uomTitle == 'piece'){
-  //             reqQty = barcode.substring(12 - 5);
-  //             reqQtyDot = reqQty.substring(6 - 4);
-  //             reqQtyDot = reqQtyDot.substring(0, 3);
-  //             console.log(reqQtyDot);
-  //             reqQty = reqQty.substring(0, 5);
-  //             console.log(reqQty);
-  //             prodQty = parseFloat(reqQty);
-
-  //           }
-  //           else{
-  //               /////////// extracting quantity from special barcode based on UOM
-  //             reqQty = barcode.substring(12 - 5);
-  //             reqQtyDot = reqQty.substring(6 - 4);
-  //             reqQtyDot = reqQtyDot.substring(0, 3);
-  //             reqQty = reqQty.substring(0, 2);
-  //             prodQty = parseFloat(reqQty + '.' + reqQtyDot);
-  //           }
-
-  //           /////////// verifying exists in already scanned products or not
-  //           var condition = this.tableDataList.find(
-  //             (x: any) => x.productID == prodDetail.productID
-  //           );
-
-  //           var index = this.tableDataList.indexOf(condition);
-
-  //           if(condition == undefined ){
-
-  //             /////////// inserting data into tableDataList
-  //             this.global.getProdDetail(0, txtBCode).subscribe(
-  //               (Response: any) => {
-  //                  this.tableDataList.push({
-  //                   rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
-  //                     : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
-  //                       : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
-  //                   productID: Response[0].productID,
-  //                   productTitle: Response[0].productTitle,
-  //                   barcode: Response[0].barcode,
-  //                   productImage: Response[0].productImage,
-  //                   quantity: prodQty || 1,
-  //                   wohCP: Response[0].costPrice,
-  //                   avgCostPrice: Response[0].avgCostPrice,
-  //                   costPrice: Response[0].costPrice,
-  //                   //salePrice: (tmpPrice / Response[0].salePrice) || Response[0].salePrice,
-  //                   salePrice: tmpPrice  || Response[0].salePrice,
-  //                   ovhPercent: 0,
-  //                   ovhAmount: 0,
-  //                   expiryDate: this.global.dateFormater(new Date(), '-'),
-  //                   batchNo: '-',
-  //                   batchStatus: '-',
-  //                   uomID: Response[0].uomID,
-  //                   gst: this.gstFeature ? Response[0].gst : 0,
-  //                   et:Response[0].et,
-  //                   packing: 1,
-  //                   discInP: this.discFeature ?  Response[0].discPercentage : 0,
-  //                   discInR: this.discFeature ?  Response[0].discRupees  : 0,
-  //                   aq: Response[0].aq,
-  //                   total:(Response[0].salePrice * qty) - (Response[0].discRupees * qty),
-  //                   productDetail:'',
-
-  //                 });
-
-  //                 //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
-  //                 this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-  //                 this.getTotal();
-
-
-  //                 this.productImage = Response[0].productImage;
-  //               }
-  //             )
-  //           }else{
-  //           /////////// changing qty if product already scanned
-  //             if(prodDetail.uomTitle == 'price'){
-  //               this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
-  //             }else{
-  //               this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + parseFloat(prodQty);
-  //             }
-
-  //             this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
-  //             this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-  //             this.productImage = this.tableDataList[index].productImage;
-
-  //           }
-
-
-  //         }
-
-
-
-
-  //       }else{
-  //         this.msg.WarnNotify('Product Not Found');
-
-  //       }
-
-
-  //       this.PBarcode = '';
-  //       this.getTotal();
-  //       $('#psearchProduct').trigger('focus');
-
-  //     }
-  //   }
-
-
-  // }
-
   searchByCode(e: any) {
 
     var barcode = this.PBarcode;
@@ -508,78 +267,9 @@ export class GarmentSaleComponent implements OnInit {
               this.searchSpecialBarcode(barcode, qty);
               return;
             } else {
-
-              if (BType == 'price') {
-                qty = qty / parseFloat(Response[0].salePrice);
-
-              }
-
-              /////// check already present in the table or not
-              var condition = this.tableDataList.find(
-                (x: any) => x.productID == Response[0].productID
-              );
-
-              var index = this.tableDataList.indexOf(condition);
-
-              //// push the data using index
-              if (condition == undefined) {
-
-                this.tableDataList.push({
-                  rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
-                    : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
-                      : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
-                  productID: Response[0].productID,
-                  productTitle: Response[0].productTitle,
-                  barcode: Response[0].barcode,
-                  productImage: Response[0].productImage,
-                  quantity: qty,
-                  wohCP: Response[0].costPrice,
-                  avgCostPrice: Response[0].avgCostPrice,
-                  costPrice: Response[0].costPrice,
-                  salePrice: Response[0].salePrice,
-                  ovhPercent: 0,
-                  ovhAmount: 0,
-                  expiryDate: this.global.dateFormater(new Date(), '-'),
-                  batchNo: '-',
-                  batchStatus: '-',
-                  uomID: Response[0].uomID,
-                  gst: this.gstFeature ? Response[0].gst : 0,
-                  et: Response[0].et,
-                  packing: 1,
-                  discInP: this.discFeature ? Response[0].discPercentage : 0,
-                  discInR: this.discFeature ? Response[0].discRupees : 0,
-                  aq: Response[0].aq,
-                  total: (Response[0].salePrice * qty) - (Response[0].discRupees * qty),
-                  productDetail: '',
-
-                });
-
-                //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
-                this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-                this.getTotal();
-                this.productImage = Response[0].productImage;
-
-
-
-
-              } else {
-                if (this.PBarcode.split("/")[1] != undefined) {
-                  qty = this.PBarcode.split("/")[1] / this.tableDataList[index].salePrice;
-                }
-                this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + qty;
-
-                /////// Sorting Table
-                this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
-                this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-                this.productImage = this.tableDataList[index].productImage;
-                this.getTotal();
-              }
-
+              if (BType == 'price') { qty = qty / parseFloat(Response[0].salePrice); }
+              this.pushProdData(Response[0], qty);
             }
-
-
-
-
           }
         )
 
@@ -590,7 +280,87 @@ export class GarmentSaleComponent implements OnInit {
 
       }
     }
+  }
 
+  holdDataFunction(data: any) {
+    this.global.getProdDetail(data.productID, '').subscribe(
+      (Response: any) => {
+        this.pushProdData(Response[0], 1)
+      }
+    )
+
+    this.app.stopLoaderDark();
+    this.productName = '';
+    this.getTotal();
+    this.global.closeBootstrapModal('#prodModal', true);
+    setTimeout(() => {
+      $('#psearchProduct').trigger('focus');
+    }, 500);
+
+  }
+
+  pushProdData(data: any, qty: any) {
+
+    /////// check already present in the table or not
+    var condition = this.tableDataList.find(
+      (x: any) => x.productID == data.productID
+    );
+
+    var index = this.tableDataList.indexOf(condition);
+
+    //// push the data using index
+    if (condition == undefined) {
+
+      this.tableDataList.push({
+        rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
+          : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
+            : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
+        productID: data.productID,
+        productTitle: data.productTitle,
+        barcode: data.barcode,
+        productImage: data.productImage,
+        quantity: qty,
+        wohCP: data.costPrice,
+        avgCostPrice: data.avgCostPrice,
+        costPrice: data.costPrice,
+        salePrice: data.salePrice,
+        ovhPercent: 0,
+        ovhAmount: 0,
+        expiryDate: this.global.dateFormater(new Date(), '-'),
+        batchNo: '-',
+        batchStatus: '-',
+        uomID: data.uomID,
+        gst: this.gstFeature ? data.gst : 0,
+        et: data.et,
+        packing: 1,
+        discInP: this.discFeature ? data.discPercentage : 0,
+        discInR: this.discFeature ? data.discRupees : 0,
+        aq: data.aq,
+        total: (data.salePrice * qty) - (data.discRupees * qty),
+        productDetail: '',
+
+      });
+
+      //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
+      this.sortTableData();
+      this.getTotal();
+      this.productImage = data.productImage;
+
+
+
+
+    } else {
+      if (this.PBarcode.split("/")[1] != undefined) {
+        qty = this.PBarcode.split("/")[1] / this.tableDataList[index].salePrice;
+      }
+      this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + qty;
+
+      /////// Sorting Table
+      this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
+      this.sortTableData();
+      this.productImage = this.tableDataList[index].productImage;
+      this.getTotal();
+    }
 
   }
 
@@ -649,40 +419,42 @@ export class GarmentSaleComponent implements OnInit {
         var index = this.tableDataList.indexOf(condition);
         if (condition == undefined) {
           /////////// inserting data into tableDataList
-          this.tableDataList.push({
-            rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
-              : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
-                : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
-            productID: Response[0].productID,
-            productTitle: Response[0].productTitle,
-            barcode: Response[0].barcode,
-            productImage: Response[0].productImage,
-            quantity: prodQty || 1,
-            wohCP: Response[0].costPrice,
-            avgCostPrice: Response[0].avgCostPrice,
-            costPrice: Response[0].costPrice,
-            //salePrice: (tmpPrice / Response[0].salePrice) || Response[0].salePrice,
-            salePrice: tmpPrice || Response[0].salePrice,
-            ovhPercent: 0,
-            ovhAmount: 0,
-            expiryDate: this.global.dateFormater(new Date(), '-'),
-            batchNo: '-',
-            batchStatus: '-',
-            uomID: Response[0].uomID,
-            gst: this.gstFeature ? Response[0].gst : 0,
-            et: Response[0].et,
-            packing: 1,
-            discInP: this.discFeature ? Response[0].discPercentage : 0,
-            discInR: this.discFeature ? Response[0].discRupees : 0,
-            aq: Response[0].aq,
-            total: (Response[0].salePrice * qty) - (Response[0].discRupees * qty),
-            productDetail: '',
+          Response[0].salePrice = tmpPrice || Response[0].salePrice;
+          this.pushProdData(Response[0], prodQty || 1)
+          // this.tableDataList.push({
+          //   rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
+          //     : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
+          //       : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
+          //   productID: Response[0].productID,
+          //   productTitle: Response[0].productTitle,
+          //   barcode: Response[0].barcode,
+          //   productImage: Response[0].productImage,
+          //   quantity: prodQty || 1,
+          //   wohCP: Response[0].costPrice,
+          //   avgCostPrice: Response[0].avgCostPrice,
+          //   costPrice: Response[0].costPrice,
+          //   //salePrice: (tmpPrice / Response[0].salePrice) || Response[0].salePrice,
+          //   salePrice: tmpPrice || Response[0].salePrice,
+          //   ovhPercent: 0,
+          //   ovhAmount: 0,
+          //   expiryDate: this.global.dateFormater(new Date(), '-'),
+          //   batchNo: '-',
+          //   batchStatus: '-',
+          //   uomID: Response[0].uomID,
+          //   gst: this.gstFeature ? Response[0].gst : 0,
+          //   et: Response[0].et,
+          //   packing: 1,
+          //   discInP: this.discFeature ? Response[0].discPercentage : 0,
+          //   discInR: this.discFeature ? Response[0].discRupees : 0,
+          //   aq: Response[0].aq,
+          //   total: (Response[0].salePrice * qty) - (Response[0].discRupees * qty),
+          //   productDetail: '',
 
-          });
-          //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
-          this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-          this.getTotal();
-          this.productImage = Response[0].productImage;
+          // });
+          // //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
+          // this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+          // this.getTotal();
+          // this.productImage = Response[0].productImage;
 
         } else {
           /////////// changing qty if product already scanned
@@ -694,7 +466,7 @@ export class GarmentSaleComponent implements OnInit {
             this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + parseFloat(prodQty);
           }
           this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
-          this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+          this.sortTableData();
           this.productImage = this.tableDataList[index].productImage;
 
         }
@@ -710,85 +482,326 @@ export class GarmentSaleComponent implements OnInit {
 
   }
 
-
-  holdDataFunction(data: any) {
-
-
-    var condition = this.tableDataList.find(
-      (x: any) => x.productID == data.productID
-    );
-
-    var index = this.tableDataList.indexOf(condition);
-
-    if (condition == undefined) {
-
-      this.app.startLoaderDark();
-
-      this.global.getProdDetail(data.productID, '').subscribe(
-        (Response: any) => {
-
-          this.tableDataList.push({
-
-            rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
-              : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
-                : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
-            productID: Response[0].productID,
-            productTitle: Response[0].productTitle,
-            barcode: Response[0].barcode,
-            productImage: Response[0].productImage,
-            quantity: 1,
-            wohCP: Response[0].costPrice,
-            costPrice: Response[0].costPrice,
-            avgCostPrice: Response[0].avgCostPrice,
-            salePrice: Response[0].salePrice,
-            ovhPercent: 0,
-            ovhAmount: 0,
-            expiryDate: this.global.dateFormater(new Date(), '-'),
-            batchNo: '-',
-            batchStatus: '-',
-            uomID: Response[0].uomID,
-            gst: this.gstFeature ? Response[0].gst : 0,
-            et: Response[0].et,
-            packing: 1,
-            discInP: this.discFeature ? Response[0].discPercentage : 0,
-            discInR: this.discFeature ? Response[0].discRupees : 0,
-            aq: Response[0].aq,
-            total: (Response[0].salePrice * 1) - (Response[0].discRupees),
-
-          });
-          // this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
-          this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-          this.getTotal();
-
-
-          this.productImage = Response[0].productImage;
-        }
-      )
-    } else {
-      this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
-      this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
-      this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-      this.productImage = this.tableDataList[index].productImage;
-
-    }
-
-    this.app.stopLoaderDark();
-    this.productName = '';
-    this.getTotal();
-    setTimeout(() => {
-      $('#psearchProduct').trigger('focus');
-    }, 500);
+  sortTableData() {
+    this.sortType == 'desc' 
+    ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) 
+    : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
 
   }
 
+  // searchByCode(e: any) {
+
+  //   var barcode = this.PBarcode;
+  //   var qty: number = 1;
+  //   var BType = '';
+
+  //   if (this.PBarcode !== '') {
+  //     if (e.keyCode == 13) {
+
+  //       /// Seperating by / and coverting to Qty
+  //       if (this.PBarcode.split("/")[1] != undefined) {
+  //         barcode = this.PBarcode.split("/")[0];
+  //         qty = parseFloat(this.PBarcode.split("/")[1]);
+  //         BType = 'price';
+
+
+  //       }
+  //       /// Seperating by - and coverting to Qty 
+  //       if (this.PBarcode.split("-")[1] != undefined) {
+  //         barcode = this.PBarcode.split("-")[0];
+  //         qty = parseFloat(this.PBarcode.split("-")[1]);
+  //         BType = 'qty';
+
+  //       }
+
+  //       // this.app.startLoaderDark();
+  //       this.global.getProdDetail(0, barcode).subscribe(
+  //         (Response: any) => {
+  //           if (Response == '' || Response == null || Response == undefined) {
+  //             this.searchSpecialBarcode(barcode, qty);
+  //             return;
+  //           } else {
+
+  //             if (BType == 'price') {
+  //               qty = qty / parseFloat(Response[0].salePrice);
+
+  //             }
+
+  //             /////// check already present in the table or not
+  //             var condition = this.tableDataList.find(
+  //               (x: any) => x.productID == Response[0].productID
+  //             );
+
+  //             var index = this.tableDataList.indexOf(condition);
+
+  //             //// push the data using index
+  //             if (condition == undefined) {
+
+  //               this.tableDataList.push({
+  //                 rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
+  //                   : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
+  //                     : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
+  //                 productID: Response[0].productID,
+  //                 productTitle: Response[0].productTitle,
+  //                 barcode: Response[0].barcode,
+  //                 productImage: Response[0].productImage,
+  //                 quantity: qty,
+  //                 wohCP: Response[0].costPrice,
+  //                 avgCostPrice: Response[0].avgCostPrice,
+  //                 costPrice: Response[0].costPrice,
+  //                 salePrice: Response[0].salePrice,
+  //                 ovhPercent: 0,
+  //                 ovhAmount: 0,
+  //                 expiryDate: this.global.dateFormater(new Date(), '-'),
+  //                 batchNo: '-',
+  //                 batchStatus: '-',
+  //                 uomID: Response[0].uomID,
+  //                 gst: this.gstFeature ? Response[0].gst : 0,
+  //                 et: Response[0].et,
+  //                 packing: 1,
+  //                 discInP: this.discFeature ? Response[0].discPercentage : 0,
+  //                 discInR: this.discFeature ? Response[0].discRupees : 0,
+  //                 aq: Response[0].aq,
+  //                 total: (Response[0].salePrice * qty) - (Response[0].discRupees * qty),
+  //                 productDetail: '',
+
+  //               });
+
+  //               //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
+  //               this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+  //               this.getTotal();
+  //               this.productImage = Response[0].productImage;
+
+
+
+
+  //             } else {
+  //               if (this.PBarcode.split("/")[1] != undefined) {
+  //                 qty = this.PBarcode.split("/")[1] / this.tableDataList[index].salePrice;
+  //               }
+  //               this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + qty;
+
+  //               /////// Sorting Table
+  //               this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
+  //               this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+  //               this.productImage = this.tableDataList[index].productImage;
+  //               this.getTotal();
+  //             }
+
+  //           }
+
+
+
+
+  //         }
+  //       )
+
+
+  //       this.PBarcode = '';
+  //       this.getTotal();
+  //       $('#psearchProduct').trigger('focus');
+
+  //     }
+  //   }
+  // }
+
+  // searchSpecialBarcode(barcode: any, qty: any) {
+
+  //   //////////////// For Special Barcode setting /////////////////////////
+
+  //   var txtBCode = barcode;
+  //   var reqQty: any = 0;
+  //   var reqQtyDot: any = 0;
+  //   var prodQty: any = 0;
+  //   var tmpPrice: any = 0;
+
+  //   txtBCode = txtBCode.substring(2, 7);  /////////// extracting product barcode from special barcode
+  //   txtBCode = parseInt(txtBCode);
+  //   txtBCode = txtBCode.toString();
+
+  //   /////////// verifying whether exists in product list or not
+  //   var prodDetail = this.productList.find((p: any) => p.barcode == txtBCode);
+
+
+  //   this.global.getProdDetail(0, txtBCode).subscribe(
+  //     (Response: any) => {
+
+  //       if (Response == '' || Response == null || Response == undefined) {
+  //         this.msg.WarnNotify('Product Not Found');
+  //         return;
+  //       }
+
+  //       /////////// extracting price from special barcode based on UOM
+  //       if (Response[0].uomTitle == 'price') {
+  //         reqQty = barcode.substring(12 - 5);
+  //         reqQtyDot = reqQty.substring(0, 5);
+  //         tmpPrice = reqQtyDot;
+
+  //       } else if (Response[0].uomTitle == 'piece') {
+  //         reqQty = barcode.substring(12 - 5);
+  //         reqQtyDot = reqQty.substring(6 - 4);
+  //         reqQtyDot = reqQtyDot.substring(0, 3);
+  //         reqQty = reqQty.substring(0, 5);
+  //         prodQty = parseFloat(reqQty);
+
+  //       }
+  //       else {
+  //         /////////// extracting quantity from special barcode based on UOM
+  //         reqQty = barcode.substring(12 - 5);
+  //         reqQtyDot = reqQty.substring(6 - 4);
+  //         reqQtyDot = reqQtyDot.substring(0, 3);
+  //         reqQty = reqQty.substring(0, 2);
+  //         prodQty = parseFloat(reqQty + '.' + reqQtyDot);
+  //       }
+
+  //       var condition = this.tableDataList.find(
+  //         (x: any) => x.productID == Response[0].productID
+  //       );
+  //       var index = this.tableDataList.indexOf(condition);
+  //       if (condition == undefined) {
+  //         /////////// inserting data into tableDataList
+  //         this.tableDataList.push({
+  //           rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
+  //             : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
+  //               : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
+  //           productID: Response[0].productID,
+  //           productTitle: Response[0].productTitle,
+  //           barcode: Response[0].barcode,
+  //           productImage: Response[0].productImage,
+  //           quantity: prodQty || 1,
+  //           wohCP: Response[0].costPrice,
+  //           avgCostPrice: Response[0].avgCostPrice,
+  //           costPrice: Response[0].costPrice,
+  //           //salePrice: (tmpPrice / Response[0].salePrice) || Response[0].salePrice,
+  //           salePrice: tmpPrice || Response[0].salePrice,
+  //           ovhPercent: 0,
+  //           ovhAmount: 0,
+  //           expiryDate: this.global.dateFormater(new Date(), '-'),
+  //           batchNo: '-',
+  //           batchStatus: '-',
+  //           uomID: Response[0].uomID,
+  //           gst: this.gstFeature ? Response[0].gst : 0,
+  //           et: Response[0].et,
+  //           packing: 1,
+  //           discInP: this.discFeature ? Response[0].discPercentage : 0,
+  //           discInR: this.discFeature ? Response[0].discRupees : 0,
+  //           aq: Response[0].aq,
+  //           total: (Response[0].salePrice * qty) - (Response[0].discRupees * qty),
+  //           productDetail: '',
+
+  //         });
+  //         //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
+  //         this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+  //         this.getTotal();
+  //         this.productImage = Response[0].productImage;
+
+  //       } else {
+  //         /////////// changing qty if product already scanned
+  //         if (prodDetail.uomTitle == 'price') {
+  //           this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+  //           this.tableDataList[index].total = parseFloat(this.tableDataList[index].total) + parseFloat(tmpPrice);
+  //           this.tableDataList[index].salePrice = parseFloat(this.tableDataList[index].total) / parseFloat(this.tableDataList[index].quantity);
+  //         } else {
+  //           this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + parseFloat(prodQty);
+  //         }
+  //         this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
+  //         this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+  //         this.productImage = this.tableDataList[index].productImage;
+
+  //       }
+
+
+
+  //       this.getTotal();
+
+
+  //     }
+  //   )
+
+
+  // }
+
+
+  // holdDataFunction(data: any) {
+
+
+  //   var condition = this.tableDataList.find(
+  //     (x: any) => x.productID == data.productID
+  //   );
+
+  //   var index = this.tableDataList.indexOf(condition);
+
+  //   if (condition == undefined) {
+
+  //     this.app.startLoaderDark();
+
+  //     this.global.getProdDetail(data.productID, '').subscribe(
+  //       (Response: any) => {
+
+  //         this.tableDataList.push({
+
+  //           rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
+  //             : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
+  //               : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
+  //           productID: Response[0].productID,
+  //           productTitle: Response[0].productTitle,
+  //           barcode: Response[0].barcode,
+  //           productImage: Response[0].productImage,
+  //           quantity: 1,
+  //           wohCP: Response[0].costPrice,
+  //           costPrice: Response[0].costPrice,
+  //           avgCostPrice: Response[0].avgCostPrice,
+  //           salePrice: Response[0].salePrice,
+  //           ovhPercent: 0,
+  //           ovhAmount: 0,
+  //           expiryDate: this.global.dateFormater(new Date(), '-'),
+  //           batchNo: '-',
+  //           batchStatus: '-',
+  //           uomID: Response[0].uomID,
+  //           gst: this.gstFeature ? Response[0].gst : 0,
+  //           et: Response[0].et,
+  //           packing: 1,
+  //           discInP: this.discFeature ? Response[0].discPercentage : 0,
+  //           discInR: this.discFeature ? Response[0].discRupees : 0,
+  //           aq: Response[0].aq,
+  //           total: (Response[0].salePrice * 1) - (Response[0].discRupees),
+
+  //         });
+  //         // this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
+  //         this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+  //         this.getTotal();
+
+
+  //         this.productImage = Response[0].productImage;
+  //       }
+  //     )
+  //   } else {
+  //     this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+  //     this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
+  //     this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+  //     this.productImage = this.tableDataList[index].productImage;
+
+  //   }
+
+  //   this.app.stopLoaderDark();
+  //   this.productName = '';
+  //   this.getTotal();
+  //   setTimeout(() => {
+  //     $('#psearchProduct').trigger('focus');
+  //   }, 500);
+
+  // }
+
+
+
   searchProductByName() {
-    this.dialogue.open(ProductModalComponent, {
-      width: '80%',
-    }).afterClosed().subscribe(val => {
-      if (val != '' && val != undefined) {
-        this.holdDataFunction(val.data);
-      }
-    })
+    this.global.openBootstrapModal('#prodModal', true);
+
+    setTimeout(() => {
+      $('#prodName').trigger('select');
+      $('#prodName').trigger('focus');
+    }, 500);
+
   }
 
   focusto(cls: any, e: any) {
@@ -868,9 +881,9 @@ export class GarmentSaleComponent implements OnInit {
     if (this.gstFeature) {
       this.subTotal = this.subTotal + this.PosFee;
     }
- 
+
     this.netTotal = this.subTotal - parseFloat(this.discount) - parseFloat(this.offerDiscount);
-    
+
     if (this.paymentType == 'Split') {
       this.bankCash = this.netTotal - parseFloat(this.cash);
     }
@@ -878,12 +891,12 @@ export class GarmentSaleComponent implements OnInit {
       this.bankCash = this.netTotal;
     }
 
- 
+
 
     if (this.paymentType !== 'Credit') {
       this.partyID = 0;
     }
-       
+
     this.change = (parseFloat(this.cash) + parseFloat(this.bankCash)) - this.netTotal;
 
 
@@ -1253,7 +1266,7 @@ export class GarmentSaleComponent implements OnInit {
   save(paymentType: any, SendToFbr: any, printFlag: any) {
 
 
-   
+
 
 
     this.isValidSale = true;
@@ -1267,17 +1280,17 @@ export class GarmentSaleComponent implements OnInit {
         this.msg.WarnNotify('(' + p.productTitle + ') Cost Price greater than Sale Price');
         this.isValidSale = false;
         return;
-      }else if (p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null) {
+      } else if (p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null) {
         this.msg.WarnNotify('(' + p.productTitle + ') Sale Price is not Valid');
         this.isValidSale = false;
         return;
-      }else if (p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '') {
+      } else if (p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '') {
         this.msg.WarnNotify('(' + p.productTitle + ') Quantity is not Valid');
         this.isValidSale = false;
         return;
-      }else if (!this.LessToCostFeature && (p.costPrice > (p.salePrice - p.discInR))) {
+      } else if (!this.LessToCostFeature && (p.costPrice > (p.salePrice - p.discInR))) {
         this.msg.WarnNotify('(' + p.productTitle + ') Discount not valid');
-        this.isValidSale = false; 
+        this.isValidSale = false;
         return;
       }
     });
@@ -1297,37 +1310,37 @@ export class GarmentSaleComponent implements OnInit {
         this.msg.WarnNotify('Cash Amount is Not Valid')
       } else if (this.paymentType == 'Split' && this.bankCash <= 0) {
         this.msg.WarnNotify('Bank Amount is Not Valid')
-      }else if (this.paymentType == 'Credit' && ((this.cash + this.bankCash) > this.netTotal))  {
+      } else if (this.paymentType == 'Credit' && ((this.cash + this.bankCash) > this.netTotal)) {
         this.msg.WarnNotify('Enter Valid Amount')
       } else if ((this.bookerID == 0 || this.bookerID == undefined) && this.BookerFeature) {
         this.msg.WarnNotify('Select Booker')
       } else if (this.paymentType == 'Credit' && this.partyID == 0) {
         this.msg.WarnNotify('Select Customer');
-      }else if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
+      } else if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
         this.msg.WarnNotify('Enter Valid Amount')
       }
-      else if (paymentType == 'Bank'  && this.bankCoaID == 0) {
+      else if (paymentType == 'Bank' && this.bankCoaID == 0) {
         this.msg.WarnNotify('Select Bank')
       }
-      else if ( (paymentType == 'Credit' || paymentType == 'Split') && this.bankCash > 0 && this.bankCoaID == 0 ) {
+      else if ((paymentType == 'Credit' || paymentType == 'Split') && this.bankCash > 0 && this.bankCoaID == 0) {
         this.msg.WarnNotify('Select Bank')
-      }else {
+      } else {
 
 
 
-              if (this.global.SubscriptionExpired()) {
-                Swal.fire({
-                  title: 'Alert!',
-                  text: 'Unable To Save , Contact To Administrator!',
-                  position: 'center',
-                  icon: 'warning',
-                  showCancelButton: false,
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'OK',
-                });
-                return;
-              }
+        if (this.global.SubscriptionExpired()) {
+          Swal.fire({
+            title: 'Alert!',
+            text: 'Unable To Save , Contact To Administrator!',
+            position: 'center',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK',
+          });
+          return;
+        }
 
 
         this.isValidSale = false;
@@ -1364,7 +1377,7 @@ export class GarmentSaleComponent implements OnInit {
               this.tmpChange = this.change;
               this.reset();
               this.msg.SuccessNotify(Response.msg);
-            
+
               if (printFlag) {
                 this.PrintAfterSave(Response.invNo);
               }
@@ -1471,58 +1484,8 @@ export class GarmentSaleComponent implements OnInit {
   myOfferDiscount = 0;
   myBookerName = '';
   PrintAfterSave(InvNo: any) {
-
-
     this.billPrint.PrintBill(InvNo);
     this.billPrint.billType = '';
-    // setTimeout(() => {   
-    //   this.global.printData('#print-bill')
-    // }, 200);
-
-    // setTimeout(() => {
-    //   this.billPrint.billType = 'Counter Copy';
-    //  setTimeout(() => {
-    //   this.global.printData('#print-bill');
-    //  }, 100);
-    // }, 200);
-
-
-
-    // this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
-    //   (Response: any) => {
-
-    //     this.myPrintTableData = Response;
-    //     this.myInvoiceNo = InvNo;
-    //     this.myInvDate = Response[0].createdOn;
-    //     this.myCounterName = Response[0].entryUser;
-    //     this.mySubTotal = Response[0].billTotal;
-    //     this.myNetTotal = Response[0].netTotal;
-    //     this.myOtherCharges = Response[0].otherCharges;
-    //     this.myRemarks = Response[0].remarks;
-    //     this.myCash = Response[0].cashRec;
-    //     this.myBank = Response[0].netTotal - Response[0].cashRec;
-    //     this.myDiscount = Response[0].billDiscount;
-    //     this.myChange = Response[0].change;
-    //     this.myPaymentType = Response[0].paymentType;
-    //     this.myCustomerName = Response[0].partyName;
-    //     this.myBookerName = Response[0].bookerName;
-
-
-    //     this.myQtyTotal = 0;
-    //     Response.forEach((e: any) => {
-    //       this.myQtyTotal += e.quantity;
-    //       this.myOfferDiscount += e.discInR * e.quantity;
-    //     });
-
-    //     setTimeout(() => {
-    //       this.global.printData('#cncBillPrint');
-    //       this.global.printData('#cncBillPrint2');
-    //     }, 2000);
-
-    //   }
-    // )
-
-
 
   }
 
@@ -1531,40 +1494,40 @@ export class GarmentSaleComponent implements OnInit {
 
     $('#SavedBillModal').hide();
 
-    if(this.disablePrintPwd){
-    this.billPrint.PrintBill(item.invBillNo);
-    this.billPrint.billType = 'Duplicate';
-    }else{
-   this.global.openPassword('Password').subscribe(pin => {
-      if (pin !== '') {
-        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
-          RestrictionCodeID: 5,
-          Password: pin,
-          UserID: this.global.getUserID()
+    if (this.disablePrintPwd) {
+      this.billPrint.PrintBill(item.invBillNo);
+      this.billPrint.billType = 'Duplicate';
+    } else {
+      this.global.openPassword('Password').subscribe(pin => {
+        if (pin !== '') {
+          this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+            RestrictionCodeID: 5,
+            Password: pin,
+            UserID: this.global.getUserID()
 
-        }).subscribe(
-          (Response: any) => {
-            if (Response.msg == 'Password Matched Successfully') {
-
-
-              $('#SavedBillModal').show();
-              this.billPrint.PrintBill(item.invBillNo);
-              this.billPrint.billType = 'Duplicate';
-              // setTimeout(() => {
-              //   this.global.printData('#print-bill')
-              // }, 200);
+          }).subscribe(
+            (Response: any) => {
+              if (Response.msg == 'Password Matched Successfully') {
 
 
+                $('#SavedBillModal').show();
+                this.billPrint.PrintBill(item.invBillNo);
+                this.billPrint.billType = 'Duplicate';
+                // setTimeout(() => {
+                //   this.global.printData('#print-bill')
+                // }, 200);
 
-            } else {
-              this.msg.WarnNotify(Response.msg);
+
+
+              } else {
+                this.msg.WarnNotify(Response.msg);
+              }
             }
-          }
-        )
-      }
-    })
+          )
+        }
+      })
     }
- 
+
 
 
   }
@@ -1652,21 +1615,21 @@ export class GarmentSaleComponent implements OnInit {
   }
 
 
-  changePayment(data:any){
+  changePayment(data: any) {
     $('#SavedBillModal').hide();
-    this.dialogue.open(PaymentMehtodComponent,{
-      width:'30%',
-      data:data
-    }).afterClosed().subscribe(val=>{
+    this.dialogue.open(PaymentMehtodComponent, {
+      width: '30%',
+      data: data
+    }).afterClosed().subscribe(val => {
       this.getSavedBill();
       $('#SavedBillModal').show();
     })
-  
+
   }
 
 
-  postSaleBill(item:any){
-    if(!item.postedStatus){
+  postSaleBill(item: any) {
+    if (!item.postedStatus) {
       this.global.postSaleInvoice(item).subscribe(
         (Response: any) => {
           if (Response.msg == 'Posted Successfully') {
@@ -1678,7 +1641,7 @@ export class GarmentSaleComponent implements OnInit {
         }
       );
     }
-  
+
   }
 
 

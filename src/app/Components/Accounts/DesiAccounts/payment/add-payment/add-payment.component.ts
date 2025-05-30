@@ -62,7 +62,7 @@ export class AddPaymentComponent {
   coaID = 0;
   remarks = '';
   partyID = 0;
-  projectID = 0;
+  projectID = this.global.getProjectID();
   paymentTypeList = [{value:'CPV',title:'Cash'},{value:'BPV',title:'Bank'},];
 
   paymentType = 'CPV';

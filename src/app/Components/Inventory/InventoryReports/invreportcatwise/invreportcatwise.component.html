@@ -3,7 +3,7 @@
 
     <div class="ps-1 d-flex  pt-2  border-bottom" >
 
-        <mat-form-field appearance="outline" class="col-lg-10 matSmall">
+        <mat-form-field appearance="outline" class="col-lg-6 matSmall">
             <mat-label>Report Type</mat-label>
             <mat-select [(ngModel)]="reportType" (selectionChange)="emptyField()" >
                 <mat-option *ngFor="let item of reportTypeList index as index" [value]="item.val">{{index+1}} - {{item.title}}</mat-option>
@@ -11,9 +11,15 @@
         </mat-form-field>
 
 
-       <div class="col-lg-2 ms-1 ">
-        <button  data-bs-toggle="modal" data-bs-target="#credential"  class="btn-rpt-success" (click)="openDialog()">Get Report</button>
-        <mat-checkbox [(ngModel)]="minusOnly">Minus Only</mat-checkbox>
+       <div class="col-lg-6 ms-1 ">
+        <button    class="btn-rpt-success" (click)="openDialog()">Get Report</button>
+
+        <mat-radio-group [(ngModel)]="filterID" (change)="filterReport()">
+            <mat-radio-button *ngFor="let item of filterList" [value]="item.id">{{item.title}}</mat-radio-button>
+        </mat-radio-group>
+        <!-- <mat-checkbox [(ngModel)]="minusOnly">Minus Only</mat-checkbox>
+        <mat-checkbox [(ngModel)]="hideZero">Hide Zero</mat-checkbox>
+        <mat-checkbox [(ngModel)]="zeroOnly">Zero Only</mat-checkbox> -->
 
        </div>
 

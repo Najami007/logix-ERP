@@ -309,7 +309,9 @@ export const inventoryRoutes: Route[] = [
     
   ],
   exports: [
-    RouterModule
+    RouterModule,
+    CashierClosingRptComponent,
+    ProductModalComponent
   ],
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },

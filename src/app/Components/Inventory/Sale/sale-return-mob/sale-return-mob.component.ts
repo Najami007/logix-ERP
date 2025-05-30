@@ -32,7 +32,7 @@ export class SaleReturnMobComponent implements OnInit {
   prodDetailFeature = this.global.prodDetailFeature;
   disableDate = this.global.DisableDateSale;
 
-  @ViewChild(SaleBillPrintComponent) billPrint:any;
+  @ViewChild(SaleBillPrintComponent) billPrint: any;
 
   companyProfile: any = [];
   companyLogo: any = '';
@@ -98,17 +98,14 @@ export class SaleReturnMobComponent implements OnInit {
     this.getPartyList();
     this.getBooker();
 
-    setTimeout(() => {
-      $('#psearchProduct').trigger('focus');
-    }, 200);
+    setTimeout(() => {$('#psearchProduct').trigger('focus');}, 200);
+    this.getProducts();
+    for (let i = 0; i <= 100; i++) { this.discountList.push({ value: i }); }
+  }
 
+  getProducts() {
     this.global.getProducts().subscribe(
       (data: any) => { this.productList = data; });
-
-    for (let i = 0; i <= 100; i++) { this.discountList.push({ value: i }); }
-
-
-
   }
 
   discountList: any = [];
@@ -135,7 +132,7 @@ export class SaleReturnMobComponent implements OnInit {
   projectID = this.global.getProjectID();
 
   tableDataList: any = [];
-  productDetail:any = [];     
+  productDetail: any = [];
   tempTableDataList: any = [];
   InvDate = new Date();
   PBarcode: any = '';
@@ -162,13 +159,13 @@ export class SaleReturnMobComponent implements OnInit {
 
   bankCoaList: any = [];
   partyList: any = [];
-  bookerList:any = [];
+  bookerList: any = [];
 
-  billPrintType:any = this.global.getBillPrintType();
-  setBillType(e:any){
-    localStorage.setItem('BillPrint',this.billPrintType);
+  billPrintType: any = this.global.getBillPrintType();
+  setBillType(e: any) {
+    localStorage.setItem('BillPrint', this.billPrintType);
   }
-  getBooker(){
+  getBooker() {
     this.global.getBookerList().subscribe((data: any) => { this.bookerList = data; });
   }
 
@@ -176,18 +173,18 @@ export class SaleReturnMobComponent implements OnInit {
     this.global.getCustomerList().subscribe((data: any) => { this.partyList = data; });
   }
 
-    ////////////////////////////////////////////
+  ////////////////////////////////////////////
 
-    getBankList() {
+  getBankList() {
 
-      this.global.getBankList().subscribe((data: any) => { 
-        this.bankCoaList = data;
-        setTimeout(() => {
-          this.bankCoaID = data[0].coaID;
-        }, 200);
-       });
-    
-    }
+    this.global.getBankList().subscribe((data: any) => {
+      this.bankCoaList = data;
+      setTimeout(() => {
+        this.bankCoaID = data[0].coaID;
+      }, 200);
+    });
+
+  }
 
   @ViewChild('supplier') myParty: any;
   addParty() {
@@ -231,10 +228,10 @@ export class SaleReturnMobComponent implements OnInit {
 
               if (condition == undefined) {
 
-              
+
 
                 this.tableDataList.push({
-            
+
                   rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
                     : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
                       : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
@@ -242,7 +239,7 @@ export class SaleReturnMobComponent implements OnInit {
                   productTitle: Response[0].productTitle,
                   barcode: Response[0].barcode,
                   productImage: Response[0].productImage,
-                  quantity: Response[0].productOtherDetDescription != '' ? 1 : 0 ,
+                  quantity: Response[0].productOtherDetDescription != '' ? 1 : 0,
                   wohCP: Response[0].costPrice,
                   costPrice: Response[0].costPrice,
                   avgCostPrice: Response[0].avgCostPrice,
@@ -254,25 +251,25 @@ export class SaleReturnMobComponent implements OnInit {
                   batchStatus: '-',
                   uomID: Response[0].uomID,
                   gst: this.gstFeature ? Response[0].gst : 0,
-                  et:Response[0].et,
+                  et: Response[0].et,
                   packing: 1,
-                  discInP: this.discFeature ?  Response[0].discPercentage : 0,
-                  discInR: this.discFeature ?  Response[0].discRupees  : 0,
+                  discInP: this.discFeature ? Response[0].discPercentage : 0,
+                  discInR: this.discFeature ? Response[0].discRupees : 0,
                   aq: Response[0].aq,
-                  total:(Response[0].salePrice * 1) - (Response[0].discRupees),
-      
+                  total: (Response[0].salePrice * 1) - (Response[0].discRupees),
+
                 });
 
-                if(Response[0].productOtherDetDescription != ''){
-                  var tmpRow = this.productDetail.find((e:any)=> e.productOtherDetDescription == Response[0].productOtherDetDescription);
-                  if(tmpRow == undefined){
+                if (Response[0].productOtherDetDescription != '') {
+                  var tmpRow = this.productDetail.find((e: any) => e.productOtherDetDescription == Response[0].productOtherDetDescription);
+                  if (tmpRow == undefined) {
                     this.productDetail.push({ productID: Response[0].productID, productOtherDetDescription: Response[0].productOtherDetDescription });
-                   
-                  }else{
+
+                  } else {
                     this.msg.WarnNotify('IMEI Already Entered');
                     return;
-                  }               
-               }
+                  }
+                }
 
                 this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
                 this.getTotal();
@@ -283,19 +280,19 @@ export class SaleReturnMobComponent implements OnInit {
               } else {
                 // this.tableDataList[index].Quantity = parseFloat(this.tableDataList[index].Quantity) + 1;
                 // this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length -1].rowIndex + 1 ;
-                if(Response[0].productOtherDetDescription != ''){
-                  var tmpRow = this.productDetail.find((e:any)=> e.productOtherDetDescription == Response[0].productOtherDetDescription);
-                  if(tmpRow == undefined){
+                if (Response[0].productOtherDetDescription != '') {
+                  var tmpRow = this.productDetail.find((e: any) => e.productOtherDetDescription == Response[0].productOtherDetDescription);
+                  if (tmpRow == undefined) {
                     this.productDetail.push({ productID: Response[0].productID, productOtherDetDescription: Response[0].productOtherDetDescription });
                     this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
                     this.getTotal();
-                  }else{
+                  } else {
                     this.msg.WarnNotify('IMEI Already Entered');
                     return;
-                  }               
-               }else{
-                 this.msg.WarnNotify('Product Already Exist in Table');
-               }
+                  }
+                } else {
+                  this.msg.WarnNotify('Product Already Exist in Table');
+                }
 
                 this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
                 // this.msg.WarnNotify('Product Already Exist in Table');
@@ -324,86 +321,100 @@ export class SaleReturnMobComponent implements OnInit {
   holdDataFunction(data: any) {
 
 
-    var condition = this.tableDataList.find(
-      (x: any) => x.productID == data.productID
-    );
-
-    var index = this.tableDataList.indexOf(condition);
-
-    if (condition == undefined) {
-
-      this.app.startLoaderDark();
-
-      this.global.getProdDetail(data.productID, '').subscribe(
-        (Response: any) => {
-           
-          this.tableDataList.push({
-            
-            rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
-              : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
-                : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
-            productID: Response[0].productID,
-            productTitle: Response[0].productTitle,
-            barcode: Response[0].barcode,
-            productImage: Response[0].productImage,
-            quantity: 0,
-            wohCP: Response[0].costPrice,
-            costPrice: Response[0].costPrice,
-            avgCostPrice: Response[0].avgCostPrice,
-            salePrice: Response[0].salePrice,
-            ovhPercent: 0,
-            ovhAmount: 0,
-            expiryDate: this.global.dateFormater(new Date(), '-'),
-            batchNo: '-',
-            batchStatus: '-',
-            uomID: Response[0].uomID,
-            gst: this.gstFeature ? Response[0].gst : 0,
-            et:Response[0].et,
-            packing: 1,
-            discInP: this.discFeature ?  Response[0].discPercentage : 0,
-            discInR: this.discFeature ?  Response[0].discRupees  : 0,
-            aq: Response[0].aq,
-            total:(Response[0].salePrice * 1) - (Response[0].discRupees),
-          });
-
-          // this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
-          this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-          this.getTotal();
-
-
-          this.productImage = Response[0].productImage;
-        }
-      )
-    } else {
-      // this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
-      // this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
-   
-      this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-      this.msg.WarnNotify('Product Already Exist in Table');
-
-      this.productImage = this.tableDataList[index].productImage;
-
-    }
+    this.global.getProdDetail(data.productID, '').subscribe(
+      (Response: any) => {
+        this.pushProdData(Response[0], 1)
+      }
+    )
 
     this.app.stopLoaderDark();
     this.productName = '';
     this.getTotal();
+    this.global.closeBootstrapModal('#prodModal', true);
     setTimeout(() => {
       $('#psearchProduct').trigger('focus');
     }, 500);
 
   }
 
-   searchProductByName() {
-      this.dialogue.open(ProductModalComponent, {
-        width: '80%',
-      }).afterClosed().subscribe(val => {
-        if (val != '' && val != undefined) {
-          this.holdDataFunction(val.data);
-        }
-      })
+
+  pushProdData(data: any, qty: any) {
+
+    /////// check already present in the table or not
+    var condition = this.tableDataList.find(
+      (x: any) => x.productID == data.productID
+    );
+
+    var index = this.tableDataList.indexOf(condition);
+
+    //// push the data using index
+    if (condition == undefined) {
+
+      this.tableDataList.push({
+        rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
+          : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
+            : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
+        productID: data.productID,
+        productTitle: data.productTitle,
+        barcode: data.barcode,
+        productImage: data.productImage,
+        quantity: qty,
+        wohCP: data.costPrice,
+        avgCostPrice: data.avgCostPrice,
+        costPrice: data.costPrice,
+        salePrice: data.salePrice,
+        ovhPercent: 0,
+        ovhAmount: 0,
+        expiryDate: this.global.dateFormater(new Date(), '-'),
+        batchNo: '-',
+        batchStatus: '-',
+        uomID: data.uomID,
+        gst: this.gstFeature ? data.gst : 0,
+        et: data.et,
+        packing: 1,
+        discInP: this.discFeature ? data.discPercentage : 0,
+        discInR: this.discFeature ? data.discRupees : 0,
+        aq: data.aq,
+        total: (data.salePrice * qty) - (data.discRupees * qty),
+        productDetail: '',
+
+      });
+
+      //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
+      this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+      this.getTotal();
+      this.productImage = data.productImage;
+
+
+
+
+    } else {
+      if (this.PBarcode.split("/")[1] != undefined) {
+        qty = this.PBarcode.split("/")[1] / this.tableDataList[index].salePrice;
+      }
+      this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + qty;
+
+      /////// Sorting Table
+      this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
+      this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+      this.productImage = this.tableDataList[index].productImage;
+      this.getTotal();
     }
-  
+
+  }
+
+
+  searchProductByName() {
+    this.global.openBootstrapModal('#prodModal', true);
+
+    setTimeout(() => {
+      $('#prodName').trigger('select');
+      $('#prodName').trigger('focus');
+    }, 500);
+
+  }
+
+
 
   focusto(cls: any, e: any) {
 
@@ -424,20 +435,20 @@ export class SaleReturnMobComponent implements OnInit {
     }
     if (cls == '#charges' && e.keyCode == 13) {
       e.preventDefault();
-        $(cls).trigger('select');
-        $(cls).trigger('focus');
+      $(cls).trigger('select');
+      $(cls).trigger('focus');
     }
     if (cls == '#cash' && e.keyCode == 13 && e.target.value == '') {
       e.preventDefault();
-        $(cls).trigger('select');
-        $(cls).trigger('focus');
+      $(cls).trigger('select');
+      $(cls).trigger('focus');
 
     }
 
     if (cls == '#save' && e.keyCode == 13) {
       e.preventDefault();
-        // $(cls).trigger('select');
-        $(cls).trigger('focus');
+      // $(cls).trigger('select');
+      $(cls).trigger('focus');
 
     }
 
@@ -491,13 +502,13 @@ export class SaleReturnMobComponent implements OnInit {
       this.bankCash = this.netTotal;
     }
 
-    if(this.paymentType == 'Credit'){
+    if (this.paymentType == 'Credit') {
       this.cash = 0;
       this.bankCoaID = 0;
       this.bankCash = 0;
     }
 
-    if(this.paymentType !== 'Credit'){
+    if (this.paymentType !== 'Credit') {
       this.partyID = 0;
     }
 
@@ -623,8 +634,8 @@ export class SaleReturnMobComponent implements OnInit {
         } else {
           var clsName = cls + this.rowFocused;
           e.preventDefault();
-            $(clsName).trigger('select');   
-            $(clsName).trigger('focus');    
+          $(clsName).trigger('select');
+          $(clsName).trigger('focus');
         }
       }
     }
@@ -635,8 +646,8 @@ export class SaleReturnMobComponent implements OnInit {
 
       if (this.rowFocused == 0) {
         e.preventDefault();
-        $(".searchProduct").trigger('select');  
-          $(".searchProduct").trigger('focus');
+        $(".searchProduct").trigger('select');
+        $(".searchProduct").trigger('focus');
         this.rowFocused = 0;
 
       }
@@ -647,7 +658,7 @@ export class SaleReturnMobComponent implements OnInit {
 
         var clsName = cls + this.rowFocused;
         e.preventDefault();
-        $(clsName).trigger('select'); 
+        $(clsName).trigger('select');
         $(clsName).trigger('focus');
 
 
@@ -674,12 +685,12 @@ export class SaleReturnMobComponent implements OnInit {
           this.getTotal();
 
           if (index == 0) {
-            $('#psearchProduct').trigger('select'); 
+            $('#psearchProduct').trigger('select');
             $('#psearchProduct').trigger('focus');
           } else {
             this.rowFocused = index - 1;
-            $('.qty'+this.rowFocused).trigger('select');
-            $('.qty'+this.rowFocused).trigger('focus');
+            $('.qty' + this.rowFocused).trigger('select');
+            $('.qty' + this.rowFocused).trigger('focus');
           }
         }
       }
@@ -716,161 +727,161 @@ export class SaleReturnMobComponent implements OnInit {
 
   }
 
-  editSP(item:any){
-   if(this.editSpFeature){
-    Swal.fire({
-      title:"Enter Total Amount",
-      input:"text",
-      showCancelButton:true,
-      confirmButtonText:'Save',
-      showLoaderOnConfirm:true,
-      preConfirm: (value )=>{
-        
-        if(value == ""){
-        return  Swal.showValidationMessage("Enter Valid Amount");
-        }
+  editSP(item: any) {
+    if (this.editSpFeature) {
+      Swal.fire({
+        title: "Enter Total Amount",
+        input: "text",
+        showCancelButton: true,
+        confirmButtonText: 'Save',
+        showLoaderOnConfirm: true,
+        preConfirm: (value) => {
 
-        if(isNaN(value)){
-          return  Swal.showValidationMessage("Enter Valid Amount");
-        }
+          if (value == "") {
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
 
-        if(value <= 0){
-          return  Swal.showValidationMessage("Enter Valid Amount");
-        }
+          if (isNaN(value)) {
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
 
-        if(value < this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].costPrice){
-          return  Swal.showValidationMessage("Sale Price Is Less Then Cost Price");
+          if (value <= 0) {
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
+
+          if (value < this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].costPrice) {
+            return Swal.showValidationMessage("Sale Price Is Less Then Cost Price");
+          }
+
+          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice = value;
+          this.getTotal();
+          this.tempProdData = [];
         }
-        
-        this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice = value;
-        this.getTotal();
-        this.tempProdData = [];
-      }
-    }).then((result)=>{
-        if(result.isConfirmed){
+      }).then((result) => {
+        if (result.isConfirmed) {
           Swal.fire({
             title: "Sale Price Updated",
-            timer:500,
-           });
+            timer: 500,
+          });
         }
-    })
-   }
+      })
+    }
   }
 
-  
-  editDR(item:any){
 
-    if(this.editDiscFeature){
-      
-    Swal.fire({
-      title:"Enter Discount Amount",
-      input:"text",
-      showCancelButton:true,
-      confirmButtonText:'Save',
-      showLoaderOnConfirm:true,
-      preConfirm: (value )=>{
-        
-        if(value == ""){
-        return  Swal.showValidationMessage("Enter Valid Amount");
-        }
+  editDR(item: any) {
 
-        if(isNaN(value)){
-          return  Swal.showValidationMessage("Enter Valid Amount");
-        }
+    if (this.editDiscFeature) {
 
-        if(value < 0){
-          return  Swal.showValidationMessage("Enter Valid Amount");
-        }
+      Swal.fire({
+        title: "Enter Discount Amount",
+        input: "text",
+        showCancelButton: true,
+        confirmButtonText: 'Save',
+        showLoaderOnConfirm: true,
+        preConfirm: (value) => {
 
-        if(item.salePrice - value < item.costPrice){
-          return  Swal.showValidationMessage("Discount Price Not Valid");
+          if (value == "") {
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
+
+          if (isNaN(value)) {
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
+
+          if (value < 0) {
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
+
+          if (item.salePrice - value < item.costPrice) {
+            return Swal.showValidationMessage("Discount Price Not Valid");
+          }
+
+          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR = value;
+          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInP = (value / item.salePrice) * 100;
+          this.getTotal();
+          this.tempProdData = [];
         }
-        
-        this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR = value;
-        this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInP = (value / item.salePrice) * 100;
-        this.getTotal();
-        this.tempProdData = [];
-      }
-    }).then((result)=>{
-        if(result.isConfirmed){
+      }).then((result) => {
+        if (result.isConfirmed) {
           Swal.fire({
             title: "Discount Updated",
-            timer:500,
-           });
+            timer: 500,
+          });
         }
-    })
+      })
     }
 
 
   }
 
-  editDP(item:any){
-    if(this.editDiscFeature){
+  editDP(item: any) {
+    if (this.editDiscFeature) {
       Swal.fire({
-        title:"Enter Discount Percent",
-        input:"text",
-        showCancelButton:true,
-        confirmButtonText:'Save',
-        showLoaderOnConfirm:true,
-        preConfirm: (value )=>{
-          
-          if(value == ""){
-          return  Swal.showValidationMessage("Enter Valid Amount");
+        title: "Enter Discount Percent",
+        input: "text",
+        showCancelButton: true,
+        confirmButtonText: 'Save',
+        showLoaderOnConfirm: true,
+        preConfirm: (value) => {
+
+          if (value == "") {
+            return Swal.showValidationMessage("Enter Valid Amount");
           }
-  
-          if(isNaN(value)){
-            return  Swal.showValidationMessage("Enter Valid Amount");
+
+          if (isNaN(value)) {
+            return Swal.showValidationMessage("Enter Valid Amount");
           }
-  
-          if(value < 0){
-            return  Swal.showValidationMessage("Enter Valid Amount");
+
+          if (value < 0) {
+            return Swal.showValidationMessage("Enter Valid Amount");
           }
-  
-          if(item.salePrice - ((item.salePrice * value) / 100 ) < item.costPrice){
-            return  Swal.showValidationMessage("Discount % Not Valid");
+
+          if (item.salePrice - ((item.salePrice * value) / 100) < item.costPrice) {
+            return Swal.showValidationMessage("Discount % Not Valid");
           }
-          
+
           this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInP = value;
           this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR = (item.salePrice * value) / 100;
           this.getTotal();
           this.tempProdData = [];
         }
-      }).then((result)=>{
-          if(result.isConfirmed){
-            Swal.fire({
-              title: "Discount Updated",
-              timer:500,
-             });
-          }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Discount Updated",
+            timer: 500,
+          });
+        }
       })
     }
 
-   
+
 
   }
- 
 
-  editTotal(amount:any){
-    if(this.editSpFeature){
+
+  editTotal(amount: any) {
+    if (this.editSpFeature) {
       this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].total = amount;
-    this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].quantity = (amount / (this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice - this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR));
+      this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].quantity = (amount / (this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice - this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR));
 
-    this.getTotal();
-    this.tempProdData = [];
+      this.getTotal();
+      this.tempProdData = [];
     }
 
 
-   
+
 
   }
 
-  partySelect(){
-    if(this.partyID > 0){
+  partySelect() {
+    if (this.partyID > 0) {
       this.paymentType = 'Credit';
-      
-    }else{
+
+    } else {
       this.paymentType = 'Cash';
-      }
+    }
     this.getTotal();
   }
 
@@ -878,7 +889,7 @@ export class SaleReturnMobComponent implements OnInit {
   isValidSale = true;
   save(paymentType: any) {
     this.isValidSale = true;
-   
+
     this.tableDataList.forEach((p: any) => {
 
       p.quantity = parseFloat(p.quantity);
@@ -889,17 +900,17 @@ export class SaleReturnMobComponent implements OnInit {
         this.msg.WarnNotify('(' + p.productTitle + ') Cost Price greater than Sale Price');
         this.isValidSale = false;
         return;
-      }else if (p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null) {
+      } else if (p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null) {
         this.msg.WarnNotify('(' + p.productTitle + ') Sale Price is not Valid');
         this.isValidSale = false;
         return;
-      }else if (p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '') {
+      } else if (p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '') {
         this.msg.WarnNotify('(' + p.productTitle + ') Quantity is not Valid');
         this.isValidSale = false;
         return;
-      }else if (p.costPrice > (p.salePrice - p.discInR)) {
+      } else if (p.costPrice > (p.salePrice - p.discInR)) {
         this.msg.WarnNotify('(' + p.productTitle + ') Discount not valid');
-        this.isValidSale = false; 
+        this.isValidSale = false;
         return;
       }
     });
@@ -909,7 +920,7 @@ export class SaleReturnMobComponent implements OnInit {
       if (this.tableDataList == '') {
         this.msg.WarnNotify('No Product Seleted')
       }
-       else if (paymentType == 'Cash' && this.partyID == 0 && (this.cash == 0 || this.cash == undefined || this.cash == null)) {
+      else if (paymentType == 'Cash' && this.partyID == 0 && (this.cash == 0 || this.cash == undefined || this.cash == null)) {
         this.msg.WarnNotify('Enter Cash')
       } else if (paymentType == 'Cash' && this.partyID == 0 && this.cash < this.netTotal) {
         this.msg.WarnNotify('Entered Cash is not Valid')
@@ -919,18 +930,18 @@ export class SaleReturnMobComponent implements OnInit {
         this.msg.WarnNotify('Cash Amount is Not Valid')
       } else if (this.paymentType == 'Split' && this.bankCash <= 0) {
         this.msg.WarnNotify('Bank Amount is Not Valid')
-      }else if ((this.bookerID == 0 || this.bookerID == undefined) && this.BookerFeature) {
+      } else if ((this.bookerID == 0 || this.bookerID == undefined) && this.BookerFeature) {
         this.msg.WarnNotify('Select Booker')
-      }else if(this.paymentType == 'Credit' && this.partyID == 0){
+      } else if (this.paymentType == 'Credit' && this.partyID == 0) {
         this.msg.WarnNotify('Select Customer');
       }
-      
+
       else if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
         this.msg.WarnNotify('Enter Valid Amount')
       } else {
 
-        
-        if(this.tillOpenFeature){
+
+        if (this.tillOpenFeature) {
           this.global.openTill();
         }
         this.app.startLoaderDark();
@@ -945,30 +956,30 @@ export class SaleReturnMobComponent implements OnInit {
           OrderType: "Take Away",
           BillTotal: this.subTotal,
           BillDiscount: parseFloat(this.discount) + parseFloat(this.offerDiscount),
-          OtherCharges: this.otherCharges ,
+          OtherCharges: this.otherCharges,
           NetTotal: this.netTotal,
           CashRec: this.cash,
           Change: this.change,
-          AdvTaxAmount : this.AdvTaxAmount,
-          AdvTaxValue : this.AdvTaxValue,
+          AdvTaxAmount: this.AdvTaxAmount,
+          AdvTaxValue: this.AdvTaxValue,
           BankCoaID: this.bankCoaID,
           BankCash: this.bankCash,
           CusContactNo: this.customerMobileno || '-',
-          CusName: this.customerName || '-',   
+          CusName: this.customerName || '-',
           SaleDetail: JSON.stringify(this.tableDataList),
-          ProductDetail:JSON.stringify(this.productDetail),
+          ProductDetail: JSON.stringify(this.productDetail),
           UserID: this.global.getUserID()
         }).subscribe(
           (Response: any) => {
             if (Response.msg == 'Data Saved Successfully') {
-              
+
               this.msg.SuccessNotify(Response.msg);
               this.reset();
               this.PrintAfterSave(Response.invNo);
 
               if (paymentType != 'Cash') {
                 $('#searchProduct').trigger('focus');
-                this.global.closeBootstrapModal('#paymentMehtod',true);
+                this.global.closeBootstrapModal('#paymentMehtod', true);
 
               }
 
@@ -979,7 +990,7 @@ export class SaleReturnMobComponent implements OnInit {
           },
           (Error: any) => {
             this.msg.WarnNotify(Error);
-            
+
             this.app.stopLoaderDark();
           }
         )
@@ -1061,24 +1072,24 @@ export class SaleReturnMobComponent implements OnInit {
   myDuplicateFlag = false;
   myTime: any;
   myQtyTotal = 0;
-  myOfferDiscount=0;
+  myOfferDiscount = 0;
   myBookerName = '';
   PrintAfterSave(InvNo: any) {
 
-    
+
     this.billPrint.PrintBill(InvNo);
     this.billPrint.billType = '';
     // setTimeout(() => {   
     //   this.global.printData('#print-bill')
     // }, 200);
-    
+
     // setTimeout(() => {
     //   this.billPrint.billType = 'Counter Copy';
     //  setTimeout(() => {
     //   this.global.printData('#print-bill');
     //  }, 100);
     // }, 200);
-   
+
 
 
     // this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
@@ -1099,7 +1110,7 @@ export class SaleReturnMobComponent implements OnInit {
     //     this.myPaymentType = Response[0].paymentType;
     //     this.myCustomerName = Response[0].partyName;
     //     this.myBookerName = Response[0].bookerName;
-         
+
 
     //     this.myQtyTotal = 0;
     //     Response.forEach((e: any) => {
@@ -1119,12 +1130,12 @@ export class SaleReturnMobComponent implements OnInit {
 
   }
 
-  printDuplicateBill(item:any){
+  printDuplicateBill(item: any) {
 
 
     $('#SavedBillModal').hide();
 
-    
+
     this.global.openPassword('Password').subscribe(pin => {
       if (pin !== '') {
         this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
@@ -1136,16 +1147,16 @@ export class SaleReturnMobComponent implements OnInit {
           (Response: any) => {
             if (Response.msg == 'Password Matched Successfully') {
 
-          
+
               $('#SavedBillModal').show();
-            this.billPrint.PrintBill(item.invBillNo);
-            this.billPrint.billType = 'Duplicate';
-            // setTimeout(() => {
-            //   this.global.printData('#print-bill')
-            // }, 200);
-              
-             
-             
+              this.billPrint.PrintBill(item.invBillNo);
+              this.billPrint.billType = 'Duplicate';
+              // setTimeout(() => {
+              //   this.global.printData('#print-bill')
+              // }, 200);
+
+
+
             } else {
               this.msg.WarnNotify(Response.msg);
             }
@@ -1153,17 +1164,17 @@ export class SaleReturnMobComponent implements OnInit {
         )
       }
     })
-  
-  
+
+
   }
 
-  billDetails(item:any){
+  billDetails(item: any) {
 
 
     $('#SavedBillModal').hide();
     // $('#paymentMehtod').hide();
     // $('.modal-backdrop').remove();
-    
+
     this.global.openPassword('Password').subscribe(pin => {
       if (pin !== '') {
         this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
@@ -1175,12 +1186,12 @@ export class SaleReturnMobComponent implements OnInit {
           (Response: any) => {
             if (Response.msg == 'Password Matched Successfully') {
               $('#SavedBillModal').show();
-              this.dialogue.open(SaleBillDetailComponent,{
-                width:'50%',
-                data:item,
-                disableClose:true,
-              }).afterClosed().subscribe(value=>{
-                
+              this.dialogue.open(SaleBillDetailComponent, {
+                width: '50%',
+                data: item,
+                disableClose: true,
+              }).afterClosed().subscribe(value => {
+
               })
             } else {
               this.msg.WarnNotify(Response.msg);
@@ -1190,30 +1201,30 @@ export class SaleReturnMobComponent implements OnInit {
       }
     })
 
-   
+
   }
 
 
-  getSavedBill(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetOpenDaySale').subscribe(
-      (Response:any)=>{
-       
+  getSavedBill() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetOpenDaySale').subscribe(
+      (Response: any) => {
+
         this.savedbillList = [];
-        Response.forEach((e:any) => {
-          if(e.invType == 'SR'){
+        Response.forEach((e: any) => {
+          if (e.invType == 'SR') {
             this.savedbillList.push(e);
           }
-          
-          
+
+
         });
-     
+
       }
     )
 
   }
 
 
-  
+
   addProdDetail(item: any) {
     this.global.openBootstrapModal('#ProdDetailModal', true);
     this.tmpProdDetial = item;
@@ -1237,22 +1248,22 @@ export class SaleReturnMobComponent implements OnInit {
 
 
   insertProdDetail(value: any) {
-    if(value == ''|| value == undefined){
+    if (value == '' || value == undefined) {
       this.msg.WarnNotify('Enter value');
-    } else { 
+    } else {
       // this.productDetail.push({ productID: this.tmpProdDetial.ProductID, productOtherDetDescription: value });
       var tmpRow = this.productDetail.find((e: any) => e.productOtherDetDescription == value);
       if (tmpRow == undefined) {
         ///////////////////pushing Detail into tmp Array ///////
         this.productDetail.push({ productID: this.tmpProdDetial.productID, productOtherDetDescription: value });
         ////////////////// Changing Qty ///////
-        this.tmpProdDetial.quantity = this.productDetail.filter((e:any)=> e.productID == this.tmpProdDetial.productID).length;
-     
+        this.tmpProdDetial.quantity = this.productDetail.filter((e: any) => e.productID == this.tmpProdDetial.productID).length;
+
         this.tableDataList.forEach((e: any) => {
           ////////////////// Assigning tmpProdDetial value to Maing TableDataLIst ///////
           if (e.productID == this.tmpProdDetial.productID) {
             e = this.tmpProdDetial;
-            
+
           }
         });
         this.getTotal();
@@ -1283,7 +1294,7 @@ export class SaleReturnMobComponent implements OnInit {
 
     var index = this.productDetail.indexOf(item);
     this.productDetail.splice(index, 1);
-    this.tmpProdDetial.quantity = this.productDetail.filter((e:any)=> e.productID == this.tmpProdDetial.productID).length;
+    this.tmpProdDetial.quantity = this.productDetail.filter((e: any) => e.productID == this.tmpProdDetial.productID).length;
     this.getTotal();
 
 
