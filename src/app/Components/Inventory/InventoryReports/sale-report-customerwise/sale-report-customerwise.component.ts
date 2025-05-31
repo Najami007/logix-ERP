@@ -84,7 +84,11 @@ export class SaleReportCustomerwiseComponent implements OnInit {
 
   getParty(){
    
-      this.global.getCustomerList().subscribe((data: any) => { this.partyList = data; });
+//      this.global.getCustomerList().subscribe((data: any) => { this.partyList = data; });
+      this.global.getCustomerList().subscribe((data: any) => { this.partyList = data.map((e:any)=>{
+        return e;
+      }); });
+
 
   }
 
@@ -118,6 +122,7 @@ export class SaleReportCustomerwiseComponent implements OnInit {
 
     this.partyName = this.partyList.find((e:any)=> e.partyID == this.partyID).partyName;
 
+    this.app.startLoaderDark();
    if(type == 'detail'){
     $('#detailTable').show();
     $('#ledger').hide();
@@ -142,7 +147,7 @@ export class SaleReportCustomerwiseComponent implements OnInit {
           }
           
         });
-
+      this.app.stopLoaderDark();
       }
     )
    }
@@ -177,6 +182,7 @@ export class SaleReportCustomerwiseComponent implements OnInit {
           }
             
         });
+        this.app.stopLoaderDark();
 
       }
     )
@@ -194,10 +200,14 @@ export class SaleReportCustomerwiseComponent implements OnInit {
         // console.log(Response);
        this.ledgerDetailList = Response.map((e:any)=>{
         if(e.billDetail != '-'){
-          (e.billDetailList = JSON.parse(e.billDetail))
+          (e.billDetailList = JSON.parse(e.billDetail));
+          
         }
+        (e.invoiceDate = new Date(e.invoiceDate))
         return e;
        })
+       console.log(this.ledgerDetailList);
+             this.app.stopLoaderDark();
       }
     )
    }
@@ -211,6 +221,9 @@ export class SaleReportCustomerwiseComponent implements OnInit {
   }
 
 
+  sortTable(){
+    this.ledgerDetailList.sort((a: any, b: any)=> a.invoiceDate - b.invoiceDate)
+  }
 
 
   print() {

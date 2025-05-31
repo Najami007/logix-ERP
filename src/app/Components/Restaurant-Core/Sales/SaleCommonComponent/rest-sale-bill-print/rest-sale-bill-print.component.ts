@@ -178,6 +178,7 @@ export class RestSaleBillPrintComponent {
     this.myInvoiceNo = invoiceNo;
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetHoldedBillDetail?BillNo=' + invoiceNo).subscribe(
       (Response: any) => {
+        console.log(Response);
         this.myPrintData = Response;
 
         this.mytableNo = Response[0].tableTitle;
@@ -200,8 +201,7 @@ export class RestSaleBillPrintComponent {
           this.mySubTotal += e.salePrice * e.quantity;
         });
 
-      })
-    setTimeout(() => {
+         setTimeout(() => {
       if (this.gstFeature) {
         this.global.printData('#printGSTRestBill');
       }
@@ -211,6 +211,9 @@ export class RestSaleBillPrintComponent {
 
       this.type = '';
     }, 200);
+
+      })
+   
     this.myDuplicateFlag = false;
 
 

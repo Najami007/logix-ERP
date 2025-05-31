@@ -1260,32 +1260,50 @@ export class GarmentSaleReturnComponent implements OnInit {
 
   save(paymentType: any) {
 
-    this.isValidSale = true;
+        var inValidCostProdList = this.tableDataList.filter((p:any)=> p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null );
+    var inValidSaleProdList = this.tableDataList.filter((p:any)=> p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
+    var inValidQtyProdList = this.tableDataList.filter((p:any)=> p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
+    var inValidDiscProdList = this.tableDataList.filter((p:any)=> p.costPrice > (p.salePrice - p.discInR));
 
-    this.tableDataList.forEach((p: any) => {
+    if(inValidCostProdList.length > 0 && !this.LessToCostFeature){
+       this.msg.WarnNotify('(' + inValidCostProdList[0].productTitle + ') Cost Price greater than Sale Price');
+        return;
+    }
+      if(inValidSaleProdList.length> 0 ){
+       this.msg.WarnNotify('(' + inValidSaleProdList[0].productTitle + ') Sale Price is not Valid');
+        return;
+    }
+       if(inValidQtyProdList.length> 0 ){
+       this.msg.WarnNotify('(' + inValidQtyProdList[0].productTitle + ') Quantity is not Valid');
+        return;
+    }
 
-      p.quantity = parseFloat(p.quantity);
-      p.salePrice = parseFloat(p.salePrice);
-      p.costPrice = parseFloat(p.costPrice);
+       if(inValidDiscProdList.length> 0 && !this.LessToCostFeature ){
+       this.msg.WarnNotify('(' + inValidDiscProdList[0].productTitle + ') Discount is not Valid');
+        return;
+    }
+  
 
-      if (!this.LessToCostFeature && (p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null)) {
-        this.msg.WarnNotify('(' + p.productTitle + ') Cost Price greater than Sale Price');
-        this.isValidSale = false;
-        return;
-      } else if (p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null) {
-        this.msg.WarnNotify('(' + p.productTitle + ') Sale Price is not Valid');
-        this.isValidSale = false;
-        return;
-      } else if (p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '') {
-        this.msg.WarnNotify('(' + p.productTitle + ') Quantity is not Valid');
-        this.isValidSale = false;
-        return;
-      } else if (!this.LessToCostFeature && (p.costPrice > (p.salePrice - p.discInR))) {
-        this.msg.WarnNotify('(' + p.productTitle + ') Discount not valid');
-        this.isValidSale = false;
-        return;
-      }
-    });
+    // this.tableDataList.forEach((p: any) => {
+
+    //   p.quantity = parseFloat(p.quantity);
+    //   p.salePrice = parseFloat(p.salePrice);
+    //   p.costPrice = parseFloat(p.costPrice);
+
+    //   if (!this.LessToCostFeature && (p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null)) {
+    //     this.msg.WarnNotify('(' + p.productTitle + ') Cost Price greater than Sale Price');
+    //     return;
+    //   } else if (p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null) {
+    //     this.msg.WarnNotify('(' + p.productTitle + ') Sale Price is not Valid');
+    //     return;
+    //   } else if (p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '') {
+    //     this.msg.WarnNotify('(' + p.productTitle + ') Quantity is not Valid');
+    //     return;
+    //   } else if (!this.LessToCostFeature && (p.costPrice > (p.salePrice - p.discInR))) {
+    //     this.msg.WarnNotify('(' + p.productTitle + ') Discount not valid');
+    //     return;
+    //   }
+    // });
 
 
     if (this.isValidSale == true) {
@@ -1311,9 +1329,10 @@ export class GarmentSaleReturnComponent implements OnInit {
       else if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
         this.msg.WarnNotify('Enter Valid Amount')
       } else {
-        this.isValidSale = false;
-        this.app.startLoaderDark();
-        this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySaleRtn', {
+
+
+
+        var postData =  {
           InvDate: this.global.dateFormater(this.InvDate, '-'),
           PartyID: this.partyID,
           InvType: "SR",
@@ -1335,24 +1354,26 @@ export class GarmentSaleReturnComponent implements OnInit {
           BankCash: this.bankCash,
           SaleDetail: JSON.stringify(this.tableDataList),
           UserID: this.global.getUserID()
-        }).subscribe(
+        };
+
+
+        this.isValidSale = false;
+        this.app.startLoaderDark();
+        this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySaleRtn',postData).subscribe(
           (Response: any) => {
             if (Response.msg == 'Data Saved Successfully') {
               this.msg.SuccessNotify(Response.msg);
               this.reset();
               this.PrintAfterSave(Response.invNo);
-
               if (paymentType != 'Cash') {
                 $('#searchProduct').trigger('focus');
                 $('#paymentMehtod').hide();
                 $('.modal-backdrop').remove();
               }
-              this.isValidSale = true;
-
             } else {
               this.msg.WarnNotify(Response.msg);
-              this.isValidSale = true;
             }
+             this.isValidSale = true;
             this.app.stopLoaderDark();
 
           },

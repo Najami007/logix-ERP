@@ -49,7 +49,7 @@ export class GlobalDataModule implements OnInit {
   // RestServiceCharges = 0;
   RestServiceCharges = this.getServiceCharges();  //////////// Jazeerra Food Service Charges
   validCharges(billTotal: any) {
-    if (billTotal > 0) { ////////// Jazeera Foods Condition
+    if (billTotal > 3000) { ////////// Jazeera Foods Condition
       //if (billTotal > 0) { ////////// Cake Corner Refreshment
       return true;
     } else {
@@ -448,7 +448,7 @@ export class GlobalDataModule implements OnInit {
   }
 
   getServiceCharges() {
-    var val = 5.5;
+    var val = 2;
     return val;
   }
 
@@ -536,7 +536,7 @@ export class GlobalDataModule implements OnInit {
   curDate: any = new Date();
   public SubscriptionExpired(): boolean {
     ///// yyyy-MM-dd /////////////
-    var ExpiryDate: any = '2025-07-10';
+    var ExpiryDate: any = '2025-06-10';
     var curDate = this.datePipe.transform(this.curDate, 'yyyy-MM-dd')
     var status: any = curDate! >= ExpiryDate;
     console.log(status, this.curDate, ExpiryDate);

@@ -808,37 +808,57 @@ searchProductByName() {
 
 
 
-
+ validFlag = true;
   SaveBill(type: any) {
-    var isValidFlag = true;
-    this.tableDataList.forEach((p: any) => {
-      p.Quantity = parseFloat(p.Quantity);
-      p.SalePrice = parseFloat(p.SalePrice);
-      p.CostPrice = parseFloat(p.CostPrice);
-
-      if (p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null) {
-        this.msg.WarnNotify('(' + p.ProductTitle + ') Cost Price is not Valid');
-        isValidFlag = false;
-
-        return;
-      }
-
-      if (p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null) {
-        this.msg.WarnNotify('(' + p.ProductTitle + ') Sale Price is not Valid');
-        isValidFlag = false;
-
-        return;
-      }
-
-      if (p.Quanity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '') {
-        this.msg.WarnNotify('(' + p.ProductTitle + ') Quantity is not Valid');
-        isValidFlag = false;
-        return;
-      }
 
 
+    var inValidCostProdList = this.tableDataList.filter((p: any) => p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null);
+    var inValidSaleProdList = this.tableDataList.filter((p: any) => p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null);
+    var inValidQtyProdList = this.tableDataList.filter((p: any) => p.Quantity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '')
 
-    });
+    console.log(inValidCostProdList)
+    console.log(inValidSaleProdList);
+    console.log(inValidQtyProdList);
+    if (inValidCostProdList.length > 0) {
+      this.msg.WarnNotify('(' + inValidCostProdList[0].ProductTitle + ') Cost Price greater than Sale Price');
+      return;
+    }
+    if (inValidSaleProdList.length > 0) {
+      this.msg.WarnNotify('(' + inValidSaleProdList[0].ProductTitle + ') Sale Price is not Valid');
+      return;
+    }
+    if (inValidQtyProdList.length > 0) {
+      this.msg.WarnNotify('(' + inValidQtyProdList[0].ProductTitle + ') Quantity is not Valid');
+      return;
+    }
+    // this.tableDataList.forEach((p: any) => {
+    //   p.Quantity = parseFloat(p.Quantity);
+    //   p.SalePrice = parseFloat(p.SalePrice);
+    //   p.CostPrice = parseFloat(p.CostPrice);
+
+    //   if (p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null) {
+    //     this.msg.WarnNotify('(' + p.ProductTitle + ') Cost Price is not Valid');
+    //     isValidFlag = false;
+
+    //     return;
+    //   }
+
+    //   if (p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null) {
+    //     this.msg.WarnNotify('(' + p.ProductTitle + ') Sale Price is not Valid');
+    //     isValidFlag = false;
+
+    //     return;
+    //   }
+
+    //   if (p.Quanity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '') {
+    //     this.msg.WarnNotify('(' + p.ProductTitle + ') Quantity is not Valid');
+    //     isValidFlag = false;
+    //     return;
+    //   }
+
+
+
+    // });
 
 
 
@@ -856,93 +876,75 @@ searchProductByName() {
     } else {
 
 
-      if (this.discount == '' || this.discount == undefined) {
-        this.discount = 0;
-      }
-      if (this.overHead == '' || this.overHead == undefined) {
-        this.overHead = 0;
-      }
-      if (this.invRemarks == '' || this.invRemarks == undefined) {
-        this.invRemarks = '-';
-      }
 
-      if (isValidFlag == true) {
+       var postData = {
+        InvBillNo: this.holdInvNo,
+        InvType: "PR",
+        InvDate: this.global.dateFormater(this.invoiceDate, '-'),
+        RefInvoiceNo: this.refInvNo,
+        PartyID: this.partyID,
+        LocationID: this.locationID,
+        ProjectID: this.projectID,
+        BookerID: this.bookerID,
+        BillTotal: this.subTotal,
+        BillDiscount: this.discount || 0,
+        OverHeadAmount: this.overHead || 0,
+        NetTotal: this.subTotal - this.discount,
+        Remarks: this.invRemarks || '-',
+        InvoiceDocument: "-",
+        HoldInvNo: this.holdInvNo,
+        InvDetail: JSON.stringify(this.tableDataList),
+        UserID: this.global.getUserID()
+      };
+
+      if (this.validFlag == true) {
+            this.validFlag = false;
         if (type == 'hold') {
           if (this.holdBtnType == 'Hold') {
             this.app.startLoaderDark();
-            this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchaseRtn', {
-              InvType: "HPR",
-              InvDate: this.global.dateFormater(this.invoiceDate, '-'),
-              RefInvoiceNo: this.refInvNo,
-              PartyID: this.partyID,
-              LocationID: this.locationID,
-              ProjectID: this.projectID,
-              BookerID: this.bookerID,
-              BillTotal: this.subTotal,
-              BillDiscount: this.discount,
-              OverHeadAmount: this.overHead,
-              NetTotal: this.subTotal - this.discount,
-              Remarks: this.invRemarks,
-              InvoiceDocument: "-",
-
-              InvDetail: JSON.stringify(this.tableDataList),
-
-              UserID: this.global.getUserID()
-            }).subscribe(
+              postData.InvType = 'HPR';
+            console.log(postData);
+            this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchaseRtn', postData).subscribe(
               (Response: any) => {
                 if (Response.msg == 'Data Saved Successfully') {
                   this.msg.SuccessNotify(Response.msg);
                   this.reset();
-                  this.app.stopLoaderDark();
 
                 } else {
                   this.msg.WarnNotify(Response.msg);
-                  this.app.stopLoaderDark();
                 }
+                 this.app.stopLoaderDark();
+                    this.validFlag = true;
               },
               (Error: any) => {
                 this.msg.WarnNotify(Error);
                 this.app.stopLoaderDark();
+                    this.validFlag = true;
               }
             )
           } else if (this.holdBtnType == 'ReHold') {
             this.global.openPinCode().subscribe(pin => {
               if (pin != '') {
                 this.app.startLoaderDark();
-
-                this.http.post(environment.mainApi + this.global.inventoryLink + 'UpdateHoldInvoice', {
-                  InvBillNo: this.holdInvNo,
-                  InvDate: this.global.dateFormater(this.invoiceDate, '-'),
-                  RefInvoiceNo: this.refInvNo,
-                  PartyID: this.partyID,
-                  LocationID: this.locationID,
-                  ProjectID: this.projectID,
-                  BookerID: this.bookerID,
-                  BillTotal: this.subTotal,
-                  BillDiscount: this.discount,
-                  OverHeadAmount: this.overHead,
-                  NetTotal: this.subTotal - this.discount,
-                  Remarks: this.invRemarks,
-                  InvoiceDocument: "-",
-                  PinCode: pin,
-                  InvDetail: JSON.stringify(this.tableDataList),
-
-                  UserID: this.global.getUserID()
-                }).subscribe(
+                  postData['PinCode'] = pin;
+                  console.log(postData);
+                this.http.post(environment.mainApi + this.global.inventoryLink + 'UpdateHoldInvoice', postData).subscribe(
                   (Response: any) => {
                     if (Response.msg == 'Data Updated Successfully') {
                       this.msg.SuccessNotify(Response.msg);
                       this.reset();
-                      this.app.stopLoaderDark();
+                     
 
                     } else {
                       this.msg.WarnNotify(Response.msg);
-                      this.app.stopLoaderDark();
                     }
+                        this.validFlag = true;
+                         this.app.stopLoaderDark();
                   },
                   (Error: any) => {
                     this.msg.WarnNotify(Error);
                     this.app.stopLoaderDark();
+                        this.validFlag = true;
                   }
                 )
               }
@@ -955,40 +957,25 @@ searchProductByName() {
             (Response: any) => {
               if (Response == true) {
                 this.app.startLoaderDark();
-                this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchaseRtn', {
-                  InvType: "PR",
-                  InvDate: this.global.dateFormater(this.invoiceDate, '-'),
-                  RefInvoiceNo: this.refInvNo,
-                  PartyID: this.partyID,
-                  LocationID: this.locationID,
-                  ProjectID: this.projectID,
-                  BookerID: this.bookerID,
-                  BillTotal: this.subTotal,
-                  BillDiscount: this.discount,
-                  OverHeadAmount: this.overHead,
-                  NetTotal: this.subTotal - this.discount,
-                  Remarks: this.invRemarks,
-                  InvoiceDocument: "-",
-                  HoldInvNo: this.holdInvNo,
-
-                  InvDetail: JSON.stringify(this.tableDataList),
-
-                  UserID: this.global.getUserID()
-                }).subscribe(
+                   postData.InvType = 'PR';
+                  console.log(postData);
+                this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchaseRtn', postData).subscribe(
                   (Response: any) => {
                     if (Response.msg == 'Data Saved Successfully') {
                       this.msg.SuccessNotify(Response.msg);
                       this.reset();
-                      this.app.stopLoaderDark();
 
                     } else {
                       this.msg.WarnNotify(Response.msg);
-                      this.app.stopLoaderDark();
                     }
+                     this.app.stopLoaderDark();
+                        this.validFlag = true;
                   },
                   (Error: any) => {
                     this.msg.WarnNotify(Error);
                     this.app.stopLoaderDark();
+                       this.validFlag = true;
+                    
                   }
                 )
               }

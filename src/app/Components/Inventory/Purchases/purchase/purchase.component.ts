@@ -188,8 +188,8 @@ export class PurchaseComponent implements OnInit {
 
 
 
-  
-   searchByCode(e: any) {
+
+  searchByCode(e: any) {
 
     var barcode = this.PBarcode;
     var qty: number = 1;
@@ -221,8 +221,8 @@ export class PurchaseComponent implements OnInit {
               this.searchSpecialBarcode(barcode, qty);
               return;
             } else {
-              if (BType == 'price') {qty = qty / parseFloat(Response[0].salePrice);}
-                this.pushProdData(Response[0],qty);
+              if (BType == 'price') { qty = qty / parseFloat(Response[0].salePrice); }
+              this.pushProdData(Response[0], qty);
             }
           }
         )
@@ -239,16 +239,16 @@ export class PurchaseComponent implements OnInit {
 
 
   holdDataFunction(data: any) {
-     this.global.getProdDetail(data.productID, '').subscribe(
-        (Response: any) => {
-          this.pushProdData(Response[0],1)
-        }
-      )
+    this.global.getProdDetail(data.productID, '').subscribe(
+      (Response: any) => {
+        this.pushProdData(Response[0], 1)
+      }
+    )
 
     this.app.stopLoaderDark();
     this.productName = '';
     this.getTotal();
-      this.global.closeBootstrapModal('#prodModal',true);
+    this.global.closeBootstrapModal('#prodModal', true);
     setTimeout(() => {
       $('#psearchProduct').trigger('focus');
     }, 500);
@@ -256,63 +256,63 @@ export class PurchaseComponent implements OnInit {
   }
 
 
-  pushProdData(data:any,qty:any){
-       /////// check already present in the table or not
-              var condition = this.tableDataList.find(
-                (x: any) => x.ProductID == data.productID
-              );
+  pushProdData(data: any, qty: any) {
+    /////// check already present in the table or not
+    var condition = this.tableDataList.find(
+      (x: any) => x.ProductID == data.productID
+    );
 
-              var index = this.tableDataList.indexOf(condition);
+    var index = this.tableDataList.indexOf(condition);
 
-              //// push the data using index
-              if (condition == undefined) {
+    //// push the data using index
+    if (condition == undefined) {
 
-                 this.tableDataList.push({
-                  rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
-                    : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
-                      : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
-                  ProductID: data.productID,
-                  ProductTitle: data.productTitle,
-                  barcode:data.barcode,
-                  productImage: data.productImage,
-                  Quantity: qty,
-                  wohCP: data.costPrice,
-                  CostPrice: data.costPrice,
-                  SalePrice: data.salePrice,
-                  ovhPercent: 0,
-                  ovhAmount: 0,
-                  ExpiryDate: this.global.dateFormater(new Date(), '-'),
-                  BatchNo: '-',
-                  BatchStatus: '-',
-                  UomID: data.uomID,
-                  Packing: 1,
-                  discInP: 0,
-                  discInR: 0,
-                  AQ: data.aq,
+      this.tableDataList.push({
+        rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
+          : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
+            : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
+        ProductID: data.productID,
+        ProductTitle: data.productTitle,
+        barcode: data.barcode,
+        productImage: data.productImage,
+        Quantity: qty,
+        wohCP: data.costPrice,
+        CostPrice: data.costPrice,
+        SalePrice: data.salePrice,
+        ovhPercent: 0,
+        ovhAmount: 0,
+        ExpiryDate: this.global.dateFormater(new Date(), '-'),
+        BatchNo: '-',
+        BatchStatus: '-',
+        UomID: data.uomID,
+        Packing: 1,
+        discInP: 0,
+        discInR: 0,
+        AQ: data.aq,
 
-                });
+      });
 
-                //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
-                this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-                this.getTotal();
-                this.productImage = data.productImage;
-
-
+      //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
+      this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+      this.getTotal();
+      this.productImage = data.productImage;
 
 
-              } else {
-                if (this.PBarcode.split("/")[1] != undefined) {
-                  var total:any = this.PBarcode.split("/")[1];
-                  qty = total / this.tableDataList[index].SalePrice;
-                }
-                this.tableDataList[index].Quantity = parseFloat(this.tableDataList[index].Quantity) + qty;
 
-                /////// Sorting Table
-                this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
-                this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-                this.productImage = this.tableDataList[index].productImage;
-                this.getTotal();
-              }
+
+    } else {
+      if (this.PBarcode.split("/")[1] != undefined) {
+        var total: any = this.PBarcode.split("/")[1];
+        qty = total / this.tableDataList[index].SalePrice;
+      }
+      this.tableDataList[index].Quantity = parseFloat(this.tableDataList[index].Quantity) + qty;
+
+      /////// Sorting Table
+      this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
+      this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+      this.productImage = this.tableDataList[index].productImage;
+      this.getTotal();
+    }
 
   }
 
@@ -368,15 +368,15 @@ export class PurchaseComponent implements OnInit {
         var index = this.tableDataList.indexOf(condition);
         if (condition == undefined) {
           /////////// inserting data into tableDataList
-          Response[0].costPrice =   tmpPrice || Response[0].costPrice;
-          this.pushProdData(Response[0],prodQty || 1)
+          Response[0].costPrice = tmpPrice || Response[0].costPrice;
+          this.pushProdData(Response[0], prodQty || 1)
 
         } else {
           /////////// changing qty if product already scanned
           if (Response[0].uomTitle == 'price') {
-           var total = (parseFloat(this.tableDataList[index].CostPrice) * parseFloat(this.tableDataList[index].Quantity)) ;
+            var total = (parseFloat(this.tableDataList[index].CostPrice) * parseFloat(this.tableDataList[index].Quantity));
             this.tableDataList[index].Quantity = parseFloat(this.tableDataList[index].Quantity) + 1;
-             this.tableDataList[index].CostPrice   = (total  + parseFloat(tmpPrice) )/  parseFloat(this.tableDataList[index].Quantity) ;
+            this.tableDataList[index].CostPrice = (total + parseFloat(tmpPrice)) / parseFloat(this.tableDataList[index].Quantity);
           } else {
             this.tableDataList[index].Quantity = parseFloat(this.tableDataList[index].Quantity) + parseFloat(prodQty);
           }
@@ -803,37 +803,62 @@ export class PurchaseComponent implements OnInit {
 
 
 
-
+  validFlag = true;
   SaveBill(type: any) {
-    var isValidFlag = true;
-    this.tableDataList.forEach((p: any) => {
-      p.Quantity = parseFloat(p.Quantity);
-      p.SalePrice = parseFloat(p.SalePrice);
-      p.CostPrice = parseFloat(p.CostPrice);
-
-      if (p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null) {
-        this.msg.WarnNotify('(' + p.ProductTitle + ') Cost Price is not Valid');
-        isValidFlag = false;
-
-        return;
-      }
-
-      if (p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null) {
-        this.msg.WarnNotify('(' + p.ProductTitle + ') Sale Price is not Valid');
-        isValidFlag = false;
-
-        return;
-      }
-
-      if (p.Quanity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '') {
-        this.msg.WarnNotify('(' + p.ProductTitle + ') Quantity is not Valid');
-        isValidFlag = false;
-        return;
-      }
 
 
 
-    });
+
+    var inValidCostProdList = this.tableDataList.filter((p: any) => p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null);
+    var inValidSaleProdList = this.tableDataList.filter((p: any) => p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null);
+    var inValidQtyProdList = this.tableDataList.filter((p: any) => p.Quantity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '')
+
+    console.log(inValidCostProdList)
+    console.log(inValidSaleProdList);
+    console.log(inValidQtyProdList);
+    if (inValidCostProdList.length > 0) {
+      this.msg.WarnNotify('(' + inValidCostProdList[0].ProductTitle + ') Cost Price greater than Sale Price');
+      return;
+    }
+    if (inValidSaleProdList.length > 0) {
+      this.msg.WarnNotify('(' + inValidSaleProdList[0].ProductTitle + ') Sale Price is not Valid');
+      return;
+    }
+    if (inValidQtyProdList.length > 0) {
+      this.msg.WarnNotify('(' + inValidQtyProdList[0].ProductTitle + ') Quantity is not Valid');
+      return;
+    }
+
+
+
+    // this.tableDataList.forEach((p: any) => {
+    //   p.Quantity = parseFloat(p.Quantity);
+    //   p.SalePrice = parseFloat(p.SalePrice);
+    //   p.CostPrice = parseFloat(p.CostPrice);
+
+    //   if (p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null) {
+    //     this.msg.WarnNotify('(' + p.ProductTitle + ') Cost Price is not Valid');
+    //     isValidFlag = false;
+
+    //     return;
+    //   }
+
+    //   if (p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null) {
+    //     this.msg.WarnNotify('(' + p.ProductTitle + ') Sale Price is not Valid');
+    //     isValidFlag = false;
+
+    //     return;
+    //   }
+
+    //   if (p.Quanity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '') {
+    //     this.msg.WarnNotify('(' + p.ProductTitle + ') Quantity is not Valid');
+    //     isValidFlag = false;
+    //     return;
+    //   }
+
+
+
+    // });
 
 
 
@@ -861,81 +886,73 @@ export class PurchaseComponent implements OnInit {
         this.invRemarks = '-';
       }
 
-      if (isValidFlag == true) {
+
+      var postData = {
+        InvBillNo: this.holdInvNo,
+        InvType: "P",
+        InvDate: this.global.dateFormater(this.invoiceDate, '-'),
+        RefInvoiceNo: this.refInvNo,
+        PartyID: this.partyID,
+        LocationID: this.locationID,
+        ProjectID: this.projectID,
+        BookerID: this.bookerID,
+        BillTotal: this.subTotal,
+        BillDiscount: this.discount,
+        OverHeadAmount: this.overHead,
+        NetTotal: this.subTotal - this.discount,
+        Remarks: this.invRemarks,
+        InvoiceDocument: "-",
+        HoldInvNo: this.holdInvNo,
+        InvDetail: JSON.stringify(this.tableDataList),
+        UserID: this.global.getUserID()
+      };
+
+      if (this.validFlag == true) {
+        this.validFlag = false;
         if (type == 'hold') {
           if (this.holdBtnType == 'Hold') {
             this.app.startLoaderDark();
-            this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchase', {
-              InvType: "HP",
-              InvDate: this.global.dateFormater(this.invoiceDate, '-'),
-              RefInvoiceNo: this.refInvNo,
-              PartyID: this.partyID,
-              LocationID: this.locationID,
-              ProjectID: this.projectID,
-              BookerID: this.bookerID,
-              BillTotal: this.subTotal,
-              BillDiscount: this.discount,
-              OverHeadAmount: this.overHead,
-              NetTotal: this.subTotal - this.discount,
-              Remarks: this.invRemarks,
-              InvoiceDocument: "-",
-
-              InvDetail: JSON.stringify(this.tableDataList),
-
-              UserID: this.global.getUserID()
-            }).subscribe(
+            postData.InvType = 'HP';
+            console.log(postData);
+            this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchase', postData).subscribe(
               (Response: any) => {
                 if (Response.msg == 'Data Saved Successfully') {
                   this.msg.SuccessNotify(Response.msg);
                   this.reset();
-                  this.app.stopLoaderDark();
 
                 } else {
                   this.msg.WarnNotify(Response.msg);
-                  this.app.stopLoaderDark();
                 }
+                this.app.stopLoaderDark();
+                this.validFlag = true;
               },
               (Error: any) => {
                 this.app.stopLoaderDark();
+                this.validFlag = true;
               }
             )
           } else if (this.holdBtnType == 'ReHold') {
             this.global.openPinCode().subscribe(pin => {
               if (pin != '') {
                 this.app.startLoaderDark();
-
-                this.http.post(environment.mainApi + this.global.inventoryLink + 'UpdateHoldInvoice', {
-                  InvBillNo: this.holdInvNo,
-                  InvDate: this.global.dateFormater(this.invoiceDate, '-'),
-                  RefInvoiceNo: this.refInvNo,
-                  PartyID: this.partyID,
-                  LocationID: this.locationID,
-                  ProjectID: this.projectID,
-                  BookerID: this.bookerID,
-                  BillTotal: this.subTotal,
-                  BillDiscount: this.discount,
-                  OverHeadAmount: this.overHead,
-                  NetTotal: this.subTotal - this.discount,
-                  Remarks: this.invRemarks,
-                  InvoiceDocument: "-",
-                  PinCode: pin,
-                  InvDetail: JSON.stringify(this.tableDataList),
-
-                  UserID: this.global.getUserID()
-                }).subscribe(
+                postData['PinCode'] = pin;
+                console.log(postData);
+                this.http.post(environment.mainApi + this.global.inventoryLink + 'UpdateHoldInvoice', postData).subscribe(
                   (Response: any) => {
                     if (Response.msg == 'Data Updated Successfully') {
                       this.msg.SuccessNotify(Response.msg);
                       this.reset();
-                      this.app.stopLoaderDark();
 
                     } else {
                       this.msg.WarnNotify(Response.msg);
-                      this.app.stopLoaderDark();
                     }
+                    this.app.stopLoaderDark();
+
+                    this.validFlag = true;
                   },
                   (Error: any) => {
                     this.app.stopLoaderDark();
+                    this.validFlag = true;
                   }
                 )
               }
@@ -949,59 +966,33 @@ export class PurchaseComponent implements OnInit {
               if (Response == true) {
 
                 this.app.startLoaderDark();
-                this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchase', {
-                  InvType: "P",
-                  InvDate: this.global.dateFormater(this.invoiceDate, '-'),
-                  RefInvoiceNo: this.refInvNo,
-                  PartyID: this.partyID,
-                  LocationID: this.locationID,
-                  ProjectID: this.projectID,
-                  BookerID: this.bookerID,
-                  BillTotal: this.subTotal,
-                  BillDiscount: this.discount,
-                  OverHeadAmount: this.overHead,
-                  NetTotal: this.subTotal - this.discount,
-                  Remarks: this.invRemarks,
-                  InvoiceDocument: "-",
-                  HoldInvNo: this.holdInvNo,
-
-                  InvDetail: JSON.stringify(this.tableDataList),
-
-                  UserID: this.global.getUserID()
-                }).subscribe(
+                postData.InvType = 'P';
+                console.log(postData);
+                this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchase', postData).subscribe(
                   (Response: any) => {
                     if (Response.msg == 'Data Saved Successfully') {
                       this.msg.SuccessNotify(Response.msg);
                       this.reset();
-                      this.app.stopLoaderDark();
 
                     } else {
                       this.msg.WarnNotify(Response.msg);
-                      this.app.stopLoaderDark();
                     }
+                    this.app.stopLoaderDark();
+                    this.validFlag = true;
                   },
                   (Error: any) => {
                     this.app.stopLoaderDark();
+                    this.validFlag = true;
                   }
                 )
 
               }
             }
           )
-
-
-
-
         }
 
       }
-
-
-
     }
-
-
-
   }
 
 

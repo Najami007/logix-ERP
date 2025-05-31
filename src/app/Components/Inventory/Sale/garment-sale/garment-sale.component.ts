@@ -1268,34 +1268,58 @@ export class GarmentSaleComponent implements OnInit {
 
 
 
+    var inValidCostProdList = this.tableDataList.filter((p:any)=> p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null );
+    var inValidSaleProdList = this.tableDataList.filter((p:any)=> p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
+    var inValidQtyProdList = this.tableDataList.filter((p:any)=> p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
+    var inValidDiscProdList = this.tableDataList.filter((p:any)=> p.costPrice > (p.salePrice - p.discInR));
 
-    this.isValidSale = true;
-    this.tableDataList.forEach((p: any) => {
+    console.log(inValidCostProdList)
+    console.log(inValidSaleProdList);
+    console.log(inValidQtyProdList);
+    console.log(inValidDiscProdList);
+    if(inValidCostProdList.length > 0 && !this.LessToCostFeature){
+       this.msg.WarnNotify('(' + inValidCostProdList[0].productTitle + ') Cost Price greater than Sale Price');
+        return;
+    }
+      if(inValidSaleProdList.length> 0 ){
+       this.msg.WarnNotify('(' + inValidSaleProdList[0].productTitle + ') Sale Price is not Valid');
+        return;
+    }
+       if(inValidQtyProdList.length> 0 ){
+       this.msg.WarnNotify('(' + inValidQtyProdList[0].productTitle + ') Quantity is not Valid');
+        return;
+    }
 
-      p.quantity = parseFloat(p.quantity);
-      p.salePrice = parseFloat(p.salePrice);
-      p.costPrice = parseFloat(p.costPrice);
+       if(inValidDiscProdList.length> 0 && !this.LessToCostFeature ){
+       this.msg.WarnNotify('(' + inValidDiscProdList[0].productTitle + ') Discount is not Valid');
+        return;
+    }
+  
 
-      if (!this.LessToCostFeature && (p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null)) {
-        this.msg.WarnNotify('(' + p.productTitle + ') Cost Price greater than Sale Price');
-        this.isValidSale = false;
-        return;
-      } else if (p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null) {
-        this.msg.WarnNotify('(' + p.productTitle + ') Sale Price is not Valid');
-        this.isValidSale = false;
-        return;
-      } else if (p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '') {
-        this.msg.WarnNotify('(' + p.productTitle + ') Quantity is not Valid');
-        this.isValidSale = false;
-        return;
-      } else if (!this.LessToCostFeature && (p.costPrice > (p.salePrice - p.discInR))) {
-        this.msg.WarnNotify('(' + p.productTitle + ') Discount not valid');
-        this.isValidSale = false;
-        return;
-      }
-    });
+
+    // this.tableDataList.forEach((p: any) => {
+
+    //   p.quantity = parseFloat(p.quantity);
+    //   p.salePrice = parseFloat(p.salePrice);
+    //   p.costPrice = parseFloat(p.costPrice);
+
+    //   if (!this.LessToCostFeature && (p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null)) {
+    //     this.msg.WarnNotify('(' + p.productTitle + ') Cost Price greater than Sale Price');
+    //     return;
+    //   } else if (p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null) {
+    //     this.msg.WarnNotify('(' + p.productTitle + ') Sale Price is not Valid');
+    //     return;
+    //   } else if (p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '') {
+    //     this.msg.WarnNotify('(' + p.productTitle + ') Quantity is not Valid');
+    //     return;
+    //   } else if (!this.LessToCostFeature && (p.costPrice > (p.salePrice - p.discInR))) {
+    //     this.msg.WarnNotify('(' + p.productTitle + ') Discount not valid');
+    //     return;
+    //   }
+    // });
 
     if (this.isValidSale == true) {
+       
 
       if (this.tableDataList == '') {
         this.msg.WarnNotify('No Product Seleted')
@@ -1326,26 +1350,7 @@ export class GarmentSaleComponent implements OnInit {
         this.msg.WarnNotify('Select Bank')
       } else {
 
-
-
-        if (this.global.SubscriptionExpired()) {
-          Swal.fire({
-            title: 'Alert!',
-            text: 'Unable To Save , Contact To Administrator!',
-            position: 'center',
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'OK',
-          });
-          return;
-        }
-
-
-        this.isValidSale = false;
-        this.app.startLoaderDark();
-        this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', {
+        var postData:any = {
           InvDate: this.global.dateFormater(this.InvDate, '-'),
           PartyID: this.partyID,
           InvType: "S",
@@ -1370,7 +1375,27 @@ export class GarmentSaleComponent implements OnInit {
           CusName: this.customerName || '-',
           SaleDetail: JSON.stringify(this.tableDataList),
           UserID: this.global.getUserID()
-        }).subscribe(
+        }
+
+
+
+        if (this.global.SubscriptionExpired()) {
+          Swal.fire({
+            title: 'Alert!',
+            text: 'Unable To Save , Contact To Administrator!',
+            position: 'center',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK',
+          });
+          return;
+        }
+         this.isValidSale = false;
+
+        this.app.startLoaderDark();
+        this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', postData).subscribe(
           (Response: any) => {
             if (Response.msg == 'Data Saved Successfully') {
               this.tmpCash = this.cash;
@@ -1387,11 +1412,11 @@ export class GarmentSaleComponent implements OnInit {
                 this.global.closeBootstrapModal('#paymentMehtod', true);
 
               }
-              this.isValidSale = true;
+            
             } else {
               this.msg.WarnNotify(Response.msg);
-              this.isValidSale = true;
             }
+              this.isValidSale = true;
             this.app.stopLoaderDark();
 
           },
