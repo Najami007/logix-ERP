@@ -128,7 +128,7 @@ export class SaleBillPrintComponent implements OnInit {
         this.myOtherCharges = Response[0].otherCharges;
         this.myRemarks = Response[0].remarks;
         this.myCash = Response[0].cashRec;
-        this.myBank = Response[0].netTotal - Response[0].cashRec;
+        this.myBank =  Response[0].bankCash; //Response[0].netTotal - Response[0].cashRec;
         this.myDiscount = Response[0].billDiscount;
         this.myChange = Response[0].change;
         this.myPaymentType = Response[0].paymentType;

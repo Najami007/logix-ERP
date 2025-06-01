@@ -12,14 +12,14 @@ import { environment } from 'src/environments/environment.development';
 })
 export class AdddwComponent implements OnInit {
 
-  
+
   constructor(
-    private http:HttpClient,
+    private http: HttpClient,
     private dialogRef: MatDialogRef<AdddwComponent>,
-    public global:GlobalDataModule,
-    private msg:NotificationService,
-    @Inject(MAT_DIALOG_DATA) public editData : any,
-  ){}
+    public global: GlobalDataModule,
+    private msg: NotificationService,
+    @Inject(MAT_DIALOG_DATA) public editData: any,
+  ) { }
 
   ngOnInit(): void {
     this.getSupplier();
@@ -29,12 +29,12 @@ export class AdddwComponent implements OnInit {
     this.getCashList();
     this.getBankList();
 
-    if(this.editData){
+    if (this.editData) {
       this.invoiceNo = this.editData.invoiceNo;
       this.invoiceDate = new Date(this.editData.invoiceDate);
       this.subType = this.editData.subType;
-      this.bankCoaID = this.subType == 'Deposit' ? this.editData.coaid : this.editData.refCOAID ;
-      this.cashCoaID = this.subType == 'Deposit' ? this.editData.refCOAID : this.editData.coaid ;
+      this.bankCoaID = this.subType == 'Deposit' ? this.editData.coaid : this.editData.refCOAID;
+      this.cashCoaID = this.subType == 'Deposit' ? this.editData.refCOAID : this.editData.coaid;
       this.amount = this.editData.amount;
       this.discount = this.editData.discount;
       this.remarks = this.editData.invoiceRemarks;
@@ -44,30 +44,30 @@ export class AdddwComponent implements OnInit {
     }
   }
 
-  btnType =  'Save';
+  btnType = 'Save';
 
   invoiceNo = '';
   invoiceDate = new Date();
   supplierBalance = 0;
   amount = 0;
   discount = 0;
-  customerList:any = [];
-  coaList:any = [];
+  customerList: any = [];
+  coaList: any = [];
   coaID = 0;
   refCoaID = 0;
-  refCoaList:any = [];
+  refCoaList: any = [];
   bankReceiptNo = '-';
   remarks = '';
   partyID = 0;
   projectID = this.global.getProjectID();
 
   subType = '';
-  subTypeList = [{title:'Deposit'},{title:'Withdrawal'}]
+  subTypeList = [{ title: 'Deposit' }, { title: 'Withdrawal' }]
 
 
-  getSupplier(){
+  getSupplier() {
     this.global.getCustomerList().subscribe(
-      (Response)=>{
+      (Response) => {
         this.customerList = Response;
       }
     )
@@ -75,129 +75,118 @@ export class AdddwComponent implements OnInit {
 
   bankCoaID = 0;
   cashCoaID = 0;
-  cashHeadList:any = [];
-  BankList:any = []
+  cashHeadList: any = [];
+  BankList: any = []
   ////////////////////////////////////////////
 
-  getBankList(){
+  getBankList() {
     this.global.getCashBankCoa('BRV').subscribe(
       (Response: any) => {
-         this.BankList = Response;
+        this.BankList = Response;
       }
     )
   }
 
   getCashList() {
-   this.global.getCashBankCoa('CRV').subscribe(
+    this.global.getCashBankCoa('CRV').subscribe(
       (Response: any) => {
-      
+
         this.cashHeadList = Response;
       }
     )
 
-   
 
-    
+
+
   }
 
 
-  save(){
-    
-    if(this.subType == '' || this.subType == undefined || this.subType == null){
+  save() {
+
+    if (this.subType == '' || this.subType == undefined || this.subType == null) {
       this.msg.WarnNotify('Select Transaction Type');
-    }else if(this.bankCoaID == 0 || this.bankCoaID == undefined || this.bankCoaID == null){
-      this.msg.WarnNotify('Select Bank Head')
-    }else if(this.cashCoaID == 0 || this.cashCoaID == undefined || this.cashCoaID == null){
-      this.msg.WarnNotify('Select Cash Head')
-    }else if(this.amount == 0 || this.amount == undefined || this.amount == null){
-      this.msg.WarnNotify('Enter Amount')
-    }else{
-      
-      if(this.bankReceiptNo == '' || this.bankReceiptNo == null || this.bankReceiptNo == undefined){
-        this.bankReceiptNo = '-';
-      }
-
-      if(this.remarks == '' || this.remarks == undefined || this.remarks == null){
-        this.remarks = '-';
-      }  
-    
-      if(this.btnType == 'Save'){
-        this.insert();
-      }
-
-      if(this.btnType == 'Update'){
-        this.update();
-      }
-
+      return;
+    } 
+     if (this.bankCoaID == 0 || this.bankCoaID == undefined || this.bankCoaID == null) {
+      this.msg.WarnNotify('Select Bank Head');
+      return;
+    } 
+     if (this.cashCoaID == 0 || this.cashCoaID == undefined || this.cashCoaID == null) {
+      this.msg.WarnNotify('Select Cash Head');
+      return;
+    } 
+     if (this.amount == 0 || this.amount == undefined || this.amount == null) {
+      this.msg.WarnNotify('Enter Amount');
+      return;
     }
 
+      var postData = {
+         InvoiceNo: this.invoiceNo,
+        InvoiceDate: this.global.dateFormater(this.invoiceDate, '-'),
+        Type: "JV",
+        SubType: this.subType,
+        InvoiceRemarks: this.remarks || '-',
+        BankReceiptNo: this.bankReceiptNo || '-',
+        COAID: this.subType == 'Deposit' ? this.bankCoaID : this.cashCoaID,
+        RefCOAID: this.subType == 'Deposit' ? this.cashCoaID : this.bankCoaID,
+        ProjectID: this.projectID,
+        Amount: this.amount,
+        UserID: this.global.getUserID()
+      }
+
+      if (this.btnType == 'Save') {
+        this.insert(postData);
+      }
+
+      if (this.btnType == 'Update') {
+        this.update(postData);
+      }
+
   }
 
 
-  insert(){
+  insert(postData:any) {
     $('.loaderDark').show();
-    this.http.post(environment.mainApi+this.global.accountLink+'InsertDepositWithdrawal',{
-    InvoiceDate:this.global.dateFormater(this.invoiceDate,'-'),
-    Type: "JV",
-    SubType: this.subType,
-    InvoiceRemarks: this.remarks,
-    BankReceiptNo: this.bankReceiptNo,
-    COAID: this.subType == 'Deposit' ? this.bankCoaID : this.cashCoaID,
-    RefCOAID: this.subType == 'Deposit' ? this.cashCoaID : this.bankCoaID,
-    ProjectID:this.projectID,
-    Amount: this.amount,
-    UserID:  this.global.getUserID()
-    }).subscribe(
-      (Response:any)=>{
-        if(Response.msg == 'Data Saved Successfully'){
+    this.http.post(environment.mainApi + this.global.accountLink + 'InsertDepositWithdrawal', postData).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully') {
           this.msg.SuccessNotify(Response.msg);
           this.reset();
           this.dialogRef.close('update');
 
-        }else{
+        } else {
           this.msg.WarnNotify(Response.msg);
         }
 
         $('.loaderDark').fadeOut(500);
       },
-      (Error:any)=>{
+      (Error: any) => {
         $('.loaderDark').fadeOut(500);
       }
     )
   }
 
-  update(){
-    
+  update(postData:any) {
+
     this.global.openPinCode().subscribe(pin => {
 
-      if(pin != ''){
+      if (pin != '') {
         $('.loaderDark').show();
-        this.http.post(environment.mainApi+this.global.accountLink+'UpdateDepositWithdrawal',{
-          InvoiceNo: this.invoiceNo,
-          InvoiceDate: this.global.dateFormater(this.invoiceDate,'-'),
-          SubType: this.subType,
-          InvoiceRemarks: this.remarks,
-          BankReceiptNo: this.bankReceiptNo,
-          COAID: this.subType == 'Deposit' ? this.bankCoaID : this.cashCoaID,
-          RefCOAID: this.subType == 'Deposit' ? this.cashCoaID : this.bankCoaID,
-          ProjectID:this.projectID,
-          Amount: this.amount,
-          Pincode:pin,
-          UserID:  this.global.getUserID()
-        }).subscribe(
-          (Response:any)=>{
-            if(Response.msg == 'Data Updated Successfully'){
+        postData['PinCode'] = pin;
+        this.http.post(environment.mainApi + this.global.accountLink + 'UpdateDepositWithdrawal', postData).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Data Updated Successfully') {
               this.msg.SuccessNotify(Response.msg);
               this.reset();
               this.dialogRef.close('update');
-    
-            }else{
+
+            } else {
               this.msg.WarnNotify(Response.msg);
             }
-    
+
             $('.loaderDark').fadeOut(500);
           },
-          (Error:any)=>{
+          (Error: any) => {
             $('.loaderDark').fadeOut(500);
           }
         )
@@ -208,12 +197,12 @@ export class AdddwComponent implements OnInit {
 
 
 
-  closeDialog(){
+  closeDialog() {
     this.dialogRef.close();
   }
 
 
-  reset(){
+  reset() {
     this.invoiceDate = new Date();
     this.invoiceNo = '';
     this.coaID = 0;

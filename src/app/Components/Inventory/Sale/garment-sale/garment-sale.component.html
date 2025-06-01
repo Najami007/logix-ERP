@@ -100,12 +100,12 @@
 
                 <div class="d-flex justify-content-between">
                     <div class="pe-1 w-25"><button class="btnduplicate w-100" accesskey="u" *ngIf="crudList.u"
-                            (click)="global.openBootstrapModal('#SavedBillModal',true);getSavedBill()">D<u>u</u>plicate</button>
+                            (click)="openDuplicateModal()">D<u>u</u>plicate</button>
                     </div>
 
                     <button accesskey="o" [ngClass]="tillOpenFeature ? 'col-lg-7' : 'col-lg-9'"
                         class="btnload pt-2 d-flex justify-content-between "
-                        (click)="global.openBootstrapModal('#paymentMehtod',true);cash = 0;this.getTotal()">
+                        (click)="openPaymentModal()">
                         <span><u>O</u>ther</span> <mat-icon>keyboard_arrow_right</mat-icon>
                     </button>
                     <div class="col-lg-2 ps-1" *ngIf="tillOpenFeature">
@@ -273,7 +273,7 @@
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-header">
                     <h2 class="modal-title" id="paymentMehtodLabel">Payment Method</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="onPaymentModalClose()"></button>
                 </div>
                 <div class="modal-body">
 
@@ -373,7 +373,7 @@
                 <div class="modal-footer bg-mf-blue">
                     <button class="btnsave" (click)="save(pType.value,true,true)">Save</button>
                     <button type="button" class="btnclose" data-bs-dismiss="modal"
-                        (click)="paymentType = 'Cash';bankCoaID=0">Close</button>
+                        (click)="onPaymentModalClose()">Close</button>
                 </div>
 
 

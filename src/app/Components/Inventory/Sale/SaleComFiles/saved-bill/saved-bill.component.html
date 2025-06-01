@@ -39,7 +39,7 @@
                     <td>{{item.netTotal |number:'1.0-0'}}</td>
                     <td >
                         <div class="cursorPointer d-flex gap-2">
-                            <mat-icon class="text-dark " *ngIf="changePaymentMehtodFeature && crudList.u"
+                            <mat-icon class="text-dark " *ngIf="changePaymentMehtodFeature && crudList.u && !postBillFeature"
                             (click)="changePayment(item)">payment</mat-icon>
                         <mat-icon class="text-primary "
                             (click)="printDuplicateBill(item)">print</mat-icon>

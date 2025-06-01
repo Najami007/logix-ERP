@@ -13,14 +13,14 @@ import { environment } from 'src/environments/environment.development';
 })
 export class AddReceiptComponent implements OnInit {
 
-  
+
   constructor(
-    private http:HttpClient,
+    private http: HttpClient,
     private dialogRef: MatDialogRef<AddrecipeCategoryComponent>,
-    public global:GlobalDataModule,
-    private msg:NotificationService,
-    @Inject(MAT_DIALOG_DATA) public editData : any,
-  ){}
+    public global: GlobalDataModule,
+    private msg: NotificationService,
+    @Inject(MAT_DIALOG_DATA) public editData: any,
+  ) { }
 
   ngOnInit(): void {
     this.getSupplier();
@@ -29,8 +29,8 @@ export class AddReceiptComponent implements OnInit {
       $('#customer').trigger('focus');
     }, 500);
 
-    if(this.editData){
-       this.invoiceNo = this.editData.invoiceNo;
+    if (this.editData) {
+      this.invoiceNo = this.editData.invoiceNo;
       this.invoiceDate = new Date(this.editData.invoiceDate);
       this.partyID = this.editData.partyID;
       this.paymentType = this.editData.type;
@@ -39,8 +39,8 @@ export class AddReceiptComponent implements OnInit {
       this.discount = this.editData.discount;
       this.remarks = this.editData.invoiceRemarks;
       this.bankReceiptNo = this.editData.bankReceiptNo;
-       this.projectID = this.editData.projectID;
-       
+      this.projectID = this.editData.projectID;
+
       setTimeout(() => {
         this.getCoaList();
       }, 200);
@@ -55,44 +55,43 @@ export class AddReceiptComponent implements OnInit {
   invoiceDate = new Date();
   customerBalance = 0;
   amount = 0;
-  discount:any = 0;
-  customerList:any = [];
-  coaList:any = [];
+  discount: any = 0;
+  customerList: any = [];
+  coaList: any = [];
   coaID = 0;
   remarks = '';
   partyID = 0;
   bankReceiptNo = '';
   projectID = this.global.getProjectID();
-  paymentTypeList = [{value:'CRV',title:'Cash'},{value:'BRV',title:'Bank'},];
+  paymentTypeList = [{ value: 'CRV', title: 'Cash' }, { value: 'BRV', title: 'Bank' },];
 
   paymentType = 'CRV';
 
-  projectList:any = [];
+  projectList: any = [];
 
-  getProject(){
-    this.http.get(environment.mainApi+this.global.companyLink+'getproject').subscribe(
-      (Response:any)=>{
+  getProject() {
+    this.http.get(environment.mainApi + this.global.companyLink + 'getproject').subscribe(
+      (Response: any) => {
         this.projectList = Response;
-       // console.log(Response);
-      
+
       }
     )
   }
 
 
-  getSupplierBalance(){
-    var partyType = this.customerList.find((e:any)=> e.partyID == this.partyID).partyType;
+  getSupplierBalance() {
+    var partyType = this.customerList.find((e: any) => e.partyID == this.partyID).partyType;
     var reqType = partyType == 'Supplier' ? 'sup' : 'cus';
-    this.http.get(environment.mainApi+this.global.accountLink+'getcussupbalance?reqtype='+reqType+'&reqpartyid='+this.partyID).subscribe(
-      (Response:any)=>{
-         this.customerBalance = Response[0].amount;
+    this.http.get(environment.mainApi + this.global.accountLink + 'getcussupbalance?reqtype=' + reqType + '&reqpartyid=' + this.partyID).subscribe(
+      (Response: any) => {
+        this.customerBalance = Response[0].amount;
       }
     )
   }
 
-  getSupplier(){
+  getSupplier() {
     this.global.getPartyList().subscribe(
-      (Response)=>{
+      (Response) => {
         this.customerList = Response;
       }
     )
@@ -107,134 +106,127 @@ export class AddReceiptComponent implements OnInit {
     this.global.getCashBankCoa(this.paymentType).subscribe(
       (Response: any) => {
         this.coaList = Response;
-       if(Response.length > 0){
-        this.coaID = Response[0].coaID;
-       }
+        if (this.invoiceNo == '' && Response.length > 0) {
+          this.coaID = Response[0].coaID;
+        }
       },
       (Error) => {
-      
+
       }
     )
   }
 
 
 
-    //////////////////////////////////////////
+  //////////////////////////////////////////
 
-    Save(){
-      if(this.partyID == 0 || this.partyID == undefined){
-        this.msg.WarnNotify('Select Supplier')
-      }else if(this.paymentType == '' || this.paymentType == undefined){
-        this.msg.WarnNotify('Select Payment Type')
-      }else if(this.coaID == 0 || this.coaID == undefined){
-        this.msg.WarnNotify('Select COA')
-      }else if(this.amount == 0 || this.amount == undefined || this.amount == null){
-        this.msg.WarnNotify('Enter Amount')
-      }else{
+  Save() {
+    if (this.partyID == 0 || this.partyID == undefined) {
+      this.msg.WarnNotify('Select Supplier')
+    } else if (this.paymentType == '' || this.paymentType == undefined) {
+      this.msg.WarnNotify('Select Payment Type')
+    } else if (this.coaID == 0 || this.coaID == undefined) {
+      this.msg.WarnNotify('Select COA')
+    } else if (this.amount == 0 || this.amount == undefined || this.amount == null) {
+      this.msg.WarnNotify('Enter Amount')
+    } else {
 
-        if(this.bankReceiptNo == '' || this.bankReceiptNo == null || this.bankReceiptNo == undefined){
-          this.bankReceiptNo = '-';
-        }
-
-        if(this.discount == '' || this.discount == undefined || this.discount == null){
-          this.discount = 0;
-        }
-
-        if(this.remarks == '' || this.remarks == undefined || this.remarks == null){
-          this.remarks  = '-';
-        }
-        
-        if(this.btnType == 'Save'){
-          this.insert()
-        }
-
-        if(this.btnType == 'Update'){
-          this.Update();
-        }
-  
-        
+      if (this.bankReceiptNo == '' || this.bankReceiptNo == null || this.bankReceiptNo == undefined) {
+        this.bankReceiptNo = '-';
       }
-    }
+
+      if (this.discount == '' || this.discount == undefined || this.discount == null) {
+        this.discount = 0;
+      }
+
+      if (this.remarks == '' || this.remarks == undefined || this.remarks == null) {
+        this.remarks = '-';
+      }
 
 
-    insert(){
-      $('.loaderDark').show();
-      this.http.post(environment.mainApi+this.global.accountLink+'InsertReceipt',{
-        InvoiceDate: this.global.dateFormater(this.invoiceDate,'-'),
-        PartyID: this.partyID, 
+      var postData = {
+            InvoiceNo: this.invoiceNo,
+        InvoiceDate: this.global.dateFormater(this.invoiceDate, '-'),
+        PartyID: this.partyID,
         Type: this.paymentType,
         InvoiceRemarks: this.remarks,
         BankReceiptNo: this.bankReceiptNo,
         COAID: this.coaID,
         Amount: this.amount,
-        ProjectID:this.projectID,
+        ProjectID: this.projectID,
         Discount: this.discount,
         UserID: this.global.getUserID()
-      }).subscribe(
-        (Response:any)=>{
-          if(Response.msg == 'Data Saved Successfully'){
-            this.msg.SuccessNotify(Response.msg);
-            this.reset();
-            this.dialogRef.close('update');
-          
+      }
 
-          }else{
-            this.msg.WarnNotify(Response.msg);
-          }
+      if (this.btnType == 'Save') {
+        this.insert(postData)
+      }
 
-          $('.loaderDark').fadeOut(500);
-        },
-        (Error:any)=>{
-          $('.loaderDark').fadeOut(500);
-        }
-      )
+      if (this.btnType == 'Update') {
+        this.Update(postData);
+      }
+
+
     }
+  }
 
-    Update(){
-    
-      this.global.openPinCode().subscribe(pin=>{
-        if(pin != ''){
-          $('.loaderDark').show();
-          this.http.post(environment.mainApi+this.global.accountLink+'UpdateReceipt',{
-            InvoiceNo:this.invoiceNo,
-            InvoiceDate: this.global.dateFormater(this.invoiceDate,'-'),
-            PartyID: this.partyID, 
-            InvoiceRemarks: this.remarks,
-            BankReceiptNo: this.bankReceiptNo,
-            COAID: this.coaID,
-            Amount: this.amount,
-            Discount: this.discount,
-            Pincode:pin,
-            ProjectID:this.projectID,
-            UserID: this.global.getUserID()
-          }).subscribe(
-            (Response:any)=>{
-              if(Response.msg == 'Data Updated Successfully'){
-                this.msg.SuccessNotify(Response.msg);
-                this.reset();
-                this.dialogRef.close('update');
-              
-    
-              }else{
-                this.msg.WarnNotify(Response.msg);
-              }
-    
-              $('.loaderDark').fadeOut(500);
-            },
-            (Error:any)=>{
-              $('.loaderDark').fadeOut(500);
+
+  insert(postData:any) {
+    $('.loaderDark').show();
+    this.http.post(environment.mainApi + this.global.accountLink + 'InsertReceipt', postData).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully') {
+          this.msg.SuccessNotify(Response.msg);
+          this.reset();
+          this.dialogRef.close('update');
+
+
+        } else {
+          this.msg.WarnNotify(Response.msg);
+        }
+
+        $('.loaderDark').fadeOut(500);
+      },
+      (Error: any) => {
+        $('.loaderDark').fadeOut(500);
+      }
+    )
+  }
+
+  Update(postData:any) {
+
+    this.global.openPinCode().subscribe(pin => {
+      if (pin != '') {
+        $('.loaderDark').show();
+        postData['PinCode'] = pin;
+        this.http.post(environment.mainApi + this.global.accountLink + 'UpdateReceipt', postData).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Data Updated Successfully') {
+              this.msg.SuccessNotify(Response.msg);
+              this.reset();
+              this.dialogRef.close('update');
+
+
+            } else {
+              this.msg.WarnNotify(Response.msg);
             }
-          )
-        }
-      })
-    }
+
+            $('.loaderDark').fadeOut(500);
+          },
+          (Error: any) => {
+            $('.loaderDark').fadeOut(500);
+          }
+        )
+      }
+    })
+  }
 
 
-  closeDialog(){
+  closeDialog() {
     this.dialogRef.close();
   }
 
-  reset(){
+  reset() {
     this.invoiceNo = '';
     this.invoiceDate = new Date();
     this.partyID = 0;
@@ -244,7 +236,7 @@ export class AddReceiptComponent implements OnInit {
     this.discount = 0;
     this.remarks = '';
     this.btnType = 'Save';
-          
+
   }
 
 

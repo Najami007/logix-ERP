@@ -219,7 +219,7 @@ sortData(type:any){
         (Response:any)=>{
     
           this.tableData = Response.map((e:any)=>{
-          (e.invoiceDate = new Date(e.invoiceDate))
+          (e.invoiceDate = new Date(e.invoiceDate));
           return e;
           }
          

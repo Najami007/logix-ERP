@@ -185,7 +185,7 @@
                     </tr>
                     <tr class="text-center " *ngIf="!gstFeature">
 
-                        <td width="40%" rowspan="7" style="font-size: 10px;">
+                        <td width="40%" rowspan="6" style="font-size: 10px;">
                             <img [src]="global.thankyouImage" height="80" width="80" /><br />
                             FOR VISITING US.
                         </td>
@@ -193,63 +193,53 @@
 
                     <tr class="text-end fw-bold fs-16">
 
-                        <td></td>
                         <td>Sub Total</td>
                         <td>{{mySubTotal |number:'1.0-1'}}</td>
 
                     </tr>
                     <tr class="text-end fs-14" *ngIf="gstFeature && myGstTotal > 0">
 
-                        <td></td>
                         <td>Gst</td>
                         <td>{{myGstTotal |number:'1.0-1'}}</td>
 
                     </tr>
                     <tr class="text-end fs-14" *ngIf="myAdvTaxValue > 0">
-                        <td></td>
                         <td>Adv Tax ({{myAdvTaxValue}}%)</td>
                         <td> {{myAdvTaxAmount|number:'1.0-1'}}</td>
 
                     </tr>
                     <tr class="text-end fs-14" *ngIf="myOtherCharges > 0">
-                        <td></td>
                         <td>Other Charges</td>
                         <td> {{myOtherCharges|number:'1.0-1'}}</td>
 
                     </tr>
                     <tr class="text-end fs-14" *ngIf="myOfferDiscount > 0">
-                        <td></td>
                         <td>Offer Disc</td>
                         <td>{{myOfferDiscount|number:'1.0-1'}}</td>
 
                     </tr>
                     <tr class="text-end fs-14" *ngIf="myDiscount - myOfferDiscount > 0">
-                        <td></td>
                         <td>Disc</td>
                         <td>{{myDiscount - myOfferDiscount|number:'1.0-1'}}</td>
 
                     </tr>
 
                     <tr class="text-end fw-bold fs-16">
-                        <td></td>
                         <td>Net Total</td>
                         <td>{{myNetTotal|number:'1.0-1'}}</td>
 
                     </tr>
-                    <tr class="text-end fs-14" *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
-                        <td></td>
+                    <tr class="text-end fs-14" *ngIf="myCash > 0">
                         <td>Cash</td>
                         <td>{{myCash|number:'1.0-1'}}</td>
 
                     </tr>
-                    <tr class="text-end fs-14" *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
-                        <td></td>
+                    <tr class="text-end fs-14" *ngIf="myBank > 0 ">
                         <td>Bank</td>
                         <td>{{myBank|number:'1.0-1'}}</td>
                         <td></td>
                     </tr>
                     <tr class="text-end fs-14" *ngIf="myChange !== 0">
-                        <td></td>
                         <td>Change</td>
                         <td>{{myChange|number:'1.0-1'}}</td>
 
@@ -257,18 +247,18 @@
                     </tr>
 
 
-                    <tr style="text-align:right;" *ngIf="myCusBalance !== 0">
+                    <tr  class="text-end fw-bold" *ngIf="myCusBalance !== 0">
                         <td></td>
-                        <td class="fw-bold">prv Blnc</td>
-                        <td class="fw-bold" *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
-                        <td class="fw-bold" *ngIf="myChange <= 0">{{myCusBalance - ( -1 * myChange) | number:'1.0-1'}}
+                        <td >prv Blnc</td>
+                        <td *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
+                        <td  *ngIf="myChange <= 0">{{myCusBalance - ( -1 * myChange) | number:'1.0-1'}}
                         </td>
 
                     </tr>
-                    <tr style="text-align:right;" *ngIf="myCusBalance !== 0">
+                    <tr class="text-end fw-bold" *ngIf="myCusBalance !== 0">
                         <td></td>
-                        <td class="fw-bold">Net Blnc</td>
-                        <td class="fw-bold">{{myCusBalance | number:'1.0-1'}}</td>
+                        <td >Net Blnc</td>
+                        <td >{{myCusBalance | number:'1.0-1'}}</td>
 
                     </tr>
 
@@ -509,14 +499,14 @@
 
 
                     </tr>
-                    <tr class="text-end" *ngIf="myPaymentType == 'Cash' || myPaymentType == 'Split' ">
+                    <tr class="text-end" *ngIf="myCash > 0 ">
 
                         <td></td>
                         <td class="urdu">کیش</td>
                         <td class="text-start">{{myCash|number:'1.0-1'}}</td>
 
                     </tr>
-                    <tr class="text-end" *ngIf="myPaymentType == 'Bank' || myPaymentType == 'Split' ">
+                    <tr class="text-end" *ngIf="myBank > 0 ">
                         <td></td>
                         <td>بینک</td>
                         <td class="text-start">{{myBank|number:'1.0-1'}}</td>

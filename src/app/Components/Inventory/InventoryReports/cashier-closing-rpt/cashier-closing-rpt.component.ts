@@ -57,11 +57,20 @@ export class CashierClosingRptComponent implements OnInit {
   userList: any = [];
   userID = 0;
   userName = '';
+  roleTypeID = this.global.getRoleTypeID();
 
 
   getUsers() {
 
-    this.global.getUserList().subscribe((data: any) => { this.userList = data; });
+    this.global.getUserList().subscribe((data: any) => {
+      if(this.roleTypeID == 3){
+        this.userList = data.filter((e:any)=> e.userID == this.global.getUserID());
+        this.userID = this.global.getUserID();
+      }else{
+         this.userList = data;
+      }
+      
+       });
 
   }
 

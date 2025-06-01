@@ -13,19 +13,19 @@ import { environment } from 'src/environments/environment.development';
 export class AddOpeningComponent {
 
   constructor(
-    private http:HttpClient,
+    private http: HttpClient,
     private dialogRef: MatDialogRef<AddOpeningComponent>,
-    public global:GlobalDataModule,
-    private msg:NotificationService,
-    @Inject(MAT_DIALOG_DATA) public editData : any,
-  ){}
+    public global: GlobalDataModule,
+    private msg: NotificationService,
+    @Inject(MAT_DIALOG_DATA) public editData: any,
+  ) { }
 
   ngOnInit(): void {
     setTimeout(() => {
       $('#supplier').trigger('focus');
     }, 500);
 
-    if(this.editData){
+    if (this.editData) {
       this.invoiceNo = this.editData.invoiceNo;
       this.invoiceDate = new Date(this.editData.invoiceDate);
       this.paymentType = this.editData.type;
@@ -50,149 +50,138 @@ export class AddOpeningComponent {
   bankReceiptNo = '';
   supplierBalance = 0;
   amount = 0;
-  discount:any = 0;
-  supplierList:any = [];
-  coaList:any = [];
+  discount: any = 0;
+  supplierList: any = [];
+  coaList: any = [];
   coaID = 0;
   remarks = '';
   projectID = this.global.getProjectID();
-  paymentTypeList = [{value:'CRV',title:'Cash'},{value:'BRV',title:'Bank'},];
+  paymentTypeList = [{ value: 'CRV', title: 'Cash' }, { value: 'BRV', title: 'Bank' },];
 
   paymentType = 'CRV';
 
 
- 
-  
+
+
 
   ////////////////////////////////////////////
 
   getCoaList() {
 
- 
+
     this.global.getCashBankCoa(this.paymentType).subscribe(
       (Response: any) => {
         this.coaList = Response;
-       if(Response.length > 0){
-        this.coaID = Response[0].coaID;
-       }
+        if (this.invoiceNo == '' && Response.length > 0) {
+          this.coaID = Response[0].coaID;
+        }
       },
       (Error) => {
-      
+        console.log(Error);
+
       }
     )
   }
 
 
-    //////////////////////////////////////////
+  //////////////////////////////////////////
 
-    Save(){
-      if(this.paymentType == '' || this.paymentType == undefined){
-        this.msg.WarnNotify('Select Payment Type')
-      }else if(this.coaID == 0 || this.coaID == undefined){
-        this.msg.WarnNotify('Select COA')
-      }else if(this.amount == 0 || this.amount == undefined || this.amount == null){
-          this.msg.WarnNotify('Enter Amount')
-      }else{
+  Save() {
+    if (this.paymentType == '' || this.paymentType == undefined) {
+      this.msg.WarnNotify('Select Payment Type');
+      return;
+    }
+    if (this.coaID == 0 || this.coaID == undefined) {
+      this.msg.WarnNotify('Select COA');
+      return;
+    }
+    if (this.amount == 0 || this.amount == undefined || this.amount == null) {
+      this.msg.WarnNotify('Enter Amount');
+      return;
+    }
 
-        if(this.bankReceiptNo == '' || this.bankReceiptNo == null || this.bankReceiptNo == undefined){
-          this.bankReceiptNo = '-';
-        }
-        
-        if(this.discount == '' || this.discount == undefined || this.discount == null){
-          this.discount = 0;
+
+    var postData = {
+      InvoiceNo: this.invoiceNo,
+      InvoiceDate: this.global.dateFormater(this.invoiceDate, '-'),
+      Type: this.paymentType,
+      InvoiceRemarks: this.remarks || '-',
+      BankReceiptNo: this.bankReceiptNo || '-',
+      COAID: this.coaID,
+      Amount: this.amount,
+      ProjectID: this.projectID,
+      UserID: this.global.getUserID()
+    }
+
+    if (this.btnType == 'Save') {
+      this.insert(postData)
+    }
+
+    if (this.btnType == 'Update') {
+      this.Update(postData);
+    }
+
+
+
+  }
+
+
+  insert(postData:any) {
+    $('.loaderDark').show();
+    this.http.post(environment.mainApi + this.global.accountLink + 'InsertOpeningCash', postData).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully') {
+          this.msg.SuccessNotify(Response.msg);
+          this.reset();
+          this.dialogRef.close('update');
+
+
+        } else {
+          this.msg.WarnNotify(Response.msg);
         }
 
-        if(this.remarks == '' || this.remarks == undefined || this.remarks == null){
-          this.remarks  = '-';
-        }
-        
-        if(this.btnType == 'Save'){
-          this.insert()
-        }
-
-        if(this.btnType == 'Update'){
-          this.Update();
-        }
-  
-        
+        $('.loaderDark').fadeOut(500);
+      },
+      (Error: any) => {
+        $('.loaderDark').fadeOut(500);
       }
-    }
+    )
+  }
+
+  Update(postData:any) {
+
+    this.global.openPinCode().subscribe(pin => {
+      if (pin != '') {
+        $('.loaderDark').show();
+        postData['PinCode'] = pin;
+        this.http.post(environment.mainApi + this.global.accountLink + 'UpdateOpeningCash', postData).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Data Updated Successfully') {
+              this.msg.SuccessNotify(Response.msg);
+              this.reset();
+              this.dialogRef.close('update');
 
 
-    insert(){
-      $('.loaderDark').show();
-      this.http.post(environment.mainApi+this.global.accountLink+'InsertOpeningCash',{
-        InvoiceDate: this.global.dateFormater(this.invoiceDate,'-'),
-        Type: this.paymentType,
-        InvoiceRemarks: this.remarks,
-        BankReceiptNo: this.bankReceiptNo,
-        COAID: this.coaID,
-        Amount: this.amount,
-        ProjectID:this.projectID,
-        UserID: this.global.getUserID()
-      }).subscribe(
-        (Response:any)=>{
-          if(Response.msg == 'Data Saved Successfully'){
-            this.msg.SuccessNotify(Response.msg);
-            this.reset();
-            this.dialogRef.close('update');
-          
-
-          }else{
-            this.msg.WarnNotify(Response.msg);
-          }
-
-          $('.loaderDark').fadeOut(500);
-        },
-        (Error:any)=>{
-          $('.loaderDark').fadeOut(500);
-        }
-      )
-    }
-
-    Update(){
-    
-      this.global.openPinCode().subscribe(pin=>{
-        if(pin != ''){
-          $('.loaderDark').show();
-          this.http.post(environment.mainApi+this.global.accountLink+'UpdateOpeningCash',{
-            InvoiceNo:this.global.dateFormater(this.invoiceDate,'-'),
-            InvoiceDate: this.invoiceDate,
-            InvoiceRemarks: this.remarks,
-            BankReceiptNo: this.bankReceiptNo,
-            COAID: this.coaID,
-            Amount: this.amount,
-            ProjectID:this.projectID,
-            Pincode:pin,
-            UserID: this.global.getUserID()
-          }).subscribe(
-            (Response:any)=>{
-              if(Response.msg == 'Data Updated Successfully'){
-                this.msg.SuccessNotify(Response.msg);
-                this.reset();
-                this.dialogRef.close('update');
-              
-    
-              }else{
-                this.msg.WarnNotify(Response.msg);
-              }
-    
-              $('.loaderDark').fadeOut(500);
-            },
-            (Error:any)=>{
-              $('.loaderDark').fadeOut(500);
+            } else {
+              this.msg.WarnNotify(Response.msg);
             }
-          )
-        }
-      })
-    }
+
+            $('.loaderDark').fadeOut(500);
+          },
+          (Error: any) => {
+            $('.loaderDark').fadeOut(500);
+          }
+        )
+      }
+    })
+  }
 
 
-  closeDialog(){
+  closeDialog() {
     this.dialogRef.close();
   }
 
-  reset(){
+  reset() {
     this.invoiceNo = '';
     this.invoiceDate = new Date();
     this.paymentType = '';
@@ -201,7 +190,7 @@ export class AddOpeningComponent {
     this.discount = 0;
     this.remarks = '';
     this.btnType = 'Save';
-          
+
   }
 
 

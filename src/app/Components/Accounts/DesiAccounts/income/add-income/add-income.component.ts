@@ -9,16 +9,16 @@ import { environment } from 'src/environments/environment.development';
   templateUrl: './add-income.component.html',
   styleUrls: ['./add-income.component.scss']
 })
-export class AddIncomeComponent  implements OnInit {
+export class AddIncomeComponent implements OnInit {
 
-  
+
   constructor(
-    private http:HttpClient,
+    private http: HttpClient,
     private dialogRef: MatDialogRef<AddIncomeComponent>,
-    public global:GlobalDataModule,
-    private msg:NotificationService,
-    @Inject(MAT_DIALOG_DATA) public editData : any,
-  ){}
+    public global: GlobalDataModule,
+    private msg: NotificationService,
+    @Inject(MAT_DIALOG_DATA) public editData: any,
+  ) { }
 
   ngOnInit(): void {
     this.getSupplier();
@@ -28,7 +28,7 @@ export class AddIncomeComponent  implements OnInit {
     this.getRefCoaList();
     this.getCoaList();
 
-    if(this.editData){
+    if (this.editData) {
       this.invoiceNo = this.editData.invoiceNo;
       this.invoiceDate = new Date(this.editData.invoiceDate);
       this.partyID = this.editData.partyID;
@@ -42,18 +42,18 @@ export class AddIncomeComponent  implements OnInit {
     }
   }
 
-  btnType =  'Save';
+  btnType = 'Save';
 
   invoiceNo = '';
   invoiceDate = new Date();
   supplierBalance = 0;
   amount = 0;
   discount = 0;
-  customerList:any = [];
-  coaList:any = [];
+  customerList: any = [];
+  coaList: any = [];
   coaID = 0;
   refCoaID = 0;
-  refCoaList:any = [];
+  refCoaList: any = [];
   bankReceiptNo = '';
   remarks = '';
   partyID = 0;
@@ -61,9 +61,9 @@ export class AddIncomeComponent  implements OnInit {
   paymentType = '';
 
 
-  getSupplier(){
+  getSupplier() {
     this.global.getCustomerList().subscribe(
-      (Response)=>{
+      (Response) => {
         this.customerList = Response;
       }
     )
@@ -72,142 +72,132 @@ export class AddIncomeComponent  implements OnInit {
 
   ////////////////////////////////////////////
 
-  getCoaList(){
+  getCoaList() {
     this.global.getCashBankCoa('INC')
       .subscribe(
-      (Response: any) => {
-     
-        this.coaList = Response;
-       
-      },
-      (Error) => {
-      
-      }
-    )
+        (Response: any) => {
+
+          this.coaList = Response;
+
+        },
+        (Error) => {
+
+        }
+      )
   }
 
   getRefCoaList() {
 
-  
+
 
     this.global.getCashBankCoa('CRV').subscribe(
       (Response: any) => {
-        Response.forEach((e:any) => {
+        Response.forEach((e: any) => {
           this.refCoaList.push(e);
         });
-        if(Response.length > 0){
+        if (this.invoiceNo == '' && Response.length > 0) {
           this.coaID = this.refCoaList[0].coaID;
-         }
+        }
       }
     )
 
     this.global.getCashBankCoa('BRV').subscribe(
       (Response: any) => {
-        Response.forEach((e:any) => {
+        Response.forEach((e: any) => {
           this.refCoaList.push(e);
         });
-        
+
       }
     )
 
-    
+
   }
 
 
-  save(){
-    
-    if(this.refCoaID == 0 || this.refCoaID == undefined || this.refCoaID == null){
+  save() {
+
+    if (this.refCoaID == 0 || this.refCoaID == undefined || this.refCoaID == null) {
       this.msg.WarnNotify('Select Income Head')
-    }else if(this.coaID == 0 || this.coaID == undefined || this.coaID == null){
+      return;
+    } 
+     if (this.coaID == 0 || this.coaID == undefined || this.coaID == null) {
       this.msg.WarnNotify('Select Cash Or Bank')
+      return;
     }
-    else if(this.amount == 0 || this.amount == undefined || this.amount == null){
+     if (this.amount == 0 || this.amount == undefined || this.amount == null) {
       this.msg.WarnNotify('Enter Amount')
-    }else{
+      return;
+    } 
+  
 
-      if(this.bankReceiptNo == '' || this.bankReceiptNo == null || this.bankReceiptNo == undefined){
-        this.bankReceiptNo = '-';
+      var postData = {
+        InvoiceNo: this.invoiceNo,
+        InvoiceDate: this.global.dateFormater(this.invoiceDate, '-'),
+        Type: "JV",
+        InvoiceRemarks: this.remarks || '-',
+        BankReceiptNo: this.bankReceiptNo || '-',
+        COAID: this.coaID,
+        RefCOAID: this.refCoaID,
+        Amount: this.amount,
+        ProjectID: this.projectID,
+        UserID: this.global.getUserID()
       }
 
-      if(this.remarks == '' || this.remarks == undefined || this.remarks == null){
-        this.remarks = '-';
-      }  
-
-      if(this.btnType == 'Save'){
-        this.insert();
+      if (this.btnType == 'Save') {
+        this.insert(postData);
       }
 
-      if(this.btnType == 'Update'){
-        this.update();
+      if (this.btnType == 'Update') {
+        this.update(postData);
       }
 
-    }
+    
 
   }
 
 
-  insert(){
+  insert(postData:any) {
     $('.loaderDark').show();
-    this.http.post(environment.mainApi+this.global.accountLink+'InsertIncome',{
-    InvoiceDate: this.global.dateFormater(this.invoiceDate,'-'),
-    Type: "JV",
-    InvoiceRemarks: this.remarks,
-    BankReceiptNo: this.bankReceiptNo,
-    COAID: this.coaID,
-    RefCOAID: this.refCoaID,
-    Amount: this.amount,
-    ProjectID:this.projectID,
-    UserID: this.global.getUserID()
-    }).subscribe(
-      (Response:any)=>{
-        if(Response.msg == 'Data Saved Successfully'){
+    this.http.post(environment.mainApi + this.global.accountLink + 'InsertIncome', postData).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully') {
           this.msg.SuccessNotify(Response.msg);
           this.reset();
           this.dialogRef.close('update');
 
-        }else{
+        } else {
           this.msg.WarnNotify(Response.msg);
         }
 
         $('.loaderDark').fadeOut(500);
       },
-      (Error:any)=>{
+      (Error: any) => {
         $('.loaderDark').fadeOut(500);
       }
     )
   }
 
-  update(){
-    
+  update(postData:any) {
+
     this.global.openPinCode().subscribe(pin => {
 
-      if(pin != ''){
+      if (pin != '') {
         $('.loaderDark').show();
-        this.http.post(environment.mainApi+this.global.accountLink+'UpdateIncome',{
-        InvoiceNo: this.invoiceNo,
-        InvoiceDate: this.global.dateFormater(this.invoiceDate,'-'),
-        InvoiceRemarks: this.remarks,
-        BankReceiptNo: this.bankReceiptNo,
-        COAID: this.coaID,
-        RefCOAID: this.refCoaID,
-        Amount: this.amount,
-        ProjectID:this.projectID,
-        PinCode: pin,
-        UserID: this.global.getUserID()
-        }).subscribe(
-          (Response:any)=>{
-            if(Response.msg == 'Data Updated Successfully'){
+        postData['PinCode'] = pin;
+         this.http.post(environment.mainApi + this.global.accountLink + 'UpdateIncome', postData).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Data Updated Successfully') {
               this.msg.SuccessNotify(Response.msg);
               this.reset();
               this.dialogRef.close('update');
-    
-            }else{
+
+            } else {
               this.msg.WarnNotify(Response.msg);
             }
-    
+
             $('.loaderDark').fadeOut(500);
           },
-          (Error:any)=>{
+          (Error: any) => {
             $('.loaderDark').fadeOut(500);
           }
         )
@@ -218,12 +208,12 @@ export class AddIncomeComponent  implements OnInit {
 
 
 
-  closeDialog(){
+  closeDialog() {
     this.dialogRef.close();
   }
 
 
-  reset(){
+  reset() {
     this.invoiceDate = new Date();
     this.invoiceNo = '';
     this.coaID = 0;

@@ -1273,10 +1273,7 @@ export class GarmentSaleComponent implements OnInit {
     var inValidQtyProdList = this.tableDataList.filter((p:any)=> p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
     var inValidDiscProdList = this.tableDataList.filter((p:any)=> p.costPrice > (p.salePrice - p.discInR));
 
-    console.log(inValidCostProdList)
-    console.log(inValidSaleProdList);
-    console.log(inValidQtyProdList);
-    console.log(inValidDiscProdList);
+
     if(inValidCostProdList.length > 0 && !this.LessToCostFeature){
        this.msg.WarnNotify('(' + inValidCostProdList[0].productTitle + ') Cost Price greater than Sale Price');
         return;
@@ -1321,34 +1318,50 @@ export class GarmentSaleComponent implements OnInit {
     if (this.isValidSale == true) {
        
 
-      if (this.tableDataList == '') {
-        this.msg.WarnNotify('No Product Seleted')
+       if (this.tableDataList == '') {
+        this.msg.WarnNotify('No Product Seleted');
+        return;
       }
-      else if (paymentType == 'Cash' && this.partyID == 0 && (this.cash == 0 || this.cash == undefined || this.cash == null)) {
-        this.msg.WarnNotify('Enter Cash')
-      } else if (paymentType == 'Cash' && this.partyID == 0 && this.cash < this.netTotal) {
-        this.msg.WarnNotify('Entered Cash is not Valid')
-      } else if (paymentType == 'Split' && ((this.cash + this.bankCash) > this.netTotal || (this.cash + this.bankCash) < this.netTotal)) {
-        this.msg.WarnNotify('Sum Of Both Amount must be Equal to Net Total')
-      } else if (this.paymentType == 'Split' && this.cash <= 0) {
-        this.msg.WarnNotify('Cash Amount is Not Valid')
-      } else if (this.paymentType == 'Split' && this.bankCash <= 0) {
-        this.msg.WarnNotify('Bank Amount is Not Valid')
-      } else if (this.paymentType == 'Credit' && ((this.cash + this.bankCash) > this.netTotal)) {
-        this.msg.WarnNotify('Enter Valid Amount')
-      } else if ((this.bookerID == 0 || this.bookerID == undefined) && this.BookerFeature) {
-        this.msg.WarnNotify('Select Booker')
-      } else if (this.paymentType == 'Credit' && this.partyID == 0) {
+       if (paymentType == 'Cash' && this.partyID == 0 && (this.cash == 0 || this.cash == undefined || this.cash == null)) {
+        this.msg.WarnNotify('Enter Cash');
+        return;
+      } 
+      
+      if (paymentType == 'Cash' && this.partyID == 0 && this.cash < this.netTotal) {
+        this.msg.WarnNotify('Entered Cash is not Valid');
+        return;
+      } 
+       if (paymentType == 'Split' && ((this.cash + this.bankCash) > this.netTotal || (this.cash + this.bankCash) < this.netTotal)) {
+        this.msg.WarnNotify('Sum Of Both Amount must be Equal to Net Total');
+         return;
+      } 
+      
+      if (this.paymentType == 'Split' && this.cash <= 0) {
+        this.msg.WarnNotify('Cash Amount is Not Valid');
+         return;
+      } 
+       if (this.paymentType == 'Split' && this.bankCash <= 0) {
+        this.msg.WarnNotify('Bank Amount is Not Valid');
+         return;
+      } 
+       if ((this.bookerID == 0 || this.bookerID == undefined) && this.BookerFeature) {
+        this.msg.WarnNotify('Select Booker');
+         return;
+      } 
+       if (this.paymentType == 'Credit' && this.partyID == 0) {
         this.msg.WarnNotify('Select Customer');
-      } else if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
-        this.msg.WarnNotify('Enter Valid Amount')
+         return;
+      } 
+       if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
+        this.msg.WarnNotify('Enter Valid Amount');
+         return;
+      } 
+ 
+       if ((paymentType == 'Credit' || paymentType == 'Split' || paymentType == 'Bank') && this.bankCash > 0 && this.bankCoaID == 0) {
+        this.msg.WarnNotify('Select Bank');
+         return;
       }
-      else if (paymentType == 'Bank' && this.bankCoaID == 0) {
-        this.msg.WarnNotify('Select Bank')
-      }
-      else if ((paymentType == 'Credit' || paymentType == 'Split') && this.bankCash > 0 && this.bankCoaID == 0) {
-        this.msg.WarnNotify('Select Bank')
-      } else {
+
 
         var postData:any = {
           InvDate: this.global.dateFormater(this.InvDate, '-'),
@@ -1393,7 +1406,7 @@ export class GarmentSaleComponent implements OnInit {
           return;
         }
          this.isValidSale = false;
-
+        console.log(postData);
         this.app.startLoaderDark();
         this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', postData).subscribe(
           (Response: any) => {
@@ -1430,7 +1443,7 @@ export class GarmentSaleComponent implements OnInit {
         )
       }
 
-    }
+    
 
   }
 
@@ -1635,6 +1648,8 @@ export class GarmentSaleComponent implements OnInit {
   }
   onCashSelected() {
     this.paymentType = 'Cash';
+    this.bankCash = 0;
+    
     this.getTotal();
 
   }
@@ -1667,6 +1682,27 @@ export class GarmentSaleComponent implements OnInit {
       );
     }
 
+  }
+
+
+  openDuplicateModal(){
+    this.global.openBootstrapModal('#SavedBillModal',true);
+    this.getSavedBill()
+  }
+
+  openPaymentModal(){
+    this.global.openBootstrapModal('#paymentMehtod',true);
+    this.cash = 0;
+    this.bankCash=0;
+     this.getTotal()
+  }
+
+  onPaymentModalClose(){
+    this.paymentType = 'Cash';
+    this.bankCoaID=0;
+    this.cash =0;
+    this.bankCash = 0
+    this.partyID = 0;
   }
 
 

@@ -6,7 +6,7 @@
 
         <mat-form-field appearance="outline" class="col-lg-5 matSmall">
             <mat-label>User</mat-label>
-            <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
+            <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()" [disabled]="roleTypeID > 2">
                 <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
                         [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                 <mat-option [value]="0">All User</mat-option>

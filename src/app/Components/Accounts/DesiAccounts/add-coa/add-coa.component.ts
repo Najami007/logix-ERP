@@ -14,47 +14,47 @@ import Swal from 'sweetalert2';
   templateUrl: './add-coa.component.html',
   styleUrls: ['./add-coa.component.scss']
 })
-export class AddCoaComponent implements OnInit{
+export class AddCoaComponent implements OnInit {
 
-  crudList:any = {c:true,r:true,u:true,d:true};
+  crudList: any = { c: true, r: true, u: true, d: true };
 
-  constructor(private http:HttpClient,
-    private msg:NotificationService,
+  constructor(private http: HttpClient,
+    private msg: NotificationService,
     private dialogue: MatDialog,
-    private globaldata:GlobalDataModule,
-    private app:AppComponent,
-    private route:Router
-    
-    ){
-     
+    private globaldata: GlobalDataModule,
+    private app: AppComponent,
+    private route: Router
 
-      this.globaldata.getMenuList().subscribe((data)=>{
-        this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      });
+  ) {
 
-    }
+
+    this.globaldata.getMenuList().subscribe((data) => {
+      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
+    });
+
+  }
   ngOnInit(): void {
     this.globaldata.setHeaderTitle('ADD BANK');
-     this.getCoaType();
+    this.getCoaType();
     this.getSavedData('EXP');
-   
-    
-   
+
+
+
   }
 
-  txtSearch:any;
-  coaTitle:any;
-  coaID:number = 0;
-  btnType:any = 'Save';
-  description:any;
+  txtSearch: any;
+  coaTitle: any;
+  coaID: number = 0;
+  btnType: any = 'Save';
+  description: any;
 
 
 
-  notesList:any = [];
-  coaTypesList:any = [];
-  
-  savedDataList:any = [];
-  CoaTypeID:any = 0;
+  notesList: any = [];
+  coaTypesList: any = [];
+
+  savedDataList: any = [];
+  CoaTypeID: any = 0;
   level1 = '';
   level2 = '';
   level3 = '';
@@ -63,34 +63,34 @@ export class AddCoaComponent implements OnInit{
   NoteID = 0;
   FilterType = 'EXP';
 
-  searchType:any = [{value:'EXP',title:'Expense'},{value:'INC',title:'Income'},]
-///////////////////////////// will get the notes list
-  
-getNotes(){
-  this.http.get(environment.mainApi+this.globaldata.accountLink+'GetNote').subscribe(
-    (Response )=>{
-      this.notesList = Response;
+  searchType: any = [{ value: 'EXP', title: 'Expense' }, { value: 'INC', title: 'Income' },]
+  ///////////////////////////// will get the notes list
 
-    }
-    
-  )
-}
+  getNotes() {
+    this.http.get(environment.mainApi + this.globaldata.accountLink + 'GetNote').subscribe(
+      (Response) => {
+        this.notesList = Response;
 
+      }
 
+    )
+  }
 
 
 
-  
+
+
+
   //////////////////////////// will get the coa main five types///////////////////
 
-  getCoaType(){
-    this.http.get(environment.mainApi+this.globaldata.accountLink+'getcoatype').subscribe(
+  getCoaType() {
+    this.http.get(environment.mainApi + this.globaldata.accountLink + 'getcoatype').subscribe(
       {
-        next:value=>{
+        next: value => {
           this.coaTypesList = value;
-         },
-        error:error=>{
-         
+        },
+        error: error => {
+
         }
       }
     )
@@ -98,108 +98,111 @@ getNotes(){
 
 
 
-  getSavedData(type:any){
+  getSavedData(type: any) {
     this.globaldata.getCashBankCoa(type)
       .subscribe(
-      (Response: any) => {
-        this.savedDataList = Response;
-      },
-      (Error) => {
-      
-      }
-    )
+        (Response: any) => {
+          this.savedDataList = Response;
+
+          console.log(Response);
+
+        },
+        (Error) => {
+
+        }
+      )
   }
 
 
 
 
-  save(){
-    if(this.btnType == 'Save' && (this.CoaTypeID == '' || this.CoaTypeID == undefined || this.CoaTypeID == 0)){
-      this.msg.WarnNotify('Select COA Type')
-    }else if(this.coaTitle == '' || this.coaTitle == undefined){
-      this.msg.WarnNotify('Enter COA Title')
-    }else{
+  save() {
+    if (this.btnType == 'Save' && (this.CoaTypeID == '' || this.CoaTypeID == undefined || this.CoaTypeID == 0)) {
+      this.msg.WarnNotify('Select COA Type');
+      return;
+    }
 
-      if(this.description == '' || this.description == undefined){
-        this.description = '-';
+    if (this.coaTitle == '' || this.coaTitle == undefined) {
+      this.msg.WarnNotify('Enter COA Title');
+      return;
+    }
+    var postData = {
+      CoaID: this.coaID,
+      CoaTitle: this.coaTitle,
+      CoaTypeID: this.CoaTypeID,
+      Level1: this.level1.toString(),
+      Level2: '',
+      Level3: '',
+      Level4: '',
+      TransactionAllowed: this.TransactionAllowed,
+      Editable: false,
+      IsService: false,
+      noteID: this.NoteID,
+      UserID: this.globaldata.getUserID(),
+    }
+
+
+
+
+    if (this.btnType == 'Save') {
+      if (this.CoaTypeID == 2) {
+        this.globaldata.getCashBankCoa('EXP').subscribe((Response: any) => {
+          postData.Level1 = Response.sort((a: any, b: any) => b.accountCode - a.accountCode)[0].accountCode.split('.')[1] + 1
+          // this.level1 = Response.length + 1; 
+          this.insert(postData);
+        })
       }
 
-     
 
-
-      if(this.btnType == 'Save'){
-        if(this.CoaTypeID == 2 ){this.globaldata.getCashBankCoa('EXP').subscribe((Response: any) => {this.level1 = Response.length+1; this.insert();})}
-      
-
-        if(this.CoaTypeID == 3 ){this.globaldata.getCashBankCoa('INC').subscribe((Response: any) => {this.level1 = Response.length+1; this.insert();})}
-        
-      }else if(this.btnType == 'Update'){
-        this.update();
-
+      if (this.CoaTypeID == 3) {
+        this.globaldata.getCashBankCoa('INC').subscribe((Response: any) => {
+          postData.Level1 = Response.sort((a: any, b: any) => b.accountCode - a.accountCode)[0].accountCode.split('.')[1] + 1
+          // this.level1 = Response.length + 1;
+          this.insert(postData);
+        })
       }
 
+    } else if (this.btnType == 'Update') {
+      this.update(postData);
     }
 
   }
 
 
-  insert(){
+  insert(postData: any) {
 
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+this.globaldata.accountLink+'InsertChartOfAccount',{
-    CoaTitle: this.coaTitle,
-    CoaTypeID: this.CoaTypeID,
-    Level1: this.level1.toString(),
-    Level2: '',
-    Level3:'',
-    Level4:'',
-    TransactionAllowed: this.TransactionAllowed,
-    Editable: false,
-    IsService: false,
-    noteID:this.NoteID,
-    UserID: this.globaldata.getUserID(),
-  
-    }).subscribe(
-      (Response:any)=>{
-          if(Response.msg == "Data Saved Successfully"){
+    this.http.post(environment.mainApi + this.globaldata.accountLink + 'InsertChartOfAccount', postData).subscribe(
+      (Response: any) => {
+        if (Response.msg == "Data Saved Successfully") {
           this.msg.SuccessNotify(Response.msg);
-        
           this.getSavedData(this.FilterType);
           this.reset();
-          this.app.stopLoaderDark();
-        }else{
+        } else {
           this.msg.WarnNotify(Response.msg);
-          this.app.stopLoaderDark();
         }
+        this.app.stopLoaderDark();
       }
-      
+
     )
   }
 
-  update(){
+  update(postData: any) {
 
-    this.globaldata.openPinCode().subscribe(pin=>{
-      if(pin != ''){
-        
+    this.globaldata.openPinCode().subscribe(pin => {
+      if (pin != '') {
         this.app.startLoaderDark();
-        this.http.post(environment.mainApi+this.globaldata.accountLink+'UpdateChartofAccount',{
-          CoaID: this.coaID,
-          CoaTitle: this.coaTitle,
-          NoteID:this.NoteID,
-          pinCode:pin,
-          UserID: this.globaldata.getUserID()
-        }).subscribe(
-          (Response:any)=>{
-            if(Response.msg == 'Data Updated Successfully'){
+        postData['PinCode'] = pin;
+        this.http.post(environment.mainApi + this.globaldata.accountLink + 'UpdateChartofAccount', postData).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Data Updated Successfully') {
               this.msg.SuccessNotify(Response.msg);
-           
               this.getSavedData(this.FilterType);
               this.reset();
-              this.app.stopLoaderDark();
-            }else{
+            } else {
               this.msg.WarnNotify(Response.msg);
-              this.app.stopLoaderDark();
             }
+            this.app.stopLoaderDark();
           }
         )
       }
@@ -208,9 +211,9 @@ getNotes(){
 
 
 
-  reset(){
+  reset() {
     this.coaTitle = '';
-    this.coaID = 0 ;
+    this.coaID = 0;
     this.NoteID = 0;
     this.level1 = '';
     this.level2 = '';
@@ -223,46 +226,46 @@ getNotes(){
   }
 
 
-  edit(row:any){
-    this.coaID  = row.coaID;
+  edit(row: any) {
+    this.coaID = row.coaID;
     this.NoteID = row.noteID;
     this.CoaTypeID = row.coaTypeID;
     this.coaTitle = row.coaTitle;
-    this.btnType  = 'Update';
+    this.btnType = 'Update';
   }
 
-   
-///////////////////////////////////////////////////////////////////////////////
-delete(row:any){
-  this.globaldata.openPinCode().subscribe(pin=>{
-if(pin != ''){
 
-      this.app.startLoaderDark();
-       this.http.post(environment.mainApi+this.globaldata.accountLink+'DeleteChartOfAccount',{
-        CoaID: row.coaID,
-        PinCode:pin,
-        AccountCode:row.accountCode,
-        UserID: this.globaldata.getUserID(),
-          }).subscribe(
-            (Response:any)=>{
-              if(Response.msg == "Data Deleted Successfully"){
-                this.msg.SuccessNotify(Response.msg);
-                this.getSavedData(this.FilterType);
+  ///////////////////////////////////////////////////////////////////////////////
+  delete(row: any) {
+    this.globaldata.openPinCode().subscribe(pin => {
+      if (pin != '') {
 
-              }else{
-                this.msg.WarnNotify(Response.msg);
-              }
-              this.app.stopLoaderDark();
-            },
-            (error:any)=>{
-             this.app.stopLoaderDark();
+        this.app.startLoaderDark();
+        this.http.post(environment.mainApi + this.globaldata.accountLink + 'DeleteChartOfAccount', {
+          CoaID: row.coaID,
+          PinCode: pin,
+          AccountCode: row.accountCode,
+          UserID: this.globaldata.getUserID(),
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == "Data Deleted Successfully") {
+              this.msg.SuccessNotify(Response.msg);
+              this.getSavedData(this.FilterType);
+
+            } else {
+              this.msg.WarnNotify(Response.msg);
             }
-          )
-  
-}
-})
-  
-}
+            this.app.stopLoaderDark();
+          },
+          (error: any) => {
+            this.app.stopLoaderDark();
+          }
+        )
+
+      }
+    })
+
+  }
 
 }
 

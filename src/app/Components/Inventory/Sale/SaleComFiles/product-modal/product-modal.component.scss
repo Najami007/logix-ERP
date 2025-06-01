@@ -1,29 +1,31 @@
-.SearchConatiner{
- 
-    width: 100%;
-    margin-top: -20px;
-    // max-height: 70vh;
-    overflow: hidden;
-    
-    .SearchConatiner , .card{
-      background-color: rgb(247, 242, 242);
-    }
-    
-    .SearchConatiner, p{
-      padding: 10px;
-      text-decoration: none;
-      // color:rgb(255, 253, 253);
-      height: 30px;
-      display: block;
-      // border-bottom: 1px solid rgb(174, 174, 174);
-    }
-    
-    }
+.SearchConatiner {
 
-    .prodBtn:focus{
-        outline: none;
-        color: rgb(255, 255, 255) !important;
-        background-color: black !important;
-        zoom: 1;
-       
-      }
+  width: 100%;
+  // margin-top: -20px;
+  // max-height: 70vh;
+  overflow: hidden;
+
+  .SearchConatiner,
+  .card {
+    background-color: rgb(247, 242, 242);
+  }
+
+  .SearchConatiner,
+  p {
+    padding: 10px;
+    text-decoration: none;
+    // color:rgb(255, 253, 253);
+    height: 30px;
+    display: block;
+    // border-bottom: 1px solid rgb(174, 174, 174);
+  }
+
+}
+
+.prodBtn:focus {
+  outline: none;
+  color: rgb(255, 255, 255) !important;
+  background-color: black !important;
+  zoom: 1;
+
+}

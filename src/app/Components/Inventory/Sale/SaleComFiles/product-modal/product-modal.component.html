@@ -1,26 +1,23 @@
-    <div class="p-3" >
-        <div class="row">
-            <mat-form-field appearance="outline" class="col-lg-10 matSmall">
-                <input type="text" matInput #pName [(ngModel)]="productName" id="prodName"
-                    (keydown)="this.changeFocus($event,'.fintProd')"
-                    placeholder="Search Barcode / Name (Alt + a)" class="fintProd prodName"
-                    autocomplete="off" accesskey="a">
-    
-            </mat-form-field>
-            <div class="col-lg-2">
-                <button class="btnload w-100" style="height: 44px;" (click)="reloadProducts()">Load</button>
-            </div>
-    
-    
+<div class="p-3" >
+    <div class="row">
+        <mat-form-field appearance="outline" class="col-lg-10 matSmall">
+            <input type="text" matInput #pName [(ngModel)]="productName" id="prodName"
+                (keydown)="this.changeFocus($event,'.fintProd')" placeholder="Search Barcode / Name (Alt + a)"
+                class="fintProd prodName" autocomplete="off" accesskey="a">
+
+        </mat-form-field>
+        <div class="col-lg-2">
+            <button class="btnload w-100" style="height: 44px;" (click)="reloadProducts()">Load</button>
         </div>
-    
-        <div style="height: 55vh;overflow: scroll;">
-                <div class="SearchConatiner cursorPointer" 
-            *ngIf="productName != '' && productName != undefined">
-            <mat-card class="card"
-                *ngFor="let item of productList  | filter:productName | slice:0:25    index as index"
+
+
+    </div>
+
+    <div style="height: 45vh;overflow:hidden;">
+        <div class="SearchConatiner cursorPointer" *ngIf="productName != '' && productName != undefined">
+            <mat-card class="card" *ngFor="let item of productList  | filter:productName | slice:0:25    index as index"
                 (click)="selectProduct(item)">
-                <button  style="height: 40px; background: none;text-align: left;"
+                <button style="height: 40px; background: none;text-align: left;"
                     class="prodRow{{index}} prodBtn border-0 border-bottom border-dark"
                     (keydown)="handleProdFocus(item,$event,'.prodRow','.prodName',productList)">
                     <div class="justify-content-between d-flex">
@@ -30,10 +27,7 @@
                 </button>
             </mat-card>
         </div>
-        </div>
-    
-    
     </div>
 
 
-
+</div>
