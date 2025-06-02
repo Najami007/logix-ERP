@@ -147,7 +147,8 @@ export class AddCoaComponent implements OnInit {
     if (this.btnType == 'Save') {
       if (this.CoaTypeID == 2) {
         this.globaldata.getCashBankCoa('EXP').subscribe((Response: any) => {
-          postData.Level1 = Response.sort((a: any, b: any) => b.accountCode - a.accountCode)[0].accountCode.split('.')[1] + 1
+          var level:any =  parseFloat(Response.sort((a: any, b: any) => b.accountCode - a.accountCode)[0].accountCode.split('.')[1]) + 1;
+          postData.Level1 = level.toString();
           // this.level1 = Response.length + 1; 
           this.insert(postData);
         })
@@ -156,7 +157,8 @@ export class AddCoaComponent implements OnInit {
 
       if (this.CoaTypeID == 3) {
         this.globaldata.getCashBankCoa('INC').subscribe((Response: any) => {
-          postData.Level1 = Response.sort((a: any, b: any) => b.accountCode - a.accountCode)[0].accountCode.split('.')[1] + 1
+           var level:any =  parseFloat(Response.sort((a: any, b: any) => b.accountCode - a.accountCode)[0].accountCode.split('.')[1]) + 1;
+               postData.Level1 = level.toString();
           // this.level1 = Response.length + 1;
           this.insert(postData);
         })
@@ -165,6 +167,8 @@ export class AddCoaComponent implements OnInit {
     } else if (this.btnType == 'Update') {
       this.update(postData);
     }
+
+    console.log(postData);
 
   }
 
@@ -182,6 +186,10 @@ export class AddCoaComponent implements OnInit {
           this.msg.WarnNotify(Response.msg);
         }
         this.app.stopLoaderDark();
+      },
+      (Error:any)=>{
+        console.log(Error);
+         this.app.stopLoaderDark();
       }
 
     )
@@ -203,7 +211,11 @@ export class AddCoaComponent implements OnInit {
               this.msg.WarnNotify(Response.msg);
             }
             this.app.stopLoaderDark();
-          }
+          },
+      (Error:any)=>{
+        console.log(Error);
+         this.app.stopLoaderDark();
+      }
         )
       }
     })

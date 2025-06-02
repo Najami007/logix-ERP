@@ -57,7 +57,7 @@
                     <td class="ms-2 fs-11">{{myRemarks}}</td>
                 </tr>
 
-                
+
 
 
             </table>
@@ -247,23 +247,30 @@
                     </tr>
 
 
-                    <tr  class="text-end fw-bold" *ngIf="myCusBalance !== 0">
-                        <td></td>
-                        <td >prv Blnc</td>
+
+
+                </tbody>
+                <tbody>
+                    <tr class="text-center " *ngIf="!gstFeature">
+
+                        <td width="40%" rowspan="6">
+                        </td>
+                    </tr>
+                    <tr class="text-end fw-bold" *ngIf="myCusBalance !== 0">
+                        <td>prv Blnc</td>
                         <td *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
-                        <td  *ngIf="myChange <= 0">{{myCusBalance - ( -1 * myChange) | number:'1.0-1'}}
+                        <td *ngIf="myChange <= 0">{{myCusBalance - ( -1 * myChange) | number:'1.0-1'}}
                         </td>
 
                     </tr>
                     <tr class="text-end fw-bold" *ngIf="myCusBalance !== 0">
-                        <td></td>
-                        <td >Net Blnc</td>
-                        <td >{{myCusBalance | number:'1.0-1'}}</td>
+                        <td>Net Blnc</td>
+                        <td>{{myCusBalance | number:'1.0-1'}}</td>
 
                     </tr>
-
                 </tbody>
             </table>
+
 
             <!--------------------------Bill Total Area End ---------------------->
 
@@ -313,7 +320,7 @@
 
 
         <div>
-            <table class="table-logix2 fs-13 urdu" >
+            <table class="table-logix2 fs-13 urdu">
                 <thead>
                     <tr>
                         <th> بل نمبر </th>
@@ -331,9 +338,9 @@
                 </tbody>
             </table>
 
-            <table  dir="rtl" class="w-100 justify-content-start urdu">
+            <table dir="rtl" class="w-100 justify-content-start urdu">
                 <tr *ngIf="myCustomerName != null">
-                    
+
                     <th class="fs-12"> کسٹمر :</th>
                     <td class="ms-2 fs-11"> {{myCustomerName}}</td>
                     <td></td>
@@ -344,7 +351,7 @@
                     <td></td>
                 </tr>
 
-                <tr class="fs-11" >
+                <tr class="fs-11">
                     <th class="fs-12"> ریمارکس : </th>
                     <td class="ms-2 fs-11">{{myRemarks}} </td>
                     <td></td>
@@ -419,14 +426,14 @@
             <table class="table table-sale" dir="rtl" *ngIf="billFormate2">
                 <thead>
                     <tr class="fs-10">
-                        
-                        <th >  نمبر </th>
-                        <th >  ائٹم </th>
-                        <th >تعداد</th>
-                        <th >قیمت</th>
-                        <th  *ngIf="discFeature">ڈسکاؤنٹ</th>
-                        <th  *ngIf="discFeature">% ڈسکاؤنٹ</th>
-                        <th >ٹوٹل</th>
+
+                        <th> نمبر </th>
+                        <th> ائٹم </th>
+                        <th>تعداد</th>
+                        <th>قیمت</th>
+                        <th *ngIf="discFeature">ڈسکاؤنٹ</th>
+                        <th *ngIf="discFeature">% ڈسکاؤنٹ</th>
+                        <th>ٹوٹل</th>
 
                     </tr>
                 </thead>
@@ -458,7 +465,7 @@
 
             <table class="table-garment-sale-Urdu-Bottom " dir="rtl">
                 <tbody class="fs-16 fw-bold">
-                      <tr class="text-center " *ngIf="!gstFeature">
+                    <tr class="text-center " *ngIf="!gstFeature">
 
                         <td width="40%" rowspan="7" style="font-size: 10px;">
                             <img [src]="global.thankyouImage" height="80" width="80" /><br />
@@ -515,16 +522,22 @@
                         <td></td>
                         <td class="urdu">بقایا</td>
                         <td class="text-start">{{myChange|number:'1.0-1'}}</td>
-
-
-
                     </tr>
+                </tbody>
 
 
-                    <tr style="text-align:right; " *ngIf="myCusBalance !== 0">
-                        <td></td>
+
+                <tbody>
+                    <tr class="text-center " *ngIf="!gstFeature">
+
+                        <td width="40%" rowspan="6">
+                        </td>
+                    </tr>
+                   <tr style="text-align:right; " *ngIf="myCusBalance !== 0">
+                    <td></td>
                         <td class="urdu fw-bold">سابقا بقایا</td>
-                        <td class="fw-bold text-start" *ngIf="myChange <= 0">{{myCusBalance - (-1 * myChange) | number:'1.0-1'}}
+                        <td class="fw-bold text-start" *ngIf="myChange <= 0">{{myCusBalance - (-1 * myChange) |
+                            number:'1.0-1'}}
                         </td>
                         <td class="fw-bold text-start" *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
 
@@ -538,11 +551,12 @@
 
 
                     </tr>
-
-
-
                 </tbody>
+
+
             </table>
+
+
 
             <hr>
 
