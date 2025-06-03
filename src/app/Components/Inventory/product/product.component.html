@@ -332,16 +332,16 @@
                             <td>{{item.subCategoryTitle}}</td>
                             <td>{{item.brandTitle}}</td>
 
-                            <td>{{item.costPrice}}</td>
-                            <td>{{item.salePrice}}</td>
+                            <td>{{item.costPrice |number:'1.0-1'}}</td>
+                            <td>{{item.salePrice |number:'1.0-0'}}</td>
                             <td>{{item.discPercentage}}%</td>
                             <td>{{item.gst}}%</td>
                             <td>{{item.entryUser}}</td>
                             <td class="hide-in-print" *ngIf="crudList.u"><mat-icon class="text-success cursorPointer" (click)="edit(item)">edit</mat-icon></td>
                             <td class="hide-in-print"><mat-icon class="text-success cursorPointer"
                                     [ngClass]="item.activeStatus ? 'text-success' :'text-danger'"
-                                    (click)="activeProduct(item)">{{item.activeStatus ? 'remove_circle' :
-                                    'remove_circle'}}</mat-icon></td>
+                                    (click)="activeProduct(item)">{{item.activeStatus ? 'check' :
+                                    'close'}}</mat-icon></td>
                             <td (click)="this.global.showProductImage('',item.productID)" class="cursorPointer hide-in-print">
                                 <mat-icon>image</mat-icon></td>
                             <td class="hide-in-print" *ngIf="crudList.d"><mat-icon class="text-danger cursorPointer" (click)="deleteProd(item)">delete</mat-icon></td>
@@ -375,7 +375,7 @@
 
     <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
     <select class="text-white" style="height: 25px;background-color: rgb(75, 164, 248);"
-        (change)="onTableSizeChange($event)">
+        (change)="onTableSizeChange($event)"  [(ngModel)]="tableSize">
         <option *ngFor=" let item of tableSizes" [selected]="tableSize == item">{{item}}</option>
     </select>
 

@@ -1,12 +1,12 @@
 import { animate } from '@angular/animations';
-import { Component, ElementRef, OnInit ,ViewChild} from '@angular/core';
-import {FormControl } from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import * as $ from 'jquery';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.development';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
-import { formatDate } from '@angular/common';
+import { DatePipe, formatDate } from '@angular/common';
 import { CircleProgressOptions } from 'ng-circle-progress';
 import { AppComponent } from 'src/app/app.component';
 import { Subscription } from 'rxjs';
@@ -25,128 +25,128 @@ export class LedgerComponent {
 
   date = new FormControl(new Date());
 
-  CoaList:any;
-  crudList:any = {c:true,r:true,u:true,d:true};
-  companyProfile:any = [];
+  CoaList: any;
+  crudList: any = { c: true, r: true, u: true, d: true };
+  companyProfile: any = [];
 
- 
-  
 
-  constructor( public globalData: GlobalDataModule,
-    private http:HttpClient,
-    private msg:NotificationService,
-    private app:AppComponent,
-    private dialogue:MatDialog,
-    private route:Router
-    
 
-    ) {
-      
-        // this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
-        //   (Response:any)=>{
-        //     this.companyProfile = Response;
-        //     //console.log(Response)  
-            
-        //   }
-        // )
 
-       this.globalData.getCompany().subscribe((data)=>{
-          this.companyProfile = data;
-        });
+  constructor(public globalData: GlobalDataModule,
+    private http: HttpClient,
+    private msg: NotificationService,
+    private app: AppComponent,
+    private dialogue: MatDialog,
+    private route: Router,
+    private datePipe:DatePipe
 
-        this.globalData.getMenuList().subscribe((data)=>{
-          this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-        })
-      
-    
-    }
+  ) {
+
+    // this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+    //   (Response:any)=>{
+    //     this.companyProfile = Response;
+    //     //console.log(Response)  
+
+    //   }
+    // )
+
+    this.globalData.getCompany().subscribe((data) => {
+      this.companyProfile = data;
+    });
+
+    this.globalData.getMenuList().subscribe((data) => {
+      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
+    })
+
+
+  }
 
   ngOnInit(): void {
-   
+
     this.globalData.setHeaderTitle('Ledger');
     this.getProject();
 
-    
+
     this.getCoa();
 
-   
+
   }
 
-  projectSearch:any;
-  coaID:any  ;
-  projectID:number = 0;
-  projectName:any;
+  projectSearch: any;
+  coaID: any;
+  projectID: number = 0;
+  projectName: any;
   startDate = new Date();
   EndDate = new Date();
-  debitTotal=0;
-  creditTotal=0;
-  curCOATitle:any;
-
-  
-
-
-
-  tableData:any = [];
- placholder = 'Search...';
- txtSearch = '';
- curDate = new Date();
+  debitTotal = 0;
+  creditTotal = 0;
+  curCOATitle: any;
 
 
 
 
- //////////////// print Variables/////////////////////
 
- lblInvoiceNo:any;
- lblInvoiceDate:any;
- lblRemarks:any;
- lblVoucherType:any;
- lblVoucherTable:any;
- lblDebitTotal:any;
- lblCreditTotal:any;
- lblVoucherPrintDate = new Date();
- invoiceDetails:any;
-
- projectList:any = [];
-
- getProject(){
-
-  this.globalData.getProjectList().subscribe((data: any) => { this.projectList = data; });
-
-}
+  tableData: any = [];
+  placholder = 'Search...';
+  txtSearch = '';
+  curDate = new Date();
 
 
-sortData(type:any){
 
-  if(type == 'date'){
-    this.tableData.sort((a:any,b:any)=>  a.invoiceDate - b.invoiceDate );
+
+  //////////////// print Variables/////////////////////
+
+  lblInvoiceNo: any;
+  lblInvoiceDate: any;
+  lblRemarks: any;
+  lblVoucherType: any;
+  lblVoucherTable: any;
+  lblDebitTotal: any;
+  lblCreditTotal: any;
+  lblVoucherPrintDate = new Date();
+  invoiceDetails: any;
+
+  projectList: any = [];
+
+  getProject() {
+
+    this.globalData.getProjectList().subscribe((data: any) => { this.projectList = data; });
+
   }
 
-  if(type =='invNo'){
-    
-     this.tableData.sort((a:any,b:any)=>  a.voucherNo - b.voucherNo );
-     //a.voucherNo - b.voucherNo
-  }
-  
-}
 
+  sortData(type: any) {
 
- ////////////////////////getting total of debit and credit Sides///////////
- 
-
-
-  getTotal(){
-      this.debitTotal = 0;
-      this.creditTotal = 0; 
-      for(var i=0;i<this.tableData.length;i++){
-        this.debitTotal += this.tableData[i].debit;
-        this.creditTotal += this.tableData[i].credit;
-      }
+    if (type == 'date') {
+      this.tableData.sort((a: any, b: any) => a.invoiceDate - b.invoiceDate);
     }
-  
- 
+
+    if (type == 'invNo') {
+
+      this.tableData.sort((a: any, b: any) => a.voucherNo - b.voucherNo);
+      //a.voucherNo - b.voucherNo
+    }
+
+  }
+
+
+  ////////////////////////getting total of debit and credit Sides///////////
+
+
+
+  getTotal() {
+    this.debitTotal = 0;
+    this.creditTotal = 0;
+    for (var i = 0; i < this.tableData.length; i++) {
+      this.debitTotal += this.tableData[i].debit;
+      this.creditTotal += this.tableData[i].credit;
+    }
+  }
+
+
   PrintTable() {
     this.globalData.printData('#printRpt');
-    
+
   }
 
 
@@ -160,102 +160,96 @@ sortData(type:any){
     this.CoaList.sort((a: any, b: any) => b.indexNo - a.indexNo);
   }
 
-  getCoa(){
+  getCoa() {
     this.app.startLoaderDark();
-    this.http.get(environment.mainApi+this.globalData.accountLink+'GetVoucherCOA').subscribe(
-      (Response:any)=>{
+    this.http.get(environment.mainApi + this.globalData.accountLink + 'GetVoucherCOA').subscribe(
+      (Response: any) => {
         // console.log(Response);
-       this.CoaList = [];
         if (Response.length > 0) {
-          Response.forEach((e: any) => {
-            this.CoaList.push({
-              indexNo: this.CoaList.length == 0 ? this.CoaList.length + 1
-                : this.CoaList[0].indexNo + 1,
-              coaTitle: e.coaTitle,
-              accountCode: e.accountCode,
-              coaID: e.coaID
-            });
-          });
+          this.CoaList = Response.map((e: any, index: any) => {
+            (e.indexNo = index + 1);
+            return e;
+          })
+
+          this.CoaList.sort((a: any, b: any) => b.indexNo - a.indexNo);
         }
-
-
-
-        this.CoaList.sort((a: any, b: any) => b.indexNo - a.indexNo);
         this.app.stopLoaderDark();
       }
     )
   }
- 
+
 
 
   ///////////////////////////////////////////////////////
 
-  getLedgerReport(param:any){
+  getLedgerReport(param: any) {
 
-    if(this.coaID == '' || this.coaID == undefined){
+    if (this.coaID == '' || this.coaID == undefined) {
       this.msg.WarnNotify('Select Chart Of Account Title')
-    }else if((this.projectID == 0 || this.projectID == undefined) && param == 'project'){
+    } else if ((this.projectID == 0 || this.projectID == undefined) && param == 'project') {
       this.msg.WarnNotify('Select Project')
-    } else{
+    } else {
       this.app.startLoaderDark();
       this.projectName = '';
-      if(param == 'all'){
-      
+      if (param == 'all') {
+
         this.projectID = 0;
       }
-      if(this.projectID != 0){
-        this.projectName = this.projectList.find((e:any)=> e.projectID == this.projectID).projectTitle;
+      if (this.projectID != 0) {
+        this.projectName = this.projectList.find((e: any) => e.projectID == this.projectID).projectTitle;
       }
-      
+
       /////////////////// finding the coaTitle from coalist by coaID////////
-      var curRow = this.CoaList.find((e:any)=> e.coaID == this.coaID);
-    
+      var curRow = this.CoaList.find((e: any) => e.coaID == this.coaID);
+
       this.curCOATitle = curRow.coaTitle;
       /////////////////////////////////////////////////
 
-     
-      this.http.get(environment.mainApi+this.globalData.accountLink+'GetLedgerRpt?coaid='+this.coaID +'&fromdate='
-      +this.globalData.dateFormater(this.startDate,'-') +'&todate='+this.globalData.dateFormater(this.EndDate,'-')+'&projectID='+this.projectID).subscribe(
-        (Response:any)=>{
-    
-          this.tableData = Response.map((e:any)=>{
-          (e.invoiceDate = new Date(e.invoiceDate));
-          return e;
-          }
-         
-        );
-          //console.log(this.tableData );
-          this.getTotal();
-          this.app.stopLoaderDark();
-        },
-        
-      )
+
+      this.http.get(environment.mainApi + this.globalData.accountLink + 'GetLedgerRpt?coaid=' + this.coaID + '&fromdate='
+        + this.globalData.dateFormater(this.startDate, '-') + '&todate=' + this.globalData.dateFormater(this.EndDate, '-') + '&projectID=' + this.projectID).subscribe(
+          (Response: any) => {
+
+            this.tableData = Response.map((e: any) => {
+              (e.invoiceDate = new Date(e.invoiceDate));
+              return e;
+            }
+
+            );
+            //console.log(this.tableData );
+            this.getTotal();
+            this.app.stopLoaderDark();
+          },
+
+        )
     }
 
 
-    
+
   }
 
-  
 
-   ///////////////////////////////////////////////////
+
+  ///////////////////////////////////////////////////
 
 
 
 
   /////////////////////////////////////////////
 
- 
 
 
-  VoucherDetails(row:any){
-  
-    this.dialogue.open(VoucherDetailsComponent,{width:"40%",data:row,}).afterClosed().subscribe(val=>{ }) ;
+
+  VoucherDetails(row: any) {
+
+    this.dialogue.open(VoucherDetailsComponent, { width: "40%", data: row, }).afterClosed().subscribe(val => { });
   }
 
 
-  export(){
-    this.globalData.ExportHTMLTabletoExcel('printRpt','Ledger '+this.curCOATitle +'(' + this.startDate.toLocaleDateString() + ' - ' + this.EndDate.toLocaleDateString() +')')
+  export() {
+    var startDate = this.datePipe.transform(this.startDate,'dd/MM/yyyy');
+    var endDate = this.datePipe.transform(this.EndDate,'dd/MM/yyyy');
+    this.globalData.ExportHTMLTabletoExcel('printRpt','Ledger'+this.curCOATitle+'('+startDate+' - '+endDate+ ')')
   }
 
 }

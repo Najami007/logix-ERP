@@ -38,11 +38,7 @@ export class InvrptprodwiseComponent implements OnInit {
       this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
     })
 
-    this.global.getProducts().subscribe(
-      (Response: any) => {
-        this.productList = Response;
-      }
-    )
+   this.getProduct();
   }
   ngOnInit(): void {
     this.global.setHeaderTitle('Inventory Report (Product Wise)');
@@ -50,6 +46,29 @@ export class InvrptprodwiseComponent implements OnInit {
 
   }
 
+
+  getProduct(){
+     this.global.getProducts().subscribe(
+      (Response: any) => {
+        if(Response.length > 0){
+        this.productList = Response.map((e:any,index:any)=>{
+          (e.indexNo = index + 1);
+          return e;
+      });
+    
+        this.productList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+        }
+      }
+    )
+  }
+
+
+  
+  onProdSelected() {
+    var index = this.productList.findIndex((e: any) => e.productID == this.productID);
+    this.productList[index].indexNo = this.productList[0].indexNo + 1;
+    this.productList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+  }
 
 
   reportsList:any = [

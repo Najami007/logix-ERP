@@ -319,21 +319,14 @@ export class Voucher2Component implements OnInit {
 
         this.CoaList = [];
         if (Response.length > 0) {
-          Response.forEach((e: any) => {
-            this.CoaList.push({
-              indexNo: this.CoaList.length == 0 ? this.CoaList.length + 1
-                : this.CoaList[0].indexNo + 1,
-              coaTitle: e.coaTitle,
-              accountCode: e.accountCode,
-              coaID: e.coaID
-            });
-          });
+          this.CoaList = Response.map((e: any, index: any) => {
+            (e.indexNo = index + 1);
+            return e;
+          })
+
+          this.CoaList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+        
         }
-
-
-
-        this.CoaList.sort((a: any, b: any) => b.indexNo - a.indexNo);
-        console.log(this.CoaList);
       }
     )
   }

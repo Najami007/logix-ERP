@@ -6,6 +6,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { environment } from 'src/environments/environment.development';
 import { AppComponent } from 'src/app/app.component';
 import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-plstat',
@@ -24,7 +25,8 @@ export class PLStatComponent implements OnInit {
     private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
-    private route:Router
+    private route:Router,
+    private datePipe:DatePipe
     
     ){
       // this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
@@ -206,6 +208,8 @@ getProject(){
   }
 
   export(){
-    this.globalData.ExportHTMLTabletoExcel('printDiv','P&L '+'(' + this.fromDate.toLocaleDateString() + ' - ' + this.toDate.toLocaleDateString() +')')
+     var startDate = this.datePipe.transform(this.fromDate,'dd/MM/yyyy');
+    var endDate = this.datePipe.transform(this.toDate,'dd/MM/yyyy');
+    this.globalData.ExportHTMLTabletoExcel('printDiv','P&L '+'(' + startDate + ' - ' + endDate +')')
   }
 }

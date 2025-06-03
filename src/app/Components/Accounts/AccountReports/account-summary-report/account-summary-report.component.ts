@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -26,7 +27,8 @@ export class AccountSummaryReportComponent implements OnInit {
     private http:HttpClient,
     private msg:NotificationService,
     private app:AppComponent,
-    private route:Router
+    private route:Router,
+    private datePipe:DatePipe
 
     ) {
       // this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
@@ -218,7 +220,9 @@ this.TrialBalanceData = [];
 
   export(){
     if(this.rptType != ''){
-    this.globalData.ExportHTMLTabletoExcel(this.rptType,'Account Summary'+'(' + this.fromDate.toLocaleDateString() + ' - ' + this.toDate.toLocaleDateString() +')');
+       var startDate = this.datePipe.transform(this.fromDate,'dd/MM/yyyy');
+    var endDate = this.datePipe.transform(this.toDate,'dd/MM/yyyy');
+    this.globalData.ExportHTMLTabletoExcel(this.rptType,'Account Summary'+'(' + startDate + ' - ' + endDate +')');
     }
   }
 

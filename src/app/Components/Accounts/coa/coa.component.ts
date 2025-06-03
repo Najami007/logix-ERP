@@ -88,17 +88,17 @@ export class COAComponent implements OnInit {
 
     if (type == 'haveNote') {
 
-       this.filterNoteID = 0;
+      this.filterNoteID = 0;
       this.filterTransactionType = 'all';
       this.filterCoaType = 0;
       if (this.filterHaveNoteID == 0) {
         this.ChartsofAccountsData = this.tmpCoaData
       }
       if (this.filterHaveNoteID == 1) {
-        this.ChartsofAccountsData = this.tmpCoaData.filter((e:any)=> e.noteID > 0)
+        this.ChartsofAccountsData = this.tmpCoaData.filter((e:any)=> e.noteID > 0 && (e.coaTypeID == 1 || e.coaTypeID == 4 || e.coaTypeID == 5))
       }
        if (this.filterHaveNoteID == 2) {
-        this.ChartsofAccountsData = this.tmpCoaData.filter((e:any)=> e.noteID == 0)
+        this.ChartsofAccountsData = this.tmpCoaData.filter((e:any)=> e.noteID == 0 && (e.coaTypeID == 1 || e.coaTypeID == 4 || e.coaTypeID == 5))
       }
       
     }

@@ -142,6 +142,7 @@ export class AdddwComponent implements OnInit {
         this.update(postData);
       }
 
+      console.log(postData);
   }
 
 

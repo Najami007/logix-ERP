@@ -76,7 +76,23 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
   }
 
   getSupplier(){
-    this.global.getSupplierList().subscribe((data: any) => { this.supplierList = data; });
+    this.global.getSupplierList().subscribe((data: any) => {
+     if(data.length > 0){
+       this.supplierList = data.map((e: any, index: any) => {
+        (e.indexNo = index + 1);
+        return e;
+      });
+      this.supplierList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+     }
+    });
+
+  }
+
+    onSupplierSelected() {
+    this.partyName = this.supplierList.find((e: any) => e.partyID == this.partyID).partyName;
+     var index = this.supplierList.findIndex((e: any) => e.partyID == this.partyID);
+    this.supplierList[index].indexNo = this.supplierList[0].indexNo + 1;
+    this.supplierList.sort((a: any, b: any) => b.indexNo - a.indexNo);
 
   }
 

@@ -47,64 +47,99 @@ export class ProductModalComponent implements OnInit {
     }
   }
 
-  handleProdFocus(item: any, e: any, cls: any, endFocus: any, prodList: []) {
+  // handleProdFocus(item: any, e: any, cls: any, endFocus: any, prodList: []) {
 
 
-    /////// increment in prodfocus on tab click
-    if (e.keyCode == 9 && !e.shiftKey) {
-      this.prodFocusedRow += 1;
+  //   /////// increment in prodfocus on tab click
+  //   if (e.keyCode == 9 && !e.shiftKey) {  
+  //     this.prodFocusedRow += 1;
 
-    }
-    /////// decrement in prodfocus on shift tab click
-    if (e.shiftKey && e.keyCode == 9) {
-      this.prodFocusedRow -= 1;
+  //   }
+  //   /////// decrement in prodfocus on shift tab click
+  //   if (e.shiftKey && e.keyCode == 9) {
+  //     this.prodFocusedRow -= 1;
 
-    }
-    /////move down
-    if (e.keyCode == 40) {
-
-
-      if (prodList.length > 1) {
-        this.prodFocusedRow += 1;
-        if (this.prodFocusedRow >= prodList.length) {
-          this.prodFocusedRow -= 1
-        } else {
-          var clsName = cls + this.prodFocusedRow;
-          //  alert(clsName);
-          e.preventDefault();
-          $(clsName).trigger('focus');
-          //  e.which = 9;   
-          //  $(clsName).trigger(e)       
-        }
-      }
-    }
+  //   }
+  //   /////move down
+  //   if (e.keyCode == 40) {
 
 
-    //Move up
-    if (e.keyCode == 38) {
+  //     if (prodList.length > 1) {
+  //       this.prodFocusedRow += 1;
+  //       if (this.prodFocusedRow >= prodList.length) {
+  //         this.prodFocusedRow -= 1
+  //       } else {
+  //         var clsName = cls + this.prodFocusedRow;
+  //         //  alert(clsName);
+  //         e.preventDefault();
+  //         $(clsName).trigger('focus');
+  //         //  e.which = 9;   
+  //         //  $(clsName).trigger(e)       
+  //       }
+  //     }
+  //   }
 
-      if (this.prodFocusedRow == 0) {
-        e.preventDefault();
-        $(endFocus).trigger('focus');
-        this.prodFocusedRow = 0;
 
-      }
+  //   //Move up
+  //   if (e.keyCode == 38) {
 
-      if (prodList.length > 1) {
+  //     if (this.prodFocusedRow == 0) {
+  //       e.preventDefault();
+  //       $(endFocus).trigger('focus');
+  //       this.prodFocusedRow = 0;
 
-        this.prodFocusedRow -= 1;
+  //     }
 
-        var clsName = cls + this.prodFocusedRow;
-        //  alert(clsName);
+  //     if (prodList.length > 1) {
+
+  //       this.prodFocusedRow -= 1;
+
+  //       var clsName = cls + this.prodFocusedRow;
+  //       //  alert(clsName);
+  //       e.preventDefault();
+  //       $(clsName).trigger('focus');
+
+
+  //     }
+
+  //   }
+
+  // }
+
+
+  handleProdFocus(item: any, e: KeyboardEvent, cls: string, endFocus: string, prodList: any[]) {
+  const key = e.keyCode;
+
+  if (key === 9 && !e.shiftKey) {
+    this.prodFocusedRow++;
+  } else if (key === 9 && e.shiftKey) {
+    this.prodFocusedRow--;
+  } else if (key === 40) {
+    // Arrow Down
+    if (prodList.length > 0) {
+      this.prodFocusedRow++;
+      if (this.prodFocusedRow >= prodList.length) {
+        this.prodFocusedRow = prodList.length - 1;
+      } else {
+        const clsName = cls + this.prodFocusedRow;
         e.preventDefault();
         $(clsName).trigger('focus');
-
-
       }
-
     }
-
+  } else if (key === 38) {
+    // Arrow Up
+    if (this.prodFocusedRow <= 0) {
+      this.prodFocusedRow = 0;
+      e.preventDefault();
+      $(endFocus).trigger('focus');
+    } else {
+      this.prodFocusedRow--;
+      const clsName = cls + this.prodFocusedRow;
+      e.preventDefault();
+      $(clsName).trigger('focus');
+    }
   }
+}
 
 
   selectProduct(item:any){

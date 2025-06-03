@@ -54,7 +54,7 @@
             
 
             <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
-            <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);" (change)="onTableSizeChange($event)">
+            <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);"  [(ngModel)]="tableSize" (change)="onTableSizeChange($event)">
                 <option *ngFor=" let item of tableSizes">{{item}}</option>
             </select>
             
@@ -132,15 +132,15 @@
                         <tr *ngFor="let item of lblInvoiceDetails; index as index">
                             <td>{{index+1}}</td>
                             <td>{{item.coaTitle}} ({{item.accountCode}})</td>
-                            <td class="text-end">{{item.debit |number}}</td>
-                            <td  class="text-end">{{item.credit |number}}</td>
+                            <td class="text-end">{{item.debit |number:'1.0-0'}}</td>
+                            <td  class="text-end">{{item.credit |number:'1.0-0'}}</td>
                             <td >{{item.detailNarration}}</td>
                         </tr>
                         <tr>
                             <td></td>
                             <td><b>Total</b></td>
-                            <td  class="text-end"><b>{{lblDebitTotal |number}}</b></td>
-                            <td  class="text-end"><b>{{lblCreditTotal |number}}</b></td>
+                            <td  class="text-end"><b>{{lblDebitTotal |number:'1.0-0'}}</b></td>
+                            <td  class="text-end"><b>{{lblCreditTotal |number:'1.0-0'}}</b></td>
                             <td></td>
                         </tr>
                     </tbody>
@@ -149,9 +149,9 @@
 
                <div class="w-100 d-flex justify-content-end">
                 <span class="w-75 d-flex flex-column fw-bold text-end">
-                    <span >Prev Balance: {{ lblPartyType === 'Supplier' ?  lblPartyBalance + lblInvAmount : lblPartyBalance - lblInvAmount |number}}</span>
-                    <span>Paid: {{lblInvAmount |number}}</span>
-                    <span>Cur Balance: {{lblPartyBalance |number}}</span>
+                    <span >Prev Balance: {{ lblPartyType === 'Supplier' ?  lblPartyBalance + lblInvAmount : lblPartyBalance - lblInvAmount |number:'1.0-0'}}</span>
+                    <span>Paid: {{lblInvAmount |number:'1.0-0'}}</span>
+                    <span>Cur Balance: {{lblPartyBalance |number:'1.0-0'}}</span>
                 </span>
         
                </div>   

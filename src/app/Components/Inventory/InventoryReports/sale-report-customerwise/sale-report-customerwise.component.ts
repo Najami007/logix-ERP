@@ -83,12 +83,24 @@ export class SaleReportCustomerwiseComponent implements OnInit {
 
 
   getParty(){
-   
-//      this.global.getCustomerList().subscribe((data: any) => { this.partyList = data; });
-      this.global.getCustomerList().subscribe((data: any) => { this.partyList = data.map((e:any)=>{
-        return e;
-      }); });
+   this.global.getCustomerList().subscribe((data: any) => {
+      if (data.length > 0) {
+        this.partyList = data.map((e: any, index: any) => {
+          (e.indexNo = index + 1);
+          return e;
+        });
+        this.partyList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+      }
+    });
 
+
+  }
+
+   onPartySelected() {
+    this.partyName = this.partyList.find((e: any) => e.partyID == this.partyID).partyName;
+     var index = this.partyList.findIndex((e: any) => e.partyID == this.partyID);
+    this.partyList[index].indexNo = this.partyList[0].indexNo + 1;
+    this.partyList.sort((a: any, b: any) => b.indexNo - a.indexNo);
 
   }
 
@@ -98,6 +110,7 @@ export class SaleReportCustomerwiseComponent implements OnInit {
   onUserSelected() {
     var curUser = this.userList.find((e: any) => e.userID == this.userID);
     this.userName = curUser.userName;
+
   }
 
 

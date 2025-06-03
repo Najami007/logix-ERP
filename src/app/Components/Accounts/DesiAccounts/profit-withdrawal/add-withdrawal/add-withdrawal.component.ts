@@ -121,8 +121,6 @@ export class AddWithdrawalComponent {
       this.Update(postData);
     }
 
-
-
   }
 
 

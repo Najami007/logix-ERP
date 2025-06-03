@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment.development';
 import * as $ from 'jquery';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-balance-sheet',
@@ -25,7 +26,8 @@ export class BalanceSheetComponent implements OnInit {
     private http: HttpClient,
     private app: AppComponent,
     private msg: NotificationService,
-    private route: Router
+    private route: Router,
+    private datePipe:DatePipe
   ) {
 
     // this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
@@ -218,7 +220,8 @@ export class BalanceSheetComponent implements OnInit {
 
   export() {
     if (this.rptType != '') {
-      this.globalData.ExportHTMLTabletoExcel(this.rptType, 'Balance Sheet ' + '(' + this.toDate.toLocaleDateString() + ')')
+       var toDate = this.datePipe.transform(this.toDate,'dd/MM/yyyy');
+      this.globalData.ExportHTMLTabletoExcel(this.rptType, 'Balance Sheet ' + '(' + toDate + ')')
     }
 
   }

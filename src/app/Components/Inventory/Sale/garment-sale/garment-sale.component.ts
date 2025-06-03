@@ -795,7 +795,7 @@ export class GarmentSaleComponent implements OnInit {
 
 
   searchProductByName() {
-    this.global.openBootstrapModal('#prodModal', true);
+    this.global.openBootstrapModal('#prodModal', true,true);
 
     setTimeout(() => {
       $('#prodName').trigger('select');

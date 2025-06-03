@@ -170,7 +170,7 @@
                                 </tr>
                                  <tr *ngIf="vType == 'JV'" class="fw-bold bg-light">
                                     
-                                    <td colspan="4" class="text-center">Balance</td>
+                                    <td colspan="4" class="text-center">Difference</td>
                              
                                     <td class="text-center text-danger">{{debittotal - creditTotal | number}}</td>
                                     <td></td>
@@ -378,7 +378,7 @@
 
                 <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
                 <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);"
-                    (change)="onTableSizeChange($event)">
+                    (change)="onTableSizeChange($event)" [(ngModel)]="tableSize">
                     <option *ngFor=" let item of tableSizes">{{item}}</option>
                 </select>
 

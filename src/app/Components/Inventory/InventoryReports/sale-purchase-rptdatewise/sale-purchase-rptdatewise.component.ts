@@ -10,6 +10,7 @@ import { SaleBillPrintComponent } from '../../Sale/SaleComFiles/sale-bill-print/
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { PurchaseBillPrintComponent } from '../../Purchases/purchase-bill-print/purchase-bill-print.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-sale-purchase-rptdatewise',
@@ -31,7 +32,8 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     private msg:NotificationService,
     private app:AppComponent,
     public global:GlobalDataModule,
-    private route:Router    
+    private route:Router,
+    private datePipe:DatePipe    
   ){
 
     this.global.getCompany().subscribe((data)=>{
@@ -311,7 +313,9 @@ rptType:any = 's';
 
    export(){
     var type = this.reportsList.find((e:any)=> e.val == this.tmpRptType).title;
-    this.global.ExportHTMLTabletoExcel('PrintDiv',type+'(' + this.fromDate.toLocaleDateString() + ' - ' + this.toDate.toLocaleDateString() +')')
+     var startDate = this.datePipe.transform(this.fromDate,'dd/MM/yyyy');
+    var endDate = this.datePipe.transform(this.toDate,'dd/MM/yyyy');
+    this.global.ExportHTMLTabletoExcel('PrintDiv',type+'(' + startDate+ ' - ' + endDate +')')
   }
 
 
