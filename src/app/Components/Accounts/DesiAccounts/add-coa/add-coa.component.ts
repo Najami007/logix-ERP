@@ -34,7 +34,7 @@ export class AddCoaComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.globaldata.setHeaderTitle('ADD BANK');
+    this.globaldata.setHeaderTitle('Charts Of Account');
     this.getCoaType();
     this.getSavedData('EXP');
 

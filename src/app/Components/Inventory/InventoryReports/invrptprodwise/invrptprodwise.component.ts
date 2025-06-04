@@ -41,7 +41,7 @@ export class InvrptprodwiseComponent implements OnInit {
    this.getProduct();
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Inventory Report (Product Wise)');
+    this.global.setHeaderTitle('Inventory Report (ProdWise)');
     this.getUsers();
 
   }

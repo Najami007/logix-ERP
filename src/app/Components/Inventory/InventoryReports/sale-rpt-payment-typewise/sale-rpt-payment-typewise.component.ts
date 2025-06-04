@@ -40,7 +40,7 @@ export class SaleRptPaymentTypewiseComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Sale Report (Recipewise)');
+    this.global.setHeaderTitle('Sale Report Payment Typewise');
     this.getUsers();
     $('#detailTable').show();
     $('#summaryTable').hide();

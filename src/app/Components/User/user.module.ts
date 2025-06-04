@@ -32,9 +32,9 @@ export const userRoutes: Route[] = [
   
   {path:'adduser', component:AddUserComponent,data: { title: 'Add User' },canActivate:[AuthGuard]  },
   {path:'usrl', component:UserRoleComponent,data: { title: 'User Role' },canActivate:[AuthGuard]  },
-  {path:'respwd', component:RestrictpwdComponent,data: { title: 'Codes' },canActivate:[AuthGuard]  },
+  {path:'respwd', component:RestrictpwdComponent,data: { title: 'Restriction Codes' },canActivate:[AuthGuard]  },
   {path:'doc', component:DayopencloseComponent,data: { title: 'Day Open Close' }, canActivate:[AuthGuard] },
-  {path:'rptdoc', component:DayOpencloseRptComponent,data: { title: 'DOC Rpt' }, canActivate:[AuthGuard] },
+  {path:'rptdoc', component:DayOpencloseRptComponent,data: { title: 'Report Day Open Close' }, canActivate:[AuthGuard] },
   {path:'keygen', component:SubscriptionKeyGeneratorComponent,data: { title: 'Key Generator' }},
 
   {path:'**', redirectTo:'home',pathMatch:'full'}

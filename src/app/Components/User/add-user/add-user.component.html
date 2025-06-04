@@ -46,11 +46,9 @@
                     <td *ngIf="crudList.u"><button mat-mini-fab class="h30px w30px "
                             style="background-color: rgb(57, 154, 183);"
                             (click)="ChangePassword(item.userID)"><mat-icon>lock</mat-icon></button></td>
-                    <td *ngIf="crudList.u"><button mat-mini-fab class="bg-warning h30px w30px"
-                            *ngIf="item.tempBlock == false "
-                            (click)="blockUser(item,true)"><mat-icon>block</mat-icon></button>
-                        <button mat-mini-fab *ngIf="item.tempBlock == true " (click)="blockUser(item,false)"
-                            class="bg-white text-dark h30px w30px"> <mat-icon>block</mat-icon></button>
+                    <td *ngIf="crudList.u">
+                        <button mat-mini-fab color="white" [ngClass]="item.tempBlock ? 'text-danger' : 'text-success'" class="h30px w30px pt-1"
+                            (click)="blockUser(item,!item.tempBlock)"><mat-icon>{{item.tempBlock ? 'block' : 'check'}}</mat-icon></button>
                     </td>
                     <td *ngIf="crudList.d"><button mat-mini-fab class="bg-danger h30px w30px"
                             (click)="deleteUser(item)"><mat-icon>delete</mat-icon></button></td>

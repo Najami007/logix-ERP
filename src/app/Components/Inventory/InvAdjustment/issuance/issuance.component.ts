@@ -50,7 +50,7 @@ export class IssuanceComponent implements OnInit {
 
 
   ngOnInit(): void {
-   this.global.setHeaderTitle('Issuance');
+   this.global.setHeaderTitle('Stock Issuance');
    this.getLocation();
    this.getIssueTypes();
    $('.searchProduct').trigger('focus');

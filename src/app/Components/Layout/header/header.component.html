@@ -1,9 +1,9 @@
-<div class="pb-5 ps-2 pe-3 justify-content-center shadow bg-white"  style="height: 40px;">
+<div class="pb-5 ps-2 pe-3 justify-content-center shadow bg-white" style="height: 40px;">
     <span class="justify-content-between d-flex w-100">
-       
-            <!-- <button class="button" mat-icon-button (click)="toggleSideBar()"><mat-icon>{{Menu}}</mat-icon> </button> -->
 
-           <!-- <div class="d-flex bg-white ps-2 " style="border-radius: 30px;" >
+        <!-- <button class="button" mat-icon-button (click)="toggleSideBar()"><mat-icon>{{Menu}}</mat-icon> </button> -->
+
+        <!-- <div class="d-flex bg-white ps-2 " style="border-radius: 30px;" >
             <img src="../../../../assets/Images/logo-logix.png" height="25" width="120" class="mt-3">
 
             <h4 class="m-3 text-muted" style="font-family: Arial, Helvetica, sans-serif;letter-spacing:5px;">
@@ -12,43 +12,45 @@
            </div> -->
 
 
-        <div class="col-lg-3 text-start d-flex  ps-2 mt-1  " style="border-radius: 30px;" >
-            
-                <p class="mt-2 text-muted" style="font-family: Arial, Helvetica, sans-serif;">Software By: </p> 
+        <div class="col-lg-3 text-start d-flex  ps-2 mt-1  " style="border-radius: 30px;">
+
+            <p class="mt-2 text-muted" style="font-family: Arial, Helvetica, sans-serif;">Software By: </p>
             <!-- <span class="fw-bold text-muted">Logix Solutionz</span> -->
-           
-      
-                <img src="../../../../assets/Images/logo-logix.png" height="25" width="120" class="mt-2 ps-1" >
-         
-            
-           
+
+
+            <img src="../../../../assets/Images/logo-logix.png" height="25" width="120" class="mt-2 ps-1">
+
+
+
         </div>
-        
-       
+
+
         <div class="col-lg-6 text-center " style="padding-top: 14px;">
             <span class="text-muted fw-bold menuTitle">
-                {{title}} ({{moduleTitle}})
+                {{title}}
             </span>
-           </div>
-     
-        <div class="mt-1 col-lg-3 text-end">
-            <button mat-mini-fab class="example-icon" aria-label="Example icon-button with share icon"
-            [matMenuTriggerFor]="menu">
-            <mat-icon>apps</mat-icon>
-        </button>
-
-        <mat-menu #menu="matMenu" >
-            <div *ngFor="let item of moduleList">
-                <button mat-menu-item (click)="setMenu(item)">
-                    <mat-icon>{{item.moduleIcon}}</mat-icon>
-                    <span>{{item.moduleTitle}}</span>
-                </button>
-            </div>
-        
-            
-        </mat-menu>
         </div>
-  
+
+        <div class="col-lg-3 d-flex justify-content-end">
+            <span class="text-muted fw-bold menuTitle " style="padding-top: 14px;">{{moduleTitle}}</span>
+            <div>
+                <button mat-mini-fab class="mt-1" aria-label="Example icon-button with share icon"
+                    [matMenuTriggerFor]="menu">
+                    <mat-icon>apps</mat-icon>
+                </button>
+
+                <mat-menu #menu="matMenu">
+                    <div *ngFor="let item of moduleList">
+                        <button mat-menu-item (click)="setMenu(item)">
+                            <mat-icon>{{item.moduleIcon}}</mat-icon>
+                            <span>{{item.moduleTitle}}</span>
+                        </button>
+                    </div>
+                </mat-menu>
+            </div>
+
+        </div>
+
     </span>
-  
+
 </div>

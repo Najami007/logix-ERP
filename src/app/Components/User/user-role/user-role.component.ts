@@ -32,7 +32,7 @@ export class UserRoleComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.global.setHeaderTitle('USER Roles');
+    this.global.setHeaderTitle('Create Roles');
     this.getModules();
     this.getMenuList();
     this.getSavedRoles();

@@ -106,7 +106,7 @@ export class COAComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.globalData.setHeaderTitle('Charts Of Accounts');
+    this.globalData.setHeaderTitle('Chart Of Account');
     this.getCoaType();
     this.globalData.numberOnly();
     this.getNotes();

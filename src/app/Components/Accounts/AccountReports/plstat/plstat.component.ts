@@ -46,7 +46,7 @@ export class PLStatComponent implements OnInit {
     
     }
   ngOnInit(): void {
-    this.globalData.setHeaderTitle('Profit & Loss Statement');
+    this.globalData.setHeaderTitle('Profit & Loss Report');
     this.globalData.getCompany();
     this.getProject();
    

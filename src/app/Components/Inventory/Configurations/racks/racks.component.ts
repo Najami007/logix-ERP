@@ -34,7 +34,7 @@ export class RacksComponent implements OnInit{
 
     }
   ngOnInit(): void {
-    this.globaldata.setHeaderTitle('Rack');
+    this.globaldata.setHeaderTitle('Racks');
     this.getRacksList();
    
     

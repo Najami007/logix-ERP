@@ -20,8 +20,7 @@ import { ChartModule, HIGHCHARTS_MODULES } from 'angular-highcharts';
 import { BudgettingComponent } from './budgetting/budgetting.component';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { SettingsComponent } from './settings/settings.component';
-import { CoaNotesComponent } from './settings/coa-notes/coa-notes.component';
-import { AddNoteComponent } from './settings/coa-notes/add-note/add-note.component';
+
 import { VoucherSupervisionComponent } from './voucher-supervision/voucher-supervision.component';
 import { LedgerComponent } from './AccountReports/ledger/ledger.component';
 import { BudgetReportComponent } from './AccountReports/budget-report/budget-report.component';
@@ -67,6 +66,8 @@ import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/materia
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { AddChartOfAccountComponent } from './coa/add-chart-of-account/add-chart-of-account.component';
 import { AccountSummaryReportComponent } from './AccountReports/account-summary-report/account-summary-report.component';
+import { CoaNotesComponent } from './coa-notes/coa-notes.component';
+import { AddNoteComponent } from './coa-notes/add-note/add-note.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -84,13 +85,13 @@ export const MY_DATE_FORMAT = {
 
 export const accountRountes: Route[] = [
 
-  { path: 'dashboard', component: DashboardComponent, data: { title: 'Dashboard' }, canActivate: [AuthGuard] },
-  { path: 'coa', component: COAComponent, data: { title: 'COA' }, canActivate: [AuthGuard] },
+  { path: 'dashboard', component: DashboardComponent, data: { title: 'Finance Dashboard' }, canActivate: [AuthGuard] },
+  { path: 'coa', component: COAComponent, data: { title: 'Chart Of Account' }, canActivate: [AuthGuard] },
   { path: 'voucher', component: Voucher2Component, data: { title: 'Voucher' }, canActivate: [AuthGuard] },
   { path: 'bdgtng', component: BudgettingComponent, data: { title: 'Budgeting' }, canActivate: [AuthGuard] },
-  { path: 'setting', component: SettingsComponent, data: { title: 'Setting' }, canActivate: [AuthGuard] },
+  { path: 'notes', component: CoaNotesComponent, data: { title: 'Notes' }, canActivate: [AuthGuard] },
   { path: 'dtran', component: DayTransactionComponent, data: { title: 'Day Transaction' }, canActivate: [AuthGuard] },
-  { path: 'spvn', component: VoucherSupervisionComponent, data: { title: 'Supervision' }, canActivate: [AuthGuard] },
+  { path: 'spvn', component: VoucherSupervisionComponent, data: { title: 'Voucher Supervision' }, canActivate: [AuthGuard] },
   { path: 'ldgrrpt', component: LedgerComponent, data: { title: 'Ledger' }, canActivate: [AuthGuard] },
   { path: 'bdgrpt', component: BudgetReportComponent, data: { title: 'Budget Rpt' }, canActivate: [AuthGuard] },
   { path: 'bsrpt', component: BalanceSheetComponent, data: { title: 'Balance Sheet' }, canActivate: [AuthGuard] },

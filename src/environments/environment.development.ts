@@ -14,7 +14,7 @@ export const environment = {
 
   //mainApi: 'http://192.168.100.37:5000/',
   //mainApi: 'http://localhost:5000/', 
-  //mainApi: 'http://localhost:8060/',           /////////// system own published API
+  mainApi: 'http://localhost:8060/',           /////////// system own published API
   // mainApi: 'http://192.168.160.98:8060/',  ////////// live Server Dani System
   //mainApi: 'http://192.168.100.250:1007/',  ////////// live Server Dani System
   //mainApi: 'http://192.168.10.100:1003/',    /////////// Local Server Office
@@ -23,7 +23,7 @@ export const environment = {
 
 
 
-
+ //mainApi: 'http://159.69.174.21:2016/',   /////// Erp Demo Live For Clients
   //mainApi: 'http://159.69.174.21:2008/', /////// Live Serve Testing API General
   //  mainApi: 'http://159.69.174.21:2019/', /////// Live Serve Testing API Property
 
@@ -46,7 +46,7 @@ export const environment = {
 
   // mainApi: 'http://159.69.174.21:2013/',  ////////// Shama Royal City
   // mainApi: 'http://192.168.10.180:8081/',  /////// Lasani Traders Fateh Jang local System
-  //mainApi: 'http://159.69.174.21:2016/',   /////// Erp Demo Live For Clients
+ 
   // mainApi: 'http://159.69.174.21:2019/',    /////// Ejaz And Sons Rawalpindi
   //mainApi: 'http://localhost:8060/',           /////////// BAke INN Fateh Jang
   //mainApi: 'http://192.168.10.100:8080/',   /////////// BAke INN Server Live
@@ -88,7 +88,7 @@ export const environment = {
 
   //mainApi: 'http://localhost:8060/', ////////Fazil sons mandi bahaudin
   //mainApi: 'http://192.168.100.100:8060/',           /////////// Fazil Sons live
-   mainApi: 'http://159.69.174.21:2026/',           /////////// Fazil Sons live Server
+   //mainApi: 'http://159.69.174.21:2026/',           /////////// Fazil Sons live Server
 
    // mainApi: 'http://192.168.100.100:8060/',           /////////// Rahat Bakers Quetta
 

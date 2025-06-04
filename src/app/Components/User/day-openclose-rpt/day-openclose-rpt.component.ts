@@ -39,7 +39,7 @@ export class DayOpencloseRptComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Day Open Close Report');
+    this.global.setHeaderTitle('Report Day Open Close ');
 
   
 

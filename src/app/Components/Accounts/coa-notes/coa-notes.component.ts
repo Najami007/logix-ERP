@@ -35,6 +35,7 @@ export class CoaNotesComponent implements OnInit{
 
 
   ngOnInit(): void {
+    this.globalData.setHeaderTitle('Notes')
     this.getNotes();
     
   }

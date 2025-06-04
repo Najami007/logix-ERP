@@ -31,7 +31,7 @@ export class UnitOfMeasurementComponent implements OnInit{
 
     }
   ngOnInit(): void {
-    this.globaldata.setHeaderTitle('Unit Of Measurement')
+    this.globaldata.setHeaderTitle('Units Of Measurement')
     this.getUOMList();
     
    

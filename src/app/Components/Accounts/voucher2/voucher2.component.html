@@ -348,7 +348,7 @@
                         <td> {{item.invoiceNo}}</td>
                         <td>{{item.invoiceDate | date:'yyyy-MM-dd'}}</td>
                         <td>{{item.projectTitle}}</td>
-                        <td>{{item.amount |number}}</td>
+                        <td>{{item.amount |number:'1.0-0'}}</td>
                         <td class="text-start">{{item.invoiceRemarks}}</td>
                         <td><mat-icon class="text-success" (click)="VoucherDetails(item)">receipt</mat-icon></td>
                         <td>

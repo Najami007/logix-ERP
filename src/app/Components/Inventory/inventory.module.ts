@@ -128,7 +128,7 @@ export const inventoryRoutes: Route[] = [
 
   ////////////////////////// Configuration Pages /////////////
 
-  {path: 'pcat',component: ProductCategoryComponent,data: { title: 'Prod Category' },canActivate: [AuthGuard]},
+  {path: 'pcat',component: ProductCategoryComponent,data: { title: 'Product Category' },canActivate: [AuthGuard]},
   {path: 'pscat',component: ProductSubCategoryComponent,data: { title: 'Sub Category' },canActivate: [AuthGuard]},
   {path: 'pbrnd',component: BrandComponent, data: { title: 'Brand' }, canActivate: [AuthGuard]},
   {path: 'prac',component: RacksComponent,data: { title: 'Racks' },canActivate: [AuthGuard]},
@@ -163,7 +163,7 @@ export const inventoryRoutes: Route[] = [
 
  ////////////////////////// Adjustment Pages /////////////
  
-  {path: 'isnc',component: IssuanceComponent,data: { title: 'Issuance' },canActivate: [AuthGuard]},
+  {path: 'isnc',component: IssuanceComponent,data: { title: 'Stock Issuance' },canActivate: [AuthGuard]},
   {path: 'isncrtn',component: IssueStockRerturnComponent,data: { title: 'Issue Return' },canActivate: [AuthGuard]},
   {path: 'stkadj',component: StockAdjustmentComponent,data: { title: 'Stock Adjustment' }, canActivate: [AuthGuard]},
   {path: 'opnstk',component: OpeningStockComponent,data: { title: 'Opening Stock' },canActivate: [AuthGuard]},

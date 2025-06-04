@@ -259,7 +259,8 @@
                     <tr class="text-end fw-bold" *ngIf="myCusBalance !== 0">
                         <td>prv Blnc</td>
                         <td *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
-                        <td *ngIf="myChange <= 0">{{myCusBalance - ( -1 * myChange) | number:'1.0-1'}}
+                        <td *ngIf="myChange <= 0 && myInvType == 'S'">{{myCusBalance - ( -1 * myChange) | number:'1.0-1'}}
+                        <td *ngIf="myChange <= 0 && myInvType == 'SR'">{{myCusBalance + ( -1 * myChange) | number:'1.0-1'}}
                         </td>
 
                     </tr>
@@ -536,9 +537,8 @@
                    <tr style="text-align:right; " *ngIf="myCusBalance !== 0">
                     <td></td>
                         <td class="urdu fw-bold">سابقا بقایا</td>
-                        <td class="fw-bold text-start" *ngIf="myChange <= 0">{{myCusBalance - (-1 * myChange) |
-                            number:'1.0-1'}}
-                        </td>
+                      <td  class="fw-bold text-start"  *ngIf="myChange <= 0 && myInvType == 'S'">{{myCusBalance - ( -1 * myChange) | number:'1.0-1'}}
+                        <td *ngIf="myChange <= 0 && myInvType == 'SR'">{{myCusBalance + ( -1 * myChange) | number:'1.0-1'}}
                         <td class="fw-bold text-start" *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
 
 

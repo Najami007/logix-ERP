@@ -26,7 +26,7 @@ export class RestrictpwdComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.global.setHeaderTitle('Restriction Password');
+    this.global.setHeaderTitle('Restriction Codes');
     this.getCodes();
   }
 

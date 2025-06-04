@@ -217,7 +217,7 @@
                 <tr *ngFor="let item of capitalList; index as index">
                     <td class="text-center">{{index+1}}</td>
                     <td>{{item.noteTitle}}</td>
-                    <td>{{item.noteID}}</td>
+                    <td class="text-center">{{item.noteID}}</td>
                     <td class="text-end"> {{item.oTotal |number:'1.0-0'}}</td>
                     <td class="text-end"> {{item.nTotal |number:'1.0-0'}}</td>
                 </tr>
