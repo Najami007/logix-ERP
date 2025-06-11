@@ -1,2 +1,17 @@
 
 
+.selectedModule{
+    color: white;
+    background-color: black;
+    mat-icon{
+        color: white;
+    }
+    &:hover{
+        color: black;
+        background-color: gray !important;
+        mat-icon{
+        color: black;
+    }
+    }
+}
+

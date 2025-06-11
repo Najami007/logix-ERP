@@ -40,6 +40,7 @@ export class HeaderComponent implements OnInit {
     this.globalData.header_title$.subscribe((Response:string)=>{this.title = Response});
      this.globalData.module_title$.subscribe((Response:string)=>{this.moduleTitle = Response});
     this.getModules();
+    this.moduleID = this.globalData.getModuleID();
     // alert(this.globalData.getUserID())
     // this.UserName = this.globalData.getUserName().toUpperCase();
   }
@@ -47,7 +48,7 @@ export class HeaderComponent implements OnInit {
   Menu = "menu";
 
 
-
+  moduleID = 0;
 
   
  /////////////////////////////////////////////////////////////////////////
@@ -63,7 +64,7 @@ export class HeaderComponent implements OnInit {
 }
 
   setMenu(item: any) {
-
+    this.moduleID = item.moduleID;
     this.route.navigate(['home']);
     localStorage.setItem('mid',JSON.stringify(item.moduleID));
     sessionStorage.setItem('mid',JSON.stringify(item.moduleID));

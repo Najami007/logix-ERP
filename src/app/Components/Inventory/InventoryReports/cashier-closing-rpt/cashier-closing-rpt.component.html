@@ -124,45 +124,64 @@
                 </div>
                 <div>
                     <table class="table table-logix">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>In</th>
+                                <th>Out</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
                         <tbody>
                             <tr>
                                 <th class="text-start">Cash</th>
-                                <td class="text-end" colspan="2">{{item.cashIn - item.cashOut |number:'1.0-0'}}</td>
+                                <td class="text-end">{{item.cashIn|number:'1.0-0'}}</td>
+                                <td class="text-end">{{item.cashOut|number:'1.0-0'}}</td>
+                                <td class="text-end" >{{item.cashIn - item.cashOut |number:'1.0-0'}}</td>
 
                             </tr>
                             <tr>
                                 <th class="text-start">Bank</th>
-                                <td class="text-end" colspan="2">{{item.bank |number:'1.0-0'}}</td>
+                                <td class="text-end" >{{item.bank |number:'1.0-0'}}</td>
+                                <td class="text-end" >{{item.bankReturn |number:'1.0-0'}}</td>
+                                <td class="text-end" >{{item.bank - item.bankReturn |number:'1.0-0'}}</td>
+                                <!-- <td class="text-end" >{{item.bank|number:'1.0-0'}}</td> -->
                             </tr>
-                            <tr class="d-flex flex-wrap" *ngIf="item.bank > 0">
+                            <tr class="d-flex flex-wrap" *ngIf="item.bank > 0 || item.bankReturn > 0">
                                 <div *ngFor="let bank of BankDetail" class="d-flex ">
                                     <span *ngIf="bank.userID == item.userID" class="text-start me-2">{{bank.coaTitle}} =</span>
-                                    <span *ngIf="bank.userID == item.userID" class="text-end fw-bold">({{bank.amount |number:'1.0-0'}})</span>
+                                    <span *ngIf="bank.userID == item.userID" class="text-end fw-bold">({{bank.debit - bank.credit |number:'1.0-0'}})</span>
                                 </div>
 
                             </tr>
                             <tr>
                                 <th class="text-start">Credit</th>
-                                <td class="text-end" colspan="2">{{item.creditSale |number:'1.0-0'}}</td>
+                                <td class="text-end" >{{item.creditSale |number:'1.0-0'}}</td>
+                                 <td class="text-end" >{{item.creditSaleReturn |number:'1.0-0'}}</td>
+                                <td class="text-end" >{{item.creditSale - item.creditSaleReturn |number:'1.0-0'}}</td>
 
                             </tr>
                             <tr>
                                 <th class="text-start"> Complimentary</th>
-                                <td class="text-end" colspan="2">{{item.complimentary|number:'1.0-0'}}</td>
+           
+                                <td class="text-end" colspan="3">{{item.complimentary|number:'1.0-0'}}</td>
 
                             </tr>
                             <tr *ngIf="FBRFeature">
                                 <th class="text-start">POS FEE</th>
-                                <td class="text-end" colspan="2">{{item.posFee |number:'1.0-0'}}</td>
+                                <td class="text-end" colspan="3">{{item.posFee |number:'1.0-0'}}</td>
                             </tr>
                             <tr>
                                 <th class="text-start">Discount</th>
-                                <td class="text-end" colspan="2">{{item.disocunt |number:'1.0-0'}}</td>
+                                 <td class="text-end" >{{item.discount |number:'1.0-0'}}</td>
+                                  <td class="text-end" >{{item.discountReturn |number:'1.0-0'}}</td>
+                                   <td class="text-end" >{{item.discount - item.discountReturn |number:'1.0-0'}}</td>
+                                <!-- <td class="text-end" colspan="2">{{item.disocunt |number:'1.0-0'}}</td> -->
                             </tr>
                             <tr>
                                 <td class="text-start"><b>Total</b></td>
-                                <td class="text-end " colspan="2"><b>{{(item.cashIn - item.cashOut) + item.bank +
-                                        item.complimentary + item.disocunt + item.creditSale |number:'1.0-0'}}</b></td>
+                                <td class="text-end " colspan="3"><b>{{(item.cashIn - item.cashOut) + (item.bank -  item.bankReturn) +
+                                        item.complimentary + (item.discount - item.discountReturn ) + (item.creditSale - item.creditSaleReturn) |number:'1.0-0'}}</b></td>
                             </tr>
                             <!-- <tr>
                                 <td class="text-start"><b>Amount Received</b></td>

@@ -1,0 +1,120 @@
+<div class="container-fluid body ">
+
+    <div class=" p-2 mt-2">
+
+        <div class="row ">
+            <mat-form-field class="col-lg-4 matSmall" appearance="outline">
+                <mat-label>From Date</mat-label>
+                <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
+                <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
+                <mat-datepicker #sDate></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="col-lg-4 matSmall" appearance="outline">
+                <mat-label>To Date</mat-label>
+                <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
+                <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+                <mat-datepicker #eDate></mat-datepicker>
+            </mat-form-field>
+
+            <div class="col-lg-4 pb-2" *ngIf="crudList.r">
+                <button class="btn-rpt-success col-lg-2  me-1" (click)="getReport()">Get Report</button>
+                <button class="btn-rpt-primary col-lg-2 me-1" (click)="print()">Print</button>
+                <!-- <button style="width: 60px;font-size: 20px;" class="btn-rpt-primary" (click)="global.ExportHTMLTabletoExcel('PrintDiv','Summary')"><i class="bi bi-filetype-xlsx"></i></button> -->
+            </div>
+        </div>
+
+
+        <div id="PrintDiv">
+
+            <!-------------------------    Top Logo Section -------------------->
+
+            <div class="hide">
+                <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                    <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset=""
+                            [height]="item.logo1Height" [width]="item.logo1Width">
+                    </span>
+                    <span>
+
+
+                        <h1 class="companyName">{{item.companyName}}</h1>
+                        <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}})
+                            <b>To:</b>
+                            {{toDate | date:'dd-MM-yyyy'}}({{toTime}})
+                        </p>
+
+
+                    </span>
+                    <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                            height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                    </span>
+
+
+                </div>
+            </div>
+
+            <div>
+                <table class="table table-logix">
+                    <thead>
+                        <tr>
+                            <th>S#</th>
+                            <th>Inv #</th>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Particular</th>
+                            <th>Debit</th>
+                            <th>Credit</th>
+                            <th>Balance</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of rptData index as index">
+                            <td>{{index +1}}</td>
+
+                            <td class="text-center cursorPointer"><span
+                                    (click)="VoucherDetails(item)">{{item.invoiceNo}}</span></td>
+                            <td>{{item.createdOn | date:'dd-MM-yyyy hh:mm:s a'}}</td>
+                            <td>{{item.invoiceType}} <small *ngIf="item.partyName">({{item.partyName}})</small></td>
+                            <td>
+                                <div>
+                                    <span>{{item.particular}}</span>
+                                    <div *ngFor="let row of item.billDetails">
+                                        <div *ngIf="row.ProductID > 0">
+                                            <span>{{row.ProductTitle}}
+                                                <b *ngIf="row.invType == 'S' || row.invType ==  'SR'">({{row.SalePrice}} x {{row.Quantity}} = {{row.SalePrice *
+                                                    row.Quantity}})</b>
+                                                <b *ngIf="row.invType == 'P' || row.invType == 'PR'">({{row.CostPrice}} x {{row.Quantity}} = {{row.CostPrice *
+                                                    row.Quantity}})</b>
+                                            </span>
+                                        </div>
+                                        <div class="fw-bold" *ngIf="row.ProductID == 0 
+                                     && (row.ProductTitle != 'CGS' && row.ProductTitle != 'Sales Income')">
+                                            <span>{{row.ProductTitle}}
+                                                <b>({{row.Debit + row.Credit}})</b>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-end">{{item.debit|number:'1.0-0'}}</td>
+                            <td class="text-end">{{item.credit|number:'1.0-0'}}</td>
+                            <td class="text-end">{{item.balance|number:'1.0-0'}}</td>
+                            <td>{{item.invoiceRemarks}}</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>
+
+<app-sale-bill-print class="hide" id="print-Bill"> </app-sale-bill-print>
+<app-purchase-bill-print class="hide" id="print-Bill"></app-purchase-bill-print>

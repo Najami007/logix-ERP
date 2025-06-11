@@ -986,6 +986,8 @@ export class PurchaseComponent implements OnInit {
                   }
                 )
 
+              }else{
+                this.validFlag = true;
               }
             }
           )

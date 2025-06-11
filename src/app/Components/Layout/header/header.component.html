@@ -39,9 +39,9 @@
                     <mat-icon>apps</mat-icon>
                 </button>
 
-                <mat-menu #menu="matMenu">
-                    <div *ngFor="let item of moduleList">
-                        <button mat-menu-item (click)="setMenu(item)">
+                <mat-menu #menu="matMenu" >
+                    <div *ngFor="let item of moduleList" >
+                        <button mat-menu-item (click)="setMenu(item)" [ngClass]="item.moduleID == this.moduleID ? 'selectedModule' : ''  ">
                             <mat-icon>{{item.moduleIcon}}</mat-icon>
                             <span>{{item.moduleTitle}}</span>
                         </button>
