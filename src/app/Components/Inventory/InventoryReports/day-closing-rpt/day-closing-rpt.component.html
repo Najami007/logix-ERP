@@ -80,22 +80,22 @@
                             <td>{{item.invoiceType}} <small *ngIf="item.partyName">({{item.partyName}})</small></td>
                             <td>
                                 <div>
-                                    <span>{{item.particular}}</span>
-                                    <div *ngFor="let row of item.billDetails">
-                                        <div *ngIf="row.ProductID > 0">
+                                    <span class="fw-bold">{{item.particular}}</span>
+                                    <div *ngFor="let row of item.billDetails" >
+                                        <div *ngIf="row.ProductID > 0" class="border-top">
                                             <span>{{row.ProductTitle}}
-                                                <b *ngIf="row.invType == 'S' || row.invType ==  'SR'">({{row.SalePrice}} x {{row.Quantity}} = {{row.SalePrice *
+                                                <b *ngIf="row.InvType == 'S' || row.InvType ==  'SR'">({{row.SalePrice}} x {{row.Quantity}} = {{row.SalePrice *
                                                     row.Quantity}})</b>
-                                                <b *ngIf="row.invType == 'P' || row.invType == 'PR'">({{row.CostPrice}} x {{row.Quantity}} = {{row.CostPrice *
+                                                <b *ngIf="row.InvType == 'P' || row.InvType == 'PR'">({{row.CostPrice}} x {{row.Quantity}} = {{row.CostPrice *
                                                     row.Quantity}})</b>
                                             </span>
                                         </div>
-                                        <div class="fw-bold" *ngIf="row.ProductID == 0 
+                                        <!-- <div class="fw-bold" *ngIf="row.ProductID == 0 
                                      && (row.ProductTitle != 'CGS' && row.ProductTitle != 'Sales Income')">
                                             <span>{{row.ProductTitle}}
                                                 <b>({{row.Debit + row.Credit}})</b>
                                             </span>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </td>

@@ -18,56 +18,56 @@ export class DayClosingRptComponent {
 
 
 
-    
-  companyProfile:any = [];
-  crudList:any = {c:true,r:true,u:true,d:true};
+
+  companyProfile: any = [];
+  crudList: any = { c: true, r: true, u: true, d: true };
   constructor(
-      private http:HttpClient,
-      private msg:NotificationService,
-      private app:AppComponent,
-      public global:GlobalDataModule,
-      private route:Router,
-      private datePipe:DatePipe ,
-      private dialog:MatDialog   
-    ){
-  
-      this.global.getCompany().subscribe((data)=>{
-        this.companyProfile = data;
-      });
-  
-      this.global.getMenuList().subscribe((data)=>{
-        this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      })
-    }
-    ngOnInit(): void {
-      this.global.setHeaderTitle('Sale Purchase Report (Datewise)');
-      $('#detailTable').show();
-      $('#summaryTable').hide();
-    }
+    private http: HttpClient,
+    private msg: NotificationService,
+    private app: AppComponent,
+    public global: GlobalDataModule,
+    private route: Router,
+    private datePipe: DatePipe,
+    private dialog: MatDialog
+  ) {
 
-     fromDate:Date = new Date();
-  fromTime:any = '00:00';
-  toDate:Date = new Date();
-  toTime:any = '23:59';
+    this.global.getCompany().subscribe((data) => {
+      this.companyProfile = data;
+    });
 
-    rptData:any  = [];
+    this.global.getMenuList().subscribe((data) => {
+      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
+    })
+  }
+  ngOnInit(): void {
+    this.global.setHeaderTitle('Sale Purchase Report (Datewise)');
+    $('#detailTable').show();
+    $('#summaryTable').hide();
+  }
 
-  getReport(){
+  fromDate: Date = new Date();
+  fromTime: any = '00:00';
+  toDate: Date = new Date();
+  toTime: any = '23:59';
 
-    var fromDate = this.global.dateFormater(this.fromDate,'-');
-    var toDate = this.global.dateFormater(this.toDate,'-');
+  rptData: any = [];
 
-    var url = environment.mainApi+this.global.accountLink+'GetDayTransaction2?FromDate='+fromDate+'&ToDate='+toDate;
+  getReport() {
+
+    var fromDate = this.global.dateFormater(this.fromDate, '-');
+    var toDate = this.global.dateFormater(this.toDate, '-');
+
+    var url = environment.mainApi + this.global.accountLink + 'GetDayTransaction2?FromDate=' + fromDate + '&ToDate=' + toDate;
     console.log(url)
 
     this.http.get(url).subscribe(
-      (Response:any)=>{
+      (Response: any) => {
         console.log(Response);
-        this.rptData = Response.map((e:any)=>{
-          if(e.billDetail != '-'){
-         e.billDetails = JSON.parse(e.billDetail);
+        this.rptData = Response.map((e: any) => {
+          if (e.billDetail != '-') {
+            e.billDetails = JSON.parse(e.billDetail);
           }
-       
+
           return e;
         });
       }
@@ -76,17 +76,17 @@ export class DayClosingRptComponent {
   }
 
 
-    VoucherDetails(row: any) {
-  
-      this.dialog.open(VoucherDetailsComponent, { width: "40%", data: row, }).afterClosed().subscribe(val => { });
-    }
-  
+  VoucherDetails(row: any) {
+
+    this.dialog.open(VoucherDetailsComponent, { width: "40%", data: row, }).afterClosed().subscribe(val => { });
+  }
 
 
 
-    print(){
+
+  print() {
     this.global.printData('#PrintDiv')
-   }
-  
+  }
+
 
 }

@@ -263,6 +263,7 @@ export class GarmentSaleComponent implements OnInit {
         // this.app.startLoaderDark();
         this.global.getProdDetail(0, barcode).subscribe(
           (Response: any) => {
+            console.log(Response);
             if (Response == '' || Response == null || Response == undefined) {
               this.searchSpecialBarcode(barcode, qty);
               return;
