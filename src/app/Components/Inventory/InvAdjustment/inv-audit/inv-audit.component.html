@@ -74,7 +74,7 @@
                             <td>{{item.barcode}}</td>
                             <td>{{item.productTitle}}</td>
                             <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
-                                    (keydown)="handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
+                                    (keydown)="handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);"
                                     (keyup)="changeValue(item);getTotal();showImg(item);"
                                     class="qty{{index}} text-center" style="width: 80px;"></td>
                             <td class="text-center">{{item.aq |number:'1.0-3'}}</td>

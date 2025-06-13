@@ -50,7 +50,7 @@
             <mat-select [(ngModel)]="productID" (selectionChange)="onProdSelected()">
                 <mat-option><ngx-mat-select-search #prodsearch [placeholderLabel]="'Search...'"
                         [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                <mat-option *ngFor="let item of productList | filter:prodsearch.value"
+                <mat-option *ngFor="let item of productList | filter:prodsearch.value | slice:0:30"
                     [value]="item.productID">{{item.productTitle}} <b>({{item.barcode}})</b></mat-option>
             </mat-select>
         </mat-form-field>
@@ -60,7 +60,7 @@
             <mat-select [(ngModel)]="partyID" (selectionChange)="onSupplierSelected()">
                 <mat-option><ngx-mat-select-search #supSearch [placeholderLabel]="'Search...'"
                     [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                <mat-option  *ngFor="let item of supplierList | filter:supSearch.value"
+                <mat-option  *ngFor="let item of supplierList | filter:supSearch.value | slice:0:30"
                     [value]="item.partyID">{{item.partyName}}</mat-option>
             </mat-select>
         </mat-form-field>

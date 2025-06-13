@@ -17,6 +17,7 @@
                     <th>Inv No.</th>
                     <th>Amount</th>
                     <th>Remarks</th>
+                     <th>Entered By</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -27,6 +28,7 @@
                     <td >{{item.invoiceNo }}</td>
                     <td >{{item.amount |number:'1.0-1'}}</td>
                     <td>{{item.invoiceRemarks }}</td>
+                      <td>{{item.entryUser}}</td>
                     <td class="cursorPointer">
                         <mat-icon class="text-success" *ngIf="crudList.u && item.approvedStatus == false" (click)="edit(item)">edit</mat-icon>
                         <mat-icon class="text-primary" *ngIf="crudList.r" (click)="printBill(item)">print</mat-icon>

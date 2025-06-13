@@ -68,6 +68,7 @@ import { AddChartOfAccountComponent } from './coa/add-chart-of-account/add-chart
 import { AccountSummaryReportComponent } from './AccountReports/account-summary-report/account-summary-report.component';
 import { CoaNotesComponent } from './coa-notes/coa-notes.component';
 import { AddNoteComponent } from './coa-notes/add-note/add-note.component';
+import { JournelComponent } from './AccountReports/journel/journel.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -99,6 +100,7 @@ export const accountRountes: Route[] = [
   { path: 'plrpt', component: PLStatComponent, data: { title: 'Profit & Loss' }, canActivate: [AuthGuard] },
   { path: 'tbrpt', component: TrialBalanceComponent, data: { title: 'Trial Balance' }, canActivate: [AuthGuard] },
    { path: 'accSmryrpt', component: AccountSummaryReportComponent, data: { title: 'Account Summary' }, canActivate: [AuthGuard] },
+   { path: 'journel', component: JournelComponent, data: { title: 'Journel' }, canActivate: [AuthGuard] },
 
   /// Desi Accounts Imports
   { path: 'pmt', component: PaymentComponent, data: { title: 'Payment' }, canActivate: [AuthGuard] },
@@ -159,7 +161,8 @@ export const accountRountes: Route[] = [
     AddBalanceComponent,
     VoucherPrintComponent,
     AddChartOfAccountComponent,
-    AccountSummaryReportComponent
+    AccountSummaryReportComponent,
+    JournelComponent
 
 
 

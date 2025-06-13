@@ -124,10 +124,10 @@ export class InvDashboardComponent {
         type: 'column',
       },
       title: {
-        text: 'SALES VS PURCHASE',
+        text: 'SALE VS PURCHASE',
       },
       subtitle: {
-        text: 'CURRENT MONTH',
+        text: 'LAST 12 Months',
       },
       xAxis: {
         categories: ['a','b','c','d'],
@@ -156,7 +156,7 @@ export class InvDashboardComponent {
     },
     series: [
       {
-        name: 'Income',
+        name: 'Sale',
         type: 'column',
         
         
@@ -164,7 +164,7 @@ export class InvDashboardComponent {
         data: [4000,2000,3000,2000],
       },
       {
-        name: 'Expense',
+        name: 'Purchase',
         type: 'column',
        
         data: [50000,2000,30000,20000],

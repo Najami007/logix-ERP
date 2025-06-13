@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
@@ -8,6 +8,8 @@ import { VoucherDetailsComponent } from 'src/app/Components/Accounts/CommonCompo
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { environment } from 'src/environments/environment.development';
+import { SaleBillPrintComponent } from '../../Sale/SaleComFiles/sale-bill-print/sale-bill-print.component';
+import { PurchaseBillPrintComponent } from '../../Purchases/purchase-bill-print/purchase-bill-print.component';
 
 @Component({
   selector: 'app-day-closing-rpt',
@@ -17,6 +19,8 @@ import { environment } from 'src/environments/environment.development';
 export class DayClosingRptComponent {
 
 
+  @ViewChild(SaleBillPrintComponent)  saleBill:any;
+   @ViewChild(PurchaseBillPrintComponent) purchaseBill:any;
 
 
   companyProfile: any = [];
@@ -40,7 +44,7 @@ export class DayClosingRptComponent {
     })
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Sale Purchase Report (Datewise)');
+    this.global.setHeaderTitle('Day Closing');
     $('#detailTable').show();
     $('#summaryTable').hide();
   }
@@ -55,7 +59,7 @@ export class DayClosingRptComponent {
   getReport() {
 
     var fromDate = this.global.dateFormater(this.fromDate, '-');
-    var toDate = this.global.dateFormater(this.toDate, '-');
+    var toDate = this.global.dateFormater(this.fromDate, '-');
 
     var url = environment.mainApi + this.global.accountLink + 'GetDayTransaction2?FromDate=' + fromDate + '&ToDate=' + toDate;
     console.log(url)
@@ -87,6 +91,23 @@ export class DayClosingRptComponent {
   print() {
     this.global.printData('#PrintDiv')
   }
+
+
+   printBill(item:any){
+
+    if(item.invType == 'S' || item.invType == 'SR'){
+      this.saleBill.PrintBill(item.invBillNo);
+   
+       this.saleBill.billType = 'Duplicate';
+      
+    }
+
+    if(item.invType == 'P' || item.invType == 'PR'){
+      this.purchaseBill.printBill(item);
+    }
+
+   }
+
 
 
 }

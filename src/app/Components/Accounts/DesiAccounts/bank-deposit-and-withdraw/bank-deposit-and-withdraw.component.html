@@ -15,8 +15,11 @@
                     <th>S#</th>
                     <th>Date</th>
                     <th>Voucher #</th>
+                    <th>Particular</th>
                     <th>Title</th>
                     <th>Amount</th>
+                    <th>Remarks</th>
+                     <th>Entered By</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -30,8 +33,11 @@
                     <td>{{index + 1}}</td>
                     <td>{{item.invoiceDate | date:'dd-MM-yyyy'}}</td>
                     <td>{{item.invoiceNo}}</td>
+                    <td>{{item.coaTitle}}</td>
                     <td>{{item.subType}}</td>
                     <td>{{item.amount |number:'1.0-1'}}</td>
+                    <td>{{item.invoiceRemarks}}</td>
+                      <td>{{item.entryUser}}</td>
                     <td class="cursorPointer">
                         <mat-icon class="text-success" *ngIf="crudList.u && item.approvedStatus == false" (click)="edit(item)">edit</mat-icon>
                         <mat-icon class="text-primary" *ngIf="crudList.r" (click)="printBill(item)">print</mat-icon>

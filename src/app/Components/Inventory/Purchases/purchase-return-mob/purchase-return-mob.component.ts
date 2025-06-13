@@ -324,15 +324,24 @@ export class PurchaseReturnMobComponent implements OnInit{
 
   
 
+    netTotal = 0;
   getTotal() {
     this.subTotal = 0;
     this.myTotalQty = 0;
-    for (var i = 0; i < this.tableDataList.length; i++) {
-   
-      this.subTotal += (parseFloat(this.tableDataList[i].Quantity) * parseFloat(this.tableDataList[i].CostPrice)) - this.discount;
-      this.myTotalQty += parseFloat(this.tableDataList[i].Quantity);
-    
+    this.netTotal = 0;
+
+    if (this.discount == '') {
+      this.discount = 0;
     }
+    if (this.overHead == '') {
+      this.overHead = 0;
+    }
+    for (var i = 0; i < this.tableDataList.length; i++) {
+      this.subTotal += (parseFloat(this.tableDataList[i].Quantity) * parseFloat(this.tableDataList[i].CostPrice));
+      this.myTotalQty += parseFloat(this.tableDataList[i].Quantity);
+    }
+    this.netTotal = (this.subTotal + parseFloat(this.overHead)) - parseFloat(this.discount)
+
   }
 
   delRow(item: any) {
