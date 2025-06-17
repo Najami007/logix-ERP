@@ -342,8 +342,9 @@
                                     [ngClass]="item.activeStatus ? 'text-success' :'text-danger'"
                                     (click)="activeProduct(item)">{{item.activeStatus ? 'check' :
                                     'close'}}</mat-icon></td>
-                            <td (click)="this.global.showProductImage('',item.productID)" class="cursorPointer hide-in-print">
-                                <mat-icon>image</mat-icon></td>
+                            <td class="cursorPointer hide-in-print">
+                                <mat-icon *ngIf="item.productImage == 'Yes'" (click)="this.global.showProductImage('',item.productID)" >image</mat-icon>
+                              <mat-icon *ngIf="item.productImage == '-'" >cancel_presentation</mat-icon></td>
                             <td class="hide-in-print" *ngIf="crudList.d"><mat-icon class="text-danger cursorPointer" (click)="deleteProd(item)">delete</mat-icon></td>
                             <td class="hide-in-print"><mat-icon class="cursorPointer" (click)="copyProd(item)">save</mat-icon></td>
                         </tr>

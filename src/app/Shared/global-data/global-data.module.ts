@@ -141,12 +141,12 @@ export class GlobalDataModule implements OnInit {
   module_title$ = this._moduleTitleSource.asObservable();
 
 
-    //////////////sets the header title ////////////////////////
+  //////////////sets the header title ////////////////////////
   setHeaderTitle(title: string) {
     this._headerTitleSource.next(title.toUpperCase());
   }
 
-    //////////////sets the header title ////////////////////////
+  //////////////sets the header title ////////////////////////
   setModuleTitle(title: string) {
     this._moduleTitleSource.next(title.toUpperCase());
   }
@@ -314,6 +314,7 @@ export class GlobalDataModule implements OnInit {
   urduBill = this.getFeature('UrduPrint');
   CommentCard = this.getFeature('CommentCard');
   DisableInvDate = this.getFeature('DisableInvDate');
+  RestBillUserwise = this.getFeature('RestBillUserwise');
 
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
@@ -350,6 +351,7 @@ export class GlobalDataModule implements OnInit {
     this.urduBill = this.getFeature('UrduPrint');
     this.CommentCard = this.getFeature('CommentCard');
     this.DisableInvDate = this.getFeature('DisableInvDate');
+    this.RestBillUserwise = this.getFeature('RestBillUserwise');
 
   }
 
@@ -535,7 +537,7 @@ export class GlobalDataModule implements OnInit {
   curDate: any = new Date();
   public SubscriptionExpired(): boolean {
     ///// yyyy-MM-dd /////////////
-    var ExpiryDate: any = '2030-06-10';
+    var ExpiryDate: any = '2030-07-10';
     var curDate = this.datePipe.transform(this.curDate, 'yyyy-MM-dd')
     var status: any = curDate! >= ExpiryDate;
     return status;
@@ -1313,6 +1315,15 @@ export class GlobalDataModule implements OnInit {
   }
 
 
+  public popupAlert(msg?:any) {
+    return Swal.fire({
+      title: "Alert",
+      text: msg || 'Data Not Found!',
+       timer: 1500,
+    });
+  }
+
+
 
   showPassword(event: any, id: any) {
     if ($(id).attr("type") == 'password') {
@@ -1408,7 +1419,7 @@ export class GlobalDataModule implements OnInit {
     return result;
   }
 
-  openBootstrapModal(modalID: any, condition: any,keyboard?:any) {
+  openBootstrapModal(modalID: any, condition: any, keyboard?: any) {
     if (condition) {
       const myModal = new bootstrap.Modal(modalID, { keyboard: keyboard || false, backdrop: false });
       myModal.show();

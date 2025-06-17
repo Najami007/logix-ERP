@@ -20,14 +20,14 @@ export class SaleRptPaymentTypewiseComponent implements OnInit {
 
 
   companyProfile: any = [];
-  crudList:any = {c:true,r:true,u:true,d:true};
+  crudList: any = { c: true, r: true, u: true, d: true };
   constructor(
     private http: HttpClient,
     private msg: NotificationService,
     private app: AppComponent,
     private global: GlobalDataModule,
     private route: Router,
-    private dialog:MatDialog
+    private dialog: MatDialog
 
   ) {
 
@@ -49,9 +49,14 @@ export class SaleRptPaymentTypewiseComponent implements OnInit {
 
 
 
-  paymentTypeList:any = [{val:'Cash', title:'Cash'},{val:'Bank', title:'Bank'},{val:'Split', title:'Split'},{val:'Complimentary', title:'Complimentary'},]
+  paymentTypeList: any = [
+    { val: 'Cash', title: 'Cash' },
+    { val: 'Bank', title: 'Bank' },
+    { val: 'Split', title: 'Split' },
+    { val: 'Credit', title: 'Credit' },
+    { val: 'Complimentary', title: 'Complimentary' },]
 
-  paymentType:any = 'Cash';
+  paymentType: any = 'Cash';
 
   userList: any = [];
   userID = 0;
@@ -63,7 +68,7 @@ export class SaleRptPaymentTypewiseComponent implements OnInit {
   toTime: any = '23:59';
 
   SaleDetailList: any = [];
-  saleSummaryList:any = [];
+  saleSummaryList: any = [];
   reportType: any;
 
 
@@ -83,61 +88,84 @@ export class SaleRptPaymentTypewiseComponent implements OnInit {
 
 
   grandTotal = 0;
+  billTotal = 0;
+  otherChargesTotal = 0;
+  discountTotal = 0;
 
 
-  getReport(type:any) {
+  getReport(type: any) {
 
     // alert(this.recipeCatID);
-   
-  if(type == 'detail' && (this.paymentType == '' || this.paymentType == undefined)){
-    this.msg.WarnNotify('Select Payment Type')
-  }else{
 
-   if(type == 'detail'){
-    $('#detailTable').show();
-    $('#summaryTable').hide();
-    this.reportType = 'Detail';
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInOutDetailPTWiseAndDateWise?reqPT='+this.paymentType+'&reqUID='+this.userID+'&FromDate='+
-    this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
-      (Response: any) => {
-        this.SaleDetailList = Response;
-        this.grandTotal = 0;
-        Response.forEach((e:any) => {
-          if(e.invType == 'S'){
-            this.grandTotal += e.netTotal;
-          }
+    if (type == 'detail' && (this.paymentType == '' || this.paymentType == undefined)) {
+      this.msg.WarnNotify('Select Payment Type')
+    } else {
 
-          if(e.invType == 'SR'){
-            this.grandTotal -= e.netTotal;
-          }
-          
-        });
+      if (type == 'detail') {
+        $('#detailTable').show();
+        $('#summaryTable').hide();
+        this.reportType = 'Detail';
+        this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInOutDetailPTWiseAndDateWise?reqPT=' + this.paymentType + '&reqUID=' + this.userID + '&FromDate=' +
+          this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
+            (Response: any) => {
+               if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+                this.app.stopLoaderDark();
+              return;
+              
+            }
+              this.SaleDetailList = Response;
+              this.grandTotal = 0;
+              this.billTotal = 0;
+              this.otherChargesTotal = 0;
+              this.discountTotal = 0;
+              Response.forEach((e: any) => {
+                if (e.invType == 'S') {
+                  this.grandTotal += e.netTotal;
+                  this.discountTotal += e.billDiscount;
+                  this.billTotal += e.billTotal;
+                  this.otherChargesTotal += e.otherCharges;
+                }
 
+                if (e.invType == 'SR') {
+                  this.grandTotal -= e.netTotal;
+                  this.discountTotal -= e.billDiscount;
+                  this.billTotal -= e.billTotal;
+                  this.otherChargesTotal -= e.otherCharges;
+                }
+
+              });
+
+            }
+          )
       }
-    )
-   }
 
-   if(type == 'summary'){
-    $('#detailTable').hide();
+      if (type == 'summary') {
+        $('#detailTable').hide();
         $('#summaryTable').show();
         this.reportType = 'Summary';
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPaymentSaleSummaryDateWise?reqUID='+this.userID+'&FromDate='+
-    this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
-      (Response: any) => {
-      
-        this.saleSummaryList = Response;
-        this.grandTotal = 0;
-        Response.forEach((e:any) => {
-          this.grandTotal += e.total;
-        });
+        this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPaymentSaleSummaryDateWise?reqUID=' + this.userID + '&FromDate=' +
+          this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
+            (Response: any) => {
+              if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+                this.app.stopLoaderDark();
+              return;
+              
+            }
+              this.saleSummaryList = Response;
+              this.grandTotal = 0;
+              Response.forEach((e: any) => {
+                this.grandTotal += e.total;
+              });
 
+            }
+          )
       }
-    )
-   }
-    
 
-  }
-    
+
+    }
+
 
 
 
@@ -150,13 +178,13 @@ export class SaleRptPaymentTypewiseComponent implements OnInit {
     this.global.printData('#PrintDiv')
   }
 
-  billDetails(item:any){
-    this.dialog.open(SaleBillDetailComponent,{
-      width:'50%',
-      data:item,
-      disableClose:true,
-    }).afterClosed().subscribe(value=>{
-      
+  billDetails(item: any) {
+    this.dialog.open(SaleBillDetailComponent, {
+      width: '50%',
+      data: item,
+      disableClose: true,
+    }).afterClosed().subscribe(value => {
+
     })
   }
 

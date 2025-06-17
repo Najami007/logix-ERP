@@ -50,7 +50,7 @@ export class AccountSummaryReportComponent implements OnInit {
   ngOnInit(): void {
     this.globalData.getCompany();
     this.getProject();
-    this.globalData.setHeaderTitle('Trial Balance');
+    this.globalData.setHeaderTitle('Account Summary Report');
     
     this.getNotes();
 

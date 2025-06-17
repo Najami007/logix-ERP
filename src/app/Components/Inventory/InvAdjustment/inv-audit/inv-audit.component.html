@@ -8,18 +8,18 @@
 
 
 
-            <div class="ps-1 d-flex ">
+            <div class="ps-1 d-flex flex-wrap gap-1">
 
                 <!-------------------- Product Search Bar --------------->
 
-                <div class="col-lg-9  d-flex flex-column">
+                <div class="col-md-8  d-flex flex-column">
                     <mat-label class="text-primary">Search Barcode / Product</mat-label>
                     <input type="text" #pbarcode [(ngModel)]="PBarcode"
                         (keydown)="searchByCode($event);changeFocus($event,'.prodRow')" id="searchProduct"
-                        class="p-1 ps-2 mb-2 searchProduct" placeholder="Alt + b" autofocus autocomplete="off"
+                        class="p-1 ps-2 mb-2 searchProduct w-100" placeholder="Alt + b" autofocus autocomplete="off"
                         accesskey="b">
 
-                    <div class="  d-flex flex-column SearchConatiner cursorPointer "
+                    <div class="  d-flex flex-column SearchConatiner cursorPointer w-100"
                         *ngIf="PBarcode != '' && PBarcode != undefined">
                         <mat-card class="card "
                             *ngFor="let item of productList| filter:PBarcode | slice:0:25 index as index"
@@ -33,15 +33,16 @@
                         </mat-card>
                     </div>
                 </div>
-                <div>
-                    <mat-label class="text-primary">Quantity</mat-label>
-                    <input type="text" (keydown)="InsertToTable($event)" class="p-1 ps-2 mb-2 qtyInput" id="qtyInput"
+                <div class="col-md-3 d-flex ">
+                   <div class="d-flex flex-column">
+                     <mat-label class="text-primary">Quantity</mat-label>
+                    <input type="text" [(ngModel)]="tmpQuantity" (keydown)="onQtyinsert($event)" class="col-md-6 p-1 ps-2 mb-2 qtyInput" id="qtyInput"
                         autofocus autocomplete="off" accesskey="">
+                   </div>
+                <mat-checkbox class="mt-4 col-md-6" [(ngModel)]="autoInsert">Auto Insert</mat-checkbox> 
                 </div>
-                <div class="col-lg-3 text-start ms-1 pt-3 mt-1">
-                    <!-- <button mat-raised-button class="bg-primary text-white w-50 " style="height: 40px;"
-                        (click)="ngOnInit()">Load</button> -->
-                </div>
+        
+
 
             </div>
 
@@ -77,8 +78,8 @@
                                     (keydown)="handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);"
                                     (keyup)="changeValue(item);getTotal();showImg(item);"
                                     class="qty{{index}} text-center" style="width: 80px;"></td>
-                            <td class="text-center">{{item.aq |number:'1.0-3'}}</td>
-                             <td class="text-center">{{ item.quantity - item.aq |number:'1.0-3'}}</td>
+                            <td class="text-center">{{item.avlQuantity |number:'1.0-3'}}</td>
+                             <td class="text-center">{{ item.quantity - item.avlQuantity |number:'1.0-3'}}</td>
                             <td class="text-end">{{item.avgCostPrice | number:'1.0-2'}}</td>
                             <td class="text-end">{{item.costPrice | number:'1.0-2'}}</td>
                             <td class="text-end">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
@@ -139,11 +140,11 @@
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="w-100 matSmall">
                     <mat-label>Location</mat-label>
-                    <mat-select [(ngModel)]="locationID" name="location" (selectionChange)="onLocationSelected('l1')">
+                    <mat-select [(ngModel)]="locationID" name="location" [disabled]="tableDataList.length > 0" (selectionChange)="onLocationSelected('l1')">
                         <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                         <mat-option *ngFor="let item of locationList | filter:locationSearch.value"
-                            [disabled]="item.locationID == locationTwoID"
+                            
                             [value]="item.locationID">{{item.locationTitle}}</mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -161,14 +162,17 @@
             </div>
             <div class="mt-4 d-flex justify-content-around">
 
-                <button *ngIf="crudList.c" class="btnsave w-25" (click)="SaveBill('issue')">Save</button>
+                <button *ngIf="crudList.c" class="btnsave w-25" (click)="SaveBill('save')">Save</button>
 
-
-
-
-
+                <button class="btnsave w-25" (click)="importFromLocalStorage()">Import</button>
             </div>
 
+             <div class="mt-4 d-flex justify-content-around">
+
+                <button *ngIf="crudList.c" class="btnsave w-25" (click)="startAudit('start')">Start Audit</button>
+
+                <button class="btnsave w-25" (click)="startAudit('start')">End Audit</button>
+            </div>
         </div>
 
     </div>
@@ -191,11 +195,11 @@
                             <mat-datepicker #hbDate></mat-datepicker>
                         </mat-form-field>
 
-
+<!-- 
                         <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 bg-primary text-white btn-rpt"
-                            (click)="findHoldBills('HI')">Hold Bill</button>
+                            (click)="findHoldBills('HI')">Hold Bill</button> -->
                         <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt"
-                            (click)="findHoldBills('I')">Issue Bill</button>
+                            (click)="findHoldBills('I')">Get Bill</button>
 
                         <mat-form-field class="col-lg-3 matSmall" appearance="outline">
                             <mat-label>Search.......</mat-label>
@@ -210,27 +214,29 @@
                                 <th>S#</th>
                                 <th>Inv No.</th>
                                 <th>Date</th>
-                                <th>Type</th>
-                                <th>Department</th>
-                                <th>Amount</th>
+                                <th>Audit Start</th>
+                                <th>Audit End</th>
+                                <th>Remarks</th>
+                               
                                 <th>User</th>
                                 <th *ngIf="crudList.r">Action</th>
-                                <th *ngIf="crudList.u" id="edit">Retrive</th>
+                                <th *ngIf="crudList.u">Retrive</th>
                             </tr>
 
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of IssueBillList  | filter:holdSearch.value index as index">
+                            <tr *ngFor="let item of savedInvoiceList  | filter:holdSearch.value index as index">
                                 <td>{{index+1}}</td>
-                                <td>{{item.invBillNo}}</td>
-                                <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
-                                <td>{{item.issueType}}</td>
-                                <td>{{item.locationTwoTitle}}</td>
-                                <td class="text-end">{{item.netTotal | number:'1.0-0'}}</td>
+                                <td>{{item.auditInventoryID}}</td>
+                                <td>{{item.auditInvDate | date:'dd-MM-yyyy'}}</td>
+                                 <td>{{item.auditStartDate | date:'dd-MM-yyyy'}}</td>
+                                  <td>{{item.auditEndDate | date:'dd-MM-yyyy'}}</td>
+                                <td>{{item.remarks}}</td>
+    
                                 <td>{{item.entryUser}}</td>
                                 <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary"
                                         (click)="printBill(item)">print</mat-icon></td>
-                                <td class="text-center cursorPointer" *ngIf=" item.invType == 'HI' && crudList.u">
+                                <td class="text-center cursorPointer" *ngIf=" crudList.u">
                                     <mat-icon data-bs-dismiss="modal" (click)="retriveBill(item)">edit</mat-icon>
                                 </td>
 

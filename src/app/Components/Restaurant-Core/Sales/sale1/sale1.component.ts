@@ -46,6 +46,10 @@ export class Sale1Component implements OnInit {
   disablePrintPwd = this.global.DisablePrintPwd;
   autoTableSelectFeature = this.global.AutoTableSelect;
   postBillFeature = this.global.postSale;
+  RestBillUserwise = this.global.RestBillUserwise;
+
+
+  roleType = this.global.getRoleTypeID();
 
 
   appVisibility() {
@@ -1081,7 +1085,13 @@ export class Sale1Component implements OnInit {
 
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetHoldBills').subscribe(
       (Response: any) => {
-        this.holdBillList = Response;
+      
+        if(this.RestBillUserwise && this.roleType == 3){
+          
+          this.holdBillList = Response.filter((e:any)=> e.userID == this.global.getUserID());
+        }else{
+           this.holdBillList = Response;
+        }
       },
       (Error: any) => {
         this.msg.WarnNotify(Error);

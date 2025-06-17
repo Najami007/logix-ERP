@@ -14,19 +14,19 @@ import { environment } from 'src/environments/environment.development';
   templateUrl: './sale-purchase-comparison-rptsupplierwise.component.html',
   styleUrls: ['./sale-purchase-comparison-rptsupplierwise.component.scss']
 })
-export class SalePurchaseComparisonRptsupplierwiseComponent  implements OnInit {
+export class SalePurchaseComparisonRptsupplierwiseComponent implements OnInit {
 
 
 
   companyProfile: any = [];
-  crudList:any = {c:true,r:true,u:true,d:true};
+  crudList: any = { c: true, r: true, u: true, d: true };
   constructor(
     private http: HttpClient,
     private msg: NotificationService,
     private app: AppComponent,
     private global: GlobalDataModule,
     private route: Router,
-    private dialog:MatDialog
+    private dialog: MatDialog
 
   ) {
 
@@ -49,15 +49,15 @@ export class SalePurchaseComparisonRptsupplierwiseComponent  implements OnInit {
     this.global.setHeaderTitle('Sale Purchase Comparison');
     this.getUsers();
     this.getSupplier();
-   
+
   }
 
 
 
 
-  supplierList:any = [];
+  supplierList: any = [];
   partyID = 0;
-  productList:any = [];
+  productList: any = [];
   productID = 0;
   userList: any = [];
   userID = 0;
@@ -69,7 +69,7 @@ export class SalePurchaseComparisonRptsupplierwiseComponent  implements OnInit {
   toTime: any = '23:59';
 
   DetailList: any = [];
-  summaryList:any = [];
+  summaryList: any = [];
   reportType: any;
 
 
@@ -80,14 +80,14 @@ export class SalePurchaseComparisonRptsupplierwiseComponent  implements OnInit {
     this.global.getUserList().subscribe((data: any) => { this.userList = data; });
   }
 
-  getSupplier(){
+  getSupplier() {
     this.global.getSupplierList().subscribe((data: any) => { this.supplierList = data; });
 
   }
 
-  onSupplierSelected(){
+  onSupplierSelected() {
     this.partyName = this.supplierList.find((e: any) => e.partyID == this.partyID).partyName;
-  
+
   }
 
 
@@ -97,42 +97,52 @@ export class SalePurchaseComparisonRptsupplierwiseComponent  implements OnInit {
   }
 
 
- 
+
   purQtyTotal = 0;
   saleQtyTotal = 0;
   purchaseTotal = 0;
   saleTotal = 0;
 
-  getReport(type:any) {
+  getReport(type: any) {
 
     // alert(this.recipeCatID);
- 
-    this.reportType = 'Detail';
-    this.app.startLoaderDark();
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseSaleComparisonRptSupplierWise_7?reqPartyID='+this.partyID+'&FromDate='+this.global.dateFormater(this.fromDate, '-')+
-    '&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
-      (Response: any) => {
-       
-        this.DetailList = Response;
-        this.purQtyTotal = 0;
-        this.saleQtyTotal = 0;
-        this.purchaseTotal = 0;
-        this.saleTotal = 0;
-        Response.forEach((e:any) => {
-       
-          this.purQtyTotal += e.purQty;
-          this.saleQtyTotal += e.saleQty;
-          this.purchaseTotal += e.purTotal;
-          this.saleTotal += e.saleTotal;
-        
-        });
-        this.app.stopLoaderDark();
-      },
-      (Error:any)=>{
-        this.app.stopLoaderDark();
-      }
-    )
-  
+    if (this.partyID == 0) {
+      this.msg.WarnNotify('Select Supplier')
+    } else {
+
+      this.reportType = 'Detail';
+      this.app.startLoaderDark();
+      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseSaleComparisonRptSupplierWise_7?reqPartyID=' + this.partyID + '&FromDate=' + this.global.dateFormater(this.fromDate, '-') +
+        '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
+          (Response: any) => {
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+                this.app.stopLoaderDark();
+              return;
+              
+            }
+            this.DetailList = Response;
+            this.purQtyTotal = 0;
+            this.saleQtyTotal = 0;
+            this.purchaseTotal = 0;
+            this.saleTotal = 0;
+            Response.forEach((e: any) => {
+
+              this.purQtyTotal += e.purQty;
+              this.saleQtyTotal += e.saleQty;
+              this.purchaseTotal += e.purTotal;
+              this.saleTotal += e.saleTotal;
+
+            });
+            this.app.stopLoaderDark();
+          },
+          (Error: any) => {
+            console.log(Error);
+            this.app.stopLoaderDark();
+          }
+        )
+    }
+
 
   }
 
@@ -143,13 +153,13 @@ export class SalePurchaseComparisonRptsupplierwiseComponent  implements OnInit {
     this.global.printData('#PrintDiv')
   }
 
-  billDetails(item:any){
-    this.dialog.open(SaleBillDetailComponent,{
-      width:'50%',
-      data:item,
-      disableClose:true,
-    }).afterClosed().subscribe(value=>{
-      
+  billDetails(item: any) {
+    this.dialog.open(SaleBillDetailComponent, {
+      width: '50%',
+      data: item,
+      disableClose: true,
+    }).afterClosed().subscribe(value => {
+
     })
   }
 

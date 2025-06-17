@@ -28,6 +28,10 @@ export class SaleHoldedBillComponent {
   disablePrintPwd = this.global.DisablePrintPwd;
   autoTableSelectFeature = this.global.AutoTableSelect;
   postBillFeature = this.global.postSale;
+    RestBillUserwise = this.global.RestBillUserwise;
+
+
+  roleType = this.global.getRoleTypeID();
 
 
     constructor(

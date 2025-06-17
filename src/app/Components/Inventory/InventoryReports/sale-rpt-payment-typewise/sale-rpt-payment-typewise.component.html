@@ -17,20 +17,20 @@
             <mat-label>Payment Type</mat-label>
             <mat-select [(ngModel)]="paymentType">
                 <mat-option><ngx-mat-select-search #typeSearch [placeholderLabel]="'Search...'"
-                    [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                <mat-option  *ngFor="let item of paymentTypeList | filter:typeSearch.value"
+                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of paymentTypeList | filter:typeSearch.value"
                     [value]="item.val">{{item.title}}</mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field  appearance="outline" class="col-lg-2 matSmall" >
+        <mat-form-field appearance="outline" class="col-lg-2 matSmall">
             <mat-label>From Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
             <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
             <mat-datepicker #sDate></mat-datepicker>
         </mat-form-field>
-        <mat-form-field class="col-lg-2 matSmall" appearance="outline" >
-            <mat-label>From Time</mat-label>         
-            <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+        <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+            <mat-label>From Time</mat-label>
+            <input matInput [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
             <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
             <ngx-material-timepicker #fTime></ngx-material-timepicker>
         </mat-form-field>
@@ -44,9 +44,9 @@
         </mat-form-field>
         <mat-form-field class="col-lg-2 matSmall" appearance="outline">
             <mat-label>To Time</mat-label>
-                <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
-                <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
-                <ngx-material-timepicker #tTime></ngx-material-timepicker>
+            <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+            <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #tTime></ngx-material-timepicker>
         </mat-form-field>
 
     </div>
@@ -70,7 +70,7 @@
 
 
 
-    
+
     <div id="PrintDiv">
 
         <!-------------------------    Top Logo Section -------------------->
@@ -87,8 +87,10 @@
                     <h1 class="companyName">{{item.companyName}}</h1>
 
                     <p class="rptTitle" style="margin-top:-20px">Sale {{reportType}} Report </p>
-                    <p style="margin-top: -15px;" *ngIf="userName != '' || reportType == 'Detail'" > <b *ngIf="userName != ''">User: {{userName}} |</b>
-                        <b *ngIf="paymentType != ''">  Type: {{paymentType}}</b></p>
+                    <p style="margin-top: -15px;" *ngIf="userName != '' || reportType == 'Detail'"> <b
+                            *ngIf="userName != ''">User: {{userName}} |</b>
+                        <b *ngIf="paymentType != ''"> Type: {{paymentType}}</b>
+                    </p>
                     <p style="margin-top:-15px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
 
@@ -113,6 +115,7 @@
                     <th>Table</th>
                     <th style="width: 120px;">Bill</th>
                     <th style="width: 150px;">Other Charges</th>
+                    <th style="width: 150px;">Discount</th>
                     <th style="width: 120px;">Net Total</th>
                     <th>Entered By</th>
 
@@ -123,23 +126,29 @@
             <tbody>
                 <tr *ngFor="let item of SaleDetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td class="text-center cursorPointer " (click)="billDetails(item)"><span class="text-primary border-bottom">{{item.invBillNo}}</span></td>
+                    <td class="text-center cursorPointer " (click)="billDetails(item)"><span
+                            class="text-primary border-bottom">{{item.invBillNo}}</span></td>
                     <td>{{item.invDate |date:'dd-MM-yyyy'}} ({{item.createdOn |date:'hh:mm:a'}})</td>
                     <td class="text-center">{{item.tableTitle}}</td>
                     <td class="text-end">{{item.billTotal |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.otherCharges|number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.billDiscount|number:'1.0-0'}}</td>
                     <td class="text-end">{{item.netTotal |number:'1.0-0'}}</td>
                     <td>{{item.entryUser}}</td>
                 </tr>
                 <tr>
-                    <td colspan="6"></td>
+                    <td colspan="4"></td>
+                    <th class="text-end">{{billTotal|number:'1.0-0'}}</th>
+
+                    <th class="text-end">{{otherChargesTotal|number:'1.0-0'}}</th>
+                    <th class="text-end">{{discountTotal|number:'1.0-0'}}</th>
                     <th class="text-end">{{grandTotal|number:'1.0-0'}}</th>
                     <td></td>
                 </tr>
             </tbody>
-          
 
-          
+
+
         </table>
 
         <table class="table table-logix" id="summaryTable">
@@ -147,7 +156,7 @@
                 <tr>
                     <th>S#</th>
                     <th>Type</th>
-                    <th >Net Total</th>
+                    <th>Net Total</th>
 
                 </tr>
 
@@ -156,17 +165,17 @@
             <tbody>
                 <tr *ngFor="let item of saleSummaryList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td >{{item.paymentType}}</td>
+                    <td>{{item.paymentType}}</td>
                     <td class="text-end">{{item.total |number:'1.0-0'}}</td>
                 </tr>
                 <tr>
                     <td colspan="2"></td>
-                    <th class="text-end">{{grandTotal|number:'1.0-0'}}</th> 
+                    <th class="text-end">{{grandTotal|number:'1.0-0'}}</th>
                 </tr>
             </tbody>
-          
 
-          
+
+
         </table>
 
 
@@ -179,9 +188,3 @@
 
 
 </div>
-
-
-
-
-
-

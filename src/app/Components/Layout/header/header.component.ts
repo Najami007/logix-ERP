@@ -40,7 +40,9 @@ export class HeaderComponent implements OnInit {
     this.globalData.header_title$.subscribe((Response:string)=>{this.title = Response});
      this.globalData.module_title$.subscribe((Response:string)=>{this.moduleTitle = Response});
     this.getModules();
-    this.moduleID = this.globalData.getModuleID();
+   setTimeout(() => {
+     this.moduleID = this.globalData.getModuleID();
+   }, 500);
     // alert(this.globalData.getUserID())
     // this.UserName = this.globalData.getUserName().toUpperCase();
   }

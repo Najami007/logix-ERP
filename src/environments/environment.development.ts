@@ -49,7 +49,7 @@ export const environment = {
  
   // mainApi: 'http://159.69.174.21:2019/',    /////// Ejaz And Sons Rawalpindi
   //mainApi: 'http://localhost:8060/',           /////////// BAke INN Fateh Jang
-  //mainApi: 'http://192.168.10.100:8080/',   /////////// BAke INN Server Live
+ // mainApi: 'http://192.168.10.100:8080/',   /////////// BAke INN Server Live
   //mainApi: 'http://192.168.18.100:8080/',    /////////// The Bucket Client
   //mainApi: 'http://192.168.1.100:8080/',    /////////// Jazeera Foods Saddar API
   //mainApi: 'http://192.168.18.200:8080/',    /////////// Jazeera Foods Commercial API
@@ -77,7 +77,7 @@ export const environment = {
 
   //mainApi: 'http://localhost:8060/',   ///////////////// Bilal Sweets Peshawar
 
-  //mainApi: 'http://159.69.174.21:2023/',  ////////// live Server Bake Inn Bakers Fateh Jang
+ // mainApi: 'http://159.69.174.21:2023/',  ////////// live Server Bake Inn Bakers Fateh Jang
 
   //mainApi: 'http://localhost:8060/',           /////////// Cake Corner Refreshment
   // mainApi: 'http://192.168.110.100:8060/',           /////////// Cake Corner Refreshment

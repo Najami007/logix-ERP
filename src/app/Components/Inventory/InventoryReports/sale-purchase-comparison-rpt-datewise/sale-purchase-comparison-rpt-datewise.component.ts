@@ -15,19 +15,19 @@ import { environment } from 'src/environments/environment.development';
   templateUrl: './sale-purchase-comparison-rpt-datewise.component.html',
   styleUrls: ['./sale-purchase-comparison-rpt-datewise.component.scss']
 })
-export class SalePurchaseComparisonRptDatewiseComponent  implements OnInit {
+export class SalePurchaseComparisonRptDatewiseComponent implements OnInit {
 
 
 
   companyProfile: any = [];
-  crudList:any = {c:true,r:true,u:true,d:true};
+  crudList: any = { c: true, r: true, u: true, d: true };
   constructor(
     private http: HttpClient,
     private msg: NotificationService,
     private app: AppComponent,
     private global: GlobalDataModule,
     private route: Router,
-    private dialog:MatDialog
+    private dialog: MatDialog
 
   ) {
 
@@ -50,15 +50,20 @@ export class SalePurchaseComparisonRptDatewiseComponent  implements OnInit {
     this.global.setHeaderTitle('Sale Purchase Comparison');
     this.getUsers();
     this.getSupplier();
-   
+
+    setTimeout(() => {
+      $('#detailTable').show();
+      $('#summaryTable').hide();
+    }, 200);
+
   }
 
 
 
 
-  supplierList:any = [];
+  supplierList: any = [];
   partyID = 0;
-  productList:any = [];
+  productList: any = [];
   productID = 0;
   userList: any = [];
   userID = 0;
@@ -70,7 +75,7 @@ export class SalePurchaseComparisonRptDatewiseComponent  implements OnInit {
   toTime: any = '23:59';
 
   DetailList: any = [];
-  summaryList:any = [];
+  summaryList: any = [];
   reportType: any;
 
 
@@ -82,7 +87,7 @@ export class SalePurchaseComparisonRptDatewiseComponent  implements OnInit {
   }
 
 
-  getSupplier(){
+  getSupplier() {
     this.global.getSupplierList().subscribe((data: any) => { this.supplierList = data; });
 
   }
@@ -96,40 +101,65 @@ export class SalePurchaseComparisonRptDatewiseComponent  implements OnInit {
   }
 
 
- 
+
   purQtyTotal = 0;
   saleQtyTotal = 0;
   purchaseTotal = 0;
   saleTotal = 0;
 
-  getReport(type:any) {
+  getReport(type: any) {
 
     // alert(this.recipeCatID);
- 
+    this.app.startLoaderDark();
     this.reportType = 'Detail';
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseSaleComparisonRptDateWise_8?FromDate='+this.global.dateFormater(this.fromDate, '-')+
-    '&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
+    var fromDate = this.global.dateFormater(this.fromDate, '');
+    var toDate = this.global.dateFormater(this.toDate, '');
+
+    var url = type == 'Detail'
+      ? `GetPurchaseSaleComparisonRptDateWise_8?FromDate=${fromDate}&todate=${toDate}&fromtime=${this.fromTime}&totime=${this.toTime}`
+      : `GetPurchaseSaleComparisonRptDateWiseSummary_12?FromDate=${fromDate}&todate=${toDate}&fromtime=${this.fromTime}&totime=${this.toTime}`;
+
+    if (type == 'Detail') {
+      $('#detailTable').show();
+      $('#summaryTable').hide();
+    } else {
+      $('#detailTable').hide();
+      $('#summaryTable').show();
+    }
+    this.http.get(environment.mainApi + this.global.inventoryLink + url).subscribe(
       (Response: any) => {
-    
+          if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+                this.app.stopLoaderDark();
+              return;
+              
+            }
         this.DetailList = Response;
         this.purQtyTotal = 0;
         this.saleQtyTotal = 0;
         this.purchaseTotal = 0;
         this.saleTotal = 0;
-        Response.forEach((e:any) => {
-       
+        Response.forEach((e: any) => {
+
           this.purQtyTotal += e.purQty;
           this.saleQtyTotal += e.saleQty;
-          this.purchaseTotal += e.purTotal;
-          this.saleTotal += e.saleTotal;
-        
+          this.purchaseTotal += e.purTotal - e.purRTotal;
+          this.saleTotal += e.saleTotal - e.saleRTotal;
+
         });
 
+        this.app.stopLoaderDark();
+
+      },
+      (Error: any) => {
+        this.app.stopLoaderDark();
       }
     )
-  
+
 
   }
+
+
 
 
 
@@ -138,13 +168,13 @@ export class SalePurchaseComparisonRptDatewiseComponent  implements OnInit {
     this.global.printData('#PrintDiv')
   }
 
-  billDetails(item:any){
-    this.dialog.open(SaleBillDetailComponent,{
-      width:'50%',
-      data:item,
-      disableClose:true,
-    }).afterClosed().subscribe(value=>{
-      
+  billDetails(item: any) {
+    this.dialog.open(SaleBillDetailComponent, {
+      width: '50%',
+      data: item,
+      disableClose: true,
+    }).afterClosed().subscribe(value => {
+
     })
   }
 

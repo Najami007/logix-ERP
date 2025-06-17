@@ -57,9 +57,9 @@
                 <mat-label class="text-primary">Search Barcode / Product</mat-label>
                 <input type="text" #pbarcode [(ngModel)]="PBarcode"
                     (keydown)="searchByCode($event);this.changeFocus($event,'.prodRow')" id="searchProduct"
-                    class="p-1 mb-2 searchProduct" placeholder="Alt + b" autofocus autocomplete="off" accesskey="b">
+                    class="p-1 mb-2 searchProduct w-100" placeholder="Alt + b" autofocus autocomplete="off" accesskey="b">
 
-                <div class="col-lg-7  d-flex flex-column SearchConatiner cursorPointer"
+                <div class=" d-flex flex-column SearchConatiner cursorPointer w-100"
                     *ngIf="PBarcode != '' && PBarcode != undefined">
                     <mat-card class="card "
                         *ngFor="let item of productList| filter:PBarcode | slice:0:25 index as index"

@@ -23,23 +23,13 @@
 }
 
 .SearchConatiner{
-// border: 0px solid rgb(180, 180, 180);
-// background-color: rgb(249, 249, 249);
-
-margin-top: 55px;
-width: 55.5%;
 z-index:1000;
-position: absolute;
 max-height: 250px;
 overflow: hidden;
-// max-width: 500px;
-
 
 .SearchConatiner , .card{
     background-color: rgb(247, 242, 242);
-    // padding: 10px;
-    // margin: 1px;
-  
+   
 }
 
 
@@ -48,7 +38,6 @@ overflow: hidden;
     padding: 10px;
     text-decoration: none;
     height: 30px;
-    display: block;
  }
 
 }

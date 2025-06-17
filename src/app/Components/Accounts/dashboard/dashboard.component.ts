@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit {
     this.globalData.setHeaderTitle('Finance DashBoard');
 
 
-    this.AnnualProfitLoss();
+    this.getAnuualProfit();
 
     //this.getbudgetChart();
 
@@ -69,7 +69,7 @@ export class DashboardComponent implements OnInit {
   ExpenseList: any = [];
   MonthList: any = []
 
-  MonthNameList: any = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
 
 
@@ -121,11 +121,11 @@ export class DashboardComponent implements OnInit {
           Response.forEach((e: any) => {
 
             if (e.coaTypeID == 2) {
-              this.ExpenseList.push(e.amount);
+              this.ExpenseList.push(Math.round(e.amount));
             }
 
             if (e.coaTypeID == 3) {
-              this.IncomeList.push(e.amount);
+              this.IncomeList.push(Math.round(e.amount));
             }
 
             this.incomeExpenseChart();
@@ -162,7 +162,7 @@ export class DashboardComponent implements OnInit {
       yAxis: {
         min: 0,
         title: {
-          text: 'Amount',
+          text: 'AMOUNT',
         },
       },
       tooltip: {
@@ -182,7 +182,7 @@ export class DashboardComponent implements OnInit {
       },
       series: [
         {
-          name: 'Income',
+          name: 'INCOME',
           type: 'column',
 
 
@@ -190,7 +190,7 @@ export class DashboardComponent implements OnInit {
           data: this.IncomeList,
         },
         {
-          name: 'Expense',
+          name: 'EXPENSE',
           type: 'column',
 
           data: this.ExpenseList,
@@ -205,16 +205,19 @@ export class DashboardComponent implements OnInit {
 
   getBudget() {
 
+    var projectID = this.globalData.getProjectID();
+    var date = this.globalData.dateFormater(this.budgetMonth,'');
+    var url = `acc/GetMonthlyBudget?BudgetDate=${date}&projectid=${projectID}`;
 
-    this.http.get(environment.mainApi + 'acc/GetMonthlyBudget?BudgetDate='+ this.globalData.dateFormater(this.budgetMonth, '-')).subscribe(
+    this.http.get(environment.mainApi + url).subscribe(
       (Response: any) => {
         this.budgetData = Response;
 
         console.log(Response);
         Response.forEach((e: any) => {
           this.titleList.push(e.coaTitle);
-          this.budgetAmountList.push(e.budgetAmount);
-          this.consumedAmountList.push(e.consumedAmount);
+          this.budgetAmountList.push(Math.round(e.budgetAmount));
+          this.consumedAmountList.push(Math.round(e.consumedAmount));
         });
 
         this.getbudgetChart();
@@ -249,7 +252,7 @@ export class DashboardComponent implements OnInit {
         min: 0,
         allowDecimals: false,
         title: {
-          text: 'Amount'
+          text: 'AMOUNT'
         }
       },
       tooltip: {
@@ -269,7 +272,7 @@ export class DashboardComponent implements OnInit {
       },
       series: [
         {
-          name: 'Budget Amount',
+          name: 'BUDGET AMOUNT',
           type: 'column',
           color: 'green',
 
@@ -278,7 +281,7 @@ export class DashboardComponent implements OnInit {
           ,
         },
         {
-          name: 'Consumed',
+          name: 'CONSUMED',
           type: 'column',
           color: 'red',
           data: this.consumedAmountList,
@@ -329,7 +332,7 @@ export class DashboardComponent implements OnInit {
               var amount = (obj.credit - obj.debit).toFixed();
               this.IncomeHeadsList.push(obj.coaTitle);
               var tmpArry: any = [];
-              tmpArry.push(obj.coaTitle, parseFloat(amount), false);
+              tmpArry.push(obj.coaTitle, Math.round(parseFloat(amount)), false);
               this.IncomeHeadsAmountList.push(tmpArry);
 
             });
@@ -414,7 +417,7 @@ export class DashboardComponent implements OnInit {
               var amount = (obj.debit - obj.credit).toFixed();
               this.expenseHeadList.push(obj.coaTitle);
               var tmpArry: any = [];
-              tmpArry.push(obj.coaTitle, parseFloat(amount), false);
+              tmpArry.push(obj.coaTitle, Math.round(parseFloat(amount)), false);
               this.ExpenseAmountList.push(tmpArry);
 
 
@@ -438,22 +441,24 @@ export class DashboardComponent implements OnInit {
       },
 
       title: {
-        text: 'Expense ANALYSIS',
+        text: 'EXPENSE ANALYSIS',
       },
       subtitle: {
-        text: 'Current MONTH'
+        text: 'CURRENT MONTH'
 
       },
 
       xAxis: {
+        
         categories: this.expenseHeadList,
+        
       },
 
       series: [
         {
           type: 'pie',
           allowPointSelect: true,
-
+          
           keys: ['name', 'y', 'selected', 'sliced'],
           //keys: ['y', 'selected', 'sliced'],
           data: this.ExpenseAmountList,
@@ -475,248 +480,43 @@ export class DashboardComponent implements OnInit {
     { roomNo: 5, bookings: 50 }
   ];
 
-  // getRoomsBooking(){
-
-  //   const chart = new Chart( {
-  //     chart: {
-  //       type: 'columnrange'
-  //     },
-  //     title: {
-  //       text: 'Room Bookings Between 2023-10-01 and 2023-10-07'
-  //     },
-  //     xAxis: {
-  //       title: {
-  //         text: 'Room No.'
-  //       }
-  //     },
-  //     yAxis: {
-  //       title: {
-  //         text: 'Bookings'
-  //       }
-  //     },
-  //     series: []
-  //   });
-  // }
-
-
-  // getBookingBarChart(){
-
-  // //   const chart = new Chart( {
-
-  // //     chart: {
-  // //         type: 'columnrange',
-  // //         inverted: true
-  // //     },
-
-
-
-  // //     title: {
-  // //         text: 'Temperature variation by month'
-  // //     },
-
-  // //     subtitle: {
-  // //         text: 'Observed in Vik i Sogn, Norway, 2021 | ' +
-  // //             'Source: <a href="https://www.vikjavev.no/ver/" target="_blank">Vikjavev</a>'
-  // //     },
-
-  // //     xAxis: {
-  // //         categories: ['01', '02', '03', '04', '05', '06',
-  // //             '07', '08', '09', '10', '11', '12']
-  // //     },
-
-  // //     yAxis: {
-  // //         title: {
-  // //             text: 'Temperature ( °C )'
-  // //         }
-  // //     },
-
-  // //     tooltip: {
-  // //         valueSuffix: '°C'
-  // //     },
-
-  // //     plotOptions: {
-  // //         columnrange: {
-  // //             borderRadius: '50%',
-  // //             dataLabels: {
-  // //                 enabled: true,
-  // //                 format: '{y}°C'
-  // //             }
-  // //         }
-  // //     },
-
-  // //     legend: {
-  // //         enabled: false
-  // //     },
-
-  // //     series: [{
-  // //         type:'bar',
-  // //         name: 'Temperatures',
-  // //         data: [
-  // //             [13.9, 5.2],
-  // //             [16.7, 10.6],
-  // //             [4.7, 11.6],
-  // //             [4.4, 16.8],
-  // //             [2.1, 27.2],
-  // //             [5.9, 29.4],
-  // //             [6.5, 29.1],
-  // //             [4.7, 25.4],
-  // //             [4.3, 21.6],
-  // //             [3.5, 15.1],
-  // //             [9.8, 12.5],
-  // //             [11.5, 8.4]
-  // //         ]
-  // //     }]
-
-  // // });
-
-  // // const chart = new Chart(
-  // //    {   
-  // //     chart : {
-  // //        type: 'columnrange',
-  // //        inverted:true
-  // //     },
-  // //     title : {
-  // //        text: 'Temperature variation by month'   
-  // //     },
-  // //     subtitle : {
-  // //        text: 'Observed in Vik i Sogn, Norway, 2009'   
-  // //     },
-  // //     xAxis : {
-  // //        categories: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']      
-  // //     },
-  // //     yAxis : {     
-  // //        title: {
-  // //           text: 'Temperature ( \xB0C )'         
-  // //        }      
-  // //     },
-  // //     tooltip: {
-  // //        headerFormat: '<span style = "font-size:10px">{point.key}</span><table>',
-  // //           pointFormat: '<tr><td style = "color:{series.color};padding:0">{series.name}: </td>' +
-  // //           '<td style = "padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-  // //           footerFormat: '</table>',
-  // //        shared: true,
-  // //        useHTML: true
-  // //     },
-  // //     plotOptions : {
-  // //        columnrange: {
-  // //           dataLabels: {
-  // //              enabled: true,
-  // //              formatter: function () {
-  // //                 return this.y + '\xB0C';
-  // //              }
-  // //           }
-  // //        }
-  // //     },
-  // //     credits : {
-  // //        enabled: false
-  // //     },
-  // //     series : [{
-  // //       type:'columnrange',
-  // //        name: 'Temperatures',
-  // //        data: [
-  // //           [-9.7, 9.4],
-  // //           [-8.7, 6.5],
-  // //           [-3.5, 9.4],
-  // //           [-1.4, 19.9],
-  // //           [0.0, 22.6],
-  // //           [2.9, 29.5],
-  // //           [9.2, 30.7],
-  // //           [7.3, 26.5],
-  // //           [4.4, 18.0],
-  // //           [-3.1, 11.4],
-  // //           [-5.2, 10.4],
-  // //           [-13.5, 9.8]
-  // //        ]
-  // //     }]
-  // //  })
-
-  // let chart = new Chart({
-  //   chart: {
-  //     type: 'columnrange',
-  //     inverted: true
-  //   },
-
-  //   title: {
-  //     text: 'Booking Table'
-  //   },
-
-  //   subtitle: {
-  //     text: 'Current Month'
-  //   },
-
-  //   xAxis: {
-  //     categories: [this.BookingsList.roomTitle]
-  //   },
-
-  //   yAxis: {
-  //     opposite: true,
-  //   type: "datetime",
-  //   tickmarkPlacement: "on",
-  //   tickInterval: 3600 * 1000,
-  //   // dateTimeLabelFormats: {
-  //   //   day: "%H:%M:%S",
-  //   //   // week: "%H:%M:%S",
-  //   //   month: "%H:%M:%S",
-  //   //   year: "%H:%M:%S"
-  //   // },
-
-  //     title: {
-  //       text: 'Date'
-  //     },
-
-  //   },
-
-  //   // tooltip: {
-  //   //   valueSuffix: '°C'
-  //   // },
-
-  //   // plotOptions: {
-  //   //   columnrange: {
-  //   //     dataLabels: {
-  //   //       enabled: true,
-  //   //       format: '{y}'
-  //   //     }
-  //   //   }
-  //   // },
-
-  //   legend: {
-  //     enabled: false
-  //   },
-
-  //   series: [{
-  //     type:'columnrange',
-  //     name: 'Date',
-  //     data: [
-  //      this.BookingsList.dateOfArrival,this.BookingsList.dateOfDeparture
-
-
-  //     ]
-  //   }]
-  // });
-
-
-  // this.room_Booking_Chart = chart;
-
-  // }
 
 
 
   BookingsList: any = [];
 
-  // getBookings(){
-  //   this.http.get(environment.mainApi+'acc/agetbooking').subscribe(
-  //   (Response:any)=>{
 
 
-  //     this.BookingsList =Response.filter((e:any)=>e.bookingStatus == 'Confirmed');
-  //     // console.log(this.BookingsList);
-  //     this.getBookingBarChart();
-  //   }
-  //   )
-  // }
+  //////////////////////////////////////////////////
 
 
-  ///////////////////////////////////////////////////////////////////
+  profitMonthList:any = [];
+  profitAmountList:any = [];
+
+  getAnuualProfit(){
+    this.http.get(environment.mainApi+this.globalData.accountLink +'GetMonthProfitChartData').subscribe(
+      (Response:any)=>{
+        if(Response.length > 0){
+
+
+          Response.forEach((e:any) => {
+
+            this.profitAmountList.push(Math.round(e.amount));
+            this.profitMonthList.push(this.MonthNameList[e.month - 1]);
+          });
+          //  var monthList = this.globalData.filterUniqueValuesByKey(Response, 'month');
+          // monthList.forEach((e: any) => {
+          //   this.profitMonthList.push(this.MonthNameList[e.month - 1]);
+          // })
+        }
+
+
+
+        this.AnnualProfitLoss();
+      }
+    )
+  }
+
 
   AnnualProfitLoss() {
     let chart = new Chart({
@@ -724,17 +524,17 @@ export class DashboardComponent implements OnInit {
         type: 'line',
       },
       title: {
-        text: 'Analysis Profit (Annual)',
+        text: 'ANALYSIS PROFIT & LOSS (ANNUAL)',
       },
       subtitle: {
         text: '',
       },
       xAxis: {
-        categories: ["abc"],
+        categories: this.profitMonthList,
       },
       yAxis: {
         title: {
-          text: 'Amount ',
+          text: 'AMOUNT ',
         },
       },
       plotOptions: {
@@ -747,9 +547,9 @@ export class DashboardComponent implements OnInit {
       },
       series: [
         {
-          name: 'Profit / Loss',
+          name: 'PROFIT / LOSS',
           type: 'line',
-          data: [0, 1, 2],
+          data: this.profitAmountList,
         },
       ],
     });

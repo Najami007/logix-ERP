@@ -63,6 +63,8 @@ export class InvreportcatwiseComponent implements OnInit {
     this.getBrandList();
     this.getLocation();
     this.getProductTypes();
+      this.hideFields();
+   
   }
 
 
@@ -91,6 +93,22 @@ export class InvreportcatwiseComponent implements OnInit {
 
 
   ]
+
+
+  roleTypeID = this.global.getRoleTypeID();
+
+  hideCost = true;
+  hideSale = true;
+  hideAvg = true;
+
+  hideFields(){
+    this.roleTypeID = this.global.getRoleTypeID();
+    if(this.roleTypeID > 2){
+      this.hideCost = false;
+      this.hideAvg = false;
+      this.hideSale = false;
+    }
+  }
 
 
   catFlag = false;

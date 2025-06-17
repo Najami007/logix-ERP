@@ -147,6 +147,9 @@ rptType:any = 's';
         this.CategoryID = this.BrandID;
       }
 
+
+      this.app.startLoaderDark();
+
       if(type == 'summary'){
         $('#detailTable').hide();
         $('#summaryTable').show();
@@ -155,7 +158,12 @@ rptType:any = 's';
           '&catID='+this.CategoryID+'&subCatID='+this.SubCategoryID+'&reqUserID='+this.userID+'&FromDate='+
         this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
           (Response:any)=>{
-           console.log(Response);
+                if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+                this.app.stopLoaderDark();
+              return;
+              
+            }
             this.SaleDetailList = [];
            
             if(this.rptType == 'R'){
@@ -179,7 +187,11 @@ rptType:any = 's';
               this.summaryNetTotal += e.total;
     
             });
-            
+            this.app.stopLoaderDark();
+          },
+          (Error:any)=>{
+            console.log(Error);
+            this.app.stopLoaderDark();
           }
         )
        }
@@ -192,8 +204,12 @@ rptType:any = 's';
           '&catID='+this.CategoryID+'&subCatID='+this.SubCategoryID+'&reqUserID='+this.userID+'&FromDate='+
         this.global.dateFormater(this.fromDate,'-')+'&todate='+this.global.dateFormater(this.toDate,'-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
           (Response:any)=>{
-            console.log(Response);
-         
+              if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+                this.app.stopLoaderDark();
+              return;
+              
+            }
             this.SaleDetailList = [];
             if(this.rptType == 'R'){
               Response.forEach((e:any)=>{
@@ -226,6 +242,11 @@ rptType:any = 's';
                 this.detNetTotal += e.avgCostPrice * e.quantity;
               }
              });
+             this.app.stopLoaderDark();
+          },
+          (Error:any)=>{
+            console.log(Error);
+            this.app.stopLoaderDark();
           }
         )
        }

@@ -9,7 +9,7 @@
                         <tbody class="">
                             <tr style="display: inline-flex; " class="cursorPointer "
                                 *ngFor="let item of holdBillList |filter:searchHoldBill.value ">
-                                <mat-card class="btblbtn justify-content-center" (click)="getBillDetail(item)">
+                                <mat-card  class="btblbtn justify-content-center" (click)="getBillDetail(item)">
                                     <span>{{item.tableTitle}}</span>
                                     <span>Ord:({{item.orderNo}})</span>
                                     <span style="font-size: 8px;">({{item.createdOn | date:'hh:mm:a'}})</span>

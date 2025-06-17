@@ -9,12 +9,12 @@
             <mat-datepicker #sDate></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="col-lg-3 matSmall" appearance="outline">
-            <mat-label>From Time</mat-label>    
-        
-            <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+            <mat-label>From Time</mat-label>
+
+            <input matInput [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
             <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
             <ngx-material-timepicker #fTime></ngx-material-timepicker>
-        
+
 
         </mat-form-field>
 
@@ -27,9 +27,9 @@
         </mat-form-field>
         <mat-form-field class="col-lg-3 matSmall" appearance="outline">
             <mat-label>To Time</mat-label>
-              <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
-                <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
-                <ngx-material-timepicker #tTime></ngx-material-timepicker>
+            <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+            <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #tTime></ngx-material-timepicker>
         </mat-form-field>
 
     </div>
@@ -42,7 +42,7 @@
             <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
                 <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
                         [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-            <mat-option [value]="0">All User</mat-option>
+                <mat-option [value]="0">All User</mat-option>
                 <mat-option *ngFor="let item of userList | filter:usearch.value"
                     [value]="item.userID">{{item.userName}}</mat-option>
             </mat-select>
@@ -59,7 +59,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline" class="col-lg-3 matSmall">
             <mat-label>Reports</mat-label>
-            <mat-select [(ngModel)]="rptType" >
+            <mat-select [(ngModel)]="rptType">
                 <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
                         [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                 <mat-option *ngFor="let item of reportsList | filter:rptSearch.value"
@@ -68,11 +68,11 @@
         </mat-form-field>
 
         <div class="col-lg-3" *ngIf="crudList.r">
-          
+
             <button class=" btn-rpt-success me-1" (click)="getReport(rptType)">Get Report</button>
             <button class="  btn-rpt-primary " (click)="print()">Print</button>
         </div>
-   
+
     </div>
 
 
@@ -80,7 +80,7 @@
 
 
 
-    
+
     <div id="PrintDiv">
 
         <!-------------------------    Top Logo Section -------------------->
@@ -96,7 +96,8 @@
 
                     <h1 class="companyName">{{item.companyName}}</h1>
 
-                    <p class="rptTitle" style="margin-top:-20px">{{reportType}} <span *ngIf="userName != ''">({{userName}})</span></p>
+                    <p class="rptTitle" style="margin-top:-20px">{{reportType}} <span
+                            *ngIf="userName != ''">({{userName}})</span></p>
                     <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
 
@@ -111,7 +112,7 @@
             </div>
         </div>
 
-    
+
 
         <table class="table table-logix" id="summaryTable">
             <thead>
@@ -120,14 +121,15 @@
                     <th>Bill #</th>
                     <th>Date</th>
                     <th>Title</th>
-                    <th >Location</th>
+                    <th>Location</th>
+                    <th *ngIf="rptType == 's' || rptType == 'sr' || rptType == 'p' || rptType == 'pr'">Party</th>
                     <th *ngIf="rptType == 'I' || rptType == 'R'">Type</th>
-                    <th >Qty</th>
+                    <th>Qty</th>
                     <th>Cost</th>
                     <th>Avg Cost</th>
                     <th>Sale</th>
-                    <th >Cost Total</th>
-                    <th >Sale Total</th>
+                    <th>Cost Total</th>
+                    <th>Sale Total</th>
                     <th>Entered By</th>
 
                 </tr>
@@ -137,10 +139,13 @@
             <tbody>
                 <tr *ngFor="let item of invDetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td class="text-center cursorPointer" (click)="printBill(item)"><u class="text-primary">{{item.invBillNo}}</u></td>
-                    <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
-                    <td >{{item.productTitle}} <b *ngIf="item.barcode !== null">({{item.barcode}})</b></td>
-                    <td >{{item.locationTitle }}</td>
+                    <td class="text-center cursorPointer" (click)="printBill(item)"><u
+                            class="text-primary">{{item.invBillNo}}</u></td>
+                    <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
+                    <td>{{item.productTitle}} <b *ngIf="item.barcode !== null">({{item.barcode}})</b></td>
+                    <td>{{item.locationTitle }}</td>
+                    <td *ngIf="rptType == 's' || rptType == 'sr' || rptType == 'p' || rptType == 'pr'">
+                        {{item.partyName}}</td>
                     <td *ngIf="rptType == 'I' || rptType == 'R'">{{item.issueType }}</td>
                     <td class="text-center">{{item.quantity |number:"1.0-3"}}</td>
                     <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
@@ -150,8 +155,9 @@
                     <td class="text-end">{{item.salePrice * item.quantity |number:'1.0-1'}}</td>
                     <td>{{item.entryUser}}</td>
                 </tr>
+                  
                 <tr>
-                    <td colspan="5"></td>
+                    <td colspan="6"></td>
                     <td *ngIf="rptType == 'I' || rptType == 'R'"></td>
                     <td class="text-center fw-bold">{{QtyTotal |number:'1.0-3'}}</td>
                     <td></td>
@@ -161,10 +167,12 @@
                     <td class="text-end fw-bold">{{saleTotal |number:'1.0-0'}}</td>
                     <td></td>
                 </tr>
+             
             </tbody>
-          
+
         </table>
 
+    
 
     </div>
 
@@ -174,4 +182,3 @@
 
 <app-sale-bill-print class="hide" id="print-Bill"> </app-sale-bill-print>
 <app-purchase-bill-print class="hide" id="print-Bill"></app-purchase-bill-print>
-

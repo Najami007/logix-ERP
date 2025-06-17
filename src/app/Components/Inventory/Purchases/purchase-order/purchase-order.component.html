@@ -1,6 +1,6 @@
-<div class="row body h-100 w-100" style="background-color: gainsboro;">
+<div class="row body h-100 w-100" >
 
-    <div class="col-lg-9 bg-white ">
+    <div class="col-lg-9 ">
         <div class="row ps-1 pe-1 pt-1 justify-content-between ">
             <mat-form-field appearance="outline" *ngIf="!disableDateFeature" class="col-lg-2 matSmall">
                 <mat-label>Invoice Date</mat-label>
@@ -49,10 +49,10 @@
                 <mat-label class="text-primary">Search Barcode / Product</mat-label>
                 <input type="text" #pbarcode [(ngModel)]="PBarcode"
                     (keydown)="searchByCode($event);this.changeFocus($event,'.prodRow')" id="searchProduct"
-                    class="p-1 mb-2 searchProduct" placeholder="Alt + b" autofocus (focus)="rowFocused = -1"
+                    class="p-1 mb-2 searchProduct w-100" placeholder="Alt + b" autofocus (focus)="rowFocused = -1"
                     autocomplete="off" accesskey="b">
 
-                <div class=" col-lg-7 d-flex flex-column SearchConatiner cursorPointer"
+                <div class=" w-100 d-flex flex-column SearchConatiner cursorPointer"
                     *ngIf="PBarcode != '' && PBarcode != undefined">
                     <mat-card class="card "
                         *ngFor="let item of productList| filter:PBarcode | slice:0:25 index as index"
@@ -127,7 +127,7 @@
 
 
 
-    <div class="col-lg-3 h-100" style="background-color: rgb(226, 222, 222);">
+    <div class="col-lg-3 border-start border-dark" style="height: 84vh;">
 
         <div class="p-1">
             <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">

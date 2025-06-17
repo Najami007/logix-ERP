@@ -35,7 +35,8 @@
 
         <div class="col-lg-3 pb-2" *ngIf="crudList.r">
           
-            <button class="btn-rpt-success col-lg-4  me-1" (click)="getReport('')">Get Report</button>
+            <button class="btn-rpt-success col-lg-4  me-1" (click)="getReport('Detail')">Get Report</button>
+             <button class="btn-rpt-success col-lg-4  me-1" (click)="getReport('Summary')">Get Summary</button>
             <button class="btn-rpt-primary col-lg-1" (click)="print()">Print</button>
         </div>
    
@@ -115,6 +116,41 @@
 
           
         </table>
+
+         <table class="table table-logix" id="summaryTable">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Date</th>
+                    <th>Pur Total</th>
+                    <th >Sale Total</th>
+                    <th>Difference</th>
+
+                </tr>
+
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of DetailList index as index">
+                    <td class="text-center">{{index + 1}}</td>
+                    <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
+                    <td class="text-end">{{item.purTotal - item.purRTotal |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.saleTotal - item.saleRTotal |number:'1.0-0'}}</td>
+                    <td class="text-end">{{(item.purTotal - item.purRTotal) - (item.saleTotal - item.saleRTotal) |number:'1.0-0'}}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <th class="text-end">{{purchaseTotal|number:'1.0-0'}}</th>
+                    <th class="text-end">{{saleTotal|number:'1.0-0'}}</th>
+                    <th class="text-end">{{purchaseTotal - saleTotal |number:'1.0-0'}}</th>
+                </tr>
+            </tbody>
+          
+
+          
+        </table>
+
+
 
     
 

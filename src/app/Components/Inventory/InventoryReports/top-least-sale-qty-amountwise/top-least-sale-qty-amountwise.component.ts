@@ -71,6 +71,12 @@ export class TopLeastSaleQtyAmountwiseComponent {
     this.http.get(environment.mainApi+this.global.inventoryLink+'RptTopLeastSaleQtyAndAmountWise_1?reqType='+type+'&FromDate='+
     this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response:any)=>{
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+                this.app.stopLoaderDark();
+              return;
+              
+            }
         this.reportDataList = Response;
        
         this.qtyTotal = 0;

@@ -116,6 +116,12 @@ export class SaleReportBookerwiseComponent implements OnInit {
       this.http.get(environment.mainApi+this.global.inventoryLink + 'GetSaleDetailBookerDateWise?reqUID='+this.userID+'&FromDate='+
       this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime+'&BookerID='+this.bookerID).subscribe(
         (Response: any) => {
+              if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+                this.app.stopLoaderDark();
+              return;
+              
+            }
           this.DetailList = Response;
           this.saleGrandTotal = 0;
           this.profitTotal = 0;
@@ -143,6 +149,12 @@ export class SaleReportBookerwiseComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleSummaryBookerDateWise?reqUID='+this.userID+'&FromDate='+
       this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime+'&BookerID='+this.bookerID).subscribe(
         (Response: any) => {
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+                this.app.stopLoaderDark();
+              return;
+              
+            }
          
           this.saleSummaryList = Response.filter((e:any)=> e.invType == 'S');
           this.saleRtnSummaryList = Response.filter((e:any)=> e.invType == 'SR');

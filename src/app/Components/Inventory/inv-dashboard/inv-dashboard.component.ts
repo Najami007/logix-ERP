@@ -13,12 +13,13 @@ import { environment } from 'src/environments/environment.development';
 export class InvDashboardComponent {
 
 
-  constructor(private globalData :GlobalDataModule,
-    private http:HttpClient,
+  constructor(private globalData: GlobalDataModule,
+    private http: HttpClient,
 
-){
+  ) {
 
-}
+  }
+
 
   swingSale_pie_chart: Chart | undefined;
   monthly_Sale_Chart: Chart | undefined;
@@ -26,30 +27,32 @@ export class InvDashboardComponent {
 
 
   ngOnInit(): void {
- 
+
     this.globalData.setHeaderTitle('DashBoard');
-  
-    this.getSwingSale();
-    this.barChart();
+
+    this.getsubCategorySale();
+    this.GetSalePurchaseData();
+    
     this.getCardsData();
     this.getMonthlySales();
-    this.getActiveTickets();
-  
-   //this.getbudgetChart();
-   
-  
+
+    //this.getbudgetChart();
+
+
   }
 
-  cardDataList:any =[{totalSale:0,totalPurchase:0,totalItems:0,totalAmount:0,productTitle:''}];
- 
+MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-  getCardsData(){
-    this.http.get(environment.mainApi+this.globalData.inventoryLink+'GetTotals').subscribe(
-      (Response:any)=>{
-        if(Response != ''){
+  cardDataList: any = [{ totalSale: 0, totalPurchase: 0, totalItems: 0, totalAmount: 0, productTitle: '' }];
+
+
+  getCardsData() {
+    this.http.get(environment.mainApi + this.globalData.inventoryLink + 'GetTotals').subscribe(
+      (Response: any) => {
+        if (Response != '') {
           this.cardDataList = Response;
         }
-      
+
       }
     )
   }
@@ -60,19 +63,19 @@ export class InvDashboardComponent {
   ///////////////////////////////////////////////////////////////////
 
 
-  dayList:any =[];
-  saleList:any = [];
+  dayList: any = [];
+  saleList: any = [];
 
-  getMonthlySales(){
-    this.http.get(environment.mainApi+this.globalData.inventoryLink+'GetSoldInvoicesQty').subscribe(
-      (Response:any)=>{
-        Response.forEach((e:any) => {
+  getMonthlySales() {
+    this.http.get(environment.mainApi + this.globalData.inventoryLink + 'GetSoldInvoicesQty').subscribe(
+      (Response: any) => {
+        Response.forEach((e: any) => {
           this.dayList.push(e.day);
-          this.saleList.push(e.saleQty )
+          this.saleList.push(e.saleQty)
         });
-        
+
         this.monthlySale();
-        
+
       }
     )
   }
@@ -84,17 +87,17 @@ export class InvDashboardComponent {
         type: 'line',
       },
       title: {
-        text: 'Analysis Sale Invoices (Current Month)',
+        text: 'ANALYSIS SALE INVOICES (CURRENT MONTH)',
       },
       subtitle: {
         text: '',
       },
       xAxis: {
-        categories:this.dayList,
+        categories: this.dayList,
       },
       yAxis: {
         title: {
-          text: 'Daily Sold Invoices Quantity ',
+          text: 'DAILY SOLD INVOICES QUANTITY ',
         },
       },
       plotOptions: {
@@ -107,7 +110,8 @@ export class InvDashboardComponent {
       },
       series: [
         {
-          name: 'Sale Invoices',
+          color:'',
+          name: 'SALE INVOICES',
           type: 'line',
           data: this.saleList,
         },
@@ -118,8 +122,46 @@ export class InvDashboardComponent {
 
   ///////////////////////////////////////////////////////////
 
+  salePurchaseMonthList: any = [];
+  saleAmountList: any = [];
+  purchaseAmountList: any = [];
+
+  GetSalePurchaseData() {
+    this.http.get(environment.mainApi + this.globalData.inventoryLink + 'GetSalePurchaseData').subscribe(
+      (Response: any) => {
+        console.log(Response);
+        this.saleAmountList = [];
+        this.purchaseAmountList = [];
+        this.salePurchaseMonthList = [];
+        if (Response.length > 0) {
+          Response.forEach((e: any) => {
+            if (e.invType == 'S') {
+              this.saleAmountList.push(Math.round(e.amount));
+            }
+            if (e.invType == 'P') {
+              this.purchaseAmountList.push(Math.round(e.amount))
+            }
+
+          });
+           var monthList = this.globalData.filterUniqueValuesByKey(Response, 'month');
+          monthList.forEach((e: any) => {
+            this.salePurchaseMonthList.push(this.MonthNameList[e.month - 1]);
+          })
+        
+        }
+
+
+        this.barChart();
+      }
+
+       
+    )
+  }
+
+
+
   barChart() {
-    let chart =new Chart({
+    let chart = new Chart({
       chart: {
         type: 'column',
       },
@@ -127,107 +169,109 @@ export class InvDashboardComponent {
         text: 'SALE VS PURCHASE',
       },
       subtitle: {
-        text: 'LAST 12 Months',
+        text: 'LAST 12 MONTHS',
       },
       xAxis: {
-        categories: ['a','b','c','d'],
+        categories: this.salePurchaseMonthList,
         crosshair: true,
       },
       yAxis: {
-      min: 0,
-      title: {
-        text: 'Amount',
+        min: 0,
+        title: {
+          text: 'AMOUNT',
+        },
       },
-    },
-    tooltip: {
-      headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-      pointFormat:
-        '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-        '<td style="padding:0"><b>{point.y:.1f} Rs</b></td></tr>',
-      footerFormat: '</table>',
-      shared: true,
-      useHTML: true,
-    },
-    plotOptions: {
-      column: {
-        pointPadding: 0.2,
-        borderWidth: 0,
+      tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat:
+          '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+          '<td style="padding:0"><b>{point.y:.1f} Rs</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true,
       },
-    },
-    series: [
-      {
-        name: 'Sale',
-        type: 'column',
-        
-        
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0,
+        },
+      },
+      series: [
+        {
+          color:'#FFC107',
+          name: 'SALE',
+          type: 'column',
 
-        data: [4000,2000,3000,2000],
-      },
-      {
-        name: 'Purchase',
-        type: 'column',
-       
-        data: [50000,2000,30000,20000],
-      },
-    ],
-  });
+
+
+          data: this.saleAmountList,
+        },
+        {
+          color:'#DC3545',
+          name: 'PURCHASE',
+          type: 'column',
+
+          data: this.purchaseAmountList,
+        },
+      ],
+    });
     this.monthly_Bar_Chart = chart;
   }
 
 
   ////////////////////////////////////////////////////////////
 
-  
-  swingsList:any = [];
-  swingSaleAmountList:any = [];
 
-  getSwingSale(){
-    this.http.get(environment.mainApi+this.globalData.parkLink+'GetSwingQtyTotal').subscribe(
-      (Response:any)=>{
+  subCategoryList: any = [];
+  subCatSaleAmountList: any = [];
 
-
-        Response.forEach((e:any) => {
-          this.swingsList.push(e.swingTitle);
-          var tmpArry:any = [];
-            tmpArry.push(e.swingTitle, e.ticketQuantity, false,false);
-          this.swingSaleAmountList.push(tmpArry)
+  getsubCategorySale() {
+    this.http.get(environment.mainApi + this.globalData.inventoryLink + 'GetSubCatTotals').subscribe(
+      (Response: any) => {
+      if(Response.length > 0  ){
+          Response.forEach((e: any) => {
+          this.subCategoryList.push(e.catTitle);
+          var tmpArry: any = [];
+          tmpArry.push(e.catTitle, Math.round(e.amount), false, false);
+          this.subCatSaleAmountList.push(tmpArry)
         });
-        
-        this.swingSaleChart();
-    
+      }
+
+        this.subCatSaleChart();
+
       }
     )
   }
 
 
-  swingSaleChart() {
+  subCatSaleChart() {
     let chart = new Chart({
       chart: {
         styledMode: false,
       },
 
       title: {
-        text: 'Sale Analysis',
+        text: 'SALE ANALYSIS (SUBCATEGORY)',
       },
 
       xAxis: {
-        categories: this.swingsList,
+        categories: this.subCategoryList,
       },
       tooltip: {
-               headerFormat: '<span style = "font-size:10px">{point.key}</span><table>',
-                  pointFormat: '<tr><td style = "color:{series.color};padding:0">QTY: </td>' +
-                  '<td style = "padding:0"><b>{point.y}</b></td></tr>',
-                  footerFormat: '</table>',
-               shared: true,
-               useHTML: true
-            },
+        headerFormat: '<span style = "font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style = "color:{series.color};padding:0"> </td>' +
+          '<td style = "padding:0"><b>{point.y}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      },
 
       series: [
         {
           type: 'pie',
           allowPointSelect: true,
           keys: ['name', 'y', 'selected', 'sliced'],
-          data: this.swingSaleAmountList,
+          data: this.subCatSaleAmountList,
           showInLegend: true,
         },
       ],
@@ -236,17 +280,6 @@ export class InvDashboardComponent {
   }
 
 
-  /////////////////////////////////////////////////////////////////
-
-  activeMemberList:any = [];
-  getActiveTickets(){
-    this.http.get(environment.mainApi+this.globalData.parkLink+'GetActiveSwingQtyTotal').subscribe(
-      (Response:any) =>{
-        this.activeMemberList = Response;
-    
-      }
-    )
-  }
 
 
 }

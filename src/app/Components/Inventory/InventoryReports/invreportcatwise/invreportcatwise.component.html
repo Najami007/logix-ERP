@@ -1,149 +1,165 @@
 <div class="body ">
 
 
-    <div class="ps-1 d-flex  pt-2  border-bottom" >
+    <div class="ps-1 pt-2  border-bottom">
 
-        <mat-form-field appearance="outline" class="col-lg-6 matSmall">
-            <mat-label>Report Type</mat-label>
-            <mat-select [(ngModel)]="reportType" (selectionChange)="emptyField()" >
-                <mat-option *ngFor="let item of reportTypeList index as index" [value]="item.val">{{index+1}} - {{item.title}}</mat-option>
-            </mat-select>
-        </mat-form-field>
+        <div class="row  col-md-12 justify-content-center">
+            <div class="col-md-8">
+                 <mat-form-field class="col-md-6 pe-1 matSmall" appearance="outline">
+            <mat-label><u>S</u>earch...</mat-label>
+            <input matInput #InvSearch accesskey="s" />
+             </mat-form-field>
+                <mat-form-field appearance="outline" class=" matSmall col-md-6">
+                <mat-label>Report Type</mat-label>
+                <mat-select [(ngModel)]="reportType" (selectionChange)="emptyField()">
+                    <mat-option *ngFor="let item of reportTypeList index as index" [value]="item.val">{{index+1}} -
+                        {{item.title}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            </div>
+          <div class="col-md-2">
+              <button class="btn-rpt-success me-1" (click)="openDialog()">Get Report</button>
+              <button  class="btn-rpt-primary " (click)="print()">Print</button>
+          </div>
+      
 
+        </div>
+        <div class="col-md-12 d-flex flex-wrap justify-content-center">
 
-       <div class="col-lg-6 ms-1 ">
-        <button    class="btn-rpt-success" (click)="openDialog()">Get Report</button>
+            <mat-radio-group [(ngModel)]="filterID" (change)="filterReport()">
+                <mat-radio-button *ngFor="let item of filterList" [value]="item.id">{{item.title}}</mat-radio-button>
+            </mat-radio-group>
 
-        <mat-radio-group [(ngModel)]="filterID" (change)="filterReport()">
-            <mat-radio-button *ngFor="let item of filterList" [value]="item.id">{{item.title}}</mat-radio-button>
-        </mat-radio-group>
-        <!-- <mat-checkbox [(ngModel)]="minusOnly">Minus Only</mat-checkbox>
-        <mat-checkbox [(ngModel)]="hideZero">Hide Zero</mat-checkbox>
-        <mat-checkbox [(ngModel)]="zeroOnly">Zero Only</mat-checkbox> -->
-
-       </div>
+            <div *ngIf="roleTypeID < 3">
+                <mat-checkbox [(ngModel)]="hideCost">Show Cost</mat-checkbox>
+                <mat-checkbox [(ngModel)]="hideAvg">Show Avg</mat-checkbox>
+                <mat-checkbox [(ngModel)]="hideSale">Show Sale</mat-checkbox>
+            </div>
+        </div>
 
 
     </div>
     <div class="p-1 d-flex justify-content-between">
-        <mat-form-field class="col-lg-11 pe-1 matSmall" appearance="outline">
-            <mat-label><u>S</u>earch...</mat-label>
-            <input matInput #InvSearch accesskey="s" />
-        </mat-form-field>
-        <div class="col-lg-1 ">
-            <button mat-mini-fab class=" " color="primary" (click)="print()"><mat-icon>print</mat-icon></button>
-        </div>
-    </div>
-    
-
-        <div >
-
        
-              <!------------------- Print Area ---------------------- -->
-              <div id="printRpt" class=" printDiv" >
+    
+    </div>
 
 
-                <!-------------------------    Top Logo Section -------------------->
-               <div class="hide">
+    <div>
+
+
+        <!------------------- Print Area ---------------------- -->
+        <div id="printRpt" class=" printDiv">
+
+
+            <!-------------------------    Top Logo Section -------------------->
+            <div class="hide">
                 <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
                     <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
-                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
+                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset=""
+                            [height]="item.logo1Height" [width]="item.logo1Width">
                     </span>
-                    <span >
-                        
-    
+                    <span>
+
+
                         <h1 class="companyName">{{item.companyName}}</h1>
-                        
-    
-                        <p class="rptTitle" style="margin-top:-20px">Inventory Report  </p>
+
+
+                        <p class="rptTitle" style="margin-top:-20px">Inventory Report </p>
                         <p style="margin-top:-20px" class="fw-bold">({{Title}})</p>
                     </span>
                     <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
-                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                            height="{{item.logo2Height}}" width="{{item.logo2Width}}">
                     </span>
-            
-            
+
+
                 </div>
-               </div>
-               <hr class="hide">
-                <table class="table table-logix hide">
-    
-                    <thead >
-                        <tr class="text-center">
-                            <th>S#</th>
-                            <th >Barcode</th>
-                            <th >Product Title</th>
-                             <!-- <th >In</th>
-                            <th >Out</th> -->
-                        
-                            <th >Balance</th>
-                            <th >Cost Price</th>
-                            <th>Avg Cost Price</th>
-                            <th >Sale Price</th>
-                           
-                            <th>Cost Total</th>
-                            <th>Avg Cost Total</th>
-                            <th>Sale Total  </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of inventoryList|filter:InvSearch.value index as index" [ngClass]="(item.qtyIn - item.qtyOut)< 0 ?'fw-bold':''">
-                            <td class="text-center">{{index+1}}</td>
-                            <td>{{item.barcode}}</td>
-                            <td>{{item.productTitle}}</td>
-                            <!-- <td class="text-center">{{item.qtyIn}}</td>
-                            <td class="text-center">{{item.qtyOut}}</td> -->
-                            <td class="text-center">{{item.qtyIn - item.qtyOut|number:'1.0-3'}}</td>
-                            <td class="text-end">{{item.costPrice |number:'1.0-3'}}</td>
-                            <td class="text-end">{{item.avgCostPrice|number:'1.0-3'}}</td>
-                            <td class="text-end">{{item.salePrice|number:'1.0-3'}}</td>
-                           
-                            <td class="text-end">{{item.costPrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>
-                            <td class="text-end">{{item.avgCostPrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>
-                            <td class="text-end">{{item.salePrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="6"></td>
-                            <td class="text-center fw-bold">{{balanceQtyTotal |number:'1.0-3'}}</td>
-                            <td class="text-end fw-bold">{{costTotal |number:'1.0-3'}}</td>
-                            <td class="text-end fw-bold">{{avgCostTotal |number:'1.0-3'}}</td>
-                            <td class="text-end fw-bold">{{saleTotal |number:'1.0-3'}}</td>
-                        </tr>
-                      
-                      
-    
-    
-                    </tbody>
-                    
-                </table>
-
             </div>
+            <hr class="hide">
+            <table class="table table-logix hide">
 
-
-
-         <div class="p-1">
-            <div class="text-center ">
-                <h3 style="font-family:Verdana, Geneva, Tahoma, sans-serif;">Inventory Report</h3>
-                <p style="font-family:Verdana, Geneva, Tahoma, sans-serif;margin-top: -20px;"><strong>{{Title}}</strong></p>
-            </div>
-            <table class="table table-logix">
-    
-                <thead >
+                <thead>
                     <tr class="text-center">
                         <th>S#</th>
-                        <th >Barcode</th>
-                        <th >Product Title</th>
-                         <!-- <th >In</th>
-                        <th >Out</th> -->
-                        <th >Avl Qty</th>
-                       
-                        <th >Cost Price</th>
-                        <th>Avg Cost Price</th>
-                        <th >Sale Price</th>
-                       
-                        <th>Cost Total</th>
-                        <th>Avg Cost Total</th>
-                        <th>Sale Total  </th>
+                        <th>Barcode</th>
+                        <th>Product Title</th>
+                        <!-- <th >In</th>
+                            <th >Out</th> -->
+
+                        <th>Balance</th>
+                        <th *ngIf="hideCost">Cost Price</th>
+                        <th *ngIf="hideAvg">Avg Cost Price</th>
+                        <th *ngIf="hideSale">Sale Price</th>
+
+                        <th *ngIf="hideCost">Cost Total</th>
+                        <th *ngIf="hideAvg">Avg Cost Total</th>
+                        <th *ngIf="hideSale">Sale Total </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of inventoryList|filter:InvSearch.value index as index"
+                        [ngClass]="(item.qtyIn - item.qtyOut)< 0 ?'fw-bold':''">
+                        <td class="text-center">{{index+1}}</td>
+                        <td>{{item.barcode}}</td>
+                        <td>{{item.productTitle}}</td>
+                        <!-- <td class="text-center">{{item.qtyIn}}</td>
+                            <td class="text-center">{{item.qtyOut}}</td> -->
+                        <td class="text-center">{{item.qtyIn - item.qtyOut|number:'1.0-3'}}</td>
+                        <td *ngIf="hideCost" class="text-end">{{item.costPrice |number:'1.0-3'}}</td>
+                        <td *ngIf="hideAvg" class="text-end">{{item.avgCostPrice|number:'1.0-3'}}</td>
+                        <td *ngIf="hideSale" class="text-end">{{item.salePrice|number:'1.0-3'}}</td>
+
+                        <td *ngIf="hideCost" class="text-end">{{item.costPrice * (item.qtyIn -
+                            item.qtyOut)|number:'1.0-3'}}</td>
+                        <td *ngIf="hideAvg" class="text-end">{{item.avgCostPrice * (item.qtyIn -
+                            item.qtyOut)|number:'1.0-3'}}</td>
+                        <td *ngIf="hideSale" class="text-end">{{item.salePrice * (item.qtyIn -
+                            item.qtyOut)|number:'1.0-3'}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <td class="text-center fw-bold">{{balanceQtyTotal |number:'1.0-3'}}</td>
+                        <td *ngIf="hideCost" class="text-end fw-bold">{{costTotal |number:'1.0-3'}}</td>
+                        <td *ngIf="hideAvg" class="text-end fw-bold">{{avgCostTotal |number:'1.0-3'}}</td>
+                        <td *ngIf="hideSale" class="text-end fw-bold">{{saleTotal |number:'1.0-3'}}</td>
+                    </tr>
+
+
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+
+        <div class="p-1">
+            <div class="text-center ">
+                <h3 style="font-family:Verdana, Geneva, Tahoma, sans-serif;">Inventory Report</h3>
+                <p style="font-family:Verdana, Geneva, Tahoma, sans-serif;margin-top: -20px;"><strong>{{Title}}</strong>
+                </p>
+            </div>
+            <table class="table table-logix">
+
+                <thead>
+                    <tr class="text-center">
+                        <th>S#</th>
+                        <th>Barcode</th>
+                        <th>Product Title</th>
+                        <!-- <th >In</th>
+                            <th >Out</th> -->
+
+                        <th>Balance</th>
+                        <th *ngIf="hideCost">Cost Price</th>
+                        <th *ngIf="hideAvg">Avg Cost Price</th>
+                        <th *ngIf="hideSale">Sale Price</th>
+
+                        <th *ngIf="hideCost">Cost Total</th>
+                        <th *ngIf="hideAvg">Avg Cost Total</th>
+                        <th *ngIf="hideSale">Sale Total </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -156,50 +172,49 @@
                         <td>{{item.barcode}}</td>
                         <td>{{item.productTitle}}</td>
                         <!-- <td class="text-center">{{item.qtyIn}}</td>
-                        <td class="text-center">{{item.qtyOut}}</td> -->
-                        <td class="text-center" >{{item.qtyIn - item.qtyOut |number:'1.0-3'}}</td>
-                        <td class="text-end">{{item.costPrice |number:'1.0-3'}}</td>
-                        <td class="text-end">{{item.avgCostPrice|number:'1.0-3'}}</td>
-                        <td class="text-end">{{item.salePrice|number:'1.0-3'}}</td>
-                        
-                        <td class="text-end">{{item.costPrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>
-                        <td class="text-end">{{item.avgCostPrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>
-                        <td class="text-end">{{item.salePrice * (item.qtyIn - item.qtyOut)|number:'1.0-3'}}</td>
+                            <td class="text-center">{{item.qtyOut}}</td> -->
+                        <td class="text-center">{{item.qtyIn - item.qtyOut|number:'1.0-3'}}</td>
+                        <td *ngIf="hideCost" class="text-end">{{item.costPrice |number:'1.0-3'}}</td>
+                        <td *ngIf="hideAvg" class="text-end">{{item.avgCostPrice|number:'1.0-3'}}</td>
+                        <td *ngIf="hideSale" class="text-end">{{item.salePrice|number:'1.0-3'}}</td>
+
+                        <td *ngIf="hideCost" class="text-end">{{item.costPrice * (item.qtyIn -
+                            item.qtyOut)|number:'1.0-3'}}</td>
+                        <td *ngIf="hideAvg" class="text-end">{{item.avgCostPrice * (item.qtyIn -
+                            item.qtyOut)|number:'1.0-3'}}</td>
+                        <td *ngIf="hideSale" class="text-end">{{item.salePrice * (item.qtyIn -
+                            item.qtyOut)|number:'1.0-3'}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <td class="text-center fw-bold">{{balanceQtyTotal |number:'1.0-3'}}</td>
+                        <td *ngIf="hideCost" class="text-end fw-bold">{{costTotal |number:'1.0-3'}}</td>
+                        <td *ngIf="hideAvg" class="text-end fw-bold">{{avgCostTotal |number:'1.0-3'}}</td>
+                        <td *ngIf="hideSale" class="text-end fw-bold">{{saleTotal |number:'1.0-3'}}</td>
                     </tr>
 
-                    <tr>
-                        <td colspan="6"></td>
-                        <!-- <td class="text-center fw-bold">{{balanceQtyTotal |number:'1.0-3'}}</td> -->
-                        <td class="text-center fw-bold"></td>
-                        <td class="text-end fw-bold">{{costTotal |number:'1.0-3'}}</td>
-                        <td class="text-end fw-bold">{{avgCostTotal |number:'1.0-3'}}</td>
-                        <td class="text-end fw-bold">{{saleTotal |number:'1.0-3'}}</td>
-                    </tr>
-                  
 
 
                 </tbody>
-                
+
             </table>
 
-            <div class="d-flex" >
+            <div class="d-flex">
                 <!-- <mat-hint class="me-1 text-secondary">Total: ({{inventoryList.length || 0}})    </mat-hint> -->
-                <pagination-controls
-                previousLabel="Prev"
-                nextLabel="Next"
-                (pageChange)="onTableDataChange($event)"
-                ></pagination-controls>
-                
+                <pagination-controls previousLabel="Prev" nextLabel="Next"
+                    (pageChange)="onTableDataChange($event)"></pagination-controls>
+
 
                 <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
-                <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);" (change)="onTableSizeChange($event)">
+                <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);"
+                    (change)="onTableSizeChange($event)">
                     <option *ngFor=" let item of tableSizes">{{item}}</option>
                 </select>
-                
+
             </div>
-         </div>
-    
         </div>
+
+    </div>
 
 
 
@@ -209,65 +224,70 @@
 
 
 
-            <!---------------------------------- Modal Window for Credentials-------------------------->
-            <div class="modal fade" id="credential" tabindex="-1" data-bs-backdrop="static" aria-labelledby="credentialLabel" >
-                <div class="modal-dialog modal-dialog-centered  modal-l">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h2 class="modal-title text-uppercase" id="credentialLabel">Credentials</h2>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
-                    </div>
-                    <div class="modal-body">
-    
-                        <!-- <select appearance="outline" *ngIf="reportType == 'cw'|| reportType == 'scw'" >
+<!---------------------------------- Modal Window for Credentials-------------------------->
+<div class="modal fade" id="credential" tabindex="-1" data-bs-backdrop="static" aria-labelledby="credentialLabel">
+    <div class="modal-dialog modal-dialog-centered  modal-l">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title text-uppercase" id="credentialLabel">Credentials</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <!-- <select appearance="outline" *ngIf="reportType == 'cw'|| reportType == 'scw'" >
                             <option><ngx-mat-select-search   #cat [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></option>
                             <option *ngFor="let item of CategoriesList |filter:cat.value" value="{{item.categoryID}}">{{item.categoryTitle}}</option>
                         </select> -->
-    
-                        <mat-form-field appearance="outline" *ngIf="catFlag" class="w-100 cat matSmall">
-                            <mat-label>Category</mat-label>
-                            <mat-select [(ngModel)]="categoryID"  (selectionChange)="onSelection('cat',$event);getSubCategory()" >
-                            
-                                <mat-option *ngFor="let item of CategoriesList " [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
-                            </mat-select>
-                         </mat-form-field>
-    
-                         <mat-form-field appearance="outline" *ngIf="subCatFlag" class="w-100 subcat matSmall">
-                            <mat-label>Sub Category</mat-label>
-                            <mat-select [(ngModel)]="subCategoryID" (selectionChange)="onSelection('subcat',$event)">
-                                <mat-option *ngFor="let item of SubCategoriesList " [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
-                            </mat-select>
-                         </mat-form-field>
-                         <mat-form-field appearance="outline" class="w-100 brand matSmall" *ngIf="brandFlag">
-                            <mat-label>Brand</mat-label>
-                            <mat-select [(ngModel)]="brandID" (selectionChange)="onSelection('brand',$event)">
-                                <mat-option *ngFor="let item of BrandList " [value]="item.brandID">{{item.brandTitle}}</mat-option>
-                            </mat-select>
-                         </mat-form-field>
-                         <mat-form-field appearance="outline" class="w-100 type matSmall" *ngIf="typeFlag"> 
-                            <mat-label>Type</mat-label>
-                            <mat-select [(ngModel)]="typeID" (selectionChange)="onSelection('type',$event)">
-                                <mat-option *ngFor="let item of ProductTypeList " [value]="item.productTypeID">{{item.productTypeTitle}}</mat-option>
-                            </mat-select>
-                         </mat-form-field>
-        
-                     <mat-form-field appearance="outline" class="w-100 loc matSmall" *ngIf="locFlag">
-                        <mat-label>Location</mat-label>
-                        <mat-select [(ngModel)]="locationID" (selectionChange)="onSelection('location',$event)">
-                            <mat-option *ngFor="let item of locationList " [value]="item.locationID">{{item.locationTitle}}</mat-option>
-                        </mat-select>
-                     </mat-form-field>
-                       
-                
-                    </div>
-    
-                    <div class="modal-footer bg-mf">
-                        <button class="btnsave" data-bs-dismiss="modal" (click)="getReport()">Get Report</button>
-                        <button type="button" class="btnclose"  data-bs-dismiss="modal"  >Close </button>
-                      </div>
-                    
-                
-                  </div>
-                </div>
-              </div>
+
+                <mat-form-field appearance="outline" *ngIf="catFlag" class="w-100 cat matSmall">
+                    <mat-label>Category</mat-label>
+                    <mat-select [(ngModel)]="categoryID" (selectionChange)="onSelection('cat',$event);getSubCategory()">
+
+                        <mat-option *ngFor="let item of CategoriesList "
+                            [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" *ngIf="subCatFlag" class="w-100 subcat matSmall">
+                    <mat-label>Sub Category</mat-label>
+                    <mat-select [(ngModel)]="subCategoryID" (selectionChange)="onSelection('subcat',$event)">
+                        <mat-option *ngFor="let item of SubCategoriesList "
+                            [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-100 brand matSmall" *ngIf="brandFlag">
+                    <mat-label>Brand</mat-label>
+                    <mat-select [(ngModel)]="brandID" (selectionChange)="onSelection('brand',$event)">
+                        <mat-option *ngFor="let item of BrandList "
+                            [value]="item.brandID">{{item.brandTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-100 type matSmall" *ngIf="typeFlag">
+                    <mat-label>Type</mat-label>
+                    <mat-select [(ngModel)]="typeID" (selectionChange)="onSelection('type',$event)">
+                        <mat-option *ngFor="let item of ProductTypeList "
+                            [value]="item.productTypeID">{{item.productTypeTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="w-100 loc matSmall" *ngIf="locFlag">
+                    <mat-label>Location</mat-label>
+                    <mat-select [(ngModel)]="locationID" (selectionChange)="onSelection('location',$event)">
+                        <mat-option *ngFor="let item of locationList "
+                            [value]="item.locationID">{{item.locationTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+            </div>
+
+            <div class="modal-footer bg-mf">
+                <button class="btnsave" data-bs-dismiss="modal" (click)="getReport()">Get Report</button>
+                <button type="button" class="btnclose" data-bs-dismiss="modal">Close </button>
+            </div>
+
+
+        </div>
+    </div>
+</div>

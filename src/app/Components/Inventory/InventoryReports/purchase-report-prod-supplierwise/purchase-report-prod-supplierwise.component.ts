@@ -98,13 +98,13 @@ export class PurchaseReportProdSupplierwiseComponent implements OnInit {
 
   getSupplier() {
     this.global.getSupplierList().subscribe((data: any) => {
-     if(data.length > 0){
-       this.supplierList = data.map((e: any, index: any) => {
-        (e.indexNo = index + 1);
-        return e;
-      });
-      this.supplierList.sort((a: any, b: any) => b.indexNo - a.indexNo);
-     }
+      if (data.length > 0) {
+        this.supplierList = data.map((e: any, index: any) => {
+          (e.indexNo = index + 1);
+          return e;
+        });
+        this.supplierList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+      }
     });
 
   }
@@ -112,7 +112,7 @@ export class PurchaseReportProdSupplierwiseComponent implements OnInit {
 
   onSupplierSelected() {
     this.partyName = this.supplierList.find((e: any) => e.partyID == this.partyID).partyName;
-     var index = this.supplierList.findIndex((e: any) => e.partyID == this.partyID);
+    var index = this.supplierList.findIndex((e: any) => e.partyID == this.partyID);
     this.supplierList[index].indexNo = this.supplierList[0].indexNo + 1;
     this.supplierList.sort((a: any, b: any) => b.indexNo - a.indexNo);
 
@@ -140,12 +140,17 @@ export class PurchaseReportProdSupplierwiseComponent implements OnInit {
     else {
 
 
-
+      this.app.startLoaderDark();
       this.reportType = 'Detail';
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseRptProductAndSupplierWise_6?reqUserID=' + this.userID + '&reqPartyID=' + this.partyID +
         '&reqProductID=' + this.productID + '&FromDate=' + this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
-
+             if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+                this.app.stopLoaderDark();
+              return;
+              
+            }
             this.DetailList = Response;
             this.grandTotal = 0;
             Response.forEach((e: any) => {
@@ -159,6 +164,11 @@ export class PurchaseReportProdSupplierwiseComponent implements OnInit {
 
             });
 
+            this.app.stopLoaderDark();
+
+          },
+          (Error: any) => {
+            this.app.stopLoaderDark();
           }
         )
 

@@ -140,10 +140,8 @@
                     <td></td>
                 </tr>
             </tbody>
-          
-
-          
         </table>
+     
 
         <table class="table table-logix" id="summaryTable">
             <thead>
@@ -164,7 +162,7 @@
 
             </thead>
             <tbody>
-                <tr *ngFor="let item of summaryList index as index">
+                <tr *ngFor="let item of DetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
                     <td [ngClass]="item.invType == 'PR' ? 'text-danger' : ''" class="text-center">{{item.invBillNo}}</td>
                     <td>{{item.invDate |date:'dd-MM-yyyy'}}</td>
@@ -186,10 +184,6 @@
 
           
         </table>
-
-
-
-
 
 
     </div>

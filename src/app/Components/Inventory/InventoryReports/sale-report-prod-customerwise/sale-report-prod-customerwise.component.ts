@@ -113,7 +113,7 @@ export class SaleReportProdCustomerwiseComponent implements OnInit {
 
   onPartySelected() {
     this.partyName = this.partyList.find((e: any) => e.partyID == this.partyID).partyName;
-     var index = this.partyList.findIndex((e: any) => e.partyID == this.partyID);
+    var index = this.partyList.findIndex((e: any) => e.partyID == this.partyID);
     this.partyList[index].indexNo = this.partyList[0].indexNo + 1;
     this.partyList.sort((a: any, b: any) => b.indexNo - a.indexNo);
 
@@ -148,6 +148,12 @@ export class SaleReportProdCustomerwiseComponent implements OnInit {
         '&FromDate=' + this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') +
         '&fromtime=' + this.fromTime + '&totime=' + this.toTime + '&PartyID=' + this.partyID + '&ProductID=' + this.productID).subscribe(
           (Response: any) => {
+             if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+                this.app.stopLoaderDark();
+              return;
+              
+            }
             this.DetailList = Response;
             this.grandTotal = 0;
             this.profitTotal = 0;

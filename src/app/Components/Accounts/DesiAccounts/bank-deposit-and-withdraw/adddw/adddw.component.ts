@@ -28,6 +28,7 @@ export class AdddwComponent implements OnInit {
     }, 500);
     this.getCashList();
     this.getBankList();
+    this.getRefCoaList();
 
     if (this.editData) {
       this.invoiceNo = this.editData.invoiceNo;
@@ -78,6 +79,34 @@ export class AdddwComponent implements OnInit {
   cashHeadList: any = [];
   BankList: any = []
   ////////////////////////////////////////////
+
+
+  getRefCoaList() {
+
+
+
+    this.global.getCashBankCoa('CRV').subscribe(
+      (Response: any) => {
+        Response.forEach((e: any) => {
+          this.refCoaList.push(e);
+        });
+        if (this.invoiceNo == '' && Response.length > 0) {
+          this.coaID = this.refCoaList[0].coaID;
+        }
+      }
+    )
+
+    this.global.getCashBankCoa('BRV').subscribe(
+      (Response: any) => {
+        Response.forEach((e: any) => {
+          this.refCoaList.push(e);
+        });
+
+      }
+    )
+
+
+  }
 
   getBankList() {
     this.global.getCashBankCoa('BRV').subscribe(

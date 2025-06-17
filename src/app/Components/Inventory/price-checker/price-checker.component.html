@@ -1,40 +1,29 @@
-<div  style="background-color: rgb(10, 10, 10);height: 100%;" > 
-    <!-- <div class="w-100" style="background-color: orange;height: 200px;">
+<div style="background-color: rgb(10, 10, 10);height: 100vh;">
+    <div class="d-flex flex-column justify-content-center ">
 
-    </div> -->
+        <div class="text-center justify-content-between ">
 
-    <!-- <div  class="p-5  mt-5 justify-content-between" style="position: absolute;">
-        <img src="../../../../assets/Images/logo-logix.png" style="opacity: 0.05;" alt=""  width="500px">
-        <img src="../../../../assets/Images/logo-logix.png" style="opacity: 0.05;" alt=""  width="500px">
-        <img src="../../../../assets/Images/logo-logix.png" style="opacity: 0.05;" alt=""  width="500px">
-        <img src="../../../../assets/Images/logo-logix.png" style="opacity: 0.05;" alt=""  width="500px">
-        <img src="../../../../assets/Images/logo-logix.png" style="opacity: 0.05;" alt=""  width="500px">
-        <img src="../../../../assets/Images/logo-logix.png" style="opacity: 0.05;" alt=""  width="500px">
-    </div> -->
-  <div class="d-flex flex-column justify-content-center p-5" >
 
-    <div class="text-center justify-content-between p-5">
-   
+            <div style="margin-bottom: 120px;margin-top: 200px;">
+                <h1 style="font-size: 80px;color: orange;margin-bottom: 80px !important;"><b>{{productName}}</b></h1>
+                <h1 style="font-size: 100px;color: orange;"><b>{{productPrice}}</b></h1>
+            </div>
 
-        <div style="margin-bottom: 120px;margin-top: 200px;">
-            <h1  style="font-size: 80px;color: orange;margin-bottom: 80px !important;"><b>{{productName}}</b></h1>
-        <h1  style="font-size: 100px;color: orange;" ><b >{{productPrice}}</b></h1>
+
+
         </div>
 
 
-     
     </div>
-    
- 
-  </div>
 
-  
-   
-  </div>
 
-  <div class="w-100 p-2 text-center " style="position: fixed;bottom: 80px;background-color: black;">
-    
-        <input id="barcode" class="col-lg-11" style="background-color: white;height: 80px;font-size: 40px;border-radius: 10px;"
-         autofocus matInput [(ngModel)]="barcode" (keydown)="seacrhBarcode($event)" placeholder="Search Barcode" />
+
+</div>
+
+<div class="w-100 p-2 text-center " style="position: fixed;bottom: 80px;background-color: black;">
+
+    <input id="barcode" class="col-lg-11"
+        style="background-color: white;height: 80px;font-size: 40px;border-radius: 10px;" autofocus matInput
+        [(ngModel)]="barcode" (keydown)="seacrhBarcode($event)" placeholder="Search Barcode" />
 
 </div>

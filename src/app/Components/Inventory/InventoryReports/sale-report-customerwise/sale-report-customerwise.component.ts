@@ -18,17 +18,17 @@ import { SaleBillPrintComponent } from '../../Sale/SaleComFiles/sale-bill-print/
 })
 export class SaleReportCustomerwiseComponent implements OnInit {
 
-  @ViewChild(SaleBillPrintComponent)  billPrint:any;
+  @ViewChild(SaleBillPrintComponent) billPrint: any;
 
   companyProfile: any = [];
-  crudList:any = {c:true,r:true,u:true,d:true};
+  crudList: any = { c: true, r: true, u: true, d: true };
   constructor(
     private http: HttpClient,
     private msg: NotificationService,
     private app: AppComponent,
     private global: GlobalDataModule,
     private route: Router,
-    private dialog:MatDialog
+    private dialog: MatDialog
 
   ) {
 
@@ -44,18 +44,20 @@ export class SaleReportCustomerwiseComponent implements OnInit {
     this.global.setHeaderTitle('Sale Report (Customerwise)');
     this.getUsers();
     this.getParty();
-    $('#detailTable').show();
+   setTimeout(() => {
+     $('#detailTable').show();
     $('#summaryTable').hide();
     $('#ledger').hide();
+   }, 200);
 
   }
 
 
   hideProfit = false;
   hideCost = false;
-  
 
-  partyList:any = [];
+
+  partyList: any = [];
   partyID = 0;
   partyName = '';
 
@@ -69,8 +71,8 @@ export class SaleReportCustomerwiseComponent implements OnInit {
   toTime: any = '23:59';
 
   DetailList: any = [];
-  saleSummaryList:any = [];
-  saleRtnSummaryList:any = [];
+  saleSummaryList: any = [];
+  saleRtnSummaryList: any = [];
   reportType: any;
 
 
@@ -82,8 +84,8 @@ export class SaleReportCustomerwiseComponent implements OnInit {
   }
 
 
-  getParty(){
-   this.global.getCustomerList().subscribe((data: any) => {
+  getParty() {
+    this.global.getCustomerList().subscribe((data: any) => {
       if (data.length > 0) {
         this.partyList = data.map((e: any, index: any) => {
           (e.indexNo = index + 1);
@@ -96,9 +98,9 @@ export class SaleReportCustomerwiseComponent implements OnInit {
 
   }
 
-   onPartySelected() {
+  onPartySelected() {
     this.partyName = this.partyList.find((e: any) => e.partyID == this.partyID).partyName;
-     var index = this.partyList.findIndex((e: any) => e.partyID == this.partyID);
+    var index = this.partyList.findIndex((e: any) => e.partyID == this.partyID);
     this.partyList[index].indexNo = this.partyList[0].indexNo + 1;
     this.partyList.sort((a: any, b: any) => b.indexNo - a.indexNo);
 
@@ -123,119 +125,134 @@ export class SaleReportCustomerwiseComponent implements OnInit {
   saleRtnDiscountTotal = 0;
   profitTotal = 0;
 
-  ledgerDetailList:any = [];
+  ledgerDetailList: any = [];
 
-  getReport(type:any) {
+  getReport(type: any) {
 
     // alert(this.recipeCatID);
-   
-  if(this.partyID == 0 || this.partyID == undefined){
-    this.msg.WarnNotify('Select Customer')
-  }else{
 
-    this.partyName = this.partyList.find((e:any)=> e.partyID == this.partyID).partyName;
+    if (this.partyID == 0 || this.partyID == undefined) {
+      this.msg.WarnNotify('Select Customer')
+    } else {
 
-    this.app.startLoaderDark();
-   if(type == 'detail'){
-    $('#detailTable').show();
-    $('#ledger').hide();
-    $('#summaryTable').hide();
-    this.reportType = 'Sale Detail';
-    this.http.get(environment.mainApi+this.global.inventoryLink + 'GetSaleDetailCustomerDateWise?reqUID='+this.userID+'&FromDate='+
-    this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime+'&PartyID='+this.partyID).subscribe(
-      (Response: any) => {
-       // console.log(Response);
-        this.DetailList = Response;
-        this.saleGrandTotal = 0;
-        this.profitTotal = 0;
-        Response.forEach((e:any) => {
-          if(e.invType == 'S'){
-            this.saleGrandTotal += (e.salePrice * e.quantity) - (e.discInR * e.quantity);
-            this.profitTotal += ((e.salePrice * e.quantity) - (e.discInR * e.quantity)) - (e.avgCostPrice * e.quantity);
-          }
+      this.partyName = this.partyList.find((e: any) => e.partyID == this.partyID).partyName;
 
-          if(e.invType == 'SR'){
-            this.saleGrandTotal -= (e.salePrice * e.quantity) - (e.discInR * e.quantity);
-            this.profitTotal -= ((e.salePrice * e.quantity) - (e.discInR * e.quantity)) - (e.avgCostPrice * e.quantity);
-          }
-          
-        });
-      this.app.stopLoaderDark();
+      this.app.startLoaderDark();
+      if (type == 'detail') {
+        $('#detailTable').show();
+        $('#ledger').hide();
+        $('#summaryTable').hide();
+        this.reportType = 'Sale Detail';
+        this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleDetailCustomerDateWise?reqUID=' + this.userID + '&FromDate=' +
+          this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + '&PartyID=' + this.partyID).subscribe(
+            (Response: any) => {
+                if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+                this.app.stopLoaderDark();
+              return;
+              
+            }
+              // console.log(Response);
+              this.DetailList = Response;
+              this.saleGrandTotal = 0;
+              this.profitTotal = 0;
+              Response.forEach((e: any) => {
+                if (e.invType == 'S') {
+                  this.saleGrandTotal += (e.salePrice * e.quantity) - (e.discInR * e.quantity);
+                  this.profitTotal += ((e.salePrice * e.quantity) - (e.discInR * e.quantity)) - (e.avgCostPrice * e.quantity);
+                }
+
+                if (e.invType == 'SR') {
+                  this.saleGrandTotal -= (e.salePrice * e.quantity) - (e.discInR * e.quantity);
+                  this.profitTotal -= ((e.salePrice * e.quantity) - (e.discInR * e.quantity)) - (e.avgCostPrice * e.quantity);
+                }
+
+              });
+              this.app.stopLoaderDark();
+            }
+          )
       }
-    )
-   }
 
-   if(type == 'summary'){
-    $('#detailTable').hide();
-    $('#ledger').hide();
+      if (type == 'summary') {
+        $('#detailTable').hide();
+        $('#ledger').hide();
         $('#summaryTable').show();
         this.reportType = 'Sale Summary';
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleSummaryCustomerDateWise?reqUID='+this.userID+'&FromDate='+
-    this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime+'&PartyID='+this.partyID).subscribe(
-      (Response: any) => {
-       
-        this.saleSummaryList = Response.filter((e:any)=> e.invType == 'S');
-        this.saleRtnSummaryList = Response.filter((e:any)=> e.invType == 'SR');
-        this.saleGrandTotal = 0;
-        this.saleBillTotal = 0;
-        this.saleDiscountTotal=0;
-        this.saleRtnGrandTotal = 0;
-        this.saleRtnBillTotal = 0;
-        this.saleRtnDiscountTotal=0;
-        Response.forEach((e:any) => {
-          if(e.invType == 'S'){
-            this.saleGrandTotal += e.total - e.billDiscount ;
-            this.saleBillTotal += e.total;
-            this.saleDiscountTotal += e.billDiscount;
-          }
-          if(e.invType == 'SR'){
-            this.saleRtnGrandTotal += e.total - e.billDiscount ;
-            this.saleRtnBillTotal += e.total;
-            this.saleRtnDiscountTotal += e.billDiscount;
-          }
-            
-        });
-        this.app.stopLoaderDark();
+        this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleSummaryCustomerDateWise?reqUID=' + this.userID + '&FromDate=' +
+          this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + '&PartyID=' + this.partyID).subscribe(
+            (Response: any) => {
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+                this.app.stopLoaderDark();
+              return;
+              
+            }
+              this.saleSummaryList = Response.filter((e: any) => e.invType == 'S');
+              this.saleRtnSummaryList = Response.filter((e: any) => e.invType == 'SR');
+              this.saleGrandTotal = 0;
+              this.saleBillTotal = 0;
+              this.saleDiscountTotal = 0;
+              this.saleRtnGrandTotal = 0;
+              this.saleRtnBillTotal = 0;
+              this.saleRtnDiscountTotal = 0;
+              Response.forEach((e: any) => {
+                if (e.invType == 'S') {
+                  this.saleGrandTotal += e.total - e.billDiscount;
+                  this.saleBillTotal += e.total;
+                  this.saleDiscountTotal += e.billDiscount;
+                }
+                if (e.invType == 'SR') {
+                  this.saleRtnGrandTotal += e.total - e.billDiscount;
+                  this.saleRtnBillTotal += e.total;
+                  this.saleRtnDiscountTotal += e.billDiscount;
+                }
 
+              });
+              this.app.stopLoaderDark();
+
+            }
+          )
       }
-    )
-   }
 
 
-   if(type == 'ledger'){
-    $('#detailTable').hide();
-    $('#summaryTable').hide();
-    $('#ledger').show();
-    this.reportType = ' Ledger';
-    this.http.get(environment.mainApi+this.global.inventoryLink + 'GetLedgerRpt_11?FromDate='+
-    this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime+'&PartyID='+this.partyID).subscribe(
-      (Response: any) => {
-        // console.log(Response);
-       this.ledgerDetailList = Response.map((e:any)=>{
-        if(e.billDetail != '-'){
-          (e.billDetailList = JSON.parse(e.billDetail));
-          
-        }
-        (e.invoiceDate = new Date(e.invoiceDate))
-        return e;
-       })
-       console.log(this.ledgerDetailList);
-             this.app.stopLoaderDark();
+      if (type == 'ledger') {
+        $('#detailTable').hide();
+        $('#summaryTable').hide();
+        $('#ledger').show();
+        this.reportType = ' Ledger';
+        this.http.get(environment.mainApi + this.global.inventoryLink + 'GetLedgerRpt_11?FromDate=' +
+          this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + '&PartyID=' + this.partyID).subscribe(
+            (Response: any) => {
+              if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+                this.app.stopLoaderDark();
+              return;
+              
+            }
+              this.ledgerDetailList = Response.map((e: any) => {
+                if (e.billDetail != '-') {
+                  (e.billDetailList = JSON.parse(e.billDetail));
+
+                }
+                (e.invoiceDate = new Date(e.invoiceDate))
+                return e;
+              })
+              this.app.stopLoaderDark();
+            }
+          )
       }
-    )
-   }
-    
+
+
+    }
+
+
+
 
   }
-    
 
 
-
-  }
-
-
-  sortTable(){
-    this.ledgerDetailList.sort((a: any, b: any)=> a.invoiceDate - b.invoiceDate)
+  sortTable() {
+    this.ledgerDetailList.sort((a: any, b: any) => a.invoiceDate - b.invoiceDate)
   }
 
 
@@ -243,24 +260,24 @@ export class SaleReportCustomerwiseComponent implements OnInit {
     this.global.printData('#PrintDiv')
   }
 
-  billDetails(item:any){
-    this.dialog.open(SaleBillDetailComponent,{
-      width:'50%',
-      data:item,
-      disableClose:true,
-    }).afterClosed().subscribe(value=>{
-      
+  billDetails(item: any) {
+    this.dialog.open(SaleBillDetailComponent, {
+      width: '50%',
+      data: item,
+      disableClose: true,
+    }).afterClosed().subscribe(value => {
+
     })
   }
 
-  printBill(item:any){
+  printBill(item: any) {
 
-    if(item.invType == 'S' || item.invType == 'SR'){
+    if (item.invType == 'S' || item.invType == 'SR') {
       this.billPrint.PrintBill(item.invBillNo);
-       this.billPrint.billType = 'Duplicate';
-  
+      this.billPrint.billType = 'Duplicate';
+
     }
-   }
+  }
 
 
 }
