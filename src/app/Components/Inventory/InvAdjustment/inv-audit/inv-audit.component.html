@@ -42,7 +42,7 @@
                             accesskey="">
                     </div>
                     <mat-checkbox class="mt-4 col-md-4" [(ngModel)]="autoInsert">Auto Insert</mat-checkbox>
-                    <mat-checkbox class="mt-4 col-md-2" [disabled]="tableDataList.length > 0"
+                    <mat-checkbox class="mt-4 col-md-2 d-none" [disabled]="tableDataList.length > 0"
                         [(ngModel)]="autoMerge">Merge</mat-checkbox>
                 </div>
 
@@ -60,14 +60,16 @@
                         <tr>
                             <th class="cursorPointer" (click)="changeOrder()">S#</th>
                             <th>Barcode</th>
-                            <th>Product Name</th>
+                            <th class="col-3">Product Name</th>
                             <th>Scan Qty</th>
-                            <th>AQ</th>
-                            <th>Dif</th>
-                            <th>Avg Cost</th>
+                            <!-- <th>AQ</th> -->
+                            <!-- <th >Dif</th> -->
+                            <!-- <th>Avg Cost</th>
                             <th>Cost</th>
                             <th>Avg Total</th>
-                            <th>Cost Total</th>
+                            <th>Cost Total</th> -->
+                            <th class="col-2">Sub Category</th>
+                            <th class="col-2">Brand</th>
 
                             <th>Action</th>
                         </tr>
@@ -82,12 +84,24 @@
                                     (keydown)="handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);insertToLocalStorage()"
                                     (keyup)="changeValue(item);getTotal();showImg(item);insertToLocalStorage()"
                                     class="qty{{index}} text-center" style="width: 80px;"></td>
-                            <td class="text-center">{{item.avlQuantity |number:'1.0-3'}}</td>
-                            <td class="text-center">{{ item.quantity - item.avlQuantity |number:'1.0-3'}}</td>
-                            <td class="text-end">{{item.avgCostPrice | number:'1.0-2'}}</td>
+                            <!-- <td class="text-center">{{item.avlQuantity |number:'1.0-3'}}</td> -->
+                            <!-- <td class="text-center">{{ item.quantity - item.avlQuantity |number:'1.0-3'}}</td> -->
+                            <!-- <td class="text-end">{{item.avgCostPrice | number:'1.0-2'}}</td>
                             <td class="text-end">{{item.costPrice | number:'1.0-2'}}</td>
                             <td class="text-end">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
-                            <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
+                            <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-2'}}</td> -->
+                            <td>
+                                <select class="select w-100" [(ngModel)]="item.subCategoryID" (change)="insertToLocalStorage()">
+                                    <option *ngFor="let row of SubCategoriesList" [value]="row.subCategoryID">
+                                        {{row.subCategoryTitle}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="select w-100" [(ngModel)]="item.brandID" (change)="insertToLocalStorage()">
+                                    <option *ngFor="let row of BrandList" [value]="row.brandID">{{row.brandTitle}}
+                                    </option>
+                                </select>
+                            </td>
 
                             <td class="cursorPointer text-center  text-danger"><mat-icon
                                     (click)="delRow(item)">delete</mat-icon></td>
@@ -96,9 +110,9 @@
                             <td colspan="3"></td>
 
                             <th class="">{{totalQty |number:'1.0-3'}}</th>
-                            <th colspan="4"></th>
-                            <th class="text-end">{{avgCostTotal |number:'1.0-2'}}</th>
-                            <th class="text-end">{{CostTotal |number:'1.0-2'}}</th>
+                            <th colspan="2"></th>
+                            <!-- <th class="text-end">{{avgCostTotal |number:'1.0-2'}}</th>
+                            <th class="text-end">{{CostTotal |number:'1.0-2'}}</th> -->
                             <td class="text-center"><mat-icon class="cursorPointer "
                                     (click)="EmptyData()">delete</mat-icon></td>
 
@@ -114,7 +128,7 @@
 
         <div class="col-lg-3  border-start border-dark" style="height: 84vh;">
 
-            <div class="pt-1">
+            <!-- <div class="pt-1">
                 <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
                     <div class="text-center" *ngIf="tableDataList != ''">
                         <img [src]="productImage" alt="Img not Found" height="190" width="200" accesskey="i"
@@ -123,18 +137,19 @@
                 </mat-card>
 
 
-            </div>
+            </div> -->
 
-            <div class="pt-1">
+            <div class="pt-2">
                 <mat-card class="p-1 w-100 ">
                     <mat-card-content>
                         <div class="text-center ">
-                            <p class="font-digit fs-50">{{subTotal |number:'1.0-2'}}</p>
+                            <div class="font-digit fs-50"><span class="text-danger">{{tmpAvailableQty |number:'1.0-2'}} </span>/ <span class="text-success">{{tmpPreviousEnteredQty | number:'1.0-2'}}</span></div>
+                            <!-- <p class="font-digit fs-50">{{subTotal |number:'1.0-2'}}</p> -->
                         </div>
                     </mat-card-content>
                 </mat-card>
             </div>
-            <div class="pt-1">
+            <div class="mt-2">
                 <mat-form-field appearance="outline" *ngIf="!disableDateFeature" class="w-100 matSmall">
                     <mat-label>Invoice Date</mat-label>
                     <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="invDate"
@@ -165,7 +180,8 @@
 
             </div>
             <div class="mt-4 d-flex justify-content-around">
-                <button  *ngIf="roleTypeID < 3" class="btnsave w-25" (click)="global.openBootstrapModal('#AuditStart',true)">Others</button>
+                <button *ngIf="roleTypeID < 3" class="btnsave w-25"
+                    (click)="global.openBootstrapModal('#AuditStart',true)">Others</button>
             </div>
 
 
@@ -257,7 +273,7 @@
 
     <!---------------     Modal Window for Retreiving Hold Bills --------------->
     <div class="modal fade" id="AuditStart" tabindex="-1" aria-labelledby="holdModalLabel">
-        <div class="modal-dialog modal-dialog-scrollable mt-5  modal-xl">
+        <div class="modal-dialog modal-dialog-scrollable mt-5  modal-md ">
             <div class="modal-content">
                 <div class="modal-header">
                     <h2 class="modal-title" id="holdModalLabel">Audit</h2>
@@ -267,12 +283,8 @@
 
                     <div class="mt-4 d-flex justify-content-around">
 
-                        <button *ngIf="crudList.c" class="btnsave w-25" (click)="startAudit('start')">Start
-                            Audit</button>
-
-                        <button class="btnsave w-25" (click)="startAudit('start')">End Audit</button>
-                        
-                        <button class="btnsave w-25" >Merge & Post</button>
+                        <button *ngIf="crudList.c" class="btnsave w-25" (click)="startAudit('start')">Start Audit</button>
+                        <button class="btnsave w-25" (click)="startAudit('post')">Post Audit</button>
                     </div>
 
 

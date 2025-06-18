@@ -1271,7 +1271,7 @@ export class GlobalDataModule implements OnInit {
   //////////// func to get product Detail
   public getProdDetail(id: any, barcode: any,locationID?:any): Observable<any> {
 
-    var url = environment.mainApi + this.inventoryLink + `GetSingleProductDetail?ProductID=${id}&Barcode=${barcode}&LocationID=${locationID}`
+    var url = environment.mainApi + this.inventoryLink + `GetSingleProductDetail?ProductID=${id}&Barcode=${barcode}&LocID=${locationID}`
 
     return this.http.get(url).pipe(retry(3));
   }

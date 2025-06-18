@@ -25,7 +25,6 @@ export class InvAuditComponent implements OnInit {
   appVisibility() {
     if (document.hidden) { } else { this.importFromLocalStorage(); }
   }
-  os:any = require('os');
 
   crudList: any = { c: true, r: true, u: true, d: true };
   companyProfile: any = [];
@@ -47,12 +46,6 @@ export class InvAuditComponent implements OnInit {
       this.companyProfile = data;
     });
 
-    
-
-const hostname = this.os.hostname();
-
-console.log("PC Name:", hostname);
-
 
   }
 
@@ -68,13 +61,16 @@ console.log("PC Name:", hostname);
 
     this.importFromLocalStorage();
 
+    this.getBrandList();
+    this.getSubCategory();
+
   }
 
 
   roleTypeID = this.global.getRoleTypeID();
 
   autoInsert = false;
-  autoMerge = false;
+  autoMerge = true;
   sortType = 'desc';
 
 
@@ -102,6 +98,42 @@ console.log("PC Name:", hostname);
   tempQty: any = '';
   tempProdRow: any = [];
   tmpQuantity: any = '';
+  tmpAvailableQty = 0;
+  tmpPreviousEnteredQty = 0;
+
+  BrandList: any = [];
+  getBrandList() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetBrand').subscribe(
+      (Response: any) => {
+        this.BrandList = Response;
+
+      },
+      (Error: any) => {
+        this.msg.WarnNotify(Error);
+
+      }
+    )
+  }
+
+  SubCategoriesList: any = [];
+  getSubCategory() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSubCategory').subscribe(
+      (Response: any) => {
+        this.SubCategoriesList = Response;
+      }
+    )
+  }
+
+
+
+  CategoriesList: any = [];
+  getCategory() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetCategory').subscribe(
+      (Response: any) => {
+        this.CategoriesList = Response;
+      }
+    )
+  }
 
 
   changeOrder() {
@@ -157,9 +189,6 @@ console.log("PC Name:", hostname);
           this.msg.WarnNotify('Select Location');
           return;
         }
-        ///// check the product in product list by barcode
-        var row = this.productList.find((p: any) => p.barcode == this.PBarcode);
-
 
         this.global.getProdDetail(0, this.PBarcode, this.locationID).subscribe(
           (Response: any) => {
@@ -207,6 +236,8 @@ console.log("PC Name:", hostname);
       var condition: any = this.tableDataList.filter((e: any) => e.productID == this.tempProdRow[0].productID);
       var index = this.tableDataList.indexOf(condition[0]);
 
+      this.tmpPreviousEnteredQty = 0;
+
       if (condition.length == 0 || (condition.length > 0 && !this.autoMerge)) {
         this.tableDataList.push({
           rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
@@ -217,6 +248,9 @@ console.log("PC Name:", hostname);
           barcode: this.tempProdRow[0].barcode,
           // productImage: this.tempProdRow[0].productImage,
           quantity: Qty,
+          scanTime: new Date(),
+          subCategoryID: this.tempProdRow[0].subCategoryID,
+          brandID: this.tempProdRow[0].brandID,
           avgCostPrice: this.tempProdRow[0].avgCostPrice,
           costPrice: this.tempProdRow[0].costPrice,
           salePrice: this.tempProdRow[0].salePrice,
@@ -224,15 +258,20 @@ console.log("PC Name:", hostname);
         });
         this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
         // this.productImage = this.tempProdRow[0].productImage;
+        this.tmpAvailableQty = this.tempProdRow[0].aq;
       }
 
       if (condition.length > 0 && this.autoMerge) {
+        this.tmpPreviousEnteredQty = this.tableDataList[index].quantity;
         this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + parseFloat(Qty);
         this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
         this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
         // this.productImage = this.tableDataList[index].productImage;
+
+
       }
 
+      this.tmpAvailableQty = this.tempProdRow[0].aq;
 
       this.PBarcode = '';
       $('#searchProduct').trigger('focus');
@@ -614,21 +653,66 @@ console.log("PC Name:", hostname);
 
   startAudit(type: any) {
 
-    var url = type == 'start' ? 'StartAudit' : 'EndAudit'
+    var url = type == 'start' ? 'StartAudit' : 'PostAudit'
 
-    this.http.post(environment.mainApi + this.global.inventoryLink + url, {
-      UserID: this.global.getUserID()
-    }).subscribe(
-      (Response: any) => {
-        console.log(Response);
-        if (Response.msg == 'Data Saved Successfully') {
-          this.msg.SuccessNotify(Response.msg);
+    if (type == 'start') {
+      this.http.post(environment.mainApi + this.global.inventoryLink + url, {
+        UserID: this.global.getUserID(),
+      }).subscribe(
+        (Response: any) => {
+          console.log(Response);
+          if (Response.msg == 'Data Saved Successfully') {
+            this.msg.SuccessNotify(Response.msg);
+            this.reset();
 
-        } else {
-          this.msg.WarnNotify(Response.msg);
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
         }
-      }
-    )
+      )
+    }
+
+    if (type == 'post') {
+      Swal.fire({
+        title: "Do you want to post Audit?",
+        text: 'After posting all the holded audit invoices will be posted and will not be editable anymore.',
+        showCancelButton: true,
+        confirmButtonText: "Confirm",
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          this.global.closeBootstrapModal('#AuditStart', true);
+          this.global.openPinCode().subscribe(
+            (pin: any) => {
+              if (pin != '') {
+
+
+
+                this.http.post(environment.mainApi + this.global.inventoryLink + url, {
+                  UserID: this.global.getUserID(),
+                  PinCode: pin,
+                  ProjectID:this.global.getProjectID()
+                }).subscribe(
+                  (Response: any) => {
+                    console.log(Response);
+                    if (Response.msg == 'Data Saved Successfully') {
+                      this.msg.SuccessNotify(Response.msg);
+                      this.reset();
+
+                    } else {
+                      this.msg.WarnNotify(Response.msg);
+                    }
+                  }
+                )
+              }
+            }
+          )
+        }
+      });
+    }
+
+
+
 
   }
 
@@ -706,9 +790,6 @@ console.log("PC Name:", hostname);
 
     console.log(url);
 
-
-
-
     this.http.post(url, postData).subscribe(
       (Response: any) => {
         console.log(Response);
@@ -747,6 +828,8 @@ console.log("PC Name:", hostname);
     this.CostTotal = 0;
     this.AuditInventoryID = 0;
     this.auditID = 0;
+    this.tmpAvailableQty = 0;
+    this.tmpPreviousEnteredQty = 0;
 
   }
 
@@ -817,6 +900,9 @@ console.log("PC Name:", hostname);
             costPrice: e.costPrice,
             salePrice: e.salePrice,
             avlQuantity: e.avlQuantity,
+            scanTime: e.scanTime,
+            subCategoryID: e.subCategoryID,
+            brandID: e.brandID,
           })
         });
 
