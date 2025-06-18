@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
@@ -19,6 +19,13 @@ import { AdjBillPrintComponent } from '../adj-bill-print/adj-bill-print.componen
 export class InvAuditComponent implements OnInit {
 
   @ViewChild(AdjBillPrintComponent) billPrint: any;
+
+  @HostListener('document:visibilitychange', ['$event'])
+
+  appVisibility() {
+    if (document.hidden) { } else { this.importFromLocalStorage(); }
+  }
+  os:any = require('os');
 
   crudList: any = { c: true, r: true, u: true, d: true };
   companyProfile: any = [];
@@ -40,7 +47,11 @@ export class InvAuditComponent implements OnInit {
       this.companyProfile = data;
     });
 
+    
 
+const hostname = this.os.hostname();
+
+console.log("PC Name:", hostname);
 
 
   }
@@ -55,11 +66,15 @@ export class InvAuditComponent implements OnInit {
     this.global.getProducts().subscribe(
       (data: any) => { this.productList = data; })
 
+    this.importFromLocalStorage();
+
   }
 
 
-  autoInsert = false;
+  roleTypeID = this.global.getRoleTypeID();
 
+  autoInsert = false;
+  autoMerge = false;
   sortType = 'desc';
 
 
@@ -145,39 +160,27 @@ export class InvAuditComponent implements OnInit {
         ///// check the product in product list by barcode
         var row = this.productList.find((p: any) => p.barcode == this.PBarcode);
 
-        /////// check already present in the table or not
-        if (row !== undefined) {
-          var condition = this.tableDataList.find((x: any) => x.productID == row.productID);
 
-          var index = this.tableDataList.indexOf(condition);
+        this.global.getProdDetail(0, this.PBarcode, this.locationID).subscribe(
+          (Response: any) => {
 
-          //// push the data using index
-          if (condition == undefined) {
-            this.global.getProdDetail(0, this.PBarcode).subscribe(
-              (Response: any) => {
-                this.tempProdRow = Response;
-                if (this.autoInsert) {
-                  this.InsertToTable(1);
-                } else {
-                  $('#qtyInput').trigger('select');
-                  $('#qtyInput').trigger('focus');
-                }
-
+            if (Response.length > 0) {
+              this.tempProdRow = Response;
+              if (this.autoInsert) {
+                this.InsertToTable(1);
+              } else {
+                $('#qtyInput').trigger('select');
+                $('#qtyInput').trigger('focus');
               }
-            )
-          } else {
-            this.tempProdRow = condition;
-            if (this.autoInsert) {
-              this.InsertToTable(1);
             } else {
-              $('#qtyInput').trigger('select');
-              $('#qtyInput').trigger('focus');
+              this.msg.WarnNotify('Product Not Found');
+              this.PBarcode = '';
+              $('#searchProduct').trigger('focus');
             }
+
+
           }
-        } else {
-          this.PBarcode = '';
-          this.msg.WarnNotify('Product Not Found')
-        }
+        )
 
 
       }
@@ -201,14 +204,10 @@ export class InvAuditComponent implements OnInit {
   InsertToTable(Qty: any) {
 
     if (this.tempProdRow != '') {
-      var condition = this.tableDataList.find((x: any) => x.productID == this.tempProdRow.productID);
+      var condition: any = this.tableDataList.filter((e: any) => e.productID == this.tempProdRow[0].productID);
+      var index = this.tableDataList.indexOf(condition[0]);
 
-      var index = this.tableDataList.indexOf(condition);
-
-
-      if (condition == undefined) {
-
-
+      if (condition.length == 0 || (condition.length > 0 && !this.autoMerge)) {
         this.tableDataList.push({
           rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
             : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
@@ -216,23 +215,22 @@ export class InvAuditComponent implements OnInit {
           productID: this.tempProdRow[0].productID,
           productTitle: this.tempProdRow[0].productTitle,
           barcode: this.tempProdRow[0].barcode,
-          productImage: this.tempProdRow[0].productImage,
+          // productImage: this.tempProdRow[0].productImage,
           quantity: Qty,
           avgCostPrice: this.tempProdRow[0].avgCostPrice,
           costPrice: this.tempProdRow[0].costPrice,
           salePrice: this.tempProdRow[0].salePrice,
-
           avlQuantity: this.tempProdRow[0].aq,
-
-
         });
         this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-        this.productImage = this.tempProdRow[0].productImage;
-      } else {
+        // this.productImage = this.tempProdRow[0].productImage;
+      }
+
+      if (condition.length > 0 && this.autoMerge) {
         this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + parseFloat(Qty);
         this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
         this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-        this.productImage = this.tableDataList[index].productImage;
+        // this.productImage = this.tableDataList[index].productImage;
       }
 
 
@@ -250,10 +248,23 @@ export class InvAuditComponent implements OnInit {
   insertToLocalStorage() {
 
     var prodData = JSON.stringify(this.tableDataList);
+    var locationID = JSON.stringify(this.locationID);
+    var AuditInventoryID = JSON.stringify(this.AuditInventoryID);
+    var autMerge = JSON.stringify(this.autoMerge);
+    var AuditID = JSON.stringify(this.auditID);
 
-      localStorage.removeItem('tmpAuditData');
-     localStorage.setItem('tmpAuditData', prodData);
-    
+    localStorage.removeItem('tmpAuditData');
+    localStorage.removeItem('tmpAuditLocation');
+    localStorage.removeItem('tmpAuditInventoryID');
+    localStorage.removeItem('tmpAuditID');
+    localStorage.removeItem('tmpAutoMerge');
+
+    localStorage.setItem('tmpAuditData', prodData);
+    localStorage.setItem('tmpAuditLocation', locationID);
+    localStorage.setItem('tmpAuditInventoryID', AuditInventoryID);
+    localStorage.setItem('tmpAuditID', AuditID);
+    localStorage.setItem('tmpAutoMerge', autMerge);
+
 
 
   }
@@ -265,9 +276,10 @@ export class InvAuditComponent implements OnInit {
       this.msg.WarnNotify('No Data Stored in local Storage')
       return;
     }
-
-
-
+    this.autoMerge = JSON.parse(localStorage.getItem('tmpAutoMerge') || '0');
+    this.auditID = JSON.parse(localStorage.getItem('tmpAuditID') || '0');
+    this.AuditInventoryID = JSON.parse(localStorage.getItem('tmpAuditInventoryID') || '0');
+    this.locationID = JSON.parse(localStorage.getItem('tmpAuditLocation') || '0');
     this.tableDataList = data;
     this.getTotal();
   }
@@ -285,46 +297,27 @@ export class InvAuditComponent implements OnInit {
       (x: any) => x.productID == data.productID
     );
 
-    var index = this.tableDataList.indexOf(condition);
+    this.global.getProdDetail(data.productID, '', this.locationID).subscribe(
+      (Response: any) => {
 
-    if (condition == undefined) {
+        this.tempProdRow = Response;
 
-
-      this.global.getProdDetail(data.productID, '').subscribe(
-        (Response: any) => {
-
-          this.tempProdRow = Response;
-
-          if (this.autoInsert) {
-            this.InsertToTable(1);
-          } else {
-            $('#qtyInput').trigger('select');
-            $('#qtyInput').trigger('focus');
-          }
+        if (this.autoInsert) {
+          this.InsertToTable(1);
+        } else {
+          $('#qtyInput').trigger('select');
+          $('#qtyInput').trigger('focus');
         }
-      )
-    } else {
-      this.tempProdRow = condition;
-       if (this.autoInsert) {
-            this.InsertToTable(1);
-          } else {
-            $('#qtyInput').trigger('select');
-            $('#qtyInput').trigger('focus');
-          }
-    }
-
-
+      }
+    )
 
   }
 
 
-
-
-
   showImg(item: any) {
 
-    var index = this.tableDataList.findIndex((e: any) => e.productID == item.productID);
-    this.productImage = this.tableDataList[index].productImage;
+    // var index = this.tableDataList.findIndex((e: any) => e.productID == item.productID);
+    // this.productImage = this.tableDataList[index].productImage;
 
   }
 
@@ -619,19 +612,19 @@ export class InvAuditComponent implements OnInit {
   }
 
 
-  startAudit(type:any){
+  startAudit(type: any) {
 
     var url = type == 'start' ? 'StartAudit' : 'EndAudit'
 
-    this.http.post(environment.mainApi+this.global.inventoryLink+url,{
-      UserID:this.global.getUserID()
+    this.http.post(environment.mainApi + this.global.inventoryLink + url, {
+      UserID: this.global.getUserID()
     }).subscribe(
-      (Response:any)=>{
+      (Response: any) => {
         console.log(Response);
-        if(Response.msg == 'Data Saved Successfully'){
+        if (Response.msg == 'Data Saved Successfully') {
           this.msg.SuccessNotify(Response.msg);
 
-        }else{
+        } else {
           this.msg.WarnNotify(Response.msg);
         }
       }
@@ -657,60 +650,84 @@ export class InvAuditComponent implements OnInit {
     if (this.tableDataList == '') {
       this.msg.WarnNotify('Atleast One Product Must Be Selected')
     } else if (this.locationID == undefined || this.locationID == 0) {
-      this.msg.WarnNotify('Select Warehouse Location')
+      this.msg.WarnNotify('Select Location')
     }
     else {
 
       this.tableDataList = this.tableDataList.map((e: any) => {
         (e.Difference = e.quantity - e.avlQuantity,
-          e.ScanQuantity = e.quantity
+          e.ScanQuantity = e.quantity,
+          e.productImage = ''
         )
-        
+
         return e;
       }
       )
       var postData = {
-        AuditInventoryID:this.AuditInventoryID,
-        AuditID:this.auditID,
-        AuditInvDate: this.global.dateFormater(this.invoiceDate,''),
+        AuditInventoryID: this.AuditInventoryID,
+        AuditID: this.auditID,
+        AuditInvDate: this.global.dateFormater(this.invoiceDate, ''),
         Remarks: this.invRemarks || '-',
         LocationID: this.locationID,
         HoldInvNo: this.holdInvNo,
         InvDetail: JSON.stringify(this.tableDataList),
         UserID: this.global.getUserID()
       }
-
+      console.log(this.tableDataList);
       console.log(postData);
       if (isValidFlag == true) {
 
         if (type == 'hold') {
+          if (this.AuditInventoryID > 0) {
+            this.global.openPinCode().subscribe(
+              (pin: any) => {
 
-          var url = this.holdBtnType == 'hold' ? 'InsertHoldAudit' : 'UpdateAudit'
-
-          this.http.post(environment.mainApi + this.global.inventoryLink + url, postData).subscribe(
-            (Response: any) => {
-              if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
-                this.msg.SuccessNotify(Response.msg);
-                this.reset();
-                localStorage.removeItem('tmpAuditData')
-              } else {
-                this.msg.WarnNotify(Response.msg);
+                if (pin !== '') {
+                  postData['PinCode'] = pin;
+                  this.holdBill(postData);
+                }
               }
-            }
-          )
+            )
+          } else {
+            this.holdBill(postData);
+          }
+
+
         }
-
-
       }
-
-
-
     }
-
-
-
   }
 
+
+  holdBill(postData: any) {
+    var urlEnd = this.AuditInventoryID > 0 ? 'UpdateAudit' : 'InsertHoldAudit'
+    this.app.startLoaderDark();
+    var url = environment.mainApi + this.global.inventoryLink + urlEnd;
+
+    console.log(url);
+
+
+
+
+    this.http.post(url, postData).subscribe(
+      (Response: any) => {
+        console.log(Response);
+        if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
+          this.msg.SuccessNotify(Response.msg);
+          this.reset();
+          this.insertToLocalStorage();
+        } else {
+          this.msg.WarnNotify(Response.msg);
+        }
+
+        this.app.stopLoaderDark()
+      },
+      (Error: any) => {
+        console.log(Error);
+        this.app.stopLoaderDark();
+      }
+    )
+  }
 
 
   reset() {
@@ -728,18 +745,20 @@ export class InvAuditComponent implements OnInit {
     this.savedInvoiceList = [];
     this.avgCostTotal = 0;
     this.CostTotal = 0;
+    this.AuditInventoryID = 0;
+    this.auditID = 0;
 
   }
 
 
 
   findHoldBills(type: any) {
- 
+
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetAuditExistingInvoices').subscribe(
       (Response: any) => {
         console.log(Response);
         this.savedInvoiceList = Response;
-        
+
       },
       (Error: any) => {
         console.log(Error);
@@ -755,8 +774,8 @@ export class InvAuditComponent implements OnInit {
 
   }
 
-  auditID:any = 0;
-  AuditInventoryID:any = 0;
+  auditID: any = 0;
+  AuditInventoryID: any = 0;
 
   retriveBill(item: any) {
 
@@ -792,7 +811,7 @@ export class InvAuditComponent implements OnInit {
             productID: e.productID,
             productTitle: e.productTitle,
             barcode: e.barcode,
-            productImage: e.productImage,
+            // productImage: e.productImage,
             quantity: e.quantity,
             avgCostPrice: e.avgCostPrice,
             costPrice: e.costPrice,
@@ -806,6 +825,8 @@ export class InvAuditComponent implements OnInit {
           : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
 
         this.getTotal();
+
+        this.insertToLocalStorage();
 
       }
     )

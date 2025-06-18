@@ -1,7 +1,7 @@
 <div class=" body h-100">
 
 
-    <div class="row h-100 w-100" >
+    <div class="row h-100 w-100">
         <div class="col-lg-9">
 
             <!-------------------- Top Date and location section --------------->
@@ -12,7 +12,7 @@
 
                 <!-------------------- Product Search Bar --------------->
 
-                <div class="col-md-8  d-flex flex-column">
+                <div class="col-md-7  d-flex flex-column">
                     <mat-label class="text-primary">Search Barcode / Product</mat-label>
                     <input type="text" #pbarcode [(ngModel)]="PBarcode"
                         (keydown)="searchByCode($event);changeFocus($event,'.prodRow')" id="searchProduct"
@@ -33,15 +33,19 @@
                         </mat-card>
                     </div>
                 </div>
-                <div class="col-md-3 d-flex ">
-                   <div class="d-flex flex-column">
-                     <mat-label class="text-primary">Quantity</mat-label>
-                    <input type="text" [(ngModel)]="tmpQuantity" (keydown)="onQtyinsert($event)" class="col-md-6 p-1 ps-2 mb-2 qtyInput" id="qtyInput"
-                        autofocus autocomplete="off" accesskey="">
-                   </div>
-                <mat-checkbox class="mt-4 col-md-6" [(ngModel)]="autoInsert">Auto Insert</mat-checkbox> 
+                <div class="col-md-4 d-flex ">
+                    <div class="d-flex flex-column">
+                        <mat-label class="text-primary">Quantity</mat-label>
+                        <input type="text" [(ngModel)]="tmpQuantity"
+                            (keydown)="onQtyinsert($event);global.handleNumKeys($event)"
+                            class="col-md-6 p-1 ps-2 mb-2 qtyInput" id="qtyInput" autofocus autocomplete="off"
+                            accesskey="">
+                    </div>
+                    <mat-checkbox class="mt-4 col-md-4" [(ngModel)]="autoInsert">Auto Insert</mat-checkbox>
+                    <mat-checkbox class="mt-4 col-md-2" [disabled]="tableDataList.length > 0"
+                        [(ngModel)]="autoMerge">Merge</mat-checkbox>
                 </div>
-        
+
 
 
             </div>
@@ -57,9 +61,9 @@
                             <th class="cursorPointer" (click)="changeOrder()">S#</th>
                             <th>Barcode</th>
                             <th>Product Name</th>
-                            <th>Qty</th>
+                            <th>Scan Qty</th>
                             <th>AQ</th>
-                             <th>Dif</th>
+                            <th>Dif</th>
                             <th>Avg Cost</th>
                             <th>Cost</th>
                             <th>Avg Total</th>
@@ -75,11 +79,11 @@
                             <td>{{item.barcode}}</td>
                             <td>{{item.productTitle}}</td>
                             <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
-                                    (keydown)="handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);"
-                                    (keyup)="changeValue(item);getTotal();showImg(item);"
+                                    (keydown)="handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);insertToLocalStorage()"
+                                    (keyup)="changeValue(item);getTotal();showImg(item);insertToLocalStorage()"
                                     class="qty{{index}} text-center" style="width: 80px;"></td>
                             <td class="text-center">{{item.avlQuantity |number:'1.0-3'}}</td>
-                             <td class="text-center">{{ item.quantity - item.avlQuantity |number:'1.0-3'}}</td>
+                            <td class="text-center">{{ item.quantity - item.avlQuantity |number:'1.0-3'}}</td>
                             <td class="text-end">{{item.avgCostPrice | number:'1.0-2'}}</td>
                             <td class="text-end">{{item.costPrice | number:'1.0-2'}}</td>
                             <td class="text-end">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
@@ -108,7 +112,7 @@
 
 
 
-        <div class="col-lg-3  border-start border-dark"  style="height: 84vh;">
+        <div class="col-lg-3  border-start border-dark" style="height: 84vh;">
 
             <div class="pt-1">
                 <mat-card class="p-1 w-100 " style="height: 200px;width: 380px;">
@@ -140,11 +144,11 @@
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="w-100 matSmall">
                     <mat-label>Location</mat-label>
-                    <mat-select [(ngModel)]="locationID" name="location" [disabled]="tableDataList.length > 0" (selectionChange)="onLocationSelected('l1')">
+                    <mat-select [(ngModel)]="locationID" name="location" [disabled]="tableDataList.length > 0"
+                        (selectionChange)="onLocationSelected('l1')">
                         <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                         <mat-option *ngFor="let item of locationList | filter:locationSearch.value"
-                            
                             [value]="item.locationID">{{item.locationTitle}}</mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -161,18 +165,10 @@
 
             </div>
             <div class="mt-4 d-flex justify-content-around">
-
-                <button *ngIf="crudList.c" class="btnsave w-25" (click)="SaveBill('save')">Save</button>
-
-                <button class="btnsave w-25" (click)="importFromLocalStorage()">Import</button>
+                <button  *ngIf="roleTypeID < 3" class="btnsave w-25" (click)="global.openBootstrapModal('#AuditStart',true)">Others</button>
             </div>
 
-             <div class="mt-4 d-flex justify-content-around">
 
-                <button *ngIf="crudList.c" class="btnsave w-25" (click)="startAudit('start')">Start Audit</button>
-
-                <button class="btnsave w-25" (click)="startAudit('start')">End Audit</button>
-            </div>
         </div>
 
     </div>
@@ -195,7 +191,7 @@
                             <mat-datepicker #hbDate></mat-datepicker>
                         </mat-form-field>
 
-<!-- 
+                        <!-- 
                         <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 bg-primary text-white btn-rpt"
                             (click)="findHoldBills('HI')">Hold Bill</button> -->
                         <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt"
@@ -217,7 +213,7 @@
                                 <th>Audit Start</th>
                                 <th>Audit End</th>
                                 <th>Remarks</th>
-                               
+
                                 <th>User</th>
                                 <th *ngIf="crudList.r">Action</th>
                                 <th *ngIf="crudList.u">Retrive</th>
@@ -229,10 +225,10 @@
                                 <td>{{index+1}}</td>
                                 <td>{{item.auditInventoryID}}</td>
                                 <td>{{item.auditInvDate | date:'dd-MM-yyyy'}}</td>
-                                 <td>{{item.auditStartDate | date:'dd-MM-yyyy'}}</td>
-                                  <td>{{item.auditEndDate | date:'dd-MM-yyyy'}}</td>
+                                <td>{{item.auditStartDate | date:'dd-MM-yyyy'}}</td>
+                                <td>{{item.auditEndDate | date:'dd-MM-yyyy'}}</td>
                                 <td>{{item.remarks}}</td>
-    
+
                                 <td>{{item.entryUser}}</td>
                                 <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary"
                                         (click)="printBill(item)">print</mat-icon></td>
@@ -255,6 +251,39 @@
     <!----------- Print Area For Bill Print --------------------->
 
     <app-adj-bill-print></app-adj-bill-print>
+
+
+
+
+    <!---------------     Modal Window for Retreiving Hold Bills --------------->
+    <div class="modal fade" id="AuditStart" tabindex="-1" aria-labelledby="holdModalLabel">
+        <div class="modal-dialog modal-dialog-scrollable mt-5  modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="holdModalLabel">Audit</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="mt-4 d-flex justify-content-around">
+
+                        <button *ngIf="crudList.c" class="btnsave w-25" (click)="startAudit('start')">Start
+                            Audit</button>
+
+                        <button class="btnsave w-25" (click)="startAudit('start')">End Audit</button>
+                        
+                        <button class="btnsave w-25" >Merge & Post</button>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
 
 
 </div>
