@@ -19,8 +19,8 @@ import { PurchaseBillPrintComponent } from '../../Purchases/purchase-bill-print/
 export class DayClosingRptComponent {
 
 
-  @ViewChild(SaleBillPrintComponent)  saleBill:any;
-   @ViewChild(PurchaseBillPrintComponent) purchaseBill:any;
+  @ViewChild(SaleBillPrintComponent) saleBill: any;
+  @ViewChild(PurchaseBillPrintComponent) purchaseBill: any;
 
 
   companyProfile: any = [];
@@ -60,13 +60,16 @@ export class DayClosingRptComponent {
 
     var fromDate = this.global.dateFormater(this.fromDate, '-');
     var toDate = this.global.dateFormater(this.fromDate, '-');
-
+    this.app.startLoaderDark();
     var url = environment.mainApi + this.global.accountLink + 'GetDayTransaction2?FromDate=' + fromDate + '&ToDate=' + toDate;
-    console.log(url)
-
     this.http.get(url).subscribe(
       (Response: any) => {
-        console.log(Response);
+        if (Response.length == 0 || Response == null) {
+          this.global.popupAlert('Data Not Found!');
+          this.app.stopLoaderDark();
+          return;
+
+        }
         this.rptData = Response.map((e: any) => {
           if (e.billDetail != '-') {
             e.billDetails = JSON.parse(e.billDetail);
@@ -74,6 +77,11 @@ export class DayClosingRptComponent {
 
           return e;
         });
+          this.app.stopLoaderDark();
+      },
+      (Error:any)=>{
+        console.log(Error);
+        this.app.stopLoaderDark();
       }
     )
 
@@ -93,20 +101,20 @@ export class DayClosingRptComponent {
   }
 
 
-   printBill(item:any){
+  printBill(item: any) {
 
-    if(item.invType == 'S' || item.invType == 'SR'){
+    if (item.invType == 'S' || item.invType == 'SR') {
       this.saleBill.PrintBill(item.invBillNo);
-   
-       this.saleBill.billType = 'Duplicate';
-      
+
+      this.saleBill.billType = 'Duplicate';
+
     }
 
-    if(item.invType == 'P' || item.invType == 'PR'){
+    if (item.invType == 'P' || item.invType == 'PR') {
       this.purchaseBill.printBill(item);
     }
 
-   }
+  }
 
 
 

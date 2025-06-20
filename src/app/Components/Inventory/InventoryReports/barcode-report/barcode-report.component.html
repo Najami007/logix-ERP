@@ -1,86 +1,123 @@
 <div class="body h-100 w-100 ">
 
-    <mat-card class="h-75 w-50 bg-white text-center row"
-    style="position: fixed; margin-top: 5%; margin-left: 25%">
-    <div class="col-lg-12 row justify-content-between p-2">
-        <mat-form-field  appearance="outline" class="col-lg-3 matSmall" >
-            <mat-label>Manufacture</mat-label>
-            <input matInput type="text" readonly="true" [(ngModel)]="manufactureDate" [matDatepicker]="mDate">
-            <mat-datepicker-toggle matSuffix [for]="mDate"></mat-datepicker-toggle>
-            <mat-datepicker #mDate></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field  appearance="outline" class="col-lg-3 matSmall" >
-            <mat-label>Expiry</mat-label>
-            <input matInput type="text" readonly="true" [(ngModel)]="expiryDate" [matDatepicker]="expDate">
-            <mat-datepicker-toggle matSuffix [for]="expDate"></mat-datepicker-toggle>
-            <mat-datepicker #expDate></mat-datepicker>
-        </mat-form-field>
-    </div>
- 
+    <mat-card class="h-75 w-50 bg-white text-center row" style="position: fixed; margin-top: 5%; margin-left: 25%">
+        <div class="col-lg-12 row justify-content-between p-2">
+            <mat-form-field appearance="outline" class="col-lg-3 matSmall">
+                <mat-label>Manufacture</mat-label>
+                <input matInput type="text" readonly="true" [(ngModel)]="manufactureDate" [matDatepicker]="mDate">
+                <mat-datepicker-toggle matSuffix [for]="mDate"></mat-datepicker-toggle>
+                <mat-datepicker #mDate></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="col-lg-3 matSmall">
+                <mat-label>Expiry</mat-label>
+                <input matInput type="text" readonly="true" [(ngModel)]="expiryDate" [matDatepicker]="expDate">
+                <mat-datepicker-toggle matSuffix [for]="expDate"></mat-datepicker-toggle>
+                <mat-datepicker #expDate></mat-datepicker>
+            </mat-form-field>
+        </div>
+
         <div class="col-lg-12 row text-center justify-content-center">
 
             <div class="col-lg-6 pe-1  d-flex flex-column ">
-                <mat-label class="text-primary">Search Barcode / Product</mat-label> 
-               <input type="text"   #pbarcode [(ngModel)]="PBarcode"  
+                <mat-label class="text-primary">Search Barcode / Product</mat-label>
+                <input type="text" #pbarcode [(ngModel)]="PBarcode"
                     (keydown)="changeFocus($event,'.prodRow');searchByCode($event)" id="searchProduct"
-                    class="p-1 ps-2 mb-2 searchProduct" placeholder="Alt + b" autofocus
-                    autocomplete="off" accesskey="b">
-    
+                    class="p-1 ps-2 mb-2 searchProduct" placeholder="Alt + b" autofocus autocomplete="off"
+                    accesskey="b">
+
                 <div class="  d-flex flex-column SearchConatiner cursorPointer "
                     *ngIf="PBarcode != '' && PBarcode != undefined">
-                    <mat-card class="card " *ngFor="let item of productList| filter:PBarcode | slice:0:25 index as index">
-                        <button style="height: 40px; background: none;border: none;text-align: left;" class="prodRow{{index}} prodBtn justify-content-between d-flex" 
-                        (click)="onProductSelected(item);"
-                        (keydown)=" handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)"><p>{{item.productTitle}}</p>
-                            <p><strong>({{item.barcode}})</strong></p> </button>
+                    <mat-card class="card "
+                        *ngFor="let item of productList| filter:PBarcode | slice:0:25 index as index">
+                        <button style="height: 40px; background: none;border: none;text-align: left;"
+                            class="prodRow{{index}} prodBtn justify-content-between d-flex"
+                            (click)="onProductSelected(item);"
+                            (keydown)=" handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">
+                            <p>{{item.productTitle}}</p>
+                            <p><strong>({{item.barcode}})</strong></p>
+                        </button>
                     </mat-card>
                 </div>
 
             </div>
             <div class="col-lg-3 text-start pt-3 mt-1">
-                <button  class="btnload w-50 " style="height: 40px;"  (click)="ngOnInit()">Load</button>
-            
+                <button class="btnload w-50 " style="height: 40px;" (click)="ngOnInit()">Load</button>
+
             </div>
 
             <div>
-             
+
                 <mat-checkbox [(ngModel)]="hideExpiry">Hide Expiry</mat-checkbox>
                 <mat-checkbox [(ngModel)]="hidePrice">Hide Price</mat-checkbox>
                 <mat-checkbox [(ngModel)]="hideBarcode">Hide Code</mat-checkbox>
                 <mat-checkbox [(ngModel)]="showLess">less \ Full</mat-checkbox>
+                <mat-checkbox [(ngModel)]="hideName">Hide Name</mat-checkbox>
+                <mat-checkbox [(ngModel)]="hideCmp">Hide Cmp</mat-checkbox>
             </div>
 
         </div>
 
         <div class="col-lg-12 row text-center justify-content-center">
 
-            <div class="pt-1 card w-75" style="height: 350px;width: 600px;" >
-                <div class="text-start" ><button mat-mini-fab class="bg-primary text-white " (click)="print()"><mat-icon>print</mat-icon></button></div>
+            <div class="pt-1 card w-75" style="height: 350px;width: 600px;">
+                <div class="text-start"><button mat-mini-fab class="bg-primary text-white "
+                        (click)="print()"><mat-icon>print</mat-icon></button></div>
 
                 <div *ngFor="let item of curProduct" class="d-flex  justify-content-center">
-                   <div id="PrintDiv" >
-                    <div > 
-                    
-                        <p  class="fw-bold cmpName text-center">{{companyName}}</p>
-                        <ngx-barcode6 class="barcode" *ngIf="!hideBarcode" [bc-format]="'CODE128'" [bc-font-size]="15"[bc-height]="40" [bc-margin-top]="-15" [bc-background]="'none'"  [bc-value]="item.barcode" [bc-display-value]="true"></ngx-barcode6>
-                 
+                    <div id="PrintDiv">
+
+
+                        <span class="cmpName" *ngIf="!hideCmp">{{companyName}}</span>
+                        <span class="bcodet" [ngClass]="hideBarcode ? '': 'mb-8px'" *ngIf="!showLess && !hideName">{{item.productTitle}}</span>
+                        <span class="bcodet" [ngClass]="hideBarcode ? '': 'mb-8px'" *ngIf="showLess">{{item.productTitle |slice:0:24}}...</span>
+                        <ngx-barcode6 class="barcode" *ngIf="!hideBarcode" [bc-format]="'CODE128'" [bc-height]="40"
+                            [bc-background]="'none'" [bc-value]="item.barcode" [bc-width]='1.5' [bc-font-size]="10" [bc-text-margin]="-2"
+                            [bc-display-value]="true" [bc-text-position]="'bottom'" [bc-text-align]="'right'"></ngx-barcode6>
+                        <!-- <span class="barcodeText">{{item.barcode}}</span> -->
                         <!-- <div class="font-barcode" >*{{item.barcode}}*</div>
                         <div class="bcodeC">{{item.barcode}}</div> -->
-                        <div class="row text-center barcodeName" >
-                            <div class="bcodet" *ngIf="!showLess" [ngClass]="hidePrice || hideBarcode ? 'w-80 text-center' : 'w-50'" >{{item.productTitle}}</div>
-                            <div class="bcodet" *ngIf="showLess"  [ngClass]="hidePrice || hideBarcode ? 'w-80 text-center' : 'w-50'" >{{item.productTitle | slice:0:12}}...</div>
-                            <div *ngIf="!hidePrice" [ngClass]="hideBarcode? 'w-80 text-center' : 'w-50' " class="bcodep text-start" >Rs.{{item.salePrice|number}}</div>
+                        <div *ngIf="!hideExpiry" class="expiry">
+                            <span>Mfg: {{manufactureDate | date:'dd-MM-yyyy'}}</span>
+                            <span>Exp: {{expiryDate | date:'dd-MM-yyyy'}}</span>
                         </div>
-                          
-                    </div> 
-                    <div *ngIf="!hideExpiry" class="d-flex fw-bold" style="font-size: 10px !important;">
-                        <span class="w-50"><b>Mfg: </b>{{manufactureDate | date:'dd-MM-yyyy'}}</span>
-                        <span class="w-50"><b>Exp: </b>{{expiryDate | date:'dd-MM-yyyy'}}</span>
-                      </div>
-                 
-                   </div>
-                   
-                </div  >
+
+                        <span *ngIf="!hidePrice" class="bcodep text-end">Rs.{{item.salePrice|number}}</span>
+                    </div>
+
+
+                </div>
+
+
+                <!-- <div *ngFor="let item of curProduct" class="d-flex  justify-content-center border">
+                    <div id="PrintDiv">
+
+
+                        <span class="cmpName">{{companyName}}</span>
+                        <ngx-barcode6 class="barcode" *ngIf="!hideBarcode" [bc-format]="'CODE128'" [bc-height]="40"
+                            [bc-background]="'none'" [bc-value]="item.barcode" [bc-width]='1.5'
+                            [bc-display-value]="false"></ngx-barcode6>
+
+                        <div class="row text-center barcodeName">
+                            <div class="bcodet" *ngIf="!showLess"
+                                [ngClass]="hidePrice || hideBarcode ? 'w-80 text-center' : 'w-50'">{{item.productTitle}}
+                            </div>
+                            <div class="bcodet" *ngIf="showLess"
+                                [ngClass]="hidePrice || hideBarcode ? 'w-80 text-center' : 'w-50'">{{item.productTitle |
+                                slice:0:12}}...</div>
+                            <div *ngIf="!hidePrice" [ngClass]="hideBarcode? 'w-80 text-center' : 'w-50' "
+                                class="bcodep text-start">Rs.{{item.salePrice|number}}</div>
+                        </div>
+
+                        <div *ngIf="!hideExpiry" class="d-flex fw-bold" style="font-size: 10px !important;">
+                            <span class="w-50 text-center"><b>Mfg: </b>{{manufactureDate | date:'dd-MM-yyyy'}}</span>
+                            <span class="w-50 text-center"><b>Exp: </b>{{expiryDate | date:'dd-MM-yyyy'}}</span>
+                        </div>
+
+                    </div>
+
+
+                </div> -->
+
 
             </div>
 

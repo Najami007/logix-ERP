@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { Observable, retry } from 'rxjs';
 import Swal from 'sweetalert2';
 import { AdjBillPrintComponent } from '../adj-bill-print/adj-bill-print.component';
+import { AuditInvoicePrintComponent } from './audit-invoice-print/audit-invoice-print.component';
 
 @Component({
   selector: 'app-inv-audit',
@@ -18,7 +19,7 @@ import { AdjBillPrintComponent } from '../adj-bill-print/adj-bill-print.componen
 })
 export class InvAuditComponent implements OnInit {
 
-  @ViewChild(AdjBillPrintComponent) billPrint: any;
+  @ViewChild(AuditInvoicePrintComponent) billPrint: any;
 
   @HostListener('document:visibilitychange', ['$event'])
 
@@ -83,12 +84,12 @@ export class InvAuditComponent implements OnInit {
   locationTitle = '';
   locationList: any = [];
 
-  invRemarks: any;
-  PBarcode: any;
+  invRemarks: any = '';
+  PBarcode: any = '';
   productList: any = [];
   tableDataList: any = [];
 
-  productImage: any;
+  productImage: any = '';
   subTotal: number = 0;
   totalQty: number = 0;
   savedInvoiceList: any = [];
@@ -233,6 +234,7 @@ export class InvAuditComponent implements OnInit {
   InsertToTable(Qty: any) {
 
     if (this.tempProdRow != '') {
+      
       var condition: any = this.tableDataList.filter((e: any) => e.productID == this.tempProdRow[0].productID);
       var index = this.tableDataList.indexOf(condition[0]);
 
@@ -291,36 +293,56 @@ export class InvAuditComponent implements OnInit {
     var AuditInventoryID = JSON.stringify(this.AuditInventoryID);
     var autMerge = JSON.stringify(this.autoMerge);
     var AuditID = JSON.stringify(this.auditID);
+    var remarks = JSON.stringify(this.invRemarks);
 
     localStorage.removeItem('tmpAuditData');
     localStorage.removeItem('tmpAuditLocation');
     localStorage.removeItem('tmpAuditInventoryID');
     localStorage.removeItem('tmpAuditID');
     localStorage.removeItem('tmpAutoMerge');
+    localStorage.removeItem('tmpRemarks');
 
     localStorage.setItem('tmpAuditData', prodData);
     localStorage.setItem('tmpAuditLocation', locationID);
     localStorage.setItem('tmpAuditInventoryID', AuditInventoryID);
     localStorage.setItem('tmpAuditID', AuditID);
     localStorage.setItem('tmpAutoMerge', autMerge);
+    localStorage.setItem('tmpRemarks', remarks);
 
 
 
   }
 
   importFromLocalStorage() {
-    var data = JSON.parse(localStorage.getItem('tmpAuditData') || '0');
 
-    if (data == '0' || data == '') {
-      this.msg.WarnNotify('No Data Stored in local Storage')
-      return;
+    var data = JSON.parse(localStorage.getItem('tmpAuditData') || '[]');
+
+    if (this.tableDataList.length > 0) {
+      if (data == '0' || data == '') {
+        Swal.fire({
+          title: "No Data Found",
+          text: "Storage Limit Exceed Please Hold the Bill Else Data will be Lost on Reload?",
+          icon: "warning"
+        });
+        // this.msg.WarnNotify('Storage Limit Exceed Please Hold the Bill Else Data will be vanished on Reload?')
+        return;
+      }
     }
-    this.autoMerge = JSON.parse(localStorage.getItem('tmpAutoMerge') || '0');
+
+    this.invRemarks = JSON.parse(localStorage.getItem('tmpRemarks') || '');
+    this.autoMerge = JSON.parse(localStorage.getItem('tmpAutoMerge') || 'false');
     this.auditID = JSON.parse(localStorage.getItem('tmpAuditID') || '0');
     this.AuditInventoryID = JSON.parse(localStorage.getItem('tmpAuditInventoryID') || '0');
     this.locationID = JSON.parse(localStorage.getItem('tmpAuditLocation') || '0');
     this.tableDataList = data;
     this.getTotal();
+
+    if (this.AuditInventoryID > 0) {
+      this.holdBtnType = 'Rehold'
+    }
+
+
+
   }
 
 
@@ -332,13 +354,9 @@ export class InvAuditComponent implements OnInit {
       return;
     }
 
-    var condition = this.tableDataList.find(
-      (x: any) => x.productID == data.productID
-    );
-
     this.global.getProdDetail(data.productID, '', this.locationID).subscribe(
       (Response: any) => {
-
+        console.log(Response);
         this.tempProdRow = Response;
 
         if (this.autoInsert) {
@@ -462,6 +480,9 @@ export class InvAuditComponent implements OnInit {
   }
 
   handleUpdown(item: any, e: any, cls: string, index: any) {
+
+   
+
     const container = $(".table-logix");
     if (e.keyCode == 9) {
       if (cls == '.sp') {
@@ -635,6 +656,7 @@ export class InvAuditComponent implements OnInit {
 
 
   changeValue(item: any) {
+     this.tmpAvailableQty = item.avlQuantity;
     var myIndex = this.tableDataList.indexOf(item);
 
     var myQty = this.tableDataList[myIndex].quantity;
@@ -656,18 +678,23 @@ export class InvAuditComponent implements OnInit {
     var url = type == 'start' ? 'StartAudit' : 'PostAudit'
 
     if (type == 'start') {
+      this.app.startLoaderDark();
       this.http.post(environment.mainApi + this.global.inventoryLink + url, {
         UserID: this.global.getUserID(),
       }).subscribe(
         (Response: any) => {
-          console.log(Response);
           if (Response.msg == 'Data Saved Successfully') {
             this.msg.SuccessNotify(Response.msg);
-            this.reset();
+            this.global.closeBootstrapModal('#AuditStart', true);
 
           } else {
             this.msg.WarnNotify(Response.msg);
           }
+          this.app.stopLoaderDark();
+        },
+        (Error: any) => {
+          console.log(Error);
+          this.app.stopLoaderDark();
         }
       )
     }
@@ -687,21 +714,28 @@ export class InvAuditComponent implements OnInit {
               if (pin != '') {
 
 
-
-                this.http.post(environment.mainApi + this.global.inventoryLink + url, {
+                var postData = {
                   UserID: this.global.getUserID(),
                   PinCode: pin,
-                  ProjectID:this.global.getProjectID()
-                }).subscribe(
+                  ProjectID: this.global.getProjectID(),
+                  remarks: '-'
+                };
+                this.app.startLoaderDark();
+                this.http.post(environment.mainApi + this.global.inventoryLink + url, postData).subscribe(
                   (Response: any) => {
-                    console.log(Response);
-                    if (Response.msg == 'Data Saved Successfully') {
+                    if (Response.msg == 'Data Updated Successfully') {
                       this.msg.SuccessNotify(Response.msg);
-                      this.reset();
+                      this.findHoldBills();
+                      this.global.closeBootstrapModal('#AuditStart', true);
 
                     } else {
                       this.msg.WarnNotify(Response.msg);
                     }
+                    this.app.stopLoaderDark();
+                  },
+                  (Error: any) => {
+                    console.log(Error);
+                    this.app.stopLoaderDark();
                   }
                 )
               }
@@ -757,7 +791,6 @@ export class InvAuditComponent implements OnInit {
         InvDetail: JSON.stringify(this.tableDataList),
         UserID: this.global.getUserID()
       }
-      console.log(this.tableDataList);
       console.log(postData);
       if (isValidFlag == true) {
 
@@ -787,12 +820,8 @@ export class InvAuditComponent implements OnInit {
     var urlEnd = this.AuditInventoryID > 0 ? 'UpdateAudit' : 'InsertHoldAudit'
     this.app.startLoaderDark();
     var url = environment.mainApi + this.global.inventoryLink + urlEnd;
-
-    console.log(url);
-
     this.http.post(url, postData).subscribe(
       (Response: any) => {
-        console.log(Response);
         if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
           this.msg.SuccessNotify(Response.msg);
           this.reset();
@@ -835,11 +864,10 @@ export class InvAuditComponent implements OnInit {
 
 
 
-  findHoldBills(type: any) {
+  findHoldBills() {
 
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetAuditExistingInvoices').subscribe(
       (Response: any) => {
-        console.log(Response);
         this.savedInvoiceList = Response;
 
       },
@@ -866,29 +894,20 @@ export class InvAuditComponent implements OnInit {
     this.holdBtnType = 'ReHold'
     this.invoiceDate = new Date(item.auditInvDate);
     this.locationID = item.locationID;
-    // this.locationTitle = item.locationTitle;
+
 
     this.invRemarks = item.remarks;
     this.auditID = item.auditID;
     this.AuditInventoryID = item.auditInventoryID;
-    // this.holdInvNo = item.invBillNo;
-    // this.subTotal = item.auditInventoryID;
+
 
     this.getBillDetail(item.auditInventoryID).subscribe(
       (Response: any) => {
-        console.log(Response)
 
-        // this.totalQty = 0;
-        // this.CostTotal = 0;
-        // this.avgCostTotal = 0;
-        // this.productImage = Response[Response.length - 1].productImage;
 
 
         Response.forEach((e: any) => {
 
-          // this.totalQty += e.quantity;
-          // this.CostTotal += e.quantity * e.costPrice;
-          // this.avgCostTotal += e.quantity * e.avgCostPrice;
           this.tableDataList.push({
             rowIndex: this.tableDataList.length + 1,
             productID: e.productID,
@@ -923,7 +942,6 @@ export class InvAuditComponent implements OnInit {
 
   public getBillDetail(billNo: any): Observable<any> {
     var url = environment.mainApi + this.global.inventoryLink + 'GetSingleAuditInvDetail?reqInvID=' + billNo;
-    console.log(url);
     return this.http.get(url).pipe(retry(3));
   }
 

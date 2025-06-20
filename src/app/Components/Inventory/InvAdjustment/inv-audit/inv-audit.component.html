@@ -91,16 +91,33 @@
                             <td class="text-end">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
                             <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-2'}}</td> -->
                             <td>
-                                <select class="select w-100" [(ngModel)]="item.subCategoryID" (change)="insertToLocalStorage()">
+                                <!-- <input placeholder="Type Car Name" list="cars">
+                                <datalist id="cars" [(ngModel)]="item.subCategoryID" (change)="insertToLocalStorage()">
+                                    <option *ngFor="let row of SubCategoriesList" [value]="row.subCategoryID"> {{row.subCategoryTitle}}</option>
+                                </datalist> -->
+                                <mat-select [(ngModel)]="item.subCategoryID" (selectionChange)="insertToLocalStorage()">
+                                      <mat-option><ngx-mat-select-search #catSearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                    <mat-option *ngFor="let row of SubCategoriesList | filter:catSearch.value" [value]="row.subCategoryID"> {{row.subCategoryTitle}}</mat-option>
+                                </mat-select>
+                                <!-- <select class="select w-100" [(ngModel)]="item.subCategoryID"
+                                    (change)="insertToLocalStorage()">
+                                    <option><input class="w-100" #CatSearch /></option>
                                     <option *ngFor="let row of SubCategoriesList" [value]="row.subCategoryID">
                                         {{row.subCategoryTitle}}</option>
-                                </select>
+                                </select> -->
                             </td>
                             <td>
-                                <select class="select w-100" [(ngModel)]="item.brandID" (change)="insertToLocalStorage()">
+                                  <mat-select [(ngModel)]="item.brandID" (selectionChange)="insertToLocalStorage()">
+                                      <mat-option><ngx-mat-select-search #brandSearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                    <mat-option *ngFor="let row of BrandList | filter:brandSearch.value" [value]="row.brandID"> {{row.brandTitle}}</mat-option>
+                                </mat-select>
+                                <!-- <select class="select w-100" [(ngModel)]="item.brandID"
+                                    (change)="insertToLocalStorage()">
                                     <option *ngFor="let row of BrandList" [value]="row.brandID">{{row.brandTitle}}
                                     </option>
-                                </select>
+                                </select> -->
                             </td>
 
                             <td class="cursorPointer text-center  text-danger"><mat-icon
@@ -143,7 +160,9 @@
                 <mat-card class="p-1 w-100 ">
                     <mat-card-content>
                         <div class="text-center ">
-                            <div class="font-digit fs-50"><span class="text-danger">{{tmpAvailableQty |number:'1.0-2'}} </span>/ <span class="text-success">{{tmpPreviousEnteredQty | number:'1.0-2'}}</span></div>
+                            <div class="font-digit fs-50"><span class="text-danger">{{tmpAvailableQty |number:'1.0-2'}}
+                                </span>/ <span class="text-success">{{tmpPreviousEnteredQty | number:'1.0-2'}}</span>
+                            </div>
                             <!-- <p class="font-digit fs-50">{{subTotal |number:'1.0-2'}}</p> -->
                         </div>
                     </mat-card-content>
@@ -211,7 +230,7 @@
                         <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 bg-primary text-white btn-rpt"
                             (click)="findHoldBills('HI')">Hold Bill</button> -->
                         <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt"
-                            (click)="findHoldBills('I')">Get Bill</button>
+                            (click)="findHoldBills()">Get Bill</button>
 
                         <mat-form-field class="col-lg-3 matSmall" appearance="outline">
                             <mat-label>Search.......</mat-label>
@@ -226,6 +245,7 @@
                                 <th>S#</th>
                                 <th>Inv No.</th>
                                 <th>Date</th>
+                                <th>Location</th>
                                 <th>Audit Start</th>
                                 <th>Audit End</th>
                                 <th>Remarks</th>
@@ -241,6 +261,7 @@
                                 <td>{{index+1}}</td>
                                 <td>{{item.auditInventoryID}}</td>
                                 <td>{{item.auditInvDate | date:'dd-MM-yyyy'}}</td>
+                                 <td>{{item.locationTitle}}</td>
                                 <td>{{item.auditStartDate | date:'dd-MM-yyyy'}}</td>
                                 <td>{{item.auditEndDate | date:'dd-MM-yyyy'}}</td>
                                 <td>{{item.remarks}}</td>
@@ -248,7 +269,7 @@
                                 <td>{{item.entryUser}}</td>
                                 <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary"
                                         (click)="printBill(item)">print</mat-icon></td>
-                                <td class="text-center cursorPointer" *ngIf=" crudList.u">
+                                <td class="text-center cursorPointer" *ngIf=" crudList.u && item.auditActiveStatus">
                                     <mat-icon data-bs-dismiss="modal" (click)="retriveBill(item)">edit</mat-icon>
                                 </td>
 
@@ -266,8 +287,7 @@
 
     <!----------- Print Area For Bill Print --------------------->
 
-    <app-adj-bill-print></app-adj-bill-print>
-
+        <app-audit-invoice-print></app-audit-invoice-print>
 
 
 
@@ -283,8 +303,9 @@
 
                     <div class="mt-4 d-flex justify-content-around">
 
-                        <button *ngIf="crudList.c" class="btnsave w-25" (click)="startAudit('start')">Start Audit</button>
-                        <button class="btnsave w-25" (click)="startAudit('post')">Post Audit</button>
+                        <button *ngIf="crudList.c" class="btnsave w-25" (click)="startAudit('start')">Start
+                            Audit</button>
+                        <button class="btnsave w-25" [disabled]="tableDataList.length > 0" (click)="startAudit('post')">Post Audit</button>
                     </div>
 
 

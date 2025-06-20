@@ -1298,6 +1298,7 @@ export class TableSale2Component implements OnInit {
   changeQty(qty:any){
 
     this.tableData[this.tmpProdIndex].quantity = qty;
+    this.getTotal();
 
   }
 

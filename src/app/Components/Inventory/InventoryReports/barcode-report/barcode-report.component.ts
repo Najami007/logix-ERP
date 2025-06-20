@@ -57,6 +57,8 @@ export class BarcodeReportComponent implements OnInit {
   hideExpiry = true;
   hidePrice = false;
   hideBarcode = false;
+  hideName = false;
+  hideCmp = false;
   productList:any = [];
 
 

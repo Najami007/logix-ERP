@@ -89,7 +89,7 @@ $my-theme-dark: mat.define-dark-theme((color: (primary: $my-primary,
 @import url('./assets/style/AngularMaterial.scss');
 @import url('./assets/style/fonts.scss');
 // @import url('./assets/style/logixDesign.css');
-// @import url('./assets/style/barcode.scss');
+@import url('./assets/style/barcode.css');
 @import '~material-design-icons/iconfont/material-icons.css';
 
 

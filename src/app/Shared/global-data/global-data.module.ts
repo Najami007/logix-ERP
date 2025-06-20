@@ -537,7 +537,7 @@ export class GlobalDataModule implements OnInit {
   curDate: any = new Date();
   public SubscriptionExpired(): boolean {
     ///// yyyy-MM-dd /////////////
-    var ExpiryDate: any = '2030-07-10';
+    var ExpiryDate: any = '2030-07-05';
     var curDate = this.datePipe.transform(this.curDate, 'yyyy-MM-dd')
     var status: any = curDate! >= ExpiryDate;
     return status;
@@ -856,7 +856,7 @@ export class GlobalDataModule implements OnInit {
     frameDoc.document.write(
       //  '<link rel="stylesheet" href="../../styles.scss" type="text/scss" media="print"/>'+
       '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>' +
-      '<link rel="stylesheet" href="../../assets/style/barcode.scss" type="text/css" media="print"/>'
+      '<link rel="stylesheet" href="../../assets/style/barcode.css" type="text/css" media="print"/>'
 
 
 
@@ -1270,9 +1270,11 @@ export class GlobalDataModule implements OnInit {
 
   //////////// func to get product Detail
   public getProdDetail(id: any, barcode: any,locationID?:any): Observable<any> {
-
+    if(locationID == undefined){
+      locationID = 0;
+    }
     var url = environment.mainApi + this.inventoryLink + `GetSingleProductDetail?ProductID=${id}&Barcode=${barcode}&LocID=${locationID}`
-
+    console.log(url);
     return this.http.get(url).pipe(retry(3));
   }
 

@@ -105,6 +105,7 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { SharedComponentsModule } from '../shared-components/shared-components.module';
 import { PaymentComponent } from '../Accounts/DesiAccounts/payment/payment.component';
 import { DayClosingRptComponent } from './InventoryReports/day-closing-rpt/day-closing-rpt.component';
+import { AuditInvoicePrintComponent } from './InvAdjustment/inv-audit/audit-invoice-print/audit-invoice-print.component';
 
 export const MY_DATE_FORMAT  = {
   parse: {
@@ -281,6 +282,7 @@ export const inventoryRoutes: Route[] = [
     PaymentMehtodComponent,
     SavedBillComponent,
     DayClosingRptComponent,
+    AuditInvoicePrintComponent,
     
   
   
