@@ -50,6 +50,7 @@ export class ProductComponent implements OnInit {
 
   tableSize: number = 0;
   tableSizes: any = [];
+  jumpPage: any = 0;
 
   onTableDataChange(event: any) {
 
@@ -67,6 +68,22 @@ export class ProductComponent implements OnInit {
     setTimeout(() => {
       this.filterProductList(this.filterType);
     }, 500);
+  }
+
+  goToPage(): void {
+    var count = this.productList.length / this.tableSize;
+    if (parseFloat(this.jumpPage) > count) {
+      this.msg.WarnNotify('Invalid Value')
+      return;
+    }
+
+    if (this.jumpPage >= 1) {
+      this.page = this.jumpPage;
+      this.getProductList();
+      setTimeout(() => {
+        this.filterProductList(this.filterType);
+      }, 500);
+    }
   }
 
   constructor(
@@ -139,15 +156,15 @@ export class ProductComponent implements OnInit {
       this.subCategoryFilterID = 0;
       this.brandFilterID = 0;
       this.discFilterID = 0;
-      this.productList = this.activeFilterID == '-' 
-      ? this.productList = this.tempProdList 
-      : this.tempProdList.filter((e: any) => e.activeStatus == this.activeFilterID);
+      this.productList = this.activeFilterID == '-'
+        ? this.productList = this.tempProdList
+        : this.tempProdList.filter((e: any) => e.activeStatus == this.activeFilterID);
     }
 
     if (type == 'disc') {
-    this.subCategoryFilterID = 0;
+      this.subCategoryFilterID = 0;
       this.brandFilterID = 0;
-       this.activeFilterID = '-';
+      this.activeFilterID = '-';
 
       if (this.discFilterID == 0) {
         this.productList = this.tempProdList;
@@ -237,7 +254,7 @@ export class ProductComponent implements OnInit {
         this.productList = Response;
         this.tempProdList = Response;
         this.filterProductList(this.filterType);
-     
+
       }
     )
   }

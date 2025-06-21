@@ -375,6 +375,48 @@ export class GlobalDataModule implements OnInit {
 
   }
 
+
+  /////////////////////////////////////////////////////////////
+  ///////////// Pagination Settings  //////////////////////////////////////////////
+
+
+
+  
+  page: number = 1;
+  count: number = 0;
+
+  tableSize: number = 25;
+  tableSizes: any = [10, 25, 50, 100];
+  jumpPage: any = 0;
+
+  onTableDataChange(event: any,callFunc:any) {
+
+    this.page = event;
+    callFunc();
+  }
+
+  onTableSizeChange(event: any,callFunc:any): void {
+    this.tableSize = event.target.value;
+    this.page = 1;
+    callFunc();
+  }
+
+  goToPage(List:any,callFunc:any): void {
+    var count = List.length / this.tableSize;
+    if(parseFloat(this.jumpPage) > count)  {
+      this.msg.WarnNotify('Invalid Value')
+      return;
+    }
+
+    if (this.jumpPage >= 1) {
+      this.page = this.jumpPage;
+      callFunc();
+    }
+  }
+
+  /////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////
+
   getBillPrintType() {
     var value = '';
     var credentials = localStorage.getItem('BillPrint');

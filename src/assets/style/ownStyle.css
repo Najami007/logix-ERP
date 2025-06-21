@@ -1,3 +1,22 @@
+
+@media screen {
+  .print-only {
+    display: none;
+  }
+}
+
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    break-inside: avoid;
+    /* background-color: #efefef !important; */
+    text-wrap: wrap;
+    text-wrap-mode: wrap;
+    text-wrap-style: pretty;
+  }
+}
+
+
 .rptTable {
     width: 100%;
     /* margin-left: 15px; */
@@ -93,7 +112,10 @@
   /*color:#fff;*/  
   font-weight: bold;  
   text-align: center;
-  border:1px solid black;
+  border:1px solid #fff !important;
+  padding: 10px !important;
+  background-color: rgb(6, 6, 54);
+  color:#fff !important;
 }
 
 .table-logix > thead  > th {
@@ -129,24 +151,26 @@
 
 
 
-.table-logix2{
+.table-logix2 {
+  font-size: 12px;
   width: 100%;
   text-align: center;
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.table-logix2 >thead>tr>th{
-  padding: 2px;
-  border: 1px solid rgb(148, 146, 146);
-  font-size: 12px;
+.table-logix2>thead>tr>th {
+   padding: 10px;
+  border: 1px solid #fff !important;
+  background-color: rgb(6, 6, 54);
+  color: #fff !important;
 
 }
 
-.table-logix2 >tbody>tr>td{
-  padding: 2px;
+.table-logix2>tbody>tr>td {
+
+  padding: 2.5px;
   border: 1px solid rgb(148, 146, 146);
-  font-size: 11px;
-  
+
 }
 
 .urdu{

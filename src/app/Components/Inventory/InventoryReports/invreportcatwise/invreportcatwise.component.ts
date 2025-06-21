@@ -20,6 +20,7 @@ export class InvreportcatwiseComponent implements OnInit {
 
   tableSize: number = 25;
   tableSizes: any = [10, 25, 50, 100];
+  jumpPage: any = 0;
 
   onTableDataChange(event: any) {
 
@@ -31,6 +32,21 @@ export class InvreportcatwiseComponent implements OnInit {
     this.tableSize = event.target.value;
     this.page = 1;
     this.getReport();
+  }
+
+  goToPage(): void {
+    var count = this.inventoryList.length / this.tableSize;
+      alert(count)
+
+    if(parseFloat(this.jumpPage) > count)  {
+      this.msg.WarnNotify('Invalid Value')
+      return;
+    }
+
+    if (this.jumpPage >= 1) {
+      this.page = this.jumpPage;
+      this.getReport();
+    }
   }
 
 
@@ -63,8 +79,8 @@ export class InvreportcatwiseComponent implements OnInit {
     this.getBrandList();
     this.getLocation();
     this.getProductTypes();
-      this.hideFields();
-   
+    this.hideFields();
+
   }
 
 
@@ -101,9 +117,9 @@ export class InvreportcatwiseComponent implements OnInit {
   hideSale = true;
   hideAvg = true;
 
-  hideFields(){
+  hideFields() {
     this.roleTypeID = this.global.getRoleTypeID();
-    if(this.roleTypeID > 2){
+    if (this.roleTypeID > 2) {
       this.hideCost = false;
       this.hideAvg = false;
       this.hideSale = false;
@@ -596,7 +612,7 @@ export class InvreportcatwiseComponent implements OnInit {
     { id: 5, title: 'Plus Only' },
     { id: 3, title: 'Hide Zero' },
     { id: 4, title: 'Zero Only' },
-   
+
   ]
 
   filterID: any = 1;
@@ -617,7 +633,7 @@ export class InvreportcatwiseComponent implements OnInit {
     if (this.filterID == 4) {
       this.inventoryList = this.tmpInventoryList.filter((e: any) => (e.qtyIn - e.qtyOut) == 0)
     }
-    
+
     if (this.filterID == 5) {
       this.inventoryList = this.tmpInventoryList.filter((e: any) => (e.qtyIn - e.qtyOut) > 0)
     }

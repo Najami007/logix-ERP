@@ -21,6 +21,7 @@ export class DayClosingRptComponent {
 
   @ViewChild(SaleBillPrintComponent) saleBill: any;
   @ViewChild(PurchaseBillPrintComponent) purchaseBill: any;
+   @ViewChild(PurchaseBillPrintComponent) adjustmentBill: any;
 
 
   companyProfile: any = [];
@@ -68,7 +69,6 @@ export class DayClosingRptComponent {
           this.global.popupAlert('Data Not Found!');
           this.app.stopLoaderDark();
           return;
-
         }
         this.rptData = Response.map((e: any) => {
           if (e.billDetail != '-') {
@@ -102,17 +102,21 @@ export class DayClosingRptComponent {
 
 
   printBill(item: any) {
-
-    if (item.invType == 'S' || item.invType == 'SR') {
+    
+    if (item.billDetails[0].InvType == 'S' || item.billDetails[0].InvType == 'SR') {
       this.saleBill.PrintBill(item.invBillNo);
-
       this.saleBill.billType = 'Duplicate';
-
     }
 
-    if (item.invType == 'P' || item.invType == 'PR') {
-      this.purchaseBill.printBill(item);
-    }
+      // if (item.billDetails[0].InvType == 'P' || item.billDetails[0].InvType == 'PR') {
+      //   this.purchaseBill.printBill(item);
+      // }
+
+      
+      // if (item.billDetails[0].InvType == 'I' ||item.billDetails[0].InvType == 'AI' || item.billDetails[0].InvType == 'AO' || item.billDetails[0].InvType == 'DL' || item.billDetails[0].InvType == 'E' ) {
+      //   this.adjustmentBill.printBill(item);
+      // }
+
 
   }
 

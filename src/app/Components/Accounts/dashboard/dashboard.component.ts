@@ -184,6 +184,7 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
         {
           name: 'INCOME',
           type: 'column',
+          color:'#FFC107',
 
 
 
@@ -192,6 +193,7 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
         {
           name: 'EXPENSE',
           type: 'column',
+          color:'#DC3545',
 
           data: this.ExpenseList,
         },

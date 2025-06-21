@@ -223,7 +223,8 @@
 
 
                 <div class="p-5 ">
-                    <button #toggleBtn class="btnsave me-5 w-25" *ngIf="crudList.c" accesskey="s" (click)="save() ">{{btnType}}</button>
+                    <button #toggleBtn class="btnsave me-5 w-25" *ngIf="crudList.c" accesskey="s"
+                        (click)="save() ">{{btnType}}</button>
                     <button class="btnreset w-25" (click)="reset('btn')">Reset</button>
                     <mat-checkbox [(ngModel)]="autoEmpty">Auto Empty</mat-checkbox>
                 </div>
@@ -294,12 +295,13 @@
                         [value]="item.val">{{item.title}}</mat-option>
                 </mat-select>
             </mat-form-field>
-            <button style="height: 40px;" class="btn-rpt-primary  col-lg-1" (click)="global.printData('#prodTable')">Print</button>
+            <button style="height: 40px;" class="btn-rpt-primary  col-lg-1"
+                (click)="global.printData('#prodTable')">Print</button>
 
             <hr>
 
             <div id="prodTable">
-                <table class="table table-hover" style="font-size: 12px;" >
+                <table class="table table-hover" style="font-size: 12px;">
                     <thead>
                         <th>S#</th>
                         <th class="cursorPointer" (click)="sortProds('productTitle')">Product Title</th>
@@ -337,16 +339,21 @@
                             <td>{{item.discPercentage}}%</td>
                             <td>{{item.gst}}%</td>
                             <td>{{item.entryUser}}</td>
-                            <td class="hide-in-print" *ngIf="crudList.u"><mat-icon class="text-success cursorPointer" (click)="edit(item)">edit</mat-icon></td>
+                            <td class="hide-in-print" *ngIf="crudList.u"><mat-icon class="text-success cursorPointer"
+                                    (click)="edit(item)">edit</mat-icon></td>
                             <td class="hide-in-print"><mat-icon class="text-success cursorPointer"
                                     [ngClass]="item.activeStatus ? 'text-success' :'text-danger'"
                                     (click)="activeProduct(item)">{{item.activeStatus ? 'check' :
                                     'close'}}</mat-icon></td>
                             <td class="cursorPointer hide-in-print">
-                                <mat-icon *ngIf="item.productImage == 'Yes'" (click)="this.global.showProductImage('',item.productID)" >image</mat-icon>
-                              <mat-icon *ngIf="item.productImage == '-'" >cancel_presentation</mat-icon></td>
-                            <td class="hide-in-print" *ngIf="crudList.d"><mat-icon class="text-danger cursorPointer" (click)="deleteProd(item)">delete</mat-icon></td>
-                            <td class="hide-in-print"><mat-icon class="cursorPointer" (click)="copyProd(item)">save</mat-icon></td>
+                                <mat-icon *ngIf="item.productImage == 'Yes'"
+                                    (click)="this.global.showProductImage('',item.productID)">image</mat-icon>
+                                <mat-icon *ngIf="item.productImage == '-'">cancel_presentation</mat-icon>
+                            </td>
+                            <td class="hide-in-print" *ngIf="crudList.d"><mat-icon class="text-danger cursorPointer"
+                                    (click)="deleteProd(item)">delete</mat-icon></td>
+                            <td class="hide-in-print"><mat-icon class="cursorPointer"
+                                    (click)="copyProd(item)">save</mat-icon></td>
                         </tr>
                     </tbody>
 
@@ -354,7 +361,7 @@
                 <br />
             </div>
 
-           
+
         </div> <!--End container div-->
 
 
@@ -367,6 +374,8 @@
 </mat-tab-group>
 
 
+
+
 <div class="d-flex" *ngIf="tabIndex == 1"
     style="position: fixed; bottom: 32px !important; width: 100%; background-color: #fff; z-index: 2;">
 
@@ -376,8 +385,13 @@
 
     <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
     <select class="text-white" style="height: 25px;background-color: rgb(75, 164, 248);"
-        (change)="onTableSizeChange($event)"  [(ngModel)]="tableSize">
+        (change)="onTableSizeChange($event)" [(ngModel)]="tableSize">
         <option *ngFor=" let item of tableSizes" [selected]="tableSize == item">{{item}}</option>
     </select>
+
+    <div class="jump-to-page">
+        <input type="number"    [(ngModel)]="jumpPage" placeholder="Page #" min="1" [max]="count" />
+        <button (click)="goToPage()" class="text-white"  style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
+    </div>
 
 </div>

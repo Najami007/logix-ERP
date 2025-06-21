@@ -5,23 +5,23 @@
 
         <div class="row  col-md-12 justify-content-center">
             <div class="col-md-8">
-                 <mat-form-field class="col-md-6 pe-1 matSmall" appearance="outline">
-            <mat-label><u>S</u>earch...</mat-label>
-            <input matInput #InvSearch accesskey="s" />
-             </mat-form-field>
+                <mat-form-field class="col-md-6 pe-1 matSmall" appearance="outline">
+                    <mat-label><u>S</u>earch...</mat-label>
+                    <input matInput #InvSearch accesskey="s" />
+                </mat-form-field>
                 <mat-form-field appearance="outline" class=" matSmall col-md-6">
-                <mat-label>Report Type</mat-label>
-                <mat-select [(ngModel)]="reportType" (selectionChange)="emptyField()">
-                    <mat-option *ngFor="let item of reportTypeList index as index" [value]="item.val">{{index+1}} -
-                        {{item.title}}</mat-option>
-                </mat-select>
-            </mat-form-field>
+                    <mat-label>Report Type</mat-label>
+                    <mat-select [(ngModel)]="reportType" (selectionChange)="emptyField()">
+                        <mat-option *ngFor="let item of reportTypeList index as index" [value]="item.val">{{index+1}} -
+                            {{item.title}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
-          <div class="col-md-2">
-              <button class="btn-rpt-success me-1" (click)="openDialog()">Get Report</button>
-              <button  class="btn-rpt-primary " (click)="print()">Print</button>
-          </div>
-      
+            <div class="col-md-2">
+                <button class="btn-rpt-success me-1" (click)="openDialog()">Get Report</button>
+                <button class="btn-rpt-primary " (click)="print()">Print</button>
+            </div>
+
 
         </div>
         <div class="col-md-12 d-flex flex-wrap justify-content-center">
@@ -40,8 +40,8 @@
 
     </div>
     <div class="p-1 d-flex justify-content-between">
-       
-    
+
+
     </div>
 
 
@@ -77,10 +77,10 @@
                 </div>
             </div>
             <hr class="hide">
-            <table class="table table-logix hide">
+            <table class="table-logix hide">
 
                 <thead>
-                    <tr class="text-center">
+                    <tr class="text-center stickyHeader">
                         <th>S#</th>
                         <th>Barcode</th>
                         <th>Product Title</th>
@@ -117,13 +117,17 @@
                         <td *ngIf="hideSale" class="text-end">{{item.salePrice * (item.qtyIn -
                             item.qtyOut)|number:'1.0-3'}}</td>
                     </tr>
-                    <tr>
+                     <tr>
                         <td colspan="3"></td>
                         <td class="text-center fw-bold">{{balanceQtyTotal |number:'1.0-3'}}</td>
+                        <td *ngIf="hideCost"></td>
+                        <td *ngIf="hideAvg"></td>
+                        <td *ngIf="hideSale"></td>
                         <td *ngIf="hideCost" class="text-end fw-bold">{{costTotal |number:'1.0-3'}}</td>
                         <td *ngIf="hideAvg" class="text-end fw-bold">{{avgCostTotal |number:'1.0-3'}}</td>
                         <td *ngIf="hideSale" class="text-end fw-bold">{{saleTotal |number:'1.0-3'}}</td>
                     </tr>
+
 
 
 
@@ -142,10 +146,10 @@
                 <p style="font-family:Verdana, Geneva, Tahoma, sans-serif;margin-top: -20px;"><strong>{{Title}}</strong>
                 </p>
             </div>
-            <table class="table table-logix">
+            <table class="table-logix">
 
                 <thead>
-                    <tr class="text-center">
+                    <tr class="text-center stickyHeader">
                         <th>S#</th>
                         <th>Barcode</th>
                         <th>Product Title</th>
@@ -164,9 +168,9 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of inventoryList |filter:InvSearch.value |paginate:{
-                        itemsPerPage : tableSize,
-                        currentPage : page,
-                        totalItems :    count,
+                        itemsPerPage : global.tableSize,
+                        currentPage :  global.page,
+                        totalItems :     global.count,
                     }  ; index as index" [ngClass]="(item.qtyIn - item.qtyOut)< 0 ?'text-danger fw-bold':''">
                         <td class="text-center">{{index+1}}</td>
                         <td>{{item.barcode}}</td>
@@ -188,6 +192,9 @@
                     <tr>
                         <td colspan="3"></td>
                         <td class="text-center fw-bold">{{balanceQtyTotal |number:'1.0-3'}}</td>
+                        <td *ngIf="hideCost"></td>
+                        <td *ngIf="hideAvg"></td>
+                        <td *ngIf="hideSale"></td>
                         <td *ngIf="hideCost" class="text-end fw-bold">{{costTotal |number:'1.0-3'}}</td>
                         <td *ngIf="hideAvg" class="text-end fw-bold">{{avgCostTotal |number:'1.0-3'}}</td>
                         <td *ngIf="hideSale" class="text-end fw-bold">{{saleTotal |number:'1.0-3'}}</td>
@@ -199,17 +206,22 @@
 
             </table>
 
-            <div class="d-flex">
+            <div class="d-flex mt-3">
                 <!-- <mat-hint class="me-1 text-secondary">Total: ({{inventoryList.length || 0}})    </mat-hint> -->
                 <pagination-controls previousLabel="Prev" nextLabel="Next"
-                    (pageChange)="onTableDataChange($event)"></pagination-controls>
+                    (pageChange)=" global.onTableDataChange($event,getReport())"></pagination-controls>
 
 
                 <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
                 <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);"
-                    (change)="onTableSizeChange($event)">
-                    <option *ngFor=" let item of tableSizes">{{item}}</option>
+                    (change)="global.onTableSizeChange($event,getReport())" [(ngModel)]="global.tableSize">
+                    <option *ngFor=" let item of global.tableSizes">{{item}}</option>
                 </select>
+                <div class="jump-to-page">
+                    <input type="number" [(ngModel)]="global.jumpPage" placeholder="Page #" min="1"
+                        [max]="global.count" />
+                    <button (click)="global.goToPage(inventoryList,getReport())"class="text-white" style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
+                </div>
 
             </div>
         </div>

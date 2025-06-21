@@ -3,30 +3,8 @@
 
     <section class="statis p-2 text-center  mb-3">
         <div class="row" >
-            <div class="col-lg-3 mb-2" >
-                <div class="box bg-warning text-white  p-3 mat-elevation-z2 " style="box-shadow: 0px 0px 10px 1px  rgb(180, 183, 219);" >
-                    <i ><mat-icon>account_balance</mat-icon></i>                  
-                    <p class="value font-digit ">{{cardsData[0].bankBalance || 0  |number:'1.0-0'}}</p>
-                    <p class="lead ">Bank Balance</p>
-                </div>
-            </div>
-            <div class="col-lg-3 mb-2">
-                <div class="box  bg-danger text-white p-3 mat-elevation-z2" style="box-shadow: 0px 0px 10px 1px  rgb(190, 215, 190);">
-                    <i class=""><mat-icon>attach_money</mat-icon> </i>
-                    <p class="value font-digit">{{cardsData[0].cashInHand || 0 |number:'1.0-0'}}</p>
-                    <p class="lead">Cash Balance</p>
-                </div>
-            </div>
-            <div class="col-lg-3  mb-2">
-                <div class="box bg-success  p-3 text-white mat-elevation-z2" style="box-shadow: 0px 0px  10px 0px  rgb(173, 167, 165);">
-                    <i class=" " ><mat-icon>money_off</mat-icon></i>
-             
-                    <div class="value d-flex text-center justify-content-center  "><p class="font-digit">{{cardsData[0].totalExpense || 0  | number:'1.0-0'}}</p></div>
-                    <p class="lead">TOTAL EXPENSE</p>
-                </div>
-            </div>
-            <div class="col-lg-3 mb-2">
-                <div class="box  bg-primary text-white p-3 mat-elevation-z2" style="box-shadow: 0px 0px 10px 1px  rgb(205, 193, 193);">
+             <div class="col-lg-3 mb-2">
+                <div class="box  bg-warning text-white p-3 mat-elevation-z2" style="box-shadow: 0px 0px 10px 1px  rgb(205, 193, 193);">
                     <i class=""><mat-icon>attach_money</mat-icon></i>
         
                     <div class="d-flex value justify-content-center  "><p class="font-digit">{{cardsData[0].totalIncome || 0  | number:'1.0-0'}}</p> </div>
@@ -35,6 +13,30 @@
                     <p class="lead">TOTAL INCOME</p>
                 </div>
             </div>
+            <div class="col-lg-3  mb-2">
+                <div class="box    bg-danger p-3 text-white mat-elevation-z2" style="box-shadow: 0px 0px  10px 0px  rgb(173, 167, 165);">
+                    <i class=" " ><mat-icon>money_off</mat-icon></i>
+             
+                    <div class="value d-flex text-center justify-content-center  "><p class="font-digit">{{cardsData[0].totalExpense || 0  | number:'1.0-0'}}</p></div>
+                    <p class="lead">TOTAL EXPENSE</p>
+                </div>
+            </div>
+            <div class="col-lg-3 mb-2" >
+                <div class="box bg-success text-white  p-3 mat-elevation-z2 " style="box-shadow: 0px 0px 10px 1px  rgb(180, 183, 219);" >
+                    <i ><mat-icon>account_balance</mat-icon></i>                  
+                    <p class="value font-digit ">{{cardsData[0].bankBalance || 0  |number:'1.0-0'}}</p>
+                    <p class="lead ">Bank Balance</p>
+                </div>
+            </div>
+            <div class="col-lg-3 mb-2">
+                <div class="box  bg-primary text-white p-3 mat-elevation-z2" style="box-shadow: 0px 0px 10px 1px  rgb(190, 215, 190);">
+                    <i class=""><mat-icon>attach_money</mat-icon> </i>
+                    <p class="value font-digit">{{cardsData[0].cashInHand || 0 |number:'1.0-0'}}</p>
+                    <p class="lead">Cash Balance</p>
+                </div>
+            </div>
+            
+           
         </div>
     </section>
 

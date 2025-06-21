@@ -19,19 +19,19 @@
         </mat-form-field>
     
         <mat-form-field appearance="outline" class="col-lg-6 matSmall">
-            <mat-label>COA From</mat-label>
+            <mat-label>Bank Heads</mat-label>
             <mat-select  [(ngModel)]="bankCoaID">
                 <mat-option><ngx-mat-select-search #coaSearch [placeholderLabel]="'Search...'"
                     [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-             <mat-option *ngFor="let item of refCoaList |filter:coaSearch.value" [disabled]="item.coaID === cashCoaID" [value]="item.coaID">{{item.coaTitle}}</mat-option>
+             <mat-option *ngFor="let item of BankList |filter:coaSearch.value" [disabled]="item.coaID === cashCoaID" [value]="item.coaID">{{item.coaTitle}}</mat-option>
             </mat-select>
         </mat-form-field>
     
     
         <mat-form-field appearance="outline" class="col-lg-6 matSmall">
-            <mat-label>COA To</mat-label>
+            <mat-label>Cash Heads</mat-label>
             <mat-select  [(ngModel)]="cashCoaID">           
-             <mat-option *ngFor="let item of refCoaList" [disabled]="item.coaID === bankCoaID" [value]="item.coaID">{{item.coaTitle}}</mat-option>
+             <mat-option *ngFor="let item of cashHeadList" [disabled]="item.coaID === bankCoaID" [value]="item.coaID">{{item.coaTitle}}</mat-option>
             </mat-select>
         </mat-form-field>
     

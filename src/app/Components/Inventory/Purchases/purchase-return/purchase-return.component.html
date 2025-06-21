@@ -51,7 +51,7 @@
     <div class="border rounded card shadow p-1 w-100"
         style="overflow-y: scroll !important; max-height: 70vh;padding-bottom: 120px;">
 
-        <table class="table table-hover table-logix">
+        <table class="table-hover table-logix">
             <thead>
                 <tr>
                     <th class="cursorPointer" (click)="changeOrder()">S#</th>
@@ -101,7 +101,7 @@
                     </td>
 
                     <td class="text-end">{{item.CostPrice * item.Quantity |number}}</td>
-                    <td class="text-center">{{item.aq |number:'1.0-3'}}</td>
+                    <td class="text-center">{{item.AQ |number:'1.0-3'}}</td>
                     <td class="text-danger text-center cursorPointer"><mat-icon (click)="delRow(item)">delete</mat-icon>
                     </td>
 
@@ -328,7 +328,7 @@
                         <mat-radio-button value="Date">Datewise</mat-radio-button>
                     </mat-radio-group>
 
-                    <table class="table table-logix">
+                    <table class="table-logix">
                         <thead>
                             <tr>
                                 <th>S#</th>
