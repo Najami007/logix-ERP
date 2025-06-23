@@ -49,7 +49,7 @@ export class GlobalDataModule implements OnInit {
   // RestServiceCharges = 0;
   RestServiceCharges = this.getServiceCharges();  //////////// Jazeerra Food Service Charges
   validCharges(billTotal: any) {
-    if (billTotal > 3000) { ////////// Jazeera Foods Condition
+    if (billTotal > 0) { ////////// Jazeera Foods Condition
       //if (billTotal > 0) { ////////// Cake Corner Refreshment
       return true;
     } else {
@@ -491,7 +491,7 @@ export class GlobalDataModule implements OnInit {
   }
 
   getServiceCharges() {
-    var val = 2;
+    var val = 5.5;
     return val;
   }
 

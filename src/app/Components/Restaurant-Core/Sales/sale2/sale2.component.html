@@ -63,14 +63,6 @@
             </div>
 
 
-
-
-
-
-
-
-
-
         </div>
 
 
@@ -168,7 +160,7 @@
 
             <div class="d-flex col-lg-3 justify-content-between ">
                 <mat-label class="w-50 text-primary cursorPointer"
-                    (click)="global.openBootstrapModal('#disc',tableData.length > 0);focusTo('#discInput');"
+                    (click)="global.openBootstrapModal('#disc',tableData.length > 0);focusTo('#discInput',$event);"
                     style="font-size: 20px;" accesskey="t"><strong>DISCOUN<u>T</u></strong></mat-label>
                 <p class="text-center font-digit " style="font-size: 35px;">{{billDiscount |number:'1.0-2'}}</p>
                 <!-- <input disabled="true" [(ngModel)]="billDiscount" class="w-50 text-end" (keyup)="getTotal();"
@@ -204,12 +196,12 @@
                     <td *ngIf="holdbtnType != 'rehold'">
                         <button mat-raised-button class="btn-table m-1 text-white bg-primary col-lg-5"
                             *ngIf="holdbtnType == 'hold'" matTooltip="Hold Current Bill" matTooltipPosition="left"
-                            (click)="save('hold')" accesskey="h">HOLD</button>
+                            (click)="save('hold',false)" accesskey="h">HOLD</button>
                     </td>
                     <td *ngIf="holdbtnType == 'rehold'">
                         <button mat-raised-button class="btn-table m-1 btn text-white bg-primary col-lg-5"
                             *ngIf="holdbtnType == 'rehold'" matTooltipPosition="left" matTooltip="ReHold Current Bill"
-                            (click)="save('rehold')">ReHold</button>
+                            (click)="save('rehold',false)">ReHold</button>
                     </td>
                     <td>
                         <button mat-raised-button class=" btn-table m-1 btn text-white bg-danger col-lg-5"
@@ -229,7 +221,7 @@
                     <td rowspan="2">
                         <button mat-raised-button style="height: 130px;width: 200px;"
                             class=" btn text-white bg-success col-lg-5"
-                            (click)="global.openBootstrapModal('#paymentMehtod',tableData != '');focusTo('#cash');generateGst()"
+                            (click)="global.openBootstrapModal('#paymentMehtod',tableData != '');focusTo('#cash',$event);generateGst()"
                             matTooltipPosition="right" matTooltip="Save Current Bill" accesskey="s"><u>S</u>ave</button>
                     </td>
                     <td rowspan="2">
@@ -570,7 +562,7 @@
 
                             <div class="text-center d-flex justify-content-between ">
                                 <button class="btn btn-success" data-bs-dismiss="modal"
-                                    (click)="changeQty(prodQty.value);prodQty.value = '1';tempQty = 1">Save</button>
+                                    (click)="changeQty(tempQty)">Save</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                     (click)="tempQty = 1;recipeSearch.focus()">Close</button>
                             </div>
@@ -690,7 +682,9 @@
                 </div>
 
                 <div class="modal-footer bg-mf-blue">
-                    <button class="btn btn-success" id="save" (click)="save('sale')">Save</button>
+                     <button class="btn btn-success" id="save" (click)="save('sale',true)">Save</button>
+                    <button class="btn btn-success d-none" id="save2" accesskey="."
+                        (click)="save('sale',false)">Save</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                         (click)="paymentType = 'Cash';cash = 0;bankCash = 0;">Close</button>
                 </div>
@@ -744,7 +738,7 @@
                                         [value]="item.val">{{item.title}}</mat-radio-button>
                                 </mat-radio-group>
 
-                                <mat-form-field appearance="outline" class="w-100 pt-4 matSmall">
+                                <mat-form-field appearance="outline" class="w-100 pt-4 matSmall" *ngIf="coverOfFeature"> 
                                     <mat-label>Cover</mat-label>
                                     <input name="cover" type="number" (keydown)="this.global.handleNumKeys($event)"
                                         matInput [(ngModel)]="coverOf" />
