@@ -17,10 +17,14 @@
                 <mat-datepicker #eDate></mat-datepicker>
             </mat-form-field> -->
 
-            <div class="col-lg-4 pb-2" *ngIf="crudList.r">
-                <button class="btn-rpt-success col-lg-2  me-1" (click)="getReport()">Get Report</button>
-                <button class="btn-rpt-primary col-lg-2 me-1" (click)="print()">Print</button>
+            <div class="col-lg-2 pb-2" *ngIf="crudList.r">
+                <button class="btn-rpt-success col-lg-5  me-1" (click)="getReport()">Get Report</button>
+                <button class="btn-rpt-primary col-lg-5 me-1" (click)="print()">Print</button>
                 <!-- <button style="width: 60px;font-size: 20px;" class="btn-rpt-primary" (click)="global.ExportHTMLTabletoExcel('PrintDiv','Summary')"><i class="bi bi-filetype-xlsx"></i></button> -->
+            </div>
+            <div class="col-lg-4 pb-2">
+                <mat-checkbox [(ngModel)]="cashSaleOnly" (change)="filter('cash')">Cash Sale Only</mat-checkbox>
+                <mat-checkbox [(ngModel)]="creditSaleOnly" (change)="filter('credit')">Credit Sale Only</mat-checkbox>
             </div>
         </div>
 

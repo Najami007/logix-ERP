@@ -325,7 +325,7 @@ export class Voucher2Component implements OnInit {
           })
 
           this.CoaList.sort((a: any, b: any) => b.indexNo - a.indexNo);
-        
+
         }
       }
     )
@@ -633,15 +633,8 @@ export class Voucher2Component implements OnInit {
     this.lblVoucherType = curRow.type;
     this.lblProjectName = curRow.projectTitle;
 
-    this.getInvoiceDetail(invoiceNo);
+    this.getInvoiceDetail(invoiceNo, true);
 
-    setTimeout(() => {
-      if (this.invoiceDetails != '') {
-
-        this.globalData.printData('#afterSavePrint');
-
-      }
-    }, 1000);
 
 
   }
@@ -649,7 +642,7 @@ export class Voucher2Component implements OnInit {
 
   /////////////////////////////////////////////
 
-  getInvoiceDetail(invoiceNo: any) {
+  getInvoiceDetail(invoiceNo: any, printFlag?: any) {
 
     this.lblDebitTotal = 0;
     this.lblCreditTotal = 0;
@@ -666,6 +659,13 @@ export class Voucher2Component implements OnInit {
             this.lblDebitTotal += e.debit;
             this.lblCreditTotal += e.credit;
           });
+
+          if (printFlag) {
+
+            setTimeout(() => {
+                this.globalData.printData('#afterSavePrint');
+            }, 200);
+          }
         }
       },
       (error: any) => {

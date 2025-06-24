@@ -111,21 +111,21 @@
                         <td *ngIf="hideSale" class="text-end">{{item.salePrice|number:'1.0-3'}}</td>
 
                         <td *ngIf="hideCost" class="text-end">{{item.costPrice * (item.qtyIn -
-                            item.qtyOut)|number:'1.0-3'}}</td>
+                            item.qtyOut)|number:'1.0-0'}}</td>
                         <td *ngIf="hideAvg" class="text-end">{{item.avgCostPrice * (item.qtyIn -
-                            item.qtyOut)|number:'1.0-3'}}</td>
+                            item.qtyOut)|number:'1.0-0'}}</td>
                         <td *ngIf="hideSale" class="text-end">{{item.salePrice * (item.qtyIn -
-                            item.qtyOut)|number:'1.0-3'}}</td>
+                            item.qtyOut)|number:'1.0-0'}}</td>
                     </tr>
-                     <tr>
+                    <tr>
                         <td colspan="3"></td>
                         <td class="text-center fw-bold">{{balanceQtyTotal |number:'1.0-3'}}</td>
                         <td *ngIf="hideCost"></td>
                         <td *ngIf="hideAvg"></td>
                         <td *ngIf="hideSale"></td>
-                        <td *ngIf="hideCost" class="text-end fw-bold">{{costTotal |number:'1.0-3'}}</td>
-                        <td *ngIf="hideAvg" class="text-end fw-bold">{{avgCostTotal |number:'1.0-3'}}</td>
-                        <td *ngIf="hideSale" class="text-end fw-bold">{{saleTotal |number:'1.0-3'}}</td>
+                        <td *ngIf="hideCost" class="text-end fw-bold">{{costTotal |number:'1.0-0'}}</td>
+                        <td *ngIf="hideAvg" class="text-end fw-bold">{{avgCostTotal |number:'1.0-0'}}</td>
+                        <td *ngIf="hideSale" class="text-end fw-bold">{{saleTotal |number:'1.0-0'}}</td>
                     </tr>
 
 
@@ -183,11 +183,11 @@
                         <td *ngIf="hideSale" class="text-end">{{item.salePrice|number:'1.0-3'}}</td>
 
                         <td *ngIf="hideCost" class="text-end">{{item.costPrice * (item.qtyIn -
-                            item.qtyOut)|number:'1.0-3'}}</td>
+                            item.qtyOut)|number:'1.0-0'}}</td>
                         <td *ngIf="hideAvg" class="text-end">{{item.avgCostPrice * (item.qtyIn -
-                            item.qtyOut)|number:'1.0-3'}}</td>
+                            item.qtyOut)|number:'1.0-0'}}</td>
                         <td *ngIf="hideSale" class="text-end">{{item.salePrice * (item.qtyIn -
-                            item.qtyOut)|number:'1.0-3'}}</td>
+                            item.qtyOut)|number:'1.0-0'}}</td>
                     </tr>
                     <tr>
                         <td colspan="3"></td>
@@ -195,9 +195,9 @@
                         <td *ngIf="hideCost"></td>
                         <td *ngIf="hideAvg"></td>
                         <td *ngIf="hideSale"></td>
-                        <td *ngIf="hideCost" class="text-end fw-bold">{{costTotal |number:'1.0-3'}}</td>
-                        <td *ngIf="hideAvg" class="text-end fw-bold">{{avgCostTotal |number:'1.0-3'}}</td>
-                        <td *ngIf="hideSale" class="text-end fw-bold">{{saleTotal |number:'1.0-3'}}</td>
+                        <td *ngIf="hideCost" class="text-end fw-bold">{{costTotal |number:'1.0-0'}}</td>
+                        <td *ngIf="hideAvg" class="text-end fw-bold">{{avgCostTotal |number:'1.0-0'}}</td>
+                        <td *ngIf="hideSale" class="text-end fw-bold">{{saleTotal |number:'1.0-0'}}</td>
                     </tr>
 
 
@@ -220,7 +220,8 @@
                 <div class="jump-to-page">
                     <input type="number" [(ngModel)]="global.jumpPage" placeholder="Page #" min="1"
                         [max]="global.count" />
-                    <button (click)="global.goToPage(inventoryList,getReport())"class="text-white" style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
+                    <button (click)="global.goToPage(inventoryList,getReport())" class="text-white"
+                        style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
                 </div>
 
             </div>
@@ -251,6 +252,13 @@
                                 [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></option>
                             <option *ngFor="let item of CategoriesList |filter:cat.value" value="{{item.categoryID}}">{{item.categoryTitle}}</option>
                         </select> -->
+
+                <mat-form-field class="col-lg-12 matSmall" *ngIf="dateFlag" appearance="outline">
+                    <mat-label>To Date</mat-label>
+                    <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
+                    <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+                    <mat-datepicker #eDate></mat-datepicker>
+                </mat-form-field>
 
                 <mat-form-field appearance="outline" *ngIf="catFlag" class="w-100 cat matSmall">
                     <mat-label>Category</mat-label>

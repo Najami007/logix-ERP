@@ -52,9 +52,7 @@ export class BalanceSheetComponent implements OnInit {
 
     this.globalData.setHeaderTitle('Balance Sheet');
     this.getProject();
-    setTimeout(() => {
-      this.changeReport(this.rptType);
-    }, 200);
+    
   }
 
   rptType = 'balanceSheet1';
@@ -84,7 +82,8 @@ export class BalanceSheetComponent implements OnInit {
 
 
   ////////////////////////////////////////////////////////////////////
-
+  balanceSheetTypeID:any = 1;
+  formateId = 1;
   projectSearch: any;
   projectID: number = 0;
   projectName: any;
@@ -119,19 +118,26 @@ export class BalanceSheetComponent implements OnInit {
     } else {
       this.projectName = '';
 
-      if (param == 'all') {
-        this.projectID = 0;
-      }
-      if (this.projectID != 0) {
-        this.projectName = this.projectList.find((e: any) => e.projectID == this.projectID).projectTitle;
-      }
+      if (param == 'all')  this.projectID = 0;
+       this.projectName = this.projectID > 0 ? this.projectList.find((e: any) => e.projectID == this.projectID).projectTitle : '';
+      
 
 
       this.currentYear = this.getYear();
-
       this.previousYear = this.currentYear - 1
 
-      this.http.get(environment.mainApi + this.globalData.accountLink + 'GetMainBalanceSheet?todate=' + this.globalData.dateFormater(this.toDate, '-') + '&projectid=' + this.projectID).subscribe(
+      var url = '';
+      if(this.balanceSheetTypeID == 1){
+          url = `GetMainBalanceSheet?todate= ${this.globalData.dateFormater(this.toDate, '-')}&projectid=${this.projectID}`
+      }
+      if(this.balanceSheetTypeID == 2){
+          url = `GetMainBalanceSheet_2?todate= ${this.globalData.dateFormater(this.toDate, '-')}&projectid=${this.projectID}`
+      }
+
+
+    
+
+      this.http.get(environment.mainApi + this.globalData.accountLink + url).subscribe(
         (Response: any) => {
 
           this.assetList = [];
@@ -148,7 +154,6 @@ export class BalanceSheetComponent implements OnInit {
           this.oAccumulatedTotal = 0;
 
           $('#printRpt').show();
-          this.changeReport(this.rptType);
 
           Response.forEach((e: any) => {
 
@@ -205,17 +210,7 @@ export class BalanceSheetComponent implements OnInit {
   }
 
 
-  changeReport(type: any) {
-    this.rptType = type;
-    if (this.rptType == 'balanceSheet1') {
-      $('#balanceSheet2').hide();
-      $('#balanceSheet1').show();
-    }
-    if (this.rptType == 'balanceSheet2') {
-      $('#balanceSheet1').hide();
-      $('#balanceSheet2').show();
-    }
-  }
+
 
 
   export() {

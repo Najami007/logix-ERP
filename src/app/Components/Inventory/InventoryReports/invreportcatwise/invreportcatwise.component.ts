@@ -7,6 +7,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import * as $ from 'jquery';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-invreportcatwise',
@@ -60,7 +61,8 @@ export class InvreportcatwiseComponent implements OnInit {
     private app: AppComponent,
     public global: GlobalDataModule,
     private dialog: MatDialog,
-    private route: Router
+    private route: Router,
+    private datePipe:DatePipe
   ) {
 
     this.global.getCompany().subscribe((data) => {
@@ -86,6 +88,7 @@ export class InvreportcatwiseComponent implements OnInit {
 
   reportTypeList: any = [
     { val: 'full', title: 'Full Report' },
+     { val: 'FWD', title: 'Datewise' },
     { val: 'cw', title: 'Categorywise' },
     { val: 'scw', title: 'Sub Categorywise' },
     { val: 'bw', title: 'Brandwise' },
@@ -126,7 +129,7 @@ export class InvreportcatwiseComponent implements OnInit {
     }
   }
 
-
+  dateFlag = false;
   catFlag = false;
   subCatFlag = false;
   locFlag = false;
@@ -138,7 +141,7 @@ export class InvreportcatwiseComponent implements OnInit {
   hideZero = false;
   zeroOnly = false;
   reportType = 'full';
-  Title = 'Full';
+  Title:any = 'Full';
 
   inventoryList: any = [];
   tmpInventoryList: any = [];
@@ -154,6 +157,7 @@ export class InvreportcatwiseComponent implements OnInit {
   locationID = 0;
   typeID = 0;
   brandID = 0;
+  toDate = new Date();
 
 
 
@@ -203,6 +207,10 @@ export class InvreportcatwiseComponent implements OnInit {
 
     this.inventoryList = [];
     var idType = '';
+    if (this.reportType == 'FWD') {
+      idType = `&reqDate=${this.global.dateFormater(this.toDate,'-')}`;
+      this.Title = `Date: ${this.datePipe.transform(this.toDate,'dd-MM-yyyy')}` ;
+    }
 
     if (this.reportType == 'cw') {
       idType = '&cid=' + this.categoryID;
@@ -386,6 +394,17 @@ export class InvreportcatwiseComponent implements OnInit {
       this.global.openBootstrapModal('#credential', true);
     }
 
+    
+    if (this.reportType == 'FWD') {
+      this.dateFlag = true;
+      this.catFlag = false;
+      this.subCatFlag = false;
+      this.brandFlag = false;
+      this.locFlag = false;
+      this.typeFlag = false
+
+    }
+
 
     if (this.reportType == 'cw') {
 
@@ -394,6 +413,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = false;
       this.locFlag = false;
       this.typeFlag = false
+      this.dateFlag = false;
 
     }
 
@@ -403,6 +423,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = false;
       this.locFlag = false;
       this.typeFlag = false
+      this.dateFlag = false;
     }
 
     if (this.reportType == 'bw') {
@@ -411,6 +432,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = true;
       this.locFlag = false;
       this.typeFlag = false
+      this.dateFlag = false;
     }
 
     if (this.reportType == 'lw') {
@@ -419,6 +441,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = false;
       this.locFlag = true;
       this.typeFlag = false
+      this.dateFlag = false;
     }
 
     if (this.reportType == 'tw') {
@@ -435,6 +458,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = true;
       this.locFlag = false;
       this.typeFlag = false;
+      this.dateFlag = false;
     }
 
     if (this.reportType == 'scbw') {
@@ -443,6 +467,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = true;
       this.locFlag = false;
       this.typeFlag = false;
+      this.dateFlag = false;
     }
 
     if (this.reportType == 'ctw') {
@@ -451,6 +476,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = false;
       this.locFlag = false;
       this.typeFlag = true;
+      this.dateFlag = false;
     }
 
     if (this.reportType == 'sctw') {
@@ -459,6 +485,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = false;
       this.locFlag = false;
       this.typeFlag = true;
+      this.dateFlag = false;
     }
 
     if (this.reportType == 'cbtw') {
@@ -467,6 +494,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = true;
       this.locFlag = false;
       this.typeFlag = true;
+      this.dateFlag = false;
     }
 
     if (this.reportType == 'scbtw') {
@@ -475,6 +503,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = true;
       this.locFlag = false;
       this.typeFlag = true;
+      this.dateFlag = false;
     }
 
 
@@ -484,6 +513,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = true;
       this.locFlag = false;
       this.typeFlag = true;
+      this.dateFlag = false;
     }
 
     if (this.reportType == 'lcw') {
@@ -492,6 +522,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = false;
       this.locFlag = true;
       this.typeFlag = false;
+      this.dateFlag = false;
     }
 
     if (this.reportType == 'lscw') {
@@ -500,6 +531,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = false;
       this.locFlag = true;
       this.typeFlag = false;
+      this.dateFlag = false;
     }
 
     if (this.reportType == 'lcbw') {
@@ -508,6 +540,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = true;
       this.locFlag = true;
       this.typeFlag = false;
+      this.dateFlag = false;
     }
 
     if (this.reportType == 'lscbw') {
@@ -516,6 +549,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = true;
       this.locFlag = true;
       this.typeFlag = false;
+      this.dateFlag = false;
     }
 
     if (this.reportType == 'lctw') {
@@ -524,6 +558,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = false;
       this.locFlag = true;
       this.typeFlag = true;
+      this.dateFlag = false;
     }
 
     if (this.reportType == 'lsctw') {
@@ -532,6 +567,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = false;
       this.locFlag = true;
       this.typeFlag = true;
+      this.dateFlag = false;
     }
 
     if (this.reportType == 'lctbw') {
@@ -540,6 +576,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = true;
       this.locFlag = true;
       this.typeFlag = true;
+      this.dateFlag = false;
     }
 
     if (this.reportType == 'lsctbw') {
@@ -548,6 +585,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.brandFlag = true;
       this.locFlag = true;
       this.typeFlag = true;
+      this.dateFlag = false;
     }
 
   }

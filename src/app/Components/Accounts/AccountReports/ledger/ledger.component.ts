@@ -181,6 +181,7 @@ export class LedgerComponent {
 
 
   ///////////////////////////////////////////////////////
+  tmpTableData:any = [];
 
   getLedgerReport(param: any) {
 
@@ -209,6 +210,7 @@ export class LedgerComponent {
       this.http.get(environment.mainApi + this.globalData.accountLink + 'GetLedgerRpt?coaid=' + this.coaID + '&fromdate='
         + this.globalData.dateFormater(this.startDate, '-') + '&todate=' + this.globalData.dateFormater(this.EndDate, '-') + '&projectID=' + this.projectID).subscribe(
           (Response: any) => {
+            console.log(Response);
 
             this.tableData = Response.map((e: any) => {
               (e.invoiceDate = new Date(e.invoiceDate));
@@ -216,10 +218,15 @@ export class LedgerComponent {
             }
 
             );
+            this.tmpTableData = this.tableData;
             //console.log(this.tableData );
             this.getTotal();
             this.app.stopLoaderDark();
           },
+          (Error:any)=>{
+            console.log(Error);
+             this.app.stopLoaderDark();
+          }
 
         )
     }
@@ -227,6 +234,7 @@ export class LedgerComponent {
 
 
   }
+
 
 
 

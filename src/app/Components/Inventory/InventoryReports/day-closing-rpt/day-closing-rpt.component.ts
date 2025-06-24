@@ -19,9 +19,11 @@ import { PurchaseBillPrintComponent } from '../../Purchases/purchase-bill-print/
 export class DayClosingRptComponent {
 
 
+
+
   @ViewChild(SaleBillPrintComponent) saleBill: any;
   @ViewChild(PurchaseBillPrintComponent) purchaseBill: any;
-   @ViewChild(PurchaseBillPrintComponent) adjustmentBill: any;
+  @ViewChild(PurchaseBillPrintComponent) adjustmentBill: any;
 
 
   companyProfile: any = [];
@@ -50,12 +52,16 @@ export class DayClosingRptComponent {
     $('#summaryTable').hide();
   }
 
+  cashSaleOnly = false;
+  creditSaleOnly = false;
+
   fromDate: Date = new Date();
   fromTime: any = '00:00';
   toDate: Date = new Date();
   toTime: any = '23:59';
 
   rptData: any = [];
+  tmpRptData: any = [];
 
   getReport() {
 
@@ -77,9 +83,11 @@ export class DayClosingRptComponent {
 
           return e;
         });
-          this.app.stopLoaderDark();
+        this.tmpRptData = this.rptData;
+        // this.filter(this.cashSaleOnly?'cash':'credit')
+        this.app.stopLoaderDark();
       },
-      (Error:any)=>{
+      (Error: any) => {
         console.log(Error);
         this.app.stopLoaderDark();
       }
@@ -102,24 +110,37 @@ export class DayClosingRptComponent {
 
 
   printBill(item: any) {
-    
+
     if (item.billDetails[0].InvType == 'S' || item.billDetails[0].InvType == 'SR') {
       this.saleBill.PrintBill(item.invBillNo);
       this.saleBill.billType = 'Duplicate';
     }
 
-      // if (item.billDetails[0].InvType == 'P' || item.billDetails[0].InvType == 'PR') {
-      //   this.purchaseBill.printBill(item);
-      // }
+    // if (item.billDetails[0].InvType == 'P' || item.billDetails[0].InvType == 'PR') {
+    //   this.purchaseBill.printBill(item);
+    // }
 
-      
-      // if (item.billDetails[0].InvType == 'I' ||item.billDetails[0].InvType == 'AI' || item.billDetails[0].InvType == 'AO' || item.billDetails[0].InvType == 'DL' || item.billDetails[0].InvType == 'E' ) {
-      //   this.adjustmentBill.printBill(item);
-      // }
+
+    // if (item.billDetails[0].InvType == 'I' ||item.billDetails[0].InvType == 'AI' || item.billDetails[0].InvType == 'AO' || item.billDetails[0].InvType == 'DL' || item.billDetails[0].InvType == 'E' ) {
+    //   this.adjustmentBill.printBill(item);
+    // }
 
 
   }
 
+
+  filter(type:any) {
+
+    if (this.cashSaleOnly && type == 'cash') {
+      this.creditSaleOnly  = false;
+      this.rptData = this.tmpRptData.filter((e: any) => e.invoiceType == 'Cash Sale');
+    }
+    if (this.creditSaleOnly && type == 'credit') {
+      this.cashSaleOnly  = false;
+      this.rptData = this.tmpRptData.filter((e: any) => e.invoiceType == 'Credit Sale');
+    }
+
+  }
 
 
 }
