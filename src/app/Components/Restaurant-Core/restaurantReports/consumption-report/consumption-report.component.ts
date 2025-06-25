@@ -37,25 +37,45 @@ export class ConsumptionReportComponent {
     })
 
 
-    
-    this.global.getProducts().subscribe(
-      (Response: any) => {
-        this.productList = Response;
-      }
-    )
+
+
   }
   ngOnInit(): void {
     this.global.setHeaderTitle('Consumption Report');
     this.getUsers();
     this.getAllRecipe();
-    $('#detailTable').hide();
-    $('#summaryTable').show();
+    this.getProducts();
+    setTimeout(() => {
+      $('#detailTable').hide();
+      $('#summaryTable').show();
+    }, 200);
 
+  }
+
+  getProducts() {
+    this.global.getProducts().subscribe(
+      (Response: any) => {
+        if (Response.length > 0) {
+          this.productList = Response.map((e: any, index: any) => {
+            (e.indexNo = index + 1);
+            return e;
+          });
+          this.productList.sort((a: any, b: any) => b.indexNo - a.indexNo);;
+        }
+      }
+    )
+  }
+
+  onProdSelected() {
+    var index = this.productList.findIndex((e: any) => e.productID == this.productID);
+    this.productList[index].indexNo = this.productList[0].indexNo + 1;
+    this.productList.sort((a: any, b: any) => b.indexNo - a.indexNo);
   }
 
 
 
-  productList:any = [];
+
+  productList: any = [];
   productID = 0;
   userList: any = [];
   userID = 0;
@@ -69,11 +89,14 @@ export class ConsumptionReportComponent {
   toTime: any = '23:59';
 
 
-  ConsumptionList:any = [];
+  ConsumptionList: any = [];
   tempRecipeTitle = '';
   recipeID = 0;
   recipeTitle = '';
   RecipeList: any = [];
+  qtyTotal: any = 0;
+  amountTotal: any = 0;
+
   getUsers() {
     this.global.getUserList().subscribe((data: any) => { this.userList = data; });
   }
@@ -87,78 +110,135 @@ export class ConsumptionReportComponent {
   getAllRecipe() {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipes').subscribe(
       (Response: any) => {
-        this.RecipeList = Response;
-
+        this.RecipeList = Response.map((e: any, index: any) => {
+          (e.indexNo = index + 1);
+          return e;
+        });
+        this.RecipeList.sort((a: any, b: any) => b.indexNo - a.indexNo);
       }
     )
   }
 
-  OnRecipeSelected(){
-    var title = this.RecipeList.find((e: any) => e.recipeID == this.recipeID);
-    this.tempRecipeTitle = title.recipeTitle;
+  OnRecipeSelected() {
+    this.tempRecipeTitle = this.RecipeList.find((e: any) => e.recipeID == this.recipeID).recipeTitle;
+    var index = this.RecipeList.findIndex((e: any) => e.recipeID == this.recipeID);
+    this.RecipeList[index].indexNo = this.RecipeList[0].indexNo + 1;
+    this.RecipeList.sort((a: any, b: any) => b.indexNo - a.indexNo);
   }
 
 
-  getReport(){
+  getReport() {
     $('#detailTable').hide();
     $('#summaryTable').show();
     this.ConsumptionList = [];
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetConsumptionRptDateWise?reqUID=' + this.userID + '&FromDate=' +
-        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
-          (Response:any)=>{
-          
-            this.ConsumptionList = Response;
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetConsumptionRptDateWise?reqUID=' + this.userID + '&FromDate=' +
+      this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
+        (Response: any) => {
+          if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
 
           }
-        )
+
+          this.ConsumptionList = Response;
+
+          if (Response.length > 0) {
+            this.qtyTotal = 0;
+            this.amountTotal = 0;
+            Response.forEach((e: any) => {
+              this.qtyTotal += e.quantity;
+              this.amountTotal += e.avgCostPriceTotal;
+
+            });
+          }
+
+        }
+      )
 
   }
 
 
-  getIngredientwise(){
+  getIngredientwise() {
     $('#detailTable').show();
     $('#summaryTable').hide();
-    if(this.productID == 0 || this.productID == undefined){
+    if (this.productID == 0 || this.productID == undefined) {
       this.msg.WarnNotify('Select Product')
-    }else{
+    } else {
       this.ConsumptionList = [];
-      this.http.get(environment.mainApi+this.global.inventoryLink+'GetConsumptionRptIngredientAndDateWise?reqUID=' + this.userID + '&FromDate=' +
-        this.global.dateFormater(this.fromDate, '-') + '&ToDate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime+
-      '&ProductID='+this.productID).subscribe(
-          (Response:any)=>{
+      this.qtyTotal = 0;
+      this.amountTotal = 0;
+      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetConsumptionRptIngredientAndDateWise?reqUID=' + this.userID + '&FromDate=' +
+        this.global.dateFormater(this.fromDate, '-') + '&ToDate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime +
+        '&ProductID=' + this.productID).subscribe(
+          (Response: any) => {
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
             this.ConsumptionList = Response;
-  
+            if (Response.length > 0) {
+              this.qtyTotal = 0;
+              this.amountTotal = 0;
+              Response.forEach((e: any) => {
+                this.qtyTotal += e.quantity;
+                this.amountTotal += e.avgCostPriceTotal;
+
+              });
+            }
+
+
           }
         )
     }
 
-  
+
   }
 
 
-  getRecipewise(){
+  getRecipewise() {
     $('#detailTable').show();
     $('#summaryTable').hide();
-    if(this.recipeID == 0 || this.recipeID == undefined){
+    if (this.recipeID == 0 || this.recipeID == undefined) {
       this.msg.WarnNotify('Select Recipe')
-    }else{
+    } else {
       this.ConsumptionList = [];
-      this.http.get(environment.mainApi+this.global.inventoryLink+'GetConsumptionRptRecipeAndDateWise?reqUID=' + this.userID + '&FromDate=' +
-        this.global.dateFormater(this.fromDate, '-') + '&ToDate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime+
-      '&RecipeID='+this.recipeID).subscribe(
-          (Response:any)=>{
+      this.qtyTotal = 0;
+      this.amountTotal = 0;
+      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetConsumptionRptRecipeAndDateWise?reqUID=' + this.userID + '&FromDate=' +
+        this.global.dateFormater(this.fromDate, '-') + '&ToDate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime +
+        '&RecipeID=' + this.recipeID).subscribe(
+          (Response: any) => {
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
             this.ConsumptionList = Response;
-  
+            if (Response.length > 0) {
+              this.qtyTotal = 0;
+              this.amountTotal = 0;
+              Response.forEach((e: any) => {
+                this.qtyTotal += e.quantity;
+                this.amountTotal += e.avgCostPriceTotal;
+
+              });
+            }
+
+
           }
         )
     }
 
-  
+
   }
 
 
 
-  
+
   print() {
     this.global.printData('#PrintDiv')
   }

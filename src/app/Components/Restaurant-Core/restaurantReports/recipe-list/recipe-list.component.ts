@@ -78,6 +78,12 @@ export class RecipeListComponent implements OnInit {
     this.app.startLoaderDark();
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipes').subscribe(
       (Response: any) => {
+           if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+
+          }
         this.tempRecipeList = Response;
      if(this.catID != 0){
       this.RecipeList = Response.filter((e:any)=>e.recipeCatID == this.catID);

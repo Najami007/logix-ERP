@@ -18,7 +18,7 @@
             <mat-select [(ngModel)]="recipeID" (selectionChange)="OnRecipeSelected()">
                 <mat-option><ngx-mat-select-search #recSearch [placeholderLabel]="'Search...'"
                         [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                <mat-option  *ngFor="let item of RecipeList | filter:recSearch.value"
+                <mat-option  *ngFor="let item of RecipeList | filter:recSearch.value | slice:0:10"
                     [value]="item.recipeID">{{item.recipeTitle}}</mat-option>
             </mat-select>
         </mat-form-field>
@@ -143,11 +143,11 @@
                 <tr *ngFor="let item of SaleDetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
                     <td class="text-center cursorPointer " (click)="billDetails(item)"><span class="text-primary border-bottom">{{item.invBillNo}}</span></td>
-                    <td>{{item.invDate |date:'dd-MM-yyyy'}} ({{item.createdOn |date:'hh:mm:a'}})</td>
+                    <td>{{item.createdOn |date:'dd-MM-yyyy'}} ({{item.createdOn |date:'hh:mm:a'}})</td>
                     <td>{{item.tableTitle}}</td>
                     <td class="text-center">{{item.quantity | number:'1.0-3'}}</td>
                     <td class="text-end">{{item.avgCostPrice  |number:'1.0-3'}}</td>
-                    <td class="text-end">{{((item.avgCostPrice / item.quantity) / item.salePrice) * 100|number:'1.0-3'}}%</td>
+                    <td class="text-end">{{(item.avgCostPrice  / item.salePrice) * 100|number:'1.0-3'}}%</td>
                     <td class="text-end">{{item.salePrice|number:'1.0-3'}}</td>
                     <td class="text-end">{{item.avgCostPrice * item.quantity|number:'1.0-3'}}</td>
                     <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-3'}}</td>
@@ -190,8 +190,8 @@
                     <!-- <td>{{item.invDate |date:'dd-MM-yyyy'}}</td> -->
                     <td>{{item.recipeTitle}}</td>
                     <td class="text-center">{{item.quantity |number:'1.0-3'}}</td>
-                    <td class="text-end">{{item.avgCostPrice * item.quantity |number:'1.0-3'}}</td>
-                    <td class="text-center">{{((item.avgCostPrice * item.quantity) / item.total) * 100 |number:'1.0-3'}}%</td>
+                    <td class="text-end">{{item.avgCostPrice  |number:'1.0-3'}}</td>
+                    <td class="text-center">{{((item.avgCostPrice) / item.total) * 100 |number:'1.0-3'}}%</td>
                     <td class="text-end">{{item.total |number:'1.0-3'}}</td>
                 </tr>
                 <tr>

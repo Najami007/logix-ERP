@@ -1,25 +1,21 @@
-<mat-drawer-container class="mat-drawer-container displayMainPage">
- <mat-drawer mode="side" [opened]="sideBarOpen" class="mat-drawer">
-        <app-side-navbar ></app-side-navbar>
-    </mat-drawer>  
- 
-       <mat-drawer-container>
-        <app-top-nav-bar *ngIf="hideFlag == false" class="topBar" id="menubar" (toggleMySideBar)="sideBarToggler()"></app-top-nav-bar>
+<mat-drawer-container class="mat-drawer-container displayMainPage" autosize>
+    <mat-drawer mode="side" [opened]="sideBarOpen" class="mat-drawer" position="start">
+        <app-side-navbar></app-side-navbar>
+    </mat-drawer>
+
+       <div class="layout-sideNav-content">
+         <app-top-nav-bar *ngIf="hideFlag == false" class="topBar" id="menubar"
+            (toggleMySideBar)="sideBarToggler()"></app-top-nav-bar>
         <!-- <mat-icon  style="position: fixed;right: 0;z-index: 101;top: 35px;" class="mt-2 text-danger" (click)="hideUnhide()">{{hideFlag ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}}</mat-icon> -->
 
-        <div class="bodyContainer">
-            <router-outlet ></router-outlet>
-        </div>
-        <div class="header" >
+        <section class="main-content">
+            <router-outlet></router-outlet>
+        </section>
+       </div>
+        <div class="header">
             <app-header></app-header>
         </div>
-       </mat-drawer-container>
-       
-
-
-  </mat-drawer-container> 
 
 
 
-
-  
+</mat-drawer-container>

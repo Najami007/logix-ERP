@@ -124,7 +124,7 @@
                 <tr *ngFor="let item of SaleDetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
                     <td class="text-center cursorPointer " (click)="billDetails(item)"><span class="text-primary border-bottom">{{item.invBillNo}}</span></td>
-                    <td>{{item.invDate |date:'dd-MM-yyyy'}} ({{item.createdOn |date:'hh:mm:a'}})</td>
+                    <td>{{item.createdOn |date:'dd-MM-yyyy'}} ({{item.createdOn |date:'hh:mm:a'}})</td>
                     <td class="text-center">{{item.tableTitle}}</td>
                     <td class="text-end">{{item.billTotal |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.otherCharges|number:'1.0-0'}}</td>
@@ -132,7 +132,9 @@
                     <td>{{item.entryUser}}</td>
                 </tr>
                 <tr>
-                    <td colspan="6"></td>
+                    <td colspan="4"></td>
+                     <th class="text-end">{{detailBillTotal|number:'1.0-0'}}</th>
+                      <th class="text-end">{{detailOtherChargesTotal|number:'1.0-0'}}</th>
                     <th class="text-end">{{grandTotal|number:'1.0-0'}}</th>
                     <td></td>
                 </tr>

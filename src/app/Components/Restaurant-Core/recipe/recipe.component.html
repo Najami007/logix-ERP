@@ -88,18 +88,7 @@
                                 </div>
                             </div>
                         </div>
-
-
-
                     </div>
-
-
-                    <div class="row">
-
-
-                    </div>
-
-
                     <div class="justify-content-around d-flex">
                         <button #toggleBtn class="btnsave w-25" accesskey="s" (click)="save() "
                             *ngIf="crudList.c && btnType == 'Save'"><u>S</u>ave</button>
@@ -257,71 +246,71 @@
 
 
                 </div>
-                
+
                 <div id="printTable">
-                         <table class="table txtsm">
-                    <thead>
-                        <tr>
-                            <th>S#</th>
-                            <th (click)="sortData('title')" class="cursorPointer">Title</th>
-                            <th>Code</th>
-                            <th>Type</th>
-                            <th>Time</th>
-                            <th>Cost</th>
-                            <th>Food Cost</th>
-                            <!-- <th>Cur Cost</th> -->
-                            <!-- <th>Cur Cost Other</th> -->
-                            <th>Sale</th>
-                            <th>Category</th>
-                            <th>Cooking Area</th>
-                            <th class="hide-in-print">Edit</th>
-                            <th class="hide-in-print">Lock Status</th>
-                            <th class="hide-in-print">Status</th>
-                            <th class="hide-in-print">Retrieve</th>
-                            <th class="hide-in-print">Copy</th>
-                            <th class="hide-in-print">Img</th>
-                            <th class="hide-in-print">Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of RecipeList |filter:recipeSearch.value index as index">
-                            <td>{{index+1}}</td>
-                            <td>{{item.recipeTitle}}</td>
-                            <td>{{item.recipeCode}}</td>
-                            <td>{{item.recipeType}}</td>
-                            <td>{{item.cookingTime}} min</td>
-                            <!-- <td>{{item.recipeCostPrice |number:'1.0-1'}}</td> -->
-                            <td>{{item.recipeCurrentCostPrice |number:'1.0-1'}}</td>
-                            <td>{{(item.recipeCurrentCostPrice / item.recipeSalePrice) * 100 |number:'1.0-1'}}%</td>
-                            <!-- <td>{{item.OtherRecipeCostPrice |number:'1.0-1'}}</td> -->
-                            <td>{{item.recipeSalePrice |number:'1.0-0'}}</td>
-                            <td>{{item.recipeCatTitle}}</td>
-                            <td>{{item.cookingAriaTitle}}</td>
-                            <td class="cursorPointer hide-in-print"><mat-icon class="text-success"
-                                    (click)="edit(item)">edit</mat-icon></td>
-                            <td class="hide-in-print"><mat-icon *ngIf="crudList.u"
-                                    (click)="approveRecipe(item)">{{item.approvedStatus == true
-                                    ? 'lock' :'lock_open'}}</mat-icon></td>
-                            <td class="cursorPointer hide-in-print"><mat-icon *ngIf="crudList.u"
-                                    [ngClass]="item.activeStatus == false ?'text-danger': 'text-success'"
-                                    (click)="activeRecipe(item)">{{item.activeStatus == false ?
-                                    'indeterminate_check_box' :'check_box'}}</mat-icon></td>
-                            <td class="cursorPointer hide-in-print"><mat-icon
-                                    (click)="getIngredient(item)">photo_filter</mat-icon>
-                            </td>
-                            <td class="cursorPointer hide-in-print"><mat-icon data-bs-toggle="modal"
-                                    data-bs-target="#otherRecipe" *ngIf="crudList.u"
-                                    (click)="copyRecipe(item)">save</mat-icon></td>
-                            <td class="cursorPointer hide-in-print"><mat-icon
-                                    (click)="getRecipeImage(item.recipeID,'show')">image</mat-icon></td>
-                            <td class="cursorPointer hide-in-print"><mat-icon class="text-danger" *ngIf="crudList.d"
-                                    (click)="delete(item)">delete</mat-icon></td>
+                    <table class="table txtsm">
+                        <thead>
+                            <tr>
+                                <th>S#</th>
+                                <th (click)="sortData('title')" class="cursorPointer">Title</th>
+                                <th>Code</th>
+                                <th>Type</th>
+                                <th>Time</th>
+                                <th>Cost</th>
+                                <th>Food Cost</th>
+                                <!-- <th>Cur Cost</th> -->
+                                <!-- <th>Cur Cost Other</th> -->
+                                <th>Sale</th>
+                                <th>Category</th>
+                                <th>Cooking Area</th>
+                                <th class="hide-in-print">Edit</th>
+                                <th class="hide-in-print">Lock Status</th>
+                                <th class="hide-in-print">Status</th>
+                                <th class="hide-in-print">Retrieve</th>
+                                <th class="hide-in-print">Copy</th>
+                                <th class="hide-in-print">Img</th>
+                                <th class="hide-in-print">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of RecipeList |filter:recipeSearch.value index as index">
+                                <td>{{index+1}}</td>
+                                <td>{{item.recipeTitle}}</td>
+                                <td>{{item.recipeCode}}</td>
+                                <td>{{item.recipeType}}</td>
+                                <td>{{item.cookingTime}} min</td>
+                                <!-- <td>{{item.recipeCostPrice |number:'1.0-1'}}</td> -->
+                                <td>{{item.recipeCurrentCostPrice |number:'1.0-1'}}</td>
+                                <td>{{(item.recipeCurrentCostPrice / item.recipeSalePrice) * 100 |number:'1.0-1'}}%</td>
+                                <!-- <td>{{item.OtherRecipeCostPrice |number:'1.0-1'}}</td> -->
+                                <td>{{item.recipeSalePrice |number:'1.0-0'}}</td>
+                                <td>{{item.recipeCatTitle}}</td>
+                                <td>{{item.cookingAriaTitle}}</td>
+                                <td class="cursorPointer hide-in-print"><mat-icon class="text-success"
+                                        (click)="edit(item)">edit</mat-icon></td>
+                                <td class="hide-in-print"><mat-icon *ngIf="crudList.u"
+                                        (click)="approveRecipe(item)">{{item.approvedStatus == true
+                                        ? 'lock' :'lock_open'}}</mat-icon></td>
+                                <td class="cursorPointer hide-in-print"><mat-icon *ngIf="crudList.u"
+                                        [ngClass]="item.activeStatus == false ?'text-danger': 'text-success'"
+                                        (click)="activeRecipe(item)">{{item.activeStatus == false ?
+                                        'indeterminate_check_box' :'check_box'}}</mat-icon></td>
+                                <td class="cursorPointer hide-in-print"><mat-icon
+                                        (click)="getIngredient(item)">photo_filter</mat-icon>
+                                </td>
+                                <td class="cursorPointer hide-in-print"><mat-icon data-bs-toggle="modal"
+                                        data-bs-target="#otherRecipe" *ngIf="crudList.u" [ngClass]="item.recipeRefID > 0 ? 'text-success': 'text-secondary'"
+                                        (click)="copyRecipe(item)">save</mat-icon></td>
+                                <td class="cursorPointer hide-in-print"><mat-icon 
+                                        (click)="getRecipeImage(item.recipeID,'show')">image</mat-icon></td>
+                                <td class="cursorPointer hide-in-print"><mat-icon class="text-danger" *ngIf="crudList.d"
+                                        (click)="delete(item)">delete</mat-icon></td>
 
-                        </tr>
-                    </tbody>
+                            </tr>
+                        </tbody>
 
 
-                </table>
+                    </table>
                 </div>
 
             </div>
@@ -413,7 +402,7 @@
                                     <td class="text-center">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
                                     <td class="text-center">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
 
-                                    <td class="cursorPointer"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
+                                    <td class="cursorPointer"><mat-icon *ngIf="!item.lockedStatus" (click)="delRow(item)">delete</mat-icon></td>
                                 </tr>
                                 <tr>
                                     <td colspan="2"></td>

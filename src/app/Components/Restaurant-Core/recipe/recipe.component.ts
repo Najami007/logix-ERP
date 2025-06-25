@@ -132,11 +132,6 @@ export class RecipeComponent implements OnInit {
      if(type == 'activeStatus'){
       this.RecipeList = this.filterActiveStatus == 0 ? this.tmpRecipeList : this.tmpRecipeList.filter((e:any)=> e.activeStatus == this.filterActiveStatus);
     }
-
-
-    console.log(this.RecipeList);
-
-
   }
 
 
@@ -151,8 +146,6 @@ export class RecipeComponent implements OnInit {
       (Response: any) => {
         this.RecipeList = Response;
         this.tmpRecipeList = Response;
-     
-
       }
     )
   }

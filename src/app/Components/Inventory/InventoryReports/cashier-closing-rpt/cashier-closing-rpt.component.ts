@@ -120,11 +120,11 @@ export class CashierClosingRptComponent implements OnInit {
           this.totalSaleReturn += e.saleReturn;
           this.totalServiceCharges += e.servicesCharges;
           this.totalCash += e.cashIn - e.cashOut;
-          this.totalBank += e.bank;
+          this.totalBank += e.debit + e.credit;
           this.totalComplimentary += e.complimentary;
-          this.totalDiscount += e.disocunt;
+          this.totalDiscount += e.discount - e.discountReturn;
           this.totalHDCharges += e.hdCharges;
-          this.totalCredit += e.creditSale;
+          this.totalCredit += e.creditSale - e.creditSaleReturn;
           this.totalPosFee += e.posFee;
         });
 

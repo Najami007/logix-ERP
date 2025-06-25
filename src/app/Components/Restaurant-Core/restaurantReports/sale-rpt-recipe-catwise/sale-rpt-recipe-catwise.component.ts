@@ -116,6 +116,12 @@ export class SaleRptRecipeCatwiseComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleSummaryRecipeCatAndDateWise?reqCID='+this.recipeCatID+'&reqUID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response: any) => {
+           if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+
+          }
      
         this.SaleDetailList = Response;
         this.grandTotal = 0;
@@ -136,6 +142,12 @@ export class SaleRptRecipeCatwiseComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleDetailRecipeCatAndDateWise?reqCID='+this.recipeCatID+'&reqUID='+this.userID+'&FromDate='+
     this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
       (Response: any) => {
+           if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+
+          }
         this.SaleDetailList = Response;
         this.grandTotal = 0;
         Response.forEach((e:any) => {

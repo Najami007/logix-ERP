@@ -130,8 +130,8 @@
                     <td class="text-center">{{index + 1}}</td>
                     <td class="text-center cursorPointer " (click)="printBill(item)"><span class="text-primary border-bottom">{{item.invBillNo}}</span></td>
                     <td class="text-center">{{item.orderNo}}</td>
-                    <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
-                    <td class="text-center">{{item.tableTitle}}</td>
+                    <td >{{item.createdOn | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
+                    <td class="text-start">{{item.tableTitle}}</td>
                     <td class="text-end">{{item.billTotal |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.otherCharges |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.billDiscount |number:'1.0-0'}}</td>
@@ -182,8 +182,8 @@
                     <td class="text-center">{{index + 1}}</td>
                     <td class="text-center cursorPointer " (click)="printBill(item)"><span class="text-primary border-bottom">{{item.invBillNo}}</span></td>
                     <td class="text-center">{{item.orderNo}}</td>
-                    <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
-                    <td class="text-center">{{item.tableTitle}}</td>
+                    <td >{{item.createdOn | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
+                    <td class="text-start">{{item.tableTitle}}</td>
                     <td class="text-end">{{item.gstAmount |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.billTotal |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.otherCharges |number:'1.0-0'}}</td>
@@ -238,9 +238,9 @@
             <tbody>
                 <tr *ngFor="let item of SaleDetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td class="text-center cursorPointer " (click)="billDetails(item)"><span class="text-primary border-bottom">{{item.invBillNo}}</span></td>
+                    <td class="text-center cursorPointer " (click)="printBill(item)"><span class="text-primary border-bottom">{{item.invBillNo}}</span></td>
                     <td class="text-center">{{item.orderNo}}</td>
-                    <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
+                    <td >{{item.createdOn | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
                     <td>{{item.tableTitle}}</td>
                     <td>{{item.productTitle}}</td>
                     <td class="text-center">{{item.quantity |number:'1.0-3'}}</td>
@@ -272,8 +272,8 @@
                 <tr>
                     <th>S#</th>
                     <th>Title</th>
-                    <th>Qty</th>
-                    <th>Total</th>
+                    <th (click)="sortData('qty')" class="cursorPointer">Qty</th>
+                    <th (click)="sortData('amount')" class="cursorPointer">Total</th>
 
                 </tr>
 

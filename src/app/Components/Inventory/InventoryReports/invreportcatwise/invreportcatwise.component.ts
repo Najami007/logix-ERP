@@ -37,9 +37,9 @@ export class InvreportcatwiseComponent implements OnInit {
 
   goToPage(): void {
     var count = this.inventoryList.length / this.tableSize;
-      alert(count)
+    alert(count)
 
-    if(parseFloat(this.jumpPage) > count)  {
+    if (parseFloat(this.jumpPage) > count) {
       this.msg.WarnNotify('Invalid Value')
       return;
     }
@@ -62,7 +62,7 @@ export class InvreportcatwiseComponent implements OnInit {
     public global: GlobalDataModule,
     private dialog: MatDialog,
     private route: Router,
-    private datePipe:DatePipe
+    private datePipe: DatePipe
   ) {
 
     this.global.getCompany().subscribe((data) => {
@@ -88,7 +88,7 @@ export class InvreportcatwiseComponent implements OnInit {
 
   reportTypeList: any = [
     { val: 'full', title: 'Full Report' },
-     { val: 'FWD', title: 'Datewise' },
+    { val: 'FWD', title: 'Datewise' },
     { val: 'cw', title: 'Categorywise' },
     { val: 'scw', title: 'Sub Categorywise' },
     { val: 'bw', title: 'Brandwise' },
@@ -141,7 +141,7 @@ export class InvreportcatwiseComponent implements OnInit {
   hideZero = false;
   zeroOnly = false;
   reportType = 'full';
-  Title:any = 'Full';
+  Title: any = 'Full';
 
   inventoryList: any = [];
   tmpInventoryList: any = [];
@@ -208,8 +208,8 @@ export class InvreportcatwiseComponent implements OnInit {
     this.inventoryList = [];
     var idType = '';
     if (this.reportType == 'FWD') {
-      idType = `&reqDate=${this.global.dateFormater(this.toDate,'-')}`;
-      this.Title = `Date: ${this.datePipe.transform(this.toDate,'dd-MM-yyyy')}` ;
+      idType = `&reqDate=${this.global.dateFormater(this.toDate, '-')}`;
+      this.Title = `Date: ${this.datePipe.transform(this.toDate, 'dd-MM-yyyy')}`;
     }
 
     if (this.reportType == 'cw') {
@@ -333,6 +333,12 @@ export class InvreportcatwiseComponent implements OnInit {
       // alert(this.reportType+idType);
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryRpt?rptType=' + this.reportType + idType).subscribe(
         (Response: any) => {
+          if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+
+          }
 
           this.inventoryList = Response;
           this.tmpInventoryList = Response;
@@ -394,7 +400,7 @@ export class InvreportcatwiseComponent implements OnInit {
       this.global.openBootstrapModal('#credential', true);
     }
 
-    
+
     if (this.reportType == 'FWD') {
       this.dateFlag = true;
       this.catFlag = false;

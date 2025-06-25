@@ -42,8 +42,10 @@ export class SaleRptRecipewiseComponent implements OnInit {
     this.global.setHeaderTitle('Sale Report (Recipewise)');
     this.getUsers();
     this.getAllRecipe();
-    $('#detailTable').show();
+   setTimeout(() => {
+     $('#detailTable').show();
     $('#summaryTable').hide();
+   }, 200);
   }
 
 
@@ -110,10 +112,21 @@ export class SaleRptRecipewiseComponent implements OnInit {
   getAllRecipe() {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipes').subscribe(
       (Response: any) => {
-        this.RecipeList = Response;
+        this.RecipeList = Response.map((e: any, index: any) => {
+          (e.indexNo = index + 1);
+          return e;
+        });
+        this.RecipeList.sort((a: any, b: any) => b.indexNo - a.indexNo);
 
       }
     )
+  }
+
+  OnRecipeSelected(){
+    this.tempRecipeTitle= this.RecipeList.find((e: any) => e.recipeID == this.recipeID).recipeTitle;
+    var index = this.RecipeList.findIndex((e: any) => e.recipeID == this.recipeID);
+    this.RecipeList[index].indexNo = this.RecipeList[0].indexNo + 1;
+    this.RecipeList.sort((a: any, b: any) => b.indexNo - a.indexNo);
   }
 
   getUsers() {
@@ -128,10 +141,7 @@ export class SaleRptRecipewiseComponent implements OnInit {
     this.userName = curUser.userName;
   }
 
-  OnRecipeSelected(){
-    var title = this.RecipeList.find((e: any) => e.recipeID == this.recipeID);
-    this.tempRecipeTitle = title.recipeTitle;
-  }
+  
 
 
   QtyTotal = 0;
@@ -157,6 +167,12 @@ export class SaleRptRecipewiseComponent implements OnInit {
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetRecipeSaleDetailDateWise?reqrid='+this.recipeID+'&reqUID='+this.userID+'&FromDate='+
       this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
         (Response: any) => {
+             if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+
+          }
         
           this.saleSummaryList = [];
           this.tempSaleSummaryList = [];
@@ -190,6 +206,12 @@ export class SaleRptRecipewiseComponent implements OnInit {
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetRecipeSaleSummaryDateWise?&reqUID='+this.userID+'&FromDate='+
         this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
           (Response: any) => {
+               if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+
+          }
             this.SaleDetailList = [];
         
             this.saleSummaryList = Response;
@@ -200,7 +222,7 @@ export class SaleRptRecipewiseComponent implements OnInit {
             this.summaryAvgCostTotal = 0;
             Response.forEach((e:any) => {
               this.QtyTotal += e.quantity;
-              this.summaryAvgCostTotal += e.avgCostPrice * e.quantity;
+              this.summaryAvgCostTotal += e.avgCostPrice;
               this.summaryTotal += e.total;
             });
             this.app.stopLoaderDark();

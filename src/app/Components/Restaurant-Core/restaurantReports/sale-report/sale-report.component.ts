@@ -19,7 +19,7 @@ export class SaleReportComponent implements OnInit {
 
   FBRFeature = this.global.FBRFeature;
 
-  @ViewChild(RestSaleBillPrintComponent) billPrint:any;
+  @ViewChild(RestSaleBillPrintComponent) billPrint: any;
 
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -46,10 +46,17 @@ export class SaleReportComponent implements OnInit {
   ngOnInit(): void {
     this.global.setHeaderTitle('Sale Report (Datewise)');
     this.getUsers();
-    $('#detailTable').show();
-    $('#summaryTable').hide();
+    setTimeout(() => {
+      $('#detailTable').hide();
+      $('#TaxSummaryTable').hide();
+      $('#summaryTable').show();
+      $('#qsmtable').hide();
+    }, 200);
 
   }
+
+
+
 
 
 
@@ -68,7 +75,7 @@ export class SaleReportComponent implements OnInit {
   saleSummaryList: any = [];
   SaleDetailList: any = [];
   tempSaleDetailList: any = [];
-  qtySummaryList:any = []
+  qtySummaryList: any = []
 
   reportType: any;
 
@@ -77,9 +84,9 @@ export class SaleReportComponent implements OnInit {
   }
 
   filterRecipe(start: any, end: any, type: any) {
-    if (this.SaleDetailList == ''){
+    if (this.SaleDetailList == '') {
       this.msg.WarnNotify('First Get Sale Detail')
-    }else{
+    } else {
       this.app.startLoaderDark();
       if (type == 'perc') {
         this.SaleDetailList = this.tempSaleDetailList.filter((e: any) => ((e.avgCostPrice / e.salePrice) * 100) >= start &&
@@ -106,7 +113,7 @@ export class SaleReportComponent implements OnInit {
       this.app.stopLoaderDark();
     }
 
-    
+
   }
 
 
@@ -127,7 +134,7 @@ export class SaleReportComponent implements OnInit {
 
   getReport(type: any) {
 
-    if (type == 'summary') {  
+    if (type == 'summary') {
       $('#detailTable').hide();
       $('#TaxSummaryTable').hide();
       $('#summaryTable').show();
@@ -137,6 +144,12 @@ export class SaleReportComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=s&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
             this.saleSummaryList = Response;
             this.billTotal = 0;
             this.chargesTotal = 0;
@@ -151,7 +164,7 @@ export class SaleReportComponent implements OnInit {
             });
             this.app.stopLoaderDark();
           },
-          (Error:any)=>{
+          (Error: any) => {
             this.app.stopLoaderDark();
           }
         )
@@ -168,6 +181,12 @@ export class SaleReportComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=s&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
             this.saleSummaryList = Response;
             this.billTotal = 0;
             this.chargesTotal = 0;
@@ -179,12 +198,12 @@ export class SaleReportComponent implements OnInit {
               this.chargesTotal += e.otherCharges;
               this.discountTotal += e.billDiscount;
               this.netGrandTotal += e.netTotal;
-              this.gstTotal  += e.gstAmount;
+              this.gstTotal += e.gstAmount;
 
             });
             this.app.stopLoaderDark();
           },
-          (Error:any)=>{
+          (Error: any) => {
             this.app.stopLoaderDark();
           }
         )
@@ -199,6 +218,12 @@ export class SaleReportComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryDetailDateWise_3?reqType=s&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
             this.tempSaleDetailList = Response;
             this.SaleDetailList = Response;
             this.qtyTotal = 0;
@@ -211,13 +236,13 @@ export class SaleReportComponent implements OnInit {
             });
             this.app.stopLoaderDark();
           },
-          (Error:any)=>{
+          (Error: any) => {
             this.app.stopLoaderDark();
           }
         )
     }
 
-    
+
     if (type == 'qsm') {
       $('#detailTable').hide();
       $('#summaryTable').hide();
@@ -228,29 +253,35 @@ export class SaleReportComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryDetailDateWise_3?reqType=s&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
+               if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+
+          }
             this.qtySummaryList = [];
-             this.filterUniqueValues(Response).forEach((e:any)=>{
-              this.qtySummaryList.push({recipeID:e.recipeID, productTitle:e.productTitle,quantity:0,saleTotal:0})
+            this.filterUniqueValues(Response).forEach((e: any) => {
+              this.qtySummaryList.push({ recipeID: e.recipeID, productTitle: e.productTitle, quantity: 0, saleTotal: 0 })
             });
-           
-             setTimeout(() => {
-              Response.forEach((e:any)=>{
-             
-                this.qtySummaryList.forEach((j:any) => {
-                  if(e.recipeID == j.recipeID){
-                
+
+            setTimeout(() => {
+              Response.forEach((e: any) => {
+
+                this.qtySummaryList.forEach((j: any) => {
+                  if (e.recipeID == j.recipeID) {
+
                     j.quantity += e.quantity;
-                    j.saleTotal+= e.quantity * e.salePrice;
+                    j.saleTotal += e.quantity * e.salePrice;
                   }
                 });
-                
-               })
-             }, 200);
-            
+
+              })
+            }, 200);
+
 
             this.app.stopLoaderDark();
           },
-          (Error:any)=>{
+          (Error: any) => {
             this.app.stopLoaderDark();
           }
         )
@@ -261,16 +292,16 @@ export class SaleReportComponent implements OnInit {
   public filterUniqueValues<T>(array: T[]): T[] {
     const uniqueSet = new Set<string>();
     const uniqueArray: T[] = [];
-  
-    array.forEach((item:any) => {
-     
+
+    array.forEach((item: any) => {
+
       const key = JSON.stringify(item.productTitle);
       if (!uniqueSet.has(key)) {
         uniqueSet.add(key);
         uniqueArray.push(item);
       }
     });
-  
+
     return uniqueArray;
   }
 
@@ -290,32 +321,42 @@ export class SaleReportComponent implements OnInit {
   }
 
 
-  printBill(item:any){
+  printBill(item: any) {
     this.billPrint.printBill(item.invBillNo);
-          this.billPrint.myDuplicateFlag = true;
+    this.billPrint.myDuplicateFlag = true;
 
-          // setTimeout(() => {
-          //   this.global.printData('#print-bill');
-          // }, 500);
+    // setTimeout(() => {
+    //   this.global.printData('#print-bill');
+    // }, 500);
   }
 
 
 
-    sendToFbr(item: any) {
-      this.http.post(environment.mainApi + this.global.restaurentLink + 'ResSendToPra', {
-        InvBillNo: item.invBillNo,
-        UserID: this.global.getUserID()
-      }).subscribe(
-        (Response: any) => {
-          if (Response.msg == 'Data Updated Successfully') {
-            this.msg.SuccessNotify(Response.msg);
-            this.getReport('taxSummary');
-          } else {
-            this.msg.WarnNotify(Response.msg);
-          }
+  sendToFbr(item: any) {
+    this.http.post(environment.mainApi + this.global.restaurentLink + 'ResSendToPra', {
+      InvBillNo: item.invBillNo,
+      UserID: this.global.getUserID()
+    }).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Data Updated Successfully') {
+          this.msg.SuccessNotify(Response.msg);
+          this.getReport('taxSummary');
+        } else {
+          this.msg.WarnNotify(Response.msg);
         }
-      )
+      }
+    )
+  }
+
+
+  sortData(type:any){
+    if(type == 'qty'){
+      this.qtySummaryList.sort((a:any,b:any)=> b.quantity - a.quantity)
     }
-  
+     if(type == 'amount'){
+         this.qtySummaryList.sort((a:any,b:any)=> b.saleTotal - a.saleTotal)
+    }
+  }
+
 
 }

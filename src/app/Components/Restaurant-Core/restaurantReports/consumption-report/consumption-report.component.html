@@ -2,7 +2,7 @@
     <div class="row  mt-2">
 
 
-        <mat-form-field appearance="outline" class="col-lg-4 matSmall" >
+        <mat-form-field appearance="outline" class="col-lg-4 matSmall">
             <mat-label>User</mat-label>
             <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
                 <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
@@ -19,8 +19,8 @@
             <mat-datepicker #sDate></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="col-lg-2 matSmall" appearance="outline">
-            <mat-label>From Time</mat-label>    
-            <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+            <mat-label>From Time</mat-label>
+            <input matInput [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
             <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
             <ngx-material-timepicker #fTime></ngx-material-timepicker>
 
@@ -35,14 +35,14 @@
         </mat-form-field>
         <mat-form-field class="col-lg-2 matSmall" appearance="outline">
             <mat-label>To Time</mat-label>
-                <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
-                <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
-                <ngx-material-timepicker #tTime></ngx-material-timepicker>
+            <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+            <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #tTime></ngx-material-timepicker>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="col-lg-4 matSmall">
             <mat-label>Proudct</mat-label>
-            <mat-select [(ngModel)]="productID" >
+            <mat-select [(ngModel)]="productID" (selectionChange)="onProdSelected()">
                 <mat-option><ngx-mat-select-search #prodsearch [placeholderLabel]="'Search...'"
                         [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                 <mat-option *ngFor="let item of productList | filter:prodsearch.value | slice:0:25"
@@ -54,13 +54,13 @@
             <mat-select [(ngModel)]="recipeID" (selectionChange)="OnRecipeSelected()">
                 <mat-option><ngx-mat-select-search #recSearch [placeholderLabel]="'Search...'"
                         [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                <mat-option  *ngFor="let item of RecipeList | filter:recSearch.value"
+                <mat-option *ngFor="let item of RecipeList | filter:recSearch.value | slice:0:25"
                     [value]="item.recipeID">{{item.recipeTitle}}</mat-option>
             </mat-select>
         </mat-form-field>
 
         <div class="col-lg-4  mb-2 " *ngIf="crudList.r">
-   
+
             <button class="btn-rpt-success col-lg-3  me-1" (click)="getReport()">Summary</button>
             <button class="btn-rpt-success col-lg-3 me-1" (click)="getIngredientwise()">Productwise</button>
             <button class="btn-rpt-primary col-lg-3 me-1" (click)="getRecipewise()">Recipewise</button>
@@ -69,7 +69,7 @@
 
     </div>
 
-    
+
 
     <div id="PrintDiv">
 
@@ -87,7 +87,7 @@
                     <h1 class="companyName">{{item.companyName}}</h1>
 
                     <p class="rptTitle" style="margin-top:-20px">Consumption Report</p>
-                    <p style="margin-top: -15px;" > <b *ngIf="userName != ''">User: {{userName}}</b></p>
+                    <p style="margin-top: -15px;"> <b *ngIf="userName != ''">User: {{userName}}</b></p>
                     <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
 
@@ -102,17 +102,17 @@
             </div>
         </div>
 
-    
 
-        <table class="table-logix" id="summaryTable" >
+
+        <table class="table-logix" id="summaryTable">
             <thead>
                 <tr>
                     <th>S#</th>
                     <th>Title</th>
                     <th>Qty</th>
-                    <th>Cost</th>
+                    <!-- <th>Cost</th> -->
                     <th>Total</th>
-                
+
 
                 </tr>
 
@@ -120,34 +120,39 @@
             </thead>
             <tbody>
                 <tr *ngFor="let item of ConsumptionList index as index">
-                    <td>{{index +1}}</td>
+                    <td class="text-center">{{index +1}}</td>
                     <td>{{item.productTitle}}</td>
-                     <td class="text-center">{{item.quantity  | number:'0.0-3'}} </td>
+                    <td class="text-center">{{item.quantity | number:'0.0-3'}} </td>
                     <!-- <td >{{item.quantity  > 1  ?  item.quantity    :  item.quantity * 1000 | number:'0.0-3'}} {{item.quantity < 1  ? 'gm' : 'kg'}}</td> -->
-                    <td class="text-end">{{item.avgCostPriceTotal | number:'0.0-2'}}</td>
-                    <td class="text-end">{{ item.quantity  * item.avgCostPriceTotal | number:'0.0-2'}}</td>
+                    <td class="text-end">{{item.avgCostPriceTotal | number:'0.0-0'}}</td>
+                    <!-- <td class="text-end">{{ item.quantity  * item.avgCostPriceTotal | number:'0.0-2'}}</td> -->
 
                 </tr>
-               
-               
+                   <tr>
+                    <td colspan="2"></td>
+                    <td class="text-center fw-bold">{{qtyTotal | number:'0.0-3'}}</td>
+                    <td class="text-end fw-bold">{{amountTotal | number:'0.0-0'}}</td>
+                </tr>
+
+
             </tbody>
 
-          
+
         </table>
 
 
-           
 
-        <table class="table-logix" id="detailTable" >
+
+        <table class="table-logix" id="detailTable">
             <thead>
                 <tr>
                     <th>S#</th>
                     <th>Product</th>
                     <th>Recipe</th>
                     <th>Qty</th>
-                    <th>Cost</th>
+                    <!-- <th>Cost</th> -->
                     <th>Total</th>
-                
+
 
                 </tr>
 
@@ -155,21 +160,26 @@
             </thead>
             <tbody>
                 <tr *ngFor="let item of ConsumptionList index as index">
-                    <td>{{index +1}}</td>
-                    
+                    <td class="text-center">{{index +1}}</td>
+
                     <td>{{item.productTitle}}</td>
                     <td>{{item.recipeTitle}}</td>
-                    <td class="text-center">{{item.quantity  | number:'0.0-3'}} </td>
+                    <td class="text-center">{{item.quantity | number:'0.0-3'}} </td>
                     <!-- <td >{{item.quantity  > 1  ?  item.quantity   :  item.quantity * 1000 | number:'0.0-3'}} {{item.quantity < 1  ? 'gm' : 'kg'}}</td> -->
-                    <td class="text-end">{{item.avgCostPriceTotal | number:'0.0-2'}}</td>
-                    <td class="text-end">{{ item.quantity  * item.avgCostPriceTotal | number:'0.0-2'}}</td>
+                    <td class="text-end">{{item.avgCostPriceTotal | number:'0.0-0'}}</td>
+                    <!-- <td class="text-end">{{ item.quantity  * item.avgCostPriceTotal | number:'0.0-2'}}</td> -->
 
                 </tr>
-               
-               
+                <tr>
+                    <td colspan="3"></td>
+                    <td class="text-center fw-bold">{{qtyTotal | number:'0.0-3'}}</td>
+                    <td class="text-end fw-bold">{{amountTotal | number:'0.0-0'}}</td>
+                </tr>
+
+
             </tbody>
 
-          
+
         </table>
 
 
@@ -178,4 +188,3 @@
 
 
 </div>
-
