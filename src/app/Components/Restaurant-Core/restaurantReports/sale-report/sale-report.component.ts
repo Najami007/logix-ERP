@@ -84,7 +84,7 @@ export class SaleReportComponent implements OnInit {
   }
 
   filterRecipe(start: any, end: any, type: any) {
-    if (this.SaleDetailList == '') {
+    if (this.tempSaleDetailList == '') {
       this.msg.WarnNotify('First Get Sale Detail')
     } else {
       this.app.startLoaderDark();

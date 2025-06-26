@@ -34,10 +34,13 @@ import { AreaComponent } from './area/area.component';
 
 
 
-import { DateAdapter, MAT_DATE_LOCALE , MAT_DATE_FORMATS } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { VehicleComponent } from './vehicle/vehicle.component';
+import { AddVehicleComponent } from './vehicle/add-vehicle/add-vehicle.component';
 
-export const MY_DATE_FORMAT  = {
+
+export const MY_DATE_FORMAT = {
   parse: {
     dateInput: 'DD/MM/YYYY',
   },
@@ -51,21 +54,22 @@ export const MY_DATE_FORMAT  = {
 
 export const companyRoutes: Route[] = [
 
-  {path:'cmpprof', component:CompanyProfileComponent,data: { title: 'Company Profile' }, canActivate:[AuthGuard] },
-  {path:'prtnr', component:PartnersComponent,data: { title: 'Partner' },  canActivate:[AuthGuard]},
-  {path:'city', component:CityComponent,data: { title: 'City' },canActivate:[AuthGuard]  },
-  {path:'cntry', component:CountryComponent,data: { title: 'Country' }, canActivate:[AuthGuard] },
-  {path:'adep', component:DepartmentComponent,data: { title: 'Department' },canActivate:[AuthGuard]  },
-  {path:'asec', component:SectionComponent,data: { title: 'Section' },canActivate:[AuthGuard]  },
-  {path:'proj', component:ProjectComponent,data: { title: 'Project' },canActivate:[AuthGuard]  },
-  {path:'party', component:PartyComponent,data: { title: 'Party' },canActivate:[AuthGuard]  },
-  {path:'loc', component:ListOfCustomersComponent,data: { title: 'List Of Customer' },canActivate:[AuthGuard]  },
-  {path:'los', component:ListOfSuppliersComponent,data: { title: 'List Of Supplier' },canActivate:[AuthGuard]  },
-  {path:'bkr', component:BookerComponent,data: { title: 'Booker' },canActivate:[AuthGuard]  },
-  {path:'root', component:RootComponent,data: { title: 'Root' },canActivate:[AuthGuard]  },
-  {path:'area', component:AreaComponent,data: { title: 'Area' },canActivate:[AuthGuard]  },
-  
-  {path:'**', redirectTo:'home',pathMatch:'full'}
+  { path: 'cmpprof', component: CompanyProfileComponent, data: { title: 'Company Profile' }, canActivate: [AuthGuard] },
+  { path: 'prtnr', component: PartnersComponent, data: { title: 'Partner' }, canActivate: [AuthGuard] },
+  { path: 'city', component: CityComponent, data: { title: 'City' }, canActivate: [AuthGuard] },
+  { path: 'cntry', component: CountryComponent, data: { title: 'Country' }, canActivate: [AuthGuard] },
+  { path: 'adep', component: DepartmentComponent, data: { title: 'Department' }, canActivate: [AuthGuard] },
+  { path: 'asec', component: SectionComponent, data: { title: 'Section' }, canActivate: [AuthGuard] },
+  { path: 'proj', component: ProjectComponent, data: { title: 'Project' }, canActivate: [AuthGuard] },
+  { path: 'party', component: PartyComponent, data: { title: 'Party' }, canActivate: [AuthGuard] },
+  { path: 'loc', component: ListOfCustomersComponent, data: { title: 'List Of Customer' }, canActivate: [AuthGuard] },
+  { path: 'los', component: ListOfSuppliersComponent, data: { title: 'List Of Supplier' }, canActivate: [AuthGuard] },
+  { path: 'bkr', component: BookerComponent, data: { title: 'Booker' }, canActivate: [AuthGuard] },
+  { path: 'root', component: RootComponent, data: { title: 'Root' }, canActivate: [AuthGuard] },
+  { path: 'area', component: AreaComponent, data: { title: 'Area' }, canActivate: [AuthGuard] },
+  { path: 'vehicle', component: VehicleComponent, data: { title: 'Vehicle' }, canActivate: [AuthGuard] },
+
+  { path: '**', redirectTo: 'home', pathMatch: 'full' }
 
 
 ];
@@ -91,8 +95,10 @@ export const companyRoutes: Route[] = [
     BookerComponent,
     RootComponent,
     AreaComponent,
-    
-  
+    VehicleComponent,
+    AddVehicleComponent
+
+
   ],
   imports: [
     CommonModule,
@@ -113,7 +119,8 @@ export const companyRoutes: Route[] = [
 
   ],
   exports: [
-    RouterModule
+    RouterModule,
+    VehicleComponent
   ],
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },

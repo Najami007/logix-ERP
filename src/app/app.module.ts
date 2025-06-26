@@ -35,6 +35,7 @@ import { ConfirmationAlertComponent } from './Components/Common/confirmation-ale
 import { SharedServicesDataModule } from './Shared/helper/shared-services-data/shared-services-data.module';
 import { SharedFieldValidationModule } from './Shared/helper/shared-field-validation/shared-field-validation.module';
 import { CommonModule, DatePipe } from '@angular/common';
+import { DisableAutocompleteDirective } from './Shared/directives/disable-autocomplete.directive';
 
 
 
@@ -61,6 +62,7 @@ import { CommonModule, DatePipe } from '@angular/common';
     NumberInputComponent,
     SideNavbarComponent,
     ConfirmationAlertComponent,
+    DisableAutocompleteDirective,
     
    
     
@@ -105,6 +107,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 
   ],
   exports:[
+    DisableAutocompleteDirective
    
   ],
   providers: [

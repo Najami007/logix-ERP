@@ -31,6 +31,7 @@ export class SaleBillPrintComponent implements OnInit {
   printKotFeature = this.global.printKot;
   billFormate1 = this.global.BillFormate1Feature;
   billFormate2 = this.global.BillFormate2Feature;
+    VehicleSaleFeature = this.global.VehicleSaleFeature;
 
 
 
@@ -113,11 +114,16 @@ export class SaleBillPrintComponent implements OnInit {
   myFbrResponse = '';
   myPOSFee = 0;
   myInvTime = new Date();
+
+  myVehicleNo = '';
+  myMeterReading = '';
+  myVehicleName = '';
+
   PrintBill(InvNo: any) {
     this.billPrintType = this.global.getBillPrintType();
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
       (Response: any) => {
-        console.log(Response);
+        // console.log(Response);
         this.myPrintTableData = Response;
 
 
@@ -144,6 +150,9 @@ export class SaleBillPrintComponent implements OnInit {
         this.myFbrResponse = Response[0].fbrResponse;
         this.myPOSFee = Response[0].posFee;
         this.myCusBalance = Response[0].cusBalance;
+        this.myVehicleNo = Response[0].vehicleNo;
+        this.myMeterReading = Response[0].meterReading;
+        this.myVehicleName = Response[0].vehicleName;
         this.myInvTime = new Date();
 
 

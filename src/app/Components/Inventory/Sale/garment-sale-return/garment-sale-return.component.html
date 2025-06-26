@@ -79,8 +79,31 @@
                                 ||0|number:'1.0-1'}}</p>
                         </div>
                     </div>
-                       <mat-radio-group *ngIf="urduBillFeature" aria-label="Select an option" [(ngModel)]="billPrintType" #BillType
-                        (change)="setBillType($event)">
+                    <div class="d-flex flex-wrap" *ngIf="VehicleSaleFeature">
+                        <div class="col-md-8 pe-1">
+                            <mat-form-field class="w-100 matSmall" appearance="outline">
+                                <mat-label>Select Vehicle</mat-label>
+                                <mat-select appearance="outline" [(ngModel)]="vehicleID">
+                                    <mat-option><ngx-mat-select-search #vehicleSearch [placeholderLabel]="'Search...'"
+                                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                    <mat-option *ngFor="let item of vehicleList|filter:vehicleSearch.value "
+                                        [value]="item.vehicleID">
+                                        {{item.vehicleNo}}<small class="fs-10px">({{item.vehicleName}})</small>
+                                    </mat-option>
+                                </mat-select>
+
+                            </mat-form-field>
+
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field class="w-100 matSmall" appearance="outline">
+                                <mat-label>Reading</mat-label>
+                                <input [(ngModel)]="meterReading" matInput type="text">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <mat-radio-group *ngIf="urduBillFeature" aria-label="Select an option" [(ngModel)]="billPrintType"
+                        #BillType (change)="setBillType($event)">
                         <mat-radio-button value="english">English</mat-radio-button>
                         <mat-radio-button value="urdu">Urdu</mat-radio-button>
                     </mat-radio-group>
@@ -215,8 +238,8 @@
 
 
 
-    
-        <!----------------Modal Window For Products lisr ---------->
+
+    <!----------------Modal Window For Products lisr ---------->
 
 
 
@@ -224,10 +247,10 @@
         aria-labelledby="paymentMehtodLabel">
         <div class="modal-dialog modal-dialog-scrollable modal-xl  modal-dialog-centered ">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-           
+
                 <div class="modal-body">
-                <app-product-modal [productList]="productList" (reloadProdEmitter)="getProducts()"
-                 (addProductEmitter)="holdDataFunction($event)" ></app-product-modal>
+                    <app-product-modal [productList]="productList" (reloadProdEmitter)="getProducts()"
+                        (addProductEmitter)="holdDataFunction($event)"></app-product-modal>
 
                 </div>
 
@@ -254,7 +277,8 @@
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-header">
                     <h2 class="modal-title" id="paymentMehtodLabel">Payment Method</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="onPaymentModalClose()"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        (click)="onPaymentModalClose()"></button>
                 </div>
                 <div class="modal-body">
 
@@ -298,11 +322,13 @@
                     </mat-form-field> -->
 
                     <div class="w-100 mb-3" *ngIf="customerFeature">
-                        <ng-select  class="w-100 custom" placeholder="Customer" appearance="outline" [(ngModel)]="partyID" (ngModelChange)="partySelect()" name="customer">
+                        <ng-select class="w-100 custom" placeholder="Customer" appearance="outline"
+                            [(ngModel)]="partyID" (ngModelChange)="partySelect()" name="customer">
                             <ng-option [value]="0">WalkIn Customer</ng-option>
-                            <ng-option *ngFor="let item of partyList " [value]="item.partyID"> {{item.partyName}}</ng-option>
+                            <ng-option *ngFor="let item of partyList " [value]="item.partyID">
+                                {{item.partyName}}</ng-option>
                         </ng-select>
-                     </div>
+                    </div>
 
 
                     <mat-form-field appearance="outline" class="w-100 matSmall">
@@ -408,8 +434,8 @@
             <div class="modal-content">
 
                 <app-saved-bill (changePaymentEmitter)="changePayment($event)"
-                (printDuplicateEmitter)="printDuplicateBill($event)" (billDetailEmitter)="billDetails($event)"
-                (postBillEmitter)="postSaleBill($event)" [savedbillList]="savedbillList"></app-saved-bill>
+                    (printDuplicateEmitter)="printDuplicateBill($event)" (billDetailEmitter)="billDetails($event)"
+                    (postBillEmitter)="postSaleBill($event)" [savedbillList]="savedbillList"></app-saved-bill>
 
                 <!-- <div>
                     <mat-tab-group>
@@ -567,11 +593,11 @@
 
 
 
-                    <!------------------------------ Design For Bill Pirnt  --------------------->
+                <!------------------------------ Design For Bill Pirnt  --------------------->
 
-                    <app-sale-bill-print id="print-bill" class="hide"></app-sale-bill-print>
+                <app-sale-bill-print id="print-bill" class="hide"></app-sale-bill-print>
 
-                    <!---------------------------------------------------------------------------------->
+                <!---------------------------------------------------------------------------------->
 
 
 

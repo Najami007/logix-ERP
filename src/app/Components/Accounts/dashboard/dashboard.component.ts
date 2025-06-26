@@ -160,11 +160,14 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
         crosshair: true,
       },
       yAxis: {
-        min: 0,
+        // min: 0,
         title: {
           text: 'AMOUNT',
         },
       },
+       credits: {
+        enabled: false
+    },
       tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
         pointFormat:

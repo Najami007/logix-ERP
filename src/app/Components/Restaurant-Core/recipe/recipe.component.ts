@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import Swal from 'sweetalert2';
 import { MapWHProductComponent } from './map-whproduct/map-whproduct.component';
+import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
 
 @Component({
   selector: 'app-recipe',
@@ -1155,5 +1156,14 @@ export class RecipeComponent implements OnInit {
       }
     })
   }
+
+
+
+    getRecipeDetail(item:any){
+      this.dialog.open(RecipeDetailComponent,{
+        width:'50%',
+        data:[item,{type:'Dine In'}]
+      }).afterClosed().subscribe()
+    }
 
 }

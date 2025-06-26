@@ -51,6 +51,7 @@ export class ProductComponent implements OnInit {
   tableSize: number = 0;
   tableSizes: any = [];
   jumpPage: any = 0;
+  tmpPage: number = 0;
 
   onTableDataChange(event: any) {
 
@@ -84,6 +85,29 @@ export class ProductComponent implements OnInit {
         this.filterProductList(this.filterType);
       }, 500);
     }
+  }
+
+  onProdSearchKeyup(e:any, value:any) {
+
+    if (e.target.value.length == 0 && this.tmpPage == 0) {
+      this.tmpPage = this.page;
+      this.page = 1;
+    }
+    if (e.key == 'Backspace') {
+      if (value.length == 1) {
+        this.page = this.tmpPage;
+        this.tmpPage = 0;
+      }
+    }
+
+
+  }
+  onProdSearchKeydown(e: any, value: any) {
+    //    if(value.length == 0){
+    //     alert(this.tmpPage)
+    //   this.page = this.tmpPage;
+    //   this.tmpPage = 0;
+    // }
   }
 
   constructor(

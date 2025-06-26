@@ -79,13 +79,38 @@
                                 ||0|number:'1.0-1'}}</p>
                         </div>
 
-                    
+
                     </div>
-                    <mat-radio-group *ngIf="urduBillFeature" aria-label="Select an option" [(ngModel)]="billPrintType" #BillType
-                        (change)="setBillType($event)">
-                        <mat-radio-button value="english">English</mat-radio-button>
-                        <mat-radio-button value="urdu">Urdu</mat-radio-button>
-                    </mat-radio-group>
+                    <div class="d-flex flex-wrap" *ngIf="VehicleSaleFeature">
+                        <div class="col-md-8 pe-1">
+                            <mat-form-field class="w-100 matSmall" appearance="outline">
+                                <mat-label>Select Vehicle</mat-label>
+                                <mat-select appearance="outline" [(ngModel)]="vehicleID">
+                                    <mat-option><ngx-mat-select-search #vehicleSearch [placeholderLabel]="'Search...'"
+                                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                    <mat-option *ngFor="let item of vehicleList|filter:vehicleSearch.value "
+                                        [value]="item.vehicleID">
+                                        {{item.vehicleNo}}<small class="fs-10px">({{item.vehicleName}})</small>  </mat-option>
+                                </mat-select>
+
+                            </mat-form-field>
+
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field class="w-100 matSmall" appearance="outline">
+                                <mat-label>Reading</mat-label>
+                                <input [(ngModel)]="meterReading" matInput type="text">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="w-100">
+                        <mat-radio-group *ngIf="urduBillFeature" aria-label="Select an option"
+                            [(ngModel)]="billPrintType" #BillType (change)="setBillType($event)">
+                            <mat-radio-button value="english">English</mat-radio-button>
+                            <mat-radio-button value="urdu">Urdu</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
                 </div>
                 <div class="pt-1 pb-1 text-center d-flex justify-content-between">
                     <span class="pe-1 w-25" *ngIf="onlySaveBillFeature">
@@ -93,7 +118,7 @@
                             accesskey="S"><u>S</u>ave</button>
                     </span>
                     <button class="btn btn-success" [ngClass]="onlySaveBillFeature ? 'w-75' : 'w-100'" id="save"
-                        (click)="save(paymentType,true,true)" accesskey="P"><u>S</u>ave & Print</button>
+                        (click)="save(paymentType,true,true)" accesskey="P">Save & <u>P</u>rint</button>
                     <button class="w-100 btnsave d-none" (click)="save(paymentType,false,true)"
                         accesskey="."><u>S</u>ave</button>
                 </div>
@@ -104,8 +129,7 @@
                     </div>
 
                     <button accesskey="o" [ngClass]="tillOpenFeature ? 'col-lg-7' : 'col-lg-9'"
-                        class="btnload pt-2 d-flex justify-content-between "
-                        (click)="openPaymentModal()">
+                        class="btnload pt-2 d-flex justify-content-between " (click)="openPaymentModal()">
                         <span><u>O</u>ther</span> <mat-icon>keyboard_arrow_right</mat-icon>
                     </button>
                     <div class="col-lg-2 ps-1" *ngIf="tillOpenFeature">
@@ -236,18 +260,17 @@
 
 
 
-        <!----------------Modal Window For Products lisr ---------->
+    <!----------------Modal Window For Products lisr ---------->
 
 
 
-    <div class="modal fade" id="prodModal" tabindex="-1" role="dialog"
-        aria-labelledby="paymentMehtodLabel">
+    <div class="modal fade" id="prodModal" tabindex="-1" role="dialog" aria-labelledby="paymentMehtodLabel">
         <div class="modal-dialog modal-dialog-scrollable modal-xl  modal-dialog-centered ">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-           
+
                 <div class="modal-body">
-                <app-product-modal [productList]="productList" (reloadProdEmitter)="getProducts()"
-                 (addProductEmitter)="holdDataFunction($event)" ></app-product-modal>
+                    <app-product-modal [productList]="productList" (reloadProdEmitter)="getProducts()"
+                        (addProductEmitter)="holdDataFunction($event)"></app-product-modal>
 
                 </div>
 
@@ -273,7 +296,8 @@
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
                 <div class="modal-header">
                     <h2 class="modal-title" id="paymentMehtodLabel">Payment Method</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="onPaymentModalClose()"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        (click)="onPaymentModalClose()"></button>
                 </div>
                 <div class="modal-body">
 
@@ -429,8 +453,8 @@
             <div class="modal-content">
 
                 <app-saved-bill (changePaymentEmitter)="changePayment($event)" (sendToFbrEmitter)="sendToFbr($event)"
-                (printDuplicateEmitter)="printDuplicateBill($event)" (billDetailEmitter)="billDetails($event)"
-                (postBillEmitter)="postSaleBill($event)" [savedbillList]="savedbillList"></app-saved-bill>
+                    (printDuplicateEmitter)="printDuplicateBill($event)" (billDetailEmitter)="billDetails($event)"
+                    (postBillEmitter)="postSaleBill($event)" [savedbillList]="savedbillList"></app-saved-bill>
 
 
                 <!-- <div>

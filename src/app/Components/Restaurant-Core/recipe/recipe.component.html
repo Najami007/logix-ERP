@@ -268,6 +268,7 @@
                                 <th class="hide-in-print">Status</th>
                                 <th class="hide-in-print">Retrieve</th>
                                 <th class="hide-in-print">Copy</th>
+                                <th class="hide-in-print">Detail</th>
                                 <th class="hide-in-print">Img</th>
                                 <th class="hide-in-print">Delete</th>
                             </tr>
@@ -299,9 +300,13 @@
                                         (click)="getIngredient(item)">photo_filter</mat-icon>
                                 </td>
                                 <td class="cursorPointer hide-in-print"><mat-icon data-bs-toggle="modal"
-                                        data-bs-target="#otherRecipe" *ngIf="crudList.u" [ngClass]="item.recipeRefID > 0 ? 'text-success': 'text-secondary'"
+                                        data-bs-target="#otherRecipe" *ngIf="crudList.u"
+                                        [ngClass]="item.recipeRefID > 0 ? 'text-success': 'text-secondary'"
                                         (click)="copyRecipe(item)">save</mat-icon></td>
-                                <td class="cursorPointer hide-in-print"><mat-icon 
+                                <td><mat-icon class="cursorPointer text-success hide-in-print"
+                                        (click)="getRecipeDetail(item)">receipt</mat-icon></td>
+
+                                <td class="cursorPointer hide-in-print"><mat-icon
                                         (click)="getRecipeImage(item.recipeID,'show')">image</mat-icon></td>
                                 <td class="cursorPointer hide-in-print"><mat-icon class="text-danger" *ngIf="crudList.d"
                                         (click)="delete(item)">delete</mat-icon></td>
@@ -402,7 +407,8 @@
                                     <td class="text-center">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
                                     <td class="text-center">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
 
-                                    <td class="cursorPointer"><mat-icon *ngIf="!item.lockedStatus" (click)="delRow(item)">delete</mat-icon></td>
+                                    <td class="cursorPointer"><mat-icon *ngIf="!item.lockedStatus"
+                                            (click)="delRow(item)">delete</mat-icon></td>
                                 </tr>
                                 <tr>
                                     <td colspan="2"></td>

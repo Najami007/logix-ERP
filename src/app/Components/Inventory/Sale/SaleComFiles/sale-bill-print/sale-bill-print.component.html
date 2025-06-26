@@ -43,6 +43,14 @@
                     <th class="fs-12">FBR Inv:-</th>
                     <td class="ms-2 fs-11">{{myFbrInvoiceNo}}</td>
                 </tr>
+                   <tr *ngIf="VehicleSaleFeature">
+                    <th class="fs-12">Vehicle No:-</th>
+                    <td class="ms-2 fs-11">{{myVehicleNo}} <small>({{myVehicleName}})</small> </td>
+                </tr>
+                   <tr *ngIf="VehicleSaleFeature">
+                    <th class="fs-12">Reading:-</th>
+                    <td class="ms-2 fs-11">{{myMeterReading}}</td>
+                </tr>
                 <tr *ngIf="myCustomerName != null">
                     <th class="fs-12">Customer:-</th>
                     <td class="ms-2 fs-11">{{myCustomerName}}</td>

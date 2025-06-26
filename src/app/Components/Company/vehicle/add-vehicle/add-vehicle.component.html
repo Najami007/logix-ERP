@@ -1,0 +1,25 @@
+<div>
+    <mat-form-field class="col-md-12 matSmall" appearance="outline">
+        <mat-label>Vehicle Name</mat-label>
+        <input [(ngModel)]="VehicleName"  matInput type="text">
+    </mat-form-field>
+       <mat-form-field class="col-md-12 matSmall" appearance="outline">
+        <mat-label>Vehicle No</mat-label>
+        <input [(ngModel)]="VehicleNo" id="vehicleNO" matInput type="text">
+    </mat-form-field>
+       <mat-form-field class="col-md-12 matSmall" appearance="outline">
+        <mat-label>Contact No</mat-label>
+        <input [(ngModel)]="ContactNo" id="contactNo" matInput type="text">
+    </mat-form-field>
+     <!-- <mat-form-field class="col-md-12 matSmall" appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea [(ngModel)]="Description" id="description" matInput type="text"></textarea>
+    </mat-form-field> -->
+
+
+    <div class="row justify-content-around">
+            <button class="btnsave w-25" *ngIf="crudList.c " (click)="save()" accesskey="s">{{actionbtn}}</button>
+            <button class="btnreset w-25" (click)="reset()">Reset</button>
+        </div>
+    
+</div>

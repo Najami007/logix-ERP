@@ -106,6 +106,7 @@ import { SharedComponentsModule } from '../shared-components/shared-components.m
 import { PaymentComponent } from '../Accounts/DesiAccounts/payment/payment.component';
 import { DayClosingRptComponent } from './InventoryReports/day-closing-rpt/day-closing-rpt.component';
 import { AuditInvoicePrintComponent } from './InvAdjustment/inv-audit/audit-invoice-print/audit-invoice-print.component';
+import { VehicleSaleReportComponent } from './InventoryReports/vehicle-sale-report/vehicle-sale-report.component';
 
 export const MY_DATE_FORMAT  = {
   parse: {
@@ -195,6 +196,7 @@ export const inventoryRoutes: Route[] = [
   {path: 'vrptuw',component: VoidListReportComponent,data: { title: 'Void List Rpt' }, canActivate: [AuthGuard]},
   {path: 'ccrpt',component: CashierClosingRptComponent,data: { title: 'Cashier Closing' },canActivate: [AuthGuard]},
   {path: 'dayClose',component: DayClosingRptComponent,data: { title: 'Day Closing' },canActivate: [AuthGuard]},
+   {path: 'srptv',component: VehicleSaleReportComponent,data: { title: 'Vehicle Sale Report' },canActivate: [AuthGuard]},
 
   
 
@@ -283,6 +285,7 @@ export const inventoryRoutes: Route[] = [
     SavedBillComponent,
     DayClosingRptComponent,
     AuditInvoicePrintComponent,
+    VehicleSaleReportComponent,
     
   
   

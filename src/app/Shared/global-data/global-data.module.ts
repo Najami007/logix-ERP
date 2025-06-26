@@ -315,6 +315,7 @@ export class GlobalDataModule implements OnInit {
   CommentCard = this.getFeature('CommentCard');
   DisableInvDate = this.getFeature('DisableInvDate');
   RestBillUserwise = this.getFeature('RestBillUserwise');
+  VehicleSaleFeature = this.getFeature('VehicleSale');
 
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
@@ -352,6 +353,7 @@ export class GlobalDataModule implements OnInit {
     this.CommentCard = this.getFeature('CommentCard');
     this.DisableInvDate = this.getFeature('DisableInvDate');
     this.RestBillUserwise = this.getFeature('RestBillUserwise');
+    this.VehicleSaleFeature = this.getFeature('VehicleSale');
 
   }
 

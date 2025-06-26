@@ -64,6 +64,12 @@ export class RecipeListComponent implements OnInit {
      this.app.stopLoaderDark();
   }
 
+  clearFilter(){
+    this.startPerc = '';
+    this.endPerc = '';
+    this.getAllRecipe();  
+  }
+
   getCategories(){
     this.http.get(environment.mainApi+this.global.restaurentLink+'GetRecipeCategories').subscribe(
       (Response:any)=>{

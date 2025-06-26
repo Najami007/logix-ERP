@@ -176,7 +176,7 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
         crosshair: true,
       },
       yAxis: {
-        min: 0,
+        // min: 0,
         title: {
           text: 'AMOUNT',
         },

@@ -38,19 +38,19 @@
 
                 <mat-form-field appearance="outline" class="col-md-6 matSmall">
                     <mat-label>Product Title</mat-label>
-                    <input matInput id="title2" [(ngModel)]="ProductName" accesskey="n" type="text">
+                    <input matInput id="title2" autocomplete="off" [(ngModel)]="ProductName" accesskey="n" type="text">
 
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-md-6 matSmall">
                     <mat-label>Product Title 2 </mat-label>
-                    <input matInput [(ngModel)]="productNameOthLanguage" type="text">
+                    <input matInput autocomplete="off"  [(ngModel)]="productNameOthLanguage" type="text">
 
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-md-6 matSmall">
                     <mat-label>Code</mat-label>
-                    <input matInput [(ngModel)]="productCode" type="text">
+                    <input matInput autocomplete="off"  [(ngModel)]="productCode" type="text">
 
                 </mat-form-field>
 
@@ -251,7 +251,7 @@
 
             <mat-form-field appearance="outline" class="col-md-4 matSmall">
                 <mat-label>Search.....</mat-label>
-                <input type="text" id="searchProduct" matInput #searchProd [(ngModel)]="searchProduct">
+                <input type="text" id="searchProduct" (keydown)="onProdSearchKeyup($event,searchProduct)"  (keypress)="onProdSearchKeyup($event,searchProduct)" matInput #searchProd [(ngModel)]="searchProduct">
             </mat-form-field>
             <mat-form-field appearance="outline" class="col-md-2 matSmall">
                 <mat-label>Sub Category</mat-label>

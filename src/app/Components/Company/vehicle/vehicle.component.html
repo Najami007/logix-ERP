@@ -1,0 +1,51 @@
+<div class="d-flex flex-wrap container-fluid body bg-light">
+
+    <div class="col-md-3 p-2 border-end border-dark ">
+
+        <h2 class="border-bottom">Vehicle Detail's</h2>
+
+        <app-add-vehicle (saveEventEmitter)="getSavedData()"></app-add-vehicle>
+
+    </div>
+
+    <div class="col-md-9 p-2 mt-2 fh-config">
+
+        <mat-form-field class="col-md-12 matSmall" appearance="outline">
+            <mat-label>Search</mat-label>
+            <input matInput #vehicleSearch type="search" class="text-secondary">
+        </mat-form-field>
+
+
+        <div>
+            <table class="table-logix2">
+
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Vehicle Name</th>
+                        <th>Vehicle No</th>
+                        <th>Contact No</th>
+                        <!-- <th>Description</th> -->
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of savedDataList|filter:vehicleSearch.value index as index">
+                        <td>{{index +1}}</td>
+                        <td>{{item.vehicleName}}</td>
+                        <td>{{item.vehicleNo}}</td>
+                        <td>{{item.contactNo}}</td>
+                        <!-- <td>{{item.description}}</td> -->
+                        <td>
+                            <mat-icon (click)="edit(item)" class="text-success">edit</mat-icon>
+                            <mat-icon (click)="delete(item)" class="text-danger">delete</mat-icon>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+</div>

@@ -2,3 +2,20 @@
 .hide{
     display: none;
 }
+
+.filterBtn{
+    height: 45px;
+    border: none;
+    width: 45px;
+    margin-right: 5px;
+    border-radius: 5px;
+    color: white;
+
+    &--green{
+        background-color: green;
+    }
+    &--red{
+        background-color: red;
+    }
+
+}

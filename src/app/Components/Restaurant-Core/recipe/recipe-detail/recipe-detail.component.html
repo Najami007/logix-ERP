@@ -1,35 +1,45 @@
-<div  style="height: 80vh; overflow-y: scroll;">
+<div style="height: 80vh; overflow-y: auto;">
+    <!-- <div class="text-end pb-4 pe-4">
+        <button mat-icon-button color="primary" (click)="print()"><mat-icon>print</mat-icon></button>
+        <button mat-icon-button color="dark" (click)="closeDialog()"><mat-icon>close</mat-icon></button>
+    </div> -->
+    <div class="bg-mute p-2">
 
-    <mat-card class="bg-mute">
-      
-          <div id="recipeDetail">
-            <div  class="hide">
+        <div id="recipeDetail">
+            <div class="hide">
                 <div class="text-center" *ngFor="let item of companyProfile">
-                        <h1 class="companyName">{{item.companyName}}</h1>
-                        <p class="rptTitle" style="margin-top:-20px">Recipe Detail</p>     
+                    <h1 class="companyName">{{item.companyName}}</h1>
+                    <p class="rptTitle" style="margin-top:-20px">Recipe Detail</p>
                 </div>
             </div>
-            <div class="d-flex justify-content-between p-3" >
+            <div class="d-flex justify-content-between p-3">
                 <div class="d-flex flex-column">
                     <span><b>Title:</b> {{recipeTitle}}</span>
                     <span><b>Category:</b> {{Category}}</span>
-                    <span><b>Type:</b> {{recipeType}}</span>
+                    <!-- <span><b>Type:</b> {{recipeType}}</span> -->
                     <span><b>Cooking Time:</b> {{cookingTime}} min</span>
                 </div>
-                <div *ngFor="let item of companyProfile" >
+                <div *ngFor="let item of companyProfile">
                     <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
                         <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="75"
                             [width]="75">
                     </span>
                 </div>
-              
-            </div>
-            <mat-card-title><h2></h2></mat-card-title>
 
-        
-            <mat-card-content>
+            </div>
+            <mat-card-title>
+                <h2></h2>
+            </mat-card-title>
+
+
+          <div class="d-flex flex-wrap">
+              <div class="pe-1" [ngClass]="OtherProdList.length > 0 ? 'col-md-6 ':'col-md-12'">
+              
                 <table class="table-logix txtsm">
                     <thead>
+                        <tr>
+                            <th colspan="5">Dine In</th>
+                        </tr>
                         <tr>
                             <th>S#</th>
                             <th>Title</th>
@@ -41,7 +51,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of prodList index as index">
+                        <tr *ngFor="let item of DineInProdList index as index">
                             <td class="text-center">{{index +1}}</td>
                             <td>{{item.productTitle}}</td>
                             <td class="text-center">{{item.quantity |number:'1.0-3'}}</td>
@@ -50,27 +60,67 @@
                             <td class="text-end">{{item.quantity * item.avgCostPrice |number:'1.0-1'}}</td>
                             <!-- <td>{{item.quantity * item.avgCostPrice |number:'1.0-1'}}</td> -->
                         </tr>
-        
+
                     </tbody>
                 </table>
-            </mat-card-content>
+            
             <div class="mt-4">
-                <div class="d-flex justify-content-around" style="height: 80px;"> 
-                <span><b>Cost Price: {{costPrice | number:"1.0-1"}}</b></span>
-                <span><b>Food Cost: {{(costPrice / salePrice) * 100 | number:"1.0-1"}} %</b></span>
-                 <span><b>Sale Price: {{salePrice | number:"1.0-1"}}</b></span>
+                <div class="d-flex justify-content-around" style="height: 80px;">
+                    <span><b>Cost Price: {{costPrice | number:"1.0-1"}}</b></span>
+                    <span><b>Food Cost: {{(costPrice / salePrice) * 100 | number:"1.0-1"}} %</b></span>
+                    <span><b>Sale Price: {{salePrice | number:"1.0-1"}}</b></span>
                 </div>
             </div>
-         
-          </div>
-                <div class="text-end pb-4 pe-4" >
-                    <button mat-icon-button  color="primary" (click)="print()"><mat-icon>print</mat-icon></button>
-                    <button mat-icon-button color="dark" (click)="closeDialog()"><mat-icon>close</mat-icon></button>
+
+            </div>
+           <div *ngIf="OtherProdList.length > 0" class="col-md-6">
+            
+                <table class="table-logix txtsm">
+                    <thead>
+                        <tr>
+                            <th colspan="5">Other</th>
+                        </tr>
+                        <tr>
+                            <th>S#</th>
+                            <th>Title</th>
+                            <th>Qty</th>
+                            <th>Cost</th>
+                            <!-- <th>Avg</th> -->
+                            <th>Cost Total</th>
+                            <!-- <th>Avg Total</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of OtherProdList index as index">
+                            <td class="text-center">{{index +1}}</td>
+                            <td>{{item.productTitle}}</td>
+                            <td class="text-center">{{item.quantity |number:'1.0-3'}}</td>
+                            <td class="text-end">{{item.avgCostPrice |number:'1.0-1'}}</td>
+                            <!-- <td>{{item.avgCostPrice |number:'1.0-1'}}</td> -->
+                            <td class="text-end">{{item.quantity * item.avgCostPrice |number:'1.0-1'}}</td>
+                            <!-- <td>{{item.quantity * item.avgCostPrice |number:'1.0-1'}}</td> -->
+                        </tr>
+
+                    </tbody>
+                </table>
+            
+            <div class="mt-4" >
+                <div class="d-flex justify-content-around" style="height: 80px;">
+                    <span><b>Cost Price: {{OtherCostPrice | number:"1.0-1"}}</b></span>
+                    <span><b>Food Cost: {{(OtherCostPrice / salePrice) * 100 | number:"1.0-1"}} %</b></span>
+                    <span><b>Sale Price: {{salePrice | number:"1.0-1"}}</b></span>
                 </div>
-               
-    </mat-card>
+            </div>
+           </div>
+          </div>
 
-   
- 
+        </div>
 
+
+    </div>
 </div>
+
+    <div class="modal-footer bg-mf gap-2 pe-2" style="height: 60px;">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="print()">Print</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeDialog()">Close</button>
+    </div>
