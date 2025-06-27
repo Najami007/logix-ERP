@@ -356,7 +356,6 @@ export class InvAuditComponent implements OnInit {
 
     this.global.getProdDetail(data.productID, '', this.locationID).subscribe(
       (Response: any) => {
-        console.log(Response);
         this.tempProdRow = Response;
 
         if (this.autoInsert) {
@@ -791,7 +790,6 @@ export class InvAuditComponent implements OnInit {
         InvDetail: JSON.stringify(this.tableDataList),
         UserID: this.global.getUserID()
       }
-      console.log(postData);
       if (isValidFlag == true) {
 
         if (type == 'hold') {

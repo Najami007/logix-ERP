@@ -192,11 +192,7 @@ export class CompanyProfileComponent implements OnInit {
         event.target.value = '';
         this.RegistrationDoc = '';
       }
-    
-
-
-    //console.log(this.imageFile);
-  }
+      }
 
 ////////////////////////////////////////////////////////////////////////
   getCompany(){
@@ -204,9 +200,7 @@ export class CompanyProfileComponent implements OnInit {
       (Response:any)=>{
        if(Response != ''){
         this.companyProfile = Response;
-       }
-       // console.log(Response);
-        
+       }      
          
           if(Response != '' && (Response[0].companyLogo1 != '' || Response[0].companyLogo1 != null || Response[0].companyLogo1 == '-')){
             this.logo1 = this.companyProfile[0].companyLogo1;
@@ -387,7 +381,6 @@ export class CompanyProfileComponent implements OnInit {
 ////////////////////////////////////////////////////////////////////////
 
   editProfile(row:any){
-    console.log(row);
     this.btnType = 'Update';
     this.profileID = row.companyProfileID;
     this.CompanyName = row.companyName;

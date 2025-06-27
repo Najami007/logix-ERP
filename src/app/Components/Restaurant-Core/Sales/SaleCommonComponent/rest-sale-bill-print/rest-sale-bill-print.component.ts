@@ -178,7 +178,6 @@ export class RestSaleBillPrintComponent {
     this.myInvoiceNo = invoiceNo;
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetHoldedBillDetail?BillNo=' + invoiceNo).subscribe(
       (Response: any) => {
-        console.log(Response);
         this.myPrintData = Response;
 
         this.mytableNo = Response[0].tableTitle;

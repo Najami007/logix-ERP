@@ -85,7 +85,6 @@ export class AddUserComponent implements OnInit {
     this.http.get(environment.mainApi+'cmp/getproject').subscribe(
       (Response:any)=>{
         this.projectList = Response;
-       // console.log(Response);
       
       }
     )
@@ -126,11 +125,7 @@ export class AddUserComponent implements OnInit {
         }
         if(this.userRoleTypeID == 3){
         this.userList = Response.filter((e:any)=> e.roleTypeID > 2);
-        }
-
-
-          // console.log(Response);
-        
+        }        
         this.app.stopLoaderDark();
 
       },

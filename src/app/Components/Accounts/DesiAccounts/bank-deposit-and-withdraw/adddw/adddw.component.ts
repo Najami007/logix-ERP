@@ -170,8 +170,6 @@ export class AdddwComponent implements OnInit {
       if (this.btnType == 'Update') {
         this.update(postData);
       }
-
-      console.log(postData);
   }
 
 

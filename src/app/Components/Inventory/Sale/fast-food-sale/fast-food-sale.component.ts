@@ -138,7 +138,6 @@ export class FastFoodSaleComponent {
 
   changeValue(item: any) {
     var myIndex = this.tableDataList.indexOf(item);
-    // console.log(this.tableDataList[myIndex]);
     var myQty = this.tableDataList[myIndex].TicketQuantity;
     if (myQty == null || myQty == '' || myQty == undefined) {
       this.tableDataList[myIndex].TicketQuantity = 0;

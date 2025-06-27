@@ -144,6 +144,11 @@ export class SaleReportComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=s&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
+            this.saleSummaryList = [];
+            this.billTotal = 0;
+            this.chargesTotal = 0;
+            this.netGrandTotal = 0;
+            this.discountTotal = 0;
             if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
               this.app.stopLoaderDark();
@@ -151,10 +156,7 @@ export class SaleReportComponent implements OnInit {
 
             }
             this.saleSummaryList = Response;
-            this.billTotal = 0;
-            this.chargesTotal = 0;
-            this.netGrandTotal = 0;
-            this.discountTotal = 0;
+
             Response.forEach((e: any) => {
               this.billTotal += e.billTotal;
               this.chargesTotal += e.otherCharges;
@@ -181,6 +183,12 @@ export class SaleReportComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=s&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
+            this.saleSummaryList = [];
+            this.billTotal = 0;
+            this.chargesTotal = 0;
+            this.netGrandTotal = 0;
+            this.discountTotal = 0;
+            this.gstTotal = 0;
             if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
               this.app.stopLoaderDark();
@@ -188,11 +196,7 @@ export class SaleReportComponent implements OnInit {
 
             }
             this.saleSummaryList = Response;
-            this.billTotal = 0;
-            this.chargesTotal = 0;
-            this.netGrandTotal = 0;
-            this.discountTotal = 0;
-            this.gstTotal = 0;
+
             Response.forEach((e: any) => {
               this.billTotal += e.billTotal;
               this.chargesTotal += e.otherCharges;
@@ -218,6 +222,11 @@ export class SaleReportComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryDetailDateWise_3?reqType=s&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
+            this.tempSaleDetailList = [];
+            this.SaleDetailList = [];
+            this.qtyTotal = 0;
+            this.detSaleTotal = 0;
+            this.detCostTotal = 0;
             if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
               this.app.stopLoaderDark();
@@ -226,9 +235,7 @@ export class SaleReportComponent implements OnInit {
             }
             this.tempSaleDetailList = Response;
             this.SaleDetailList = Response;
-            this.qtyTotal = 0;
-            this.detSaleTotal = 0;
-            this.detCostTotal = 0;
+
             Response.forEach((e: any) => {
               this.qtyTotal += e.quantity;
               this.detSaleTotal += e.salePrice * e.quantity;
@@ -253,13 +260,14 @@ export class SaleReportComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryDetailDateWise_3?reqType=s&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
-               if (Response.length == 0 || Response == null) {
-            this.global.popupAlert('Data Not Found!');
-            this.app.stopLoaderDark();
-            return;
-
-          }
             this.qtySummaryList = [];
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
+
             this.filterUniqueValues(Response).forEach((e: any) => {
               this.qtySummaryList.push({ recipeID: e.recipeID, productTitle: e.productTitle, quantity: 0, saleTotal: 0 })
             });
@@ -349,12 +357,12 @@ export class SaleReportComponent implements OnInit {
   }
 
 
-  sortData(type:any){
-    if(type == 'qty'){
-      this.qtySummaryList.sort((a:any,b:any)=> b.quantity - a.quantity)
+  sortData(type: any) {
+    if (type == 'qty') {
+      this.qtySummaryList.sort((a: any, b: any) => b.quantity - a.quantity)
     }
-     if(type == 'amount'){
-         this.qtySummaryList.sort((a:any,b:any)=> b.saleTotal - a.saleTotal)
+    if (type == 'amount') {
+      this.qtySummaryList.sort((a: any, b: any) => b.saleTotal - a.saleTotal)
     }
   }
 

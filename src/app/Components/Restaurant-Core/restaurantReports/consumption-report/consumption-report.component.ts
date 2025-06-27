@@ -211,6 +211,9 @@ export class ConsumptionReportComponent {
         this.global.dateFormater(this.fromDate, '-') + '&ToDate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime +
         '&RecipeID=' + this.recipeID).subscribe(
           (Response: any) => {
+            this.ConsumptionList = [];
+            this.qtyTotal = 0;
+              this.amountTotal = 0;
             if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
               this.app.stopLoaderDark();
@@ -219,8 +222,7 @@ export class ConsumptionReportComponent {
             }
             this.ConsumptionList = Response;
             if (Response.length > 0) {
-              this.qtyTotal = 0;
-              this.amountTotal = 0;
+              
               Response.forEach((e: any) => {
                 this.qtyTotal += e.quantity;
                 this.amountTotal += e.avgCostPriceTotal;

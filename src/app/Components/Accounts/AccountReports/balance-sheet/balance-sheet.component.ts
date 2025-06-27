@@ -30,15 +30,6 @@ export class BalanceSheetComponent implements OnInit {
     private datePipe:DatePipe
   ) {
 
-    // this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
-    //   (Response:any)=>{
-    //     this.companyProfile = Response;
-    //     //console.log(Response)  
-
-    //   }
-    // )
-
-
     this.globalData.getCompany().subscribe((data) => {
       this.companyProfile = data;
     });

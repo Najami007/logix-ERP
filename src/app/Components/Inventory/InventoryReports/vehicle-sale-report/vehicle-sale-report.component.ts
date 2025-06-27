@@ -100,8 +100,6 @@ export class VehicleSaleReportComponent {
           return;
 
         }
-        console.log(Response);
-
         if (Response.length > 0) {
           this.SaleDetail = Response.map((e: any) => {
             (e.billDetails = JSON.parse(e.billDetail))

@@ -42,13 +42,6 @@ export class LedgerComponent {
 
   ) {
 
-    // this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
-    //   (Response:any)=>{
-    //     this.companyProfile = Response;
-    //     //console.log(Response)  
-
-    //   }
-    // )
 
     this.globalData.getCompany().subscribe((data) => {
       this.companyProfile = data;
@@ -164,7 +157,6 @@ export class LedgerComponent {
     this.app.startLoaderDark();
     this.http.get(environment.mainApi + this.globalData.accountLink + 'GetVoucherCOA').subscribe(
       (Response: any) => {
-        // console.log(Response);
         if (Response.length > 0) {
           this.CoaList = Response.map((e: any, index: any) => {
             (e.indexNo = index + 1);
@@ -210,7 +202,6 @@ export class LedgerComponent {
       this.http.get(environment.mainApi + this.globalData.accountLink + 'GetLedgerRpt?coaid=' + this.coaID + '&fromdate='
         + this.globalData.dateFormater(this.startDate, '-') + '&todate=' + this.globalData.dateFormater(this.EndDate, '-') + '&projectID=' + this.projectID).subscribe(
           (Response: any) => {
-            console.log(Response);
 
             this.tableData = Response.map((e: any) => {
               (e.invoiceDate = new Date(e.invoiceDate));
@@ -219,7 +210,6 @@ export class LedgerComponent {
 
             );
             this.tmpTableData = this.tableData;
-            //console.log(this.tableData );
             this.getTotal();
             this.app.stopLoaderDark();
           },

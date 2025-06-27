@@ -44,11 +44,11 @@ export class SaleReportCustomerwiseComponent implements OnInit {
     this.global.setHeaderTitle('Sale Report (Customerwise)');
     this.getUsers();
     this.getParty();
-   setTimeout(() => {
-     $('#detailTable').show();
-    $('#summaryTable').hide();
-    $('#ledger').hide();
-   }, 200);
+    setTimeout(() => {
+      $('#detailTable').show();
+      $('#summaryTable').hide();
+      $('#ledger').hide();
+    }, 200);
 
   }
 
@@ -146,16 +146,18 @@ export class SaleReportCustomerwiseComponent implements OnInit {
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleDetailCustomerDateWise?reqUID=' + this.userID + '&FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + '&PartyID=' + this.partyID).subscribe(
             (Response: any) => {
-                if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-                this.app.stopLoaderDark();
-              return;
-              
-            }
-              // console.log(Response);
-              this.DetailList = Response;
+              this.DetailList = [];
+
               this.saleGrandTotal = 0;
               this.profitTotal = 0;
+              if (Response.length == 0 || Response == null) {
+                this.global.popupAlert('Data Not Found!');
+                this.app.stopLoaderDark();
+                return;
+
+              }
+              this.DetailList = Response;
+
               Response.forEach((e: any) => {
                 if (e.invType == 'S') {
                   this.saleGrandTotal += (e.salePrice * e.quantity) - (e.discInR * e.quantity);
@@ -181,20 +183,23 @@ export class SaleReportCustomerwiseComponent implements OnInit {
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleSummaryCustomerDateWise?reqUID=' + this.userID + '&FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + '&PartyID=' + this.partyID).subscribe(
             (Response: any) => {
-            if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-                this.app.stopLoaderDark();
-              return;
-              
-            }
-              this.saleSummaryList = Response.filter((e: any) => e.invType == 'S');
-              this.saleRtnSummaryList = Response.filter((e: any) => e.invType == 'SR');
+              this.saleSummaryList = [];
+              this.saleRtnSummaryList = [];
               this.saleGrandTotal = 0;
               this.saleBillTotal = 0;
               this.saleDiscountTotal = 0;
               this.saleRtnGrandTotal = 0;
               this.saleRtnBillTotal = 0;
               this.saleRtnDiscountTotal = 0;
+              if (Response.length == 0 || Response == null) {
+                this.global.popupAlert('Data Not Found!');
+                this.app.stopLoaderDark();
+                return;
+
+              }
+              this.saleSummaryList = Response.filter((e: any) => e.invType == 'S');
+              this.saleRtnSummaryList = Response.filter((e: any) => e.invType == 'SR');
+
               Response.forEach((e: any) => {
                 if (e.invType == 'S') {
                   this.saleGrandTotal += e.total - e.billDiscount;
@@ -223,12 +228,13 @@ export class SaleReportCustomerwiseComponent implements OnInit {
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetLedgerRpt_11?FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + '&PartyID=' + this.partyID).subscribe(
             (Response: any) => {
+              this.ledgerDetailList = [];
               if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
+                this.global.popupAlert('Data Not Found!');
                 this.app.stopLoaderDark();
-              return;
-              
-            }
+                return;
+
+              }
               this.ledgerDetailList = Response.map((e: any) => {
                 if (e.billDetail != '-') {
                   (e.billDetailList = JSON.parse(e.billDetail));

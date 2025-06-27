@@ -27,15 +27,6 @@ export class BudgetReportComponent implements OnInit{
     private global:GlobalDataModule,
     private route:Router
   ){
-    
-    // this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
-    //   (Response:any)=>{
-    //     this.companyProfile = Response;
-    //     //console.log(Response)  
-        
-    //   }
-    // )
-
     this.global.getCompany().subscribe((data)=>{
       this.companyProfile = data;
     });

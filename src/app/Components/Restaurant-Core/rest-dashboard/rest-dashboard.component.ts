@@ -43,8 +43,9 @@ export class RestDashboardComponent  {
  
 
   getCardsData(){
-    this.http.get(environment.mainApi+this.globalData.parkLink+'GetTotals').subscribe(
+    this.http.get(environment.mainApi+this.globalData.restaurentLink+'GetTotals').subscribe(
       (Response:any)=>{
+        console.log(Response,'Card Totals');
         this.cardDataList = Response;
          
       }
@@ -61,11 +62,11 @@ export class RestDashboardComponent  {
   saleList:any = [];
 
   getMonthlySales(){
-    this.http.get(environment.mainApi+this.globalData.parkLink+'GetDailyQtyTotal').subscribe(
+    this.http.get(environment.mainApi+this.globalData.restaurentLink+'GetSoldInvoicesQty').subscribe(
       (Response:any)=>{
           Response.forEach((e:any) => {
           this.dayList.push(e.day);
-          this.saleList.push(e.ticketQuantity)
+          this.saleList.push(e.saleQty)
         });
         
         this.monthlySale();
@@ -81,7 +82,7 @@ export class RestDashboardComponent  {
         type: 'line',
       },
       title: {
-        text: 'Analysis Sale (Current Month)',
+        text: 'ANALYSIS SALE INVOICES (CURRENT MONTH)',
       },
       subtitle: {
         text: '',
@@ -91,7 +92,7 @@ export class RestDashboardComponent  {
       },
       yAxis: {
         title: {
-          text: 'Daily Ticket Sold Quantity ',
+          text: 'DAILY BILL GENERATED QUANTITY',
         },
       },
       plotOptions: {
@@ -122,14 +123,14 @@ export class RestDashboardComponent  {
   swingSaleAmountList:any = [];
 
   getSwingSale(){
-    this.http.get(environment.mainApi+this.globalData.parkLink+'GetSwingQtyTotal').subscribe(
+    this.http.get(environment.mainApi+this.globalData.restaurentLink+'GetCatTotals').subscribe(
       (Response:any)=>{
         
-
+        console.log(Response);
         Response.forEach((e:any) => {
-          this.swingsList.push(e.swingTitle);
+          this.swingsList.push(e.catTitle);
           var tmpArry:any = [];
-            tmpArry.push(e.swingTitle, e.ticketQuantity, false,false);
+            tmpArry.push(e.catTitle, e.amount, false,false);
           this.swingSaleAmountList.push(tmpArry)
         });
         
@@ -147,7 +148,7 @@ export class RestDashboardComponent  {
       },
 
       title: {
-        text: 'Sale Analysis',
+        text: 'SALE ANALYSIS (CATEGORYWISE)',
       },
 
       xAxis: {

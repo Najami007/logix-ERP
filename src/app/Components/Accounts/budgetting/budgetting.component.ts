@@ -36,13 +36,6 @@ export class BudgettingComponent implements OnInit {
 
   ){
 
-    // this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
-    //   (Response:any)=>{
-    //     this.companyProfile = Response;
-    //     //console.log(Response)  
-        
-    //   }
-    // )
 
     this.globalData.getCompany().subscribe((data)=>{
       this.companyProfile = data;
@@ -157,7 +150,6 @@ export class BudgettingComponent implements OnInit {
       (Response:any)=>{
       
         this.savedData = Response;
-        //console.log(Response);
       }
     )
   }

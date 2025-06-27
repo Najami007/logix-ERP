@@ -91,8 +91,14 @@
                                         {{item.vehicleNo}}<small class="fs-10px">({{item.vehicleName}})</small>
                                     </mat-option>
                                 </mat-select>
+                                <mat-icon matSuffix (click)="addVehicle()">add</mat-icon>
 
                             </mat-form-field>
+                            <!-- 
+                                <select class="selectpicker" [(ngModel)]="vehicleID" data-live-search="true" data-style="btn-info" >
+                                    <option *ngFor="let item of vehicleList " [value]="item.vehicleID">{{item.vehicleNo}}<small class="fs-10px">({{item.vehicleName}})</small></option>
+                                </select> -->
+
 
                         </div>
                         <div class="col-md-4">
@@ -437,173 +443,29 @@
                     (printDuplicateEmitter)="printDuplicateBill($event)" (billDetailEmitter)="billDetails($event)"
                     (postBillEmitter)="postSaleBill($event)" [savedbillList]="savedbillList"></app-saved-bill>
 
-                <!-- <div>
-                    <mat-tab-group>
-                        <mat-tab label="Sale Return">
-                            <div class="text-end p-2">
-                                <mat-form-field appearance="outline" class="w-100 matSmall">
-                                    <mat-label>Search...</mat-label>
-                                    <input matInput #searchBill name="searchBill" type="text" />
-                                </mat-form-field>
-                            </div>
-                            <div class="p-2" style="min-height: 200px; max-height: 400px;overflow-y: scroll;">
-
-
-
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>S#</th>
-                                            <th>Bill #</th>
-                                            <th>Date</th>
-                                            <th>Type</th>
-                                            <th>Counter</th>
-                                            <th>Customer</th>
-                                            <th>Amount</th>
-                                            <th>Print</th>
-                                            <th>Detail</th>
-                                        </tr>
-
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of savedbillList|filter:searchBill.value index as index">
-
-                                            <td>{{index+1}}</td>
-                                            <td>{{item.invBillNo}}</td>
-                                            <td>{{item.invDate|date:'dd-MM-yyyy'}} ({{item.createdOn|date:'hh:mm:a'}})
-                                            </td>
-                                            <td>{{item.paymentType}}</td>
-                                            <td>{{item.entryUser}}</td>
-                                            <td>{{item.partyName || "Walk In"}}</td>
-                                            <td>{{item.netTotal |number:'1.0-0'}}</td>
-                                            <td class="text-primary cursorPointer"><mat-icon
-                                                    (click)="printDuplicateBill(item)">print</mat-icon></td>
-                                            <td class="text-success cursorPointer"><mat-icon
-                                                    (click)="billDetails(item)">receipt</mat-icon></td>
-                                        </tr>
-                                    </tbody>
-
-                                </table>
-
-
-                            </div>
-                        </mat-tab>
-                        <mat-tab label="Sale">
-
-                            <div style="overflow-x: hidden;">
-                                <div class="text-end p-2 row">
-
-                                    <mat-form-field appearance="outline" class="col-md-4 matSmall">
-                                        <mat-label>Date</mat-label>
-                                        <input [(ngModel)]="saleBillDate" readonly="true" (dateChange)="getSaleBill()"
-                                            matInput type="text" name="Sale Bill Date" [matDatepicker]="sd">
-                                        <mat-datepicker-toggle matSuffix [for]="sd"></mat-datepicker-toggle>
-                                        <mat-datepicker #sd></mat-datepicker>
-                                    </mat-form-field>
-                                    <mat-form-field appearance="outline" class="col-md-4 matSmall">
-                                        <mat-label>Search...</mat-label>
-                                        <input matInput #searchSaleBill name="searchBill" type="text" />
-                                    </mat-form-field>
-                                </div>
-                                <div class="p-2" style="min-height: 200px; max-height: 400px;overflow-y: scroll;">
-
-
-
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>S#</th>
-                                                <th>Bill #</th>
-                                                <th>Date</th>
-                                                <th>Type</th>
-                                                <th>Counter</th>
-                                                <th>Customer</th>
-                                                <th>Amount</th>
-                                                <th>Return</th>
-                                            </tr>
-
-                                        </thead>
-                                        <tbody>
-                                            <tr
-                                                *ngFor="let item of SaleBillList|filter:searchSaleBill.value index as index">
-
-                                                <td>{{index+1}}</td>
-                                                <td>{{item.invBillNo}}</td>
-                                                <td>{{item.invDate|date:'dd-MM-yyyy'}}
-                                                    ({{item.createdOn|date:'hh:mm:a'}})</td>
-                                                <td>{{item.paymentType}}</td>
-                                                <td>{{item.entryUser}}</td>
-                                                <td>{{item.partyName || "Walk In"}}</td>
-                                                <td>{{item.netTotal |number:'1.0-0'}}</td>
-                                                <td class="text-primary cursorPointer"><mat-icon
-                                                        (click)="getSaleBillDetail(item)">edit</mat-icon></td>
-                                            </tr>
-                                        </tbody>
-
-                                    </table>
-
-                                    <hr>
-
-                                    <table class="table" *ngIf="saleBillDetail.length > 0">
-                                        <thead>
-                                            <tr>
-                                                <th>S#</th>
-                                                <th>Bill #</th>
-                                                <th>Product Name</th>
-                                                <th>Qty</th>
-                                                <th>Sale</th>
-                                                <th>Total</th>
-                                                <th>Return</th>
-                                            </tr>
-
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let item of saleBillDetail index as index">
-
-                                                <td>{{index+1}}</td>
-                                                <td>{{item.invBillNo}}</td>
-                                                <td>{{item.productTitle}}</td>
-                                                <td>{{item.quantity}}</td>
-                                                <td>{{item.salePrice || "Walk In"}}</td>
-                                                <td>{{item.quantity * item.salePrice |number:'1.0-0'}}</td>
-                                                <td class="text-primary cursorPointer"><mat-icon
-                                                        (click)="insertToTable(item)">edit</mat-icon></td>
-                                            </tr>
-                                        </tbody>
-
-                                    </table>
-
-                                </div>
-                            </div>
-
-                        </mat-tab>
-
-
-                    </mat-tab-group>
-                    <div class="text-end bg-mf-blue p-3">
-
-                        <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
-                    </div>
-
-
-
-                </div> -->
-
-
-
-
-
-                <!------------------------------ Design For Bill Pirnt  --------------------->
-
                 <app-sale-bill-print id="print-bill" class="hide"></app-sale-bill-print>
 
-                <!---------------------------------------------------------------------------------->
+
+            </div>
+        </div>
+    </div>
 
 
+    <!------------------------- Modal Window for Adding New Vehicle =----------------->
 
 
+    <div class="modal fade" id="addVehicleModal" tabindex="-1" aria-labelledby="SavedBillModalLabel">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-md">
+            <div class="modal-content">
 
+                <div class="modal-body">
+                    <app-add-vehicle (saveEventEmitter)="getVehicles();closeVehicleModal()"></app-add-vehicle>
+                </div>
 
+                <div class="modal-footer bg-mf-blue">
+                    <button type="button" class="btnclose" data-bs-dismiss="modal"
+                        (click)="onPaymentModalClose()">Close</button>
+                </div>
 
             </div>
         </div>

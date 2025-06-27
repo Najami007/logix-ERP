@@ -54,7 +54,6 @@ export class AddNoteComponent implements OnInit{
     this.http.get(environment.mainApi+this.global.accountLink+'getcoatype').subscribe(
       {
         next:value=>{
-          // console.log(value);
           this.coaTypesList = value;
         },
         error:error=>{

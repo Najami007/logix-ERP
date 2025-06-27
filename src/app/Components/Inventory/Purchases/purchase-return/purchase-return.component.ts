@@ -824,10 +824,6 @@ export class PurchaseReturnComponent implements OnInit {
     var inValidCostProdList = this.tableDataList.filter((p: any) => p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null);
     var inValidSaleProdList = this.tableDataList.filter((p: any) => p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null);
     var inValidQtyProdList = this.tableDataList.filter((p: any) => p.Quantity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '')
-
-    console.log(inValidCostProdList)
-    console.log(inValidSaleProdList);
-    console.log(inValidQtyProdList);
     if (inValidCostProdList.length > 0) {
       this.msg.WarnNotify('(' + inValidCostProdList[0].ProductTitle + ') Cost Price greater than Sale Price');
       return;
@@ -912,7 +908,6 @@ export class PurchaseReturnComponent implements OnInit {
           if (this.holdBtnType == 'Hold') {
             this.app.startLoaderDark();
             postData.InvType = 'HPR';
-            console.log(postData);
             this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchaseRtn', postData).subscribe(
               (Response: any) => {
                 if (Response.msg == 'Data Saved Successfully') {
@@ -936,7 +931,6 @@ export class PurchaseReturnComponent implements OnInit {
               if (pin != '') {
                 this.app.startLoaderDark();
                 postData['PinCode'] = pin;
-                console.log(postData);
                 this.http.post(environment.mainApi + this.global.inventoryLink + 'UpdateHoldInvoice', postData).subscribe(
                   (Response: any) => {
                     if (Response.msg == 'Data Updated Successfully') {
@@ -967,7 +961,6 @@ export class PurchaseReturnComponent implements OnInit {
               if (Response == true) {
                 this.app.startLoaderDark();
                 postData.InvType = 'PR';
-                console.log(postData);
                 this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchaseRtn', postData).subscribe(
                   (Response: any) => {
                     if (Response.msg == 'Data Saved Successfully') {
@@ -1103,9 +1096,6 @@ export class PurchaseReturnComponent implements OnInit {
 
         //////////sorting data table base on sort type
         this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-
-        // console.log(this.tableDataList);
-        // this.getTotal();
 
       }
     )

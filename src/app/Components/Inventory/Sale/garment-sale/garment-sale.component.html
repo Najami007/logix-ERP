@@ -85,13 +85,14 @@
                         <div class="col-md-8 pe-1">
                             <mat-form-field class="w-100 matSmall" appearance="outline">
                                 <mat-label>Select Vehicle</mat-label>
-                                <mat-select appearance="outline" [(ngModel)]="vehicleID">
+                                <mat-select appearance="outline" [(ngModel)]="vehicleID" #vehicle>
                                     <mat-option><ngx-mat-select-search #vehicleSearch [placeholderLabel]="'Search...'"
                                             [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
                                     <mat-option *ngFor="let item of vehicleList|filter:vehicleSearch.value "
                                         [value]="item.vehicleID">
                                         {{item.vehicleNo}}<small class="fs-10px">({{item.vehicleName}})</small>  </mat-option>
                                 </mat-select>
+                                <mat-icon matSuffix (click)="addVehicle()">add</mat-icon>
 
                             </mat-form-field>
 
@@ -528,6 +529,27 @@
 
 
                 <app-sale-bill-print id="print-bill" class="hide"></app-sale-bill-print>
+            </div>
+        </div>
+    </div>
+
+
+       <!------------------------- Modal Window for Adding New Vehicle =----------------->
+
+
+    <div class="modal fade" id="addVehicleModal" tabindex="-1" aria-labelledby="SavedBillModalLabel">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-md">
+            <div class="modal-content">
+
+               <div class="modal-body">
+                 <app-add-vehicle (saveEventEmitter)="getVehicles();closeVehicleModal()"></app-add-vehicle>
+               </div>
+
+                  <div class="modal-footer bg-mf-blue">
+                    <button type="button" class="btnclose" data-bs-dismiss="modal"
+                        (click)="onPaymentModalClose()">Close</button>
+                </div>
+
             </div>
         </div>
     </div>

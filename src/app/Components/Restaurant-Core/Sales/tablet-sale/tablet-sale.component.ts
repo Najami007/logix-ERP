@@ -60,28 +60,6 @@ export class TabletSaleComponent implements OnInit {
     private dialogue: MatDialog,
     private route: Router
   ) {
-
-    // function getPCName(): Promise<string> {
-    //   return new Promise((resolve, reject) => {
-    //     const exec = require('child_process').exec;
-    //     exec('hostname', (error:any, stdout:any, stderr:any) => {
-    //       if (error) {
-    //         reject(error);
-    //       } else {
-    //         resolve(stdout.trim());
-    //       }
-    //     });
-    //   });
-    // }
-
-    // getPCName().then((pcName) => {
-    //   console.log('PC Name:', pcName);
-    // }).catch((error) => {
-    //   console.error('Error getting PC name:', error);
-    // });
-
-
-
     this.global.getCompany().subscribe((data) => {
       this.companyProfile = data;
       this.companyLogo = data[0].companyLogo1;

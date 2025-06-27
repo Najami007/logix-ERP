@@ -109,7 +109,6 @@ export class ParkSaleComponent {
 
   changeValue(item:any){
     var myIndex = this.TicketDetails.indexOf(item);
-   // console.log(this.tableDataList[myIndex]);
     var myQty = this.TicketDetails[myIndex].TicketQuantity;
      if(myQty == null || myQty == '' || myQty == undefined){
       this.TicketDetails[myIndex].TicketQuantity = 0;
@@ -174,7 +173,6 @@ findTickets(){
   this.app.startLoaderDark();
   this.http.get(environment.mainApi+this.global.parkLink+'GetTicketSummarySingleDate?ToDate='+this.global.dateFormater(this.TicketDate,'-')).subscribe(
     (Response:any)=>{
-    // console.log(Response);
       this.TicketsList = Response;
       this.app.stopLoaderDark();
     }
@@ -269,7 +267,6 @@ ticketArray:any = [];
               setTimeout(() => {
                 this.printTicket(Response.rtnTktNo,'SaleReturn','');
               }, 2000);
-              //console.log(Response);
               this.reset();
               this.app.stopLoaderDark();
               
@@ -356,7 +353,6 @@ ticketArray:any = [];
         this.rtnTicketDetails.push({swingID:row.swingID,swingTitle:row.swingTitle,TicketQuantity:1,TicketPrice:Response[0].ticketPrice});
         this.billType = 'SaleReturn';
         this.tempTicketNo = Response[0].ticketNo;
-        // console.log(Response);
       }
     )
   }

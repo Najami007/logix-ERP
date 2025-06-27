@@ -76,7 +76,6 @@ export class SaledetailrptdatewiseComponent implements OnInit {
       this.http.get(environment.mainApi+this.global.parkLink+'GetSaleDetailBetweenDate?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
     '&ToDate='+this.global.dateFormater(this.toDate,'-')+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
       (Response:any)=>{
-       //console.log(Response);
          this.SaleList = [];
          this.returnList = [];
          this.saleTotalAmount = 0;
@@ -106,7 +105,6 @@ export class SaledetailrptdatewiseComponent implements OnInit {
       this.http.get(environment.mainApi+this.global.parkLink+'GetSaleSummaryBetweenDate?fromdate='+this.global.dateFormater(this.fromDate,'-')+
       '&todate='+this.global.dateFormater(this.toDate,'-')+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
         (Response:any)=>{
-           // console.log(Response);
            this.SaleList = [];
            this.returnList = [];
             this.saleTotalAmount = 0;

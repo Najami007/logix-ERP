@@ -84,6 +84,7 @@ export class RecipeListComponent implements OnInit {
     this.app.startLoaderDark();
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetAllRecipes').subscribe(
       (Response: any) => {
+        this.tempRecipeList = [];
            if (Response.length == 0 || Response == null) {
             this.global.popupAlert('Data Not Found!');
             this.app.stopLoaderDark();
@@ -118,7 +119,7 @@ export class RecipeListComponent implements OnInit {
 
   getDetail(item:any){
     this.dialog.open(RecipeDetailComponent,{
-      width:'50%',
+      width:'80%',
       data:[item,{type:'Dine In'}]
     }).afterClosed().subscribe()
   }

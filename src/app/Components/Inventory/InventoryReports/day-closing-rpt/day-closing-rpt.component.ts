@@ -71,6 +71,8 @@ export class DayClosingRptComponent {
     var url = environment.mainApi + this.global.accountLink + 'GetDayTransaction2?FromDate=' + fromDate + '&ToDate=' + toDate;
     this.http.get(url).subscribe(
       (Response: any) => {
+        this.rptData = [];
+        this.tmpRptData = [];
         if (Response.length == 0 || Response == null) {
           this.global.popupAlert('Data Not Found!');
           this.app.stopLoaderDark();

@@ -108,6 +108,11 @@ export class SaleRptPaymentTypewiseComponent implements OnInit {
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInOutDetailPTWiseAndDateWise?reqPT=' + this.paymentType + '&reqUID=' + this.userID + '&FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
             (Response: any) => {
+               this.SaleDetailList = [];
+               this.grandTotal = 0;
+              this.billTotal = 0;
+              this.otherChargesTotal = 0;
+              this.discountTotal = 0;
                if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
                 this.app.stopLoaderDark();
@@ -115,10 +120,7 @@ export class SaleRptPaymentTypewiseComponent implements OnInit {
               
             }
               this.SaleDetailList = Response;
-              this.grandTotal = 0;
-              this.billTotal = 0;
-              this.otherChargesTotal = 0;
-              this.discountTotal = 0;
+             
               Response.forEach((e: any) => {
                 if (e.invType == 'S') {
                   this.grandTotal += e.netTotal;
@@ -147,6 +149,8 @@ export class SaleRptPaymentTypewiseComponent implements OnInit {
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPaymentSaleSummaryDateWise?reqUID=' + this.userID + '&FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
             (Response: any) => {
+               this.saleSummaryList = [];
+               this.grandTotal = 0;
               if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
                 this.app.stopLoaderDark();
@@ -154,7 +158,7 @@ export class SaleRptPaymentTypewiseComponent implements OnInit {
               
             }
               this.saleSummaryList = Response;
-              this.grandTotal = 0;
+             
               Response.forEach((e: any) => {
                 this.grandTotal += e.total;
               });

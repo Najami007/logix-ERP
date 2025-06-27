@@ -72,7 +72,6 @@ export class SectionComponent implements OnInit {
     this.http.get(environment.mainApi+this.globaldata.companyLink+'getsection').subscribe(
       (Response)=>{
         this.sectionList = Response;
-        //console.log(Response);
       },
       (Error)=>{
         this.msg.WarnNotify('Error Occured')

@@ -64,8 +64,6 @@ export class SaleRptswingWiseComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.parkLink+'GetSwing').subscribe(
       (Response:any)=>{
         this.swingsList = Response;
-        // console.log(Response);
-
       }
     )
   }
@@ -80,7 +78,6 @@ export class SaleRptswingWiseComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.parkLink+'GetSaleDetailBetweenDateSwingWise?FromDate='+this.global.dateFormater(this.fromDate,'-')+
     '&todate='+this.global.dateFormater(this.toDate,'-')+'&SwingID='+this.swingID+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
       (Response:any)=>{
-       //console.log(Response);
        this.SaleList = [];
        this.returnList = [];//unt = 0;
        this.saleTotalAmount= 0;

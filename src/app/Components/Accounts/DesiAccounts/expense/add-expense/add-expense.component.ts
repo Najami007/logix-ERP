@@ -31,7 +31,6 @@ export class AddExpenseComponent implements OnInit {
     this.getCoaList();
 
     if (this.editData) {
-      console.log(this.editData);
       this.invoiceNo = this.editData.invoiceNo;
       this.invoiceDate = new Date(this.editData.invoiceDate);
       this.partyID = this.editData.partyID;

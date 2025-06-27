@@ -34,6 +34,7 @@
     "angularx-qrcode": "^16.0.2",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.11.3",
+    "bootstrap-select": "^1.13.18",
     "child_process": "^1.0.2",
     "dayjs": "^1.11.13",
     "file-saver": "^2.0.5",

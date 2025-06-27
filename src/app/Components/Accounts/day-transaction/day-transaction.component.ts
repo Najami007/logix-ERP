@@ -111,8 +111,6 @@ export class DayTransactionComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.accountLink + 'GetDayTransaction?FromDate=' + this.global.dateFormater(this.fromDate, '-') +
         '&ToDate=' + this.global.dateFormater(this.toDate, '-')).subscribe(
           (Response: any) => {
-            //console.log(Response);
-
             this.tmpReportData = Response.map((e: any) => {
               e.debit = Math.round(e.debit);
               e.credit = Math.round(e.credit);
@@ -165,7 +163,6 @@ export class DayTransactionComponent implements OnInit {
 
 
   VoucherDetails(row: any) {
-    console.log(row);
     this.dialogue.open(VoucherDetailsComponent, {
       width: "40%",
       data: row,

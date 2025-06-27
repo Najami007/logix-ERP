@@ -97,7 +97,6 @@ export class AddVehicleComponent {
 
 
   insert(url: any, postData) {
-    console.log(postData);
      this.app.startLoaderDark();
     this.http.post(environment.mainApi + 'veh/' + url, postData).subscribe(
       (Response: any) => {

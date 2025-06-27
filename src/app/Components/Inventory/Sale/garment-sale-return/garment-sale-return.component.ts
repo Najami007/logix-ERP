@@ -1364,7 +1364,6 @@ export class GarmentSaleReturnComponent implements OnInit {
           this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
           this.getTotal();
 
-          console.log(this.tableDataList);
           this.productImage = Response[0].productImage;
 
         })
@@ -1434,6 +1433,22 @@ export class GarmentSaleReturnComponent implements OnInit {
 
 
 
+
+  
+    @ViewChild('vehicle') myVehicle: any;
+    addVehicle() {
+      setTimeout(() => {
+        this.myVehicle.close()
+  
+      }, 200);
+
+      this.global.openBootstrapModal('#addVehicleModal',true);
+ 
+    }
+
+    closeVehicleModal(){
+       this.global.closeBootstrapModal('#addVehicleModal',true);
+    }
 
 
 

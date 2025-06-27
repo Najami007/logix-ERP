@@ -60,7 +60,6 @@ export class HeaderComponent implements OnInit {
     (Response:any)=>{
       this.moduleList = Response;
       this.moduleTitle = Response.find((e:any)=> e.moduleID == this.globalData.getModuleID()).moduleTitle.toUpperCase().split(" ")[0];
-    //  console.log(Response);
     }
   )
 }

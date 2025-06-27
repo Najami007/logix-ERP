@@ -167,7 +167,6 @@ export class VoucherSupervisionComponent {
     
     this.http.get(environment.mainApi+this.globalData.accountLink+'GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
       (Response:any)=>{
-        // console.log(Response);
         this.invoiceDetails = Response;
         if(Response != ''){
          
@@ -207,7 +206,6 @@ export class VoucherSupervisionComponent {
             UserID: this.globalData.getUserID(),
             }).subscribe(
               (Response:any)=>{
-                // console.log(Response.msg);
                 if(Response.msg == 'Voucher Approved Successfully'){
                   this.msg.SuccessNotify(Response.msg);
                   this.delRow(row);

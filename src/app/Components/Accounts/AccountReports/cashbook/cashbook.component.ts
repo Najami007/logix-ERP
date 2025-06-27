@@ -27,14 +27,6 @@ export class CashbookComponent implements OnInit{
     private dialogue:MatDialog,
     private route:Router
   ){
-    // this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
-    //   (Response:any)=>{
-    //     this.companyProfile = Response;
-    //     //console.log(Response)  
-        
-    //   }
-    // )
-
 
     this.globalData.getCompany().subscribe((data)=>{
       this.companyProfile = data;

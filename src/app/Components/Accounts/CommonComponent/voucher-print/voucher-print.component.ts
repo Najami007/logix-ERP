@@ -83,7 +83,6 @@ export class VoucherPrintComponent {
 
     this.http.get(environment.mainApi + this.globalData.accountLink + 'GetSpecificVocherDetail?InvoiceNo=' + invoiceNo).subscribe(
       (Response: any) => {
-        console.log(Response);
         this.invoiceDetails = Response;
    
         this.lblRemarks = Response[0].invoiceRemarks;

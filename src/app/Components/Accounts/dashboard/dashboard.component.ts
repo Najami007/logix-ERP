@@ -95,12 +95,9 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
 
     this.http.get(environment.mainApi + 'acc/GetTotals').subscribe(
       (Response: any) => {
-        //console.log(Response)
         if (Response != null) {
           this.cardsData = Response;
         }
-        //console.log(Response);
-
       }
     )
   }
@@ -113,9 +110,6 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
   GetIncExp() {
     this.http.get(environment.mainApi + 'acc/GetIncExp').subscribe(
       (Response: any) => {
-        //console.log(Response);
-
-
 
         if (Response.length > 0) {
           Response.forEach((e: any) => {
@@ -217,8 +211,6 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
     this.http.get(environment.mainApi + url).subscribe(
       (Response: any) => {
         this.budgetData = Response;
-
-        console.log(Response);
         Response.forEach((e: any) => {
           this.titleList.push(e.coaTitle);
           this.budgetAmountList.push(Math.round(e.budgetAmount));
@@ -312,8 +304,6 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
       + this.globalData.dateFormater(this.lastDay, '-')).subscribe(
         (Response: any) => {
 
-          // console.log(Response);
-
 
           // this.IncomeHeadsList = [
           //   'salaries',
@@ -398,7 +388,6 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
     this.http.get(environment.mainApi + 'acc/GetLossRpt?fromdate=' + this.globalData.dateFormater(this.firstDay, '-') + '&todate='
       + this.globalData.dateFormater(this.lastDay, '-')).subscribe(
         (Response: any) => {
-          //  console.log(Response);
           // this.IncomeHeadsList = [
           //   'salaries',
           //   'medical',
@@ -429,7 +418,6 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
             });
 
           }
-          //console.log(this.ExpenseAmountList)
           this.ExpenseDetailChart();
 
         },

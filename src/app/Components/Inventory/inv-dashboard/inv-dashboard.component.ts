@@ -129,7 +129,6 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
   GetSalePurchaseData() {
     this.http.get(environment.mainApi + this.globalData.inventoryLink + 'GetSalePurchaseData').subscribe(
       (Response: any) => {
-        console.log(Response);
         this.saleAmountList = [];
         this.purchaseAmountList = [];
         this.salePurchaseMonthList = [];

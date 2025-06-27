@@ -46,7 +46,6 @@ export class ParkDashBoardComponent      {
     this.http.get(environment.mainApi+this.globalData.parkLink+'GetTotals').subscribe(
       (Response:any)=>{
         this.cardDataList = Response;
-         console.log(Response);  
       }
     )
   }
@@ -124,8 +123,6 @@ export class ParkDashBoardComponent      {
   getSwingSale(){
     this.http.get(environment.mainApi+this.globalData.parkLink+'GetSwingQtyTotal').subscribe(
       (Response:any)=>{
-        // console.log(Response);
-
         Response.forEach((e:any) => {
           this.swingsList.push(e.swingTitle);
           var tmpArry:any = [];
@@ -134,7 +131,6 @@ export class ParkDashBoardComponent      {
         });
         
         this.swingSaleChart();
-        // console.log(this.swingSaleAmountList)
       }
     )
   }
@@ -183,7 +179,6 @@ export class ParkDashBoardComponent      {
     this.http.get(environment.mainApi+this.globalData.parkLink+'GetActiveSwingQtyTotal').subscribe(
       (Response:any) =>{
         this.activeMemberList = Response;
-        //console.log(Response);
       }
     )
   }

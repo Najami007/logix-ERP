@@ -850,9 +850,7 @@ export class RetailerSaleComponent implements OnInit {
       this.msg.WarnNotify('Enter Valid Amount')
     }else {
       
-      console.log(this.global.dateFormater(this.InvDate,'-'),this.projectID,paymentType,this.billRemarks,this.subTotal,
-      this.discount,this.otherCharges,this.netTotal,this.cash,this.change,this.bankCoaID,this.bankCash,this.tableDataList,this.global.getUserID())
-      
+    
       this.app.startLoaderDark();
         this.http.post(environment.mainApi+this.global.inventoryLink+'InsertCashAndCarrySale',{
         InvDate: this.global.dateFormater(this.InvDate,'-'),

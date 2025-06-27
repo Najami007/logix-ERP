@@ -1,34 +1,34 @@
 <div class="body" style="overflow-x: hidden;">
     <div id="main-content ">
         <section class="statis mt-4 ps-2 pe-2 text-center  mb-3">
-            <div class="row" *ngFor="let item of cardDataList">
+            <div class="row" >
                 <div class="col-md-3 " >
                     <div class="box bg-warning text-white  p-3 mat-elevation-z2 " style="box-shadow: 0px 0px 10px 1px  rgb(180, 183, 219);" >
                         <i ><mat-icon>attach_money</mat-icon></i>                  
-                        <p class="value font-digit ">{{item.totalSaleAmount |number:'1.0-0'}}</p>
+                        <p class="value font-digit ">{{cardDataList[0]?.totalSale || 0 |number:'1.0-0'}}</p>
                         <p class="lead ">TOTAL SALES</p>
                     </div>
                 </div>
                 <div class="col-md-3 ">
                     <div class="box  bg-danger text-white p-3 mat-elevation-z2" style="box-shadow: 0px 0px 10px 1px  rgb(190, 215, 190);">
                         <i class=""><mat-icon>receipt</mat-icon> </i>
-                        <p class="value font-digit">{{item.totalTktSold|number:'1.0-0'}}</p>
-                        <p class="lead">TOTAL BILLS</p>
+                        <p class="value font-digit">{{cardDataList[0]?.holdedInvoices || 0 |number:'1.0-0'}}</p>
+                        <p class="lead">HOLDED BILLS</p>
                     </div>
                 </div>
                 <div class="col-md-3  ">
                     <div class="box bg-success  p-3 text-white mat-elevation-z2" style="box-shadow: 0px 0px  10px 0px  rgb(173, 167, 165);">
-                        <i class=" " ><mat-icon>save_alt</mat-icon></i>
+                        <i class=" " ><mat-icon>group</mat-icon></i>
                  
-                        <div class="value d-flex text-center justify-content-center  "><p class="font-digit">{{item.maxSale | number:'1.0-0'}}</p></div>
-                        <p class="lead">RECIPE SOLD</p>
+                        <div class="value d-flex text-center justify-content-center  "><p class="font-digit">{{cardDataList[0]?.holdedTables || 0 | number:'1.0-0'}}</p></div>
+                        <p class="lead">HOLDED TABLES</p>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="box  bg-primary text-white p-3 mat-elevation-z2" style="box-shadow: 0px 0px 10px 1px  rgb(205, 193, 193);">
                         <i class=""><mat-icon>bar_chart</mat-icon></i>
             
-                        <div class="d-flex value justify-content-center  "><p class="font-digit">{{item.maxQty | number:'1.0-0'}}</p> <p style="font-size: 17px;">{{item.maxQtySwingTitle}}</p></div>
+                        <div class="d-flex value justify-content-center  "><p class="font-digit">{{cardDataList[0]?.totalAmount || 0 | number:'1.0-0'}}</p> <p style="font-size: 17px;">{{cardDataList[0]?.productTitle}}</p></div>
 
                         <!-- <p class="text-danger font-digit">{{item.maxQty|number:'1.0-0'}} {{item.maxQtySwingTitle}}</p> -->
                         <p class="lead">HIGHEST sold</p>

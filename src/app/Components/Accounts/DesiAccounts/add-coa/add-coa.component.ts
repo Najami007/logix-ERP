@@ -103,9 +103,6 @@ export class AddCoaComponent implements OnInit {
       .subscribe(
         (Response: any) => {
           this.savedDataList = Response;
-
-          console.log(Response);
-
         },
         (Error) => {
 
@@ -167,9 +164,6 @@ export class AddCoaComponent implements OnInit {
     } else if (this.btnType == 'Update') {
       this.update(postData);
     }
-
-    console.log(postData);
-
   }
 
 

@@ -148,15 +148,17 @@ export class SaleReportProdCustomerwiseComponent implements OnInit {
         '&FromDate=' + this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') +
         '&fromtime=' + this.fromTime + '&totime=' + this.toTime + '&PartyID=' + this.partyID + '&ProductID=' + this.productID).subscribe(
           (Response: any) => {
-             if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-                this.app.stopLoaderDark();
-              return;
-              
-            }
-            this.DetailList = Response;
+            this.DetailList = [];
             this.grandTotal = 0;
             this.profitTotal = 0;
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
+            this.DetailList = Response;
+
             Response.forEach((e: any) => {
               if (e.invType == 'S') {
                 this.grandTotal += (e.salePrice * e.quantity) - (e.discInR * e.quantity);

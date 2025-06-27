@@ -25,7 +25,6 @@ export class RecipeDetailComponent  {
     this.global.getCompany().subscribe((data)=>{
       this.companyProfile = data;
     });
-    //console.log(data)
     if(this.data){
     var recipeID = 0;
     if(this.data[1].type == 'Other'){
@@ -60,14 +59,16 @@ export class RecipeDetailComponent  {
         this.recipeType = Response[0].recipeType;
         this.salePrice = Response[0].recipeSalePrice;
         
-
+          
           if(recipeID > 0){
             this.DineInProdList = [];
             this.DineInProdList = Response;
+            this.DineInProdList.sort((a:any,b:any)=>a.productTitle - b.productTitle )
           }
           if(refID > 0){
             this.OtherProdList = [];
             this.OtherProdList = Response;
+             this.OtherProdList.sort((a:any,b:any)=>a.productTitle - b.productTitle && a.lockedStatus - b.lockedStatus )
             if(Response.length > 0){
               Response.forEach((e:any) => {
                 this.OtherCostPrice += e.avgCostPrice * e.quantity;

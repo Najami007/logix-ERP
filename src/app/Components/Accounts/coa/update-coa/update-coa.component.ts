@@ -73,7 +73,6 @@ export class UpdateCoaComponent implements OnInit {
         if (pin != '') {
           $('.loaderDark').show();
           postData['PinCode'] = pin;
-          console.log(postData);
           this.http.post(environment.mainApi + this.global.accountLink + 'UpdateChartofAccount',postData).subscribe(
             (Response: any) => {
               if (Response.msg == 'Data Updated Successfully') {

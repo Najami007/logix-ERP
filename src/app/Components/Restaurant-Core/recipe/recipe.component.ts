@@ -1161,7 +1161,7 @@ export class RecipeComponent implements OnInit {
 
     getRecipeDetail(item:any){
       this.dialog.open(RecipeDetailComponent,{
-        width:'50%',
+        width:'80%',
         data:[item,{type:'Dine In'}]
       }).afterClosed().subscribe()
     }

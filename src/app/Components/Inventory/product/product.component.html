@@ -44,13 +44,13 @@
 
                 <mat-form-field appearance="outline" class="col-md-6 matSmall">
                     <mat-label>Product Title 2 </mat-label>
-                    <input matInput autocomplete="off"  [(ngModel)]="productNameOthLanguage" type="text">
+                    <input matInput autocomplete="off" [(ngModel)]="productNameOthLanguage" type="text">
 
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-md-6 matSmall">
                     <mat-label>Code</mat-label>
-                    <input matInput autocomplete="off"  [(ngModel)]="productCode" type="text">
+                    <input matInput autocomplete="off" [(ngModel)]="productCode" type="text">
 
                 </mat-form-field>
 
@@ -251,7 +251,9 @@
 
             <mat-form-field appearance="outline" class="col-md-4 matSmall">
                 <mat-label>Search.....</mat-label>
-                <input type="text" id="searchProduct" (keydown)="onProdSearchKeyup($event,searchProduct)"  (keypress)="onProdSearchKeyup($event,searchProduct)" matInput #searchProd [(ngModel)]="searchProduct">
+                <input type="text" id="searchProduct" (keydown)="onProdSearchKeyup($event,searchProduct)"
+                    (keypress)="onProdSearchKeyup($event,searchProduct)" matInput #searchProd
+                    [(ngModel)]="searchProduct">
             </mat-form-field>
             <mat-form-field appearance="outline" class="col-md-2 matSmall">
                 <mat-label>Sub Category</mat-label>
@@ -315,11 +317,13 @@
                         <th class="cursorPointer" (click)="sortProds('discPercentage')">Disc %</th>
                         <th>GST</th>
                         <th>Entered By</th>
-                        <th class="hide-in-print" *ngIf="crudList.u">Edit</th>
-                        <th class="hide-in-print">Active Status</th>
                         <th class="hide-in-print">Img</th>
+                        <!-- <th class="hide-in-print" *ngIf="crudList.u">Edit</th>
+                        <th class="hide-in-print">Active Status</th>
+
                         <th class="hide-in-print" *ngIf="crudList.d">Del</th>
-                        <th class="hide-in-print">Copy</th>
+                        <th class="hide-in-print">Copy</th> -->
+                        <th class="hide-in-print text-center">Action</th>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of productList | filter:searchProduct |paginate:{
@@ -339,21 +343,24 @@
                             <td>{{item.discPercentage}}%</td>
                             <td>{{item.gst}}%</td>
                             <td>{{item.entryUser}}</td>
-                            <td class="hide-in-print" *ngIf="crudList.u"><mat-icon class="text-success cursorPointer"
-                                    (click)="edit(item)">edit</mat-icon></td>
-                            <td class="hide-in-print"><mat-icon class="text-success cursorPointer"
-                                    [ngClass]="item.activeStatus ? 'text-success' :'text-danger'"
-                                    (click)="activeProduct(item)">{{item.activeStatus ? 'check' :
-                                    'close'}}</mat-icon></td>
                             <td class="cursorPointer hide-in-print">
                                 <mat-icon *ngIf="item.productImage == 'Yes'"
                                     (click)="this.global.showProductImage('',item.productID)">image</mat-icon>
                                 <mat-icon *ngIf="item.productImage == '-'">cancel_presentation</mat-icon>
                             </td>
-                            <td class="hide-in-print" *ngIf="crudList.d"><mat-icon class="text-danger cursorPointer"
-                                    (click)="deleteProd(item)">delete</mat-icon></td>
-                            <td class="hide-in-print"><mat-icon class="cursorPointer"
-                                    (click)="copyProd(item)">save</mat-icon></td>
+                            <td class="hide-in-print text-center" >
+                                <mat-icon class="text-success cursorPointer" matTooltip="Edit" *ngIf="crudList.u" (click)="edit(item)">edit</mat-icon>
+
+                                <mat-icon class="text-success cursorPointer" *ngIf="crudList.u" matTooltip="Active / Inactive"
+                                    [ngClass]="item.activeStatus ? 'text-success' :'text-danger'"
+                                    (click)="activeProduct(item)">{{item.activeStatus ? 'check' :
+                                    'close'}}</mat-icon>
+ 
+                                <mat-icon *ngIf="crudList.d" class="text-danger cursorPointer" matTooltip="Delete"
+                                    (click)="deleteProd(item)">delete</mat-icon>
+
+                                <mat-icon class="cursorPointer" matTooltip="Copy" (click)="copyProd(item)">save</mat-icon>
+                            </td>
                         </tr>
                     </tbody>
 
@@ -390,8 +397,9 @@
     </select>
 
     <div class="jump-to-page">
-        <input type="number"    [(ngModel)]="jumpPage" placeholder="Page #" min="1" [max]="count" />
-        <button (click)="goToPage()" class="text-white"  style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
+        <input type="number" [(ngModel)]="jumpPage" placeholder="Page #" min="1" [max]="count" />
+        <button (click)="goToPage()" class="text-white"
+            style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
     </div>
 
 </div>

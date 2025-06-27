@@ -134,16 +134,17 @@ export class InvrptprodwiseComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink +'GetProductInOutDetailDateWise?reqType='+type+'&reqPID='+this.productID+'&reqUID='+this.userID+'&FromDate='+
         this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
           (Response: any) => {
+             this.invDetailList = [];
+            this.QtyTotal = 0;
+            this.saleTotal = 0;
+            this.costTotal = 0;
               if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
                 this.app.stopLoaderDark();
               return;
               
             }
-            this.invDetailList = [];
-            this.QtyTotal = 0;
-            this.saleTotal = 0;
-            this.costTotal = 0;
+           
             if(type == 'R'){
               Response.forEach((e:any) => {
 

@@ -78,7 +78,6 @@ export class RecipeComparisonComponent implements OnInit {
   }else{
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetSingleRecipeDetail?recipeid='+this.recipe1).subscribe(
       (Response: any) => {
-        //console.log(Response);
         this.costPrice1 = Response[0].recipeCostPrice;
         this.recipeTitle1 = Response[0].recipeTitle;
         this.recipeType1 = Response[0].recipeType;
@@ -111,7 +110,6 @@ export class RecipeComparisonComponent implements OnInit {
 
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetSingleRecipeDetail?recipeid='+this.recipe2).subscribe(
       (Response: any) => {
-        //console.log(Response);
         this.costPrice2 = Response[0].recipeCostPrice;
         this.recipeTitle2 = Response[0].recipeTitle;
         this.recipeType2 = Response[0].recipeType;

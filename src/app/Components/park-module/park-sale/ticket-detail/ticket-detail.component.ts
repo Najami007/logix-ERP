@@ -30,7 +30,6 @@ export class TicketDetailComponent{
   this.http.get(environment.mainApi+this.global.parkLink+'PrintTicket?ticketno='+this.editData.ticketNo).subscribe(
     (Response:any)=>{
      this.printDetails = Response;
-    //  console.log(Response);
 
     }
     

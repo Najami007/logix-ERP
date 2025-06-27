@@ -111,8 +111,6 @@ export class TopNavBarComponent implements OnInit{
         this.logo1 = this.companyProfile[0].companyLogo3; 
         this.height = this.companyProfile[0].logo3Height;
         this.width = this.companyProfile[0].logo3Width;
-        
-        //console.log(Response);  
         this.globalData.comapnayProfile = Response[0];      
         }
         
@@ -155,9 +153,6 @@ export class TopNavBarComponent implements OnInit{
           (Response:any)=>{
            this.menuList = Response;
           this.globalData.glbMenulist = Response;
-          //console.log(Response);
-
-          //  this.globalData.setMenuList(Response);
            
           }
         )

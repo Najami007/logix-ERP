@@ -82,8 +82,6 @@ export class AddSwingComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.parkLink+'GetSwing').subscribe(
       (Response:any)=>{
         this.swingsList = Response;
-      //  console.log(Response);
-
       }
     )
   }

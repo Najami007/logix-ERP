@@ -112,9 +112,6 @@ export class WholeSaleComponent implements OnInit {
       (data: any) => { this.productList = data; });
 
     for (let i = 0; i <= 100; i++) { this.discountList.push({ value: i }); }
-
-
-      console.log( this.global.DisableDateSale);
   }
 
   discountList: any = [];

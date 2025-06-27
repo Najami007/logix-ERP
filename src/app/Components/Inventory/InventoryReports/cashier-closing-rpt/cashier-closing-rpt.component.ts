@@ -96,7 +96,6 @@ export class CashierClosingRptComponent implements OnInit {
   getReport() {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetDayClosingRpt_9?reqDate=' + this.global.dateFormater(this.Date, '-')).subscribe(
       (Response: any) => {
-        console.log(Response);
         this.TotalSales = 0
         this.totalSaleReturn = 0
         this.totalServiceCharges = 0

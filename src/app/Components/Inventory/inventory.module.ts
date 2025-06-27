@@ -107,6 +107,7 @@ import { PaymentComponent } from '../Accounts/DesiAccounts/payment/payment.compo
 import { DayClosingRptComponent } from './InventoryReports/day-closing-rpt/day-closing-rpt.component';
 import { AuditInvoicePrintComponent } from './InvAdjustment/inv-audit/audit-invoice-print/audit-invoice-print.component';
 import { VehicleSaleReportComponent } from './InventoryReports/vehicle-sale-report/vehicle-sale-report.component';
+import { CompanyModule } from '../Company/company.module';
 
 export const MY_DATE_FORMAT  = {
   parse: {
@@ -286,6 +287,7 @@ export const inventoryRoutes: Route[] = [
     DayClosingRptComponent,
     AuditInvoicePrintComponent,
     VehicleSaleReportComponent,
+   
     
   
   
@@ -311,11 +313,10 @@ export const inventoryRoutes: Route[] = [
     PipesModule,
     QRCodeModule,
     NgSelectModule,
-    SharedComponentsModule
+    SharedComponentsModule,
+    CompanyModule
     
-
-    
-  ],
+],
   exports: [
     RouterModule,
     CashierClosingRptComponent,

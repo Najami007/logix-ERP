@@ -333,6 +333,12 @@ export class InvreportcatwiseComponent implements OnInit {
       // alert(this.reportType+idType);
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryRpt?rptType=' + this.reportType + idType).subscribe(
         (Response: any) => {
+          this.inventoryList = [];
+          this.tmpInventoryList = [];
+          this.costTotal = 0;
+          this.avgCostTotal = 0;
+          this.saleTotal = 0;
+          this.balanceQtyTotal = 0;
           if (Response.length == 0 || Response == null) {
             this.global.popupAlert('Data Not Found!');
             this.app.stopLoaderDark();
@@ -347,10 +353,7 @@ export class InvreportcatwiseComponent implements OnInit {
           // this.inventoryList = Response;
 
           this.app.stopLoaderDark();
-          this.costTotal = 0;
-          this.avgCostTotal = 0;
-          this.saleTotal = 0;
-          this.balanceQtyTotal = 0;
+          
 
           if (Response != null)
             this.getTotal()

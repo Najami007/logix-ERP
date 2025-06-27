@@ -863,7 +863,6 @@ export class IssuanceComponent implements OnInit {
 
     this.getBillDetail(item.invBillNo).subscribe(
       (Response:any)=>{
-        //console.log(Response);
         this.totalQty = 0;
         this.CostTotal = 0;
         this.avgCostTotal = 0;

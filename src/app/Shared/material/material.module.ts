@@ -81,7 +81,8 @@ import {MatChipsModule} from '@angular/material/chips';
       separator: ' - ',
       applyLabel: 'Okay',
   }),
-  MatChipsModule
+  MatChipsModule,
+  
     
 
   ],

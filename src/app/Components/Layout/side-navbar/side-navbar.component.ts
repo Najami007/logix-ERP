@@ -79,9 +79,6 @@ export class SideNavbarComponent {
         (Response:any)=>{
          this.menuList = Response;
         this.global.glbMenulist = Response;
-        //console.log(Response);
-
-        //  this.globalData.setMenuList(Response);
          
         }
       )

@@ -133,13 +133,20 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
-              if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-                this.app.stopLoaderDark();
-              return;
-              
-            }
             this.SaleDetailList = [];
+            this.billTotal = 0;
+            this.chargesTotal = 0;
+            this.netGrandTotal = 0;
+            this.discountTotal = 0;
+            this.offerDiscTotal = 0;
+            this.summaryNetTotal = 0;
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
+
 
             if (this.rptType == 'R') {
               Response.forEach((e: any) => {
@@ -153,12 +160,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
             } else {
               this.SaleDetailList = Response;
             }
-            this.billTotal = 0;
-            this.chargesTotal = 0;
-            this.netGrandTotal = 0;
-            this.discountTotal = 0;
-            this.offerDiscTotal = 0;
-            this.summaryNetTotal = 0;
+
 
             this.SaleDetailList.forEach((e: any) => {
 
@@ -186,13 +188,21 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
-             if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-                this.app.stopLoaderDark();
-              return;
-              
-            }
             this.SaleDetailList = [];
+            this.billTotal = 0;
+            this.chargesTotal = 0;
+            this.netGrandTotal = 0;
+            this.discountTotal = 0;
+            this.offerDiscTotal = 0;
+            this.summaryNetTotal = 0;
+            this.myTaxTotal = 0;
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
+
 
             if (this.rptType == 'R') {
               Response.forEach((e: any) => {
@@ -206,13 +216,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
             } else {
               this.SaleDetailList = Response;
             }
-            this.billTotal = 0;
-            this.chargesTotal = 0;
-            this.netGrandTotal = 0;
-            this.discountTotal = 0;
-            this.offerDiscTotal = 0;
-            this.summaryNetTotal = 0;
-            this.myTaxTotal = 0;
+
 
             this.SaleDetailList.forEach((e: any) => {
 
@@ -242,13 +246,22 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryDetailDateWise_3?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
-              if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-                this.app.stopLoaderDark();
-              return;
-              
-            }
             this.SaleDetailList = [];
+            this.qtyTotal = 0;
+            this.detNetTotal = 0;
+            this.profitPercentTotal = 0;
+            this.profitTotal = 0;
+            this.discountTotal = 0;
+            this.salePriceTotal = 0;
+            this.costPriceTotal = 0;
+            this.avgCostTotal = 0;
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
+
             if (this.rptType == 'R') {
               Response.forEach((e: any) => {
                 if (e.issueType != 'Stock Transfer') {
@@ -262,14 +275,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
               this.SaleDetailList = Response;
             }
 
-            this.qtyTotal = 0;
-            this.detNetTotal = 0;
-            this.profitPercentTotal = 0;
-            this.profitTotal = 0;
-            this.discountTotal = 0;
-            this.salePriceTotal = 0;
-            this.costPriceTotal = 0;
-            this.avgCostTotal = 0;
+
             this.SaleDetailList.forEach((e: any) => {
               this.qtyTotal += e.quantity;
               if (this.rptType == 's' || this.rptType == 'sr') {

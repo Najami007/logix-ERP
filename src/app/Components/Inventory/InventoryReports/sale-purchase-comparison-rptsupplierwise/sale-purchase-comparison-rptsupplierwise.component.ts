@@ -115,6 +115,11 @@ export class SalePurchaseComparisonRptsupplierwiseComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseSaleComparisonRptSupplierWise_7?reqPartyID=' + this.partyID + '&FromDate=' + this.global.dateFormater(this.fromDate, '-') +
         '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
+            this.DetailList = [];
+             this.purQtyTotal = 0;
+            this.saleQtyTotal = 0;
+            this.purchaseTotal = 0;
+            this.saleTotal = 0;
             if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
                 this.app.stopLoaderDark();
@@ -122,10 +127,7 @@ export class SalePurchaseComparisonRptsupplierwiseComponent implements OnInit {
               
             }
             this.DetailList = Response;
-            this.purQtyTotal = 0;
-            this.saleQtyTotal = 0;
-            this.purchaseTotal = 0;
-            this.saleTotal = 0;
+           
             Response.forEach((e: any) => {
 
               this.purQtyTotal += e.purQty;

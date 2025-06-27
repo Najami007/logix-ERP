@@ -30,7 +30,6 @@ export class SubscriptionKeyGeneratorComponent {
 
   getCode(){
     this.token =  this.global.encodeSubscriptionDate(this.SubscriptionDate,this.code);
-    console.log(this.token);
     }
 
 

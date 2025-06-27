@@ -13,13 +13,14 @@ import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/add
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bill-print.component';
 import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-mehtod.component';
+import { CompanyModule } from "../../../Company/company.module";
 
 
 
 @Component({
   selector: 'app-garment-sale',
   templateUrl: './garment-sale.component.html',
-  styleUrls: ['./garment-sale.component.scss']
+  styleUrls: ['./garment-sale.component.scss'],
 })
 export class GarmentSaleComponent implements OnInit {
 
@@ -268,7 +269,6 @@ export class GarmentSaleComponent implements OnInit {
         // this.app.startLoaderDark();
         this.global.getProdDetail(0, barcode).subscribe(
           (Response: any) => {
-            console.log(Response);
             if (Response == '' || Response == null || Response == undefined) {
               this.searchSpecialBarcode(barcode, qty);
               return;
@@ -1105,7 +1105,6 @@ vehicleList:any = [];
           return;
         }
          this.isValidSale = false;
-        console.log(postData);
         this.app.startLoaderDark();
         this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', postData).subscribe(
           (Response: any) => {
@@ -1313,7 +1312,6 @@ vehicleList:any = [];
 
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetOpenDaySale').subscribe(
       (Response: any) => {
-        // console.log(Response);
         this.savedbillList = [];
         Response.forEach((e: any) => {
           if (e.invType == 'S') {
@@ -1406,6 +1404,21 @@ vehicleList:any = [];
     this.partyID = 0;
   }
 
+
+    @ViewChild('vehicle') myVehicle: any;
+    addVehicle() {
+      setTimeout(() => {
+        this.myVehicle.close()
+  
+      }, 200);
+
+      this.global.openBootstrapModal('#addVehicleModal',true);
+ 
+    }
+
+    closeVehicleModal(){
+       this.global.closeBootstrapModal('#addVehicleModal',true);
+    }
 
 
 }

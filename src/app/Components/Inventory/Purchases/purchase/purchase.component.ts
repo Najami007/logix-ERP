@@ -813,9 +813,6 @@ export class PurchaseComponent implements OnInit {
     var inValidSaleProdList = this.tableDataList.filter((p: any) => p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null);
     var inValidQtyProdList = this.tableDataList.filter((p: any) => p.Quantity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '')
 
-    console.log(inValidCostProdList)
-    console.log(inValidSaleProdList);
-    console.log(inValidQtyProdList);
     if (inValidCostProdList.length > 0) {
       this.msg.WarnNotify('(' + inValidCostProdList[0].ProductTitle + ') Cost Price greater than Sale Price');
       return;
@@ -913,7 +910,6 @@ export class PurchaseComponent implements OnInit {
           if (this.holdBtnType == 'Hold') {
             this.app.startLoaderDark();
             postData.InvType = 'HP';
-            console.log(postData);
             this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchase', postData).subscribe(
               (Response: any) => {
                 if (Response.msg == 'Data Saved Successfully') {
@@ -936,7 +932,6 @@ export class PurchaseComponent implements OnInit {
               if (pin != '') {
                 this.app.startLoaderDark();
                 postData['PinCode'] = pin;
-                console.log(postData);
                 this.http.post(environment.mainApi + this.global.inventoryLink + 'UpdateHoldInvoice', postData).subscribe(
                   (Response: any) => {
                     if (Response.msg == 'Data Updated Successfully') {
@@ -967,7 +962,6 @@ export class PurchaseComponent implements OnInit {
 
                 this.app.startLoaderDark();
                 postData.InvType = 'P';
-                console.log(postData);
                 this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchase', postData).subscribe(
                   (Response: any) => {
                     if (Response.msg == 'Data Saved Successfully') {

@@ -431,8 +431,6 @@ export class ProductComponent implements OnInit {
         ProductTypeID: this.prodTypeID,
         UserID: this.global.getUserID()
       };
-
-      console.log(postData);
       if (this.btnType == 'Save') {
         this.insert(postData);
       } else if (this.btnType == 'Update') {

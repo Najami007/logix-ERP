@@ -167,9 +167,7 @@ export class VoucherComponent implements OnInit{
   getProject(){
     this.http.get(environment.mainApi+'cmp/getproject').subscribe(
       (Response:any)=>{
-        this.projectList = Response;
-       // console.log(Response);
-      
+        this.projectList = Response;      
       }
     )
   }
@@ -203,8 +201,6 @@ export class VoucherComponent implements OnInit{
   save() {
 
     var titleRow = this.CoaList.find((obj:any)=> obj.coaID === this.COATitleID);
-    // console.log(titleRow);
-
     // finding the value of coatitle in voucherdata array here
     const findValue = this.VoucherData.find((obj : any) => obj.COAID === this.COATitleID);
     if(this.COATitleID == '' || this.COATitleID == undefined){
@@ -254,11 +250,8 @@ export class VoucherComponent implements OnInit{
    
     this.http.get(environment.mainApi+this.globalData.accountLink+'GetSavedVoucherDetail').subscribe(
       (Response:any)=>{
-      //  console.log(Response);
         this.SavedVoucherData = Response;
         this.loadingBar = 'stop';
-       
-       
       },
       (error:any)=>{
         console.log(error)
@@ -277,7 +270,6 @@ export class VoucherComponent implements OnInit{
   getParty(){
     this.http.get(environment.mainApi+this.globalData.accountLink+'GetVoucherParty').subscribe(
       (Response)=>{
-        // console.log(Response);
         this.partyList = Response;
       },
       (Error)=>{
@@ -293,7 +285,6 @@ export class VoucherComponent implements OnInit{
   getCoa(){
     this.http.get(environment.mainApi+this.globalData.accountLink+'GetVoucherCOA').subscribe(
       (Response)=>{
-        // console.log(Response);
         this.CoaList = Response;
       }
     )
@@ -307,7 +298,7 @@ export class VoucherComponent implements OnInit{
         this.refCoaList = Response;
       },
       (Error)=>{
-        //console.log(Error);
+        console.log(Error);
       }
     )
   }
@@ -355,7 +346,6 @@ export class VoucherComponent implements OnInit{
         UserID: this.globalData.getUserID(),
       }).subscribe(
         (Response:any)=>{
-          // console.log(Response);
           if(Response.msg == 'Data Saved Successfully'){
             this.msg.SuccessNotify(Response.msg);
             this.reset();
@@ -440,17 +430,11 @@ export class VoucherComponent implements OnInit{
       event.target.value = '';
       this.VoucherDocument = '';
     }
-  
-
-
-  //console.log(this.imageFile);
-}
+  }
 
 
 downloadVoucherDocument(row:any){
-  var vdoc = row.voucherDocument;
-  // console.log(vdoc);
-    
+  var vdoc = row.voucherDocument;    
   var newImage = vdoc.replace('data:application/pdf;base64,','');
 
    const byteArray = new Uint8Array(atob(newImage).split('').map(char=> char.charCodeAt(0)));
@@ -531,7 +515,6 @@ downloadVoucherDocument(row:any){
             UserID: this.globalData.getUserID(),
             }).subscribe(
               (Response:any)=>{
-                // console.log(Response.msg);
                 if(Response.msg == 'Voucher Approved Successfully'){
                   this.msg.SuccessNotify(Response.msg);
                   this.getSavedVoucher();
@@ -585,12 +568,8 @@ downloadVoucherDocument(row:any){
 
   printAfterSave(invoiceNo:any){
 
-     this.getSavedVoucher();
-    //console.log(this.SavedVoucherData);
-    
+     this.getSavedVoucher();    
     var curRow = this.SavedVoucherData.find((obj:any)=> obj.invoiceNo ===  invoiceNo );
-    // console.log(curRow);
-
     this.lblInvoiceNo = curRow.invoiceNo;
     this.lblInvoiceDate = curRow.invoiceDate;
     this.lblRemarks = curRow.invoiceRemarks;
@@ -622,7 +601,6 @@ downloadVoucherDocument(row:any){
     
     this.http.get(environment.mainApi+this.globalData.accountLink+'GetSpecificVocherDetail?InvoiceNo='+invoiceNo).subscribe(
       (Response:any)=>{
-        // console.log(Response);
         this.invoiceDetails = Response;
         if(Response != ''){
          

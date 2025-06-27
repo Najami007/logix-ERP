@@ -13,9 +13,9 @@ import { environment } from 'src/environments/environment.development';
 })
 export class TopLeastSaleQtyAmountwiseComponent {
 
-  
+
   companyProfile: any = [];
-  crudList:any = {c:true,r:true,u:true,d:true};
+  crudList: any = { c: true, r: true, u: true, d: true };
   constructor(
     private http: HttpClient,
     private msg: NotificationService,
@@ -33,17 +33,17 @@ export class TopLeastSaleQtyAmountwiseComponent {
       this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
     })
 
-  
+
   }
   ngOnInit(): void {
     this.global.setHeaderTitle('Top Least Sale Report');
 
   }
 
-  reportsList:any = [
-    {val:'Qty',title:'Quantitywise'},
-    {val:'Amount',title:'Amountwise'},
-]
+  reportsList: any = [
+    { val: 'Qty', title: 'Quantitywise' },
+    { val: 'Amount', title: 'Amountwise' },
+  ]
 
 
 
@@ -52,12 +52,12 @@ export class TopLeastSaleQtyAmountwiseComponent {
   toDate: Date = new Date();
   toTime: any = '23:59';
 
-  rptType:any = 'Qty';
+  rptType: any = 'Qty';
 
-  reportType:any = '';
+  reportType: any = '';
 
 
-  reportDataList :any = [];
+  reportDataList: any = [];
 
 
   qtyTotal = 0;
@@ -65,34 +65,39 @@ export class TopLeastSaleQtyAmountwiseComponent {
   rtnQtyTotal = 0;
   netTotal = 0;
 
-  getReport(type:any){
+  getReport(type: any) {
 
     this.app.startLoaderDark();
-    this.http.get(environment.mainApi+this.global.inventoryLink+'RptTopLeastSaleQtyAndAmountWise_1?reqType='+type+'&FromDate='+
-    this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
-      (Response:any)=>{
-            if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-                this.app.stopLoaderDark();
-              return;
-              
-            }
-        this.reportDataList = Response;
-       
-        this.qtyTotal = 0;
-        this.netTotal = 0;
-        this.saleQtyTotal = 0;
-        this.rtnQtyTotal = 0;
-        Response.forEach((e:any) => {
-          this.qtyTotal += e.quantity;
-          this.netTotal += e.total;
-          this.saleQtyTotal += e.saleQty;
-          this.rtnQtyTotal += e.rtnQty;
-        });
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'RptTopLeastSaleQtyAndAmountWise_1?reqType=' + type + '&FromDate=' +
+      this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
+        (Response: any) => {
 
-        this.app.stopLoaderDark();
-      }
-    )
+
+          this.reportDataList = [];
+
+          this.qtyTotal = 0;
+          this.netTotal = 0;
+          this.saleQtyTotal = 0;
+          this.rtnQtyTotal = 0;
+          if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+
+          }
+          this.reportDataList = Response;
+
+
+          Response.forEach((e: any) => {
+            this.qtyTotal += e.quantity;
+            this.netTotal += e.total;
+            this.saleQtyTotal += e.saleQty;
+            this.rtnQtyTotal += e.rtnQty;
+          });
+
+          this.app.stopLoaderDark();
+        }
+      )
 
   }
 
@@ -100,7 +105,7 @@ export class TopLeastSaleQtyAmountwiseComponent {
 
 
 
-  print(){
+  print() {
     this.global.printData('#PrintDiv')
   }
 

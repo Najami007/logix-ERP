@@ -120,7 +120,8 @@ export const companyRoutes: Route[] = [
   ],
   exports: [
     RouterModule,
-    VehicleComponent
+    VehicleComponent,
+    AddVehicleComponent
   ],
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },

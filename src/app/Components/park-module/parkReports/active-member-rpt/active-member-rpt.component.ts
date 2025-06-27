@@ -41,7 +41,6 @@ export class ActiveMemberRptComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.parkLink+'GetActiveSwingQtyTotal').subscribe(
       (Response:any) =>{
         this.activeMemberList = Response;
-       // console.log(Response);
         this.app.stopLoaderDark();
       }
     )

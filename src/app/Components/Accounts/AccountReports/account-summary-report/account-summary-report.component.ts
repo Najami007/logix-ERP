@@ -155,7 +155,6 @@ this.TrialBalanceData = [];
          }
         }
          this.app.stopLoaderDark();
-        // console.log(this.notesList);
       },
       (Error)=>{
         this.app.stopLoaderDark();
@@ -194,8 +193,6 @@ this.TrialBalanceData = [];
     this.notesList = [];
     this.http.get(environment.mainApi+this.globalData.accountLink+'GetNote').subscribe(
       (Response:any )=>{
-        // console.log(Response);
-
         Response.forEach((e:any) => {
           this.notesList.push({noteID:e.noteID,noteTitle:e.noteTitle,coaTypeID:e.coaTypeID,debitTotal:0,creditTotal:0,})
         });

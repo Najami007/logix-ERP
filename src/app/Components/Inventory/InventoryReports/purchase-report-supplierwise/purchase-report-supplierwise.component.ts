@@ -126,14 +126,17 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseRptSupplierWiseDetail_5?reqUserID=' + this.userID + '&reqPartyID=' + this.partyID + '&FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
             (Response: any) => {
-               if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
+              this.DetailList = [];
+                  this.grandTotal = 0;
+
+              if (Response.length == 0 || Response == null) {
+                this.global.popupAlert('Data Not Found!');
                 this.app.stopLoaderDark();
-              return;
-              
-            }
+                return;
+
+              }
               this.DetailList = Response;
-              this.grandTotal = 0;
+          
               Response.forEach((e: any) => {
                 if (e.invType == 'P') {
                   this.grandTotal += e.costPrice * e.quantity;
@@ -162,12 +165,15 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseRptSupplierWiseSummary_4?reqUserID=' + this.userID + '&reqPartyID=' + this.partyID + '&FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
             (Response: any) => {
+              this.DetailList = [];
+                this.grandTotal = 0;
               if (Response.length == 0 || Response == null) {
                 this.global.popupAlert('Data Not Found!');
+                 this.app.stopLoaderDark();
                 return;
               }
               this.DetailList = Response;
-              this.grandTotal = 0;
+            
               Response.forEach((e: any) => {
                 if (e.invType == 'P') {
                   this.grandTotal += e.netTotal + e.overHeadAmount + e.billDiscount;

@@ -77,7 +77,6 @@ export class DayOpencloseRptComponent implements OnInit {
       this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
         (Response: any) => {
           this.DOClist = Response;
-          console.log(Response)
         }
       )
      

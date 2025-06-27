@@ -133,6 +133,9 @@ export class SaleRptOrderTypewiseComponent implements OnInit {
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetOrderTypeSaleSummaryDateWise?reqUID=' + this.userID + '&FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
             (Response: any) => {
+              this.saleSummaryList = [];
+              this.QtyTotal = 0;
+              this.summaryTotal = 0;
               if (Response.length == 0 || Response == null) {
                 this.global.popupAlert('Data Not Found!');
                 this.app.stopLoaderDark();
@@ -140,8 +143,7 @@ export class SaleRptOrderTypewiseComponent implements OnInit {
 
               }
               this.saleSummaryList = Response;
-              this.QtyTotal = 0;
-              this.summaryTotal = 0;
+
               Response.forEach((e: any) => {
                 this.QtyTotal += e.quantity;
                 this.summaryTotal += e.total;

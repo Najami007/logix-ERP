@@ -71,7 +71,6 @@ export class SalesummaryrptswingwiseComponent implements OnInit {
       this.http.get(environment.mainApi+this.global.parkLink+'GetSaleSummaryBetweenDateSwingWise?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
     '&ToDate='+this.global.dateFormater(this.toDate,'-')+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
       (Response:any)=>{
-       //console.log(Response);
        this.SaleList = [];
        this.returnList = [];
         this.saleTotalAmount = 0;

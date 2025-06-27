@@ -67,7 +67,6 @@ export class UserRoleComponent implements OnInit {
 
       (Response: any) => {
         this.rolesList = Response;
-        // console.log(Response);
       }
     )
   }
@@ -91,7 +90,6 @@ export class UserRoleComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.userLink + 'getmenu').subscribe(
       (Response) => {
         this.menuList = Response;
-        // console.log(Response);
       }
     )
   }
@@ -228,12 +226,6 @@ export class UserRoleComponent implements OnInit {
 
     if (item.c == false || item.r == false || item.u == false || item.d == false) {
       item.a = false;
-
-      // var moduleIndex = this.TempModuleList.findIndex((md:any)=>md.moduleID == item.moduleID);
-      // var menuIndex = this.TempModuleList[moduleIndex].tempMenuList.findIndex((tm:any)=>tm.menuID == item.menuID);
-
-      // this.TempModuleList[moduleIndex].tempMenuList.splice(menuIndex,1);
-      // console.log(this.TempModuleList,menuIndex,moduleIndex);
     }
 
 
@@ -304,8 +296,6 @@ export class UserRoleComponent implements OnInit {
     this.roleID = row.roleID;
 
     this.http.get(environment.mainApi + this.global.userLink + 'getrolemenu?roleid=' + row.roleID).subscribe((Response: any) => {
-      // console.log(Response);
-
       var AllowedRolesList: any = [];
 
       Response.forEach((e: any) => {
@@ -313,8 +303,6 @@ export class UserRoleComponent implements OnInit {
         //// will replace the menu list crud fields by comparing with response //////////
 
         var index = this.menuList.findIndex((obj: any) => obj.menuID == e.menuID);
-
-        //console.log(e,index)
         if (index != -1) {
           this.menuList[index].c = e.c;
           this.menuList[index].r = e.r;
@@ -370,15 +358,7 @@ export class UserRoleComponent implements OnInit {
 
 
       });
-
-
-    }
-    )
-
-
-
-    //console.log(this.TempModuleList); 
-
+})
     this.btnType = 'Update';
     this.tabIndex = 0;
 

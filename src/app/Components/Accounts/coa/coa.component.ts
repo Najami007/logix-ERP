@@ -333,7 +333,6 @@ export class COAComponent implements OnInit {
     this.http.get(environment.mainApi + this.globalData.accountLink + 'getlevel1?level0=' + this.CoaType).subscribe(
       {
         next: value => {
-          // console.log(value);
           this.coaLevel1List = value;
         },
         error: error => {
@@ -349,7 +348,6 @@ export class COAComponent implements OnInit {
     this.http.get(environment.mainApi + this.globalData.accountLink + 'getlevel2?level0=' + this.CoaType + '&level1=' + this.level1).subscribe(
       {
         next: value => {
-          // console.log(value);
           this.coaLevel2List = value;
         },
         error: error => {
@@ -365,7 +363,6 @@ export class COAComponent implements OnInit {
     this.http.get(environment.mainApi + this.globalData.accountLink + 'getlevel3?level0=' + this.CoaType + '&level1=' + this.level1 + '&level2=' + this.level2).subscribe(
       {
         next: value => {
-          // console.log(value);
           this.coaLevel3List = value;
         },
         error: error => {
@@ -381,7 +378,6 @@ export class COAComponent implements OnInit {
     this.http.get(environment.mainApi + this.globalData.accountLink + 'getlevel4?level0=' + this.CoaType + '&level1=' + this.level1 + '&level2=' + this.level2 + '&level3=' + this.level3).subscribe(
       {
         next: value => {
-          // console.log(value);
           this.coaLevel4List = value;
         },
         error: error => {
@@ -451,7 +447,6 @@ export class COAComponent implements OnInit {
     this.app.startLoaderDark();
     this.http.post(environment.mainApi + this.globalData.accountLink + 'InsertChartOfAccount', postData).subscribe(
       (Response: any) => {
-        // console.log(this.TransactionAllowed);
         if (Response.msg == "Data Saved Successfully") {
           this.msg.SuccessNotify(Response.msg);
           this.GetChartOfAccount();

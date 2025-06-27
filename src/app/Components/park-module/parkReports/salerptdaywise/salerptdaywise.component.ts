@@ -62,7 +62,6 @@ export class SalerptdaywiseComponent {
     this.app.startLoaderDark();
     this.http.get(environment.mainApi+this.global.parkLink+'GetTicketSummarySingleDate?ToDate='+this.global.dateFormater(this.toDate,'-')).subscribe(
       (Response:any)=>{
-      //  console.log(Response);
       this.SaleList = [];
       this.returnList = [];
        this.saleTotalAmount = 0;

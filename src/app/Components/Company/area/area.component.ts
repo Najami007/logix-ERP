@@ -70,7 +70,6 @@ export class AreaComponent {
     this.http.get(environment.mainApi+this.globaldata.companyLink+'GetArea').subscribe(
       (Response)=>{
         this.SavedDataList = Response;
-        //console.log(Response);
       },
       (Error)=>{
         this.msg.WarnNotify('Error Occured while Loading Countries List')
@@ -160,7 +159,6 @@ export class AreaComponent {
       next:value=>{
     
         this.citiesList = value;
-        //console.log(value);
       },
       error:error=>{
         console.log(error);

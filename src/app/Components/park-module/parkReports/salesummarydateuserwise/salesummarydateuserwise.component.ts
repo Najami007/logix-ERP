@@ -80,9 +80,7 @@ export class SalesummarydateuserwiseComponent implements OnInit {
     this.app.startLoaderDark()
     this.http.get(environment.mainApi+this.global.userLink+'getuser').subscribe(
       (Response)=>{
-        this.userList = Response;
-        // console.log(Response);
-        
+        this.userList = Response;       
         this.app.stopLoaderDark();
 
       },
@@ -107,7 +105,6 @@ export class SalesummarydateuserwiseComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.parkLink+'GetSaleSummaryBetweenDateUserWise?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
     '&ToDate='+this.global.dateFormater(this.toDate,'-')+'&UserID='+this.userID+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
       (Response:any)=>{
-     //   console.log(Response);
      this.SaleList = [];
      this.returnList = [];
       this.saleTotalAmount = 0;
@@ -139,7 +136,6 @@ export class SalesummarydateuserwiseComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.parkLink+'GetSaleDetailBetweenDateUserWise?FromDate='+ this.global.dateFormater(this.fromDate,'-')+
     '&ToDate='+this.global.dateFormater(this.toDate,'-')+'&UserID='+this.userID+'&FromTime='+this.fromTime+'&ToTime='+this.toTime).subscribe(
       (Response:any)=>{
-     //   console.log(Response);
      this.SaleList = [];
      this.returnList = [];
       this.saleTotalAmount = 0;

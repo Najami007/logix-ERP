@@ -139,7 +139,6 @@ export class WhsSavedBillComponent implements OnInit {
               this.myDuplicateFlag = true;
               this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+item.invBillNo).subscribe(
                 (Response:any)=>{
-                  //console.log(Response);
                   this.myPrintData = Response;
                   this.myCustomerName = Response[0].partyName;
                   this.myQtyTotal = 0;
@@ -161,7 +160,6 @@ export class WhsSavedBillComponent implements OnInit {
         )
       }
     })
-    //console.log(item)
   
   }
 

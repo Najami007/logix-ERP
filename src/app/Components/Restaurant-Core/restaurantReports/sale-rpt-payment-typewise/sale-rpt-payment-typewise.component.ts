@@ -105,6 +105,10 @@ export class SaleRptPaymentTypewiseComponent implements OnInit {
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInOutDetailPTWiseAndDateWise?reqPT=' + this.paymentType + '&reqUID=' + this.userID + '&FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
             (Response: any) => {
+              this.SaleDetailList = [];
+              this.grandTotal = 0;
+              this.detailBillTotal = 0;
+              this.detailOtherChargesTotal = 0;
               if (Response.length == 0 || Response == null) {
                 this.global.popupAlert('Data Not Found!');
                 this.app.stopLoaderDark();
@@ -112,9 +116,7 @@ export class SaleRptPaymentTypewiseComponent implements OnInit {
 
               }
               this.SaleDetailList = Response;
-              this.grandTotal = 0;
-              this.detailBillTotal = 0;
-              this.detailOtherChargesTotal = 0;
+
               Response.forEach((e: any) => {
                 this.detailBillTotal += e.billTotal;
                 this.detailOtherChargesTotal += e.otherCharges;

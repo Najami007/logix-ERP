@@ -263,14 +263,16 @@
                                 <th>Sale</th>
                                 <th>Category</th>
                                 <th>Cooking Area</th>
-                                <th class="hide-in-print">Edit</th>
+                                <th class="hide-in-print">Retrieve</th>
+                                <th class="hide-in-print">Other</th>
+                                <!-- <th class="hide-in-print">Edit</th>
                                 <th class="hide-in-print">Lock Status</th>
                                 <th class="hide-in-print">Status</th>
-                                <th class="hide-in-print">Retrieve</th>
-                                <th class="hide-in-print">Copy</th>
+                                
                                 <th class="hide-in-print">Detail</th>
                                 <th class="hide-in-print">Img</th>
-                                <th class="hide-in-print">Delete</th>
+                                <th class="hide-in-print">Delete</th> -->
+                                <th class="hide-in-print text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -287,28 +289,31 @@
                                 <td>{{item.recipeSalePrice |number:'1.0-0'}}</td>
                                 <td>{{item.recipeCatTitle}}</td>
                                 <td>{{item.cookingAriaTitle}}</td>
-                                <td class="cursorPointer hide-in-print"><mat-icon class="text-success"
-                                        (click)="edit(item)">edit</mat-icon></td>
-                                <td class="hide-in-print"><mat-icon *ngIf="crudList.u"
-                                        (click)="approveRecipe(item)">{{item.approvedStatus == true
-                                        ? 'lock' :'lock_open'}}</mat-icon></td>
-                                <td class="cursorPointer hide-in-print"><mat-icon *ngIf="crudList.u"
-                                        [ngClass]="item.activeStatus == false ?'text-danger': 'text-success'"
-                                        (click)="activeRecipe(item)">{{item.activeStatus == false ?
-                                        'indeterminate_check_box' :'check_box'}}</mat-icon></td>
-                                <td class="cursorPointer hide-in-print"><mat-icon
+                                 <td class="cursorPointer hide-in-print"><mat-icon matTooltip="Ingredient Retreive"
                                         (click)="getIngredient(item)">photo_filter</mat-icon>
                                 </td>
-                                <td class="cursorPointer hide-in-print"><mat-icon data-bs-toggle="modal"
+                                <td class="cursorPointer hide-in-print "><mat-icon data-bs-toggle="modal" matTooltip="Other Recipe"
                                         data-bs-target="#otherRecipe" *ngIf="crudList.u"
-                                        [ngClass]="item.recipeRefID > 0 ? 'text-success': 'text-secondary'"
+                                        [ngClass]="item.recipeRefID > 0 ? 'text-warning': 'text-secondary'"
                                         (click)="copyRecipe(item)">save</mat-icon></td>
-                                <td><mat-icon class="cursorPointer text-success hide-in-print"
-                                        (click)="getRecipeDetail(item)">receipt</mat-icon></td>
+                                <td class="cursorPointer hide-in-print text-center">
+                                    <mat-icon class="text-success" matTooltip="Edit"
+                                        (click)="edit(item)">edit</mat-icon>
+                                        
+                                        <mat-icon matTooltip="Approve" *ngIf="crudList.u" (click)="approveRecipe(item)">{{item.approvedStatus == true
+                                        ? 'lock' :'lock_open'}}</mat-icon>
 
-                                <td class="cursorPointer hide-in-print"><mat-icon
-                                        (click)="getRecipeImage(item.recipeID,'show')">image</mat-icon></td>
-                                <td class="cursorPointer hide-in-print"><mat-icon class="text-danger" *ngIf="crudList.d"
+                                        <mat-icon *ngIf="crudList.u" matTooltip="Active"
+                                        [ngClass]="item.activeStatus == false ?'text-danger': 'text-success'"
+                                        (click)="activeRecipe(item)">{{item.activeStatus == false ?
+                                        'indeterminate_check_box' :'check_box'}}</mat-icon>
+                                         
+                                        <mat-icon class="cursorPointer text-success hide-in-print" matTooltip="Detail"
+                                        (click)="getRecipeDetail(item)">receipt</mat-icon>
+
+                                        <mat-icon (click)="getRecipeImage(item.recipeID,'show')" matTooltip="Image">image</mat-icon>
+
+                                        <mat-icon class="text-danger" *ngIf="crudList.d" matTooltip="Delete"
                                         (click)="delete(item)">delete</mat-icon></td>
 
                             </tr>
