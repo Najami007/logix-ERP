@@ -87,7 +87,7 @@ export class ProductComponent implements OnInit {
     }
   }
 
-  onProdSearchKeyup(e:any, value:any) {
+  onProdSearchKeyup(e: any, value: any) {
 
     if (e.target.value.length == 0 && this.tmpPage == 0) {
       this.tmpPage = this.page;
@@ -220,11 +220,13 @@ export class ProductComponent implements OnInit {
   autoEmpty = false;
   searchProduct: any = '';
   CategoriesList: any = [];
+  ProductSupplierList: any = [];
   SubCategoriesList: any = [];
   ProductID: any = 0;
   CategoryID: any = 0;
   SubCategoryID: any = 0;
   ProductName: any = '';
+  tmpProductName: any = '';
   prodBarcodeType = 'auto';
   Barcode: any = '';
   CostPrice: any = '';
@@ -357,6 +359,30 @@ export class ProductComponent implements OnInit {
     )
   }
 
+
+
+
+  getProductSupplierDetail(item: any) {
+    this.ProductSupplierList = [];
+    this.tmpProductName = item.productTitle;
+    this.app.startLoaderDark();
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSinglePuroductSuppliers_13?reqProId=' + item.productID).subscribe(
+      (Response: any) => {
+        if (Response.length == 0 || Response == null) {
+          this.global.popupAlert('Data Not Found!');
+          this.app.stopLoaderDark();
+          return;
+        }
+        this.ProductSupplierList = Response;
+        this.app.stopLoaderDark();
+        this.global.openBootstrapModal('#SuppDetMdl', true);
+
+      },
+      (Error: any) => {
+        this.app.stopLoaderDark();
+      }
+    )
+  }
 
 
 

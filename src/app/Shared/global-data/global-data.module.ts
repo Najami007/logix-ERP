@@ -704,7 +704,6 @@ export class GlobalDataModule implements OnInit {
 
       '<link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>'
       + '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'
-      + '<link rel="stylesheet" href="../../assets/style/barcode.scss" type="text/css" media="print"/>'
       //+'<style type="text/css" media="print">/*@page { size: landscape; }*/</style>'
       // '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css.map" type="text/css" />'+
 
@@ -759,7 +758,6 @@ export class GlobalDataModule implements OnInit {
 
       '<link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>'
       + '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'
-      + '<link rel="stylesheet" href="../../assets/style/barcode.scss" type="text/css" media="print"/>'
 
       //+'<style type="text/css" media="print">/*@page { size: landscape; }*/</style>'
       // '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css.map" type="text/css" />'+
@@ -802,7 +800,6 @@ export class GlobalDataModule implements OnInit {
 
       '<link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>'
       + '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'
-      + '<link rel="stylesheet" href="../../assets/style/barcode.scss" type="text/css" media="print"/>'
 
     );
     frameDoc.document.write('</head><body>'
@@ -843,7 +840,6 @@ export class GlobalDataModule implements OnInit {
 
       '<link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>'
       + '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'
-      + '<link rel="stylesheet" href="../../assets/style/barcode.scss" type="text/css" media="print"/>'
       //+'<style type="text/css" media="print">/*@page { size: landscape; }*/</style>'
       // '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css.map" type="text/css" />'+
 

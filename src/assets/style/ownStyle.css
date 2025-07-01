@@ -5,27 +5,29 @@
 }
 
 @media print {
-  body {
-    -webkit-print-color-adjust: exact;
+
+   body {
+     -webkit-print-color-adjust: exact !important;
+      overflow: visible !important;
+      height: auto !important;
+      /* page-break-after: always !important;  */
     print-color-adjust: exact !important;
     /* Standard property */
-    color-adjust: exact !important;
-
-    break-inside: avoid;
-    /* background-color: #efefef !important; */
-    text-wrap: wrap;
+   color-adjust: exact !important;
+     /* text-wrap: wrap;
     text-wrap-mode: wrap;
-    text-wrap-style: pretty;
+    text-wrap-style: pretty; */
   }
 
   .whiteText {
-    -webkit-text-fill-color: white !important;
+    /* -webkit-text-fill-color: white !important; */
     /* Forces white text */
-    color: white !important;
+    /* color: white !important;
     -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-    ;
+    print-color-adjust: exact !important; */
+    
   }
+ 
 }
 
 
@@ -127,7 +129,7 @@
   /*color:#fff;*/
   font-weight: bold;
   text-align: center;
-  border: 1px solid #fff !important;
+  border: 1px solid black !important;
   padding: 10px !important;
   background-color: rgb(6, 6, 54);
   color: #fff !important;
@@ -175,9 +177,9 @@
 
 .table-logix2>thead>tr>th {
   padding: 10px;
-  border: 1px solid #fff !important;
+  border: 1px solid black !important;
   background-color: rgb(6, 6, 54);
-  color: #fff !important;
+  color: black !important;
 
 }
 

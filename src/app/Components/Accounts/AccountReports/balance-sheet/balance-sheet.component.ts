@@ -27,7 +27,7 @@ export class BalanceSheetComponent implements OnInit {
     private app: AppComponent,
     private msg: NotificationService,
     private route: Router,
-    private datePipe:DatePipe
+    private datePipe: DatePipe
   ) {
 
     this.globalData.getCompany().subscribe((data) => {
@@ -43,7 +43,7 @@ export class BalanceSheetComponent implements OnInit {
 
     this.globalData.setHeaderTitle('Balance Sheet');
     this.getProject();
-    
+
   }
 
   rptType = 'balanceSheet1';
@@ -73,7 +73,7 @@ export class BalanceSheetComponent implements OnInit {
 
 
   ////////////////////////////////////////////////////////////////////
-  balanceSheetTypeID:any = 1;
+  balanceSheetTypeID: any = 1;
   formateId = 1;
   projectSearch: any;
   projectID: number = 0;
@@ -104,46 +104,46 @@ export class BalanceSheetComponent implements OnInit {
 
   getBalanceSheet(param: any) {
 
-    if (this.projectID == 0 && param == 'project') {
-      this.msg.WarnNotify('Select Project')
-    } else {
+   
       this.projectName = '';
+      var projectID = this.projectID;
+      this.projectName = projectID > 0 ? this.projectList.find((e: any) => e.projectID == this.projectID).projectTitle : '';
 
-      if (param == 'all')  this.projectID = 0;
-       this.projectName = this.projectID > 0 ? this.projectList.find((e: any) => e.projectID == this.projectID).projectTitle : '';
-      
 
 
       this.currentYear = this.getYear();
       this.previousYear = this.currentYear - 1
 
       var url = '';
-      if(this.balanceSheetTypeID == 1){
-          url = `GetMainBalanceSheet?todate= ${this.globalData.dateFormater(this.toDate, '-')}&projectid=${this.projectID}`
+      if (this.balanceSheetTypeID == 1) {
+        url = `GetMainBalanceSheet?todate= ${this.globalData.dateFormater(this.toDate, '-')}&projectid=${projectID}`
       }
-      if(this.balanceSheetTypeID == 2){
-          url = `GetMainBalanceSheet_2?todate= ${this.globalData.dateFormater(this.toDate, '-')}&projectid=${this.projectID}`
+      if (this.balanceSheetTypeID == 2) {
+        url = `GetMainBalanceSheet_2?todate= ${this.globalData.dateFormater(this.toDate, '-')}&projectid=${projectID}`
       }
 
 
-    
+      this.assetList = [];
+      this.liabilityList = [];
+      this.capitalList = [];
+      this.accumulatedPL = [];
+      this.assetTotal = 0;
+      this.liabilityTotal = 0;
+      this.capitalTotal = 0;
+      this.accumulatedTotal = 0;
+      this.oAssetTotal = 0;
+      this.oLiabilityTotal = 0;
+      this.oCapitalTotal = 0;
+      this.oAccumulatedTotal = 0;
 
+      this.app.startLoaderDark();
       this.http.get(environment.mainApi + this.globalData.accountLink + url).subscribe(
         (Response: any) => {
-
-          this.assetList = [];
-          this.liabilityList = [];
-          this.capitalList = [];
-          this.accumulatedPL = [];
-          this.assetTotal = 0;
-          this.liabilityTotal = 0;
-          this.capitalTotal = 0;
-          this.accumulatedTotal = 0;
-          this.oAssetTotal = 0;
-          this.oLiabilityTotal = 0;
-          this.oCapitalTotal = 0;
-          this.oAccumulatedTotal = 0;
-
+          if (Response.length == 0 || Response == null) {
+            this.globalData.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+          }
           $('#printRpt').show();
 
           Response.forEach((e: any) => {
@@ -176,13 +176,17 @@ export class BalanceSheetComponent implements OnInit {
               this.oAccumulatedTotal += e.oTotal;
             }
 
-
+            this.app.stopLoaderDark();
+          },
+          (Error:any)=>{
+            console.log(Error);
+            this.app.stopLoaderDark();
           }
           )
         }
 
       )
-    }
+    
 
 
 
@@ -206,7 +210,7 @@ export class BalanceSheetComponent implements OnInit {
 
   export() {
     if (this.rptType != '') {
-       var toDate = this.datePipe.transform(this.toDate,'dd/MM/yyyy');
+      var toDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
       this.globalData.ExportHTMLTabletoExcel(this.rptType, 'Balance Sheet ' + '(' + toDate + ')')
     }
 

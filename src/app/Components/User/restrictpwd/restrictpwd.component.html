@@ -29,7 +29,7 @@
                     <td>{{item.restrictionRemarks}}</td>
                     <td><button mat-mini-fab class="bg-success text-white" data-bs-toggle="modal" data-bs-target="#pwdModal"
                          (click)="restrictionCodeID = item.restrictionCodeID"><mat-icon>edit</mat-icon></button></td>
-                    <td><button mat-mini-fab (click)="resetCode()"><mat-icon>rotate_left</mat-icon></button></td>
+                    <td><button mat-mini-fab (click)="resetCode(item.restrictionCodeID)"><mat-icon>rotate_left</mat-icon></button></td>
                 </tr>
             </tbody>
             

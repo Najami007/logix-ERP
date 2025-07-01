@@ -17,39 +17,39 @@ export class PLStatComponent implements OnInit {
 
 
 
-  crudList:any = {c:true,r:true,u:true,d:true};
-   companyProfile:any = [];
+  crudList: any = { c: true, r: true, u: true, d: true };
+  companyProfile: any = [];
 
 
   constructor(private globalData: GlobalDataModule,
-    private http:HttpClient,
-    private msg:NotificationService,
-    private app:AppComponent,
-    private route:Router,
-    private datePipe:DatePipe
-    
-    ){
-      // this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
-      //   (Response:any)=>{
-      //     this.companyProfile = Response;
-      //   }
-      // )
+    private http: HttpClient,
+    private msg: NotificationService,
+    private app: AppComponent,
+    private route: Router,
+    private datePipe: DatePipe
 
-      this.globalData.getCompany().subscribe((data)=>{
-        this.companyProfile = data;
-      });
+  ) {
+    // this.http.get(environment.mainApi+'cmp/getcompanyprofile').subscribe(
+    //   (Response:any)=>{
+    //     this.companyProfile = Response;
+    //   }
+    // )
 
-      this.globalData.getMenuList().subscribe((data)=>{
-        this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      })
+    this.globalData.getCompany().subscribe((data) => {
+      this.companyProfile = data;
+    });
 
-    
-    }
+    this.globalData.getMenuList().subscribe((data) => {
+      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
+    })
+
+
+  }
   ngOnInit(): void {
     this.globalData.setHeaderTitle('Profit & Loss Report');
     this.globalData.getCompany();
     this.getProject();
-   
+
 
     $('#printDiv').hide();
   }
@@ -58,158 +58,167 @@ export class PLStatComponent implements OnInit {
   fromDate: any = new Date();
   toDate: any = new Date();
 
-  IncomeData:any;
-  ExpenseData:any;
+  IncomeData: any;
+  ExpenseData: any;
 
   incDebitTotal = 0;
   incCreditTotal = 0;
 
   expDebitTotal = 0;
   expCreditTotal = 0;
-  projectSearch:any;
-  projectID:number = 0;
-  projectName:any;
-  projectList:any = [];
+  projectSearch: any;
+  projectID: number = 0;
+  projectName: any;
+  projectList: any = [];
 
 
-getProject(){
+  getProject() {
 
-  this.globalData.getProjectList().subscribe((data: any) => { this.projectList = data; });
+    this.globalData.getProjectList().subscribe((data: any) => { this.projectList = data; });
 
-}
- 
-
-
-  getReport(reqFunc:any,param:any){
-
-    if(this.projectID == 0 && param == 'project'){
-      this.msg.WarnNotify('Select Project');
-
-    }else{
-      this.projectName = '';
-
-      if(param == 'all'){
-        this.projectID = 0;
-      }
+  }
 
 
-      if(this.projectID != 0){
-        this.projectName = this.projectList.find((e:any)=> e.projectID == this.projectID).projectTitle;
-      }
-      
 
-      
+  getReport(reqFunc: any, param: any) {
+
+
+    this.projectName = '';
+    if (this.projectID != 0) {
+      this.projectName = this.projectList.find((e: any) => e.projectID == this.projectID).projectTitle;
+    }
+
+
+
     this.incDebitTotal = 0;
     this.incCreditTotal = 0;
     this.expDebitTotal = 0;
     this.expCreditTotal = 0;
     this.app.startLoaderDark();
-    
+
     this.IncomeData = [];
     this.ExpenseData = [];
 
 
-    if(reqFunc == 'R1'){
-      this.http.get(environment.mainApi+this.globalData.accountLink+'GetProfitRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+'&todate='
-      +this.globalData.dateFormater(this.toDate,'-')+'&projectid='+this.projectID).subscribe(
-        (Response)=>{
-         
-          $('#printDiv').show();
-         
-          
-          this.IncomeData = Response;
+    this.incDebitTotal = 0;
+    this.incCreditTotal = 0;
+    this.IncomeData = [];
+    if (reqFunc == 'R1') {
+      this.http.get(environment.mainApi + this.globalData.accountLink + 'GetProfitRpt?fromdate=' + this.globalData.dateFormater(this.fromDate, '-') + '&todate='
+        + this.globalData.dateFormater(this.toDate, '-') + '&projectid=' + this.projectID).subscribe(
+          (Response: any) => {
 
-          this.incDebitTotal = 0;
-          this.incCreditTotal = 0;
-          this.IncomeData.forEach((e:any) => {
-            this.incDebitTotal += e.debit;
-            this.incCreditTotal += e.credit;
-      
+            if (Response.length == 0 || Response == null) {
+              this.globalData.popupAlert('Income Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+            }
+
+            $('#printDiv').show();
+
+
+            this.IncomeData = Response;
+
+            this.incDebitTotal = 0;
+            this.incCreditTotal = 0;
+            this.IncomeData.forEach((e: any) => {
+              this.incDebitTotal += e.debit;
+              this.incCreditTotal += e.credit;
+
+            });
+
+
+            this.app.stopLoaderDark();
+
+
+          },
+          (Error) => {
+            this.msg.WarnNotify('Error occured While Loading Expense');
+            this.app.stopLoaderDark();
+            console.log(Error);
+          }
+        )
+    }
+
+    if (reqFunc == 'R2') {
+
+      this.http.get(environment.mainApi + this.globalData.accountLink + 'GetProfitDetailRpt?fromdate=' + this.globalData.dateFormater(this.fromDate, '-') + '&todate='
+        + this.globalData.dateFormater(this.toDate, '-') + '&projectid=' + this.projectID).subscribe(
+          (Response: any) => {
+            if (Response.length == 0 || Response == null) {
+              this.globalData.popupAlert('Income Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+            }
+
+
+            $('#printDiv').show();
+
+            this.IncomeData = Response;
+
+            this.IncomeData.forEach((e: any) => {
+              this.incDebitTotal += e.debit;
+              this.incCreditTotal += e.credit;
+
+            });
+            this.app.stopLoaderDark();
+
+
+          },
+          (Error) => {
+            this.msg.WarnNotify('Error occured While Loading Expense');
+            console.log(Error);
+            this.app.stopLoaderDark();
+          }
+        )
+    }
+
+
+    this.expDebitTotal = 0;
+    this.expCreditTotal = 0;
+    this.ExpenseData = [];
+    this.http.get(environment.mainApi + this.globalData.accountLink + 'GetLossRpt?fromdate=' + this.globalData.dateFormater(this.fromDate, '-') + '&todate='
+      + this.globalData.dateFormater(this.toDate, '-') + '&projectid=' + this.projectID).subscribe(
+        (Response: any) => {
+          if (Response.length == 0 || Response == null) {
+            this.globalData.popupAlert('Expense Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+          }
+
+          this.ExpenseData = Response;
+          this.ExpenseData.forEach((e: any) => {
+            this.expDebitTotal += e.debit;
+            this.expCreditTotal += e.credit;
+
           });
-      
-
           this.app.stopLoaderDark();
-          
-  
+          $('#printDiv').show();
         },
-        (Error)=>{
-          this.msg.WarnNotify('Error occured While Loading Expense');
+        (Error) => {
+          this.msg.WarnNotify('Error occured While Loading Income')
           this.app.stopLoaderDark();
         }
       )
-    }
-
-    if(reqFunc == 'R2'){
-      this.http.get(environment.mainApi+this.globalData.accountLink+'GetProfitDetailRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+'&todate='
-      +this.globalData.dateFormater(this.toDate,'-')+'&projectid='+this.projectID).subscribe(
-        (Response)=>{
-        
-         
-          $('#printDiv').show();
-        
-          this.IncomeData = Response;
-          this.incDebitTotal = 0;
-          this.incCreditTotal = 0;
-          this.IncomeData.forEach((e:any) => {
-            this.incDebitTotal += e.debit;
-            this.incCreditTotal += e.credit;
-      
-          });
-          this.app.stopLoaderDark();
-          
-  
-        },
-        (Error)=>{
-          this.msg.WarnNotify('Error occured While Loading Expense');
-          this.app.stopLoaderDark();
-        }
-      )
-    }
-
-    
-    this.http.get(environment.mainApi+this.globalData.accountLink+'GetLossRpt?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+'&todate='
-    +this.globalData.dateFormater(this.toDate,'-')+'&projectid='+this.projectID).subscribe(
-      (Response)=>{
-
-        this.ExpenseData = Response;
-     
-
-        this.expDebitTotal = 0;
-        this.expCreditTotal = 0;
-        this.ExpenseData.forEach((e:any) => {
-          this.expDebitTotal += e.debit;
-          this.expCreditTotal += e.credit;
-    
-        });
 
 
-        this.app.stopLoaderDark();
-        $('#printDiv').show();
-      },
-      (Error)=>{
-        this.msg.WarnNotify('Error occured While Loading Income')
-        this.app.stopLoaderDark();
-      }
-    )
 
 
-    }
-  
   }
-  
 
-  
+
+
 
   PrintTable() {
- 
-   setTimeout(() => {
-    this.globalData.printData('#printDiv');
-   }, 200);
+
+    setTimeout(() => {
+      this.globalData.printData('#printDiv');
+    }, 200);
   }
 
-  export(){
-     var startDate = this.datePipe.transform(this.fromDate,'dd/MM/yyyy');
-    var endDate = this.datePipe.transform(this.toDate,'dd/MM/yyyy');
-    this.globalData.ExportHTMLTabletoExcel('printDiv','P&L '+'(' + startDate + ' - ' + endDate +')')
+  export() {
+    var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
+    var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
+    this.globalData.ExportHTMLTabletoExcel('printDiv', 'P&L ' + '(' + startDate + ' - ' + endDate + ')')
   }
 }

@@ -4,7 +4,7 @@
     <div class="row pt-2">
 
 
-        <mat-form-field appearance="outline" class="col-lg-5 matSmall">
+        <mat-form-field appearance="outline" class="col-lg-3 matSmall">
             <mat-label>User</mat-label>
             <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()" [disabled]="roleTypeID > 2">
                 <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
@@ -22,10 +22,11 @@
             <mat-datepicker #sDate></mat-datepicker>
         </mat-form-field>
 
-        <div class="col-lg-4 " *ngIf="crudList.r">
+        <div class="col-lg-6 " *ngIf="crudList.r">
 
-            <button class=" btn-rpt-success col-lg-5 me-1" (click)="getReport()">Get Report</button>
-            <button class=" btn-rpt-primary col-lg-5" (click)="print()">Print</button>
+            <button class=" btn-rpt-success col-lg-3 me-1" (click)="getReport()">Date Wise Rpt</button>
+            <button class=" btn-rpt-success col-lg-3 me-1" (click)="getReport2()">Active Day Rpt</button>
+            <button class=" btn-rpt-primary col-lg-4" (click)="print()">Print</button>
         </div>
 
     </div>

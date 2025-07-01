@@ -77,16 +77,27 @@ export class JournelComponent {
 
     var fromDate = this.globalData.dateFormater(this.fromDate, '');
     var toDate = this.globalData.dateFormater(this.toDate, '');
-    var projectID = type == 'project' ? this.projectID : 0;
+    var projectID = this.projectID;
 
 
     if (this.projectID != 0) {
       this.projectName = this.projectList.find((e: any) => e.projectID == this.projectID).projectTitle;
     }
-
+    this.app.startLoaderDark();
+    this.dataList = [];
     this.http.get(environment.mainApi + this.globalData.accountLink + `GetJournal?FromDate=${fromDate}&ToDate=${toDate}&ProjectID=${projectID}`).subscribe(
       (Response: any) => {
+         if (Response.length == 0 || Response == null) {
+              this.globalData.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+            }
         this.dataList = Response;
+        this.app.stopLoaderDark();
+      },
+      (Error: any) => {
+        console.log(Error);
+        this.app.stopLoaderDark();
       }
     )
 

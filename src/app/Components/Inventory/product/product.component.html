@@ -248,7 +248,6 @@
 
 
 
-
             <mat-form-field appearance="outline" class="col-md-4 matSmall">
                 <mat-label>Search.....</mat-label>
                 <input type="text" id="searchProduct" (keydown)="onProdSearchKeyup($event,searchProduct)"
@@ -348,18 +347,26 @@
                                     (click)="this.global.showProductImage('',item.productID)">image</mat-icon>
                                 <mat-icon *ngIf="item.productImage == '-'">cancel_presentation</mat-icon>
                             </td>
-                            <td class="hide-in-print text-center" >
-                                <mat-icon class="text-success cursorPointer" matTooltip="Edit" *ngIf="crudList.u" (click)="edit(item)">edit</mat-icon>
+                            <td class="hide-in-print text-center">
 
-                                <mat-icon class="text-success cursorPointer" *ngIf="crudList.u" matTooltip="Active / Inactive"
+                                <mat-icon class="text-success cursorPointer" matTooltip="Edit" *ngIf="crudList.u"
+                                    (click)="edit(item)">edit</mat-icon>
+
+                                <mat-icon class="text-success cursorPointer" *ngIf="crudList.u"
+                                    matTooltip="Active / Inactive"
                                     [ngClass]="item.activeStatus ? 'text-success' :'text-danger'"
                                     (click)="activeProduct(item)">{{item.activeStatus ? 'check' :
                                     'close'}}</mat-icon>
- 
+
                                 <mat-icon *ngIf="crudList.d" class="text-danger cursorPointer" matTooltip="Delete"
                                     (click)="deleteProd(item)">delete</mat-icon>
 
-                                <mat-icon class="cursorPointer" matTooltip="Copy" (click)="copyProd(item)">save</mat-icon>
+                                <mat-icon class="cursorPointer" matTooltip="Copy"
+                                    (click)="copyProd(item)">save</mat-icon>
+
+                                <mat-icon class="text-secondary cursorPointer" matTooltip="Suppliers Detail"
+                                    (click)="this.getProductSupplierDetail(item);">person</mat-icon>
+
                             </td>
                         </tr>
                     </tbody>
@@ -402,4 +409,49 @@
             style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
     </div>
 
+</div>
+
+
+
+<div class="modal" id="SuppDetMdl" tabindex="-1" data-bs-backdrop="true" aria-labelledby="holdModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable mt-5  modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title" id="holdModalLabel">Product Suppliers Detail ({{this.tmpProductName}})</h2>
+                <!-- <button type="button" class="btn-close" id="clsMdl" data-bs-dismiss="modal" aria-label="Close"></button> -->
+            </div>
+            <div class="modal-body">
+
+
+                <table class="table-logix">
+                    <thead>
+                        <tr>
+                            <th>S#</th>
+                            <th>Supplier Name</th>
+                            <th>Total Inv</th>
+                            <th>First Pur Date</th>
+                            <th>Last Pur Date</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of ProductSupplierList index as index">
+                            <td class="text-center">{{index+1}}</td>
+                            <td>{{item.partyName}}</td>
+                            <td class="text-center">{{item.totalInvoices}}</td>
+                            <td>{{item.firstPurchase | date:'dd-MM-yyyy'}}</td>
+                            <td>{{item.lastPurchase | date:'dd-MM-yyyy'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+
+            <div class="text-end bg-mf-blue p-3">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>

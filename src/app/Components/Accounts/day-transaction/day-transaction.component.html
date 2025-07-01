@@ -1,111 +1,117 @@
 <div class="container-fluid body">
 
     <!-----------           Date Selection Section ------------------>
-    
-        <div class="mb-1 pt-2 border-bottom">
-            <div class="row ">
-                <mat-form-field class="col-lg-3 matSmall"  appearance="outline">
-                    <mat-label>Project </mat-label>
-                    <mat-select [(ngModel)]="projectID" >
-                        <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch"
-                            [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
-                            name="search"></ngx-mat-select-search></mat-option>
-                        <mat-option *ngFor="let item of projectList|filter:projectSearch " value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-     
-                    <mat-form-field class="col-lg-2 matSmall" appearance="outline">
-                        <mat-label>From Date</mat-label>
-                        <input matInput type="text"  readonly="true" [(ngModel)]="fromDate" [matDatepicker]="startDate">
-                        <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-                        <mat-datepicker #startDate></mat-datepicker>
-                    </mat-form-field>
 
-                    <mat-form-field class="col-lg-2 matSmall" appearance="outline">
-                        <mat-label>To Date</mat-label>
-                        <input matInput type="text" readonly="true" [(ngModel)]="toDate"  [matDatepicker]="EndDate">
-                        <mat-datepicker-toggle matSuffix [for]="EndDate"></mat-datepicker-toggle>
-                        <mat-datepicker #EndDate></mat-datepicker>
-                    </mat-form-field>
-                
+    <div class="mb-1 pt-2 border-bottom">
+        <div class="row ">
+            <mat-form-field class="col-lg-3 matSmall" appearance="outline">
+                <mat-label>Project </mat-label>
+                <mat-select [(ngModel)]="projectID">
+                    <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch" [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option [value]="0">All</mat-option>
+                    <mat-option *ngFor="let item of projectList|filter:projectSearch "
+                        value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
 
-                <div class="col-lg-5  pt-1" *ngIf="crudList.r">
-                    <button class="btn-rpt-success col-lg-3  me-1" (click)="getReport('project')" >
-                        ProjectWise
-                     </button>  
-                    <button class="btn-rpt-success col-lg-3 me-1" (click)="getReport('all')" >
-                       Get ALL
-                    </button>   
-                   
-                
-                    <button class="btn-rpt-primary  col-lg-2 " (click)="PrintTable()">
-                       Print
-                    </button>
-                    <mat-checkbox class="col-lg-2 " (change)="onFilterChange($event)" [(ngModel)]="showDifferenceFilterOnly">Filter Diff</mat-checkbox>
-                </div>
+            <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+                <mat-label>From Date</mat-label>
+                <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="startDate">
+                <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                <mat-datepicker #startDate></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+                <mat-label>To Date</mat-label>
+                <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="EndDate">
+                <mat-datepicker-toggle matSuffix [for]="EndDate"></mat-datepicker-toggle>
+                <mat-datepicker #EndDate></mat-datepicker>
+            </mat-form-field>
+
+
+            <div class="col-lg-5  pt-1" *ngIf="crudList.r">
+                <!-- <button class="btn-rpt-success col-lg-3  me-1" (click)="getReport('project')">
+                    ProjectWise
+                </button> -->
+                <button class="btn-rpt-success col-lg-3 me-1" (click)="getReport('all')">
+                    Get Report
+                </button>
+
+
+                <button class="btn-rpt-primary  col-lg-2 " (click)="PrintTable()">
+                    Print
+                </button>
+                <mat-checkbox class="col-lg-2 " (change)="onFilterChange($event)"
+                    [(ngModel)]="showDifferenceFilterOnly">Filter Diff</mat-checkbox>
+            </div>
+        </div>
+    </div>
+
+    <!------------------  Table Section ------------------->
+
+
+    <div id="printRpt">
+
+        <!-------------------------    Top Logo Section -------------------->
+        <div class="hide border-bottom">
+            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
+                        [width]="item.logo1Width">
+                </span>
+                <span>
+
+
+                    <h1 class="companyName">{{item.companyName}}</h1>
+
+
+                    <p class="rptTitle" style="margin-top:-20px">Transaction Report</p>
+                    <h4 class="projtitl" *ngIf="projectName != ''" style="margin-top:-20px;"><b>Project:</b>
+                        {{projectName}}</h4>
+                    <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}} <b>To:</b> {{toDate |
+                        date:'dd-MM-yyyy'}}</p>
+
+                </span>
+                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                        height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                </span>
+
+
             </div>
         </div>
 
-        <!------------------  Table Section ------------------->
-
-
-        <div id="printRpt">
-
-             <!-------------------------    Top Logo Section -------------------->
-             <div class="hide border-bottom">
-                <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
-                    <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
-                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
-                    </span>
-                    <span >
-                        
-    
-                        <h1 class="companyName">{{item.companyName}}</h1>
-                        
-    
-                        <p class="rptTitle" style="margin-top:-20px">Transaction Report</p>
-                        <h4 class="projtitl" *ngIf="projectName != ''" style="margin-top:-20px;"><b >Project:</b> {{projectName}}</h4>
-                        <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}} <b>To:</b> {{toDate | date:'dd-MM-yyyy'}}</p>
-                      
-                    </span>
-                    <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
-                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
-                    </span>
-            
-            
-                </div>
-               </div>
-
-           <div>
+        <div>
             <table class="table-logix">
                 <thead>
-                   <tr>
-                    <th>S#</th>
-                    <th>Invoice No</th>
-                    <th>Date</th>
-                    <th>Narration</th>
-                    <th >Amount</th>
-                   </tr>
+                    <tr>
+                        <th>S#</th>
+                        <th>Invoice No</th>
+                        <th>Date</th>
+                        <th>Narration</th>
+                        <th>Amount</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of reportData;index as index">
-                        <td class="text-center" >{{index+1}}</td>
-                        <td class="cursorPointer" 
-                        (click)="VoucherDetails(item)"><span [ngClass]="item.debit !== item.credit ? 'text-danger border-danger' :'text-primary border-primary'"  class="border-bottom">{{item.invoiceNo}}</span></td>
+                        <td class="text-center">{{index+1}}</td>
+                        <td class="cursorPointer" (click)="VoucherDetails(item)"><span
+                                [ngClass]="item.debit !== item.credit ? 'text-danger border-danger' :'text-primary border-primary'"
+                                class="border-bottom">{{item.invoiceNo}}</span></td>
                         <td>{{item.invoiceDate |date:'yyyy-MM-dd'}}</td>
                         <td class="col-lg-4">{{item.invoiceRemarks}}</td>
                         <td class="text-end">{{item.amount |number:'1.0-0'}}</td>
                     </tr>
                 </tbody>
             </table>
-           </div>
-
-
         </div>
 
 
-
- 
-
     </div>
 
+
+
+
+
+</div>

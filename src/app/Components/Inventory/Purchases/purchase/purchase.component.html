@@ -70,10 +70,10 @@
 
 
                 <div class="col-lg-3 ms-1">
-                    <button *ngIf="crudList.c" style="height: 50px;" class=" col-lg-5 btnhold me-1"
-                        matTooltip="Hold Bill" (click)="SaveBill('hold')">{{holdBtnType}}</button>
-                    <button class=" col-lg-5 btnreset me-1" (click)="global.openBootstrapModal('#holdModal',true)"
-                        style="height: 50px;" matTooltip="Retrieve Bill">Retrieve</button>
+                    
+                    <button *ngIf="crudList.c" style="height: 50px;" class=" col-lg-5 btnhold me-1" matTooltip="Hold Bill" (click)="SaveBill('hold')">{{holdBtnType}}</button>
+                    
+                    <button class=" col-lg-5 btnreset me-1" (click)="global.openBootstrapModal('#holdModal',true)" style="height: 50px;" matTooltip="Retrieve Bill">Retrieve</button>
 
 
                 </div>
@@ -229,29 +229,29 @@
 
 
 
-        <!----------------Modal Window For Products lisr ---------->
+    <!----------------Modal Window For Products lisr ---------->
 
 
 
-    <div class="modal fade" id="prodModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-labelledby="paymentMehtodLabel">
-        <div class="modal-dialog modal-dialog-scrollable modal-xl  modal-dialog-centered ">
-            <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-           
-                <div class="modal-body">
-                <app-product-modal [productList]="productList" (reloadProdEmitter)="getProducts()"
-                 (addProductEmitter)="holdDataFunction($event)" ></app-product-modal>
-
-                </div>
-
-                <div class="modal-footer bg-mf-blue">
-                    <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
-                </div>
-
+<div class="modal fade" id="prodModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    aria-labelledby="paymentMehtodLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl  modal-dialog-centered ">
+        <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+        
+            <div class="modal-body">
+            <app-product-modal [productList]="productList" (reloadProdEmitter)="getProducts()"
+                (addProductEmitter)="holdDataFunction($event)" ></app-product-modal>
 
             </div>
+
+            <div class="modal-footer bg-mf-blue">
+                <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
+            </div>
+
+
         </div>
     </div>
+</div>
 
     <!---------------------------------------------------------->
 
@@ -263,9 +263,10 @@
 <div class="modal" id="holdModal" tabindex="-1" data-bs-backdrop="true" aria-labelledby="holdModalLabel">
     <div class="modal-dialog modal-dialog-scrollable mt-5  modal-xl">
         <div class="modal-content">
+            
             <div class="modal-header">
                 <h2 class="modal-title" id="holdModalLabel">Bill Details</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" id="clsMdl" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
 
@@ -326,6 +327,7 @@
                                     (click)="printBill(item)">print</mat-icon></td>
                             <td class="text-center cursorPointer" *ngIf=" item.invType == 'HP' && crudList.u">
                                 <mat-icon data-bs-dismiss="modal" (click)="retriveBill(item)">edit</mat-icon>
+                                <mat-icon class="text-danger cursorPointer" matTooltip="Delete" (click)="deleteProd(item)">delete</mat-icon>
                             </td>
                             <td class="text-center cursorPointer" *ngIf=" item.invType == 'P'">
                                 <mat-icon (click)="openDocumentModal(item)">note_add</mat-icon>
@@ -341,6 +343,10 @@
         </div>
     </div>
 </div>
+
+
+
+
 
 
 <div class="modal" id="DocumentModal" tabindex="-1" data-bs-backdrop="true" aria-labelledby="DocumentModalLabel">

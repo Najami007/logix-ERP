@@ -38,7 +38,7 @@ export class LedgerComponent {
     private app: AppComponent,
     private dialogue: MatDialog,
     private route: Router,
-    private datePipe:DatePipe
+    private datePipe: DatePipe
 
   ) {
 
@@ -173,35 +173,38 @@ export class LedgerComponent {
 
 
   ///////////////////////////////////////////////////////
-  tmpTableData:any = [];
+  tmpTableData: any = [];
 
   getLedgerReport(param: any) {
 
     if (this.coaID == '' || this.coaID == undefined) {
-      this.msg.WarnNotify('Select Chart Of Account Title')
-    } else if ((this.projectID == 0 || this.projectID == undefined) && param == 'project') {
-      this.msg.WarnNotify('Select Project')
-    } else {
-      this.app.startLoaderDark();
-      this.projectName = '';
-      if (param == 'all') {
+      this.msg.WarnNotify('Select Chart Of Account Title');
+      return;
+    }
 
-        this.projectID = 0;
-      }
+
+      this.projectName = '';
+
       if (this.projectID != 0) {
         this.projectName = this.projectList.find((e: any) => e.projectID == this.projectID).projectTitle;
       }
 
       /////////////////// finding the coaTitle from coalist by coaID////////
       var curRow = this.CoaList.find((e: any) => e.coaID == this.coaID);
-
       this.curCOATitle = curRow.coaTitle;
       /////////////////////////////////////////////////
 
-
+      this.tableData = [];
+      this.app.startLoaderDark();
       this.http.get(environment.mainApi + this.globalData.accountLink + 'GetLedgerRpt?coaid=' + this.coaID + '&fromdate='
         + this.globalData.dateFormater(this.startDate, '-') + '&todate=' + this.globalData.dateFormater(this.EndDate, '-') + '&projectID=' + this.projectID).subscribe(
           (Response: any) => {
+
+            if (Response.length == 0 || Response == null) {
+              this.globalData.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+            }
 
             this.tableData = Response.map((e: any) => {
               (e.invoiceDate = new Date(e.invoiceDate));
@@ -213,16 +216,12 @@ export class LedgerComponent {
             this.getTotal();
             this.app.stopLoaderDark();
           },
-          (Error:any)=>{
+          (Error: any) => {
             console.log(Error);
-             this.app.stopLoaderDark();
+            this.app.stopLoaderDark();
           }
 
         )
-    }
-
-
-
   }
 
 
@@ -245,9 +244,9 @@ export class LedgerComponent {
 
 
   export() {
-    var startDate = this.datePipe.transform(this.startDate,'dd/MM/yyyy');
-    var endDate = this.datePipe.transform(this.EndDate,'dd/MM/yyyy');
-    this.globalData.ExportHTMLTabletoExcel('printRpt','Ledger'+this.curCOATitle+'('+startDate+' - '+endDate+ ')')
+    var startDate = this.datePipe.transform(this.startDate, 'dd/MM/yyyy');
+    var endDate = this.datePipe.transform(this.EndDate, 'dd/MM/yyyy');
+    this.globalData.ExportHTMLTabletoExcel('printRpt', 'Ledger' + this.curCOATitle + '(' + startDate + ' - ' + endDate + ')')
   }
 
 }

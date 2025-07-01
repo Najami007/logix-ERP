@@ -164,7 +164,8 @@
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="matSmall" [ngClass]="global.DisableDate == true ? 'col-lg-3' :'col-lg-2'">
             <mat-label>Discount</mat-label>
-            <input matInput [(ngModel)]="discount" (keyup)="this.global.avoidMinus($event);getTotal()" type="number" name="dicount">
+            <input matInput [(ngModel)]="discount" (keyup)="this.global.handleNumKeys($event);getTotal()"
+                    (keydown)="this.global.handleNumKeys($event);getTotal()"type="text" name="dicount">
         </mat-form-field>
         <!-- <mat-form-field appearance="outline" class="col-lg-3 p-1">
             <mat-label>OverHead</mat-label>

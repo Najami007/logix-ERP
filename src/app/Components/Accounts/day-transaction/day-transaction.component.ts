@@ -97,46 +97,46 @@ export class DayTransactionComponent implements OnInit {
   }
 
   getReport(param: any) {
-    if (this.projectID == 0 && param == 'project') {
-      this.msg.WarnNotify('Select Project')
-    } else {
 
-
-      this.projectName = '';
-      if (this.projectID != 0 && param == 'project') {
-        this.projectName = this.projectList.find((e: any) => e.projectID == this.projectID).projectTitle;
-      }
-
-      this.app.startLoaderDark();
-      this.http.get(environment.mainApi + this.global.accountLink + 'GetDayTransaction?FromDate=' + this.global.dateFormater(this.fromDate, '-') +
-        '&ToDate=' + this.global.dateFormater(this.toDate, '-')).subscribe(
-          (Response: any) => {
-            this.tmpReportData = Response.map((e: any) => {
-              e.debit = Math.round(e.debit);
-              e.credit = Math.round(e.credit);
-              return e;
-            });
-            if (param == 'all') {
-
-              this.reportData = this.showDifferenceFilterOnly ? this.tmpReportData.filter((e: any) => e.debit !== e.credit) : this.tmpReportData;
-
-
-            }
-
-            if (param == 'project') {
-              this.reportData = this.showDifferenceFilterOnly
-                ? this.tmpReportData.filter((e: any) => e.debit !== e.credit)
-                : this.tmpReportData.filter((e: any) => e.projectID == this.projectID);
-            }
-
-            this.app.stopLoaderDark();
-          },
-          (Error: any) => {
-            this.msg.WarnNotify(Error);
-            this.app.stopLoaderDark();
-          }
-        )
+    this.projectName = '';
+    if (this.projectID != 0 ) {
+      this.projectName = this.projectList.find((e: any) => e.projectID == this.projectID).projectTitle;
     }
+
+    this.app.startLoaderDark();
+    this.reportData = [];
+    this.tmpReportData= [];
+    this.http.get(environment.mainApi + this.global.accountLink + 'GetDayTransaction?FromDate=' + this.global.dateFormater(this.fromDate, '-') +
+      '&ToDate=' + this.global.dateFormater(this.toDate, '-')).subscribe(
+        (Response: any) => {
+            if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+          }
+          this.tmpReportData = Response.map((e: any) => {
+            e.debit = Math.round(e.debit);
+            e.credit = Math.round(e.credit);
+            return e;
+          });
+          if (this.projectID == 0) {
+            this.reportData = this.showDifferenceFilterOnly ? this.tmpReportData.filter((e: any) => e.debit !== e.credit) : this.tmpReportData;
+          }
+
+          if (this.projectID > 0) {
+            this.reportData = this.showDifferenceFilterOnly
+              ? this.tmpReportData.filter((e: any) => e.debit !== e.credit)
+              : this.tmpReportData.filter((e: any) => e.projectID == this.projectID);
+          }
+
+          this.app.stopLoaderDark();
+        },
+        (Error: any) => {
+          this.msg.WarnNotify(Error);
+          this.app.stopLoaderDark();
+        }
+      )
+
 
   }
 

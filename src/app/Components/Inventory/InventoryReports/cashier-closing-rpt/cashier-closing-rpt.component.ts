@@ -132,6 +132,49 @@ export class CashierClosingRptComponent implements OnInit {
   }
 
 
+
+
+
+  getReport2() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetCurrentOpenDayClosingRpt_14').subscribe(
+      (Response: any) => {
+        this.TotalSales = 0
+        this.totalSaleReturn = 0
+        this.totalServiceCharges = 0
+        this.totalCash = 0
+        this.totalBank = 0
+        this.totalComplimentary = 0
+        this.totalDiscount = 0
+        this.totalHDCharges = 0;
+        this.totalCredit = 0;
+
+        this.getBankDetail();
+        if (this.userID > 0) {
+          this.ClosingDetail = Response.filter((e: any) => e.userID == this.userID);
+        } else {
+          this.ClosingDetail = Response;
+
+        }
+
+        this.ClosingDetail.forEach((e: any) => {
+          this.TotalSales += e.totalSale;
+          this.totalSaleReturn += e.saleReturn;
+          this.totalServiceCharges += e.servicesCharges;
+          this.totalCash += e.cashIn - e.cashOut;
+          this.totalBank += e.debit + e.credit;
+          this.totalComplimentary += e.complimentary;
+          this.totalDiscount += e.discount - e.discountReturn;
+          this.totalHDCharges += e.hdCharges;
+          this.totalCredit += e.creditSale - e.creditSaleReturn;
+          this.totalPosFee += e.posFee;
+        });
+
+      }
+    )
+  }
+
+
+
   BankDetail: any = [];
   BankSummaryList: any = [];
 

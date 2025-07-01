@@ -6,6 +6,7 @@
             <mat-select [(ngModel)]="projectID">
                 <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch" [placeholderLabel]="'Search...'"
                         [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option [value]="0">All</mat-option>
                 <mat-option *ngFor="let item of projectList|filter:projectSearch "
                     value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
             </mat-select>
@@ -32,9 +33,9 @@
                 <mat-radio-button [value]="1">Inv Date</mat-radio-button>
                 <mat-radio-button [value]="2">Date Created</mat-radio-button>
             </mat-radio-group>
-            <button class="btn-rpt-success  col-lg-2  me-1" (click)="getBalanceSheet('project')">
+            <!-- <button class="btn-rpt-success  col-lg-2  me-1" (click)="getBalanceSheet('project')">
                 ProjectWise
-            </button>
+            </button> -->
             <button class="btn-rpt-success col-lg-2  me-1" (click)="getBalanceSheet('all')">
                 Get Report
             </button>

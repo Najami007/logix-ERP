@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { Observable, retry } from 'rxjs';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../../../User/pincode/pincode.component';
-
+import { error } from 'jquery';
+import { Observable, retry } from 'rxjs';
 import * as $ from 'jquery';
 import Swal from 'sweetalert2';
 import { AddpartyComponent } from '../../../Company/party/addparty/addparty.component';
@@ -564,8 +564,7 @@ export class PurchaseComponent implements OnInit {
 
 
   delRow(item: any) {
-    this.global.confirmAlert().subscribe(
-      (Response: any) => {
+    this.global.confirmAlert().subscribe((Response: any) => {
         if (Response == true) {
 
           var index = this.tableDataList.indexOf(item);
@@ -590,8 +589,7 @@ export class PurchaseComponent implements OnInit {
   }
 
   EmptyData() {
-    this.global.confirmAlert().subscribe(
-      (Response: any) => {
+    this.global.confirmAlert().subscribe((Response: any) => {
         if (Response == true) {
           this.reset();
 
@@ -690,7 +688,6 @@ export class PurchaseComponent implements OnInit {
         var clsName = cls + this.prodFocusedRow;
         //  alert(clsName);
         $(clsName).trigger('focus');
-
 
       }
 
@@ -1163,6 +1160,38 @@ export class PurchaseComponent implements OnInit {
 
 
 
+  deleteProd(row: any) {
 
+    $('#clsMdl').click();
+
+    this.global.openPinCode().subscribe(pin => {
+      if (pin != '') {
+        //this.app.startLoaderDark();
+
+        var postData = {
+          InvBillNo: row.invBillNo,
+          PinCode: pin,
+          UserID: this.global.getUserID()
+        }
+
+        this.http.post(environment.mainApi + this.global.inventoryLink + 'DeleteBill', postData).subscribe((Response: any) => {
+            if (Response.msg == 'Data Deleted Successfully') {
+              this.msg.SuccessNotify(Response.msg);
+              this.findHoldBills('hp');
+              //this.app.stopLoaderDark();
+
+
+            } else {
+              this.msg.WarnNotify(Response.msg);
+              //this.app.stopLoaderDark();
+            }
+          },
+          (error: any) => {
+            //this.app.stopLoaderDark();
+          }
+        )
+      }
+    })
+  }
 
 }

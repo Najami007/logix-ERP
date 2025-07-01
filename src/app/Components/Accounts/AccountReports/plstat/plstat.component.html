@@ -1,174 +1,186 @@
 <div class="bckgrnd body">
     <div class="container-fluid p-3">
-  
-            <div class=" container-fluid ">
-                <div class="row">
-                    <mat-form-field class="col-lg-4 matSmall" appearance="outline" >
-                        <mat-label>Project </mat-label>
-                        <mat-select [(ngModel)]="projectID" >
-                            <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch"
-                                [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
-                                name="search"></ngx-mat-select-search></mat-option>
-                            <mat-option *ngFor="let item of projectList|filter:projectSearch " value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-         
-                        <mat-form-field class="col-lg-2 matSmall" appearance="outline" >
-                            <mat-label>From Date</mat-label>
-                            <input matInput type="text"  readonly="true" [(ngModel)]="fromDate" [matDatepicker]="startDate">
-                            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-                            <mat-datepicker #startDate></mat-datepicker>
-                        </mat-form-field>
 
-                        <mat-form-field class="col-lg-2 matSmall" appearance="outline">
-                            <mat-label>To Date</mat-label>
-                            <input matInput type="text" readonly="true" [(ngModel)]="toDate"  [matDatepicker]="EndDate">
-                            <mat-datepicker-toggle matSuffix [for]="EndDate"></mat-datepicker-toggle>
-                            <mat-datepicker #EndDate></mat-datepicker>
-                        </mat-form-field>
-                    
+        <div class=" container-fluid ">
+            <div class="row">
+                <mat-form-field class="col-lg-4 matSmall" appearance="outline">
+                    <mat-label>Project </mat-label>
+                    <mat-select [(ngModel)]="projectID">
+                        <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch" [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                        <mat-option [value]="0">All</mat-option>
+                        <mat-option *ngFor="let item of projectList|filter:projectSearch "
+                            value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
 
-                    <div class="col-lg-4" *ngIf="crudList.r">
-                        <button class="btn-rpt-success w-25  me-1" (click)="getReport('R1','project')" >
-                            ProjectWise
-                        </button>  
-                        <button class="btn-rpt-success w-25 me-1" (click)="getReport('R1','all')" >
-                            All Report
-                        </button>   
-                        <!-- <button class=" btn btn-primary w-25 btn-rpt me-2" (click)="getReport('R2','')" >
+                <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+                    <mat-label>From Date</mat-label>
+                    <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="startDate">
+                    <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                    <mat-datepicker #startDate></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+                    <mat-label>To Date</mat-label>
+                    <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="EndDate">
+                    <mat-datepicker-toggle matSuffix [for]="EndDate"></mat-datepicker-toggle>
+                    <mat-datepicker #EndDate></mat-datepicker>
+                </mat-form-field>
+
+
+                <div class="col-lg-4" *ngIf="crudList.r">
+                    <!-- <button class="btn-rpt-success w-25  me-1" (click)="getReport('R1','project')">
+                        ProjectWise
+                    </button> -->
+                    <button class="btn-rpt-success w-25 me-1" (click)="getReport('R1','all')">
+                        Get Report
+                    </button>
+                    <!-- <button class=" btn btn-primary w-25 btn-rpt me-2" (click)="getReport('R2','')" >
                             Summary 2
                         </button>    -->
-                    
-                        <button class=" btn-rpt-primary me-1" (click)="PrintTable()">
-                           Print
-                        </button>
-                        <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
-                    </div>
+
+                    <button class=" btn-rpt-primary me-1" (click)="PrintTable()">
+                        Print
+                    </button>
+                    <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
                 </div>
             </div>
+        </div>
 
-            <hr>
-                <!------------------- Table Area ---------------------- -->
-        <div id="printDiv"  class="container printRpt p-3 pt-0" >
+        <hr>
+        <!------------------- Table Area ---------------------- -->
+        <div id="printDiv" class="container printRpt p-3 pt-0">
 
             <!------------------- Logo Section --------------------------------->
             <div class="hide">
                 <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
                     <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
-                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
+                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset=""
+                            [height]="item.logo1Height" [width]="item.logo1Width">
                     </span>
-                    <span >
-                        
-    
+                    <span>
+
+
                         <h1 class="companyName">{{item.companyName}}</h1>
-                        
-    
+
+
                         <p class="rptTitle" style="margin-top:-20px">Profit & Loss Statement</p>
-                        <h4 class="projtitl" *ngIf="projectName != ''" style="margin-top:-20px;"><b >Project:</b> {{projectName}}</h4>
-                        <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}} <b>To:</b> {{toDate | date:'dd-MM-yyyy'}}</p>
-                      
+                        <h4 class="projtitl" *ngIf="projectName != ''" style="margin-top:-20px;"><b>Project:</b>
+                            {{projectName}}</h4>
+                        <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}} <b>To:</b> {{toDate |
+                            date:'dd-MM-yyyy'}}</p>
+
                     </span>
                     <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
-                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" [height]="item.logo2Height" [width]="item.logo2Width">
+                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                            [height]="item.logo2Height" [width]="item.logo2Width">
                     </span>
-            
-            
+
+
                 </div>
-               </div>
-        
+            </div>
+
 
 
             <!------------- TAble Area ------------------------------------>
             <table class="mt-3 table-logix">
 
-               <thead>
-                <tr>
-                
-                <th>Title</th>
-                <th>Debit</th>
-                <th>Credit</th>
-                </tr>
-               </thead>
-               <tbody >
+                <thead>
+                    <tr>
 
-                <!--------------  income Row ------------------>
-                <tr *ngFor="let item of IncomeData;index as index" >
-                    
-                    <th class="text-start">{{item.coaTitle}}</th>
-                    <td class="text-end">{{item.debit |number:'1.0-0'}}</td>
-                    <td class="text-end">{{item.credit |number:'1.0-0'}}</td>
-                </tr>
+                        <th>Title</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-                <!---------------- income Total Row ------------------>
-                <tr class="border-bottom border-top">
-                    <td ></td>
-                    <td class="text-end fw-bold">{{incDebitTotal |number:'1.0-0'}}</td>
-                    <td class="text-end fw-bold">{{incCreditTotal |number:'1.0-0'}}</td>
-                </tr>
-                <tr>
-                    <td colspan="3"></td>
-                    
-                </tr>
-                
-                <tr style="border: 1px double; " class="mt-2 mb-2" >
-                    <td colspan="2" class="fw-bold text-center"> Total Income</td>
-                    
-                    <td class="text-end fw-bold" style="font-size: 20px;">{{ incCreditTotal - incDebitTotal  |number:'1.0-0'}}</td>
-                </tr>
-                <tr>
-                    <td colspan="3"></td>
-                    
-                </tr>
+                    <!--------------  income Row ------------------>
+                    <tr *ngFor="let item of IncomeData;index as index">
 
-                 <!---------------- Expense SEction ------------------>
+                        <th class="text-start">{{item.coaTitle}}</th>
+                        <td class="text-end">{{item.debit |number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.credit |number:'1.0-0'}}</td>
+                    </tr>
 
-                <tr *ngFor="let item of ExpenseData;index as index">
-                   
-                    <th class="text-start">{{item.coaTitle}}</th>
-                    <td class="text-end">{{item.debit |number:'1.0-0'}}</td>
-                    <td class="text-end">{{item.credit |number:'1.0-0'}}</td>
-                </tr>
+                    <!---------------- income Total Row ------------------>
+                    <tr class="border-bottom border-top">
+                        <td></td>
+                        <td class="text-end fw-bold">{{incDebitTotal |number:'1.0-0'}}</td>
+                        <td class="text-end fw-bold">{{incCreditTotal |number:'1.0-0'}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
 
+                    </tr>
 
-                 <!---------------- Expense Total ------------------>
+                    <tr style="border: 1px double; " class="mt-2 mb-2">
+                        <td colspan="2" class="fw-bold text-center"> Total Income</td>
 
-                <tr>
-                    <th ></th>
-                    <th class="text-end">{{expDebitTotal |number:'1.0-0'}}</th>
-                    <th class="text-end">{{expCreditTotal |number:'1.0-0'}}</th>
-                </tr>
-                <tr>
-                    <td colspan="3"></td>
-                    
-                </tr>
-                
-                <tr style="border: 1px double; " class="mt-2 mb-2">
-                    <th colspan="2  " > Total Expense</th>
-                    
-                    <th colspan="1" class="text-end" style="font-size: 20px;">{{expDebitTotal - expCreditTotal |number:'1.0-0'}}</th>
-                </tr>
+                        <td class="text-end fw-bold" style="font-size: 20px;">{{ incCreditTotal - incDebitTotal
+                            |number:'1.0-0'}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
 
-                <tr>
-                    <td colspan="3"></td>
-                    
-                </tr>
+                    </tr>
+
+                    <!---------------- Expense SEction ------------------>
+
+                    <tr *ngFor="let item of ExpenseData;index as index">
+
+                        <th class="text-start">{{item.coaTitle}}</th>
+                        <td class="text-end">{{item.debit |number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.credit |number:'1.0-0'}}</td>
+                    </tr>
 
 
+                    <!---------------- Expense Total ------------------>
 
-                <!---------------- Profit & Loss Calculation ------------------>
-                <tr>
-                    <th colspan="2" *ngIf="(incCreditTotal - incDebitTotal ) - (expDebitTotal - expCreditTotal) >= 0">NET PROFIT</th>
-                    <th colspan="2" *ngIf="(incCreditTotal - incDebitTotal ) - (expDebitTotal - expCreditTotal) < 0">NET LOSS</th>
-                    
-                    <th style="font-size: 20px;">{{(incCreditTotal - incDebitTotal ) - (expDebitTotal - expCreditTotal) |number :'1.0-0'}}</th>
-                </tr>
+                    <tr>
+                        <th></th>
+                        <th class="text-end">{{expDebitTotal |number:'1.0-0'}}</th>
+                        <th class="text-end">{{expCreditTotal |number:'1.0-0'}}</th>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+
+                    </tr>
+
+                    <tr style="border: 1px double; " class="mt-2 mb-2">
+                        <th colspan="2  "> Total Expense</th>
+
+                        <th colspan="1" class="text-end" style="font-size: 20px;">{{expDebitTotal - expCreditTotal
+                            |number:'1.0-0'}}</th>
+                    </tr>
+
+                    <tr>
+                        <td colspan="3"></td>
+
+                    </tr>
 
 
 
+                    <!---------------- Profit & Loss Calculation ------------------>
+                    <tr>
+                        <th colspan="2"
+                            *ngIf="(incCreditTotal - incDebitTotal ) - (expDebitTotal - expCreditTotal) >= 0">NET PROFIT
+                        </th>
+                        <th colspan="2"
+                            *ngIf="(incCreditTotal - incDebitTotal ) - (expDebitTotal - expCreditTotal) < 0">NET LOSS
+                        </th>
+
+                        <th style="font-size: 20px;">{{(incCreditTotal - incDebitTotal ) - (expDebitTotal -
+                            expCreditTotal) |number :'1.0-0'}}</th>
+                    </tr>
 
 
-               </tbody>
-                
+
+
+
+                </tbody>
+
             </table>
         </div>
 

@@ -76,12 +76,12 @@ export class RestrictpwdComponent implements OnInit {
   }
 
 
-  resetCode(){
+  resetCode(reqRestrictionCodeID:any){
     this.global.openPinCode().subscribe(pin=>{
       if(pin != ''){
         this.app.startLoaderDark()
         this.http.post(environment.mainApi+this.global.userLink+'ResetRestrictionCode',{
-          RestrictionCodeID: this.restrictionCodeID,
+          RestrictionCodeID: reqRestrictionCodeID,
           PinCode: pin,
           UserID: this.global.getUserID()
         }).subscribe(
