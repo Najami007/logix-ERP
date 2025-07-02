@@ -383,7 +383,7 @@ export class GlobalDataModule implements OnInit {
 
 
 
-  
+
   page: number = 1;
   count: number = 0;
 
@@ -391,21 +391,21 @@ export class GlobalDataModule implements OnInit {
   tableSizes: any = [10, 25, 50, 100];
   jumpPage: any = 0;
 
-  onTableDataChange(event: any,callFunc:any) {
+  onTableDataChange(event: any, callFunc: any) {
 
     this.page = event;
     callFunc();
   }
 
-  onTableSizeChange(event: any,callFunc:any): void {
+  onTableSizeChange(event: any, callFunc: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
     callFunc();
   }
 
-  goToPage(List:any,callFunc:any): void {
+  goToPage(List: any, callFunc: any): void {
     var count = List.length / this.tableSize;
-    if(parseFloat(this.jumpPage) > count)  {
+    if (parseFloat(this.jumpPage) > count) {
       this.msg.WarnNotify('Invalid Value')
       return;
     }
@@ -1213,44 +1213,37 @@ export class GlobalDataModule implements OnInit {
 
   }
 
+  handleNumKeys(e: KeyboardEvent) {
+    const allowedKeys = [
+      'Enter', 'Backspace', 'Tab', 'Shift', 'Delete',
+      'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown',
+      '.', // Dot
+      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+    ];
 
-  /////// will allow only number keys
-  handleNumKeys(e: any) {
+    // Allow numpad keys (Numpad0-Numpad9)
+    const isNumpad = e.code.startsWith('Numpad') && /^[0-9]$/.test(e.key);
 
-
-    if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
-      // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
-    }
-    else {
-      e.preventDefault();
-    }
-
-
-    // if(e.target.value == '' ){
-    //  e.target.value = 0;
-    // }
-
-
-
-  }
-
-  /////// will allow only number keys
-  handleAlphabet(e: any) {
-
-
-    if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37
-      || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48
-      || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54
-      || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98
-      || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104
-      || e.keyCode == 105 || e.keyCode == 109 || e.keyCode == 173 || e.keyCode == 189)) {
-      // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
-    }
-    else {
+    if (!allowedKeys.includes(e.key) && !isNumpad) {
       e.preventDefault();
     }
   }
 
+  /////// will allow only number keys
+  handleAlphabet(e: KeyboardEvent) {
+    const key = e.key;
+
+    const allowedKeys = [
+      'Enter', 'Backspace', 'Tab', 'Shift', 'Delete',
+      'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'
+    ];
+
+    const isAlphabet = /^[a-zA-Z]$/.test(key);
+
+    if (!isAlphabet && !allowedKeys.includes(key)) {
+      e.preventDefault();
+    }
+  }
   prodFocusedRow = 0;
   handleProdFocus(item: any, e: any, cls: any, endFocus: any, prodList: []) {
 
@@ -1309,8 +1302,8 @@ export class GlobalDataModule implements OnInit {
   }
 
   //////////// func to get product Detail
-  public getProdDetail(id: any, barcode: any,locationID?:any): Observable<any> {
-    if(locationID == undefined){
+  public getProdDetail(id: any, barcode: any, locationID?: any): Observable<any> {
+    if (locationID == undefined) {
       locationID = 0;
     }
     var url = environment.mainApi + this.inventoryLink + `GetSingleProductDetail?ProductID=${id}&Barcode=${barcode}&LocID=${locationID}`
@@ -1359,11 +1352,11 @@ export class GlobalDataModule implements OnInit {
   }
 
 
-  public popupAlert(msg?:any) {
+  public popupAlert(msg?: any) {
     return Swal.fire({
       title: "Alert",
       text: msg || 'Data Not Found!',
-       timer: 1500,
+      timer: 1500,
     });
   }
 

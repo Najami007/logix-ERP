@@ -1,6 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-saved-bill',
@@ -14,7 +16,9 @@ export class SavedBillComponent {
     constructor(
 
       public global: GlobalDataModule,
-      private route: Router
+      private route: Router,
+      private http:HttpClient,
+      
 
     ) {
 
@@ -52,6 +56,8 @@ export class SavedBillComponent {
   @Output() postBillEmitter = new EventEmitter();
   @Input()  savedbillList:any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
+
+
 
 
 

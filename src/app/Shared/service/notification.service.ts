@@ -38,7 +38,9 @@ export class NotificationService {
     timer: 1500,
     timerProgressBar: true,
     showLoaderOnConfirm:true,
-    
+     customClass: {
+    popup: 'swal-top-z'
+  },
    
    
     
@@ -72,6 +74,9 @@ export class NotificationService {
     timer: 1500,
     timerProgressBar: true,
     showLoaderOnConfirm:true,
+     customClass: {
+    popup: 'swal-top-z'
+  },
 
    willOpen : (toast)=> {
     toast.addEventListener('mouseenter', Swal.stopTimer)

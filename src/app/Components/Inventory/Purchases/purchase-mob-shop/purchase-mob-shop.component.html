@@ -71,8 +71,8 @@
                 <div class="col-lg-3 ms-1">
                     <!-- <button *ngIf="crudList.c" style="height: 50px;" class=" col-lg-5 btnhold me-1" matTooltip="Hold Bill"
                     (click)="SaveBill('hold')">{{holdBtnType}}</button> -->
-                    <button  class=" col-lg-5 btnreset me-1"  data-bs-toggle="modal" style="height: 50px;" matTooltip="Retrieve Bill" 
-                        data-bs-target="#holdModal">Retrieve</button>
+                    <button  class=" col-lg-5 btnreset me-1" accesskey="r"  data-bs-toggle="modal" style="height: 50px;" matTooltip="Retrieve Bill" 
+                        data-bs-target="#holdModal"><u>R</u>etrieve</button>
                 
 
                 </div>
@@ -133,7 +133,7 @@
                                     style="height: 25px; width: 150px;"></td>
 
 
-                            <td class="text-center"><input type="text" disabled="true" [(ngModel)]="item.Quantity" min="0" draggable="false" dropzone="false"
+                            <td class="text-center"><input type="text" disabled="true" [accessKey]="index +1 " [(ngModel)]="item.Quantity" min="0" draggable="false" dropzone="false"
                                     (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);"
                                     (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index"
                                     (change)="getTotal();"
@@ -213,7 +213,7 @@
             </div>
 
             <div class="mt-2 text-center">
-                <button class=" w-50 btnsave" id="savebtn" *ngIf="crudList.c" (click)="SaveBill('purchase')">Save</button>
+                <button class=" w-50 btnsave" id="savebtn" *ngIf="crudList.c" (click)="SaveBill('purchase')" accesskey="s"><u>S</u>ave</button>
             </div>
         </mat-card>
     </div>

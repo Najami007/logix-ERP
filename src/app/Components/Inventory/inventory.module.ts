@@ -286,8 +286,7 @@ export const inventoryRoutes: Route[] = [
     SavedBillComponent,
     DayClosingRptComponent,
     AuditInvoicePrintComponent,
-    VehicleSaleReportComponent,
-   
+    VehicleSaleReportComponent,   
     
   
   

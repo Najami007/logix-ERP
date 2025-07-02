@@ -71,9 +71,9 @@
 
                 <div class="col-lg-3 ms-1">
                     
-                    <button *ngIf="crudList.c" style="height: 50px;" class=" col-lg-5 btnhold me-1" matTooltip="Hold Bill" (click)="SaveBill('hold')">{{holdBtnType}}</button>
+                    <button *ngIf="crudList.c" style="height: 50px;" class=" col-lg-5 btnhold me-1" matTooltip="Hold Bill" accesskey="h" (click)="SaveBill('hold')"><span *ngIf="holdBtnType == 'Hold'"><u>H</u>old</span><span *ngIf="holdBtnType == 'ReHold'">Re<u>H</u>old</span> </button>
                     
-                    <button class=" col-lg-5 btnreset me-1" (click)="global.openBootstrapModal('#holdModal',true)" style="height: 50px;" matTooltip="Retrieve Bill">Retrieve</button>
+                    <button class=" col-lg-5 btnreset me-1" accesskey="r" (click)="global.openBootstrapModal('#holdModal',true)" style="height: 50px;" matTooltip="Retrieve Bill"><u>R</u>etrieve</button>
 
 
                 </div>
@@ -133,7 +133,7 @@
                                     draggable="false" dropzone="false"
                                     (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);"
                                     (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index"
-                                    (change)="getTotal();" class="qty{{index}} text-center" style="width: 80px;"></td>
+                                    (change)="getTotal();" [accessKey]="index +1 " class="qty{{index}} text-center" style="width: 80px;"></td>
 
 
                             <td class="text-center"><input type="text" [(ngModel)]="item.CostPrice" min="0"
@@ -212,8 +212,8 @@
             </div>
 
             <div class="mt-2 text-center">
-                <button class=" w-50 btnsave" id="savebtn" *ngIf="crudList.c"
-                    (click)="SaveBill('purchase')">Save</button>
+                <button class=" w-50 btnsave" id="savebtn" accesskey="s" *ngIf="crudList.c"
+                    (click)="SaveBill('purchase')"><u>S</u>ave</button>
             </div>
         </mat-card>
     </div>

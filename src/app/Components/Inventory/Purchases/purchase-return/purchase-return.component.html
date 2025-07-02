@@ -19,10 +19,10 @@
 
 
                 <div class="col-lg-4 ps-1">
-                    <button class=" w-25 btnhold me-1  " *ngIf="crudList.c" style="height: 50px;"
-                        (click)="SaveBill('hold')">{{holdBtnType}}</button>
-                    <button class="w-25 btnreset me-1" style="height: 50px;" data-bs-toggle="modal"
-                        data-bs-target="#purRtnholdModal">Retrieve</button>
+                    <button class=" w-25 btnhold me-1  " accesskey="h" *ngIf="crudList.c" style="height: 50px;"
+                        (click)="SaveBill('hold')"><span *ngIf="holdBtnType == 'Hold'"><u>H</u>old</span><span *ngIf="holdBtnType == 'ReHold'">Re<u>H</u>old</span> </button>
+                    <button class="w-25 btnreset me-1" style="height: 50px;" accesskey="r" data-bs-toggle="modal"
+                        data-bs-target="#purRtnholdModal"><u>R</u>etrieve</button>
 
                 </div>
             </div>
@@ -83,7 +83,7 @@
                     <td class="text-center"><input type="text" [(ngModel)]="item.Quantity" min="0"
                             (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);"
                             (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index"
-                            class="qty{{index}} text-center" style="width: 80px;"></td>
+                            class="qty{{index}} text-center" [accessKey]="index +1 " style="width: 80px;"></td>
 
 
                     <td class="text-center"><input type="text" [(ngModel)]="item.CostPrice" min="0"
@@ -239,8 +239,8 @@
                     <h1 style="font-size: 50px;" class="text-danger">{{netTotal || 0 |number:'1.0-2'}}</h1>
                 </div>
                 <div class="text-center">
-                    <button class=" w-50 btnsave " style="height: 50px;" *ngIf="crudList.c"
-                        (click)="SaveBill('purchase')">Save</button>
+                    <button class=" w-50 btnsave " accesskey="s" style="height: 50px;" *ngIf="crudList.c"
+                        (click)="SaveBill('purchase')"><u>S</u>ave</button>
 
                 </div>
 

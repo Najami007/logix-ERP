@@ -1405,6 +1405,11 @@ vehicleList:any = [];
   }
 
 
+
+
+
+  ///////////////////////// For Adding New Vehicle Shortcut /////////////
+
     @ViewChild('vehicle') myVehicle: any;
     addVehicle() {
       setTimeout(() => {
