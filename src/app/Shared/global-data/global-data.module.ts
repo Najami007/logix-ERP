@@ -16,12 +16,10 @@ import { CookieService } from 'ngx-cookie-service';
 import { ConfirmationAlertComponent } from 'src/app/Components/Common/confirmation-alert/confirmation-alert.component';
 import * as bootstrap from 'bootstrap';
 import { ExcelExportService } from '../service/ExcelExportService/excel-export.service';
-import { ProductModalComponent } from 'src/app/Components/Inventory/Sale/SaleComFiles/product-modal/product-modal.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import Swal from 'sweetalert2';
 import { UpdateSubscriptionComponent } from 'src/app/Components/User/update-subscription/update-subscription.component';
 import { SubscriptionKeyGeneratorComponent } from 'src/app/Components/User/subscription-key-generator/subscription-key-generator.component';
-import * as exp from 'constants';
 
 
 

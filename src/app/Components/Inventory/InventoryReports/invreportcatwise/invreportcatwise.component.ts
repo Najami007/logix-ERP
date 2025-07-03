@@ -75,7 +75,7 @@ export class InvreportcatwiseComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Inventory Report');
+    this.global.setHeaderTitle('Stock Register');
     this.getReport();
     this.getCategory();
     this.getBrandList();

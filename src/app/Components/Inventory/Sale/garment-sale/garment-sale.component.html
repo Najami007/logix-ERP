@@ -193,7 +193,7 @@
                             </td> -->
                                 <td class="text-end cursorPointer" *ngIf="gstFeature">{{item.salePrice / ((item.gst /
                                     100) + 1) |number:'1.0-1'}}</td>
-                                <td class="text-end cursorPointer" (click)="tempProdData = item;editSP(item)">
+                                <td class="text-end cursorPointer" (click)="editSP(item)">
                                     {{item.salePrice
                                     |number:'1.0-3'}}</td>
 

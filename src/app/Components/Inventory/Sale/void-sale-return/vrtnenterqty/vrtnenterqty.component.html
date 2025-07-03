@@ -7,7 +7,7 @@
                 <mat-form-field appearance="outline" class="w-100 matSmall">
                     <mat-icon (click)="increment('add',prodQty.value)" matPrefix>add</mat-icon>
 
-                    <input class="prodQty text-center" [value]="tempQty"
+                    <input class="prodQty text-center" [value]="tempQty" id="qty"
                         (keydown)="this.global.handleNumKeys($event);changeQty($event);"
                         (change)="changeQty($event);" type="text" min="0" matInput
                         #prodQty />

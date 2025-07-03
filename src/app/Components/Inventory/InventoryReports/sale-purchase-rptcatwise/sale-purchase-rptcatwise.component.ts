@@ -39,7 +39,7 @@ export class SalePurchaseRptcatwiseComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Sale Purchase Report (Categorywise)');
+    this.global.setHeaderTitle('Sale Purchase History Category wise');
     this.getUsers();
     this.getCategory();
     this.getBrandList();
@@ -215,7 +215,6 @@ export class SalePurchaseRptcatwiseComponent implements OnInit {
                 this.global.popupAlert('Data Not Found!');
                 this.app.stopLoaderDark();
                 return;
-
               }
 
               if (this.rptType == 'R') {

@@ -108,6 +108,7 @@ import { DayClosingRptComponent } from './InventoryReports/day-closing-rpt/day-c
 import { AuditInvoicePrintComponent } from './InvAdjustment/inv-audit/audit-invoice-print/audit-invoice-print.component';
 import { VehicleSaleReportComponent } from './InventoryReports/vehicle-sale-report/vehicle-sale-report.component';
 import { CompanyModule } from '../Company/company.module';
+import { ReorderReportComponent } from './InventoryReports/reorder-report/reorder-report.component';
 
 export const MY_DATE_FORMAT  = {
   parse: {
@@ -176,12 +177,12 @@ export const inventoryRoutes: Route[] = [
 
   ////////////////////////// Reports Pages /////////////
 
-  {path: 'invrpt',component: InvreportcatwiseComponent,data: { title: 'Inventory Rpt' },canActivate: [AuthGuard]},
-  {path: 'invrptpw',component: InvrptprodwiseComponent,data: { title: 'Inv Rpt Prodwise' },canActivate: [AuthGuard]},
-  {path: 'sprptdw',component: SalePurchaseRptdatewiseComponent,data: { title: 'Sale Purchase Rpt' },canActivate: [AuthGuard]},
-  {path: 'tlsrpt',component: TopLeastSaleQtyAmountwiseComponent,data: { title: 'Top Least Rpt' },canActivate: [AuthGuard]},
+  {path: 'invrpt',component: InvreportcatwiseComponent,data: { title: 'Stock Register' },canActivate: [AuthGuard]},
+  {path: 'invrptpw',component: InvrptprodwiseComponent,data: { title: 'Product In Out History' },canActivate: [AuthGuard]},
+  {path: 'sprptdw',component: SalePurchaseRptdatewiseComponent,data: { title: 'Stock In Out Datewise' },canActivate: [AuthGuard]},
+  {path: 'tlsrpt',component: TopLeastSaleQtyAmountwiseComponent,data: { title: 'Top Least Sale Report' },canActivate: [AuthGuard]},
   {path: 'invdsbrd',component: InvDashboardComponent,data: { title: 'Dashboard' },canActivate: [AuthGuard]},
-  {path: 'isrptptw',component: SaleRptPaymentTypewiseComponent,data: { title: 'Sale Rpt Payment Type' },canActivate: [AuthGuard]},
+  {path: 'isrptptw',component: SaleRptPaymentTypewiseComponent,data: { title: 'Sale History Payment Type wise' },canActivate: [AuthGuard]},
   {path: 'prptsw',component: PurchaseReportSupplierwiseComponent,data: { title: 'Purchase Rpt Supplier' },canActivate: [AuthGuard]},
   {path: 'prptpsw', component: PurchaseReportProdSupplierwiseComponent,data: { title: 'Purchase Rpt Prod Supplier' },canActivate: [AuthGuard]},
   { path: 'spcrptdw',component: SalePurchaseComparisonRptDatewiseComponent,data: { title: 'Sale Purchase Comparison' },canActivate: [AuthGuard]},
@@ -198,6 +199,7 @@ export const inventoryRoutes: Route[] = [
   {path: 'ccrpt',component: CashierClosingRptComponent,data: { title: 'Cashier Closing' },canActivate: [AuthGuard]},
   {path: 'dayClose',component: DayClosingRptComponent,data: { title: 'Day Closing' },canActivate: [AuthGuard]},
    {path: 'srptv',component: VehicleSaleReportComponent,data: { title: 'Vehicle Sale Report' },canActivate: [AuthGuard]},
+      {path: 'reorderrpt',component: ReorderReportComponent,data: { title: 'ReOrder Report' },canActivate: [AuthGuard]},
 
   
 
@@ -286,7 +288,8 @@ export const inventoryRoutes: Route[] = [
     SavedBillComponent,
     DayClosingRptComponent,
     AuditInvoicePrintComponent,
-    VehicleSaleReportComponent,   
+    VehicleSaleReportComponent,
+    ReorderReportComponent,   
     
   
   

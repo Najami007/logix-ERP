@@ -836,36 +836,6 @@ export class PurchaseReturnComponent implements OnInit {
       this.msg.WarnNotify('(' + inValidQtyProdList[0].ProductTitle + ') Quantity is not Valid');
       return;
     }
-    // this.tableDataList.forEach((p: any) => {
-    //   p.Quantity = parseFloat(p.Quantity);
-    //   p.SalePrice = parseFloat(p.SalePrice);
-    //   p.CostPrice = parseFloat(p.CostPrice);
-
-    //   if (p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null) {
-    //     this.msg.WarnNotify('(' + p.ProductTitle + ') Cost Price is not Valid');
-    //     isValidFlag = false;
-
-    //     return;
-    //   }
-
-    //   if (p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null) {
-    //     this.msg.WarnNotify('(' + p.ProductTitle + ') Sale Price is not Valid');
-    //     isValidFlag = false;
-
-    //     return;
-    //   }
-
-    //   if (p.Quanity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '') {
-    //     this.msg.WarnNotify('(' + p.ProductTitle + ') Quantity is not Valid');
-    //     isValidFlag = false;
-    //     return;
-    //   }
-
-
-
-    // });
-
-
 
 
     if (this.tableDataList == '') {
@@ -1153,5 +1123,32 @@ export class PurchaseReturnComponent implements OnInit {
 
     }
   }
+
+
+  editTotal(item: any) {
+    Swal.fire({
+      title: "Enter Total Amount",
+      input: "text",
+      showCancelButton: true,
+      confirmButtonText: 'Save',
+      showLoaderOnConfirm: true,
+      preConfirm: (value) => {
+        if (!value || isNaN(value) || value <= 0) {
+          return Swal.showValidationMessage("Enter Valid Amount");
+        }
+        const index = this.tableDataList.indexOf(item);
+        this.tableDataList[index].CostPrice = value / item.Quantity;
+        this.getTotal();
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Price Updated",
+          timer: 500,
+        });
+      }
+    })
+  }
+
 
 }

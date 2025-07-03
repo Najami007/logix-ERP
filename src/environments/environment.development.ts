@@ -12,19 +12,24 @@ export const environment = {
   // apiUrl: 'https://localhost:7005/',
   apiUrl: 'http://localhost:8081/',
 
-  //mainApi: 'http://192.168.100.37:5000/',
+  //mainApi: 'http://192.168.100.37:1000/',
   //mainApi: 'http://localhost:5000/', 
-   mainApi: 'http://localhost:8060/',           /////////// system own published API
+  //mainApi: 'http://localhost:8060/',           /////////// system own published API
   // mainApi: 'http://192.168.160.98:8060/',  ////////// live Server Dani System
   //mainApi: 'http://192.168.100.250:1007/',  ////////// live Server Dani System
   //mainApi: 'http://192.168.10.100:1003/',    /////////// Local Server Office
   // mainApi: 'http://192.168.18.206:8060/',
+  // mainApi: 'http://159.69.174.21:1000/', /////// Logix Solutionz Published Accounts
+  //mainApi: 'http://159.69.174.21:2016/',   /////// Erp Demo Live For Clients
+
+
+
 
 
   //mainApi: 'http://159.69.174.21:2027/', /////////////// Makkah Oil Islamabad
- // mainApi: 'http://159.69.174.21:1000/', /////// Logix Solutionz Published Accounts
 
- //mainApi: 'http://159.69.174.21:2016/',   /////// Erp Demo Live For Clients
+
+
   //mainApi: 'http://159.69.174.21:2008/', /////// Live Serve Testing API General
   //  mainApi: 'http://159.69.174.21:2019/', /////// Live Serve Testing API Property
 
@@ -32,7 +37,7 @@ export const environment = {
   //mainApi: 'http://192.168.10.100:2001/', /////// Shama Royal City Server
   //mainApi: 'http://159.69.174.21:2006/',  ////////// live Server Mehria Brands
   //mainApi: 'http://159.69.174.21:2007/',  ////////// live Server Balck Gold Restaurant
-   //mainApi: 'http://192.168.1.100:8081/',   ///Alsheikh Mall Wahcant
+  //mainApi: 'http://192.168.1.100:8081/',   ///Alsheikh Mall Wahcant
   //mainApi: 'http://159.69.174.21:2010/',    ////////// live Server for Alsheikh
   // mainApi: 'http://159.69.174.21:2012/',  ////////// live Server for Alsheikh HassanAbdal
   //mainApi: 'http://192.168.18.100:8081/',   ///Stylish Garment Wahcant
@@ -47,10 +52,10 @@ export const environment = {
 
   // mainApi: 'http://159.69.174.21:2013/',  ////////// Shama Royal City
   // mainApi: 'http://192.168.10.180:8081/',  /////// Lasani Traders Fateh Jang local System
- 
+
   // mainApi: 'http://159.69.174.21:2019/',    /////// Ejaz And Sons Rawalpindi
   //mainApi: 'http://localhost:8060/',           /////////// BAke INN Fateh Jang
-   //mainApi: 'http://192.168.10.100:8080/',   /////////// BAke INN Server Live
+  //mainApi: 'http://192.168.10.100:8080/',   /////////// BAke INN Server Live
   //mainApi: 'http://159.69.174.21:2023/',  ////////// live Server Bake Inn Bakers Fateh Jang
   //mainApi: 'http://192.168.18.100:8080/',    /////////// The Bucket Client
   //mainApi: 'http://192.168.1.100:8080/',    /////////// Jazeera Foods Saddar API
@@ -70,11 +75,11 @@ export const environment = {
 
   // mainApi: 'http://192.168.20.100:7000/',    /////////// Black Gold Restaurant
   // mainApi: 'http://192.168.20.99:7000/',    /////////// Black Gold Restauratn Hyper accounts
- // mainApi: 'http://192.168.20.100:7003/',    /////////// Mehria Brands
+  // mainApi: 'http://192.168.20.100:7003/',    /////////// Mehria Brands
 
 
 
- // mainApi: 'http://159.69.174.21:2022/',  ////////// live Server City Bakers Rwp
+  // mainApi: 'http://159.69.174.21:2022/',  ////////// live Server City Bakers Rwp
 
 
   //mainApi: 'http://localhost:8060/',   ///////////////// Bilal Sweets Peshawar
@@ -88,15 +93,15 @@ export const environment = {
   //mainApi: 'http://159.69.174.21:2047/', /////// Property Management FMIS Dubai
 
 
- // mainApi: 'http://localhost:8060/', ////////Fazil sons mandi bahaudin
+   mainApi: 'http://localhost:8060/', ////////Fazil sons mandi bahaudin
   //mainApi: 'http://192.168.100.100:8060/',           /////////// Fazil Sons live
- // mainApi: 'http://159.69.174.21:2026/',           /////////// Fazil Sons live Server
+  // mainApi: 'http://159.69.174.21:2026/',           /////////// Fazil Sons live Server
 
-   // mainApi: 'http://192.168.100.100:8060/',           /////////// Rahat Bakers Quetta
+  // mainApi: 'http://192.168.100.100:8060/',           /////////// Rahat Bakers Quetta
 
 
 
-   //mainApi: 'http://localhost:8060/', //////////// Master Traders Faisalabad
+  //mainApi: 'http://localhost:8060/', //////////// Master Traders Faisalabad
   // mainApi: 'http://192.168.100.100:8060/', //////////////// Master Traders Sharing
 
 

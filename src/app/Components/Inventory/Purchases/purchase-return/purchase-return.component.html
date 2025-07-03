@@ -100,7 +100,7 @@
                             style="width: 80px;">
                     </td>
 
-                    <td class="text-end">{{item.CostPrice * item.Quantity |number}}</td>
+                    <td class="text-end" (click)="editTotal(item)">{{item.CostPrice * item.Quantity |number}}</td>
                     <td class="text-center">{{item.AQ |number:'1.0-3'}}</td>
                     <td class="text-danger text-center cursorPointer"><mat-icon (click)="delRow(item)">delete</mat-icon>
                     </td>

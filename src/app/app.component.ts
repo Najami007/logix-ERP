@@ -106,20 +106,27 @@ constructor(
    private titleService: Title,
    private activatedRoute: ActivatedRoute
   ){
-    this.route.events
-      .pipe(
-        filter(event => event instanceof NavigationEnd),
-        map(() => {
-          let route = this.activatedRoute;
-          while (route.firstChild) {
-            route = route.firstChild;
-          }
-          return route.snapshot.data['title'];
-        })
-      )
-      .subscribe((title: string) => {
-        if (title) {
-          this.titleService.setTitle('ERP: '+title);
+    // this.route.events
+    //   .pipe(
+    //     filter(event => event instanceof NavigationEnd),
+    //     map(() => {
+    //       let route = this.activatedRoute;
+    //       while (route.firstChild) {
+    //         route = route.firstChild;
+    //       }
+    //       return route.snapshot.data['title'];
+    //     })
+    //   )
+    //   .subscribe((title: string) => {
+    //     if (title) {
+    //       this.titleService.setTitle('ERP: '+title);
+    //     }
+    //   });
+
+       this.global.header_title$.subscribe((Response:string)=>{
+        this.title = Response
+        if (this.title) {
+          this.titleService.setTitle('ERP: '+  this.title);
         }
       });
 

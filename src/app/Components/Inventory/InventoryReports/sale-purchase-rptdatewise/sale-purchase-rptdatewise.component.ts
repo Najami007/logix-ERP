@@ -45,10 +45,13 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Sale Purchase Report (Datewise)');
+    this.global.setHeaderTitle('Stock In Out Date wise');
     this.getUsers();
-    $('#detailTable').show();
+   setTimeout(() => {
+     $('#detailTable').show();
     $('#summaryTable').hide();
+    $('#TaxsummaryTable').hide();
+   }, 200);
   }
 
 

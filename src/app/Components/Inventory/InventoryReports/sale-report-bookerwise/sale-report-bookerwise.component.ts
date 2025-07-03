@@ -40,7 +40,7 @@ export class SaleReportBookerwiseComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Sale Report (Bookerwise)');
+    this.global.setHeaderTitle('Sale History Booker wise');
     this.getUsers();
     this.getParty();
     $('#detailTable').show();

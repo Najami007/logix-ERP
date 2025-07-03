@@ -39,7 +39,7 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Purchase Report (Supplierwise)');
+    this.global.setHeaderTitle('Purchase History Supplier wise');
     this.getUsers();
     this.getSupplier();
     setTimeout(() => {

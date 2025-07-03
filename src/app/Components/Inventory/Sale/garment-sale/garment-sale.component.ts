@@ -13,7 +13,6 @@ import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/add
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bill-print.component';
 import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-mehtod.component';
-import { CompanyModule } from "../../../Company/company.module";
 
 
 
@@ -24,7 +23,8 @@ import { CompanyModule } from "../../../Company/company.module";
 })
 export class GarmentSaleComponent implements OnInit {
 
-
+@ViewChild(SaleBillPrintComponent) billPrint: any;
+disableDate = this.global.DisableDateSale;
   discFeature = this.global.discFeature;
   BookerFeature = this.global.BookerFeature;
   gstFeature = this.global.gstFeature;
@@ -38,14 +38,14 @@ export class GarmentSaleComponent implements OnInit {
   LessToCostFeature = this.global.LessToCostFeature;
   changePaymentMehtodFeature = this.global.changePaymentMehtodFeature;
   onlySaveBillFeature = this.global.onlySaveBillFeature;
-  disableDate = this.global.DisableDateSale;
+  
   postBillFeature = this.global.postSale;
   urduBillFeature = this.global.urduBill;
   disablePrintPwd = this.global.DisablePrintPwd;
   VehicleSaleFeature = this.global.VehicleSaleFeature;
 
 
-  @ViewChild(SaleBillPrintComponent) billPrint: any;
+  
 
   companyProfile: any = [];
   companyLogo: any = '';
@@ -109,6 +109,7 @@ export class GarmentSaleComponent implements OnInit {
 
   }
   ngOnInit(): void {
+  
     this.global.setHeaderTitle('Sale');
     this.getBankList();
     this.getPartyList();
@@ -178,7 +179,7 @@ export class GarmentSaleComponent implements OnInit {
   bookerID = 0;
   AdvTaxValue = 0;
   AdvTaxAmount = 0;
-  
+
 
   qtyTotal = 0;
   subTotal: any = 0;
@@ -489,13 +490,13 @@ export class GarmentSaleComponent implements OnInit {
   }
 
   sortTableData() {
-    this.sortType == 'desc' 
-    ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) 
-    : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+    this.sortType == 'desc'
+      ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex)
+      : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
 
   }
 
-vehicleList:any = [];
+  vehicleList: any = [];
   getVehicles() {
     this.http.get(environment.mainApi + 'veh/GetActiveVehicle').subscribe(
       (Response: any) => {
@@ -505,7 +506,7 @@ vehicleList:any = [];
   }
 
   searchProductByName() {
-    this.global.openBootstrapModal('#prodModal', true,true);
+    this.global.openBootstrapModal('#prodModal', true, true);
 
     setTimeout(() => {
       $('#prodName').trigger('select');
@@ -562,6 +563,8 @@ vehicleList:any = [];
 
 
   getTotal() {
+
+    if(this.tableDataList.length == 0) return;
     this.qtyTotal = 0;
     this.subTotal = 0;
     this.netTotal = 0;
@@ -824,25 +827,16 @@ vehicleList:any = [];
         showLoaderOnConfirm: true,
         preConfirm: (value) => {
 
-          if (value == "") {
+          if (!value || isNaN(value) || value <= 0) {
             return Swal.showValidationMessage("Enter Valid Amount");
           }
-
-          if (isNaN(value)) {
-            return Swal.showValidationMessage("Enter Valid Amount");
-          }
-
-          if (value <= 0) {
-            return Swal.showValidationMessage("Enter Valid Amount");
-          }
-
-          if (value < this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].costPrice && this.LessToCostFeature == false) {
+          const index = this.tableDataList.indexOf(item);
+          if (value < this.tableDataList[index].costPrice && this.LessToCostFeature == false) {
             return Swal.showValidationMessage("Sale Price Is Less Then Cost Price");
           }
 
-          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice = value;
+          this.tableDataList[index].salePrice = value;
           this.getTotal();
-          this.tempProdData = [];
         }
       }).then((result) => {
         if (result.isConfirmed) {
@@ -867,27 +861,17 @@ vehicleList:any = [];
         confirmButtonText: 'Save',
         showLoaderOnConfirm: true,
         preConfirm: (value) => {
-
-          if (value == "") {
-            return Swal.showValidationMessage("Enter Valid Amount");
-          }
-
-          if (isNaN(value)) {
-            return Swal.showValidationMessage("Enter Valid Amount");
-          }
-
-          if (value < 0) {
+          if (!value || isNaN(value) || value < 0) {
             return Swal.showValidationMessage("Enter Valid Amount");
           }
 
           if (item.salePrice - value < item.costPrice) {
             return Swal.showValidationMessage("Discount Price Not Valid");
           }
-
-          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR = value;
-          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInP = (value / item.salePrice) * 100;
+              const index = this.tableDataList.indexOf(item);
+          this.tableDataList[index].discInR = value;
+          this.tableDataList[index].discInP = (value / item.salePrice) * 100;
           this.getTotal();
-          this.tempProdData = [];
         }
       }).then((result) => {
         if (result.isConfirmed) {
@@ -911,25 +895,16 @@ vehicleList:any = [];
         confirmButtonText: 'Save',
         showLoaderOnConfirm: true,
         preConfirm: (value) => {
-
-          if (value == "") {
-            return Swal.showValidationMessage("Enter Valid Amount");
-          }
-
-          if (isNaN(value)) {
-            return Swal.showValidationMessage("Enter Valid Amount");
-          }
-
-          if (value < 0) {
+          if (!value || isNaN(value) || value < 0) {
             return Swal.showValidationMessage("Enter Valid Amount");
           }
 
           if (item.salePrice - ((item.salePrice * value) / 100) < item.costPrice) {
             return Swal.showValidationMessage("Discount % Not Valid");
           }
-
-          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInP = value;
-          this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR = (item.salePrice * value) / 100;
+          const index = this.tableDataList.indexOf(item);
+          this.tableDataList[index].discInP = value;
+          this.tableDataList[index].discInR = (item.salePrice * value) / 100;
           this.getTotal();
           this.tempProdData = [];
         }
@@ -978,170 +953,170 @@ vehicleList:any = [];
 
 
 
-    var inValidCostProdList = this.tableDataList.filter((p:any)=> p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null );
-    var inValidSaleProdList = this.tableDataList.filter((p:any)=> p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
-    var inValidQtyProdList = this.tableDataList.filter((p:any)=> p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
-    var inValidDiscProdList = this.tableDataList.filter((p:any)=> p.costPrice > (p.salePrice - p.discInR));
+    var inValidCostProdList = this.tableDataList.filter((p: any) => p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
+    var inValidSaleProdList = this.tableDataList.filter((p: any) => p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
+    var inValidQtyProdList = this.tableDataList.filter((p: any) => p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
+    var inValidDiscProdList = this.tableDataList.filter((p: any) => p.costPrice > (p.salePrice - p.discInR));
 
 
-    if(inValidCostProdList.length > 0 && !this.LessToCostFeature){
-       this.msg.WarnNotify('(' + inValidCostProdList[0].productTitle + ') Cost Price greater than Sale Price');
-        return;
+    if (inValidCostProdList.length > 0 && !this.LessToCostFeature) {
+      this.msg.WarnNotify('(' + inValidCostProdList[0].productTitle + ') Cost Price greater than Sale Price');
+      return;
     }
-      if(inValidSaleProdList.length> 0 ){
-       this.msg.WarnNotify('(' + inValidSaleProdList[0].productTitle + ') Sale Price is not Valid');
-        return;
+    if (inValidSaleProdList.length > 0) {
+      this.msg.WarnNotify('(' + inValidSaleProdList[0].productTitle + ') Sale Price is not Valid');
+      return;
     }
-       if(inValidQtyProdList.length> 0 ){
-       this.msg.WarnNotify('(' + inValidQtyProdList[0].productTitle + ') Quantity is not Valid');
-        return;
+    if (inValidQtyProdList.length > 0) {
+      this.msg.WarnNotify('(' + inValidQtyProdList[0].productTitle + ') Quantity is not Valid');
+      return;
     }
 
-       if(inValidDiscProdList.length> 0 && !this.LessToCostFeature ){
-       this.msg.WarnNotify('(' + inValidDiscProdList[0].productTitle + ') Discount is not Valid');
-        return;
+    if (inValidDiscProdList.length > 0 && !this.LessToCostFeature) {
+      this.msg.WarnNotify('(' + inValidDiscProdList[0].productTitle + ') Discount is not Valid');
+      return;
     }
-  
+
 
     if (this.isValidSale == true) {
-       
 
-       if (this.tableDataList == '') {
+
+      if (this.tableDataList == '') {
         this.msg.WarnNotify('No Product Seleted');
         return;
       }
-       if (paymentType == 'Cash' && this.partyID == 0 && (this.cash == 0 || this.cash == undefined || this.cash == null)) {
+      if (paymentType == 'Cash' && this.partyID == 0 && (this.cash == 0 || this.cash == undefined || this.cash == null)) {
         this.msg.WarnNotify('Enter Cash');
         return;
-      } 
-      
+      }
+
       if (paymentType == 'Cash' && this.partyID == 0 && this.cash < this.netTotal) {
         this.msg.WarnNotify('Entered Cash is not Valid');
         return;
-      } 
-       if (paymentType == 'Split' && ((this.cash + this.bankCash) > this.netTotal || (this.cash + this.bankCash) < this.netTotal)) {
+      }
+      if (paymentType == 'Split' && ((this.cash + this.bankCash) > this.netTotal || (this.cash + this.bankCash) < this.netTotal)) {
         this.msg.WarnNotify('Sum Of Both Amount must be Equal to Net Total');
-         return;
-      } 
-      
-      if (this.paymentType == 'Split' && this.cash <= 0) {
-        this.msg.WarnNotify('Cash Amount is Not Valid');
-         return;
-      } 
-       if (this.paymentType == 'Split' && this.bankCash <= 0) {
-        this.msg.WarnNotify('Bank Amount is Not Valid');
-         return;
-      } 
-       if ((this.bookerID == 0 || this.bookerID == undefined) && this.BookerFeature) {
-        this.msg.WarnNotify('Select Booker');
-         return;
-      } 
-       if (this.paymentType == 'Credit' && this.partyID == 0) {
-        this.msg.WarnNotify('Select Customer');
-         return;
-      } 
-       if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
-        this.msg.WarnNotify('Enter Valid Amount');
-         return;
-      } 
- 
-       if ((paymentType == 'Credit' || paymentType == 'Split' || paymentType == 'Bank') && this.bankCash > 0 && this.bankCoaID == 0) {
-        this.msg.WarnNotify('Select Bank');
-         return;
+        return;
       }
 
-      if(this.VehicleSaleFeature && this.vehicleID == 0){
+      if (this.paymentType == 'Split' && this.cash <= 0) {
+        this.msg.WarnNotify('Cash Amount is Not Valid');
+        return;
+      }
+      if (this.paymentType == 'Split' && this.bankCash <= 0) {
+        this.msg.WarnNotify('Bank Amount is Not Valid');
+        return;
+      }
+      if ((this.bookerID == 0 || this.bookerID == undefined) && this.BookerFeature) {
+        this.msg.WarnNotify('Select Booker');
+        return;
+      }
+      if (this.paymentType == 'Credit' && this.partyID == 0) {
+        this.msg.WarnNotify('Select Customer');
+        return;
+      }
+      if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
+        this.msg.WarnNotify('Enter Valid Amount');
+        return;
+      }
+
+      if ((paymentType == 'Credit' || paymentType == 'Split' || paymentType == 'Bank') && this.bankCash > 0 && this.bankCoaID == 0) {
+        this.msg.WarnNotify('Select Bank');
+        return;
+      }
+
+      if (this.VehicleSaleFeature && this.vehicleID == 0) {
         this.msg.WarnNotify('Select Vehicle');
         return;
       }
-        if(this.VehicleSaleFeature && this.meterReading == ''){
+      if (this.VehicleSaleFeature && this.meterReading == '') {
         this.msg.WarnNotify('Enter Meter Reading');
         return;
       }
 
 
-        var postData:any = {
-          InvDate: this.global.dateFormater(this.InvDate, '-'),
-          PartyID: this.partyID,
-          InvType: "S",
-          ProjectID: this.projectID,
-          BookerID: this.bookerID,
-          PaymentType: paymentType,
-          SendToFbr: SendToFbr,
-          PosFee: this.gstFeature ? this.PosFee : 0,
-          Remarks: this.billRemarks || '-',
-          OrderType: "Take Away",
-          BillTotal: this.subTotal,
-          BillDiscount: parseFloat(this.discount) + parseFloat(this.offerDiscount),
-          OtherCharges: this.otherCharges,
-          NetTotal: this.netTotal,
-          CashRec: this.cash,
-          Change: this.change,
-          AdvTaxAmount: this.AdvTaxAmount,
-          AdvTaxValue: this.AdvTaxValue,
-          BankCoaID: this.bankCoaID,
-          BankCash: this.bankCash,
-          CusContactNo: this.customerMobileno || '-',
-          CusName: this.customerName || '-',
-          SaleDetail: JSON.stringify(this.tableDataList),
-          VehicleID:this.vehicleID,
-          MeterReading:this.meterReading || '0',
-          UserID: this.global.getUserID()
-        }
-
-
-
-        if (this.global.SubscriptionExpired()) {
-          Swal.fire({
-            title: 'Alert!',
-            text: 'Unable To Save , Contact To Administrator!',
-            position: 'center',
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'OK',
-          });
-          return;
-        }
-         this.isValidSale = false;
-        this.app.startLoaderDark();
-        this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', postData).subscribe(
-          (Response: any) => {
-            if (Response.msg == 'Data Saved Successfully') {
-              this.tmpCash = this.cash;
-              this.tmpChange = this.change;
-              this.reset();
-              this.msg.SuccessNotify(Response.msg);
-
-              if (printFlag) {
-                this.PrintAfterSave(Response.invNo);
-              }
-
-              if (paymentType != 'Cash') {
-                $('#searchProduct').trigger('focus');
-                this.global.closeBootstrapModal('#paymentMehtod', true);
-
-              }
-            
-            } else {
-              this.msg.WarnNotify(Response.msg);
-            }
-              this.isValidSale = true;
-            this.app.stopLoaderDark();
-
-          },
-          (error: any) => {
-            this.isValidSale = true;
-            console.log(error);
-            this.msg.WarnNotify('Unable to Save Check Connection');
-
-            this.app.stopLoaderDark();
-          }
-        )
+      var postData: any = {
+        InvDate: this.global.dateFormater(this.InvDate, '-'),
+        PartyID: this.partyID,
+        InvType: "S",
+        ProjectID: this.projectID,
+        BookerID: this.bookerID,
+        PaymentType: paymentType,
+        SendToFbr: SendToFbr,
+        PosFee: this.gstFeature ? this.PosFee : 0,
+        Remarks: this.billRemarks || '-',
+        OrderType: "Take Away",
+        BillTotal: this.subTotal,
+        BillDiscount: parseFloat(this.discount) + parseFloat(this.offerDiscount),
+        OtherCharges: this.otherCharges,
+        NetTotal: this.netTotal,
+        CashRec: this.cash,
+        Change: this.change,
+        AdvTaxAmount: this.AdvTaxAmount,
+        AdvTaxValue: this.AdvTaxValue,
+        BankCoaID: this.bankCoaID,
+        BankCash: this.bankCash,
+        CusContactNo: this.customerMobileno || '-',
+        CusName: this.customerName || '-',
+        SaleDetail: JSON.stringify(this.tableDataList),
+        VehicleID: this.vehicleID,
+        MeterReading: this.meterReading || '0',
+        UserID: this.global.getUserID()
       }
 
-    
+
+
+      if (this.global.SubscriptionExpired()) {
+        Swal.fire({
+          title: 'Alert!',
+          text: 'Unable To Save , Contact To Administrator!',
+          position: 'center',
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'OK',
+        });
+        return;
+      }
+      this.isValidSale = false;
+      this.app.startLoaderDark();
+      this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', postData).subscribe(
+        (Response: any) => {
+          if (Response.msg == 'Data Saved Successfully') {
+            this.tmpCash = this.cash;
+            this.tmpChange = this.change;
+            this.reset();
+            this.msg.SuccessNotify(Response.msg);
+
+            if (printFlag) {
+              this.PrintAfterSave(Response.invNo);
+            }
+
+            if (paymentType != 'Cash') {
+              $('#searchProduct').trigger('focus');
+              this.global.closeBootstrapModal('#paymentMehtod', true);
+
+            }
+
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+          this.isValidSale = true;
+          this.app.stopLoaderDark();
+
+        },
+        (error: any) => {
+          this.isValidSale = true;
+          console.log(error);
+          this.msg.WarnNotify('Unable to Save Check Connection');
+
+          this.app.stopLoaderDark();
+        }
+      )
+    }
+
+
 
   }
 
@@ -1348,7 +1323,7 @@ vehicleList:any = [];
   onCashSelected() {
     this.paymentType = 'Cash';
     this.bankCash = 0;
-    
+
     this.getTotal();
 
   }
@@ -1384,22 +1359,22 @@ vehicleList:any = [];
   }
 
 
-  openDuplicateModal(){
-    this.global.openBootstrapModal('#SavedBillModal',true);
+  openDuplicateModal() {
+    this.global.openBootstrapModal('#SavedBillModal', true);
     this.getSavedBill()
   }
 
-  openPaymentModal(){
-    this.global.openBootstrapModal('#paymentMehtod',true);
+  openPaymentModal() {
+    this.global.openBootstrapModal('#paymentMehtod', true);
     this.cash = 0;
-    this.bankCash=0;
-     this.getTotal()
+    this.bankCash = 0;
+    this.getTotal()
   }
 
-  onPaymentModalClose(){
+  onPaymentModalClose() {
     this.paymentType = 'Cash';
-    this.bankCoaID=0;
-    this.cash =0;
+    this.bankCoaID = 0;
+    this.cash = 0;
     this.bankCash = 0
     this.partyID = 0;
   }
@@ -1410,20 +1385,20 @@ vehicleList:any = [];
 
   ///////////////////////// For Adding New Vehicle Shortcut /////////////
 
-    @ViewChild('vehicle') myVehicle: any;
-    addVehicle() {
-      setTimeout(() => {
-        this.myVehicle.close()
-  
-      }, 200);
+  @ViewChild('vehicle') myVehicle: any;
+  addVehicle() {
+    setTimeout(() => {
+      this.myVehicle.close()
 
-      this.global.openBootstrapModal('#addVehicleModal',true);
- 
-    }
+    }, 200);
 
-    closeVehicleModal(){
-       this.global.closeBootstrapModal('#addVehicleModal',true);
-    }
+    this.global.openBootstrapModal('#addVehicleModal', true);
+
+  }
+
+  closeVehicleModal() {
+    this.global.closeBootstrapModal('#addVehicleModal', true);
+  }
 
 
 }

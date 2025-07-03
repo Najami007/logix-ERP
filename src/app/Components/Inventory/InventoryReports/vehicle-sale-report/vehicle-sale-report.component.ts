@@ -36,7 +36,7 @@ export class VehicleSaleReportComponent {
 
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Vehicle Sale Report');
+    this.global.setHeaderTitle('Sale History Vehicle');
     this.getVehicles();
     this.getUsers();
 

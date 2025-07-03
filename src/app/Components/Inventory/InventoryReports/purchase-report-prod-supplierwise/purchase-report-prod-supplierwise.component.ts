@@ -41,7 +41,7 @@ export class PurchaseReportProdSupplierwiseComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Purchase Report(Prod & Supplierwise)');
+    this.global.setHeaderTitle('Purchase History Prod & Supplier wise'); //// setting Header Title 
     this.getUsers();
     this.getSupplier();
     this.getProduct();
@@ -49,27 +49,6 @@ export class PurchaseReportProdSupplierwiseComponent implements OnInit {
   }
 
 
-
-  getProduct() {
-    this.global.getProducts().subscribe(
-      (Response: any) => {
-        if (Response.length > 0) {
-          this.productList = Response.map((e: any, index: any) => {
-            (e.indexNo = index + 1);
-            return e;
-          });
-
-          this.productList.sort((a: any, b: any) => b.indexNo - a.indexNo);
-        }
-      }
-    )
-  }
-
-  onProdSelected() {
-    var index = this.productList.findIndex((e: any) => e.productID == this.productID);
-    this.productList[index].indexNo = this.productList[0].indexNo + 1;
-    this.productList.sort((a: any, b: any) => b.indexNo - a.indexNo);
-  }
 
 
 
@@ -92,10 +71,73 @@ export class PurchaseReportProdSupplierwiseComponent implements OnInit {
   reportType: any;
 
 
+    //////////////////// getting Product List /////////
+  getProduct() {
+    this.global.getProducts().subscribe(
+      (Response: any) => {
+        if (Response.length > 0) {
+          this.productList = Response.map((e: any, index: any) => {
+            (e.indexNo = index + 1);
+            return e;
+          });
+
+          this.productList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+        }
+      }
+    )
+  }
+
+
+
+  onProdSelected() {
+    var index = this.productList.findIndex((e: any) => e.productID == this.productID);
+    this.productList[index].indexNo = this.productList[0].indexNo + 1;
+    this.productList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+  }
+
+
+  ///////////////////// Product Supplier Details ///////////////
+  getProductSupplierDetail(productID: any) {
+    this.supplierList = [];
+    this.app.startLoaderDark();
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSinglePuroductSuppliers_13?reqProId=' + productID).subscribe(
+      (Response: any) => {
+
+        ////////////// Empty Data Alert //////////
+        if (Response.length == 0 || Response == null) {
+          this.global.popupAlert('No Supplier Record For this Product');
+          this.app.stopLoaderDark();
+          return;
+        }
+        this.supplierList = Response;
+        this.app.stopLoaderDark();
+
+      },
+      (Error: any) => {
+        console.log(Error);
+        this.app.stopLoaderDark();
+      }
+    )
+  }
+
+
+
+  /////////////// List of Users///////////////
   getUsers() {
     this.global.getUserList().subscribe((data: any) => { this.userList = data; });
   }
 
+  
+  onUserSelected() {
+    var curUser = this.userList.find((e: any) => e.userID == this.userID);
+    this.userName = curUser.userName;
+  }
+
+
+
+
+
+  ////////////// Getitng Sepplier List ////////////
   getSupplier() {
     this.global.getSupplierList().subscribe((data: any) => {
       if (data.length > 0) {
@@ -119,26 +161,23 @@ export class PurchaseReportProdSupplierwiseComponent implements OnInit {
   }
 
 
-  onUserSelected() {
-    var curUser = this.userList.find((e: any) => e.userID == this.userID);
-    this.userName = curUser.userName;
-  }
 
 
+
+///////////////////////////////////////////////
   grandTotal = 0;
-
-
   getReport(type: any) {
 
     // alert(this.recipeCatID);
 
     if (this.partyID == 0 || this.partyID == undefined) {
-      this.msg.WarnNotify('Select Supplier')
-    } else if (this.productID == 0 || this.productID == undefined) {
-      this.msg.WarnNotify('Select Product')
+      this.msg.WarnNotify('Select Supplier');
+      return;
+    } 
+     if (this.productID == 0 || this.productID == undefined) {
+      this.msg.WarnNotify('Select Product');
+      return;
     }
-    else {
-
 
       this.app.startLoaderDark();
       this.reportType = 'Detail';
@@ -154,7 +193,7 @@ export class PurchaseReportProdSupplierwiseComponent implements OnInit {
               
             }
             this.DetailList = Response;
-          
+            /////////// generating total on basis of inv Type ///////////
             Response.forEach((e: any) => {
               if (e.invType == 'P') {
                 this.grandTotal += e.costPrice * e.quantity;
@@ -174,24 +213,18 @@ export class PurchaseReportProdSupplierwiseComponent implements OnInit {
           }
         )
 
-
-
-
-
-    }
-
-
-
-
   }
 
 
 
-
+///////////////////////////////////////////
   print() {
     this.global.printData('#PrintDiv')
   }
 
+
+
+  //////////// getting Sale Invoice Report ////////////
   billDetails(item: any) {
     this.dialog.open(SaleBillDetailComponent, {
       width: '50%',

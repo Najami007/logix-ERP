@@ -551,7 +551,7 @@ export class PurchaseComponent implements OnInit {
 
 
   searchProductByName() {
-    this.global.openBootstrapModal('#prodModal', true,true);
+    this.global.openBootstrapModal('#prodModal', true, true);
 
     setTimeout(() => {
       $('#prodName').trigger('select');
@@ -565,23 +565,23 @@ export class PurchaseComponent implements OnInit {
 
   delRow(item: any) {
     this.global.confirmAlert().subscribe((Response: any) => {
-        if (Response == true) {
+      if (Response == true) {
 
-          var index = this.tableDataList.indexOf(item);
-          this.tableDataList.splice(index, 1);
-          this.getTotal();
+        var index = this.tableDataList.indexOf(item);
+        this.tableDataList.splice(index, 1);
+        this.getTotal();
 
-          if (index == 0) {
-            $('#psearchProduct').trigger('select');
-            $('#psearchProduct').trigger('focus');
-          } else {
-            this.rowFocused = index - 1;
-            $('.qty' + this.rowFocused).trigger('select');
-            $('.qty' + this.rowFocused).trigger('focus');
-          }
-
+        if (index == 0) {
+          $('#psearchProduct').trigger('select');
+          $('#psearchProduct').trigger('focus');
+        } else {
+          this.rowFocused = index - 1;
+          $('.qty' + this.rowFocused).trigger('select');
+          $('.qty' + this.rowFocused).trigger('focus');
         }
+
       }
+    }
     )
 
 
@@ -590,11 +590,11 @@ export class PurchaseComponent implements OnInit {
 
   EmptyData() {
     this.global.confirmAlert().subscribe((Response: any) => {
-        if (Response == true) {
-          this.reset();
+      if (Response == true) {
+        this.reset();
 
-        }
-      })
+      }
+    })
   }
 
 
@@ -824,39 +824,6 @@ export class PurchaseComponent implements OnInit {
     }
 
 
-
-    // this.tableDataList.forEach((p: any) => {
-    //   p.Quantity = parseFloat(p.Quantity);
-    //   p.SalePrice = parseFloat(p.SalePrice);
-    //   p.CostPrice = parseFloat(p.CostPrice);
-
-    //   if (p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null) {
-    //     this.msg.WarnNotify('(' + p.ProductTitle + ') Cost Price is not Valid');
-    //     isValidFlag = false;
-
-    //     return;
-    //   }
-
-    //   if (p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null) {
-    //     this.msg.WarnNotify('(' + p.ProductTitle + ') Sale Price is not Valid');
-    //     isValidFlag = false;
-
-    //     return;
-    //   }
-
-    //   if (p.Quanity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '') {
-    //     this.msg.WarnNotify('(' + p.ProductTitle + ') Quantity is not Valid');
-    //     isValidFlag = false;
-    //     return;
-    //   }
-
-
-
-    // });
-
-
-
-
     if (this.tableDataList == '') {
       this.msg.WarnNotify('Atleast One Product Must Be Selected')
     } else if (this.bookerID == 0 || this.bookerID == undefined) {
@@ -977,7 +944,7 @@ export class PurchaseComponent implements OnInit {
                   }
                 )
 
-              }else{
+              } else {
                 this.validFlag = true;
               }
             }
@@ -1175,17 +1142,17 @@ export class PurchaseComponent implements OnInit {
         }
 
         this.http.post(environment.mainApi + this.global.inventoryLink + 'DeleteBill', postData).subscribe((Response: any) => {
-            if (Response.msg == 'Data Deleted Successfully') {
-              this.msg.SuccessNotify(Response.msg);
-              this.findHoldBills('hp');
-              //this.app.stopLoaderDark();
+          if (Response.msg == 'Data Deleted Successfully') {
+            this.msg.SuccessNotify(Response.msg);
+            this.findHoldBills('hp');
+            //this.app.stopLoaderDark();
 
 
-            } else {
-              this.msg.WarnNotify(Response.msg);
-              //this.app.stopLoaderDark();
-            }
-          },
+          } else {
+            this.msg.WarnNotify(Response.msg);
+            //this.app.stopLoaderDark();
+          }
+        },
           (error: any) => {
             //this.app.stopLoaderDark();
           }
@@ -1193,5 +1160,34 @@ export class PurchaseComponent implements OnInit {
       }
     })
   }
+
+
+
+  editTotal(item: any) {
+
+    Swal.fire({
+      title: "Enter Total Amount",
+      input: "text",
+      showCancelButton: true,
+      confirmButtonText: 'Save',
+      showLoaderOnConfirm: true,
+      preConfirm: (value) => {
+
+        if (!value || isNaN(value) || value <= 0) {
+          return Swal.showValidationMessage("Enter Valid Amount");
+        }
+        const index = this.tableDataList.indexOf(item);
+        this.tableDataList[index].CostPrice = value / item.Quantity;
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Price Updated",
+          timer: 500,
+        });
+      }
+    })
+  }
+
 
 }

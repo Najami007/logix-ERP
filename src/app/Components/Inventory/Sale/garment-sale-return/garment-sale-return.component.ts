@@ -552,6 +552,7 @@ export class GarmentSaleReturnComponent implements OnInit {
 
 
   getTotal() {
+     if(this.tableDataList.length == 0) return;
     this.qtyTotal = 0;
     this.subTotal = 0;
     this.netTotal = 0;

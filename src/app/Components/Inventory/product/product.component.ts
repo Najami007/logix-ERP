@@ -24,14 +24,19 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class ProductComponent implements OnInit {
 
+  /////////// crud list to handle user wise restriction //////////
   crudList: any = { c: true, r: true, u: true, d: true };
 
   dataSource!: MatTableDataSource<any>;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+
+  //////////////// Pagination Setting
+  @ViewChild(MatPaginator) paginator!: MatPaginator;  
   @ViewChild(MatSort) sort!: MatSort;
 
   AutoFillProdNameFeature = this.global.AutoFillNameFeature;
+  discFeature = this.global.discFeature;
 
   applyFilter() {
     // const filterValue = (event.target as HTMLInputElement).value;
@@ -270,10 +275,16 @@ export class ProductComponent implements OnInit {
   displayedColumns = ['Product Title', 'Product Title 2', 'Product Barcode', 'Sub Category',
     'Brand', 'UOM', 'Type', 'Cost Price', 'Average Cost', 'Sale Price', 'GST', 'Entered By', 'Active Status', 'Image', 'Edit', 'Delete']
 
+
+    ////// calculating Discount on Basis of Discount in Percentage click ////////////
+
   applyDiscount() {
     this.DiscRupee = (this.SalePrice == '' || this.SalePrice == undefined || this.SalePrice == null ? 0 : this.SalePrice * this.DiscPercent) / 100
   }
 
+
+
+  /////////////////// getting Product List global Function //////////
   getProductList() {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProduct').subscribe(
       (Response: any) => {
@@ -286,10 +297,14 @@ export class ProductComponent implements OnInit {
   }
 
 
+
+  ///////////////// Product Types //////////////////////
+
   getProductTypes() {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductType').subscribe(
       (Response: any) => {
         this.ProductTypeList = Response;
+        //////// assigning value on load/////////////
         if (Response.length > 0) { this.prodTypeID = Response[0].productTypeID; }
       },
       (Error: any) => {
@@ -301,6 +316,8 @@ export class ProductComponent implements OnInit {
 
 
 
+
+  ////////////////////// Unit of Measurement ///////////
   getUOMList() {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetUOM').subscribe(
       (Response: any) => {
@@ -316,10 +333,14 @@ export class ProductComponent implements OnInit {
 
 
 
+
+  /////////////////////////  Racks List /////////////////
+
   getRacksList() {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'getrack').subscribe(
       (Response: any) => {
         this.RacksList = Response;
+        //////// assigning value on load/////////////
         if (this.RacksList.length > 0) {
           this.rackID = this.RacksList[0].rackID;
         }
@@ -333,10 +354,13 @@ export class ProductComponent implements OnInit {
 
 
 
+  ///////////////////////// Brand List //////////////
+
   getBrandList() {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetBrand').subscribe(
       (Response: any) => {
         this.BrandList = Response;
+        //////// assigning value on load/////////////
         if (this.BrandList.length > 0) {
           this.BrandID = this.BrandList[0].brandID;
         }
@@ -348,6 +372,9 @@ export class ProductComponent implements OnInit {
     )
   }
 
+
+
+////////////////////// Sub Categories List /////////////
 
   getSubCategory() {
     this.SubCategoryID = 0;
@@ -362,12 +389,15 @@ export class ProductComponent implements OnInit {
 
 
 
+  ///////////////////// Product Supplier Details ///////////////
   getProductSupplierDetail(item: any) {
     this.ProductSupplierList = [];
     this.tmpProductName = item.productTitle;
     this.app.startLoaderDark();
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSinglePuroductSuppliers_13?reqProId=' + item.productID).subscribe(
       (Response: any) => {
+
+        ////////////// Empty Data Alert //////////
         if (Response.length == 0 || Response == null) {
           this.global.popupAlert('Data Not Found!');
           this.app.stopLoaderDark();
@@ -375,7 +405,7 @@ export class ProductComponent implements OnInit {
         }
         this.ProductSupplierList = Response;
         this.app.stopLoaderDark();
-        this.global.openBootstrapModal('#SuppDetMdl', true);
+        this.global.openBootstrapModal('#SuppDetMdl', true); ////////// using global bootstrap Modal Func
 
       },
       (Error: any) => {
@@ -385,7 +415,7 @@ export class ProductComponent implements OnInit {
   }
 
 
-
+  /////////////////////// List of Categories //////////////////
   getCategory() {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetCategory').subscribe(
       (Response: any) => {
@@ -395,35 +425,56 @@ export class ProductComponent implements OnInit {
   }
 
 
-
+/////////////////////////// Save Function Product//////////////
   save() {
 
 
     if (this.CategoryID == '' || this.CategoryID == undefined) {
-      this.msg.WarnNotify('Select Category')
-    } else if (this.SubCategoryID == '' || this.SubCategoryID == undefined) {
-      this.msg.WarnNotify('Select SubCategory')
-    } else if (this.ProductName == '' || this.ProductName == undefined) {
-      this.msg.WarnNotify('Enter Product Name')
+      this.msg.WarnNotify('Select Category');
+      return;
+    } 
+     if (this.SubCategoryID == '' || this.SubCategoryID == undefined) {
+      this.msg.WarnNotify('Select SubCategory');
+      return;
+    } 
+     if (this.ProductName == '' || this.ProductName == undefined) {
+      this.msg.WarnNotify('Enter Product Name');
+      return;
     }
-    else if (this.prodBarcodeType == 'manual' && (this.Barcode == '' || this.Barcode == undefined)) {
-      this.msg.WarnNotify('Enter Barcode')
-    } else if (this.BrandID == '' || this.BrandID == undefined) {
-      this.msg.WarnNotify('Select Brand')
-    } else if (this.rackID == '' || this.rackID == undefined) {
-      this.msg.WarnNotify('Select Rack ')
-    } else if (this.UOMID == '' || this.UOMID == undefined) {
-      this.msg.WarnNotify('Select Unit of Measurement')
-    } else if (this.CostPrice == '' || this.CostPrice <= 0 || this.CostPrice == undefined) {
-      this.msg.WarnNotify('Enter Cost Price')
-    } else if (this.SalePrice == '' || this.SalePrice <= 0 || this.SalePrice == undefined) {
-      this.msg.WarnNotify('Enter Sale Price')
-    } else if (this.barcodeType == undefined) {
-      this.msg.WarnNotify('Select Barcode Type')
-    } else if (this.SalePrice < this.CostPrice) {
-      this.msg.WarnNotify('Sale Price Is less Than Cost Price')
+    
+     if (this.prodBarcodeType == 'manual' && (this.Barcode == '' || this.Barcode == undefined)) {
+      this.msg.WarnNotify('Enter Barcode');
+      return;
+    } 
+     if (this.BrandID == '' || this.BrandID == undefined) {
+      this.msg.WarnNotify('Select Brand');
+      return;
+    } 
+     if (this.rackID == '' || this.rackID == undefined) {
+      this.msg.WarnNotify('Select Rack ');
+      return;
+    } 
+     if (this.UOMID == '' || this.UOMID == undefined) {
+      this.msg.WarnNotify('Select Unit of Measurement');
+      return;
+    } 
+     if (this.CostPrice == '' || this.CostPrice <= 0 || this.CostPrice == undefined) {
+      this.msg.WarnNotify('Enter Cost Price');
+      return;
+    } 
+     if (this.SalePrice == '' || this.SalePrice <= 0 || this.SalePrice == undefined) {
+      this.msg.WarnNotify('Enter Sale Price');
+      return;
+    } 
+     if (this.barcodeType == undefined) {
+      this.msg.WarnNotify('Select Barcode Type');
+      return;
+    } 
+     if (this.SalePrice < this.CostPrice) {
+      this.msg.WarnNotify('Sale Price Is less Than Cost Price');
+      return;
     }
-    else {
+
 
 
       if (this.prodBarcodeType == 'auto' && (this.Barcode == '' || this.Barcode == undefined || this.Barcode == null)) {
@@ -462,11 +513,13 @@ export class ProductComponent implements OnInit {
       } else if (this.btnType == 'Update') {
         this.update(postData);
       }
-    }
+    
 
   }
 
 
+
+  //////////////////////////////// Insert Function ////////////////
   insert(postData: any) {
     this.app.startLoaderDark();
     this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertProduct', postData).subscribe(
@@ -489,6 +542,8 @@ export class ProductComponent implements OnInit {
     )
   }
 
+
+  ////////////////////////// Update Function ///////////////
   openFlag = false;
   update(postData: any) {
 
@@ -531,6 +586,9 @@ export class ProductComponent implements OnInit {
     }
   }
 
+
+
+  //////////////////////////// Reset Fields ////////////////
   reset(type: any) {
     this.ProductID = 0;
     this.Barcode = '';
@@ -570,6 +628,8 @@ export class ProductComponent implements OnInit {
   }
 
 
+
+  /////////////////// Product Edit //////////////////
   edit(row: any) {
     this.SubCategoryID = 0;
     this.ProductID = row.productID;
@@ -599,7 +659,7 @@ export class ProductComponent implements OnInit {
     this.prodTypeID = row.productTypeID;
     this.tabIndex = 0;
     this.btnType = 'Update';
-
+    ////////////// Product Img Global Fucntion ///////////
     this.global.getProdImage(row.productID).subscribe(
       (Response: any) => {
         this.productImg = Response[0].productImage;
@@ -610,6 +670,11 @@ export class ProductComponent implements OnInit {
 
   }
 
+
+
+
+
+  ////////////////////////// Copy Product Details ///////////////
   copyProd(row: any) {
     this.SubCategoryID = 0;
     this.CategoryID = row.categoryID;
@@ -647,6 +712,10 @@ export class ProductComponent implements OnInit {
 
   }
 
+
+
+
+  /////////////////////// Delete Product Func /////////////
   deleteProd(row: any) {
 
     this.global.openPinCode().subscribe(pin => {
@@ -684,6 +753,10 @@ export class ProductComponent implements OnInit {
 
   }
 
+
+
+
+  ////////////////Change Product Status ////////////////
   activeProduct(row: any) {
 
     this.global.openPinCode().subscribe(pin => {
@@ -721,11 +794,14 @@ export class ProductComponent implements OnInit {
 
   }
 
+
+
+  /////////////// to Add New Brand Short cut ///////////////
   @ViewChild('brand') mybrand: any;
   addBrand() {
+     /////// close List on Add Icon Click /////////
     setTimeout(() => {
       this.mybrand.close()
-
     }, 200);
     this.dialogue.open(AddBrandComponent, {
       width: '40%'
@@ -736,11 +812,14 @@ export class ProductComponent implements OnInit {
     })
   }
 
+
+
+  //////////////// to Add New Rack Short Cut ///////////////
   @ViewChild('rack') myrack: any;
   addRack() {
+     /////// close List on Add Icon Click /////////
     setTimeout(() => {
       this.myrack.close()
-
     }, 200);
     this.dialogue.open(AddRackComponent, {
       width: '40%'
@@ -751,8 +830,13 @@ export class ProductComponent implements OnInit {
     })
   }
 
+
+
+
+  //////////////// to Add New Unit of Measurement Shortcut ///////////////
   @ViewChild('uom') myUom: any;
   addUOM() {
+     /////// close List on Add Icon Click /////////
     setTimeout(() => {
       this.myUom.close()
 
@@ -766,11 +850,13 @@ export class ProductComponent implements OnInit {
     })
   }
 
-  @ViewChild('category') myCategory: any;
 
+
+  //////////////// to Add New Category Short cut //////////////////
+  @ViewChild('category') myCategory: any;
   addCategory() {
     // alert()
-
+ /////// close List on Add Icon Click /////////
     setTimeout(() => {
       this.myCategory.close()
 
@@ -786,12 +872,15 @@ export class ProductComponent implements OnInit {
 
   }
 
-  @ViewChild('subCategory') mysubcat: any;
 
+
+
+  //////////////// adding New Subcategory Short cut ////////////////
+  @ViewChild('subCategory') mysubcat: any;
   addSubCategory() {
+    /////// close List on Add Icon Click /////////
     setTimeout(() => {
       this.mysubcat.close()
-
     }, 200);
     this.dialogue.open(AddProdSubCategoryComponent, {
       width: '40%'
@@ -805,10 +894,8 @@ export class ProductComponent implements OnInit {
 
 
 
-
+  ///////////////// Imaging Converting Base 64 Function //////////
   onImgSelected(event: any) {
-
-
     var imgSize = event.target.files[0].size;
     var isConvert: number = parseFloat((imgSize / 1048576).toFixed(2));
 
@@ -847,8 +934,10 @@ export class ProductComponent implements OnInit {
   }
 
 
-  salePercent = '';
 
+
+  ////////////// Price Generator Function //////////////
+  salePercent = '';
   generatePrice(e: any) {
 
     if (e.keyCode == 13 || e == 'generate') {

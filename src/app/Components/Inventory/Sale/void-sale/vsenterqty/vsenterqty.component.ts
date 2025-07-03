@@ -21,6 +21,11 @@ export class VsenterqtyComponent implements OnInit {
   ){}
   ngOnInit(): void {
     this.tempQty = this.data;
+
+   setTimeout(() => {
+     $('#qty').trigger('select');
+    $('#qty').trigger('focus');
+   }, 200);
   }
 
 

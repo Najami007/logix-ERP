@@ -172,7 +172,7 @@ export class VoidSaleComponent implements OnInit {
   bookerID = 0;
   qtyTotal: any = 0;
   offerDiscount: any = 0;
-    PosFee = this.global.POSFee;
+  PosFee = this.global.POSFee;
 
   tempProdData: any = [];
 
@@ -294,43 +294,42 @@ export class VoidSaleComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleExistingBill?reqUserID=' + this.global.getUserID()).subscribe(
       (Response: any) => {
         this.tableDataList = [];
-        if (Response != '') {
+        if (Response.length > 0) {
           this.invBillNo = Response[0].invBillNo;
-        }
 
-        Response.forEach((e: any) => {
-          this.tableDataList.push({
-            productID: e.productID,
-            productTitle: e.productTitle,
-            barcode: e.barcode,
-            productImage: e.productImage,
-            quantity: e.quantity,
-            wohCP: e.costPrice,
-            costPrice: e.costPrice,
-            avgCostPrice: e.avgCostPrice,
-            salePrice: e.salePrice,
-            ovhPercent: 0,
-            ovhAmount: 0,
-            expiryDate: this.global.dateFormater(new Date(), '-'),
-            batchNo: '-',
-            batchStatus: '-',
-            uomID: e.uomID,
-            packing: 1,
-            discInP: e.discInP,
-            discInR: e.discInR,
-            aq: e.aq,
-            autoInvDetID: e.autoInvDetID,
-            gstAmount: e.gstAmount,
-            gstValue: e.gstValue,
-            gst: e.gst
+          Response.forEach((e: any) => {
+            this.tableDataList.push({
+              productID: e.productID,
+              productTitle: e.productTitle,
+              barcode: e.barcode,
+              productImage: e.productImage,
+              quantity: e.quantity,
+              wohCP: e.costPrice,
+              costPrice: e.costPrice,
+              avgCostPrice: e.avgCostPrice,
+              salePrice: e.salePrice,
+              ovhPercent: 0,
+              ovhAmount: 0,
+              expiryDate: this.global.dateFormater(new Date(), '-'),
+              batchNo: '-',
+              batchStatus: '-',
+              uomID: e.uomID,
+              packing: 1,
+              discInP: e.discInP,
+              discInR: e.discInR,
+              aq: e.aq,
+              autoInvDetID: e.autoInvDetID,
+              gstAmount: e.gstAmount,
+              gstValue: e.gstValue,
+              gst:  this.gstFeature ? e.gst : 0,
 
-          })
-        });
+            })
+          });
 
-        if (Response != '') {
           this.productImage = Response[0].productImage;
+
+          this.getTotal();
         }
-        this.getTotal();
 
       }
     )
@@ -695,7 +694,7 @@ export class VoidSaleComponent implements OnInit {
 
   //////////////////////////////// Sale Insert Function //////////////////////////////////////////////////
   isValidSale = true;
-  save(paymentType: any,SendToFbr:any) {
+  save(paymentType: any, SendToFbr: any) {
 
     if (this.tableDataList == '') {
       this.msg.WarnNotify('No Product Seleted');
@@ -781,10 +780,16 @@ export class VoidSaleComponent implements OnInit {
             this.tmpCash = this.cash;
             this.tmpChange = this.change;
             this.PrintAfterSave(Response.invNo);
-            this.getCurrentBill();
             this.reset();
-            $('#vssearchProduct').trigger('focus');  /// setting focus to prodsearch field
-            this.global.closeBootstrapModal('#paymentMehtod', true);     //// hiding payment Mehtod Modal window
+            this.getCurrentBill();
+
+            if (paymentType != 'Cash') {
+              $('#vssearchProduct').trigger('focus');  /// setting focus to prodsearch field
+              this.global.closeBootstrapModal('#paymentMehtod', true);     //// hiding payment Mehtod Modal window
+
+            }
+
+
           } else {
             this.msg.WarnNotify(Response.msg);
           }
@@ -1008,7 +1013,11 @@ export class VoidSaleComponent implements OnInit {
     }).subscribe(
       (Response: any) => {
         if (Response.msg == 'Data Saved Successfully') {
+          if(this.tableDataList.length == 1){
+            this.reset();
+          }
           this.getCurrentBill();
+
           $('#vssearchProduct').trigger('focus');
           $('.billArea').scrollTop(0);
         } else {

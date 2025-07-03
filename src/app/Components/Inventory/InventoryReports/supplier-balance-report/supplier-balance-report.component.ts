@@ -32,7 +32,7 @@ export class SupplierBalanceReportComponent  {
 
 
   ngOnInit(): void {
-    this.global.setHeaderTitle('Supplier Balance Report');
+    this.global.setHeaderTitle('Supplier Balances');
     this.getParty();
   }
 
@@ -41,15 +41,23 @@ export class SupplierBalanceReportComponent  {
   TableData:any = [];
 
   getParty(){
+    this.app.startLoaderDark();
     this.http.get(environment.mainApi+this.global.inventoryLink+'GetSuppliersBalanceRpt').subscribe(
-      {
-        next:value =>{
-          this.TableData = value;
+      (Response: any) => {
+        this.TableData = [];
+        if (Response.length == 0 || Response == null) {
+          this.global.popupAlert('Data Not Found!');
+          this.app.stopLoaderDark();
+          return;
 
-         },
-        error: error=>{
-          this.msg.WarnNotify('Error Occured While Loading Data')  ;      
-        }         
+        }
+        this.TableData = Response;
+         this.app.stopLoaderDark();
+      },
+      (Error:any)=>{
+        console.log(Error);
+         this.app.stopLoaderDark();
+
       })
   }
 

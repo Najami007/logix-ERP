@@ -20,12 +20,9 @@
   }
 
   .whiteText {
-    /* -webkit-text-fill-color: white !important; */
+    -webkit-text-fill-color: white !important;
     /* Forces white text */
-    /* color: white !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important; */
-    
+    color: white !important;    
   }
  
 }
@@ -178,8 +175,8 @@
 .table-logix2>thead>tr>th {
   padding: 10px;
   border: 1px solid black !important;
-  background-color: rgb(6, 6, 54);
-  color: white !important;
+  /* background-color: rgb(6, 6, 54); */
+  color: black !important;
 
 }
 

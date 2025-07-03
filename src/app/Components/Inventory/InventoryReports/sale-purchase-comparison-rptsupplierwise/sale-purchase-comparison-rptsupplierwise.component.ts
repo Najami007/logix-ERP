@@ -46,7 +46,7 @@ export class SalePurchaseComparisonRptsupplierwiseComponent implements OnInit {
     )
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Sale Purchase Comparison');
+    this.global.setHeaderTitle('Sale Purchase Comparison Supplier wise');
     this.getUsers();
     this.getSupplier();
 

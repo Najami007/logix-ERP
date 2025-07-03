@@ -129,16 +129,16 @@
                         (change)="global.avoidMinus($event)">
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="col-md-3 matSmall">
+                <mat-form-field appearance="outline" class="col-md-3 matSmall" >
                     <mat-label>Discount Percentage</mat-label>
-                    <mat-select [(ngModel)]="DiscPercent" name="billDiscount" (selectionChange)="applyDiscount()">
+                    <mat-select [(ngModel)]="DiscPercent" name="billDiscount" [disabled]="!discFeature" (selectionChange)="applyDiscount()">
                         <mat-option *ngFor="let item of discountList" [value]="item.value">{{item.value}}%</mat-option>
                     </mat-select>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-md-3  matSmall">
                     <mat-label>Discount Rupees</mat-label>
-                    <input matInput disabled="true" type="number" [(ngModel)]="DiscRupee"
+                    <input matInput disabled="true" type="number" [disabled]="!discFeature" [(ngModel)]="DiscRupee"
                         (change)="global.avoidMinus($event)">
                 </mat-form-field>
 
@@ -290,7 +290,7 @@
             <mat-form-field appearance="outline" class="col-md-1 matSmall">
                 <mat-label>Disc</mat-label>
 
-                <mat-select [(ngModel)]="discFilterID" (selectionChange)="filterProductList('disc')">
+                <mat-select [disabled]="!discFeature" [(ngModel)]="discFilterID" (selectionChange)="filterProductList('disc')">
 
                     <mat-option *ngFor="let item of DiscFilterList | filter:bfs.value"
                         [value]="item.val">{{item.title}}</mat-option>
@@ -313,7 +313,7 @@
 
                         <th class="cursorPointer" (click)="sortProds('costPrice')">Cost Price</th>
                         <th class="cursorPointer" (click)="sortProds('salePrice')">Sale Price</th>
-                        <th class="cursorPointer" (click)="sortProds('discPercentage')">Disc %</th>
+                        <th class="cursorPointer" (click)="sortProds('discPercentage')" *ngIf="discFeature">Disc %</th>
                         <th>GST</th>
                         <th>Entered By</th>
                         <th class="hide-in-print">Img</th>
@@ -339,7 +339,7 @@
 
                             <td>{{item.costPrice |number:'1.0-1'}}</td>
                             <td>{{item.salePrice |number:'1.0-0'}}</td>
-                            <td>{{item.discPercentage}}%</td>
+                            <td  *ngIf="discFeature">{{item.discPercentage}}%</td>
                             <td>{{item.gst}}%</td>
                             <td>{{item.entryUser}}</td>
                             <td class="cursorPointer hide-in-print">

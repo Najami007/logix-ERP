@@ -24,8 +24,8 @@
 
         <div class="col-lg-6 " *ngIf="crudList.r">
 
-            <button class=" btn-rpt-success col-lg-3 me-1" (click)="getReport()">Date Wise Rpt</button>
-            <button class=" btn-rpt-success col-lg-3 me-1" (click)="getReport2()">Active Day Rpt</button>
+            <button class=" btn-rpt-success col-lg-3 me-1" (click)="getReport('date')">Date Wise Rpt</button>
+            <button class=" btn-rpt-success col-lg-3 me-1" (click)="getReport('day')">Active Day Rpt</button>
             <button class=" btn-rpt-primary col-lg-4" (click)="print()">Print</button>
         </div>
 
@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <div class="row justify-content-center p-3">
+        <div class="row justify-content-center">
 
             <!----------Detail Card Start -------------->
             <div class="p-2 card" style="width: 98%;">
@@ -103,7 +103,7 @@
 
             <!----------Userwise Card Start -------------->
 
-            <div *ngFor="let item of ClosingDetail" class="me-1 mt-2 card p-2" style="width: 49%; ">
+            <div *ngFor="let item of ClosingDetail" class="me-1 mt-2 card p-2" style="max-width: 49%;" >
                 <div class="border border-dark text-center fw-bold">
                     <p class="mt-2" style="font-size: 15px;">{{item.userName}}</p>
                 </div>

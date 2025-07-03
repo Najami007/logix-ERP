@@ -124,7 +124,7 @@
 
             </thead>
             <tbody>
-                <tr *ngFor="let item of SaleDetailList index as index">
+                <tr *ngFor="let item of SaleDetailList index as index" [ngClass]="item.invType  == 'SR' ? 'bg-danger whiteText text-white':''">
                     <td class="text-center">{{index + 1}}</td>
                     <td class="text-center cursorPointer " (click)="billDetails(item)"><span
                             class="text-primary border-bottom">{{item.invBillNo}}</span></td>

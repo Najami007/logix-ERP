@@ -41,7 +41,7 @@ export class SaleReportProdCustomerwiseComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Purchase Report(Prod & Customerwise)');
+    this.global.setHeaderTitle('Sale History Prod & Customer wise');
     this.getUsers();
     this.getCustomer();
     this.getProduct()

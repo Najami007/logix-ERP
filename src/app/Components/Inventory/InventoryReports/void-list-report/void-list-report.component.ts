@@ -36,7 +36,7 @@ export class VoidListReportComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Void Report (Userwise)');
+    this.global.setHeaderTitle('Void History By User');
     this.getUsers();
 
   }

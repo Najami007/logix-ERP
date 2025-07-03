@@ -41,7 +41,7 @@ export class SaleReportCustomerwiseComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Sale Report (Customerwise)');
+    this.global.setHeaderTitle('Sale History Customer wise');
     this.getUsers();
     this.getParty();
     setTimeout(() => {
