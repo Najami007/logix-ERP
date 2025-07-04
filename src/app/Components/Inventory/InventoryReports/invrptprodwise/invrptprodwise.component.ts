@@ -78,7 +78,6 @@ export class InvrptprodwiseComponent implements OnInit {
 getReportTypes(){
   this.http.get(environment.mainApi+this.global.inventoryLink+'GetInvoiceTypes_15').subscribe(
     (Response:any)=>{
-      console.log(Response);
       this.reportsList = Response;
     }
   )
