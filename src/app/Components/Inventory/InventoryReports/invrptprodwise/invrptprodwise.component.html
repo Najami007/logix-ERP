@@ -63,7 +63,7 @@
                 <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
                         [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                 <mat-option *ngFor="let item of reportsList | filter:rptSearch.value"
-                    [value]="item.val">{{item.title}}</mat-option>
+                    [value]="item.invType">{{item.invTypeTitle}}</mat-option>
             </mat-select>
         </mat-form-field>
 
@@ -122,7 +122,7 @@
                     <th>Date</th>
                     <th>Title</th>
                     <th>Location</th>
-                    <th *ngIf="rptType == 's' || rptType == 'sr' || rptType == 'p' || rptType == 'pr'">Party</th>
+                    <th *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'P' || rptType == 'PR'">Party</th>
                     <th *ngIf="rptType == 'I' || rptType == 'R'">Type</th>
                     <th>Qty</th>
                     <th>Cost</th>
@@ -144,7 +144,7 @@
                     <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
                     <td>{{item.productTitle}} <b *ngIf="item.barcode !== null">({{item.barcode}})</b></td>
                     <td>{{item.locationTitle }}</td>
-                    <td *ngIf="rptType == 's' || rptType == 'sr' || rptType == 'p' || rptType == 'pr'">
+                    <td *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'P' || rptType == 'PR'">
                         {{item.partyName}}</td>
                     <td *ngIf="rptType == 'I' || rptType == 'R'">{{item.issueType }}</td>
                     <td class="text-center">{{item.quantity |number:"1.0-3"}}</td>

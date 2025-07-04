@@ -43,6 +43,7 @@ export class InvrptprodwiseComponent implements OnInit {
   ngOnInit(): void {
     this.global.setHeaderTitle('Product In Out History');
     this.getUsers();
+    this.getReportTypes();
 
   }
 
@@ -71,23 +72,20 @@ export class InvrptprodwiseComponent implements OnInit {
   }
 
 
-  reportsList:any = [
-    {val:'s',title:'Sale Report'},
-    {val:'sr',title:'Sale Return Report'},
-    {val:'p',title:'Purchase Report'},
-    {val:'pr',title:'Purchase Return Report'},
-    {val:'I',title:'Issuance Report'},
-    {val:'R',title:'Stock Receive'},
-    {val:'AI',title:'Adjustment In Report'},
-    {val:'Ao',title:'Adjustment Out Report'},
-    {val:'Dl',title:'Damage Loss Report'},
-    {val:'E',title:'Expiry Report'},
-    {val:'OS',title:'Opening Stock Report'},
-  
-]
+  reportsList:any = []
 
 
-  rptType:any = 's';
+getReportTypes(){
+  this.http.get(environment.mainApi+this.global.inventoryLink+'GetInvoiceTypes_15').subscribe(
+    (Response:any)=>{
+      console.log(Response);
+      this.reportsList = Response;
+    }
+  )
+}
+
+
+  rptType:any = 'S';
 
 
 

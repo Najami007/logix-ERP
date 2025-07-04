@@ -222,10 +222,11 @@
 
 
 
-                <div class="p-5 ">
-                    <button #toggleBtn class="btnsave me-5 w-25" *ngIf="crudList.c" accesskey="s"
+                <div class="p-5 d-flex flex-wrap justify-content gap-4">
+                    <button #toggleBtn class="btnsave col-md-3" *ngIf="crudList.c" accesskey="s"
                         (click)="save() ">{{btnType}}</button>
-                    <button class="btnreset w-25" (click)="reset('btn')">Reset</button>
+                    <button class="btnreset col-md-3" (click)="reset('btn')">Reset</button>
+                    <button class="btnload col-md-2" (click)="ngOnInit()">Load</button>
                     <mat-checkbox [(ngModel)]="autoEmpty">Auto Empty</mat-checkbox>
                 </div>
 

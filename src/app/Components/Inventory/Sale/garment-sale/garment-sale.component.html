@@ -312,7 +312,7 @@
 
                     <mat-form-field appearance="outline" *ngIf="disableDate" class="w-100 matSmall">
                         <mat-label>Invoice Date</mat-label>
-                        <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
+                        <input [(ngModel)]="InvDate" readonly="true" matInput type="text" name="voucherDate"
                             [matDatepicker]="voucherDate">
                         <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
                         <mat-datepicker #voucherDate></mat-datepicker>

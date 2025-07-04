@@ -54,7 +54,7 @@ export const environment = {
   // mainApi: 'http://192.168.10.180:8081/',  /////// Lasani Traders Fateh Jang local System
 
   // mainApi: 'http://159.69.174.21:2019/',    /////// Ejaz And Sons Rawalpindi
-  //mainApi: 'http://localhost:8060/',           /////////// BAke INN Fateh Jang
+  mainApi: 'http://localhost:8060/',           /////////// BAke INN Fateh Jang
   //mainApi: 'http://192.168.10.100:8080/',   /////////// BAke INN Server Live
   //mainApi: 'http://159.69.174.21:2023/',  ////////// live Server Bake Inn Bakers Fateh Jang
   //mainApi: 'http://192.168.18.100:8080/',    /////////// The Bucket Client
@@ -93,7 +93,7 @@ export const environment = {
   //mainApi: 'http://159.69.174.21:2047/', /////// Property Management FMIS Dubai
 
 
-   mainApi: 'http://localhost:8060/', ////////Fazil sons mandi bahaudin
+  // mainApi: 'http://localhost:8060/', ////////Fazil sons mandi bahaudin
   //mainApi: 'http://192.168.100.100:8060/',           /////////// Fazil Sons live
   // mainApi: 'http://159.69.174.21:2026/',           /////////// Fazil Sons live Server
 

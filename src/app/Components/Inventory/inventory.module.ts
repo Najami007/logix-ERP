@@ -109,6 +109,7 @@ import { AuditInvoicePrintComponent } from './InvAdjustment/inv-audit/audit-invo
 import { VehicleSaleReportComponent } from './InventoryReports/vehicle-sale-report/vehicle-sale-report.component';
 import { CompanyModule } from '../Company/company.module';
 import { ReorderReportComponent } from './InventoryReports/reorder-report/reorder-report.component';
+import { ProductEditBulkComponent } from './product-edit-bulk/product-edit-bulk.component';
 
 export const MY_DATE_FORMAT  = {
   parse: {
@@ -142,6 +143,7 @@ export const inventoryRoutes: Route[] = [
   {path: 'prod',component: ProductComponent,data: { title: 'Product' },canActivate: [AuthGuard]},
   {path: 'pckr',component: PriceCheckerComponent,data: { title: 'Price Checker' },canActivate: [AuthGuard]},
    {path: 'suppay',component: PaymentComponent, data: { title: 'Payment' }, canActivate: [AuthGuard]},
+      {path: 'prodeditbulk',component: ProductEditBulkComponent, data: { title: 'Product Edit Bulk' }, canActivate: [AuthGuard]},
   
   //////// Sale Pages////////////////////
 
@@ -289,7 +291,8 @@ export const inventoryRoutes: Route[] = [
     DayClosingRptComponent,
     AuditInvoicePrintComponent,
     VehicleSaleReportComponent,
-    ReorderReportComponent,   
+    ReorderReportComponent,
+    ProductEditBulkComponent,   
     
   
   

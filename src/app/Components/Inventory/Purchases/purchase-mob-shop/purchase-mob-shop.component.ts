@@ -24,8 +24,8 @@ import { PurchaseBillPrintComponent } from '../purchase-bill-print/purchase-bill
 })
 export class PurchaseMobShopComponent implements OnInit {
 
-  @ViewChild(PurchaseBillPrintComponent) billPrint:any;
-    
+  @ViewChild(PurchaseBillPrintComponent) billPrint: any;
+
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
   constructor(
@@ -62,7 +62,7 @@ export class PurchaseMobShopComponent implements OnInit {
   }
 
 
-  
+
   getProducts() {
     this.global.getProducts().subscribe(
       (data: any) => { this.productList = data; });
@@ -316,17 +316,17 @@ export class PurchaseMobShopComponent implements OnInit {
     this.app.stopLoaderDark();
     this.productName = '';
     this.getTotal();
-    this.global.closeBootstrapModal('#prodModal',true);
+    this.global.closeBootstrapModal('#prodModal', true);
     setTimeout(() => {
       $('#psearchProduct').trigger('focus');
     }, 500);
 
   }
 
- 
+
 
   searchProductByName() {
-    this.global.openBootstrapModal('#prodModal', true,true);
+    this.global.openBootstrapModal('#prodModal', true, true);
 
     setTimeout(() => {
       $('#prodName').trigger('select');
@@ -491,7 +491,7 @@ export class PurchaseMobShopComponent implements OnInit {
     }
 
   }
- 
+
 
   handleUpdown(item: any, e: any, cls: string, index: any) {
     const container = $(".table-logix");
@@ -509,42 +509,42 @@ export class PurchaseMobShopComponent implements OnInit {
       e.preventDefault();
     }
 
-    
+
 
     /////move down
     if (e.keyCode === 40) {
       if (this.tableDataList.length > 1) {
-          this.rowFocused = Math.min(this.rowFocused + 1, this.tableDataList.length - 1);
-          const clsName = cls + this.rowFocused;
-          this.global.scrollToRow(clsName, container);
-          e.preventDefault();
-            $(clsName).trigger('select');
-            $(clsName).trigger('focus');
-         
+        this.rowFocused = Math.min(this.rowFocused + 1, this.tableDataList.length - 1);
+        const clsName = cls + this.rowFocused;
+        this.global.scrollToRow(clsName, container);
+        e.preventDefault();
+        $(clsName).trigger('select');
+        $(clsName).trigger('focus');
+
       }
-  }
+    }
 
 
     //Move up
 
-      if (e.keyCode === 38) {
-        if (this.rowFocused > 0) {
-          
-            this.rowFocused -= 1;
-            const clsName = cls + this.rowFocused;
-            this.global.scrollToRow(clsName, container);
-            e.preventDefault();
-            $(clsName).trigger('select');
-            $(clsName).trigger('focus');
+    if (e.keyCode === 38) {
+      if (this.rowFocused > 0) {
 
-        } else {
-            e.preventDefault();
-            $(".searchProduct").trigger('select');
-            $(".searchProduct").trigger('focus');
-        }
+        this.rowFocused -= 1;
+        const clsName = cls + this.rowFocused;
+        this.global.scrollToRow(clsName, container);
+        e.preventDefault();
+        $(clsName).trigger('select');
+        $(clsName).trigger('focus');
+
+      } else {
+        e.preventDefault();
+        $(".searchProduct").trigger('select');
+        $(".searchProduct").trigger('focus');
+      }
     }
 
- 
+
 
     ////removeing row
     if (e.keyCode == 46) {
@@ -579,37 +579,26 @@ export class PurchaseMobShopComponent implements OnInit {
 
 
 
-
+  validFlag = true;
   SaveBill(type: any) {
-    var isValidFlag = true;
-    this.tableDataList.forEach((p: any) => {
-      p.Quantity = parseFloat(p.Quantity);
-      p.SalePrice = parseFloat(p.SalePrice);
-      p.CostPrice = parseFloat(p.CostPrice);
 
-      if (p.CostPrice > p.SalePrice || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null) {
-        this.msg.WarnNotify('(' + p.ProductTitle + ') Cost Price is not Valid');
-        isValidFlag = false;
+    var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.CostPrice) > Number(p.SalePrice) || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null);
+    var inValidSaleProdList = this.tableDataList.filter((p: any) => p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null);
+    var inValidQtyProdList = this.tableDataList.filter((p: any) => p.Quantity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '')
+    console.log(inValidCostProdList);
+    if (inValidCostProdList.length > 0) {
+      this.msg.WarnNotify('(' + inValidCostProdList[0].ProductTitle + ') Cost Price greater than Sale Price');
+      return;
+    }
+    if (inValidSaleProdList.length > 0) {
+      this.msg.WarnNotify('(' + inValidSaleProdList[0].ProductTitle + ') Sale Price is not Valid');
+      return;
+    }
+    if (inValidQtyProdList.length > 0) {
+      this.msg.WarnNotify('(' + inValidQtyProdList[0].ProductTitle + ') Quantity is not Valid');
+      return;
+    }
 
-        return;
-      }
-
-      if (p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null) {
-        this.msg.WarnNotify('(' + p.ProductTitle + ') Sale Price is not Valid');
-        isValidFlag = false;
-
-        return;
-      }
-
-      if (p.Quanity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '') {
-        this.msg.WarnNotify('(' + p.ProductTitle + ') Quantity is not Valid');
-        isValidFlag = false;
-        return;
-      }
-
-
-
-    });
 
 
 
@@ -628,7 +617,8 @@ export class PurchaseMobShopComponent implements OnInit {
 
 
 
-      if (isValidFlag == true) {
+      if (this.validFlag == true) {
+        this.validFlag = false;
         if (type == 'hold') {
           if (this.holdBtnType == 'Hold') {
             this.app.startLoaderDark();
@@ -661,9 +651,11 @@ export class PurchaseMobShopComponent implements OnInit {
                   this.msg.WarnNotify(Response.msg);
                   this.app.stopLoaderDark();
                 }
+                this.validFlag = true;
               },
               (Error: any) => {
                 this.app.stopLoaderDark();
+                this.validFlag = true;
               }
             )
           } else if (this.holdBtnType == 'ReHold') {
@@ -700,9 +692,11 @@ export class PurchaseMobShopComponent implements OnInit {
                       this.msg.WarnNotify(Response.msg);
                       this.app.stopLoaderDark();
                     }
+                    this.validFlag = true;
                   },
                   (Error: any) => {
                     this.app.stopLoaderDark();
+                    this.validFlag = true;
                   }
                 )
               }
@@ -747,9 +741,11 @@ export class PurchaseMobShopComponent implements OnInit {
                       this.msg.WarnNotify(Response.msg);
                       this.app.stopLoaderDark();
                     }
+                    this.validFlag = true;
                   },
                   (Error: any) => {
                     this.app.stopLoaderDark();
+                    this.validFlag = true;
                   }
                 )
 

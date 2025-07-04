@@ -1,0 +1,197 @@
+<div class="container-fluid body ">
+
+    <div class="mt-2">
+        <div class="row">
+
+            <mat-form-field appearance="outline" class="col-lg-2 matSmall">
+                <mat-label>Update Type</mat-label>
+
+                <mat-select [(ngModel)]="reqType" name="catType">
+                    <mat-option value="OTHER">Prices</mat-option>
+                    <mat-option value="CAT">Categories</mat-option>
+
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-lg-2 matSmall">
+                <mat-label>Type</mat-label>
+
+                <mat-select [(ngModel)]="rptType" name="catType">
+                    <mat-option value="full">All</mat-option>
+                    <mat-option value="cw">Categorywise</mat-option>
+                    <mat-option value="scw">Sub Categorywise</mat-option>
+                    <mat-option value="bw">Brandwise</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="col-lg-2 matSmall" *ngIf="rptType == 'cw' || rptType == 'scw'">
+                <mat-label>Category</mat-label>
+
+                <mat-select [(ngModel)]="CategoryID" #category (selectionChange)="getSubCategory()" name="pCategory">
+                    <mat-option><ngx-mat-select-search #catsearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of CategoriesList | filter:catsearch.value"
+                        [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
+
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="col-lg-2 matSmall" *ngIf="rptType == 'scw'">
+                <mat-label>Sub Category</mat-label>
+
+                <mat-select [(ngModel)]="SubCategoryID" #subCategory name="pSubCategory">
+                    <mat-option><ngx-mat-select-search #subcatsearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of SubCategoriesList| filter:subcatsearch.value "
+                        [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-lg-2 matSmall" *ngIf="rptType == 'bw'">
+                <mat-label>Brand</mat-label>
+                <mat-select [(ngModel)]="BrandID" #brand>
+                    <mat-option><ngx-mat-select-search #brandSearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of BrandList | filter:brandSearch.value"
+                        [value]="item.brandID">{{item.brandTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <div class="col-lg-4 pb-2" *ngIf="crudList.r">
+                <button class="btn-rpt-success col-lg-4  me-1" (click)="getProductList()">Get Report</button>
+                <button class="btn-rpt-success col-lg-4  me-1" (click)="updateProdList()">Update Product</button>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="prodTable" class="pb-5">
+        <table class="table table-hover" style="font-size: 12px;">
+            <thead>
+                <th><mat-checkbox [(ngModel)]="checkAll" (change)="onCheckAll($event)"></mat-checkbox> S#</th>
+                <th class="cursorPointer" (click)="sortProds('productTitle')">Product Title</th>
+                <th>Product Title 2</th>
+                <th class="cursorPointer" (click)="sortProds('barcode')">Product Barcode</th>
+                <th>Sub Category</th>
+                <th>Brand</th>
+
+                <th class="cursorPointer" (click)="sortProds('costPrice')">Cost Price</th>
+                <th class="cursorPointer" (click)="sortProds('salePrice')">Sale Price</th>
+                <th class="cursorPointer" (click)="sortProds('discPercentage')" *ngIf="discFeature">Disc %</th>
+                <th class="cursorPointer" *ngIf="discFeature">Disc Rs</th>
+                <th>GST</th>
+                <th>Entered By</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of productList index as index">
+                    <td><mat-checkbox [(ngModel)]="item.isChecked"></mat-checkbox> {{index +1}}</td>
+                    <td> {{item.productTitle}}</td>
+                    <td> {{item.productTitleOtherLang}}</td>
+                    <td>{{item.barcode}}</td>
+                    <td>{{item.subCategoryTitle}}</td>
+                    <td>
+                        <span>{{item.brandTitle}}</span>
+                        <!-- <span *ngIf="item.isChecked">
+                            <mat-form-field class="matSmall" appearance="fill">
+                                <mat-select [(ngModel)]="item.brandID">
+                                    <mat-option><ngx-mat-select-search #prodbrandSearch [placeholderLabel]="'Search...'"
+                                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                    <mat-option *ngFor="let item of BrandList |filter:prodbrandSearch.value"
+                                        [value]="item.brandID">{{item.brandTitle}}</mat-option>
+                                </mat-select>
+                            </mat-form-field></span> -->
+
+                    </td>
+
+                    <td>{{item.costPrice |number:'1.0-1'}}</td>
+                    <td>
+                        <span *ngIf="reqType == 'CAT'">{{item.salePrice |number:'1.0-1'}}</span>
+                        <div *ngIf="reqType == 'OTHER'">
+                            <span *ngIf="!item.isChecked">{{item.salePrice |number:'1.0-1'}}</span>
+                            <span *ngIf="item.isChecked"><input [(ngModel)]="item.salePrice"
+                                    class="w-100 input" /></span>
+                        </div>
+                    </td>
+                    <td *ngIf="discFeature">
+                        <span *ngIf="reqType == 'CAT'">{{item.discPercentage |number:'1.0-1'}}</span>
+                        <div *ngIf="reqType == 'OTHER'">
+                            <span *ngIf="!item.isChecked">{{item.discPercentage |number:'1.0-1'}}</span>
+                            <span *ngIf="item.isChecked">
+                                <select [(ngModel)]="item.discPercentage" class="w-100 input"
+                                    (ngModelChange)="onDiscountChange(item)">
+                                    <option *ngFor="let item of discountList" [value]="item.value">{{item.value}}%
+                                    </option>
+                                </select></span>
+                        </div>
+                    </td>
+                    <td *ngIf="discFeature">{{item.discRupees |number:'1.0-1'}}</td>
+                    <td>
+                        <span *ngIf="reqType == 'CAT'">{{item.gst |number:'1.0-1'}}</span>
+                        <div *ngIf="reqType == 'OTHER'">
+                            <span *ngIf="!item.isChecked">{{item.gst |number:'1.0-1'}}%</span>
+                            <span *ngIf="item.isChecked"><input  (keydown)="global.handleNumKeys($event)" [(ngModel)]="item.gst" class="w-100 input" /></span>
+                        </div>
+                    </td>
+                    <td>{{item.entryUser}}</td>
+
+
+                </tr>
+            </tbody>
+
+        </table>
+        <br />
+    </div>
+
+
+    <div class="w-100" style="position: fixed;bottom: 4%;background-color: azure;" *ngIf="reqType == 'CAT'">
+
+
+        
+      <div class="row w-100">
+          <div class="col-lg-3">
+            <mat-checkbox [(ngModel)]="updateCategoryFlag">Update Category</mat-checkbox>
+            <mat-form-field appearance="outline" class="w-100 matSmall">
+            <mat-label>Category</mat-label>
+
+            <mat-select [(ngModel)]="updateCategoryID" #updateCategorySearch (selectionChange)="getSubCategory()"
+                name="pCategory">
+                <mat-option><ngx-mat-select-search #catsearch [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of CategoriesList | filter:updateCategorySearch.value"
+                    [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
+
+            </mat-select>
+        </mat-form-field>
+          </div>
+        <div class="col-lg-3">
+             <mat-checkbox [(ngModel)]="updateSubcategoryFlag">Update Subcategory</mat-checkbox>
+            <mat-form-field appearance="outline" class="w-100 matSmall">
+            <mat-label>Sub Category</mat-label>
+
+            <mat-select [(ngModel)]="updateSubCategoryID" #subCategory name="pSubCategory">
+                <mat-option><ngx-mat-select-search #updateSubCategorySearch [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of SubCategoriesList| filter:updateSubCategorySearch.value "
+                    [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        </div>
+
+      <div class="col-lg-3">
+         <mat-checkbox [(ngModel)]="updateBrandFlag">Update Brand</mat-checkbox>
+          <mat-form-field appearance="outline" class="w-100 matSmall">
+            <mat-label>Brand</mat-label>
+            <mat-select [(ngModel)]="UpdateBrandID" #brand>
+                <mat-option><ngx-mat-select-search #UpdateBrancSearch [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of BrandList | filter:UpdateBrancSearch.value"
+                    [value]="item.brandID">{{item.brandTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+      </div>
+
+      </div>
+    </div>
+
+
+</div>
