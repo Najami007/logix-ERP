@@ -26,7 +26,7 @@
             <mat-form-field appearance="outline" class="col-lg-2 matSmall" *ngIf="rptType == 'cw' || rptType == 'scw'">
                 <mat-label>Category</mat-label>
 
-                <mat-select [(ngModel)]="CategoryID" #category (selectionChange)="getSubCategory()" name="pCategory">
+                <mat-select [(ngModel)]="CategoryID" #category (selectionChange)="getSubCategory('filter')" name="pCategory">
                     <mat-option><ngx-mat-select-search #catsearch [placeholderLabel]="'Search...'"
                             [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
                     <mat-option *ngFor="let item of CategoriesList | filter:catsearch.value"
@@ -77,9 +77,19 @@
 
                 <th class="cursorPointer" (click)="sortProds('costPrice')">Cost Price</th>
                 <th class="cursorPointer" (click)="sortProds('salePrice')">Sale Price</th>
-                <th class="cursorPointer" (click)="sortProds('discPercentage')" *ngIf="discFeature">Disc %</th>
+                <th class="cursorPointer" (click)="sortProds('discPercentage')" *ngIf="discFeature">
+                        <div class="d-flex flex-column">
+                        <span><input [(ngModel)]="discountAll" class="input" (keydown)="onGstAllUpdate($event,'disc')" /></span>
+                          <span>Disc %</span>
+                    </div>
+                </th>
                 <th class="cursorPointer" *ngIf="discFeature">Disc Rs</th>
-                <th>GST</th>
+                <th>
+                    <div class="d-flex flex-column">
+                        <span><input [(ngModel)]="gstAll" class="input" (keydown)="onGstAllUpdate($event,'gst')" /></span>
+                          <span>GST</span>
+                    </div>
+                </th>
                 <th>Entered By</th>
             </thead>
             <tbody>
@@ -153,7 +163,7 @@
             <mat-form-field appearance="outline" class="w-100 matSmall">
             <mat-label>Category</mat-label>
 
-            <mat-select [(ngModel)]="updateCategoryID" #updateCategorySearch (selectionChange)="getSubCategory()"
+            <mat-select [(ngModel)]="updateCategoryID" #updateCategorySearch (selectionChange)="getSubCategory('update')"
                 name="pCategory">
                 <mat-option><ngx-mat-select-search #catsearch [placeholderLabel]="'Search...'"
                         [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
@@ -163,15 +173,15 @@
             </mat-select>
         </mat-form-field>
           </div>
-        <div class="col-lg-3">
-             <mat-checkbox [(ngModel)]="updateSubcategoryFlag">Update Subcategory</mat-checkbox>
+        <div class="col-lg-3 ">
+             <mat-checkbox [(ngModel)]="updateSubcategoryFlag" [disabled]="true"></mat-checkbox>
             <mat-form-field appearance="outline" class="w-100 matSmall">
             <mat-label>Sub Category</mat-label>
 
             <mat-select [(ngModel)]="updateSubCategoryID" #subCategory name="pSubCategory">
                 <mat-option><ngx-mat-select-search #updateSubCategorySearch [placeholderLabel]="'Search...'"
                         [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                <mat-option *ngFor="let item of SubCategoriesList| filter:updateSubCategorySearch.value "
+                <mat-option *ngFor="let item of updateSubCategoryList| filter:updateSubCategorySearch.value "
                     [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
             </mat-select>
         </mat-form-field>

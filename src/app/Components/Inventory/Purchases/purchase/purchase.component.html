@@ -70,10 +70,15 @@
 
 
                 <div class="col-lg-3 ms-1">
-                    
-                    <button *ngIf="crudList.c" style="height: 50px;" class=" col-lg-5 btnhold me-1" matTooltip="Hold Bill" accesskey="h" (click)="SaveBill('hold')"><span *ngIf="holdBtnType == 'Hold'"><u>H</u>old</span><span *ngIf="holdBtnType == 'ReHold'">Re<u>H</u>old</span> </button>
-                    
-                    <button class=" col-lg-5 btnreset me-1" accesskey="r" (click)="global.openBootstrapModal('#holdModal',true)" style="height: 50px;" matTooltip="Retrieve Bill"><u>R</u>etrieve</button>
+
+                    <button *ngIf="crudList.c" style="height: 50px;" class=" col-lg-5 btnhold me-1"
+                        matTooltip="Hold Bill" accesskey="h" (click)="SaveBill('hold')"><span
+                            *ngIf="holdBtnType == 'Hold'"><u>H</u>old</span><span
+                            *ngIf="holdBtnType == 'ReHold'">Re<u>H</u>old</span> </button>
+
+                    <button class=" col-lg-5 btnreset me-1" accesskey="r"
+                        (click)="global.openBootstrapModal('#holdModal',true)" style="height: 50px;"
+                        matTooltip="Retrieve Bill"><u>R</u>etrieve</button>
 
 
                 </div>
@@ -93,9 +98,15 @@
 
     </div>
 
+    <div class="d-flex justify-content-end pe-2">
+        <select [(ngModel)]="discType">
+            <option [value]="'bd'">Before Disc</option>
+            <option [value]="'ad'">After Disc</option>
+        </select>
+    </div>
     <div class="row w-100">
 
-        <div class="col-lg-10 pt-1 billArea">
+        <div class="col-lg-12 pt-1 billArea">
             <!-- ////////////////////////// Table Row////////////////// -->
 
             <div class="p-1"
@@ -109,6 +120,12 @@
                             <th>Product Name</th>
                             <th>Expiry</th>
                             <th>Quantity</th>
+                            <th>Cost Price</th>
+                            <th>Disc %</th>
+                            <th>Disc Rs</th>
+                            <th>GST</th>
+                            <th>Adv Tax</th>
+
                             <th>Cost Price</th>
                             <th>Sale Price</th>
                             <th>Cost Total</th>
@@ -129,11 +146,48 @@
                                     style="height: 25px; width: 150px;"></td>
 
 
+
+
+
                             <td class="text-center"><input type="text" [(ngModel)]="item.Quantity" min="0"
                                     draggable="false" dropzone="false"
-                                    (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);"
-                                    (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index"
-                                    (change)="getTotal();" [accessKey]="index +1 " class="qty{{index}} text-center" style="width: 80px;"></td>
+                                    (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);onFieldsUpdate('qty',item)"
+                                    (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('qty',item)"
+                                    (change)="getTotal();" [accessKey]="index +1 " class="qty{{index}} text-center"
+                                    style="width: 80px;"></td>
+
+                            <td class="text-center"><input type="text" [(ngModel)]="item.tempCostPrice" min="0"
+                                    draggable="false"
+                                    (keydown)="changeValue(item);this.handleUpdown(item,$event,'.tcp',index);getTotal();onFieldsUpdate('tcp',item)"
+                                    (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('tcp',item)"
+                                    (change)="getTotal()" class="tcp{{index}} text-center" style="width: 80px;"></td>
+
+
+
+                            <td class="text-center"><input type="text" [(ngModel)]="item.discInP" min="0"
+                                    draggable="false" dropzone="false"
+                                    (keydown)="this.handleUpdown(item,$event,'.discP',index);getTotal();changeValue(item);onFieldsUpdate('dp',item)"
+                                    (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('dp',item)"
+                                    (change)="getTotal();" class="discP{{index}} text-center" style="width: 80px;"></td>
+
+
+                            <td class="text-center"><input type="text" [(ngModel)]="item.discInR" min="0"
+                                    draggable="false" dropzone="false"
+                                    (keydown)="this.handleUpdown(item,$event,'.discR',index);getTotal();changeValue(item);onFieldsUpdate('dR',item);"
+                                    (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('dR',item)"
+                                    (change)="getTotal();" class="discR{{index}} text-center" style="width: 80px;"></td>
+
+                            <td class="text-center"><input type="text" [(ngModel)]="item.gst" min="0" draggable="false"
+                                    dropzone="false"
+                                    (keydown)="this.handleUpdown(item,$event,'.gst',index);getTotal();changeValue(item);onFieldsUpdate('gst',item);"
+                                    (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('gst',item);"
+                                    (change)="getTotal();" class="gst{{index}} text-center" style="width: 80px;"></td>
+
+                            <td class="text-center"><input type="text" [(ngModel)]="item.et" min="0" draggable="false"
+                                    dropzone="false"
+                                    (keydown)="this.handleUpdown(item,$event,'.et',index);getTotal();changeValue(item);onFieldsUpdate('et',item);"
+                                    (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('et',item);"
+                                    (change)="getTotal();" class="et{{index}} text-center" style="width: 80px;"></td>
 
 
                             <td class="text-center"><input type="text" [(ngModel)]="item.CostPrice" min="0"
@@ -150,7 +204,8 @@
                             </td>
 
 
-                            <td class="text-end" (click)="editTotal(item)">{{item.CostPrice * item.Quantity |number}}</td>
+                            <td class="text-end" (click)="editTotal(item)">{{item.CostPrice * item.Quantity |number}}
+                            </td>
                             <td class="text-center">{{item.AQ |number:'1.0-3'}}</td>
                             <td class="text-danger text-center cursorPointer"><mat-icon
                                     (click)="delRow(item)">delete</mat-icon>
@@ -182,7 +237,7 @@
 
 
 
-        <mat-card class="col-lg-2 h-100 p-2 totalArea"
+        <mat-card class="col-lg-2 h-100 p-2 totalArea hide"
             style="background-color: rgb(9, 2, 69);min-height: 70vh !important; top: 2%;">
 
             <div class="d-flex pb-2 flex-column border-bottom">
@@ -229,7 +284,7 @@
 
 
 
-    <!----------------Modal Window For Products lisr ---------->
+<!----------------Modal Window For Products lisr ---------->
 
 
 
@@ -237,10 +292,10 @@
     aria-labelledby="paymentMehtodLabel">
     <div class="modal-dialog modal-dialog-scrollable modal-xl  modal-dialog-centered ">
         <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-        
+
             <div class="modal-body">
-            <app-product-modal [productList]="productList" (reloadProdEmitter)="getProducts()"
-                (addProductEmitter)="holdDataFunction($event)" ></app-product-modal>
+                <app-product-modal [productList]="productList" (reloadProdEmitter)="getProducts()"
+                    (addProductEmitter)="holdDataFunction($event)"></app-product-modal>
 
             </div>
 
@@ -253,7 +308,7 @@
     </div>
 </div>
 
-    <!---------------------------------------------------------->
+<!---------------------------------------------------------->
 
 
 
@@ -263,7 +318,7 @@
 <div class="modal" id="holdModal" tabindex="-1" data-bs-backdrop="true" aria-labelledby="holdModalLabel">
     <div class="modal-dialog modal-dialog-scrollable mt-5  modal-xl">
         <div class="modal-content">
-            
+
             <div class="modal-header">
                 <h2 class="modal-title" id="holdModalLabel">Bill Details</h2>
                 <button type="button" class="btn-close" id="clsMdl" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -327,7 +382,8 @@
                                     (click)="printBill(item)">print</mat-icon></td>
                             <td class="text-center cursorPointer" *ngIf=" item.invType == 'HP' && crudList.u">
                                 <mat-icon data-bs-dismiss="modal" (click)="retriveBill(item)">edit</mat-icon>
-                                <mat-icon class="text-danger cursorPointer" matTooltip="Delete" (click)="deleteProd(item)">delete</mat-icon>
+                                <mat-icon class="text-danger cursorPointer" matTooltip="Delete"
+                                    (click)="deleteProd(item)">delete</mat-icon>
                             </td>
                             <td class="text-center cursorPointer" *ngIf=" item.invType == 'P'">
                                 <mat-icon (click)="openDocumentModal(item)">note_add</mat-icon>

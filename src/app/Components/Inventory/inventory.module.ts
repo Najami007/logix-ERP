@@ -110,6 +110,9 @@ import { VehicleSaleReportComponent } from './InventoryReports/vehicle-sale-repo
 import { CompanyModule } from '../Company/company.module';
 import { ReorderReportComponent } from './InventoryReports/reorder-report/reorder-report.component';
 import { ProductEditBulkComponent } from './product-edit-bulk/product-edit-bulk.component';
+import { CustomerIssuanceComponent } from './CusotmerIssuance/customer-issuance/customer-issuance.component';
+import { CustomerIssueReturnComponent } from './CusotmerIssuance/customer-issue-return/customer-issue-return.component';
+import { ProductBarcodesComponent } from './product/product-barcodes/product-barcodes.component';
 
 export const MY_DATE_FORMAT  = {
   parse: {
@@ -158,6 +161,10 @@ export const inventoryRoutes: Route[] = [
   {path: 'mobsl',component: SaleMobComponent,data: { title: 'Mob Sale' },canActivate: [AuthGuard]},
   {path: 'mobslrtn',component: SaleReturnMobComponent,data: { title: 'Mob Sale Return' },canActivate: [AuthGuard]},
   {path: 'ffsl',component: FastFoodSaleComponent,data: { title: 'Fast Food Sale' },canActivate: [AuthGuard]},
+
+
+   {path: 'customerissue',component: CustomerIssuanceComponent,data: { title: 'Customer Issue' },canActivate: [AuthGuard]},
+      {path: 'customerissuertn',component: CustomerIssueReturnComponent,data: { title: 'Customer Issue Return' },canActivate: [AuthGuard]},
 
     //////// Purchase Pages////////////////////
 
@@ -292,7 +299,10 @@ export const inventoryRoutes: Route[] = [
     AuditInvoicePrintComponent,
     VehicleSaleReportComponent,
     ReorderReportComponent,
-    ProductEditBulkComponent,   
+    ProductEditBulkComponent,
+    CustomerIssuanceComponent,
+    CustomerIssueReturnComponent,
+    ProductBarcodesComponent,   
     
   
   

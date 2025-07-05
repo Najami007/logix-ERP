@@ -7,7 +7,7 @@
             <div class="row">
 
                 <mat-form-field appearance="outline" class="col-md-6 matSmall">
-                    <mat-label>Category</mat-label>
+                    <mat-label>Category *</mat-label>
 
                     <mat-select [(ngModel)]="CategoryID" #category (selectionChange)="getSubCategory()"
                         name="pCategory">
@@ -20,7 +20,7 @@
                     <mat-icon class="cursorPointer" (click)="addCategory()" matSuffix>add</mat-icon>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="col-md-6 matSmall">
-                    <mat-label>Sub Category</mat-label>
+                    <mat-label>Sub Category *</mat-label>
 
                     <mat-select [(ngModel)]="SubCategoryID" #subCategory name="pSubCategory">
                         <mat-option><ngx-mat-select-search #subcatsearch [placeholderLabel]="'Search...'"
@@ -37,7 +37,7 @@
 
 
                 <mat-form-field appearance="outline" class="col-md-6 matSmall">
-                    <mat-label>Product Title</mat-label>
+                    <mat-label>Product Title *</mat-label>
                     <input matInput id="title2" autocomplete="off" [(ngModel)]="ProductName" accesskey="n" type="text">
 
                 </mat-form-field>
@@ -55,7 +55,7 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-md-2  matSmall">
-                    <mat-label>Barcode Type</mat-label>
+                    <mat-label>Barcode Type *</mat-label>
                     <mat-select [(ngModel)]="prodBarcodeType" name="pType">
                         <mat-option [value]="'auto'">Auto</mat-option>
                         <mat-option [value]="'manual'">Manual</mat-option>
@@ -63,13 +63,13 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-md-4 matSmall">
-                    <mat-label>Product Barcode</mat-label>
+                    <mat-label>Product Barcode *</mat-label>
                     <input matInput type="text" [(ngModel)]="Barcode" [disabled]="prodBarcodeType == 'auto'">
                 </mat-form-field>
 
 
                 <mat-form-field appearance="outline" class="col-md-3 matSmall">
-                    <mat-label>Brand</mat-label>
+                    <mat-label>Brand *</mat-label>
                     <mat-select [(ngModel)]="BrandID" #brand>
                         <mat-option><ngx-mat-select-search #brandSearch [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
@@ -83,7 +83,7 @@
 
 
                 <mat-form-field appearance="outline" class="col-md-3 matSmall">
-                    <mat-label>Rack</mat-label>
+                    <mat-label>Rack *</mat-label>
                     <mat-select [(ngModel)]="rackID" #rack>
                         <mat-option><ngx-mat-select-search #rackSearch [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
@@ -95,7 +95,7 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-md-3 matSmall">
-                    <mat-label>UOM</mat-label>
+                    <mat-label>UOM *</mat-label>
                     <mat-select [(ngModel)]="UOMID" #uom>
                         <mat-option><ngx-mat-select-search #uomSearch [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
@@ -106,7 +106,7 @@
 
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="col-md-3 matSmall">
-                    <mat-label>Product Type</mat-label>
+                    <mat-label>Product Type *</mat-label>
                     <mat-select [(ngModel)]="prodTypeID">
                         <mat-option><ngx-mat-select-search #pType [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
@@ -116,7 +116,7 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="col-md-3 matSmall">
-                    <mat-label>Cost Price</mat-label>
+                    <mat-label>Cost Price *</mat-label>
                     <!-- <input matInput type="number" [(ngModel)]="CostPrice" (change)="global.avoidMinus($event)"> -->
                     <input matInput type="number" [(ngModel)]="CostPrice" (change)="global.avoidMinus($event)"
                         [disabled]="btnType == 'Update'">
@@ -124,7 +124,7 @@
 
 
                 <mat-form-field appearance="outline" class="col-md-3 matSmall">
-                    <mat-label>Sale Price</mat-label>
+                    <mat-label>Sale Price *</mat-label>
                     <input matInput (keyup)="applyDiscount()" type="number" [(ngModel)]="SalePrice"
                         (change)="global.avoidMinus($event)">
                 </mat-form-field>
@@ -318,6 +318,7 @@
                         <th>GST</th>
                         <th>Entered By</th>
                         <th class="hide-in-print">Img</th>
+                        <th>UOM</th>
                         <!-- <th class="hide-in-print" *ngIf="crudList.u">Edit</th>
                         <th class="hide-in-print">Active Status</th>
 
@@ -348,6 +349,7 @@
                                     (click)="this.global.showProductImage('',item.productID)">image</mat-icon>
                                 <mat-icon *ngIf="item.productImage == '-'">cancel_presentation</mat-icon>
                             </td>
+                            <td><mat-icon  class="cursorPointer hide-in-print" (click)="openBarcodeModal(item)">add_to_photos</mat-icon></td>
                             <td class="hide-in-print text-center">
 
                                 <mat-icon class="text-success cursorPointer" matTooltip="Edit" *ngIf="crudList.u"
@@ -456,3 +458,5 @@
         </div>
     </div>
 </div>
+
+

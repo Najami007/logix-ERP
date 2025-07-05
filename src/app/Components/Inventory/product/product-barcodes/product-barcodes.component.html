@@ -1,0 +1,80 @@
+<div class="p-3" style="height: 64vh;overflow-y: auto;overflow-x: hidden !important;">
+
+    <h3 class="fw-bold text-uppercase">{{productDetail.productTitle}}  (Rs. {{productDetail.salePrice}})</h3>
+
+    <div class="row">
+        <mat-form-field appearance="outline" class="col-md-2 matSmall">
+            <mat-label>Flavour Title *</mat-label>
+            <input matInput id="flavourTitle" autocomplete="off" [(ngModel)]="flavourTitle" accesskey="false"
+                type="text">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-2 matSmall">
+            <mat-label>Barcode *</mat-label>
+            <input matInput id="title2" autocomplete="off" [(ngModel)]="barcode" accesskey="false" type="text">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-2 matSmall">
+            <mat-label>quantity *</mat-label>
+            <input matInput id="quantity" (keydown)="global.handleNumKeys" autocomplete="off" [(ngModel)]="quantity"
+                accesskey="false" type="text">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-2 matSmall">
+            <mat-label>Disc %</mat-label>
+            <input matInput id="discInP"  (keydown)="onDiscChange('perc')" (keyup)="onDiscChange('perc')"  autocomplete="off" [(ngModel)]="discInP" accesskey="false" type="text">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-2 matSmall">
+            <mat-label>Disc Amount</mat-label>
+            <input matInput id="discInR" autocomplete="off" (keydown)="onDiscChange('amount')" (keyup)="onDiscChange('amount')" [(ngModel)]="discInR" accesskey="false" type="text">
+        </mat-form-field>
+
+        <div class="col-md-2">
+            <button #toggleBtn class="btnsave w-100"  accesskey="s" (click)="save() ">{{btnType}}</button>
+
+        </div>
+
+
+
+
+    </div>
+    <hr>
+
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Barcode</th>
+                    <th>Title</th>
+                    <th>Quantity</th>
+                    <th>Disc %</th>
+                    <th>Disc Rs</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of productDiscList index as index">
+                    <td>{{index +1 }}</td>
+                    <td>{{item.barcode }}</td>
+                    <td>{{item.flavourTitle}}</td>
+                    <td>{{item.quantity }}</td>
+                    <td>{{item.discInP }}</td>
+                    <td>{{item.discInR }}</td>
+                    <td><mat-icon class="text-danger cursorPointer" (click)="deleteProductDisc(item)">delete</mat-icon>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+</div>
+
+<div class="text-end p-3 bg-mf">
+    <button class="btnclose" (click)="closeDialog()">Close</button>
+</div>

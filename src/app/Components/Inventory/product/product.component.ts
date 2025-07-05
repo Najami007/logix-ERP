@@ -16,6 +16,7 @@ import { AddProdSubCategoryComponent } from '../Configurations/product-sub-categ
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ProductBarcodesComponent } from './product-barcodes/product-barcodes.component';
 
 @Component({
   selector: 'app-product',
@@ -28,6 +29,7 @@ export class ProductComponent implements OnInit {
   crudList: any = { c: true, r: true, u: true, d: true };
 
   dataSource!: MatTableDataSource<any>;
+
 
 
 
@@ -943,6 +945,23 @@ export class ProductComponent implements OnInit {
     if (e.keyCode == 13 || e == 'generate') {
       this.SalePrice = parseFloat(this.CostPrice) + (parseFloat(this.CostPrice) * parseFloat(this.salePercent) / 100);
     }
+  }
+
+
+
+  //////////////////////// Add multiple Barcodes Model///////////
+
+  openBarcodeModal(item:any){
+    this.dialogue.open(ProductBarcodesComponent,{
+      width:'80%',
+      data:item
+    }).afterClosed().subscribe(
+    val =>{
+
+    }
+    )
+
+
   }
 
 

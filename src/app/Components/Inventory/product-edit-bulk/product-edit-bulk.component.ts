@@ -59,15 +59,15 @@ export class ProductEditBulkComponent implements OnInit {
   /////////////////// getting Product List global Function //////////
   getProductList() {
 
-    if(this.rptType == 'cw' && this.CategoryID == 0){
+    if (this.rptType == 'cw' && this.CategoryID == 0) {
       this.msg.WarnNotify('Select Category');
       return
     }
-    if(this.rptType == 'scw' && (this.CategoryID == 0 || this.SubCategoryID == 0)){
-      this.msg.WarnNotify('Select Category');
+    if (this.rptType == 'scw' && (this.CategoryID == 0 || this.SubCategoryID == 0)) {
+      this.msg.WarnNotify('Category Or Sub Category Not Selected');
       return
     }
-    if(this.rptType == 'bw' && this.BrandID == 0){
+    if (this.rptType == 'bw' && this.BrandID == 0) {
       this.msg.WarnNotify('Select Category');
       return
     }
@@ -113,13 +113,21 @@ export class ProductEditBulkComponent implements OnInit {
 
   CategoriesList: any = [];
   SubCategoriesList: any = [];
+  updateSubCategoryList:any = [];
   SubCategoryID = 0;
   CategoryID = 0;
-  getSubCategory() {
-    this.SubCategoryID = 0;
+  getSubCategory(type:any) {
+    
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSubCategory').subscribe(
       (Response: any) => {
+       if(type == 'filter'){
+        this.SubCategoryID = 0;
         this.SubCategoriesList = Response.filter((e: any) => e.categoryID == this.CategoryID);
+       } 
+       if(type == 'update'){
+        this.updateSubCategoryID = 0;
+        this.updateSubCategoryList = Response.filter((e: any) => e.categoryID == this.updateCategoryID);
+       }
       }
     )
   }
@@ -167,6 +175,14 @@ export class ProductEditBulkComponent implements OnInit {
 
   updateProdList() {
 
+
+    var invalidProdList = this.productList.filter((e:any)=> Number(e.salePrice < e.costPrice));
+
+    if(invalidProdList.length > 0){
+      this.msg.WarnNotify(`${invalidProdList[0].productTitle} Sale Price Is not Valid` );
+      return;
+    }
+
     ///////// extracting data that is checked //////////////
     var ProductList = this.productList.filter((e: any) => e.isChecked == true);
     if (ProductList.length == 0) {
@@ -175,12 +191,21 @@ export class ProductEditBulkComponent implements OnInit {
     }
 
     /////////// verifying atleast one update check box checked ///////
-    if(this.reqType == 'CAT' && !this.updateCategoryFlag && !this.updateSubcategoryFlag && !this.updateBrandFlag){
+    if (this.reqType == 'CAT' && !this.updateCategoryFlag && !this.updateSubcategoryFlag && !this.updateBrandFlag) {
       this.msg.WarnNotify('No type Checked');
       return
     }
 
-    return;
+    if(this.updateCategoryFlag && (this.updateCategoryID == 0 || this.updateSubCategoryID == 0)){
+      this.msg.WarnNotify('Category or Sub Category Not Selected');
+      return;
+    }
+
+    
+    if(this.updateBrandFlag && this.UpdateBrandID == 0 ){
+      this.msg.WarnNotify('Brand Not Selected');
+      return;
+    }
 
     var postData = {
       reqTypy: this.reqType,
@@ -188,12 +213,12 @@ export class ProductEditBulkComponent implements OnInit {
       PinCode: '',
       UserID: this.global.getUserID(),
       CategoryID: this.updateCategoryFlag ? this.updateCategoryID : 0,       /////////// conditional Inserting ID
-      SubCategoryID:this.updateSubcategoryFlag ?  this.updateSubCategoryID : 0,
-      BrandID: this.updateBrandFlag ?  this.UpdateBrandID : 0
+      SubCategoryID: this.updateCategoryFlag  ? this.updateSubCategoryID : 0,
+      BrandID: this.updateBrandFlag ? this.UpdateBrandID : 0
 
     }
 
-    
+
     //////////// opeinging pin code Modal
     this.global.openPinCode().subscribe(
       pin => {
@@ -211,6 +236,7 @@ export class ProductEditBulkComponent implements OnInit {
                 this.msg.WarnNotify(Response.msg);
               }
               this.app.stopLoaderDark();
+              this.checkAll = false;
 
             },
             (Error: any) => {
@@ -233,6 +259,26 @@ export class ProductEditBulkComponent implements OnInit {
   updateCategoryFlag = false;
   updateSubcategoryFlag = false;
   updateBrandFlag = false;
+
+
+  gstAll: any = 0;
+  discountAll: any = 0;
+
+  onGstAllUpdate(e: any, type: any) {
+
+    if (e.key == 'Enter') {
+      this.productList.forEach((e: any) => {
+        if (e.isChecked) {
+          if (type == 'gst') e.gst = this.gstAll;
+          if (type == 'disc') {
+            e.discPercentage = this.discountAll;
+            e.discRupees = (e.salePrice * e.discPercentage) / 100
+          }
+        }
+      });
+    }
+
+  }
 
 
 }

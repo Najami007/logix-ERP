@@ -129,6 +129,37 @@ export class PurchaseComponent implements OnInit {
   BookerList: any = [];
 
 
+  discType: any = 'bd';
+
+
+  onFieldsUpdate(type: any, item: any) {
+
+    if (this.discType == 'ad') {
+      var totalCost = item.tempCostPrice * item.Quantity;
+      var costWithDiscP = item.tempCostPrice - ((item.tempCostPrice * item.discInP) / 100);
+      var costWithDiscR = costWithDiscP -  (item.discInR / item.Quantity);
+      var costWithGst = costWithDiscR + ( (costWithDiscR * item.gst) / 100);
+      var costWithEt = costWithGst + ((item.tempCostPrice *  item.et) /100);
+      // console.log(costWithDiscP,costWithDiscR,costWithGst,costWithEt)
+      item.CostPrice = costWithEt;
+    }
+      if (this.discType == 'bd') {
+
+      var totalCost = item.tempCostPrice * item.Quantity;
+    var gstAmount =  ( (item.tempCostPrice * item.gst) / 100);
+      var etAmount =  ((item.tempCostPrice *  item.et) /100);
+      var discP =   (((item.tempCostPrice - gstAmount) * item.discInP) / 100);
+      var discR =  (item.discInR / item.Quantity);
+
+        console.log(gstAmount,discP);
+      // console.log(costWithDiscP,costWithDiscR,costWithGst,costWithEt)
+
+      item.CostPrice =  (Number(item.tempCostPrice) - Number(gstAmount) - (Number(discP) + Number(discR))) + Number(etAmount) + Number(gstAmount)   // + Number(etAmount )  - Number(discR);
+    }
+
+  }
+
+
 
   changeOrder() {
     this.sortType = this.sortType == 'desc' ? 'asc' : 'desc';
@@ -263,7 +294,7 @@ export class PurchaseComponent implements OnInit {
     );
 
     var index = this.tableDataList.indexOf(condition);
-
+    console.log(data);
     //// push the data using index
     if (condition == undefined) {
 
@@ -277,6 +308,7 @@ export class PurchaseComponent implements OnInit {
         productImage: data.productImage,
         Quantity: qty,
         wohCP: data.costPrice,
+        tempCostPrice: data.costPrice,
         CostPrice: data.costPrice,
         SalePrice: data.salePrice,
         ovhPercent: 0,
@@ -289,6 +321,9 @@ export class PurchaseComponent implements OnInit {
         discInP: 0,
         discInR: 0,
         AQ: data.aq,
+        gst: data.gst,
+        et: data.et,
+
 
       });
 
@@ -806,7 +841,7 @@ export class PurchaseComponent implements OnInit {
 
 
 
-    var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.CostPrice) > Number( p.SalePrice) || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null);
+    var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.CostPrice) > Number(p.SalePrice) || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null);
     var inValidSaleProdList = this.tableDataList.filter((p: any) => p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null);
     var inValidQtyProdList = this.tableDataList.filter((p: any) => p.Quantity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '')
     console.log(inValidCostProdList);

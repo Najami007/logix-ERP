@@ -302,10 +302,11 @@ export class GarmentSaleReturnComponent implements OnInit {
   pushProdData(data: any, qty: any) {
 
     /////// check already present in the table or not
+    const targetBarcode = data.barcode2 || data.barcode;
     var condition = this.tableDataList.find(
-      (x: any) => x.productID == data.productID
-    );
+      (x: any) => x.productID == data.productID && x.barcode == targetBarcode
 
+    );
     var index = this.tableDataList.indexOf(condition);
 
     //// push the data using index
@@ -317,9 +318,9 @@ export class GarmentSaleReturnComponent implements OnInit {
             : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
         productID: data.productID,
         productTitle: data.productTitle,
-        barcode: data.barcode,
+        barcode: data.barcode2 ? data.barcode2 : data.barcode,
         productImage: data.productImage,
-        quantity: qty,
+        quantity: qty > 0 ? qty * data.quantity : data.quantity,
         wohCP: data.costPrice,
         avgCostPrice: data.avgCostPrice,
         costPrice: data.costPrice,
@@ -333,8 +334,8 @@ export class GarmentSaleReturnComponent implements OnInit {
         gst: this.gstFeature ? data.gst : 0,
         et: data.et,
         packing: 1,
-        discInP: this.discFeature ? data.discPercentage : 0,
-        discInR: this.discFeature ? data.discRupees : 0,
+        discInP: this.discFeature ? data.barcode2 ? data.discInP : data.discPercentage : 0,
+        discInR: this.discFeature ? data.barcode2 ? data.discInR : data.discRupees : 0,
         aq: data.aq,
         total: (data.salePrice * qty) - (data.discRupees * qty),
         productDetail: '',
@@ -353,7 +354,10 @@ export class GarmentSaleReturnComponent implements OnInit {
       if (this.PBarcode.split("/")[1] != undefined) {
         qty = this.PBarcode.split("/")[1] / this.tableDataList[index].salePrice;
       }
-      this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + qty;
+
+      //////////////// inserting quantity by multiplying packing qty to qty after 
+      var newQty: any = Number(qty) > 0 ? Number(qty) * data.quantity : data.quantity;
+      this.tableDataList[index].quantity = Number(this.tableDataList[index].quantity) + newQty;
 
       /////// Sorting Table
       this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
@@ -552,7 +556,7 @@ export class GarmentSaleReturnComponent implements OnInit {
 
 
   getTotal() {
-     if(this.tableDataList.length == 0) return;
+    if (this.tableDataList.length == 0) return;
     this.qtyTotal = 0;
     this.subTotal = 0;
     this.netTotal = 0;
@@ -1025,11 +1029,11 @@ export class GarmentSaleReturnComponent implements OnInit {
         return;
       }
 
-       if(this.VehicleSaleFeature && this.vehicleID == 0){
+      if (this.VehicleSaleFeature && this.vehicleID == 0) {
         this.msg.WarnNotify('Select Vehicle');
         return;
       }
-        if(this.VehicleSaleFeature && this.meterReading == ''){
+      if (this.VehicleSaleFeature && this.meterReading == '') {
         this.msg.WarnNotify('Enter Meter Reading');
         return;
       }
@@ -1435,21 +1439,21 @@ export class GarmentSaleReturnComponent implements OnInit {
 
 
 
-  
-    @ViewChild('vehicle') myVehicle: any;
-    addVehicle() {
-      setTimeout(() => {
-        this.myVehicle.close()
-  
-      }, 200);
 
-      this.global.openBootstrapModal('#addVehicleModal',true);
- 
-    }
+  @ViewChild('vehicle') myVehicle: any;
+  addVehicle() {
+    setTimeout(() => {
+      this.myVehicle.close()
 
-    closeVehicleModal(){
-       this.global.closeBootstrapModal('#addVehicleModal',true);
-    }
+    }, 200);
+
+    this.global.openBootstrapModal('#addVehicleModal', true);
+
+  }
+
+  closeVehicleModal() {
+    this.global.closeBootstrapModal('#addVehicleModal', true);
+  }
 
 
 

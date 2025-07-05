@@ -130,7 +130,7 @@ export class AdjBillPrintComponent {
 
     setInvoiceTitle(type:any){
 
-      if(type == 'AI' || type == 'AO' || type == 'DL' || type == 'E'){
+      if(type == 'AI' || type == 'AO' || type == 'DL' || type == 'E' ){
         this.myInvoiceTitle = 'Stock Adjustment Note';
       }else if(type == 'OS'){
         this.myInvoiceTitle = 'Opening Stock Note';
@@ -139,6 +139,12 @@ export class AdjBillPrintComponent {
         this.myInvoiceTitle = 'Stock Return Note';
       }else if(type == 'I'){
         this.myInvoiceTitle = 'Stock Issue Note';
+      }
+      if(type == 'IC' || type == "HIC"){
+        this.myInvoiceTitle = 'Issue Stock Note'
+      }
+       if(type == 'RIC' || type == "HRIC"){
+        this.myInvoiceTitle = 'Return Stock Note'
       }
       
     }

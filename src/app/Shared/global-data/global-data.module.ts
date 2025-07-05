@@ -1227,6 +1227,22 @@ export class GlobalDataModule implements OnInit {
     }
   }
 
+  handleNumKeysandMinut(e: KeyboardEvent) {
+    const allowedKeys = [
+      'Enter', 'Backspace', 'Tab', 'Shift', 'Delete',
+      'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown',
+      '.', // Dot
+      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9','-'
+    ];
+
+    // Allow numpad keys (Numpad0-Numpad9)
+    const isNumpad = e.code.startsWith('Numpad') && /^[0-9]$/.test(e.key);
+
+    if (!allowedKeys.includes(e.key) && !isNumpad) {
+      e.preventDefault();
+    }
+  }
+
   /////// will allow only number keys
   handleAlphabet(e: KeyboardEvent) {
     const key = e.key;
@@ -1300,7 +1316,7 @@ export class GlobalDataModule implements OnInit {
   }
 
   //////////// func to get product Detail
-  public getProdDetail(id: any, barcode: any, locationID?: any): Observable<any> {
+  public getProdDetail(id: any, barcode: any, locationID = 0): Observable<any> {
     if (locationID == undefined) {
       locationID = 0;
     }

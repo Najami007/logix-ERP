@@ -245,7 +245,7 @@ disableDate = this.global.DisableDateSale;
   searchByCode(e: any) {
 
     var barcode = this.PBarcode;
-    var qty: number = 1;
+    var qty: number = 0;
     var BType = '';
 
     if (this.PBarcode !== '') {
@@ -309,12 +309,13 @@ disableDate = this.global.DisableDateSale;
   pushProdData(data: any, qty: any) {
 
     /////// check already present in the table or not
+    const targetBarcode = data.barcode2 || data.barcode;
     var condition = this.tableDataList.find(
-      (x: any) => x.productID == data.productID
+      (x: any) => x.productID == data.productID && x.barcode == targetBarcode
+      
     );
 
     var index = this.tableDataList.indexOf(condition);
-
     //// push the data using index
     if (condition == undefined) {
 
@@ -324,9 +325,9 @@ disableDate = this.global.DisableDateSale;
             : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
         productID: data.productID,
         productTitle: data.productTitle,
-        barcode: data.barcode,
+        barcode: data.barcode2 ? data.barcode2 : data.barcode,
         productImage: data.productImage,
-        quantity: qty,
+        quantity: qty > 0 ? qty * data.quantity : data.quantity,
         wohCP: data.costPrice,
         avgCostPrice: data.avgCostPrice,
         costPrice: data.costPrice,
@@ -340,8 +341,8 @@ disableDate = this.global.DisableDateSale;
         gst: this.gstFeature ? data.gst : 0,
         et: data.et,
         packing: 1,
-        discInP: this.discFeature ? data.discPercentage : 0,
-        discInR: this.discFeature ? data.discRupees : 0,
+        discInP: this.discFeature ? data.barcode2 ? data.discInP : data.discPercentage : 0,
+        discInR: this.discFeature ? data.barcode2 ? data.discInR :  data.discRupees : 0,
         aq: data.aq,
         total: (data.salePrice * qty) - (data.discRupees * qty),
         productDetail: '',
@@ -360,7 +361,8 @@ disableDate = this.global.DisableDateSale;
       if (this.PBarcode.split("/")[1] != undefined) {
         qty = this.PBarcode.split("/")[1] / this.tableDataList[index].salePrice;
       }
-      this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + qty;
+      var newQty:any = Number(qty) > 0 ? Number(qty) * data.quantity : data.quantity;
+      this.tableDataList[index].quantity = Number(this.tableDataList[index].quantity) + newQty;
 
       /////// Sorting Table
       this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
@@ -953,10 +955,10 @@ disableDate = this.global.DisableDateSale;
 
 
 
-    var inValidCostProdList = this.tableDataList.filter((p: any) => p.costPrice > p.salePrice || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
+    var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.costPrice )> Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
     var inValidSaleProdList = this.tableDataList.filter((p: any) => p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
     var inValidQtyProdList = this.tableDataList.filter((p: any) => p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
-    var inValidDiscProdList = this.tableDataList.filter((p: any) => p.costPrice > (p.salePrice - p.discInR));
+    var inValidDiscProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > (Number(p.salePrice) - (Number(p.discInR))));
 
 
     if (inValidCostProdList.length > 0 && !this.LessToCostFeature) {

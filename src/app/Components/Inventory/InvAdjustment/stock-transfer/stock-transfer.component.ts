@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+
 
 @Component({
   selector: 'app-stock-transfer',
   templateUrl: './stock-transfer.component.html',
   styleUrls: ['./stock-transfer.component.scss']
 })
-export class StockTransferComponent {
+export class StockTransferComponent  {
 
 }

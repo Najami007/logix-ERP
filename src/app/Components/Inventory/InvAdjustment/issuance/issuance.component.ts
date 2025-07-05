@@ -840,6 +840,8 @@ export class IssuanceComponent implements OnInit {
     )
   }
 
+  
+
 
 
   printBill(item:any){
