@@ -23,8 +23,8 @@ import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-m
 })
 export class GarmentSaleComponent implements OnInit {
 
-@ViewChild(SaleBillPrintComponent) billPrint: any;
-disableDate = this.global.DisableDateSale;
+  @ViewChild(SaleBillPrintComponent) billPrint: any;
+  disableDate = this.global.DisableDateSale;
   discFeature = this.global.discFeature;
   BookerFeature = this.global.BookerFeature;
   gstFeature = this.global.gstFeature;
@@ -38,14 +38,14 @@ disableDate = this.global.DisableDateSale;
   LessToCostFeature = this.global.LessToCostFeature;
   changePaymentMehtodFeature = this.global.changePaymentMehtodFeature;
   onlySaveBillFeature = this.global.onlySaveBillFeature;
-  
+
   postBillFeature = this.global.postSale;
   urduBillFeature = this.global.urduBill;
   disablePrintPwd = this.global.DisablePrintPwd;
   VehicleSaleFeature = this.global.VehicleSaleFeature;
 
 
-  
+
 
   companyProfile: any = [];
   companyLogo: any = '';
@@ -109,7 +109,6 @@ disableDate = this.global.DisableDateSale;
 
   }
   ngOnInit(): void {
-  
     this.global.setHeaderTitle('Sale');
     this.getBankList();
     this.getPartyList();
@@ -312,7 +311,7 @@ disableDate = this.global.DisableDateSale;
     const targetBarcode = data.barcode2 || data.barcode;
     var condition = this.tableDataList.find(
       (x: any) => x.productID == data.productID && x.barcode == targetBarcode
-      
+
     );
 
     var index = this.tableDataList.indexOf(condition);
@@ -342,7 +341,7 @@ disableDate = this.global.DisableDateSale;
         et: data.et,
         packing: 1,
         discInP: this.discFeature ? data.barcode2 ? data.discInP : data.discPercentage : 0,
-        discInR: this.discFeature ? data.barcode2 ? data.discInR :  data.discRupees : 0,
+        discInR: this.discFeature ? data.barcode2 ? data.discInR : data.discRupees : 0,
         aq: data.aq,
         total: (data.salePrice * qty) - (data.discRupees * qty),
         productDetail: '',
@@ -361,7 +360,7 @@ disableDate = this.global.DisableDateSale;
       if (this.PBarcode.split("/")[1] != undefined) {
         qty = this.PBarcode.split("/")[1] / this.tableDataList[index].salePrice;
       }
-      var newQty:any = Number(qty) > 0 ? Number(qty) * data.quantity : data.quantity;
+      var newQty: any = Number(qty) > 0 ? Number(qty) * data.quantity : data.quantity;
       this.tableDataList[index].quantity = Number(this.tableDataList[index].quantity) + newQty;
 
       /////// Sorting Table
@@ -566,7 +565,7 @@ disableDate = this.global.DisableDateSale;
 
   getTotal() {
 
-    if(this.tableDataList.length == 0) return;
+    if (this.tableDataList.length == 0) return;
     this.qtyTotal = 0;
     this.subTotal = 0;
     this.netTotal = 0;
@@ -870,7 +869,7 @@ disableDate = this.global.DisableDateSale;
           if (item.salePrice - value < item.costPrice) {
             return Swal.showValidationMessage("Discount Price Not Valid");
           }
-              const index = this.tableDataList.indexOf(item);
+          const index = this.tableDataList.indexOf(item);
           this.tableDataList[index].discInR = value;
           this.tableDataList[index].discInP = (value / item.salePrice) * 100;
           this.getTotal();
@@ -955,7 +954,7 @@ disableDate = this.global.DisableDateSale;
 
 
 
-    var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.costPrice )> Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
+    var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
     var inValidSaleProdList = this.tableDataList.filter((p: any) => p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
     var inValidQtyProdList = this.tableDataList.filter((p: any) => p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
     var inValidDiscProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > (Number(p.salePrice) - (Number(p.discInR))));
@@ -1065,7 +1064,6 @@ disableDate = this.global.DisableDateSale;
         MeterReading: this.meterReading || '0',
         UserID: this.global.getUserID()
       }
-
 
 
       if (this.global.SubscriptionExpired()) {

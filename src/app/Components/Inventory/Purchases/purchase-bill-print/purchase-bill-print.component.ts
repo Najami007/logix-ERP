@@ -14,15 +14,11 @@ import { environment } from 'src/environments/environment.development';
 export class PurchaseBillPrintComponent {
 
 
-discFeature = this.global.getFeature('Discount');
-  BookerFeature = this.global.getFeature('Booker');
-  showCompanyName = this.global.getFeature('CmpName');
-  showCompanyLogo = this.global.getFeature('CmpLogo');
-  gstFeature = this.global.getFeature('GST');
-  prodDetailFeature = this.global.getFeature('ProdDetail');
+ 
+  DetailedPurchaseFeature = this.global.DetailedPurchase;
 
 
-  billPrintType:any = '';;
+  billPrintType: any = '';;
   companyProfile: any = [];
   companyLogo: any = '';
   logoHeight: any = 0;
@@ -35,8 +31,8 @@ discFeature = this.global.getFeature('Discount');
     private http: HttpClient,
     public global: GlobalDataModule,
   ) {
-   
-    
+
+
     this.global.getCompany().subscribe((data) => {
       this.companyProfile = data;
       this.companyLogo = data[0].companyLogo1;
@@ -48,7 +44,7 @@ discFeature = this.global.getFeature('Discount');
     });
 
 
-  
+
 
   }
 
@@ -75,7 +71,7 @@ discFeature = this.global.getFeature('Discount');
   myInvType = '';
 
   printBill(item: any) {
-    
+
     this.myTableDataList = [];
     this.myInvoiceNo = item.invBillNo;
     this.myInvoiceDate = new Date(item.invDate);
@@ -109,7 +105,7 @@ discFeature = this.global.getFeature('Discount');
 
         }
 
-       
+
 
         Response.forEach((e: any) => {
           this.myBillTotalQty += e.quantity;
@@ -124,6 +120,7 @@ discFeature = this.global.getFeature('Discount');
             productImage: e.productImage,
             Quantity: e.quantity,
             wohCP: (e.costPrice - overhead),
+            tempCostPrice: e.tempCostPrice,
             CostPrice: e.costPrice,
             SalePrice: e.salePrice,
             ExpiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
@@ -133,6 +130,8 @@ discFeature = this.global.getFeature('Discount');
             Packing: e.packing,
             discInP: e.discInP,
             discInR: e.discInR,
+            gst: e.gst,
+            et: e.et,
 
           })
         });
@@ -147,25 +146,25 @@ discFeature = this.global.getFeature('Discount');
   }
 
 
-  setInvoiceTitle(type:any){
+  setInvoiceTitle(type: any) {
 
-    if(type == 'HP'){
+    if (type == 'HP') {
       this.myInvoiceTitle = 'Goods Receive Note';
-    }else if(type == 'HPR'){
+    } else if (type == 'HPR') {
       this.myInvoiceTitle = 'Goods Return Note';
     }
-    if(type == 'HP'){
+    if (type == 'HP') {
       this.myInvoiceTitle = 'Goods Receive Note';
-    }else if(type == 'PO'){
+    } else if (type == 'PO') {
       this.myInvoiceTitle = 'Purchase Order';
     }
-    
+
   }
 
 
-    public getBillDetail(billNo: any): Observable<any> {
-      return this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSingleBillDetail?reqInvBillNo=' + billNo).pipe(retry(3));
-    }
-  
+  public getBillDetail(billNo: any): Observable<any> {
+    return this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSingleBillDetail?reqInvBillNo=' + billNo).pipe(retry(3));
+  }
+
 
 }

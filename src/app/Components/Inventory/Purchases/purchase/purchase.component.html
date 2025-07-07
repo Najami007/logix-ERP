@@ -57,7 +57,7 @@
             </div>
             <!------------------- Product search Area -------->
             <div class="row prod">
-                <div class="col-lg-8 d-flex">
+                <div class="col-lg-7 d-flex">
                     <input type="text" [(ngModel)]="PBarcode"
                         (keydown)="focusto('#ovhd',$event);changeFocus($event,'.prodRow');searchByCode($event);"
                         id="psearchProduct" class="searchProduct ps-2" placeholder="Scan Barcode (Alt + b)"
@@ -69,16 +69,29 @@
                 </div>
 
 
-                <div class="col-lg-3 ms-1">
+                <div class="col-lg-5 row ">
 
-                    <button *ngIf="crudList.c" style="height: 50px;" class=" col-lg-5 btnhold me-1"
+                   <div class="col-md-4 pe-1">
+                     <button *ngIf="crudList.c" style="height: 50px;" class="w-100 btnhold"
                         matTooltip="Hold Bill" accesskey="h" (click)="SaveBill('hold')"><span
                             *ngIf="holdBtnType == 'Hold'"><u>H</u>old</span><span
                             *ngIf="holdBtnType == 'ReHold'">Re<u>H</u>old</span> </button>
+                   </div>
 
-                    <button class=" col-lg-5 btnreset me-1" accesskey="r"
+                  <div class="col-md-4 pe-1">
+                      <button class="w-100 btnreset" accesskey="r"
                         (click)="global.openBootstrapModal('#holdModal',true)" style="height: 50px;"
                         matTooltip="Retrieve Bill"><u>R</u>etrieve</button>
+
+                  </div>
+                    <div class="col-md-4" *ngIf="DetailedPurchaseFeature">
+                        <mat-form-field class="matSmall w-100"  appearance="outline">
+                            <mat-select [(ngModel)]="discType" [disabled]="tableDataList.length > 0">
+                            <mat-option value="bd">Before Disc</mat-option>
+                            <mat-option  value="ad">After Disc</mat-option>
+                        </mat-select>
+                        </mat-form-field>
+                    </div>
 
 
                 </div>
@@ -98,33 +111,28 @@
 
     </div>
 
-    <div class="d-flex justify-content-end pe-2">
-        <select [(ngModel)]="discType">
-            <option [value]="'bd'">Before Disc</option>
-            <option [value]="'ad'">After Disc</option>
-        </select>
-    </div>
+
     <div class="row w-100">
 
-        <div class="col-lg-12 pt-1 billArea">
+        <div class="col-lg-10 billArea">
             <!-- ////////////////////////// Table Row////////////////// -->
 
-            <div class="p-1"
-                style="overflow-y: scroll;min-height: 70vh; max-height: 65vh;padding-bottom: 120px !important;">
+            <div class="ps-1"
+                style="overflow-y: auto; max-height: 65vh;padding-bottom: 120px !important; overflow-x: auto;width: 100%;">
 
-                <table class="table-hover table-logix">
+                <table class="table-hover table-logix ">
                     <thead>
                         <tr>
                             <th class="cursorPointer" (click)="changeOrder()">S#</th>
                             <th>Barcode</th>
-                            <th>Product Name</th>
+                            <th class="col-3">Product Name</th>
                             <th>Expiry</th>
                             <th>Quantity</th>
-                            <th>Cost Price</th>
-                            <th>Disc %</th>
-                            <th>Disc Rs</th>
-                            <th>GST</th>
-                            <th>Adv Tax</th>
+                            <th *ngIf="DetailedPurchaseFeature">Cost Price</th>
+                            <th *ngIf="DetailedPurchaseFeature">Disc %</th>
+                            <th *ngIf="DetailedPurchaseFeature">Disc Rs</th>
+                            <th *ngIf="DetailedPurchaseFeature">GST</th>
+                            <th *ngIf="DetailedPurchaseFeature">Adv Tax</th>
 
                             <th>Cost Price</th>
                             <th>Sale Price</th>
@@ -140,7 +148,7 @@
                             [ngClass]="rowFocused == index ?'bg-dg':''" (click)="showImg(item);rowFocused = index">
                             <td class="text-center">{{index+1}}</td>
                             <td>{{item.barcode}}</td>
-                            <td>{{item.ProductTitle}}</td>
+                            <td class="col-3">{{item.ProductTitle}}</td>
                             <td><input type="date" class="expDate{{index}}" [(ngModel)]="item.ExpiryDate"
                                     (keydown)="rowFocused = index" (keyup)="rowFocused = index"
                                     style="height: 25px; width: 150px;"></td>
@@ -156,45 +164,48 @@
                                     (change)="getTotal();" [accessKey]="index +1 " class="qty{{index}} text-center"
                                     style="width: 80px;"></td>
 
-                            <td class="text-center"><input type="text" [(ngModel)]="item.tempCostPrice" min="0"
-                                    draggable="false"
+                            <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
+                                    [(ngModel)]="item.tempCostPrice" min="0" draggable="false"
                                     (keydown)="changeValue(item);this.handleUpdown(item,$event,'.tcp',index);getTotal();onFieldsUpdate('tcp',item)"
                                     (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('tcp',item)"
                                     (change)="getTotal()" class="tcp{{index}} text-center" style="width: 80px;"></td>
 
 
 
-                            <td class="text-center"><input type="text" [(ngModel)]="item.discInP" min="0"
-                                    draggable="false" dropzone="false"
+                            <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
+                                    [(ngModel)]="item.discInP" min="0" draggable="false" dropzone="false"
                                     (keydown)="this.handleUpdown(item,$event,'.discP',index);getTotal();changeValue(item);onFieldsUpdate('dp',item)"
                                     (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('dp',item)"
                                     (change)="getTotal();" class="discP{{index}} text-center" style="width: 80px;"></td>
 
 
-                            <td class="text-center"><input type="text" [(ngModel)]="item.discInR" min="0"
-                                    draggable="false" dropzone="false"
+                            <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
+                                    [(ngModel)]="item.discInR" min="0" draggable="false" dropzone="false"
                                     (keydown)="this.handleUpdown(item,$event,'.discR',index);getTotal();changeValue(item);onFieldsUpdate('dR',item);"
                                     (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('dR',item)"
                                     (change)="getTotal();" class="discR{{index}} text-center" style="width: 80px;"></td>
 
-                            <td class="text-center"><input type="text" [(ngModel)]="item.gst" min="0" draggable="false"
-                                    dropzone="false"
+                            <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
+                                    [(ngModel)]="item.gst" min="0" draggable="false" dropzone="false"
                                     (keydown)="this.handleUpdown(item,$event,'.gst',index);getTotal();changeValue(item);onFieldsUpdate('gst',item);"
                                     (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('gst',item);"
                                     (change)="getTotal();" class="gst{{index}} text-center" style="width: 80px;"></td>
 
-                            <td class="text-center"><input type="text" [(ngModel)]="item.et" min="0" draggable="false"
-                                    dropzone="false"
+                            <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
+                                    [(ngModel)]="item.et" min="0" draggable="false" dropzone="false"
                                     (keydown)="this.handleUpdown(item,$event,'.et',index);getTotal();changeValue(item);onFieldsUpdate('et',item);"
                                     (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('et',item);"
                                     (change)="getTotal();" class="et{{index}} text-center" style="width: 80px;"></td>
 
 
-                            <td class="text-center"><input type="text" [(ngModel)]="item.CostPrice" min="0"
+                            <td class="text-center">
+                                <span *ngIf="DetailedPurchaseFeature">{{item.CostPrice |number|number:'1.0-1'}} </span>
+                                <input type="text" [(ngModel)]="item.CostPrice" min="0" *ngIf="!DetailedPurchaseFeature"
                                     draggable="false"
                                     (keydown)="changeValue(item);this.handleUpdown(item,$event,'.cp',index);getTotal();"
                                     (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index"
-                                    (change)="getTotal()" class="cp{{index}} text-center" style="width: 80px;"></td>
+                                    (change)="getTotal()" class="cp{{index}} text-center" style="width: 80px;">
+                            </td>
 
                             <td class="text-center"><input type="text" [(ngModel)]="item.SalePrice" min="0"
                                     draggable="false"
@@ -204,7 +215,8 @@
                             </td>
 
 
-                            <td class="text-end" (click)="editTotal(item)">{{item.CostPrice * item.Quantity |number}}
+                            <td class="text-end" (click)="editTotal(item)">{{item.CostPrice * item.Quantity
+                                |number:'1.0-1'}}
                             </td>
                             <td class="text-center">{{item.AQ |number:'1.0-3'}}</td>
                             <td class="text-danger text-center cursorPointer"><mat-icon
@@ -217,6 +229,7 @@
                             <td colspan="4"></td>
                             <td class="text-center">{{myTotalQty|number:'1.0-3' }}</td>
                             <td colspan="4"></td>
+                            <td colspan="5" *ngIf="DetailedPurchaseFeature"></td>
                             <td class="text-center"><mat-icon class="cursorPointer"
                                     (click)="EmptyData()">delete</mat-icon>
                             </td>
@@ -237,8 +250,8 @@
 
 
 
-        <mat-card class="col-lg-2 h-100 p-2 totalArea hide"
-            style="background-color: rgb(9, 2, 69);min-height: 70vh !important; top: 2%;">
+        <mat-card class="col-lg-2 h-100 p-2 totalArea"
+            style="background-color: rgb(9, 2, 69);min-height: 64vh !important; top: 2%;">
 
             <div class="d-flex pb-2 flex-column border-bottom">
                 <div class=" pt-3   ">

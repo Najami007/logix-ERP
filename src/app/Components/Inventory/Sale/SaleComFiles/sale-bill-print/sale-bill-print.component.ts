@@ -31,7 +31,8 @@ export class SaleBillPrintComponent implements OnInit {
   printKotFeature = this.global.printKot;
   billFormate1 = this.global.BillFormate1Feature;
   billFormate2 = this.global.BillFormate2Feature;
-    VehicleSaleFeature = this.global.VehicleSaleFeature;
+  VehicleSaleFeature = this.global.VehicleSaleFeature;
+
 
 
 
@@ -87,6 +88,7 @@ export class SaleBillPrintComponent implements OnInit {
   myCounterName = '';
   myCustomerName = '';
   myInvDate: any = new Date();
+  myCreatedDate:any = new Date();
   myOrderType = '';
   mySubTotal = 0;
   myNetTotal = 0;
@@ -128,7 +130,8 @@ export class SaleBillPrintComponent implements OnInit {
 
 
         this.myInvoiceNo = InvNo;
-        this.myInvDate = Response[0].createdOn;
+        this.myInvDate = Response[0].invDate;
+        this.myCreatedDate = Response[0].createdOn;
         this.myCounterName = Response[0].entryUser;
         this.mySubTotal = Response[0].billTotal;
         this.myNetTotal = Response[0].netTotal;

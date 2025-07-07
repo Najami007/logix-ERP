@@ -90,11 +90,12 @@ export class VehicleSaleReportComponent {
     this.app.startLoaderDark();
     this.http.get(environment.mainApi + 'veh/' + url).subscribe(
       (Response: any) => {
+        console.log(Response);
         this.SaleDetail = [];
         this.billGrandTotal = 0;
         this.DiscTotal = 0;
         this.netGrandTotal = 0;
-        if (Response.length == 0 || Response == null) {
+        if (Response.length == 0 || Response === null) {
           this.global.popupAlert('Data Not Found!');
           this.app.stopLoaderDark();
           return;

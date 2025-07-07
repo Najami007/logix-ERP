@@ -102,7 +102,7 @@ export const environment = {
 
 
   //mainApi: 'http://localhost:8060/', //////////// Master Traders Faisalabad
-  // mainApi: 'http://192.168.100.100:8060/', //////////////// Master Traders Sharing
+  //mainApi: 'http://192.168.100.100:8060/', //////////////// Master Traders Sharing
 
 
 

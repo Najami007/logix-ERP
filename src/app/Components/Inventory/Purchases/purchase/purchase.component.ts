@@ -30,6 +30,7 @@ export class PurchaseComponent implements OnInit {
   @ViewChild(AddDocumentComponent) AddDocument: any;
 
   disableDateFeature = this.global.DisableInvDate;
+  DetailedPurchaseFeature = this.global.DetailedPurchase;
 
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -129,33 +130,44 @@ export class PurchaseComponent implements OnInit {
   BookerList: any = [];
 
 
-  discType: any = 'bd';
+  discType: any = 'ad';
 
 
   onFieldsUpdate(type: any, item: any) {
 
     if (this.discType == 'ad') {
+
+      var gstAmount = ((item.tempCostPrice * item.gst) / 100)
+      var discP = ((item.tempCostPrice * item.discInP) / 100);
+      var discR = (item.discInR / item.Quantity);
+      var etAmount = (((Number(item.tempCostPrice) + Number(gstAmount) - discP - discR) * item.et) / 100);
+
       var totalCost = item.tempCostPrice * item.Quantity;
-      var costWithDiscP = item.tempCostPrice - ((item.tempCostPrice * item.discInP) / 100);
-      var costWithDiscR = costWithDiscP -  (item.discInR / item.Quantity);
-      var costWithGst = costWithDiscR + ( (costWithDiscR * item.gst) / 100);
-      var costWithEt = costWithGst + ((item.tempCostPrice *  item.et) /100);
-      // console.log(costWithDiscP,costWithDiscR,costWithGst,costWithEt)
+      var costWithDiscP = item.tempCostPrice - discP;
+      var costWithDiscR = costWithDiscP - discR;
+      var costWithGst = costWithDiscR + ((costWithDiscR * item.gst) / 100);
+      var costWithEt = costWithGst + etAmount;
+
+
       item.CostPrice = costWithEt;
     }
-      if (this.discType == 'bd') {
+    if (this.discType == 'bd') {
 
       var totalCost = item.tempCostPrice * item.Quantity;
-    var gstAmount =  ( (item.tempCostPrice * item.gst) / 100);
-      var etAmount =  ((item.tempCostPrice *  item.et) /100);
-      var discP =   (((item.tempCostPrice - gstAmount) * item.discInP) / 100);
-      var discR =  (item.discInR / item.Quantity);
+      var gstAmount = ((item.tempCostPrice * item.gst) / 100);
+      var etAmount = (((Number(item.tempCostPrice) + Number(gstAmount))  * item.et) / 100);
+      var discP = (((item.tempCostPrice - gstAmount) * item.discInP) / 100);
+      var discR = (item.discInR / item.Quantity);
 
-        console.log(gstAmount,discP);
-      // console.log(costWithDiscP,costWithDiscR,costWithGst,costWithEt)
 
-      item.CostPrice =  (Number(item.tempCostPrice) - Number(gstAmount) - (Number(discP) + Number(discR))) + Number(etAmount) + Number(gstAmount)   // + Number(etAmount )  - Number(discR);
+      var costWithGst = Number(item.tempCostPrice) - Number(discR) + gstAmount;
+      var costWithDisc = (Number(item.tempCostPrice) - Number(gstAmount)) - Number(discP) - Number(discR) + Number(gstAmount);
+
+      item.CostPrice = item.discInP > 0
+        ? costWithDisc + ((costWithDisc * item.et) / 100)
+        : costWithGst + ((costWithGst * item.et) / 100);
     }
+    this.getTotal();
 
   }
 
@@ -294,7 +306,6 @@ export class PurchaseComponent implements OnInit {
     );
 
     var index = this.tableDataList.indexOf(condition);
-    console.log(data);
     //// push the data using index
     if (condition == undefined) {
 
@@ -844,7 +855,6 @@ export class PurchaseComponent implements OnInit {
     var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.CostPrice) > Number(p.SalePrice) || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null);
     var inValidSaleProdList = this.tableDataList.filter((p: any) => p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null);
     var inValidQtyProdList = this.tableDataList.filter((p: any) => p.Quantity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '')
-    console.log(inValidCostProdList);
     if (inValidCostProdList.length > 0) {
       this.msg.WarnNotify('(' + inValidCostProdList[0].ProductTitle + ') Cost Price greater than Sale Price');
       return;
@@ -899,9 +909,11 @@ export class PurchaseComponent implements OnInit {
         Remarks: this.invRemarks,
         InvoiceDocument: "-",
         HoldInvNo: this.holdInvNo,
+        discType: this.discType,
         InvDetail: JSON.stringify(this.tableDataList),
         UserID: this.global.getUserID()
       };
+
 
       if (this.validFlag == true) {
         this.validFlag = false;
@@ -1057,7 +1069,6 @@ export class PurchaseComponent implements OnInit {
   cpTotal = 0;
   wohCPTotal = 0;
   retriveBill(item: any) {
-
     this.tableDataList = [];
     this.holdBtnType = 'ReHold'
     this.invoiceDate = new Date(item.invDate);
@@ -1069,6 +1080,7 @@ export class PurchaseComponent implements OnInit {
     this.holdInvNo = item.invBillNo;
     this.bookerID = item.bookerID;
     this.partyID = item.partyID;
+
     this.onPartySelected();
 
     this.getBillDetail(item.invBillNo).subscribe(
@@ -1076,7 +1088,7 @@ export class PurchaseComponent implements OnInit {
 
         this.myTotalQty = 0;
         this.productImage = Response[Response.length - 1].productImage;
-
+        this.discType = Response[0].discType;
         Response.forEach((e: any) => {
 
           this.myTotalQty += e.quantity;
@@ -1088,6 +1100,8 @@ export class PurchaseComponent implements OnInit {
             productImage: e.productImage,
             Quantity: e.quantity,
             wohCP: e.costPrice,
+            tempCostPrice: e.tempCostPrice,
+
             CostPrice: e.costPrice,
             SalePrice: e.salePrice,
             ExpiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
@@ -1098,6 +1112,8 @@ export class PurchaseComponent implements OnInit {
             discInP: e.discInP,
             discInR: e.discInR,
             AQ: e.aq,
+            gst: e.gst,
+            et: e.et,
           })
         });
 
@@ -1199,6 +1215,10 @@ export class PurchaseComponent implements OnInit {
 
 
   editTotal(item: any) {
+
+    if (this.DetailedPurchaseFeature) {
+      return;
+    }
 
     Swal.fire({
       title: "Enter Total Amount",

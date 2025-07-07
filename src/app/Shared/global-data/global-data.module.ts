@@ -314,6 +314,7 @@ export class GlobalDataModule implements OnInit {
   DisableInvDate = this.getFeature('DisableInvDate');
   RestBillUserwise = this.getFeature('RestBillUserwise');
   VehicleSaleFeature = this.getFeature('VehicleSale');
+  DetailedPurchase = this.getFeature('DetailedPurchase');
 
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
@@ -340,8 +341,8 @@ export class GlobalDataModule implements OnInit {
     this.changePaymentMehtodFeature = this.getFeature('chngPayMtd');
     this.onlySaveBillFeature = this.getFeature('OnlySave');
     this.coverOfFeature = this.getFeature('CoverOf');
-    this.DisableDateSale = this.getFeature('DisableDateSale');
-    this.DisableDateAcc = this.getFeature('DisableDateAcc');
+    this.DisableDateSale = this.getFeature('showDateSale');
+    this.DisableDateAcc = this.getFeature('showDateAcc');
     this.DefaultOrderType = this.getFeature('DefaultOrderType');
     this.DisableDiscPwd = this.getFeature('DisableDiscPwd');
     this.DisablePrintPwd = this.getFeature('DisablePrintPwd');
@@ -352,6 +353,7 @@ export class GlobalDataModule implements OnInit {
     this.DisableInvDate = this.getFeature('DisableInvDate');
     this.RestBillUserwise = this.getFeature('RestBillUserwise');
     this.VehicleSaleFeature = this.getFeature('VehicleSale');
+    this.DetailedPurchase = this.getFeature('DetailedPurchase');
 
   }
 
@@ -579,7 +581,7 @@ export class GlobalDataModule implements OnInit {
   curDate: any = new Date();
   public SubscriptionExpired(): boolean {
     ///// yyyy-MM-dd /////////////
-    var ExpiryDate: any = '2025-08-05';
+    var ExpiryDate: any = '2030-08-05';
     var curDate = this.datePipe.transform(this.curDate, 'yyyy-MM-dd')
     var status: any = curDate! >= ExpiryDate;
     return status;
@@ -1232,7 +1234,7 @@ export class GlobalDataModule implements OnInit {
       'Enter', 'Backspace', 'Tab', 'Shift', 'Delete',
       'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown',
       '.', // Dot
-      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9','-'
+      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-'
     ];
 
     // Allow numpad keys (Numpad0-Numpad9)

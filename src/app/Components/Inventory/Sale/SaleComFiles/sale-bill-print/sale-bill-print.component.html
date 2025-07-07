@@ -30,7 +30,9 @@
                 <tbody class="text-center">
                     <tr>
                         <td>{{myInvoiceNo}}</td>
-                        <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
+                        <td>
+                            <span *ngIf="!VehicleSaleFeature">{{myCreatedDate | date:'dd-MM-yyyy hh:mm:a'}}</span>
+                        <span *ngIf="VehicleSaleFeature">{{myInvDate | date:'dd-MM-yyyy'}}</span></td>
                         <td>{{myCounterName}}</td>
                     </tr>
 

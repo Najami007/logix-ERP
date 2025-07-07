@@ -67,7 +67,13 @@
                     <!-- <th style="width: 100px;">Expiry</th> -->
                     <th class="text-center">Quantity</th>
                     <!-- <th class="text-center ">WOH CP</th> -->
-                    <th class=" text-center">Cost Price</th>
+
+                    <th class=" text-center" *ngIf="DetailedPurchaseFeature && myInvType === 'P'">Cost Price</th>
+                    <th class=" text-center" *ngIf="DetailedPurchaseFeature && myInvType === 'P'">Disc %</th>
+                    <th class=" text-center" *ngIf="DetailedPurchaseFeature && myInvType === 'P'">Disc Amt</th>
+                    <th class=" text-center" *ngIf="DetailedPurchaseFeature && myInvType === 'P'">GST</th>
+                    <th class=" text-center" *ngIf="DetailedPurchaseFeature && myInvType === 'P'">Et</th>
+                     <th class=" text-center">Cost Price</th>
                     <th class=" text-center" *ngIf="myInvType !== 'PO' ">Sale Price</th>
                     <th class=" text-center">Cost Total</th>
                     <th class=" text-center" *ngIf="myInvType !== 'PO' ">Sale Total</th>
@@ -90,10 +96,16 @@
                     <!-- <td s></td> -->
                     <td class="text-center ">{{item.Quantity |number}}</td>
                     <!-- <td class="text-end">{{item.wohCP | number: '1.0-2'}}</td> -->
+                    <td class="text-end " *ngIf="DetailedPurchaseFeature && myInvType === 'P'">{{item.tempCostPrice |number: '1.0-2'}}</td>
+                    <td class="text-end " *ngIf="DetailedPurchaseFeature && myInvType === 'P'">{{item.discInP |number: '1.0-2'}}</td>
+                    <td class="text-end " *ngIf="DetailedPurchaseFeature && myInvType === 'P'">{{item.discInR |number: '1.0-2'}}</td>
+                    <td class="text-end " *ngIf="DetailedPurchaseFeature && myInvType === 'P'">{{item.gst |number: '1.0-2'}}</td>
+                    <td class="text-end " *ngIf="DetailedPurchaseFeature && myInvType === 'P'">{{item.et |number: '1.0-2'}}</td>
                     <td class="text-end ">{{item.CostPrice |number: '1.0-2'}}</td>
                     <td class="text-end " *ngIf="myInvType !== 'PO' ">{{item.SalePrice |number: '1.0-2'}}</td>
                     <td class="text-end ">{{item.CostPrice * item.Quantity |number: '1.0-2'}}</td>
-                    <td class="text-end " *ngIf="myInvType !== 'PO' ">{{item.SalePrice * item.Quantity |number: '1.0-2'}}</td>
+                    <td class="text-end " *ngIf="myInvType !== 'PO' ">{{item.SalePrice * item.Quantity |number:
+                        '1.0-2'}}</td>
 
 
                 </tr>
@@ -101,6 +113,7 @@
                     <th colspan="2"></th>
                     <th class="text-center">{{myBillTotalQty}}</th>
                     <th></th>
+                    <th colspan="5" *ngIf="DetailedPurchaseFeature && myInvType === 'P'"></th>
                     <th *ngIf="myInvType !== 'PO' "></th>
                     <th class="text-end">{{myCPTotal | number:'1.0-2'}}</th>
                     <th class="text-end" *ngIf="myInvType !== 'PO' ">{{mySPTotal | number:'1.0-2'}}</th>
@@ -113,7 +126,8 @@
         </table>
         <br>
 
-        <div class="d-flex text-end border border-dark" style="text-align: end;" *ngIf="myInvType == 'P' || myInvType == 'HP' || myInvType == 'PR' || myInvType == 'HPR'">
+        <div class="d-flex text-end border border-dark" style="text-align: end;"
+            *ngIf="myInvType == 'P' || myInvType == 'HP' || myInvType == 'PR' || myInvType == 'HPR'">
 
             <div class="row w-75">
                 <label class="fw-bold">Total</label>
