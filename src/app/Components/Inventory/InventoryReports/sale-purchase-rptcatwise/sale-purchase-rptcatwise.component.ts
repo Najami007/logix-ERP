@@ -41,6 +41,7 @@ export class SalePurchaseRptcatwiseComponent implements OnInit {
   ngOnInit(): void {
     this.global.setHeaderTitle('Sale Purchase History Category wise');
     this.getUsers();
+    this.getReportTypes();
     this.getCategory();
     this.getBrandList();
     $('#detailTable').show();
@@ -49,20 +50,17 @@ export class SalePurchaseRptcatwiseComponent implements OnInit {
 
 
 
-  reportsList: any = [
-    { val: 's', title: 'Sale Report' },
-    { val: 'sr', title: 'Sale Return Report' },
-    { val: 'p', title: 'Purchase Report' },
-    { val: 'pr', title: 'Purchase Return Report' },
-    { val: 'I', title: 'Issuance Report' },
-    { val: 'R', title: 'Stock Receive' },
-    { val: 'AI', title: 'Adjustment In Report' },
-    { val: 'Ao', title: 'Adjustment Out Report' },
-    { val: 'Dl', title: 'Damage Loss Report' },
-    { val: 'E', title: 'Expiry Report' },
-    { val: 'OS', title: 'Opening Stock Report' },
+  reportsList: any = []
 
-  ]
+    getReportTypes() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInvoiceTypes_15').subscribe(
+      (Response: any) => {
+        this.reportsList = Response;
+      }
+    )
+  }
+
+
   tmpRptType = 's';
   rptType: any = 's';
 
@@ -77,7 +75,6 @@ export class SalePurchaseRptcatwiseComponent implements OnInit {
   toTime: any = '23:59';
 
   SaleDetailList: any = [];
-
   reportType: any;
 
   getUsers() {

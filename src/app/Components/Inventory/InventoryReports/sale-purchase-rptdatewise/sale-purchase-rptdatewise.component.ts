@@ -47,30 +47,18 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
   ngOnInit(): void {
     this.global.setHeaderTitle('Stock In Out Date wise');
     this.getUsers();
-   setTimeout(() => {
-     $('#detailTable').show();
-    $('#summaryTable').hide();
-    $('#TaxsummaryTable').hide();
-   }, 200);
+    this.getReportTypes();
+    setTimeout(() => {
+      $('#detailTable').show();
+      $('#summaryTable').hide();
+      $('#TaxsummaryTable').hide();
+    }, 200);
   }
 
 
 
 
-  reportsList: any = [
-    { val: 's', title: 'Sale Report' },
-    { val: 'sr', title: 'Sale Return Report' },
-    { val: 'p', title: 'Purchase Report' },
-    { val: 'pr', title: 'Purchase Return Report' },
-    { val: 'I', title: 'Issuance Report' },
-    { val: 'R', title: 'Stock Receive' },
-    { val: 'AI', title: 'Adjustment In Report' },
-    { val: 'Ao', title: 'Adjustment Out Report' },
-    { val: 'Dl', title: 'Damage Loss Report' },
-    { val: 'E', title: 'Expiry Report' },
-    { val: 'OS', title: 'Opening Stock Report' },
-
-  ]
+  reportsList: any = []
   tmpRptType = 's';
   rptType: any = 's';
 
@@ -92,6 +80,14 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     this.global.getUserList().subscribe((data: any) => { this.userList = data; });
   }
 
+
+  getReportTypes() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInvoiceTypes_15').subscribe(
+      (Response: any) => {
+        this.reportsList = Response;
+      }
+    )
+  }
 
 
 

@@ -19,6 +19,62 @@ import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
 export class RecipeComponent implements OnInit {
   tabIndex = 0;
   crudList: any = { c: true, r: true, u: true, d: true };
+
+
+
+
+  page: number = 1;
+  count: number = 0;
+
+  tableSize: number = 0;
+  tableSizes: any = [];
+  jumpPage: any = 0;
+  tmpPage: number = 0;
+
+  onTableDataChange(event: any) {
+
+    this.page = event;
+    this.getAllRecipe();
+
+  }
+
+  onTableSizeChange(event: any): void {
+    this.tableSize = event.target.value;
+    this.page = 1;
+    this.getAllRecipe();
+
+  }
+
+  goToPage(): void {
+    var count = this.productList.length / this.tableSize;
+    if (parseFloat(this.jumpPage) > count) {
+      this.msg.WarnNotify('Invalid Value')
+      return;
+    }
+
+    if (this.jumpPage >= 1) {
+      this.page = this.jumpPage;
+      this.getAllRecipe();
+    }
+  }
+
+  onProdSearchKeyup(e: any, value: any) {
+
+    if (e.target.value.length == 0 && this.tmpPage == 0) {
+      this.tmpPage = this.page;
+      this.page = 1;
+    }
+    if (e.key == 'Backspace') {
+      if (value.length == 1) {
+        this.page = this.tmpPage;
+        this.tmpPage = 0;
+      }
+    }
+
+
+  }
+
+
   constructor(
     private http: HttpClient,
     private msg: NotificationService,
@@ -40,21 +96,24 @@ export class RecipeComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.tableSize = this.global.paginationDefaultTalbeSize;
+    this.tableSizes = this.global.paginationTableSizes;
     this.global.setHeaderTitle('Recipe');
     this.getAllRecipe();
     this.getCategories();
     this.getCookingArea()
 
-    
+
     this.global.getProducts().subscribe(
       (data: any) => { this.productList = data; })
   }
 
 
-  filterCategoryID:any = 0;
-  filterCookingAreaID:any = 0;
-  filterStatus:any = 0;
-  filterActiveStatus:any = 0;
+  searchRecipe:any = ''
+  filterCategoryID: any = 0;
+  filterCookingAreaID: any = 0;
+  filterStatus: any = 0;
+  filterActiveStatus: any = 0;
 
   autoEmptyFlag = true;
   foodCost = 0;
@@ -76,7 +135,7 @@ export class RecipeComponent implements OnInit {
   avgCostTotal: number = 0;
   projectID = this.global.InvProjectID;
 
-  recipeCode:any = '';
+  recipeCode: any = '';
 
   totalQty: any = 0;
   productList: any = [];
@@ -84,7 +143,7 @@ export class RecipeComponent implements OnInit {
   menuProdList: any = [];
 
   RecipeList: any = [];
-  tmpRecipeList:any = [];
+  tmpRecipeList: any = [];
 
 
   categoryID: number = 0;
@@ -96,7 +155,7 @@ export class RecipeComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetCookingAria').subscribe(
       (Response: any) => {
         this.cookingAreaList = Response;
-        if(Response.length>0){
+        if (Response.length > 0) {
           this.cookingAriaID = Response[0].cookingAriaID;
         }
       }
@@ -114,31 +173,31 @@ export class RecipeComponent implements OnInit {
   }
 
 
-  filterRecipe(type:any){
+  filterRecipe(type: any) {
 
-    if(type == 'cat'){
-      this.RecipeList = this.filterCategoryID == 0 ? this.tmpRecipeList : this.tmpRecipeList.filter((e:any)=> e.recipeCatID == this.filterCategoryID);
+    if (type == 'cat') {
+      this.RecipeList = this.filterCategoryID == 0 ? this.tmpRecipeList : this.tmpRecipeList.filter((e: any) => e.recipeCatID == this.filterCategoryID);
     }
 
-    
-    if(type == 'ca'){
-      this.RecipeList = this.filterCookingAreaID == 0 ? this.tmpRecipeList : this.tmpRecipeList.filter((e:any)=> e.cookingAriaID == this.filterCookingAreaID);
+
+    if (type == 'ca') {
+      this.RecipeList = this.filterCookingAreaID == 0 ? this.tmpRecipeList : this.tmpRecipeList.filter((e: any) => e.cookingAriaID == this.filterCookingAreaID);
     }
 
-        
-    if(type == 'status'){
-      this.RecipeList = this.filterStatus == 0 ? this.tmpRecipeList : this.tmpRecipeList.filter((e:any)=> e.approvedStatus == this.filterStatus);
+
+    if (type == 'status') {
+      this.RecipeList = this.filterStatus == 0 ? this.tmpRecipeList : this.tmpRecipeList.filter((e: any) => e.approvedStatus == this.filterStatus);
     }
 
-     if(type == 'activeStatus'){
-      this.RecipeList = this.filterActiveStatus == 0 ? this.tmpRecipeList : this.tmpRecipeList.filter((e:any)=> e.activeStatus == this.filterActiveStatus);
+    if (type == 'activeStatus') {
+      this.RecipeList = this.filterActiveStatus == 0 ? this.tmpRecipeList : this.tmpRecipeList.filter((e: any) => e.activeStatus == this.filterActiveStatus);
     }
   }
 
 
-  sortData(type:any){
-    if(type == 'title'){
-     this.RecipeList  = this.global.sortByKey(this.RecipeList,'recipeTitle','asc');
+  sortData(type: any) {
+    if (type == 'title') {
+      this.RecipeList = this.global.sortByKey(this.RecipeList, 'recipeTitle', 'asc');
     }
   }
 
@@ -407,7 +466,7 @@ export class RecipeComponent implements OnInit {
           e.preventDefault();
           $(clsName).trigger('select');
           $(clsName).trigger('focus');
-        
+
         }
       }
     }
@@ -420,7 +479,7 @@ export class RecipeComponent implements OnInit {
         e.preventDefault();
         $(".searchProduct").trigger('select');
         $(".searchProduct").trigger('focus');
-     
+
         this.rowFocused = 0;
 
       }
@@ -433,7 +492,7 @@ export class RecipeComponent implements OnInit {
         e.preventDefault();
         $(clsName).trigger('select');
         $(clsName).trigger('focus');
-       
+
 
       }
 
@@ -458,61 +517,62 @@ export class RecipeComponent implements OnInit {
     }
   }
 
- 
-  handleProdFocus(item:any,e:any,cls:any,endFocus:any, prodList:[]){
-    
-   
+
+  handleProdFocus(item: any, e: any, cls: any, endFocus: any, prodList: []) {
+
+
     /////// increment in prodfocus on tab click
-    if(e.keyCode == 9 && !e.shiftKey){
-     this.prodFocusedRow += 1;
- 
-   }
-   /////// decrement in prodfocus on shift tab click
-   if(e.shiftKey && e.keyCode == 9){
-     this.prodFocusedRow -= 1;
- 
-   }
-     /////move down
-     if(e.keyCode == 40){
- 
-  
-       if(prodList.length > 1 ){
+    if (e.keyCode == 9 && !e.shiftKey) {
+      this.prodFocusedRow += 1;
+
+    }
+    /////// decrement in prodfocus on shift tab click
+    if (e.shiftKey && e.keyCode == 9) {
+      this.prodFocusedRow -= 1;
+
+    }
+    /////move down
+    if (e.keyCode == 40) {
+
+
+      if (prodList.length > 1) {
         this.prodFocusedRow += 1;
-        if (this.prodFocusedRow >= prodList.length) {      
-          this.prodFocusedRow -= 1  
-      } else {
-          var clsName = cls + this.prodFocusedRow;    
-         //  alert(clsName);
+        if (this.prodFocusedRow >= prodList.length) {
+          this.prodFocusedRow -= 1
+        } else {
+          var clsName = cls + this.prodFocusedRow;
+          //  alert(clsName);
           $(clsName).trigger('focus');
           // e.which = 9;   
           // $(clsName).trigger(e)       
-      }}
-    }
-  
-  
-       //Move up
-       if (e.keyCode == 38) {
-  
-        if (this.prodFocusedRow == 0) {
-            $(endFocus).trigger('focus');
-            this.prodFocusedRow = 0;
-   
         }
-  
-        if (prodList.length > 1) {
-  
-            this.prodFocusedRow -= 1;
-  
-            var clsName = cls + this.prodFocusedRow;
-           //  alert(clsName);
-            $(clsName).trigger('focus');
-            
-  
-        }
-  
+      }
     }
- 
-   }
+
+
+    //Move up
+    if (e.keyCode == 38) {
+
+      if (this.prodFocusedRow == 0) {
+        $(endFocus).trigger('focus');
+        this.prodFocusedRow = 0;
+
+      }
+
+      if (prodList.length > 1) {
+
+        this.prodFocusedRow -= 1;
+
+        var clsName = cls + this.prodFocusedRow;
+        //  alert(clsName);
+        $(clsName).trigger('focus');
+
+
+      }
+
+    }
+
+  }
 
   prodFocusedRow = 0;
   changeFocus(e: any, cls: any) {
@@ -577,7 +637,7 @@ export class RecipeComponent implements OnInit {
       this.costTotal += e.costPrice * e.quantity;
     });
 
-      this.foodCost = (this.costPrice / this.salePrice) * 100;
+    this.foodCost = (this.costPrice / this.salePrice) * 100;
   }
 
 
@@ -658,12 +718,12 @@ export class RecipeComponent implements OnInit {
     //  else if (this.costPrice == 0 || this.costPrice == '' || this.costPrice == undefined) {
     //   this.msg.WarnNotify('Select Ingredients')
     // } 
-      else if (this.menuProdList == '') {
+    else if (this.menuProdList == '') {
       this.msg.WarnNotify('Select Ingredients')
     }
     else if (this.salePrice == 0 || this.salePrice == '' || this.salePrice == undefined) {
       this.msg.WarnNotify('Enter Receipe Sale Price')
-    } else if (this.recipeType == 'Dine In' && ( this.recipeImg == '' || this.recipeImg == undefined)) {
+    } else if (this.recipeType == 'Dine In' && (this.recipeImg == '' || this.recipeImg == undefined)) {
       this.msg.WarnNotify('Select Recipe Image')
     } else if (this.categoryID == 0 || this.categoryID == undefined) {
       this.msg.WarnNotify('Select Category');
@@ -674,7 +734,7 @@ export class RecipeComponent implements OnInit {
     }
     else {
 
-   
+
 
 
       if (isValidFlag) {
@@ -682,7 +742,7 @@ export class RecipeComponent implements OnInit {
           this.app.startLoaderDark();
           this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertRecipe', {
             RecipeTitle: this.recipeTitle,
-            recipeCode:this.recipeCode || this.recipeTitle,
+            recipeCode: this.recipeCode || this.recipeTitle,
             RecipeDescription: this.Description || '-',
             RecipeCostPrice: this.costPrice,
             RecipeSalePrice: this.salePrice,
@@ -716,7 +776,7 @@ export class RecipeComponent implements OnInit {
               this.http.post(environment.mainApi + this.global.restaurentLink + 'UpdateRecipe', {
                 RecipeID: this.recipeID,
                 RecipeTitle: this.recipeTitle,
-                recipeCode:this.recipeCode || this.recipeTitle,
+                recipeCode: this.recipeCode || this.recipeTitle,
                 RecipeDescription: this.Description || '-',
                 RecipeCostPrice: this.costPrice,
                 RecipeSalePrice: this.salePrice,
@@ -755,18 +815,18 @@ export class RecipeComponent implements OnInit {
   }
 
 
-  getRecipeImage(recipeID:any,type:any){
-    this.http.get(environment.mainApi+this.global.restaurentLink+'GetRecipeImage?RecipeID='+recipeID).subscribe(
-      (Response:any)=>{
-        
-       if(type == 'hide'){
-        this.recipeImg = Response[0].recipeImage;
-       }
-       if(type == 'show'){
-     
-          this.global.showProductImage(Response[0].recipeImage,0);
-     
-       }
+  getRecipeImage(recipeID: any, type: any) {
+    this.http.get(environment.mainApi + this.global.restaurentLink + 'GetRecipeImage?RecipeID=' + recipeID).subscribe(
+      (Response: any) => {
+
+        if (type == 'hide') {
+          this.recipeImg = Response[0].recipeImage;
+        }
+        if (type == 'show') {
+
+          this.global.showProductImage(Response[0].recipeImage, 0);
+
+        }
       }
     )
   }
@@ -781,14 +841,14 @@ export class RecipeComponent implements OnInit {
     this.recipeTitle = item.recipeTitle;
     this.costPrice = item.recipeCostPrice;
     this.salePrice = item.recipeSalePrice;
-    this.getRecipeImage(item.recipeID,'hide');
+    this.getRecipeImage(item.recipeID, 'hide');
     // this.recipeImg = this.getRecipeImage(item.recipeID);
     this.recipeRefID = item.recipeRefID;
     this.Description = item.recipeDescription;
     this.cookingTime = item.cookingTime;
     this.cookingAriaID = item.cookingAriaID;
     this.recipeCode = item.recipeCode;
-    
+
 
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetSingleRecipeDetail?recipeid=' + item.recipeID).subscribe(
       (Response: any) => {
@@ -821,7 +881,7 @@ export class RecipeComponent implements OnInit {
     )
 
     setTimeout(() => {
-       $('#RecipeTitle').trigger('select');      
+      $('#RecipeTitle').trigger('select');
     }, 200);
 
   }
@@ -952,37 +1012,37 @@ export class RecipeComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.restaurentLink + 'GetSingleRecipeDetail?recipeid=' + item.recipeID).subscribe(
         (Response: any) => {
           Response.forEach((e: any) => {
-           var value = this.menuProdList.find((f:any)=>f.productID == e.productID);
+            var value = this.menuProdList.find((f: any) => f.productID == e.productID);
             var index = this.menuProdList.indexOf(value);
-          //  alert(index);
-              if (value !== undefined) {
-                this.menuProdList[index].quantity = parseFloat(this.menuProdList[index].quantity) + e.quantity;
+            //  alert(index);
+            if (value !== undefined) {
+              this.menuProdList[index].quantity = parseFloat(this.menuProdList[index].quantity) + e.quantity;
 
-              }
-              if (value == undefined) {
-                this.menuProdList.push({
-                  productID: e.productID,
-                  productTitle: e.productTitle,
-                  barcode: e.barcode,
-                  productImage: e.productImage,
-                  quantity: e.quantity,
-                  avgCostPrice: e.avgCostPrice,
-                  costPrice: e.costPrice,
-                  salePrice: e.salePrice,
-                  expiryDate: this.global.dateFormater(new Date(), '-'),
-                  batchNo: '-',
-                  batchStatus: '-',
-                  uomID: e.uomID,
-                  packing: 1,
-                  discInP: 0,
-                  discInR: 0,
-                  lockedStatus: e.lockedStatus,
+            }
+            if (value == undefined) {
+              this.menuProdList.push({
+                productID: e.productID,
+                productTitle: e.productTitle,
+                barcode: e.barcode,
+                productImage: e.productImage,
+                quantity: e.quantity,
+                avgCostPrice: e.avgCostPrice,
+                costPrice: e.costPrice,
+                salePrice: e.salePrice,
+                expiryDate: this.global.dateFormater(new Date(), '-'),
+                batchNo: '-',
+                batchStatus: '-',
+                uomID: e.uomID,
+                packing: 1,
+                discInP: 0,
+                discInR: 0,
+                lockedStatus: e.lockedStatus,
 
-                })
-              }
-            });
+              })
+            }
+          });
 
-          
+
           this.getTotal()
           this.tabIndex = 0;
         }
@@ -999,7 +1059,7 @@ export class RecipeComponent implements OnInit {
 
   approveRecipe(item: any) {
 
-    this.global.openPinCode().subscribe(pin => {
+    this.global.openPinCode().subscribe(pin => { //////////// Opening Pin Code Global Modal
       if (pin != '') {
         this.app.startLoaderDark();
         this.http.post(environment.mainApi + this.global.restaurentLink + 'ApproveRecipe', {
@@ -1112,23 +1172,23 @@ export class RecipeComponent implements OnInit {
     this.recipeID = 0;
     this.recipeType = 'Dine In';
     this.btnType = 'Save';
-    this.productImage = '';  
+    this.productImage = '';
     this.recipeImg = '';
     this.recipeRefID = 0;
-   if(this.autoEmptyFlag){
-    this.cookingAriaID = 0;
-    this.categoryID = 0;
-    this.recipeTitle = '';
-    this.costPrice = '';
-    this.salePrice = '';
-    this.Description = '';
-    this.menuProdList = [];
-    this.totalQty = 0;
-    this.costTotal = 0;
-    this.avgCostTotal = 0;
-    this.cookingTime = '';
-    this.foodCost = 0;
-   }
+    if (this.autoEmptyFlag) {
+      this.cookingAriaID = 0;
+      this.categoryID = 0;
+      this.recipeTitle = '';
+      this.costPrice = '';
+      this.salePrice = '';
+      this.Description = '';
+      this.menuProdList = [];
+      this.totalQty = 0;
+      this.costTotal = 0;
+      this.avgCostTotal = 0;
+      this.cookingTime = '';
+      this.foodCost = 0;
+    }
 
 
 
@@ -1139,11 +1199,22 @@ export class RecipeComponent implements OnInit {
 
 
   /////// to change the tab on edit
+  curFocusRow:any = -1;
 
   changeTab(tabNum: any) {
     this.tabIndex = tabNum;
-
+    setTimeout(() => {
+      this.scrollToRow(this.curFocusRow)
+    }, 50);
   }
+
+  scrollToRow(index: number) {
+  const row = document.getElementById('rcp-' + index);
+  if (row) {
+    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
 
 
 
@@ -1159,11 +1230,11 @@ export class RecipeComponent implements OnInit {
 
 
 
-    getRecipeDetail(item:any){
-      this.dialog.open(RecipeDetailComponent,{
-        width:'80%',
-        data:[item,{type:'Dine In'}]
-      }).afterClosed().subscribe()
-    }
+  getRecipeDetail(item: any) {
+    this.dialog.open(RecipeDetailComponent, {
+      width: '80%',
+      data: [item, { type: 'Dine In' }]
+    }).afterClosed().subscribe()
+  }
 
 }

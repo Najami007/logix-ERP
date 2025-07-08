@@ -790,12 +790,21 @@ export class ProductComponent implements OnInit {
 
 
   /////// to change the tab on edit
-
+  curFocusRow:any = -1;
   changeTab(tabNum: any) {
     this.tabIndex = tabNum;
-
+    setTimeout(() => {
+      this.scrollToRow(this.curFocusRow)
+    }, 500);
   }
 
+
+  scrollToRow(index: number) {
+  const row = document.getElementById('prod-' + index);
+  if (row) {
+    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
 
 
   /////////////// to Add New Brand Short cut ///////////////

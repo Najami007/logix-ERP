@@ -49,7 +49,7 @@
                      <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
                              [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                      <mat-option *ngFor="let item of reportsList | filter:rptSearch.value"
-                         [value]="item.val">{{item.title}}</mat-option>
+                         [value]="item.invType">{{item.invTypeTitle}}</mat-option>
                  </mat-select>
              </mat-form-field>
              <mat-form-field appearance="outline" class="col-lg-2 matSmall">

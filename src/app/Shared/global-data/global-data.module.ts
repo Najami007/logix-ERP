@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment.development';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { NotificationService } from '../service/notification.service';
 import { userInterface } from '../Interfaces/login-user-interface';
-import { BehaviorSubject, Observable, Observer, from, retry } from 'rxjs';
+import { BehaviorSubject, Observable, Observer, from, map, of, retry, switchMap } from 'rxjs';
 import * as $ from 'jquery';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductImgComponent } from 'src/app/Components/Inventory/product/product-img/product-img.component';
@@ -124,9 +124,6 @@ export class GlobalDataModule implements OnInit {
 
 
   ngOnInit(): void {
-
-
-
 
 
   }
@@ -315,6 +312,7 @@ export class GlobalDataModule implements OnInit {
   RestBillUserwise = this.getFeature('RestBillUserwise');
   VehicleSaleFeature = this.getFeature('VehicleSale');
   DetailedPurchase = this.getFeature('DetailedPurchase');
+  PinCodeFeature = this.getFeature('PinCode');
 
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
@@ -354,6 +352,7 @@ export class GlobalDataModule implements OnInit {
     this.RestBillUserwise = this.getFeature('RestBillUserwise');
     this.VehicleSaleFeature = this.getFeature('VehicleSale');
     this.DetailedPurchase = this.getFeature('DetailedPurchase');
+    this.PinCodeFeature = this.getFeature('PinCode');
 
   }
 
@@ -637,9 +636,6 @@ export class GlobalDataModule implements OnInit {
 
 
   openTill() {
-
-
-
     var frame1: any = $('<iframe />');
     frame1[0].name = 'frame1';
     frame1.css({ position: 'absolute', top: '-1000000px' });
@@ -1336,13 +1332,38 @@ export class GlobalDataModule implements OnInit {
   }
 
   ///////////// for opening pincode modal window
+
+  pin$ = of('1234');
   public openPinCode(): Observable<any> {
-    return this.dialog.open(PincodeComponent, {
-      width: '30%',
-      enterAnimationDuration: 500,
-      hasBackdrop: true,
-      disableClose: true,
-    }).afterClosed().pipe(retry(3));
+
+
+    if (this.PinCodeFeature) {
+      return this.dialog.open(PincodeComponent, {
+        width: '30%',
+        enterAnimationDuration: 500,
+        hasBackdrop: true,
+        disableClose: true,
+      }).afterClosed().pipe(retry(3));
+    } else {
+
+      return from(
+        Swal.fire({
+          title: "Confirm To Proceed",
+          showCancelButton: true,
+          confirmButtonText: 'Confirm',
+          showLoaderOnConfirm: true,
+        })
+      ).pipe(
+        switchMap((result) => {
+          if (result.isConfirmed) {
+            return this.pin$.pipe(map(pin => '*' + pin)); // transform and return pin
+          } else {
+            return of(''); // return null if cancelled
+          }
+        })
+      );
+
+    }
   }
 
 
@@ -1760,6 +1781,14 @@ export class GlobalDataModule implements OnInit {
     //   }
     // )
   }
+
+  scrollToSection(id: string) {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
 
 
 }

@@ -327,7 +327,7 @@
                         <th class="hide-in-print text-center">Action</th>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of productList | filter:searchProduct |paginate:{
+                        <tr [id]="'prod-'+index" [ngClass]="curFocusRow == index ? 'bg-dark-light' : ''" (click)="curFocusRow = index" *ngFor="let item of productList | filter:searchProduct |paginate:{
                         itemsPerPage : tableSize,
                         currentPage : page,
                         totalItems :    count,

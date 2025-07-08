@@ -200,7 +200,8 @@
                 <div class="row">
                     <mat-form-field class="col-lg-4 matSmall" appearance="outline">
                         <mat-label>Search.....</mat-label>
-                        <input #recipeSearch matInput type="search" class="text-secondary">
+                        <input #recipeSearch matInput [(ngModel)]="searchRecipe" (keydown)="onProdSearchKeyup($event,searchRecipe)"
+                    (keypress)="onProdSearchKeyup($event,searchRecipe)" type="search" class="text-secondary">
                     </mat-form-field>
 
                     <mat-form-field class="col-lg-2 matSmall" appearance="outline">
@@ -276,7 +277,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of RecipeList |filter:recipeSearch.value index as index">
+                            <tr [ngClass]="curFocusRow == index ? 'bg-dark-light' : ''" [id]="'rcp-'+index" (click)="curFocusRow = index" *ngFor="let item of RecipeList |filter:searchRecipe |paginate:{
+                        itemsPerPage : tableSize,
+                        currentPage : page,
+                        totalItems :    count,
+                    }  ; index as index">
                                 <td>{{index+1}}</td>
                                 <td>{{item.recipeTitle}}</td>
                                 <td>{{item.recipeCode}}</td>
@@ -289,32 +294,35 @@
                                 <td>{{item.recipeSalePrice |number:'1.0-0'}}</td>
                                 <td>{{item.recipeCatTitle}}</td>
                                 <td>{{item.cookingAriaTitle}}</td>
-                                 <td class="cursorPointer hide-in-print"><mat-icon matTooltip="Ingredient Retreive"
+                                <td class="cursorPointer hide-in-print"><mat-icon matTooltip="Ingredient Retreive"
                                         (click)="getIngredient(item)">photo_filter</mat-icon>
                                 </td>
-                                <td class="cursorPointer hide-in-print "><mat-icon data-bs-toggle="modal" matTooltip="Other Recipe"
-                                        data-bs-target="#otherRecipe" *ngIf="crudList.u"
+                                <td class="cursorPointer hide-in-print "><mat-icon data-bs-toggle="modal"
+                                        matTooltip="Other Recipe" data-bs-target="#otherRecipe" *ngIf="crudList.u"
                                         [ngClass]="item.recipeRefID > 0 ? 'text-warning': 'text-secondary'"
                                         (click)="copyRecipe(item)">save</mat-icon></td>
                                 <td class="cursorPointer hide-in-print text-center">
                                     <mat-icon class="text-success" matTooltip="Edit"
                                         (click)="edit(item)">edit</mat-icon>
-                                        
-                                        <mat-icon matTooltip="Approve" *ngIf="crudList.u" (click)="approveRecipe(item)">{{item.approvedStatus == true
+
+                                    <mat-icon matTooltip="Approve" *ngIf="crudList.u"
+                                        (click)="approveRecipe(item)">{{item.approvedStatus == true
                                         ? 'lock' :'lock_open'}}</mat-icon>
 
-                                        <mat-icon *ngIf="crudList.u" matTooltip="Active"
+                                    <mat-icon *ngIf="crudList.u" matTooltip="Active"
                                         [ngClass]="item.activeStatus == false ?'text-danger': 'text-success'"
                                         (click)="activeRecipe(item)">{{item.activeStatus == false ?
                                         'indeterminate_check_box' :'check_box'}}</mat-icon>
-                                         
-                                        <mat-icon class="cursorPointer text-success hide-in-print" matTooltip="Detail"
+
+                                    <mat-icon class="cursorPointer text-success hide-in-print" matTooltip="Detail"
                                         (click)="getRecipeDetail(item)">receipt</mat-icon>
 
-                                        <mat-icon (click)="getRecipeImage(item.recipeID,'show')" matTooltip="Image">image</mat-icon>
+                                    <mat-icon (click)="getRecipeImage(item.recipeID,'show')"
+                                        matTooltip="Image">image</mat-icon>
 
-                                        <mat-icon class="text-danger" *ngIf="crudList.d" matTooltip="Delete"
-                                        (click)="delete(item)">delete</mat-icon></td>
+                                    <mat-icon class="text-danger" *ngIf="crudList.d" matTooltip="Delete"
+                                        (click)="delete(item)">delete</mat-icon>
+                                </td>
 
                             </tr>
                         </tbody>
@@ -336,6 +344,27 @@
     </mat-tab-group>
 
 
+
+    <div class="d-flex" *ngIf="tabIndex == 1"
+    style="position: fixed; bottom: 32px !important; width: 100%; background-color: #fff; z-index: 2;">
+
+    <pagination-controls previousLabel="Prev" nextLabel="Next"
+        (pageChange)="onTableDataChange($event)"></pagination-controls>
+
+
+    <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+    <select class="text-white" style="height: 25px;background-color: rgb(75, 164, 248);"
+        (change)="onTableSizeChange($event)" [(ngModel)]="tableSize">
+        <option *ngFor=" let item of tableSizes" [selected]="tableSize == item">{{item}}</option>
+    </select>
+
+    <div class="jump-to-page">
+        <input type="number" [(ngModel)]="jumpPage" placeholder="Page #" min="1" [max]="count" />
+        <button (click)="goToPage()" class="text-white"
+            style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
+    </div>
+
+</div>
 
     <!------------------------ Modal Window for Making Other Recipe ------------------>
 
