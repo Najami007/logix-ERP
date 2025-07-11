@@ -61,8 +61,8 @@ export class SalePurchaseRptcatwiseComponent implements OnInit {
   }
 
 
-  tmpRptType = 's';
-  rptType: any = 's';
+  tmpRptType = 'S';
+  rptType: any = 'S';
 
 
   userList: any = [];
@@ -128,7 +128,7 @@ export class SalePurchaseRptcatwiseComponent implements OnInit {
 
   getReport(type: any) {
 
-    this.reportType = this.reportsList.find((e: any) => e.val == this.rptType).title;
+    this.reportType = this.reportsList.find((e: any) => e.invType == this.tmpRptType).invTypeTitle;
 
 
     this.rptType = this.tmpRptType;
@@ -230,12 +230,12 @@ export class SalePurchaseRptcatwiseComponent implements OnInit {
 
               this.SaleDetailList.forEach((e: any) => {
                 this.qtyTotal += e.quantity;
-                if (this.rptType == 's' || this.rptType == 'sr') {
+                if (this.rptType == 'S' || this.rptType == 'SR') {
                   this.detNetTotal += e.salePrice * e.quantity;
                   this.profitTotal += (e.salePrice * e.quantity) - (e.avgCostPrice * e.quantity);
                   // this.profitPercentTotal += (((e.salePrice * e.quantity) - (e.avgCostPrice * e.quantity)) / (e.salePrice * e.quantity));
                 }
-                else if (this.rptType == 'p' || this.rptType == 'pr') {
+                else if (this.rptType == 'P' || this.rptType == 'PR') {
                   this.detNetTotal += e.costPrice * e.quantity;
                 }
                 else {

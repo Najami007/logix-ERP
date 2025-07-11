@@ -359,7 +359,7 @@
     </select>
 
     <div class="jump-to-page">
-        <input type="number" [(ngModel)]="jumpPage" placeholder="Page #" min="1" [max]="count" />
+        <input type="text" class="w-25" (keydown)="global.handleNumKeys($event)" [(ngModel)]="jumpPage" placeholder="Page #" min="1" [max]="count" />
         <button (click)="goToPage()" class="text-white"
             style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
     </div>

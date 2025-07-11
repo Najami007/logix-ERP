@@ -794,7 +794,7 @@ export class ProductComponent implements OnInit {
   changeTab(tabNum: any) {
     this.tabIndex = tabNum;
     setTimeout(() => {
-      this.scrollToRow(this.curFocusRow)
+      if(this.tabIndex == 1 )this.scrollToRow(this.curFocusRow)
     }, 500);
   }
 

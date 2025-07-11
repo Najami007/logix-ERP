@@ -148,7 +148,7 @@ export class PurchaseComponent implements OnInit {
       var costWithGst = costWithDiscR + ((costWithDiscR * item.gst) / 100);
       var costWithEt = costWithGst + etAmount;
 
-
+      console.log(costWithDiscP,costWithDiscR,costWithGst,costWithEt)
       item.CostPrice = costWithEt;
     }
     if (this.discType == 'bd') {

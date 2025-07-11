@@ -59,8 +59,8 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
 
 
   reportsList: any = []
-  tmpRptType = 's';
-  rptType: any = 's';
+  tmpRptType = 'S';
+  rptType: any = 'S';
 
 
   userList: any = [];
@@ -114,9 +114,9 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
 
   getReport(type: any) {
 
-    this.reportType = this.reportsList.find((e: any) => e.val == this.rptType).title;
+    this.reportType = this.reportsList.find((e: any) => e.invType == this.tmpRptType).invTypeTitle;
 
-    if (type == 'taxSummary' && (this.rptType != 's')) {
+    if (type == 'taxSummary' && (this.rptType != 'S')) {
       this.msg.WarnNotify('Tax Is Only For Sales')
       return;
     }
@@ -277,7 +277,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
 
             this.SaleDetailList.forEach((e: any) => {
               this.qtyTotal += e.quantity;
-              if (this.rptType == 's' || this.rptType == 'sr') {
+              if (this.rptType == 'S' || this.rptType == 'SR') {
                 this.detNetTotal += (e.salePrice - e.discInR) * e.quantity;
                 this.profitTotal += ((e.salePrice - e.discInR) * e.quantity) - (e.avgCostPrice * e.quantity);
                 this.discountTotal += e.discInR * e.quantity;
@@ -286,7 +286,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
                 this.avgCostTotal += e.quantity * e.avgCostPrice;
                 //this.profitPercentTotal += ((e.salePrice - e.discInR) * e.quantity) - (e.avgCostPrice * e.quantity) / ;
               }
-              else if (this.rptType == 'p' || this.rptType == 'pr') {
+              else if (this.rptType == 'P' || this.rptType == 'PR') {
                 this.detNetTotal += e.costPrice * e.quantity;
               }
               else {

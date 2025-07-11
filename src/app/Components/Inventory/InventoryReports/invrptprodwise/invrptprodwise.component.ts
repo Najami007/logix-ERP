@@ -121,7 +121,7 @@ getReportTypes(){
   costTotal = 0;
 
   getReport(type: any) {
-    this.reportType = this.reportsList.find((e:any)=>e.val == type).title;
+    this.reportType = this.reportsList.filter((e:any)=>e.invType == this.rptType)[0].invTypeTitle;
 
    
     if (this.productID == 0 || this.productID == undefined) {
