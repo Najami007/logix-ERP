@@ -43,7 +43,7 @@
             </mat-form-field>
     
         
-            <mat-form-field  class="col-lg-6 matSmall" appearance="outline">
+            <mat-form-field  class="col-lg-4 matSmall" appearance="outline">
                 <mat-label>Reports</mat-label>
                 <mat-select [(ngModel)]="tmpRptType" >
                     <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
@@ -52,10 +52,19 @@
                         [value]="item.invType">{{item.invTypeTitle}}</mat-option>
                 </mat-select>
             </mat-form-field>
+              <mat-form-field appearance="outline" class="col-md-2 matSmall" >
+                <mat-label>Formate</mat-label>
+                <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
+                    
+                    <mat-option [value]="1">Summary</mat-option>
+                     <mat-option [value]="2">Detail</mat-option>
+                      <mat-option  *ngIf="FBRFeature" [value]="3">Tax Detail</mat-option>
+                </mat-select>
+            </mat-form-field>
             <div class="col-lg-6 pb-2" *ngIf="crudList.r">
-                <button class="btn-rpt-success col-lg-2  me-1" (click)="getReport('summary')">Summary</button>
-                <button class="btn-rpt-success col-lg-2  me-1" *ngIf="FBRFeature" (click)="getReport('taxSummary')">Tax Rpt</button>
-                <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('detail')">Detail</button>
+                <!-- <button class="btn-rpt-success col-lg-2  me-1" (click)="getReport('summary')">Summary</button>
+                <button class="btn-rpt-success col-lg-2  me-1" *ngIf="FBRFeature" (click)="getReport('taxSummary')">Tax Rpt</button> -->
+                <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('')">Get Report</button>
                 <button class="btn-rpt-primary col-lg-2 me-1" (click)="print()">Print</button>
                 <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
                 <!-- <button style="width: 60px;font-size: 20px;" class="btn-rpt-primary" (click)="global.ExportHTMLTabletoExcel('PrintDiv','Summary')"><i class="bi bi-filetype-xlsx"></i></button> -->
@@ -96,7 +105,7 @@
 
     
 
-        <table class="table-logix" id="summaryTable">
+        <table class="table-logix" id="summaryTable" *ngIf="formateType == 1">
             <thead>
                 <tr>
                     <th>S#</th>
@@ -151,7 +160,7 @@
           
         </table>
 
-        <table  class="table-logix" id="TaxsummaryTable" *ngIf="FBRFeature">
+        <table  class="table-logix" id="TaxsummaryTable" *ngIf="FBRFeature && formateType == 3">
             <thead>
                 <tr>
                     <th>S#</th>
@@ -215,7 +224,7 @@
 
 
 
-        <table class="table-logix" id="detailTable">
+        <table class="table-logix" id="detailTable" *ngIf="formateType == 2">
             <thead>
                 <tr>
                     <th>S#</th>

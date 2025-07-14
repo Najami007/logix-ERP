@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
@@ -21,7 +22,8 @@ export class TopLeastSaleQtyAmountwiseComponent {
     private msg: NotificationService,
     private app: AppComponent,
     private global: GlobalDataModule,
-    private route: Router
+    private route: Router,
+    private datePipe: DatePipe
 
   ) {
 
@@ -108,5 +110,17 @@ export class TopLeastSaleQtyAmountwiseComponent {
   print() {
     this.global.printData('#PrintDiv')
   }
+
+
+  
+  export() {
+    if (this.reportDataList.length == 0) return;
+    var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
+    var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
+    this.global.ExportHTMLTabletoExcel(`summaryTable`, `Top Least Sale Report (${startDate} - ${endDate})`)
+  }
+
+
+
 
 }

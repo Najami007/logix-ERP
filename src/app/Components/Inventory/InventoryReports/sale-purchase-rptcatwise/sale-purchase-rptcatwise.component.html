@@ -1,90 +1,91 @@
 <div class="container-fluid body ">
 
     <div class=" p-2 mt-2">
-   
-         <div class="row">
- 
- 
-             <mat-form-field appearance="outline" class="col-lg-4 matSmall">
-                 <mat-label>User</mat-label>
-                 <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
-                     <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
-                             [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                     <mat-option [value]="0">All User</mat-option>
-                     <mat-option *ngFor="let item of userList | filter:usearch.value"
-                         [value]="item.userID">{{item.userName}}</mat-option>
-                 </mat-select>
-             </mat-form-field>
-             <mat-form-field class="col-lg-2 matSmall" appearance="outline">
-                 <mat-label>From Date</mat-label>
-                 <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
-                 <mat-datepicker-toggle matSuffix [for]="sDate" ></mat-datepicker-toggle>
-                 <mat-datepicker #sDate></mat-datepicker>
-             </mat-form-field>
-             <mat-form-field class="col-lg-2 matSmall" appearance="outline">
-                 <mat-label>From Time</mat-label>       
-                 <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
-                 <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
-                 <ngx-material-timepicker #fTime></ngx-material-timepicker>
-             </mat-form-field>
-     
-     
-             <mat-form-field class="col-lg-2 matSmall" appearance="outline">
-                 <mat-label>To Date</mat-label>
-                 <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
-                 <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
-                 <mat-datepicker #eDate></mat-datepicker>
-             </mat-form-field>
-             <mat-form-field class="col-lg-2 matSmall" appearance="outline">
-                 <mat-label>To Time</mat-label>
-                     <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
-                     <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
-                     <ngx-material-timepicker #tTime></ngx-material-timepicker>
-             </mat-form-field>
-     
-         
-             <mat-form-field  class="col-lg-2 matSmall" appearance="outline">
-                 <mat-label>Reports</mat-label>
-                 <mat-select [(ngModel)]="tmpRptType" >
-                     <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
-                             [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                     <mat-option *ngFor="let item of reportsList | filter:rptSearch.value"
-                         [value]="item.invType">{{item.invTypeTitle}}</mat-option>
-                 </mat-select>
-             </mat-form-field>
-             <mat-form-field appearance="outline" class="col-lg-2 matSmall">
+
+        <div class="row">
+
+
+            <mat-form-field appearance="outline" class="col-md-4 matSmall">
+                <mat-label>User</mat-label>
+                <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
+                    <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option [value]="0">All User</mat-option>
+                    <mat-option *ngFor="let item of userList | filter:usearch.value"
+                        [value]="item.userID">{{item.userName}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                <mat-label>From Date</mat-label>
+                <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
+                <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
+                <mat-datepicker #sDate></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                <mat-label>From Time</mat-label>
+                <input matInput [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+                <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
+                <ngx-material-timepicker #fTime></ngx-material-timepicker>
+            </mat-form-field>
+
+
+            <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                <mat-label>To Date</mat-label>
+                <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
+                <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+                <mat-datepicker #eDate></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                <mat-label>To Time</mat-label>
+                <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+                <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
+                <ngx-material-timepicker #tTime></ngx-material-timepicker>
+            </mat-form-field>
+
+
+            <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                <mat-label>Reports</mat-label>
+                <mat-select [(ngModel)]="tmpRptType">
+                    <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of reportsList | filter:rptSearch.value"
+                        [value]="item.invType">{{item.invTypeTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="col-md-2 matSmall">
                 <mat-label>Type</mat-label>
-             
-                <mat-select [(ngModel)]="catType"  name="catType">
-               
+
+                <mat-select [(ngModel)]="catType" name="catType">
+
                     <mat-option value="cat">Categorywise</mat-option>
                     <mat-option value="subcat">Sub Categorywise</mat-option>
                     <mat-option value="brand">Brandwise</mat-option>
                 </mat-select>
             </mat-form-field>
-             <mat-form-field appearance="outline" class="col-lg-2 matSmall" *ngIf="catType == 'cat' || catType == 'subcat'">
+            <mat-form-field appearance="outline" class="col-md-2 matSmall"
+                *ngIf="catType == 'cat' || catType == 'subcat'">
                 <mat-label>Category</mat-label>
-              
+
                 <mat-select [(ngModel)]="CategoryID" #category (selectionChange)="getSubCategory()" name="pCategory">
                     <mat-option><ngx-mat-select-search #catsearch [placeholderLabel]="'Search...'"
-                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
                     <mat-option *ngFor="let item of CategoriesList | filter:catsearch.value"
                         [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
 
                 </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="outline" class="col-lg-2 matSmall" *ngIf="catType == 'subcat'">
+            <mat-form-field appearance="outline" class="col-md-2 matSmall" *ngIf="catType == 'subcat'">
                 <mat-label>Sub Category</mat-label>
-             
+
                 <mat-select [(ngModel)]="SubCategoryID" #subCategory name="pSubCategory">
                     <mat-option><ngx-mat-select-search #subcatsearch [placeholderLabel]="'Search...'"
-                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
                     <mat-option *ngFor="let item of SubCategoriesList| filter:subcatsearch.value "
                         [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
                 </mat-select>
             </mat-form-field>
-            
-            <mat-form-field appearance="outline" class="col-lg-2 matSmall" *ngIf="catType == 'brand'">
+
+            <mat-form-field appearance="outline" class="col-md-2 matSmall" *ngIf="catType == 'brand'">
                 <mat-label>Brand</mat-label>
                 <mat-select [(ngModel)]="BrandID" #brand>
                     <mat-option><ngx-mat-select-search #brandSearch [placeholderLabel]="'Search...'"
@@ -93,156 +94,176 @@
                         [value]="item.brandID">{{item.brandTitle}}</mat-option>
                 </mat-select>
             </mat-form-field>
+              <mat-form-field appearance="outline" class="col-md-2 matSmall" >
+                <mat-label>Formate</mat-label>
+                <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
+                    
+                    <mat-option [value]="1">Summary</mat-option>
+                     <mat-option [value]="2">Detail</mat-option>
+                </mat-select>
+            </mat-form-field>
             
-             <div class="col-lg-4 pb-2" *ngIf="crudList.r">
-                 <button class="btn-rpt-success col-lg-4  me-1" (click)="getReport('summary')">Summary</button>
-                 <button class="btn-rpt-success col-lg-4 me-1" (click)="getReport('detail')">Detail</button>
-                 <button class="btn-rpt-primary col-lg-3 " (click)="print()">Print</button>
-             </div>
-         </div>
-     
- 
-     <div id="PrintDiv">
- 
-         <!-------------------------    Top Logo Section -------------------->
- 
-         <div class="hide">
-             <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
-                 <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
-                     <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
-                         [width]="item.logo1Width">
-                 </span>
-                 <span>
- 
- 
-                     <h1 class="companyName">{{item.companyName}}</h1>
- 
-                     <p class="rptTitle" style="margin-top:-20px">{{reportType}}</p>
-                     <p style="margin-top: -15px;" > <b *ngIf="userName != ''">User: {{userName}}</b></p>
-                     <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
-                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
- 
- 
-                 </span>
-                 <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
-                     <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
-                         height="{{item.logo2Height}}" width="{{item.logo2Width}}">
-                 </span>
- 
- 
-             </div>
-         </div>
- 
-     
- 
-         <table class="table-logix" id="summaryTable">
-            <thead>
-                <tr>
-                    <th>S#</th>
-                 
-                    <th>Title</th>
-                    <th>Qty</th>
-                    <th >Total</th>
 
-                </tr>
+            <div class="col-md-2" *ngIf="crudList.r">
+                <!-- <button class="btn-rpt-success col-lg-3  me-1" (click)="getReport('summary')">Summary</button> -->
+                <button class="btn-rpt-success col-lg-3 me-1" (click)="getReport('detail')">Get Report</button>
+                <button class="btn-rpt-primary col-lg-3 " (click)="print()">Print</button>
+                <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
+
+            </div>
+        </div>
 
 
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of SaleDetailList index as index">
-                    <td class="text-center">{{index + 1}}</td>
-                 
-                    <td>{{item.productTitle}}</td>
-                    <td class="text-center">{{item.quantity | number:'1.0-2'}}</td>
-                    <td class="text-end">{{item.total |number:'1.0-1'}}</td>
-                  
-                  
-                </tr>
-                <tr>
-                    <td colspan="3"></td>
-                    <td class="text-end fw-bold">{{summaryNetTotal|number:'1.0-1'}}</td>
-                </tr>
-            </tbody>
- 
-           
-         </table>
- 
- 
- 
- 
-         <table class="table-logix" id="detailTable">
-             <thead>
-                 <tr>
-                     <th>S#</th>
-                     <th>Bill #</th>
-                     <th>Date</th>
-                     <!-- <th *ngIf="rptType == 's'">Table</th> -->
-                     <th>Title</th>
-                     <th>Qty</th>
-                     <th style="width: 120px;">Cost Price</th>
-                     <th style="width: 150px;">Avg Cost</th>
-                     <th style="width: 120px;">Sale Price</th>
-                     <th *ngIf="rptType == 's' || rptType == 'sr'">Disc</th>
-                     <th *ngIf="rptType == 's' || rptType == 'sr'">Disc %</th>
-                     <th>Total</th>
-                     <th *ngIf="rptType == 's'">Profit</th>
-                     <th *ngIf="rptType == 's'">Profit %</th>
- 
-                 </tr>
- 
- 
-             </thead>
-             <tbody>
-                 <tr *ngFor="let item of SaleDetailList index as index">
-                     <td class="text-center">{{index + 1}}</td>
-                     <td class="text-center cursorPointer" (click)="printBill(item)"><u class="text-primary">{{item.invBillNo}}</u></td>
-                     <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
-                     <!-- <td *ngIf="rptType == 's'">{{item.tableTitle}}</td> -->
-                     <td>{{item.productTitle}}</td>
-                     <td class="text-center">{{item.quantity |number:"1.0-3"}}</td>
-                     <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
-                     <td class="text-end">{{item.avgCostPrice |number:'1.0-1'}}</td>
-                     <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
-                     <td class="text-end" *ngIf="rptType == 's' || rptType == 'sr'">{{item.discInR |number:'1.0-1'}}</td>
-                     <td class="text-end" *ngIf="rptType == 's' || rptType == 'sr'">{{item.discInP |number:'1.0-1'}}</td>
-                     <td class="text-end" *ngIf="rptType == 's' || rptType == 'sr'">{{(item.salePrice * item.quantity) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
-                     <!-- <td class="text-end" *ngIf="rptType != 's' && rptType != 'sr'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td> -->
-                     <td class="text-end" *ngIf="rptType == 'p' || rptType == 'pr'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td>
-                     <td class="text-end" *ngIf="rptType == 'I' || rptType == 'R'|| rptType == 'AI'|| rptType == 'AO'|| rptType == 'DL'|| rptType == 'E'|| rptType == 'OS'">{{item.avgCostPrice * item.quantity |number:'1.0-1'}}</td>
-                     <td class="text-end" *ngIf="rptType == 's'">{{((item.salePrice * item.quantity) - (item.discInR * item.quantity)) - (item.avgCostPrice * item.quantity) |number:'1.0-1'}}</td>
-                     <td class="text-end" *ngIf="rptType == 's'">{{(((item.salePrice * item.quantity) - (item.discInR * item.quantity)) - (item.avgCostPrice * item.quantity)) / ((item.salePrice * item.quantity) - (item.discInR * item.quantity)) |percent:'1.0-1'}}</td>
-                   
-                 </tr>
-                 <tr>
-                     <td colspan="2"></td>
-                     <td *ngIf="rptType == 's'"></td>
-                     <td></td>
-                     <td *ngIf="rptType != 's'"></td>
-                     <td class="fw-bold text-center">{{qtyTotal  |number:'1.0-0'}}</td>
-                     <td ></td>                    
-                     <td></td>
-                     <td></td>
-                     <td *ngIf="rptType == 's' || rptType == 'sr'"></td>
-                     <td *ngIf="rptType == 's' || rptType == 'sr'"></td>
-                     
-                     <td class="fw-bold text-end">{{detNetTotal |number:'1.0-0'}}</td>
-                     <td *ngIf="rptType == 's'" class="fw-bold text-end">{{profitTotal |number:'1.0-0'}}</td>
-                     <td *ngIf="rptType == 's'" class="fw-bold text-end">{{profitTotal / detNetTotal * 100 |number:'1.0-2'}}%</td>
-                 </tr>
-             </tbody>
-           
-         </table>
+        <div id="PrintDiv">
+
+            <!-------------------------    Top Logo Section -------------------->
+
+            <div class="hide">
+                <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                    <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset=""
+                            [height]="item.logo1Height" [width]="item.logo1Width">
+                    </span>
+                    <span>
 
 
-     </div>
+                        <h1 class="companyName">{{item.companyName}}</h1>
+
+                        <p class="rptTitle" style="margin-top:-20px">{{reportType}}</p>
+                        <p style="margin-top: -15px;"> <b *ngIf="userName != ''">User: {{userName}}</b></p>
+                        <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}})
+                            <b>To:</b>
+                            {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
+
+
+                    </span>
+                    <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                            height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                    </span>
+
+
+                </div>
+            </div>
+
+
+
+            <table class="table-logix" *ngIf="formateType == 1" id="summaryTable">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+
+                        <th>Title</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+
+                    </tr>
+
+
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of SaleDetailList index as index">
+                        <td class="text-center">{{index + 1}}</td>
+
+                        <td>{{item.productTitle}}</td>
+                        <td class="text-center">{{item.quantity | number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.total |number:'1.0-1'}}</td>
+
+
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <td class="text-end fw-bold">{{summaryNetTotal|number:'1.0-1'}}</td>
+                    </tr>
+                </tbody>
+
+
+            </table>
+
+
+
+
+            <table class="table-logix" *ngIf="formateType == 2" id="detailTable">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Bill #</th>
+                        <th>Date</th>
+                        <!-- <th *ngIf="rptType == 's'">Table</th> -->
+                        <th>Title</th>
+                        <th>Qty</th>
+                        <th style="width: 120px;">Cost Price</th>
+                        <th style="width: 150px;">Avg Cost</th>
+                        <th style="width: 120px;">Sale Price</th>
+                        <th *ngIf="rptType == 'S' || rptType == 'SR'">Disc</th>
+                        <th *ngIf="rptType == 'S' || rptType == 'SR'">Disc %</th>
+                        <th>Total</th>
+                        <th *ngIf="rptType == 'S'">Profit</th>
+                        <th *ngIf="rptType == 'S'">Profit %</th>
+
+                    </tr>
+
+
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of SaleDetailList index as index">
+                        <td class="text-center">{{index + 1}}</td>
+                        <td class="text-center cursorPointer" (click)="printBill(item)"><u
+                                class="text-primary">{{item.invBillNo}}</u></td>
+                        <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
+                        <!-- <td *ngIf="rptType == 's'">{{item.tableTitle}}</td> -->
+                        <td>{{item.productTitle}}</td>
+                        <td class="text-center">{{item.quantity |number:"1.0-3"}}</td>
+                        <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
+                        <td class="text-end">{{item.avgCostPrice |number:'1.0-1'}}</td>
+                        <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
+                        <td class="text-end" *ngIf="rptType == 'S' || rptType == 'SR'">{{item.discInR |number:'1.0-1'}}
+                        </td>
+                        <td class="text-end" *ngIf="rptType == 'S' || rptType == 'SR'">{{item.discInP |number:'1.0-1'}}
+                        </td>
+                        <td class="text-end" *ngIf="rptType == 'S' || rptType == 'SR'">{{(item.salePrice *
+                            item.quantity) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
+                        <!-- <td class="text-end" *ngIf="rptType != 's' && rptType != 'sr'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td> -->
+                        <td class="text-end" *ngIf="rptType == 'P' || rptType == 'PR'">{{item.costPrice * item.quantity
+                            |number:'1.0-1'}}</td>
+                        <td class="text-end"
+                            *ngIf="rptType == 'I' || rptType == 'R'|| rptType == 'AI'|| rptType == 'AO'|| rptType == 'DL'|| rptType == 'E'|| rptType == 'OS'">
+                            {{item.avgCostPrice * item.quantity |number:'1.0-1'}}</td>
+                        <td class="text-end" *ngIf="rptType == 'S'">{{((item.salePrice * item.quantity) - (item.discInR
+                            * item.quantity)) - (item.avgCostPrice * item.quantity) |number:'1.0-1'}}</td>
+                        <td class="text-end" *ngIf="rptType == 'S'">{{(((item.salePrice * item.quantity) - (item.discInR
+                            * item.quantity)) - (item.avgCostPrice * item.quantity)) / ((item.salePrice * item.quantity)
+                            - (item.discInR * item.quantity)) |percent:'1.0-1'}}</td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td *ngIf="rptType == 'S'"></td>
+                        <td></td>
+                        <td *ngIf="rptType != 'S'"></td>
+                        <td class="fw-bold text-center">{{qtyTotal |number:'1.0-0'}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td *ngIf="rptType == 'S' || rptType == 'SR'"></td>
+                        <td *ngIf="rptType == 'S' || rptType == 'SR'"></td>
+
+                        <td class="fw-bold text-end">{{detNetTotal |number:'1.0-0'}}</td>
+                        <td *ngIf="rptType == 'S'" class="fw-bold text-end">{{profitTotal |number:'1.0-0'}}</td>
+                        <td *ngIf="rptType == 'S'" class="fw-bold text-end">{{profitTotal / detNetTotal * 100
+                            |number:'1.0-2'}}%</td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+
+        </div>
     </div>
- 
- 
- 
- </div>
- 
- 
- <app-sale-bill-print class="hide"
- id="print-Bill"> </app-sale-bill-print>
- 
- 
+
+
+
+</div>
+
+
+<app-sale-bill-print class="hide" id="print-Bill"> </app-sale-bill-print>

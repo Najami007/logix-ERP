@@ -58,12 +58,25 @@
                     [value]="item.val">{{item.title}}</mat-option>
             </mat-select>
         </mat-form-field> -->
-        <div class="col-lg-8 pb-2" *ngIf="crudList.r">
+        <div class="col-md-2 pt-2">
+            <mat-form-field appearance="outline" class="w-100 matSmall">
+                <mat-label>Formate</mat-label>
+                <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
 
-            <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('summary')">Summary</button>
-            <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('detail')">Detail</button>
-            <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('ledger')">Ledger</button>
+                    <mat-option [value]="1">Summary</mat-option>
+                    <mat-option [value]="2">Detail</mat-option>
+                    <mat-option [value]="3">Ledger</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-lg-10 pb-2" *ngIf="crudList.r">
+
+            <!-- <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('summary')">Summary</button>
+            <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('detail')">Detail</button> -->
+            <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('')">Get Report</button>
             <button class="btn-rpt-primary col-lg-2" (click)="print()">Print</button>
+            <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
+
             <mat-checkbox [(ngModel)]="hideProfit">Hide Profit</mat-checkbox>
             <mat-checkbox [(ngModel)]="hideCost">Hide Cost</mat-checkbox>
         </div>
@@ -87,11 +100,11 @@
                 <div class="d-flex flex-column">
 
 
-                    <span class="companyName" >{{item.companyName}}</span>
+                    <span class="companyName">{{item.companyName}}</span>
                     <span class="rptPartyName" style="margin-top: -10px;">{{partyName}} </span>
                     <span class="rptTitle" style="margin-top: -10px;">{{reportType}} Report</span>
-                    <span  *ngIf="userName != ''"> <b *ngIf="userName != ''">User: {{userName}}|</b> </span>
-                    <span ><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                    <span *ngIf="userName != ''"> <b *ngIf="userName != ''">User: {{userName}}|</b> </span>
+                    <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
 
 
@@ -106,7 +119,7 @@
         </div>
 
 
-        <table class="table-logix" id="detailTable">
+        <table class="table-logix" id="detailTable" *ngIf="formateType == 2">
             <thead>
                 <tr>
                     <th>S#</th>
@@ -170,7 +183,7 @@
 
         </table>
 
-        <table class="table-logix" id="summaryTable">
+        <table class="table-logix" id="summaryTable" *ngIf="formateType == 1">
             <thead>
                 <tr>
                     <th>S#</th>
@@ -253,7 +266,7 @@
             </tbody>
         </table>
 
-        <table class="table-logix" id="ledger">
+        <table class="table-logix" id="ledger" *ngIf="formateType == 3">
             <thead>
                 <tr>
                     <th>S#</th>
@@ -279,7 +292,7 @@
 
                     <td class="text-center cursorPointer">
                         <div class="d-flex flex-column">
-                            <span  (click)="printBill(item)"><u >{{item.invBillNo}}</u></span>
+                            <span (click)="printBill(item)"><u>{{item.invBillNo}}</u></span>
                             <span>{{item.invoiceNo}}</span>
                         </div>
                     </td>

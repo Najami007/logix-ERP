@@ -69,6 +69,10 @@ export class CustomerBalanceReportComponent {
     this.global.printData('#PrintDiv');
   }
 
+ export() {
+    this.global.ExportHTMLTabletoExcel('printDiv', 'Customer Balance Report')
+  }
+
 
 
 

@@ -9,6 +9,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { SaleBillPrintComponent } from '../../Sale/SaleComFiles/sale-bill-print/sale-bill-print.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-sale-report-prod-customerwise',
@@ -27,7 +28,8 @@ export class SaleReportProdCustomerwiseComponent implements OnInit {
     private app: AppComponent,
     private global: GlobalDataModule,
     private route: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private datePipe: DatePipe
 
   ) {
 
@@ -210,6 +212,18 @@ export class SaleReportProdCustomerwiseComponent implements OnInit {
       this.billPrint.billType = 'Duplicate';
 
     }
+  }
+
+
+
+  export() {
+
+    if (this.DetailList.length > 0) {
+      var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
+      var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
+      this.global.ExportHTMLTabletoExcel(`detailTable`, `Sale History Prod & Customer (${startDate} - ${endDate})`)
+    }
+
   }
 
 

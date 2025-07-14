@@ -693,4 +693,10 @@ export class InvreportcatwiseComponent implements OnInit {
   }
 
 
+  export() {
+
+    this.global.ExportHTMLTabletoExcel('PrintDiv', 'Inventory Report')
+  }
+
+
 }

@@ -69,6 +69,8 @@
 
             <button class="btn-rpt-success col-lg-4  me-1" (click)="getReport('')">Get Report</button>
             <button class="btn-rpt-primary col-lg-1" (click)="print()">Print</button>
+            <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
+
         </div>
 
     </div>
@@ -118,7 +120,8 @@
                     <th>S#</th>
                     <th>Bill #</th>
                     <th style="width: 200px;">Date</th>
-                    <th>Title</th>
+                    <th style="width: 250px;">Title</th>
+                    
                     <th>Qty</th>
                     <th style="width: 120px;">Cost</th>
                     <th style="width: 150px;">Avg Cost</th>
@@ -137,8 +140,10 @@
             <tbody>
                 <tr *ngFor="let item of DetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td [ngClass]="item.invType == 'PR' ? 'text-danger' : ''" class="text-center cursorPointer " (click)="printBill(item)">
-                        <u class="text-primary">{{item.invBillNo}}</u></td>
+                    <td [ngClass]="item.invType == 'PR' ? 'text-danger' : ''" class="text-center cursorPointer "
+                        (click)="printBill(item)">
+                        <u class="text-primary">{{item.invBillNo}}</u>
+                    </td>
                     <td>{{item.invDate |date:'dd-MM-yyyy'}} </td>
                     <td>{{item.productTitle}}</td>
                     <td class="text-center">{{item.quantity |number:'1.0-3'}}</td>

@@ -9,6 +9,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { SaleBillPrintComponent } from '../../Sale/SaleComFiles/sale-bill-print/sale-bill-print.component';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -28,7 +29,8 @@ export class SaleReportCustomerwiseComponent implements OnInit {
     private app: AppComponent,
     private global: GlobalDataModule,
     private route: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private datePipe: DatePipe
 
   ) {
 
@@ -44,18 +46,15 @@ export class SaleReportCustomerwiseComponent implements OnInit {
     this.global.setHeaderTitle('Sale History Customer wise');
     this.getUsers();
     this.getParty();
-    setTimeout(() => {
-      $('#detailTable').show();
-      $('#summaryTable').hide();
-      $('#ledger').hide();
-    }, 200);
+
 
   }
 
+  
 
   hideProfit = false;
   hideCost = false;
-
+  formateType = 1;
 
   partyList: any = [];
   partyID = 0;
@@ -138,10 +137,8 @@ export class SaleReportCustomerwiseComponent implements OnInit {
       this.partyName = this.partyList.find((e: any) => e.partyID == this.partyID).partyName;
 
       this.app.startLoaderDark();
-      if (type == 'detail') {
-        $('#detailTable').show();
-        $('#ledger').hide();
-        $('#summaryTable').hide();
+      if (this.formateType == 2) {
+
         this.reportType = 'Sale Detail';
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleDetailCustomerDateWise?reqUID=' + this.userID + '&FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + '&PartyID=' + this.partyID).subscribe(
@@ -175,10 +172,8 @@ export class SaleReportCustomerwiseComponent implements OnInit {
           )
       }
 
-      if (type == 'summary') {
-        $('#detailTable').hide();
-        $('#ledger').hide();
-        $('#summaryTable').show();
+      if (this.formateType == 1) {
+
         this.reportType = 'Sale Summary';
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleSummaryCustomerDateWise?reqUID=' + this.userID + '&FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + '&PartyID=' + this.partyID).subscribe(
@@ -220,10 +215,8 @@ export class SaleReportCustomerwiseComponent implements OnInit {
       }
 
 
-      if (type == 'ledger') {
-        $('#detailTable').hide();
-        $('#summaryTable').hide();
-        $('#ledger').show();
+      if (this.formateType == 3) {
+
         this.reportType = ' Ledger';
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetLedgerRpt_11?FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + '&PartyID=' + this.partyID).subscribe(
@@ -285,5 +278,39 @@ export class SaleReportCustomerwiseComponent implements OnInit {
     }
   }
 
+
+
+  reset() {
+    this.DetailList = [];
+    this.saleSummaryList = [];
+    this.saleBillTotal = 0;
+    this.saleDiscountTotal = 0;
+    this.saleGrandTotal = 0;
+    this.saleRtnBillTotal = 0;
+    this.saleRtnDiscountTotal = 0;
+    this.saleRtnGrandTotal = 0;
+    this.saleGrandTotal = 0;
+    this.profitTotal = 0;
+  }
+
+
+
+  export() {
+
+    if (this.formateType == 2 && this.DetailList.length == 0) return;
+    if (this.formateType == 1 && this.saleSummaryList.length == 0) return;
+    if (this.formateType == 3 && this.ledgerDetailList.length == 0) return;
+    var partyName = this.partyList.filter((e: any) => e.partyID === this.partyID)[0].partyName;
+    var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
+    var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
+    var tableID = '';
+
+    if (this.formateType == 1) tableID = 'summaryTable';
+    if (this.formateType == 2) tableID = 'detailTable';
+    if (this.formateType == 3) tableID = 'ledger';
+
+    this.global.ExportHTMLTabletoExcel(tableID,
+      `Sale Report(${partyName}) (${startDate} - ${endDate})`)
+  }
 
 }

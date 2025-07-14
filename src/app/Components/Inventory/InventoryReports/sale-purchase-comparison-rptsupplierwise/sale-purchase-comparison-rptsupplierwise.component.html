@@ -5,27 +5,27 @@
             <mat-label>Supplier</mat-label>
             <mat-select [(ngModel)]="partyID" (selectionChange)="onSupplierSelected()">
                 <mat-option><ngx-mat-select-search #supSearch [placeholderLabel]="'Search...'"
-                    [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                <mat-option  *ngFor="let item of supplierList | filter:supSearch.value"
+                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of supplierList | filter:supSearch.value"
                     [value]="item.partyID">{{item.partyName}}</mat-option>
             </mat-select>
         </mat-form-field>
-   
-        <mat-form-field  appearance="outline" class="col-lg-2 matSmall" >
+
+        <mat-form-field appearance="outline" class="col-lg-2 matSmall">
             <mat-label>From Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
             <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
             <mat-datepicker #sDate></mat-datepicker>
         </mat-form-field>
-        <mat-form-field class="col-lg-2 matSmall" appearance="outline" >
-            <mat-label>From Time</mat-label>         
-            <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+        <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+            <mat-label>From Time</mat-label>
+            <input matInput [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
             <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
             <ngx-material-timepicker #fTime></ngx-material-timepicker>
         </mat-form-field>
 
 
-        <mat-form-field class="col-lg-2 matSmall"  appearance="outline">
+        <mat-form-field class="col-lg-2 matSmall" appearance="outline">
             <mat-label>To Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
             <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
@@ -33,26 +33,28 @@
         </mat-form-field>
         <mat-form-field class="col-lg-2 matSmall" appearance="outline">
             <mat-label>To Time</mat-label>
-                <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
-                <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
-                <ngx-material-timepicker #tTime></ngx-material-timepicker>
+            <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+            <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #tTime></ngx-material-timepicker>
         </mat-form-field>
 
     </div>
     <div class="row text-center justify-content-center">
 
         <div class="col-lg-3 pb-2" *ngIf="crudList.r">
-          
+
             <button class="btn-rpt-success col-lg-4  me-1" (click)="getReport('')">Get Report</button>
             <button class="btn-rpt-primary btn-rpt col-lg-1" (click)="print()">Print</button>
+            <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
+
         </div>
-   
+
     </div>
 
 
 
 
-    
+
     <div id="PrintDiv">
 
         <!-------------------------    Top Logo Section -------------------->
@@ -91,9 +93,9 @@
                     <th>S#</th>
                     <th>Title</th>
                     <th>Pur Qty</th>
-                    <th >Sale Qty</th>
+                    <th>Sale Qty</th>
                     <th>Pur Total</th>
-                    <th >Sale Total</th>
+                    <th>Sale Total</th>
                     <th>Difference</th>
 
                 </tr>
@@ -119,13 +121,13 @@
                     <th class="text-end">{{purchaseTotal - saleTotal |number:'1.0-0'}}</th>
                 </tr>
             </tbody>
-          
 
-          
+
+
         </table>
 
 
-    
+
 
 
 
@@ -136,6 +138,3 @@
 
 
 </div>
-
-
-

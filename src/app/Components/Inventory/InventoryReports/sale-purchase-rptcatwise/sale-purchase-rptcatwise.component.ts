@@ -7,6 +7,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { SaleBillPrintComponent } from '../../Sale/SaleComFiles/sale-bill-print/sale-bill-print.component';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -26,7 +27,8 @@ export class SalePurchaseRptcatwiseComponent implements OnInit {
     private msg: NotificationService,
     private app: AppComponent,
     private global: GlobalDataModule,
-    private route: Router
+    private route: Router,
+    private datePipe: DatePipe
 
   ) {
 
@@ -52,7 +54,7 @@ export class SalePurchaseRptcatwiseComponent implements OnInit {
 
   reportsList: any = []
 
-    getReportTypes() {
+  getReportTypes() {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInvoiceTypes_15').subscribe(
       (Response: any) => {
         this.reportsList = Response;
@@ -116,7 +118,7 @@ export class SalePurchaseRptcatwiseComponent implements OnInit {
     this.userName = curUser.userName;
   }
 
-
+formateType =1;
 
   qtyTotal = 0;
   detNetTotal = 0;
@@ -147,9 +149,8 @@ export class SalePurchaseRptcatwiseComponent implements OnInit {
 
       this.app.startLoaderDark();
 
-      if (type == 'summary') {
-        $('#detailTable').hide();
-        $('#summaryTable').show();
+      if (this.formateType == 1) {
+  
         // this.reportType = 'Summary';
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetCatWiseSummaryDateWise?reqType=' + this.rptType + '&catType=' + this.catType +
           '&catID=' + this.CategoryID + '&subCatID=' + this.SubCategoryID + '&reqUserID=' + this.userID + '&FromDate=' +
@@ -195,9 +196,8 @@ export class SalePurchaseRptcatwiseComponent implements OnInit {
           )
       }
 
-      if (type == 'detail') {
-        $('#detailTable').show();
-        $('#summaryTable').hide();
+      if (this.formateType == 2) {
+
         // this.reportType = 'Detail';
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetCatWiseDetailDateWise?reqType=' + this.rptType + '&catType=' + this.catType +
           '&catID=' + this.CategoryID + '&subCatID=' + this.SubCategoryID + '&reqUserID=' + this.userID + '&FromDate=' +
@@ -271,6 +271,26 @@ export class SalePurchaseRptcatwiseComponent implements OnInit {
       this.billPrint.billType = 'Duplicate';
 
     }
+  }
+
+
+  export() {
+    if(this.SaleDetailList.length == 0){
+      return;
+    }
+    var type = this.reportsList.find((e: any) => e.invType == this.rptType).invTypeTitle;
+    var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
+    var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
+    this.global.ExportHTMLTabletoExcel(`${this.formateType == 1 ? 'summaryTable' : 'detailTable'}`, `Sale Purchase History Categorywise( ${type}(${startDate} - ${endDate})`) 
+  }
+
+
+  reset(){
+    this.SaleDetailList = [];
+    this.summaryNetTotal = 0;
+    this.detNetTotal = 0;
+    this.profitTotal= 0;
+
   }
 
 }

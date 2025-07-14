@@ -48,16 +48,12 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     this.global.setHeaderTitle('Stock In Out Date wise');
     this.getUsers();
     this.getReportTypes();
-    setTimeout(() => {
-      $('#detailTable').show();
-      $('#summaryTable').hide();
-      $('#TaxsummaryTable').hide();
-    }, 200);
+
   }
 
 
 
-
+formateType = 1;
   reportsList: any = []
   tmpRptType = 'S';
   rptType: any = 'S';
@@ -123,11 +119,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
 
     this.app.startLoaderDark();
     this.rptType = this.tmpRptType;
-    if (type == 'summary') {
-
-      $('#detailTable').hide();
-      $('#TaxsummaryTable').hide();
-      $('#summaryTable').show();
+    if (this.formateType == 1) {
       // this.reportType = 'Summary';
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
@@ -179,10 +171,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
           }
         )
     }
-    if (type == 'taxSummary') {
-      $('#detailTable').hide();
-      $('#summaryTable').hide();
-      $('#TaxsummaryTable').show();
+    if (this.formateType == 3) {
       // this.reportType = 'Summary';
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
@@ -236,10 +225,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
         )
     }
 
-    if (type == 'detail') {
-      $('#detailTable').show();
-      $('#summaryTable').hide();
-      $('#TaxsummaryTable').hide();
+    if (this.formateType == 2) {
 
       // this.reportType = 'Detail';
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryDetailDateWise_3?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
@@ -346,12 +332,37 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
 
 
   export() {
-    var type = this.reportsList.find((e: any) => e.val == this.tmpRptType).title;
+    var type = this.reportsList.find((e: any) => e.invType == this.tmpRptType).invTypeTitle;
     var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
     var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
-    this.global.ExportHTMLTabletoExcel('PrintDiv', type + '(' + startDate + ' - ' + endDate + ')')
+
+      var tableID = '';
+
+    if (this.formateType == 1) tableID = 'summaryTable';
+    if (this.formateType == 2) tableID = 'detailTable';
+    if (this.formateType == 3) tableID = 'TaxsummaryTable';
+
+
+    this.global.ExportHTMLTabletoExcel(tableID, type + '(' + startDate + ' - ' + endDate + ')')
   }
 
 
+  reset(){
+
+    this.SaleDetailList = [];
+    this.netGrandTotal= 0;
+    this.offerDiscTotal = 0;
+    this.discountTotal = 0;
+    this.summaryNetTotal = 0;
+    this.myTaxTotal = 0;
+    this.qtyTotal = 0;
+    this.costPriceTotal = 0;
+    this.avgCostTotal = 0;
+
+    this.salePriceTotal = 0;
+    this.detNetTotal = 0;
+
+
+  }
 
 }

@@ -9,6 +9,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { SaleBillPrintComponent } from '../../Sale/SaleComFiles/sale-bill-print/sale-bill-print.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-sale-report-bookerwise',
@@ -27,7 +28,8 @@ export class SaleReportBookerwiseComponent implements OnInit {
     private app: AppComponent,
     private global: GlobalDataModule,
     private route: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private datePipe:DatePipe
 
   ) {
 
@@ -50,7 +52,7 @@ export class SaleReportBookerwiseComponent implements OnInit {
 
 
 
-
+formateType = 1;
   bookerList: any = [];
   bookerID = 0;
 
@@ -109,9 +111,8 @@ export class SaleReportBookerwiseComponent implements OnInit {
       this.msg.WarnNotify('Select Booker')
     } else {
 
-      if (type == 'detail') {
-        $('#detailTable').show();
-        $('#summaryTable').hide();
+      if (this.formateType == 2) {
+
         this.reportType = 'Detail';
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleDetailBookerDateWise?reqUID=' + this.userID + '&FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + '&BookerID=' + this.bookerID).subscribe(
@@ -144,9 +145,7 @@ export class SaleReportBookerwiseComponent implements OnInit {
           )
       }
 
-      if (type == 'summary') {
-        $('#detailTable').hide();
-        $('#summaryTable').show();
+      if (this.formateType == 1) {
         this.reportType = 'Summary';
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleSummaryBookerDateWise?reqUID=' + this.userID + '&FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + '&BookerID=' + this.bookerID).subscribe(
@@ -221,6 +220,38 @@ export class SaleReportBookerwiseComponent implements OnInit {
 
     }
   }
+  
 
+  reset(){
+    this.DetailList  = [];
+    this.saleGrandTotal= 0;
+    this.profitTotal = 0;
+    this.saleSummaryList = [];
+    this.saleRtnSummaryList= [];
+    this.saleBillTotal = 0;
+    this.saleDiscountTotal= 0;
+    this.saleGrandTotal = 0;
+    this.saleRtnBillTotal= 0;
+    this.saleRtnDiscountTotal = 0;
+    this.saleRtnGrandTotal  = 0;
+
+  }
+
+
+    export() {
+    
+    if (this.formateType == 2 && this.DetailList.length == 0) return;
+    if (this.formateType == 1 && this.saleSummaryList.length == 0) return;
+    var partyName = this.bookerList.filter((e: any) => e.bookerID === this.bookerID)[0].bookerName;
+    var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
+    var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
+    var tableID = '';
+
+    if (this.formateType == 1) tableID = 'summaryTable';
+    if (this.formateType == 2) tableID = 'detailTable';
+
+    this.global.ExportHTMLTabletoExcel(tableID,
+      `Sale Report Booker (${partyName}) (${startDate} - ${endDate})`)
+  }
 
 }

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -25,7 +26,8 @@ export class PurchaseReportProdSupplierwiseComponent implements OnInit {
     private app: AppComponent,
     private global: GlobalDataModule,
     private route: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private datePipe: DatePipe
 
   ) {
 
@@ -71,7 +73,7 @@ export class PurchaseReportProdSupplierwiseComponent implements OnInit {
   reportType: any;
 
 
-    //////////////////// getting Product List /////////
+  //////////////////// getting Product List /////////
   getProduct() {
     this.global.getProducts().subscribe(
       (Response: any) => {
@@ -127,7 +129,7 @@ export class PurchaseReportProdSupplierwiseComponent implements OnInit {
     this.global.getUserList().subscribe((data: any) => { this.userList = data; });
   }
 
-  
+
   onUserSelected() {
     var curUser = this.userList.find((e: any) => e.userID == this.userID);
     this.userName = curUser.userName;
@@ -164,7 +166,7 @@ export class PurchaseReportProdSupplierwiseComponent implements OnInit {
 
 
 
-///////////////////////////////////////////////
+  ///////////////////////////////////////////////
   grandTotal = 0;
   getReport(type: any) {
 
@@ -173,51 +175,51 @@ export class PurchaseReportProdSupplierwiseComponent implements OnInit {
     if (this.partyID == 0 || this.partyID == undefined) {
       this.msg.WarnNotify('Select Supplier');
       return;
-    } 
-     if (this.productID == 0 || this.productID == undefined) {
+    }
+    if (this.productID == 0 || this.productID == undefined) {
       this.msg.WarnNotify('Select Product');
       return;
     }
 
-      this.app.startLoaderDark();
-      this.reportType = 'Detail';
-      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseRptProductAndSupplierWise_6?reqUserID=' + this.userID + '&reqPartyID=' + this.partyID +
-        '&reqProductID=' + this.productID + '&FromDate=' + this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
-          (Response: any) => {
-            this.DetailList = [];
-              this.grandTotal = 0;
-             if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-                this.app.stopLoaderDark();
-              return;
-              
-            }
-            this.DetailList = Response;
-            /////////// generating total on basis of inv Type ///////////
-            Response.forEach((e: any) => {
-              if (e.invType == 'P') {
-                this.grandTotal += e.costPrice * e.quantity;
-              }
-
-              if (e.invType == 'PR') {
-                this.grandTotal -= e.costPrice * e.quantity;
-              }
-
-            });
-
+    this.app.startLoaderDark();
+    this.reportType = 'Detail';
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseRptProductAndSupplierWise_6?reqUserID=' + this.userID + '&reqPartyID=' + this.partyID +
+      '&reqProductID=' + this.productID + '&FromDate=' + this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
+        (Response: any) => {
+          this.DetailList = [];
+          this.grandTotal = 0;
+          if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
             this.app.stopLoaderDark();
+            return;
 
-          },
-          (Error: any) => {
-            this.app.stopLoaderDark();
           }
-        )
+          this.DetailList = Response;
+          /////////// generating total on basis of inv Type ///////////
+          Response.forEach((e: any) => {
+            if (e.invType == 'P') {
+              this.grandTotal += e.costPrice * e.quantity;
+            }
+
+            if (e.invType == 'PR') {
+              this.grandTotal -= e.costPrice * e.quantity;
+            }
+
+          });
+
+          this.app.stopLoaderDark();
+
+        },
+        (Error: any) => {
+          this.app.stopLoaderDark();
+        }
+      )
 
   }
 
 
 
-///////////////////////////////////////////
+  ///////////////////////////////////////////
   print() {
     this.global.printData('#PrintDiv')
   }
@@ -234,6 +236,15 @@ export class PurchaseReportProdSupplierwiseComponent implements OnInit {
 
     })
   }
+
+
+  export() {
+    if (this.DetailList.length == 0) return;
+    var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
+    var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
+    this.global.ExportHTMLTabletoExcel(`detailTable`, `Purchase History Prod & Supplier (${startDate} - ${endDate})`)
+  }
+
 
 
 }

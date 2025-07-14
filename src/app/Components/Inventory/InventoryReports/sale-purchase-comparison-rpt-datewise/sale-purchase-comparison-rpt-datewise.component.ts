@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -27,7 +28,8 @@ export class SalePurchaseComparisonRptDatewiseComponent implements OnInit {
     private app: AppComponent,
     private global: GlobalDataModule,
     private route: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private datePipe: DatePipe
 
   ) {
 
@@ -51,15 +53,11 @@ export class SalePurchaseComparisonRptDatewiseComponent implements OnInit {
     this.getUsers();
     this.getSupplier();
 
-    setTimeout(() => {
-      $('#detailTable').show();
-      $('#summaryTable').hide();
-    }, 200);
 
   }
 
 
-
+  formateType = 1;
 
   supplierList: any = [];
   partyID = 0;
@@ -115,32 +113,26 @@ export class SalePurchaseComparisonRptDatewiseComponent implements OnInit {
     var fromDate = this.global.dateFormater(this.fromDate, '');
     var toDate = this.global.dateFormater(this.toDate, '');
 
-    var url = type == 'Detail'
+    var url = this.formateType == 2
       ? `GetPurchaseSaleComparisonRptDateWise_8?FromDate=${fromDate}&todate=${toDate}&fromtime=${this.fromTime}&totime=${this.toTime}`
       : `GetPurchaseSaleComparisonRptDateWiseSummary_12?FromDate=${fromDate}&todate=${toDate}&fromtime=${this.fromTime}&totime=${this.toTime}`;
 
-    if (type == 'Detail') {
-      $('#detailTable').show();
-      $('#summaryTable').hide();
-    } else {
-      $('#detailTable').hide();
-      $('#summaryTable').show();
-    }
+
     this.http.get(environment.mainApi + this.global.inventoryLink + url).subscribe(
       (Response: any) => {
         this.DetailList = [];
-          this.purQtyTotal = 0;
+        this.purQtyTotal = 0;
         this.saleQtyTotal = 0;
         this.purchaseTotal = 0;
         this.saleTotal = 0;
-          if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-                this.app.stopLoaderDark();
-              return;
-              
-            }
+        if (Response.length == 0 || Response == null) {
+          this.global.popupAlert('Data Not Found!');
+          this.app.stopLoaderDark();
+          return;
+
+        }
         this.DetailList = Response;
-      
+
         Response.forEach((e: any) => {
 
           this.purQtyTotal += e.purQty;
@@ -180,6 +172,30 @@ export class SalePurchaseComparisonRptDatewiseComponent implements OnInit {
     })
   }
 
+
+  reset() {
+    this.DetailList = [];
+    this.purQtyTotal = 0;
+    this.saleQtyTotal = 0;
+    this.purchaseTotal = 0;
+    this.saleTotal = 0;
+  }
+
+
+
+  export() {
+
+    if (this.DetailList.length == 0) return;
+    var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
+    var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
+    var tableID = '';
+
+    if (this.formateType == 1) tableID = 'summaryTable';
+    if (this.formateType == 2) tableID = 'detailTable';
+
+    this.global.ExportHTMLTabletoExcel(tableID,
+      `Sale Purchase Comparison(${startDate} - ${endDate})`)
+  }
 
 }
 

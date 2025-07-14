@@ -71,6 +71,7 @@
 
             <button class=" btn-rpt-success me-1" (click)="getReport(rptType)">Get Report</button>
             <button class="  btn-rpt-primary " (click)="print()">Print</button>
+            <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
         </div>
 
     </div>
@@ -114,7 +115,7 @@
 
 
 
-        <table class="table-logix" id="summaryTable">
+        <table class="table-logix" id="PrintDiv">
             <thead>
                 <tr>
                     <th>S#</th>

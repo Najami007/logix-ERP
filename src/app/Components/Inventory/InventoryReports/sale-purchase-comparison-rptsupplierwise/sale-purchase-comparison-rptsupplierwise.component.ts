@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -26,7 +27,8 @@ export class SalePurchaseComparisonRptsupplierwiseComponent implements OnInit {
     private app: AppComponent,
     private global: GlobalDataModule,
     private route: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private datePipe:DatePipe
 
   ) {
 
@@ -164,6 +166,21 @@ export class SalePurchaseComparisonRptsupplierwiseComponent implements OnInit {
 
     })
   }
+
+
+    export() {
+
+    if (this.DetailList.length == 0) return;
+
+    var partyName = this.supplierList.filter((e:any)=> e.partyID === this.partyID)[0].partyName;
+    var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
+    var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
+    var tableID = 'detailTable';
+
+    this.global.ExportHTMLTabletoExcel(tableID,
+      `Sale Purchase Comparison (${partyName})(${startDate} - ${endDate})`)
+  }
+
 
 
 }

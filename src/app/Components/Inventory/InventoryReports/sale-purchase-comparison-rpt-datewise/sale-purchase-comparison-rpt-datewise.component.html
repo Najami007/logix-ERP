@@ -2,16 +2,16 @@
 
     <div class="row justify-content-between mt-2">
 
-   
-        <mat-form-field  appearance="outline" class="col-lg-3 matSmall" >
+
+        <mat-form-field appearance="outline" class="col-lg-3 matSmall">
             <mat-label>From Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
             <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
             <mat-datepicker #sDate></mat-datepicker>
         </mat-form-field>
-        <mat-form-field class="col-lg-3 matSmall" appearance="outline" >
-            <mat-label>From Time</mat-label>         
-            <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+        <mat-form-field class="col-lg-3 matSmall" appearance="outline">
+            <mat-label>From Time</mat-label>
+            <input matInput [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
             <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
             <ngx-material-timepicker #fTime></ngx-material-timepicker>
         </mat-form-field>
@@ -25,27 +25,40 @@
         </mat-form-field>
         <mat-form-field class="col-lg-3 matSmall" appearance="outline">
             <mat-label>To Time</mat-label>
-                <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
-                <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
-                <ngx-material-timepicker #tTime></ngx-material-timepicker>
+            <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+            <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #tTime></ngx-material-timepicker>
         </mat-form-field>
 
     </div>
     <div class="row text-center justify-content-center">
 
-        <div class="col-lg-3 pb-2" *ngIf="crudList.r">
-          
-            <button class="btn-rpt-success col-lg-4  me-1" (click)="getReport('Detail')">Get Report</button>
-             <button class="btn-rpt-success col-lg-4  me-1" (click)="getReport('Summary')">Get Summary</button>
-            <button class="btn-rpt-primary col-lg-1" (click)="print()">Print</button>
+        <div class="col-md-2">
+            <mat-form-field appearance="outline" class="w-100 matSmall">
+                <mat-label>Formate</mat-label>
+                <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
+
+                    <mat-option [value]="1">Summary</mat-option>
+                    <mat-option [value]="2">Detail</mat-option>
+                </mat-select>
+            </mat-form-field>
         </div>
-   
+
+        <div class="col-lg-3" *ngIf="crudList.r">
+
+            <!-- <button class="btn-rpt-success col-lg-4  me-1" (click)="getReport('Detail')">Get Report</button> -->
+            <button class="btn-rpt-success col-lg-4  me-1" (click)="getReport('')">Get Report</button>
+            <button class="btn-rpt-primary col-lg-1" (click)="print()">Print</button>
+            <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
+
+        </div>
+
     </div>
 
 
 
 
-    
+
     <div id="PrintDiv">
 
         <!-------------------------    Top Logo Section -------------------->
@@ -62,7 +75,8 @@
                     <h1 class="companyName">{{item.companyName}}</h1>
 
                     <p class="rptTitle" style="margin-top:-20px">Purchase Sale Comparison Report </p>
-                    <p style="margin-top: -15px;" *ngIf="userName != ''" > <b *ngIf="userName != ''">User: {{userName}} |</b> </p>
+                    <p style="margin-top: -15px;" *ngIf="userName != ''"> <b *ngIf="userName != ''">User: {{userName}}
+                            |</b> </p>
                     <p style="margin-top:-15px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
 
@@ -78,15 +92,15 @@
         </div>
 
 
-        <table class="table-logix" id="detailTable">
+        <table class="table-logix" id="detailTable" *ngIf="formateType == 2">
             <thead>
                 <tr>
                     <th>S#</th>
                     <th>Title</th>
                     <th>Pur Qty</th>
-                    <th >Sale Qty</th>
+                    <th>Sale Qty</th>
                     <th>Pur Total</th>
-                    <th >Sale Total</th>
+                    <th>Sale Total</th>
                     <th>Difference</th>
 
                 </tr>
@@ -112,18 +126,18 @@
                     <th class="text-end">{{purchaseTotal - saleTotal |number:'1.0-0'}}</th>
                 </tr>
             </tbody>
-          
 
-          
+
+
         </table>
 
-         <table class="table-logix" id="summaryTable">
+        <table class="table-logix" id="summaryTable" *ngIf="formateType == 1">
             <thead>
                 <tr>
                     <th>S#</th>
                     <th>Date</th>
                     <th>Pur Total</th>
-                    <th >Sale Total</th>
+                    <th>Sale Total</th>
                     <th>Difference</th>
 
                 </tr>
@@ -136,7 +150,8 @@
                     <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
                     <td class="text-end">{{item.purTotal - item.purRTotal |number:'1.0-0'}}</td>
                     <td class="text-end">{{item.saleTotal - item.saleRTotal |number:'1.0-0'}}</td>
-                    <td class="text-end">{{(item.purTotal - item.purRTotal) - (item.saleTotal - item.saleRTotal) |number:'1.0-0'}}</td>
+                    <td class="text-end">{{(item.purTotal - item.purRTotal) - (item.saleTotal - item.saleRTotal)
+                        |number:'1.0-0'}}</td>
                 </tr>
                 <tr>
                     <td colspan="2"></td>
@@ -145,14 +160,14 @@
                     <th class="text-end">{{purchaseTotal - saleTotal |number:'1.0-0'}}</th>
                 </tr>
             </tbody>
-          
 
-          
+
+
         </table>
 
 
 
-    
+
 
 
 
@@ -163,5 +178,3 @@
 
 
 </div>
-
-

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -26,7 +27,8 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
     private app: AppComponent,
     private global: GlobalDataModule,
     private route: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private datePipe: DatePipe
 
   ) {
 
@@ -42,10 +44,7 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
     this.global.setHeaderTitle('Purchase History Supplier wise');
     this.getUsers();
     this.getSupplier();
-    setTimeout(() => {
-      $('#detailTable').show();
-      $('#summaryTable').hide();
-    }, 200);
+  
 
   }
 
@@ -68,7 +67,7 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
   DetailList: any = [];
   reportType: any;
 
-
+formateType = 1;
 
 
 
@@ -119,9 +118,8 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
 
       this.app.startLoaderDark();
 
-      if (type == 'detail') {
-        $('#detailTable').show();
-        $('#summaryTable').hide();
+      if (this.formateType == 2) {
+
         this.reportType = 'Detail';
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseRptSupplierWiseDetail_5?reqUserID=' + this.userID + '&reqPartyID=' + this.partyID + '&FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
@@ -158,9 +156,7 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
           )
       }
 
-      if (type == 'summary') {
-        $('#detailTable').hide();
-        $('#summaryTable').show();
+      if (this.formateType == 1) {
         this.reportType = 'Summary';
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseRptSupplierWiseSummary_4?reqUserID=' + this.userID + '&reqPartyID=' + this.partyID + '&FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
@@ -202,6 +198,10 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
   }
 
 
+  reset(){
+    this.DetailList = [];
+    this.grandTotal = 0;
+  }
 
 
   print() {
@@ -217,6 +217,19 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
 
     })
   }
+
+
+  
+  export() {
+    if (this.DetailList.length == 0) return;
+    var partyName = this.supplierList.filter((e:any)=> e.partyID === this.partyID)[0].partyName;
+    var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
+    var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
+    this.global.ExportHTMLTabletoExcel(`${this.formateType == 1 ? 'summaryTable' : 'detailTable'}`,
+       `Purchase History Supplier(${partyName}) (${startDate} - ${endDate})`)
+  }
+
+
 
 
 }

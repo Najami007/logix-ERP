@@ -20,6 +20,7 @@
             <div class="col-md-2">
                 <button class="btn-rpt-success me-1" (click)="openDialog()">Get Report</button>
                 <button class="btn-rpt-primary " (click)="print()">Print</button>
+                <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
             </div>
 
 
@@ -77,7 +78,7 @@
                 </div>
             </div>
             <hr class="hide">
-            <table class="table-logix hide">
+            <table class="table-logix hide" id="PrintDiv">
 
                 <thead>
                     <tr class="text-center stickyHeader">

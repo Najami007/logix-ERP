@@ -8,6 +8,7 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { SaleBillPrintComponent } from '../../Sale/SaleComFiles/sale-bill-print/sale-bill-print.component';
 import { PurchaseBillPrintComponent } from '../../Purchases/purchase-bill-print/purchase-bill-print.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-invrptprodwise',
@@ -16,17 +17,18 @@ import { PurchaseBillPrintComponent } from '../../Purchases/purchase-bill-print/
 })
 export class InvrptprodwiseComponent implements OnInit {
 
- @ViewChild(SaleBillPrintComponent)  salebillPrint:any;
- @ViewChild(PurchaseBillPrintComponent)  purchaseBillPrint:any;
+  @ViewChild(SaleBillPrintComponent) salebillPrint: any;
+  @ViewChild(PurchaseBillPrintComponent) purchaseBillPrint: any;
 
   companyProfile: any = [];
-  crudList:any = {c:true,r:true,u:true,d:true};
+  crudList: any = { c: true, r: true, u: true, d: true };
   constructor(
     private http: HttpClient,
     private msg: NotificationService,
     private app: AppComponent,
     private global: GlobalDataModule,
-    private route: Router
+    private route: Router,
+    private datePipe: DatePipe
 
   ) {
 
@@ -38,7 +40,7 @@ export class InvrptprodwiseComponent implements OnInit {
       this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
     })
 
-   this.getProduct();
+    this.getProduct();
   }
   ngOnInit(): void {
     this.global.setHeaderTitle('Product In Out History');
@@ -48,23 +50,23 @@ export class InvrptprodwiseComponent implements OnInit {
   }
 
 
-  getProduct(){
-     this.global.getProducts().subscribe(
+  getProduct() {
+    this.global.getProducts().subscribe(
       (Response: any) => {
-        if(Response.length > 0){
-        this.productList = Response.map((e:any,index:any)=>{
-          (e.indexNo = index + 1);
-          return e;
-      });
-    
-        this.productList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+        if (Response.length > 0) {
+          this.productList = Response.map((e: any, index: any) => {
+            (e.indexNo = index + 1);
+            return e;
+          });
+
+          this.productList.sort((a: any, b: any) => b.indexNo - a.indexNo);
         }
       }
     )
   }
 
 
-  
+
   onProdSelected() {
     var index = this.productList.findIndex((e: any) => e.productID == this.productID);
     this.productList[index].indexNo = this.productList[0].indexNo + 1;
@@ -72,19 +74,19 @@ export class InvrptprodwiseComponent implements OnInit {
   }
 
 
-  reportsList:any = []
+  reportsList: any = []
 
 
-getReportTypes(){
-  this.http.get(environment.mainApi+this.global.inventoryLink+'GetInvoiceTypes_15').subscribe(
-    (Response:any)=>{
-      this.reportsList = Response;
-    }
-  )
-}
+  getReportTypes() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInvoiceTypes_15').subscribe(
+      (Response: any) => {
+        this.reportsList = Response;
+      }
+    )
+  }
 
 
-  rptType:any = 'S';
+  rptType: any = 'S';
 
 
 
@@ -121,52 +123,52 @@ getReportTypes(){
   costTotal = 0;
 
   getReport(type: any) {
-    this.reportType = this.reportsList.filter((e:any)=>e.invType == this.rptType)[0].invTypeTitle;
+    this.reportType = this.reportsList.filter((e: any) => e.invType == this.rptType)[0].invTypeTitle;
 
-   
+
     if (this.productID == 0 || this.productID == undefined) {
       this.msg.WarnNotify('Select Product')
     } else {
       this.app.startLoaderDark();
-      this.http.get(environment.mainApi + this.global.inventoryLink +'GetProductInOutDetailDateWise?reqType='+type+'&reqPID='+this.productID+'&reqUID='+this.userID+'&FromDate='+
-        this.global.dateFormater(this.fromDate, '-')+'&todate='+this.global.dateFormater(this.toDate, '-')+'&fromtime='+this.fromTime+'&totime='+this.toTime).subscribe(
+      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductInOutDetailDateWise?reqType=' + type + '&reqPID=' + this.productID + '&reqUID=' + this.userID + '&FromDate=' +
+        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
-             this.invDetailList = [];
+            this.invDetailList = [];
             this.QtyTotal = 0;
             this.saleTotal = 0;
             this.costTotal = 0;
-              if (Response.length == 0 || Response == null) {
+            if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
-                this.app.stopLoaderDark();
+              this.app.stopLoaderDark();
               return;
-              
-            }
-           
-            if(type == 'R'){
-              Response.forEach((e:any) => {
 
-                if(e.issueType != 'Stock Transfer'){
+            }
+
+            if (type == 'R') {
+              Response.forEach((e: any) => {
+
+                if (e.issueType != 'Stock Transfer') {
                   this.invDetailList.push(e);
                   this.QtyTotal += e.quantity;
                   this.saleTotal += e.salePrice * e.quantity;
                   this.costTotal += e.costPrice * e.quantity;
-                 
+
                 }
               });
-            }else{
+            } else {
               this.invDetailList = Response;
-              Response.forEach((e:any) => {
+              Response.forEach((e: any) => {
                 this.QtyTotal += e.quantity;
                 this.saleTotal += e.salePrice * e.quantity;
                 this.costTotal += e.costPrice * e.quantity;
-            });
+              });
             }
 
             this.app.stopLoaderDark();
-           
-     
+
+
           },
-          (Error:any)=>{
+          (Error: any) => {
             this.app.stopLoaderDark();
             this.msg.WarnNotify('Unable to Connect to Data')
           }
@@ -181,17 +183,26 @@ getReportTypes(){
     this.global.printData('#PrintDiv')
   }
 
-  printBill(item:any){
+  printBill(item: any) {
 
-    if(item.invType == 'S' || item.invType == 'SR'){
+    if (item.invType == 'S' || item.invType == 'SR') {
       this.salebillPrint.PrintBill(item.invBillNo);
-       this.salebillPrint.billType = 'Duplicate';
+      this.salebillPrint.billType = 'Duplicate';
     }
 
-    if(item.invType == 'P' || item.invType == 'PR'){
+    if (item.invType == 'P' || item.invType == 'PR') {
       this.purchaseBillPrint.printBill(item);
     }
-   }
+  }
+
+
+
+  export() {
+    var type = this.reportsList.find((e: any) => e.invType == this.rptType).invTypeTitle;
+    var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
+    var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
+    this.global.ExportHTMLTabletoExcel('PrintDiv', `${type}(${startDate} - ${endDate}`)
+  }
 
 
 }
