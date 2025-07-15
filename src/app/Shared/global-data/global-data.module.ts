@@ -313,6 +313,7 @@ export class GlobalDataModule implements OnInit {
   VehicleSaleFeature = this.getFeature('VehicleSale');
   DetailedPurchase = this.getFeature('DetailedPurchase');
   PinCodeFeature = this.getFeature('PinCode');
+  MultiBarcode = this.getFeature('MultiBarcode');
 
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
@@ -353,6 +354,7 @@ export class GlobalDataModule implements OnInit {
     this.VehicleSaleFeature = this.getFeature('VehicleSale');
     this.DetailedPurchase = this.getFeature('DetailedPurchase');
     this.PinCodeFeature = this.getFeature('PinCode');
+    this.MultiBarcode = this.getFeature('MultiBarcode');
 
   }
 
@@ -1335,35 +1337,40 @@ export class GlobalDataModule implements OnInit {
 
   pin$ = of('1234');
   public openPinCode(): Observable<any> {
+    return this.dialog.open(PincodeComponent, {
+      width: '30%',
+      enterAnimationDuration: 500,
+      hasBackdrop: true,
+      disableClose: true,
+    }).afterClosed().pipe(retry(3));
 
+    // if (this.PinCodeFeature) {
+    //   return this.dialog.open(PincodeComponent, {
+    //     width: '30%',
+    //     enterAnimationDuration: 500,
+    //     hasBackdrop: true,
+    //     disableClose: true,
+    //   }).afterClosed().pipe(retry(3));
+    // } else {
 
-    if (this.PinCodeFeature) {
-      return this.dialog.open(PincodeComponent, {
-        width: '30%',
-        enterAnimationDuration: 500,
-        hasBackdrop: true,
-        disableClose: true,
-      }).afterClosed().pipe(retry(3));
-    } else {
+    //   return from(
+    //     Swal.fire({
+    //       title: "Confirm To Proceed",
+    //       showCancelButton: true,
+    //       confirmButtonText: 'Confirm',
+    //       showLoaderOnConfirm: true,
+    //     })
+    //   ).pipe(
+    //     switchMap((result) => {
+    //       if (result.isConfirmed) {
+    //         return this.pin$.pipe(map(pin => '*' + pin)); // transform and return pin
+    //       } else {
+    //         return of(''); // return null if cancelled
+    //       }
+    //     })
+    //   );
 
-      return from(
-        Swal.fire({
-          title: "Confirm To Proceed",
-          showCancelButton: true,
-          confirmButtonText: 'Confirm',
-          showLoaderOnConfirm: true,
-        })
-      ).pipe(
-        switchMap((result) => {
-          if (result.isConfirmed) {
-            return this.pin$.pipe(map(pin => '*' + pin)); // transform and return pin
-          } else {
-            return of(''); // return null if cancelled
-          }
-        })
-      );
-
-    }
+    // }
   }
 
 

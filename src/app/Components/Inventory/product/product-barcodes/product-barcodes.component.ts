@@ -16,6 +16,8 @@ import * as $ from 'jquery';
 })
 export class ProductBarcodesComponent implements OnInit {
 
+  discFeature = this.global.discFeature;
+
 
   constructor(
     private http: HttpClient,
@@ -62,7 +64,7 @@ export class ProductBarcodesComponent implements OnInit {
 
 
     if (this.flavourTitle == '') {
-      this.msg.WarnNotify('Enter Flavour Title');
+      this.msg.WarnNotify('Enter Title');
       return;
     }
     if (this.barcode == '') {
@@ -189,11 +191,19 @@ export class ProductBarcodesComponent implements OnInit {
 
 
   onDiscChange(type:any){
+
+    if(this.quantity == 0 || this.quantity == '') {
+      this.discInP = 0;
+      this.discInR = 0;
+      this.msg.WarnNotify('Quantity Not Valid')
+      return;
+    }
+    
     if(type === 'perc'){
-      this.discInR = (this.productDetail.salePrice *  this.discInP) / 100;
+      this.discInR = ((this.productDetail.salePrice * this.quantity) *  this.discInP) / 100;
     }
      if(type === 'amount'){
-      this.discInP = (this.discInR / this.productDetail.salePrice) * 100
+      this.discInP = (this.discInR / (this.productDetail.salePrice * this.quantity) ) * 100
     }
   }
 

@@ -318,15 +318,42 @@ export class GarmentSaleComponent implements OnInit {
     //// push the data using index
     if (condition == undefined) {
 
+
+      var tmpQuantity = 0;
+      var discRupee = 0;
+      var discPerc = 0;
+      var tmpBarcode = '';
+
+      if(data.barcode2){
+        tmpBarcode = data.barcode2;
+      }else{
+        tmpBarcode = data.barcode;
+      }
+
+      if(qty > 0){
+        tmpQuantity = qty * data.quantity ;
+      }else{
+        tmpQuantity = data.quantity;
+      }
+
+      if(this.discFeature && data.barcode2){
+        discPerc = data.discInP;
+        discRupee = data.discInR /  tmpQuantity;
+      }
+      if(this.discFeature && !data.barcode2){
+        discPerc = data.discPercentage
+        discRupee = data.discRupees ;
+      }
+
       this.tableDataList.push({
         rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
           : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
             : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
         productID: data.productID,
         productTitle: data.productTitle,
-        barcode: data.barcode2 ? data.barcode2 : data.barcode,
+        barcode: tmpBarcode,
         productImage: data.productImage,
-        quantity: qty > 0 ? qty * data.quantity : data.quantity,
+        quantity: tmpQuantity,
         wohCP: data.costPrice,
         avgCostPrice: data.avgCostPrice,
         costPrice: data.costPrice,
@@ -340,10 +367,10 @@ export class GarmentSaleComponent implements OnInit {
         gst: this.gstFeature ? data.gst : 0,
         et: data.et,
         packing: 1,
-        discInP: this.discFeature ? data.barcode2 ? data.discInP : data.discPercentage : 0,
-        discInR: this.discFeature ? data.barcode2 ? data.discInR : data.discRupees : 0,
+        discInP: discPerc,
+        discInR: discRupee,
         aq: data.aq,
-        total: (data.salePrice * qty) - (data.discRupees * qty),
+        total: (data.salePrice * qty) - (discRupee * qty),
         productDetail: '',
 
       });
@@ -576,7 +603,6 @@ export class GarmentSaleComponent implements OnInit {
       //   e.discInP = this.billDiscount;
       //   e.discInR = (e.salePrice * this.billDiscount) / 100
       // }
-      e.total = ((parseFloat(e.salePrice) - parseFloat(e.discInR)) * parseFloat(e.quantity));
       this.qtyTotal += parseFloat(e.quantity);
       this.subTotal += parseFloat(e.quantity) * parseFloat(e.salePrice);
       this.offerDiscount += parseFloat(e.discInR) * parseFloat(e.quantity);
@@ -923,20 +949,39 @@ export class GarmentSaleComponent implements OnInit {
 
   }
 
+  EditTotal(item: any) {
 
-  editTotal(amount: any) {
-    if (this.editSpFeature) {
-      this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].total = amount;
-      this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].quantity = (amount / (this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice - this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR));
+    // if(this.discFeature) return;
+  
+      Swal.fire({
+        title: "Enter Total Amount",
+        input: "text",
+        showCancelButton: true,
+        confirmButtonText: 'Save',
+        showLoaderOnConfirm: true,
+        preConfirm: (value) => {
 
-      this.getTotal();
-      this.tempProdData = [];
-    }
-
-
-
-
+          if (!value || isNaN(value) || value <= 0) {
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
+          const index = this.tableDataList.indexOf(item);
+      
+          
+          this.tableDataList[index].quantity = value /  (this.tableDataList[index].salePrice - this.tableDataList[index].discInR);
+          this.getTotal();
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Price Updated",
+            timer: 200,
+          });
+        }
+      })
+    
   }
+
+
 
   partySelect() {
     if (this.partyID > 0) {

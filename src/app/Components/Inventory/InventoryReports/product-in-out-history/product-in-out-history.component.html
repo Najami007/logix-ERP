@@ -1,0 +1,199 @@
+<div class="body container-fluid">
+
+    <div class="row mt-2">
+
+        <mat-form-field class="col-lg-3 matSmall" appearance="outline">
+            <mat-label>From Date</mat-label>
+            <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
+            <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
+            <mat-datepicker #sDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="col-lg-3 matSmall" appearance="outline">
+            <mat-label>From Time</mat-label>
+
+            <input matInput [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+            <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #fTime></ngx-material-timepicker>
+
+
+        </mat-form-field>
+
+
+        <mat-form-field class="col-lg-3 matSmall" appearance="outline">
+            <mat-label>To Date</mat-label>
+            <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
+            <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+            <mat-datepicker #eDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="col-lg-3 matSmall" appearance="outline">
+            <mat-label>To Time</mat-label>
+            <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+            <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #tTime></ngx-material-timepicker>
+        </mat-form-field>
+
+    </div>
+
+    <div class="row">
+
+
+        <mat-form-field appearance="outline" class="col-lg-3 matSmall">
+            <mat-label>User</mat-label>
+            <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
+                <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option [value]="0">All User</mat-option>
+                <mat-option *ngFor="let item of userList | filter:usearch.value"
+                    [value]="item.userID">{{item.userName}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-lg-3 matSmall">
+            <mat-label>Proudct</mat-label>
+            <mat-select [(ngModel)]="productID" (selectionChange)="onProdSelected()">
+                <mat-option><ngx-mat-select-search #prodsearch [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of productList | filter:prodsearch.value | slice:0:25"
+                    [value]="item.productID">{{item.productTitle}} <b>({{item.barcode}})</b></mat-option>
+            </mat-select>
+        </mat-form-field>
+
+
+        <div class="col-lg-3" *ngIf="crudList.r">
+
+            <button class=" btn-rpt-success me-1" (click)="getReport(rptType)">Get Report</button>
+            <button class="  btn-rpt-primary " (click)="print()">Print</button>
+            <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+    <div id="PrintDiv">
+
+        <!-------------------------    Top Logo Section -------------------->
+
+        <div class="hide">
+            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
+                        [width]="item.logo1Width">
+                </span>
+                <span>
+
+
+                    <h1 class="companyName">{{item.companyName}}</h1>
+
+                    <p class="rptTitle" style="margin-top:-20px">{{reportType}} <span
+                            *ngIf="userName != ''">({{userName}})</span></p>
+                    <p style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                        {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
+
+
+                </span>
+                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                        height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                </span>
+
+
+            </div>
+        </div>
+
+
+
+        <table class="table-logix" id="PrintDiv">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Bill #</th>
+                    <th>Date</th>
+                    <th>Title</th>
+                    <th>Party</th>
+                    <th>Stock In</th>
+                    <th>Amount</th>
+                    <th>Stock Out</th>
+                    <th>Amount</th>
+                    <!-- <th>Cost</th>
+                    <th>Avg Cost</th>
+                    <th>Sale</th>
+                    <th>Cost Total</th>
+                    <th>Sale Total</th> -->
+                    <th>Balance</th>
+                    <th>Entered By</th>
+
+                </tr>
+
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of invDetailList index as index">
+                    <td class="text-center">{{index + 1}}</td>
+                    <td class="text-center cursorPointer" (click)="printBill(item)"><u
+                            class="text-primary">{{item.invBillNo}}</u></td>
+                    <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
+                    <td>{{item.productTitle}} <b *ngIf="item.barcode !== null">({{item.barcode}})</b></td>
+                    <td><span *ngIf="item.partyID > 0">{{item.partyName }}</span></td>
+                    <td class="text-center"><span *ngIf="item.invSubType == 'IN'">{{item.quantity
+                            |number:"1.0-3"}}</span></td>
+                    <td class="text-end">
+                        <span *ngIf="item.invSubType == 'IN'">
+                            <small *ngIf="item.invType == 'P' || item.invType == 'AI'|| item.invType == 'OS' ">{{item.avgCostPrice *
+                                item.quantity|number:'1.0-1'}}</small>
+                            <small *ngIf="item.invType == 'SR'  ">{{item.salePrice *
+                                item.quantity|number:'1.0-1'}}</small>
+                        </span>
+                    </td>
+
+                    <td class="text-center"><span *ngIf="item.invSubType == 'OUT'">{{item.quantity
+                            |number:"1.0-3"}}</span></td>
+                    <td class="text-end">
+                        <span *ngIf="item.invSubType == 'OUT' "> 
+                            <small *ngIf="item.invType == 'PR' || item.invType == 'AO' ">{{item.avgCostPrice *
+                                item.quantity|number:'1.0-1'}}</small>
+                            <small *ngIf="item.invType == 'S'  ">{{item.salePrice *
+                                item.quantity|number:'1.0-1'}}</small>
+                        </span>
+                    </td>
+
+                    <!-- <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
+                    <td class="text-end">{{item.avgCostPrice |number:'1.0-1'}}</td>
+                    <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
+                    <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-1'}}</td>
+                    <td class="text-end">{{item.salePrice * item.quantity |number:'1.0-1'}}</td> -->
+                    <td class="text-end">{{item.balanceQty |number:'1.0-1'}}</td>
+                    <td>{{item.entryUser}}</td>
+                </tr>
+                <br>
+
+                <tr>
+                    <td colspan="5"></td>
+                    <td class="text-center fw-bold">{{stockInTotal |number:'1.0-3'}}</td>
+                    <td class="text-end fw-bold">{{stockInAmountTotal |number:'1.0-3'}}</td>
+                    <td class="text-center fw-bold">{{stockOUtTotal |number:'1.0-3'}}</td>
+                    <td class="text-end fw-bold">{{stockOutAmountTotal |number:'1.0-3'}}</td>
+                    <td class="text-end fw-bold"> {{ stockOutAmountTotal - stockInAmountTotal |number:'1.0-3'}}</td>
+                    <td></td>
+                </tr>
+
+
+            </tbody>
+
+
+        </table>
+
+
+
+    </div>
+
+
+
+</div>
+
+<app-sale-bill-print class="hide" id="print-Bill"> </app-sale-bill-print>
+<app-purchase-bill-print class="hide" id="print-Bill"></app-purchase-bill-print>

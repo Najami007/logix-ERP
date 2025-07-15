@@ -113,6 +113,7 @@ import { ProductEditBulkComponent } from './product-edit-bulk/product-edit-bulk.
 import { CustomerIssuanceComponent } from './CusotmerIssuance/customer-issuance/customer-issuance.component';
 import { CustomerIssueReturnComponent } from './CusotmerIssuance/customer-issue-return/customer-issue-return.component';
 import { ProductBarcodesComponent } from './product/product-barcodes/product-barcodes.component';
+import { ProductInOutHistoryComponent } from './InventoryReports/product-in-out-history/product-in-out-history.component';
 
 export const MY_DATE_FORMAT  = {
   parse: {
@@ -209,6 +210,7 @@ export const inventoryRoutes: Route[] = [
   {path: 'dayClose',component: DayClosingRptComponent,data: { title: 'Day Closing' },canActivate: [AuthGuard]},
    {path: 'srptv',component: VehicleSaleReportComponent,data: { title: 'Vehicle Sale Report' },canActivate: [AuthGuard]},
       {path: 'reorderrpt',component: ReorderReportComponent,data: { title: 'ReOrder Report' },canActivate: [AuthGuard]},
+      {path: 'prodInOutHistory',component: ProductInOutHistoryComponent,data: { title: 'Product In Out Hisotry' },canActivate: [AuthGuard]},
 
   
 
@@ -302,7 +304,8 @@ export const inventoryRoutes: Route[] = [
     ProductEditBulkComponent,
     CustomerIssuanceComponent,
     CustomerIssueReturnComponent,
-    ProductBarcodesComponent,   
+    ProductBarcodesComponent,
+    ProductInOutHistoryComponent,   
     
   
   

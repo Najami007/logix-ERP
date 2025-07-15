@@ -204,10 +204,8 @@
                                     (click)="tempProdData = item;editDP(item)">{{item.discInP
                                     |number:'1.0-3'}}</td>
 
-                                <td class="text-end cursorPointer" data-bs-toggle="modal"
-                                    data-bs-target="#totalChangeModal"
-                                    (click)="tempProdData = item;global.focusTo('#totalAmnt')">{{item.total
-                                    |number:'1.0-3'}}</td>
+                                <td class="text-end cursorPointer"  
+                                    (click)="EditTotal(item)">{{(item.salePrice * item.quantity)-(item.discInR * item.quantity)|number:'1.0-3'}}</td>
                                 <!-- <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-3'}}</td> -->
                                 <td *ngIf="prodDetailFeature" style="padding: 0px !important;"><textarea
                                         [(ngModel)]="item.productDetail"
@@ -418,33 +416,7 @@
 
 
 
-    <!------------------------- Modal Window for Total Amount Change =----------------->
-
-    <div class="modal fade" id="totalChangeModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-labelledby="totalChangeModalLabel">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-sm">
-            <div class="modal-content">
-
-                <form action="" method="post">
-                    <div class="modal-body">
-                        <mat-form-field class="w-100 matSmall" appearance="outline">
-                            <mat-label>Amount</mat-label>
-                            <input matInput #totalAmnt id="totalAmnt" (keydown)="global.handleNumKeys($event)" />
-                        </mat-form-field>
-
-                    </div>
-
-                    <div class="modal-footer bg-mf-blue">
-                        <button class="btnsave" data-bs-dismiss="modal"
-                            (click)="editTotal(totalAmnt.value);totalAmnt.value = ''">Save</button>
-                        <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </form>
-
-            </div>
-        </div>
-    </div>
-
+   
 
     <!------------------------- Modal Window for Saved Bill =----------------->
 

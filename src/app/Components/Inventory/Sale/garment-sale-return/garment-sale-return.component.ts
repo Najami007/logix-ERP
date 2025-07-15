@@ -331,11 +331,11 @@ export class GarmentSaleReturnComponent implements OnInit {
         batchNo: '-',
         batchStatus: '-',
         uomID: data.uomID,
-        gst: this.gstFeature ? data.gst : 0,
-        et: data.et,
+        gst:0,
+        et: 0,
         packing: 1,
-        discInP: this.discFeature ? data.barcode2 ? data.discInP : data.discPercentage : 0,
-        discInR: this.discFeature ? data.barcode2 ? data.discInR : data.discRupees : 0,
+        discInP:0,
+        discInR:0,
         aq: data.aq,
         total: (data.salePrice * qty) - (data.discRupees * qty),
         productDetail: '',
@@ -934,18 +934,41 @@ export class GarmentSaleReturnComponent implements OnInit {
 
   }
 
-  editTotal(amount: any) {
-    if (this.editSpFeature) {
-      this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].total = amount;
-      this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].quantity = (amount / (this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].salePrice - this.tableDataList[this.tableDataList.indexOf(this.tempProdData)].discInR));
 
-      this.getTotal();
-      this.tempProdData = [];
+   EditTotal(item: any) {
+  
+      // if(this.discFeature) return;
+    
+        Swal.fire({
+          title: "Enter Total Amount",
+          input: "text",
+          showCancelButton: true,
+          confirmButtonText: 'Save',
+          showLoaderOnConfirm: true,
+          preConfirm: (value) => {
+  
+            if (!value || isNaN(value) || value <= 0) {
+              return Swal.showValidationMessage("Enter Valid Amount");
+            }
+            const index = this.tableDataList.indexOf(item);
+        
+            
+            this.tableDataList[index].quantity = value /  (this.tableDataList[index].salePrice - this.tableDataList[index].discInR);
+            this.getTotal();
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: "Price Updated",
+              timer: 200,
+            });
+          }
+        })
+      
     }
+  
 
 
-
-  }
 
   partySelect() {
     if (this.partyID > 0) {

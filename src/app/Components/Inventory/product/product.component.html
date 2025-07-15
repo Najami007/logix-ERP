@@ -318,7 +318,7 @@
                         <th>GST</th>
                         <th>Entered By</th>
                         <th class="hide-in-print">Img</th>
-                        <th>UOM</th>
+                        <th *ngIf="MultiBarcode" class="hide-in-print">UOM</th>
                         <!-- <th class="hide-in-print" *ngIf="crudList.u">Edit</th>
                         <th class="hide-in-print">Active Status</th>
 
@@ -349,7 +349,7 @@
                                     (click)="this.global.showProductImage('',item.productID)">image</mat-icon>
                                 <mat-icon *ngIf="item.productImage == '-'">cancel_presentation</mat-icon>
                             </td>
-                            <td><mat-icon  class="cursorPointer hide-in-print" (click)="openBarcodeModal(item)">add_to_photos</mat-icon></td>
+                            <td *ngIf="MultiBarcode" class="cursorPointer hide-in-print" ><mat-icon  (click)="openBarcodeModal(item)">add_to_photos</mat-icon></td>
                             <td class="hide-in-print text-center">
 
                                 <mat-icon class="text-success cursorPointer" matTooltip="Edit" *ngIf="crudList.u"
