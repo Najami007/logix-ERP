@@ -29,7 +29,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { SalePurchaseRptdatewiseComponent } from './InventoryReports/sale-purchase-rptdatewise/sale-purchase-rptdatewise.component';
 import { TopLeastSaleQtyAmountwiseComponent } from './InventoryReports/top-least-sale-qty-amountwise/top-least-sale-qty-amountwise.component';
 
-import {ScrollingModule} from '@angular/cdk/scrolling';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { EnterQtyComponent } from './Sale/retailer-sale/enter-qty/enter-qty.component';
 
 
@@ -95,12 +95,12 @@ import { UnitOfMeasurementComponent } from './Configurations/unit-of-measurement
 import { MaterialModule } from 'src/app/Shared/material/material.module';
 import { PurchaseOrderComponent } from './Purchases/purchase-order/purchase-order.component';
 import { StockTransferComponent } from './InvAdjustment/stock-transfer/stock-transfer.component';
-import { QRCodeModule  } from 'angularx-qrcode';
+import { QRCodeModule } from 'angularx-qrcode';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PaymentMehtodComponent } from './Sale/SaleComFiles/payment-mehtod/payment-mehtod.component';
 import { SavedBillComponent } from './Sale/SaleComFiles/saved-bill/saved-bill.component';
 
-import { DateAdapter, MAT_DATE_LOCALE , MAT_DATE_FORMATS } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { SharedComponentsModule } from '../shared-components/shared-components.module';
 import { PaymentComponent } from '../Accounts/DesiAccounts/payment/payment.component';
@@ -114,8 +114,10 @@ import { CustomerIssuanceComponent } from './CusotmerIssuance/customer-issuance/
 import { CustomerIssueReturnComponent } from './CusotmerIssuance/customer-issue-return/customer-issue-return.component';
 import { ProductBarcodesComponent } from './product/product-barcodes/product-barcodes.component';
 import { ProductInOutHistoryComponent } from './InventoryReports/product-in-out-history/product-in-out-history.component';
+import { CustomerIssueBillPrintComponent } from './CusotmerIssuance/customer-issue-bill-print/customer-issue-bill-print.component';
+import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
 
-export const MY_DATE_FORMAT  = {
+export const MY_DATE_FORMAT = {
   parse: {
     dateInput: 'DD/MM/YYYY',
   },
@@ -138,83 +140,83 @@ export const inventoryRoutes: Route[] = [
 
   ////////////////////////// Configuration Pages /////////////
 
-  {path: 'pcat',component: ProductCategoryComponent,data: { title: 'Product Category' },canActivate: [AuthGuard]},
-  {path: 'pscat',component: ProductSubCategoryComponent,data: { title: 'Sub Category' },canActivate: [AuthGuard]},
-  {path: 'pbrnd',component: BrandComponent, data: { title: 'Brand' }, canActivate: [AuthGuard]},
-  {path: 'prac',component: RacksComponent,data: { title: 'Racks' },canActivate: [AuthGuard]},
-  { path: 'ploc',component: LocationsComponent,data: { title: 'Location' },canActivate: [AuthGuard]},
-  {path: 'uom',component: UnitOfMeasurementComponent,data: { title: 'UOM' },canActivate: [AuthGuard]},
-  {path: 'prod',component: ProductComponent,data: { title: 'Product' },canActivate: [AuthGuard]},
-  {path: 'pckr',component: PriceCheckerComponent,data: { title: 'Price Checker' },canActivate: [AuthGuard]},
-   {path: 'suppay',component: PaymentComponent, data: { title: 'Payment' }, canActivate: [AuthGuard]},
-      {path: 'prodeditbulk',component: ProductEditBulkComponent, data: { title: 'Product Edit Bulk' }, canActivate: [AuthGuard]},
-  
+  { path: 'pcat', component: ProductCategoryComponent, data: { title: 'Product Category' }, canActivate: [AuthGuard] },
+  { path: 'pscat', component: ProductSubCategoryComponent, data: { title: 'Sub Category' }, canActivate: [AuthGuard] },
+  { path: 'pbrnd', component: BrandComponent, data: { title: 'Brand' }, canActivate: [AuthGuard] },
+  { path: 'prac', component: RacksComponent, data: { title: 'Racks' }, canActivate: [AuthGuard] },
+  { path: 'ploc', component: LocationsComponent, data: { title: 'Location' }, canActivate: [AuthGuard] },
+  { path: 'uom', component: UnitOfMeasurementComponent, data: { title: 'UOM' }, canActivate: [AuthGuard] },
+  { path: 'prod', component: ProductComponent, data: { title: 'Product' }, canActivate: [AuthGuard] },
+  { path: 'pckr', component: PriceCheckerComponent, data: { title: 'Price Checker' }, canActivate: [AuthGuard] },
+  { path: 'suppay', component: PaymentComponent, data: { title: 'Payment' }, canActivate: [AuthGuard] },
+  { path: 'prodeditbulk', component: ProductEditBulkComponent, data: { title: 'Product Edit Bulk' }, canActivate: [AuthGuard] },
+
   //////// Sale Pages////////////////////
 
-  {path: 'whsl', component: WholeSaleComponent,data: { title: 'Whole Sale' },canActivate: [AuthGuard]},    
-  {path: 'whslrtn', component: WholeSaleReturnComponent,data: { title: 'Whole Sale Return' },canActivate: [AuthGuard]},    
-  {path: 'gmsale',component: GarmentSaleComponent,data: { title: 'Sale GS' },canActivate: [AuthGuard]}, 
-  {path: 'gmslrtn',component: GarmentSaleReturnComponent,data: { title: 'Sale Return GS' },canActivate: [AuthGuard]}, 
-  {path: 'vblsale',component: VoidSaleComponent,data: { title: 'VB Sale' },canActivate: [AuthGuard]},
-  {path: 'vblsalertn',component: VoidSaleReturnComponent,data: { title: 'VB Sale Return' },canActivate: [AuthGuard]},
-  {path: 'retsl',component: RetailerSaleComponent,data: { title: 'Rt Sale' },canActivate: [AuthGuard]},
-  {path: 'retslrtn',component: RetailerSaleReturnComponent,data: { title: 'RT Sale Return' },canActivate: [AuthGuard]},
-  {path: 'mobsl',component: SaleMobComponent,data: { title: 'Mob Sale' },canActivate: [AuthGuard]},
-  {path: 'mobslrtn',component: SaleReturnMobComponent,data: { title: 'Mob Sale Return' },canActivate: [AuthGuard]},
-  {path: 'ffsl',component: FastFoodSaleComponent,data: { title: 'Fast Food Sale' },canActivate: [AuthGuard]},
+  { path: 'whsl', component: WholeSaleComponent, data: { title: 'Whole Sale' }, canActivate: [AuthGuard] },
+  { path: 'whslrtn', component: WholeSaleReturnComponent, data: { title: 'Whole Sale Return' }, canActivate: [AuthGuard] },
+  { path: 'gmsale', component: GarmentSaleComponent, data: { title: 'Sale GS' }, canActivate: [AuthGuard] },
+  { path: 'gmslrtn', component: GarmentSaleReturnComponent, data: { title: 'Sale Return GS' }, canActivate: [AuthGuard] },
+  { path: 'vblsale', component: VoidSaleComponent, data: { title: 'VB Sale' }, canActivate: [AuthGuard] },
+  { path: 'vblsalertn', component: VoidSaleReturnComponent, data: { title: 'VB Sale Return' }, canActivate: [AuthGuard] },
+  { path: 'retsl', component: RetailerSaleComponent, data: { title: 'Rt Sale' }, canActivate: [AuthGuard] },
+  { path: 'retslrtn', component: RetailerSaleReturnComponent, data: { title: 'RT Sale Return' }, canActivate: [AuthGuard] },
+  { path: 'mobsl', component: SaleMobComponent, data: { title: 'Mob Sale' }, canActivate: [AuthGuard] },
+  { path: 'mobslrtn', component: SaleReturnMobComponent, data: { title: 'Mob Sale Return' }, canActivate: [AuthGuard] },
+  { path: 'ffsl', component: FastFoodSaleComponent, data: { title: 'Fast Food Sale' }, canActivate: [AuthGuard] },
 
 
-   {path: 'customerissue',component: CustomerIssuanceComponent,data: { title: 'Customer Issue' },canActivate: [AuthGuard]},
-      {path: 'customerissuertn',component: CustomerIssueReturnComponent,data: { title: 'Customer Issue Return' },canActivate: [AuthGuard]},
+  { path: 'customerissue', component: CustomerIssuanceComponent, data: { title: 'Customer Issue' }, canActivate: [AuthGuard] },
+  { path: 'customerissuertn', component: CustomerIssueReturnComponent, data: { title: 'Customer Issue Return' }, canActivate: [AuthGuard] },
 
-    //////// Purchase Pages////////////////////
+  //////// Purchase Pages////////////////////
 
-  {path: 'pur',component: PurchaseComponent,data: { title: 'Purchase' },canActivate: [AuthGuard]},
-  {path: 'purtn',component: PurchaseReturnComponent,data: { title: 'Purchase Return' },canActivate: [AuthGuard]},
-  {path: 'purmob',component: PurchaseMobShopComponent,data: { title: 'Purchase Mob' },canActivate: [AuthGuard]},
-  {path: 'purtnmob',component: PurchaseReturnMobComponent,data: { title: 'Purchase Return Mob' },canActivate: [AuthGuard]},
-  {path: 'purordr',component: PurchaseOrderComponent,data: { title: 'Purchase Order' },canActivate: [AuthGuard]},
+  { path: 'pur', component: PurchaseComponent, data: { title: 'Purchase' }, canActivate: [AuthGuard] },
+  { path: 'purtn', component: PurchaseReturnComponent, data: { title: 'Purchase Return' }, canActivate: [AuthGuard] },
+  { path: 'purmob', component: PurchaseMobShopComponent, data: { title: 'Purchase Mob' }, canActivate: [AuthGuard] },
+  { path: 'purtnmob', component: PurchaseReturnMobComponent, data: { title: 'Purchase Return Mob' }, canActivate: [AuthGuard] },
+  { path: 'purordr', component: PurchaseOrderComponent, data: { title: 'Purchase Order' }, canActivate: [AuthGuard] },
 
 
- ////////////////////////// Adjustment Pages /////////////
- 
-  {path: 'isnc',component: IssuanceComponent,data: { title: 'Stock Issuance' },canActivate: [AuthGuard]},
-  {path: 'isncrtn',component: IssueStockRerturnComponent,data: { title: 'Issue Return' },canActivate: [AuthGuard]},
-  {path: 'stkadj',component: StockAdjustmentComponent,data: { title: 'Stock Adjustment' }, canActivate: [AuthGuard]},
-  {path: 'opnstk',component: OpeningStockComponent,data: { title: 'Opening Stock' },canActivate: [AuthGuard]},
-  {path: 'stktrnsfr',component: StockTransferComponent,data: { title: 'Stock Transfer' },canActivate: [AuthGuard]},
+  ////////////////////////// Adjustment Pages /////////////
+
+  { path: 'isnc', component: IssuanceComponent, data: { title: 'Stock Issuance' }, canActivate: [AuthGuard] },
+  { path: 'isncrtn', component: IssueStockRerturnComponent, data: { title: 'Issue Return' }, canActivate: [AuthGuard] },
+  { path: 'stkadj', component: StockAdjustmentComponent, data: { title: 'Stock Adjustment' }, canActivate: [AuthGuard] },
+  { path: 'opnstk', component: OpeningStockComponent, data: { title: 'Opening Stock' }, canActivate: [AuthGuard] },
+  { path: 'stktrnsfr', component: StockTransferComponent, data: { title: 'Stock Transfer' }, canActivate: [AuthGuard] },
 
 
   ////////////////////////// Reports Pages /////////////
 
-  {path: 'invrpt',component: InvreportcatwiseComponent,data: { title: 'Stock Register' },canActivate: [AuthGuard]},
-  {path: 'invrptpw',component: InvrptprodwiseComponent,data: { title: 'Product In Out History' },canActivate: [AuthGuard]},
-  {path: 'sprptdw',component: SalePurchaseRptdatewiseComponent,data: { title: 'Stock In Out Datewise' },canActivate: [AuthGuard]},
-  {path: 'tlsrpt',component: TopLeastSaleQtyAmountwiseComponent,data: { title: 'Top Least Sale Report' },canActivate: [AuthGuard]},
-  {path: 'invdsbrd',component: InvDashboardComponent,data: { title: 'Dashboard' },canActivate: [AuthGuard]},
-  {path: 'isrptptw',component: SaleRptPaymentTypewiseComponent,data: { title: 'Sale History Payment Type wise' },canActivate: [AuthGuard]},
-  {path: 'prptsw',component: PurchaseReportSupplierwiseComponent,data: { title: 'Purchase Rpt Supplier' },canActivate: [AuthGuard]},
-  {path: 'prptpsw', component: PurchaseReportProdSupplierwiseComponent,data: { title: 'Purchase Rpt Prod Supplier' },canActivate: [AuthGuard]},
-  { path: 'spcrptdw',component: SalePurchaseComparisonRptDatewiseComponent,data: { title: 'Sale Purchase Comparison' },canActivate: [AuthGuard]},
-  {path: 'slrptcw',component: SaleReportCustomerwiseComponent,data: { title: 'Sale Rpt Customerwise' },canActivate: [AuthGuard]}, 
-  {path: 'invadt',component: InvAuditComponent,data: { title: 'Inv Audit' },canActivate: [AuthGuard]}, 
-  {path: 'cbrpt',component: CustomerBalanceReportComponent,data: { title: 'Customer Balance Rpt' },canActivate: [AuthGuard]}, 
-  {path: 'sbrpt',component: SupplierBalanceReportComponent,data: { title: 'Supplier Balance Rpt' },canActivate: [AuthGuard]}, 
-  { path: 'srptbkrw',component: SaleReportBookerwiseComponent,data: { title: 'Sale Rpt Booker' },canActivate: [AuthGuard]}, 
-  {path: 'srptprodcw',component: SaleReportProdCustomerwiseComponent,data: { title: 'Sale Rpt Customer' },canActivate: [AuthGuard]}, 
-  {path: 'sprptcw',component: SalePurchaseRptcatwiseComponent,data: { title: 'Sale Rpt Category' },canActivate: [AuthGuard]}, 
-  {path: 'spcrptsw',component: SalePurchaseComparisonRptsupplierwiseComponent,data: { title: 'Sale Purchase Comp Supplier' },canActivate: [AuthGuard]},
-  {path: 'brpt',component: BarcodeReportComponent,data: { title: 'Barcode Report' },canActivate: [AuthGuard]},
-  {path: 'vrptuw',component: VoidListReportComponent,data: { title: 'Void List Rpt' }, canActivate: [AuthGuard]},
-  {path: 'ccrpt',component: CashierClosingRptComponent,data: { title: 'Cashier Closing' },canActivate: [AuthGuard]},
-  {path: 'dayClose',component: DayClosingRptComponent,data: { title: 'Day Closing' },canActivate: [AuthGuard]},
-   {path: 'srptv',component: VehicleSaleReportComponent,data: { title: 'Vehicle Sale Report' },canActivate: [AuthGuard]},
-      {path: 'reorderrpt',component: ReorderReportComponent,data: { title: 'ReOrder Report' },canActivate: [AuthGuard]},
-      {path: 'prodInOutHistory',component: ProductInOutHistoryComponent,data: { title: 'Product In Out Hisotry' },canActivate: [AuthGuard]},
+  { path: 'invrpt', component: InvreportcatwiseComponent, data: { title: 'Stock Register' }, canActivate: [AuthGuard] },
+  { path: 'invrptpw', component: InvrptprodwiseComponent, data: { title: 'Product In Out History' }, canActivate: [AuthGuard] },
+  { path: 'sprptdw', component: SalePurchaseRptdatewiseComponent, data: { title: 'Stock In Out Datewise' }, canActivate: [AuthGuard] },
+  { path: 'tlsrpt', component: TopLeastSaleQtyAmountwiseComponent, data: { title: 'Top Least Sale Report' }, canActivate: [AuthGuard] },
+  { path: 'invdsbrd', component: InvDashboardComponent, data: { title: 'Dashboard' }, canActivate: [AuthGuard] },
+  { path: 'isrptptw', component: SaleRptPaymentTypewiseComponent, data: { title: 'Sale History Payment Type wise' }, canActivate: [AuthGuard] },
+  { path: 'prptsw', component: PurchaseReportSupplierwiseComponent, data: { title: 'Purchase Rpt Supplier' }, canActivate: [AuthGuard] },
+  { path: 'prptpsw', component: PurchaseReportProdSupplierwiseComponent, data: { title: 'Purchase Rpt Prod Supplier' }, canActivate: [AuthGuard] },
+  { path: 'spcrptdw', component: SalePurchaseComparisonRptDatewiseComponent, data: { title: 'Sale Purchase Comparison' }, canActivate: [AuthGuard] },
+  { path: 'slrptcw', component: SaleReportCustomerwiseComponent, data: { title: 'Sale Rpt Customerwise' }, canActivate: [AuthGuard] },
+  { path: 'invadt', component: InvAuditComponent, data: { title: 'Inv Audit' }, canActivate: [AuthGuard] },
+  { path: 'cbrpt', component: CustomerBalanceReportComponent, data: { title: 'Customer Balance Rpt' }, canActivate: [AuthGuard] },
+  { path: 'sbrpt', component: SupplierBalanceReportComponent, data: { title: 'Supplier Balance Rpt' }, canActivate: [AuthGuard] },
+  { path: 'srptbkrw', component: SaleReportBookerwiseComponent, data: { title: 'Sale Rpt Booker' }, canActivate: [AuthGuard] },
+  { path: 'srptprodcw', component: SaleReportProdCustomerwiseComponent, data: { title: 'Sale Rpt Customer' }, canActivate: [AuthGuard] },
+  { path: 'sprptcw', component: SalePurchaseRptcatwiseComponent, data: { title: 'Sale Rpt Category' }, canActivate: [AuthGuard] },
+  { path: 'spcrptsw', component: SalePurchaseComparisonRptsupplierwiseComponent, data: { title: 'Sale Purchase Comp Supplier' }, canActivate: [AuthGuard] },
+  { path: 'brpt', component: BarcodeReportComponent, data: { title: 'Barcode Report' }, canActivate: [AuthGuard] },
+  { path: 'vrptuw', component: VoidListReportComponent, data: { title: 'Void List Rpt' }, canActivate: [AuthGuard] },
+  { path: 'ccrpt', component: CashierClosingRptComponent, data: { title: 'Cashier Closing' }, canActivate: [AuthGuard] },
+  { path: 'dayClose', component: DayClosingRptComponent, data: { title: 'Day Closing' }, canActivate: [AuthGuard] },
+  { path: 'srptv', component: VehicleSaleReportComponent, data: { title: 'Vehicle Sale Report' }, canActivate: [AuthGuard] },
+  { path: 'reorderrpt', component: ReorderReportComponent, data: { title: 'ReOrder Report' }, canActivate: [AuthGuard] },
+  { path: 'prodInOutHistory', component: ProductInOutHistoryComponent, data: { title: 'Product In Out Hisotry' }, canActivate: [AuthGuard] },
 
-  
 
-  { path: '**', redirectTo: 'home',data: { title: 'Home' }, pathMatch: 'full' }
+
+  { path: '**', redirectTo: 'home', data: { title: 'Home' }, pathMatch: 'full' }
 
 
 ];
@@ -246,7 +248,7 @@ export const inventoryRoutes: Route[] = [
     InvrptprodwiseComponent,
     SalePurchaseRptdatewiseComponent,
     TopLeastSaleQtyAmountwiseComponent,
- 
+
     EnterQtyComponent,
     VsenterqtyComponent,
     VssavedbillComponent,
@@ -264,9 +266,9 @@ export const inventoryRoutes: Route[] = [
     CashierClosingRptComponent,
     RetailRtnSavedbillComponent,
     RetailRtnEnterQtyComponent,
-   
+
     PriceCheckerComponent,
-   
+
     WholeSaleComponent,
     WhsSavedBillComponent,
     GarmentSaleComponent,
@@ -305,13 +307,14 @@ export const inventoryRoutes: Route[] = [
     CustomerIssuanceComponent,
     CustomerIssueReturnComponent,
     ProductBarcodesComponent,
-    ProductInOutHistoryComponent,   
-    
-  
-  
-    
+    ProductInOutHistoryComponent,
+    CustomerIssueBillPrintComponent,
 
- 
+
+
+
+
+
 
   ],
   imports: [
@@ -332,9 +335,10 @@ export const inventoryRoutes: Route[] = [
     QRCodeModule,
     NgSelectModule,
     SharedComponentsModule,
-    CompanyModule
-    
-],
+    CompanyModule,
+    DirectivesModule
+
+  ],
   exports: [
     RouterModule,
     CashierClosingRptComponent,

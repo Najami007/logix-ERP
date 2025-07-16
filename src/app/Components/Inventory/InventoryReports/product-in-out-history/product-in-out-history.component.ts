@@ -139,9 +139,6 @@ export class ProductInOutHistoryComponent implements OnInit {
     this.app.startLoaderDark();
     this.http.get(environment.mainApi + this.global.inventoryLink + url).subscribe(
       (Response: any) => {
-
-        console.log(Response);
-
         this.invDetailList = [];
         this.stockInTotal = 0;
         this.stockOUtTotal = 0;
@@ -162,31 +159,29 @@ export class ProductInOutHistoryComponent implements OnInit {
         this.invDetailList.forEach((e: any) => {
           if (e.totalIn !== 0 || e.totalOut !== 0) {
             tmpQty = e.totalIn - e.totalOut;
-            e.balanceQty =  e.totalIn - e.totalOut;
+            e.balanceQty = e.totalIn - e.totalOut;
           }
           if (e.invSubType == 'OUT') {
             e.balanceQty = tmpQty - e.quantity;
-            
+            this.stockOUtTotal += e.quantity;
             if (e.invType == 'S') {
-              this.stockOUtTotal += e.quantity;
               this.stockOutAmountTotal += (e.salePrice * e.quantity);
             }
-             if (e.invType == 'PR' || e.invType == 'AO') {
-              this.stockOUtTotal += e.quantity;
+            if (e.invType == 'PR' || e.invType == 'AO') {
               this.stockOutAmountTotal += (e.avgCostPrice * e.quantity);
             }
 
 
             tmpQty = e.balanceQty;
-          }else if (e.invSubType == 'IN') {
+          } else if (e.invSubType == 'IN') {
 
             e.balanceQty = tmpQty + e.quantity;
+            this.stockInTotal += e.quantity;
+
             if ((e.invType == 'P' || e.invType == 'AI')) {
-              this.stockInTotal += e.quantity;
               this.stockInAmountTotal += (e.avgCostPrice * e.quantity);
             }
-                if (e.invType == 'SR') {
-              this.stockInTotal += e.quantity;
+            if (e.invType == 'SR') {
               this.stockInAmountTotal += (e.salePrice * e.quantity);
             }
 
@@ -232,7 +227,7 @@ export class ProductInOutHistoryComponent implements OnInit {
     var type = this.reportsList.find((e: any) => e.invType == this.rptType).invTypeTitle;
     var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
     var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
-    this.global.ExportHTMLTabletoExcel('PrintDiv', `${type}(${startDate} - ${endDate}`)
+    this.global.ExportHTMLTabletoExcel('PrintDiv', `Prod In Out History(${startDate} - ${endDate}`)
   }
 
 

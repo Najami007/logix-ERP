@@ -21,6 +21,9 @@ export class AddCategoryComponent implements OnInit{
   ){}
 
   ngOnInit(): void {
+         setTimeout(() => {
+      $('#catTitle').trigger('focus')
+    }, 500);
    
     
   }

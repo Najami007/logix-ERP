@@ -16,31 +16,34 @@ export class AddProdSubCategoryComponent {
 
 
   constructor(
-    private http:HttpClient,
+    private http: HttpClient,
     private dialogRef: MatDialogRef<AddProdSubCategoryComponent>,
-    private global:GlobalDataModule,
-    private msg:NotificationService,
-  ){}
+    private global: GlobalDataModule,
+    private msg: NotificationService,
+  ) { }
 
   ngOnInit(): void {
     this.getCategory();
-    
+    setTimeout(() => {
+      $('#category').trigger('focus')
+    }, 500);
+
   }
 
 
-  categorySearch:any;
-  categoryID:any;
-  subCategoryTitle:any;
-  categoryList:any  = [];
-  subCategoryList:any = [];
-  subCategoryID:any;
-  description:any;
+  categorySearch: any;
+  categoryID: any;
+  subCategoryTitle: any;
+  categoryList: any = [];
+  subCategoryList: any = [];
+  subCategoryID: any;
+  description: any;
 
 
 
-  getCategory(){
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetCategory').subscribe(
-      (Response:any)=>{
+  getCategory() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetCategory').subscribe(
+      (Response: any) => {
         this.categoryList = Response;
       }
     )
@@ -48,53 +51,54 @@ export class AddProdSubCategoryComponent {
 
 
 
-  save(){
-    if(this.categoryID == '' || this.categoryID == undefined){
+  save() {
+    if (this.categoryID == '' || this.categoryID == undefined) {
       this.msg.WarnNotify('Enter Category Title')
-    }else if(this.subCategoryTitle == '' || this.subCategoryTitle == undefined){
+    } else if (this.subCategoryTitle == '' || this.subCategoryTitle == undefined) {
       this.msg.WarnNotify('Enter Sub Category Title')
-    }else {
+    } else {
 
-      if(this.description == '' || this.description == undefined){
+      if (this.description == '' || this.description == undefined) {
         this.description = '-';
       }
-      
+
       $('.loaderDark').show();
-      this.http.post(environment.mainApi+this.global.inventoryLink+'InsertSubCategory',{  
+      this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertSubCategory', {
         CategoryID: this.categoryID,
         SubCategoryTitle: this.subCategoryTitle,
         SubCategoryDescription: this.description,
         UserID: this.global.getUserID()
       }).subscribe(
-        (Response:any)=>{
-          if(Response.msg == 'Data Saved Successfully'){
+        (Response: any) => {
+          if (Response.msg == 'Data Saved Successfully') {
             this.msg.SuccessNotify(Response.msg);
             this.reset();
             this.dialogRef.close('Update');
             $('.loaderDark').fadeOut(500);
-  
-          }else{
+
+          } else {
             this.msg.WarnNotify(Response.msg);
-            $('.loaderDark').fadeOut(500);        }
+            $('.loaderDark').fadeOut(500);
+          }
         },
-        (error:any)=>{
+        (error: any) => {
           $('.loaderDark').fadeOut(500);
         }
       )
 
     }
-  
+
   }
 
 
-  reset(){
+  reset() {
     this.categoryID = '';
     this.subCategoryID = '';
     this.subCategoryTitle = '';
     this.description = '';
   }
 
-  closeDialogue(){
+  closeDialogue() {
     this.dialogRef.close();
   }
 

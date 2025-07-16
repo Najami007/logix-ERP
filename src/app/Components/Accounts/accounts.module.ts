@@ -69,6 +69,7 @@ import { AccountSummaryReportComponent } from './AccountReports/account-summary-
 import { CoaNotesComponent } from './coa-notes/coa-notes.component';
 import { AddNoteComponent } from './coa-notes/add-note/add-note.component';
 import { JournelComponent } from './AccountReports/journel/journel.component';
+import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -181,7 +182,8 @@ export const accountRountes: Route[] = [
     //Ng2SearchPipeModule,
     MatFormFieldModule,
     ChartModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    DirectivesModule
 
 
 

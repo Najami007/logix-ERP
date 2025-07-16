@@ -24,7 +24,7 @@ export class AddRackComponent {
 
   ngOnInit(): void {
     setTimeout(() => {
-      $('#title').trigger('focus')
+      $('#rackTitle').trigger('focus')
     }, 500);
   }
 

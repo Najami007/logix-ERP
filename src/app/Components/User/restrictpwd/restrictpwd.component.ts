@@ -19,7 +19,7 @@ export class RestrictpwdComponent implements OnInit {
     private http:HttpClient,
     private app:AppComponent,
     private msg:NotificationService,
-    private global:GlobalDataModule,
+    public global:GlobalDataModule,
     private dialog:MatDialog
     
   ){}
@@ -47,9 +47,22 @@ export class RestrictpwdComponent implements OnInit {
 
 
 
+  openPwdModal(item:any){
+    this.restrictionCodeID = item.restrictionCodeID;
+    this.global.openBootstrapModal('#pwdModal',true);
+    setTimeout(() => {
+       $('#pwd').trigger('select');
+      $('#pwd').trigger('focus');
+    }, 500);
+  }
 
 
   updateCode(){
+    if(this.password == '' || this.password == undefined){
+      this.msg.WarnNotify('Enter Password');
+      return;
+    }
+    this.global.closeBootstrapModal('#pwdModal',true);
     this.global.openPinCode().subscribe(pin=>{
       if(pin != ''){
         this.app.startLoaderDark()
@@ -66,9 +79,13 @@ export class RestrictpwdComponent implements OnInit {
               this.reset();
             }else{
               this.msg.WarnNotify(Response.msg);
+               this.global.openBootstrapModal('#pwdModal',true);
             }
 
             this.app.stopLoaderDark()
+          },
+          (Error:any)=>{
+             this.global.openBootstrapModal('#pwdModal',true);
           }
         )
       }

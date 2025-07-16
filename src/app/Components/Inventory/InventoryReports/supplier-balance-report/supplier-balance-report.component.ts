@@ -10,23 +10,23 @@ import { environment } from 'src/environments/environment.development';
   templateUrl: './supplier-balance-report.component.html',
   styleUrls: ['./supplier-balance-report.component.scss']
 })
-export class SupplierBalanceReportComponent  {
+export class SupplierBalanceReportComponent {
 
-  companyProfile:any= [];
-  crudList:any = {c:true,r:true,u:true,d:true};
+  companyProfile: any = [];
+  crudList: any = { c: true, r: true, u: true, d: true };
   constructor(
-    private http:HttpClient,
-    private global:GlobalDataModule,
-    private app:AppComponent,
-    private route:Router,
-    private msg:NotificationService
-  ){
-    this.global.getCompany().subscribe((data)=>{
+    private http: HttpClient,
+    private global: GlobalDataModule,
+    private app: AppComponent,
+    private route: Router,
+    private msg: NotificationService
+  ) {
+    this.global.getCompany().subscribe((data) => {
       this.companyProfile = data;
     });
 
-    this.global.getMenuList().subscribe((data)=>{
-      this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+    this.global.getMenuList().subscribe((data) => {
+      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
     })
   }
 
@@ -38,13 +38,19 @@ export class SupplierBalanceReportComponent  {
 
 
 
-  TableData:any = [];
+  TableData: any = [];
+  payableBalance = 0;
+  ReceiveableBalance = 0;
+  NetBalance = 0;
 
-  getParty(){
+  getParty() {
     this.app.startLoaderDark();
-    this.http.get(environment.mainApi+this.global.inventoryLink+'GetSuppliersBalanceRpt').subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSuppliersBalanceRpt').subscribe(
       (Response: any) => {
         this.TableData = [];
+        this.payableBalance = 0;
+        this.ReceiveableBalance = 0;
+        this.NetBalance = 0;
         if (Response.length == 0 || Response == null) {
           this.global.popupAlert('Data Not Found!');
           this.app.stopLoaderDark();
@@ -52,17 +58,26 @@ export class SupplierBalanceReportComponent  {
 
         }
         this.TableData = Response;
-         this.app.stopLoaderDark();
+         this.TableData.forEach((e: any) => {
+          if (e.balance > 0) {
+            this.payableBalance += e.balance;
+          }
+          if (e.balance < 0) {
+            this.ReceiveableBalance += e.balance;
+          }
+          this.NetBalance += e.balance
+        });
+        this.app.stopLoaderDark();
       },
-      (Error:any)=>{
+      (Error: any) => {
         console.log(Error);
-         this.app.stopLoaderDark();
+        this.app.stopLoaderDark();
 
       })
   }
 
 
-  print(){
+  print() {
     this.global.printData('#PrintDiv');
   }
 

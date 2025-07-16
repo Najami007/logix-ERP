@@ -11,6 +11,7 @@ import { Observable, retry } from 'rxjs';
 import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/addparty.component';
 import Swal from 'sweetalert2';
 import { AdjBillPrintComponent } from '../../InvAdjustment/adj-bill-print/adj-bill-print.component';
+import { CustomerIssueBillPrintComponent } from '../customer-issue-bill-print/customer-issue-bill-print.component';
 
 @Component({
   selector: 'app-customer-issuance',
@@ -19,7 +20,7 @@ import { AdjBillPrintComponent } from '../../InvAdjustment/adj-bill-print/adj-bi
 })
 export class CustomerIssuanceComponent implements OnInit {
 
-  @ViewChild(AdjBillPrintComponent) billPrint: any;
+  @ViewChild(CustomerIssueBillPrintComponent) billPrint: any;
 
   crudList: any = { c: true, r: true, u: true, d: true };
   companyProfile: any = [];
@@ -158,7 +159,7 @@ export class CustomerIssuanceComponent implements OnInit {
         this.global.getProdDetail(0, barcode).subscribe(
           (Response: any) => {
 
-            
+
             if (Response == '' || Response == null || Response == undefined) {
               this.searchSpecialBarcode(barcode, qty); ////////// conditional Searching Special Barcode of Scale
               return;
@@ -420,7 +421,7 @@ export class CustomerIssuanceComponent implements OnInit {
 
 
 
-   /////////////////////////////////////////////
+  /////////////////////////////////////////////
   rowFocused = -1;
   prodFocusedRow = 0;
   changeFocus(e: any, cls: any) {
@@ -509,7 +510,7 @@ export class CustomerIssuanceComponent implements OnInit {
 
   }
 
-    //////////////////////////// handle Table Data List updown focus on key up down ///////////////
+  //////////////////////////// handle Table Data List updown focus on key up down ///////////////
   handleUpdown(item: any, e: any, cls: string, index: any) {
     const container = $(".table-logix");
     if (e.keyCode == 9) {
@@ -713,15 +714,15 @@ export class CustomerIssuanceComponent implements OnInit {
     if (!this.isValidSale) {
       return;
     }
-  
+
     var url = '';
-    if(type == 'insert'){
+    if (type == 'insert') {
       url = 'InsertIssueStockToCustomer';
     }
-     if(type == 'update'){
+    if (type == 'update') {
       url = 'UpdateHoldedIssueInvoice';
     }
-    
+
     this.app.startLoaderDark();
     this.isValidSale = false;
     this.http.post(environment.mainApi + this.global.inventoryLink + url, postData).subscribe(
@@ -876,15 +877,16 @@ export class CustomerIssuanceComponent implements OnInit {
         }).subscribe(
           (Response: any) => {
             if (Response.msg == 'Data Deleted Successfully') {
-
               this.msg.SuccessNotify(Response.msg);
-              this.app.stopLoaderDark();
-
+              this.FindSavedBills('HIC');
             } else {
               this.msg.WarnNotify(Response.msg)
             }
+            this.app.stopLoaderDark();
 
-
+          },
+          (Error:any)=>{
+            console.log(Error);
           }
         )
       }
@@ -939,5 +941,5 @@ export class CustomerIssuanceComponent implements OnInit {
       })
     }
   }
-  
+
 }

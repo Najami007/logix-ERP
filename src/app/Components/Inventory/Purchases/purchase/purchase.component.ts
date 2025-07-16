@@ -1196,6 +1196,7 @@ export class PurchaseComponent implements OnInit {
           if (Response.msg == 'Data Deleted Successfully') {
             this.msg.SuccessNotify(Response.msg);
             this.findHoldBills('hp');
+            
             //this.app.stopLoaderDark();
 
 

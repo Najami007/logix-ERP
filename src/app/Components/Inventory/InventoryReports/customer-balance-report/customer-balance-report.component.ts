@@ -41,11 +41,18 @@ export class CustomerBalanceReportComponent {
 
   TableData: any = [];
 
+  payableBalance = 0;
+  ReceiveableBalance = 0;
+  NetBalance = 0;
+
   getParty() {
-      this.app.startLoaderDark();
+    this.app.startLoaderDark();
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetCustomersBalanceRpt').subscribe(
       (Response: any) => {
         this.TableData = [];
+        this.payableBalance = 0;
+        this.ReceiveableBalance = 0;
+        this.NetBalance = 0;
         if (Response.length == 0 || Response == null) {
           this.global.popupAlert('Data Not Found!');
           this.app.stopLoaderDark();
@@ -53,23 +60,34 @@ export class CustomerBalanceReportComponent {
 
         }
         this.TableData = Response;
-         this.app.stopLoaderDark();
+        this.TableData.forEach((e: any) => {
+          if (e.balance > 0) {
+            this.payableBalance += e.balance;
+          }
+          if (e.balance < 0) {
+            this.ReceiveableBalance += e.balance;
+          }
+          this.NetBalance += e.balance
+        });
+        this.app.stopLoaderDark();
       },
-      (Error:any)=>{
+      (Error: any) => {
         console.log(Error);
-         this.app.stopLoaderDark();
+        this.app.stopLoaderDark();
 
       }
     )
-      
+
   }
+
+
 
 
   print() {
     this.global.printData('#PrintDiv');
   }
 
- export() {
+  export() {
     this.global.ExportHTMLTabletoExcel('printDiv', 'Customer Balance Report')
   }
 

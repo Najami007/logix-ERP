@@ -38,6 +38,7 @@ import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/materia
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { VehicleComponent } from './vehicle/vehicle.component';
 import { AddVehicleComponent } from './vehicle/add-vehicle/add-vehicle.component';
+import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
 
 
 export const MY_DATE_FORMAT = {
@@ -77,6 +78,7 @@ export const companyRoutes: Route[] = [
 
 @NgModule({
   declarations: [
+       
     CompanyProfileComponent,
     PartnersComponent,
     CityComponent,
@@ -112,6 +114,7 @@ export const companyRoutes: Route[] = [
     NgxMatSelectSearchModule,
     TextMaskModule,
     PipesModule,
+    DirectivesModule
 
 
 

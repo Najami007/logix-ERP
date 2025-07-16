@@ -1,7 +1,8 @@
 :root {
   /**  --dark : #484e4a; **/
-  --app-primary:#060636;
+  --app-primary: #060636;
   --primary: #0d6efd;
+  --primary-light: #2e81fe;
   --primary-2: #DCD7C9;
   --secondary: #FDF6E2;
   --territory: #CBAA4A;
@@ -26,6 +27,7 @@
   --dark: #2a2829;
   --dark-light: #c5c1bb;
   --grey: #686969;
+    --grey-light: #8c8f8f;
   --light: #eff0eb;
   --orange: #f5b121;
   --nha-orange: #1d6340;
@@ -39,9 +41,11 @@
   --golden: rgba(204, 174, 104);
   --golden-hover: rgb(107, 89, 46);
   --success: #157347;
+  --success-light: #029450;
   --info: #0dcaf0;
   --warn: #ffc107;
   --danger: #dc3545;
+  --danger-light: #ed4657;
   /* --primary:#0d6efd;*/
   --btn-focus-text: #e0e0e0;
 }
@@ -867,9 +871,9 @@ label {
 }
 
 .table-logix2>thead>tr>th {
-   padding: 10px;
+  padding: 10px;
   border: 1px solid #fff !important;
-  background-color:var(--app-primary);
+  background-color: var(--app-primary);
   color: #fff !important;
 
 }
@@ -1206,8 +1210,13 @@ input[type="number"]::-webkit-inner-spin-button {
   border: none;
 
   &:hover {
-    color: var(--btn-focus-text);
     border: 1px solid var(--success);
+    background-color: var(--success-light) !important;
+  }
+
+  &:focus {
+    border: 1px solid var(--success);
+    background-color: var(--success-light) !important;
   }
 
 }
@@ -1223,10 +1232,14 @@ input[type="number"]::-webkit-inner-spin-button {
   border: none;
 
   &:hover {
-    color: var(--btn-focus-text);
     border: 1px solid var(--danger);
+    background-color: var(--danger-light) !important;
   }
 
+  &:focus {
+    border: 1px solid var(--danger);
+    background-color: var(--danger-light) !important;
+  }
 
 }
 
@@ -1239,8 +1252,13 @@ input[type="number"]::-webkit-inner-spin-button {
   border: none;
 
   &:hover {
-    color: var(--btn-focus-text);
+   border: 1px solid var(--grey);
+    background-color: var(--grey-light) !important;
+  }
+
+  &:focus {
     border: 1px solid var(--grey);
+    background-color: var(--grey-light) !important;
   }
 }
 
@@ -1253,8 +1271,13 @@ input[type="number"]::-webkit-inner-spin-button {
   border: none;
 
   &:hover {
-    color: var(--btn-focus-text);
     border: 1px solid var(--danger);
+    background-color: var(--danger-light) !important;
+  }
+
+  &:focus {
+    border: 1px solid var(--danger);
+    background-color: var(--danger-light) !important;
   }
 
 }
@@ -1268,8 +1291,13 @@ input[type="number"]::-webkit-inner-spin-button {
   border: none;
 
   &:hover {
-    color: var(--btn-focus-text);
     border: 1px solid var(--primary);
+    background-color: var(--primary-light) !important;
+  }
+
+  &:focus {
+    border: 1px solid var(--primary);
+    background-color: var(--primary-light) !important;
   }
 
 }
@@ -1283,8 +1311,13 @@ input[type="number"]::-webkit-inner-spin-button {
   border: none;
 
   &:hover {
-    color: var(--btn-focus-text);
     border: 1px solid var(--primary);
+    background-color: var(--primary-light) !important;
+  }
+
+  &:focus {
+    border: 1px solid var(--primary);
+    background-color: var(--primary-light) !important;
   }
 
 }
@@ -1298,8 +1331,13 @@ input[type="number"]::-webkit-inner-spin-button {
   border: none;
 
   &:hover {
-    color: var(--btn-focus-text);
     border: 1px solid var(--success);
+    background-color: var(--success-light) !important;
+  }
+
+  &:focus {
+    border: 1px solid var(--success);
+    background-color: var(--success-light) !important;
   }
 }
 
@@ -1312,9 +1350,15 @@ input[type="number"]::-webkit-inner-spin-button {
   border: none;
 
   &:hover {
-    color: var(--btn-focus-text);
     border: 1px solid var(--primary);
+    background-color: var(--primary-light) !important;
   }
+
+  &:focus {
+    border: 1px solid var(--primary);
+    background-color: var(--primary-light) !important;
+  }
+
 }
 
 .h48px {
@@ -1492,12 +1536,12 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 
-  .prodImg {
-   width: 350px;
-   height: 140px;
-    align-content: center;
-    object-fit: contain;
-    display: block;
- 
+.prodImg {
+  width: 350px;
+  height: 140px;
+  align-content: center;
+  object-fit: contain;
+  display: block;
+
 
 }

@@ -36,7 +36,7 @@ export class PincodeComponent implements OnInit{
 
     // alert(this.pinCode);
     if(this.pinCode == "" || this.pinCode == undefined){
-      this.msg.WarnNotify('Enter PinCode')
+      this.msg.WarnNotify(`Enter ${this.Title}`)
     }else{
       this.dialogRef.close(this.pinCode);
     }

@@ -24,6 +24,7 @@ import { ParkDashBoardComponent } from './park-dash-board/park-dash-board.compon
 import { ChartModule,HIGHCHARTS_MODULES } from 'angular-highcharts';
 import { ActiveMemberRptComponent } from './parkReports/active-member-rpt/active-member-rpt.component';
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
+import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
 
 
 
@@ -73,7 +74,8 @@ export const parkRoutes: Route[] = [
     //Ng2SearchPipeModule,
     NgxMaterialTimepickerModule,
     ChartModule,
-    PipesModule
+    PipesModule,
+    DirectivesModule
   ],
   exports: [
     RouterModule

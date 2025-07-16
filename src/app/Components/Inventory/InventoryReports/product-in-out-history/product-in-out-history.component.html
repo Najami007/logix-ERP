@@ -114,6 +114,7 @@
                     <th>Bill #</th>
                     <th>Date</th>
                     <th>Title</th>
+                       <th>Location</th>
                     <th>Party</th>
                     <th>Stock In</th>
                     <th>Amount</th>
@@ -138,6 +139,7 @@
                             class="text-primary">{{item.invBillNo}}</u></td>
                     <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
                     <td>{{item.productTitle}} <b *ngIf="item.barcode !== null">({{item.barcode}})</b></td>
+                    <td><span>{{item.locationTitle }}</span></td>
                     <td><span *ngIf="item.partyID > 0">{{item.partyName }}</span></td>
                     <td class="text-center"><span *ngIf="item.invSubType == 'IN'">{{item.quantity
                             |number:"1.0-3"}}</span></td>
@@ -172,7 +174,7 @@
                 <br>
 
                 <tr>
-                    <td colspan="5"></td>
+                    <td colspan="6"></td>
                     <td class="text-center fw-bold">{{stockInTotal |number:'1.0-3'}}</td>
                     <td class="text-end fw-bold">{{stockInAmountTotal |number:'1.0-3'}}</td>
                     <td class="text-center fw-bold">{{stockOUtTotal |number:'1.0-3'}}</td>

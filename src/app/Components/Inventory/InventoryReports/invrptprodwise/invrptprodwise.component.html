@@ -69,7 +69,8 @@
 
         <div class="col-lg-3" *ngIf="crudList.r">
 
-            <button class=" btn-rpt-success me-1" (click)="getReport(rptType)">Get Report</button>
+            <button class=" btn-rpt-success me-1" (click)="getSummary();formateType = 1">Get Summary</button>
+            <button class=" btn-rpt-success me-1" (click)="getReport(rptType);formateType = 2">Get Detail</button>
             <button class="  btn-rpt-primary " (click)="print()">Print</button>
             <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
         </div>
@@ -115,7 +116,7 @@
 
 
 
-        <table class="table-logix" id="PrintDiv">
+        <table class="table-logix" id="Detail" *ngIf="formateType == 2">
             <thead>
                 <tr>
                     <th>S#</th>
@@ -170,6 +171,59 @@
                 </tr>
              
             </tbody>
+
+        </table>
+
+
+        
+        <table class="table-logix" id="Summary" *ngIf="formateType == 1">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Bill #</th>
+                    <th>Date</th>
+                    <th>Title</th>
+                       <th>Location</th>
+                    <th>Party</th>
+                    <th>Stock In</th>
+                    <th>Stock Out</th>
+                    <th>Balance</th>
+                    <th>Entered By</th>
+
+                </tr>
+
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of invDetailList index as index">
+                    <td class="text-center">{{index + 1}}</td>
+                    <td class="text-center cursorPointer" (click)="printBill(item)"><u
+                            class="text-primary">{{item.invBillNo}}</u></td>
+                    <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
+                    <td>{{item.productTitle}} <b *ngIf="item.barcode !== null">({{item.barcode}})</b></td>
+                    <td><span>{{item.locationTitle }}</span></td>
+                    <td><span *ngIf="item.partyID > 0">{{item.partyName }}</span></td>
+                    <td class="text-center"><span *ngIf="item.invSubType == 'IN'">{{item.quantity
+                            |number:"1.0-3"}}</span></td>
+
+                    <td class="text-center"><span *ngIf="item.invSubType == 'OUT'">{{item.quantity
+                            |number:"1.0-3"}}</span></td>
+    
+                    <td class="text-end">{{item.balanceQty |number:'1.0-1'}}</td>
+                    <td>{{item.entryUser}}</td>
+                </tr>
+                <br>
+
+                <tr>
+                    <td colspan="6"></td>
+                    <td class="text-center fw-bold">{{stockInTotal |number:'1.0-3'}}</td>
+                    <td class="text-center fw-bold">{{stockOUtTotal |number:'1.0-3'}}</td>
+                    <td></td>
+                </tr>
+
+
+            </tbody>
+
 
         </table>
 

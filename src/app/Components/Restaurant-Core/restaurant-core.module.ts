@@ -55,6 +55,7 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { SaleHoldedBillComponent } from './Sales/SaleCommonComponent/sale-holded-bill/sale-holded-bill.component';
 import { CommentCardComponent } from './Sales/SaleCommonComponent/comment-card/comment-card.component';
 import { CashierClosingRptComponent } from '../Inventory/InventoryReports/cashier-closing-rpt/cashier-closing-rpt.component';
+import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
 
 export const MY_DATE_FORMAT  = {
   parse: {
@@ -166,7 +167,8 @@ export const restCore: Route[] = [
     TextMaskModule,
     NgxMaterialTimepickerModule,
     PipesModule,
-    NgSelectModule
+    NgSelectModule,
+    DirectivesModule
 
   ],
   exports: [

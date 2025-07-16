@@ -86,6 +86,7 @@ export class InvrptprodwiseComponent implements OnInit {
   }
 
 
+  formateType = 1;
   rptType: any = 'S';
 
 
@@ -127,53 +128,127 @@ export class InvrptprodwiseComponent implements OnInit {
 
 
     if (this.productID == 0 || this.productID == undefined) {
-      this.msg.WarnNotify('Select Product')
-    } else {
-      this.app.startLoaderDark();
-      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductInOutDetailDateWise?reqType=' + type + '&reqPID=' + this.productID + '&reqUID=' + this.userID + '&FromDate=' +
-        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
-          (Response: any) => {
-            this.invDetailList = [];
-            this.QtyTotal = 0;
-            this.saleTotal = 0;
-            this.costTotal = 0;
-            if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-              this.app.stopLoaderDark();
-              return;
+      this.msg.WarnNotify('Select Product');
+      return;
+    }
 
-            }
+    this.app.startLoaderDark();
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductInOutDetailDateWise?reqType=' + type + '&reqPID=' + this.productID + '&reqUID=' + this.userID + '&FromDate=' +
+      this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
+        (Response: any) => {
+          this.invDetailList = [];
+          this.QtyTotal = 0;
+          this.saleTotal = 0;
+          this.costTotal = 0;
+          if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
 
-            if (type == 'R') {
-              Response.forEach((e: any) => {
+          }
 
-                if (e.issueType != 'Stock Transfer') {
-                  this.invDetailList.push(e);
-                  this.QtyTotal += e.quantity;
-                  this.saleTotal += e.salePrice * e.quantity;
-                  this.costTotal += e.costPrice * e.quantity;
+          if (type == 'R') {
+            Response.forEach((e: any) => {
 
-                }
-              });
-            } else {
-              this.invDetailList = Response;
-              Response.forEach((e: any) => {
+              if (e.issueType != 'Stock Transfer') {
+                this.invDetailList.push(e);
                 this.QtyTotal += e.quantity;
                 this.saleTotal += e.salePrice * e.quantity;
                 this.costTotal += e.costPrice * e.quantity;
-              });
-            }
 
-            this.app.stopLoaderDark();
-
-
-          },
-          (Error: any) => {
-            this.app.stopLoaderDark();
-            this.msg.WarnNotify('Unable to Connect to Data')
+              }
+            });
+          } else {
+            this.invDetailList = Response;
+            Response.forEach((e: any) => {
+              this.QtyTotal += e.quantity;
+              this.saleTotal += e.salePrice * e.quantity;
+              this.costTotal += e.costPrice * e.quantity;
+            });
           }
-        )
+
+          this.app.stopLoaderDark();
+
+
+        },
+        (Error: any) => {
+          this.app.stopLoaderDark();
+          this.msg.WarnNotify('Unable to Connect to Data')
+        }
+      )
+
+
+
+
+  }
+
+
+   stockInTotal = 0;
+  stockOUtTotal = 0;
+  stockInAmountTotal = 0;
+  stockOutAmountTotal = 0;
+
+
+  getSummary() {
+
+    if (this.productID == 0 || this.productID == undefined) {
+      this.msg.WarnNotify('Select Product');
+      return;
     }
+
+    var startDate = this.global.dateFormater(this.fromDate, '');
+    var toDate = this.global.dateFormater(this.toDate, '');
+    var url = `GetSingleProductLedger_16?reqPID=${this.productID}&reqUID=${this.userID}
+    &FromDate=${startDate}&ToDate=${toDate}&FromTime=${this.fromTime}&ToTime=${this.toTime}`
+
+    this.app.startLoaderDark();
+    this.http.get(environment.mainApi + this.global.inventoryLink + url).subscribe(
+      (Response: any) => {
+        this.invDetailList = [];
+        this.stockInTotal = 0;
+        this.stockOUtTotal = 0;
+        this.stockInAmountTotal = 0;
+        this.stockOutAmountTotal = 0;
+
+        this.saleTotal = 0;
+        this.costTotal = 0;
+        if (Response.length == 0 || Response == null) {
+          this.global.popupAlert('Data Not Found!');
+          this.app.stopLoaderDark();
+          return;
+
+        }
+
+        var tmpQty = 0;
+        this.invDetailList = Response;
+        this.invDetailList.forEach((e: any) => {
+          if (e.totalIn !== 0 || e.totalOut !== 0) {
+            tmpQty = e.totalIn - e.totalOut;
+            e.balanceQty = e.totalIn - e.totalOut;
+          }
+          if (e.invSubType == 'OUT') {
+            e.balanceQty = tmpQty - e.quantity;
+            this.stockOUtTotal += e.quantity;
+            tmpQty = e.balanceQty;
+          } else if (e.invSubType == 'IN') {
+
+            e.balanceQty = tmpQty + e.quantity;
+            this.stockInTotal += e.quantity;
+            tmpQty = e.balanceQty;
+          }
+
+
+        });
+        console.log(this.invDetailList);
+        this.app.stopLoaderDark();
+
+      },
+      (Error: any) => {
+        this.app.stopLoaderDark();
+        this.msg.WarnNotify('Unable to Connect to Data')
+      }
+    )
+
 
 
 
@@ -201,7 +276,14 @@ export class InvrptprodwiseComponent implements OnInit {
     var type = this.reportsList.find((e: any) => e.invType == this.rptType).invTypeTitle;
     var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
     var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
-    this.global.ExportHTMLTabletoExcel('PrintDiv', `${type}(${startDate} - ${endDate}`)
+    var tableID = '';
+    if(this.formateType == 1){
+      tableID = 'Summary'
+    }
+     if(this.formateType == 2){
+      tableID = 'Detail'
+    }
+    this.global.ExportHTMLTabletoExcel('Detail', `${type}(${startDate} - ${endDate}`)
   }
 
 

@@ -22,7 +22,9 @@ export class AddBrandComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
-    
+      setTimeout(() => {
+      $('#brandTitle').trigger('focus')
+    }, 500);
   }
 
 
