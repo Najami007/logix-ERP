@@ -7,7 +7,7 @@
       <div class="d-flex">
         <button class="mIcon" mat-icon-button (click)="toggleSideBar()"><mat-icon>{{Menu}}</mat-icon> </button>
         <div class="logo ps-2  pe-2">
-          <img [src]="logo1"  height="35px" width="35px">
+          <img [src]="logo1" class="topNavLogo" >
         </div>
       </div>
     
@@ -51,8 +51,7 @@
 
      <div class="d-flex">
     
-      <div class="d-flex col-lg-12 text-end bg-white shadow justify-content-between logout"
-      style="min-width: 120px;height: 40px; font-size: 15px; font-family: Arial, Helvetica, sans-serif; border-radius: 20px;">
+      <div class="shadow logoutIcon">
       <p class="mt-1 pe-1 ps-2 uname ">
         {{ UserName }}
       </p>

@@ -148,14 +148,12 @@ export class PurchaseBillPrintComponent {
 
   setInvoiceTitle(type: any) {
 
-    if (type == 'HP') {
+    if (type == 'HP' || type == 'P') {
       this.myInvoiceTitle = 'Goods Receive Note';
-    } else if (type == 'HPR') {
+    } else if (type == 'HPR' || type == 'PR') {
       this.myInvoiceTitle = 'Goods Return Note';
     }
-    if (type == 'HP') {
-      this.myInvoiceTitle = 'Goods Receive Note';
-    } else if (type == 'PO') {
+   if (type == 'PO') {
       this.myInvoiceTitle = 'Purchase Order';
     }
 

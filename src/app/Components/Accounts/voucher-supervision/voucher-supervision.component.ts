@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { VoucherDetailsComponent } from '../CommonComponent/voucher-details/voucher-details.component';
 import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { Router } from '@angular/router';
+import { VoucherPrintComponent } from '../CommonComponent/voucher-print/voucher-print.component';
 
 @Component({
   selector: 'app-voucher-supervision',
@@ -26,7 +27,7 @@ export class VoucherSupervisionComponent {
   tableData: any;
 
 
-
+  @ViewChild(VoucherPrintComponent) printVoucher: any;
    companyProfile:any;
    crudList:any = {c:true,r:true,u:true,d:true};
 
@@ -129,7 +130,7 @@ export class VoucherSupervisionComponent {
       this.http.get(environment.mainApi+this.globalData.accountLink+'GetSavedVoucherDetailDateWise?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+
       '&todate='+this.globalData.dateFormater(this.toDate,'-')).subscribe(
         (Response:any)=>{
-          
+          console.log(Response);
           if(param == 'all'){
             this.voucherList = Response;
 
@@ -271,23 +272,25 @@ export class VoucherSupervisionComponent {
    printBill(row:any){
     // alert(row.projectID)
 
-    
-    this.lblInvoiceNo = row.invoiceNo;
-    this.lblInvoiceDate = row.invoiceDate;
-    this.lblRemarks = row.invoiceRemarks;
-    this.lblProjectName = this.projectList.find((e:any)=>e.projectID == row.projectID).projectTitle;
-
-    this.getInvoiceDetail(row.invoiceNo);
-    
+        this.printVoucher.printBill(row);
 
     
-      setTimeout(() => {
-        if(this.invoiceDetails != ''){
-          this.globalData.printData('#InvociePrint');
-        }else{
-          this.msg.WarnNotify('Error Occured While Printing');
-        }
-      }, 500);
+    // this.lblInvoiceNo = row.invoiceNo;
+    // this.lblInvoiceDate = row.invoiceDate;
+    // this.lblRemarks = row.invoiceRemarks;
+    // this.lblProjectName = this.projectList.find((e:any)=>e.projectID == row.projectID).projectTitle;
+
+    // this.getInvoiceDetail(row.invoiceNo);
+    
+
+    
+    //   setTimeout(() => {
+    //     if(this.invoiceDetails != ''){
+    //       this.globalData.printData('#InvociePrint');
+    //     }else{
+    //       this.msg.WarnNotify('Error Occured While Printing');
+    //     }
+    //   }, 500);
 
     
   

@@ -71,7 +71,7 @@
                         <span class="bcodet" [ngClass]="hideBarcode ? '': 'mb-8px'" *ngIf="!showLess && !hideName">{{item.productTitle}}</span>
                         <span class="bcodet" [ngClass]="hideBarcode ? '': 'mb-8px'" *ngIf="showLess">{{item.productTitle |slice:0:24}}...</span>
                         <ngx-barcode6 class="barcode" *ngIf="!hideBarcode" [bc-format]="'CODE128'" [bc-height]="40"
-                            [bc-background]="'none'" [bc-value]="item.barcode" [bc-width]='1.5' [bc-font-size]="10" [bc-text-margin]="-2"
+                            [bc-background]="'none'" [bc-value]="item.barcode2 ? item.barcode2 : item.barcode" [bc-width]='1.5' [bc-font-size]="10" [bc-text-margin]="-2"
                             [bc-display-value]="true" [bc-text-position]="'bottom'" [bc-text-align]="'right'"></ngx-barcode6>
                         <!-- <span class="barcodeText">{{item.barcode}}</span> -->
                         <!-- <div class="font-barcode" >*{{item.barcode}}*</div>
@@ -81,7 +81,7 @@
                             <span>Exp: {{expiryDate | date:'dd-MM-yyyy'}}</span>
                         </div>
 
-                        <span *ngIf="!hidePrice" class="bcodep text-end">Rs.{{item.salePrice|number}}</span>
+                        <span *ngIf="!hidePrice" class="bcodep text-end">Rs.{{item.salePrice * item.quantity|number}}</span>
                     </div>
 
 

@@ -78,15 +78,24 @@ export class BarcodeReportComponent implements OnInit {
     if(this.PBarcode !== ''){
       if(e.keyCode == 13){
         ///// check the product in product list by barcode
-        var row =  this.productList.find((p:any)=> p.barcode == this.PBarcode);
+         this.global.getProdDetail(0, this.PBarcode).subscribe(
+          (Response: any) => {
+            if(Response.length > 0){
+               this.curProduct = Response;
+            }
+          
+          }
+        )
+
+        // var row =  this.productList.find((p:any)=> p.barcode == this.PBarcode);
    
-        /////// check already present in the table or not
-        if(row !== undefined){
-          this.curProduct = [];
-          this.curProduct.push(row);
-        }else{
-          this.msg.WarnNotify('Product Not Found')
-        }
+        // /////// check already present in the table or not
+        // if(row !== undefined){
+        //   this.curProduct = [];
+        //   this.curProduct.push(row);
+        // }else{
+        //   this.msg.WarnNotify('Product Not Found')
+        // }
      
 
        this.PBarcode = '';
