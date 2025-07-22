@@ -753,7 +753,7 @@ export class VoidSaleReturnComponent implements OnInit {
       Remarks: this.billRemarks || '-',
       OrderType: "Take Away",
       BillTotal: this.subTotal,
-      BillDiscount: this.discount + this.offerDiscount,
+      BillDiscount: Number(this.discount) + Number(this.offerDiscount),
       OtherCharges: this.otherCharges,
       NetTotal: this.netTotal,
       CashRec: this.cash,
@@ -765,8 +765,6 @@ export class VoidSaleReturnComponent implements OnInit {
       SaleDetail: JSON.stringify(this.tableDataList),
       UserID: this.global.getUserID()
     }
-
-
 
     if (this.isValidSale) {
       this.app.startLoaderDark();

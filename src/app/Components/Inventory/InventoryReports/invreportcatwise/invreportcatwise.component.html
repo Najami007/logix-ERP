@@ -60,15 +60,11 @@
                         <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset=""
                             [height]="item.logo1Height" [width]="item.logo1Width">
                     </span>
-                    <span>
-
-
-                        <h1 class="companyName">{{item.companyName}}</h1>
-
-
-                        <p class="rptTitle" style="margin-top:-20px">Inventory Report </p>
-                        <p style="margin-top:-20px" class="fw-bold">({{Title}})</p>
-                    </span>
+                    <div class="d-flex flex-column">
+                        <span class="companyName">{{item.companyName}}</span>
+                        <span class="rptTitle" >Inventory Report </span>
+                        <span  class="fw-bold">({{Title}})</span>
+                    </div>
                     <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
                         <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
                             height="{{item.logo2Height}}" width="{{item.logo2Width}}">
@@ -101,8 +97,8 @@
                 <tbody>
                     <tr *ngFor="let item of inventoryList|filter:InvSearch.value index as index"
                         [ngClass]="(item.qtyIn - item.qtyOut)< 0 ?'fw-bold':''">
-                        <td class="text-center">{{index+1}}</td>
-                        <td>{{item.barcode}}</td>
+                        <td  class="text-center">{{index+1}}</td>
+                        <td >{{item.barcode}}</td>
                         <td>{{item.productTitle}}</td>
                         <!-- <td class="text-center">{{item.qtyIn}}</td>
                             <td class="text-center">{{item.qtyOut}}</td> -->

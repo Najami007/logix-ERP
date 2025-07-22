@@ -1093,7 +1093,7 @@ export class GarmentSaleComponent implements OnInit {
         Remarks: this.billRemarks || '-',
         OrderType: "Take Away",
         BillTotal: this.subTotal,
-        BillDiscount: parseFloat(this.discount) + parseFloat(this.offerDiscount),
+        BillDiscount: Number(this.discount) + Number(this.offerDiscount),
         OtherCharges: this.otherCharges,
         NetTotal: this.netTotal,
         CashRec: this.cash,

@@ -59,17 +59,14 @@
                     <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
                         [width]="item.logo1Width">
                 </span>
-                <span>
+                <div class="d-flex flex-column">
+                    <span class="companyName">{{item.companyName}}</span>
+                    <span class="rptTitle">Balance Sheet</span>
+                    <span class="projtitl" *ngIf="projectName != ''" ><b>Project:</b>
+                        {{projectName}}</span>
+                    <span ><b>AS On:</b> {{toDate |date:'dd-MM-yyyy'}}</span>
 
-
-                    <h1 class="companyName">{{item.companyName}}</h1>
-
-                    <p class="rptTitle" style="margin-top:-20px">Balance Sheet</p>
-                    <h4 class="projtitl" *ngIf="projectName != ''" style="margin-top:-20px;"><b>Project:</b>
-                        {{projectName}}</h4>
-                    <p style="margin-top:-15px"><b>AS On:</b> {{toDate |date:'dd-MM-yyyy'}}</p>
-
-                </span>
+                </div>
                 <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
                     <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
                         height="{{item.logo2Height}}" width="{{item.logo2Width}}">
@@ -173,7 +170,7 @@
         <table class="table-logix mt-3" id="balanceSheet2" *ngIf="formateId == 2">
 
             <thead>
-                <tr>
+                <tr class="whiteText">
                     <th colspan="3"></th>
                     <th>
                         <h2>{{previousYear}} - {{previousYear + 1}}</h2>

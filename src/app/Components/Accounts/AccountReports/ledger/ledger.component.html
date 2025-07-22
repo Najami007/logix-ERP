@@ -66,19 +66,19 @@
                         <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset=""
                             [height]="item.logo1Height" [width]="item.logo1Width">
                     </span>
-                    <span>
+                    <div class="d-flex flex-column">
 
 
-                        <h1 class="companyName">{{item.companyName}}</h1>
+                        <span class="companyName">{{item.companyName}}</span>
 
 
-                        <p class="rptTitle" style="margin-top:-20px">Ledger Report ( {{curCOATitle}} ) </p>
-                        <h4 class="projtitl" *ngIf="projectName != ''" style="margin-top:-20px;"><b>Project:</b>
-                            {{projectName}}</h4>
-                        <p style="margin-top:-10px"><b>From:</b> {{startDate | date:'dd-MM-yyyy'}} <b>To:</b> {{EndDate
-                            | date:'dd-MM-yyyy'}}</p>
+                        <span class="rptTitle" >Ledger Report ( {{curCOATitle}} ) </span>
+                        <span class="projtitl" *ngIf="projectName != ''" ><b>Project:</b>
+                            {{projectName}}</span>
+                        <span ><b>From:</b> {{startDate | date:'dd-MM-yyyy'}} <b>To:</b> {{EndDate
+                            | date:'dd-MM-yyyy'}}</span>
 
-                    </span>
+                    </div>
                     <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
                         <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
                             height="{{item.logo2Height}}" width="{{item.logo2Width}}">

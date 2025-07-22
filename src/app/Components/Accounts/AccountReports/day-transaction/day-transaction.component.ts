@@ -5,8 +5,8 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
-import { VoucherDetailsComponent } from '../CommonComponent/voucher-details/voucher-details.component';
 import { Router } from '@angular/router';
+import { VoucherDetailsComponent } from '../../CommonComponent/voucher-details/voucher-details.component';
 
 
 @Component({

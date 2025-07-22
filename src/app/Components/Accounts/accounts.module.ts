@@ -28,7 +28,6 @@ import { BalanceSheetComponent } from './AccountReports/balance-sheet/balance-sh
 import { CashbookComponent } from './AccountReports/cashbook/cashbook.component';
 import { PLStatComponent } from './AccountReports/plstat/plstat.component';
 import { TrialBalanceComponent } from './AccountReports/trial-balance/trial-balance.component';
-import { DayTransactionComponent } from './day-transaction/day-transaction.component';
 import { VoucherDetailsComponent } from './CommonComponent/voucher-details/voucher-details.component';
 import { AuthGuard } from 'src/app/auth.guard';
 import { Voucher2Component } from './voucher2/voucher2.component';
@@ -70,6 +69,7 @@ import { CoaNotesComponent } from './coa-notes/coa-notes.component';
 import { AddNoteComponent } from './coa-notes/add-note/add-note.component';
 import { JournelComponent } from './AccountReports/journel/journel.component';
 import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
+import { DayTransactionComponent } from './AccountReports/day-transaction/day-transaction.component';
 
 export const MY_DATE_FORMAT = {
   parse: {

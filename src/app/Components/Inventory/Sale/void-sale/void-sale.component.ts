@@ -342,11 +342,11 @@ export class VoidSaleComponent implements OnInit {
 
 
   getTotal() {
+     if (this.tableDataList.length == 0) return;
     this.qtyTotal = 0;
     this.subTotal = 0;
     this.netTotal = 0;
     this.offerDiscount = 0;
-
     this.tableDataList.forEach((e: any) => {
       // if (this.billDiscount > 0) {
       //   e.discInP = this.billDiscount;
@@ -755,7 +755,7 @@ export class VoidSaleComponent implements OnInit {
       Remarks: this.billRemarks || '-',
       OrderType: "Take Away",
       BillTotal: this.subTotal,
-      BillDiscount: this.discount + this.offerDiscount,
+      BillDiscount: Number(this.discount) + Number(this.offerDiscount),
       OtherCharges: this.otherCharges,
       NetTotal: this.netTotal,
       CashRec: this.cash,
@@ -835,7 +835,7 @@ export class VoidSaleComponent implements OnInit {
     this.tempProdRow = '';
     this.tempQty = 0;
     this.billRemarks = '';
-    this.PosFee = 0;
+    // this.PosFee = 0;
     this.offerDiscount = 0;
 
   }

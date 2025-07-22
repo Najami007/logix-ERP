@@ -14,48 +14,48 @@ import Swal from 'sweetalert2';
   templateUrl: './racks.component.html',
   styleUrls: ['./racks.component.scss']
 })
-export class RacksComponent implements OnInit{
+export class RacksComponent implements OnInit {
 
-  crudList:any = {c:true,r:true,u:true,d:true};
+  crudList: any = { c: true, r: true, u: true, d: true };
 
-  constructor(private http:HttpClient,
-    private msg:NotificationService,
+  constructor(private http: HttpClient,
+    private msg: NotificationService,
     private dialogue: MatDialog,
-    private globaldata:GlobalDataModule,
-    private app:AppComponent,
-    private route:Router
-    
-    ){
-     
+    private globaldata: GlobalDataModule,
+    private app: AppComponent,
+    private route: Router
 
-      this.globaldata.getMenuList().subscribe((data)=>{
-        this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      })
+  ) {
 
-    }
+
+    this.globaldata.getMenuList().subscribe((data) => {
+      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
+    })
+
+  }
   ngOnInit(): void {
     this.globaldata.setHeaderTitle('Racks');
     this.getRacksList();
-   
-    
-   
+
+
+
   }
 
-  txtSearch:any;
-  rackTitle:any;
-  rackID:number = 0;
-  btnType:any = 'Save';
-  description:any;
+  txtSearch: any;
+  rackTitle: any;
+  rackID: number = 0;
+  btnType: any = 'Save';
+  description: any;
 
-  RacksList:any = [];
-
-
+  RacksList: any = [];
 
 
 
-  getRacksList(){
-    this.http.get(environment.mainApi+this.globaldata.inventoryLink+'getrack').subscribe(
-      (Response:any)=>{
+
+
+  getRacksList() {
+    this.http.get(environment.mainApi + this.globaldata.inventoryLink + 'getrack').subscribe(
+      (Response: any) => {
         this.RacksList = Response;
       }
     )
@@ -63,18 +63,18 @@ export class RacksComponent implements OnInit{
 
 
 
-  save(){
-    if(this.rackTitle == '' || this.rackTitle == undefined){
+  save() {
+    if (this.rackTitle == '' || this.rackTitle == undefined) {
       this.msg.WarnNotify('Enter Category Title')
-    }else{
+    } else {
 
-      if(this.description == '' || this.description == undefined){
+      if (this.description == '' || this.description == undefined) {
         this.description = '-';
       }
 
-      if(this.btnType == 'Save'){
+      if (this.btnType == 'Save') {
         this.insert();
-      }else if(this.btnType == 'Update'){
+      } else if (this.btnType == 'Update') {
         this.update();
 
       }
@@ -86,134 +86,136 @@ export class RacksComponent implements OnInit{
 
 
 
-  insert(){
+  insert() {
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+this.globaldata.inventoryLink+'insertRack',{  
+    this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'insertRack', {
       RackTitle: this.rackTitle,
       RackDescription: this.description,
       UserID: this.globaldata.getUserID()
     }).subscribe(
-      (Response:any)=>{
-        if(Response.msg == 'Data Saved Successfully'){
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully') {
           this.msg.SuccessNotify(Response.msg);
           this.getRacksList();
           this.reset();
           this.app.stopLoaderDark();
 
-        }else{
+        } else {
           this.msg.WarnNotify(Response.msg);
           this.app.stopLoaderDark();
         }
       },
-      (error:any)=>{
+      (error: any) => {
         this.app.stopLoaderDark();
       }
     )
   }
 
-  update(){
+  update() {
 
-    this.globaldata.openPinCode().subscribe(pin=>{
+    this.globaldata.openPinCode().subscribe(pin => {
 
-     if(pin != ''){
+      if (pin != '') {
 
-      
-      this.app.startLoaderDark();
-      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'updateRack',{
-        RackID:this.rackID,  
-        RackTitle: this.rackTitle,
-        RackDescription: this.description,
-        PinCode:pin,
-        UserID: this.globaldata.getUserID()
-      }).subscribe(
-        (Response:any)=>{
-          if(Response.msg == 'Data Updated Successfully'){
-            this.msg.SuccessNotify(Response.msg);
-            this.getRacksList();
-            this.reset();
-            this.app.stopLoaderDark();
-  
-          }else{
-            this.msg.WarnNotify(Response.msg);
+
+        this.app.startLoaderDark();
+        this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'updateRack', {
+          RackID: this.rackID,
+          RackTitle: this.rackTitle,
+          RackDescription: this.description,
+          PinCode: pin,
+          UserID: this.globaldata.getUserID()
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Data Updated Successfully') {
+              this.msg.SuccessNotify(Response.msg);
+              this.getRacksList();
+              this.reset();
+              this.app.stopLoaderDark();
+
+            } else {
+              this.msg.WarnNotify(Response.msg);
+              this.app.stopLoaderDark();
+            }
+          },
+          (error: any) => {
             this.app.stopLoaderDark();
           }
-        },
-        (error:any)=>{
-          this.app.stopLoaderDark();
-        }
-      )
-     }
+        )
+      }
     })
-   
+
   }
 
 
 
-  reset(){
+  reset() {
     this.rackTitle = '';
-    this.rackID = 0 ;
+    this.rackID = 0;
     this.description = '';
     this.btnType = 'Save';
 
   }
 
 
-  edit(row:any){
-    this.rackID  = row.rackID;
+  edit(row: any) {
+    this.rackID = row.rackID;
     this.rackTitle = row.rackTitle;
     this.description = row.rackDescription;
-    this.btnType  = 'Update';
+    this.btnType = 'Update';
   }
 
-  delete(row:any){
-    this.globaldata.openPinCode().subscribe(pin=>{
+  delete(row: any) {
+    Swal.fire({
+      title: 'Alert!',
+      text: 'Confirm to Delete the Data',
+      position: 'center',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirm',
+    }).then((result) => {
 
-     if(pin != ''){
+      if (result.isConfirmed) {
+        this.globaldata.openPinCode().subscribe(pin => {
+
+          if (pin != '') {
+
+            this.app.startLoaderDark();
+            this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'deleteRack', {
+              RackID: row.rackID,
+              PinCode: pin,
+              UserID: this.globaldata.getUserID()
+
+            }).subscribe(
+              (Response: any) => {
+                if (Response.msg == 'Data Deleted Successfully') {
+                  this.msg.SuccessNotify(Response.msg);
+                  this.getRacksList();
+                  this.app.stopLoaderDark();
 
 
-      Swal.fire({
-        title:'Alert!',
-        text:'Confirm to Delete the Data',
-        position:'center',
-        icon:'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Confirm',
-      }).then((result)=>{
+                } else {
+                  this.msg.WarnNotify(Response.msg);
+                  this.app.stopLoaderDark();
+                }
+              },
+              (error: any) => {
+                this.app.stopLoaderDark();
+              }
+            )
 
-        if(result.isConfirmed){
-      this.app.startLoaderDark();
 
-      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'deleteRack',{
-        RackID: row.rackID,
-        PinCode:pin,
-        UserID: this.globaldata.getUserID()
-
-      }).subscribe(
-        (Response:any)=>{
-          if(Response.msg == 'Data Deleted Successfully'){
-            this.msg.SuccessNotify(Response.msg);
-            this.getRacksList();
-            this.app.stopLoaderDark();
-          
-            
-          }else{
-            this.msg.WarnNotify(Response.msg);
-            this.app.stopLoaderDark();
           }
-        },
-        (error:any)=>{
-          this.app.stopLoaderDark();
-        }
-      )
+        })
+
+
 
       }
-     }
-     )
+    }
+    )
 
-
-     }})
 
   }
 }

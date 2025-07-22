@@ -217,7 +217,7 @@ export class SaleBillPrintComponent implements OnInit {
     var img = $(canvas)[0].toDataURL("image/png");
     $('#output').empty();
     $('.qr-code-generator').empty();
-    $('.qr-code-generator').prepend('<img src="' + img + '" width="80" height="80" />')
+    $('.qr-code-generator').prepend('<img src="' + img + '" width="100" height="100" />')
 
     // // var img = canvas.get(0).toDataURL("image/png");
     // html2canvas(element).then((canvas) => {

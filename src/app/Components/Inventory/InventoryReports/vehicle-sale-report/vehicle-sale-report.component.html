@@ -83,12 +83,9 @@
                         [width]="item.logo1Width">
                 </span>
                 <div class="d-flex flex-column">
-
-
                     <span class="companyName">{{item.companyName}}</span>
-
-                    <span class="rptTitle" style="margin-top: -10px;" >Sale Report <span *ngIf="userName != ''">({{userName}})</span></span>
-                    <span style="margin-top: -10px;"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                    <span class="rptTitle"  >Sale Report <span *ngIf="userName != ''">({{userName}})</span></span>
+                    <span ><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
 
 

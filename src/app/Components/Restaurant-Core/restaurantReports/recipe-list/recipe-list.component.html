@@ -86,13 +86,13 @@
                 <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
                     [width]="item.logo1Width">
             </span>
-            <span>
+            <div class="d-flex flex-column">
 
 
-                <h1 class="companyName">{{item.companyName}}</h1>
+                <span class="companyName">{{item.companyName}}</span>
 
-                <p class="rptTitle" style="margin-top:-20px">List Of Recipe's</p>
-                         </span>
+                <span class="rptTitle">List Of Recipe's</span>
+                         </div>
             <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
                 <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
                     height="{{item.logo2Height}}" width="{{item.logo2Width}}">

@@ -97,9 +97,9 @@
 
 
                     <span class="companyName">{{item.companyName}}</span>
-                    <span class="rptPartyName" style="margin-top: -10px;">{{partyName}} </span>
-                    <span class="rptTitle" style="margin-top:-10px">Purchase {{reportType}} Report </span>
-                    <span style="margin-top: -10px;" *ngIf="userName != ''"> <b *ngIf="userName != ''">User:
+                    <span class="rptPartyName" >{{partyName}} </span>
+                    <span class="rptTitle" >Purchase {{reportType}} Report </span>
+                    <span  *ngIf="userName != ''"> <b *ngIf="userName != ''">User:
                             {{userName}} |</b> </span>
                     <span style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}})
                         <b>To:</b>

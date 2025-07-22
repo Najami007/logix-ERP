@@ -20,8 +20,8 @@
 
         <div>
             <table class="table-logix2 fs-13">
-                <thead >
-                    <tr >
+                <thead>
+                    <tr>
                         <th>Inv #</th>
                         <th>Date</th>
                         <th>Counter</th>
@@ -32,7 +32,8 @@
                         <td>{{myInvoiceNo}}</td>
                         <td>
                             <span *ngIf="!VehicleSaleFeature">{{myCreatedDate | date:'dd-MM-yyyy hh:mm:a'}}</span>
-                        <span *ngIf="VehicleSaleFeature">{{myInvDate | date:'dd-MM-yyyy'}}</span></td>
+                            <span *ngIf="VehicleSaleFeature">{{myInvDate | date:'dd-MM-yyyy'}}</span>
+                        </td>
                         <td>{{myCounterName}}</td>
                     </tr>
 
@@ -45,11 +46,11 @@
                     <th class="fs-12">FBR Inv:-</th>
                     <td class="ms-2 fs-11">{{myFbrInvoiceNo}}</td>
                 </tr>
-                   <tr *ngIf="VehicleSaleFeature">
+                <tr *ngIf="VehicleSaleFeature">
                     <th class="fs-12">Vehicle No:-</th>
                     <td class="ms-2 fs-11">{{myVehicleNo}} <small>({{myVehicleName}})</small> </td>
                 </tr>
-                   <tr *ngIf="VehicleSaleFeature">
+                <tr *ngIf="VehicleSaleFeature">
                     <th class="fs-12">Reading:-</th>
                     <td class="ms-2 fs-11">{{myMeterReading}}</td>
                 </tr>
@@ -179,108 +180,133 @@
 
             <!--------------------------Bill Total Area Start ---------------------->
 
-            <table class="w-100  text-uppercase">
-                <tbody>
-                    <tr class="text-end border border-dark" *ngIf="myPOSFee > 0">
-                        <td></td>
-                        <th colspan="2">POS FEE</th>
-                        <td>{{myPOSFee | number:'1.0-2'}}</td>
-                    </tr>
-
-                    <tr class="text-center " style="margin-top:15px !important;" *ngIf="gstFeature">
-                        <td id="output" class="d-none"></td>
-                        <td id="qrCode" class="qr-code-generator" width="40%" rowspan="6"
-                            style="border: 0px solid black;"></td>
-
-                    </tr>
-                    <tr class="text-center " *ngIf="!gstFeature">
-
-                        <td width="40%" rowspan="6" style="font-size: 10px;">
-                            <img [src]="global.thankyouImage" height="80" width="80" /><br />
-                            FOR VISITING US.
-                        </td>
-                    </tr>
-
-                    <tr class="text-end fw-bold fs-16">
-
-                        <td>Sub Total</td>
-                        <td>{{mySubTotal |number:'1.0-1'}}</td>
-
-                    </tr>
-                    <tr class="text-end fs-14" *ngIf="gstFeature && myGstTotal > 0">
-
-                        <td>Gst</td>
-                        <td>{{myGstTotal |number:'1.0-1'}}</td>
-
-                    </tr>
-                    <tr class="text-end fs-14" *ngIf="myAdvTaxValue > 0">
-                        <td>Adv Tax ({{myAdvTaxValue}}%)</td>
-                        <td> {{myAdvTaxAmount|number:'1.0-1'}}</td>
-
-                    </tr>
-                    <tr class="text-end fs-14" *ngIf="myOtherCharges > 0">
-                        <td>Other Charges</td>
-                        <td> {{myOtherCharges|number:'1.0-1'}}</td>
-
-                    </tr>
-                    <tr class="text-end fs-14" *ngIf="myOfferDiscount > 0">
-                        <td>Offer Disc</td>
-                        <td>{{myOfferDiscount|number:'1.0-1'}}</td>
-
-                    </tr>
-                    <tr class="text-end fs-14" *ngIf="myDiscount - myOfferDiscount > 0">
-                        <td>Disc</td>
-                        <td>{{myDiscount - myOfferDiscount|number:'1.0-1'}}</td>
-
-                    </tr>
-
-                    <tr class="text-end fw-bold fs-16">
-                        <td>Net Total</td>
-                        <td>{{myNetTotal|number:'1.0-1'}}</td>
-
-                    </tr>
-                    <tr class="text-end fs-14" *ngIf="myCash > 0">
-                        <td>Cash</td>
-                        <td>{{myCash|number:'1.0-1'}}</td>
-
-                    </tr>
-                    <tr class="text-end fs-14" *ngIf="myBank > 0 ">
-                        <td>Bank</td>
-                        <td>{{ myBank |number:'1.0-1'}}</td>
-                        <td></td>
-                    </tr>
-                    <tr class="text-end fs-14" *ngIf="myChange !== 0">
-                        <td>Change</td>
-                        <td>{{myChange|number:'1.0-1'}}</td>
 
 
-                    </tr>
+            <div class="d-flex justify-content-between">
+
+                <div style="width: 40%;">
+                    <table class="w-100 mt-2">
+                        <tbody>
+                            <tr class="text-center " *ngIf="gstFeature">
+                                <td id="output" class="d-none"></td>
+                                <td id="qrCode" class="qr-code-generator" style="border: 0px solid black;"></td>
+
+                            </tr>
+                            <tr class="text-center " *ngIf="!gstFeature">
+
+                                <td style="font-size: 10px;">
+                                    <img [src]="global.thankyouImage" height="100" width="100" /><br />
+                                    FOR VISITING US.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div style="width: 60%;">
+                    <table class="w-100  text-uppercase">
+                        <tbody>
+                            <tr class="text-end border border-dark" *ngIf="myPOSFee > 0">
+                                <th colspan="2">POS FEE</th>
+                                <td></td>
+                                <td colspan="2">{{myPOSFee | number:'1.0-2'}}</td>
+                            </tr>
 
 
+                            <tr class="text-end fw-bold fs-16">
+                                <td colspan="2">Sub Total</td>
+                                <td></td>
+                                <td colspan="2">{{mySubTotal |number:'1.0-1'}}</td>
+
+                            </tr>
+                            <tr class="text-end fs-14" *ngIf="gstFeature && myGstTotal > 0">
+
+                                <td colspan="2">Gst</td>
+                                <td></td>
+                                <td colspan="2">{{myGstTotal |number:'1.0-1'}}</td>
+
+                            </tr>
+                            <tr class="text-end fs-14" *ngIf="myAdvTaxValue > 0">
+                                <td colspan="2">Adv Tax ({{myAdvTaxValue}}%)</td>
+                                <td></td>
+                                <td colspan="2"> {{myAdvTaxAmount|number:'1.0-1'}}</td>
+
+                            </tr>
+                            <tr class="text-end fs-14" *ngIf="myOtherCharges > 0">
+                                <td colspan="2">Other Charges</td>
+                                <td></td>
+                                <td colspan="2"> {{myOtherCharges|number:'1.0-1'}}</td>
+
+                            </tr>
+                            <tr class="text-end fs-14" *ngIf="myOfferDiscount > 0">
+                                <td colspan="2">Offer Disc</td>
+                                <td></td>
+                                <td colspan="2">{{myOfferDiscount|number:'1.0-1'}}</td>
+
+                            </tr>
+                            <tr class="text-end fs-14" *ngIf="myDiscount - myOfferDiscount > 0">
+                                <td colspan="2">Disc</td>
+                                <td></td>
+                                <td colspan="2">{{myDiscount - myOfferDiscount|number:'1.0-1'}}</td>
+
+                            </tr>
+
+                            <tr class="text-end fw-bold fs-16">
+                                <td colspan="2">Net Total</td>
+                                <td></td>
+                                <td colspan="2">{{myNetTotal|number:'1.0-1'}}</td>
+
+                            </tr>
+                            <tr class="text-end fs-14" *ngIf="myCash > 0">
+                                <td colspan="2">Cash</td>
+                                <td></td>
+                                <td colspan="2">{{myCash|number:'1.0-1'}}</td>
+
+                            </tr>
+                            <tr class="text-end fs-14" *ngIf="myBank > 0 ">
+                                <td colspan="2">Bank</td>
+                                <td></td>
+                                <td colspan="2">{{ myBank |number:'1.0-1'}}</td>
+                            </tr>
+                            <tr class="text-end fs-14" *ngIf="myChange !== 0">
+                                <td colspan="2">Change</td>
+                                <td></td>
+                                <td colspan="2">{{myChange|number:'1.0-1'}}</td>
 
 
-                </tbody>
-                <tbody>
-                    <tr class="text-center " *ngIf="!gstFeature">
+                            </tr>
 
-                        <td width="40%" rowspan="6">
-                        </td>
-                    </tr>
-                    <tr class="text-end fw-bold" *ngIf="myCusBalance !== 0">
-                        <td>prv Blnc</td>
-                        <td *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
-                        <td *ngIf="myChange <= 0 && myInvType == 'S'">{{myCusBalance - ( -1 * myChange) | number:'1.0-1'}}
-                        <td *ngIf="myChange <= 0 && myInvType == 'SR'">{{myCusBalance + ( -1 * myChange) | number:'1.0-1'}}
-                        </td>
+                            <tr class="text-end fw-bold" *ngIf="myCusBalance !== 0">
+                                <td colspan="2">prv Blnc</td>
+                                <td></td>
+                                <td colspan="2" *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
+                                <td colspan="2" *ngIf="myChange <= 0 && myInvType == 'S'">{{myCusBalance - ( -1 *
+                                    myChange) |
+                                    number:'1.0-1'}}
+                                <td colspan="2" *ngIf="myChange <= 0 && myInvType == 'SR'">{{myCusBalance + ( -1 *
+                                    myChange) |
+                                    number:'1.0-1'}}
+                                </td>
 
-                    </tr>
-                    <tr class="text-end fw-bold" *ngIf="myCusBalance !== 0">
-                        <td>Net Blnc</td>
-                        <td>{{myCusBalance | number:'1.0-1'}}</td>
+                            </tr>
+                            <tr class="text-end fw-bold" *ngIf="myCusBalance !== 0">
+                                <td colspan="2"> Net Blnc</td>
+                                <td></td>
+                                <td colspan="2">{{myCusBalance | number:'1.0-1'}}</td>
 
-                    </tr>
-                </tbody>
-            </table>
+                            </tr>
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
 
 
             <!--------------------------Bill Total Area End ---------------------->
@@ -292,11 +318,13 @@
             <td >{{myRemarks}}</td>
         </tr>
        </table> -->
-            <div class="fs-12px d-flex flex-column">
+            <div class="d-flex flex-column text-center">
                 <!-- <span><b>Goods Once Sold Can Not be Replaced or Refunded. </b></span> -->
-                <b></b>
-                <span><b>Thank You for your visit.</b></span>
+                <span style="font-size: 10px;"><b>Wish to serve you again.</b></span>
 
+            </div>
+            <div class="d-flex flex-column text-center">
+                <span style="font-size: 10px;">Powered By : <b>Logix Solutionz | Mobile# 0313-5300471</b></span>
             </div>
             <div class="fs-12px d-flex flex-column">
                 <!-- <span><b>Goods Once Sold Can Not be Replaced or Refunded. </b></span> -->
@@ -474,81 +502,74 @@
             </table>
 
 
-            <table class="table-garment-sale-Urdu-Bottom " dir="rtl">
-                <tbody class="fs-16 fw-bold">
-                    <tr class="text-center " *ngIf="!gstFeature">
 
-                        <td width="40%" rowspan="7" style="font-size: 10px;">
-                            <img [src]="global.thankyouImage" height="80" width="80" /><br />
-                            FOR VISITING US.
-                        </td>
-                    </tr>
+            <div class="d-flex justify-content-between">
 
-                    <tr class="text-end">
+                  <div style="width: 60%;">
+                    <table class="w-100  table-garment-sale-Urdu-Bottom fw-bold " dir="rtl">
+                        <tbody>
+                            <tr class="text-end border border-dark" *ngIf="myPOSFee > 0">
+                                <th colspan="2">POS FEE</th>
+                                <td></td>
+                                <td colspan="2">{{myPOSFee | number:'1.0-2'}}</td>
+                            </tr>
+                            <tr class="text-end">
+                                <td></td>
+                                <td>ٹوٹل</td>
+                                <td class="text-start">{{mySubTotal |number:'1.0-1'}}</td>
+                            </tr>
+                            <tr class="text-end" *ngIf="myOtherCharges > 0">
+
+                                <td class="text-start"> {{myOtherCharges|number:'1.0-1'}}</td>
+                                <td></td>
+                            </tr>
+                            <tr class="text-end" *ngIf="myOfferDiscount > 0">
+                                <td></td>
+                                <!-- <td >Offer Disc</td> -->
+                                <td class="urdu"> آفر ڈسکاؤنٹ </td>
+                                <td class="text-start">{{myOfferDiscount|number:'1.0-1'}}</td>
+
+
+                            </tr>
+                            <tr class="text-end" *ngIf="myDiscount - myOfferDiscount > 0">
+                                <td></td>
+                                <td class="urdu">ڈسکاؤنٹ</td>
+                                <td class="text-start">{{myDiscount - myOfferDiscount|number:'1.0-1'}}</td>
+
+                            </tr>
+
+                            <tr class="text-end">
+                                <td></td>
+                                <td class="urdu"><b>بل ٹوٹل</b></td>
+                                <td class="text-start">{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</td>
+
+
+                            </tr>
+                            <tr class="text-end" *ngIf="myCash > 0 ">
+
+                                <td></td>
+                                <td class="urdu">کیش</td>
+                                <td class="text-start">{{myCash|number:'1.0-1'}}</td>
+
+                            </tr>
+                            <tr class="text-end" *ngIf="myBank > 0 ">
+                                <td></td>
+                                <td>بینک</td>
+                                <td class="text-start">{{myBank|number:'1.0-1'}}</td>
+                            </tr>
+                            <tr class="text-end" *ngIf="myChange !== 0">
+                                <td></td>
+                                <td class="urdu">بقایا</td>
+                                <td class="text-start">{{myChange|number:'1.0-1'}}</td>
+                            </tr>
+
+                               <tr style="text-align:right; " *ngIf="myCusBalance !== 0">
                         <td></td>
-                        <td>ٹوٹل</td>
-                        <td class="text-start">{{mySubTotal |number:'1.0-1'}}</td>
-                    </tr>
-                    <tr class="text-end" *ngIf="myOtherCharges > 0">
-
-                        <td class="text-start"> {{myOtherCharges|number:'1.0-1'}}</td>
-                        <td></td>
-                    </tr>
-                    <tr class="text-end" *ngIf="myOfferDiscount > 0">
-                        <td></td>
-                        <!-- <td >Offer Disc</td> -->
-                        <td></td>
-                        <td class="urdu"> آفر ڈسکاؤنٹ </td>
-                        <td class="text-start">{{myOfferDiscount|number:'1.0-1'}}</td>
-
-
-                    </tr>
-                    <tr class="text-end" *ngIf="myDiscount - myOfferDiscount > 0">
-                        <td></td>
-                        <td class="urdu">ڈسکاؤنٹ</td>
-                        <td class="text-start">{{myDiscount - myOfferDiscount|number:'1.0-1'}}</td>
-
-                    </tr>
-
-                    <tr class="text-end">
-                        <td></td>
-                        <td class="urdu"><b>بل ٹوٹل</b></td>
-                        <td class="text-start">{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-1'}}</td>
-
-
-                    </tr>
-                    <tr class="text-end" *ngIf="myCash > 0 ">
-
-                        <td></td>
-                        <td class="urdu">کیش</td>
-                        <td class="text-start">{{myCash|number:'1.0-1'}}</td>
-
-                    </tr>
-                    <tr class="text-end" *ngIf="myBank > 0 ">
-                        <td></td>
-                        <td>بینک</td>
-                        <td class="text-start">{{myBank|number:'1.0-1'}}</td>
-                    </tr>
-                    <tr class="text-end" *ngIf="myChange !== 0">
-                        <td></td>
-                        <td class="urdu">بقایا</td>
-                        <td class="text-start">{{myChange|number:'1.0-1'}}</td>
-                    </tr>
-                </tbody>
-
-
-
-                <tbody>
-                    <tr class="text-center " *ngIf="!gstFeature">
-
-                        <td width="40%" rowspan="6">
-                        </td>
-                    </tr>
-                   <tr style="text-align:right; " *ngIf="myCusBalance !== 0">
-                    <td></td>
                         <td class="urdu fw-bold">سابقا بقایا</td>
-                      <td  class="fw-bold text-start"  *ngIf="myChange <= 0 && myInvType == 'S'">{{myCusBalance - ( -1 * myChange) | number:'1.0-1'}}
-                        <td *ngIf="myChange <= 0 && myInvType == 'SR'">{{myCusBalance + ( -1 * myChange) | number:'1.0-1'}}
+                        <td class="fw-bold text-start" *ngIf="myChange <= 0 && myInvType == 'S'">{{myCusBalance - ( -1 *
+                            myChange) | number:'1.0-1'}}
+                        <td *ngIf="myChange <= 0 && myInvType == 'SR'">{{myCusBalance + ( -1 * myChange) |
+                            number:'1.0-1'}}
                         <td class="fw-bold text-start" *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
 
 
@@ -561,10 +582,37 @@
 
 
                     </tr>
-                </tbody>
 
 
-            </table>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div style="width: 40%;">
+                    <table class="w-100 mt-2" dir="rtl">
+                        <tbody>
+                            <tr class="text-center " *ngIf="gstFeature">
+                                <td id="output" class="d-none"></td>
+                                <td id="qrCode" class="qr-code-generator" style="border: 0px solid black;"></td>
+
+                            </tr>
+                            <tr class="text-center " *ngIf="!gstFeature">
+
+                                <td style="font-size: 10px;">
+                                    <img [src]="global.thankyouImage" height="100" width="100" /><br />
+                                    FOR VISITING US.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+              
+
+            </div>
 
 
 
@@ -577,6 +625,9 @@
                         <td><label style="font-family: urdu_noori;">تشریف لانے کا شکریہ</label></td>
 
                     </tr>
+                    <div class="d-flex flex-column text-center">
+                        <span style="font-size: 10px;">Powered By : <b>Logix Solutionz | Mobile# 0313-5300471</b></span>
+                    </div>
                     <tr>
                         <!-- <td><label style="font-size:8px;">Software by Logix Solutions. Mob: <b>0313-5300471</b></label>
                         </td> -->

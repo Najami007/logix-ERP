@@ -15,14 +15,14 @@
          <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
              <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
          </span>
-         <span >
+         <div class="d-flex flex-column" >
              
     
-             <h1 class="companyName">{{item.companyName}}</h1>
+             <span class="companyName">{{item.companyName}}</span>
              
-             <p class="rptTitle" style="margin-top:-15px">List Of Suppliers</p>
+             <span class="rptTitle">List Of Suppliers</span>
                       
-         </span>
+         </div>
          <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
              <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" height="{{item.logo2Height}}" width="{{item.logo2Width}}">
          </span>

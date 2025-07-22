@@ -13,76 +13,76 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './brand.component.html',
   styleUrls: ['./brand.component.scss']
 })
-export class BrandComponent implements OnInit{
+export class BrandComponent implements OnInit {
 
-  crudList:any = {c:true,r:true,u:true,d:true};
+  crudList: any = { c: true, r: true, u: true, d: true };
 
-  constructor(private http:HttpClient,
-    private msg:NotificationService,
+  constructor(private http: HttpClient,
+    private msg: NotificationService,
     private dialogue: MatDialog,
-    private globaldata:GlobalDataModule,
-    private app:AppComponent,
-    private route:Router,
+    private globaldata: GlobalDataModule,
+    private app: AppComponent,
+    private route: Router,
     private titleService: Title
-    
-    ){
-      
-        this.globaldata.getMenuList().subscribe((data)=>{
-          this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-   
-        })
-     
 
-    }
+  ) {
+
+    this.globaldata.getMenuList().subscribe((data) => {
+      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
+
+    })
+
+
+  }
   ngOnInit(): void {
     this.globaldata.setHeaderTitle('Brand');
     this.getBrandList();
-    
-   
+
+
   }
 
-  txtSearch:any;
-  brandTitle:any;
-  brandCode:any;
-  description:any;
-  brandID:number = 0;
-  btnType:any = 'Save';
+  txtSearch: any;
+  brandTitle: any;
+  brandCode: any;
+  description: any;
+  brandID: number = 0;
+  btnType: any = 'Save';
 
-  BrandList:any = [];
-
-
+  BrandList: any = [];
 
 
-  
-  getBrandList(){
-    this.http.get(environment.mainApi+this.globaldata.inventoryLink+'GetBrand').subscribe(
-      (Response:any)=>{
+
+
+
+  getBrandList() {
+    this.http.get(environment.mainApi + this.globaldata.inventoryLink + 'GetBrand').subscribe(
+      (Response: any) => {
         this.BrandList = Response;
       },
-      (Error:any)=>{
+      (Error: any) => {
         this.msg.WarnNotify(Error);
-  
-       }
+
+      }
     )
   }
 
 
 
 
-  save(){
-    if(this.brandTitle == '' || this.brandTitle == undefined){
+  save() {
+    if (this.brandTitle == '' || this.brandTitle == undefined) {
       this.msg.WarnNotify('Enter Category Title')
-    }else if(this.brandCode == '' || this.brandCode == undefined){
+    } else if (this.brandCode == '' || this.brandCode == undefined) {
       this.msg.WarnNotify('Enter Brand Code')
-    } else{
+    } else {
 
-      if(this.description == '' || this.description == undefined){
+      if (this.description == '' || this.description == undefined) {
         this.description = '-';
       }
 
-      if(this.btnType == 'Save'){
+      if (this.btnType == 'Save') {
         this.insert();
-      }else if(this.btnType == 'Update'){
+      } else if (this.btnType == 'Update') {
         this.update();
 
       }
@@ -93,82 +93,82 @@ export class BrandComponent implements OnInit{
 
 
 
-  insert(){
+  insert() {
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+this.globaldata.inventoryLink+'insertbrand',{  
+    this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'insertbrand', {
       BrandTitle: this.brandTitle,
       BrandCode: this.brandCode,
       BrandDescription: this.description,
       UserID: this.globaldata.getUserID()
     }).subscribe(
-      (Response:any)=>{
-        if(Response.msg == 'Data Saved Successfully'){
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully') {
           this.msg.SuccessNotify(Response.msg);
           this.getBrandList();
           this.reset();
           this.app.stopLoaderDark();
 
-        }else{
+        } else {
           this.msg.WarnNotify(Response.msg);
           this.app.stopLoaderDark();
         }
       },
-      (error:any)=>{
+      (error: any) => {
         this.app.stopLoaderDark();
       }
     )
   }
 
-  update(){
+  update() {
 
-    this.globaldata.openPinCode().subscribe(pin=>{
+    this.globaldata.openPinCode().subscribe(pin => {
 
-     if(pin != ''){
+      if (pin != '') {
 
-      
-      this.app.startLoaderDark();
-      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'updateBrand',{  
-        BrandID: this.brandID,
-        BrandTitle: this.brandTitle,
-        BrandCode: this.brandCode,
-        BrandDescription: this.description,
-        PinCode:pin,
-        UserID: this.globaldata.getUserID()
-      }).subscribe(
-        (Response:any)=>{
-          if(Response.msg == 'Data Updated Successfully'){
-            this.msg.SuccessNotify(Response.msg);
-            this.getBrandList();
-            this.reset();
-            this.app.stopLoaderDark();
-  
-          }else{
-            this.msg.WarnNotify(Response.msg);
+
+        this.app.startLoaderDark();
+        this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'updateBrand', {
+          BrandID: this.brandID,
+          BrandTitle: this.brandTitle,
+          BrandCode: this.brandCode,
+          BrandDescription: this.description,
+          PinCode: pin,
+          UserID: this.globaldata.getUserID()
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Data Updated Successfully') {
+              this.msg.SuccessNotify(Response.msg);
+              this.getBrandList();
+              this.reset();
+              this.app.stopLoaderDark();
+
+            } else {
+              this.msg.WarnNotify(Response.msg);
+              this.app.stopLoaderDark();
+            }
+          },
+          (error: any) => {
             this.app.stopLoaderDark();
           }
-        },
-        (error:any)=>{
-          this.app.stopLoaderDark();
-        }
-      )
-     }
+        )
+      }
     })
-   
+
   }
 
 
 
-  reset(){
+  reset() {
     this.brandCode = '';
     this.description = '';
     this.brandTitle = '';
-    this.brandID = 0 ;
+    this.brandID = 0;
     this.btnType = 'Save';
 
   }
 
 
-  edit(row:any){
+  edit(row: any) {
     this.brandID = row.brandID;
     this.brandTitle = row.brandTitle;
     this.brandCode = row.brandCode;
@@ -177,55 +177,58 @@ export class BrandComponent implements OnInit{
 
   }
 
-   delete(row:any){
-    this.globaldata.openPinCode().subscribe(pin=>{
+  delete(row: any) {
 
-     if(pin != ''){
+    Swal.fire({
+      title: 'Alert!',
+      text: 'Confirm to Delete the Data',
+      position: 'center',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirm',
+    }).then((result) => {
+
+      if (result.isConfirmed) {
+        this.globaldata.openPinCode().subscribe(pin => {
+
+          if (pin != '') {
+
+            this.app.startLoaderDark();
+
+            this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'deletebrand', {
+              BrandID: row.brandID,
+              PinCode: pin,
+              UserID: this.globaldata.getUserID()
+
+            }).subscribe(
+              (Response: any) => {
+                if (Response.msg == 'Data Deleted Successfully') {
+                  this.msg.SuccessNotify(Response.msg);
+                  this.getBrandList();
+                  this.app.stopLoaderDark();
 
 
-      Swal.fire({
-        title:'Alert!',
-        text:'Confirm to Delete the Data',
-        position:'center',
-        icon:'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Confirm',
-      }).then((result)=>{
+                } else {
+                  this.msg.WarnNotify(Response.msg);
+                  this.app.stopLoaderDark();
+                }
+              },
+              (error: any) => {
+                this.app.stopLoaderDark();
+              }
+            )
 
-        if(result.isConfirmed){
-      this.app.startLoaderDark();
-
-      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'deletebrand',{
-        BrandID: row.brandID,
-        PinCode:pin,
-        UserID: this.globaldata.getUserID()
-
-      }).subscribe(
-        (Response:any)=>{
-          if(Response.msg == 'Data Deleted Successfully'){
-            this.msg.SuccessNotify(Response.msg);
-            this.getBrandList();
-            this.app.stopLoaderDark();
-          
-            
-          }else{
-            this.msg.WarnNotify(Response.msg);
-            this.app.stopLoaderDark();
           }
-        },
-        (error:any)=>{
-          this.app.stopLoaderDark();
-        }
-      )
+        })
+
 
       }
-     }
-     )
+    }
+    )
 
 
-     }})
 
   }
 

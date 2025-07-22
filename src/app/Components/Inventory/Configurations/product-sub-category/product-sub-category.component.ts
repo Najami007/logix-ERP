@@ -19,51 +19,51 @@ import { PincodeComponent } from '../../../User/pincode/pincode.component';
 })
 export class ProductSubCategoryComponent implements OnInit {
 
-  crudList:any = {c:true,r:true,u:true,d:true};
+  crudList: any = { c: true, r: true, u: true, d: true };
 
-  constructor(private http:HttpClient,
-    private msg:NotificationService,
+  constructor(private http: HttpClient,
+    private msg: NotificationService,
     private dialogue: MatDialog,
-    private globaldata:GlobalDataModule,
-    private app:AppComponent,
-    private route:Router
-    
-    ){
-      this.globaldata.getMenuList().subscribe((data)=>{
-        this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      })
+    private globaldata: GlobalDataModule,
+    private app: AppComponent,
+    private route: Router
 
-    }
+  ) {
+    this.globaldata.getMenuList().subscribe((data) => {
+      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
+    })
+
+  }
 
 
-    
+
   ngOnInit(): void {
     this.globaldata.setHeaderTitle('Sub Category');
     this.getCategory();
     this.getSubCategory();
 
-   
+
   }
 
 
-  txtSearch:any;
-  btnType:string = 'Save';
-  categorySearch:any;
-  categoryID:any;
-  subCategoryTitle:any;
-  categoryList:any  = [];
+  txtSearch: any;
+  btnType: string = 'Save';
+  categorySearch: any;
+  categoryID: any;
+  subCategoryTitle: any;
+  categoryList: any = [];
   subCategoryList: any[] = [];
-  subCategoryID:any;
-  description:any;
-  
+  subCategoryID: any;
+  description: any;
+
 
 
 
   ///////////////////////////////////////////////////////////
 
-  getCategory(){
-    this.http.get(environment.mainApi+this.globaldata.inventoryLink+'GetCategory').subscribe(
-      (Response:any)=>{
+  getCategory() {
+    this.http.get(environment.mainApi + this.globaldata.inventoryLink + 'GetCategory').subscribe(
+      (Response: any) => {
         this.categoryList = Response;
       }
     )
@@ -72,10 +72,10 @@ export class ProductSubCategoryComponent implements OnInit {
 
   /////////////////////////////////////////////////////////////////////
 
-  getSubCategory(){
+  getSubCategory() {
     var reqHeader = new HttpHeaders({ "Content-Type": "application/json" });
-    this.http.get(environment.mainApi+this.globaldata.inventoryLink+'GetSubCategory', { headers: reqHeader }).subscribe(
-      (Response:any)=>{
+    this.http.get(environment.mainApi + this.globaldata.inventoryLink + 'GetSubCategory', { headers: reqHeader }).subscribe(
+      (Response: any) => {
         this.subCategoryList = Response;
       }
     )
@@ -85,20 +85,20 @@ export class ProductSubCategoryComponent implements OnInit {
 
 
 
-  save(){
-    if(this.categoryID == '' || this.categoryID == undefined){
+  save() {
+    if (this.categoryID == '' || this.categoryID == undefined) {
       this.msg.WarnNotify('Enter Category Title')
-    }else if(this.subCategoryTitle == '' || this.subCategoryTitle == undefined){
+    } else if (this.subCategoryTitle == '' || this.subCategoryTitle == undefined) {
       this.msg.WarnNotify('Enter Sub Category Title')
-    }else {
+    } else {
 
-      if(this.description == '' || this.description == undefined){
+      if (this.description == '' || this.description == undefined) {
         this.description = '-';
       }
 
-      if(this.btnType == 'Save'){
+      if (this.btnType == 'Save') {
         this.insert();
-      }else if(this.btnType == 'Update'){
+      } else if (this.btnType == 'Update') {
         this.update();
 
       }
@@ -110,70 +110,70 @@ export class ProductSubCategoryComponent implements OnInit {
 
 
 
-  
-  insert(){
+
+  insert() {
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+this.globaldata.inventoryLink+'InsertSubCategory',{  
+    this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'InsertSubCategory', {
       CategoryID: this.categoryID,
       SubCategoryTitle: this.subCategoryTitle,
       SubCategoryDescription: this.description,
       UserID: this.globaldata.getUserID()
     }).subscribe(
-      (Response:any)=>{
-        if(Response.msg == 'Data Saved Successfully'){
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully') {
           this.msg.SuccessNotify(Response.msg);
           this.getSubCategory();
           this.reset();
           this.app.stopLoaderDark();
 
-        }else{
+        } else {
           this.msg.WarnNotify(Response.msg);
           this.app.stopLoaderDark();
         }
       },
-      (error:any)=>{
+      (error: any) => {
         this.app.stopLoaderDark();
       }
     )
   }
 
-  update(){
-    this.globaldata.openPinCode().subscribe(pin=>{
+  update() {
+    this.globaldata.openPinCode().subscribe(pin => {
 
-     if(pin != ''){
-      this.app.startLoaderDark();
-      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'UpdateSubCategory',{
-        SubCategoryID:this.subCategoryID,  
-        CategoryID:this.categoryID,
-        SubCategoryTitle: this.subCategoryTitle,
-        SubCategoryDescription: this.description,
-      PinCode:pin,
-      UserID: this.globaldata.getUserID()
-      }).subscribe(
-        (Response:any)=>{
-          if(Response.msg == 'Data Updated Successfully'){
-            this.msg.SuccessNotify(Response.msg);
-            this.getSubCategory();
-            this.reset();
-            this.app.stopLoaderDark();
-  
-          }else{
-            this.msg.WarnNotify(Response.msg);
+      if (pin != '') {
+        this.app.startLoaderDark();
+        this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'UpdateSubCategory', {
+          SubCategoryID: this.subCategoryID,
+          CategoryID: this.categoryID,
+          SubCategoryTitle: this.subCategoryTitle,
+          SubCategoryDescription: this.description,
+          PinCode: pin,
+          UserID: this.globaldata.getUserID()
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Data Updated Successfully') {
+              this.msg.SuccessNotify(Response.msg);
+              this.getSubCategory();
+              this.reset();
+              this.app.stopLoaderDark();
+
+            } else {
+              this.msg.WarnNotify(Response.msg);
+              this.app.stopLoaderDark();
+            }
+          },
+          (error: any) => {
             this.app.stopLoaderDark();
           }
-        },
-        (error:any)=>{
-          this.app.stopLoaderDark();
-        }
-      )
-     }
+        )
+      }
     })
-   
+
   }
 
 
 
-  reset(){
+  reset() {
     this.categoryID = '';
     this.subCategoryID = '';
     this.subCategoryTitle = '';
@@ -182,7 +182,7 @@ export class ProductSubCategoryComponent implements OnInit {
   }
 
 
-  edit(row:any){
+  edit(row: any) {
     this.categoryID = row.categoryID;
     this.subCategoryID = row.subCategoryID;
     this.subCategoryTitle = row.subCategoryTitle;
@@ -190,51 +190,55 @@ export class ProductSubCategoryComponent implements OnInit {
     this.btnType = 'Update';
   }
 
-  delete(row:any){
-    this.globaldata.openPinCode().subscribe(pin=>{
+  delete(row: any) {
+    Swal.fire({
+      title: 'Alert!',
+      text: 'Confirm to Delete the Data',
+      position: 'center',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirm',
+    }).then((result) => {
 
-     if(pin != ''){
+      if (result.isConfirmed) {
+        this.globaldata.openPinCode().subscribe(pin => {
 
-      
-      Swal.fire({
-        title:'Alert!',
-        text:'Confirm to Delete the Data',
-        position:'center',
-        icon:'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Confirm',
-      }).then((result)=>{
+          if (pin != '') {
 
-        if(result.isConfirmed){
-      this.app.startLoaderDark();
+            this.app.startLoaderDark();
 
-      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'DeleteSubCategory',{
-        SubCategoryID: row.subCategoryID,
-        PinCode:pin,
-        UserID: this.globaldata.getUserID()
+            this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'DeleteSubCategory', {
+              SubCategoryID: row.subCategoryID,
+              PinCode: pin,
+              UserID: this.globaldata.getUserID()
 
-      }).subscribe(
-        (Response:any)=>{
-          if(Response.msg == 'Data Deleted Successfully'){
-            this.msg.SuccessNotify(Response.msg);
-            this.getSubCategory();
-            this.app.stopLoaderDark();
-          
-            
-          }else{
-            this.msg.WarnNotify(Response.msg);
-            this.app.stopLoaderDark();
+            }).subscribe(
+              (Response: any) => {
+                if (Response.msg == 'Data Deleted Successfully') {
+                  this.msg.SuccessNotify(Response.msg);
+                  this.getSubCategory();
+                  this.app.stopLoaderDark();
+
+
+                } else {
+                  this.msg.WarnNotify(Response.msg);
+                  this.app.stopLoaderDark();
+                }
+              },
+              (error: any) => {
+                this.app.stopLoaderDark();
+              }
+            )
           }
-        },
-        (error:any)=>{
-          this.app.stopLoaderDark();
-        }
-      )
-        }})
+        })
 
-     }})
+
+      }
+    })
+
+
 
   }
 

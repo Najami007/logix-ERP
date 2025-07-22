@@ -65,18 +65,13 @@
                     <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
                         [width]="item.logo1Width">
                 </span>
-                <span>
-
-
-                    <h1 class="companyName">{{item.companyName}}</h1>
-
-                    <p class="rptTitle" style="margin-top:-20px">Purchase Sale Comparison Report </p>
-                    <p style="margin-top:-15px">Supplier: <b>{{partyName}}</b></p>
-                    <p style="margin-top:-15px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
-                        {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</p>
-
-
-                </span>
+                <div class="d-flex flex-column">
+                    <span class="companyName">{{item.companyName}}</span>
+                    <span class="rptTitle" >Purchase Sale Comparison Report </span>
+                    <span >Supplier: <b>{{partyName}}</b></span>
+                    <span ><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                        {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
+                </div>
                 <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
                     <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
                         height="{{item.logo2Height}}" width="{{item.logo2Width}}">

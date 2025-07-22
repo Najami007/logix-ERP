@@ -13,64 +13,64 @@ import Swal from 'sweetalert2';
   templateUrl: './locations.component.html',
   styleUrls: ['./locations.component.scss']
 })
-export class LocationsComponent implements OnInit{
+export class LocationsComponent implements OnInit {
 
-  crudList:any = {c:true,r:true,u:true,d:true};
+  crudList: any = { c: true, r: true, u: true, d: true };
 
-  constructor(private http:HttpClient,
-    private msg:NotificationService,
+  constructor(private http: HttpClient,
+    private msg: NotificationService,
     private dialogue: MatDialog,
-    private globaldata:GlobalDataModule,
-    private app:AppComponent,
-    private route:Router
-    
-    ){
-      this.globaldata.getMenuList().subscribe((data)=>{
-        this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      })
+    private globaldata: GlobalDataModule,
+    private app: AppComponent,
+    private route: Router
 
-    }
+  ) {
+    this.globaldata.getMenuList().subscribe((data) => {
+      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
+    })
+
+  }
   ngOnInit(): void {
     this.globaldata.setHeaderTitle('Location');
     this.getLocation();
-   
+
   }
 
-  txtSearch:any;
-  locationTitle:any;
-  locationID:number = 0;
-  btnType:any = 'Save';
-  description:any;
-  locationList:any = [];
+  txtSearch: any;
+  locationTitle: any;
+  locationID: number = 0;
+  btnType: any = 'Save';
+  description: any;
+  locationList: any = [];
 
 
 
-  getLocation(){
-    this.http.get(environment.mainApi+this.globaldata.inventoryLink+'getlocation').subscribe(
-      (Response:any)=>{
+  getLocation() {
+    this.http.get(environment.mainApi + this.globaldata.inventoryLink + 'getlocation').subscribe(
+      (Response: any) => {
         this.locationList = Response;
       },
-      (Error:any)=>{
+      (Error: any) => {
         this.msg.WarnNotify(Error);
-   
-       }
+
+      }
     )
   }
 
 
 
-  save(){
-    if(this.locationTitle == '' || this.locationTitle == undefined){
+  save() {
+    if (this.locationTitle == '' || this.locationTitle == undefined) {
       this.msg.WarnNotify('Enter Category Title')
-    }else{
+    } else {
 
-      if(this.description == '' || this.description == undefined){
+      if (this.description == '' || this.description == undefined) {
         this.description = '-';
       }
 
-      if(this.btnType == 'Save'){
+      if (this.btnType == 'Save') {
         this.insert();
-      }else if(this.btnType == 'Update'){
+      } else if (this.btnType == 'Update') {
         this.update();
 
       }
@@ -81,137 +81,138 @@ export class LocationsComponent implements OnInit{
 
 
 
-  insert(){
+  insert() {
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi+this.globaldata.inventoryLink+'insertlocation',{  
+    this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'insertlocation', {
       LocationTitle: this.locationTitle,
       LocationDescription: this.description,
       UserID: this.globaldata.getUserID()
     }).subscribe(
-      (Response:any)=>{
-        if(Response.msg == 'Data Saved Successfully'){
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully') {
           this.msg.SuccessNotify(Response.msg);
           this.getLocation();
           this.reset();
           this.app.stopLoaderDark();
 
-        }else{
+        } else {
           this.msg.WarnNotify(Response.msg);
           this.app.stopLoaderDark();
         }
       },
-      (error:any)=>{
+      (error: any) => {
         this.app.stopLoaderDark();
       }
     )
   }
 
-  update(){
+  update() {
 
-    this.globaldata.openPinCode().subscribe(pin=>{
+    this.globaldata.openPinCode().subscribe(pin => {
 
-     if(pin != ''){
+      if (pin != '') {
 
-      
-      this.app.startLoaderDark();
-      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'updatelocation',{
-        LocationID:this.locationID,  
-        LocationTitle: this.locationTitle,
-        LocationDescription: this.description,
-        PinCode:pin,
-        UserID: this.globaldata.getUserID()
-      }).subscribe(
-        (Response:any)=>{
-          if(Response.msg == 'Data Updated Successfully'){
-            this.msg.SuccessNotify(Response.msg);
-            this.getLocation();
-            this.reset();
-            this.app.stopLoaderDark();
-  
-          }else{
-            this.msg.WarnNotify(Response.msg);
+
+        this.app.startLoaderDark();
+        this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'updatelocation', {
+          LocationID: this.locationID,
+          LocationTitle: this.locationTitle,
+          LocationDescription: this.description,
+          PinCode: pin,
+          UserID: this.globaldata.getUserID()
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Data Updated Successfully') {
+              this.msg.SuccessNotify(Response.msg);
+              this.getLocation();
+              this.reset();
+              this.app.stopLoaderDark();
+
+            } else {
+              this.msg.WarnNotify(Response.msg);
+              this.app.stopLoaderDark();
+            }
+          },
+          (error: any) => {
+            this.msg.WarnNotify(error);
             this.app.stopLoaderDark();
           }
-        },
-        (error:any)=>{
-          this.msg.WarnNotify(error);
-          this.app.stopLoaderDark();
-        }
-      )
-     }
+        )
+      }
     })
-   
+
   }
 
 
 
 
-  reset(){
+  reset() {
     this.locationTitle = '';
-    this.locationID = 0 ;
-    this.description ='';
+    this.locationID = 0;
+    this.description = '';
     this.btnType = 'Save';
 
   }
 
 
-  edit(row:any){
+  edit(row: any) {
     this.locationID = row.locationID;
     this.locationTitle = row.locationTitle;
     this.description = row.locationDescription;
     this.btnType = 'Update';
   }
 
-  delete(row:any){
-    this.globaldata.openPinCode().subscribe(pin=>{
+  delete(row: any) {
+    Swal.fire({
+      title: 'Alert!',
+      text: 'Confirm to Delete the Data',
+      position: 'center',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirm',
+    }).then((result) => {
 
-     if(pin != ''){
+      if (result.isConfirmed) {
+        this.globaldata.openPinCode().subscribe(pin => {
+          if (pin != '') {
+            this.app.startLoaderDark();
+
+            this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'deletelocation', {
+              LocationID: row.locationID,
+              PinCode: pin,
+              UserID: this.globaldata.getUserID()
+
+            }).subscribe(
+              (Response: any) => {
+                if (Response.msg == 'Data Deleted Successfully') {
+                  this.msg.SuccessNotify(Response.msg);
+                  this.getLocation();
+                  this.app.stopLoaderDark();
 
 
-      Swal.fire({
-        title:'Alert!',
-        text:'Confirm to Delete the Data',
-        position:'center',
-        icon:'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Confirm',
-      }).then((result)=>{
+                } else {
+                  this.msg.WarnNotify(Response.msg);
+                  this.app.stopLoaderDark();
+                }
+              },
+              (error: any) => {
+                this.msg.WarnNotify(error);
+                this.app.stopLoaderDark();
+              }
+            )
 
-        if(result.isConfirmed){
-      this.app.startLoaderDark();
 
-      this.http.post(environment.mainApi+this.globaldata.inventoryLink+'deletelocation',{
-        LocationID: row.locationID,
-        PinCode:pin,
-        UserID: this.globaldata.getUserID()
 
-      }).subscribe(
-        (Response:any)=>{
-          if(Response.msg == 'Data Deleted Successfully'){
-            this.msg.SuccessNotify(Response.msg);
-            this.getLocation();
-            this.app.stopLoaderDark();
-          
-            
-          }else{
-            this.msg.WarnNotify(Response.msg);
-            this.app.stopLoaderDark();
           }
-        },
-        (error:any)=>{
-          this.msg.WarnNotify(error);
-          this.app.stopLoaderDark();
-        }
-      )
+        })
+
 
       }
-     }
-     )
+    }
+    )
 
-
-     }})
 
   }
 
