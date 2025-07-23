@@ -26,7 +26,7 @@
                                 *ngFor="let item of productList| filter:PBarcode | slice:0:25 index as index"
                                 (click)="holdDataFunction(item);">
                                 <button style="height: 40px; background: none;border: none;text-align: left;"
-                                    class="prodRow{{index}} prodBtn justify-content-between d-flex" [accessKey]="index"
+                                    class="prodRow{{index}} prodBtn justify-content-between d-flex" [accessKey]="index" (focus)="prodFocusedRow = index"
                                     (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">
                                     <p>{{item.productTitle}} <b>({{item.salePrice}})</b></p>
                                     <p><strong>({{item.barcode}})</strong></p>
@@ -162,24 +162,33 @@
 
 
 
-                <div class="text-center d-flex pt-1 me-1">
-                    <button class="col-lg-2 me-1 delBtn" matTooltip="Void Full Bill"
-                        (click)="voidBill()"><mat-icon>delete_outline</mat-icon></button>
-                    <button class="btnsave col-lg-10 text-center " accesskey="s" id="save"
-                        (click)="save('Cash',true)"><u>S</u>ave</button>
-                    <button class="btnsave col-lg-10 text-center d-none" accesskey="." id="save"
-                        (click)="save('Cash',false)"><u>S</u>ave</button>
+                <div class="text-center d-flex pt-1">
+                    <div class="col-md-3 pe-2">
+                        <button class="w-100 delBtn" matTooltip="Void Full Bill"
+                            (click)="voidBill()"><mat-icon>delete_outline</mat-icon></button>
+                    </div>
+                    <div class="col-md-9">
+                        <button class="btnsave w-100 text-center " accesskey="s" id="save"
+                            (click)="save('Cash',true)"><u>S</u>ave</button>
+                        <!-- <button class="btnsave w-100 text-center d-none" accesskey="." id="save"
+                        (click)="save('Cash',false)"><u>S</u>ave</button> -->
+                    </div>
 
 
                 </div>
                 <div class="mt-2 d-flex justify-content-between">
-                    <div class="pe-1"><button class="btnduplicate" accesskey="u"
-                            (click)="openDuplicateModal()">D<u>u</u>plicate</button></div>
-
-                    <button accesskey="o" class="btnload pt-2 w-75  d-flex justify-content-between btn-primary"
-                        (click)="openPaymentModal()">
-                        <span><u>O</u>ther</span> <mat-icon>keyboard_arrow_right</mat-icon>
-                    </button>
+                    <div class="col-md-3 pe-2">
+                        <button class="btnduplicate" accesskey="u"
+                            (click)="openDuplicateModal()">D<u>u</u>plicate</button>
+                    </div>
+                    <div class="col-md-9">
+                        <button accesskey="o" class="btnload pt-2 w-100  btn-primary" (click)="openPaymentModal()">
+                            <div class=" d-flex justify-content-between">
+                                <span><u>O</u>ther</span>
+                                <span><mat-icon>keyboard_arrow_right</mat-icon></span>
+                            </div>
+                        </button>
+                    </div>
                 </div>
 
 
@@ -210,25 +219,26 @@
             <form action="" method="post">
                 <div class="modal-body">
 
-                <mat-form-field appearance="outline" class="w-50 pe-1 matSmall">
-                    <mat-label>Discount Amount</mat-label>
-                    <input matInput autofocus name="discAmnt" id="discR" type="text" (keyup)="onDiscChange('amt')"
-                        [(ngModel)]="tempDisc" (keydown)="this.global.handleNumKeys($event);" />
-                </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-50 pe-1 matSmall">
+                        <mat-label>Discount Amount</mat-label>
+                        <input matInput autofocus name="discAmnt" id="discR" type="text" (keyup)="onDiscChange('amt')"
+                            [(ngModel)]="tempDisc" (keydown)="this.global.handleNumKeys($event);" />
+                    </mat-form-field>
 
-                <mat-form-field appearance="outline" class="w-50 matSmall">
-                    <mat-label>Discount %</mat-label>
-                    <input matInput autofocus name="discPerc" id="discP" type="text" (keyup)="onDiscChange('percent')"
-                        [(ngModel)]="DiscPercent" (keydown)="this.global.handleNumKeys($event);" />
+                    <mat-form-field appearance="outline" class="w-50 matSmall">
+                        <mat-label>Discount %</mat-label>
+                        <input matInput autofocus name="discPerc" id="discP" type="text"
+                            (keyup)="onDiscChange('percent')" [(ngModel)]="DiscPercent"
+                            (keydown)="this.global.handleNumKeys($event);" />
 
-                </mat-form-field>
+                    </mat-form-field>
 
-            </div>
+                </div>
 
-            <div class="modal-footer bg-mf-blue">
-                <button class="btnsave" data-bs-dismiss="modal" (click)="EnterDiscount(tempDisc)">Save</button>
-                <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
-            </div>
+                <div class="modal-footer bg-mf-blue">
+                    <button class="btnsave" data-bs-dismiss="modal" (click)="EnterDiscount(tempDisc)">Save</button>
+                    <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
+                </div>
 
             </form>
 

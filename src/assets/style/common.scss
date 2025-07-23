@@ -836,12 +836,12 @@ label {
 }
 
 .table-logix>thead {
-  border: 1px solid black;
+  border: 1px solid black !important;
 }
 
-/*********** Table Stripped *******/
 .table-logix>thead>tr {
-  border: 1px solid black;
+  border: 1px solid black !important;
+  
 }
 
 .table-logix>thead>tr>th {
@@ -849,8 +849,7 @@ label {
   /*color:#fff;*/
   font-weight: bold;
   text-align: center;
-  border: 1px solid #fff !important;
-
+  border: 1px solid #fff;
   padding: 10px;
   background-color: var(--app-primary);
   color: #fff !important;
@@ -863,16 +862,12 @@ label {
 }
 
 .table-logix>thead>th {
-  /*background-color:#D2101B;*/
-  /*color:#fff;*/
   font-weight: bold;
   text-align: center;
   border: 1px solid black;
 }
 
 .table-logix>thead>tr>td {
-  /*background-color:#D2101B;*/
-  /*color:#fff;*/
   text-align: left;
   border: 1px solid black;
 }

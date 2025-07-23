@@ -1,0 +1,27 @@
+<div class="p-3">
+    <div>
+        <form method="post">
+            <mat-label class="text-center">Enter Quantity</mat-label>
+            <div class="d-flex">
+
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-icon (click)="increment('add',prodQty.value)" matPrefix>add</mat-icon>
+
+                    <input class="prodQty text-center" [value]="tempQty" id="qty"
+                        (keydown)="this.global.handleNumKeys($event);changeQty($event);"
+                        (change)="changeQty($event);" type="text" min="0" matInput
+                        #prodQty />
+                    <mat-icon (click)="increment('minus',prodQty.value)" matSuffix>remove</mat-icon>
+                </mat-form-field>
+
+            </div>
+
+            <div class="text-center d-flex justify-content-between ">
+                <button class="btnsave" data-bs-dismiss="modal" (click)="closeDialog(tempQty);">Save</button>
+                <button type="button" class="btnclose" 
+                    (click)="closeDialog('')">Close</button>
+            </div>
+        </form>
+    </div>
+</div>
+

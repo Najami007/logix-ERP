@@ -18,7 +18,7 @@
         </div>
         <!--------------------- Company Detail Section  End------------------ -->
 
-        <div>
+        <div class="mt-2">
             <table class="table-logix2 fs-13">
                 <thead>
                     <tr>
@@ -102,7 +102,8 @@
                     <tr *ngFor="let item of myPrintTableData index as index" style="font-size: 12px !important;">
                         <td [colSpan]="discFeature ? '6' : '4'" class="text-start">
                             &nbsp;{{index +1}}. <b> {{item.productTitle}}</b> {{item.barcode}}
-                            <table class="table-garment-sale-2 w-100 " style="font-size: 12px !important;">
+                            <small>{{item.flavourTitle}}</small>
+                            <table class="table-garment-sale-2" >
                                 <tr>
                                     <td class="text-center" style="width:10% !important;">{{item.quantity
                                         |number:'1.0-2'}}</td>
@@ -151,7 +152,7 @@
 
                     <tr *ngFor="let item of myPrintTableData index as index" class="fs-12">
                         <td>{{index +1}}</td>
-                        <td class="text-start">{{item.productTitle}}</td>
+                        <td class="text-start">{{item.productTitle}} <small>{{item.flavourTitle}}</small></td>
                         <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
                         <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
                         <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
@@ -162,14 +163,15 @@
                             item.salePrice) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
 
                     </tr>
-                    <tr>
-                        <td colspan="2"></td>
-                        <td class="fw-bold">{{myQtyTotal | number:'1.0-2'}}</td>
-                        <td></td>
-                        <td colspan="2" *ngIf="discFeature"></td>
-                        <td></td>
-                    </tr>
+
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2" style="border:none !important; "></td>
+                        <td class="fw-bold" style="border: 1px solid black;">{{myQtyTotal | number:'1.0-2'}}</td>
+
+                    </tr>
+                </tfoot>
             </table>
 
 
@@ -207,8 +209,8 @@
                 <div style="width: 60%;">
                     <table class="w-100  text-uppercase">
                         <tbody>
-                            <tr class="text-end border border-dark" *ngIf="myPOSFee > 0">
-                                <th colspan="2">POS FEE</th>
+                            <tr class="text-end fw-bold" *ngIf="myPOSFee > 0">
+                                <td colspan="2">POS FEE</td>
                                 <td></td>
                                 <td colspan="2">{{myPOSFee | number:'1.0-2'}}</td>
                             </tr>
@@ -505,7 +507,7 @@
 
             <div class="d-flex justify-content-between">
 
-                  <div style="width: 60%;">
+                <div style="width: 60%;">
                     <table class="w-100  table-garment-sale-Urdu-Bottom fw-bold " dir="rtl">
                         <tbody>
                             <tr class="text-end border border-dark" *ngIf="myPOSFee > 0">
@@ -563,25 +565,27 @@
                                 <td class="text-start">{{myChange|number:'1.0-1'}}</td>
                             </tr>
 
-                               <tr style="text-align:right; " *ngIf="myCusBalance !== 0">
-                        <td></td>
-                        <td class="urdu fw-bold">سابقا بقایا</td>
-                        <td class="fw-bold text-start" *ngIf="myChange <= 0 && myInvType == 'S'">{{myCusBalance - ( -1 *
-                            myChange) | number:'1.0-1'}}
-                        <td *ngIf="myChange <= 0 && myInvType == 'SR'">{{myCusBalance + ( -1 * myChange) |
-                            number:'1.0-1'}}
-                        <td class="fw-bold text-start" *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
+                            <tr style="text-align:right; " *ngIf="myCusBalance !== 0">
+                                <td></td>
+                                <td class="urdu fw-bold">سابقا بقایا</td>
+                                <td class="fw-bold text-start" *ngIf="myChange <= 0 && myInvType == 'S'">{{myCusBalance
+                                    - ( -1 *
+                                    myChange) | number:'1.0-1'}}
+                                <td *ngIf="myChange <= 0 && myInvType == 'SR'">{{myCusBalance + ( -1 * myChange) |
+                                    number:'1.0-1'}}
+                                <td class="fw-bold text-start" *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}
+                                </td>
 
 
 
-                    </tr>
-                    <tr style="text-align:right;" *ngIf="myCusBalance !== 0">
-                        <td></td>
-                        <td class="urdu fw-bold">ٹوٹل بقایا</td>
-                        <td class="fw-bold text-start">{{myCusBalance | number:'1.0-1'}}</td>
+                            </tr>
+                            <tr style="text-align:right;" *ngIf="myCusBalance !== 0">
+                                <td></td>
+                                <td class="urdu fw-bold">ٹوٹل بقایا</td>
+                                <td class="fw-bold text-start">{{myCusBalance | number:'1.0-1'}}</td>
 
 
-                    </tr>
+                            </tr>
 
 
                         </tbody>
@@ -610,7 +614,7 @@
 
                 </div>
 
-              
+
 
             </div>
 

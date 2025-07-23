@@ -13,6 +13,7 @@ import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/add
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bill-print.component';
 import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-mehtod.component';
+import { EditQtyModalComponent } from './edit-qty-modal/edit-qty-modal.component';
 
 
 
@@ -63,7 +64,7 @@ export class GarmentSaleComponent implements OnInit {
     private http: HttpClient,
     private msg: NotificationService,
     public global: GlobalDataModule,
-    private dialogue: MatDialog,
+    private dialog: MatDialog,
     private app: AppComponent,
     private route: Router
   ) {
@@ -224,7 +225,7 @@ export class GarmentSaleComponent implements OnInit {
     setTimeout(() => {
       this.myParty.close()
     }, 200);
-    this.dialogue.open(AddpartyComponent, {
+    this.dialog.open(AddpartyComponent, {
       width: "50%"
     }).afterClosed().subscribe(value => {
       if (value == 'Update') {
@@ -273,6 +274,7 @@ export class GarmentSaleComponent implements OnInit {
               this.searchSpecialBarcode(barcode, qty);
               return;
             } else {
+
               if (BType == 'price') { qty = qty / parseFloat(Response[0].salePrice); }
               this.pushProdData(Response[0], qty);
             }
@@ -306,7 +308,7 @@ export class GarmentSaleComponent implements OnInit {
   }
 
   pushProdData(data: any, qty: any) {
-
+    console.log(data);
     /////// check already present in the table or not
     const targetBarcode = data.barcode2 || data.barcode;
     var condition = this.tableDataList.find(
@@ -324,25 +326,25 @@ export class GarmentSaleComponent implements OnInit {
       var discPerc = 0;
       var tmpBarcode = '';
 
-      if(data.barcode2){
+      if (data.barcode2) {
         tmpBarcode = data.barcode2;
-      }else{
+      } else {
         tmpBarcode = data.barcode;
       }
 
-      if(qty > 0){
-        tmpQuantity = qty * data.quantity ;
-      }else{
+      if (qty > 0) {
+        tmpQuantity = qty * data.quantity;
+      } else {
         tmpQuantity = data.quantity;
       }
 
-      if(this.discFeature && data.barcode2){
+      if (this.discFeature && data.barcode2) {
         discPerc = data.discInP;
-        discRupee = data.discInR /  tmpQuantity;
+        discRupee = data.discInR / tmpQuantity;
       }
-      if(this.discFeature && !data.barcode2){
+      if (this.discFeature && !data.barcode2) {
         discPerc = data.discPercentage
-        discRupee = data.discRupees ;
+        discRupee = data.discRupees;
       }
 
       this.tableDataList.push({
@@ -352,6 +354,7 @@ export class GarmentSaleComponent implements OnInit {
         productID: data.productID,
         productTitle: data.productTitle,
         barcode: tmpBarcode,
+        flavourTitle: data.flavourTitle,
         productImage: data.productImage,
         quantity: tmpQuantity,
         wohCP: data.costPrice,
@@ -366,7 +369,7 @@ export class GarmentSaleComponent implements OnInit {
         uomID: data.uomID,
         gst: this.gstFeature ? data.gst : 0,
         et: data.et,
-        packing: 1,
+        packing: data.packing,
         discInP: discPerc,
         discInR: discRupee,
         aq: data.aq,
@@ -728,66 +731,94 @@ export class GarmentSaleComponent implements OnInit {
     }
 
   }
-
-  handleUpdown(item: any, e: any, cls: string, index: any) {
-
+  handleUpdown(item: any, e: KeyboardEvent, cls: string, index: number): void {
     const container = $(".table-logix");
-    if (e.keyCode == 9) {
+    const key = e.keyCode;
+    const isShiftTab = e.shiftKey && key === 9;
+
+    // Tab key → Move focus to next row
+    if (key === 9 && !e.shiftKey) {
       this.rowFocused = index + 1;
+      return;
     }
 
-    if (e.shiftKey && e.keyCode == 9) {
-
+    // Shift+Tab key → Move focus to previous row
+    if (isShiftTab) {
       this.rowFocused = index - 1;
+      return;
     }
-    if (e.keyCode == 13) {
+
+    // Enter key → Focus the product search input
+    if (key === 13) {
       e.preventDefault();
-      $('#psearchProduct').trigger('select');
-      $('#psearchProduct').trigger('focus');
-    }
-
-    if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
-      // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
-    }
-    else {
-      e.preventDefault();
-    }
-
-    /////move down
-
-    if (e.keyCode === 40) {
-      if (this.tableDataList.length > 1) {
-        this.rowFocused = Math.min(this.rowFocused + 1, this.tableDataList.length - 1);
-        const clsName = cls + this.rowFocused;
-        this.global.scrollToRow(clsName, container);
-        e.preventDefault();
-        $(clsName).trigger('select');
-        $(clsName).trigger('focus');
-      }
-    }
-
-    //Move up
-    if (e.keyCode === 38) {
-      if (this.rowFocused > 0) {
-        this.rowFocused -= 1;
-        const clsName = cls + this.rowFocused;
-        this.global.scrollToRow(clsName, container);
-        e.preventDefault();
-        $(clsName).trigger('select');
-        $(clsName).trigger('focus');
+      if (item.packing > 1) {
+        this.editDiscProdQty(item);
       } else {
-        e.preventDefault();
-        $(".searchProduct").trigger('select');
-        $(".searchProduct").trigger('focus');
+        $('#psearchProduct').trigger('select').trigger('focus');
       }
-    }
-    ////removeing row
-    if (e.keyCode == 46) {
 
+      return;
+    }
+
+    // Delete key → Remove the row
+    if (key === 46) {
       this.delRow(item);
       this.rowFocused = 0;
+      return;
     }
 
+    // Arrow Down → Move to next row
+    if (key === 40) {
+      if (this.tableDataList.length > 1) {
+        this.rowFocused = Math.min(this.rowFocused + 1, this.tableDataList.length - 1);
+        const clsName = `.${cls}${this.rowFocused}`;
+        this.global.scrollToRow(clsName, container);
+        e.preventDefault();
+        $(clsName).trigger('select').trigger('focus');
+      }
+      return;
+    }
+
+    // Arrow Up → Move to previous row or focus search
+    if (key === 38) {
+      if (this.rowFocused > 0) {
+        this.rowFocused--;
+        const clsName = `.${cls}${this.rowFocused}`;
+        this.global.scrollToRow(clsName, container);
+        e.preventDefault();
+        $(clsName).trigger('select').trigger('focus');
+      } else {
+        e.preventDefault();
+        $(".searchProduct").trigger('select').trigger('focus');
+      }
+      return;
+    }
+
+    // Allowable keys (numbers, arrows, delete, tab, enter, etc.)
+    const allowedKeys = [
+      8, 9, 13, 16, 37, 38, 39, 40, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+      96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 110
+    ];
+
+    // Block any key not in allowedKeys
+    if (!allowedKeys.includes(key)) {
+      e.preventDefault();
+    }
+  }
+
+
+  editDiscProdQty(item: any) {
+    this.dialog.open(EditQtyModalComponent, {
+      width: '40%',
+      data: item
+    }).afterClosed().subscribe(value => {
+      if(Number(value) > 0){
+        var index = this.tableDataList.findIndex((e:any)=> e.barcode == item.barcode);
+        this.tableDataList[index].quantity = Number(value) * item.packing;
+        this.getTotal();
+
+      }
+    })
   }
 
 
@@ -952,33 +983,33 @@ export class GarmentSaleComponent implements OnInit {
   EditTotal(item: any) {
 
     // if(this.discFeature) return;
-  
-      Swal.fire({
-        title: "Enter Total Amount",
-        input: "text",
-        showCancelButton: true,
-        confirmButtonText: 'Save',
-        showLoaderOnConfirm: true,
-        preConfirm: (value) => {
 
-          if (!value || isNaN(value) || value <= 0) {
-            return Swal.showValidationMessage("Enter Valid Amount");
-          }
-          const index = this.tableDataList.indexOf(item);
-      
-          
-          this.tableDataList[index].quantity = value /  (this.tableDataList[index].salePrice - this.tableDataList[index].discInR);
-          this.getTotal();
+    Swal.fire({
+      title: "Enter Total Amount",
+      input: "text",
+      showCancelButton: true,
+      confirmButtonText: 'Save',
+      showLoaderOnConfirm: true,
+      preConfirm: (value) => {
+
+        if (!value || isNaN(value) || value <= 0) {
+          return Swal.showValidationMessage("Enter Valid Amount");
         }
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire({
-            title: "Price Updated",
-            timer: 200,
-          });
-        }
-      })
-    
+        const index = this.tableDataList.indexOf(item);
+
+
+        this.tableDataList[index].quantity = value / (this.tableDataList[index].salePrice - this.tableDataList[index].discInR);
+        this.getTotal();
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Price Updated",
+          timer: 200,
+        });
+      }
+    })
+
   }
 
 
@@ -1308,7 +1339,7 @@ export class GarmentSaleComponent implements OnInit {
           (Response: any) => {
             if (Response.msg == 'Password Matched Successfully') {
               $('#SavedBillModal').show();
-              this.dialogue.open(SaleBillDetailComponent, {
+              this.dialog.open(SaleBillDetailComponent, {
                 width: '50%',
                 data: item,
                 disableClose: true,
@@ -1376,7 +1407,7 @@ export class GarmentSaleComponent implements OnInit {
 
   changePayment(data: any) {
     $('#SavedBillModal').hide();
-    this.dialogue.open(PaymentMehtodComponent, {
+    this.dialog.open(PaymentMehtodComponent, {
       width: '30%',
       data: data
     }).afterClosed().subscribe(val => {

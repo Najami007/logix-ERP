@@ -116,6 +116,7 @@ import { ProductBarcodesComponent } from './product/product-barcodes/product-bar
 import { ProductInOutHistoryComponent } from './InventoryReports/product-in-out-history/product-in-out-history.component';
 import { CustomerIssueBillPrintComponent } from './CusotmerIssuance/customer-issue-bill-print/customer-issue-bill-print.component';
 import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
+import { EditQtyModalComponent } from './Sale/garment-sale/edit-qty-modal/edit-qty-modal.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -309,6 +310,7 @@ export const inventoryRoutes: Route[] = [
     ProductBarcodesComponent,
     ProductInOutHistoryComponent,
     CustomerIssueBillPrintComponent,
+    EditQtyModalComponent,
 
 
 

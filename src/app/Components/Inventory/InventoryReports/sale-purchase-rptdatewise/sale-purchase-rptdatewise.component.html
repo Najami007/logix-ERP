@@ -1,7 +1,7 @@
 <div class="container-fluid body ">
 
-   <div class=" p-2 mt-2">
-  
+    <div class=" p-2 mt-2">
+
         <div class="row ">
 
 
@@ -18,17 +18,17 @@
             <mat-form-field class="col-lg-2 matSmall" appearance="outline">
                 <mat-label>From Date</mat-label>
                 <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
-                <mat-datepicker-toggle matSuffix [for]="sDate" ></mat-datepicker-toggle>
+                <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
                 <mat-datepicker #sDate></mat-datepicker>
             </mat-form-field>
             <mat-form-field class="col-lg-2 matSmall" appearance="outline">
-                <mat-label>From Time</mat-label>       
-                <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+                <mat-label>From Time</mat-label>
+                <input matInput [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
                 <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
                 <ngx-material-timepicker #fTime></ngx-material-timepicker>
             </mat-form-field>
-    
-    
+
+
             <mat-form-field class="col-lg-2 matSmall" appearance="outline">
                 <mat-label>To Date</mat-label>
                 <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
@@ -37,262 +37,308 @@
             </mat-form-field>
             <mat-form-field class="col-lg-2 matSmall" appearance="outline">
                 <mat-label>To Time</mat-label>
-                    <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
-                    <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
-                    <ngx-material-timepicker #tTime></ngx-material-timepicker>
+                <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+                <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
+                <ngx-material-timepicker #tTime></ngx-material-timepicker>
             </mat-form-field>
-    
-        
-            <mat-form-field  class="col-lg-4 matSmall" appearance="outline">
+
+
+           <div class="col-lg-4 mt-1">
+             <mat-form-field class="w-100 matSmall" appearance="outline">
                 <mat-label>Reports</mat-label>
-                <mat-select [(ngModel)]="tmpRptType" >
+                <mat-select [(ngModel)]="tmpRptType">
                     <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
                             [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                     <mat-option *ngFor="let item of reportsList | filter:rptSearch.value"
                         [value]="item.invType">{{item.invTypeTitle}}</mat-option>
                 </mat-select>
             </mat-form-field>
-              <mat-form-field appearance="outline" class="col-md-2 matSmall" >
-                <mat-label>Formate</mat-label>
-                <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
-                    
-                    <mat-option [value]="1">Summary</mat-option>
-                     <mat-option [value]="2">Detail</mat-option>
-                      <mat-option  *ngIf="FBRFeature" [value]="3">Tax Detail</mat-option>
+           </div>
+           <div class="col-md-2 mt-1">
+             <mat-form-field appearance="outline" class="w-100 matSmall">
+                <mat-label>Location</mat-label>
+                <mat-select [(ngModel)]="locationID" (selectionChange)="reset()">
+                    <mat-option [value]="0">All</mat-option>
+                    <mat-option *ngFor="let item of locationList"
+                        [value]="item.locationID">{{item.locationTitle}}</mat-option>
+
                 </mat-select>
             </mat-form-field>
-            <div class="col-lg-6 pb-2" *ngIf="crudList.r">
+           </div>
+           <div class="col-md-2 mt-1">
+             <mat-form-field appearance="outline" class="w-100 matSmall">
+                <mat-label>Formate</mat-label>
+                <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
+
+                    <mat-option [value]="1">Summary</mat-option>
+                    <mat-option [value]="2">Detail</mat-option>
+                    <mat-option *ngIf="FBRFeature" [value]="3">Tax Detail</mat-option>
+                </mat-select>
+            </mat-form-field>
+           </div>
+
+            <div class="col-lg-4" *ngIf="crudList.r">
                 <!-- <button class="btn-rpt-success col-lg-2  me-1" (click)="getReport('summary')">Summary</button>
                 <button class="btn-rpt-success col-lg-2  me-1" *ngIf="FBRFeature" (click)="getReport('taxSummary')">Tax Rpt</button> -->
-                <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('')">Get Report</button>
-                <button class="btn-rpt-primary col-lg-2 me-1" (click)="print()">Print</button>
+                <button class="btn-rpt-success col-lg-3 me-1" (click)="getReport('')">Get Report</button>
+                <button class="btn-rpt-primary col-lg-3 me-1" (click)="print()">Print</button>
                 <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
                 <!-- <button style="width: 60px;font-size: 20px;" class="btn-rpt-primary" (click)="global.ExportHTMLTabletoExcel('PrintDiv','Summary')"><i class="bi bi-filetype-xlsx"></i></button> -->
             </div>
         </div>
-    
 
-    <div id="PrintDiv">
 
-        <!-------------------------    Top Logo Section -------------------->
+        <div id="PrintDiv">
 
-        <div class="hide">
-            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
-                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
-                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
-                        [width]="item.logo1Width">
-                </span>
-                <div class="d-flex flex-column">
-                    <span class="companyName">{{item.companyName}}</span>
+            <!-------------------------    Top Logo Section -------------------->
 
-                    <span class="rptTitle" >{{reportType}}</span>
-                    <span  > <b *ngIf="userName != ''">User: {{userName}}</b></span>
-                    <span ><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
-                        {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
+            <div class="hide">
+                <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                    <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset=""
+                            [height]="item.logo1Height" [width]="item.logo1Width">
+                    </span>
+                    <div class="d-flex flex-column">
+                        <span class="companyName">{{item.companyName}}</span>
+
+                        <span class="rptTitle">{{reportType}}</span>
+                        <span> <b *ngIf="userName != ''">User: {{userName}}</b></span>
+                        <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                            {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
+
+
+                    </div>
+                    <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                            height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                    </span>
 
 
                 </div>
-                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
-                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
-                        height="{{item.logo2Height}}" width="{{item.logo2Width}}">
-                </span>
-
-
             </div>
-        </div>
-
-    
-
-        <table class="table-logix" id="summaryTable" *ngIf="formateType == 1">
-            <thead>
-                <tr>
-                    <th>S#</th>
-                    <th>Bill #</th>
-                    <th>Date</th>
-                    <th *ngIf="rptType == 'I' || rptType == 'R'|| rptType == 'S' || rptType == 'SR'">Type</th>
-                    <!-- <th>Location</th> -->
-                    <th *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'">Party</th>
-                    <th *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'">Booker</th>
-                    <th style="width: 120px;">Total</th>
-                    <th *ngIf="(rptType == 'S' || rptType == 'SR') && DiscFeature">Offer Disc</th>
-                    <th *ngIf="rptType == 'S' || rptType == 'SR'">Disc</th>
-                    <th *ngIf="rptType == 'S' || rptType == 'SR'">Net Total</th>
-                    <th>Entered By</th>
-                    <th>Remarks</th>
-
-                </tr>
-
-
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of SaleDetailList index as index">
-                    <td class="text-center">{{index + 1}}</td>
-                    <td class="text-center cursorPointer" (click)="printBill(item)">{{item.invBillNo}}</td>
-                    <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
-                    <td  *ngIf="rptType == 'I' || rptType == 'R'">{{item.issueType}}</td>
-                    <td  *ngIf="rptType == 'S' || rptType == 'SR'">{{item.paymentType}}</td>
-                    <!-- <td >{{item.locationTitle}}</td> -->
-                    <td *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'">{{item.partyName}}</td>
-                    <td *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'">{{item.bookerName }}</td>
-                    <td class="text-end">{{item.billTotal + item.overHeadAmount  |number:'1.0-0'}}</td>
-                    <td *ngIf="(rptType == 'S' || rptType == 'SR') && DiscFeature" class="text-end">{{item.percentageDiscount |number:'1.0-0'}}</td>
-                    <td  *ngIf="rptType == 'S' || rptType == 'SR'" class="text-end">{{item.billDiscount - item.percentageDiscount |number:'1.0-0'}}</td>
-                    <td  *ngIf="rptType == 'S' || rptType == 'SR'" class="text-end">{{item.netTotal  |number:'1.0-0'}}</td>
-                    <td>{{item.entryUser}}</td>
-                    <td>{{item.remarks}}</td>
-                </tr>
-                <tr>
-                    <td colspan="3"></td>
-                    
-                    <td *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'"></td>
-                    <td *ngIf="rptType == 'I' || rptType == 'R' || rptType == 'S' || rptType == 'SR'"></td>
-                    <td *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'"></td>
-                    <td class="fw-bold text-end">{{netGrandTotal |number:'1.0-0'}}</td>
-                    <td *ngIf="(rptType == 'S' || rptType == 'SR') && DiscFeature" class="fw-bold text-end">{{offerDiscTotal |number:'1.0-0'}}</td>
-                    <td *ngIf="rptType == 'S' || rptType == 'SR'" class="fw-bold text-end">{{discountTotal |number:'1.0-0'}}</td>
-                    <td *ngIf="rptType == 'S' || rptType == 'SR'" class="fw-bold text-end">{{summaryNetTotal |number:'1.0-0'}}</td>
-                    <td></td>
-                </tr>
-            </tbody>
-
-          
-        </table>
-
-        <table  class="table-logix" id="TaxsummaryTable" *ngIf="FBRFeature && formateType == 3">
-            <thead>
-                <tr>
-                    <th>S#</th>
-                    <th>Bill #</th>
-                    <th>Date</th>
-                    <th *ngIf="rptType == 'I' || rptType == 'R'|| rptType == 'S' || rptType == 'SR'">Type</th>
-                    <!-- <th>Location</th> -->
-                    <th *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'">Party</th>
-                    <th *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'">Booker</th>
-                    <th style="width: 120px;">Total</th>
-                    <th *ngIf="(rptType == 'S' || rptType == 'SR') && DiscFeature">Offer Disc</th>
-                    <th *ngIf="rptType == 'S' || rptType == 'SR'">Disc</th>
-                    <th *ngIf="rptType == 'S' || rptType == 'SR'">Net Total</th>
-                    <th>Tax</th>
-                    <th>FBR</th>
-                    <th>Entered By</th>
-                    <th>Remarks</th>
-
-                </tr>
-
-
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of SaleDetailList index as index">
-                    <td class="text-center">{{index + 1}}</td>
-                    <td class="text-center cursorPointer" (click)="printBill(item)">{{item.invBillNo}}</td>
-                    <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
-                    <td  *ngIf="rptType == 'I' || rptType == 'R'">{{item.issueType}}</td>
-                    <td  *ngIf="rptType == 'S' || rptType == 'SR'">{{item.paymentType}}</td>
-                    <!-- <td >{{item.locationTitle}}</td> -->
-                    <td *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'">{{item.partyName}}</td>
-                    <td *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'">{{item.bookerName }}</td>
-                    <td class="text-end">{{item.billTotal + item.overHeadAmount  |number:'1.0-0'}}</td>
-                    <td *ngIf="(rptType == 'S' || rptType == 'SR') && DiscFeature" class="text-end">{{item.percentageDiscount |number:'1.0-0'}}</td>
-                    <td  *ngIf="rptType == 'S' || rptType == 'SR'" class="text-end">{{item.billDiscount |number:'1.0-0'}}</td>
-                    <td  *ngIf="rptType == 'S' || rptType == 'SR'" class="text-end">{{item.netTotal  |number:'1.0-0'}}</td>
-                    <td class="text-end">{{item.gstAmount |number:'1.0-2'}}</td>
-                    <td>{{item.fbrInvoiceNo}} <mat-icon class="cursorPointer hide-in-print"  *ngIf="!item.fbrStatus" (click)="sendToFbr(item)">send</mat-icon></td>
-                    
-                    <td>{{item.entryUser}}</td>
-                    <td>{{item.remarks}}</td>
-                </tr>
-                <tr>
-                    <td colspan="3"></td>
-                    
-                    <td *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'"></td>
-                    <td *ngIf="rptType == 'I' || rptType == 'R' || rptType == 'S' || rptType == 'SR'"></td>
-                    <td *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'"></td>
-                    <td class="fw-bold text-end">{{netGrandTotal |number:'1.0-0'}}</td>
-                    <td *ngIf="(rptType == 'S' || rptType == 'SR') && DiscFeature" class="fw-bold text-end">{{offerDiscTotal |number:'1.0-0'}}</td>
-                    <td *ngIf="rptType == 'S' || rptType == 'SR'" class="fw-bold text-end">{{discountTotal |number:'1.0-0'}}</td>
-                    <td *ngIf="rptType == 'S' || rptType == 'SR'" class="fw-bold text-end">{{summaryNetTotal |number:'1.0-0'}}</td>
-                    <td class="text-end fw-bold">{{myTaxTotal |number:'1.0-2'}}</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tbody>
-
-          
-        </table>
 
 
 
-        <table class="table-logix" id="detailTable" *ngIf="formateType == 2">
-            <thead>
-                <tr>
-                    <th>S#</th>
-                    <th>Bill #</th>
-                    <th>Date</th>
-                    <!-- <th *ngIf="rptType == 's'">Table</th> -->
-                    <th>Title</th>
-                    <th>Qty</th>
-                    <th style="width: 120px;">Cost Price</th>
-                    <th style="width: 150px;">Avg Cost</th>
-                    <th style="width: 120px;">Sale Price</th>
-                    <th *ngIf="rptType == 'S' || rptType == 'SR'">Disc</th>
-                    <th *ngIf="rptType == 'S' || rptType == 'SR'">Disc %</th>
-                    <th>Total</th>
-                    <th *ngIf="rptType == 'S'">Profit</th>
-                    <th *ngIf="rptType == 'S'">Profit %</th>
+            <table class="table-logix" id="summaryTable" *ngIf="formateType == 1">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Bill #</th>
+                        <th>Date</th>
+                        <th *ngIf="rptType == 'I' || rptType == 'R'|| rptType == 'S' || rptType == 'SR'">Type</th>
+                        <!-- <th>Location</th> -->
+                        <th *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'">Party</th>
+                        <th *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'">Booker</th>
+                        <th style="width: 120px;">Total</th>
+                        <th *ngIf="(rptType == 'S' || rptType == 'SR') && DiscFeature">Offer Disc</th>
+                        <th *ngIf="rptType == 'S' || rptType == 'SR'">Disc</th>
+                        <th *ngIf="rptType == 'S' || rptType == 'SR'">Net Total</th>
+                        <th>Entered By</th>
+                        <th>Remarks</th>
 
-                </tr>
+                    </tr>
 
 
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of SaleDetailList index as index">
-                    <td class="text-center">{{index + 1}}</td>
-                    <td class="text-center">{{item.invBillNo}}</td>
-                    <td >{{item.invDate | date:'dd-MM-yyyy'}}  ({{item.createdOn | date:'hh:mm:a'}})</td>
-                    <!-- <td *ngIf="rptType == 's'">{{item.tableTitle}}</td> -->
-                    <td>{{item.productTitle}}</td>
-                    <td class="text-center">{{item.quantity |number:"1.0-3"}}</td>
-                    <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
-                    <td class="text-end">{{item.avgCostPrice |number:'1.0-1'}}</td>
-                    <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
-                    <td class="text-end" *ngIf="rptType == 'S' || rptType == 'SR'">{{item.discInR * item.quantity  |number:'1.0-1'}}</td>
-                    <td class="text-end" *ngIf="rptType == 'S' || rptType == 'SR'">{{item.discInP |number:'1.0-1'}}%</td>
-                    <td class="text-end" *ngIf="rptType == 'S' || rptType == 'SR'">{{(item.salePrice * item.quantity) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
-                    <!-- <td class="text-end" *ngIf="rptType != 's' && rptType != 'sr'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td> -->
-                    <td class="text-end" *ngIf="rptType == 'P' || rptType == 'PR'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td>
-                    <td class="text-end" *ngIf="rptType == 'I' || rptType == 'R'|| rptType == 'AI'|| rptType == 'AO'|| rptType == 'DL'|| rptType == 'E'|| rptType == 'OS'">{{item.avgCostPrice * item.quantity |number:'1.0-1'}}</td>
-                    <td class="text-end" *ngIf="rptType == 'S'">{{((item.salePrice - item.discInR) * item.quantity)  - (item.avgCostPrice * item.quantity) |number:'1.0-1'}}</td>
-                    <td class="text-end" *ngIf="rptType == 'S'">{{(((item.salePrice - item.discInR) * item.quantity) - (item.avgCostPrice * item.quantity)) / (item.salePrice * item.quantity) |percent:'1.0-1'}}</td>
-                  
-                </tr>
-                <tr>
-                    <td colspan="2"></td>
-                    <td *ngIf="rptType == 'S'"></td>
-                    <td></td>
-                    <td *ngIf="rptType != 'S'"></td>
-                    <td class="fw-bold text-center">{{qtyTotal  |number:'1.0-0'}}</td>
-                    <td class="fw-bold text-end">{{costPriceTotal|number:'1.0-0'}}</td>                    
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of SaleDetailList index as index">
+                        <td class="text-center">{{index + 1}}</td>
+                        <td class="text-center cursorPointer" (click)="printBill(item)">{{item.invBillNo}}</td>
+                        <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
+                        <td *ngIf="rptType == 'I' || rptType == 'R'">{{item.issueType}}</td>
+                        <td *ngIf="rptType == 'S' || rptType == 'SR'">{{item.paymentType}}</td>
+                        <!-- <td >{{item.locationTitle}}</td> -->
+                        <td *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'">
+                            {{item.partyName}}</td>
+                        <td *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'">
+                            {{item.bookerName }}</td>
+                        <td class="text-end">{{item.billTotal + item.overHeadAmount |number:'1.0-0'}}</td>
+                        <td *ngIf="(rptType == 'S' || rptType == 'SR') && DiscFeature" class="text-end">
+                            {{item.percentageDiscount |number:'1.0-0'}}</td>
+                        <td *ngIf="rptType == 'S' || rptType == 'SR'" class="text-end">{{item.billDiscount -
+                            item.percentageDiscount |number:'1.0-0'}}</td>
+                        <td *ngIf="rptType == 'S' || rptType == 'SR'" class="text-end">{{item.netTotal |number:'1.0-0'}}
+                        </td>
+                        <td>{{item.entryUser}}</td>
+                        <td>{{item.remarks}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+
+                        <td *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'"></td>
+                        <td *ngIf="rptType == 'I' || rptType == 'R' || rptType == 'S' || rptType == 'SR'"></td>
+                        <td *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'"></td>
+                        <td class="fw-bold text-end">{{netGrandTotal |number:'1.0-0'}}</td>
+                        <td *ngIf="(rptType == 'S' || rptType == 'SR') && DiscFeature" class="fw-bold text-end">
+                            {{offerDiscTotal |number:'1.0-0'}}</td>
+                        <td *ngIf="rptType == 'S' || rptType == 'SR'" class="fw-bold text-end">{{discountTotal
+                            |number:'1.0-0'}}</td>
+                        <td *ngIf="rptType == 'S' || rptType == 'SR'" class="fw-bold text-end">{{summaryNetTotal
+                            |number:'1.0-0'}}</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+
+
+            </table>
+
+            <table class="table-logix" id="TaxsummaryTable" *ngIf="FBRFeature && formateType == 3">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Bill #</th>
+                        <th>Date</th>
+                        <th *ngIf="rptType == 'I' || rptType == 'R'|| rptType == 'S' || rptType == 'SR'">Type</th>
+                        <!-- <th>Location</th> -->
+                        <th *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'">Party</th>
+                        <th *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'">Booker</th>
+                        <th style="width: 120px;">Total</th>
+                        <th *ngIf="(rptType == 'S' || rptType == 'SR') && DiscFeature">Offer Disc</th>
+                        <th *ngIf="rptType == 'S' || rptType == 'SR'">Disc</th>
+                        <th *ngIf="rptType == 'S' || rptType == 'SR'">Net Total</th>
+                        <th>Tax</th>
+                        <th>FBR</th>
+                        <th>Entered By</th>
+                        <th>Remarks</th>
+
+                    </tr>
+
+
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of SaleDetailList index as index">
+                        <td class="text-center">{{index + 1}}</td>
+                        <td class="text-center cursorPointer" (click)="printBill(item)">{{item.invBillNo}}</td>
+                        <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
+                        <td *ngIf="rptType == 'I' || rptType == 'R'">{{item.issueType}}</td>
+                        <td *ngIf="rptType == 'S' || rptType == 'SR'">{{item.paymentType}}</td>
+                        <!-- <td >{{item.locationTitle}}</td> -->
+                        <td *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'">
+                            {{item.partyName}}</td>
+                        <td *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'">
+                            {{item.bookerName }}</td>
+                        <td class="text-end">{{item.billTotal + item.overHeadAmount |number:'1.0-0'}}</td>
+                        <td *ngIf="(rptType == 'S' || rptType == 'SR') && DiscFeature" class="text-end">
+                            {{item.percentageDiscount |number:'1.0-0'}}</td>
+                        <td *ngIf="rptType == 'S' || rptType == 'SR'" class="text-end">{{item.billDiscount
+                            |number:'1.0-0'}}</td>
+                        <td *ngIf="rptType == 'S' || rptType == 'SR'" class="text-end">{{item.netTotal |number:'1.0-0'}}
+                        </td>
+                        <td class="text-end">{{item.gstAmount |number:'1.0-2'}}</td>
+                        <td>{{item.fbrInvoiceNo}} <mat-icon class="cursorPointer hide-in-print" *ngIf="!item.fbrStatus"
+                                (click)="sendToFbr(item)">send</mat-icon></td>
+
+                        <td>{{item.entryUser}}</td>
+                        <td>{{item.remarks}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+
+                        <td *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'"></td>
+                        <td *ngIf="rptType == 'I' || rptType == 'R' || rptType == 'S' || rptType == 'SR'"></td>
+                        <td *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'"></td>
+                        <td class="fw-bold text-end">{{netGrandTotal |number:'1.0-0'}}</td>
+                        <td *ngIf="(rptType == 'S' || rptType == 'SR') && DiscFeature" class="fw-bold text-end">
+                            {{offerDiscTotal |number:'1.0-0'}}</td>
+                        <td *ngIf="rptType == 'S' || rptType == 'SR'" class="fw-bold text-end">{{discountTotal
+                            |number:'1.0-0'}}</td>
+                        <td *ngIf="rptType == 'S' || rptType == 'SR'" class="fw-bold text-end">{{summaryNetTotal
+                            |number:'1.0-0'}}</td>
+                        <td class="text-end fw-bold">{{myTaxTotal |number:'1.0-2'}}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+
+
+            </table>
+
+
+
+            <table class="table-logix" id="detailTable" *ngIf="formateType == 2">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Bill #</th>
+                        <th>Date</th>
+                        <!-- <th *ngIf="rptType == 's'">Table</th> -->
+                        <th>Title</th>
+                        <th>Qty</th>
+                        <th style="width: 120px;">Cost Price</th>
+                        <th style="width: 150px;">Avg Cost</th>
+                        <th style="width: 120px;">Sale Price</th>
+                        <th *ngIf="rptType == 'S' || rptType == 'SR'">Disc</th>
+                        <th *ngIf="rptType == 'S' || rptType == 'SR'">Disc %</th>
+                        <th>Total</th>
+                        <th *ngIf="rptType == 'S'">Profit</th>
+                        <th *ngIf="rptType == 'S'">Profit %</th>
+
+                    </tr>
+
+
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of SaleDetailList index as index">
+                        <td class="text-center">{{index + 1}}</td>
+                        <td class="text-center">{{item.invBillNo}}</td>
+                        <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
+                        <!-- <td *ngIf="rptType == 's'">{{item.tableTitle}}</td> -->
+                        <td>{{item.productTitle}}</td>
+                        <td class="text-center">{{item.quantity |number:"1.0-3"}}</td>
+                        <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
+                        <td class="text-end">{{item.avgCostPrice |number:'1.0-1'}}</td>
+                        <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
+                        <td class="text-end" *ngIf="rptType == 'S' || rptType == 'SR'">{{item.discInR * item.quantity
+                            |number:'1.0-1'}}</td>
+                        <td class="text-end" *ngIf="rptType == 'S' || rptType == 'SR'">{{item.discInP |number:'1.0-1'}}%
+                        </td>
+                        <td class="text-end" *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'IC' || rptType == 'RIC' ">{{(item.salePrice *
+                            item.quantity) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
+                        <!-- <td class="text-end" *ngIf="rptType != 's' && rptType != 'sr'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td> -->
+                        <td class="text-end" *ngIf="rptType == 'P' || rptType == 'PR'">{{item.costPrice * item.quantity
+                            |number:'1.0-1'}}</td>
+                        <td class="text-end"
+                            *ngIf="rptType == 'I' || rptType == 'R'|| rptType == 'AI'|| rptType == 'AO'|| rptType == 'DL'|| rptType == 'E'|| rptType == 'OS'">
+                            {{item.avgCostPrice * item.quantity |number:'1.0-1'}}</td>
+                        <td class="text-end" *ngIf="rptType == 'S'">{{((item.salePrice - item.discInR) * item.quantity)
+                            - (item.avgCostPrice * item.quantity) |number:'1.0-1'}}</td>
+                        <td class="text-end" *ngIf="rptType == 'S'">{{(((item.salePrice - item.discInR) * item.quantity)
+                            - (item.avgCostPrice * item.quantity)) / (item.salePrice * item.quantity) |percent:'1.0-1'}}
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td *ngIf="rptType == 'S'"></td>
+                        <td></td>
+                        <td *ngIf="rptType != 'S'"></td>
+                        <td class="fw-bold text-center">{{qtyTotal |number:'1.0-0'}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <!-- <td class="fw-bold text-end">{{costPriceTotal|number:'1.0-0'}}</td>                    
                     <td class="fw-bold text-end">{{avgCostTotal|number:'1.0-0'}}</td>
-                    <td class="fw-bold text-end">{{salePriceTotal|number:'1.0-0'}}</td>
-                    <td *ngIf="rptType == 'S' || rptType == 'SR'" class="fw-bold text-end">{{discountTotal |number:'1.0-0'}}</td>
-                    <td *ngIf="rptType == 'S' || rptType == 'SR'"></td>
-                    
-                    <td class="fw-bold text-end">{{detNetTotal |number:'1.0-0'}}</td>
-                    <td *ngIf="rptType == 'S'" class="fw-bold text-end">{{profitTotal |number:'1.0-0'}}</td>
-                    <td *ngIf="rptType == 'S'" class="fw-bold text-end">{{profitTotal / (detNetTotal)  * 100 |number:'1.0-2'}}%</td>
-                </tr>
-            </tbody>
-          
-        </table>
+                    <td class="fw-bold text-end">{{salePriceTotal|number:'1.0-0'}}</td> -->
+                        <td *ngIf="rptType == 'S' || rptType == 'SR'" class="fw-bold text-end">{{discountTotal
+                            |number:'1.0-0'}}</td>
+                        <td *ngIf="rptType == 'S' || rptType == 'SR'"></td>
+
+                        <td class="fw-bold text-end">{{detNetTotal |number:'1.0-0'}}</td>
+                        <td *ngIf="rptType == 'S'" class="fw-bold text-end">{{profitTotal |number:'1.0-0'}}</td>
+                        <td *ngIf="rptType == 'S'" class="fw-bold text-end">{{profitTotal / (detNetTotal) * 100
+                            |number:'1.0-2'}}%</td>
+                    </tr>
+                </tbody>
+
+            </table>
 
 
+        </div>
     </div>
-   </div>
 
 
 
 </div>
 
-<app-sale-bill-print  class="hide" id="print-Bill"> </app-sale-bill-print>
+<app-sale-bill-print class="hide" id="print-Bill"> </app-sale-bill-print>
 <app-purchase-bill-print class="hide" id="print-Bill"></app-purchase-bill-print>
-

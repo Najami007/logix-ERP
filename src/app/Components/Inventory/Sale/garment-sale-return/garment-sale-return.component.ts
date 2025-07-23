@@ -17,6 +17,7 @@ import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/add
 import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bill-print.component';
 import { ProductModalComponent } from '../SaleComFiles/product-modal/product-modal.component';
 import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-mehtod.component';
+import { EditQtyModalComponent } from '../garment-sale/edit-qty-modal/edit-qty-modal.component';
 
 @Component({
   selector: 'app-garment-sale-return',
@@ -60,7 +61,7 @@ export class GarmentSaleReturnComponent implements OnInit {
     private http: HttpClient,
     private msg: NotificationService,
     public global: GlobalDataModule,
-    private dialogue: MatDialog,
+    private dialog: MatDialog,
     private app: AppComponent,
     private route: Router
   ) {
@@ -213,7 +214,7 @@ export class GarmentSaleReturnComponent implements OnInit {
     setTimeout(() => {
       this.myParty.close()
     }, 200);
-    this.dialogue.open(AddpartyComponent, {
+    this.dialog.open(AddpartyComponent, {
       width: "50%"
     }).afterClosed().subscribe(value => {
       if (value == 'Update') {
@@ -235,7 +236,7 @@ export class GarmentSaleReturnComponent implements OnInit {
   searchByCode(e: any) {
 
     var barcode = this.PBarcode;
-    var qty: number = 1;
+    var qty: number = 0;
     var BType = '';
 
     if (this.PBarcode !== '') {
@@ -264,6 +265,7 @@ export class GarmentSaleReturnComponent implements OnInit {
               this.searchSpecialBarcode(barcode, qty);
               return;
             } else {
+              
               if (BType == 'price') { qty = qty / parseFloat(Response[0].salePrice); }
               this.pushProdData(Response[0], qty);
             }
@@ -278,8 +280,6 @@ export class GarmentSaleReturnComponent implements OnInit {
       }
     }
   }
-
-
 
   holdDataFunction(data: any) {
     this.global.getProdDetail(data.productID, '').subscribe(
@@ -298,19 +298,44 @@ export class GarmentSaleReturnComponent implements OnInit {
 
   }
 
-
   pushProdData(data: any, qty: any) {
-
     /////// check already present in the table or not
     const targetBarcode = data.barcode2 || data.barcode;
     var condition = this.tableDataList.find(
       (x: any) => x.productID == data.productID && x.barcode == targetBarcode
 
     );
-    var index = this.tableDataList.indexOf(condition);
 
+    var index = this.tableDataList.indexOf(condition);
     //// push the data using index
     if (condition == undefined) {
+
+
+      var tmpQuantity = 0;
+      var discRupee = 0;
+      var discPerc = 0;
+      var tmpBarcode = '';
+
+      if(data.barcode2){
+        tmpBarcode = data.barcode2;
+      }else{
+        tmpBarcode = data.barcode;
+      }
+
+      if(qty > 0){
+        tmpQuantity = qty * data.quantity ;
+      }else{
+        tmpQuantity = data.quantity;
+      }
+
+      if(this.discFeature && data.barcode2){
+        discPerc = data.discInP;
+        discRupee = data.discInR /  tmpQuantity;
+      }
+      if(this.discFeature && !data.barcode2){
+        discPerc = data.discPercentage
+        discRupee = data.discRupees ;
+      }
 
       this.tableDataList.push({
         rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
@@ -318,9 +343,10 @@ export class GarmentSaleReturnComponent implements OnInit {
             : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
         productID: data.productID,
         productTitle: data.productTitle,
-        barcode: data.barcode2 ? data.barcode2 : data.barcode,
+        barcode: tmpBarcode,
+        flavourTitle:data.flavourTitle,
         productImage: data.productImage,
-        quantity: qty > 0 ? qty * data.quantity : data.quantity,
+        quantity: tmpQuantity,
         wohCP: data.costPrice,
         avgCostPrice: data.avgCostPrice,
         costPrice: data.costPrice,
@@ -331,19 +357,19 @@ export class GarmentSaleReturnComponent implements OnInit {
         batchNo: '-',
         batchStatus: '-',
         uomID: data.uomID,
-        gst:0,
-        et: 0,
-        packing: 1,
-        discInP:0,
-        discInR:0,
+        gst: this.gstFeature ? data.gst : 0,
+        et: data.et,
+        packing: data.packing,
+        discInP: discPerc,
+        discInR: discRupee,
         aq: data.aq,
-        total: (data.salePrice * qty) - (data.discRupees * qty),
+        total: (data.salePrice * qty) - (discRupee * qty),
         productDetail: '',
 
       });
 
       //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
-      this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+      this.sortTableData();
       this.getTotal();
       this.productImage = data.productImage;
 
@@ -354,20 +380,17 @@ export class GarmentSaleReturnComponent implements OnInit {
       if (this.PBarcode.split("/")[1] != undefined) {
         qty = this.PBarcode.split("/")[1] / this.tableDataList[index].salePrice;
       }
-
-      //////////////// inserting quantity by multiplying packing qty to qty after 
       var newQty: any = Number(qty) > 0 ? Number(qty) * data.quantity : data.quantity;
       this.tableDataList[index].quantity = Number(this.tableDataList[index].quantity) + newQty;
 
       /////// Sorting Table
       this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
-      this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+      this.sortTableData();
       this.productImage = this.tableDataList[index].productImage;
       this.getTotal();
     }
 
   }
-
 
   searchSpecialBarcode(barcode: any, qty: any) {
 
@@ -423,10 +446,9 @@ export class GarmentSaleReturnComponent implements OnInit {
         );
         var index = this.tableDataList.indexOf(condition);
         if (condition == undefined) {
-
+          /////////// inserting data into tableDataList
           Response[0].salePrice = tmpPrice || Response[0].salePrice;
           this.pushProdData(Response[0], prodQty || 1)
-          /////////// inserting data into tableDataList
           // this.tableDataList.push({
           //   rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
           //     : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
@@ -472,7 +494,7 @@ export class GarmentSaleReturnComponent implements OnInit {
             this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + parseFloat(prodQty);
           }
           this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
-          this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+          this.sortTableData();
           this.productImage = this.tableDataList[index].productImage;
 
         }
@@ -485,6 +507,13 @@ export class GarmentSaleReturnComponent implements OnInit {
       }
     )
 
+
+  }
+
+  sortTableData() {
+    this.sortType == 'desc'
+      ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex)
+      : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
 
   }
 
@@ -692,65 +721,93 @@ export class GarmentSaleReturnComponent implements OnInit {
 
   }
 
-  handleUpdown(item: any, e: any, cls: string, index: any) {
-
+   handleUpdown(item: any, e: KeyboardEvent, cls: string, index: number): void {
     const container = $(".table-logix");
-    if (e.keyCode == 9) {
+    const key = e.keyCode;
+    const isShiftTab = e.shiftKey && key === 9;
+
+    // Tab key → Move focus to next row
+    if (key === 9 && !e.shiftKey) {
       this.rowFocused = index + 1;
+      return;
     }
 
-    if (e.shiftKey && e.keyCode == 9) {
-
+    // Shift+Tab key → Move focus to previous row
+    if (isShiftTab) {
       this.rowFocused = index - 1;
+      return;
     }
-    if (e.keyCode == 13) {
+
+    // Enter key → Focus the product search input
+    if (key === 13) {
       e.preventDefault();
-      $('#psearchProduct').trigger('select');
-      $('#psearchProduct').trigger('focus');
-    }
-
-    if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
-      // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
-    }
-    else {
-      e.preventDefault();
-    }
-
-    /////move down
-
-    if (e.keyCode === 40) {
-      if (this.tableDataList.length > 1) {
-        this.rowFocused = Math.min(this.rowFocused + 1, this.tableDataList.length - 1);
-        const clsName = cls + this.rowFocused;
-        this.global.scrollToRow(clsName, container);
-        e.preventDefault();
-        $(clsName).trigger('select');
-        $(clsName).trigger('focus');
-      }
-    }
-
-    //Move up
-    if (e.keyCode === 38) {
-      if (this.rowFocused > 0) {
-        this.rowFocused -= 1;
-        const clsName = cls + this.rowFocused;
-        this.global.scrollToRow(clsName, container);
-        e.preventDefault();
-        $(clsName).trigger('select');
-        $(clsName).trigger('focus');
+      if (item.packing > 1) {
+        this.editDiscProdQty(item);
       } else {
-        e.preventDefault();
-        $(".searchProduct").trigger('select');
-        $(".searchProduct").trigger('focus');
+        $('#psearchProduct').trigger('select').trigger('focus');
       }
-    }
-    ////removeing row
-    if (e.keyCode == 46) {
 
+      return;
+    }
+
+    // Delete key → Remove the row
+    if (key === 46) {
       this.delRow(item);
       this.rowFocused = 0;
+      return;
     }
 
+    // Arrow Down → Move to next row
+    if (key === 40) {
+      if (this.tableDataList.length > 1) {
+        this.rowFocused = Math.min(this.rowFocused + 1, this.tableDataList.length - 1);
+        const clsName = `.${cls}${this.rowFocused}`;
+        this.global.scrollToRow(clsName, container);
+        e.preventDefault();
+        $(clsName).trigger('select').trigger('focus');
+      }
+      return;
+    }
+
+    // Arrow Up → Move to previous row or focus search
+    if (key === 38) {
+      if (this.rowFocused > 0) {
+        this.rowFocused--;
+        const clsName = `.${cls}${this.rowFocused}`;
+        this.global.scrollToRow(clsName, container);
+        e.preventDefault();
+        $(clsName).trigger('select').trigger('focus');
+      } else {
+        e.preventDefault();
+        $(".searchProduct").trigger('select').trigger('focus');
+      }
+      return;
+    }
+
+    // Allowable keys (numbers, arrows, delete, tab, enter, etc.)
+    const allowedKeys = [
+      8, 9, 13, 16, 37, 38, 39, 40, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+      96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 110
+    ];
+
+    // Block any key not in allowedKeys
+    if (!allowedKeys.includes(key)) {
+      e.preventDefault();
+    }
+  }
+
+
+  editDiscProdQty(item: any) {
+    this.dialog.open(EditQtyModalComponent, {
+      width: '40%',
+      data: item
+    }).afterClosed().subscribe(value => {
+      if(Number(value) > 0){
+        var index = this.tableDataList.findIndex((e:any)=> e.barcode == item.barcode);
+        this.tableDataList[index].quantity = Number(value) * item.packing;
+        this.getTotal();
+      }
+    })
   }
 
   delRow(item: any) {
@@ -1271,7 +1328,7 @@ export class GarmentSaleReturnComponent implements OnInit {
           (Response: any) => {
             if (Response.msg == 'Password Matched Successfully') {
               $('#SavedBillModal').show();
-              this.dialogue.open(SaleBillDetailComponent, {
+              this.dialog.open(SaleBillDetailComponent, {
                 width: '50%',
                 data: item,
                 disableClose: true,
@@ -1428,7 +1485,7 @@ export class GarmentSaleReturnComponent implements OnInit {
 
   changePayment(data: any) {
     $('#SavedBillModal').hide();
-    this.dialogue.open(PaymentMehtodComponent, {
+    this.dialog.open(PaymentMehtodComponent, {
       width: '30%',
       data: data
     }).afterClosed().subscribe(val => {

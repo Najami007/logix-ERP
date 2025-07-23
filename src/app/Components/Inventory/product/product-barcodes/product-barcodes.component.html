@@ -1,6 +1,6 @@
 <div class="p-3" style="height: 64vh;overflow-y: auto;overflow-x: hidden !important;">
 
-    <h3 class="fw-bold text-uppercase">{{productDetail.productTitle}}  (Rs. {{productDetail.salePrice}})</h3>
+    <h3 class="fw-bold text-uppercase">{{productDetail.productTitle}} (Rs. {{productDetail.salePrice}})</h3>
 
     <div class="row">
         <mat-form-field appearance="outline" class="col-md-2 matSmall">
@@ -15,23 +15,27 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="col-md-2 matSmall">
-            <mat-label>quantity *</mat-label>
-            <input matInput id="quantity" (keydown)="global.handleNumKeys($event)" autocomplete="off" [(ngModel)]="quantity"
-                accesskey="false" type="text">
+            <mat-label>Quantity *</mat-label>
+            <input matInput id="quantity" (keydown)="global.handleNumKeys($event)" autocomplete="off"
+                [(ngModel)]="quantity" accesskey="false" type="text">
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="col-md-2 matSmall">
             <mat-label>Disc %</mat-label>
-            <input matInput id="discInP" [disabled]="!discFeature"  (keydown)="onDiscChange('perc');global.handleNumKeys($event)" (keyup)="onDiscChange('perc')"  autocomplete="off" [(ngModel)]="discInP" accesskey="false" type="text">
+            <input matInput id="discInP" [disabled]="!discFeature"
+                (keydown)="onDiscChange('perc');global.handleNumKeys($event)" (keyup)="onDiscChange('perc')"
+                autocomplete="off" [(ngModel)]="discInP" accesskey="false" type="text">
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="col-md-2 matSmall">
             <mat-label>Disc Amount</mat-label>
-            <input matInput id="discInR"  [disabled]="!discFeature"  autocomplete="off" (keydown)="onDiscChange('amount');global.handleNumKeys($event)" (keyup)="onDiscChange('amount')" [(ngModel)]="discInR" accesskey="false" type="text">
+            <input matInput id="discInR" [disabled]="!discFeature" autocomplete="off"
+                (keydown)="onDiscChange('amount');global.handleNumKeys($event)" (keyup)="onDiscChange('amount')"
+                [(ngModel)]="discInR" accesskey="false" type="text">
         </mat-form-field>
 
-        <div class="col-md-2">
-            <button #toggleBtn class="btnsave w-100"  accesskey="s" (click)="save() ">{{btnType}}</button>
+        <div class="col-md-2 mt-1">
+            <button #toggleBtn class="btnsave w-100" accesskey="s" (click)="save() ">{{btnType}}</button>
 
         </div>
 
@@ -62,7 +66,13 @@
                     <td>{{item.quantity }}</td>
                     <td>{{item.discInP }}</td>
                     <td>{{item.discInR }}</td>
-                    <td><mat-icon class="text-danger cursorPointer" (click)="deleteProductDisc(item)">delete</mat-icon>
+                    <td>
+                        <mat-icon class="text-success cursorPointer" matTooltip="Active / Inactive"
+                            [ngClass]="item.activeStatus ? 'text-success' :'text-danger'"
+                            (click)="activeDisc(item)">{{item.activeStatus ? 'check' : 'close'}}</mat-icon>
+                        <mat-icon class="text-danger cursorPointer" (click)="deleteProductDisc(item)">delete</mat-icon>
+
+
                     </td>
 
                 </tr>

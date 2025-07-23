@@ -47,11 +47,10 @@ export class JournelComponent {
 
   }
   ngOnInit(): void {
-    this.globalData.setHeaderTitle('Profit & Loss Report');
+    this.globalData.setHeaderTitle('Journel');
     this.globalData.getCompany();
 
     this.getProject()
-    $('#printDiv').hide();
   }
 
 

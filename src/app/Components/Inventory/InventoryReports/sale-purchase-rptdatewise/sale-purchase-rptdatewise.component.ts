@@ -48,12 +48,13 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     this.global.setHeaderTitle('Stock In Out Date wise');
     this.getUsers();
     this.getReportTypes();
+    this.getLocation();
 
   }
 
 
 
-formateType = 1;
+  formateType = 1;
   reportsList: any = []
   tmpRptType = 'S';
   rptType: any = 'S';
@@ -74,6 +75,13 @@ formateType = 1;
 
   getUsers() {
     this.global.getUserList().subscribe((data: any) => { this.userList = data; });
+  }
+  locationID = 0;
+  locationList: any = [];
+  getLocation() {
+    this.global.getWarehouseLocationList().subscribe((data: any) => {
+      this.locationList = data;
+    });
   }
 
 
@@ -138,9 +146,15 @@ formateType = 1;
 
             }
 
+            var DataList:any = [];
+            if(this.locationID > 0){
+                DataList = Response.filter((e:any)=> e.locationID == this.locationID);
+            }else{
+              DataList = Response;
+            }
 
             if (this.rptType == 'R') {
-              Response.forEach((e: any) => {
+              DataList.forEach((e: any) => {
                 if (e.issueType != 'Stock Transfer') {
                   this.SaleDetailList.push(e);
                 }
@@ -149,7 +163,7 @@ formateType = 1;
               )
               // this.SaleDetailList = Response.fil;
             } else {
-              this.SaleDetailList = Response;
+              this.SaleDetailList = DataList;
             }
 
 
@@ -192,8 +206,16 @@ formateType = 1;
             }
 
 
+              var DataList:any = [];
+            if(this.locationID > 0){
+                DataList = Response.filter((e:any)=> e.locationID == this.locationID);
+            }else{
+              DataList = Response;
+            }
+
+
             if (this.rptType == 'R') {
-              Response.forEach((e: any) => {
+              DataList.forEach((e: any) => {
                 if (e.issueType != 'Stock Transfer') {
                   this.SaleDetailList.push(e);
                 }
@@ -202,7 +224,7 @@ formateType = 1;
               )
               // this.SaleDetailList = Response.fil;
             } else {
-              this.SaleDetailList = Response;
+              this.SaleDetailList = DataList;
             }
 
 
@@ -247,8 +269,18 @@ formateType = 1;
 
             }
 
+
+            
+              var DataList:any = [];
+            if(this.locationID > 0){
+                DataList = Response.filter((e:any)=> e.locationID == this.locationID);
+            }else{
+              DataList = Response;
+            }
+
+
             if (this.rptType == 'R') {
-              Response.forEach((e: any) => {
+              DataList.forEach((e: any) => {
                 if (e.issueType != 'Stock Transfer') {
                   this.SaleDetailList.push(e);
                 }
@@ -257,13 +289,13 @@ formateType = 1;
               )
               // this.SaleDetailList = Response.fil;
             } else {
-              this.SaleDetailList = Response;
+              this.SaleDetailList = DataList;
             }
 
 
             this.SaleDetailList.forEach((e: any) => {
               this.qtyTotal += e.quantity;
-              if (this.rptType == 'S' || this.rptType == 'SR') {
+              if (this.rptType == 'S' || this.rptType == 'SR' || this.rptType == 'IC' || this.rptType == 'RIC') {
                 this.detNetTotal += (e.salePrice - e.discInR) * e.quantity;
                 this.profitTotal += ((e.salePrice - e.discInR) * e.quantity) - (e.avgCostPrice * e.quantity);
                 this.discountTotal += e.discInR * e.quantity;
@@ -336,7 +368,7 @@ formateType = 1;
     var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
     var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
 
-      var tableID = '';
+    var tableID = '';
 
     if (this.formateType == 1) tableID = 'summaryTable';
     if (this.formateType == 2) tableID = 'detailTable';
@@ -347,10 +379,10 @@ formateType = 1;
   }
 
 
-  reset(){
+  reset() {
 
     this.SaleDetailList = [];
-    this.netGrandTotal= 0;
+    this.netGrandTotal = 0;
     this.offerDiscTotal = 0;
     this.discountTotal = 0;
     this.summaryNetTotal = 0;

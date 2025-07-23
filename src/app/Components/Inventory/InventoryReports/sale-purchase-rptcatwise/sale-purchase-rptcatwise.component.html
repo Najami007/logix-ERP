@@ -43,7 +43,8 @@
             </mat-form-field>
 
 
-            <mat-form-field class="col-md-2 matSmall" appearance="outline">
+           <div class="col-md-2 mt-1">
+             <mat-form-field class="w-100 matSmall" appearance="outline">
                 <mat-label>Reports</mat-label>
                 <mat-select [(ngModel)]="tmpRptType">
                     <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
@@ -52,7 +53,9 @@
                         [value]="item.invType">{{item.invTypeTitle}}</mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="outline" class="col-md-2 matSmall">
+           </div>
+           <div class="col-md-2 mt-1">
+             <mat-form-field appearance="outline" class="w-100 matSmall">
                 <mat-label>Type</mat-label>
 
                 <mat-select [(ngModel)]="catType" name="catType">
@@ -62,8 +65,9 @@
                     <mat-option value="brand">Brandwise</mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="outline" class="col-md-2 matSmall"
-                *ngIf="catType == 'cat' || catType == 'subcat'">
+           </div>
+            <div class="col-md-2 mt-1" *ngIf="catType == 'cat' || catType == 'subcat'">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
                 <mat-label>Category</mat-label>
 
                 <mat-select [(ngModel)]="CategoryID" #category (selectionChange)="getSubCategory()" name="pCategory">
@@ -74,7 +78,9 @@
 
                 </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="outline" class="col-md-2 matSmall" *ngIf="catType == 'subcat'">
+            </div>
+           <div class="col-md-2 mt-1" *ngIf="catType == 'subcat'">
+             <mat-form-field appearance="outline" class="w-100 matSmall" >
                 <mat-label>Sub Category</mat-label>
 
                 <mat-select [(ngModel)]="SubCategoryID" #subCategory name="pSubCategory">
@@ -84,8 +90,10 @@
                         [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
                 </mat-select>
             </mat-form-field>
+           </div>
 
-            <mat-form-field appearance="outline" class="col-md-2 matSmall" *ngIf="catType == 'brand'">
+           <div class="col-md-2 mt-1" *ngIf="catType == 'brand'" >
+             <mat-form-field appearance="outline" class="w-100 matSmall"  >
                 <mat-label>Brand</mat-label>
                 <mat-select [(ngModel)]="BrandID" #brand>
                     <mat-option><ngx-mat-select-search #brandSearch [placeholderLabel]="'Search...'"
@@ -94,7 +102,9 @@
                         [value]="item.brandID">{{item.brandTitle}}</mat-option>
                 </mat-select>
             </mat-form-field>
-              <mat-form-field appearance="outline" class="col-md-2 matSmall" >
+           </div>
+             <div class="col-md-2 mt-1">
+                 <mat-form-field appearance="outline" class="w-100 matSmall" >
                 <mat-label>Formate</mat-label>
                 <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
                     
@@ -102,13 +112,14 @@
                      <mat-option [value]="2">Detail</mat-option>
                 </mat-select>
             </mat-form-field>
+             </div>
             
 
-            <div class="col-md-2" *ngIf="crudList.r">
+            <div class="col-md-4" *ngIf="crudList.r">
                 <!-- <button class="btn-rpt-success col-lg-3  me-1" (click)="getReport('summary')">Summary</button> -->
-                <button class="btn-rpt-success col-lg-3 me-1" (click)="getReport('detail')">Get Report</button>
-                <button class="btn-rpt-primary col-lg-3 " (click)="print()">Print</button>
-                <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
+                <button class="btn-rpt-success col-md-2 me-1" (click)="getReport('detail')">Get Report</button>
+                <button class="btn-rpt-primary col-md-2 " (click)="print()">Print</button>
+                <button mat-icon-button (click)="export()" class="col-md-3"> <i class="bi bi-filetype-xlsx"></i></button>
 
             </div>
         </div>
@@ -216,7 +227,7 @@
                         </td>
                         <td class="text-end" *ngIf="rptType == 'S' || rptType == 'SR'">{{item.discInP |number:'1.0-1'}}
                         </td>
-                        <td class="text-end" *ngIf="rptType == 'S' || rptType == 'SR'">{{(item.salePrice *
+                        <td class="text-end" *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'IC' || rptType == 'RIC'">{{(item.salePrice *
                             item.quantity) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
                         <!-- <td class="text-end" *ngIf="rptType != 's' && rptType != 'sr'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td> -->
                         <td class="text-end" *ngIf="rptType == 'P' || rptType == 'PR'">{{item.costPrice * item.quantity

@@ -138,6 +138,7 @@ export class ProductBarcodesComponent implements OnInit {
 
     var postData = {
       ProDiscID: item.proDiscID,
+      barcode:item.barcode,
       PinCode: '',
       UserID: this.global.getUserID()
     }
@@ -150,6 +151,45 @@ export class ProductBarcodesComponent implements OnInit {
         this.http.post(environment.mainApi + this.global.inventoryLink + 'DeleteProductDiscount', postData).subscribe(
           (Response: any) => {
             if (Response.msg == 'Data Deleted Successfully') {
+              this.msg.SuccessNotify(Response.msg);
+              this.reset();
+              this.getProductDiscList();
+            } else {
+              this.msg.WarnNotify(Response.msg);
+
+            }
+            $('.loaderDark').hide();
+          },
+          (Error: any) => {
+            console.log(Error);
+            $('.loaderDark').hide();
+
+          }
+        )
+       }
+      }
+    )
+
+  }
+
+
+  activeDisc(item:any){
+     var postData = {
+      ProDiscID: item.proDiscID,
+      barcode:item.barcode,
+      ActiveStatus: !item.activeStatus,
+      PinCode: '',
+      UserID: this.global.getUserID()
+    }
+
+    this.global.openPinCode().subscribe(
+      pin => {
+       if(pin != ''){
+         postData.PinCode = pin;
+        $('.loaderDark').show();
+        this.http.post(environment.mainApi + this.global.inventoryLink + 'ActiveProductDiscount', postData).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Data Updated Successfully') {
               this.msg.SuccessNotify(Response.msg);
               this.reset();
               this.getProductDiscList();

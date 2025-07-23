@@ -124,7 +124,7 @@
                     <th>Date</th>
                     <th>Title</th>
                     <th>Location</th>
-                    <th *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'P' || rptType == 'PR'">Party</th>
+                    <th *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'P' || rptType == 'PR' || rptType == 'IC'|| rptType == 'RIC'">Party</th>
                     <th *ngIf="rptType == 'I' || rptType == 'R'">Type</th>
                     <th>Qty</th>
                     <th>Cost</th>
@@ -146,7 +146,7 @@
                     <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
                     <td>{{item.productTitle}} <b *ngIf="item.barcode !== null">({{item.barcode}})</b></td>
                     <td>{{item.locationTitle }}</td>
-                    <td *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'P' || rptType == 'PR'">
+                    <td *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'P' || rptType == 'PR'|| rptType == 'IC'|| rptType == 'RIC'">
                         {{item.partyName}}</td>
                     <td *ngIf="rptType == 'I' || rptType == 'R'">{{item.issueType }}</td>
                     <td class="text-center">{{item.quantity |number:"1.0-3"}}</td>
@@ -159,7 +159,8 @@
                 </tr>
                   
                 <tr>
-                    <td colspan="6"></td>
+                    <td colspan="5"></td>
+                    <td *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'P' || rptType == 'PR'|| rptType == 'IC'|| rptType == 'RIC'"></td>
                     <td *ngIf="rptType == 'I' || rptType == 'R'"></td>
                     <td class="text-center fw-bold">{{QtyTotal |number:'1.0-3'}}</td>
                     <td></td>

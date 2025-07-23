@@ -8,6 +8,11 @@
         <p>{{lblInvoiceNo}}</p>
 
     </div>
+     <div class="d-flex ">
+        <p  class="pe-5 fw-bold">Date:</p>
+        <p>{{lblInvDate | date:'dd-MM-yyyy'}}</p>
+
+    </div>
     <div class="d-flex ">
         <p  class="pe-5 fw-bold">Project:</p>
         <p>{{lblProjectName}}</p>
@@ -36,7 +41,7 @@
                 <td>{{item.coaTitle}} ({{item.accountCode}})</td>
                 <td class="text-end">{{item.debit |number:'1.0-0'}}</td>
                 <td class="text-end">{{item.credit |number:'1.0-0'}}</td>
-                <td>{{item.invoiceRemarks}}</td>
+                <td>{{item.detailNarration}}</td>
             </tr>
             <tr>
                 <td></td>

@@ -48,6 +48,7 @@ lblRemarks = '';
 lblProjectName :any;
 projectID :any;
 lblInvoiceNo:any ='';
+lblInvDate:any = new Date();
 
 
 
@@ -78,6 +79,7 @@ getInvoiceDetail(invoiceNo:any){
       if(Response.length> 0){
         this.invoiceDetails = Response;
         this.lblRemarks = Response[0].invoiceRemarks;
+        this.lblInvDate = this.editData.invoiceDate;
        
         Response.forEach((e:any) => {
           this.lblDebitTotal += e.debit;

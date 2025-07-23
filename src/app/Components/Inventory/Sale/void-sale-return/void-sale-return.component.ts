@@ -403,14 +403,14 @@ export class VoidSaleReturnComponent implements OnInit {
 
   handleProdFocus(item: any, e: any, cls: any, endFocus: any, prodList: []) {
 
-    if (e.keyCode == 9 && !e.shiftKey) {
-      this.prodFocusedRow += 1;
+    // if (e.keyCode == 9 && !e.shiftKey) {
+    //   this.prodFocusedRow += 1;
 
-    }
-    if (e.shiftKey && e.keyCode == 9) {
-      this.prodFocusedRow -= 1;
+    // }
+    // if (e.shiftKey && e.keyCode == 9) {
+    //   this.prodFocusedRow -= 1;
 
-    }
+    // }
 
     /////move down
     if (e.keyCode == 40) {
@@ -854,6 +854,7 @@ export class VoidSaleReturnComponent implements OnInit {
             this.http.post(environment.mainApi + this.global.inventoryLink + 'AddSaleQuantity', {
               InvBillNo: this.invBillNo,
               ProductID: item.productID,
+              barcode:item.barcode,
               Quantity: qty - item.quantity,
 
               UserID: this.global.getUserID(),
@@ -878,6 +879,7 @@ export class VoidSaleReturnComponent implements OnInit {
               InvBillNo: this.invBillNo,
               ProductID: item.productID,
               ProductTitle: item.productTitle,
+              barcode:item.barcode,
               Quantity: item.quantity - qty,
               CostPrice: item.costPrice,
               AvgCostPrice: item.avgCostPrice,
@@ -994,6 +996,7 @@ export class VoidSaleReturnComponent implements OnInit {
       ProductID: item.productID,
       ProductTitle: item.productTitle,
       Quantity: item.quantity,
+      barcode:item.barcode,
       CostPrice: item.costPrice,
       AvgCostPrice: item.avgCostPrice,
       SalePrice: item.salePrice,

@@ -230,7 +230,7 @@ formateType =1;
 
               this.SaleDetailList.forEach((e: any) => {
                 this.qtyTotal += e.quantity;
-                if (this.rptType == 'S' || this.rptType == 'SR') {
+                if (this.rptType == 'S' || this.rptType == 'SR' || this.rptType == 'IC'  || this.rptType == 'RIC' ) {
                   this.detNetTotal += e.salePrice * e.quantity;
                   this.profitTotal += (e.salePrice * e.quantity) - (e.avgCostPrice * e.quantity);
                   // this.profitPercentTotal += (((e.salePrice * e.quantity) - (e.avgCostPrice * e.quantity)) / (e.salePrice * e.quantity));

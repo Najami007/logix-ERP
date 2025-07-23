@@ -984,6 +984,7 @@ export class PurchaseReturnComponent implements OnInit {
     this.holdBtnType = 'Hold';
     this.holdBillList = [];
     this.supplierDetail = [];
+    this.netTotal = 0;
 
 
 

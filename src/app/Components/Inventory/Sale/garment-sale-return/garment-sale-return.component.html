@@ -165,8 +165,8 @@
                             <tr *ngFor="let item of tableDataList index as index"
                                 [ngClass]="index == rowFocused ? 'bg-dg' : ''">
                                 <td class="text-center cursorPointer">{{index+1}}</td>
-                                <td>{{item.productTitle}} <b>({{item.barcode}})</b></td>
-                                <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
+                                <td>{{item.productTitle}} <b>({{item.barcode}})</b> <small> {{item.flavourTitle}}</small></td>
+                                <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0" [readonly]="item.packing > 1"
                                         (keydown)="handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item)"
                                         (keyup)="getTotal();showImg(item);changeValue(item)"
                                         (click)="rowFocused = index" [accessKey]="index +1 " class="qty{{index}} text-center"

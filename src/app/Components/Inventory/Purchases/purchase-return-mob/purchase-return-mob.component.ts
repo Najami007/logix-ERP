@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 import { AddpartyComponent } from '../../../Company/party/addparty/addparty.component';
 import { ProductModalComponent } from '../../Sale/SaleComFiles/product-modal/product-modal.component';
 import { PurchaseBillPrintComponent } from '../purchase-bill-print/purchase-bill-print.component';
+import { renderHidden } from 'highcharts/highcharts.src';
 
 @Component({
   selector: 'app-purchase-return-mob',
@@ -818,9 +819,9 @@ export class PurchaseReturnMobComponent implements OnInit {
     this.holdBtnType = 'Hold';
     this.holdBillList = [];
     this.supplierDetail = [];
+    this.netTotal = 0;
 
-
-
+    
   }
 
 
