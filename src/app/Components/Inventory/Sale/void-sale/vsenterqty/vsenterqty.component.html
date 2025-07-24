@@ -2,24 +2,32 @@
     <div>
         <form method="post">
             <mat-label class="text-center">Enter Quantity</mat-label>
-            <div class="d-flex">
+            <div class="row">
 
-                <mat-form-field appearance="outline" class="w-100 matSmall">
+                <mat-form-field appearance="outline" class="w-25 matSmall" *ngIf="tempPacking > 1">
+                    <mat-label>Packing</mat-label>
+                    <input [(ngModel)]="tempPacking" matInput [readonly]="true" id="packing" name="packing"  />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class=" matSmall" [ngClass]="tempPacking > 1 ? 'w-50' : 'w-100'">
                     <mat-icon (click)="increment('add',prodQty.value)" matPrefix>add</mat-icon>
 
-                    <input class="prodQty text-center" [value]="tempQty" id="qty"
-                        (keydown)="this.global.handleNumKeys($event);changeQty($event);"
-                        (change)="changeQty($event);" type="text" min="0" matInput
-                        #prodQty />
+                    <input class="prodQty text-center" [(ngModel)]="tempQty" id="qty" name="qty"
+                        (keydown)="this.global.handleNumKeys($event);changeQty($event);" (change)="changeQty($event);"
+                        type="text" min="0" matInput #prodQty />
                     <mat-icon (click)="increment('minus',prodQty.value)" matSuffix>remove</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="w-25 matSmall" *ngIf="tempPacking > 1">
+                    <mat-label>Total</mat-label>
+                    <input  [value]="tempPacking * tempQty" matInput [readonly]="true" id="total" name="total"  />
                 </mat-form-field>
 
             </div>
 
             <div class="text-center d-flex justify-content-between ">
                 <button class="btnsave" data-bs-dismiss="modal" (click)="closeDialog(tempQty);">Save</button>
-                <button type="button" class="btnclose" 
-                    (click)="closeDialog('')">Close</button>
+                <button type="button" class="btnclose" (click)="closeDialog('')">Close</button>
             </div>
         </form>
     </div>

@@ -771,7 +771,7 @@ export class GarmentSaleComponent implements OnInit {
     if (key === 40) {
       if (this.tableDataList.length > 1) {
         this.rowFocused = Math.min(this.rowFocused + 1, this.tableDataList.length - 1);
-        const clsName = `.${cls}${this.rowFocused}`;
+        const clsName = `${cls}${this.rowFocused}`;
         this.global.scrollToRow(clsName, container);
         e.preventDefault();
         $(clsName).trigger('select').trigger('focus');
@@ -783,7 +783,7 @@ export class GarmentSaleComponent implements OnInit {
     if (key === 38) {
       if (this.rowFocused > 0) {
         this.rowFocused--;
-        const clsName = `.${cls}${this.rowFocused}`;
+        const clsName = `${cls}${this.rowFocused}`;
         this.global.scrollToRow(clsName, container);
         e.preventDefault();
         $(clsName).trigger('select').trigger('focus');
@@ -808,8 +808,9 @@ export class GarmentSaleComponent implements OnInit {
 
 
   editDiscProdQty(item: any) {
+    if(item.packing <= 1) return;
     this.dialog.open(EditQtyModalComponent, {
-      width: '40%',
+      width: '30%',
       data: item
     }).afterClosed().subscribe(value => {
       if(Number(value) > 0){

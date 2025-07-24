@@ -141,8 +141,9 @@
             <tbody>
                 <tr *ngFor="let item of invDetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td class="text-center cursorPointer" (click)="printBill(item)"><u
-                            class="text-primary">{{item.invBillNo}}</u></td>
+                        <td class="text-center cursorPointer" (click)="printBill(item)">
+                            <span [ngClass]="item.invType == 'S' || item.invType == 'SR' || item.invType == 'P'|| item.invType == 'PR' ? 'text-primary' : '' ">{{item.invBillNo}}</span>
+                        </td>
                     <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
                     <td>{{item.productTitle}} <b *ngIf="item.barcode !== null">({{item.barcode}})</b></td>
                     <td>{{item.locationTitle }}</td>
@@ -198,8 +199,9 @@
             <tbody>
                 <tr *ngFor="let item of invDetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                    <td class="text-center cursorPointer" (click)="printBill(item)"><u
-                            class="text-primary">{{item.invBillNo}}</u></td>
+                        <td class="text-center cursorPointer" (click)="printBill(item)">
+                            <span [ngClass]="item.invType == 'S' || item.invType == 'SR' || item.invType == 'P'|| item.invType == 'PR' ? 'text-primary' : '' ">{{item.invBillNo}}</span>
+                        </td>
                     <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
                     <td>{{item.productTitle}} <b *ngIf="item.barcode !== null">({{item.barcode}})</b></td>
                     <td><span>{{item.locationTitle }}</span></td>

@@ -183,7 +183,7 @@
                                 <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0" [readonly]="item.packing > 1"
                                         (keydown)="handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item)"
                                         (keyup)="getTotal();showImg(item);changeValue(item)"
-                                        (click)="rowFocused = index" [accessKey]="index +1 " class="qty{{index}} text-center"
+                                        (click)="rowFocused = index;editDiscProdQty(item)" [accessKey]="index +1 " class="qty{{index}} text-center"
                                         style="width: 80px;"></td>
                                 <!-- <td class="text-center"><input type="text" [(ngModel)]="item.salePrice" min="0" draggable="false"
                                     (keydown)="changeValue(item);this.handleUpdown(item,$event,'.sp',index);"

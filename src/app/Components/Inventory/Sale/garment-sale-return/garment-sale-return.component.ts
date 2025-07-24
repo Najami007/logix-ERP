@@ -721,7 +721,7 @@ export class GarmentSaleReturnComponent implements OnInit {
 
   }
 
-   handleUpdown(item: any, e: KeyboardEvent, cls: string, index: number): void {
+  handleUpdown(item: any, e: KeyboardEvent, cls: string, index: number): void {
     const container = $(".table-logix");
     const key = e.keyCode;
     const isShiftTab = e.shiftKey && key === 9;
@@ -761,7 +761,7 @@ export class GarmentSaleReturnComponent implements OnInit {
     if (key === 40) {
       if (this.tableDataList.length > 1) {
         this.rowFocused = Math.min(this.rowFocused + 1, this.tableDataList.length - 1);
-        const clsName = `.${cls}${this.rowFocused}`;
+        const clsName = `${cls}${this.rowFocused}`;
         this.global.scrollToRow(clsName, container);
         e.preventDefault();
         $(clsName).trigger('select').trigger('focus');
@@ -773,7 +773,7 @@ export class GarmentSaleReturnComponent implements OnInit {
     if (key === 38) {
       if (this.rowFocused > 0) {
         this.rowFocused--;
-        const clsName = `.${cls}${this.rowFocused}`;
+        const clsName = `${cls}${this.rowFocused}`;
         this.global.scrollToRow(clsName, container);
         e.preventDefault();
         $(clsName).trigger('select').trigger('focus');
@@ -798,14 +798,16 @@ export class GarmentSaleReturnComponent implements OnInit {
 
 
   editDiscProdQty(item: any) {
+    if(item.packing <= 1) return;
     this.dialog.open(EditQtyModalComponent, {
-      width: '40%',
+      width: '30%',
       data: item
     }).afterClosed().subscribe(value => {
       if(Number(value) > 0){
         var index = this.tableDataList.findIndex((e:any)=> e.barcode == item.barcode);
         this.tableDataList[index].quantity = Number(value) * item.packing;
         this.getTotal();
+
       }
     })
   }

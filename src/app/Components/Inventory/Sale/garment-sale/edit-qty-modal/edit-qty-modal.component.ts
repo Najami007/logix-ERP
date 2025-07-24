@@ -21,6 +21,7 @@ export class EditQtyModalComponent {
     ){}
     ngOnInit(): void {
       this.tempQty = this.data.quantity / this.data.packing;
+       this.tempPacking = this.data.packing;
   
      setTimeout(() => {
        $('#qty').trigger('select');
@@ -32,6 +33,7 @@ export class EditQtyModalComponent {
   
     
     tempQty = 1;
+    tempPacking = 0;
   
   
   

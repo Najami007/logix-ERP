@@ -302,8 +302,9 @@ export class VoidSaleComponent implements OnInit {
               productID: e.productID,
               productTitle: e.productTitle,
               barcode: e.barcode,
+              flavourTitle: e.flavourTitle,
               productImage: e.productImage,
-              quantity: e.quantity,
+              quantity: e.quantity * e.packing,
               wohCP: e.costPrice,
               costPrice: e.costPrice,
               avgCostPrice: e.avgCostPrice,
@@ -314,14 +315,14 @@ export class VoidSaleComponent implements OnInit {
               batchNo: '-',
               batchStatus: '-',
               uomID: e.uomID,
-              packing: 1,
+              packing: e.packing,
               discInP: e.discInP,
-              discInR: e.discInR,
+              discInR: e.discInR / e.packing,
               aq: e.aq,
               autoInvDetID: e.autoInvDetID,
               gstAmount: e.gstAmount,
               gstValue: e.gstValue,
-              gst:  this.gstFeature ? e.gst : 0,
+              gst: this.gstFeature ? e.gst : 0,
 
             })
           });
@@ -342,7 +343,7 @@ export class VoidSaleComponent implements OnInit {
 
 
   getTotal() {
-     if (this.tableDataList.length == 0) return;
+    if (this.tableDataList.length == 0) return;
     this.qtyTotal = 0;
     this.subTotal = 0;
     this.netTotal = 0;
@@ -850,25 +851,27 @@ export class VoidSaleComponent implements OnInit {
     if (e.keyCode == 13 || e.button == 0) {
       //  $('#qtyModal').show();
       this.dialogue.open(VsenterqtyComponent, {
-        width: '20%',
-        data: item.quantity,
+        width: '30%',
+        data: item,
         disableClose: true,
         hasBackdrop: true,
       }).afterClosed().subscribe(qty => {
-        setTimeout(() => {
-          $('.qty' + this.rowFocused.toString()).trigger('focus');
-        }, 500);
+       
         if (qty != '') {
+
+          var updateQty = (Number(qty) * item.packing)
           /////////////////////////// checking whether quantity increase and trigger api
-          if (qty > item.quantity) {
-            this.http.post(environment.mainApi + this.global.inventoryLink + 'AddSaleQuantity', {
+          if (updateQty > item.quantity) {
+
+            var updatePostData = {
               InvBillNo: this.invBillNo,
               ProductID: item.productID,
-              barcode:item.barcode,
-              Quantity: qty - item.quantity,
+              barcode: item.barcode,
+              Quantity:  qty - (item.quantity / item.packing) ,
 
               UserID: this.global.getUserID(),
-            }).subscribe(
+            }
+            this.http.post(environment.mainApi + this.global.inventoryLink + 'AddSaleQuantity', updatePostData).subscribe(
               (Response: any) => {
                 if (Response.msg == 'Data Updated Successfully') {
                   this.getCurrentBill();
@@ -884,20 +887,22 @@ export class VoidSaleComponent implements OnInit {
           }
 
           /////////////////////////// checking whether quantity decrease and trigger void
-          if (qty < item.quantity) {
-            this.http.post(environment.mainApi + this.global.inventoryLink + 'VoidProduct', {
+          if (updateQty < item.quantity) {
+
+            var postData = {
               InvBillNo: this.invBillNo,
               ProductID: item.productID,
               ProductTitle: item.productTitle,
-              barcode:item.barcode,
-              Quantity: item.quantity - qty,
+              barcode: item.barcode,
+              Quantity:  (item.quantity / item.packing) - qty,
               CostPrice: item.costPrice,
               AvgCostPrice: item.avgCostPrice,
               SalePrice: item.salePrice,
               ReqRefNo: item.autoInvDetID,
 
               UserID: this.global.getUserID(),
-            }).subscribe(
+            }
+            this.http.post(environment.mainApi + this.global.inventoryLink + 'VoidProduct', postData).subscribe(
               (Response: any) => {
                 if (Response.msg == 'Data Saved Successfully') {
                   this.getCurrentBill();
@@ -913,6 +918,10 @@ export class VoidSaleComponent implements OnInit {
 
           }
         }
+
+         setTimeout(() => {
+          $('.qty' + this.rowFocused.toString()).trigger('focus');
+        }, 500);
       })
 
     }
@@ -1005,8 +1014,8 @@ export class VoidSaleComponent implements OnInit {
       InvBillNo: this.invBillNo,
       ProductID: item.productID,
       ProductTitle: item.productTitle,
-      barcode:item.barcode,
-      Quantity: item.quantity,
+      barcode: item.barcode,
+      Quantity: item.quantity / item.packing,
       CostPrice: item.costPrice,
       AvgCostPrice: item.avgCostPrice,
       SalePrice: item.salePrice,
@@ -1016,7 +1025,7 @@ export class VoidSaleComponent implements OnInit {
     }).subscribe(
       (Response: any) => {
         if (Response.msg == 'Data Saved Successfully') {
-          if(this.tableDataList.length == 1){
+          if (this.tableDataList.length == 1) {
             this.reset();
           }
           this.getCurrentBill();

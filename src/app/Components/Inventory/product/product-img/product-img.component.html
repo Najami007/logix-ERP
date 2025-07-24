@@ -3,7 +3,9 @@
     <!-- <div class="text-end pt-4 pe-4 cursorPointer">
         <button mat-icon-button (click)="closeDialog()"><mat-icon>close</mat-icon></button>
     </div> -->
-
+    <div class="text-end p-2">
+        <button mat-mini-fab class="bg-dark text-white" (click)="global.downloadBase64Image(productImage,'img')"><mat-icon>vertical_align_bottom</mat-icon></button>
+    </div>
     <div class="avatar-preview">
         <div  id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + productImage + ')' }"></div>
     </div>

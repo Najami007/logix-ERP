@@ -1798,4 +1798,15 @@ export class GlobalDataModule implements OnInit {
 
 
 
+  downloadBase64Image(base64Data, fileName) {
+  const link = document.createElement('a');
+  link.href = base64Data;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+
+
 }

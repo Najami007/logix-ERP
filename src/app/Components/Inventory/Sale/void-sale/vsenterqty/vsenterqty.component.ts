@@ -20,7 +20,8 @@ export class VsenterqtyComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data : any,
   ){}
   ngOnInit(): void {
-    this.tempQty = this.data;
+    this.tempQty = this.data.quantity / this.data.packing;
+    this.tempPacking = this.data.packing;
 
    setTimeout(() => {
      $('#qty').trigger('select');
@@ -32,6 +33,8 @@ export class VsenterqtyComponent implements OnInit {
 
   
   tempQty = 1;
+  tempPacking = 0;
+  
 
 
 

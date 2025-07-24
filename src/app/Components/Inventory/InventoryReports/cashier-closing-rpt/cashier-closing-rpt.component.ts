@@ -131,7 +131,7 @@ export class CashierClosingRptComponent implements OnInit {
           this.totalSaleReturn += e.saleReturn;
           this.totalServiceCharges += e.servicesCharges;
           this.totalCash += e.cashIn - e.cashOut;
-          this.totalBank += e.bank + e.bankReturn;
+          this.totalBank += e.bank - e.bankReturn;
           this.totalComplimentary += e.complimentary;
           this.totalDiscount += e.discount - e.discountReturn;
           this.totalHDCharges += e.hdCharges;
@@ -165,12 +165,12 @@ getBankDetail(date: any): void {
 
     for (const item of this.BankDetail) {
       if (summaryMap.has(item.coaID)) {
-        summaryMap.get(item.coaID)!.amount += item.amount;
+        summaryMap.get(item.coaID)!.amount += item.debit - item.credit;
       } else {
         summaryMap.set(item.coaID, {
           coaID: item.coaID,
           coaTitle: item.coaTitle,
-          amount: item.amount
+          amount: item.debit - item.credit
         });
       }
     }

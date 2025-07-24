@@ -63,7 +63,7 @@
                             <tr *ngFor="let item of tableDataList index as index"
                                 (click)="showImg(item);rowFocused = index;" [ngClass]="rowFocused == index ?'bg-dg':''">
                                 <td class="text-center">{{index +1}}</td>
-                                <td>{{item.productTitle}} <b>({{item.barcode}})</b></td>
+                                <td>{{item.productTitle}} <b>({{item.barcode}})</b> <small>{{item.flavourTitle}}</small></td>
 
                                 <td class="text-center"><input type="text" [readOnly]="true" [(ngModel)]="item.quantity"
                                         min="0" (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();"
@@ -178,7 +178,7 @@
                 </div>
                 <div class="mt-2 d-flex justify-content-between">
                     <div class="col-md-3 pe-2">
-                        <button class="btnduplicate" accesskey="u"
+                        <button class="btnduplicate w-100" accesskey="u"
                             (click)="openDuplicateModal()">D<u>u</u>plicate</button></div>
 
                   <div class="col-md-9">

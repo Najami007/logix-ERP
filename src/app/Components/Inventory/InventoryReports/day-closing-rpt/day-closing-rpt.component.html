@@ -81,7 +81,8 @@
                             <td class="text-center cursorPointer">
                                 <div class="d-flex flex-column">
                                      <span (click)="VoucherDetails(item)">{{item.invoiceNo}}</span>
-                                    <span (click)="printBill(item)">{{item.invBillNo}}</span>
+                                    <span (click)="printBill(item)" [ngClass]="item.billDetails[0].InvType == 'S' || item.billDetails[0].InvType == 'SR' || item.billDetails[0].InvType == 'P'|| item.billDetails[0].InvType == 'PR' ? 'text-primary' : '' ">{{item.invBillNo}}</span>
+
                                 </div>
                                </td>
                             <td> {{item.invoiceDate | date:'dd-MM-yyyy'}} {{item.createdOn | date:'hh:mm:s a'}}</td>
