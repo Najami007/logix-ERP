@@ -43,7 +43,7 @@
             </mat-form-field>
 
 
-           <div class="col-lg-4 mt-1">
+           <div class="col-lg-4 ">
              <mat-form-field class="w-100 matSmall" appearance="outline">
                 <mat-label>Reports</mat-label>
                 <mat-select [(ngModel)]="tmpRptType">
@@ -54,7 +54,7 @@
                 </mat-select>
             </mat-form-field>
            </div>
-           <div class="col-md-2 mt-1">
+           <div class="col-md-2">
              <mat-form-field appearance="outline" class="w-100 matSmall">
                 <mat-label>Location</mat-label>
                 <mat-select [(ngModel)]="locationID" (selectionChange)="reset()">
@@ -65,7 +65,7 @@
                 </mat-select>
             </mat-form-field>
            </div>
-           <div class="col-md-2 mt-1">
+           <div class="col-md-2">
              <mat-form-field appearance="outline" class="w-100 matSmall">
                 <mat-label>Formate</mat-label>
                 <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
@@ -77,12 +77,12 @@
             </mat-form-field>
            </div>
 
-            <div class="col-lg-4" *ngIf="crudList.r">
+            <div class="col-lg-4 row" *ngIf="crudList.r">
                 <!-- <button class="btn-rpt-success col-lg-2  me-1" (click)="getReport('summary')">Summary</button>
                 <button class="btn-rpt-success col-lg-2  me-1" *ngIf="FBRFeature" (click)="getReport('taxSummary')">Tax Rpt</button> -->
-                <button class="btn-rpt-success col-lg-3 me-1" (click)="getReport('')">Get Report</button>
-                <button class="btn-rpt-primary col-lg-3 me-1" (click)="print()">Print</button>
-                <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
+                <div class="col-lg-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('')">Get Report</button></div>
+                <div class="col-lg-4 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
+                <div class="col-lg-4"><button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button></div>
                 <!-- <button style="width: 60px;font-size: 20px;" class="btn-rpt-primary" (click)="global.ExportHTMLTabletoExcel('PrintDiv','Summary')"><i class="bi bi-filetype-xlsx"></i></button> -->
             </div>
         </div>

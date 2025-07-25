@@ -6,7 +6,7 @@
 
             <!-------------------- Product Search Bar --------------->
 
-            <div class="col-lg-9  d-flex flex-column">
+            <div class="col-lg-10  d-flex flex-column">
                 <mat-label class="text-primary">Search Barcode / Product</mat-label>
                 <input type="text" #pbarcode [(ngModel)]="PBarcode"
                     (keydown)="searchByCode($event);this.changeFocus($event,'.prodRow')" id="searchProduct"
@@ -27,8 +27,8 @@
                     </mat-card>
                 </div>
             </div>
-            <div class="col-lg-3 text-start ms-1 pt-3 mt-1">
-                <button class="btnload w-50 " style="height: 40px;" (click)="ngOnInit()">Load</button>
+            <div class="col-lg-2 text-start ps-1 pt-3 mt-1">
+                <button class="btnload w-100 " style="height: 40px;" (click)="ngOnInit()">Load</button>
             </div>
 
         </div>

@@ -1,10 +1,10 @@
 <div class="body h-100 ">
 
-    <div class="d-flex">
-        <div class="col-lg-10 ps-1  pt-2">
+    <div class="d-flex flex-wrap w-100 ">
+        <div class="col-md-10 ps-1 pe-1  pt-2">
 
-            <div class="row">
-                <mat-form-field appearance="outline" *ngIf="!disableDateFeature" class="col-lg-2 matSmall">
+            <div class="row ">
+                <mat-form-field appearance="outline" *ngIf="!disableDateFeature" class="col-md-2 matSmall">
                     <mat-label>Invoice Date</mat-label>
                     <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
                         [matDatepicker]="voucherDate">
@@ -12,7 +12,7 @@
                     <mat-datepicker #voucherDate></mat-datepicker>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="col-lg-2 matSmall ">
+                <mat-form-field appearance="outline" class="col-md-2 matSmall ">
                     <mat-label>Purchaser</mat-label>
                     <mat-select [(ngModel)]="bookerID" name="location">
                         <mat-option><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
@@ -21,13 +21,13 @@
                             [value]="item.bookerID">{{item.bookerName}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="col-lg-2 matSmall">
+                <mat-form-field appearance="outline" class="col-md-2 matSmall">
                     <mat-label>Ref Inv No.</mat-label>
                     <input matInput [(ngModel)]="refInvNo" type="text" name="refInvNo">
                 </mat-form-field>
 
 
-                <mat-form-field appearance="outline" class="col-lg-2 matSmall">
+                <mat-form-field appearance="outline" class="col-md-2 matSmall">
                     <mat-label>Supplier</mat-label>
                     <mat-select [(ngModel)]="partyID" #supplier (selectionChange)="onPartySelected()" name="customer">
                         <mat-option><ngx-mat-select-search #partySearch [placeholderLabel]="'Search...'"
@@ -38,7 +38,7 @@
                     </mat-select>
                     <mat-icon class="cursorPointer" (click)="addParty()" matSuffix>add</mat-icon>
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="col-lg-2 matSmall">
+                <mat-form-field appearance="outline" class="col-md-2 matSmall">
                     <mat-label>Location</mat-label>
                     <mat-select [(ngModel)]="locationID" name="location">
                         <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
@@ -49,7 +49,7 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="matSmall"
-                    [ngClass]="disableDateFeature ? 'col-lg-4' :'col-lg-2'">
+                    [ngClass]="disableDateFeature ? 'col-md-4' :'col-md-2'">
                     <mat-label>Remarks</mat-label>
                     <textarea matInput rows="1" [(ngModel)]="invRemarks" type="text" name="remarks"></textarea>
                 </mat-form-field>
@@ -57,7 +57,7 @@
             </div>
             <!------------------- Product search Area -------->
             <div class="row prod">
-                <div class="col-lg-7 d-flex">
+                <div class="col-md-8 d-flex">
                     <input type="text" [(ngModel)]="PBarcode"
                         (keydown)="focusto('#ovhd',$event);changeFocus($event,'.prodRow');searchByCode($event);"
                         id="psearchProduct" class="searchProduct ps-2" placeholder="Scan Barcode (Alt + b)"
@@ -69,16 +69,16 @@
                 </div>
 
 
-                <div class="col-lg-5 row ">
+                <div class="col-md-4 row ">
 
-                   <div class="col-md-4 pe-1">
+                   <div class="col-md-4">
                      <button *ngIf="crudList.c" style="height: 50px;" class="w-100 btnhold"
                         matTooltip="Hold Bill" accesskey="h" (click)="SaveBill('hold')"><span
                             *ngIf="holdBtnType == 'Hold'"><u>H</u>old</span><span
                             *ngIf="holdBtnType == 'ReHold'">Re<u>H</u>old</span> </button>
                    </div>
 
-                  <div class="col-md-4 pe-1">
+                  <div class="col-md-4 ">
                       <button class="w-100 btnreset" accesskey="r"
                         (click)="global.openBootstrapModal('#holdModal',true)" style="height: 50px;"
                         matTooltip="Retrieve Bill"><u>R</u>etrieve</button>
@@ -99,8 +99,8 @@
 
         </div>
 
-        <div class="col-lg-2 p-2 d-flex justify-content-center ">
-            <mat-card class=" border border-primary  p-1" style="width: 140px;height: 140px;">
+        <div class="col-md-2 pb-1 pt-2 d-flex justify-content-end pe-1">
+            <mat-card class=" border border-primary  p-1" style="width: 100%;height: 140px;">
                 <div class="text-center " *ngIf="tableDataList != ''" accesskey="i"
                     (click)="this.global.showProductImage(this.productImage,0)">
                     <img [src]="productImage" alt="Img not Found" height="130px" width="130px">
@@ -112,12 +112,12 @@
     </div>
 
 
-    <div class="row w-100">
+    <div class="d-flex flex-wrap w-100">
 
-        <div class="col-lg-10 billArea">
+        <div class="col-md-10 billArea">
             <!-- ////////////////////////// Table Row////////////////// -->
 
-            <div class="ps-1"
+            <div class="ps-1 pe-1"
                 style="overflow-y: auto; max-height: 65vh;padding-bottom: 120px !important; overflow-x: auto;width: 100%;">
 
                 <table class="table-hover table-logix ">
@@ -250,8 +250,8 @@
 
 
 
-        <mat-card class="col-lg-2 h-100 p-2 totalArea"
-            style="background-color: rgb(9, 2, 69);min-height: 64vh !important; top: 2%;">
+        <div  class="col-md-2 h-100 totalArea pe-1" >
+            <mat-card class="p-2"  style="background-color: rgb(9, 2, 69);min-height: 64vh !important; top: 2%;">
 
             <div class="d-flex pb-2 flex-column border-bottom">
                 <div class=" pt-3   ">
@@ -284,6 +284,7 @@
                     (click)="SaveBill('purchase')"><u>S</u>ave</button>
             </div>
         </mat-card>
+        </div>
     </div>
 
 

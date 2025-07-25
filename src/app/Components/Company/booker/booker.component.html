@@ -1,10 +1,13 @@
 <div  class="row  container-fluid body">
 
-    <div class="col-lg-4 p-5 border-end border-dark  ">
-        <h2 class="border-bottom">Booker Detail's</h2>
+    <div class="col-lg-4 ps-4 pe-4 pt-3 border-end border-dark  ">
+        <div class="border-bottom">
+            <h2 >Booker Detail's</h2>
+        </div>
 
 
-        <mat-form-field class="w-100 matSmall" appearance="outline">
+      <div class="row mt-4">
+          <mat-form-field class="w-100 matSmall" appearance="outline">
             <mat-label>Booker Name</mat-label>
             <input matInput type="text" [(ngModel)]="bookerName" >
         </mat-form-field>
@@ -12,6 +15,7 @@
             <mat-label>Description</mat-label>
             <textarea matInput type="text" [(ngModel)]="BookerDescription" ></textarea>
         </mat-form-field>
+      </div>
 
 
       

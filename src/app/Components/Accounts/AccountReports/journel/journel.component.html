@@ -1,7 +1,7 @@
 <div class="bckgrnd body">
     <div class="container-fluid p-3">
 
-        <div class=" container-fluid ">
+        <div >
             <div class="row">
                 <mat-form-field class="col-lg-4 matSmall" appearance="outline">
                     <mat-label>Project </mat-label>
@@ -29,28 +29,28 @@
                 </mat-form-field>
 
 
-                <div class="col-lg-4" *ngIf="crudList.r">
+                <div class="col-lg-4 row pt-1" *ngIf="crudList.r">
                     <!-- <button class="btn-rpt-success w-25  me-1" (click)="getReport('project')">
                         ProjectWise
                     </button> -->
-                    <button class="btn-rpt-success w-25 me-1" (click)="getReport('all')">
+                   <div class="col-md-4 pe-1"> <button class="btn-rpt-success w-100" (click)="getReport('all')">
                         Get Report
-                    </button>
+                    </button></div>
                     <!-- <button class=" btn btn-primary w-25 btn-rpt me-2" (click)="getReport('R2','')" >
                             Summary 2
                         </button>    -->
 
-                    <button class=" btn-rpt-primary me-1" (click)="PrintTable()">
+                    <div class="col-md-4 pe-1"><button class=" btn-rpt-primary w-100" (click)="PrintTable()">
                         Print
-                    </button>
-                    <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
+                    </button></div>
+                    <div class=" col-lg-1 pe-1"><button class="w-100 btn-rpt-export" (click)="export()">Export</button></div>
                 </div>
             </div>
         </div>
 
         <hr>
         <!------------------- Table Area ---------------------- -->
-        <div id="printDiv" class="container printRpt p-3 pt-0">
+        <div id="printDiv" class="printRpt pt-0">
 
             <!------------------- Logo Section --------------------------------->
             <div class="hide">

@@ -1,10 +1,14 @@
 <div class="d-flex flex-wrap container-fluid body bg-light">
 
-    <div class="col-md-3 p-2 border-end border-dark ">
+    <div class="col-md-3 ps-2 pe-2 pt-2 border-end border-dark ">
 
-        <h2 class="border-bottom">Vehicle Detail's</h2>
+        <div class="border-bottom">
+            <h2 >Vehicle Detail's</h2>
+        </div>
 
-        <app-add-vehicle (saveEventEmitter)="getSavedData()"></app-add-vehicle>
+        <div class="mt-4">
+            <app-add-vehicle (saveEventEmitter)="getSavedData()"></app-add-vehicle>
+        </div>
 
     </div>
 

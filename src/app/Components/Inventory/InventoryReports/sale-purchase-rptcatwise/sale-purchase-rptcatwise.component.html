@@ -54,7 +54,7 @@
                 </mat-select>
             </mat-form-field>
            </div>
-           <div class="col-md-2 mt-1">
+           <div class="col-md-2">
              <mat-form-field appearance="outline" class="w-100 matSmall">
                 <mat-label>Type</mat-label>
 
@@ -66,7 +66,7 @@
                 </mat-select>
             </mat-form-field>
            </div>
-            <div class="col-md-2 mt-1" *ngIf="catType == 'cat' || catType == 'subcat'">
+            <div class="col-md-2" *ngIf="catType == 'cat' || catType == 'subcat'">
                 <mat-form-field appearance="outline" class="w-100 matSmall">
                 <mat-label>Category</mat-label>
 
@@ -79,7 +79,7 @@
                 </mat-select>
             </mat-form-field>
             </div>
-           <div class="col-md-2 mt-1" *ngIf="catType == 'subcat'">
+           <div class="col-md-2 " *ngIf="catType == 'subcat'">
              <mat-form-field appearance="outline" class="w-100 matSmall" >
                 <mat-label>Sub Category</mat-label>
 
@@ -92,7 +92,7 @@
             </mat-form-field>
            </div>
 
-           <div class="col-md-2 mt-1" *ngIf="catType == 'brand'" >
+           <div class="col-md-2 " *ngIf="catType == 'brand'" >
              <mat-form-field appearance="outline" class="w-100 matSmall"  >
                 <mat-label>Brand</mat-label>
                 <mat-select [(ngModel)]="BrandID" #brand>
@@ -103,7 +103,7 @@
                 </mat-select>
             </mat-form-field>
            </div>
-             <div class="col-md-2 mt-1">
+             <div class="col-md-2">
                  <mat-form-field appearance="outline" class="w-100 matSmall" >
                 <mat-label>Formate</mat-label>
                 <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
@@ -115,11 +115,12 @@
              </div>
             
 
-            <div class="col-md-4" *ngIf="crudList.r">
+            <div class="col-md-4 row" *ngIf="crudList.r">
                 <!-- <button class="btn-rpt-success col-lg-3  me-1" (click)="getReport('summary')">Summary</button> -->
-                <button class="btn-rpt-success col-md-2 me-1" (click)="getReport('detail')">Get Report</button>
-                <button class="btn-rpt-primary col-md-2 " (click)="print()">Print</button>
-                <button mat-icon-button (click)="export()" class="col-md-3"> <i class="bi bi-filetype-xlsx"></i></button>
+                          <div class="col-lg-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('detail')">Get Report</button></div>
+                <div class="col-lg-4 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
+                <div class="col-lg-4"><button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button></div>
+               
 
             </div>
         </div>

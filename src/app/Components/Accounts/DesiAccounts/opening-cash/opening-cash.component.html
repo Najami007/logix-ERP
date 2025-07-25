@@ -1,11 +1,17 @@
 <div class="body container">
 
     <div class="p-2 row justify-content-center">
-        <button type="button" mat-mini-fab class="btnadd" *ngIf="crudList.c" autofocus (click)="addPayment()"><mat-icon>add</mat-icon></button>
-        <mat-form-field appearance="outline" class="matSmall" [ngClass]="crudList.c == false ? 'col-lg-12' : 'col-lg-11' ">
+           <div class="col-md-2" *ngIf="crudList.c">
+            <button autofocus (click)="addPayment()" style="height: 42px;"
+                class="btnsave w-100">Add Opening</button>
+        </div>
+        <!-- <button type="button" mat-mini-fab class="btnadd" *ngIf="crudList.c" autofocus (click)="addPayment()"><mat-icon>add</mat-icon></button> -->
+        <div [ngClass]="crudList.c == false ? 'col-md-12' : 'col-md-10' ">
+            <mat-form-field appearance="outline" class="matSmall w-100" >
             <mat-label>Search....</mat-label>
             <input matInput #search  />
         </mat-form-field>
+        </div>
     </div>
 
     <div class="p-2">

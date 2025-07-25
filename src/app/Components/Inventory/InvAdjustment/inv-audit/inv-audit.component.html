@@ -8,11 +8,11 @@
 
 
 
-            <div class="ps-1 d-flex flex-wrap gap-1">
+            <div class="ps-1 d-flex flex-wrap">
 
                 <!-------------------- Product Search Bar --------------->
 
-                <div class="col-md-7  d-flex flex-column">
+                <div class="col-md-8  d-flex flex-column">
                     <mat-label class="text-primary">Search Barcode / Product</mat-label>
                     <input type="text" #pbarcode [(ngModel)]="PBarcode"
                         (keydown)="searchByCode($event);changeFocus($event,'.prodRow')" id="searchProduct"
@@ -33,12 +33,12 @@
                         </mat-card>
                     </div>
                 </div>
-                <div class="col-md-4 d-flex ">
-                    <div class="d-flex flex-column">
+                <div class="col-md-4 d-flex flex-wrap ps-2">
+                    <div class="d-flex flex-column ">
                         <mat-label class="text-primary">Quantity</mat-label>
                         <input type="text" [(ngModel)]="tmpQuantity"
                             (keydown)="onQtyinsert($event);global.handleNumKeys($event)"
-                            class="col-md-6 p-1 ps-2 mb-2 qtyInput" id="qtyInput" autofocus autocomplete="off"
+                            class="col-md-12 p-1 ps-2 mb-2 qtyInput" id="qtyInput" autofocus autocomplete="off"
                             accesskey="">
                     </div>
                     <mat-checkbox class="mt-4 col-md-4" [(ngModel)]="autoInsert">Auto Insert</mat-checkbox>
@@ -194,12 +194,12 @@
 
 
             <div class="mt-1 d-flex justify-content-around">
-                <button *ngIf="crudList.c" class="btnhold w-25" (click)="SaveBill('hold')">{{holdBtnType}}</button>
-                <button class="btnreset w-25" data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>
+                <div class="w-50 pe-1"><button *ngIf="crudList.c" class="btnhold w-100 " (click)="SaveBill('hold')">{{holdBtnType}}</button></div>
+                <div class="w-50"><button class="btnreset w-100" data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button></div>
 
             </div>
             <div class="mt-4 d-flex justify-content-around">
-                <button *ngIf="roleTypeID < 3" class="btnsave w-25"
+                <button *ngIf="roleTypeID < 3" class="btnsave w-100"
                     (click)="global.openBootstrapModal('#AuditStart',true)">Others</button>
             </div>
 

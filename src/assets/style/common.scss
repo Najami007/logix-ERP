@@ -30,6 +30,7 @@
   --grey-light: #8c8f8f;
   --light: #eff0eb;
   --orange: #f5b121;
+   --orange-light: #f9c659;
   --nha-orange: #1d6340;
   --darktone1: #9fa8a3;
   --sun-red: #d8705c;
@@ -841,7 +842,7 @@ label {
 
 .table-logix>thead>tr {
   border: 1px solid black !important;
-  
+
 }
 
 .table-logix>thead>tr>th {
@@ -849,10 +850,17 @@ label {
   /*color:#fff;*/
   font-weight: bold;
   text-align: center;
-  border: 1px solid #fff;
+  /* border: 1px solid #fff; */
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  border-right: 1px solid #fff;
   padding: 10px;
   background-color: var(--app-primary);
   color: #fff !important;
+}
+
+.table-logix>thead>tr>th:last-child {
+    border-right: 1px solid #000;
 }
 
 .stickyHeader {
@@ -900,10 +908,16 @@ label {
 
 .table-logix2>thead>tr>th {
   padding: 10px;
-  border: 1px solid #fff !important;
+ border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  border-right: 1px solid #fff;
   background-color: var(--app-primary);
   color: #fff !important;
 
+}
+
+.table-logix2>thead>tr>th:last-child {
+    border-right: 1px solid #000;
 }
 
 .table-logix2>tbody>tr>td {
@@ -1231,7 +1245,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .btnsave {
   min-width: 80px;
-  height: 40px;
+  min-height: 40px;
   background-color: var(--success);
   color: white;
   border-radius: 8px;
@@ -1385,6 +1399,26 @@ input[type="number"]::-webkit-inner-spin-button {
   &:focus {
     border: 1px solid var(--primary);
     background-color: var(--primary-light) !important;
+  }
+
+}
+
+.btn-rpt-export {
+  min-height: 44px !important;
+  min-width: 100px !important;
+  background-color: var(--orange);
+  color: var(--white);
+  border-radius: 8px;
+  border: none;
+
+  &:hover {
+    border: 1px solid var(--orange);
+    background-color: var(--orange-light) !important;
+  }
+
+  &:focus {
+    border: 1px solid var(--orange);
+    background-color: var(--orange-light) !important;
   }
 
 }

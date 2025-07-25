@@ -42,15 +42,17 @@
                 </mat-form-field>
 
 
-                <div class="col-lg-12 text-center" *ngIf="crudList.r">
+                <div class="col-lg-12 text-center row justify-content-center" *ngIf="crudList.r">
                     <!-- <button class=" col-lg-2 btn-rpt-success  me-1"
                         (click)="getLedgerReport('project')">ProjectWise</button> -->
 
-                    <button class=" col-lg-2 btn-rpt-success  me-1" (click)="getLedgerReport('all')">Get Report</button>
+                   <div class=" col-lg-2 pe-1">
+                     <button class="btn-rpt-success w-100" (click)="getLedgerReport('all')">Get Report</button>
+                   </div>
 
-                    <button class=" col-lg-1 btn-rpt-primary  me-1 " (click)="PrintTable()"> Print</button>
+                    <div class=" col-lg-2 pe-1"><button class="w-100 btn-rpt-primary" (click)="PrintTable()"> Print</button></div>
 
-                    <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
+                    <div class=" col-lg-1 pe-1"><button class="w-100 btn-rpt-export" (click)="export()">Export</button></div>
                 </div>
             </div>
         </div>

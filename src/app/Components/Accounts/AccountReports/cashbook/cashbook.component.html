@@ -1,5 +1,5 @@
 <div class="container-fluid body">
-    <div class="row justify-content-center border-bottom p-1 mt-2">
+    <div class="row justify-content-center border-bottom mt-2">
 
         <mat-form-field class="col-lg-4 matSmall" appearance="outline">
             <mat-label>Project </mat-label>
@@ -29,17 +29,17 @@
         </mat-form-field>
 
 
-        <div class="col-lg-4 pt-1" *ngIf="crudList.r">
+        <div class="col-lg-4 pt-1 row" *ngIf="crudList.r">
 
             <!-- <button class="btn-rpt-success w-25   me-1 " (click)="getDetailReport('project')">ProjectWise </button> -->
-            <button class="btn-rpt-success w-25   me-1 " (click)="getDetailReport('all')"> Get Report </button>
+            <div class="col-md-4 pe-1"><button class="btn-rpt-success w-100" (click)="getDetailReport('all')"> Get Report </button></div>
             <!-- <button class=" btn btn-success  me-1 btn-rpt" style="width: 150px;" (click)="getSummary()">Get Summary </button> -->
-            <button class="btn-rpt-primary  " (click)="print()"> Print</button>
+            <div class="col-md-4 pe-1"><button class="btn-rpt-primary w-100 " (click)="print()"> Print</button></div>
         </div>
     </div>
     <div id="printRpt">
 
-        <div>
+
             <!-------------------------    Top Logo Section -------------------->
             <div class="hide">
                 <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
@@ -66,10 +66,8 @@
                 <hr>
             </div>
 
-
-
             <!--------------------------   Table -------------->
-            <div class="mt-3 p-1" id="CashBookDetail">
+            <div class="mt-3" id="CashBookDetail">
                 <table class="table-logix">
                     <thead>
                         <tr>
@@ -101,33 +99,7 @@
                     </tbody>
                 </table>
             </div>
-            <!-- 
-    <div class="cashSummary p-5" >
-
-        <table class="table">
-            <tr class="border-bottom">
-                <th>S#</th>
-            <th>Title</th>
-            <th>Debit</th>
-            <th>Credit</th>
-            </tr>
-            <tr *ngFor="let item of cashSummary;index as index" class="border-bottom">
-                <th>{{index+1}}</th>
-            <th>{{item.coaTitle}}</th>
-            <th>{{item.debit |number:'1.0-0'}}</th>
-            <th>{{item.credit |number:'1.0-0'}}</th>
-            </tr>
-        </table>
-    </div> -->
-
-
-        </div>
-
-
-
-
-
-
+         
     </div>
 
 

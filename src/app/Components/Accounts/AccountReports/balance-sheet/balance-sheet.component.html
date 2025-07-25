@@ -28,27 +28,34 @@
             </mat-select>
         </mat-form-field>
 
-        <div class="col-lg-6 " *ngIf="crudList.r">
-            <mat-radio-group [(ngModel)]="balanceSheetTypeID" class="me-1">
+        <div class="col-lg-6 row pt-1" *ngIf="crudList.r">
+            <div class="col-md-5 pe-1">
+                <mat-radio-group [(ngModel)]="balanceSheetTypeID">
                 <mat-radio-button [value]="1">Inv Date</mat-radio-button>
                 <mat-radio-button [value]="2">Date Created</mat-radio-button>
             </mat-radio-group>
+            </div>
             <!-- <button class="btn-rpt-success  col-lg-2  me-1" (click)="getBalanceSheet('project')">
                 ProjectWise
             </button> -->
-            <button class="btn-rpt-success col-lg-2  me-1" (click)="getBalanceSheet('all')">
+           <div class=" col-lg-2 pe-1">
+             <button class="btn-rpt-success w-100" (click)="getBalanceSheet('all')">
                 Get Report
             </button>
+           </div>
 
 
-            <button class="btn-rpt-primary  col-lg-2  me-1 " (click)="PrintTable()">
+           <div class=" col-lg-2 pe-1">
+             <button class="btn-rpt-primary w-100" (click)="PrintTable()">
                 Print
             </button>
-            <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
+           </div>
+            <div class=" col-lg-1 pe-1"><button class="w-100 btn-rpt-export" (click)="export()">Export</button></div>
+
         </div>
     </div>
 
-    <div id="printRpt" class="container">
+    <div id="printRpt" >
 
 
         <!-------------------------    Top Logo Section -------------------->

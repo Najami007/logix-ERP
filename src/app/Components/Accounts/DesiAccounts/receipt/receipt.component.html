@@ -1,12 +1,18 @@
 <div class="body container">
 
     <div class="p-2 row justify-content-center">
-        <button type="button" mat-mini-fab class="btnadd" *ngIf="crudList.c" (click)="addReceipt()"><mat-icon>add</mat-icon></button>
-        <mat-form-field appearance="outline" class="matSmall" [ngClass]="crudList.c ? 'col-lg-11' :'col-lg-12' " >
-            <mat-label>Search....</mat-label>
-            <input matInput #search  />
-        </mat-form-field>
-      
+        <div class="col-md-2" *ngIf="crudList.c">
+            <button autofocus (click)="addReceipt()" style="height: 42px;"
+                class="btnsave w-100">Add Receipt</button>
+        </div>
+        <!-- <button type="button" mat-mini-fab class="btnadd" *ngIf="crudList.c" (click)="addReceipt()"><mat-icon>add</mat-icon></button> -->
+        <div [ngClass]="crudList.c ? 'col-md-10' :'col-md-12' ">
+            <mat-form-field appearance="outline" class="matSmall w-100">
+                <mat-label>Search....</mat-label>
+                <input matInput #search />
+            </mat-form-field>
+        </div>
+
     </div>
 
     <div class="p-2">
@@ -19,157 +25,162 @@
                     <th>Customer</th>
                     <th>Amount</th>
                     <th>Remarks</th>
-                     <th>Entered By</th>
+                    <th>Entered By</th>
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody >
+            <tbody>
                 <tr *ngFor="let item of receiptsList |filter:search.value |paginate:{
                     itemsPerPage : tableSize,
                     currentPage : page,
                     totalItems :    count,
                 }  ; index as index">
-                    <td >{{index +1}}</td>
+                    <td>{{index +1}}</td>
                     <td>{{item.invoiceDate | date:'dd-MM-YYYY'}}</td>
-                    <td >{{item.invoiceNo }}</td>
-                    <td >{{item.partyName }}</td>
-                    <td >{{item.amount |number:'1.0-1'}}</td>
+                    <td>{{item.invoiceNo }}</td>
+                    <td>{{item.partyName }}</td>
+                    <td>{{item.amount |number:'1.0-1'}}</td>
                     <td>{{item.invoiceRemarks }}</td>
-                      <td>{{item.entryUser}}</td>
+                    <td>{{item.entryUser}}</td>
                     <td class="cursorPointer">
-                        <mat-icon class="text-success" *ngIf="crudList.u && item.approvedStatus == false" (click)="edit(item)">edit</mat-icon>
+                        <mat-icon class="text-success" *ngIf="crudList.u && item.approvedStatus == false"
+                            (click)="edit(item)">edit</mat-icon>
                         <mat-icon class="text-primary" *ngIf="crudList.r" (click)="printBill(item)">print</mat-icon>
-                        <mat-icon class="text-success"*ngIf="item.approvedStatus == false && crudList.u"   (click)="approveBill(item)">check</mat-icon>
-                        <mat-icon *ngIf="item.approvedStatus"  aria-label="Approved" class="text-success" >done_all</mat-icon>
-                        <mat-icon class="text-danger" *ngIf="crudList.d && item.approvedStatus == false" (click)="delete(item)">delete</mat-icon>
+                        <mat-icon class="text-success" *ngIf="item.approvedStatus == false && crudList.u"
+                            (click)="approveBill(item)">check</mat-icon>
+                        <mat-icon *ngIf="item.approvedStatus" aria-label="Approved"
+                            class="text-success">done_all</mat-icon>
+                        <mat-icon class="text-danger" *ngIf="crudList.d && item.approvedStatus == false"
+                            (click)="delete(item)">delete</mat-icon>
                         <mat-icon class="text-success" (click)="VoucherDetails(item)">receipt</mat-icon>
                     </td>
-                    </tr>
+                </tr>
             </tbody>
         </table>
-        <div class="d-flex" >
+        <div class="d-flex">
             <!-- <mat-hint class="me-1 text-secondary">Total Rows : ({{SavedVoucherData.length || 0}})    </mat-hint> -->
-            <pagination-controls
-            previousLabel="Prev"
-            nextLabel="Next"
-            (pageChange)="onTableDataChange($event)"
-            ></pagination-controls>
-            
+            <pagination-controls previousLabel="Prev" nextLabel="Next"
+                (pageChange)="onTableDataChange($event)"></pagination-controls>
+
 
             <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
-            <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);"  [(ngModel)]="tableSize" (change)="onTableSizeChange($event)">
+            <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);"
+                [(ngModel)]="tableSize" (change)="onTableSizeChange($event)">
                 <option *ngFor=" let item of tableSizes">{{item}}</option>
             </select>
-            
+
         </div>
     </div>
 
 </div>
 
 
-   <!-------------------     Invoice Print Section ------------------------->
+<!-------------------     Invoice Print Section ------------------------->
 
-   <div class="d-none InvociePrint" id="InvociePrint">
+<div class="d-none InvociePrint" id="InvociePrint">
     <div class="mt-2 p-2">
-        
+
         <!-------------------------    Top Logo Section -------------------->
         <div class="text-center border-bottom d-flex justify-content-between" *ngFor="let item of companyProfile">
             <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
-                <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height" [width]="item.logo1Width">
+                <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
+                    [width]="item.logo1Width">
 
             </span>
             <span class="mt-3">
                 <h3 class="companyName">{{item.companyName}}</h3>
                 <p style="margin-top: -15px;">{{item.companyAddress}}</p>
-                <p style="margin-top: -20px;">{{item.companyMobile}}  {{item.companyPhone}}</p>
+                <p style="margin-top: -20px;">{{item.companyMobile}} {{item.companyPhone}}</p>
                 <p style="margin-top: -20px;">{{item.companyEmail}}</p>
             </span>
             <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
-                <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" [height]="item.logo2Height" [width]="item.logo2Width">
+                <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" [height]="item.logo2Height"
+                    [width]="item.logo2Width">
 
             </span>
-    
-    
+
+
         </div>
 
 
         <!-------------------------- Headers Area   ----------------------->
-       <div class="d-flex">
-        <div class="row mt-5"  >
+        <div class="d-flex">
+            <div class="row mt-5">
 
-            <b class="row">
-            <h6>Invoice No:</h6>
-            <h6>Project:</h6>
-            <h6>Invoice Date:</h6>
-            <h6>Party Name:</h6>
-            <h6>Narration:</h6>
-            </b>
+                <b class="row">
+                    <h6>Invoice No:</h6>
+                    <h6>Project:</h6>
+                    <h6>Invoice Date:</h6>
+                    <h6>Party Name:</h6>
+                    <h6>Narration:</h6>
+                </b>
+
+            </div>
+            <div class="row mt-5">
+
+                <p>{{lblInvoiceNo}}</p>
+                <p>{{lblProjectName}}</p>
+                <p>{{lblInvoiceDate | date:'yyyy-MM-dd'}}</p>
+                <p>{{lblPartyName}}</p>
+                <p>{{lblRemarks}}</p>
+
+
+            </div>
+        </div>
+
+        <!-----------------------   Print Table Area --------------------->
+
+        <div>
+            <table class="table-logix">
+                <thead>
+
+                    <th style="width: 30px;">S#</th>
+                    <th>Description</th>
+                    <th>Debit</th>
+                    <th>Credit</th>
+                    <th>Narration</th>
+
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of lblInvoiceDetails; index as index">
+                        <td>{{index+1}}</td>
+                        <td>{{item.coaTitle}} ({{item.accountCode}})</td>
+                        <td class="text-end">{{item.debit |number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.credit |number:'1.0-0'}}</td>
+                        <td>{{item.detailNarration}}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><b>Total</b></td>
+                        <td class="text-end"><b>{{lblDebitTotal |number:'1.0-0'}}</b></td>
+                        <td class="text-end"><b>{{lblCreditTotal |number:'1.0-0'}}</b></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="w-100 d-flex justify-content-end">
+            <span class="w-75 d-flex flex-column fw-bold text-end">
+                <span>Prev Balance: {{ lblPartyType === 'Supplier' ? lblPartyBalance - lblInvAmount : lblPartyBalance +
+                    lblInvAmount |number:'1.0-0'}}</span>
+                <span>Paid: {{lblInvAmount |number:'1.0-0'}}</span>
+                <span>Cur Balance: {{lblPartyBalance |number:'1.0-0'}}</span>
+            </span>
 
         </div>
-        <div class="row mt-5" >
 
-            <p>{{lblInvoiceNo}}</p>
-            <p>{{lblProjectName}}</p>
-            <p>{{lblInvoiceDate | date:'yyyy-MM-dd'}}</p>
-            <p>{{lblPartyName}}</p>
-            <p>{{lblRemarks}}</p>
-            
 
+        <div class="d-flex justify-content-between mt-5 pt-5">
+            <h5 *ngIf="lblVoucherType == 'CPV' || lblVoucherType == 'BPV'" class="border-bottom border-dark">Received BY
+            </h5>
+            <h5 class="border-bottom border-dark">Created BY</h5>
+            <h5 class="border-bottom border-dark">Approved BY</h5>
+            <h5 class="border-bottom border-dark">Checked BY</h5>
         </div>
-       </div>
-
-       <!-----------------------   Print Table Area --------------------->
-
-       <div>
-        <table class="table-logix">
-            <thead>
-                
-                <th style="width: 30px;">S#</th>
-                <th >Description</th>
-                <th  >Debit</th>
-                <th  >Credit</th>
-                <th  >Narration</th>
-            
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of lblInvoiceDetails; index as index">
-                    <td>{{index+1}}</td>
-                    <td>{{item.coaTitle}} ({{item.accountCode}})</td>
-                    <td class="text-end">{{item.debit |number:'1.0-0'}}</td>
-                    <td  class="text-end">{{item.credit |number:'1.0-0'}}</td>
-                    <td >{{item.detailNarration}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><b>Total</b></td>
-                    <td  class="text-end"><b>{{lblDebitTotal |number:'1.0-0'}}</b></td>
-                    <td  class="text-end"><b>{{lblCreditTotal |number:'1.0-0'}}</b></td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
-       </div>
-       <div class="w-100 d-flex justify-content-end">
-        <span class="w-75 d-flex flex-column fw-bold text-end">
-            <span >Prev Balance: {{ lblPartyType === 'Supplier' ?  lblPartyBalance - lblInvAmount : lblPartyBalance + lblInvAmount |number:'1.0-0'}}</span>
-            <span>Paid: {{lblInvAmount |number:'1.0-0'}}</span>
-            <span>Cur Balance: {{lblPartyBalance |number:'1.0-0'}}</span>
-        </span>
-
-       </div>   
 
 
-       <div class="d-flex justify-content-between mt-5 pt-5">
-        <h5 *ngIf="lblVoucherType == 'CPV' || lblVoucherType == 'BPV'" class="border-bottom border-dark">Received BY</h5>
-        <h5 class="border-bottom border-dark">Created BY</h5>
-        <h5 class="border-bottom border-dark">Approved BY</h5>
-        <h5 class="border-bottom border-dark">Checked BY</h5>
-       </div>
 
-
-     
 
 
     </div>
 </div>
-

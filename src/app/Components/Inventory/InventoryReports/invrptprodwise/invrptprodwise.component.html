@@ -48,7 +48,7 @@
             </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="col-lg-3 matSmall">
+        <mat-form-field appearance="outline" class="col-lg-3     matSmall">
             <mat-label>Proudct</mat-label>
             <mat-select [(ngModel)]="productID" (selectionChange)="onProdSelected()">
                 <mat-option><ngx-mat-select-search #prodsearch [placeholderLabel]="'Search...'"
@@ -57,7 +57,7 @@
                     [value]="item.productID">{{item.productTitle}} <b>({{item.barcode}})</b></mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field appearance="outline" class="col-lg-3 matSmall">
+        <mat-form-field appearance="outline" class="col-lg-2 matSmall">
             <mat-label>Reports</mat-label>
             <mat-select [(ngModel)]="rptType">
                 <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
@@ -67,12 +67,13 @@
             </mat-select>
         </mat-form-field>
 
-        <div class="col-lg-3" *ngIf="crudList.r">
+        <div class="col-lg-4 row" *ngIf="crudList.r">
 
-            <button class=" btn-rpt-success me-1" (click)="getSummary();formateType = 1">Get Summary</button>
-            <button class=" btn-rpt-success me-1" (click)="getReport(rptType);formateType = 2">Get Detail</button>
-            <button class="  btn-rpt-primary " (click)="print()">Print</button>
-            <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
+            <div class="col-md-3 pe-1"> <button class=" btn-rpt-success w-100"(click)="getSummary();formateType = 1">Get Summary</button></div>
+            <div class="col-md-3 pe-1"><button class=" btn-rpt-success w-100" (click)="getReport(rptType);formateType = 2">Get Detail</button></div>
+            <div class="col-md-3 pe-1"><button class="  btn-rpt-primary w-100" (click)="print()">Print</button></div>
+            <div class="col-md-3"> <button mat-icon-button (click)="export()"> <i
+                        class="bi bi-filetype-xlsx"></i></button></div>
         </div>
 
     </div>
@@ -98,9 +99,8 @@
 
                     <span class="companyName">{{item.companyName}}</span>
 
-                    <span class="rptTitle" >{{reportType}} <span
-                            *ngIf="userName != ''">({{userName}})</span></span>
-                    <span ><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                    <span class="rptTitle">{{reportType}} <span *ngIf="userName != ''">({{userName}})</span></span>
+                    <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
 
 
@@ -124,7 +124,9 @@
                     <th>Date</th>
                     <th>Title</th>
                     <th>Location</th>
-                    <th *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'P' || rptType == 'PR' || rptType == 'IC'|| rptType == 'RIC'">Party</th>
+                    <th
+                        *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'P' || rptType == 'PR' || rptType == 'IC'|| rptType == 'RIC'">
+                        Party</th>
                     <th *ngIf="rptType == 'I' || rptType == 'R'">Type</th>
                     <th>Qty</th>
                     <th>Cost</th>
@@ -141,13 +143,15 @@
             <tbody>
                 <tr *ngFor="let item of invDetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                        <td class="text-center cursorPointer" (click)="printBill(item)">
-                            <span [ngClass]="item.invType == 'S' || item.invType == 'SR' || item.invType == 'P'|| item.invType == 'PR' ? 'text-primary' : '' ">{{item.invBillNo}}</span>
-                        </td>
+                    <td class="text-center cursorPointer" (click)="printBill(item)">
+                        <span
+                            [ngClass]="item.invType == 'S' || item.invType == 'SR' || item.invType == 'P'|| item.invType == 'PR' ? 'text-primary' : '' ">{{item.invBillNo}}</span>
+                    </td>
                     <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
                     <td>{{item.productTitle}} <b *ngIf="item.barcode !== null">({{item.barcode}})</b></td>
                     <td>{{item.locationTitle }}</td>
-                    <td *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'P' || rptType == 'PR'|| rptType == 'IC'|| rptType == 'RIC'">
+                    <td
+                        *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'P' || rptType == 'PR'|| rptType == 'IC'|| rptType == 'RIC'">
                         {{item.partyName}}</td>
                     <td *ngIf="rptType == 'I' || rptType == 'R'">{{item.issueType }}</td>
                     <td class="text-center">{{item.quantity |number:"1.0-3"}}</td>
@@ -158,10 +162,12 @@
                     <td class="text-end">{{item.salePrice * item.quantity |number:'1.0-1'}}</td>
                     <td>{{item.entryUser}}</td>
                 </tr>
-                  
+
                 <tr>
                     <td colspan="5"></td>
-                    <td *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'P' || rptType == 'PR'|| rptType == 'IC'|| rptType == 'RIC'"></td>
+                    <td
+                        *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'P' || rptType == 'PR'|| rptType == 'IC'|| rptType == 'RIC'">
+                    </td>
                     <td *ngIf="rptType == 'I' || rptType == 'R'"></td>
                     <td class="text-center fw-bold">{{QtyTotal |number:'1.0-3'}}</td>
                     <td></td>
@@ -171,13 +177,13 @@
                     <td class="text-end fw-bold">{{saleTotal |number:'1.0-0'}}</td>
                     <td></td>
                 </tr>
-             
+
             </tbody>
 
         </table>
 
 
-        
+
         <table class="table-logix" id="Summary" *ngIf="formateType == 1">
             <thead>
                 <tr>
@@ -185,7 +191,7 @@
                     <th>Bill #</th>
                     <th>Date</th>
                     <th>Title</th>
-                       <th>Location</th>
+                    <th>Location</th>
                     <th>Party</th>
                     <th>Stock In</th>
                     <th>Stock Out</th>
@@ -199,9 +205,10 @@
             <tbody>
                 <tr *ngFor="let item of invDetailList index as index">
                     <td class="text-center">{{index + 1}}</td>
-                        <td class="text-center cursorPointer" (click)="printBill(item)">
-                            <span [ngClass]="item.invType == 'S' || item.invType == 'SR' || item.invType == 'P'|| item.invType == 'PR' ? 'text-primary' : '' ">{{item.invBillNo}}</span>
-                        </td>
+                    <td class="text-center cursorPointer" (click)="printBill(item)">
+                        <span
+                            [ngClass]="item.invType == 'S' || item.invType == 'SR' || item.invType == 'P'|| item.invType == 'PR' ? 'text-primary' : '' ">{{item.invBillNo}}</span>
+                    </td>
                     <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
                     <td>{{item.productTitle}} <b *ngIf="item.barcode !== null">({{item.barcode}})</b></td>
                     <td><span>{{item.locationTitle }}</span></td>
@@ -211,7 +218,7 @@
 
                     <td class="text-center"><span *ngIf="item.invSubType == 'OUT'">{{item.quantity
                             |number:"1.0-3"}}</span></td>
-    
+
                     <td class="text-end">{{item.balanceQty |number:'1.0-1'}}</td>
                     <td>{{item.entryUser}}</td>
                 </tr>
@@ -230,7 +237,7 @@
 
         </table>
 
-    
+
 
     </div>
 

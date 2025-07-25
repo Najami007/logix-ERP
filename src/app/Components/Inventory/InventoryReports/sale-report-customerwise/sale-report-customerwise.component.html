@@ -58,7 +58,7 @@
                     [value]="item.val">{{item.title}}</mat-option>
             </mat-select>
         </mat-form-field> -->
-        <div class="col-md-2 pt-2">
+        <div class="col-md-2">
             <mat-form-field appearance="outline" class="w-100 matSmall">
                 <mat-label>Formate</mat-label>
                 <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
@@ -69,16 +69,18 @@
                 </mat-select>
             </mat-form-field>
         </div>
-        <div class="col-lg-10 pb-2" *ngIf="crudList.r">
+        <div class="col-lg-10 row" *ngIf="crudList.r">
 
             <!-- <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('summary')">Summary</button>
             <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('detail')">Detail</button> -->
-            <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('')">Get Report</button>
-            <button class="btn-rpt-primary col-lg-2" (click)="print()">Print</button>
-            <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
+            <div class="col-lg-2 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('')">Get Report</button></div>
+            <div class="col-lg-2 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
+           <div class="col-lg-2 pe-1"> <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button></div>
 
-            <mat-checkbox [(ngModel)]="hideProfit">Hide Profit</mat-checkbox>
-            <mat-checkbox [(ngModel)]="hideCost">Hide Cost</mat-checkbox>
+           <div class="col-lg-4 d-flex">
+             <mat-checkbox [(ngModel)]="hideProfit">Hide Profit</mat-checkbox>
+                <mat-checkbox [(ngModel)]="hideCost">Hide Cost</mat-checkbox>
+           </div>
         </div>
     </div>
 

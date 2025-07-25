@@ -1,48 +1,49 @@
+<div class="p-5 body">
 
-<div class="p-5 body mt-2">
-    
-    <div class="col-lg-12 container">
+    <div class="col-lg-12 container mt-2">
         <!-- <div class="text-end " ><button *ngIf="crudList.c" style="background: transparent;border: none;" class=" border-bottom" (click)="OpenDialogue()"><mat-icon class="pt-1">
             add</mat-icon>  ADD New Note</button></div>
             <br> -->
 
-               <div class="row">
-            <div class="col-md-2">
-                <button mat-raised-button  *ngIf="crudList.c"  (click)="OpenDialogue()" style="height: 42px;"
-                    class="bg-success text-white w-100">Add Note</button></div>
+        <div class="row">
+            <div class="col-md-2" *ngIf="crudList.c">
+                <button mat-raised-button (click)="OpenDialogue()" style="height: 42px;"
+                    class="bg-success text-white w-100">Add Note</button>
+            </div>
             <mat-form-field class="col-md-10 matSmall" appearance="outline">
                 <mat-label>Search.....</mat-label>
-                <input  matInput type="text" #searchNote>
+                <input matInput type="text" #searchNote>
             </mat-form-field>
 
         </div>
-        <table class="table-logix2 h-100 " *ngIf="crudList.r"> 
+        <table class="table-logix2 h-100 " *ngIf="crudList.r">
             <thead>
                 <tr>
-                    <th >S#</th>
-                <th>Title</th>
-                <th>Linked</th>
-                <th>Note</th>
-                <th>Coa Type</th>
-                <th >Action</th>
+                    <th>S#</th>
+                    <th>Title</th>
+                    <th>Linked</th>
+                    <th>Note</th>
+                    <th>Coa Type</th>
+                    <th>Action</th>
                 </tr>
             </thead>
-            <tbody >
+            <tbody>
                 <tr *ngFor="let item of notesData index as index">
                     <td class="text-center">{{index+1}}</td>
                     <td>{{item.noteTitle}}</td>
                     <td class="text-center">{{item.linkedAccHeads}}</td>
                     <td class="text-center">{{item.noteID}}</td>
                     <td>{{item.coaTypeTitle}}</td>
-                    <td  class="text-center">
-                        <mat-icon class="text-success cursorPointer" *ngIf="crudList.u" (click)="editNote(item)">edit</mat-icon>
-                        <mat-icon  *ngIf="crudList.d" class="text-danger cursorPointer" (click)="deleteNote(item)">delete</mat-icon>
+                    <td class="text-center">
+                        <mat-icon class="text-success cursorPointer" *ngIf="crudList.u"
+                            (click)="editNote(item)">edit</mat-icon>
+                        <mat-icon *ngIf="crudList.d" class="text-danger cursorPointer"
+                            (click)="deleteNote(item)">delete</mat-icon>
                     </td>
                 </tr>
             </tbody>
         </table>
-    
+
     </div>
 
 </div>
-

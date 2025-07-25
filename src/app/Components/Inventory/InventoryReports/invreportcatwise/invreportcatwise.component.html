@@ -4,7 +4,7 @@
     <div class="ps-1 pt-2  border-bottom">
 
         <div class="row  col-md-12 justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-8 row">
                 <mat-form-field class="col-md-6 pe-1 matSmall" appearance="outline">
                     <mat-label><u>S</u>earch...</mat-label>
                     <input matInput #InvSearch accesskey="s" />
@@ -17,10 +17,16 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-md-2">
-                <button class="btn-rpt-success me-1" (click)="openDialog()">Get Report</button>
-                <button class="btn-rpt-primary " (click)="print()">Print</button>
-                <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
+            <div class="col-md-4 row">
+                <div  class=" col-md-4 ">
+                    <button class="btn-rpt-success w-100" (click)="openDialog()">Get Report</button>
+                </div>
+                <div class=" col-md-4">
+                    <button class="btn-rpt-primary w-100" (click)="print()">Print</button>
+                </div>
+                <div class="col-md-4">
+                    <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
+                </div>
             </div>
 
 

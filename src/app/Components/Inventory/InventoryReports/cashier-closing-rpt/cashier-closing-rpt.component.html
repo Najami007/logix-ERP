@@ -1,36 +1,40 @@
 <div class="body container ">
 
-        <!-------------------------    Date Section Start -------------------->
+    <!-------------------------    Date Section Start -------------------->
     <div class="row pt-2">
+        <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100 matSmall">
+                <mat-label>User</mat-label>
+                <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()" [disabled]="roleTypeID > 2">
+                    <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option [value]="0">All User</mat-option>
+                    <mat-option *ngFor="let item of userList | filter:usearch.value"
+                        [value]="item.userID">{{item.userName}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
 
+        <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100 matSmall">
+                <mat-label>Date</mat-label>
+                <input matInput type="text" readonly="true" [(ngModel)]="Date" [matDatepicker]="sDate">
+                <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
+                <mat-datepicker #sDate></mat-datepicker>
+            </mat-form-field>
+        </div>
 
-        <mat-form-field appearance="outline" class="col-lg-3 matSmall">
-            <mat-label>User</mat-label>
-            <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()" [disabled]="roleTypeID > 2">
-                <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
-                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                <mat-option [value]="0">All User</mat-option>
-                <mat-option *ngFor="let item of userList | filter:usearch.value"
-                    [value]="item.userID">{{item.userName}}</mat-option>
-            </mat-select>
-        </mat-form-field>
+        <div class="col-md-6 row" *ngIf="crudList.r">
 
-        <mat-form-field appearance="outline" class="col-lg-3 matSmall">
-            <mat-label>Date</mat-label>
-            <input matInput type="text" readonly="true" [(ngModel)]="Date" [matDatepicker]="sDate">
-            <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
-            <mat-datepicker #sDate></mat-datepicker>
-        </mat-form-field>
-
-        <div class="col-lg-6 " *ngIf="crudList.r">
-
-            <button class=" btn-rpt-success col-lg-3 me-1" (click)="getReport('date')">Date Wise Rpt</button>
-            <button class=" btn-rpt-success col-lg-3 me-1" (click)="getReport('day')">Active Day Rpt</button>
-            <button class=" btn-rpt-primary col-lg-4" (click)="print()">Print</button>
+            <div class=" col-md-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('date')">Date Wise
+                    Rpt</button></div>
+            <div class=" col-md-4 pe-1"> <button class="btn-rpt-success w-100" (click)="getReport('day')">Active Day
+                    Rpt</button></div>
+            <div class=" col-md-4 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
         </div>
 
     </div>
- <!-------------------------    Date Section end     -------------------->
+    <!-------------------------    Date Section end     -------------------->
 
 
 
@@ -60,10 +64,10 @@
             </div>
         </div>
 
-        <div class="row justify-content-center">
+        <div class="row ">
 
             <!----------Detail Card Start -------------->
-            <div class="p-2 card" style="width: 98%;">
+            <div >
                 <table class="table-logix">
                     <thead>
                         <tr>
@@ -89,7 +93,8 @@
                             <td>{{TotalSales - totalSaleReturn |number:'1.0-0'}}</td>
                             <td>{{totalCash |number:'1.0-0'}}</td>
                             <td>{{totalCredit |number:'1.0-0'}}</td>
-                            <td class="cursorPointer" (click)="global.openBootstrapModal('#bankSummary',true)">{{totalBank |number:'1.0-0'}}</td>
+                            <td class="cursorPointer" (click)="global.openBootstrapModal('#bankSummary',true)">
+                                {{totalBank |number:'1.0-0'}}</td>
                             <td>{{totalComplimentary |number:'1.0-0'}}</td>
                             <td>{{totalDiscount |number:'1.0-0'}}</td>
                             <td *ngIf="FBRFeature">{{totalPosFee |number:'1.0-0'}}</td>
@@ -103,8 +108,10 @@
 
             <!----------Userwise Card Start -------------->
 
-            <div *ngFor="let item of ClosingDetail" class="me-1 mt-2 card p-2" style="max-width: 49%;" >
-                <div class="border border-dark text-center fw-bold">
+         
+             <div *ngFor="let item of ClosingDetail" class="mt-1">
+               <div class="w-50 p-2 border border-dark">
+                 <div class="border border-dark text-center fw-bold">
                     <p class="mt-2" style="font-size: 15px;">{{item.userName}}</p>
                 </div>
                 <div class="d-flex">
@@ -138,33 +145,35 @@
                                 <th class="text-start">Cash</th>
                                 <td class="text-end">{{item.cashIn|number:'1.0-0'}}</td>
                                 <td class="text-end">{{item.cashOut|number:'1.0-0'}}</td>
-                                <td class="text-end" >{{item.cashIn - item.cashOut |number:'1.0-0'}}</td>
+                                <td class="text-end">{{item.cashIn - item.cashOut |number:'1.0-0'}}</td>
 
                             </tr>
                             <tr>
                                 <th class="text-start">Bank</th>
-                                <td class="text-end" >{{item.bank |number:'1.0-0'}}</td>
-                                <td class="text-end" >{{item.bankReturn |number:'1.0-0'}}</td>
-                                <td class="text-end" >{{item.bank - item.bankReturn |number:'1.0-0'}}</td>
+                                <td class="text-end">{{item.bank |number:'1.0-0'}}</td>
+                                <td class="text-end">{{item.bankReturn |number:'1.0-0'}}</td>
+                                <td class="text-end">{{item.bank - item.bankReturn |number:'1.0-0'}}</td>
                                 <!-- <td class="text-end" >{{item.bank|number:'1.0-0'}}</td> -->
                             </tr>
                             <tr class="d-flex flex-wrap" *ngIf="item.bank > 0 || item.bankReturn > 0">
                                 <div *ngFor="let bank of BankDetail" class="d-flex ">
-                                    <span *ngIf="bank.userID == item.userID" class="text-start me-2">{{bank.coaTitle}} =</span>
-                                    <span *ngIf="bank.userID == item.userID" class="text-end fw-bold">({{bank.debit - bank.credit |number:'1.0-0'}})</span>
+                                    <span *ngIf="bank.userID == item.userID" class="text-start me-2">{{bank.coaTitle}}
+                                        =</span>
+                                    <span *ngIf="bank.userID == item.userID" class="text-end fw-bold">({{bank.debit -
+                                        bank.credit |number:'1.0-0'}})</span>
                                 </div>
 
                             </tr>
                             <tr>
                                 <th class="text-start">Credit</th>
-                                <td class="text-end" >{{item.creditSale |number:'1.0-0'}}</td>
-                                 <td class="text-end" >{{item.creditSaleReturn |number:'1.0-0'}}</td>
-                                <td class="text-end" >{{item.creditSale - item.creditSaleReturn |number:'1.0-0'}}</td>
+                                <td class="text-end">{{item.creditSale |number:'1.0-0'}}</td>
+                                <td class="text-end">{{item.creditSaleReturn |number:'1.0-0'}}</td>
+                                <td class="text-end">{{item.creditSale - item.creditSaleReturn |number:'1.0-0'}}</td>
 
                             </tr>
                             <tr>
                                 <th class="text-start"> Complimentary</th>
-           
+
                                 <td class="text-end" colspan="3">{{item.complimentary|number:'1.0-0'}}</td>
 
                             </tr>
@@ -174,15 +183,17 @@
                             </tr>
                             <tr>
                                 <th class="text-start">Discount</th>
-                                 <td class="text-end" >{{item.discount |number:'1.0-0'}}</td>
-                                  <td class="text-end" >{{item.discountReturn |number:'1.0-0'}}</td>
-                                   <td class="text-end" >{{item.discount - item.discountReturn |number:'1.0-0'}}</td>
+                                <td class="text-end">{{item.discount |number:'1.0-0'}}</td>
+                                <td class="text-end">{{item.discountReturn |number:'1.0-0'}}</td>
+                                <td class="text-end">{{item.discount - item.discountReturn |number:'1.0-0'}}</td>
                                 <!-- <td class="text-end" colspan="2">{{item.disocunt |number:'1.0-0'}}</td> -->
                             </tr>
                             <tr>
                                 <td class="text-start"><b>Total</b></td>
-                                <td class="text-end " colspan="3"><b>{{(item.cashIn - item.cashOut) + (item.bank -  item.bankReturn) +
-                                        item.complimentary + (item.discount - item.discountReturn ) + (item.creditSale - item.creditSaleReturn) |number:'1.0-0'}}</b></td>
+                                <td class="text-end " colspan="3"><b>{{(item.cashIn - item.cashOut) + (item.bank -
+                                        item.bankReturn) +
+                                        item.complimentary + (item.discount - item.discountReturn ) + (item.creditSale -
+                                        item.creditSaleReturn) |number:'1.0-0'}}</b></td>
                             </tr>
                             <!-- <tr>
                                 <td class="text-start"><b>Amount Received</b></td>
@@ -196,9 +207,11 @@
                         <mat-label class="fw-bold col-lg-6">Received Amount:___________________</mat-label>
                     </div>
                 </div>
+               </div>
             </div>
+         
 
-                       <!----------Userwise Card End -------------->
+            <!----------Userwise Card End -------------->
 
         </div>
 
@@ -211,23 +224,25 @@
 
 
 <div class="modal fade" id="bankSummary" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-aria-labelledby="bankSummaryLabel">
-<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm">
-    <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-        <div class="modal-body">
-            <table class="table">
-                <tbody>
-                    <tr *ngFor="let item of BankSummaryList">
-                        <td>{{item.coaTitle}}</td>
-                        <td>{{item.amount |number:'1.0-0'}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="modal-footer bg-mf-blue">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
+    aria-labelledby="bankSummaryLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm">
+        <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+            <div class="modal-body">
+                <table class="table">
+                    <tbody>
+                        <tr *ngFor="let item of BankSummaryList">
+                            <td>{{item.coaTitle}}</td>
+                            <td>{{item.amount |number:'1.0-0'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer bg-mf-blue">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
 
-    
-</div>
+
+        </div>
+    </div>
+
 </div>

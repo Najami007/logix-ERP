@@ -1,7 +1,5 @@
-<div class="body container-fluid ">
-    <div class=" p-2">
-
-        <div class="row ">
+<div class="body container-fluid">
+        <div class="row pt-2">
 
             <mat-form-field class="col-lg-3  matSmall" appearance="outline">
                 <mat-label>Project </mat-label>
@@ -38,13 +36,11 @@
             </mat-form-field>
 
 
-            <div class="col-lg-3 text-center" *ngIf="crudList.r">
+            <div class="col-lg-3 row" *ngIf="crudList.r">
                 <!-- <button class="btn-rpt-success col-lg-2 me-1 " (click)="getTrialBalance('project')">
                             ProjectWise
                          </button> -->
-                <button class="btn-rpt-success col-lg-2 me-1 " (click)="getTrialBalance('all')">
-                    Get Report
-                </button>
+                <div class="col-lg-4 pe-1"><button class="btn-rpt-success w-100 " (click)="getTrialBalance('all')"> Get Report</button></div>
                 <!-- <button class="btn-rpt-primary col-lg-2  me-1 " (click)="getSummary2('sm1')">
                     Summary 1
                 </button>
@@ -54,10 +50,8 @@
                 </button> -->
 
 
-                <button class="btn-rpt-primary me-1" (click)="PrintTable()">
-                    Print
-                </button>
-                <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
+              <div class="col-lg-4 pe-1">  <button class="btn-rpt-primary w-100" (click)="PrintTable()">Print</button></div>
+                    <div class=" col-lg-1 pe-1"><button class="w-100 btn-rpt-export" (click)="export()">Export</button></div>
             </div>
         </div>
 
@@ -242,10 +236,4 @@
 
         </div>
 
-
-
-
-
-
-    </div>
 </div>
