@@ -30,20 +30,13 @@
             </mat-form-field>
 
 
-            <div class="col-lg-5  pt-1" *ngIf="crudList.r">
+            <div class="col-lg-5 d-flex flex-wrap  pt-1" *ngIf="crudList.r">
                 <!-- <button class="btn-rpt-success col-lg-3  me-1" (click)="getReport('project')">
                     ProjectWise
                 </button> -->
-                <button class="btn-rpt-success col-lg-3 me-1" (click)="getReport('all')">
-                    Get Report
-                </button>
-
-
-                <button class="btn-rpt-primary  col-lg-2 " (click)="PrintTable()">
-                    Print
-                </button>
-                <mat-checkbox class="col-lg-2 " (change)="onFilterChange($event)"
-                    [(ngModel)]="showDifferenceFilterOnly">Filter Diff</mat-checkbox>
+                <div class="col-lg-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('all')">Get Report</button></div>
+                <div class="col-lg-4 pe-1"> <button class="btn-rpt-primary w-100" (click)="PrintTable()">Print</button></div>
+                <div class="col-lg-4 "><mat-checkbox class="w-100" (change)="onFilterChange($event)" [(ngModel)]="showDifferenceFilterOnly">Filter Diff</mat-checkbox></div>
             </div>
         </div>
     </div>
@@ -62,10 +55,10 @@
                 </span>
                 <span class="d-flex flex-column">
                     <span class="companyName">{{item.companyName}}</span>
-                    <span class="rptTitle" >Transaction Report</span>
-                    <span class="projtitl" *ngIf="projectName != ''" ><b>Project:</b>
+                    <span class="rptTitle">Transaction Report</span>
+                    <span class="projtitl" *ngIf="projectName != ''"><b>Project:</b>
                         {{projectName}}</span>
-                    <span ><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}} <b>To:</b> {{toDate |date:'dd-MM-yyyy'}}</span>
+                    <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}} <b>To:</b> {{toDate |date:'dd-MM-yyyy'}}</span>
 
                 </span>
                 <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">

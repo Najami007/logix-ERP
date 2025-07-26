@@ -76,6 +76,11 @@ export class ProductBarcodesComponent implements OnInit {
       return;
     }
 
+    if((this.productDetail.costPrice * Number(this.quantity)) > ((this.productDetail.salePrice   * Number(this.quantity) ) - Number(this.discInR)  )){
+      this.msg.WarnNotify('Discount Not Valid');
+      return;
+    }
+
 
     var postData = {
 

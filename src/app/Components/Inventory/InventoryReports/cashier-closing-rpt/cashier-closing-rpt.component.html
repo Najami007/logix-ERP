@@ -24,7 +24,7 @@
             </mat-form-field>
         </div>
 
-        <div class="col-md-6 row" *ngIf="crudList.r">
+        <div class="col-md-6 d-flex flex-wrap" *ngIf="crudList.r">
 
             <div class=" col-md-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('date')">Date Wise
                     Rpt</button></div>
@@ -93,7 +93,7 @@
                             <td>{{TotalSales - totalSaleReturn |number:'1.0-0'}}</td>
                             <td>{{totalCash |number:'1.0-0'}}</td>
                             <td>{{totalCredit |number:'1.0-0'}}</td>
-                            <td class="cursorPointer" (click)="global.openBootstrapModal('#bankSummary',true)">
+                            <td class="cursorPointer" (click)="global.openBootstrapModal('#bankSummary',true,true)">
                                 {{totalBank |number:'1.0-0'}}</td>
                             <td>{{totalComplimentary |number:'1.0-0'}}</td>
                             <td>{{totalDiscount |number:'1.0-0'}}</td>
@@ -223,7 +223,7 @@
 </div>
 
 
-<div class="modal fade" id="bankSummary" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+<div class="modal fade" id="bankSummary" tabindex="-1" data-bs-backdrop="static" 
     aria-labelledby="bankSummaryLabel">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm">
         <div class="modal-content " style="background-color: rgb(248, 247, 247);">

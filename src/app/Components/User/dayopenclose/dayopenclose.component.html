@@ -4,21 +4,23 @@
     <div class="d-flex flex-column  p-5 h-100">
         <div class="text-center p-5 row justify-content-around">
             <button mat-raised-button style="width: 200px; height: 200px;background-color: rgb(196, 255, 198);"
-            data-bs-toggle="modal" data-bs-target="#doc" (click)="Type = 'Day Open'"><strong>Day Open</strong></button>
+                data-bs-toggle="modal" data-bs-target="#doc" (click)="Type = 'Day Open'"><strong>Day
+                    Open</strong></button>
 
-        <button mat-raised-button style="width: 200px; height: 200px;background-color: rgb(196, 255, 252);"
-            data-bs-toggle="modal" data-bs-target="#post" ><strong>Posting</strong></button>
+            <button mat-raised-button style="width: 200px; height: 200px;background-color: rgb(196, 255, 252);"
+                data-bs-toggle="modal" data-bs-target="#post"><strong>Posting</strong></button>
 
 
-        <button mat-raised-button style="width: 200px; height: 200px;background-color: rgb(255, 206, 196);"
-            data-bs-toggle="modal" data-bs-target="#doc" (click)="Type = 'Day Close'"><strong>Day Close</strong></button>
+            <button mat-raised-button style="width: 200px; height: 200px;background-color: rgb(255, 206, 196);"
+                data-bs-toggle="modal" data-bs-target="#doc" (click)="Type = 'Day Close'"><strong>Day
+                    Close</strong></button>
 
         </div>
-      
-      
-       
-      </div>
-      
+
+
+
+    </div>
+
 
     <!-- <div class="justify-content-around row  w-100 fw-bold">
         <button mat-raised-button style="width: 200px; height: 200px;background-color: rgb(196, 255, 198);"
@@ -34,10 +36,10 @@
     </div> -->
 
 
-        <!---------------------- Modal Window for Date Selection ------------->
+    <!---------------------- Modal Window for Date Selection ------------->
 
 
-        <div class="modal fade"  id="doc" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    <div class="modal fade" id="doc" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
         aria-labelledby="docLabel">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
@@ -45,7 +47,7 @@
                     <div class="text-center">
                         <h1>{{Type}}</h1>
                     </div>
- 
+
                     <mat-form-field appearance="outline" class="w-100 matSmall">
                         <mat-label>Date</mat-label>
                         <input [(ngModel)]="date" disabled="true" readonly="true" matInput type="text"
@@ -53,28 +55,28 @@
                         <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
                         <mat-datepicker #voucherDate></mat-datepicker>
                     </mat-form-field>
- 
+
                 </div>
- 
+
                 <div class="modal-footer p-3 bg-mf">
                     <button class="bg-success text-white me-1" mat-raised-button data-bs-dismiss="modal"
                         (click)="save()">Save</button>
                     <button type="button" class="bg-secondary text-white" mat-raised-button
                         data-bs-dismiss="modal">Close</button>
                 </div>
- 
- 
+
+
             </div>
         </div>
     </div>
- 
+
     <!-------------------------------------------------------------------->
- 
- 
-    
+
+
+
     <!---------------------- Modal Window for Posting Bill Remarks ------------->
- 
- 
+
+
     <div class="modal fade" id="post" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
         aria-labelledby="postLabel">
         <div class="modal-dialog modal-dialog-centered modal-sm">
@@ -83,31 +85,27 @@
                     <div class="text-center">
                         <h1>Posting</h1>
                     </div>
- 
+
                     <mat-form-field appearance="outline" class="w-100 matSmall">
                         <mat-label>Remarks</mat-label>
                         <textarea matInput [(ngModel)]="postingRemarks"></textarea>
                     </mat-form-field>
- 
+
                 </div>
- 
+
                 <div class="modal-footer p-3 bg-mf">
                     <button class="bg-success text-white me-1" mat-raised-button data-bs-dismiss="modal"
                         (click)="postBills()">Save</button>
                     <button type="button" class="bg-secondary text-white" mat-raised-button
                         data-bs-dismiss="modal">Close</button>
                 </div>
- 
- 
+
+
             </div>
         </div>
     </div>
- 
+
     <!-------------------------------------------------------------------->
 
 
 </div>
-
-
-
-   

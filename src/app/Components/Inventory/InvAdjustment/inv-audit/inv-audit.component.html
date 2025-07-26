@@ -193,14 +193,16 @@
             </div>
 
 
-            <div class="mt-1 d-flex justify-content-around">
-                <div class="w-50 pe-1"><button *ngIf="crudList.c" class="btnhold w-100 " (click)="SaveBill('hold')">{{holdBtnType}}</button></div>
+            <div class="mt-1 row">
+                <div class="w-50 "><button *ngIf="crudList.c" class="btnhold w-100 " (click)="SaveBill('hold')">{{holdBtnType}}</button></div>
                 <div class="w-50"><button class="btnreset w-100" data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button></div>
 
             </div>
-            <div class="mt-4 d-flex justify-content-around">
-                <button *ngIf="roleTypeID < 3" class="btnsave w-100"
+            <div class="mt-1 row">
+               <div class="w-100">
+                 <button *ngIf="roleTypeID < 3" class="btnsave w-100"
                     (click)="global.openBootstrapModal('#AuditStart',true)">Others</button>
+               </div>
             </div>
 
 

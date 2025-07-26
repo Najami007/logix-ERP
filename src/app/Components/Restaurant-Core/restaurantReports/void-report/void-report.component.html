@@ -1,144 +1,140 @@
 <div class="body " style="overflow-x:hidden ;">
 
     <div class="container-fluid p-2 mt-2">
-     <div >
-         <div class="row">
- 
- 
-             <mat-form-field appearance="outline" class="col-lg-4 matSmall">
-                 <mat-label>User</mat-label>
-                 <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
-                     <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
-                             [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                     <mat-option [value]="0">All User</mat-option>
-                     <mat-option *ngFor="let item of userList | filter:usearch.value"
-                         [value]="item.userID">{{item.userName}}</mat-option>
-                 </mat-select>
-             </mat-form-field>
-             <mat-form-field class="col-lg-2 matSmall" appearance="outline">
-                 <mat-label>From Date</mat-label>
-                 <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
-                 <mat-datepicker-toggle matSuffix [for]="sDate" ></mat-datepicker-toggle>
-                 <mat-datepicker #sDate></mat-datepicker>
-             </mat-form-field>
-             <mat-form-field class="col-lg-2 matSmall" appearance="outline">
-                 <mat-label>From Time</mat-label>       
-                 <input matInput  [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
-                 <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
-                 <ngx-material-timepicker #fTime></ngx-material-timepicker>
-             </mat-form-field>
-     
-     
-             <mat-form-field class="col-lg-2 matSmall" appearance="outline">
-                 <mat-label>To Date</mat-label>
-                 <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
-                 <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
-                 <mat-datepicker #eDate></mat-datepicker>
-             </mat-form-field>
-             <mat-form-field class="col-lg-2 matSmall" appearance="outline">
-                 <mat-label>To Time</mat-label>
-                     <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
-                     <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
-                     <ngx-material-timepicker #tTime></ngx-material-timepicker>
-             </mat-form-field>
-     
-         </div>
-        
-         <div class="row justify-content-center">
-       
-             <div class="col-lg-6 pb-2" *ngIf="crudList.r">
-                 <button class="btn-rpt-success col-lg-4 me-1" (click)="getReport()">Get Report</button>
-                 <button class="btn-rpt-primary col-lg-2" (click)="print()">Print</button>
-             </div>
-         </div>
-     </div>
- 
- 
- 
- 
- 
-     
-     <div id="PrintDiv">
- 
-         <!-------------------------    Top Logo Section -------------------->
- 
-         <div class="hide">
-             <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
-                 <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
-                     <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
-                         [width]="item.logo1Width">
-                 </span>
-                 <div class="d-flex flex-column">
- 
- 
-                     <span class="companyName">{{item.companyName}}</span>
- 
-                     <span class="rptTitle" >Void Item List</span>
-                     <span > <b *ngIf="userName != ''">User: {{userName}}</b></span>
-                     <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
-                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
- 
- 
-                 </div>
-                 <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
-                     <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
-                         height="{{item.logo2Height}}" width="{{item.logo2Width}}">
-                 </span>
- 
- 
-             </div>
-         </div>
- 
-     
+            <div class="row">
 
- 
- 
- 
-         <table class="table-logix" id="detailTable">
-             <thead>
-                 <tr>
-                     <th>S#</th>
-                     <th>Bill #</th>
-                     <th>Enter Time</th>
-                     <th>Void Time</th>
-                     <!-- <th *ngIf="rptType == 's'">Table</th> -->
-                     <th>Title</th>
-                     <th>Table</th>
-                     <th>Qty</th>
-                     <th>Price</th>
-                     <th>Order Type</th>
-                     <th>Void By</th>
-                     <th>Reason</th>
-                  
-                 </tr>
- 
- 
-             </thead>
-             <tbody>
-                 <tr *ngFor="let item of voidList index as index">
-                     <td class="text-center">{{index + 1}}</td>
-                     <td class="text-center">{{item.invBillNo}}</td>
-                     <td >{{item.enteryTime | date:'dd-MM-yyyy hh:mm:a'}} </td>
-                     <td >{{item.voidTime | date:'dd-MM-yyyy hh:mm:a'}} </td>
-                     <!-- <td *ngIf="rptType == 's'">{{item.tableTitle}}</td> -->
-                     <td>{{item.productTitle}}</td>
-                     <td>{{item.tableTitle}}</td>
-                     <td class="text-center">{{item.quantity}}</td>
-                     <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
-                     <td>{{item.orderType}}</td>
-                     <td >{{item.voidBy }}</td>
-                     <td style="width: 150px;"></td>
-                     
-                  
-                 </tr>
-              
-             </tbody>
-           
-         </table>
-     </div>
+
+                <mat-form-field appearance="outline" class="col-lg-2 matSmall">
+                    <mat-label>User</mat-label>
+                    <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
+                        <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                        <mat-option [value]="0">All User</mat-option>
+                        <mat-option *ngFor="let item of userList | filter:usearch.value"
+                            [value]="item.userID">{{item.userName}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+                    <mat-label>From Date</mat-label>
+                    <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
+                    <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
+                    <mat-datepicker #sDate></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+                    <mat-label>From Time</mat-label>
+                    <input matInput [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+                    <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
+                    <ngx-material-timepicker #fTime></ngx-material-timepicker>
+                </mat-form-field>
+
+
+                <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+                    <mat-label>To Date</mat-label>
+                    <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
+                    <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+                    <mat-datepicker #eDate></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+                    <mat-label>To Time</mat-label>
+                    <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+                    <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
+                    <ngx-material-timepicker #tTime></ngx-material-timepicker>
+                </mat-form-field>
+                   <div class="col-lg-2 d-flex flex-wrap pt-1" *ngIf="crudList.r">
+                <div class="col-md-6 pe-1"><button class="btn-rpt-success w-100" (click)="getReport()">Get
+                        Report</button></div>
+                <div class="col-md-6 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
+            </div>
+
+            </div>
+
+
+
+         
+
     </div>
- 
- 
- 
- </div>
- 
+
+
+
+
+
+
+    <div id="PrintDiv">
+
+        <!-------------------------    Top Logo Section -------------------->
+
+        <div class="hide">
+            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
+                        [width]="item.logo1Width">
+                </span>
+                <div class="d-flex flex-column">
+
+
+                    <span class="companyName">{{item.companyName}}</span>
+
+                    <span class="rptTitle">Void Item List</span>
+                    <span> <b *ngIf="userName != ''">User: {{userName}}</b></span>
+                    <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                        {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
+
+
+                </div>
+                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                        height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                </span>
+
+
+            </div>
+        </div>
+
+
+
+
+
+
+        <table class="table-logix" id="detailTable">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Bill #</th>
+                    <th>Enter Time</th>
+                    <th>Void Time</th>
+                    <!-- <th *ngIf="rptType == 's'">Table</th> -->
+                    <th>Title</th>
+                    <th>Table</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                    <th>Order Type</th>
+                    <th>Void By</th>
+                    <th>Reason</th>
+
+                </tr>
+
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of voidList index as index">
+                    <td class="text-center">{{index + 1}}</td>
+                    <td class="text-center">{{item.invBillNo}}</td>
+                    <td>{{item.enteryTime | date:'dd-MM-yyyy hh:mm:a'}} </td>
+                    <td>{{item.voidTime | date:'dd-MM-yyyy hh:mm:a'}} </td>
+                    <!-- <td *ngIf="rptType == 's'">{{item.tableTitle}}</td> -->
+                    <td>{{item.productTitle}}</td>
+                    <td>{{item.tableTitle}}</td>
+                    <td class="text-center">{{item.quantity}}</td>
+                    <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
+                    <td>{{item.orderType}}</td>
+                    <td>{{item.voidBy }}</td>
+                    <td style="width: 150px;"></td>
+
+
+                </tr>
+
+            </tbody>
+
+        </table>
+    </div>
+</div>

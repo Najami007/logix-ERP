@@ -6,13 +6,13 @@
 
             <mat-card class="container bg-light border p-5 mt-5 shadow">
 
-                <div class="d-flex">
-                    <span class=" mt-3 pt-4  col-lg-6">
-
+                <div class="row">
+                    <span class="col-lg-6 ">
+                    <label> .</label>
 
                         <!-- Coa Types Selected Here -->
 
-                        <mat-form-field appearance="outline" class="col-lg-12 matSmall">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
                             <mat-label>Select Type </mat-label>
                             <mat-select [(ngModel)]="CoaType" (selectionChange)="onCoaTypeChange()">
                                 <mat-option *ngFor="let item of coaTypesList "
@@ -22,7 +22,7 @@
                         </mat-form-field>
 
 
-                        <mat-form-field appearance="outline" class="col-lg-12 matSmall">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
                             <mat-label>Select Level</mat-label>
                             <mat-select (selectionChange)="setvalue();onCoaLevelChange()" [(ngModel)]="coaLevel"
                                 class="" #AccountHeadLabel>
@@ -33,7 +33,7 @@
 
                         <!-- Coa Level 1 Selected Here -->
 
-                        <mat-form-field appearance="outline" *ngIf="coaLevel > 1 " class="col-lg-12 matSmall">
+                        <mat-form-field appearance="outline" *ngIf="coaLevel > 1 " class="w-100 matSmall">
                             <mat-label>Level 1</mat-label>
                             <mat-select class="" (selectionChange)="onlevel1Change();setvalue()" [(ngModel)]="level1">
                                 <mat-option *ngFor="let item of coaLevel1List" [value]="item.level1"
@@ -43,7 +43,7 @@
 
                             </mat-select>
                         </mat-form-field>
-                        <mat-form-field appearance="outline" *ngIf="coaLevel == 1" class=" col-lg-12 matSmall">
+                        <mat-form-field appearance="outline" *ngIf="coaLevel == 1" class="w-100 matSmall">
                             <mat-label>Enter Level 1</mat-label>
                             <input (keydown)="globalData.handleNumKeys($event)" matInput type="text" min="1" #EnterLevel
                                 aria-label="level1" (keyup)="setvalue()" [(ngModel)]="level1">
@@ -52,7 +52,7 @@
 
                         <!-- Coa Level 2 Selected Here -->
 
-                        <mat-form-field appearance="outline" *ngIf="coaLevel > 2" class="col-lg-12 matSmall">
+                        <mat-form-field appearance="outline" *ngIf="coaLevel > 2" class="w-100 matSmall">
                             <mat-label>Level 2</mat-label>
                             <mat-select class="" (selectionChange)="onlevel2Change();setvalue()" [(ngModel)]="level2">
                                 <mat-option *ngFor="let item of coaLevel2List" [value]="item.coaTypeID"
@@ -64,7 +64,7 @@
                             </mat-select>
                         </mat-form-field>
 
-                        <mat-form-field appearance="outline" *ngIf="coaLevel == 2" class="col-lg-12 matSmall">
+                        <mat-form-field appearance="outline" *ngIf="coaLevel == 2" class="w-100 matSmall">
                             <mat-label>Enter Level 2</mat-label>
                             <input (keydown)="globalData.handleNumKeys($event)" matInput type="text" min="1" #EnterLevel
                                 aria-label="level2" (keyup)="setvalue();" [(ngModel)]="level2">
@@ -72,7 +72,7 @@
                         </mat-form-field>
 
                         <!-- Coa level 3 Iput Field -->
-                        <mat-form-field appearance="outline" *ngIf="coaLevel > 3" class="col-lg-12 matSmall">
+                        <mat-form-field appearance="outline" *ngIf="coaLevel > 3" class="w-100 matSmall">
                             <mat-label>Level 3</mat-label>
                             <mat-select class="" (selectionChange)="onlevel3Change();setvalue()" [(ngModel)]="level3">
                                 <mat-option *ngFor="let item of coaLevel3List" [value]="item.coaTypeID"
@@ -82,7 +82,7 @@
 
                             </mat-select>
                         </mat-form-field>
-                        <mat-form-field appearance="outline" *ngIf="coaLevel == 3" class="col-lg-12 matSmall">
+                        <mat-form-field appearance="outline" *ngIf="coaLevel == 3" class="w-100 matSmall">
                             <mat-label>Enter Level 3</mat-label>
                             <input (keydown)="globalData.handleNumKeys($event)" matInput type="text" min="1" #EnterLevel
                                 aria-label="level3" (keyup)="setvalue();" [(ngModel)]="level3">
@@ -93,7 +93,7 @@
                         <!-- Coa level 4 Iput Field -->
 
 
-                        <mat-form-field appearance="outline" *ngIf="coaLevel == 4" class="col-lg-12 matSmall">
+                        <mat-form-field appearance="outline" *ngIf="coaLevel == 4" class="w-100 matSmall">
                             <mat-label>Enter Level 4</mat-label>
                             <input (keydown)="globalData.handleNumKeys($event)" matInput type="text" min="1" #EnterLevel
                                 aria-label="level4" (keyup)="setvalue();" [(ngModel)]="level4">
@@ -103,9 +103,9 @@
 
                     </span>
 
-                    <span class="ms-4 col-lg-6 ">
+                    <span class="col-lg-6 ">
 
-                        <h4>Account Head Label: {{AccountLabelHeadValue}}</h4>
+                        <label>Account Head Label: {{AccountLabelHeadValue}}</label>
 
 
 
@@ -154,11 +154,11 @@
 
                 <!-- Save And Reset Button -->
                 <br><br>
-                <div class=" text-center">
-                    <button class="btnsave col-md-1 ml-10" *ngIf="crudList.c" (click)="Save()">{{actionbtn}}</button>
+                <div class="d-flex flex-wrap justify-content-center">
+                    <div class="col-md-2 pe-1"><button class="btnsave w-100" *ngIf="crudList.c" (click)="Save()">{{actionbtn}}</button></div>
 
 
-                    <button class="btnreset col-md-1 ml-10" (click)="reset()">Reset</button>
+                    <div class="col-md-2 "><button class="btnreset w-100" (click)="reset()">Reset</button></div>
                 </div>
             </mat-card>
 

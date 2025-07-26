@@ -29,17 +29,10 @@
                 </mat-form-field>
 
 
-                <div class="col-lg-4 row pt-1" *ngIf="crudList.r">
-                    <!-- <button class="btn-rpt-success w-25  me-1" (click)="getReport('R1','project')">
-                        ProjectWise
-                    </button> -->
+                <div class="col-lg-4 d-flex flex-wrap pt-1" *ngIf="crudList.r">
                     <div class="col-md-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('R1','all')">Get Report</button></div>
-                    <!-- <button class=" btn btn-primary w-25 btn-rpt me-2" (click)="getReport('R2','')" >
-                            Summary 2
-                        </button>    -->
-
                     <div class="col-md-4 pe-1"><button class=" btn-rpt-primary w-100" (click)="PrintTable()">Print</button></div>
-                    <div class=" col-lg-1 pe-1"><button class="w-100 btn-rpt-export" (click)="export()">Export</button></div>
+                    <div class=" col-md-4"><button class="w-100 btn-rpt-export" (click)="export()">Export</button></div>
                 </div>
             </div>
         </div>

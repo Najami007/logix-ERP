@@ -17,16 +17,15 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-md-4 row">
-                <div  class=" col-md-4 ">
+            <div class="col-md-4 d-flex flex-wrap">
+                <div  class="col-md-4 pe-1">
                     <button class="btn-rpt-success w-100" (click)="openDialog()">Get Report</button>
                 </div>
-                <div class=" col-md-4">
+                <div class="col-md-4 pe-1">
                     <button class="btn-rpt-primary w-100" (click)="print()">Print</button>
                 </div>
-                <div class="col-md-4">
-                    <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
-                </div>
+                <div class="col-md-4"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
+
             </div>
 
 

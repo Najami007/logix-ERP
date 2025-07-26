@@ -5,6 +5,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { environment } from 'src/environments/environment.development';
 import { AddVehicleComponent } from './add-vehicle/add-vehicle.component';
 import { AppComponent } from 'src/app/app.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-vehicle',
@@ -15,13 +16,17 @@ export class VehicleComponent {
 
   @ViewChild(AddVehicleComponent) addVehicle: any;
 
-
+  crudList:any = {c:true,r:true,u:true,d:true};
   constructor(
     private http: HttpClient,
     private msg: NotificationService,
     public global: GlobalDataModule,
-    private app: AppComponent
+    private app: AppComponent,
+        private route:Router
   ) {
+      this.global.getMenuList().subscribe((data)=>{
+        this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
+      })
 
   }
   ngOnInit(): void {

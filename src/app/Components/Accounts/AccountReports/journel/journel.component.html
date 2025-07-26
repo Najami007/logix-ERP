@@ -29,7 +29,7 @@
                 </mat-form-field>
 
 
-                <div class="col-lg-4 row pt-1" *ngIf="crudList.r">
+                <div class="col-lg-4 d-flex flex-wrap pt-1" *ngIf="crudList.r">
                     <!-- <button class="btn-rpt-success w-25  me-1" (click)="getReport('project')">
                         ProjectWise
                     </button> -->
@@ -43,7 +43,7 @@
                     <div class="col-md-4 pe-1"><button class=" btn-rpt-primary w-100" (click)="PrintTable()">
                         Print
                     </button></div>
-                    <div class=" col-lg-1 pe-1"><button class="w-100 btn-rpt-export" (click)="export()">Export</button></div>
+                    <div class=" col-md-4"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
                 </div>
             </div>
         </div>

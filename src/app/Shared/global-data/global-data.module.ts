@@ -1502,7 +1502,7 @@ export class GlobalDataModule implements OnInit {
 
   openBootstrapModal(modalID: any, condition: any, keyboard?: any) {
     if (condition) {
-      const myModal = new bootstrap.Modal(modalID, { keyboard: keyboard || false, backdrop: false });
+      const myModal = new bootstrap.Modal(modalID, { keyboard: keyboard || false, backdrop: keyboard || false  });
       myModal.show();
 
     }

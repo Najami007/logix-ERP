@@ -3,7 +3,7 @@
   <mat-tab label="ADD Role" class="h-100">
     <div class="container-fluid ">
 
-      <div class="row pt-3">
+      <div class="row pt-3 pb-1">
         <mat-form-field class="col-lg-4  matSmall" appearance="outline">
           <mat-label>Role Title</mat-label>
           <input matInput type="text" [(ngModel)]="roleTitle">
@@ -14,13 +14,9 @@
           <input matInput type="text" [(ngModel)]="roleDescription">
         </mat-form-field>
 
-        <div class="col-lg-2 mt-1 ">
-          <button class="btnsave col-lg-6 me-1" 
-            *ngIf="crudList.u && btnType == 'Update'" (click)="save()">{{btnType}}</button>
-          <button  class="btnsave col-lg-6 me-1" 
-            *ngIf="crudList.c && btnType == 'Save'" (click)="save()">{{btnType}}</button>
-          <button  class="btnreset col-lg-5"  (click)="reset()">
-            Reset</button>
+        <div class="col-lg-2 mt-1 d-flex flex-wrap">
+          <div class="col-lg-6 pe-1"><button  class="btnsave w-100"  (click)="save()">{{btnType}}</button></div>
+          <div class="col-lg-6 pe-1"><button  class="btnreset w-100"  (click)="reset()">Reset</button></div>
         </div>
 
 
@@ -49,7 +45,7 @@
                 <th>Name</th>
                 <th>Write</th>
                 <th>Read</th>
-                <th>Update</th>
+                <th >Update</th>
                 <th>Delete</th>
                 <th>All</th>
               </tr>

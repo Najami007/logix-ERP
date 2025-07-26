@@ -39,14 +39,14 @@
         </mat-form-field>
 
     </div>
-    <div class="row text-center justify-content-center">
+    <div class="row text-center justify-content-center pb-2">
 
-        <div class="col-lg-3 pb-2" *ngIf="crudList.r">
+        <div class="col-lg-3 d-flex flex-wrap" *ngIf="crudList.r">
 
-            <button class="btn-rpt-success col-lg-4  me-1" (click)="getReport('')">Get Report</button>
-            <button class="btn-rpt-primary btn-rpt col-lg-1" (click)="print()">Print</button>
-            <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button>
-
+            <div class="col-md-4  pe-1"><button class="btn-rpt-success w-100" (click)="getReport('')">Get Report</button></div>
+            <div  class="col-md-4  pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
+            <!-- <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button> -->
+            <div class=" col-md-4"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
         </div>
 
     </div>

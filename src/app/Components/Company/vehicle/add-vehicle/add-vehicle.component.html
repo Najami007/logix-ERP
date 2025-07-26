@@ -1,4 +1,4 @@
-<div>
+<div class="row">
     <mat-form-field class="col-md-12 matSmall" appearance="outline">
         <mat-label>Vehicle Name</mat-label>
         <input [(ngModel)]="VehicleName"  matInput type="text">
@@ -17,9 +17,9 @@
     </mat-form-field> -->
 
 
-    <div class="row justify-content-around">
-            <button class="btnsave w-25" *ngIf="crudList.c " (click)="save()" accesskey="s">{{actionbtn}}</button>
-            <button class="btnreset w-25" (click)="reset()">Reset</button>
+    <div class="d-flex flex-wrap justify-content-around">
+           <div class="col-md-4 pe-1"> <button class="btnsave w-100" *ngIf="crudList.c " (click)="save()" accesskey="s">{{actionbtn}}</button></div>
+            <div class="col-md-4"><button class="btnreset w-100" (click)="reset()">Reset</button></div>
         </div>
     
 </div>

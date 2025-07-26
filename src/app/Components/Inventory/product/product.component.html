@@ -6,172 +6,174 @@
 
             <div class="row">
 
-               <div class="col-md-6">
-                 <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Category *</mat-label>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Category *</mat-label>
 
-                    <mat-select [(ngModel)]="CategoryID" #category (selectionChange)="getSubCategory()"
-                        name="pCategory">
-                        <mat-option><ngx-mat-select-search #catsearch [placeholderLabel]="'Search...'"
-                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                        <mat-option *ngFor="let item of CategoriesList | filter:catsearch.value"
-                            [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
+                        <mat-select [(ngModel)]="CategoryID" #category (selectionChange)="getSubCategory()"
+                            name="pCategory">
+                            <mat-option><ngx-mat-select-search #catsearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of CategoriesList | filter:catsearch.value"
+                                [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
 
-                    </mat-select>
-                    <mat-icon class="cursorPointer" (click)="addCategory()" matSuffix>add</mat-icon>
-                </mat-form-field>
-               </div>
-               <div class="col-md-6">
-                 <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Sub Category *</mat-label>
+                        </mat-select>
+                        <mat-icon class="cursorPointer" (click)="addCategory()" matSuffix>add</mat-icon>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Sub Category *</mat-label>
 
-                    <mat-select [(ngModel)]="SubCategoryID" #subCategory name="pSubCategory">
-                        <mat-option><ngx-mat-select-search #subcatsearch [placeholderLabel]="'Search...'"
-                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                        <mat-option *ngFor="let item of SubCategoriesList| filter:subcatsearch.value "
-                            [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
-                    </mat-select>
-                    <mat-icon class="cursorPointer" (click)="addSubCategory()" matSuffix>add</mat-icon>
+                        <mat-select [(ngModel)]="SubCategoryID" #subCategory name="pSubCategory">
+                            <mat-option><ngx-mat-select-search #subcatsearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of SubCategoriesList| filter:subcatsearch.value "
+                                [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
+                        </mat-select>
+                        <mat-icon class="cursorPointer" (click)="addSubCategory()" matSuffix>add</mat-icon>
 
-                </mat-form-field>
-               </div>
-
-
+                    </mat-form-field>
+                </div>
 
 
 
-              <div class="col-md-6">
-                  <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Product Title *</mat-label>
-                    <input matInput id="title2" autocomplete="off" [(ngModel)]="ProductName" accesskey="n" type="text">
 
-                </mat-form-field>
-              </div>
-
-               <div class="col-md-6">
-                 <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Product Title 2 </mat-label>
-                    <input matInput autocomplete="off" [(ngModel)]="productNameOthLanguage" type="text">
-
-                </mat-form-field>
-               </div>
-
-               <div class="col-md-6">
-                 <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Code</mat-label>
-                    <input matInput autocomplete="off" [(ngModel)]="productCode" type="text">
-
-                </mat-form-field>
-               </div>
 
                 <div class="col-md-6">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Product Title *</mat-label>
+                        <input matInput id="title2" autocomplete="off" [(ngModel)]="ProductName" accesskey="n"
+                            type="text">
+
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Product Title 2 </mat-label>
+                        <input matInput autocomplete="off" [(ngModel)]="productNameOthLanguage" type="text">
+
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Code</mat-label>
+                        <input matInput autocomplete="off" [(ngModel)]="productCode" type="text">
+
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-2">
                     <mat-form-field appearance="outline" class="w-100  matSmall">
-                    <mat-label>Barcode Type *</mat-label>
-                    <mat-select [(ngModel)]="prodBarcodeType" name="pType">
-                        <mat-option [value]="'auto'">Auto</mat-option>
-                        <mat-option [value]="'manual'">Manual</mat-option>
-                    </mat-select>
-                </mat-form-field>
+                        <mat-label>Barcode Type *</mat-label>
+                        <mat-select [(ngModel)]="prodBarcodeType" name="pType">
+                            <mat-option [value]="'auto'">Auto</mat-option>
+                            <mat-option [value]="'manual'">Manual</mat-option>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Product Barcode *</mat-label>
-                    <input matInput type="text" [(ngModel)]="Barcode" [disabled]="prodBarcodeType == 'auto'">
-                </mat-form-field>
+                        <mat-label>Product Barcode *</mat-label>
+                        <input matInput type="text" [(ngModel)]="Barcode" [disabled]="prodBarcodeType == 'auto'">
+                    </mat-form-field>
                 </div>
 
 
                 <div class="col-md-3">
                     <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Brand *</mat-label>
-                    <mat-select [(ngModel)]="BrandID" #brand>
-                        <mat-option><ngx-mat-select-search #brandSearch [placeholderLabel]="'Search...'"
-                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                        <mat-option *ngFor="let item of BrandList | filter:brandSearch.value"
-                            [value]="item.brandID">{{item.brandTitle}}</mat-option>
-                    </mat-select>
-                    <mat-icon class="cursorPointer" (click)="addBrand()" matSuffix>add</mat-icon>
+                        <mat-label>Brand *</mat-label>
+                        <mat-select [(ngModel)]="BrandID" #brand>
+                            <mat-option><ngx-mat-select-search #brandSearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of BrandList | filter:brandSearch.value"
+                                [value]="item.brandID">{{item.brandTitle}}</mat-option>
+                        </mat-select>
+                        <mat-icon class="cursorPointer" (click)="addBrand()" matSuffix>add</mat-icon>
 
-                </mat-form-field>
+                    </mat-form-field>
                 </div>
 
 
 
-               <div class="col-md-3">
-                 <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Rack *</mat-label>
-                    <mat-select [(ngModel)]="rackID" #rack>
-                        <mat-option><ngx-mat-select-search #rackSearch [placeholderLabel]="'Search...'"
-                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                        <mat-option *ngFor="let item of RacksList |filter:rackSearch.value"
-                            [value]="item.rackID">{{item.rackTitle}}</mat-option>
-                    </mat-select>
-                    <mat-icon class="cursorPointer" (click)="addRack()" matSuffix>add</mat-icon>
-
-                </mat-form-field>
-               </div>
-
-               <div class="col-md-3">
-                 <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>UOM *</mat-label>
-                    <mat-select [(ngModel)]="UOMID" #uom>
-                        <mat-option><ngx-mat-select-search #uomSearch [placeholderLabel]="'Search...'"
-                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                        <mat-option *ngFor="let item of UOMList |filter:uomSearch.value"
-                            [value]="item.uomID">{{item.uomTitle}}</mat-option>
-                    </mat-select>
-                    <mat-icon class="cursorPointer" (click)="addUOM()" matSuffix>add</mat-icon>
-
-                </mat-form-field>
-               </div>
                 <div class="col-md-3">
                     <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Product Type *</mat-label>
-                    <mat-select [(ngModel)]="prodTypeID">
-                        <mat-option><ngx-mat-select-search #pType [placeholderLabel]="'Search...'"
-                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                        <mat-option *ngFor="let item of ProductTypeList |filter:pType.value"
-                            [value]="item.productTypeID">{{item.productTypeTitle}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
+                        <mat-label>Rack *</mat-label>
+                        <mat-select [(ngModel)]="rackID" #rack>
+                            <mat-option><ngx-mat-select-search #rackSearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of RacksList |filter:rackSearch.value"
+                                [value]="item.rackID">{{item.rackTitle}}</mat-option>
+                        </mat-select>
+                        <mat-icon class="cursorPointer" (click)="addRack()" matSuffix>add</mat-icon>
+
+                    </mat-form-field>
                 </div>
 
                 <div class="col-md-3">
                     <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Cost Price *</mat-label>
-                    <!-- <input matInput type="number" [(ngModel)]="CostPrice" (change)="global.avoidMinus($event)"> -->
-                    <input matInput type="number" [(ngModel)]="CostPrice" (change)="global.avoidMinus($event)"
-                        [disabled]="btnType == 'Update'">
-                </mat-form-field>
+                        <mat-label>UOM *</mat-label>
+                        <mat-select [(ngModel)]="UOMID" #uom>
+                            <mat-option><ngx-mat-select-search #uomSearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of UOMList |filter:uomSearch.value"
+                                [value]="item.uomID">{{item.uomTitle}}</mat-option>
+                        </mat-select>
+                        <mat-icon class="cursorPointer" (click)="addUOM()" matSuffix>add</mat-icon>
+
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Product Type *</mat-label>
+                        <mat-select [(ngModel)]="prodTypeID">
+                            <mat-option><ngx-mat-select-search #pType [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of ProductTypeList |filter:pType.value"
+                                [value]="item.productTypeID">{{item.productTypeTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Cost Price *</mat-label>
+                        <!-- <input matInput type="number" [(ngModel)]="CostPrice" (change)="global.avoidMinus($event)"> -->
+                        <input matInput type="number" [(ngModel)]="CostPrice" (change)="global.avoidMinus($event)"
+                            [disabled]="btnType == 'Update'">
+                    </mat-form-field>
                 </div>
 
 
-               <div class="col-md-3">
-                 <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Sale Price *</mat-label>
-                    <input matInput (keyup)="applyDiscount()" type="number" [(ngModel)]="SalePrice"
-                        (change)="global.avoidMinus($event)">
-                </mat-form-field>
-               </div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Sale Price *</mat-label>
+                        <input matInput (keyup)="applyDiscount()" type="number" [(ngModel)]="SalePrice"
+                            (change)="global.avoidMinus($event)">
+                    </mat-form-field>
+                </div>
 
-               <div class="col-md-3">
-                 <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Discount Percentage</mat-label>
-                    <mat-select [(ngModel)]="DiscPercent" name="billDiscount" [disabled]="!discFeature"
-                        (selectionChange)="applyDiscount()">
-                        <mat-option *ngFor="let item of discountList" [value]="item.value">{{item.value}}%</mat-option>
-                    </mat-select>
-                </mat-form-field>
-               </div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Discount Percentage</mat-label>
+                        <mat-select [(ngModel)]="DiscPercent" name="billDiscount" [disabled]="!discFeature"
+                            (selectionChange)="applyDiscount()">
+                            <mat-option *ngFor="let item of discountList"
+                                [value]="item.value">{{item.value}}%</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
 
-               <div class="col-md-3 ">
-                 <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Discount Rupees</mat-label>
-                    <input matInput disabled="true" type="number" [disabled]="!discFeature" [(ngModel)]="DiscRupee"
-                        (change)="global.avoidMinus($event)">
-                </mat-form-field>
-               </div>
+                <div class="col-md-3 ">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Discount Rupees</mat-label>
+                        <input matInput disabled="true" type="number" [disabled]="!discFeature" [(ngModel)]="DiscRupee"
+                            (change)="global.avoidMinus($event)">
+                    </mat-form-field>
+                </div>
 
                 <div class="col-md-12 row">
                     <mat-form-field appearance="outline" class="col-md-10 matSmall">
@@ -182,62 +184,62 @@
                         (click)="generatePrice('generate')">Generate</button>
 
                 </div>
-                
+
                 <div class="col-md-3">
                     <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Min ROL</mat-label>
-                    <input matInput type="number" [(ngModel)]="minRol" (change)="global.avoidMinus($event)">
-                </mat-form-field>
+                        <mat-label>Min ROL</mat-label>
+                        <input matInput type="number" [(ngModel)]="minRol" (change)="global.avoidMinus($event)">
+                    </mat-form-field>
 
                 </div>
                 <div class="col-md-3 ">
                     <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Max ROL</mat-label>
-                    <input matInput type="number" [(ngModel)]="maxRol" (change)="global.avoidMinus($event)">
-                </mat-form-field>
+                        <mat-label>Max ROL</mat-label>
+                        <input matInput type="number" [(ngModel)]="maxRol" (change)="global.avoidMinus($event)">
+                    </mat-form-field>
                 </div>
 
                 <div class="col-md-3">
                     <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>GST(General Sales Tax)</mat-label>
-                    <input matInput type="number" [(ngModel)]="gst" (change)="global.avoidMinus($event)">
-                </mat-form-field>
+                        <mat-label>GST(General Sales Tax)</mat-label>
+                        <input matInput type="number" [(ngModel)]="gst" (change)="global.avoidMinus($event)">
+                    </mat-form-field>
                 </div>
 
-               <div class="col-md-3 ">
-                 <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>ET(Extra Tax)</mat-label>
-                    <input matInput type="number" [(ngModel)]="Et" (change)="global.avoidMinus($event)">
-                </mat-form-field>
-               </div>
+                <div class="col-md-3 ">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>ET(Extra Tax)</mat-label>
+                        <input matInput type="number" [(ngModel)]="Et" (change)="global.avoidMinus($event)">
+                    </mat-form-field>
+                </div>
 
-               <div class="col-md-6">
-                 <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>PCT Code</mat-label>
-                    <input matInput type="text" [(ngModel)]="pctCode">
-                </mat-form-field>
-               </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>PCT Code</mat-label>
+                        <input matInput type="text" [(ngModel)]="pctCode">
+                    </mat-form-field>
+                </div>
 
-               <div class="col-md-3">
-                 <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Allow Minus</mat-label>
-                    <mat-select [(ngModel)]="allowMinus">
-                        <mat-option [value]="true">Yes</mat-option>
-                        <mat-option [value]="false">No</mat-option>
-                    </mat-select>
-                </mat-form-field>
-               </div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Allow Minus</mat-label>
+                        <mat-select [(ngModel)]="allowMinus">
+                            <mat-option [value]="true">Yes</mat-option>
+                            <mat-option [value]="false">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
 
-             <div class="col-md-3">
-                   <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Barcode Type</mat-label>
-                    <mat-select [(ngModel)]="barcodeType">
-                        <mat-option value="Basic">Basic</mat-option>
-                        <mat-option value="Special">Special</mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Barcode Type</mat-label>
+                        <mat-select [(ngModel)]="barcodeType">
+                            <mat-option value="Basic">Basic</mat-option>
+                            <mat-option value="Special">Special</mat-option>
+                        </mat-select>
+                    </mat-form-field>
 
-             </div>
+                </div>
 
                 <!-------------      Image and Description Section-->
 
@@ -260,9 +262,9 @@
 
                 <div class="col-md-10">
                     <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Description</mat-label>
-                    <textarea matInput type="text" rows="5" [(ngModel)]="Description"></textarea>
-                </mat-form-field>
+                        <mat-label>Description</mat-label>
+                        <textarea matInput type="text" rows="5" [(ngModel)]="Description"></textarea>
+                    </mat-form-field>
 
                 </div>
 
@@ -270,12 +272,13 @@
 
 
 
-                <div class="p-5 d-flex flex-wrap justify-content gap-4">
-                    <button #toggleBtn class="btnsave col-md-3" *ngIf="crudList.c" accesskey="s"
-                        (click)="save() ">{{btnType}}</button>
-                    <button class="btnreset col-md-3" (click)="reset('btn')">Reset</button>
-                    <button class="btnload col-md-2" (click)="ngOnInit()">Load</button>
-                    <mat-checkbox [(ngModel)]="autoEmpty">Auto Empty</mat-checkbox>
+                <div class="p-5 d-flex flex-wrap justify-content">
+                    <div class=" col-md-3 pe-1"><button #toggleBtn class="btnsave w-100" *ngIf="crudList.c"
+                            accesskey="s" (click)="save() ">{{btnType}}</button></div>
+                    <div class=" col-md-3 pe-1"><button class="btnreset w-100" (click)="reset('btn')">Reset</button>
+                    </div>
+                    <div class=" col-md-3 pe-1"><button class="btnload w-100" (click)="ngOnInit()">Load</button></div>
+                    <div class=" col-md-3 "> <mat-checkbox [(ngModel)]="autoEmpty">Auto Empty</mat-checkbox></div>
                 </div>
 
             </div>
@@ -293,61 +296,65 @@
 
     <mat-tab label="SAVED PRODUCTS">
 
-        <div class="container-fluid  row pt-2">
+        <div class="container-fluid ">
 
 
+            <div class="row pt-2 pb-1">
 
-            <mat-form-field appearance="outline" class="col-md-4 matSmall">
-                <mat-label>Search.....</mat-label>
-                <input type="text" id="searchProduct" (keydown)="onProdSearchKeyup($event,searchProduct)"
-                    (keypress)="onProdSearchKeyup($event,searchProduct)" matInput #searchProd
-                    [(ngModel)]="searchProduct">
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="col-md-2 matSmall">
-                <mat-label>Sub Category</mat-label>
+                <mat-form-field appearance="outline" class="col-md-4 matSmall">
+                    <mat-label>Search.....</mat-label>
+                    <input type="text" id="searchProduct" (keydown)="onProdSearchKeyup($event,searchProduct)"
+                        (keypress)="onProdSearchKeyup($event,searchProduct)" matInput #searchProd
+                        [(ngModel)]="searchProduct">
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-md-2 matSmall">
+                    <mat-label>Sub Category</mat-label>
 
-                <mat-select [(ngModel)]="subCategoryFilterID" (selectionChange)="filterProductList('subcat')">
-                    <mat-option><ngx-mat-select-search #scfs [placeholderLabel]="'Search...'"
-                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                    <mat-option [value]="0">ALL</mat-option>
-                    <mat-option *ngFor="let item of subCategoryFilterList | filter:scfs.value"
-                        [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
-                </mat-select>
-            </mat-form-field>
+                    <mat-select [(ngModel)]="subCategoryFilterID" (selectionChange)="filterProductList('subcat')">
+                        <mat-option><ngx-mat-select-search #scfs [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option [value]="0">ALL</mat-option>
+                        <mat-option *ngFor="let item of subCategoryFilterList | filter:scfs.value"
+                            [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
 
-            <mat-form-field appearance="outline" class="col-md-2 matSmall">
-                <mat-label>Brand</mat-label>
+                <mat-form-field appearance="outline" class="col-md-2 matSmall">
+                    <mat-label>Brand</mat-label>
 
-                <mat-select [(ngModel)]="brandFilterID" (selectionChange)="filterProductList('brand')">
-                    <mat-option><ngx-mat-select-search #bfs [placeholderLabel]="'Search...'"
-                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                    <mat-option [value]="0">ALL</mat-option>
-                    <mat-option *ngFor="let item of BrandList | filter:bfs.value"
-                        [value]="item.brandID">{{item.brandTitle}}</mat-option>
-                </mat-select>
-            </mat-form-field>
+                    <mat-select [(ngModel)]="brandFilterID" (selectionChange)="filterProductList('brand')">
+                        <mat-option><ngx-mat-select-search #bfs [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option [value]="0">ALL</mat-option>
+                        <mat-option *ngFor="let item of BrandList | filter:bfs.value"
+                            [value]="item.brandID">{{item.brandTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
 
-            <mat-form-field appearance="outline" class="col-md-2 matSmall">
-                <mat-label>Status</mat-label>
+                <mat-form-field appearance="outline" class="col-md-2 matSmall">
+                    <mat-label>Status</mat-label>
 
-                <mat-select [(ngModel)]="activeFilterID" (selectionChange)="filterProductList('status')">
-                    <mat-option [value]="'-'">ALL</mat-option>
-                    <mat-option [value]="true">Active</mat-option>
-                    <mat-option [value]="false">Deactive</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="col-md-1 matSmall">
-                <mat-label>Disc</mat-label>
+                    <mat-select [(ngModel)]="activeFilterID" (selectionChange)="filterProductList('status')">
+                        <mat-option [value]="'-'">ALL</mat-option>
+                        <mat-option [value]="true">Active</mat-option>
+                        <mat-option [value]="false">Deactive</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-md-1 matSmall">
+                    <mat-label>Disc</mat-label>
 
-                <mat-select [disabled]="!discFeature" [(ngModel)]="discFilterID"
-                    (selectionChange)="filterProductList('disc')">
+                    <mat-select [disabled]="!discFeature" [(ngModel)]="discFilterID"
+                        (selectionChange)="filterProductList('disc')">
 
-                    <mat-option *ngFor="let item of DiscFilterList | filter:bfs.value"
-                        [value]="item.val">{{item.title}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <button style="height: 40px;" class="btn-rpt-primary  col-lg-1"
-                (click)="global.printData('#prodTable')">Print</button>
+                        <mat-option *ngFor="let item of DiscFilterList | filter:bfs.value"
+                            [value]="item.val">{{item.title}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div class="col-lg-1">
+                    <button style="height: 40px;" class="btn-rpt-primary w-100"
+                        (click)="global.printData('#prodTable')">Print</button>
+                </div>
+            </div>
 
             <hr>
 

@@ -51,21 +51,22 @@
             <mat-label>End</mat-label>
             <input  matInput type="text" [(ngModel)]="endVal" class="text-secondary">
         </mat-form-field>
-       <div class="col-lg-1">
-        <button class="btn-rpt-primary" (click)="filterRecipe(startVal,endVal,'perc')">%<mat-icon>filter_list</mat-icon></button>
+       <div class="col-lg-1 pe-1">
+        <button class="btn-rpt-primary w-100" (click)="filterRecipe(startVal,endVal,'perc')">%<mat-icon>filter_list</mat-icon></button>
        </div>
        <div class="col-lg-1">
-        <button class="btn-rpt-primary" (click)="filterRecipe(startVal,endVal,'cost')">Cost<mat-icon>filter_list</mat-icon></button>
+        <button class="btn-rpt-primary w-100" (click)="filterRecipe(startVal,endVal,'cost')">Cost<mat-icon>filter_list</mat-icon></button>
        </div>
-       <div class="col-lg-1">
-        <button class="btn-rpt-primary" (click)="filterRecipe(startVal,endVal,'sale')">Sale<mat-icon>filter_list</mat-icon></button>
+       
+        <div class="col-lg-6 pb-2 d-flex flex-wrap" *ngIf="crudList.r">
+            <div class="col-md-2 pe-1">
+        <button class="btn-rpt-primary w-100" (click)="filterRecipe(startVal,endVal,'sale')">Sale<mat-icon>filter_list</mat-icon></button>
        </div>
-        <div class="col-lg-5 pb-2" *ngIf="crudList.r">
-            <button class="btn-rpt-success col-lg-2  me-1" (click)="getReport('summary')">Summary</button>
-            <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('detail')">Detail</button>
-            <button *ngIf="FBRFeature" class="btn-rpt-success col-lg-2 me-1" (click)="getReport('taxSummary')">Tax Det</button>
-            <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('qsm')">Qty Summary</button>
-            <button class="btn-rpt-primary col-lg-2" (click)="print()">Print</button>
+            <div class="col-md-2 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('summary')">Summary</button></div>
+            <div class="col-md-2 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('detail')">Detail</button></div>
+            <div class="col-md-2 pe-1" *ngIf="FBRFeature"><button  class="btn-rpt-success w-100" (click)="getReport('taxSummary')">Tax Det</button></div>
+            <div class="col-md-2 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('qsm')">Qty Summary</button></div>
+            <div class="col-md-2 "><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
         </div>
     </div>
 

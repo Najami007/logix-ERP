@@ -162,12 +162,14 @@
         </div>
 
 
-        <div class="mt-2 d-flex justify-content-around">
-            <div class="col-md-6 pe-1"><button *ngIf="crudList.c" class="btnhold w-100" (click)="SaveBill('hold')">{{holdBtnType}}</button></div>
+        <div class="mt-2 row">
+            <div class="col-md-6 pb-1"><button *ngIf="crudList.c" class="btnhold w-100" (click)="SaveBill('hold')">{{holdBtnType}}</button></div>
             <div class="col-md-6"><button class="btnreset w-100" data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button></div>
         </div>
-        <div class="mt-2 d-flex justify-content-around">
-            <button *ngIf="crudList.c" class="btnsave w-100" (click)="SaveBill('issue')">Save</button>
+        <div class="mt-1 row">
+            <div class="col-md-12">
+                <button *ngIf="crudList.c" class="btnsave w-100" (click)="SaveBill('issue')">Save</button>
+            </div>
         </div>
 
     </div>

@@ -43,84 +43,86 @@
             </mat-form-field>
 
 
-           <div class="col-md-2 mt-1">
-             <mat-form-field class="w-100 matSmall" appearance="outline">
-                <mat-label>Reports</mat-label>
-                <mat-select [(ngModel)]="tmpRptType">
-                    <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
-                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                    <mat-option *ngFor="let item of reportsList | filter:rptSearch.value"
-                        [value]="item.invType">{{item.invTypeTitle}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-           </div>
-           <div class="col-md-2">
-             <mat-form-field appearance="outline" class="w-100 matSmall">
-                <mat-label>Type</mat-label>
+            <div class="col-md-2 mt-1">
+                <mat-form-field class="w-100 matSmall" appearance="outline">
+                    <mat-label>Reports</mat-label>
+                    <mat-select [(ngModel)]="tmpRptType">
+                        <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of reportsList | filter:rptSearch.value"
+                            [value]="item.invType">{{item.invTypeTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-2">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Type</mat-label>
 
-                <mat-select [(ngModel)]="catType" name="catType">
+                    <mat-select [(ngModel)]="catType" name="catType">
 
-                    <mat-option value="cat">Categorywise</mat-option>
-                    <mat-option value="subcat">Sub Categorywise</mat-option>
-                    <mat-option value="brand">Brandwise</mat-option>
-                </mat-select>
-            </mat-form-field>
-           </div>
+                        <mat-option value="cat">Categorywise</mat-option>
+                        <mat-option value="subcat">Sub Categorywise</mat-option>
+                        <mat-option value="brand">Brandwise</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
             <div class="col-md-2" *ngIf="catType == 'cat' || catType == 'subcat'">
                 <mat-form-field appearance="outline" class="w-100 matSmall">
-                <mat-label>Category</mat-label>
+                    <mat-label>Category</mat-label>
 
-                <mat-select [(ngModel)]="CategoryID" #category (selectionChange)="getSubCategory()" name="pCategory">
-                    <mat-option><ngx-mat-select-search #catsearch [placeholderLabel]="'Search...'"
-                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                    <mat-option *ngFor="let item of CategoriesList | filter:catsearch.value"
-                        [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
+                    <mat-select [(ngModel)]="CategoryID" #category (selectionChange)="getSubCategory()"
+                        name="pCategory">
+                        <mat-option><ngx-mat-select-search #catsearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of CategoriesList | filter:catsearch.value"
+                            [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
 
-                </mat-select>
-            </mat-form-field>
+                    </mat-select>
+                </mat-form-field>
             </div>
-           <div class="col-md-2 " *ngIf="catType == 'subcat'">
-             <mat-form-field appearance="outline" class="w-100 matSmall" >
-                <mat-label>Sub Category</mat-label>
+            <div class="col-md-2 " *ngIf="catType == 'subcat'">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Sub Category</mat-label>
 
-                <mat-select [(ngModel)]="SubCategoryID" #subCategory name="pSubCategory">
-                    <mat-option><ngx-mat-select-search #subcatsearch [placeholderLabel]="'Search...'"
-                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                    <mat-option *ngFor="let item of SubCategoriesList| filter:subcatsearch.value "
-                        [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-           </div>
+                    <mat-select [(ngModel)]="SubCategoryID" #subCategory name="pSubCategory">
+                        <mat-option><ngx-mat-select-search #subcatsearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of SubCategoriesList| filter:subcatsearch.value "
+                            [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
 
-           <div class="col-md-2 " *ngIf="catType == 'brand'" >
-             <mat-form-field appearance="outline" class="w-100 matSmall"  >
-                <mat-label>Brand</mat-label>
-                <mat-select [(ngModel)]="BrandID" #brand>
-                    <mat-option><ngx-mat-select-search #brandSearch [placeholderLabel]="'Search...'"
-                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                    <mat-option *ngFor="let item of BrandList | filter:brandSearch.value"
-                        [value]="item.brandID">{{item.brandTitle}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-           </div>
-             <div class="col-md-2">
-                 <mat-form-field appearance="outline" class="w-100 matSmall" >
-                <mat-label>Formate</mat-label>
-                <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
-                    
-                    <mat-option [value]="1">Summary</mat-option>
-                     <mat-option [value]="2">Detail</mat-option>
-                </mat-select>
-            </mat-form-field>
-             </div>
-            
+            <div class="col-md-2 " *ngIf="catType == 'brand'">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Brand</mat-label>
+                    <mat-select [(ngModel)]="BrandID" #brand>
+                        <mat-option><ngx-mat-select-search #brandSearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of BrandList | filter:brandSearch.value"
+                            [value]="item.brandID">{{item.brandTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-2">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Formate</mat-label>
+                    <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
 
-            <div class="col-md-4 row" *ngIf="crudList.r">
+                        <mat-option [value]="1">Summary</mat-option>
+                        <mat-option [value]="2">Detail</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+
+            <div class="col-md-4 d-flex flex-wrap" *ngIf="crudList.r">
                 <!-- <button class="btn-rpt-success col-lg-3  me-1" (click)="getReport('summary')">Summary</button> -->
-                          <div class="col-lg-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('detail')">Get Report</button></div>
-                <div class="col-lg-4 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
-                <div class="col-lg-4"><button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button></div>
-               
+                <div class="col-md-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('detail')">Get
+                        Report</button></div>
+                <div class="col-md-4 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
+                <div class=" col-md-4"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
+
 
             </div>
         </div>
@@ -139,7 +141,7 @@
                     <div class="d-flex flex-column">
                         <span class="companyName">{{item.companyName}}</span>
                         <span class="rptTitle">{{reportType}}</span>
-                        <span > <b *ngIf="userName != ''">User: {{userName}}</b></span>
+                        <span> <b *ngIf="userName != ''">User: {{userName}}</b></span>
                         <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}})
                             <b>To:</b>
                             {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
@@ -228,7 +230,9 @@
                         </td>
                         <td class="text-end" *ngIf="rptType == 'S' || rptType == 'SR'">{{item.discInP |number:'1.0-1'}}
                         </td>
-                        <td class="text-end" *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'IC' || rptType == 'RIC'">{{(item.salePrice *
+                        <td class="text-end"
+                            *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'IC' || rptType == 'RIC'">
+                            {{(item.salePrice *
                             item.quantity) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
                         <!-- <td class="text-end" *ngIf="rptType != 's' && rptType != 'sr'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td> -->
                         <td class="text-end" *ngIf="rptType == 'P' || rptType == 'PR'">{{item.costPrice * item.quantity

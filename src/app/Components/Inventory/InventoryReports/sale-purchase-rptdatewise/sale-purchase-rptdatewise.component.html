@@ -43,48 +43,53 @@
             </mat-form-field>
 
 
-           <div class="col-lg-4 ">
-             <mat-form-field class="w-100 matSmall" appearance="outline">
-                <mat-label>Reports</mat-label>
-                <mat-select [(ngModel)]="tmpRptType">
-                    <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
-                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                    <mat-option *ngFor="let item of reportsList | filter:rptSearch.value"
-                        [value]="item.invType">{{item.invTypeTitle}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-           </div>
-           <div class="col-md-2">
-             <mat-form-field appearance="outline" class="w-100 matSmall">
-                <mat-label>Location</mat-label>
-                <mat-select [(ngModel)]="locationID" (selectionChange)="reset()">
-                    <mat-option [value]="0">All</mat-option>
-                    <mat-option *ngFor="let item of locationList"
-                        [value]="item.locationID">{{item.locationTitle}}</mat-option>
 
-                </mat-select>
-            </mat-form-field>
-           </div>
-           <div class="col-md-2">
-             <mat-form-field appearance="outline" class="w-100 matSmall">
-                <mat-label>Formate</mat-label>
-                <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
+        </div>
+        <div class="row">
+            <div class="col-md-4 ">
+                <mat-form-field class="w-100 matSmall" appearance="outline">
+                    <mat-label>Reports</mat-label>
+                    <mat-select [(ngModel)]="tmpRptType">
+                        <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of reportsList | filter:rptSearch.value"
+                            [value]="item.invType">{{item.invTypeTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-2">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Location</mat-label>
+                    <mat-select [(ngModel)]="locationID" (selectionChange)="reset()">
+                        <mat-option [value]="0">All</mat-option>
+                        <mat-option *ngFor="let item of locationList"
+                            [value]="item.locationID">{{item.locationTitle}}</mat-option>
 
-                    <mat-option [value]="1">Summary</mat-option>
-                    <mat-option [value]="2">Detail</mat-option>
-                    <mat-option *ngIf="FBRFeature" [value]="3">Tax Detail</mat-option>
-                </mat-select>
-            </mat-form-field>
-           </div>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-2">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Formate</mat-label>
+                    <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
 
-            <div class="col-lg-4 row" *ngIf="crudList.r">
+                        <mat-option [value]="1">Summary</mat-option>
+                        <mat-option [value]="2">Detail</mat-option>
+                        <mat-option *ngIf="FBRFeature" [value]="3">Tax Detail</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-4 d-flex flex-wrap" *ngIf="crudList.r">
                 <!-- <button class="btn-rpt-success col-lg-2  me-1" (click)="getReport('summary')">Summary</button>
                 <button class="btn-rpt-success col-lg-2  me-1" *ngIf="FBRFeature" (click)="getReport('taxSummary')">Tax Rpt</button> -->
-                <div class="col-lg-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('')">Get Report</button></div>
-                <div class="col-lg-4 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
-                <div class="col-lg-4"><button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button></div>
+                <div class="col-md-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('')">Get
+                        Report</button></div>
+                <div class="col-md-4 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
+                <div class="col-md-4"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
                 <!-- <button style="width: 60px;font-size: 20px;" class="btn-rpt-primary" (click)="global.ExportHTMLTabletoExcel('PrintDiv','Summary')"><i class="bi bi-filetype-xlsx"></i></button> -->
             </div>
+
         </div>
 
 
@@ -144,7 +149,8 @@
                     <tr *ngFor="let item of SaleDetailList index as index">
                         <td class="text-center">{{index + 1}}</td>
                         <td class="text-center cursorPointer" (click)="printBill(item)">
-                            <span [ngClass]="item.invType == 'S' || item.invType == 'SR' || item.invType == 'P'|| item.invType == 'PR' ? 'text-primary' : '' ">{{item.invBillNo}}</span>
+                            <span
+                                [ngClass]="item.invType == 'S' || item.invType == 'SR' || item.invType == 'P'|| item.invType == 'PR' ? 'text-primary' : '' ">{{item.invBillNo}}</span>
                         </td>
                         <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
                         <td *ngIf="rptType == 'I' || rptType == 'R'">{{item.issueType}}</td>
@@ -294,7 +300,9 @@
                             |number:'1.0-1'}}</td>
                         <td class="text-end" *ngIf="rptType == 'S' || rptType == 'SR'">{{item.discInP |number:'1.0-1'}}%
                         </td>
-                        <td class="text-end" *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'IC' || rptType == 'RIC' ">{{(item.salePrice *
+                        <td class="text-end"
+                            *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'IC' || rptType == 'RIC' ">
+                            {{(item.salePrice *
                             item.quantity) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
                         <!-- <td class="text-end" *ngIf="rptType != 's' && rptType != 'sr'">{{item.costPrice * item.quantity |number:'1.0-1'}}</td> -->
                         <td class="text-end" *ngIf="rptType == 'P' || rptType == 'PR'">{{item.costPrice * item.quantity

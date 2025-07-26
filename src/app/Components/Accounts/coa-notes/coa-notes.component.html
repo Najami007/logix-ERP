@@ -10,13 +10,15 @@
                 <button mat-raised-button (click)="OpenDialogue()" style="height: 42px;"
                     class="bg-success text-white w-100">Add Note</button>
             </div>
-            <mat-form-field class="col-md-10 matSmall" appearance="outline">
+            <div class="col-md-10">
+                <mat-form-field class="w-100 matSmall" appearance="outline">
                 <mat-label>Search.....</mat-label>
                 <input matInput type="text" #searchNote>
             </mat-form-field>
+            </div>
 
         </div>
-        <table class="table-logix2 h-100 " *ngIf="crudList.r">
+        <table class="table-logix2 h-100"  *ngIf="crudList.r">
             <thead>
                 <tr>
                     <th>S#</th>

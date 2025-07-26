@@ -1,6 +1,6 @@
 <div class="body container-fluid">
 
-    <div class="row  mt-2">
+    <div class="row  mt-2 pb-2">
 
         <mat-form-field  appearance="outline" class="col-md-2 matSmall">
             <mat-label>From Date</mat-label>
@@ -33,10 +33,10 @@
                 <ngx-material-timepicker #tTime></ngx-material-timepicker>
             </div>
         </mat-form-field>
-        <div class="col-lg-4 pb-2 pt-2" *ngIf="crudList.r">
+        <div class="col-lg-4 pt-2 d-flex flex-wrap" *ngIf="crudList.r">
 
-            <button class=" btn-rpt-success col-lg-4 me-1" (click)="getReport()">Get Report</button>
-            <button class="btn-rpt-primary col-lg-2 " (click)="print()">Print</button>
+            <div class=" col-lg-4 pe-1"><button class=" btn-rpt-success w-100" (click)="getReport()">Get Report</button></div>
+            <div class=" col-lg-4 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
         </div>
     </div>
 
