@@ -266,6 +266,10 @@ export class ProductEditBulkComponent implements OnInit {
 
   onGstAllUpdate(e: any, type: any) {
 
+    if(this.reqType == 'CAT'){
+      return;
+    }
+
     if (e.key == 'Enter') {
       this.productList.forEach((e: any) => {
         if (e.isChecked) {

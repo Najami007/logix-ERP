@@ -1,31 +1,35 @@
 <div class="body" ondblclick="return false">
 
-    <div class="d-flex flex-wrap">
+    <div class="row">
 
         <!------------------ column 1 bill side ---------------->
 
-        <div class="col-lg-9 pe-2">
+        <div class="col-md-9 pe-2">
 
             <div style="border-radius: 5px 5px 5px 5px;height: 84vh;">
 
                 <!------------------------- Search Bar Area ------------------>
-                <div class="ps-1 d-flex" style="background-color: rgb(237, 233, 233);">
-
+                <div class="ps-1">
+                     <mat-label class="text-secondary">Search Barcode / Product</mat-label>
+                </div>
+                <div class="ps-1 d-flex">
+                   
                     <!-------------------- Product Search Bar --------------->
 
-                    <div class="col-lg-9  d-flex flex-column pb-2">
-                        <mat-label class="text-secondary">Search Barcode / Product</mat-label>
+                    <div class="col-md-9  d-flex flex-column">
+                        
                         <input type="text" [(ngModel)]="PBarcode" id="vssearchProduct"
                             (keydown)="searchByCode($event);changeFocus($event,'.prodRow');focusTo($event,'#cash')"
-                            class="p-1 ps-2 mb-2 searchProduct " placeholder="Alt + b" (focus)="rowFocused = -1"
+                            class="p-1 ps-2 mb-2 searchProduct w-100" placeholder="Alt + b" (focus)="rowFocused = -1"
                             autocomplete="off" accesskey="b">
 
-                        <div class=" d-flex flex-column SearchConatiner cursorPointer w-100"
+                        <div class="d-flex flex-column SearchConatiner cursorPointer"
                             *ngIf="PBarcode != '' && PBarcode != undefined && byNameSearch">
                             <mat-card class="card "
                                 *ngFor="let item of productList| filter:PBarcode | slice:0:25 index as index"
                                 (click)="holdDataFunction(item);">
-                                <button style="height: 40px; background: none;border: none;text-align: left;" (focus)="prodFocusedRow = index"
+                                <button style="height: 40px; background: none;border: none;text-align: left;"
+                                    (focus)="prodFocusedRow = index"
                                     class="prodRow{{index}} prodBtn justify-content-between d-flex" [accessKey]="index"
                                     (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">
                                     <p>{{item.productTitle}} <b>({{item.salePrice}})</b></p>
@@ -34,9 +38,9 @@
                             </mat-card>
                         </div>
                     </div>
-                    <div class="col-lg-3 text-start ms-1 pt-3 mt-1">
+                    <div class="col-md-3 ps-1    text-start">
                         <button class="btnload w-50 " style="height: 40px;" (click)="ngOnInit()">Load</button>
-                        <mat-checkbox [(ngModel)]="byNameSearch">Name Search</mat-checkbox>
+                        <mat-checkbox class="w-50 " [(ngModel)]="byNameSearch">Name Search</mat-checkbox>
                     </div>
 
                 </div>
@@ -63,7 +67,8 @@
                             <tr *ngFor="let item of tableDataList index as index"
                                 (click)="showImg(item);rowFocused = index;" [ngClass]="rowFocused == index ?'bg-dg':''">
                                 <td class="text-center">{{index +1}}</td>
-                                <td>{{item.productTitle}} <b>({{item.barcode}})</b> <small>{{item.flavourTitle}}</small></td>
+                                <td>{{item.productTitle}} <b>({{item.barcode}})</b> <small>{{item.flavourTitle}}</small>
+                                </td>
 
                                 <td class="text-center"><input type="text" [readOnly]="true" [(ngModel)]="item.quantity"
                                         min="0" (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();"
@@ -93,8 +98,8 @@
         </div>
 
         <!------------------ column 2 Amount side area ---------------->
-        <div class="col-lg-3 border-1 border-start border-dark">
-            <div class=" p-2 totalArea" style="height: 82vh;overflow-y: scroll;overflow-x: hidden;">
+        <div class="col-md-3 border-1 border-start border-top border-dark">
+            <div class="pt-1 totalArea" style="height: 82vh;overflow-y: scroll;overflow-x: hidden;">
                 <div class="w-100">
                     <mat-card class="p-1 w-100 d-flex justify-content-center " style="height: 150px;width: 380px;">
                         <div class="text-center" *ngIf="tableDataList != ''">
@@ -111,20 +116,21 @@
                             |number:'1.0-1'}}
                         </p>
                     </div>
-                    <div class=" pt-3 d-flex justify-content-between" *ngIf="discFeature">
+                    <div class="pt-3 d-flex justify-content-between" *ngIf="discFeature">
                         <p style="font-size: 12px;color: rgb(0, 0, 0);">OFFER DISCOUNT</p>
                         <p style="font-size: 2rem;" class="font-digit text-end">{{offerDiscount
                             |number:'1.0-1'}}
                         </p>
                     </div>
 
+
                     <div class="d-flex justify-content-between">
-                        <div class="d-flex justify-content-between col-lg-12">
-                            <p class="text-primary cursorPointer" style="font-size: 12px;" accesskey="t"
-                                (click)="onDiscountClick()">ADD DISCOUN<u>T</u></p>
-                            <p style="font-size: 2rem;color: rgb(9, 9, 9);" class="font-digit text-end">{{discount
-                                |number:'1.0-1'}}
-                        </div>
+                        <p class="text-primary cursorPointer" style="font-size: 12px;" accesskey="t"
+                            (click)="onDiscountClick()">ADD DISCOUN<u>T</u></p>
+                        <p style="font-size: 2rem;color: rgb(9, 9, 9);" class="font-digit text-end">{{discount
+                            |number:'1.0-1'}}
+                    </div>
+                    <div class="d-flex justify-content-between">
                         <!-- <div class=" col-lg-6">
                         <p style="font-size: 15px;color: rgb(6, 6, 6)" class="text-end">SERVICE CHARGES</p>
                         <input class="bg-dark border-0 text-white text-end font-digit w-100" id="charges"
@@ -162,34 +168,34 @@
 
 
 
-                <div class="text-center d-flex pt-1 ">
-                    <div class="col-md-3 pe-2">
-                        <button class="w-100 delBtn" matTooltip="Void Full Bill"
-                        (click)="voidBill()"><mat-icon>delete_outline</mat-icon></button>
+                <div class="row pt-1 ">
+                    <div class="col-md-3 pb-1">
+                        <button class="delBtn w-100 text-center" matTooltip="Void Full Bill" 
+                            (click)="voidBill()"><mat-icon>delete_outline</mat-icon></button>
                     </div>
                     <div class="col-md-9">
-                           <button class="btnsave w-100 text-center " accesskey="s" id="save"
-                        (click)="save('Cash',true)"><u>S</u>ave</button>
-                    <button class="btnsave w-100 text-center d-none" accesskey="." id="save"
-                        (click)="save('Cash',false)"><u>S</u>ave</button>
+                        <button class="btnsave w-100 " accesskey="s" id="save"
+                            (click)="save('Cash',true)"><u>S</u>ave</button>
+                        <button class="btnsave w-100 text-center d-none" accesskey="." id="save"
+                            (click)="save('Cash',false)"><u>S</u>ave</button>
                     </div>
 
 
                 </div>
-                <div class="mt-2 d-flex justify-content-between">
-                    <div class="col-md-3 pe-2">
+                <div class="pt-1 row">
+                    <div class="col-md-3 pb-1">
                         <button class="btnduplicate w-100" accesskey="u"
-                            (click)="openDuplicateModal()">D<u>u</u>plicate</button></div>
+                            (click)="openDuplicateModal()">D<u>u</u>plicate</button>
+                    </div>
 
-                  <div class="col-md-9">
-                      <button accesskey="o" class="btnload pt-2 w-100  btn-primary"
-                        (click)="openPaymentModal()">
-                        <div class=" d-flex justify-content-between">
-                            <span><u>O</u>ther</span>
-                             <span><mat-icon>keyboard_arrow_right</mat-icon></span>
-                        </div>
-                    </button>
-                  </div>
+                    <div class="col-md-9">
+                        <button accesskey="o" class="btnload pt-2 w-100  btn-primary" (click)="openPaymentModal()">
+                            <div class=" d-flex justify-content-between">
+                                <span><u>O</u>ther</span>
+                                <span><mat-icon>keyboard_arrow_right</mat-icon></span>
+                            </div>
+                        </button>
+                    </div>
                 </div>
 
 
@@ -217,29 +223,29 @@
     <div class="modal-dialog modal-dialog-scrollables modal-dialog-centered modal-sm">
         <div class="modal-content " style="background-color: rgb(248, 247, 247);">
 
-           <form method="post">
-             <div class="modal-body">
+            <form method="post">
+                <div class="modal-body">
 
-                <mat-form-field appearance="outline" class="w-50 pe-1 matSmall">
-                    <mat-label>Discount Amount</mat-label>
-                    <input matInput autofocus name="discAmount" id="discR" type="text" (keyup)="onDiscChange('amt')"
-                        [(ngModel)]="tempDisc" (keydown)="this.global.handleNumKeys($event);" />
-                </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-50 pe-1 matSmall">
+                        <mat-label>Discount Amount</mat-label>
+                        <input matInput autofocus name="discAmount" id="discR" type="text" (keyup)="onDiscChange('amt')"
+                            [(ngModel)]="tempDisc" (keydown)="this.global.handleNumKeys($event);" />
+                    </mat-form-field>
 
-                <mat-form-field appearance="outline" class="w-50 matSmall">
-                    <mat-label>Discount %</mat-label>
-                    <input matInput  name="discPerc" id="discP" type="text" (keyup)="onDiscChange('percent')"
-                        [(ngModel)]="DiscPercent" (keydown)="this.global.handleNumKeys($event);" />
+                    <mat-form-field appearance="outline" class="w-50 matSmall">
+                        <mat-label>Discount %</mat-label>
+                        <input matInput name="discPerc" id="discP" type="text" (keyup)="onDiscChange('percent')"
+                            [(ngModel)]="DiscPercent" (keydown)="this.global.handleNumKeys($event);" />
 
-                </mat-form-field>
+                    </mat-form-field>
 
-            </div>
+                </div>
 
-            <div class="modal-footer bg-mf-blue">
-                <button class="btnsave" data-bs-dismiss="modal" (click)="EnterDiscount(tempDisc)">Save</button>
-                <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
-            </div>
-           </form>
+                <div class="modal-footer bg-mf-blue">
+                    <button class="btnsave" data-bs-dismiss="modal" (click)="EnterDiscount(tempDisc)">Save</button>
+                    <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
 
 
 

@@ -479,6 +479,12 @@ export class ProductComponent implements OnInit {
     }
 
 
+    if((Number(this.SalePrice) -  Number(this.DiscRupee)) < Number( this.CostPrice)){
+      this.msg.WarnNotify('Discount Not Valid');
+      return;
+    }
+
+
 
       if (this.prodBarcodeType == 'auto' && (this.Barcode == '' || this.Barcode == undefined || this.Barcode == null)) {
         this.Barcode = '-';

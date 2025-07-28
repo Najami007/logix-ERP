@@ -698,6 +698,30 @@ export class VoidSaleReturnComponent implements OnInit {
   isValidSale = true;
   save(paymentType: any, SendToFbr: any) {
 
+    var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
+    var inValidSaleProdList = this.tableDataList.filter((p: any) => p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
+    var inValidQtyProdList = this.tableDataList.filter((p: any) => p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
+    var inValidDiscProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > (Number(p.salePrice) - (Number(p.discInR))));
+
+
+    if (inValidCostProdList.length > 0 && !this.LessToCostFeature) {
+      this.msg.WarnNotify('(' + inValidCostProdList[0].productTitle + ') Cost Price greater than Sale Price');
+      return;
+    }
+    if (inValidSaleProdList.length > 0) {
+      this.msg.WarnNotify('(' + inValidSaleProdList[0].productTitle + ') Sale Price is not Valid');
+      return;
+    }
+    if (inValidQtyProdList.length > 0) {
+      this.msg.WarnNotify('(' + inValidQtyProdList[0].productTitle + ') Quantity is not Valid');
+      return;
+    }
+
+    if (inValidDiscProdList.length > 0 && !this.LessToCostFeature) {
+      this.msg.WarnNotify('(' + inValidDiscProdList[0].productTitle + ') Discount is not Valid');
+      return;
+    }
+
     if (this.tableDataList == '') {
       this.msg.WarnNotify('No Product Seleted');
       return;

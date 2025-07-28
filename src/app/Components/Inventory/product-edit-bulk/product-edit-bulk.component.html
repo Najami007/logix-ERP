@@ -6,7 +6,7 @@
             <mat-form-field appearance="outline" class="col-lg-2 matSmall">
                 <mat-label>Update Type</mat-label>
 
-                <mat-select [(ngModel)]="reqType" name="catType">
+                <mat-select [(ngModel)]="reqType" name="catType" (selectionChange)="productList = [];tempProdList = []">
                     <mat-option value="OTHER">Prices</mat-option>
                     <mat-option value="CAT">Categories</mat-option>
 
@@ -77,10 +77,10 @@
 
                 <th class="cursorPointer" (click)="sortProds('costPrice')">Cost Price</th>
                 <th class="cursorPointer" (click)="sortProds('salePrice')">Sale Price</th>
-                <th class="cursorPointer" (click)="sortProds('discPercentage')" *ngIf="discFeature">
+                <th class="cursorPointer"  *ngIf="discFeature">
                         <div class="d-flex flex-column">
                         <span><input [(ngModel)]="discountAll" class="input" (keydown)="onGstAllUpdate($event,'disc')" /></span>
-                          <span>Disc %</span>
+                          <span (click)="sortProds('discPercentage')">Disc %</span>
                     </div>
                 </th>
                 <th class="cursorPointer" *ngIf="discFeature">Disc Rs</th>

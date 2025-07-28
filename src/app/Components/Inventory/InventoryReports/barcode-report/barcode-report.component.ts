@@ -82,6 +82,8 @@ export class BarcodeReportComponent implements OnInit {
           (Response: any) => {
             if(Response.length > 0){
                this.curProduct = Response;
+            }else{
+              this.msg.WarnNotify('Product Not Found!')
             }
           
           }
