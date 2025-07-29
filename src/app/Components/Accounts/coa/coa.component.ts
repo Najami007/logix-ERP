@@ -24,6 +24,66 @@ export class COAComponent implements OnInit {
 
   modUrl = this.route.url.split("/")[1];
 
+
+  
+  page: number = 1;
+  count: number = 0;
+
+  tableSize: number = 0;
+  tableSizes: any = [];
+  jumpPage: any = 0;
+  tmpPage: number = 0;
+
+  onTableDataChange(event: any) {
+
+    this.page = event;
+    this.GetChartOfAccount();
+    setTimeout(() => {
+      this.filterCOA(this.filterType);
+    }, 500);
+  }
+
+  onTableSizeChange(event: any): void {
+    this.tableSize = event.target.value;
+    this.page = 1;
+    this.GetChartOfAccount();
+    setTimeout(() => {
+      this.filterCOA(this.filterType);
+    }, 500);
+  }
+
+  goToPage(): void {
+    var count = this.ChartsofAccountsData.length / this.tableSize;
+    if (parseFloat(this.jumpPage) > count) {
+      this.msg.WarnNotify('Invalid Value')
+      return;
+    }
+
+    if (this.jumpPage >= 1) {
+      this.page = this.jumpPage;
+      this.GetChartOfAccount();
+      setTimeout(() => {
+        this.filterCOA(this.filterType);
+      }, 500);
+    }
+  }
+
+  onProdSearchKeyup(e: any, value: any) {
+
+    if (e.target.value.length == 0 && this.tmpPage == 0) {
+      this.tmpPage = this.page;
+      this.page = 1;
+    }
+    if (e.key == 'Backspace') {
+      if (value.length == 1) {
+        this.page = this.tmpPage;
+        this.tmpPage = 0;
+      }
+    }
+
+
+  }
+
   constructor(private msg: NotificationService,
     private app: AppComponent,
     private route: Router,
@@ -41,15 +101,17 @@ export class COAComponent implements OnInit {
 
   }
 
-
+searchCoa = ''
+  tabIndex: any;
 
   filterHaveNoteID = 0;
   filterTransactionType: any = 'all';
   filterCoaType = 0;
   filterNoteID = 0;
 
+  filterType = '';
   filterCOA(type: any) {
-
+    this.filterType = type;
     if (type == 'coaType') {
       this.filterNoteID = 0;
       this.filterTransactionType = 'all';
@@ -110,6 +172,9 @@ export class COAComponent implements OnInit {
     this.getCoaType();
     this.globalData.numberOnly();
     this.getNotes();
+
+     this.tableSize = this.globalData.paginationDefaultTalbeSize;
+    this.tableSizes = this.globalData.paginationTableSizes;
 
   }
 
@@ -624,6 +689,22 @@ export class COAComponent implements OnInit {
 
   }
 
+
+
+  /////// to change the tab on edit
+  curFocusRow:any = -1;
+   changeTab(tabNum: any) {
+    this.tabIndex = tabNum;
+    setTimeout(() => {
+      if(this.tabIndex == 1 )this.scrollToRow(this.curFocusRow)
+    }, 500);
+  }
+   scrollToRow(index: number) {
+  const row = document.getElementById('prod-' + index);
+  if (row) {
+    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
 
 
 

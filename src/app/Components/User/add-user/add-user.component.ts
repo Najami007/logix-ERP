@@ -260,6 +260,8 @@ export class AddUserComponent implements OnInit {
     this.addUser.projectID = row.projectID;
     this.addUser.roleTypeID = row.roleTypeID;
 
+      this.addUser.setFocus();
+
   }
 
 
@@ -437,6 +439,7 @@ export class AddUserComponent implements OnInit {
 
   addNewUser() {
     this.global.openBootstrapModal('#addUser', true);
+    this.addUser.setFocus();
     this.reset();
   }
 

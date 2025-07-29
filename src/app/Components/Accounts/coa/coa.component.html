@@ -1,6 +1,6 @@
 <div class="body ">
 
-    <mat-tab-group mat-stretch-tabs="true" mat-align-tabs="center">
+    <mat-tab-group mat-stretch-tabs="true" mat-align-tabs="center"  [selectedIndex]="tabIndex"  (selectedIndexChange)="changeTab($event)">
         <mat-tab label="Charts of Accounts" class="h-100">
 
 
@@ -172,7 +172,8 @@
 
                     <mat-form-field class="col-md-4 matSmall" appearance="outline">
                         <mat-label class="ps-5">Search.....</mat-label>
-                        <input #coaSearch name="search" matInput type="text" class="text-secondary">
+                        <input #coaSearch   (keydown)="onProdSearchKeyup($event,searchCoa)"  (keypress)="onProdSearchKeyup($event,searchCoa)" matInput 
+                        [(ngModel)]="searchCoa" type="text" class="text-secondary">
                         <mat-icon matPrefix class="text-secondary">search</mat-icon>
                     </mat-form-field>
                       <mat-form-field appearance="outline" class="col-md-2 matSmall">
@@ -230,7 +231,12 @@
                     </thead>
 
                     <tbody>
-                        <tr *ngFor="let item of ChartsofAccountsData |filter:coaSearch.value ; index as index">
+                        <tr [id]="'prod-'+index" [ngClass]="curFocusRow == index ? 'bg-dark-light' : ''"
+                            (click)="curFocusRow = index" *ngFor="let item of ChartsofAccountsData |filter:searchCoa|paginate:{
+                        itemsPerPage : tableSize,
+                        currentPage : page,
+                        totalItems :    count,
+                    } ; index as index">
                             <td>{{index+1}}</td>
                             <td class="cursorPointer text-right" (click)="updateCoa(item)">{{item.accountCode}}</td>
                             <td class="text-right">{{item.coaTitle}}</td>
@@ -287,6 +293,29 @@
 
         </mat-tab>
     </mat-tab-group>
+
+
+    <div class="d-flex" *ngIf="tabIndex == 1"
+    style="position: fixed; bottom: 32px !important; width: 100%; background-color: #fff; z-index: 2;">
+
+    <pagination-controls previousLabel="Prev" nextLabel="Next"
+        (pageChange)="onTableDataChange($event)"></pagination-controls>
+
+
+    <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+    <select class="text-white" style="height: 25px;background-color: rgb(75, 164, 248);"
+        (change)="onTableSizeChange($event)" [(ngModel)]="tableSize">
+        <option *ngFor=" let item of tableSizes" [selected]="tableSize == item">{{item}}</option>
+    </select>
+
+    <div class="jump-to-page">
+        <input type="text" class="w-25" (keydown)="globalData.handleNumKeys($event)" [(ngModel)]="jumpPage"
+            placeholder="Page #" min="1" [max]="count" />
+        <button (click)="goToPage()" class="text-white"
+            style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
+    </div>
+
+</div>
 
 
 </div>

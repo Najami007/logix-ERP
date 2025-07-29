@@ -25,6 +25,7 @@ import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 import { UpdateSubscriptionComponent } from './update-subscription/update-subscription.component';
 import { SubscriptionKeyGeneratorComponent } from './subscription-key-generator/subscription-key-generator.component';
 import { UserFormComponent } from './add-user/user-form/user-form.component';
+import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
 
 
 
@@ -68,7 +69,8 @@ export const userRoutes: Route[] = [
     TextMaskModule,
     //Ng2SearchPipeModule,
     NgxMaterialTimepickerModule,
-    PipesModule
+    PipesModule,
+    DirectivesModule
 
 
 

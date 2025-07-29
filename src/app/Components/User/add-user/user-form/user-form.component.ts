@@ -6,6 +6,8 @@ import { AppComponent } from 'src/app/app.component';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 
+import * as $ from 'jquery';
+
 @Component({
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
@@ -43,5 +45,15 @@ export class UserFormComponent {
   @Input() rolesList:any = [];
   @Input() userList:any = [];
   @Input() projectList:any = [];
+
+
+
+  setFocus(){
+
+    setTimeout(() => {
+      $('#userName').trigger('focus').trigger('select');
+    }, 200);
+
+  }
 
 }

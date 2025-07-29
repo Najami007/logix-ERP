@@ -402,7 +402,7 @@
                             <td>{{item.gst}}%</td>
                             <td>{{item.entryUser}}</td>
                             <td class="cursorPointer hide-in-print">
-                                <mat-icon *ngIf="item.productImage == 'Yes'"
+                                <mat-icon *ngIf="item.productImage == 'Yes'" class="text-primary"
                                     (click)="this.global.showProductImage('',item.productID)">image</mat-icon>
                                 <mat-icon *ngIf="item.productImage == '-'">cancel_presentation</mat-icon>
                             </td>
