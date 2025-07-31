@@ -117,6 +117,7 @@ import { ProductInOutHistoryComponent } from './InventoryReports/product-in-out-
 import { CustomerIssueBillPrintComponent } from './CusotmerIssuance/customer-issue-bill-print/customer-issue-bill-print.component';
 import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
 import { EditQtyModalComponent } from './Sale/garment-sale/edit-qty-modal/edit-qty-modal.component';
+import { SaleVehicleComponent } from './Sale/sale-vehicle/sale-vehicle.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -165,7 +166,7 @@ export const inventoryRoutes: Route[] = [
   { path: 'mobsl', component: SaleMobComponent, data: { title: 'Mob Sale' }, canActivate: [AuthGuard] },
   { path: 'mobslrtn', component: SaleReturnMobComponent, data: { title: 'Mob Sale Return' }, canActivate: [AuthGuard] },
   { path: 'ffsl', component: FastFoodSaleComponent, data: { title: 'Fast Food Sale' }, canActivate: [AuthGuard] },
-
+   { path: 'salevehicle', component: SaleVehicleComponent, data: { title: 'Sale Vehicle' }, canActivate: [AuthGuard] },
 
   { path: 'customerissue', component: CustomerIssuanceComponent, data: { title: 'Customer Issue' }, canActivate: [AuthGuard] },
   { path: 'customerissuertn', component: CustomerIssueReturnComponent, data: { title: 'Customer Issue Return' }, canActivate: [AuthGuard] },
@@ -311,6 +312,7 @@ export const inventoryRoutes: Route[] = [
     ProductInOutHistoryComponent,
     CustomerIssueBillPrintComponent,
     EditQtyModalComponent,
+    SaleVehicleComponent,
 
 
 

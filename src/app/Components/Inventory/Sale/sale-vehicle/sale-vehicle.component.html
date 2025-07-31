@@ -1,0 +1,189 @@
+<div class="body">
+
+    <div class="container-fluid">
+
+        <div class="row mt-2">
+            <div class="col-md-2">
+                <mat-form-field class="w-100 matSmall" appearance="outline">
+                    <mat-label>Date *</mat-label>
+                    <input matInput type="text" readonly="true" [(ngModel)]="invDate" [matDatepicker]="vcDate">
+                    <mat-datepicker-toggle matSuffix [for]="vcDate"></mat-datepicker-toggle>
+                    <mat-datepicker #vcDate></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="col-md-2">
+                <mat-form-field class="w-100 matSmall" appearance="outline">
+                    <mat-label>Select Vehicle *</mat-label>
+                    <mat-select appearance="outline" [(ngModel)]="vehicleID" #vehicle
+                        (selectionChange)="onVehicleSelection()">
+                        <mat-option><ngx-mat-select-search #vehicleSearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of vehicleList|filter:vehicleSearch.value "
+                            [value]="item.vehicleID">
+                            {{item.vehicleNo}}<small class="fs-10px">({{item.vehicleName}})</small>
+                        </mat-option>
+                    </mat-select>
+                    <mat-icon matSuffix (click)="addVehicle()">add</mat-icon>
+
+                </mat-form-field>
+
+            </div>
+            <div class="col-md-2">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Proudct *</mat-label>
+                    <mat-select [(ngModel)]="productID" (selectionChange)="searchProduct(productID)">
+                        <mat-option><ngx-mat-select-search #prodsearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of productList | filter:prodsearch.value | slice:0:25"
+                            [value]="item.productID">{{item.productTitle}} <b>({{item.barcode}})</b></mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-2">
+                <mat-form-field class="w-100 matSmall" appearance="outline">
+                    <mat-label>Contact</mat-label>
+                    <input [(ngModel)]="VehicleContact " matInput type="text">
+                </mat-form-field>
+            </div>
+            <div class="col-md-1">
+                <mat-form-field class="w-100 matSmall" appearance="outline">
+                    <mat-label>Bill No *</mat-label>
+                    <input [(ngModel)]="VehicleBillNo " matInput type="text">
+                </mat-form-field>
+
+            </div>
+
+            <div class="col-md-1">
+                <mat-form-field class="w-100 matSmall" appearance="outline">
+                    <mat-label>Reading *</mat-label>
+                    <input [(ngModel)]="meterReading" matInput type="text">
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-1">
+                <mat-form-field class="w-100 matSmall" appearance="outline">
+                    <mat-label>Balance *</mat-label>
+                    <input [(ngModel)]="VehicleBalance " matInput type="text">
+                </mat-form-field>
+            </div>
+            <div class="col-md-1">
+                <button class="btn-rpt-success w-100" (click)="save()">Add</button>
+            </div>
+        </div>
+        <hr>
+        <div>
+
+            <div class="row">
+                <div class="col-md-5">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Search.....</mat-label>
+                        <input type="text" matInput id="searchProduct" #vehicleTableSearch>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                    <mat-form-field class="w-100 matSmall" appearance="outline">
+                        <mat-label>Select Vehicle *</mat-label>
+                        <mat-select appearance="outline" [(ngModel)]="tmpVehicleID" #vehicle
+                            (selectionChange)="getSavedData()">
+                            <mat-option><ngx-mat-select-search #tmpvehicleSearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            <mat-option [value]="0">All Vehicle</mat-option>
+
+                            <mat-option *ngFor="let item of vehicleList|filter:tmpvehicleSearch.value "
+                                [value]="item.vehicleID">
+                                {{item.vehicleNo}}<small class="fs-10px">({{item.vehicleName}})</small>
+                            </mat-option>
+                        </mat-select>
+
+                    </mat-form-field>
+
+                </div>
+                <div class="col-md-2">
+                    <mat-form-field class="w-100 matSmall" appearance="outline">
+                        <mat-label>From Date</mat-label>
+                        <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="fDate"
+                            (dateChange)="getSavedData()">
+                        <mat-datepicker-toggle matSuffix [for]="fDate"></mat-datepicker-toggle>
+                        <mat-datepicker #fDate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                    <mat-form-field class="w-100 matSmall" appearance="outline">
+                        <mat-label>To Date</mat-label>
+                        <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="tDate"
+                            (dateChange)="getSavedData()">
+                        <mat-datepicker-toggle matSuffix [for]="tDate"></mat-datepicker-toggle>
+                        <mat-datepicker #tDate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn-rpt-primary w-100" (click)="print()">Print</button>
+                </div>
+
+            </div>
+
+            <div id="PrintDiv">
+
+                <table class="table-logix" id="detailTable">
+                    <thead>
+                        <tr>
+                            <th>S#</th>
+                            <th>Date</th>
+                            <th>Bill #</th>
+                            <th>Vehicle No</th>
+                            <th>Vehicle Name</th>
+                            <th>Product</th>
+                            <th>Reading</th>
+                            <th>Contact</th>
+                            <th>Balance</th>
+                            <!-- <th>Action</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of savedDataList | filter:vehicleTableSearch.value index as index">
+                            <td class="text-center">{{index +1}}</td>
+                            <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
+                            <td class="text-center">{{item.vehicleBillNo}}</td>
+                            <td>{{item.vehicleNo}}</td>
+                            <td>{{item.vehicleName}}</td>
+                            <td>{{item.billDetails[0].ProductTitle}}</td>
+                            <td>{{item.meterReading}}</td>
+                            <td>{{item.vehicleContact}}</td>
+                            <td class="text-end">{{item.vehicleBalance | number}}</td>
+                            <!-- <td><mat-icon>delete</mat-icon></td> -->
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+</div>
+
+
+
+
+
+<!------------------------- Modal Window for Adding New Vehicle =----------------->
+
+
+<div class="modal fade" id="addVehicleModal" tabindex="-1" aria-labelledby="SavedBillModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-md">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <app-add-vehicle (saveEventEmitter)="getVehicles();closeVehicleModal()"></app-add-vehicle>
+            </div>
+
+            <div class="modal-footer bg-mf-blue">
+                <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>

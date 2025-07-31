@@ -308,7 +308,6 @@ export class GarmentSaleComponent implements OnInit {
   }
 
   pushProdData(data: any, qty: any) {
-    console.log(data);
     /////// check already present in the table or not
     const targetBarcode = data.barcode2 || data.barcode;
     var condition = this.tableDataList.find(

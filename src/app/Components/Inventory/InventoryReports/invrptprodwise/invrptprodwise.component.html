@@ -212,7 +212,7 @@
                             [ngClass]="item.invType == 'S' || item.invType == 'SR' || item.invType == 'P'|| item.invType == 'PR' ? 'text-primary' : '' ">{{item.invBillNo}}</span>
                     </td>
                     <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
-                    <td>{{item.productTitle}} <b *ngIf="item.barcode !== null">({{item.barcode}})</b></td>
+                    <td>{{item.productTitle}} <b *ngIf="item.barcode !== null || item.invBillNo !='-'">({{item.barcode}})</b></td>
                     <td><span>{{item.locationTitle }}</span></td>
                     <td><span *ngIf="item.partyID > 0">{{item.partyName }}</span></td>
                     <td class="text-center"><span *ngIf="item.invSubType == 'IN'">{{item.quantity
