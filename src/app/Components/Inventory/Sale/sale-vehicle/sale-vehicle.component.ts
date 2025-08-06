@@ -186,7 +186,6 @@ export class SaleVehicleComponent {
     this.netTotal = this.subTotal;
     this.cash = this.subTotal;
     this.change = 0;
-    console.log(this.saleDetailList);
 
 
   }
@@ -295,8 +294,6 @@ export class SaleVehicleComponent {
         UserID: this.global.getUserID()
       }
 
-
-      console.log(postData);
       this.isValidSale = false;
       this.app.startLoaderDark();
       this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', postData).subscribe(
@@ -378,7 +375,6 @@ export class SaleVehicleComponent {
           (e.billDetails = JSON.parse(e.billDetail))
           return e;
         });
-        console.log(Response);
 
         this.app.stopLoaderDark();
       },

@@ -135,9 +135,11 @@
                             <th *ngIf="DetailedPurchaseFeature">Adv Tax</th>
 
                             <th>Cost Price</th>
+                          
                             <th>Sale Price</th>
                             <th>Cost Total</th>
                             <th>AQ</th>
+                              <th>Margin</th>
                             <th>Action</th>
                         </tr>
 
@@ -207,6 +209,8 @@
                                     (change)="getTotal()" class="cp{{index}} text-center" style="width: 80px;">
                             </td>
 
+                             
+
                             <td class="text-center"><input type="text" [(ngModel)]="item.SalePrice" min="0"
                                     draggable="false"
                                     (keydown)="changeValue(item);this.handleUpdown(item,$event,'.sp',index);"
@@ -219,6 +223,12 @@
                                 |number:'1.0-1'}}
                             </td>
                             <td class="text-center">{{item.AQ |number:'1.0-3'}}</td>
+                              <td class="text-center"><input type="text" [(ngModel)]="item.margin" min="0"
+                                    draggable="false"
+                                    (keydown)="onMarginChange(item,index); this.handleUpdown(item,$event,'.mg',index);"
+                                    (keyup)="onMarginChange(item,index);showImg(item);rowFocused = index"
+                                    class="mg{{index}} text-center" style="width: 80px;">
+                            </td>
                             <td class="text-danger text-center cursorPointer"><mat-icon
                                     (click)="delRow(item)">delete</mat-icon>
                             </td>
@@ -228,7 +238,7 @@
                         <tr>
                             <td colspan="4"></td>
                             <td class="text-center">{{myTotalQty|number:'1.0-3' }}</td>
-                            <td colspan="4"></td>
+                            <td colspan="5"></td>
                             <td colspan="5" *ngIf="DetailedPurchaseFeature"></td>
                             <td class="text-center"><mat-icon class="cursorPointer"
                                     (click)="EmptyData()">delete</mat-icon>

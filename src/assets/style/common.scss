@@ -841,7 +841,7 @@ label {
 }
 
 .table-logix>thead>tr {
-  border: 1px solid black !important;
+  border: 1px solid black;
 
 }
 
@@ -851,8 +851,8 @@ label {
   font-weight: bold;
   text-align: center;
   /* border: 1px solid #fff; */
-  border-top: 1px solid #000;
-  border-bottom: 1px solid #000;
+  /*border-top: 1px solid #000;*/
+  /*border-bottom: 1px solid #000;*/
   border-right: 1px solid #fff;
   padding: 10px;
   background-color: var(--app-primary);
@@ -860,7 +860,7 @@ label {
 }
 
 .table-logix>thead>tr>th:last-child {
-    border-right: 1px solid #000;
+    border-right: 1px solid #000 !important;
 }
 
 .stickyHeader {

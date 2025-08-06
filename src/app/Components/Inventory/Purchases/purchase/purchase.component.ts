@@ -320,6 +320,7 @@ export class PurchaseComponent implements OnInit {
         Quantity: qty,
         wohCP: data.costPrice,
         tempCostPrice: data.costPrice,
+        margin:((data.salePrice  - data.costPrice) / data.costPrice) * 100,
         CostPrice: data.costPrice,
         SalePrice: data.salePrice,
         ovhPercent: 0,
@@ -757,6 +758,8 @@ export class PurchaseComponent implements OnInit {
       this.tableDataList[myIndex].SalePrice = 0;
     }
 
+    item.margin = ((Number(item.SalePrice) - Number(item.CostPrice)) / Number(item.CostPrice)) * 100
+
   }
 
   handleUpdown(item: any, e: any, cls: string, index: any) {
@@ -1101,7 +1104,7 @@ export class PurchaseComponent implements OnInit {
             Quantity: e.quantity,
             wohCP: e.costPrice,
             tempCostPrice: e.tempCostPrice,
-
+            margin:((e.salePrice  - e.costPrice) / e.costPrice) * 100,
             CostPrice: e.costPrice,
             SalePrice: e.salePrice,
             ExpiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
@@ -1243,6 +1246,15 @@ export class PurchaseComponent implements OnInit {
         });
       }
     })
+  }
+
+
+  onMarginChange(item:any,index:any){
+    var margin  =Number(item.margin);
+
+    item.SalePrice = Number(item.CostPrice) + (Number(item.CostPrice) * (margin / 100));
+    this.getTotal() ;
+
   }
 
 
