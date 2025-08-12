@@ -293,6 +293,10 @@
                 <button class=" w-50 btnsave" id="savebtn" accesskey="s" *ngIf="crudList.c"
                     (click)="SaveBill('purchase')"><u>S</u>ave</button>
             </div>
+            <div class="mt-2 text-center">
+                    <button class=" w-50 btnText" [disabled]="validFlag" id="refresh" accesskey="r" 
+                    (click)="validFlag =  true">Refresh</button>
+            </div>
         </mat-card>
         </div>
     </div>

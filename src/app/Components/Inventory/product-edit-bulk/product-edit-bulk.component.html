@@ -6,7 +6,7 @@
             <mat-form-field appearance="outline" class="col-lg-2 matSmall">
                 <mat-label>Update Type</mat-label>
 
-                <mat-select [(ngModel)]="reqType" name="catType" (selectionChange)="productList = [];tempProdList = []">
+                <mat-select [(ngModel)]="reqType" name="catType" (selectionChange)="reset()">
                     <mat-option value="OTHER">Prices</mat-option>
                     <mat-option value="CAT">Categories</mat-option>
 

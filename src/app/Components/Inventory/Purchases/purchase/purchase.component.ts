@@ -636,6 +636,8 @@ export class PurchaseComponent implements OnInit {
   }
 
   EmptyData() {
+        if(this.tableDataList.length == 0) return;
+        
     this.global.confirmAlert().subscribe((Response: any) => {
       if (Response == true) {
         this.reset();
@@ -964,6 +966,8 @@ export class PurchaseComponent implements OnInit {
                     this.validFlag = true;
                   }
                 )
+              }else{
+                this.validFlag = true;
               }
             })
           }

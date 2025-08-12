@@ -135,14 +135,14 @@
                     <div class="d-flex" [ngClass]="tillOpenFeature ? 'col-md-9' : 'col-md-12'">
                         <div [ngClass]="tillOpenFeature ? 'col-md-10' : 'col-md-12'">
                             <button accesskey="o" class="btnload pt-2 d-flex justify-content-between w-100"
-                            (click)="openPaymentModal()">
-                            <span><u>O</u>ther</span> <mat-icon>keyboard_arrow_right</mat-icon>
-                        </button>
+                                (click)="openPaymentModal()">
+                                <span><u>O</u>ther</span> <mat-icon>keyboard_arrow_right</mat-icon>
+                            </button>
                         </div>
-                       <div class="col-md-2 ps-1" *ngIf="tillOpenFeature">
-                         <button  class="delBtn w-100" matTooltip="Open Drawer"
-                            (click)="global.openTill()"><mat-icon>dns</mat-icon></button>
-                       </div>
+                        <div class="col-md-2 ps-1" *ngIf="tillOpenFeature">
+                            <button class="delBtn w-100" matTooltip="Open Drawer"
+                                (click)="global.openTill()"><mat-icon>dns</mat-icon></button>
+                        </div>
                     </div>
                 </div>
 
@@ -403,6 +403,8 @@
                 </div>
 
                 <div class="modal-footer bg-mf-blue">
+                    <button class="btnText" [disabled]="isValidSale" id="refresh" accesskey="r"
+                        (click)="isValidSale =  true">Refresh</button>
                     <button class="btnsave" (click)="save(pType.value,true,true)">Save</button>
                     <button type="button" class="btnclose" data-bs-dismiss="modal"
                         (click)="onPaymentModalClose()">Close</button>

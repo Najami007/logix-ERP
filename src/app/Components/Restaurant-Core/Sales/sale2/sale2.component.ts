@@ -999,7 +999,7 @@ export class Sale2Component implements OnInit {
   }
 
   //////////////////////////////////////////////////////////////////
-  validSaleFlag = true;
+  isProcessing = false;
 
   InsertSale(SendToFbr: any) {
 
@@ -1036,9 +1036,11 @@ export class Sale2Component implements OnInit {
       UserID: this.global.getUserID()
     }
 
-    this.app.startLoaderDark()
-    if (this.validSaleFlag) {
-      this.validSaleFlag = false;
+ 
+    if (this.isProcessing) return;
+      this.isProcessing = true;
+       this.app.startLoaderDark()
+    
       this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertSale', postData).subscribe(
         (Response: any) => {
           if (Response.msg == 'Data Saved Successfully') {
@@ -1062,16 +1064,16 @@ export class Sale2Component implements OnInit {
             this.msg.WarnNotify(Response.msg);
           }
           this.app.stopLoaderDark();
-          this.validSaleFlag = true;
+          this.isProcessing = false;
         },
         (Error: any) => {
           console.log(Error);
-          this.validSaleFlag = true;
+          this.isProcessing = false;
           this.msg.WarnNotify(Error);
           this.app.stopLoaderDark();
         }
       )
-    }
+    
   }
 
   /////////////////////////////////////////////////////////////////

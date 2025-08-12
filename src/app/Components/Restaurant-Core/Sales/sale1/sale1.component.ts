@@ -47,6 +47,7 @@ export class Sale1Component implements OnInit {
   autoTableSelectFeature = this.global.AutoTableSelect;
   postBillFeature = this.global.postSale;
   RestBillUserwise = this.global.RestBillUserwise;
+  tabletPrintFeature = this.global.TabletPrintFeature;
 
 
   roleType = this.global.getRoleTypeID();
@@ -363,6 +364,7 @@ export class Sale1Component implements OnInit {
 
   changeFocus(id: any, e: any) {
     if (e.keyCode == 13) {
+      e.preventDefault();
       $(id).trigger('focus');
     }
   }
@@ -556,7 +558,7 @@ export class Sale1Component implements OnInit {
   getTotal() {
     this.subTotal = 0;
     this.tableData.forEach((e: any) => {
-      this.subTotal += e.salePrice * e.quantity;
+      this.subTotal += Number(e.salePrice) * Number(e.quantity);
     });
     if (this.OtherCharges == '' || this.OtherCharges == undefined) {
       this.OtherCharges = 0;
@@ -567,21 +569,21 @@ export class Sale1Component implements OnInit {
     if (this.orderType == 'Dine In') {
       this.OtherCharges = 0;
       if (this.global.validCharges(this.subTotal) && this.serviceChargesFeature) {
-        this.OtherCharges = this.subTotal * (this.serviceCharges / 100);
+        this.OtherCharges = Number(this.subTotal) * (Number(this.serviceCharges) / 100);
       }
     }
 
 
 
-    this.netTotal = (this.subTotal + parseFloat(this.OtherCharges)) - parseFloat(this.billDiscount);
+    this.netTotal = (this.subTotal + Number(this.OtherCharges)) - Number(this.billDiscount);
 
     if (this.paymentType == 'Split') {
-      this.bankCash = (this.netTotal + this.GstAmount) - parseFloat(this.cash);
+      this.bankCash = (this.netTotal + this.GstAmount) - Number(this.cash);
     }
     if (this.paymentType == 'Bank') {
       this.bankCash = this.netTotal + this.GstAmount;
     }
-    this.change = (parseFloat(this.cash) + parseFloat(this.bankCash)) - (this.netTotal + this.GstAmount);
+    this.change = (Number(this.cash) + Number(this.bankCash)) - (this.netTotal + this.GstAmount);
 
 
 
@@ -647,6 +649,8 @@ export class Sale1Component implements OnInit {
     }
     this.tempProdRow = [];
     this.tempQty = 1;
+
+    if(this.tabletPrintFeature)return;
     $('#recSearch').trigger('select');
     $('#recSearch').trigger('focus');
     // $('#recSearch').val('');
@@ -761,7 +765,6 @@ export class Sale1Component implements OnInit {
     this.getTotal();
 
   }
-
 
   save(type: any, SendToFbr: any, printFlag?: any) {
 
@@ -1004,7 +1007,7 @@ export class Sale1Component implements OnInit {
   }
 
   //////////////////////////////////////////////////////////////////
-  validSaleFlag = true;
+  isProcessing = false;
 
   InsertSale(SendToFbr: any) {
 
@@ -1041,42 +1044,42 @@ export class Sale1Component implements OnInit {
       UserID: this.global.getUserID()
     }
 
+    if (this.isProcessing) return;
+    this.isProcessing = true;
     this.app.startLoaderDark()
-    if (this.validSaleFlag) {
-      this.validSaleFlag = false;
-      this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertSale', postData).subscribe(
-        (Response: any) => {
-          if (Response.msg == 'Data Saved Successfully') {
+    this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertSale', postData).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully') {
 
-            this.printKOT(Response.invNo); /////// Will Print KOT ////////////////
-            this.msg.SuccessNotify(Response.msg);
+          this.printKOT(Response.invNo); /////// Will Print KOT ////////////////
+          this.msg.SuccessNotify(Response.msg);
 
-            this.printAfterSave(Response.invNo);
+          this.printAfterSave(Response.invNo);
 
-            this.getRecipeList({ recipeCatID: 0, prodFlag: false });
-            this.getHoldBills();
-            setTimeout(() => {
-              this.reset();
-              this.getTable();
-            }, 200);
-            /////////// will hide the modal window ///////////
-            this.global.closeBootstrapModal('#paymentMehtod', true);
+          this.getRecipeList({ recipeCatID: 0, prodFlag: false });
+          this.getHoldBills();
+          setTimeout(() => {
+            this.reset();
+            this.getTable();
+          }, 200);
+          /////////// will hide the modal window ///////////
+          this.global.closeBootstrapModal('#paymentMehtod', true);
 
 
-          } else {
-            this.msg.WarnNotify(Response.msg);
-          }
-          this.app.stopLoaderDark();
-          this.validSaleFlag = true;
-        },
-        (Error: any) => {
-          console.log(Error);
-          this.validSaleFlag = true;
-          this.msg.WarnNotify(Error);
-          this.app.stopLoaderDark();
+        } else {
+          this.msg.WarnNotify(Response.msg);
         }
-      )
-    }
+        this.app.stopLoaderDark();
+        this.isProcessing = false;
+      },
+      (Error: any) => {
+        console.log(Error);
+        this.isProcessing = false;
+        this.msg.WarnNotify(Error);
+        this.app.stopLoaderDark();
+      }
+    )
+
   }
 
   /////////////////////////////////////////////////////////////////

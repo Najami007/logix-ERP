@@ -904,6 +904,10 @@ export class CustomerIssueReturnComponent implements OnInit {
   //////////////////////// Empty Whole Bill Funciton //////////////
 
   EmptyData() {
+    
+    if(this.tableDataList.length == 0) return;
+    
+
     this.global.confirmAlert().subscribe(
       (Response: any) => {
         if (Response == true) {

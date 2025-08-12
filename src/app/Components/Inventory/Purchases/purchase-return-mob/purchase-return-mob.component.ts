@@ -734,6 +734,8 @@ export class PurchaseReturnMobComponent implements OnInit {
                     this.validFlag = true;
                   }
                 )
+              }else{
+                this.validFlag = true;
               }
             })
           }

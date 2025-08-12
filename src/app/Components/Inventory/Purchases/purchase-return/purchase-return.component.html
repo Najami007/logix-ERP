@@ -20,9 +20,14 @@
 
                 <div class="col-lg-4 ps-1">
                     <button class=" w-25 btnhold me-1  " accesskey="h" *ngIf="crudList.c" style="height: 50px;"
-                        (click)="SaveBill('hold')"><span *ngIf="holdBtnType == 'Hold'"><u>H</u>old</span><span *ngIf="holdBtnType == 'ReHold'">Re<u>H</u>old</span> </button>
+                        (click)="SaveBill('hold')"><span *ngIf="holdBtnType == 'Hold'"><u>H</u>old</span><span
+                            *ngIf="holdBtnType == 'ReHold'">Re<u>H</u>old</span> </button>
                     <button class="w-25 btnreset me-1" style="height: 50px;" accesskey="r" data-bs-toggle="modal"
                         data-bs-target="#purRtnholdModal"><u>R</u>etrieve</button>
+                  
+                        <button class="w-25 btnText" [disabled]="validFlag" id="refresh" accesskey="r"
+                            (click)="validFlag =  true">Refresh</button>
+                  
 
                 </div>
             </div>
@@ -168,8 +173,7 @@
                     [ngClass]="disableDateFeature ? 'col-lg-3' :'col-lg-2'">
                     <mat-label>Discount</mat-label>
                     <input matInput [(ngModel)]="discount" (keyup)="this.global.handleNumKeys($event);getTotal()"
-                    (keydown)="this.global.handleNumKeys($event);getTotal()"
-                        type="text" name="dicount">
+                        (keydown)="this.global.handleNumKeys($event);getTotal()" type="text" name="dicount">
                 </mat-form-field>
                 <!-- <mat-form-field appearance="outline" class="col-lg-3 p-1">
             <mat-label>OverHead</mat-label>
@@ -262,8 +266,8 @@
 
 
 
-    
-        <!----------------Modal Window For Products lisr ---------->
+
+    <!----------------Modal Window For Products lisr ---------->
 
 
 
@@ -271,10 +275,10 @@
         aria-labelledby="paymentMehtodLabel">
         <div class="modal-dialog modal-dialog-scrollable modal-xl  modal-dialog-centered ">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-           
+
                 <div class="modal-body">
-                <app-product-modal [productList]="productList" (reloadProdEmitter)="getProducts()"
-                 (addProductEmitter)="holdDataFunction($event)" ></app-product-modal>
+                    <app-product-modal [productList]="productList" (reloadProdEmitter)="getProducts()"
+                        (addProductEmitter)="holdDataFunction($event)"></app-product-modal>
 
                 </div>
 

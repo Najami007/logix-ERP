@@ -11,7 +11,8 @@ export const environment = {
 
   //mainApi: 'http://192.168.100.37:1000/',
   //mainApi: 'http://localhost:5000/', 
-   mainApi: 'http://localhost:8060/',           /////////// system own published API
+  // mainApi: 'http://localhost:8060/',           /////////// system own published API
+   //mainApi: 'http://10.73.14.19:8060/',    
   // mainApi: 'http://192.168.160.98:8060/',  ////////// live Server Dani System
   //mainApi: 'http://192.168.100.250:1007/',  ////////// live Server Dani System
   //mainApi: 'http://192.168.10.100:1003/',    /////////// Local Server Office
@@ -19,7 +20,7 @@ export const environment = {
   //mainApi: 'http://159.69.174.21:1000/', /////// Logix Solutionz Published Accounts
   //mainApi: 'http://159.69.174.21:2016/',   /////// Erp Demo Live For Clients
 
-
+  mainApi: 'http://192.168.1.150:8060/', ///////////// Mehria Enclave Store
 
 
 
@@ -40,6 +41,7 @@ export const environment = {
   //mainApi: 'http://192.168.18.100:8081/',   ///Stylish Garment Wahcant
   //mainApi : 'http://localhost:8081/'       ///Baraka Bakery Jazeera Food && Jazeera Warehouse
   //mainApi: 'http://192.168.1.95:8081/',    /////////// Blaster Chicken Rwp
+ // mainApi: 'http://192.168.18.100:8060/',    /////////// Blaster Chicken PWD
   // mainApi : 'http://localhost:8081/'        ///Food Mood /// Prime BBQ\
 
 
@@ -100,6 +102,8 @@ export const environment = {
 
   //mainApi: 'http://localhost:8060/', //////////// Master Traders Faisalabad
   //mainApi: 'http://192.168.100.100:8060/', //////////////// Master Traders Sharing
+
+ // mainApi: 'http://159.69.174.21:2028/',   /////// Kami Mobiles Fateh Jang
 
 
 

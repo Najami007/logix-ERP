@@ -229,6 +229,12 @@
                             <mat-label>Remar<u>k</u>s</mat-label>
                             <textarea rows="4" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
                         </mat-form-field>
+                        
+
+                    </td>
+                    <td>
+                        <button class=" w-50 btnText" *ngIf="isProcessing" id="refresh" accesskey="r" 
+                    (click)="isProcessing =  false">Refresh</button>
                     </td>
                 </tr>
 
@@ -682,8 +688,8 @@
                 </div>
 
                 <div class="modal-footer bg-mf-blue">
-                     <button class="btn btn-success" id="save" (click)="save('sale',true)">Save</button>
-                    <button class="btn btn-success d-none" id="save2" accesskey="."
+                     <button class="btn btn-success" [disabled]="isProcessing" id="save" (click)="save('sale',true)">Save</button>
+                    <button class="btn btn-success d-none" [disabled]="isProcessing" id="save2" accesskey="."
                         (click)="save('sale',false)">Save</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                         (click)="paymentType = 'Cash';cash = 0;bankCash = 0;">Close</button>

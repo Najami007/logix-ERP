@@ -7,7 +7,7 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
-declare var $:any;
+declare var $: any;
 
 @Component({
   selector: 'app-rest-sale-bill-print',
@@ -24,7 +24,7 @@ export class RestSaleBillPrintComponent {
   gstFeature = this.global.gstFeature;
   FBRFeature = this.global.FBRFeature;
   showOrderNo = this.global.showOrderNo;
-    customerFeature = this.global.customerFeature;
+  customerFeature = this.global.customerFeature;
 
   crudList: any = [];
   companyProfile: any = [];
@@ -34,7 +34,7 @@ export class RestSaleBillPrintComponent {
   companyName: any = '';
   logoHeight: any = 100;
   logoWidth: any = 100;
-  CompanyNTN  = '';
+  CompanyNTN = '';
   CompanySTRN = '';
 
   mobileMask = this.global.mobileMask;
@@ -105,7 +105,7 @@ export class RestSaleBillPrintComponent {
   myFbrCode = '';
   myFbrResponse = '';
   myPOSFee = 0;
-  myFbrInvoiceNo ='';
+  myFbrInvoiceNo = '';
   myPartyName = '';
   myPartyBalance = 0;
   myInvType = '';
@@ -136,7 +136,7 @@ export class RestSaleBillPrintComponent {
         this.myInvTime = Response[0].createdOn;
         this.myOrderNo = Response[0].orderNo;
         this.myBookerName = Response[0].bookerName;
-        this.myGstAmount = Response[0].gstAmount ;
+        this.myGstAmount = Response[0].gstAmount;
         this.myGstValue = Response[0].gstValue;
         this.myFbrInvoiceNo = Response[0].fbrInvoiceNo;
         this.myFbrStatus = Response[0].fbrStatus;
@@ -151,7 +151,7 @@ export class RestSaleBillPrintComponent {
         if (this.myPaymentType == 'Split') {
           this.myBank = this.myNetTotal - this.myCash;
         }
-        if(this.gstFeature){
+        if (this.gstFeature) {
           this.generateQRCode();
         }
 
@@ -189,8 +189,8 @@ export class RestSaleBillPrintComponent {
         this.myRemarks = Response[0].remarks;
         this.myOrderNo = Response[0].orderNo;
         this.myBookerName = Response[0].bookerName;
-          this.myInvType = Response[0].invType;
-        this.myGstAmount =0;
+        this.myInvType = Response[0].invType;
+        this.myGstAmount = 0;
         this.myGstValue = 0;
         this.myFbrInvoiceNo = '';
         this.myFbrStatus = false;
@@ -200,19 +200,19 @@ export class RestSaleBillPrintComponent {
           this.mySubTotal += e.salePrice * e.quantity;
         });
 
-         setTimeout(() => {
-      if (this.gstFeature) {
-        this.global.printData('#printGSTRestBill');
-      }
-      if (!this.gstFeature) {
-        this.global.printData('#printRestBill');
-      }
+        setTimeout(() => {
+          if (this.gstFeature) {
+            this.global.printData('#printGSTRestBill');
+          }
+          if (!this.gstFeature) {
+            this.global.printData('#printRestBill');
+          }
 
-      this.type = '';
-    }, 200);
+          this.type = '';
+        }, 200);
 
       })
-   
+
     this.myDuplicateFlag = false;
 
 
@@ -228,32 +228,32 @@ export class RestSaleBillPrintComponent {
     //   });
 
     $('#output').qrcode({
-        text: this.myFbrInvoiceNo || 'N/A',
-      });
-      var canvas = $('#output canvas');
-      // const element = $('#output')[0];
-      var img = $(canvas)[0].toDataURL("image/png");
-      $('#output').empty();
-      $('.qr-code-generator').empty();
-      $('.qr-code-generator').prepend('<img src="' + img + '" width="80" height="80" />')
+      text: this.myFbrInvoiceNo || 'N/A',
+    });
+    var canvas = $('#output canvas');
+    // const element = $('#output')[0];
+    var img = $(canvas)[0].toDataURL("image/png");
+    $('#output').empty();
+    $('.qr-code-generator').empty();
+    $('.qr-code-generator').prepend('<img src="' + img + '" width="80" height="80" />')
 
-      // // var img = canvas.get(0).toDataURL("image/png");
-      // html2canvas(element).then((canvas) => {
-      //   // Convert the canvas to a data URL (base64)
-      //   const imageData = canvas.toDataURL('image/png');
-  
-      //   // Set the image source to the generated data URL
-      //   // $('#output').attr('src', imageData);
-      //   $('#output').empty();
-      //   $('#qrCode').empty();
-      //   $('#qrCode').prepend('<img src="' + imageData + '" width="90" height="90" />')
-  
-      //   console.log('Image generated:', imageData);
-      // }).catch((error) => {
-      //   console.error('Error generating image:', error);
-      // });
-      // //or
-      
+    // // var img = canvas.get(0).toDataURL("image/png");
+    // html2canvas(element).then((canvas) => {
+    //   // Convert the canvas to a data URL (base64)
+    //   const imageData = canvas.toDataURL('image/png');
+
+    //   // Set the image source to the generated data URL
+    //   // $('#output').attr('src', imageData);
+    //   $('#output').empty();
+    //   $('#qrCode').empty();
+    //   $('#qrCode').prepend('<img src="' + imageData + '" width="90" height="90" />')
+
+    //   console.log('Image generated:', imageData);
+    // }).catch((error) => {
+    //   console.error('Error generating image:', error);
+    // });
+    // //or
+
   }
 
   EmptyBill() {

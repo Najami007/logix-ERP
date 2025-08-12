@@ -47,7 +47,7 @@ export class GlobalDataModule implements OnInit {
   // RestServiceCharges = 0;
   RestServiceCharges = this.getServiceCharges();  //////////// Jazeerra Food Service Charges
   validCharges(billTotal: any) {
-    if (billTotal > 0) { ////////// Jazeera Foods Condition
+    if (billTotal > 3000) { ////////// Jazeera Foods Condition
       //if (billTotal > 0) { ////////// Cake Corner Refreshment
       return true;
     } else {
@@ -314,6 +314,7 @@ export class GlobalDataModule implements OnInit {
   DetailedPurchase = this.getFeature('DetailedPurchase');
   PinCodeFeature = this.getFeature('PinCode');
   MultiBarcode = this.getFeature('MultiBarcode');
+  TabletPrintFeature = this.getFeature('TabletPrint');
 
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
@@ -355,6 +356,7 @@ export class GlobalDataModule implements OnInit {
     this.DetailedPurchase = this.getFeature('DetailedPurchase');
     this.PinCodeFeature = this.getFeature('PinCode');
     this.MultiBarcode = this.getFeature('MultiBarcode');
+    this.TabletPrintFeature = this.getFeature('TabletPrint');
 
   }
 
@@ -494,7 +496,7 @@ export class GlobalDataModule implements OnInit {
   }
 
   getServiceCharges() {
-    var val = 5.5;
+    var val = 2.5;
     return val;
   }
 
@@ -582,7 +584,7 @@ export class GlobalDataModule implements OnInit {
   curDate: any = new Date();
   public SubscriptionExpired(): boolean {
     ///// yyyy-MM-dd /////////////
-    var ExpiryDate: any = '2030-08-05';
+    var ExpiryDate: any = '2030-09-05';
     var curDate = this.datePipe.transform(this.curDate, 'yyyy-MM-dd')
     var status: any = curDate! >= ExpiryDate;
     return status;
@@ -673,6 +675,12 @@ export class GlobalDataModule implements OnInit {
 
 
   printData(printSection: string) {
+
+    if (this.TabletPrintFeature) {
+      this.printSeperateWindow(printSection);
+      return;
+    }
+
     var contents = $(printSection).html();
 
     var frame1: any = $('<iframe />');
@@ -723,8 +731,95 @@ export class GlobalDataModule implements OnInit {
       frame1.remove();
     }, 500);
 
+
+
   }
 
+  printSeperateWindow(printSection: string) {
+  const contents = $(printSection).html();
+  const win: any = window.open("", "_blank");
+
+  win.document.write(`
+    <html>
+      <head>
+        <link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>
+        <link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>
+      </head>
+      <body>
+        ${contents}
+
+          <script>
+          window.onload = function() {
+            window.print();
+          };
+          // window.onafterprint = function() {
+          //  window.close();
+          //};
+         
+        </script>
+       
+      </body>
+    </html>
+  `);
+
+  
+  // win.print();
+  win.document.close();
+}
+
+  // printSeperateWindow(printSection: string) {
+  //   const contents = $(printSection).html();
+  //   const currentPage = window.location.href;
+
+  //   // Replace current page with the bill
+  //   document.write(`
+  //   <html>
+  //     <head>
+  //       <link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>
+  //       <link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>
+  //     </head>
+  //     <body>
+  //       ${contents}
+      
+  //     </body>
+  //   </html>
+  // `);
+  //   setTimeout(() => {
+  //     window.print();
+  //     window.location.href = currentPage;
+  //   }, 200);
+  //   document.close();
+  // }
+
+  // printSeperateWindow(printSection: string){
+  //   var contents = $(printSection).html();
+  //     var currentPage = window.location.href;
+
+  //   var win: any = window.open("", "_blank");
+  //   win.document.write(`
+  //   <html>
+  //     <head>
+  //        <link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>
+  //          <link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>
+  //       <style>
+
+  //       </style>
+  //     </head>
+  //     <body>
+  //       ${contents}
+  //        <script>
+  //         window.onload = function() {
+  //           window.print();
+  //         };
+  //       </script>
+  //     </body>
+  //   </html>
+  // `);
+
+  //   win.document.close();
+  //   window.location.href = currentPage;
+
+  // }
 
   printBill(printSection: string, focusClass: any) {
     var contents = $(printSection).html();
@@ -819,52 +914,6 @@ export class GlobalDataModule implements OnInit {
 
   }
 
-  printToSpecificPrinter(printerName: any, printSection: any) {
-    var contents = $(printSection).html();
-
-    var printDialog: any = $('<iframe />');
-    printDialog[0].name = 'frame1';
-    printDialog.css({ position: 'absolute', top: '-1000000px' });
-    $('body').append(printDialog);
-    var frameDoc = printDialog[0].contentWindow
-      ? printDialog[0].contentWindow
-      : printDialog[0].contentDocument.document
-        ? printDialog[0].contentDocument.document
-        : printDialog[0].contentDocument;
-    frameDoc.window.open();
-    // var printDialog:any = window.open("", "PrintDialog", "width=500,height=300");
-    // printDialog.document.write("<html><head><title>Print Command</title></head><body><script>window.print();</script></body></html>");
-    printDialog.document.write(
-
-      '<link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>'
-      + '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'
-      //+'<style type="text/css" media="print">/*@page { size: landscape; }*/</style>'
-      // '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css.map" type="text/css" />'+
-
-      // '<link rel="stylesheet" href="../css/bootstrap.css" type="text/css"  media="print"/>'
-    );
-    printDialog.document.write('</head><body>');
-
-    //Append the DIV contents.
-    printDialog.document.write(contents);
-    printDialog.document.write('</body></html>');
-    printDialog.document.close();
-
-    // Simulate a click event on the print button to trigger the print dialog
-    const printButton = printDialog.document.querySelector('button[name="print"]');
-    if (printButton) {
-      printButton.click();
-    } else {
-      // If the print button is not found, try alternative methods
-      printDialog.focus();
-      printDialog.print();
-    }
-
-    // Close the print dialog after a delay to avoid conflicts
-    setTimeout(() => {
-      printDialog.close();
-    }, 1000);
-  }
 
 
   printBarcode(printSection: string) {
@@ -922,67 +971,6 @@ export class GlobalDataModule implements OnInit {
     }, 500);
 
   }
-
-
-
-
-  autoPrint(printSection: string) {
-    var contents = $(printSection).html();
-
-    var frame1: any = $('<iframe />');
-    frame1[0].name = 'frame1';
-    frame1.css({ position: 'absolute', top: '-1000000px' });
-    $('body').append(frame1);
-    var frameDoc = frame1[0].contentWindow
-      ? frame1[0].contentWindow
-      : frame1[0].contentDocument.document
-        ? frame1[0].contentDocument.document
-        : frame1[0].contentDocument;
-    frameDoc.document.open();
-
-    //Create a new HTML document.
-    // frameDoc.document.write(
-    //   "<html><head><title>DIV Contents</title>" +
-    //     "<style>" +
-    //     printCss +
-    //     "</style>"
-    // );
-
-    //Append the external CSS file. <link rel="stylesheet" href="../../../styles.scss" /> <link rel="stylesheet" href="../../../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
-    // frameDoc.document.write(
-    //   '<style type="text/css" media="print">{ variant: "non-conform" }</style>'
-    //  );
-
-    frameDoc.document.write(
-
-      '<link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>'
-      + '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'
-      //+'<style type="text/css" media="print">/*@page { size: landscape; }*/</style>'
-      // '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css.map" type="text/css" />'+
-
-      // '<link rel="stylesheet" href="../css/bootstrap.css" type="text/css"  media="print"/>'
-    );
-    frameDoc.document.write('</head><body>');
-
-    //Append the DIV contents.
-    frameDoc.document.write(contents);
-    frameDoc.document.write('</body></html>');
-
-    frameDoc.document.close();
-
-
-
-    setTimeout(function () {
-      window.frames[0].focus();
-      window.frames[0].print();
-
-
-      frame1.remove();
-    }, 500);
-
-
-  }
-
 
 
   //////////////////////////////////////////////////////////////////////
@@ -1187,13 +1175,15 @@ export class GlobalDataModule implements OnInit {
   showProductImage(img: any, prodID: number) {
 
     if (prodID != 0) {
-
+      $('.loaderDark').show();
       this.http.get(environment.mainApi + this.inventoryLink + 'GetProductImage?ProductID=' + prodID).subscribe(
         (Response: any) => {
           this.dialog.open(ProductImgComponent, {
             width: '30%',
             data: Response[0].productImage
-          }).afterClosed().subscribe()
+          }).afterClosed().subscribe();
+
+          $('.loaderDark').fadeOut();
         }
       )
     } else {
@@ -1502,7 +1492,7 @@ export class GlobalDataModule implements OnInit {
 
   openBootstrapModal(modalID: any, condition: any, keyboard?: any) {
     if (condition) {
-      const myModal = new bootstrap.Modal(modalID, { keyboard: keyboard || false, backdrop: keyboard || false  });
+      const myModal = new bootstrap.Modal(modalID, { keyboard: keyboard || false, backdrop: keyboard || false });
       myModal.show();
 
     }
@@ -1799,13 +1789,13 @@ export class GlobalDataModule implements OnInit {
 
 
   downloadBase64Image(base64Data, fileName) {
-  const link = document.createElement('a');
-  link.href = base64Data;
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
+    const link = document.createElement('a');
+    link.href = base64Data;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 
 
 

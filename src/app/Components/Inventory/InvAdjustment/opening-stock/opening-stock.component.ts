@@ -748,6 +748,9 @@ export class OpeningStockComponent implements OnInit {
    }
 
    EmptyData(){
+
+        if(this.tableDataList.length == 0) return;
+
     this.global.confirmAlert().subscribe(
       (Response:any)=>{
         if(Response == true){

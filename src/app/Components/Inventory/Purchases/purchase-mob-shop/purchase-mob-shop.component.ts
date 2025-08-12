@@ -366,6 +366,7 @@ export class PurchaseMobShopComponent implements OnInit {
   }
 
   EmptyData() {
+        if(this.tableDataList.length == 0) return;
     this.global.confirmAlert().subscribe(
       (Response: any) => {
         if (Response == true) {
@@ -699,6 +700,8 @@ export class PurchaseMobShopComponent implements OnInit {
                     this.validFlag = true;
                   }
                 )
+              }else{
+                this.validFlag = true;
               }
             })
           }

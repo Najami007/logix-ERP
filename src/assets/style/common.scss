@@ -1260,7 +1260,10 @@ input[type="number"]::-webkit-inner-spin-button {
     border: 1px solid var(--success);
     background-color: var(--success-light) !important;
   }
-
+   &:disabled {
+    border: 1px solid var(--btn-disable);
+    background-color: var(--btn-disable) !important;
+  }
 }
 
 
@@ -1282,6 +1285,10 @@ input[type="number"]::-webkit-inner-spin-button {
     border: 1px solid var(--danger);
     background-color: var(--danger-light) !important;
   }
+   &:disabled {
+    border: 1px solid var(--btn-disable);
+    background-color: var(--btn-disable) !important;
+  }
 
 }
 
@@ -1302,6 +1309,10 @@ input[type="number"]::-webkit-inner-spin-button {
     border: 1px solid var(--grey);
     background-color: var(--grey-light) !important;
   }
+   &:disabled {
+    border: 1px solid var(--btn-disable);
+    background-color: var(--btn-disable) !important;
+  }
 }
 
 .btnduplicate {
@@ -1320,6 +1331,10 @@ input[type="number"]::-webkit-inner-spin-button {
   &:focus {
     border: 1px solid var(--danger);
     background-color: var(--danger-light) !important;
+  }
+   &:disabled {
+    border: 1px solid var(--btn-disable);
+    background-color: var(--btn-disable) !important;
   }
 
 }
@@ -1340,6 +1355,10 @@ input[type="number"]::-webkit-inner-spin-button {
   &:focus {
     border: 1px solid var(--primary);
     background-color: var(--primary-light) !important;
+  }
+   &:disabled {
+    border: 1px solid var(--btn-disable);
+    background-color: var(--btn-disable) !important;
   }
 
 }
@@ -1362,6 +1381,32 @@ input[type="number"]::-webkit-inner-spin-button {
     background-color: var(--primary-light) !important;
   }
 
+   &:disabled {
+    border: 1px solid var(--btn-disable);
+    background-color: var(--btn-disable) !important;
+  }
+}
+
+
+.btnText {
+  min-width: 80px;
+  height: 40px;
+  background: none;
+  background-color: transparent !important;
+  color: red;
+  border: none;
+
+  &:hover {
+   color: red !important;
+  }
+
+  &:focus {
+    color: red!important;
+  }
+
+   &:disabled {
+    color: black !important;
+  }
 }
 
 .btn-rpt-success {

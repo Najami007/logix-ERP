@@ -6,15 +6,17 @@
 
 @media print {
 
-   body {
-     -webkit-print-color-adjust: exact !important;
-      overflow: visible !important;
-      height: auto !important;
-      /* page-break-after: always !important;  */
+  
+
+  body {
+    -webkit-print-color-adjust: exact !important;
+    overflow: visible !important;
+    height: auto !important;
+    /* page-break-after: always !important;  */
     print-color-adjust: exact !important;
     /* Standard property */
-   color-adjust: exact !important;
-     /* text-wrap: wrap;
+    color-adjust: exact !important;
+    /* text-wrap: wrap;
     text-wrap-mode: wrap;
     text-wrap-style: pretty; */
   }
@@ -22,10 +24,29 @@
   .whiteText {
     -webkit-text-fill-color: white !important;
     /* Forces white text */
-    color: white !important;    
+    color: white !important;
   }
- 
+
 }
+
+
+/* @media (max-width: 650px) {
+  body * {
+    visibility: hidden;
+  }
+
+  #print-bill,
+  #print-bill * {
+    visibility: visible !important;
+  }
+
+  #print-bill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+} */
 
 
 
@@ -331,6 +352,7 @@
   /* font-size: 12px; */
 
 }
+
 .table-garment-sale-2 {
   width: 100%;
   border-collapse: collapse;

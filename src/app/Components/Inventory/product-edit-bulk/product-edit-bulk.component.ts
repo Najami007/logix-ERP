@@ -178,7 +178,7 @@ export class ProductEditBulkComponent implements OnInit {
 
     var invalidProdList = this.productList.filter((e:any)=> Number(e.salePrice < e.costPrice));
 
-    if(invalidProdList.length > 0){
+    if(invalidProdList.length > 0 && this.reqType == 'OTHER'){
       this.msg.WarnNotify(`${invalidProdList[0].productTitle} Sale Price Is not Valid` );
       return;
     }
@@ -282,6 +282,18 @@ export class ProductEditBulkComponent implements OnInit {
       });
     }
 
+  }
+
+
+  reset(){
+    this.updateCategoryFlag = false;
+    this.updateSubcategoryFlag = false;
+    this.updateBrandFlag = false;
+    this.productList = [];
+    this.tempProdList = [];
+    this.updateCategoryID = 0;
+    this. updateSubCategoryID = 0;
+    this.UpdateBrandID = 0;
   }
 
 
