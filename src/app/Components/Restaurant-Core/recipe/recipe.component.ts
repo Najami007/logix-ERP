@@ -109,7 +109,7 @@ export class RecipeComponent implements OnInit {
   }
 
 
-  searchRecipe:any = ''
+  searchRecipe: any = ''
   filterCategoryID: any = 0;
   filterCookingAreaID: any = 0;
   filterStatus: any = 0;
@@ -699,118 +699,128 @@ export class RecipeComponent implements OnInit {
 
 
 
+  isProcessing = false;
+
   save() {
-    var isValidFlag = true;
-    this.menuProdList.forEach((e: any) => {
 
-      if (e.quantity == 0 || e.quantity == '0' || e.quantity == '' || e.quantity == undefined || e.quantity == null) {
-        this.msg.WarnNotify('(' + e.productTitle + ') Quantity is not Valid');
-        isValidFlag = false;
-        return;
-      }
+    var inValidQty = this.menuProdList.filter((e:any)=> e.quantity == 0 || e.quantity == '0' || e.quantity == '' || e.quantity == undefined || e.quantity == null);
 
-
-    });
+       if(inValidQty.length > 0){
+      this.msg.WarnNotify(`${inValidQty[0].productTitle} Quantity is not Valid`)
+      return;
+    }
+   
 
     if (this.recipeTitle == '' || this.recipeTitle == undefined) {
       this.msg.WarnNotify('Enter Recipe Title')
+      return;
     }
     //  else if (this.costPrice == 0 || this.costPrice == '' || this.costPrice == undefined) {
     //   this.msg.WarnNotify('Select Ingredients')
     // } 
-    else if (this.menuProdList == '') {
-      this.msg.WarnNotify('Select Ingredients')
+    if (this.menuProdList == '') {
+      this.msg.WarnNotify('Select Ingredients');
+      return;
     }
-    else if (this.salePrice == 0 || this.salePrice == '' || this.salePrice == undefined) {
+    if (this.salePrice == 0 || this.salePrice == '' || this.salePrice == undefined) {
       this.msg.WarnNotify('Enter Receipe Sale Price')
-    } else if (this.recipeType == 'Dine In' && (this.recipeImg == '' || this.recipeImg == undefined)) {
-      this.msg.WarnNotify('Select Recipe Image')
-    } else if (this.categoryID == 0 || this.categoryID == undefined) {
+       return;
+
+    } 
+     if (this.recipeType == 'Dine In' && (this.recipeImg == '' || this.recipeImg == undefined)) {
+      this.msg.WarnNotify('Select Recipe Image');
+      return;
+    } 
+     if (this.categoryID == 0 || this.categoryID == undefined) {
       this.msg.WarnNotify('Select Category');
-    } else if (this.costPrice > this.salePrice) {
-      this.msg.WarnNotify('Receipe Cost is not Valid')
-    } else if (this.recipeType == '' || this.recipeType == undefined) {
+      return;
+    } 
+     if (this.costPrice > this.salePrice) {
+      this.msg.WarnNotify('Receipe Cost is not Valid');
+      return;
+    } 
+     if (this.recipeType == '' || this.recipeType == undefined) {
       this.msg.WarnNotify('Select Recipe Type');
+      return;
     }
-    else {
 
 
-
-
-      if (isValidFlag) {
-        if (this.btnType == 'Save') {
-          this.app.startLoaderDark();
-          this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertRecipe', {
-            RecipeTitle: this.recipeTitle,
-            recipeCode: this.recipeCode || this.recipeTitle,
-            RecipeDescription: this.Description || '-',
-            RecipeCostPrice: this.costPrice,
-            RecipeSalePrice: this.salePrice,
-            RecipeCatID: this.categoryID,
-            ProjectID: this.projectID,
-            RecipeImage: this.recipeImg,
-            RecipeType: this.recipeType,
-            CookingTime: this.cookingTime || 10,
-            CookingAriaID: this.cookingAriaID,
-            RecipeDetail: JSON.stringify(this.menuProdList),
-
-            UserID: this.global.getUserID(),
-          }).subscribe(
-            (Response: any) => {
-              if (Response.msg == 'Data Saved Successfully') {
-                this.msg.SuccessNotify(Response.msg);
-                this.getAllRecipe();
-                this.reset();
-                this.app.stopLoaderDark();
-              } else {
-                this.msg.WarnNotify(Response.msg);
-                this.app.stopLoaderDark();
-              }
-            }
-          )
-        } else if (this.btnType == 'Update') {
-
-          this.global.openPinCode().subscribe(pin => {
-            if (pin != '') {
-              this.app.startLoaderDark();
-              this.http.post(environment.mainApi + this.global.restaurentLink + 'UpdateRecipe', {
-                RecipeID: this.recipeID,
-                RecipeTitle: this.recipeTitle,
-                recipeCode: this.recipeCode || this.recipeTitle,
-                RecipeDescription: this.Description || '-',
-                RecipeCostPrice: this.costPrice,
-                RecipeSalePrice: this.salePrice,
-                RecipeType: this.recipeType,
-                RecipeRefID: this.recipeRefID,
-                CookingTime: this.cookingTime || 10,
-                CookingAriaID: this.cookingAriaID,
-                RecipeCatID: this.categoryID,
-                ProjectID: this.projectID,
-                RecipeImage: this.recipeImg,
-                PinCode: pin,
-
-                RecipeDetail: JSON.stringify(this.menuProdList),
-
-                UserID: this.global.getUserID(),
-              }).subscribe(
-                (Response: any) => {
-                  if (Response.msg == 'Data Updated Successfully') {
-                    this.msg.SuccessNotify(Response.msg);
-                    this.getAllRecipe();
-                    this.reset();
-                    this.app.stopLoaderDark();
-                  } else {
-                    this.msg.WarnNotify(Response.msg);
-                    this.app.stopLoaderDark();
-                  }
-                }
-              )
-            }
-          })
-        }
+      var postData = {
+        RecipeID: this.recipeID,
+        RecipeTitle: this.recipeTitle,
+        recipeCode: this.recipeCode || this.recipeTitle,
+        RecipeDescription: this.Description || '-',
+        RecipeCostPrice: this.costPrice,
+        RecipeSalePrice: this.salePrice,
+        RecipeType: this.recipeType,
+        RecipeRefID: this.recipeRefID,
+        CookingTime: this.cookingTime || 10,
+        CookingAriaID: this.cookingAriaID,
+        RecipeCatID: this.categoryID,
+        ProjectID: this.projectID,
+        RecipeImage: this.recipeImg,
+        RecipeDetail: JSON.stringify(this.menuProdList),
+        UserID: this.global.getUserID(),
       }
 
-    }
+
+      if (this.isProcessing) return;
+
+      this.isProcessing = true;
+
+      if (this.btnType == 'Save') {
+        this.app.startLoaderDark();
+        this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertRecipe', postData).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Data Saved Successfully') {
+              this.msg.SuccessNotify(Response.msg);
+              this.getAllRecipe();
+              this.reset();
+            } else {
+              this.msg.WarnNotify(Response.msg);
+            }
+            this.app.stopLoaderDark();
+            this.isProcessing = false;
+
+          },
+          (Error: any) => {
+            console.log(Error);
+            this.isProcessing = false;
+          }
+        )
+      } 
+      
+      if (this.btnType == 'Update') {
+
+        this.global.openPinCode().subscribe(pin => {
+          if (pin != '') {
+            this.app.startLoaderDark();
+            postData['PinCode'] = pin;
+            this.http.post(environment.mainApi + this.global.restaurentLink + 'UpdateRecipe', postData).subscribe(
+              (Response: any) => {
+                if (Response.msg == 'Data Updated Successfully') {
+                  this.msg.SuccessNotify(Response.msg);
+                  this.getAllRecipe();
+                  this.reset();
+                } else {
+                  this.msg.WarnNotify(Response.msg);
+                }
+                this.app.stopLoaderDark();
+                this.isProcessing = false;
+
+              }
+            ),
+              (Error: any) => {
+                console.log(Error);
+                this.isProcessing = false;
+              }
+          }else{
+            this.isProcessing = false;
+          }
+        })
+      }
+
+    
 
   }
 
@@ -1199,7 +1209,7 @@ export class RecipeComponent implements OnInit {
 
 
   /////// to change the tab on edit
-  curFocusRow:any = -1;
+  curFocusRow: any = -1;
 
   changeTab(tabNum: any) {
     this.tabIndex = tabNum;
@@ -1209,11 +1219,11 @@ export class RecipeComponent implements OnInit {
   }
 
   scrollToRow(index: number) {
-  const row = document.getElementById('rcp-' + index);
-  if (row) {
-    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const row = document.getElementById('rcp-' + index);
+    if (row) {
+      row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   }
-}
 
 
 

@@ -28,8 +28,8 @@
 
         <div>
             <input matInput id="recSearch" accesskey="f" autocomplete="off" class="w-100 p-1 border"
-                style="height: 40px;" autofocus placeholder="Search Recipe (ALT + f)" #recipeSearch
-                (keyup)="searchByCode($event,recipeSearch.value)">
+                style="height: 40px;" [autofocus]="!tabletPrintFeature" placeholder="Search Recipe (ALT + f)"
+                #recipeSearch (keyup)="searchByCode($event,recipeSearch.value)">
 
         </div>
         <br>
@@ -137,7 +137,7 @@
 
 
             <!-----------   Bill Total Amount Section ------------------->
-            <div class="d-flex bg-white border-top p-1 col-lg-4 btas" style="position: fixed;bottom: 4%;right: 0%;">
+            <div class="d-flex bg-white border-top p-1 col-lg-4 btas" style="position: fixed;bottom: 45px;right: 0%;">
 
 
                 <div class="justify-content-between p-1 w-50 border-end">
@@ -169,7 +169,7 @@
                         <p class="fw-bold" style="font-size: 12px;">NET TOTAL</p>
                         <p class="text-center font-digit" style="font-size: 30px;">{{netTotal |number:'1.0-1'}}</p>
                     </div>
-                    <mat-form-field class="w-100 matSmall" appearance="outline">
+                    <mat-form-field class="w-100 matSmall" appearance="outline" *ngIf="!tabletPrintFeature">
                         <mat-label>Remar<u>k</u>s</mat-label>
                         <textarea rows="1" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
                     </mat-form-field>
@@ -251,8 +251,8 @@
                         class="m-1 text-white btn col-lg-5 fs-12px" style="background-color: pink;"
                         accesskey="m"><u>M</u>erge Bill</button>
 
-                   <button class=" w-50 btnText" *ngIf="isProcessing" id="refresh" accesskey="r" 
-                    (click)="isProcessing =  false">Refresh</button>
+                    <button class=" w-50 btnText" *ngIf="isProcessing" id="refresh" accesskey="r"
+                        (click)="isProcessing =  false">Refresh</button>
 
 
                     <div *ngIf="BankShortCutsFeature">
@@ -780,6 +780,11 @@
                                     {{item.partyName}}</ng-option>
                             </ng-select>
                         </div>
+
+                        <mat-form-field class="w-100 matSmall" appearance="outline" *ngIf="tabletPrintFeature">
+                            <mat-label>Remar<u>k</u>s</mat-label>
+                            <textarea rows="1" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
+                        </mat-form-field>
 
                         <mat-form-field appearance="outline" class="w-100 matSmall">
                             <mat-label>Payment Type</mat-label>

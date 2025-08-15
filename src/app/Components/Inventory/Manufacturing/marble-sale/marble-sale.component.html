@@ -1,0 +1,170 @@
+<div class="body container">
+
+    <div class="row mt-2">
+
+
+        <mat-form-field appearance="outline" class="col-lg-3 matSmall">
+            <mat-label>Invoice Date</mat-label>
+            <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
+                [matDatepicker]="voucherDate">
+            <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
+            <mat-datepicker #voucherDate></mat-datepicker>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" class="col-lg-3 matSmall">
+            <mat-label>Refrence</mat-label>
+            <input type="text" matInput [(ngModel)]="orderRefrence" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-lg-3 matSmall">
+            <mat-label>Customer</mat-label>
+            <mat-select [(ngModel)]="partyID" #customer name="customer">
+                <mat-option><ngx-mat-select-search #customerSearch [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                <mat-option [value]="0">WalkIn Customer</mat-option>
+                <mat-option *ngFor="let item of partyList |filter:customerSearch.value "
+                    [value]="item.partyID">{{item.partyName}}</mat-option>
+
+            </mat-select>
+            <mat-icon class="cursorPointer" (click)="addParty()" matSuffix>add</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-lg-3 matSmall">
+            <mat-label>Current Credit</mat-label>
+            <input type="text" matInput [(ngModel)]="customerPreviousBalance" />
+        </mat-form-field>
+
+
+
+    </div>
+
+    <div class="col-md-12">
+
+        <div style="border-radius: 5px 5px 5px 5px;height: 50vh;">
+
+
+            <div class="d-flex">
+
+                <!-------------------- Product Search Bar --------------->
+
+                <div class="col-md-9  d-flex flex-column">
+
+                    <input type="text" [(ngModel)]="PBarcode" id="vssearchProduct"
+                        class="p-1 ps-2 mb-2 searchProduct w-100" placeholder="Search Barcode / Product (Alt + b)" autocomplete="off"
+                        accesskey="b">
+
+                    <div class="d-flex flex-column SearchConatiner cursorPointer"
+                        *ngIf="PBarcode != '' && PBarcode != undefined ">
+                        <mat-card class="card "
+                            *ngFor="let item of productList| filter:PBarcode | slice:0:25 index as index">
+
+                        </mat-card>
+                    </div>
+                </div>
+                <div class="col-md-3 ps-1  text-start">
+                    <button class="btnload w-100 " style="height: 40px;" (click)="ngOnInit()">Load</button>
+                </div>
+
+            </div>
+
+            <!-------------------------------Bill Products Area ------------------>
+
+            <div class="billArea border" style="height: 40vh;overflow-y: auto;">
+                <table class="table-logix">
+                    <thead>
+                        <tr>
+                            <th class="cursorPointer">S#</th>
+                            <th>Title</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row">
+
+
+        <div class="col-md-4 d-flex flex-column">
+
+            <mat-form-field appearance="outline" class="col-md-12 matSmall">
+                <mat-label>Delivery Date</mat-label>
+                <input readonly="true" matInput type="text" name="DeliveryDate" [matDatepicker]="deliveryDate">
+                <mat-datepicker-toggle matSuffix [for]="deliveryDate"></mat-datepicker-toggle>
+                <mat-datepicker #deliveryDate></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-md-12 matSmall">
+                <mat-label>Deliver To</mat-label>
+                <input type="text" matInput />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-md-12  matSmall">
+                <mat-label>Address</mat-label>
+                <textarea type="text" matInput></textarea>
+            </mat-form-field>
+
+        </div>
+
+        <div class="col-md-4 d-flex flex-column pt-1">
+            <mat-form-field appearance="outline" class="col-md-12 matSmall">
+                <mat-label>Shipping Company</mat-label>
+                <mat-select>
+                    <mat-option></mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-md-12 matSmall">
+                <mat-label>Contact Person</mat-label>
+                <input type="text" matInput />
+            </mat-form-field>
+
+
+
+            <mat-form-field appearance="outline" class="col-md-12  matSmall">
+                <mat-label>Remarks</mat-label>
+                <textarea type="text" matInput></textarea>
+            </mat-form-field>
+
+        </div>
+
+        <div class="col-md-4 d-flex flex-column">
+
+            <table class="w-100">
+                <tr>
+                    <td colspan="2">
+                        <button mat-raised-button style="height: 100px;width: 100%;"
+                            class=" btn text-white bg-success " accesskey="s"><u>S</u>ave</button>
+                    </td>
+                </tr>
+                 <tr>
+                    <td >
+                        <button mat-raised-button style="height: 100px;"
+                            class=" btn text-white bg-primary col-lg-12" accesskey="s"><u>S</u>ave</button>
+                    </td>
+                     <td >
+                        <button mat-raised-button style="height: 100px;"
+                            class=" btn text-white bg-danger col-lg-12" accesskey="s"><u>S</u>ave</button>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+    </div>
+
+
+
+
+</div>

@@ -315,6 +315,7 @@ export class GlobalDataModule implements OnInit {
   PinCodeFeature = this.getFeature('PinCode');
   MultiBarcode = this.getFeature('MultiBarcode');
   TabletPrintFeature = this.getFeature('TabletPrint');
+  ManufacturingFeature = this.getFeature('Manufacturing');
 
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
@@ -357,6 +358,7 @@ export class GlobalDataModule implements OnInit {
     this.PinCodeFeature = this.getFeature('PinCode');
     this.MultiBarcode = this.getFeature('MultiBarcode');
     this.TabletPrintFeature = this.getFeature('TabletPrint');
+    this.ManufacturingFeature = this.getFeature('Manufacturing');
 
   }
 
@@ -694,33 +696,39 @@ export class GlobalDataModule implements OnInit {
         : frame1[0].contentDocument;
     frameDoc.document.open();
 
-    //Create a new HTML document.
+      //<style type="text/css" media="print">/*@page { size: landscape; }*/</style>
+      // <link rel="stylesheet" href="../../assets/style/bootstrap.min.css.map" type="text/css" />
+      //<link rel="stylesheet" href="../css/bootstrap.css" type="text/css"  media="print"/>
+
+      frameDoc.document.write(`
+    <html>
+      <head>
+       
+      <link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>
+      <link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>
+ 
+      </head>
+      <body>
+        ${contents}
+       
+      </body>
+    </html>
+  `);
     // frameDoc.document.write(
-    //   "<html><head><title>DIV Contents</title>" +
-    //     "<style>" +
-    //     printCss +
-    //     "</style>"
+
+    //   '<link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>'
+    //   + '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'
+    //   //+'<style type="text/css" media="print">/*@page { size: landscape; }*/</style>'
+    //   // '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css.map" type="text/css" />'+
+
+    //   // '<link rel="stylesheet" href="../css/bootstrap.css" type="text/css"  media="print"/>'
     // );
 
-    //Append the external CSS file. <link rel="stylesheet" href="../../../styles.scss" /> <link rel="stylesheet" href="../../../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
-    // frameDoc.document.write(
-    //   '<style type="text/css" media="print">@page { size: portrait; }</style>'
-    // );
-    frameDoc.document.write(
+    // frameDoc.document.write('</head><body>');
 
-      '<link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>'
-      + '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>'
-      //+'<style type="text/css" media="print">/*@page { size: landscape; }*/</style>'
-      // '<link rel="stylesheet" href="../../assets/style/bootstrap.min.css.map" type="text/css" />'+
-
-      // '<link rel="stylesheet" href="../css/bootstrap.css" type="text/css"  media="print"/>'
-    );
-
-    frameDoc.document.write('</head><body>');
-
-    //Append the DIV contents.
-    frameDoc.document.write(contents);
-    frameDoc.document.write('</body></html>');
+    // //Append the DIV contents.
+    // frameDoc.document.write(contents);
+    // frameDoc.document.write('</body></html>');
 
     frameDoc.document.close();
 
@@ -736,10 +744,10 @@ export class GlobalDataModule implements OnInit {
   }
 
   printSeperateWindow(printSection: string) {
-  const contents = $(printSection).html();
-  const win: any = window.open("", "_blank");
+    const contents = $(printSection).html();
+    const win: any = window.open("", "_blank");
 
-  win.document.write(`
+    win.document.write(`
     <html>
       <head>
         <link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>
@@ -747,79 +755,20 @@ export class GlobalDataModule implements OnInit {
       </head>
       <body>
         ${contents}
-
-          <script>
-          window.onload = function() {
-            window.print();
-          };
-          // window.onafterprint = function() {
-          //  window.close();
-          //};
-         
-        </script>
        
       </body>
     </html>
   `);
 
-  
-  // win.print();
-  win.document.close();
-}
+    win.onload = function () {
+      win.print();
+    };
 
-  // printSeperateWindow(printSection: string) {
-  //   const contents = $(printSection).html();
-  //   const currentPage = window.location.href;
-
-  //   // Replace current page with the bill
-  //   document.write(`
-  //   <html>
-  //     <head>
-  //       <link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>
-  //       <link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>
-  //     </head>
-  //     <body>
-  //       ${contents}
-      
-  //     </body>
-  //   </html>
-  // `);
-  //   setTimeout(() => {
-  //     window.print();
-  //     window.location.href = currentPage;
-  //   }, 200);
-  //   document.close();
-  // }
-
-  // printSeperateWindow(printSection: string){
-  //   var contents = $(printSection).html();
-  //     var currentPage = window.location.href;
-
-  //   var win: any = window.open("", "_blank");
-  //   win.document.write(`
-  //   <html>
-  //     <head>
-  //        <link rel="stylesheet" href="../../assets/style/ownStyle.css" type="text/css" media="print"/>
-  //          <link rel="stylesheet" href="../../assets/style/bootstrap.min.css" type="text/css" media="print"/>
-  //       <style>
-
-  //       </style>
-  //     </head>
-  //     <body>
-  //       ${contents}
-  //        <script>
-  //         window.onload = function() {
-  //           window.print();
-  //         };
-  //       </script>
-  //     </body>
-  //   </html>
-  // `);
-
-  //   win.document.close();
-  //   window.location.href = currentPage;
-
-  // }
+    // win.onafterprint = function () {
+    //    win.close();
+    // };
+    win.document.close();
+  }
 
   printBill(printSection: string, focusClass: any) {
     var contents = $(printSection).html();

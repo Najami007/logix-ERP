@@ -900,7 +900,7 @@ export class Sale1Component implements OnInit {
             this.msg.WarnNotify(Response.msg);
           }
           this.app.stopLoaderDark();
-          this.global.focusTo('#recSearch');
+          if(!this.tabletPrintFeature) this.global.focusTo('#recSearch');
         },
         (Error: any) => {
           console.log(Error);
@@ -931,7 +931,7 @@ export class Sale1Component implements OnInit {
             this.msg.WarnNotify(Response.msg);
           }
           this.app.stopLoaderDark();
-          this.global.focusTo('#recSearch');
+          if(!this.tabletPrintFeature) this.global.focusTo('#recSearch');
         },
         (Error: any) => {
           console.log(Error);
@@ -970,7 +970,7 @@ export class Sale1Component implements OnInit {
                 } else {
                   this.msg.WarnNotify(Response.msg);
                 }
-                this.global.focusTo('#recSearch');
+               if(!this.tabletPrintFeature) this.global.focusTo('#recSearch');
               },
               (Error: any) => {
                 console.log(Error);

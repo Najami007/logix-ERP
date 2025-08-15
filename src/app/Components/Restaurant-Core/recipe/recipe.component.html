@@ -90,12 +90,14 @@
                         </div>
                     </div>
                     <div class="justify-content-around d-flex">
-                        <button #toggleBtn class="btnsave w-25" accesskey="s" (click)="save() "
+                        <button #toggleBtn class="btnsave w-25" [disabled]="isProcessing" accesskey="s" (click)="save() "
                             *ngIf="crudList.c && btnType == 'Save'"><u>S</u>ave</button>
-                        <button #toggleBtn class="btnsave  w-25" (click)="save() "
+                        <button #toggleBtn class="btnsave  w-25" [disabled]="isProcessing" (click)="save() "
                             *ngIf="crudList.u && btnType == 'Update'" accesskey="u"><u>U</u>pdate</button>
                         <button class="btnreset w-25" accesskey="r" (click)="reset()"><u>R</u>eset</button>
                         <mat-checkbox [(ngModel)]="autoEmptyFlag">Auto Empty</mat-checkbox>
+                        <button class=" w-25 btnText" *ngIf="isProcessing" id="refresh" accesskey="r" 
+                    (click)="isProcessing =  false">Refresh</button>
 
                         <!-- <button *ngIf="crudList.c" class="btn btn-warning w-25 text-white" (click)="MapProdWithCategory()">Map / Unmap Product</button> -->
                     </div>
