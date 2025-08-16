@@ -503,3 +503,8 @@
 .hide-in-print {
   display: none;
 }
+
+
+.bgNorthedge{
+  background-color: #9CAB9B !important;
+}

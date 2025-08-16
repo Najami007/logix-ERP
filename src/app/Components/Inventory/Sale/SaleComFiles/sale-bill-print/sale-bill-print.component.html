@@ -1,4 +1,4 @@
-<div id="billEnglishs" class="d-none">
+<div id="billEnglish" class="d-none">
 
     <div class="p-1">
 
@@ -759,7 +759,7 @@
 <!---------------------- For Specific Customer ---------------->
 
 
-<div id="billEnglish">
+<div id="northedgeEnterprises">
 
     <div class="p-1">
 
@@ -769,7 +769,7 @@
 
             <tbody>
                 <tr>
-                    <td class="fs-12 fw-bold w-25">Invoice To: </td>
+                    <td class="fs-12 fw-bold w-25 bgNorthedge">Invoice To: </td>
                     <td class="ms-2 fs-11 w-75" >{{myCustomerName}}</td>
                 </tr>
                  
@@ -784,38 +784,38 @@
 
             <tbody>
                 <tr>
-                    <td class="fs-12 fw-bold">FTN#</td>
-                    <td class="ms-2 fs-11">124</td>
-                    <td class="fs-12 fw-bold">Invoice #</td>
+                    <td class="fs-12 fw-bold bgNorthedge">FTN#</td>
+                    <td class="ms-2 fs-11"></td>
+                    <td class="fs-12 fw-bold bgNorthedge">Invoice #</td>
                     <td class="ms-2 fs-11">{{myInvoiceNo}}</td>
                 </tr>
                  <tr>
-                    <td class="fs-12 fw-bold">Bank Detail</td>
-                    <td class="ms-2 fs-11">Test Bank</td>
-                    <td class="fs-12 fw-bold">NTN #</td>
-                    <td class="ms-2 fs-11">{{myInvoiceNo}}</td>
+                    <td class="fs-12 fw-bold bgNorthedge">Bank Detail</td>
+                    <td class="ms-2 fs-11"></td>
+                    <td class="fs-12 fw-bold bgNorthedge">NTN #</td>
+                    <td class="ms-2 fs-11">{{CompanyNTN}}</td>
                 </tr>
                  <tr>
-                    <td class="fs-12 fw-bold" rowspan="2">Acc Title</td>
-                    <td class="ms-2 fs-11" rowspan="2"> Test</td>
-                    <td class="fs-12 fw-bold">STRN #</td>
-                    <td class="ms-2 fs-11">{{myInvoiceNo}}</td>
+                    <td class="fs-12 fw-bold bgNorthedge" rowspan="2">Acc Title</td>
+                    <td class="ms-2 fs-11" rowspan="2"></td>
+                    <td class="fs-12 fw-bold bgNorthedge">STRN #</td>
+                    <td class="ms-2 fs-11">{{CompanySTRN}}</td>
                 </tr>
                  <tr>
      
-                    <td class="fs-12 fw-bold">PNTN #</td>
+                    <td class="fs-12 fw-bold bgNorthedge">PNTN #</td>
+                    <td class="ms-2 fs-11"></td>
+                </tr>
+                 <tr>
+                    <td class="fs-12 fw-bold bgNorthedge">B Code</td>
+                    <td class="ms-2 fs-11"></td>
+                    <td class="fs-12 fw-bold bgNorthedge">vendor</td>
                     <td class="ms-2 fs-11">{{myInvoiceNo}}</td>
                 </tr>
                  <tr>
-                    <td class="fs-12 fw-bold">B Code</td>
+                    <td class="fs-12 fw-bold bgNorthedge">ACC #</td>
                     <td class="ms-2 fs-11"></td>
-                    <td class="fs-12 fw-bold">vendor</td>
-                    <td class="ms-2 fs-11">{{myInvoiceNo}}</td>
-                </tr>
-                 <tr>
-                    <td class="fs-12 fw-bold">ACC #</td>
-                    <td class="ms-2 fs-11"></td>
-                    <td class="fs-12 fw-bold">Dated </td>
+                    <td class="fs-12 fw-bold bgNorthedge">Dated </td>
                     <td class="ms-2 fs-11">{{myInvDate | date:'dd-MM-yyyy'}}</td>
                 </tr>
             </tbody>
@@ -832,14 +832,12 @@
 
             <table class="table table-sale" *ngIf="billFormate2">
                 <thead>
-                    <tr class="fs-10">
+                    <tr class="fs-10 bgNorthedge" >
                         <th>S#</th>
                         <th>Item</th>
                         <th>Qty</th>
-                        <th>Price</th>
-                        <th style="width:10% !important;" *ngIf="discFeature">D Rs</th>
-                        <th style="width:10% !important;" *ngIf="discFeature">D %</th>
-                        <th>Total</th>
+                        <th>Unit Price</th>
+                        <th>Total Price</th>
 
                     </tr>
                 </thead>

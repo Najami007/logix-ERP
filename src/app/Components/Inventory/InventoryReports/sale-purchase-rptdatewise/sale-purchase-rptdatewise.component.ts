@@ -118,7 +118,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
 
   getReport(type: any) {
 
-    this.reportType = this.reportsList.find((e: any) => e.invType == this.tmpRptType).invTypeTitle;
+    this.reportType =  this.reportsList.find((e: any) => e.invType == this.tmpRptType).invTypeTitle;
 
     if (type == 'taxSummary' && (this.rptType != 'S')) {
       this.msg.WarnNotify('Tax Is Only For Sales')
@@ -394,6 +394,22 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     this.salePriceTotal = 0;
     this.detNetTotal = 0;
 
+
+  }
+
+
+    postSaleBill(item: any) {
+    if (!item.postedStatus) {
+      this.global.postSaleInvoice(item).subscribe(
+        (Response: any) => {
+          if (Response.msg == 'Posted Successfully') {
+            this.msg.SuccessNotify(Response.msg);
+        } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+        }
+      );
+    }
 
   }
 

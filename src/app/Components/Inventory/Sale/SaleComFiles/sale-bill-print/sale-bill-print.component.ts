@@ -173,7 +173,8 @@ export class SaleBillPrintComponent implements OnInit {
         }
         setTimeout(() => {
           if (this.billPrintType == 'english') {
-            this.global.printBill('#billEnglish', '.searchProduct');
+            // this.global.printBill('#billEnglish', '.searchProduct');
+             this.global.printBill('#northedgeEnterprises', '.searchProduct');
           }
           if (this.billPrintType == 'urdu') {
             this.global.printBill('#BillUrdu', '.searchProduct');
