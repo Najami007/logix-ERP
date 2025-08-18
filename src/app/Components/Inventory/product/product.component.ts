@@ -40,7 +40,7 @@ export class ProductComponent implements OnInit {
   AutoFillProdNameFeature = this.global.AutoFillNameFeature;
   discFeature = this.global.discFeature;
   MultiBarcode = this.global.MultiBarcode;
-  ManufacturingFeature = this.global.ManufacturingFeature;
+  ManufacturingFeature =  this.global.ManufacturingFeature;
 
   applyFilter() {
     // const filterValue = (event.target as HTMLInputElement).value;

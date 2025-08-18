@@ -32,6 +32,7 @@ export class SaleBillPrintComponent implements OnInit {
   billFormate1 = this.global.BillFormate1Feature;
   billFormate2 = this.global.BillFormate2Feature;
   VehicleSaleFeature = this.global.VehicleSaleFeature;
+  northEdgeEnterPriseBillFeature = this.global.northEdgeEnterPriseBillFeature;
 
 
 
@@ -41,6 +42,16 @@ export class SaleBillPrintComponent implements OnInit {
   companyLogo: any = '';
   CompanyNTN = '';
   CompanySTRN = '';
+  companyPNTN = '';
+  companyFTN = '';
+  companyBankTitle = '';
+  companyBankCode = '';
+  companyAccTitle = '';
+  companyAccNumber = '';
+  companyIBAN = '';
+  companyRegistrationNo = '';
+  footerText:any ='';
+
   logoHeight: any = 0;
   logoWidth: any = 0;
   companyAddress: any = '';
@@ -65,6 +76,15 @@ export class SaleBillPrintComponent implements OnInit {
       this.companyName = data[0].companyName;
       this.logoHeight = data[0].logo1Height;
       this.logoWidth = data[0].logo1Width;
+      this.companyPNTN = data[0].pntn;
+      this.companyFTN = data[0].ftn;
+      this.companyBankTitle =data[0].bankName;
+      this.companyBankCode =data[0].bankCode;
+      this.companyAccTitle = data[0].accTitle;
+      this.companyAccNumber = data[0].accNumber;
+      this.companyIBAN = data[0].iban;
+      this.companyRegistrationNo = data[0].registrationNo;
+      this.footerText = data[0].footerText;
     });
 
 
@@ -88,7 +108,7 @@ export class SaleBillPrintComponent implements OnInit {
   myCounterName = '';
   myCustomerName = '';
   myInvDate: any = new Date();
-  myCreatedDate:any = new Date();
+  myCreatedDate: any = new Date();
   myOrderType = '';
   mySubTotal = 0;
   myNetTotal = 0;
@@ -138,7 +158,7 @@ export class SaleBillPrintComponent implements OnInit {
         this.myOtherCharges = Response[0].otherCharges;
         this.myRemarks = Response[0].remarks;
         this.myCash = Response[0].cashRec;
-        this.myBank = Response[0].invType == 'S' ?   Response[0].bankCash : -1 * Response[0].bankCash; //Response[0].netTotal - Response[0].cashRec;
+        this.myBank = Response[0].invType == 'S' ? Response[0].bankCash : -1 * Response[0].bankCash; //Response[0].netTotal - Response[0].cashRec;
         this.myDiscount = Response[0].billDiscount;
         this.myChange = Response[0].change;
         this.myPaymentType = Response[0].paymentType;
@@ -172,21 +192,31 @@ export class SaleBillPrintComponent implements OnInit {
           this.generateQRCode();
         }
         setTimeout(() => {
-          if (this.billPrintType == 'english') {
-            // this.global.printBill('#billEnglish', '.searchProduct');
-             this.global.printBill('#northedgeEnterprises', '.searchProduct');
-          }
-          if (this.billPrintType == 'urdu') {
-            this.global.printBill('#BillUrdu', '.searchProduct');
-          }
-          this.qrCodeContainer;
+
+          if (this.northEdgeEnterPriseBillFeature) {
+            this.global.printBill('#northedgeEnterprises', '.searchProduct');
+            return;
+          } else {
+
+            if (this.billPrintType == 'english') {
+              this.global.printBill('#billEnglish', '.searchProduct');
+
+            }
+            if (this.billPrintType == 'urdu') {
+              this.global.printBill('#BillUrdu', '.searchProduct');
+            }
+            this.qrCodeContainer;
 
 
-          if (this.printKotFeature) {
-            var FastFoodProducts = Response.filter((e: any) => e.subCategoryID == this.fastFoodSCID);
-            this.PrintPartialKot(FastFoodProducts);
-            // this.kotPrint.PrintPartialKot(FastFoodProducts);
+            if (this.printKotFeature) {
+              var FastFoodProducts = Response.filter((e: any) => e.subCategoryID == this.fastFoodSCID);
+              this.PrintPartialKot(FastFoodProducts);
+              // this.kotPrint.PrintPartialKot(FastFoodProducts);
+            }
+
           }
+
+
 
         }, 100);
 

@@ -44,6 +44,7 @@ export class GarmentSaleComponent implements OnInit {
   urduBillFeature = this.global.urduBill;
   disablePrintPwd = this.global.DisablePrintPwd;
   VehicleSaleFeature = this.global.VehicleSaleFeature;
+  CustomSaleGstFeatrue = this.global.CustomSaleGstFeature;
 
 
 
@@ -599,6 +600,8 @@ export class GarmentSaleComponent implements OnInit {
     this.subTotal = 0;
     this.netTotal = 0;
     this.offerDiscount = 0;
+    this.AdvTaxAmount = 0;
+
 
     this.tableDataList.forEach((e: any) => {
       // if (this.billDiscount > 0) {
@@ -608,6 +611,7 @@ export class GarmentSaleComponent implements OnInit {
       this.qtyTotal += parseFloat(e.quantity);
       this.subTotal += parseFloat(e.quantity) * parseFloat(e.salePrice);
       this.offerDiscount += parseFloat(e.discInR) * parseFloat(e.quantity);
+
 
     });
 
@@ -623,8 +627,9 @@ export class GarmentSaleComponent implements OnInit {
     if (this.gstFeature) {
       this.subTotal = this.subTotal + this.PosFee;
     }
+    this.AdvTaxAmount = (Number(this.subTotal) * Number(this.AdvTaxValue)) / 100;
 
-    this.netTotal = this.subTotal - parseFloat(this.discount) - parseFloat(this.offerDiscount);
+    this.netTotal = this.subTotal + this.AdvTaxAmount - parseFloat(this.discount) - parseFloat(this.offerDiscount);
 
     if (this.paymentType == 'Split') {
       this.bankCash = this.netTotal - parseFloat(this.cash);
@@ -1223,6 +1228,8 @@ export class GarmentSaleComponent implements OnInit {
     this.bankCoaID = 0;
     this.vehicleID = 0;
     this.meterReading = '';
+     this.AdvTaxAmount = 0;
+    this.AdvTaxValue = 0;
 
 
   }

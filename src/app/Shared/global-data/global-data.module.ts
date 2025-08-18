@@ -316,6 +316,9 @@ export class GlobalDataModule implements OnInit {
   MultiBarcode = this.getFeature('MultiBarcode');
   TabletPrintFeature = this.getFeature('TabletPrint');
   ManufacturingFeature = this.getFeature('Manufacturing');
+  CustomSaleGstFeature = this.getFeature('CustomSaleGst');
+  northEdgeEnterPriseBillFeature = this.getFeature('northEdgeEnterPriseBill');
+  disableDOCPwdFeature = this.getFeature('disableDOCPwd');
 
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
@@ -359,6 +362,9 @@ export class GlobalDataModule implements OnInit {
     this.MultiBarcode = this.getFeature('MultiBarcode');
     this.TabletPrintFeature = this.getFeature('TabletPrint');
     this.ManufacturingFeature = this.getFeature('Manufacturing');
+    this.CustomSaleGstFeature = this.getFeature('CustomSaleGst');
+    this.northEdgeEnterPriseBillFeature = this.getFeature('northEdgeEnterPriseBill');
+    this.disableDOCPwdFeature = this.getFeature('disableDOCPwd');
 
   }
 

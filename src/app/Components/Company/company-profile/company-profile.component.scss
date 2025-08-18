@@ -13,7 +13,7 @@
   
   .avatar-upload {
     position: relative;
-    max-width: 205px;
+    max-width: 160px;
     margin: 0px auto;
   }
   .avatar-upload .avatar-edit {
@@ -21,7 +21,7 @@
     // right: 12px;
     left: 0;
     z-index: 1;
-    top: 2px;
+    top: 0px;
   }
   .avatar-upload .avatar-edit input {
     display: none;
@@ -67,7 +67,7 @@
     right: 20px;
     z-index: 1;
     // top: 10px;
-    bottom: 30px;
+    bottom: 0px;
   }
   .avatar-upload .avatar-del  label {
     display: inline-block;

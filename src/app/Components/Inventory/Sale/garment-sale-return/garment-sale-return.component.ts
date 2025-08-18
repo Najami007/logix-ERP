@@ -41,6 +41,7 @@ export class GarmentSaleReturnComponent implements OnInit {
   disablePrintPwd = this.global.DisablePrintPwd;
   urduBillFeature = this.global.urduBill;
   VehicleSaleFeature = this.global.VehicleSaleFeature;
+  CustomSaleGstFeatrue = this.global.CustomSaleGstFeature;
 
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
@@ -265,7 +266,7 @@ export class GarmentSaleReturnComponent implements OnInit {
               this.searchSpecialBarcode(barcode, qty);
               return;
             } else {
-              
+
               if (BType == 'price') { qty = qty / parseFloat(Response[0].salePrice); }
               this.pushProdData(Response[0], qty);
             }
@@ -316,25 +317,25 @@ export class GarmentSaleReturnComponent implements OnInit {
       var discPerc = 0;
       var tmpBarcode = '';
 
-      if(data.barcode2){
+      if (data.barcode2) {
         tmpBarcode = data.barcode2;
-      }else{
+      } else {
         tmpBarcode = data.barcode;
       }
 
-      if(qty > 0){
-        tmpQuantity = qty * data.quantity ;
-      }else{
+      if (qty > 0) {
+        tmpQuantity = qty * data.quantity;
+      } else {
         tmpQuantity = data.quantity;
       }
 
-      if(this.discFeature && data.barcode2){
+      if (this.discFeature && data.barcode2) {
         discPerc = data.discInP;
-        discRupee = data.discInR /  tmpQuantity;
+        discRupee = data.discInR / tmpQuantity;
       }
-      if(this.discFeature && !data.barcode2){
+      if (this.discFeature && !data.barcode2) {
         discPerc = data.discPercentage
-        discRupee = data.discRupees ;
+        discRupee = data.discRupees;
       }
 
       this.tableDataList.push({
@@ -344,7 +345,7 @@ export class GarmentSaleReturnComponent implements OnInit {
         productID: data.productID,
         productTitle: data.productTitle,
         barcode: tmpBarcode,
-        flavourTitle:data.flavourTitle,
+        flavourTitle: data.flavourTitle,
         productImage: data.productImage,
         quantity: tmpQuantity,
         wohCP: data.costPrice,
@@ -590,6 +591,7 @@ export class GarmentSaleReturnComponent implements OnInit {
     this.subTotal = 0;
     this.netTotal = 0;
     this.offerDiscount = 0;
+    this.AdvTaxAmount = 0;
 
     this.tableDataList.forEach((e: any) => {
       // if (this.billDiscount > 0) {
@@ -612,8 +614,9 @@ export class GarmentSaleReturnComponent implements OnInit {
     }
 
 
+    this.AdvTaxAmount = (Number(this.subTotal) * Number(this.AdvTaxValue)) / 100;
 
-    this.netTotal = this.subTotal - parseFloat(this.discount) - parseFloat(this.offerDiscount);
+    this.netTotal = this.subTotal + this.AdvTaxAmount - parseFloat(this.discount) - parseFloat(this.offerDiscount);
 
     if (this.paymentType == 'Split') {
 
@@ -798,13 +801,13 @@ export class GarmentSaleReturnComponent implements OnInit {
 
 
   editDiscProdQty(item: any) {
-    if(item.packing <= 1) return;
+    if (item.packing <= 1) return;
     this.dialog.open(EditQtyModalComponent, {
       width: '30%',
       data: item
     }).afterClosed().subscribe(value => {
-      if(Number(value) > 0){
-        var index = this.tableDataList.findIndex((e:any)=> e.barcode == item.barcode);
+      if (Number(value) > 0) {
+        var index = this.tableDataList.findIndex((e: any) => e.barcode == item.barcode);
         this.tableDataList[index].quantity = Number(value) * item.packing;
         this.getTotal();
 
@@ -994,38 +997,38 @@ export class GarmentSaleReturnComponent implements OnInit {
   }
 
 
-   EditTotal(item: any) {
-  
-      // if(this.discFeature) return;
-    
+  EditTotal(item: any) {
+
+    // if(this.discFeature) return;
+
+    Swal.fire({
+      title: "Enter Total Amount",
+      input: "text",
+      showCancelButton: true,
+      confirmButtonText: 'Save',
+      showLoaderOnConfirm: true,
+      preConfirm: (value) => {
+
+        if (!value || isNaN(value) || value <= 0) {
+          return Swal.showValidationMessage("Enter Valid Amount");
+        }
+        const index = this.tableDataList.indexOf(item);
+
+
+        this.tableDataList[index].quantity = value / (this.tableDataList[index].salePrice - this.tableDataList[index].discInR);
+        this.getTotal();
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
         Swal.fire({
-          title: "Enter Total Amount",
-          input: "text",
-          showCancelButton: true,
-          confirmButtonText: 'Save',
-          showLoaderOnConfirm: true,
-          preConfirm: (value) => {
-  
-            if (!value || isNaN(value) || value <= 0) {
-              return Swal.showValidationMessage("Enter Valid Amount");
-            }
-            const index = this.tableDataList.indexOf(item);
-        
-            
-            this.tableDataList[index].quantity = value /  (this.tableDataList[index].salePrice - this.tableDataList[index].discInR);
-            this.getTotal();
-          }
-        }).then((result) => {
-          if (result.isConfirmed) {
-            Swal.fire({
-              title: "Price Updated",
-              timer: 200,
-            });
-          }
-        })
-      
-    }
-  
+          title: "Price Updated",
+          timer: 200,
+        });
+      }
+    })
+
+  }
+
 
 
 
@@ -1139,8 +1142,8 @@ export class GarmentSaleReturnComponent implements OnInit {
         SendToFbr: false,
         CashRec: this.cash,
         Change: this.change,
-        AdvTaxAmount: this.AdvTaxAmount,
-        AdvTaxValue: this.AdvTaxValue,
+        AdvTaxAmount: this.AdvTaxAmount || 0,
+        AdvTaxValue: this.AdvTaxValue || 0,
         BankCoaID: this.bankCoaID,
         BankCash: this.bankCash,
         SaleDetail: JSON.stringify(this.tableDataList),
@@ -1171,6 +1174,7 @@ export class GarmentSaleReturnComponent implements OnInit {
 
         },
         (Error: any) => {
+          console.log(Error);
           this.isValidSale = true;
           this.msg.WarnNotify(Error);
 
@@ -1208,6 +1212,8 @@ export class GarmentSaleReturnComponent implements OnInit {
     this.customerMobileno = '';
     this.customerName = '';
     this.bankCoaID = 0;
+    this.AdvTaxAmount = 0;
+    this.AdvTaxValue = 0;
 
 
   }

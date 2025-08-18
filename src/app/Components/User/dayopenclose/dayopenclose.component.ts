@@ -6,6 +6,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { PincodeComponent } from '../pincode/pincode.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dayopenclose',
@@ -22,6 +23,8 @@ export class DayopencloseComponent implements OnInit {
     private dialog: MatDialog
   ) { }
 
+  disableDOCPwdFeature = this.global.disableDOCPwdFeature;
+
 
   ngOnInit(): void {
     this.global.setHeaderTitle('Day Open / Close')
@@ -34,6 +37,29 @@ export class DayopencloseComponent implements OnInit {
 
     if (this.Type == 'Day Open') {
 
+       if (this.disableDOCPwdFeature) {
+        Swal.fire({
+          title: 'Alert!',
+          text: 'Confirm To Open Day',
+          position: 'center',
+          icon: 'success',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Confirm',
+        }).then((result) => {
+          if (result.isConfirmed) {
+
+            //////on confirm button pressed the api will run
+
+            this.dayOpenClose('Open')
+          }
+        });
+
+        return;
+
+      }
+
       this.global.openPassword('Password').subscribe(pin => {
         if (pin !== '') {
           this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
@@ -45,23 +71,7 @@ export class DayopencloseComponent implements OnInit {
             (Response: any) => {
               if (Response.msg == 'Password Matched Successfully') {
 
-                this.app.startLoaderDark();
-                this.http.post(environment.mainApi + this.global.userLink + '_dayOpen', {
-                  DayOpenDate: this.global.dateFormater(this.date, '-'),
-                  UserID: this.global.getUserID()
-                }).subscribe(
-                  (Response: any) => {
-                    if (Response.msg == 'Data Saved Successfully') {
-                      this.msg.SuccessNotify(Response.msg);
-                      this.date = new Date();
-                    } else {
-                      this.msg.WarnNotify(Response.msg);
-                    }
-
-                    this.app.stopLoaderDark();
-
-                  }
-                )
+                this.dayOpenClose('Open')
 
               } else {
                 this.msg.WarnNotify(Response.msg);
@@ -81,6 +91,30 @@ export class DayopencloseComponent implements OnInit {
 
 
     if (this.Type == 'Day Close') {
+
+      if (this.disableDOCPwdFeature) {
+        Swal.fire({
+          title: 'Alert!',
+          text: 'Confirm To Close Day',
+          position: 'center',
+          icon: 'success',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Confirm',
+        }).then((result) => {
+          if (result.isConfirmed) {
+
+            //////on confirm button pressed the api will run
+
+            this.dayOpenClose('Close')
+          }
+        });
+
+        return;
+
+      }
+
       this.global.openPassword('Password').subscribe(pin => {
         if (pin !== '') {
           this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
@@ -91,22 +125,7 @@ export class DayopencloseComponent implements OnInit {
           }).subscribe(
             (Response: any) => {
               if (Response.msg == 'Password Matched Successfully') {
-                this.app.startLoaderDark();
-                this.http.post(environment.mainApi + this.global.userLink + '_dayClose', {
-                  DayOpenDate: this.global.dateFormater(this.date, '-'),
-                  UserID: this.global.getUserID()
-                }).subscribe(
-                  (Response: any) => {
-                    if (Response.msg == 'Data Updated Successfully') {
-                      this.msg.SuccessNotify(Response.msg);
-                      this.date = new Date();
-                    } else {
-                      this.msg.WarnNotify(Response.msg);
-                    }
-
-                    this.app.stopLoaderDark();
-                  }
-                )
+                this.dayOpenClose('Close')
 
               } else {
                 this.msg.WarnNotify(Response.msg);
@@ -131,6 +150,32 @@ export class DayopencloseComponent implements OnInit {
 
   }
 
+  dayOpenClose(type: any) {
+
+    var url = type == 'Open' ? '_dayOpen' : '_dayClose'
+
+    this.app.startLoaderDark();
+    this.http.post(environment.mainApi + this.global.userLink + url, {
+      DayOpenDate: this.global.dateFormater(this.date, '-'),
+      UserID: this.global.getUserID()
+    }).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
+          this.msg.SuccessNotify(Response.msg);
+          this.date = new Date();
+        } else {
+          this.msg.WarnNotify(Response.msg);
+        }
+
+        this.app.stopLoaderDark();
+
+      }
+    )
+
+  }
+
+
+
 
   postingRemarks: any;
   projectID = this.global.InvProjectID;
@@ -139,9 +184,9 @@ export class DayopencloseComponent implements OnInit {
 
 
   postBills() {
-    if(this.postingRemarks ==  '' || this.postingRemarks == undefined){
+    if (this.postingRemarks == '' || this.postingRemarks == undefined) {
       this.msg.WarnNotify('Enter Posting Remarks')
-    }else{
+    } else {
       this.global.openPinCode().subscribe(pin => {
         if (pin !== '') {
           this.app.startLoaderDark();
@@ -158,7 +203,7 @@ export class DayopencloseComponent implements OnInit {
               } else {
                 this.msg.WarnNotify(Response.msg);
               }
-  
+
               this.app.stopLoaderDark();
             }
           )

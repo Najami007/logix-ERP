@@ -135,6 +135,11 @@ export class PurchaseComponent implements OnInit {
 
   onFieldsUpdate(type: any, item: any) {
 
+
+    if(!this.DetailedPurchaseFeature) return;
+
+
+
     if (this.discType == 'ad') {
 
       var gstAmount = ((item.tempCostPrice * item.gst) / 100)
