@@ -40,7 +40,7 @@ export class ProductComponent implements OnInit {
   AutoFillProdNameFeature = this.global.AutoFillNameFeature;
   discFeature = this.global.discFeature;
   MultiBarcode = this.global.MultiBarcode;
-  ManufacturingFeature =  this.global.ManufacturingFeature;
+  ManufacturingFeature = true // this.global.ManufacturingFeature;
 
   applyFilter() {
     // const filterValue = (event.target as HTMLInputElement).value;
@@ -326,6 +326,7 @@ export class ProductComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetUOM').subscribe(
       (Response: any) => {
         this.UOMList = Response;
+        if (Response.length > 0) { this.UOMID = Response[0].uomID; }
 
       },
       (Error: any) => {
@@ -608,8 +609,8 @@ export class ProductComponent implements OnInit {
     if (this.autoEmpty == true || type == 'btn') {
       this.CategoryID = 0;
       this.SubCategoryID = 0;
-      this.BrandID = 0;
-      this.rackID = 0;
+      // this.BrandID = 0;
+      // this.rackID = 0;
       this.ProductName = '';
       this.productCode = '';
       this.productNameOthLanguage = '',
@@ -624,11 +625,11 @@ export class ProductComponent implements OnInit {
       this.SalePrice = '';
       this.DiscPercent = 0;
       this.DiscRupee = 0;
-      this.UOMID = 0;
+      // this.UOMID = 0;
       // this.Barcode = '';
       this.prodBarcodeType = 'auto'
       this.barcodeType = 'Basic';
-      this.prodTypeID = 0;
+      // this.prodTypeID = 0;
 
       //this.btnType = 'Save';
       // this.productImg= '';

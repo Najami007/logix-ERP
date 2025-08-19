@@ -23,7 +23,7 @@ export const environment = {
   //mainApi: 'http://192.168.1.150:8060/', ///////////// Mehria Enclave Store
 
 
-   //mainApi: 'http://159.69.174.21:2029/',   /////// AM Fast Food Salif 
+  // mainApi: 'http://159.69.174.21:2029/',   /////// AM Fast Food Salif 
   //mainApi: 'http://159.69.174.21:2027/', /////////////// Makkah Oil Islamabad
 
 

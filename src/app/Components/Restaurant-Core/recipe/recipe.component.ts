@@ -711,6 +711,8 @@ export class RecipeComponent implements OnInit {
     }
    
 
+
+
     if (this.recipeTitle == '' || this.recipeTitle == undefined) {
       this.msg.WarnNotify('Enter Recipe Title')
       return;
@@ -741,6 +743,11 @@ export class RecipeComponent implements OnInit {
     } 
      if (this.recipeType == '' || this.recipeType == undefined) {
       this.msg.WarnNotify('Select Recipe Type');
+      return;
+    }
+
+    if(this.cookingAriaID == 0 || this.cookingAriaID == undefined){
+       this.msg.WarnNotify('Select Cooking Area');
       return;
     }
 
@@ -1186,7 +1193,7 @@ export class RecipeComponent implements OnInit {
     this.recipeImg = '';
     this.recipeRefID = 0;
     if (this.autoEmptyFlag) {
-      this.cookingAriaID = 0;
+      // this.cookingAriaID = 0;
       this.categoryID = 0;
       this.recipeTitle = '';
       this.costPrice = '';

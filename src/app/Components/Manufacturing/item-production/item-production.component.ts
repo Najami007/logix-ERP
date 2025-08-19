@@ -7,6 +7,7 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AddFinishedItemComponent } from './add-finished-item/add-finished-item.component';
 
+
 @Component({
   selector: 'app-item-production',
   templateUrl: './item-production.component.html',

@@ -118,10 +118,7 @@ import { CustomerIssueBillPrintComponent } from './CusotmerIssuance/customer-iss
 import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
 import { EditQtyModalComponent } from './Sale/garment-sale/edit-qty-modal/edit-qty-modal.component';
 import { SaleVehicleComponent } from './Sale/sale-vehicle/sale-vehicle.component';
-import { ItemProductionComponent } from './Manufacturing/item-production/item-production.component';
 import { ElementsComponent } from './Manufacturing/elements/elements.component';
-import { AddFinishedItemComponent } from './Manufacturing/item-production/add-finished-item/add-finished-item.component';
-import { MarbleSaleComponent } from './Manufacturing/marble-sale/marble-sale.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -197,8 +194,8 @@ export const inventoryRoutes: Route[] = [
   //////////////////////////////// Manufacturing pages//////////////////////
 
   { path: 'elementConfiguration', component: ElementsComponent, data: { title: 'Element Configuration' }, canActivate: [AuthGuard] },
-  { path: 'itemproduction', component: ItemProductionComponent, data: { title: 'Item Production' }, canActivate: [AuthGuard] },
-    { path: 'marbleSale', component: MarbleSaleComponent, data: { title: 'Sale' }, canActivate: [AuthGuard] },
+
+    
 
 
   ////////////////////////// Reports Pages /////////////
@@ -325,10 +322,7 @@ export const inventoryRoutes: Route[] = [
     CustomerIssueBillPrintComponent,
     EditQtyModalComponent,
     SaleVehicleComponent,
-    ItemProductionComponent,
     ElementsComponent,
-    AddFinishedItemComponent,
-    MarbleSaleComponent,
 
 
 

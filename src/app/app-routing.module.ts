@@ -74,6 +74,12 @@ import('./Components/hrms/hrms.module').then((m)=>m.HRMSModule),
     import('./Components/Real-Estate/real-estate.module').then((m)=>m.RealEstateModule),
     
     },
+      {path:'mnu', 
+    component:MainComponent,
+    loadChildren:()=> 
+    import('./Components/Manufacturing/manufacturing.module').then((m)=>m.ManufacturingModule),
+    
+    },
 { path: '**', redirectTo: 'login', pathMatch: 'full' },
  
 

@@ -791,7 +791,7 @@ export class Sale1Component implements OnInit {
       return;
 
     }
-    if (type == 'sale' && this.paymentType == 'Cash' && (this.cash < (this.netTotal + this.GstAmount))) {
+    if (type == 'sale' && this.paymentType == 'Cash' && !this.RestSimpleSaleFeature && (this.cash < (this.netTotal + this.GstAmount))) {
       this.msg.WarnNotify('Enter Valid Amount');
       return;
     }
@@ -840,6 +840,9 @@ export class Sale1Component implements OnInit {
     if (this.OtherCharges == '' || this.OtherCharges == undefined || this.OtherCharges == null) {
       this.OtherCharges = 0;
     }
+
+
+  
 
     var holdPostData = {
       InvBillNo: this.invBillNo,
@@ -1010,6 +1013,12 @@ export class Sale1Component implements OnInit {
   isProcessing = false;
 
   InsertSale(SendToFbr: any) {
+
+
+      if(this.RestSimpleSaleFeature && Number(this.cash) == 0){
+      this.cash = Number(this.netTotal) + Number(this.GstAmount);
+      this.change = 0;
+    }
 
     let postData = {
 
