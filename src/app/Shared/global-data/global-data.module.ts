@@ -77,6 +77,7 @@ export class GlobalDataModule implements OnInit {
   restaurentLink = 'res/';
   societyLink = 'prp/';
   propertyLink = 'prp/';
+  manufacturingLink = 'mnu/';
 
   ////////////////////// API Module Start Points//////////////////
   Currency = 'AED';

@@ -21,13 +21,35 @@ export class DayopencloseComponent implements OnInit {
     private app: AppComponent,
     private msg: NotificationService,
     private dialog: MatDialog
-  ) { }
+  ) {
+
+
+      ///////////// will Check day is opened or not
+    
+      
+   }
+
+
+   openStatus = true;
+   dataRow:any = [];
 
   disableDOCPwdFeature = this.global.disableDOCPwdFeature;
 
 
   ngOnInit(): void {
-    this.global.setHeaderTitle('Day Open / Close')
+    this.global.setHeaderTitle('Day Open / Close');
+      this.global.getCurrentOpenDay().subscribe(
+          (Response: any) => {
+          
+
+            if(Response.length > 0){
+               this.openStatus = true;
+              this.dataRow = Response;
+            }else{
+              this.openStatus = false;
+            }
+          }
+        )
   }
 
   Type = '';
@@ -53,6 +75,7 @@ export class DayopencloseComponent implements OnInit {
             //////on confirm button pressed the api will run
 
             this.dayOpenClose('Open')
+           
           }
         });
 
@@ -163,6 +186,7 @@ export class DayopencloseComponent implements OnInit {
         if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
           this.msg.SuccessNotify(Response.msg);
           this.date = new Date();
+           this.ngOnInit();
         } else {
           this.msg.WarnNotify(Response.msg);
         }

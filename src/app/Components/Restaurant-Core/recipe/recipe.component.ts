@@ -651,51 +651,85 @@ export class RecipeComponent implements OnInit {
 
 
 
-  onImgSelected(event: any) {
+onImgSelected(event: any) {
+  const file = event.target.files[0];
+  if (!file) return;
 
+  const imgSize = file.size;
+  const isConvert: number = parseFloat((imgSize / 1048576).toFixed(2));
 
-    var imgSize = event.target.files[0].size;
-    var isConvert: number = parseFloat((imgSize / 1048576).toFixed(2));
+  ////////////// will check the file type ////////////////
+  if (this.global.getExtension(event.target.value) !== 'pdf') {
+    const fileReader: FileReader = new FileReader();
 
-    if (isConvert > 1) {
+    fileReader.onload = async () => {
+      const originalBase64 = fileReader.result as string;
 
-      this.msg.WarnNotify('File Size is more than 1MB');
-    }
-    else {
-
-      ////////////// will check the file type ////////////////
-      if (this.global.getExtension(event.target.value) != 'pdf') {
-        let targetEvent = event.target;
-
-        /////////// assign the targeted file to file variable
-        let file: File = targetEvent.files[0];
-
-        let fileReader: FileReader = new FileReader();
-
-        //////////////// if the file is other than pdf eill assign to product img varialb
-        fileReader.onload = (e) => {
-          this.recipeImg = fileReader.result;
-        }
-
-        fileReader.readAsDataURL(file);
-
-
-        const input = event.target as HTMLInputElement;
-        if (input.files && input.files.length > 0) {
-          input.value = ''; // Reset input value
-        }
-
+      // 👉 if file size > 1MB, compress before assigning
+      if (isConvert > 1) {
+        this.msg.WarnNotify('File Size is more than 1MB, compressing...');
+        this.recipeImg = await this.compressBase64(originalBase64, 400, 400, 0.5);
       } else {
+        // assign compressed anyway (smaller size, faster upload)
+        this.recipeImg = await this.compressBase64(originalBase64, 400, 400, 0.5);
+      }
+    };
 
-        this.msg.WarnNotify('File Must Be in jpg or png formate');
-        event.target.value = '';
-        this.recipeImg = '';
+    fileReader.readAsDataURL(file);
+
+    // reset file input
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      input.value = '';
+    }
+  } else {
+    this.msg.WarnNotify('File Must Be in jpg or png format');
+    event.target.value = '';
+    this.recipeImg = '';
+  }
+}
+
+
+// ✅ helper compression function
+private compressBase64(base64: string, maxWidth: number = 800, maxHeight: number = 800, quality: number = 0.7): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.src = base64;
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject('Canvas not supported');
+        return;
       }
 
-    }
+      let width = img.width;
+      let height = img.height;
 
+      // Scale down
+      if (width > maxWidth || height > maxHeight) {
+        if (width > height) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        } else {
+          width = Math.round((width * maxHeight) / height);
+          height = maxHeight;
+        }
+      }
 
-  }
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // export as JPEG
+      const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+      resolve(compressedBase64);
+    };
+
+    img.onerror = (err) => reject(err);
+  });
+}
 
 
 
@@ -834,10 +868,15 @@ export class RecipeComponent implements OnInit {
 
   getRecipeImage(recipeID: any, type: any) {
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetRecipeImage?RecipeID=' + recipeID).subscribe(
-      (Response: any) => {
+      async (Response: any) => {
 
         if (type == 'hide') {
-          this.recipeImg = Response[0].recipeImage;
+          this.recipeImg = Response[0].recipeImage
+          //    console.log( Response[0].recipeImage)
+          // this.recipeImg = await this.compressBase64( Response[0].recipeImage,400,400,0.5);
+
+          // console.log(this.recipeImg)
+          
         }
         if (type == 'show') {
 

@@ -1,0 +1,15 @@
+ <div class="row pt-4">
+         <mat-form-field class="w-100 matSmall" appearance="outline">
+            <mat-label>Category Title</mat-label>
+            <input matInput type="text" [(ngModel)]="categoryTitle" >
+        </mat-form-field>
+
+
+       </div>
+    
+
+        <div class="d-flex flex-wrap justify-content-between">
+            <div class="col-md-4 pe-1" *ngIf="crudList.c" ><button class="btnsave w-100" (click)="save()">{{btnType}}</button></div>
+            <div class="col-md-4 " ><button class="btnreset w-100" (click)="reset()">Reset</button></div>
+        </div>
+

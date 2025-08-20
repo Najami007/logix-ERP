@@ -75,51 +75,6 @@
         </div>
 
 
-        <table class="table-logix2 fs-13">
-
-            <tbody>
-                <tr>
-                    <td class="fs-12 fw-bold">FTN#</td>
-                    <td class="ms-2 fs-11"></td>
-                    <td class="fs-12 fw-bold">Invoice #</td>
-                    <td class="ms-2 fs-11">{{myInvoiceNo}}</td>
-                </tr>
-                <tr>
-                    <td class="fs-12 fw-bold">Bank Detail</td>
-                    <td class="ms-2 fs-11"></td>
-                    <td class="fs-12 fw-bold">NTN #</td>
-                    <td class="ms-2 fs-11">{{myInvoiceNo}}</td>
-                </tr>
-                <tr>
-                    <td class="fs-12 fw-bold" rowspan="2">Acc Title</td>
-                    <td class="ms-2 fs-11" rowspan="2"></td>
-                    <td class="fs-12 fw-bold">STRN #</td>
-                    <td class="ms-2 fs-11">{{myInvoiceNo}}</td>
-                </tr>
-                <tr>
-
-                    <td class="fs-12 fw-bold">PNTN #</td>
-                    <td class="ms-2 fs-11">{{myInvoiceNo}}</td>
-                </tr>
-                <tr>
-                    <td class="fs-12 fw-bold">B Code</td>
-                    <td class="ms-2 fs-11"></td>
-                    <td class="fs-12 fw-bold">vendor</td>
-                    <td class="ms-2 fs-11">{{myInvoiceNo}}</td>
-                </tr>
-                <tr>
-                    <td class="fs-12 fw-bold">ACC #</td>
-                    <td class="ms-2 fs-11"></td>
-                    <td class="fs-12 fw-bold">Dated </td>
-                    <td class="ms-2 fs-11">{{myInvDate | date:'dd-MM-yyyy'}}</td>
-                </tr>
-            </tbody>
-
-        </table>
-
-
-
-
         <div>
             <p class="border border-dark text-center mt-1 fw-bold" *ngIf="billType">{{billType}}</p>
             <p class="border border-dark text-center fw-bold">{{myInvType == 'S' ? 'Sale' : myInvType == 'SR'

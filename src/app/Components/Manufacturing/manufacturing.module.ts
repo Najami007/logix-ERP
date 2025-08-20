@@ -22,6 +22,10 @@ import { CompanyModule } from '../Company/company.module';
 import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { ShippingCompanyComponent } from './shipping-company/shipping-company.component';
+import { AddShippingCompanyComponent } from './shipping-company/add-shipping-company/add-shipping-company.component';
+import { ItemCategoriesComponent } from './item-categories/item-categories.component';
+import { AddCategoryComponent } from './item-categories/add-category/add-category.component';
 
 
 
@@ -43,7 +47,9 @@ export const manufacturingRoutes: Route[] = [
 
 
   { path: 'marbleSale', component: MarbleSaleComponent, data: { title: 'Sale' }, canActivate: [AuthGuard] },
-    { path: 'itemproduction', component: ItemProductionComponent, data: { title: 'Item Production' }, canActivate: [AuthGuard] },
+  { path: 'itemproduction', component: ItemProductionComponent, data: { title: 'Item Production' }, canActivate: [AuthGuard] },
+  { path: 'shipmentCompany', component: ShippingCompanyComponent, data: { title: 'Shipment Company' }, canActivate: [AuthGuard] },
+    { path: 'itemcategory', component: ItemCategoriesComponent, data: { title: 'Item Category' }, canActivate: [AuthGuard] },
 
 ]
 
@@ -53,33 +59,37 @@ export const manufacturingRoutes: Route[] = [
   declarations: [
     MarbleSaleComponent,
     ItemProductionComponent,
-    AddFinishedItemComponent
+    AddFinishedItemComponent,
+    ShippingCompanyComponent,
+    AddShippingCompanyComponent,
+    ItemCategoriesComponent,
+    AddCategoryComponent
   ],
   imports: [
     CommonModule,
     CommonModule,
-        RouterModule.forChild(manufacturingRoutes),
-        MatFormFieldModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MaterialModule,
-        NgxMatSelectSearchModule,
-        TextMaskModule,
-        //Ng2SearchPipeModule,
-        NgxMaterialTimepickerModule,
-        ScrollingModule,
-        ChartModule,
-        NgxBarcode6Module,
-        PipesModule,
-        QRCodeModule,
-        NgSelectModule,
-        SharedComponentsModule,
-        CompanyModule,
-        DirectivesModule
+    RouterModule.forChild(manufacturingRoutes),
+    MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MaterialModule,
+    NgxMatSelectSearchModule,
+    TextMaskModule,
+    //Ng2SearchPipeModule,
+    NgxMaterialTimepickerModule,
+    ScrollingModule,
+    ChartModule,
+    NgxBarcode6Module,
+    PipesModule,
+    QRCodeModule,
+    NgSelectModule,
+    SharedComponentsModule,
+    CompanyModule,
+    DirectivesModule
   ],
   providers: [
-      { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-      { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
-    ]
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
+  ]
 })
 export class ManufacturingModule { }

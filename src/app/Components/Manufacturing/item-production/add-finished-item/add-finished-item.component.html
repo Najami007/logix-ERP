@@ -1,17 +1,53 @@
 <div class="p-3 d-flex flex-column gap-2" style="height: 80vh;overflow-y: auto;">
 
+    <div class="row">
 
-    <mat-accordion >
+        <mat-form-field class="col-md-4 matSmall" appearance="outline">
+            <mat-label>Item Title</mat-label>
+            <input matInput type="text" [(ngModel)]="MnuItemTitle">
+        </mat-form-field>
+          <mat-form-field class="col-md-2 matSmall" appearance="outline">
+            <mat-label>Category</mat-label>
+            <mat-select [(ngModel)]="MnuItemCatID">
+                <mat-option *ngFor="let item of categoryList" [value]="item.MnuItemCatID">{{item.mnuItemCatTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+           <mat-form-field class="col-md-2 matSmall" appearance="outline">
+            <mat-label>Code</mat-label>
+            <input matInput type="text" [(ngModel)]="MnuItemCode">
+        </mat-form-field>
+          <mat-form-field class="col-md-2 matSmall" appearance="outline">
+            <mat-label>Cost Price</mat-label>
+            <input matInput type="text" [(ngModel)]="MnuItemCostPrice">
+        </mat-form-field>
+          <mat-form-field class="col-md-2 matSmall" appearance="outline">
+            <mat-label>Sale Price</mat-label>
+            <input matInput type="text" [(ngModel)]="MnuItemSalePrice">
+        </mat-form-field>
+          <mat-form-field class="col-md-2 matSmall" appearance="outline">
+            <mat-label>Size</mat-label>
+            <input matInput type="text" [(ngModel)]="MnuItemSize">
+        </mat-form-field>
+          <mat-form-field class="col-md-10 matSmall" appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea rows="1" matInput type="text" [(ngModel)]="MnuItemDescription"></textarea>
+        </mat-form-field>
+
+    </div>
+
+
+
+    <mat-accordion>
         <mat-expansion-panel>
             <mat-expansion-panel-header>
                 <mat-panel-title class="fw-bold"> Material Details </mat-panel-title>
             </mat-expansion-panel-header>
 
-            <div class="col-lg-12">
+            <div class="col-md-12">
 
                 <div class="ps-1 row ">
 
-                    <div class="col-lg-9  d-flex flex-column">
+                    <div class="col-md-10  d-flex flex-column">
                         <mat-label class="text-primary">Search Barcode / Product</mat-label>
                         <input type="text" #pbarcode [(ngModel)]="PBarcode" (keydown)="searchByCode($event);"
                             id="searchProduct" class="p-1 mb-2  searchProduct bg-transparent" placeholder="Alt + b"
@@ -30,9 +66,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 text-center">
+                    <div class="col-md-2 text-center">
                         <button mat-raised-button style="height: 40px;margin-top: 20px;"
-                            class="bg-primary text-white w-50" (click)="ngOnInit()">Load</button>
+                            class="bg-primary text-white w-100" (click)="ngOnInit()">Load</button>
                     </div>
 
                 </div>
@@ -85,25 +121,26 @@
     </mat-accordion>
 
 
-    
-    <mat-accordion >
+
+    <mat-accordion>
         <mat-expansion-panel>
             <mat-expansion-panel-header>
-                <mat-panel-title class="fw-bold">Labours for shifting, placing, curing etc. (Skilled and unskilled) </mat-panel-title>
+                <mat-panel-title class="fw-bold">Labours for shifting, placing, curing etc. (Skilled and unskilled)
+                </mat-panel-title>
             </mat-expansion-panel-header>
 
-           
+
 
         </mat-expansion-panel>
     </mat-accordion>
 
-     <mat-accordion >
+    <mat-accordion>
         <mat-expansion-panel>
             <mat-expansion-panel-header>
                 <mat-panel-title class="fw-bold">Over Head and Profit </mat-panel-title>
             </mat-expansion-panel-header>
 
-           
+
 
         </mat-expansion-panel>
     </mat-accordion>

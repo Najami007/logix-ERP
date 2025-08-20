@@ -3,6 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-add-finished-item',
@@ -12,30 +13,59 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 export class AddFinishedItemComponent implements OnInit {
 
   constructor(
-      private http: HttpClient,
-  
-      public global: GlobalDataModule,
-      private msg: NotificationService,
-      private dialogRef: MatDialogRef<AddFinishedItemComponent>,
-      @Inject(MAT_DIALOG_DATA) public editData: any,
-    ) { }
+    private http: HttpClient,
+
+    public global: GlobalDataModule,
+    private msg: NotificationService,
+    private dialogRef: MatDialogRef<AddFinishedItemComponent>,
+    @Inject(MAT_DIALOG_DATA) public editData: any,
+  ) { }
   ngOnInit(): void {
 
     this.getProducts();
+    this.getCategoryList();
   }
 
-  btnType = 'Save';
-    tableDataList:any = [];
-  productList:any = [];
+  MnuItemTitle:any = '';
+  MnuItemCode:any = '';
+  MnuItemDescription:any = '';
+  MnuItemSize:any = '';
+  MnuItemCostPrice:any = '';
+  MnuItemSalePrice:any = '';
+  MnuItemCatID:any = '';
+  ProjectID:any = '';
 
-    PBarcode:any = '';
- getProducts() {
+
+
+
+
+  btnType = 'Save';
+  tableDataList: any = [];
+  productList: any = [];
+
+  PBarcode: any = '';
+  getProducts() {
     this.global.getProducts().subscribe(
       (data: any) => { this.productList = data; });
   }
 
 
-    searchByCode(e: any) {
+categoryList:any = [];
+    getCategoryList(){
+      this.http.get(environment.mainApi+this.global.manufacturingLink+'GetMnuItemsCategories').subscribe(
+        {
+          next:(Response:any)=>{
+            this.categoryList = Response;
+          },
+          error:(error:any)=>{
+            console.log(error);
+          }
+        }
+      )
+    }
+
+
+  searchByCode(e: any) {
 
     var barcode = this.PBarcode;
     var qty: number = 0;
@@ -75,7 +105,7 @@ export class AddFinishedItemComponent implements OnInit {
         )
 
 
-      
+
 
       }
     }
@@ -121,7 +151,7 @@ export class AddFinishedItemComponent implements OnInit {
         tmpQuantity = data.quantity;
       }
 
-    
+
 
       this.tableDataList.push({
         rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
@@ -172,12 +202,12 @@ export class AddFinishedItemComponent implements OnInit {
     }
 
 
-      this.PBarcode = '';
-        this.getTotal();
-        $('#searchProduct').trigger('focus');
+    this.PBarcode = '';
+    this.getTotal();
+    $('#searchProduct').trigger('focus');
   }
 
- sortType = 'desc';
+  sortType = 'desc';
   sortTableData() {
     this.sortType == 'desc'
       ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex)
@@ -187,8 +217,8 @@ export class AddFinishedItemComponent implements OnInit {
 
 
   rowFocused = -1;
-    prodFocusedRow = 0;
-    handleUpdown(item: any, e: KeyboardEvent, cls: string, index: number): void {
+  prodFocusedRow = 0;
+  handleUpdown(item: any, e: KeyboardEvent, cls: string, index: number): void {
     const container = $(".table-logix");
     const key = e.keyCode;
     const isShiftTab = e.shiftKey && key === 9;
@@ -252,7 +282,7 @@ export class AddFinishedItemComponent implements OnInit {
     }
   }
 
-    handleProdFocus(item: any, e: any, cls: any, endFocus: any, prodList: []) {
+  handleProdFocus(item: any, e: any, cls: any, endFocus: any, prodList: []) {
 
 
     /////// increment in prodfocus on tab click
@@ -312,7 +342,7 @@ export class AddFinishedItemComponent implements OnInit {
   }
 
 
-  
+
   delRow(item: any) {
     this.global.confirmAlert().subscribe(
       (Response: any) => {
@@ -341,17 +371,17 @@ export class AddFinishedItemComponent implements OnInit {
 
 
 
-  getTotal(){
+  getTotal() {
 
   }
 
 
 
-  save(){
+  save() {
 
   }
 
-  closeDialog(){
+  closeDialog() {
     this.dialogRef.close();
   }
 
