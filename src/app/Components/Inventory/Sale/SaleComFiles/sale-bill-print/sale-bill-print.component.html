@@ -6,12 +6,12 @@
         <div class="text-center d-flex flex-column">
             <span> <img *ngIf="companyLogo && showCompanyLogo" [src]="companyLogo" [height]="logoHeight"
                     [width]="logoWidth"></span>
-            <span class="text-uppercase" *ngIf="showCompanyName">{{companyName}}</span>
-            <span class="fs-11 text-uppercase" *ngIf="companyAddress != '-'">{{companyAddress}}</span>
-            <span *ngIf="CompanyMobile != '-'" class="fs-11">{{CompanyMobile}}</span>
+            <span class="text-uppercase fw-bold" style="font-size:18px;" *ngIf="showCompanyName">{{companyName}}</span>
+            <span class="fs-11 text-uppercase fw-bold" *ngIf="companyAddress != '-'">{{companyAddress}}</span>
+            <span *ngIf="CompanyMobile != '-'" class="fs-11 fw-bold">{{CompanyMobile}}</span>
 
-            <span *ngIf="gstFeature && CompanyNTN != '-'" class="fs-11"><b>NTN:</b>{{CompanyNTN}} </span>
-            <span *ngIf="gstFeature && CompanySTRN != '-'" class="fs-11"><b>STRN:</b> {{CompanySTRN}}</span>
+            <span *ngIf="gstFeature && CompanyNTN != '-'" class="fs-11 "><b>NTN: </b>{{CompanyNTN}} </span>
+            <span *ngIf="gstFeature && CompanySTRN != '-'" class="fs-11"><b>STRN: </b> {{CompanySTRN}}</span>
 
 
 
@@ -44,7 +44,7 @@
             <table>
                 <tr *ngIf="myFbrStatus">
                     <th class="fs-12">FBR Inv:-</th>
-                    <td class="ms-2 fs-11">{{myFbrInvoiceNo}}</td>
+                    <td class="ms-2 fs-11 fw-bold">{{myFbrInvoiceNo}}</td>
                 </tr>
                 <tr *ngIf="VehicleSaleFeature">
                     <th class="fs-12">Vehicle No:-</th>
@@ -162,14 +162,13 @@
                             {{item.discInP|number:'1.0-1'}}</td>
                         <td class="text-end" style="width:20% !important;">{{(item.quantity *
                             item.salePrice) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
-
                     </tr>
 
                 </tbody>
                 <tfoot>
                     <tr>
                         <td colspan="2" style="border:none !important; "></td>
-                        <td class="fw-bold" style="border: 1px solid black;">{{myQtyTotal | number:'1.0-2'}}</td>
+                        <td class="fw-bold fs-11" style="border: 1px solid black;">{{myQtyTotal | number:'1.0-2'}}</td>
 
                     </tr>
                 </tfoot>
@@ -225,7 +224,9 @@
                             </tr>
                             <tr class="text-end fs-14" *ngIf="gstFeature && myGstTotal > 0">
 
-                                <td colspan="2">Gst</td>
+                                <!-- <td colspan="2">Gst</td> -->
+                                <td colspan="2"><small class="fs-10">Total Includes Tax of 18%</small></td>
+
                                 <td></td>
                                 <td colspan="2">{{myGstTotal |number:'1.0-1'}}</td>
 
@@ -313,20 +314,19 @@
 
 
             <!--------------------------Bill Total Area End ---------------------->
-
-            <hr>
             <!-- <table>
         <tr class="fs-11">
             <th >Remarks:- </th>
             <td >{{myRemarks}}</td>
         </tr>
        </table> -->
-            <div class="text-center">
+            <div class="border-top border-dark fw-bold">
                 <span style="white-space: pre-line;font-size: 12px;">{{footerText}}</span>
 
             </div>
-            <div class="text-center">
-                <span style="font-size: 12px;">Powered By : <b>Logix Solutionz | Mobile# 0313-5300471</b></span>
+            <div class="border-top border-dark">
+            <div style="font-size: 12px;" class="text-center">
+                <span><small>Powered By :</small><b>Logix Solutionz | 0313-5300471</b></span> </div>
             </div>
 
         </div>
@@ -615,12 +615,12 @@
 
             <div class="w-100 ">
                 <table class="w-100 text-center fs-12px ">
-                    <div class="text-center">
+                    <div class="text-center fw-bold">
                         <span style="white-space: pre-line;font-size: 12px;">{{footerText}}</span>
 
                     </div>
                     <div class="text-center">
-                        <span style="font-size: 12px;">Powered By : <b>Logix Solutionz | Mobile# 0313-5300471</b></span>
+                        <span style="font-size: 12px;"><small>Powered By :</small> <b>Logix Solutionz | Mobile# 0313-5300471</b></span>
                     </div>
                 </table>
             </div>

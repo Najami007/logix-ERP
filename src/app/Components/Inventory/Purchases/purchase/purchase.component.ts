@@ -136,7 +136,7 @@ export class PurchaseComponent implements OnInit {
   onFieldsUpdate(type: any, item: any) {
 
 
-    if(!this.DetailedPurchaseFeature) return;
+    if (!this.DetailedPurchaseFeature) return;
 
 
 
@@ -153,14 +153,14 @@ export class PurchaseComponent implements OnInit {
       var costWithGst = costWithDiscR + ((costWithDiscR * item.gst) / 100);
       var costWithEt = costWithGst + etAmount;
 
-      console.log(costWithDiscP,costWithDiscR,costWithGst,costWithEt)
+      console.log(costWithDiscP, costWithDiscR, costWithGst, costWithEt)
       item.CostPrice = costWithEt;
     }
     if (this.discType == 'bd') {
 
       var totalCost = item.tempCostPrice * item.Quantity;
       var gstAmount = ((item.tempCostPrice * item.gst) / 100);
-      var etAmount = (((Number(item.tempCostPrice) + Number(gstAmount))  * item.et) / 100);
+      var etAmount = (((Number(item.tempCostPrice) + Number(gstAmount)) * item.et) / 100);
       var discP = (((item.tempCostPrice - gstAmount) * item.discInP) / 100);
       var discR = (item.discInR / item.Quantity);
 
@@ -325,7 +325,7 @@ export class PurchaseComponent implements OnInit {
         Quantity: qty,
         wohCP: data.costPrice,
         tempCostPrice: data.costPrice,
-        margin:((data.salePrice  - data.costPrice) / data.costPrice) * 100,
+        margin: ((data.salePrice - data.costPrice) / data.costPrice) * 100,
         CostPrice: data.costPrice,
         SalePrice: data.salePrice,
         ovhPercent: 0,
@@ -338,8 +338,8 @@ export class PurchaseComponent implements OnInit {
         discInP: 0,
         discInR: 0,
         AQ: data.aq,
-        gst: data.gst,
-        et: data.et,
+        gst: 0,
+        et: 0,
 
 
       });
@@ -641,8 +641,8 @@ export class PurchaseComponent implements OnInit {
   }
 
   EmptyData() {
-        if(this.tableDataList.length == 0) return;
-        
+    if (this.tableDataList.length == 0) return;
+
     this.global.confirmAlert().subscribe((Response: any) => {
       if (Response == true) {
         this.reset();
@@ -925,55 +925,56 @@ export class PurchaseComponent implements OnInit {
       };
 
 
-      if (this.validFlag == true) {
-        this.validFlag = false;
+ 
         if (type == 'hold') {
           if (this.holdBtnType == 'Hold') {
-            this.app.startLoaderDark();
-            postData.InvType = 'HP';
-            this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchase', postData).subscribe(
-              (Response: any) => {
-                if (Response.msg == 'Data Saved Successfully') {
-                  this.msg.SuccessNotify(Response.msg);
-                  this.reset();
 
-                } else {
-                  this.msg.WarnNotify(Response.msg);
-                }
-                this.app.stopLoaderDark();
-                this.validFlag = true;
-              },
-              (Error: any) => {
-                this.app.stopLoaderDark();
-                this.validFlag = true;
-              }
-            )
+            this.insert('hold',postData)
+            // this.app.startLoaderDark();
+            // postData.InvType = 'HP';
+            // this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchase', postData).subscribe(
+            //   (Response: any) => {
+            //     if (Response.msg == 'Data Saved Successfully') {
+            //       this.msg.SuccessNotify(Response.msg);
+            //       this.reset();
+
+            //     } else {
+            //       this.msg.WarnNotify(Response.msg);
+            //     }
+            //     this.app.stopLoaderDark();
+            //     this.validFlag = true;
+            //   },
+            //   (Error: any) => {
+            //     this.app.stopLoaderDark();
+            //     this.validFlag = true;
+            //   }
+            // )
           } else if (this.holdBtnType == 'ReHold') {
             this.global.openPinCode().subscribe(pin => {
               if (pin != '') {
                 this.app.startLoaderDark();
                 postData['PinCode'] = pin;
-                this.http.post(environment.mainApi + this.global.inventoryLink + 'UpdateHoldInvoice', postData).subscribe(
-                  (Response: any) => {
-                    if (Response.msg == 'Data Updated Successfully') {
-                      this.msg.SuccessNotify(Response.msg);
-                      this.reset();
 
-                    } else {
-                      this.msg.WarnNotify(Response.msg);
-                    }
-                    this.app.stopLoaderDark();
+                this.insert('rehold',postData);
+                // this.http.post(environment.mainApi + this.global.inventoryLink + 'UpdateHoldInvoice', postData).subscribe(
+                //   (Response: any) => {
+                //     if (Response.msg == 'Data Updated Successfully') {
+                //       this.msg.SuccessNotify(Response.msg);
+                //       this.reset();
 
-                    this.validFlag = true;
-                  },
-                  (Error: any) => {
-                    this.app.stopLoaderDark();
-                    this.validFlag = true;
-                  }
-                )
-              }else{
-                this.validFlag = true;
-              }
+                //     } else {
+                //       this.msg.WarnNotify(Response.msg);
+                //     }
+                //     this.app.stopLoaderDark();
+
+                //     this.validFlag = true;
+                //   },
+                //   (Error: any) => {
+                //     this.app.stopLoaderDark();
+                //     this.validFlag = true;
+                //   }
+                // )
+              } 
             })
           }
 
@@ -983,37 +984,84 @@ export class PurchaseComponent implements OnInit {
             (Response: any) => {
               if (Response == true) {
 
-                this.app.startLoaderDark();
-                postData.InvType = 'P';
-                this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchase', postData).subscribe(
-                  (Response: any) => {
-                    if (Response.msg == 'Data Saved Successfully') {
-                      this.msg.SuccessNotify(Response.msg);
-                      this.reset();
+                   this.insert('purchase',postData);
 
-                    } else {
-                      this.msg.WarnNotify(Response.msg);
-                    }
-                    this.app.stopLoaderDark();
-                    this.validFlag = true;
-                  },
-                  (Error: any) => {
-                    this.app.stopLoaderDark();
-                    this.validFlag = true;
-                  }
-                )
+                // this.app.startLoaderDark();
+                // postData.InvType = 'P';
+                // this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchase', postData).subscribe(
+                //   (Response: any) => {
+                //     if (Response.msg == 'Data Saved Successfully') {
+                //       this.msg.SuccessNotify(Response.msg);
+                //       this.reset();
 
-              } else {
-                this.validFlag = true;
-              }
+                //     } else {
+                //       this.msg.WarnNotify(Response.msg);
+                //     }
+                //     this.app.stopLoaderDark();
+                //     this.validFlag = true;
+                //   },
+                //   (Error: any) => {
+                //     this.app.stopLoaderDark();
+                //     this.validFlag = true;
+                //   }
+                // )
+
+              } 
             }
           )
-        }
+        
 
       }
     }
   }
 
+
+
+  isProcessing = false;
+  insert(type: any,postData:any) {
+
+
+
+    this.app.startLoaderDark();
+
+    if(type == 'purchase'){
+     postData.InvType = 'P';
+    }
+    if(type == 'hold'){
+      postData.InvType = 'HP';
+    }
+
+    var url = 'InsertPurchase';
+
+    if(type == 'rehold'){
+      url = 'UpdateHoldInvoice'
+    }
+
+    if(this.isProcessing == true) return;
+    
+    this.isProcessing = true;
+
+    console.log(postData,url);
+    this.http.post(environment.mainApi + this.global.inventoryLink + url, postData).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully' ||  Response.msg == 'Data Updated Successfully') {
+          this.msg.SuccessNotify(Response.msg);
+          this.reset();
+
+        } else {
+          this.msg.WarnNotify(Response.msg);
+        }
+        this.app.stopLoaderDark();
+        this.isProcessing = false;
+      },
+      (Error: any) => {
+        console.log(Error);
+        this.app.stopLoaderDark();
+        this.isProcessing = false;
+      }
+    )
+
+  }
 
   reset() {
     this.PBarcode = '';
@@ -1097,6 +1145,7 @@ export class PurchaseComponent implements OnInit {
 
     this.getBillDetail(item.invBillNo).subscribe(
       (Response: any) => {
+        console.log(Response);
 
         this.myTotalQty = 0;
         this.productImage = Response[Response.length - 1].productImage;
@@ -1113,7 +1162,7 @@ export class PurchaseComponent implements OnInit {
             Quantity: e.quantity,
             wohCP: e.costPrice,
             tempCostPrice: e.tempCostPrice,
-            margin:((e.salePrice  - e.costPrice) / e.costPrice) * 100,
+            margin: ((e.salePrice - e.costPrice) / e.costPrice) * 100,
             CostPrice: e.costPrice,
             SalePrice: e.salePrice,
             ExpiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
@@ -1208,7 +1257,7 @@ export class PurchaseComponent implements OnInit {
           if (Response.msg == 'Data Deleted Successfully') {
             this.msg.SuccessNotify(Response.msg);
             this.findHoldBills('hp');
-            
+
             //this.app.stopLoaderDark();
 
 
@@ -1258,11 +1307,11 @@ export class PurchaseComponent implements OnInit {
   }
 
 
-  onMarginChange(item:any,index:any){
-    var margin  =Number(item.margin);
+  onMarginChange(item: any, index: any) {
+    var margin = Number(item.margin);
 
     item.SalePrice = Number(item.CostPrice) + (Number(item.CostPrice) * (margin / 100));
-    this.getTotal() ;
+    this.getTotal();
 
   }
 

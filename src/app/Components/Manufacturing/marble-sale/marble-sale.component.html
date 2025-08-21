@@ -50,14 +50,21 @@
 
                 <div class="col-md-9  d-flex flex-column">
 
-                    <input type="text" [(ngModel)]="PBarcode" id="vssearchProduct"
-                        class="p-1 ps-2 mb-2 searchProduct w-100" placeholder="Search Barcode / Product (Alt + b)" autocomplete="off"
-                        accesskey="b">
+                    <input type="text"  (keydown)="this.changeFocus($event,'.prodRow');" [(ngModel)]="PBarcode" id="vssearchProduct"
+                        class="p-1 ps-2 mb-2 searchProduct w-100" placeholder="Search Barcode / Product (Alt + b)"
+                        autocomplete="off" accesskey="b">
 
                     <div class="d-flex flex-column SearchConatiner cursorPointer"
                         *ngIf="PBarcode != '' && PBarcode != undefined ">
                         <mat-card class="card "
-                            *ngFor="let item of productList| filter:PBarcode | slice:0:25 index as index">
+                            *ngFor="let item of itemList| filter:PBarcode | slice:0:25 index as index" (click)="addMenuItem(item)">
+
+                            <button style="height: 40px; background: none;border: none;text-align: left;"
+                                class="prodRow{{index}} prodBtn justify-content-between d-flex"
+                                (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">
+                                <p>{{item.mnuItemTitle}}</p>
+                                <p><strong>({{item.mnuItemCode}})</strong></p>
+                            </button>
 
                         </mat-card>
                     </div>
@@ -83,6 +90,18 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr *ngFor="let item of tableDataList index as index">
+                            <td class="text-center">{{index +1}}</td>
+                            <td>{{item.mnuItemTitle}}</td>
+                            <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
+                                    (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();"
+                                    (keyup)="getTotal();" (click)="rowFocused = index" class="qty{{index}} text-center"
+                                    style="width: 80px;"></td>
+                            <td class="text-end">{{item.salePrice | number:'1.0-0'}}</td>
+                            <td class="text-end">{{item.quantity * item.salePrice | number:'1.0-0    '}}</td>
+                            <td class="text-center"><mat-icon (click)="delRow(item)" class="text-danger">delete</mat-icon></td>
+
+                        </tr>
 
                     </tbody>
                 </table>
@@ -144,18 +163,18 @@
             <table class="w-100">
                 <tr>
                     <td colspan="2">
-                        <button mat-raised-button style="height: 100px;width: 100%;"
-                            class=" btn text-white bg-success " accesskey="s"><u>S</u>ave</button>
+                        <button mat-raised-button style="height: 100px;width: 100%;" class=" btn text-white bg-success "
+                            accesskey="s"><u>S</u>ave</button>
                     </td>
                 </tr>
-                 <tr>
-                    <td >
-                        <button mat-raised-button style="height: 100px;"
-                            class=" btn text-white bg-primary col-lg-12" accesskey="s"><u>S</u>ave</button>
+                <tr>
+                    <td>
+                        <button mat-raised-button style="height: 100px;" class=" btn text-white bg-primary col-lg-12"
+                            accesskey="s"><u>S</u>ave</button>
                     </td>
-                     <td >
-                        <button mat-raised-button style="height: 100px;"
-                            class=" btn text-white bg-danger col-lg-12" accesskey="s"><u>S</u>ave</button>
+                    <td>
+                        <button mat-raised-button style="height: 100px;" class=" btn text-white bg-danger col-lg-12"
+                            accesskey="s"><u>S</u>ave</button>
                     </td>
                 </tr>
             </table>

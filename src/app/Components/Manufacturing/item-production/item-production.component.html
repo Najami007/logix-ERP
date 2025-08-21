@@ -1,18 +1,60 @@
 <div class="body container">
 
 
-       <div class="p-2 row justify-content-center">
+    <div class="mt-1 row justify-content-center">
         <div class="col-md-2 pb-1" *ngIf="crudList.c">
-            <button autofocus (click)="add()" style="height: 42px;"
-                class="btnsave w-100">Add</button>
+            <button autofocus (click)="add()" style="height: 42px;" class="btnsave w-100">Add</button>
         </div>
         <!-- <button type="button" mat-mini-fab class="btnadd" *ngIf="crudList.c" (click)="add()"><mat-icon>add</mat-icon></button> -->
         <div [ngClass]="crudList.c == false ? 'col-lg-12' : 'col-lg-10' ">
-            <mat-form-field appearance="outline" class="matSmall w-100" >
-            <mat-label>Search....</mat-label>
-            <input matInput #search  />
-        </mat-form-field>
+            <mat-form-field appearance="outline" class="matSmall w-100">
+                <mat-label>Search....</mat-label>
+                <input matInput #search />
+            </mat-form-field>
         </div>
+    </div>
+
+    <div>
+
+        <table class="table-logix">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Item Name</th>
+                    <th>Category</th>
+                    <th>Size</th>
+                    <th>Cost</th>
+                    <th>Sale</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of savedDataList index as index">
+                    <td>{{index + 1}}</td>
+                    <td>{{item.mnuItemTitle}}</td>
+                    <td>{{item.mnuItemCatTitle}}</td>
+                    <td>{{item.mnuItemSize}}</td>
+                    <td class="text-end">{{item.mnuItemCostPrice |number:'1.0-2'}}</td>
+                    <td class="text-end">{{item.mnuItemSalePrice |number:'1.0-2'}}</td>
+                    <td class="cursorPointer hide-in-print text-center">
+                          <mat-icon class="text-success" matTooltip="Edit"
+                                        (click)="editItem(item)">edit</mat-icon>
+                        <mat-icon matTooltip="Approve" *ngIf="crudList.u"
+                            (click)="ApproveItem(item)">{{item.approvedStatus == true
+                            ? 'lock' :'lock_open'}}</mat-icon>
+                        <mat-icon *ngIf="crudList.u" matTooltip="Active"
+                            [ngClass]="item.activeStatus == false ?'text-danger': 'text-success'"
+                            (click)="ActiveItem(item)">{{item.activeStatus == false ?
+                            'indeterminate_check_box' :'check_box'}}</mat-icon>
+                        <mat-icon class="text-danger" *ngIf="crudList.d" matTooltip="Delete"
+                            (click)="deleteItem(item)">delete</mat-icon>
+                    </td>
+
+
+                </tr>
+            </tbody>
+        </table>
+
     </div>
 
 </div>

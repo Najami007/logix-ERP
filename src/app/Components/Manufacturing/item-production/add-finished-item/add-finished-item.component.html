@@ -6,29 +6,30 @@
             <mat-label>Item Title</mat-label>
             <input matInput type="text" [(ngModel)]="MnuItemTitle">
         </mat-form-field>
-          <mat-form-field class="col-md-2 matSmall" appearance="outline">
+        <mat-form-field class="col-md-2 matSmall" appearance="outline">
             <mat-label>Category</mat-label>
             <mat-select [(ngModel)]="MnuItemCatID">
-                <mat-option *ngFor="let item of categoryList" [value]="item.MnuItemCatID">{{item.mnuItemCatTitle}}</mat-option>
+                <mat-option *ngFor="let item of categoryList"
+                    [value]="item.mnuItemCatID">{{item.mnuItemCatTitle}}</mat-option>
             </mat-select>
         </mat-form-field>
-           <mat-form-field class="col-md-2 matSmall" appearance="outline">
+        <mat-form-field class="col-md-2 matSmall" appearance="outline">
             <mat-label>Code</mat-label>
             <input matInput type="text" [(ngModel)]="MnuItemCode">
         </mat-form-field>
-          <mat-form-field class="col-md-2 matSmall" appearance="outline">
+        <mat-form-field class="col-md-2 matSmall" appearance="outline">
             <mat-label>Cost Price</mat-label>
-            <input matInput type="text" [(ngModel)]="MnuItemCostPrice">
+            <input matInput type="text" [disabled]="true" [(ngModel)]="MnuItemCostPrice">
         </mat-form-field>
-          <mat-form-field class="col-md-2 matSmall" appearance="outline">
+        <mat-form-field class="col-md-2 matSmall" appearance="outline">
             <mat-label>Sale Price</mat-label>
-            <input matInput type="text" [(ngModel)]="MnuItemSalePrice">
+            <input matInput type="text" (keydown)="this.global.handleNumKeys($event);" [(ngModel)]="MnuItemSalePrice">
         </mat-form-field>
-          <mat-form-field class="col-md-2 matSmall" appearance="outline">
+        <mat-form-field class="col-md-2 matSmall" appearance="outline">
             <mat-label>Size</mat-label>
             <input matInput type="text" [(ngModel)]="MnuItemSize">
         </mat-form-field>
-          <mat-form-field class="col-md-10 matSmall" appearance="outline">
+        <mat-form-field class="col-md-10 matSmall" appearance="outline">
             <mat-label>Description</mat-label>
             <textarea rows="1" matInput type="text" [(ngModel)]="MnuItemDescription"></textarea>
         </mat-form-field>
@@ -41,6 +42,7 @@
         <mat-expansion-panel>
             <mat-expansion-panel-header>
                 <mat-panel-title class="fw-bold"> Material Details </mat-panel-title>
+                <mat-panel-description><b>Total ({{materialTotalAmount |number:'1.0-1'}})</b> </mat-panel-description>
             </mat-expansion-panel-header>
 
             <div class="col-md-12">
@@ -101,12 +103,12 @@
                                         (keyup)="getTotal();" (click)="rowFocused = index"
                                         class="qty{{index}} text-center" style="width: 80px;"></td>
 
-                                <td>{{item.avgCostPrice | number:'1.0-2'}}</td>
+                                <td>{{item.costPrice | number:'1.0-2'}}</td>
                                 <!-- <td>{{item.costPrice | number:'1.0-2'}}</td> -->
 
 
                                 <!-- <td class="text-center">{{item.costPrice * item.quantity |number:'1.0-2'}}</td> -->
-                                <td class="text-center">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
+                                <td class="text-center">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
 
                                 <td class="cursorPointer"><mat-icon (click)="delRow(item)">delete</mat-icon></td>
                             </tr>
@@ -127,7 +129,62 @@
             <mat-expansion-panel-header>
                 <mat-panel-title class="fw-bold">Labours for shifting, placing, curing etc. (Skilled and unskilled)
                 </mat-panel-title>
+                <mat-panel-description><b>Total ({{labourTotalAmount |number:'1.0-1'}})</b> </mat-panel-description>
             </mat-expansion-panel-header>
+
+            <div class="row">
+
+
+                <mat-form-field class="col-md-6 matSmall" appearance="outline">
+                    <mat-label>Element</mat-label>
+                    <mat-select [(ngModel)]="tmplabourElementID">
+                        <mat-option *ngFor="let item of labourElements" [value]="item.value">{{item.value}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                    <mat-label>Quantity</mat-label>
+                    <input matInput type="text" (keydown)="this.global.handleNumKeys($event);"
+                        [(ngModel)]="tmpLabourQuantity">
+                </mat-form-field>
+                <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                    <mat-label>Price</mat-label>
+                    <input matInput type="text" (keydown)="this.global.handleNumKeys($event);"
+                        [(ngModel)]="tmpLabourCost">
+                </mat-form-field>
+                <div class="col-md-2">
+                    <button autofocus (click)="addLabourCharges()" style="height: 43px;"
+                        class="btnsave w-100">Add</button>
+                </div>
+
+
+            </div>
+
+            <div>
+                <table class="table table-hover txtsm">
+                    <thead>
+                        <tr>
+                            <th>S#</th>
+                            <th>Title</th>
+                            <th>Quantity</th>
+                            <th>Cost</th>
+                            <th>Total</th>
+                            <th>Del</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of tmpLabourChargesList index as index">
+
+                            <td>{{index + 1}}</td>
+                            <td>{{item.productTitle}}</td>
+                            <td>{{item.quantity |number:'1.0-2'}}</td>
+                            <td>{{item.costPrice |number:'1.0-2'}}</td>
+                            <td>{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
+                            <td><mat-icon (click)="delLabourRow(item)">delete</mat-icon></td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
 
 
@@ -138,8 +195,55 @@
         <mat-expansion-panel>
             <mat-expansion-panel-header>
                 <mat-panel-title class="fw-bold">Over Head and Profit </mat-panel-title>
+                <mat-panel-description><b>Total ({{overheadTotalAmount |number:'1.0-1'}})</b> </mat-panel-description>
             </mat-expansion-panel-header>
 
+
+            <div class="row">
+                <mat-form-field class="col-md-6 matSmall" appearance="outline">
+                    <mat-label>Element</mat-label>
+                    <mat-select [(ngModel)]="tmpOverheadElementID">
+                        <mat-option *ngFor="let item of overheadElements" [value]="item.value">{{item.value}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                  <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                    <mat-label>Percentage</mat-label>
+                    <input matInput type="text" (keydown)="this.global.handleNumKeys($event);"
+                        [(ngModel)]="tmpOverHeadPercentage">
+                </mat-form-field>
+   
+                   <div class="col-md-2">
+                    <button autofocus (click)="addOverheadCharges()" style="height: 43px;"
+                        class="btnsave w-100">Add</button>
+                </div>
+                
+
+            </div>
+
+                  <div>
+                <table class="table table-hover txtsm">
+                    <thead>
+                        <tr>
+                            <th>S#</th>
+                            <th>Title</th>
+   
+                            <th>Total</th>
+                            <th>Del</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of tmpOverHeadList index as index">
+
+                            <td>{{index + 1}}</td>
+                            <td>{{item.productTitle}} @ {{(item.costPrice / (this.materialTotalAmount + this.labourTotalAmount) ) * 100}}</td>
+    
+                            <td>{{item.costPrice * item.quantity |number:'1.0-1'}}</td>
+                            <td><mat-icon (click)="delOverheadRow(item)">delete</mat-icon></td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
 
         </mat-expansion-panel>

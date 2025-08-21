@@ -38,6 +38,7 @@ export class NotificationService {
     timer: 1500,
     timerProgressBar: true,
     showLoaderOnConfirm:true,
+     target: '.cdk-overlay-container',
      customClass: {
     popup: 'swal-top-z'
   },
@@ -74,6 +75,7 @@ export class NotificationService {
     timer: 1500,
     timerProgressBar: true,
     showLoaderOnConfirm:true,
+     target: '.cdk-overlay-container',
      customClass: {
     popup: 'swal-top-z'
   },

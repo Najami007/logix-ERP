@@ -67,8 +67,8 @@
                             <div class="text-start"><button mat-mini-fab class="bg-primary text-white "
                                     (click)="print()"><mat-icon>print</mat-icon></button></div>
 
-                            <div *ngFor="let item of curProduct" class="d-flex  justify-content-center">
-                                <div id="PrintDiv">
+                            <div *ngFor="let item of curProduct" class="d-flex  justify-content-center ">
+                                <div id="PrintDiv" class="border">
 
 
                                     <span class="cmpName" *ngIf="!hideCmp">{{companyName}}</span>
@@ -84,7 +84,7 @@
                                     <!-- <span class="barcodeText">{{item.barcode}}</span> -->
                                     <!-- <div class="font-barcode" >*{{item.barcode}}*</div>
                         <div class="bcodeC">{{item.barcode}}</div> -->
-                                    <div *ngIf="!hideExpiry" class="expiry">
+                                    <div *ngIf="!hideExpiry"  class="expiry">
                                         <span>Mfg: {{manufactureDate | date:'dd-MM-yyyy'}}</span>
                                         <span>Exp: {{expiryDate | date:'dd-MM-yyyy'}}</span>
                                     </div>

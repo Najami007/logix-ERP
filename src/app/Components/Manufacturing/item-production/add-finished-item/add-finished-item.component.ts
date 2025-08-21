@@ -12,6 +12,9 @@ import { environment } from 'src/environments/environment.development';
 })
 export class AddFinishedItemComponent implements OnInit {
 
+
+  apiReq = environment.mainApi + this.global.manufacturingLink;
+
   constructor(
     private http: HttpClient,
 
@@ -24,24 +27,233 @@ export class AddFinishedItemComponent implements OnInit {
 
     this.getProducts();
     this.getCategoryList();
+
+    if (this.editData) {
+      this.getItemDetail(this.editData.mnuItemID)
+      this.MnuItemID = this.editData.mnuItemID;
+      this.MnuItemCatID = this.editData.mnuItemCatID;
+      this.MnuItemTitle = this.editData.mnuItemTitle;
+      this.MnuItemCode = this.editData.mnuItemCode;
+      this.MnuItemSalePrice = this.editData.mnuItemSalePrice;
+      this.MnuItemSize = this.editData.mnuItemSize;
+      this.MnuItemDescription = this.editData.mnuItemDescription;
+      this.btnType = 'Update';
+    }
+
   }
 
-  MnuItemTitle:any = '';
-  MnuItemCode:any = '';
-  MnuItemDescription:any = '';
-  MnuItemSize:any = '';
-  MnuItemCostPrice:any = '';
-  MnuItemSalePrice:any = '';
-  MnuItemCatID:any = '';
-  ProjectID:any = '';
+  MnuItemID = 0;
+  MnuItemTitle: any = '';
+  MnuItemCode: any = '';
+  MnuItemDescription: any = '';
+  MnuItemSize: any = '';
+  MnuItemCostPrice: any = '';
+  MnuItemSalePrice: any = '';
+  MnuItemCatID: any = '';
+  ProjectID: any = '';
+
+
+
+  getItemDetail(mnuItemID: any) {
+
+    var url = `${this.apiReq}GetSingleIMnutemDetail?MnuItemID=${mnuItemID}`
+
+    this.http.get(url).subscribe(
+      {
+        next: (Response: any) => {
+
+          if (Response.length > 0) {
+
+            Response.forEach((e: any,index:any) => {
+              if (e.groupID == 1) {
+                this.tableDataList.push({
+                  groupID: e.groupID ,
+                  rowIndex:index,
+                  productID: e.productID,
+                  productTitle: e.productTitle,
+                  quantity: e.quantity,
+                  costPrice: e.costPrice,
+                })
+              }
+              if (e.groupID == 2) {
+                this.tmpLabourChargesList.push({
+                  groupID: e.groupID ,
+                  productID: e.productID,
+                  productTitle: e.productTitle,
+                  quantity: e.quantity,
+                  costPrice: e.costPrice,
+                })
+              }
+
+               if (e.groupID == 3) {
+                this.tmpOverHeadList.push({
+                  groupID: e.groupID ,
+                  productID: e.productID,
+                  productTitle: e.productTitle,
+                  quantity: e.quantity,
+                  costPrice: e.costPrice,
+                })
+              }
+            })
+
+            this.getTotal();
+            console.log(Response);
+          }
+
+        }
+      }
+    )
+  }
+
+
+
+  /////////////////////// Functionality Related to adding Overhead Charges //////////
+
+  tmpOverheadElementID: any = 1;
+  tmpOverheadCostPrice: any = 0;
+  tmpOverHeadPercentage: any = 0;
+
+  tmpOverHeadList: any = [];
+  overheadTotalAmount = 0;
+
+
+
+  overheadElements = [
+    { id: 1, value: 'Over Head and Profit' },
+  ]
 
 
 
 
+
+
+  addOverheadCharges() {
+
+    if (this.labourTotalAmount + this.materialTotalAmount <= 0) {
+      this.msg.WarnNotify('Enter Material and labour Charges First');
+      return;
+    }
+
+    if (this.tmpOverHeadPercentage == 0 || this.tmpOverHeadPercentage == '0' || this.tmpOverHeadPercentage == undefined || this.tmpOverHeadPercentage == '') {
+      this.msg.WarnNotify('Enter Overhead Percentage');
+      return;
+    }
+
+
+    //////////// finding current element already entered or not
+    var checkCondiditon: any = this.tmpOverHeadList.length > 0
+      ? this.tmpOverHeadList.filter((e: any) => e.productTitle == this.tmpOverheadElementID)
+      : [];
+
+    if (this.tmpOverHeadList.length > 0 && checkCondiditon.length > 0) {
+      this.msg.WarnNotify('Element Already Included');
+      return;
+
+    }
+
+
+    var overHeadCost = ((this.labourTotalAmount + this.materialTotalAmount) * Number(this.tmpOverHeadPercentage)) / 100
+    this.tmpOverHeadList.push({ groupID: 3, productID: 0, productTitle: this.tmpOverheadElementID, quantity: 1, costPrice: overHeadCost })
+
+    this.getTotal();
+  }
+
+
+
+
+  delOverheadRow(item: any) {
+
+    var index = this.tmpOverHeadList.indexOf(item);
+    this.tmpOverHeadList.splice(index, 1);
+    this.getTotal()
+
+
+
+  }
+
+
+
+
+  /////////////////////// Functionality Related to adding Labour Charges //////////
+
+
+  tmplabourElementID: any = 0;
+  tmpLabourQuantity: any = 0;
+  tmpLabourCost: any = 0;
+
+  labourTotalAmount = 0;
+
+  labourElements = [
+    { id: 1, value: 'Labour Cost 15/Cft Concrete with Boulders' },
+    { id: 2, value: 'Curing Charges' },
+  ]
+
+  tmpLabourChargesList: any = [];
+
+  addLabourCharges() {
+
+    if (this.tmplabourElementID == 0) {
+      this.msg.WarnNotify('Select Element');
+      return;
+    }
+
+    if (this.tmpLabourQuantity == 0 || this.tmpLabourQuantity == '0' || this.tmpLabourQuantity == '' || this.tmpLabourQuantity == undefined) {
+      this.msg.WarnNotify('Enter Quantity');
+      return;
+    }
+    if (this.tmpLabourCost == 0 || this.tmpLabourCost == '0' || this.tmpLabourCost == '' || this.tmpLabourCost == undefined) {
+      this.msg.WarnNotify('Enter Cost');
+      return;
+    }
+
+
+
+    //////////// finding current element already entered or not
+    var checkCondiditon: any = this.tmpLabourChargesList.length > 0
+      ? this.tmpLabourChargesList.filter((e: any) => e.productTitle == this.tmplabourElementID)
+      : [];
+
+    if (this.tmpLabourChargesList.length > 0 && checkCondiditon.length > 0) {
+      this.msg.WarnNotify('Element Already Included');
+      return;
+
+    }
+
+    //////////// pushing element data
+    this.tmpLabourChargesList.push({ groupID: 2, productID: 0, productTitle: this.tmplabourElementID, quantity: this.tmpLabourQuantity, costPrice: this.tmpLabourCost })
+
+    this.getTotal();
+    this.tmplabourElementID = 0;
+    this.tmpLabourQuantity = 0;
+    this.tmpLabourCost = 0;
+
+
+  }
+
+
+  delLabourRow(item: any) {
+
+    var index = this.tmpLabourChargesList.indexOf(item);
+    this.tmpLabourChargesList.splice(index, 1);
+    this.getTotal()
+
+
+
+  }
+
+
+
+  /////////////////////// Functionality Related to adding Labour Charges End //////////
+
+
+
+
+  /////////////////////// Functionality Related to adding Material Charges //////////
 
   btnType = 'Save';
   tableDataList: any = [];
   productList: any = [];
+  materialTotalAmount = 0;
 
   PBarcode: any = '';
   getProducts() {
@@ -50,19 +262,19 @@ export class AddFinishedItemComponent implements OnInit {
   }
 
 
-categoryList:any = [];
-    getCategoryList(){
-      this.http.get(environment.mainApi+this.global.manufacturingLink+'GetMnuItemsCategories').subscribe(
-        {
-          next:(Response:any)=>{
-            this.categoryList = Response;
-          },
-          error:(error:any)=>{
-            console.log(error);
-          }
+  categoryList: any = [];
+  getCategoryList() {
+    this.http.get(environment.mainApi + this.global.manufacturingLink + 'GetMnuItemsCategories').subscribe(
+      {
+        next: (Response: any) => {
+          this.categoryList = Response;
+        },
+        error: (error: any) => {
+          console.log(error);
         }
-      )
-    }
+      }
+    )
+  }
 
 
   searchByCode(e: any) {
@@ -135,8 +347,6 @@ categoryList:any = [];
 
 
       var tmpQuantity = 0;
-      var discRupee = 0;
-      var discPerc = 0;
       var tmpBarcode = '';
 
       if (data.barcode2) {
@@ -154,33 +364,16 @@ categoryList:any = [];
 
 
       this.tableDataList.push({
+        groupID: 1,
         rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
           : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
             : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
         productID: data.productID,
         productTitle: data.productTitle,
         barcode: tmpBarcode,
-        flavourTitle: data.flavourTitle,
-        productImage: data.productImage,
         quantity: tmpQuantity,
-        wohCP: data.costPrice,
-        avgCostPrice: data.avgCostPrice,
-        costPrice: data.costPrice,
-        salePrice: data.salePrice,
-        ovhPercent: 0,
-        ovhAmount: 0,
-        expiryDate: this.global.dateFormater(new Date(), '-'),
-        batchNo: '-',
-        batchStatus: '-',
+        costPrice: data.avgCostPrice,
         uomID: data.uomID,
-        gst: 0,
-        et: data.et,
-        packing: data.packing,
-        discInP: discPerc,
-        discInR: discRupee,
-        aq: data.aq,
-        total: (data.salePrice * qty) - (discRupee * qty),
-        productDetail: '',
 
       });
       this.sortTableData();
@@ -202,9 +395,41 @@ categoryList:any = [];
     }
 
 
+
     this.PBarcode = '';
     this.getTotal();
     $('#searchProduct').trigger('focus');
+  }
+
+
+  getTotal() {
+
+    this.materialTotalAmount = 0;
+
+    if (this.tableDataList.length > 0) {
+      this.tableDataList.forEach((e: any) => {
+        this.materialTotalAmount += e.quantity * e.costPrice;
+      });
+    }
+
+
+    this.overheadTotalAmount = 0;
+    if (this.tmpOverHeadList.length > 0) {
+      this.tmpOverHeadList.forEach((e: any) => {
+        this.overheadTotalAmount += e.costPrice * e.quantity;
+      });
+    }
+
+    this.labourTotalAmount = 0;
+    //////////// getting total of element
+    if (this.tmpLabourChargesList.length > 0) {
+      this.tmpLabourChargesList.forEach((e: any) => {
+        this.labourTotalAmount += e.costPrice * e.quantity;
+      });
+    }
+
+    this.MnuItemCostPrice = this.materialTotalAmount + this.overheadTotalAmount + this.labourTotalAmount;
+
   }
 
   sortType = 'desc';
@@ -369,17 +594,149 @@ categoryList:any = [];
   }
 
 
+  /////////////////////// Functionality Related to adding Material Charges End //////////
 
 
-  getTotal() {
 
-  }
+
+
 
 
 
   save() {
 
+    if (this.MnuItemTitle == '' || this.MnuItemTitle == undefined) {
+      this.msg.WarnNotify('Enter Title');
+      return;
+    }
+
+    if (this.MnuItemCatID == 0 || this.MnuItemCatID == undefined) {
+      this.msg.WarnNotify('Select Category');
+      return;
+    }
+
+    if (this.MnuItemCostPrice == 0 || this.MnuItemCostPrice == '0' || this.MnuItemCostPrice == undefined || this.MnuItemCostPrice == '') {
+      this.msg.WarnNotify('Cost Not Valid');
+      return;
+    }
+
+    if (this.MnuItemSalePrice == 0 || this.MnuItemSalePrice == '0' ||
+      this.MnuItemSalePrice == undefined || this.MnuItemSalePrice == '' || (Number(this.MnuItemCostPrice) > Number(this.MnuItemSalePrice))) {
+      this.msg.WarnNotify('Sale Price Not Valid');
+      return;
+    }
+
+    if (this.MnuItemSize == '' || this.MnuItemSize == undefined) {
+      this.msg.WarnNotify('Enter Size');
+      return;
+    }
+
+    var itemDetail = [...this.tableDataList, ...this.tmpLabourChargesList, ...this.tmpOverHeadList];
+
+
+    console.log(itemDetail);
+
+
+    var postData = {
+      MnuItemID: this.MnuItemID,
+      MnuItemTitle: this.MnuItemTitle,
+      MnuItemCode: this.MnuItemCode || this.MnuItemTitle,
+      MnuItemDescription: this.MnuItemDescription || '-',
+      MnuItemSize: this.MnuItemSize,
+      MnuItemCostPrice: this.MnuItemCostPrice,
+      MnuItemSalePrice: this.MnuItemSalePrice,
+      MnuItemCatID: this.MnuItemCatID,
+      ProjectID: this.global.getProjectID(),
+      ItemDetail: JSON.stringify(itemDetail),
+      UserID: this.global.getUserID(),
+
+    }
+
+    if (this.btnType == 'Save') {
+      this.insert('insert', postData)
+    }
+
+    if (this.btnType == 'Update') {
+
+      this.global.openPinCode().subscribe(pin => {
+        if (pin != '') {
+          postData['PinCode'] = pin;
+          this.insert('update', postData)
+        }
+      })
+
+
+    }
+
+
+
   }
+
+
+  isProcessing = false;
+  insert(type: any, postData: any) {
+
+    var url = ''
+
+    if (type == 'insert') {
+      url = 'InsertMnuItem';
+    }
+    if (type == 'update') {
+      url = 'UpdateMnuItem';
+    }
+
+    if (this.isProcessing) return;
+    this.isProcessing = true;
+
+    console.log(postData);
+    this.http.post(this.apiReq + url, postData).subscribe(
+      {
+        next: (Response: any) => {
+          if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
+            this.msg.SuccessNotify(Response.msg);
+            this.reset();
+            this.dialogRef.close('update');
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+          this.isProcessing = false;
+        },
+        error: error => {
+          console.log(error);
+          this.isProcessing = false;
+        }
+      }
+    )
+
+  }
+
+
+  reset() {
+
+    this.MnuItemTitle = '';
+    this.MnuItemCode = '';
+    this.MnuItemDescription = '';
+    this.MnuItemSize = '';
+    this.MnuItemCostPrice = '';
+    this.MnuItemSalePrice = '';
+    this.MnuItemCatID = '';
+    this.ProjectID = '';
+    this.labourTotalAmount = 0;
+    this.overheadTotalAmount = 0;
+    this.materialTotalAmount = 0;
+    this.tableDataList = [];
+    this.tmpOverHeadList = [];
+    this.tmpLabourChargesList = [];
+    this.tmplabourElementID = 0;
+    this.tmpLabourCost = 0;
+    this.tmpLabourQuantity = 0;
+    this.tmpOverheadCostPrice = 0;
+    this.tmpOverheadElementID = 1;
+    this.tmpOverHeadPercentage = 0;
+
+  }
+
+
 
   closeDialog() {
     this.dialogRef.close();
