@@ -132,7 +132,7 @@
                             (click)="openDuplicateModal()">D<u>u</u>plicate</button>
                     </div>
 
-                    <div class="d-flex col-md-9"  >
+                    <div class="d-flex col-md-9">
                         <div [ngClass]="tillOpenFeature ? 'col-md-10' : 'col-md-12'">
                             <button accesskey="o" class="btnload pt-2 d-flex justify-content-between w-100"
                                 (click)="openPaymentModal()">
@@ -179,6 +179,7 @@
                                 <th *ngIf="discFeature">Disc %</th>
                                 <th>Total</th>
                                 <th *ngIf="prodDetailFeature">Detail</th>
+                                <th *ngIf="showSaleAQFeature">AQ</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -220,6 +221,7 @@
                                         [(ngModel)]="item.productDetail"
                                         style="height: 45px;border: 0px solid black !important;"
                                         class="w-100"></textarea></td>
+                                <td class="text-center" *ngIf="showSaleAQFeature">{{item.aq |number:'1.0-3'}}</td>
 
                                 <td class="cursorPointer text-danger text-center"><mat-icon
                                         (click)="delRow(item)">close</mat-icon></td>
@@ -233,6 +235,7 @@
                                 <td *ngIf="discFeature"></td>
                                 <td></td>
                                 <td *ngIf="prodDetailFeature"></td>
+                                  <td *ngIf="showSaleAQFeature"></td>
                                 <td class="text-center text-danger cursorPointer"><mat-icon
                                         (click)="emptyBill()">delete</mat-icon></td>
                             </tr>
@@ -256,9 +259,10 @@
             </mat-select>
         </mat-form-field>
 
-         <mat-form-field *ngIf="CustomSaleGstFeatrue" class="col-lg-2 matSmall">
+        <mat-form-field *ngIf="CustomSaleGstFeatrue" class="col-lg-2 matSmall">
             <mat-label>GST %</mat-label>
-           <input matInput [(ngModel)]="AdvTaxValue" (keyup)="getTotal()" (keydown)="this.global.handleNumKeys($event);getTotal()"  /> 
+            <input matInput [(ngModel)]="AdvTaxValue" (keyup)="getTotal()"
+                (keydown)="this.global.handleNumKeys($event);getTotal()" />
         </mat-form-field>
 
         <mat-form-field *ngIf="BookerFeature" class="col-lg-4 matSmall">

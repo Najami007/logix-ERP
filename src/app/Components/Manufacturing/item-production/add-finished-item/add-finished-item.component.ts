@@ -277,6 +277,33 @@ export class AddFinishedItemComponent implements OnInit {
   }
 
 
+   changeFocus(e: any, cls: any) {
+
+    if (e.target.value == '') {
+      if (e.keyCode == 40) {
+
+        if (this.tableDataList.length >= 1) {
+          this.rowFocused = 0;
+          e.preventDefault();
+          $('.qty0').trigger('select');
+          $('.qty0').trigger('focus');
+
+        }
+      }
+    }
+    
+    // else {
+    //   this.prodFocusedRow = 0;
+    //   /////move down
+    //   if (e.keyCode == 40) {
+    //     if (this.productList.length >= 1) {
+    //       $('.prodRow0').trigger('focus');
+    //     }
+    //   }
+    // }
+  }
+
+
   searchByCode(e: any) {
 
     var barcode = this.PBarcode;
@@ -628,6 +655,16 @@ export class AddFinishedItemComponent implements OnInit {
 
     if (this.MnuItemSize == '' || this.MnuItemSize == undefined) {
       this.msg.WarnNotify('Enter Size');
+      return;
+    }
+
+    if(this.tmpLabourChargesList.length == 0){
+      this.msg.WarnNotify('Enter Labour Elements');
+      return;
+    }
+
+      if(this.tmpOverHeadList.length == 0){
+      this.msg.WarnNotify('Enter Overhead Element');
       return;
     }
 

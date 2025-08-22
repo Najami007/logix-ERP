@@ -59,12 +59,22 @@ export class MarbleSaleComponent implements OnInit {
 
   }
   ngOnInit(): void {
+    this.getSavedOrder();
     this.global.setHeaderTitle('Sale');
     this.getItemList();
+    this.getShippingCompany();
+    this.getPartyList();
 
   }
 
 
+  txtSearch: any = '';
+  curDate = new Date();
+  startDate: Date = new Date(this.curDate.getFullYear(), this.curDate.getMonth(), 1);
+  endDate: Date = new Date(this.curDate.getFullYear(), this.curDate.getMonth() + 1, 0);
+
+  btnType = 'Save';
+  invBillNo = '';
   PBarcode: any = '';
   productList: any = [];
   customerPreviousBalance: any = [];
@@ -72,6 +82,15 @@ export class MarbleSaleComponent implements OnInit {
   partyID: any = 0;
   invoiceDate: any = new Date();
   partyList: any = [];
+  deliverTo: any = '';
+  deliveryContactNo: any = '';
+  deliveryAddress: any = ''
+  deliveryRemarks: any = '';
+  scAutoID: any = 0;
+  deliveryDate: any = new Date();
+  remarks: any = '';
+  netTotal = 0;
+  projectID = this.global.getProjectID();
 
 
   getPartyList() {
@@ -103,7 +122,12 @@ export class MarbleSaleComponent implements OnInit {
     this.http.get(this.apiReq + 'GetAllMnuItems').subscribe(
       {
         next: (Response: any) => {
-          this.itemList = Response;
+
+          if(Response.length > 0){
+            this.itemList = Response.filter((e:any)=> e.activeStatus == true && e.approvedStatus == true);
+
+          }
+
           // console.log(Response);
         },
         error: error => {
@@ -113,6 +137,23 @@ export class MarbleSaleComponent implements OnInit {
     )
 
   }
+
+
+
+  shippingCompanyList: any = [];
+  getShippingCompany() {
+    this.http.get(environment.mainApi + this.global.manufacturingLink + 'GetShpCompanies').subscribe(
+      {
+        next: (Response: any) => {
+          this.shippingCompanyList = Response;
+        },
+        error: (error: any) => {
+          console.log(error);
+        }
+      }
+    )
+  }
+
 
 
   rowFocused = -1;
@@ -284,6 +325,7 @@ export class MarbleSaleComponent implements OnInit {
             $('.qty' + this.rowFocused).trigger('focus');
           }
         }
+        this.getTotal();
       }
     )
 
@@ -292,6 +334,27 @@ export class MarbleSaleComponent implements OnInit {
   }
 
 
+
+   searchByCode(e: any) {
+
+    var barcode = this.PBarcode;
+    var qty: number = 0;
+    var BType = '';
+
+    if (this.PBarcode !== '') {
+      if (e.keyCode == 13) {
+
+        var row = this.itemList.filter((e:any)=> e.mnuItemCode == barcode);
+
+        if(row.length > 0){
+          this.addMenuItem(row[0])
+        }else{
+          this.msg.WarnNotify('Item Not Found');
+        }
+
+      }
+    }
+  }
 
   tableDataList: any = [];
 
@@ -302,14 +365,20 @@ export class MarbleSaleComponent implements OnInit {
     if (index != -1) {
       this.tableDataList[index].quantity += 1;
       this.PBarcode = '';
+      $('.mbsearchProduct').trigger('focus');
+      this.getTotal();
       return;
+
 
     }
 
 
-    this.tableDataList.push({ mnuItemID: item.mnuItemID, mnuItemTitle: item.mnuItemTitle, quantity: 1, salePrice: item.mnuItemSalePrice })
+    this.tableDataList.push({ mnuItemID: item.mnuItemID, productTitle: item.mnuItemTitle, quantity: 1, costPrice: item.mnuItemCostPrice, salePrice: item.mnuItemSalePrice })
 
     this.PBarcode = '';
+    this.getTotal();
+
+    $('.mbsearchProduct').trigger('focus');
 
 
   }
@@ -317,12 +386,338 @@ export class MarbleSaleComponent implements OnInit {
 
   getTotal() {
 
+    this.netTotal = 0;
+
+    this.tableDataList.forEach((e: any) => {
+      this.netTotal += e.salePrice * e.quantity;
+    });
+
+  }
+
+
+
+  save() {
+
+
+    var inValidQty = this.tableDataList.filter((e: any) => e.quantity == '0' || e.quantity == 0 || e.quantity == '');
+
+    if (inValidQty.length > 0) {
+      this.msg.WarnNotify(`${inValidQty[0].productTitle} Quantity is not valid`);
+      return;
+    }
+
+
+    if (this.tableDataList.length == 0) {
+      this.msg.WarnNotify('No Item Entered');
+      return;
+    }
+
+    if (this.partyID == 0 || this.partyID == undefined) {
+      this.msg.WarnNotify('Select Customer');
+      return;
+    }
+
+    if (this.deliverTo == '' || this.deliverTo == undefined) {
+      this.msg.WarnNotify('Select Enter Delivery To');
+      return;
+    }
+    if (this.deliveryContactNo == '' || this.deliveryContactNo == undefined) {
+      this.msg.WarnNotify('Select Enter Delivery To Contact No');
+      return;
+    }
+
+     if (this.deliveryAddress == '' || this.deliveryAddress == undefined) {
+      this.msg.WarnNotify('Select Enter Delivery Address');
+      return;
+    }
+
+
+
+
+    var postData = {
+      InvBillNo: this.invBillNo,
+      InvDate: this.global.dateFormater(this.invoiceDate, ''),
+      PartyID: this.partyID,
+      InvType: "ORDER",
+      ProjectID: this.projectID,
+      Remarks: this.remarks || '-',
+      NetTotal: this.netTotal,
+
+      SCAutoID: this.scAutoID,
+      DeliveryDate: this.global.dateFormater(this.deliveryDate, ''),
+      DeliverTo: this.deliverTo,
+      DeliveryContactNo: this.deliveryContactNo,
+      DeliveryAddress: this.deliveryAddress,
+      DeliveryRemarks: this.deliveryRemarks || '-',
+
+      SaleDetail: JSON.stringify(this.tableDataList),
+      UserID: this.global.getUserID()
+
+    }
+
+    if (this.btnType == 'Save') {
+      this.insert('insert', postData);
+    }
+
+    if (this.btnType == 'Update') {
+
+      this.global.openPinCode().subscribe(pin => {
+        if (pin != '') {
+          postData.InvType = 'Update Order';
+          postData['PinCode'] = pin;
+          this.insert('update', postData);
+        }
+      })
+
+
+    }
+
+  }
+
+  isProcessing = false;
+
+  insert(type: any, postData: any) {
+
+    var url = '';
+
+    if (type == 'insert') {
+      url = 'InsertOrder';
+    }
+    if (type == 'update') {
+      url = 'UpdateOrder';
+    }
+
+    if (this.isProcessing) return;
+    this.app.startLoaderDark();
+    this.isProcessing = true;
+    console.log(postData);
+    this.http.post(this.apiReq + url, postData).subscribe(
+      {
+        next: (Response: any) => {
+          if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
+            this.msg.SuccessNotify(Response.msg);
+            this.reset();
+            this.getSavedOrder();
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+          this.app.stopLoaderDark();
+          this.isProcessing = false;
+        },
+        error: error => {
+          console.log(error);
+          this.app.stopLoaderDark();
+          this.isProcessing = false;
+
+
+        }
+      }
+    )
+
+
+  }
+
+
+
+  reset() {
+    this.invoiceDate = new Date();
+    this.partyID = 0;
+    this.remarks = '';
+    this.netTotal = 0;
+    this.scAutoID = 0;
+    this.billTotal = 0;
+    this.billDiscount = 0;
+    this.deliveryDate = new Date();
+    this.deliverTo = '';
+    this.deliveryContactNo = '';
+    this.deliveryAddress = '';
+    this.deliveryRemarks = '';
+    this.tableDataList = [];
+    this.customerPreviousBalance = 0;
+    this.btnType = 'Save';
+    this.PBarcode = '';
+
+
+  }
+
+
+  edit(item: any) {
+    this.invBillNo = item.invBillNo;
+    this.invoiceDate = new Date(item.invDate);
+    this.partyID = item.partyID;
+       this.projectID = item.projectID;
+    this.remarks = item.remarks;
+    this.netTotal = item.netTotal;
+    this.scAutoID = item.scAutoID;
+    this.btnType = 'Update';
+    this.getInvDetail(item.invBillNo);
+    this.changeTab(0)
+
+  }
+
+
+  getInvDetail(orderNo: any) {
+    this.http.get(this.apiReq + `GetOrderDetail?BillNo=${orderNo}`).subscribe(
+      {
+        next: (Response: any) => {
+          console.log(Response);
+          this.tableDataList = [];
+          if (Response.length > 0) {
+            Response.forEach((e: any) => {
+              this.tableDataList.push({
+                mnuItemID: e.mnuItemID, productTitle: e.productTitle, quantity: e.quantity, costPrice: e.costPrice, salePrice: e.salePrice
+              })
+
+              this.deliveryDate = new Date(Response[0].deliveryDate);
+              this.deliverTo = Response[0].deliverTo;
+              this.deliveryContactNo = Response[0].deliveryContactNo;
+              this.deliveryAddress = Response[0].deliveryAddress;
+              this.deliveryRemarks = Response[0].deliveryRemarks;
+              this.scAutoID = Response[0].scAutoID;
+            })
+          }
+        },
+        error: error => {
+          console.log(error);
+        }
+      }
+    )
+  }
+
+
+  savedDataList: any = [];
+
+  getSavedOrder() {
+
+    var fromDate = this.global.dateFormater(this.startDate, '');
+    var toDate = this.global.dateFormater(this.endDate, '');
+    this.http.get(this.apiReq + `GetOrder?reqUID=0&FromDate=${fromDate}&ToDate=${toDate}&FromTime=00:00&ToTime=23:59:59`).subscribe(
+      {
+        next: (Response: any) => {
+          this.savedDataList = Response;
+          console.log(Response);
+        },
+        error: error => {
+          console.log(error);
+        }
+      }
+    )
   }
 
 
 
 
+  tabIndex = 0;
+  changeTab(tabNum: any) {
+    this.tabIndex = tabNum;
 
+  }
+
+
+  billTotal = 0;
+  billDiscount = 0;
+
+
+  approveOrder(item:any){
+
+
+    this.invBillNo = item.invBillNo;
+    this.partyID = item.partyID;
+    this.projectID = item.projectID;
+    this.billTotal = item.netTotal;
+    this.netTotal = item.netTotal;
+    this.scAutoID = item.scAutoID;
+    this.getInvDetail(item.invBillNo);
+
+    this.global.openBootstrapModal('#saleModal',true);
+
+
+  }
+
+
+
+  saveSale() {
+
+
+     if (this.tableDataList.length == 0) {
+      this.msg.WarnNotify('No Item Entered');
+      return;
+    }
+
+    if (this.partyID == 0 || this.partyID == undefined) {
+      this.msg.WarnNotify('Select Customer');
+      return;
+    }
+
+
+    var postData = {
+      HoldInvNo: this.invBillNo,
+      InvDate: this.global.dateFormater(this.invoiceDate,'-'),
+      PartyID: this.partyID,
+      InvType: "S",
+      ProjectID: this.projectID,
+      BookerID: 1,
+      PaymentType: "Credit",
+      Remarks: this.remarks,
+      GstAmount: 0,
+      GstValue: 0,
+      BillTotal: this.billTotal,
+      BillDiscount: this.billDiscount,
+      OtherCharges: 0,
+      NetTotal: this.billTotal - Number(this.billDiscount),
+      CashRec: 0,
+      Change: 0,
+      BankCoaID: 0,
+      BankCash: 0,
+      InvoiceDocument: "-",
+      SaleDetail: JSON.stringify(this.tableDataList),
+      UserID: this.global.getUserID()
+    }
+
+    this.global.closeBootstrapModal('#saleModal',true);
+
+    this.global.openPinCode().subscribe(pin=>{
+      if(pin != ''){
+        postData['PinCode'] = pin;
+        this.insertSale(postData);
+      }
+    })
+
+
+
+  }
+
+
+  insertSale(postData:any){
+      console.log(postData);
+     this.http.post(this.apiReq + 'InsertMnuSale', postData).subscribe(
+      {
+        next: (Response: any) => {
+          if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
+            this.msg.SuccessNotify(Response.msg);
+            this.reset();
+            this.getSavedOrder();
+             this.global.closeBootstrapModal('#saleModal',true);
+          } else {
+            this.msg.WarnNotify(Response.msg);
+            this.global.openBootstrapModal('#saleModal',true);
+          }
+          this.app.stopLoaderDark();
+          this.isProcessing = false;
+        },
+        error: error => {
+          console.log(error);
+          this.app.stopLoaderDark();
+          this.isProcessing = false;
+
+
+        }
+      }
+    )
+  }
+
+
+ 
 
 }
 

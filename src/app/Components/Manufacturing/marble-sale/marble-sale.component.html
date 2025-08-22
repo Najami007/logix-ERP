@@ -1,189 +1,343 @@
-<div class="body container">
-
-    <div class="row mt-2">
-
-
-        <mat-form-field appearance="outline" class="col-lg-3 matSmall">
-            <mat-label>Invoice Date</mat-label>
-            <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
-                [matDatepicker]="voucherDate">
-            <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
-            <mat-datepicker #voucherDate></mat-datepicker>
-        </mat-form-field>
+<mat-tab-group mat-align-tabs="center" class="body h-100" [selectedIndex]="tabIndex"
+    (selectedIndexChange)="changeTab($event)">
 
 
-        <mat-form-field appearance="outline" class="col-lg-3 matSmall">
-            <mat-label>Refrence</mat-label>
-            <input type="text" matInput [(ngModel)]="orderRefrence" />
-        </mat-form-field>
+    <mat-tab label="Sale">
 
-        <mat-form-field appearance="outline" class="col-lg-3 matSmall">
-            <mat-label>Customer</mat-label>
-            <mat-select [(ngModel)]="partyID" #customer name="customer">
-                <mat-option><ngx-mat-select-search #customerSearch [placeholderLabel]="'Search...'"
-                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                <mat-option [value]="0">WalkIn Customer</mat-option>
-                <mat-option *ngFor="let item of partyList |filter:customerSearch.value "
-                    [value]="item.partyID">{{item.partyName}}</mat-option>
+        <div class="container">
 
-            </mat-select>
-            <mat-icon class="cursorPointer" (click)="addParty()" matSuffix>add</mat-icon>
-        </mat-form-field>
+            <div class="row mt-2">
 
-        <mat-form-field appearance="outline" class="col-lg-3 matSmall">
-            <mat-label>Current Credit</mat-label>
-            <input type="text" matInput [(ngModel)]="customerPreviousBalance" />
-        </mat-form-field>
+
+                <mat-form-field appearance="outline" class="col-lg-3 matSmall">
+                    <mat-label>Invoice Date</mat-label>
+                    <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
+                        [matDatepicker]="voucherDate">
+                    <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
+                    <mat-datepicker #voucherDate></mat-datepicker>
+                </mat-form-field>
 
 
 
-    </div>
 
-    <div class="col-md-12">
+                <mat-form-field appearance="outline" class="col-lg-3 matSmall">
+                    <mat-label>Customer</mat-label>
+                    <mat-select [(ngModel)]="partyID" #customer name="customer">
+                        <mat-option><ngx-mat-select-search #customerSearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of partyList |filter:customerSearch.value "
+                            [value]="item.partyID">{{item.partyName}}</mat-option>
 
-        <div style="border-radius: 5px 5px 5px 5px;height: 50vh;">
+                    </mat-select>
+                    <mat-icon class="cursorPointer" (click)="addParty()" matSuffix>add</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="col-lg-3 matSmall">
+                    <mat-label>Current Credit</mat-label>
+                    <input type="text" matInput [(ngModel)]="customerPreviousBalance" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="col-lg-3 matSmall">
+                    <mat-label>Remarks</mat-label>
+                    <input type="text" matInput [(ngModel)]="remarks" />
+                </mat-form-field>
 
 
-            <div class="d-flex">
 
-                <!-------------------- Product Search Bar --------------->
+            </div>
 
-                <div class="col-md-9  d-flex flex-column">
+            <div class="col-md-12">
 
-                    <input type="text"  (keydown)="this.changeFocus($event,'.prodRow');" [(ngModel)]="PBarcode" id="vssearchProduct"
-                        class="p-1 ps-2 mb-2 searchProduct w-100" placeholder="Search Barcode / Product (Alt + b)"
-                        autocomplete="off" accesskey="b">
+                <div style="border-radius: 5px 5px 5px 5px;height: 50vh;">
 
-                    <div class="d-flex flex-column SearchConatiner cursorPointer"
-                        *ngIf="PBarcode != '' && PBarcode != undefined ">
-                        <mat-card class="card "
-                            *ngFor="let item of itemList| filter:PBarcode | slice:0:25 index as index" (click)="addMenuItem(item)">
 
-                            <button style="height: 40px; background: none;border: none;text-align: left;"
-                                class="prodRow{{index}} prodBtn justify-content-between d-flex"
-                                (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">
-                                <p>{{item.mnuItemTitle}}</p>
-                                <p><strong>({{item.mnuItemCode}})</strong></p>
-                            </button>
+                    <div class="d-flex">
 
-                        </mat-card>
+                        <!-------------------- Product Search Bar --------------->
+
+                        <div class="col-md-9  d-flex flex-column">
+
+                            <input type="text" (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event)" [(ngModel)]="PBarcode"
+                                id="mbsearchProduct" class="p-1 ps-2 mb-2 searchProduct w-100"
+                                placeholder="Search Barcode / Product (Alt + b)" autocomplete="off" accesskey="b">
+
+                            <div class="d-flex flex-column SearchConatiner cursorPointer"
+                                *ngIf="PBarcode != '' && PBarcode != undefined ">
+                                <mat-card class="card "
+                                    *ngFor="let item of itemList| filter:PBarcode | slice:0:25 index as index"
+                                    (click)="addMenuItem(item)">
+
+                                    <button style="height: 40px; background: none;border: none;text-align: left;"
+                                        class="prodRow{{index}} prodBtn justify-content-between d-flex"
+                                        (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">
+                                        <p>{{item.mnuItemTitle}}</p>
+                                        <p><strong>({{item.mnuItemCode}})</strong></p>
+                                    </button>
+
+                                </mat-card>
+                            </div>
+                        </div>
+                        <div class="col-md-3 ps-1  text-start">
+                            <button class="btnload w-100 " style="height: 40px;" (click)="ngOnInit()">Load</button>
+                        </div>
+
                     </div>
-                </div>
-                <div class="col-md-3 ps-1  text-start">
-                    <button class="btnload w-100 " style="height: 40px;" (click)="ngOnInit()">Load</button>
+
+                    <!-------------------------------Bill Products Area ------------------>
+
+                    <div class="billArea border" style="height: 40vh;overflow-y: auto;">
+                        <table class="table-logix">
+                            <thead>
+                                <tr>
+                                    <th class="cursorPointer">S#</th>
+                                    <th>Title</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of tableDataList index as index">
+                                    <td class="text-center">{{index +1}}</td>
+                                    <td>{{item.productTitle}}</td>
+                                    <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
+                                            (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();"
+                                            (keyup)="getTotal();" (click)="rowFocused = index"
+                                            class="qty{{index}} text-center" style="width: 80px;"></td>
+                                    <td class="text-end">{{item.salePrice | number:'1.0-0'}}</td>
+                                    <td class="text-end">{{item.salePrice * item.quantity | number:'1.0-0'}}</td>
+                                    <td class="text-center"><mat-icon (click)="delRow(item)"
+                                            class="text-danger">delete</mat-icon></td>
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
 
             </div>
 
-            <!-------------------------------Bill Products Area ------------------>
 
-            <div class="billArea border" style="height: 40vh;overflow-y: auto;">
-                <table class="table-logix">
-                    <thead>
+            <div class="row">
+
+
+                <div class="col-md-4 d-flex flex-wrap">
+
+                    <div class="col-md-12">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <mat-label>Delivery Date</mat-label>
+                            <input readonly="true" matInput [(ngModel)]="deliveryDate" type="text" name="DeliveryDate"
+                                [matDatepicker]="dDate">
+                            <mat-datepicker-toggle matSuffix [for]="dDate"></mat-datepicker-toggle>
+                            <mat-datepicker #dDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-6 pe-2">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <mat-label>Deliver To</mat-label>
+                            <input type="text" matInput [(ngModel)]="deliverTo" />
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <mat-label>Contact No</mat-label>
+                            <input type="text" matInput [(ngModel)]="deliveryContactNo" />
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-12">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <mat-label>Delivery Address</mat-label>
+                            <textarea type="text" matInput [(ngModel)]="deliveryAddress"></textarea>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+                <div class="col-md-4 d-flex flex-column pt-1">
+                    <mat-form-field appearance="outline" class="col-md-12 matSmall">
+                        <mat-label>Shipping Company</mat-label>
+                        <mat-select [(ngModel)]="scAutoID">
+                            <mat-option><ngx-mat-select-search #scSearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            <mat-option [value]="0">None</mat-option>
+                            <mat-option *ngFor="let item of shippingCompanyList | filter:scSearch.value"
+                                [value]="item.scAutoID">{{item.shpCmpName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+
+
+
+
+                    <mat-form-field appearance="outline" class="col-md-12  matSmall">
+                        <mat-label>Remarks</mat-label>
+                        <textarea type="text" rows="5" matInput [(ngModel)]="deliveryRemarks"></textarea>
+                    </mat-form-field>
+
+                </div>
+
+                <div class="col-md-4 d-flex flex-column">
+
+                    <table class="w-100">
                         <tr>
-                            <th class="cursorPointer">S#</th>
-                            <th>Title</th>
-                            <th>Qty</th>
-                            <th>Price</th>
-                            <th>Total</th>
-                            <th>Action</th>
+                            <td colspan="2" class="border text-center">
+                                <div style="height: 100px;width: 100%;font-size: 3.5rem;color: rgb(0, 41, 16);"
+                                    class="font-digit pt-4"> {{netTotal | number:'1.0-0'}}</div>
+                                <!-- <button mat-raised-button style="height: 100px;width: 100%;" class=" btn text-white bg-success "
+                            accesskey="s"><u>S</u>ave</button> -->
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of tableDataList index as index">
-                            <td class="text-center">{{index +1}}</td>
-                            <td>{{item.mnuItemTitle}}</td>
-                            <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
-                                    (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();"
-                                    (keyup)="getTotal();" (click)="rowFocused = index" class="qty{{index}} text-center"
-                                    style="width: 80px;"></td>
-                            <td class="text-end">{{item.salePrice | number:'1.0-0'}}</td>
-                            <td class="text-end">{{item.quantity * item.salePrice | number:'1.0-0    '}}</td>
-                            <td class="text-center"><mat-icon (click)="delRow(item)" class="text-danger">delete</mat-icon></td>
-
+                        <tr>
+                            <td>
+                                <button mat-raised-button *ngIf="btnType == 'Save'" style="height: 100px;"
+                                    class=" btn text-white bg-primary col-lg-12" accesskey="s"
+                                    (click)="save()"><u>S</u>ave</button>
+                                <button *ngIf="btnType == 'Update'" mat-raised-button style="height: 100px;"
+                                    class=" btn text-white bg-primary col-lg-12" accesskey="u"
+                                    (click)="save()"><u>U</u>pdate</button>
+                            </td>
+                            <td>
+                                <button mat-raised-button style="height: 100px;" (click)="reset()"
+                                    class=" btn text-white bg-danger col-lg-12" accesskey="r">Reset</button>
+                            </td>
                         </tr>
+                    </table>
 
-                    </tbody>
-                </table>
+                </div>
+
             </div>
 
-        </div>
-
-    </div>
 
 
-    <div class="row">
-
-
-        <div class="col-md-4 d-flex flex-column">
-
-            <mat-form-field appearance="outline" class="col-md-12 matSmall">
-                <mat-label>Delivery Date</mat-label>
-                <input readonly="true" matInput type="text" name="DeliveryDate" [matDatepicker]="deliveryDate">
-                <mat-datepicker-toggle matSuffix [for]="deliveryDate"></mat-datepicker-toggle>
-                <mat-datepicker #deliveryDate></mat-datepicker>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="col-md-12 matSmall">
-                <mat-label>Deliver To</mat-label>
-                <input type="text" matInput />
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="col-md-12  matSmall">
-                <mat-label>Address</mat-label>
-                <textarea type="text" matInput></textarea>
-            </mat-form-field>
 
         </div>
+    </mat-tab>
 
-        <div class="col-md-4 d-flex flex-column pt-1">
-            <mat-form-field appearance="outline" class="col-md-12 matSmall">
-                <mat-label>Shipping Company</mat-label>
-                <mat-select>
-                    <mat-option></mat-option>
-                </mat-select>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="col-md-12 matSmall">
-                <mat-label>Contact Person</mat-label>
-                <input type="text" matInput />
-            </mat-form-field>
+    <mat-tab label="Saved Record">
 
 
+        <div class="container">
 
-            <mat-form-field appearance="outline" class="col-md-12  matSmall">
-                <mat-label>Remarks</mat-label>
-                <textarea type="text" matInput></textarea>
-            </mat-form-field>
 
-        </div>
+            <div class="row mt-2">
+                <mat-form-field class="col-md-8 matSmall" appearance="outline">
+                    <mat-label>Search.....</mat-label>
+                    <input [(ngModel)]="txtSearch" matInput type="text" #input>
+                </mat-form-field>
+                <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                    <mat-label>From Date</mat-label>
+                    <input (dateChange)="getSavedOrder()" matInput [(ngModel)]="startDate" [matDatepicker]="picker2">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                    <mat-label>To Date</mat-label>
+                    <input (dateChange)="getSavedOrder()" matInput [(ngModel)]="endDate" [matDatepicker]="picker3">
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker>
+                </mat-form-field>
+            </div>
 
-        <div class="col-md-4 d-flex flex-column">
 
-            <table class="w-100">
-                <tr>
-                    <td colspan="2">
-                        <button mat-raised-button style="height: 100px;width: 100%;" class=" btn text-white bg-success "
-                            accesskey="s"><u>S</u>ave</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button mat-raised-button style="height: 100px;" class=" btn text-white bg-primary col-lg-12"
-                            accesskey="s"><u>S</u>ave</button>
-                    </td>
-                    <td>
-                        <button mat-raised-button style="height: 100px;" class=" btn text-white bg-danger col-lg-12"
-                            accesskey="s"><u>S</u>ave</button>
-                    </td>
-                </tr>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Inv No</th>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Deliver To</th>
+                        <th>Delivery Date</th>
+                        <th>Amount</th>
+                        <th>Approve</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of savedDataList | filter:txtSearch index as index ">
+                        <td>{{index + 1}}</td>
+                        <td>{{item.invBillNo}}</td>
+                        <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.partyName}}</td>
+                        <td>{{item.deliverTo}}</td>
+                          <td>{{item.deliveryDate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.netTotal | number:'1.0-0'}}</td>
+                        <td>
+                            <mat-icon class="cursorPointer" (click)="approveOrder(item)">{{item.approvedStatus ? 'check_box': 'check_box_outline_blank'}} </mat-icon>
+                        </td>
+                        <td>
+                            <mat-icon class="text-success cursorPointer" *ngIf="!item.approvedStatus" (click)="edit(item)">edit</mat-icon>
+
+                        </td>
+                    </tr>
+                </tbody>
             </table>
 
+
+
         </div>
 
+    </mat-tab>
+
+
+</mat-tab-group>
+
+
+
+
+
+
+<div class="modal fade" id="saleModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    aria-labelledby="saleModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered ">
+        <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+      
+            <div class="modal-body">
+
+                <div class="row">
+                    <mat-form-field appearance="outline" class="col-md-12 matSmall">
+                        <mat-label>Invoice Date</mat-label>
+                        <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="invDate"
+                            [matDatepicker]="invDate">
+                        <mat-datepicker-toggle matSuffix [for]="invDate"></mat-datepicker-toggle>
+                        <mat-datepicker #invDate></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="col-md-6 matSmall">
+                        <mat-label>Bill Total</mat-label>
+                        <input type="text" readonly="true"  matInput [(ngModel)]="billTotal" />
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="col-md-6 matSmall">
+                        <mat-label>Discount</mat-label>
+                        <input type="text" matInput [(ngModel)]="billDiscount" />
+                    </mat-form-field>
+
+                         <mat-form-field appearance="outline" class="col-md-12 matSmall">
+                    <mat-label>Remarks</mat-label>
+                    <textarea type="text" matInput [(ngModel)]="remarks" ></textarea>
+                </mat-form-field>
+                </div>
+
+
+
+
+            </div>
+
+            <div class="modal-footer bg-mf-blue">
+                <!-- <button class="btnText" [disabled]="isValidSale" id="refresh" accesskey="r"
+                        (click)="isValidSale =  true">Refresh</button> -->
+                <button class="btnsave" (click)="saveSale()">Save</button>
+                <button type="button" class="btnclose" data-bs-dismiss="modal" (click)="reset()">Close</button>
+            </div>
+
+
+        </div>
     </div>
-
-
-
-
 </div>

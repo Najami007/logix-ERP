@@ -26,6 +26,9 @@ import { ShippingCompanyComponent } from './shipping-company/shipping-company.co
 import { AddShippingCompanyComponent } from './shipping-company/add-shipping-company/add-shipping-company.component';
 import { ItemCategoriesComponent } from './item-categories/item-categories.component';
 import { AddCategoryComponent } from './item-categories/add-category/add-category.component';
+import { ManufacturingSaleRptComponent } from './ManufacturingReports/manufacturing-sale-rpt/manufacturing-sale-rpt.component';
+import { ManufacturingSaleItemwiseComponent } from './ManufacturingReports/manufacturing-sale-itemwise/manufacturing-sale-itemwise.component';
+import { ManufacturingSalePartywiseComponent } from './ManufacturingReports/manufacturing-sale-partywise/manufacturing-sale-partywise.component';
 
 
 
@@ -49,7 +52,14 @@ export const manufacturingRoutes: Route[] = [
   { path: 'marbleSale', component: MarbleSaleComponent, data: { title: 'Sale' }, canActivate: [AuthGuard] },
   { path: 'itemproduction', component: ItemProductionComponent, data: { title: 'Item Production' }, canActivate: [AuthGuard] },
   { path: 'shipmentCompany', component: ShippingCompanyComponent, data: { title: 'Shipment Company' }, canActivate: [AuthGuard] },
-    { path: 'itemcategory', component: ItemCategoriesComponent, data: { title: 'Item Category' }, canActivate: [AuthGuard] },
+  { path: 'itemcategory', component: ItemCategoriesComponent, data: { title: 'Item Category' }, canActivate: [AuthGuard] },
+
+
+  /////////////////////////////////////////////////Reports ///////////////////////////////////////
+
+  { path: 'salereport', component: ManufacturingSaleRptComponent, data: { title: 'Sale Report' }, canActivate: [AuthGuard] },
+  { path: 'itemsalerpt', component: ManufacturingSaleItemwiseComponent, data: { title: 'Sale Report Itemwise' }, canActivate: [AuthGuard] },
+  { path: 'customersalerpt', component: ManufacturingSalePartywiseComponent, data: { title: 'Sale Report Customer' }, canActivate: [AuthGuard] },
 
 ]
 
@@ -63,7 +73,10 @@ export const manufacturingRoutes: Route[] = [
     ShippingCompanyComponent,
     AddShippingCompanyComponent,
     ItemCategoriesComponent,
-    AddCategoryComponent
+    AddCategoryComponent,
+    ManufacturingSaleRptComponent,
+    ManufacturingSaleItemwiseComponent,
+    ManufacturingSalePartywiseComponent
   ],
   imports: [
     CommonModule,

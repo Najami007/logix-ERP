@@ -294,8 +294,8 @@
                     (click)="SaveBill('purchase')"><u>S</u>ave</button>
             </div>
             <div class="mt-2 text-center">
-                    <button class=" w-50 btnText" [disabled]="isProcessing" id="refresh" accesskey="r" 
-                    (click)="isProcessing =  true">Refresh</button>
+                    <button class=" w-50 btnText" [disabled]="!isProcessing" id="refresh" accesskey="r" 
+                    (click)="isProcessing =  false">Refresh</button>
             </div>
         </mat-card>
         </div>

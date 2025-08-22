@@ -51,13 +51,13 @@
 
                     <div class="col-md-10  d-flex flex-column">
                         <mat-label class="text-primary">Search Barcode / Product</mat-label>
-                        <input type="text" #pbarcode [(ngModel)]="PBarcode" (keydown)="searchByCode($event);"
+                        <input type="text" #pbarcode [(ngModel)]="PBarcode" (keydown)="this.changeFocus($event,'.prodRow'); searchByCode($event);"
                             id="searchProduct" class="p-1 mb-2  searchProduct bg-transparent" placeholder="Alt + b"
                             autofocus autocomplete="off" accesskey="b">
 
                         <div class="d-flex flex-column SearchConatiner cursorPointer"
                             *ngIf="PBarcode != '' && PBarcode != undefined">
-                            <div class="card " *ngFor="let item of productList| filter:PBarcode index as index"
+                            <div class="card " *ngFor="let item of productList| filter:PBarcode | slice:0:25 index as index"
                                 (click)="holdDataFunction(item)">
                                 <button style="height: 40px; background: none;border: none;text-align: left;"
                                     class="prodRow{{index}} prodBtn justify-content-between d-flex"

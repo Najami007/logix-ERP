@@ -84,7 +84,6 @@ export class ShippingCompanyComponent implements OnInit {
     this.addCompany.Description = item.description;
     this.addCompany.btnType = 'Update';
 
-    alert( this.addCompany.CityID)
 
   }
 

@@ -45,6 +45,8 @@ export class GarmentSaleComponent implements OnInit {
   disablePrintPwd = this.global.DisablePrintPwd;
   VehicleSaleFeature = this.global.VehicleSaleFeature;
   CustomSaleGstFeatrue = this.global.CustomSaleGstFeature;
+  showSaleAQFeature = this.global.showSaleAQFeature;
+  showSaleCPFeature = this.global.showSaleCPFeature;
 
 
 

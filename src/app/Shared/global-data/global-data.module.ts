@@ -320,6 +320,10 @@ export class GlobalDataModule implements OnInit {
   CustomSaleGstFeature = this.getFeature('CustomSaleGst');
   northEdgeEnterPriseBillFeature = this.getFeature('northEdgeEnterPriseBill');
   disableDOCPwdFeature = this.getFeature('disableDOCPwd');
+  showSaleAQFeature = this.getFeature('showSaleAQ');
+  showSaleCPFeature = this.getFeature('showSaleCP');
+
+
 
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
@@ -366,6 +370,8 @@ export class GlobalDataModule implements OnInit {
     this.CustomSaleGstFeature = this.getFeature('CustomSaleGst');
     this.northEdgeEnterPriseBillFeature = this.getFeature('northEdgeEnterPriseBill');
     this.disableDOCPwdFeature = this.getFeature('disableDOCPwd');
+    this.showSaleAQFeature = this.getFeature('showSaleAQ');
+    this.showSaleCPFeature = this.getFeature('showSaleCP');
 
   }
 
@@ -703,11 +709,11 @@ export class GlobalDataModule implements OnInit {
         : frame1[0].contentDocument;
     frameDoc.document.open();
 
-      //<style type="text/css" media="print">/*@page { size: landscape; }*/</style>
-      // <link rel="stylesheet" href="../../assets/style/bootstrap.min.css.map" type="text/css" />
-      //<link rel="stylesheet" href="../css/bootstrap.css" type="text/css"  media="print"/>
+    //<style type="text/css" media="print">/*@page { size: landscape; }*/</style>
+    // <link rel="stylesheet" href="../../assets/style/bootstrap.min.css.map" type="text/css" />
+    //<link rel="stylesheet" href="../css/bootstrap.css" type="text/css"  media="print"/>
 
-      frameDoc.document.write(`
+    frameDoc.document.write(`
     <html>
       <head>
        

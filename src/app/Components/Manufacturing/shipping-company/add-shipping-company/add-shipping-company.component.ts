@@ -175,7 +175,9 @@ export class AddShippingCompanyComponent implements OnInit {
         next: (Response: any) => {
           if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
             this.msg.SuccessNotify(Response.msg);
+             this.reset();
             this.saveEmitter.emit();
+           
 
           } else {
             this.msg.WarnNotify(Response.msg);
