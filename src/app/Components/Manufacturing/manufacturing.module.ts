@@ -29,6 +29,11 @@ import { AddCategoryComponent } from './item-categories/add-category/add-categor
 import { ManufacturingSaleRptComponent } from './ManufacturingReports/manufacturing-sale-rpt/manufacturing-sale-rpt.component';
 import { ManufacturingSaleItemwiseComponent } from './ManufacturingReports/manufacturing-sale-itemwise/manufacturing-sale-itemwise.component';
 import { ManufacturingSalePartywiseComponent } from './ManufacturingReports/manufacturing-sale-partywise/manufacturing-sale-partywise.component';
+import { MaterialConsumptionRptComponent } from './ManufacturingReports/material-consumption-rpt/material-consumption-rpt.component';
+import { ManufacturingSaleCategoryComponent } from './ManufacturingReports/manufacturing-sale-category/manufacturing-sale-category.component';
+import { DeliveryChallanComponent } from './ManufacturingComFiles/delivery-challan/delivery-challan.component';
+import { OrderPrintComponent } from './ManufacturingComFiles/order-print/order-print.component';
+import { MnuInvoicePrintComponent } from './ManufacturingComFiles/mnu-invoice-print/mnu-invoice-print.component';
 
 
 
@@ -60,6 +65,10 @@ export const manufacturingRoutes: Route[] = [
   { path: 'salereport', component: ManufacturingSaleRptComponent, data: { title: 'Sale Report' }, canActivate: [AuthGuard] },
   { path: 'itemsalerpt', component: ManufacturingSaleItemwiseComponent, data: { title: 'Sale Report Itemwise' }, canActivate: [AuthGuard] },
   { path: 'customersalerpt', component: ManufacturingSalePartywiseComponent, data: { title: 'Sale Report Customer' }, canActivate: [AuthGuard] },
+  { path: 'categorysalerpt', component: ManufacturingSaleCategoryComponent, data: { title: 'Sale Report Category' }, canActivate: [AuthGuard] },
+
+  { path: 'materialconsumption', component: MaterialConsumptionRptComponent, data: { title: 'Material Consumption' }, canActivate: [AuthGuard] },
+
 
 ]
 
@@ -76,7 +85,14 @@ export const manufacturingRoutes: Route[] = [
     AddCategoryComponent,
     ManufacturingSaleRptComponent,
     ManufacturingSaleItemwiseComponent,
-    ManufacturingSalePartywiseComponent
+    ManufacturingSalePartywiseComponent,
+    MaterialConsumptionRptComponent,
+    ManufacturingSaleCategoryComponent,
+    DeliveryChallanComponent,
+    OrderPrintComponent,
+    MnuInvoicePrintComponent,
+
+
   ],
   imports: [
     CommonModule,

@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -8,13 +8,11 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { environment } from 'src/environments/environment.development';
 
 @Component({
-  selector: 'app-manufacturing-sale-itemwise',
-  templateUrl: './manufacturing-sale-itemwise.component.html',
-  styleUrls: ['./manufacturing-sale-itemwise.component.scss']
+  selector: 'app-material-consumption-rpt',
+  templateUrl: './material-consumption-rpt.component.html',
+  styleUrls: ['./material-consumption-rpt.component.scss']
 })
-export class ManufacturingSaleItemwiseComponent {
-
-
+export class MaterialConsumptionRptComponent implements OnInit {
 
   apiReq = environment.mainApi + this.global.manufacturingLink;
   companyProfile: any = [];
@@ -37,8 +35,7 @@ export class ManufacturingSaleItemwiseComponent {
     })
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Sale Report');
-    this.getItemList();
+    this.global.setHeaderTitle('Material consumption');
     this.getUsers();
   }
 
@@ -63,76 +60,54 @@ export class ManufacturingSaleItemwiseComponent {
   }
 
   onUserSelected() {
-    if(this.userID == 0) return;
     var curUser = this.userList.find((e: any) => e.userID == this.userID);
     this.userName = curUser.userName;
   }
 
-  mnuItemID:any = 0;
-  itemList: any = [];
-  getItemList() {
-
-    this.http.get(this.apiReq + 'GetAllMnuItems').subscribe(
-      {
-        next: (Response: any) => {
-          this.itemList = Response;
-          // console.log(Response);
-        },
-        error: error => {
-          console.log(error);
-        }
-      }
-    )
-
-  }
-
-
-
 
   DataList: any = [];
 
-  costTotal = 0;
-  saleTotal = 0;
+  billTotal = 0;
+  billDiscountTotal = 0;
+  netTotal = 0;
 
   getReport() {
 
-    if(this.mnuItemID == 0){
-      this.msg.WarnNotify('Select Item');
-      return;
-    }
-    var mnuItemID = this.mnuItemID;
     var userID = this.userID;
     var fromDate = this.global.dateFormater(this.fromDate, '');
     var fromTime = this.fromTime;
     var toDate = this.global.dateFormater(this.toDate, '');
     var toTime = this.toTime;
 
-     this.app.startLoaderDark();
-    this.http.get(this.apiReq + `SaleDetailRptMnuItemWise?reqMnuItemID=${mnuItemID}&reqUID=${userID}&FromDate=${fromDate}
+    this.app.startLoaderDark();
+    this.http.get(this.apiReq + `GetConsumptionRptDateWise?reqUID=${userID}&FromDate=${fromDate}
       &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`).subscribe(
       {
         next: (Response: any) => {
-             this.DataList = [];
-            this.costTotal = 0;
-            this.saleTotal = 0;
+          this.billTotal = 0;
+          this.billDiscountTotal = 0;
+          this.netTotal = 0;
 
-              if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-              this.app.stopLoaderDark();
-              return;
+          this.DataList = [];
 
-            }
+
+          if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+
+          }
 
           console.log(Response);
           if (Response.length > 0) {
-            this.DataList = Response.filter((e: any) => e.invType == this.rptType);
+            this.DataList = Response;
             this.DataList.forEach((e: any) => {
-              this.costTotal += e.costPrice * e.quantity;
-              this.saleTotal += e.salePrice * e.quantity;
+
+              this.netTotal += e.avgCostPriceTotal;
             });
           }
 
-         this.app.stopLoaderDark();
+          this.app.stopLoaderDark();
 
         },
         error: error => {
@@ -155,7 +130,8 @@ export class ManufacturingSaleItemwiseComponent {
     var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
 
 
-    this.global.ExportHTMLTabletoExcel('#printContainer', `Sale Report ${startDate} - ${endDate}`);
+    this.global.ExportHTMLTabletoExcel('#printContainer', `Consumption Report ${startDate} - ${endDate}`);
   }
+
 
 }

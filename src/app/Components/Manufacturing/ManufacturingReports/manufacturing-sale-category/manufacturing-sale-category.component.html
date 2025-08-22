@@ -44,12 +44,12 @@
 
         <div class="col-md-4">
             <mat-form-field appearance="outline" class="w-100  matSmall">
-                <mat-label>Item</mat-label>
-                <mat-select [(ngModel)]="mnuItemID" (selectionChange)="onUserSelected()">
+                <mat-label>Category</mat-label>
+                <mat-select [(ngModel)]="mnuCategoryID" (selectionChange)="onUserSelected()">
                     <mat-option><ngx-mat-select-search #searchItem [placeholderLabel]="'Search...'"
                             [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                    <mat-option *ngFor="let item of itemList | filter:searchItem.value | slice:0:25"
-                        [value]="item.mnuItemID">{{item.mnuItemTitle}}</mat-option>
+                    <mat-option *ngFor="let item of categoryList | filter:searchItem.value | slice:0:25"
+                        [value]="item.mnuItemCatID">{{item.mnuItemCatTitle}}</mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
@@ -89,7 +89,7 @@
                 <div class="d-flex flex-column">
                     <span class="companyName">{{item.companyName}}</span>
 
-                    <span class="rptTitle">Sale Report Itemwise</span>
+                    <span class="rptTitle">Sale Report Category</span>
                     <span> <b *ngIf="userName != ''">User: {{userName}}</b></span>
                     <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>

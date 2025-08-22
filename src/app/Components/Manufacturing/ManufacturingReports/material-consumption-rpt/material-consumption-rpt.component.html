@@ -40,30 +40,8 @@
         </mat-form-field>
     </div>
 
-    <div class="row">
+    <div class="d-flex justify-content-center">
 
-        <div class="col-md-4">
-            <mat-form-field appearance="outline" class="w-100  matSmall">
-                <mat-label>Item</mat-label>
-                <mat-select [(ngModel)]="mnuItemID" (selectionChange)="onUserSelected()">
-                    <mat-option><ngx-mat-select-search #searchItem [placeholderLabel]="'Search...'"
-                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                    <mat-option *ngFor="let item of itemList | filter:searchItem.value | slice:0:25"
-                        [value]="item.mnuItemID">{{item.mnuItemTitle}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-
-        <div class="col-md-4">
-
-            <mat-form-field appearance="outline" class="w-100  matSmall">
-                <mat-label>Type</mat-label>
-                <mat-select [(ngModel)]="rptType">
-                    <mat-option value="ORDER">Order Report</mat-option>
-                    <mat-option value="S">Sale Report</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
         <div class="col-md-4 d-flex flex-wrap" *ngIf="crudList.r">
             <div class="col-md-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport()">Get
                     Report</button></div>
@@ -74,7 +52,7 @@
 
 
 
-
+<br>
 
     <div id="PrintDiv">
 
@@ -89,7 +67,7 @@
                 <div class="d-flex flex-column">
                     <span class="companyName">{{item.companyName}}</span>
 
-                    <span class="rptTitle">Sale Report Itemwise</span>
+                    <span class="rptTitle">Consumption Report</span>
                     <span> <b *ngIf="userName != ''">User: {{userName}}</b></span>
                     <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
@@ -105,43 +83,34 @@
             </div>
         </div>
 
-        <div id="printContainer">
-            <table class="table-logix">
-                <thead>
-                    <tr>
-                        <th>S#</th>
-                        <th>Inv #</th>
-                        <th>Date</th>
-                        <th>Item Name</th>
-                        <th>Quantity</th>
-                        <!-- <th>Cost</th> -->
-                        <th>Sale</th>
-                        <!-- <th>Cost Total</th> -->
-                        <th>Sale Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of DataList index as index">
-                        <td>{{index + 1}}</td>
-                        <td>{{item.invBillNo}}</td>
-                        <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
-                        <td>{{item.productTitle}}</td>
-                        <td class="text-center">{{item.quantity}}</td>
-                        <!-- <td class="text-end">{{item.costPrice | number:'1.0-0'}}</td> -->
-                        <td class="text-end">{{item.salePrice | number:'1.0-0'}}</td>
-                        <!-- <td class="text-end">{{item.costPrice * item.quantity | number:'1.0-0'}}</td> -->
-                        <td class="text-end">{{item.salePrice * item.quantity | number:'1.0-0'}}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="6" class="fw-bold text-center">Total</td>
-                        <!-- <td class="text-end fw-bold">{{costTotal | number:'1.0-0'}}</td> -->
-                        <td class="text-end fw-bold">{{saleTotal | number:'1.0-0'}}</td>
-                    </tr>
-                </tbody>
+       <div id="printContainer">
+         <table class="table-logix">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Product Title</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+     
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of DataList index as index">
+                    <td>{{index + 1}}</td>
+                    <td>{{item.productTitle}}</td>
+                    <td class="text-center">{{item.quantity | number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.avgCostPriceTotal | number:'1.0-0'}}</td>
+                    
+                </tr>
+                <tr>
+                    <td colspan="3" class="fw-bold text-center">Total</td>
+                    <td class="text-end fw-bold" >{{netTotal | number:'1.0-0'}}</td>
+                </tr>
+            </tbody>
 
-            </table>
+        </table>
 
-        </div>
+       </div>
 
 
     </div>

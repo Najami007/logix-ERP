@@ -1,0 +1,109 @@
+<div id="printSaleInv">
+
+
+
+
+    <div class="p-1">
+
+
+        <!--------------------- Company Detail Section Start------------------ -->
+        <div class="text-center d-flex flex-column">
+            <span> <img *ngIf="companyLogo && showCompanyLogo" [src]="companyLogo" [height]="logoHeight"
+                    [width]="logoWidth"></span>
+            <span class="text-uppercase fw-bold" style="font-size:18px;" *ngIf="showCompanyName">{{companyName}}</span>
+            <span class="fs-11 text-uppercase fw-bold" *ngIf="companyAddress != '-'">{{companyAddress}}</span>
+            <span *ngIf="CompanyMobile != '-'" class="fs-11 fw-bold">{{CompanyMobile}}</span>
+
+            <span *ngIf="gstFeature && CompanyNTN != '-'" class="fs-11 "><b>NTN: </b>{{CompanyNTN}} </span>
+            <span *ngIf="gstFeature && CompanySTRN != '-'" class="fs-11"><b>STRN: </b> {{CompanySTRN}}</span>
+
+
+
+        </div>
+
+
+        <br>
+
+        <div class="mt-2">
+            <table class="table-logix2 fs-13">
+                <thead>
+                    <tr>
+                        <th>Inv #</th>
+                        <th>Date</th>
+                        <th>Counter</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr>
+                        <td>{{tmpInvBillNo}}</td>
+                        <td>
+                            <span>{{tmpInvDate | date:'dd-MM-yyyy hh:mm:a'}}</span>
+                        </td>
+                        <td>{{myCounterName}}</td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+        <br>
+
+        <div>
+            <div>
+                <table class="table-logix2">
+                    <thead>
+                        <tr>
+                            <th>S#</th>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of tableDataList index as index">
+                            <td>{{index + 1}}</td>
+                            <td>{{item.productTitle}}</td>
+                            <td class="text-center">{{item.quantity |number:'1.0-0'}}</td>
+                            <td class="text-end">{{item.salePrice |number:'1.0-0'}}</td>
+                            <td class="text-end">{{item.salePrice * item.quantity |number:'1.0-0'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <br>
+
+            <div class="d-flex text-end border border-dark" style="text-align: end;">
+
+                <div class="row w-75">
+                    <label class="fw-bold text-end">Total</label>
+                    <label class="fw-bold text-end">Discount</label>
+                    <label class="fw-bold text-end">Net Total</label>
+                </div>
+                <div class="row w-25">
+                    <label class="fw-bold text-end">{{myBillTotal |number:'1.0-2'}}</label>
+                    <label class="fw-bold text-end">{{myBillDiscount|number:'1.0-2'}}</label>
+                    <label class="fw-bold text-end">{{myNetTotal|number:'1.0-2'}}</label>
+                </div>
+
+            </div>
+
+
+            <div class="d-flex justify-content-around mt-5">
+                <label class="border-0 border-top border-dark fw-bold">Created By</label>
+                <label class="border-0 border-top border-dark fw-bold">Checked By</label>
+                <label class="border-0 border-top border-dark fw-bold">Approved By</label>
+            </div>
+
+
+
+
+        </div>
+
+
+
+    </div>

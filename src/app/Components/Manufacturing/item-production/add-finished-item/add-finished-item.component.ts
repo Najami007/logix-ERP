@@ -72,7 +72,7 @@ export class AddFinishedItemComponent implements OnInit {
                   productID: e.productID,
                   productTitle: e.productTitle,
                   quantity: e.quantity,
-                  costPrice: e.costPrice,
+                  costPrice: e.avgCostPrice,
                 })
               }
               if (e.groupID == 2) {

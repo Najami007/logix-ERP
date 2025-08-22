@@ -7,6 +7,9 @@ import { AddpartyComponent } from "src/app/Components/Company/party/addparty/add
 import { GlobalDataModule } from "src/app/Shared/global-data/global-data.module";
 import { NotificationService } from "src/app/Shared/service/notification.service";
 import { environment } from "src/environments/environment.development";
+import { DeliveryChallanComponent } from "../ManufacturingComFiles/delivery-challan/delivery-challan.component";
+import { OrderPrintComponent } from "../ManufacturingComFiles/order-print/order-print.component";
+import { MnuInvoicePrintComponent } from "../ManufacturingComFiles/mnu-invoice-print/mnu-invoice-print.component";
 
 
 
@@ -16,6 +19,10 @@ import { environment } from "src/environments/environment.development";
   styleUrls: ['./marble-sale.component.scss']
 })
 export class MarbleSaleComponent implements OnInit {
+
+  @ViewChild(DeliveryChallanComponent) deliveryChallan: any;
+  @ViewChild(OrderPrintComponent) orderPrint: any;
+  @ViewChild(MnuInvoicePrintComponent) saleInvoicePrint: any;
 
   apiReq = environment.mainApi + this.global.manufacturingLink;
 
@@ -60,6 +67,7 @@ export class MarbleSaleComponent implements OnInit {
   }
   ngOnInit(): void {
     this.getSavedOrder();
+    this.getSavedSale();
     this.global.setHeaderTitle('Sale');
     this.getItemList();
     this.getShippingCompany();
@@ -72,6 +80,8 @@ export class MarbleSaleComponent implements OnInit {
   curDate = new Date();
   startDate: Date = new Date(this.curDate.getFullYear(), this.curDate.getMonth(), 1);
   endDate: Date = new Date(this.curDate.getFullYear(), this.curDate.getMonth() + 1, 0);
+  saleStartDate: Date = new Date(this.curDate.getFullYear(), this.curDate.getMonth(), 1);
+  saleEndDate: Date = new Date(this.curDate.getFullYear(), this.curDate.getMonth() + 1, 0);
 
   btnType = 'Save';
   invBillNo = '';
@@ -123,8 +133,8 @@ export class MarbleSaleComponent implements OnInit {
       {
         next: (Response: any) => {
 
-          if(Response.length > 0){
-            this.itemList = Response.filter((e:any)=> e.activeStatus == true && e.approvedStatus == true);
+          if (Response.length > 0) {
+            this.itemList = Response.filter((e: any) => e.activeStatus == true && e.approvedStatus == true);
 
           }
 
@@ -335,7 +345,7 @@ export class MarbleSaleComponent implements OnInit {
 
 
 
-   searchByCode(e: any) {
+  searchByCode(e: any) {
 
     var barcode = this.PBarcode;
     var qty: number = 0;
@@ -344,11 +354,11 @@ export class MarbleSaleComponent implements OnInit {
     if (this.PBarcode !== '') {
       if (e.keyCode == 13) {
 
-        var row = this.itemList.filter((e:any)=> e.mnuItemCode == barcode);
+        var row = this.itemList.filter((e: any) => e.mnuItemCode == barcode);
 
-        if(row.length > 0){
+        if (row.length > 0) {
           this.addMenuItem(row[0])
-        }else{
+        } else {
           this.msg.WarnNotify('Item Not Found');
         }
 
@@ -426,7 +436,7 @@ export class MarbleSaleComponent implements OnInit {
       return;
     }
 
-     if (this.deliveryAddress == '' || this.deliveryAddress == undefined) {
+    if (this.deliveryAddress == '' || this.deliveryAddress == undefined) {
       this.msg.WarnNotify('Select Enter Delivery Address');
       return;
     }
@@ -463,7 +473,6 @@ export class MarbleSaleComponent implements OnInit {
 
       this.global.openPinCode().subscribe(pin => {
         if (pin != '') {
-          postData.InvType = 'Update Order';
           postData['PinCode'] = pin;
           this.insert('update', postData);
         }
@@ -545,7 +554,7 @@ export class MarbleSaleComponent implements OnInit {
     this.invBillNo = item.invBillNo;
     this.invoiceDate = new Date(item.invDate);
     this.partyID = item.partyID;
-       this.projectID = item.projectID;
+    this.projectID = item.projectID;
     this.remarks = item.remarks;
     this.netTotal = item.netTotal;
     this.scAutoID = item.scAutoID;
@@ -604,6 +613,24 @@ export class MarbleSaleComponent implements OnInit {
     )
   }
 
+  saleSavedDataList: any = [];
+  getSavedSale() {
+
+    var fromDate = this.global.dateFormater(this.saleStartDate, '');
+    var toDate = this.global.dateFormater(this.saleEndDate, '');
+    this.http.get(this.apiReq + `GetMnuSale?reqUID=0&FromDate=${fromDate}&ToDate=${toDate}&FromTime=00:00&ToTime=23:59:59`).subscribe(
+      {
+        next: (Response: any) => {
+          this.saleSavedDataList = Response;
+          console.log(Response);
+        },
+        error: error => {
+          console.log(error);
+        }
+      }
+    )
+  }
+
 
 
 
@@ -618,7 +645,9 @@ export class MarbleSaleComponent implements OnInit {
   billDiscount = 0;
 
 
-  approveOrder(item:any){
+  approveOrder(item: any) {
+
+    if (item.approvedStatus) return;
 
 
     this.invBillNo = item.invBillNo;
@@ -629,7 +658,7 @@ export class MarbleSaleComponent implements OnInit {
     this.scAutoID = item.scAutoID;
     this.getInvDetail(item.invBillNo);
 
-    this.global.openBootstrapModal('#saleModal',true);
+    this.global.openBootstrapModal('#saleModal', true);
 
 
   }
@@ -639,7 +668,7 @@ export class MarbleSaleComponent implements OnInit {
   saveSale() {
 
 
-     if (this.tableDataList.length == 0) {
+    if (this.tableDataList.length == 0) {
       this.msg.WarnNotify('No Item Entered');
       return;
     }
@@ -652,7 +681,7 @@ export class MarbleSaleComponent implements OnInit {
 
     var postData = {
       HoldInvNo: this.invBillNo,
-      InvDate: this.global.dateFormater(this.invoiceDate,'-'),
+      InvDate: this.global.dateFormater(this.invoiceDate, '-'),
       PartyID: this.partyID,
       InvType: "S",
       ProjectID: this.projectID,
@@ -674,10 +703,10 @@ export class MarbleSaleComponent implements OnInit {
       UserID: this.global.getUserID()
     }
 
-    this.global.closeBootstrapModal('#saleModal',true);
+    this.global.closeBootstrapModal('#saleModal', true);
 
-    this.global.openPinCode().subscribe(pin=>{
-      if(pin != ''){
+    this.global.openPinCode().subscribe(pin => {
+      if (pin != '') {
         postData['PinCode'] = pin;
         this.insertSale(postData);
       }
@@ -688,19 +717,19 @@ export class MarbleSaleComponent implements OnInit {
   }
 
 
-  insertSale(postData:any){
-      console.log(postData);
-     this.http.post(this.apiReq + 'InsertMnuSale', postData).subscribe(
+  insertSale(postData: any) {
+    console.log(postData);
+    this.http.post(this.apiReq + 'InsertMnuSale', postData).subscribe(
       {
         next: (Response: any) => {
           if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
             this.msg.SuccessNotify(Response.msg);
             this.reset();
             this.getSavedOrder();
-             this.global.closeBootstrapModal('#saleModal',true);
+            this.global.closeBootstrapModal('#saleModal', true);
           } else {
             this.msg.WarnNotify(Response.msg);
-            this.global.openBootstrapModal('#saleModal',true);
+            this.global.openBootstrapModal('#saleModal', true);
           }
           this.app.stopLoaderDark();
           this.isProcessing = false;
@@ -717,7 +746,33 @@ export class MarbleSaleComponent implements OnInit {
   }
 
 
- 
+
+  print(id: any) {
+    this.global.printData(id);
+  }
+
+
+
+  printChallan(item: any) {
+
+    this.deliveryChallan.printChallan(item.invBillNo);
+
+  }
+
+
+  printOrder(item: any) {
+
+    this.orderPrint.printChallan(item.invBillNo);
+
+  }
+
+    printSaleInvoice(item: any) {
+
+    this.saleInvoicePrint.printChallan(item.invBillNo);
+
+  }
+
+
 
 }
 

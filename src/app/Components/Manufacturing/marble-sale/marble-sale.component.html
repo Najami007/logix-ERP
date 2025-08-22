@@ -57,8 +57,8 @@
 
                         <div class="col-md-9  d-flex flex-column">
 
-                            <input type="text" (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event)" [(ngModel)]="PBarcode"
-                                id="mbsearchProduct" class="p-1 ps-2 mb-2 searchProduct w-100"
+                            <input type="text" (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event)"
+                                [(ngModel)]="PBarcode" id="mbsearchProduct" class="p-1 ps-2 mb-2 searchProduct w-100"
                                 placeholder="Search Barcode / Product (Alt + b)" autocomplete="off" accesskey="b">
 
                             <div class="d-flex flex-column SearchConatiner cursorPointer"
@@ -219,14 +219,14 @@
         </div>
     </mat-tab>
 
-    <mat-tab label="Saved Record">
+    <mat-tab label="Saved Order">
 
 
         <div class="container">
 
 
             <div class="row mt-2">
-                <mat-form-field class="col-md-8 matSmall" appearance="outline">
+                <mat-form-field class="col-md-6 matSmall" appearance="outline">
                     <mat-label>Search.....</mat-label>
                     <input [(ngModel)]="txtSearch" matInput type="text" #input>
                 </mat-form-field>
@@ -242,10 +242,13 @@
                     <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                     <mat-datepicker #picker3></mat-datepicker>
                 </mat-form-field>
+                <div class="col-md-2 pe-1"><button class="btn-rpt-primary w-100" (click)="print('#orderList')">Print</button></div>
+
             </div>
 
 
-            <table class="table">
+           <div id="orderList">
+             <table class="table">
                 <thead>
                     <tr>
                         <th>S#</th>
@@ -255,8 +258,9 @@
                         <th>Deliver To</th>
                         <th>Delivery Date</th>
                         <th>Amount</th>
-                        <th>Approve</th>
-                        <th>Action</th>
+                        <th class="hide-in-print">Approve</th>
+                        <th class="hide-in-print">Challan</th>
+                        <th class="hide-in-print">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -266,19 +270,101 @@
                         <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
                         <td>{{item.partyName}}</td>
                         <td>{{item.deliverTo}}</td>
-                          <td>{{item.deliveryDate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.deliveryDate | date:'dd-MM-yyyy'}}</td>
                         <td>{{item.netTotal | number:'1.0-0'}}</td>
-                        <td>
-                            <mat-icon class="cursorPointer" (click)="approveOrder(item)">{{item.approvedStatus ? 'check_box': 'check_box_outline_blank'}} </mat-icon>
+                        <td class="hide-in-print">
+                            <mat-icon class="cursorPointer" (click)="approveOrder(item)">{{item.approvedStatus ?
+                                'check_box': 'check_box_outline_blank'}} </mat-icon>
                         </td>
-                        <td>
-                            <mat-icon class="text-success cursorPointer" *ngIf="!item.approvedStatus" (click)="edit(item)">edit</mat-icon>
+                         <td class="hide-in-print">
+                            <mat-icon class="cursorPointer" (click)="printChallan(item)">print</mat-icon>
+                        </td>
+                        <td class="hide-in-print">
+                              <mat-icon class="cursorPointer text-primary" (click)="printOrder(item)">print</mat-icon>
+                            <mat-icon class="text-success cursorPointer" *ngIf="!item.approvedStatus"
+                                (click)="edit(item)">edit</mat-icon>
 
                         </td>
                     </tr>
                 </tbody>
             </table>
 
+
+            <app-delivery-challan class="d-none"></app-delivery-challan>
+            <app-order-print class="d-none"></app-order-print>
+
+           </div>
+
+
+        </div>
+
+    </mat-tab>
+
+    <mat-tab label="Saved Invoices">
+
+
+        <div class="container">
+
+
+            <div class="row mt-2">
+                <mat-form-field class="col-md-6 matSmall" appearance="outline">
+                    <mat-label>Search.....</mat-label>
+                    <input matInput type="text" #searchSaleInv>
+                </mat-form-field>
+                <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                    <mat-label>From Date</mat-label>
+                    <input (dateChange)="getSavedSale()" matInput [(ngModel)]="saleStartDate" [matDatepicker]="picker4">
+                    <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                    <mat-datepicker #picker4></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                    <mat-label>To Date</mat-label>
+                    <input (dateChange)="getSavedSale()" matInput [(ngModel)]="saleEndDate" [matDatepicker]="picker5">
+                    <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                    <mat-datepicker #picker5></mat-datepicker>
+                </mat-form-field>
+                <div class="col-md-2 pe-1"><button class="btn-rpt-primary w-100" (click)="print('#saleList')">Print</button></div>
+            </div>
+
+
+            <div id="saleList">
+                <table class="table">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Inv No</th>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Deliver To</th>
+                        <th>Delivery Date</th>
+                        <th>Bill Total</th>
+                        <th>Bill Discount</th>
+                        <th>Net Total</th>
+                        <th class="hide-in-print">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of saleSavedDataList | filter:searchSaleInv.value index as index ">
+                        <td>{{index + 1}}</td>
+                        <td>{{item.invBillNo}}</td>
+                        <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.partyName}}</td>
+                        <td>{{item.deliverTo}}</td>
+                        <td>{{item.deliveryDate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.billTotal | number:'1.0-0'}}</td>
+                        <td>{{item.billDiscount | number:'1.0-0'}}</td>
+                        <td>{{item.netTotal | number:'1.0-0'}}</td>
+                        <td class="hide-in-print">
+                            <mat-icon class="cursorPointer text-primary" (click)="printSaleInvoice(item)">print</mat-icon>
+                        </td>
+
+
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+
+            <app-mnu-invoice-print class="d-none"></app-mnu-invoice-print>
 
 
         </div>
@@ -297,7 +383,7 @@
     aria-labelledby="saleModalLabel">
     <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered ">
         <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-      
+
             <div class="modal-body">
 
                 <div class="row">
@@ -311,7 +397,7 @@
 
                     <mat-form-field appearance="outline" class="col-md-6 matSmall">
                         <mat-label>Bill Total</mat-label>
-                        <input type="text" readonly="true"  matInput [(ngModel)]="billTotal" />
+                        <input type="text" readonly="true" matInput [(ngModel)]="billTotal" />
                     </mat-form-field>
 
                     <mat-form-field appearance="outline" class="col-md-6 matSmall">
@@ -319,10 +405,10 @@
                         <input type="text" matInput [(ngModel)]="billDiscount" />
                     </mat-form-field>
 
-                         <mat-form-field appearance="outline" class="col-md-12 matSmall">
-                    <mat-label>Remarks</mat-label>
-                    <textarea type="text" matInput [(ngModel)]="remarks" ></textarea>
-                </mat-form-field>
+                    <mat-form-field appearance="outline" class="col-md-12 matSmall">
+                        <mat-label>Remarks</mat-label>
+                        <textarea type="text" matInput [(ngModel)]="remarks"></textarea>
+                    </mat-form-field>
                 </div>
 
 

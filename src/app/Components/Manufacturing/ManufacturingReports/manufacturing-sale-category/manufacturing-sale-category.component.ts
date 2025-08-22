@@ -8,11 +8,11 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { environment } from 'src/environments/environment.development';
 
 @Component({
-  selector: 'app-manufacturing-sale-itemwise',
-  templateUrl: './manufacturing-sale-itemwise.component.html',
-  styleUrls: ['./manufacturing-sale-itemwise.component.scss']
+  selector: 'app-manufacturing-sale-category',
+  templateUrl: './manufacturing-sale-category.component.html',
+  styleUrls: ['./manufacturing-sale-category.component.scss']
 })
-export class ManufacturingSaleItemwiseComponent {
+export class ManufacturingSaleCategoryComponent {
 
 
 
@@ -38,7 +38,7 @@ export class ManufacturingSaleItemwiseComponent {
   }
   ngOnInit(): void {
     this.global.setHeaderTitle('Sale Report');
-    this.getItemList();
+    this.getCategoryList();
     this.getUsers();
   }
 
@@ -63,27 +63,27 @@ export class ManufacturingSaleItemwiseComponent {
   }
 
   onUserSelected() {
-    if(this.userID == 0) return;
+    if (this.userID == 0) return;
     var curUser = this.userList.find((e: any) => e.userID == this.userID);
     this.userName = curUser.userName;
   }
 
-  mnuItemID:any = 0;
-  itemList: any = [];
-  getItemList() {
 
-    this.http.get(this.apiReq + 'GetAllMnuItems').subscribe(
+
+
+  mnuCategoryID: any = 0
+  categoryList: any = [];
+  getCategoryList() {
+    this.http.get(environment.mainApi + this.global.manufacturingLink + 'GetMnuItemsCategories').subscribe(
       {
         next: (Response: any) => {
-          this.itemList = Response;
-          // console.log(Response);
+          this.categoryList = Response;
         },
-        error: error => {
+        error: (error: any) => {
           console.log(error);
         }
       }
     )
-
   }
 
 
@@ -96,32 +96,33 @@ export class ManufacturingSaleItemwiseComponent {
 
   getReport() {
 
-    if(this.mnuItemID == 0){
-      this.msg.WarnNotify('Select Item');
+    if (this.mnuCategoryID == 0) {
+      this.msg.WarnNotify('Select Category');
       return;
     }
-    var mnuItemID = this.mnuItemID;
+    var mnuItemID = this.mnuCategoryID;
     var userID = this.userID;
     var fromDate = this.global.dateFormater(this.fromDate, '');
     var fromTime = this.fromTime;
     var toDate = this.global.dateFormater(this.toDate, '');
     var toTime = this.toTime;
 
-     this.app.startLoaderDark();
-    this.http.get(this.apiReq + `SaleDetailRptMnuItemWise?reqMnuItemID=${mnuItemID}&reqUID=${userID}&FromDate=${fromDate}
-      &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`).subscribe(
+    this.app.startLoaderDark();
+    this.http.get(this.apiReq + `SaleDetailRptCatagoryWise?reqCatID=${mnuItemID}&reqUID=${userID}&FromDate=${fromDate}
+        &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`).subscribe(
       {
         next: (Response: any) => {
-             this.DataList = [];
-            this.costTotal = 0;
-            this.saleTotal = 0;
+          this.DataList = [];
+          this.costTotal = 0;
+          this.saleTotal = 0;
 
-              if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-              this.app.stopLoaderDark();
-              return;
+          if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
 
-            }
+          }
+
 
           console.log(Response);
           if (Response.length > 0) {
@@ -132,7 +133,7 @@ export class ManufacturingSaleItemwiseComponent {
             });
           }
 
-         this.app.stopLoaderDark();
+          this.app.stopLoaderDark();
 
         },
         error: error => {
@@ -157,5 +158,6 @@ export class ManufacturingSaleItemwiseComponent {
 
     this.global.ExportHTMLTabletoExcel('#printContainer', `Sale Report ${startDate} - ${endDate}`);
   }
+
 
 }
