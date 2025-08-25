@@ -60,7 +60,6 @@ export class ShippingCompanyComponent implements OnInit {
       {
         next:(Response:any)=>{
           this.dataList = Response;
-          console.log(Response);
         },
         error:(error:any)=>{
           console.log(error);

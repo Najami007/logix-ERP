@@ -61,7 +61,7 @@ export class RestKotPrintComponent {
 
 
 
-
+  myCookingAreaTitle = '';
   myPrintData: any = [];
   myInvoiceNo = '';
   mytableNo = '';
@@ -84,45 +84,41 @@ export class RestKotPrintComponent {
   myOrderNo = 0;
 
 
+  printBill(invNo: any, voidFlag: any, isKOT: boolean = false,kotItems:any) {
+  this.voidFlag = voidFlag;
 
-  printBill(invNo: any, voidFlag: any) {
-    this.voidFlag = voidFlag;
+  this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + invNo).subscribe(
+    (Response: any) => {
 
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + invNo).subscribe(
-      (Response: any) => {
+      // -------- Header Data (always from API) ----------
+      this.myInvoiceNo = Response[0].invBillNo;
+      this.myInvDate = Response[0].invDate;
+      this.myOrderType = Response[0].orderType;
+      this.mySubTotal = Response[0].billTotal;
+      this.myNetTotal = Response[0].netTotal;
+      this.myOtherCharges = Response[0].otherCharges;
+      this.myRemarks = Response[0].remarks;
+      this.myCash = Response[0].cashRec;
+      this.myDiscount = Response[0].billDiscount;
+      this.myChange = Response[0].change;
+      this.myPaymentType = Response[0].paymentType;
+      this.mytableNo = Response[0].tableTitle;
+      this.myCounterName = Response[0].entryUser;
+      this.myInvTime = new Date();
+      this.myOrderNo = Response[0].orderNo;
 
-        this.myInvoiceNo = Response[0].invBillNo;
-        this.myInvDate = Response[0].invDate;
-        this.myOrderType = Response[0].orderType;
-        this.mySubTotal = Response[0].billTotal;
-        this.myNetTotal = Response[0].netTotal;
-        this.myOtherCharges = Response[0].otherCharges;
-        this.myRemarks = Response[0].remarks;
-        this.myCash = Response[0].cashRec;
-        // this.myBank = Response[0].bankCash;
-        this.myDiscount = Response[0].billDiscount;
-        this.myChange = Response[0].change;
-        this.myPaymentType = Response[0].paymentType;
-        this.mytableNo = Response[0].tableTitle;
-        this.myCounterName = Response[0].entryUser;
-        this.myInvTime = new Date();
-        this.myOrderNo = Response[0].orderNo;
+      // If KOT → myPrintData already set in printKOT
 
-        if (this.myPaymentType == 'Bank') {
-          this.myBank = this.myNetTotal;
-        }
-        if (this.myPaymentType == 'Split') {
-          this.myBank = this.myNetTotal - this.myCash;
-        }
 
-        setTimeout(() => {
-          this.global.printData('#printKOT');
-        }, 200);
 
-      }
-    )
-
-  }
+       this.myPrintData = kotItems; 
+       this.myCookingAreaTitle = kotItems[0].cookingAriaID; // kotItems[0].cookingAriaTitle;
+      setTimeout(() => {
+        this.global.printData('#printKOT');
+      }, 1);
+    }
+  );
+}
 
 
 

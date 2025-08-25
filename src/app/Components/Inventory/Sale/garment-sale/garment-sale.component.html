@@ -186,7 +186,7 @@
                         <tbody>
                             <tr *ngFor="let item of tableDataList index as index"
                                 [ngClass]="index == rowFocused ? 'bg-dg' : ''">
-                                <td class="text-center cursorPointer">{{index+1}}</td>
+                                <td class="text-center cursorPointer" [matTooltip]="showSaleCPFeature? item.costPrice + ' , ' + item.avgCostPrice : '' ">{{index+1}}</td>
                                 <td>{{item.productTitle}} <b>({{item.barcode}})</b> <small>
                                         {{item.flavourTitle}}</small></td>
                                 <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
@@ -221,7 +221,7 @@
                                         [(ngModel)]="item.productDetail"
                                         style="height: 45px;border: 0px solid black !important;"
                                         class="w-100"></textarea></td>
-                                <td class="text-center" *ngIf="showSaleAQFeature">{{item.aq |number:'1.0-3'}}</td>
+                                <td class="text-center text-white" [ngClass]="item.aq > 0 ? 'bgSuccessLight' : 'bg-danger'" *ngIf="showSaleAQFeature">{{item.aq |number:'1.0-3'}}</td>
 
                                 <td class="cursorPointer text-danger text-center"><mat-icon
                                         (click)="delRow(item)">close</mat-icon></td>

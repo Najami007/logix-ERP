@@ -135,12 +135,12 @@
 }
 
 .table-logix>thead {
-  border: 1px solid #fff;
+  border: 1px solid #000 !important;
 }
 
 /*********** Table Stripped *******/
 .table-logix>thead>tr {
-  border: 1px solid #fff;
+  border: 1px solid #000 !important;
 }
 
 .table-logix>thead>tr>th {
@@ -148,12 +148,16 @@
   /*color:#fff;*/
   font-weight: bold;
   text-align: center;
-  border: 1px solid #fff !important;
+  border-right: 1px solid #fff !important;
   padding: 10px !important;
   background-color: rgb(6, 6, 54);
   color: #fff !important;
 
 
+}
+
+.table-logix>thead>tr>th:last-child {
+    border-right: 1px solid #000 !important;
 }
 
 .table-logix>thead>th {

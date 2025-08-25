@@ -97,7 +97,6 @@ export class AddFinishedItemComponent implements OnInit {
             })
 
             this.getTotal();
-            console.log(Response);
           }
 
         }
@@ -671,9 +670,6 @@ export class AddFinishedItemComponent implements OnInit {
     var itemDetail = [...this.tableDataList, ...this.tmpLabourChargesList, ...this.tmpOverHeadList];
 
 
-    console.log(itemDetail);
-
-
     var postData = {
       MnuItemID: this.MnuItemID,
       MnuItemTitle: this.MnuItemTitle,
@@ -725,7 +721,6 @@ export class AddFinishedItemComponent implements OnInit {
     if (this.isProcessing) return;
     this.isProcessing = true;
 
-    console.log(postData);
     this.http.post(this.apiReq + url, postData).subscribe(
       {
         next: (Response: any) => {

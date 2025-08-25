@@ -322,7 +322,7 @@ export class GlobalDataModule implements OnInit {
   disableDOCPwdFeature = this.getFeature('disableDOCPwd');
   showSaleAQFeature = this.getFeature('showSaleAQ');
   showSaleCPFeature = this.getFeature('showSaleCP');
-
+  PrintKotAreawiseFeature = this.getFeature('PrintKotAreawise');
 
 
   refreshFeatures() {
@@ -372,7 +372,7 @@ export class GlobalDataModule implements OnInit {
     this.disableDOCPwdFeature = this.getFeature('disableDOCPwd');
     this.showSaleAQFeature = this.getFeature('showSaleAQ');
     this.showSaleCPFeature = this.getFeature('showSaleCP');
-
+    this.PrintKotAreawiseFeature = this.getFeature('PrintKotAreawise');
   }
 
 
@@ -1420,6 +1420,20 @@ export class GlobalDataModule implements OnInit {
   public getBankList(): Observable<any> {
     return this.http.get(environment.mainApi + 'acc/GetVoucherCBCOA?type=BRV').pipe(retry(3));
   }
+
+
+
+  getUniqueRows<T>(arr: T[], keySelector: (item: T) => any): T[] {
+  const seen = new Set();
+  return arr.filter(item => {
+    const key = keySelector(item);
+    if (seen.has(key)) {
+      return false;
+    }
+    seen.add(key);
+    return true;
+  });
+}
 
 
   public filterUniqueValues<T>(array: T[]): T[] {

@@ -15,70 +15,70 @@ import { environment } from 'src/environments/environment.development';
 export class ManufacturingSalePartywiseComponent {
 
 
-  
-  
-    apiReq = environment.mainApi + this.global.manufacturingLink;
-    companyProfile: any = [];
-    crudList: any = { c: true, r: true, u: true, d: true };
-    constructor(
-      private http: HttpClient,
-      private msg: NotificationService,
-      private app: AppComponent,
-      public global: GlobalDataModule,
-      private route: Router,
-      private datePipe: DatePipe
-    ) {
-  
-      this.global.getCompany().subscribe((data) => {
-        this.companyProfile = data;
-      });
-  
-      this.global.getMenuList().subscribe((data) => {
-        this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
-      })
-    }
-    ngOnInit(): void {
-      this.global.setHeaderTitle('Sale Report Customer');
-      this.getUsers();
-      this.getPartyList();
-    }
-  
-  
-    rptType: any = 'ORDER';
-  
-    userList: any = [];
-    userID = 0;
-    userName = '';
-  
-    fromDate: Date = new Date();
-    fromTime: any = '00:00';
-    toDate: Date = new Date();
-    toTime: any = '23:59';
-  
-    SaleDetailList: any = [];
-  
-    reportType: any;
-  
-    getUsers() {
-      this.global.getUserList().subscribe((data: any) => { this.userList = data; });
-    }
-  
-    onUserSelected() {
-      if(this.userID == 0) return;
-      var curUser = this.userList.find((e: any) => e.userID == this.userID);
-      this.userName = curUser.userName;
-    }
 
 
-    partyID = 0;
-    partyList:any = [];
-    
+  apiReq = environment.mainApi + this.global.manufacturingLink;
+  companyProfile: any = [];
+  crudList: any = { c: true, r: true, u: true, d: true };
+  constructor(
+    private http: HttpClient,
+    private msg: NotificationService,
+    private app: AppComponent,
+    public global: GlobalDataModule,
+    private route: Router,
+    private datePipe: DatePipe
+  ) {
+
+    this.global.getCompany().subscribe((data) => {
+      this.companyProfile = data;
+    });
+
+    this.global.getMenuList().subscribe((data) => {
+      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
+    })
+  }
+  ngOnInit(): void {
+    this.global.setHeaderTitle('Sale Report Customer');
+    this.getUsers();
+    this.getPartyList();
+  }
+
+
+  rptType: any = 'ORDER';
+
+  userList: any = [];
+  userID = 0;
+  userName = '';
+
+  fromDate: Date = new Date();
+  fromTime: any = '00:00';
+  toDate: Date = new Date();
+  toTime: any = '23:59';
+
+  SaleDetailList: any = [];
+
+  reportType: any;
+
+  getUsers() {
+    this.global.getUserList().subscribe((data: any) => { this.userList = data; });
+  }
+
+  onUserSelected() {
+    if (this.userID == 0) return;
+    var curUser = this.userList.find((e: any) => e.userID == this.userID);
+    this.userName = curUser.userName;
+  }
+
+
+  partyID = 0;
+  partyList: any = [];
+
   getPartyList() {
     this.global.getCustomerList().subscribe((data: any) => { this.partyList = data; });
   }
 
 
-  
+
   DataList: any = [];
 
   costTotal = 0;
@@ -86,7 +86,7 @@ export class ManufacturingSalePartywiseComponent {
 
   getReport() {
 
-    if(this.partyID == 0){
+    if (this.partyID == 0) {
       this.msg.WarnNotify('Select Customer');
       return;
     }
@@ -98,23 +98,20 @@ export class ManufacturingSalePartywiseComponent {
     var toTime = this.toTime;
 
 
-     this.app.startLoaderDark();
+    this.app.startLoaderDark();
     this.http.get(this.apiReq + `SaleDetailRptPartyWise?reqPartyID=${partyID}&reqUID=${userID}&FromDate=${fromDate}
       &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`).subscribe(
       {
         next: (Response: any) => {
-             this.DataList = [];
-            this.costTotal = 0;
-            this.saleTotal = 0;
+          this.reset();
 
-              if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-              this.app.stopLoaderDark();
-              return;
+          if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
 
-            }
+          }
 
-          console.log(Response);
           if (Response.length > 0) {
             this.DataList = Response.filter((e: any) => e.invType == this.rptType);
             this.DataList.forEach((e: any) => {
@@ -123,7 +120,7 @@ export class ManufacturingSalePartywiseComponent {
             });
           }
 
-         this.app.stopLoaderDark();
+          this.app.stopLoaderDark();
 
         },
         error: error => {
@@ -149,6 +146,11 @@ export class ManufacturingSalePartywiseComponent {
     this.global.ExportHTMLTabletoExcel('#printContainer', `Sale Report ${startDate} - ${endDate}`);
   }
 
-  
+
+  reset() {
+    this.DataList = [];
+    this.costTotal = 0;
+    this.saleTotal = 0;
+  }
 
 }

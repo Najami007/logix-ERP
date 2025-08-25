@@ -16,6 +16,7 @@ import * as bootstrap from 'bootstrap';
 
 import * as $ from 'jquery';
 import { SaleSavedBillComponent } from '../SaleCommonComponent/sale-saved-bill/sale-saved-bill.component';
+import { time } from 'console';
 
 
 
@@ -48,6 +49,8 @@ export class Sale1Component implements OnInit {
   postBillFeature = this.global.postSale;
   RestBillUserwise = this.global.RestBillUserwise;
   tabletPrintFeature = this.global.TabletPrintFeature;
+  PrintKotAreawiseFeature = this.global.PrintKotAreawiseFeature;
+  printKotFeature = this.global.printKot
 
 
   roleType = this.global.getRoleTypeID();
@@ -622,6 +625,8 @@ export class Sale1Component implements OnInit {
         this.tableData[index].quantity += 1;
         this.tableData[index].rowIndex = this.tableData[0].rowIndex + 1;
       } else {
+
+        console.log(item);
         this.tableData.push({
           rowIndex: this.tableData.length == 0 ? this.tableData.length + 1
             : this.tableData[0].rowIndex + 1,
@@ -633,6 +638,7 @@ export class Sale1Component implements OnInit {
           avgCostPrice: item.avgCostPrice,
           salePrice: item.recipeSalePrice,
           recipeID: item.recipeID,
+          cookingAriaTitle: item.cookingAriaTitle,
           cookingAriaID: item.cookingAriaID,
           cookingTime: item.cookingTime,
           requestType: 'Order',
@@ -650,7 +656,7 @@ export class Sale1Component implements OnInit {
     this.tempProdRow = [];
     this.tempQty = 1;
 
-    if(this.tabletPrintFeature)return;
+    if (this.tabletPrintFeature) return;
     $('#recSearch').trigger('select');
     $('#recSearch').trigger('focus');
     // $('#recSearch').val('');
@@ -842,7 +848,7 @@ export class Sale1Component implements OnInit {
     }
 
 
-  
+
 
     var holdPostData = {
       InvBillNo: this.invBillNo,
@@ -903,7 +909,7 @@ export class Sale1Component implements OnInit {
             this.msg.WarnNotify(Response.msg);
           }
           this.app.stopLoaderDark();
-          if(!this.tabletPrintFeature) this.global.focusTo('#recSearch');
+          if (!this.tabletPrintFeature) this.global.focusTo('#recSearch');
         },
         (Error: any) => {
           console.log(Error);
@@ -934,7 +940,7 @@ export class Sale1Component implements OnInit {
             this.msg.WarnNotify(Response.msg);
           }
           this.app.stopLoaderDark();
-          if(!this.tabletPrintFeature) this.global.focusTo('#recSearch');
+          if (!this.tabletPrintFeature) this.global.focusTo('#recSearch');
         },
         (Error: any) => {
           console.log(Error);
@@ -973,7 +979,7 @@ export class Sale1Component implements OnInit {
                 } else {
                   this.msg.WarnNotify(Response.msg);
                 }
-               if(!this.tabletPrintFeature) this.global.focusTo('#recSearch');
+                if (!this.tabletPrintFeature) this.global.focusTo('#recSearch');
               },
               (Error: any) => {
                 console.log(Error);
@@ -996,18 +1002,52 @@ export class Sale1Component implements OnInit {
 
 
   printKOT(invNo: any) {
-    var printData = this.tableData.filter((e: any) => e.entryType == 'New');
-    if (printData.length > 0 && this.global.getKOTApproval() == true) {
 
-      this.KotPrint.myPrintData = printData;
-      this.KotPrint.printBill(invNo, false);
 
-      // setTimeout(() => {
-      //   this.global.printData('#print-Kot');
-      // }, 200);
+
+    if ((this.printKotFeature && !this.PrintKotAreawiseFeature) || this.global.getKOTApproval()) {
+      var printData = this.tableData.filter((e: any) => e.entryType == 'New');
+      if (printData.length > 0) {
+        this.KotPrint.printBill(invNo, false, true, printData);
+      }
+
     }
 
+
+    if (this.PrintKotAreawiseFeature && this.printKotFeature) {
+      const printData = this.tableData;
+      if (printData.length > 0) {
+        const dataRows = this.global.filterUniqueValuesByKey(printData, 'cookingAriaID');
+
+        const printSequentially = async () => {
+          for (const e of dataRows) {
+            const kotItems = printData.filter((p: any) => e.cookingAriaID == p.cookingAriaID);
+            // 👇 wait for each print to finish
+            await this.printKotAsync(invNo, kotItems);
+          }
+        };
+
+        printSequentially();
+      }
+    }
+
+
   }
+
+
+  private printKotAsync(invNo: any, kotItems: any[]): Promise<void> {
+  return new Promise((resolve) => {
+    // if KotPrint.printBill has a callback/event, hook it here
+    this.KotPrint.printBill(invNo, false, true, kotItems);
+
+    // 👇 if printBill is instant and doesn't return promise,
+    // add a small delay so printer catches up
+    setTimeout(() => resolve(), 800); // adjust delay as needed
+  });
+}
+
+
+  
 
   //////////////////////////////////////////////////////////////////
   isProcessing = false;
@@ -1015,7 +1055,7 @@ export class Sale1Component implements OnInit {
   InsertSale(SendToFbr: any) {
 
 
-      if(this.RestSimpleSaleFeature && Number(this.cash) == 0){
+    if (this.RestSimpleSaleFeature && Number(this.cash) == 0) {
       this.cash = Number(this.netTotal) + Number(this.GstAmount);
       this.change = 0;
     }

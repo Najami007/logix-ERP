@@ -84,11 +84,7 @@ export class MaterialConsumptionRptComponent implements OnInit {
       &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`).subscribe(
       {
         next: (Response: any) => {
-          this.billTotal = 0;
-          this.billDiscountTotal = 0;
-          this.netTotal = 0;
-
-          this.DataList = [];
+          this.reset();
 
 
           if (Response.length == 0 || Response == null) {
@@ -98,7 +94,6 @@ export class MaterialConsumptionRptComponent implements OnInit {
 
           }
 
-          console.log(Response);
           if (Response.length > 0) {
             this.DataList = Response;
             this.DataList.forEach((e: any) => {
@@ -133,5 +128,12 @@ export class MaterialConsumptionRptComponent implements OnInit {
     this.global.ExportHTMLTabletoExcel('#printContainer', `Consumption Report ${startDate} - ${endDate}`);
   }
 
+  reset() {
+    this.billTotal = 0;
+    this.billDiscountTotal = 0;
+    this.netTotal = 0;
+
+    this.DataList = [];
+  }
 
 }

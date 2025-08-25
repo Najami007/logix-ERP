@@ -85,11 +85,7 @@ export class ManufacturingSaleRptComponent implements OnInit {
       &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`).subscribe(
       {
         next: (Response: any) => {
-          this.billTotal = 0;
-          this.billDiscountTotal = 0;
-          this.netTotal = 0;
-
-          this.DataList = [];
+          this.reset();
 
 
           if (Response.length == 0 || Response == null) {
@@ -99,7 +95,6 @@ export class ManufacturingSaleRptComponent implements OnInit {
 
           }
 
-          console.log(Response);
           if (Response.length > 0) {
             this.DataList = Response.filter((e: any) => e.invType == this.rptType);
             this.DataList.forEach((e: any) => {
@@ -135,5 +130,15 @@ export class ManufacturingSaleRptComponent implements OnInit {
     this.global.ExportHTMLTabletoExcel('#printContainer', `Sale Report ${startDate} - ${endDate}`);
   }
 
+
+  reset() {
+
+    this.billTotal = 0;
+    this.billDiscountTotal = 0;
+    this.netTotal = 0;
+
+    this.DataList = [];
+
+  }
 
 }

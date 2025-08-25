@@ -112,9 +112,7 @@ export class ManufacturingSaleCategoryComponent {
         &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`).subscribe(
       {
         next: (Response: any) => {
-          this.DataList = [];
-          this.costTotal = 0;
-          this.saleTotal = 0;
+          this.reset();
 
           if (Response.length == 0 || Response == null) {
             this.global.popupAlert('Data Not Found!');
@@ -123,8 +121,6 @@ export class ManufacturingSaleCategoryComponent {
 
           }
 
-
-          console.log(Response);
           if (Response.length > 0) {
             this.DataList = Response.filter((e: any) => e.invType == this.rptType);
             this.DataList.forEach((e: any) => {
@@ -157,6 +153,12 @@ export class ManufacturingSaleCategoryComponent {
 
 
     this.global.ExportHTMLTabletoExcel('#printContainer', `Sale Report ${startDate} - ${endDate}`);
+  }
+
+    reset() {
+    this.DataList = [];
+    this.costTotal = 0;
+    this.saleTotal = 0;
   }
 
 

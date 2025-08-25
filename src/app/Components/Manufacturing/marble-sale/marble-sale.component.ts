@@ -138,7 +138,6 @@ export class MarbleSaleComponent implements OnInit {
 
           }
 
-          // console.log(Response);
         },
         error: error => {
           console.log(error);
@@ -499,7 +498,6 @@ export class MarbleSaleComponent implements OnInit {
     if (this.isProcessing) return;
     this.app.startLoaderDark();
     this.isProcessing = true;
-    console.log(postData);
     this.http.post(this.apiReq + url, postData).subscribe(
       {
         next: (Response: any) => {
@@ -569,7 +567,6 @@ export class MarbleSaleComponent implements OnInit {
     this.http.get(this.apiReq + `GetOrderDetail?BillNo=${orderNo}`).subscribe(
       {
         next: (Response: any) => {
-          console.log(Response);
           this.tableDataList = [];
           if (Response.length > 0) {
             Response.forEach((e: any) => {
@@ -604,7 +601,6 @@ export class MarbleSaleComponent implements OnInit {
       {
         next: (Response: any) => {
           this.savedDataList = Response;
-          console.log(Response);
         },
         error: error => {
           console.log(error);
@@ -622,7 +618,6 @@ export class MarbleSaleComponent implements OnInit {
       {
         next: (Response: any) => {
           this.saleSavedDataList = Response;
-          console.log(Response);
         },
         error: error => {
           console.log(error);
@@ -718,7 +713,6 @@ export class MarbleSaleComponent implements OnInit {
 
 
   insertSale(postData: any) {
-    console.log(postData);
     this.http.post(this.apiReq + 'InsertMnuSale', postData).subscribe(
       {
         next: (Response: any) => {

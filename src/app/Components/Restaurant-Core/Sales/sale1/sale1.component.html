@@ -107,7 +107,7 @@
                     <tbody>
                         <tr *ngFor="let item of tableData index as index">
                             <td class="text-center">{{index +1}}</td>
-                            <td>{{item.productTitle}}</td>
+                            <td>{{item.productTitle}} {{item.cookingAriaID}}</td>
                             <td class="text-center">{{item.salePrice |number:'1.0-1'}}</td>
                             <td class="text-center" (click)="editQty(item,index)" *ngIf="!RestSimpleSaleFeature">
                                 {{item.quantity}}</td>
@@ -941,9 +941,12 @@
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
 
+                <div class="modal-body">
+                    <app-sale-holded-bill (billDetailEmitter)="getBillDetail($event)"
+                        [holdBillList]="holdBillList"></app-sale-holded-bill>
+                </div>
 
-                <app-sale-holded-bill (billDetailEmitter)="getBillDetail($event)"
-                    [holdBillList]="holdBillList"></app-sale-holded-bill>
+
 
                 <div class="modal-footer bg-mf-blue">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

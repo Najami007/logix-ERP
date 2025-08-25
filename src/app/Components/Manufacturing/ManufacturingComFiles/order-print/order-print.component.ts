@@ -35,7 +35,6 @@ export class OrderPrintComponent {
   ) {
 
     this.global.getCompany().subscribe((data) => {
-      console.log(data)
       this.CompanyNTN = data[0].ntn;
       this.CompanySTRN = data[0].strn;
       this.companyProfile = data;
@@ -98,7 +97,6 @@ export class OrderPrintComponent {
     this.http.get(this.apiReq + `GetOrderDetail?BillNo=${orderNo}`).subscribe(
       {
         next: (Response: any) => {
-          console.log(Response);
           this.tableDataList = [];
           if (Response.length > 0) {
             Response.forEach((e: any) => {

@@ -58,7 +58,7 @@
 
             <mat-form-field appearance="outline" class="w-100  matSmall">
                 <mat-label>Type</mat-label>
-                <mat-select [(ngModel)]="rptType">
+                <mat-select [(ngModel)]="rptType" (selectionChange)="reset()">
                     <mat-option value="ORDER">Order Report</mat-option>
                     <mat-option value="S">Sale Report</mat-option>
                 </mat-select>

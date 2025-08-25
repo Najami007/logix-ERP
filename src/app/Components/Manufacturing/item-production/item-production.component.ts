@@ -90,7 +90,6 @@ export class ItemProductionComponent {
       {
         next: (Response: any) => {
           this.savedDataList = Response;
-          // console.log(Response);
         },
         error: error => {
           console.log(error);
@@ -102,7 +101,6 @@ export class ItemProductionComponent {
 
 
   editItem(item: any) {
-    console.log(item);
     this.dialogue.open(AddFinishedItemComponent, {
       width: '90%',
       
