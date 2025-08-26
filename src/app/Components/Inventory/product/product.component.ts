@@ -41,6 +41,9 @@ export class ProductComponent implements OnInit {
   discFeature = this.global.discFeature;
   MultiBarcode = this.global.MultiBarcode;
   ManufacturingFeature =  this.global.ManufacturingFeature;
+  FurnitureSaleFeature = this.global.FurnitureSaleFeature;
+
+
 
   applyFilter() {
     // const filterValue = (event.target as HTMLInputElement).value;
@@ -463,11 +466,11 @@ export class ProductComponent implements OnInit {
       this.msg.WarnNotify('Select Unit of Measurement');
       return;
     } 
-     if (this.CostPrice == '' || this.CostPrice <= 0 || this.CostPrice == undefined) {
+     if ((this.CostPrice == '' || this.CostPrice <= 0 || this.CostPrice == undefined) && !this.ManufacturingFeature) {
       this.msg.WarnNotify('Enter Cost Price');
       return;
     } 
-     if (this.SalePrice == '' || this.SalePrice <= 0 || this.SalePrice == undefined) {
+     if ((this.SalePrice == '' || this.SalePrice <= 0 || this.SalePrice == undefined) && !this.ManufacturingFeature) {
       this.msg.WarnNotify('Enter Sale Price');
       return;
     } 
@@ -508,8 +511,8 @@ export class ProductComponent implements OnInit {
         ET: this.Et || 0,
         PCTCode: this.pctCode || '-',
         AllowMinus: this.allowMinus,
-        CostPrice: this.CostPrice,
-        SalePrice: this.SalePrice,
+        CostPrice: this.CostPrice || 1,
+        SalePrice: this.SalePrice || 1,
         DiscPercentage: this.DiscPercent,
         DiscRupees: this.DiscRupee,
         UomID: this.UOMID,

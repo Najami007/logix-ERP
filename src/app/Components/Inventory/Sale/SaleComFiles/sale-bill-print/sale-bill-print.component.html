@@ -325,8 +325,9 @@
 
             </div>
             <div class="border-top border-dark">
-            <div style="font-size: 12px;" class="text-center">
-                <span><small>Powered By :</small><b>Logix Solutionz | 0313-5300471</b></span> </div>
+                <div style="font-size: 12px;" class="text-center">
+                    <span><small>Powered By :</small><b>Logix Solutionz | 0313-5300471</b></span>
+                </div>
             </div>
 
         </div>
@@ -362,7 +363,10 @@
                 <tbody class="text-center">
                     <tr>
                         <td>{{myInvoiceNo}}</td>
-                        <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
+                        <td>
+                            <span *ngIf="!VehicleSaleFeature">{{myCreatedDate | date:'dd-MM-yyyy hh:mm:a'}}</span>
+                            <span *ngIf="VehicleSaleFeature">{{myInvDate | date:'dd-MM-yyyy'}}</span>
+                        </td>
                         <td>{{myCounterName}}</td>
                     </tr>
 
@@ -620,7 +624,8 @@
 
                     </div>
                     <div class="text-center">
-                        <span style="font-size: 12px;"><small>Powered By :</small> <b>Logix Solutionz | Mobile# 0313-5300471</b></span>
+                        <span style="font-size: 12px;"><small>Powered By :</small> <b>Logix Solutionz | Mobile#
+                                0313-5300471</b></span>
                     </div>
                 </table>
             </div>
@@ -724,8 +729,8 @@
 
             <tbody class="text-start">
                 <tr>
-                    <td class="fs-12 fw-bold bgNorthedge">FTN#</td>
-                    <td class="ms-2 fs-11 ">{{companyFTN}}</td>
+                    <td class="fs-12 fw-bold bgNorthedge">FTN / NTN#</td>
+                    <td class="ms-2 fs-11 ">{{partyNtn}}</td>
                     <td class="fs-12 fw-bold bgNorthedge">Invoice #</td>
                     <td class="ms-2 fs-11 ">{{myInvoiceNo}}</td>
                 </tr>
@@ -798,7 +803,7 @@
                         <td class="fw-bold text-end">{{mySubTotal |number:'1.0-1'}}</td>
                     </tr>
                     <tr>
-                        <td colspan="4" class="fw-bold">GST ({{myAdvTaxValue}} %)</td>
+                        <td colspan="4" class="fw-bold">GST ({{myAdvTaxValue}}%)</td>
                         <td class="fw-bold text-end">{{myAdvTaxAmount |number:'1.0-1'}}</td>
                     </tr>
                     <tr>

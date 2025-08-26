@@ -112,7 +112,7 @@ export class RestKotPrintComponent {
 
 
        this.myPrintData = kotItems; 
-       this.myCookingAreaTitle = kotItems[0].cookingAriaID; // kotItems[0].cookingAriaTitle;
+       this.myCookingAreaTitle = kotItems[0].cookingAriaTitle;
       setTimeout(() => {
         this.global.printData('#printKOT');
       }, 1);

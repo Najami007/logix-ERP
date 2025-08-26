@@ -118,6 +118,7 @@ import { CustomerIssueBillPrintComponent } from './CusotmerIssuance/customer-iss
 import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
 import { EditQtyModalComponent } from './Sale/garment-sale/edit-qty-modal/edit-qty-modal.component';
 import { SaleVehicleComponent } from './Sale/sale-vehicle/sale-vehicle.component';
+import { SaleFurnitureComponent } from './Sale/sale-furniture/sale-furniture.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -170,6 +171,8 @@ export const inventoryRoutes: Route[] = [
 
   { path: 'customerissue', component: CustomerIssuanceComponent, data: { title: 'Customer Issue' }, canActivate: [AuthGuard] },
   { path: 'customerissuertn', component: CustomerIssueReturnComponent, data: { title: 'Customer Issue Return' }, canActivate: [AuthGuard] },
+
+    { path: 'saleFurniture', component: SaleFurnitureComponent, data: { title: 'Sale Furniture' }, canActivate: [AuthGuard] },
 
   //////// Purchase Pages////////////////////
 
@@ -316,6 +319,7 @@ export const inventoryRoutes: Route[] = [
     CustomerIssueBillPrintComponent,
     EditQtyModalComponent,
     SaleVehicleComponent,
+    SaleFurnitureComponent,
 
 
 

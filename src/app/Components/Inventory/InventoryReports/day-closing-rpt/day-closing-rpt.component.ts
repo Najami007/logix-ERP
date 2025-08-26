@@ -81,6 +81,8 @@ export class DayClosingRptComponent {
         this.rptData = Response.map((e: any) => {
           if (e.billDetail != '-') {
             e.billDetails = JSON.parse(e.billDetail);
+          }else{
+            e.billDetails = '';
           }
 
           return e;

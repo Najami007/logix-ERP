@@ -323,7 +323,7 @@ export class GlobalDataModule implements OnInit {
   showSaleAQFeature = this.getFeature('showSaleAQ');
   showSaleCPFeature = this.getFeature('showSaleCP');
   PrintKotAreawiseFeature = this.getFeature('PrintKotAreawise');
-
+  FurnitureSaleFeature = this.getFeature('FurnitureSale');
 
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
@@ -373,6 +373,7 @@ export class GlobalDataModule implements OnInit {
     this.showSaleAQFeature = this.getFeature('showSaleAQ');
     this.showSaleCPFeature = this.getFeature('showSaleCP');
     this.PrintKotAreawiseFeature = this.getFeature('PrintKotAreawise');
+    this.FurnitureSaleFeature = this.getFeature('FurnitureSale');
   }
 
 

@@ -15,43 +15,54 @@
             </mat-form-field>
             
             
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline">
+            <mat-form-field class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">
                 <mat-label>Party CNIC</mat-label>
                 <input [(ngModel)]="partyCNIC" (keydown)="global.handleNumKeysandMinut($event)" [textMask]="{mask:cnicMask}" maxlength="15"     matInput type="text">
                 <mat-hint>{{partyCNIC.length}} / 15</mat-hint>
             </mat-form-field>
             
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline">
+            <mat-form-field class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">
                 <mat-label>Passport no.</mat-label>
                 <input [(ngModel)]="passportNo"   matInput type="text">
             </mat-form-field>
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline">
+            <mat-form-field class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">
                 <mat-label>Mobile no.</mat-label>
                 <input [(ngModel)]="partyMobileno" (keydown)="global.handleNumKeysandMinut($event)" [textMask]="{mask:mobileMask}" maxlength="12"   matInput type="text">
                 <mat-hint>{{partyMobileno.length}} / 12</mat-hint>
             </mat-form-field>
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline">
+            <mat-form-field class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">
                 <mat-label>Telephone no.</mat-label>
                 <input  [(ngModel)]="partyTelephoneno" (keydown)="global.handleNumKeysandMinut($event)" maxlength="11" [textMask]="{mask:telephoneMask}"  matInput type="text">
                 <mat-hint>{{partyTelephoneno.length}} / 11</mat-hint>
             </mat-form-field>
 
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline">
+            <mat-form-field class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">
                 <mat-label>Bank Name</mat-label>
                 <input  [(ngModel)]="bankName"   matInput type="text">
             </mat-form-field>
 
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline">
+            <mat-form-field class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">
                 <mat-label>Account Title</mat-label>
                 <input  [(ngModel)]="accountTitle"   matInput type="text">
             </mat-form-field>
 
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline">
+            <mat-form-field class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">
                 <mat-label>Account No.</mat-label>
                 <input  [(ngModel)]="accountNo"   matInput type="text">
             </mat-form-field>
+
+                  <mat-form-field class="col-lg-6 matSmall" appearance="outline"  >
+                <mat-label>NTN / FTN</mat-label>
+                <input [(ngModel)]="ntn" matInput type="text">
+            </mat-form-field>
+
+                  <mat-form-field class="col-lg-6 matSmall" appearance="outline"  *ngIf="!FurnitureSaleFeature">
+                <mat-label>STRN </mat-label>
+                <input [(ngModel)]="strn" matInput type="text">
+            </mat-form-field>
+
          
-            <mat-form-field  class="col-lg-6 matsmall" appearance="outline"> 
+            <mat-form-field  class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">  
                 <mat-label>City</mat-label>
                 <mat-select [(ngModel)]="City" #city>
                     <mat-option><ngx-mat-select-search #citySearch
@@ -64,14 +75,14 @@
         
            
             
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline">
+            <mat-form-field class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">
                 <mat-label>Address</mat-label>
-                <textarea [(ngModel)]="partyAddress" matInput type="text"></textarea>
+                <textarea rows="1" [(ngModel)]="partyAddress" matInput type="text"></textarea>
             </mat-form-field>
             
             <mat-form-field class="col-lg-6 matsmall" appearance="outline">
                 <mat-label>Description</mat-label>
-                <textarea [(ngModel)]="description" matInput type="text"></textarea>
+                <textarea rows="1" [(ngModel)]="description" matInput type="text"></textarea>
             </mat-form-field>
         </div>
 

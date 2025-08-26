@@ -140,12 +140,12 @@ export class SaleBillPrintComponent implements OnInit {
   myVehicleNo = '';
   myMeterReading = '';
   myVehicleName = '';
+  partyNtn = '';
 
   PrintBill(InvNo: any) {
     this.billPrintType = this.global.getBillPrintType();
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
       (Response: any) => {
-        console.log(Response);
         this.myPrintTableData = Response;
 
 
@@ -176,6 +176,7 @@ export class SaleBillPrintComponent implements OnInit {
         this.myVehicleNo = Response[0].vehicleNo;
         this.myMeterReading = Response[0].meterReading;
         this.myVehicleName = Response[0].vehicleName;
+        this.partyNtn = Response[0].ntn;
         this.myInvTime = new Date();
 
 
