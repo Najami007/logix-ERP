@@ -119,6 +119,7 @@ import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
 import { EditQtyModalComponent } from './Sale/garment-sale/edit-qty-modal/edit-qty-modal.component';
 import { SaleVehicleComponent } from './Sale/sale-vehicle/sale-vehicle.component';
 import { SaleFurnitureComponent } from './Sale/sale-furniture/sale-furniture.component';
+import { BarcodeReportInvoicewiseComponent } from './InventoryReports/barcode-report-invoicewise/barcode-report-invoicewise.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -221,6 +222,7 @@ export const inventoryRoutes: Route[] = [
   { path: 'srptv', component: VehicleSaleReportComponent, data: { title: 'Vehicle Sale Report' }, canActivate: [AuthGuard] },
   { path: 'reorderrpt', component: ReorderReportComponent, data: { title: 'ReOrder Report' }, canActivate: [AuthGuard] },
   { path: 'prodInOutHistory', component: ProductInOutHistoryComponent, data: { title: 'Product In Out Hisotry' }, canActivate: [AuthGuard] },
+    { path: 'barcodeReportInv', component: BarcodeReportInvoicewiseComponent, data: { title: 'Barcode Report Invoice' }, canActivate: [AuthGuard] },
 
 
 
@@ -320,6 +322,7 @@ export const inventoryRoutes: Route[] = [
     EditQtyModalComponent,
     SaleVehicleComponent,
     SaleFurnitureComponent,
+    BarcodeReportInvoicewiseComponent,
 
 
 

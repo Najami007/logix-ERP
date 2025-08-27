@@ -26,7 +26,7 @@
   }
   
   .barcode{
-    margin-bottom: -4px;
+ 
     font-size: 10px;
     display: flex;
     justify-content: center;
@@ -36,12 +36,12 @@
     /* padding-top: 10px; */
     /* border: 1px solid red; */
     /* height: 40px; */
-    overflow: hidden;
+    /* overflow: hidden; */
   }
 
 
   .bcodep{
-    
+
     font-weight: bold;
     font-size: 12px;
     text-align: center !important;
@@ -87,6 +87,7 @@
     font-size: 8px;
   }
    .expiry span{
+        margin-top: -4px;
     text-align: center !important;
   }
   .bcodeC{

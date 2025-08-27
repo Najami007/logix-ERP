@@ -34,6 +34,10 @@ import { ManufacturingSaleCategoryComponent } from './ManufacturingReports/manuf
 import { DeliveryChallanComponent } from './ManufacturingComFiles/delivery-challan/delivery-challan.component';
 import { OrderPrintComponent } from './ManufacturingComFiles/order-print/order-print.component';
 import { MnuInvoicePrintComponent } from './ManufacturingComFiles/mnu-invoice-print/mnu-invoice-print.component';
+import { ContractorProfileComponent } from './contractor-profile/contractor-profile.component';
+import { AddContractorProfileComponent } from './contractor-profile/add-contractor-profile/add-contractor-profile.component';
+import { ProductionAuditComponent } from './production-audit/production-audit.component';
+import { ProductionItemReceivingComponent } from './production-item-receiving/production-item-receiving.component';
 
 
 
@@ -58,6 +62,9 @@ export const manufacturingRoutes: Route[] = [
   { path: 'itemproduction', component: ItemProductionComponent, data: { title: 'Item Production' }, canActivate: [AuthGuard] },
   { path: 'shipmentCompany', component: ShippingCompanyComponent, data: { title: 'Shipment Company' }, canActivate: [AuthGuard] },
   { path: 'itemcategory', component: ItemCategoriesComponent, data: { title: 'Item Category' }, canActivate: [AuthGuard] },
+  { path: 'contractorProfile', component: ContractorProfileComponent, data: { title: 'Contractor Profile' }, canActivate: [AuthGuard] },
+  { path: 'itemReceiving', component: ProductionItemReceivingComponent, data: { title: 'Item Receiving' }, canActivate: [AuthGuard] },
+  { path: 'productionAudit', component: ProductionAuditComponent, data: { title: 'Audit' }, canActivate: [AuthGuard] },
 
 
   /////////////////////////////////////////////////Reports ///////////////////////////////////////
@@ -91,6 +98,10 @@ export const manufacturingRoutes: Route[] = [
     DeliveryChallanComponent,
     OrderPrintComponent,
     MnuInvoicePrintComponent,
+    ContractorProfileComponent,
+    AddContractorProfileComponent,
+    ProductionAuditComponent,
+    ProductionItemReceivingComponent,
 
 
   ],

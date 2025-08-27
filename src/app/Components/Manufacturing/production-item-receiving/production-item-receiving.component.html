@@ -1,0 +1,258 @@
+<div class="row body h-100 w-100">
+
+    <div class="col-lg-9">
+
+        <div class="ps-1 d-flex ">
+
+            <!-------------------- Product Search Bar --------------->
+
+            <div class="col-lg-10  d-flex flex-column">
+                <mat-label class="text-primary">Search Barcode / Product</mat-label>
+                <input type="text" #pbarcode [(ngModel)]="PBarcode"
+                    (keydown)="searchByCode($event);this.changeFocus($event,'.prodRow')" id="searchProduct"
+                    class="p-1 mb-2 searchProduct w-100" placeholder="Alt + b" autofocus (focus)="rowFocused = -1"
+                    autocomplete="off" accesskey="b">
+
+                <div class="w-100 d-flex flex-column SearchConatiner cursorPointer"
+                    *ngIf="PBarcode != '' && PBarcode != undefined">
+                    <mat-card class="card " *ngFor="let item of itemList| filter:PBarcode | slice:0:25 index as index"
+                        (click)="addMenuItem(item)">
+                        <button style="height: 40px; background: none;border: none;text-align: left;"
+                            class="prodRow{{index}} prodBtn justify-content-between d-flex"
+                            (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">
+                            <p>{{item.mnuItemTitle}}</p>
+                            <p><strong>({{item.mnuItemCode}})</strong></p>
+                        </button>
+                    </mat-card>
+                </div>
+            </div>
+            <div class="col-lg-2 text-start ps-1 pt-3 mt-1">
+                <button class="btnload w-100 " style="height: 40px;" (click)="ngOnInit()">Load</button>
+            </div>
+
+        </div>
+
+        <div class="ps-1" style="max-height: 74vh;overflow-y:auto ;padding-bottom: 10px;">
+            <table class="table-hover table-logix">
+                <thead>
+                    <tr>
+                        <th class="cursorPointer" (click)="changeOrder()">S#</th>
+                        <th>Barcode</th>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+
+                        <th>Cost</th>
+                        <!-- <th>Avg Cost</th> -->
+                        <th>Cost Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of tableDataList index as index" (click)="rowFocused = index"
+                        [ngClass]="rowFocused == index ?'bg-dg':''">
+                        <td>{{index+1}}</td>
+                        <td>{{item.barcode}}</td>
+                        <td>{{item.productTitle}}</td>
+                        <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
+                                (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);"
+                                (keyup)="changeValue(item);getTotal();" class="qty{{index}} text-center"
+                                style="width: 80px;"></td>
+
+                        <td class="text-center"><input type="text" [(ngModel)]="item.labourCost" min="0"
+                                (keydown)="this.handleUpdown(item,$event,'.lc',index);getTotal();changeValue(item);"
+                                (keyup)="changeValue(item);getTotal();" class="lc{{index}} text-center"
+                                style="width: 80px;"></td>
+
+                        <!-- <td class="text-end">{{item.labourCost | number:'1.0-2'}}</td> -->
+                        <td class="text-end">{{item.labourCost * item.quantity | number:'1.0-2'}}</td>
+                        <td class="cursorPointer text-center text-danger"><mat-icon
+                                (click)="delRow(item)">delete</mat-icon></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <th class="text-center">{{totalQty |number:'1.0-2'}}</th>
+                        <th colspan="1"></th>
+                        <th class="text-end">{{CostTotal |number:'1.0-2'}}</th>
+                        <td class="text-center"><mat-icon class="cursorPointer " (click)="EmptyData()">delete</mat-icon>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="col-lg-3  border-start border-dark" style="height: 84vh;">
+
+        <!-- <div class="mb-1">
+            <mat-card class="p-1 w-100 " style="height: 150px;width: 380px;">
+                <div class="text-center" *ngIf="tableDataList != ''">
+                    <img [src]="productImage" accesskey="i" alt="Img not Found" class="prodImg"
+                        (click)="this.global.showProductImage(this.productImage,0)">
+                </div>
+            </mat-card>
+
+
+        </div> -->
+
+        <div class="mb-2 mt-2">
+            <mat-card class="p-1 w-100 ">
+                <mat-card-content>
+                    <div class="text-center ">
+                        <p class="font-digit fs-50">{{subTotal |number:'1.0-2'}}</p>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div class="d-flex flex-wrap ">
+            <mat-form-field appearance="outline" *ngIf="!disableDateFeature" class="col-md-12 matSmall">
+                <mat-label>Invoice Date</mat-label>
+                <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="invDate"
+                    [matDatepicker]="iDate">
+                <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
+                <mat-datepicker #iDate></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-md-12 matSmall">
+                <mat-label>Location</mat-label>
+                <mat-select [(ngModel)]="locationID" name="location">
+                    <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of locationList | filter:locationSearch.value"
+                        [value]="item.locationID">{{item.locationTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline" class="col-md-12 matSmall">
+                <mat-label>Contractor</mat-label>
+                <mat-select [(ngModel)]="partyID" #party name="customer">
+                    <mat-option><ngx-mat-select-search #partySearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of partyList | filter:partySearch.value"
+                        [value]="item.partyID">{{item.partyName}}</mat-option>
+
+                </mat-select>
+                <!-- <mat-icon class="cursorPointer" (click)="addParty()" matSuffix>add</mat-icon> -->
+            </mat-form-field>
+
+
+
+
+            <mat-form-field appearance="outline" class="col-md-12 matSmall">
+                <mat-label>Remarks</mat-label>
+                <input matInput type="text" [(ngModel)]="invRemarks">
+            </mat-form-field>
+        </div>
+
+
+
+        <div class="d-flex flex-wrap">
+
+            <div class="w-100 mb-1">
+                <button *ngIf="crudList.c" class="btnsave w-100" (click)="SaveBill('Save')">{{btnType}}</button>
+            </div>
+            <div class="w-50 pe-1">
+                <button class="btnhold w-100" (click)="SaveBill('hold')">{{holdBtnType}}</button>
+            </div>
+            <div class="w-50">
+                <button class="btnreset w-100" data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+    <!---------------     Modal Window for Retreiving Hold Bills --------------->
+    <div class="modal fade" id="holdModal" tabindex="-1" aria-labelledby="holdModalLabel">
+        <div class="modal-dialog modal-dialog-scrollable  modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="holdModalLabel">Bill Details</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="d-flex justify-content-between">
+                        <mat-form-field class="col-lg-4 matSmall" appearance="outline">
+                            <mat-label>Date</mat-label>
+                            <input matInput type="text" readonly="true" [(ngModel)]="Date" [matDatepicker]="hbDate">
+                            <mat-datepicker-toggle matSuffix [for]="hbDate"></mat-datepicker-toggle>
+                            <mat-datepicker #hbDate></mat-datepicker>
+                        </mat-form-field>
+
+
+                        <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt"
+                            (click)="FindSavedBills('HIC')">Get Holded</button>
+                        <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt"
+                            (click)="FindSavedBills('IC')">Get Saved</button>
+
+                        <mat-form-field class="col-lg-3 matSmall" appearance="outline">
+                            <mat-label>Search.......</mat-label>
+                            <input matInput #holdSearch type="text" class="col-lg-4">
+                        </mat-form-field>
+
+                    </div>
+
+                    <table class="table-logix">
+                        <thead>
+                            <tr>
+                                <th>S#</th>
+                                <th>Inv No.</th>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Location</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>User</th>
+                                <th *ngIf="crudList.r">Action</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of IssueBillList  | filter:holdSearch.value index as index">
+                                <td>{{index+1}}</td>
+                                <td>{{item.invBillNo}}</td>
+                                <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
+                                <td>{{item.invType}}</td>
+                                <td>{{item.locationTitle}}</td>
+                                <td>{{item.partyName}}</td>
+                                <td class="text-end">{{item.netTotal | number:'1.0-0'}}</td>
+                                <td>{{item.entryUser}}</td>
+                                <td class="text-center cursorPointer" *ngIf="crudList.r">
+
+                                    <mat-icon data-bs-dismiss="modal" *ngIf="item.approvedStatus == false"
+                                        (click)="retriveBill(item)">edit_outline</mat-icon>
+                                    <mat-icon class="text-primary" (click)="printBill(item)">print</mat-icon>
+                                    <mat-icon class="text-danger" *ngIf="item.approvedStatus == false"
+                                        (click)="DeleteInv(item)">delete_outline</mat-icon>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!----------- Print Area For Bill Print --------------------->
+
+
+
+
+</div>
