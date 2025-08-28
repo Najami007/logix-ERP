@@ -324,6 +324,7 @@ export class GlobalDataModule implements OnInit {
   showSaleCPFeature = this.getFeature('showSaleCP');
   PrintKotAreawiseFeature = this.getFeature('PrintKotAreawise');
   FurnitureSaleFeature = this.getFeature('FurnitureSale');
+  DisableDineInKotPrintFeature = this.getFeature('DisableDineInKotPrint');
 
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
@@ -374,6 +375,7 @@ export class GlobalDataModule implements OnInit {
     this.showSaleCPFeature = this.getFeature('showSaleCP');
     this.PrintKotAreawiseFeature = this.getFeature('PrintKotAreawise');
     this.FurnitureSaleFeature = this.getFeature('FurnitureSale');
+    this.DisableDineInKotPrintFeature = this.getFeature('DisableDineInKotPrint');
   }
 
 
@@ -1425,16 +1427,16 @@ export class GlobalDataModule implements OnInit {
 
 
   getUniqueRows<T>(arr: T[], keySelector: (item: T) => any): T[] {
-  const seen = new Set();
-  return arr.filter(item => {
-    const key = keySelector(item);
-    if (seen.has(key)) {
-      return false;
-    }
-    seen.add(key);
-    return true;
-  });
-}
+    const seen = new Set();
+    return arr.filter(item => {
+      const key = keySelector(item);
+      if (seen.has(key)) {
+        return false;
+      }
+      seen.add(key);
+      return true;
+    });
+  }
 
 
   public filterUniqueValues<T>(array: T[]): T[] {

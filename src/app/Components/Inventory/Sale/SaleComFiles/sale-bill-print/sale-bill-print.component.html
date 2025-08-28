@@ -710,6 +710,129 @@
 
         <!--------------------- Company Detail Section  End------------------ -->
 
+        <div class="d-flex">
+
+            <span><b>Issued To:</b> {{myCustomerName}}</span>
+
+        </div>
+
+        <div class="d-flex">
+
+            <span class="col-md-6"><b>P.O No #</b> {{myRemarks}}</span>
+            <span class="col-md-6"><b>FTN/NTN #</b> {{partyNtn}}</span>
+        </div>
+
+        <hr>
+
+
+        <div class="d-flex">
+
+            <span class="col-md-4"><b>Bank Detail :-</b> {{companyBankTitle}}</span>
+            <span class="col-md-4"><b>Vendor #</b> {{companyRegistrationNo}}</span>
+            <span class="col-md-4"><b>Invoice #</b> {{myInvoiceNo}}</span>
+
+        </div>
+
+        <div class="d-flex">
+
+            <span class="col-md-4"><b>Acc Title :-</b> {{companyAccTitle}}</span>
+            <span class="col-md-4"><b>STRN #</b> {{CompanySTRN}}</span>
+            <span class="col-md-4"><b>NTN #</b> {{CompanyNTN}}</span>
+
+        </div>
+
+        <div class="d-flex">
+
+            <span class="col-md-4"><b>B Code :-</b> {{companyBankCode}}</span>
+            <span class="col-md-4"><b>PNTN #</b> {{companyPNTN}}</span>
+            <span class="col-md-4"><b>Date #</b> {{myInvDate | date:'dd-MM-yyyy'}}</span>
+
+        </div>
+
+        <div class="d-flex">
+
+            <span class="col-md-4"><b>Account :-</b> {{companyAccNumber}}</span>
+
+
+        </div>
+
+        <br>
+
+
+        <div>
+
+            <table class="table-sale-Furniture">
+                <thead>
+                    <tr class="fs-10 bgNorthedge whiteText">
+                        <th>S#</th>
+                        <th>Item</th>
+                        <th>Qty</th>
+                        <th>Unit Price</th>
+                        <th>Total Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr *ngFor="let item of myPrintTableData index as index" class="fs-12">
+                        <td>{{index +1}}</td>
+                        <td class="text-start">{{item.productTitle}}</td>
+                        <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
+                        <td class="text-end" style="width:20% !important;">{{(item.quantity *
+                            item.salePrice) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
+
+                    </tr>
+
+
+                </tbody>
+            </table>
+
+        </div>
+
+<hr>
+
+        <div class="d-flex justify-content-between">
+
+            <div style="width: 40%;">
+
+            </div>
+
+            <div style="width: 60%;">
+                <table class="w-100  text-uppercase">
+                    <tbody>
+                        <tr>
+                            <td colspan="4" class="fw-bold">Total # </td>
+                            <td class="fw-bold text-end">{{mySubTotal |number:'1.0-1'}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="fw-bold">GST ({{myAdvTaxValue}}%) #</td>
+                            <td class="fw-bold text-end"> {{myAdvTaxAmount |number:'1.0-1'}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="fw-bold">Grand Total With GST #</td>
+                            <td class="fw-bold text-end">{{myNetTotal |number:'1.0-1'}}</td>
+                        </tr>
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+</div>
+
+<!-- <div id="northedgeEnterprises">
+
+    <div class="p-1">
+
+
         <table class="table-logix2 fs-13">
 
             <tbody>
@@ -818,4 +941,4 @@
 
 
 
-</div>
+</div> -->

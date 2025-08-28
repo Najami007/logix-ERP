@@ -50,7 +50,8 @@ export class Sale1Component implements OnInit {
   RestBillUserwise = this.global.RestBillUserwise;
   tabletPrintFeature = this.global.TabletPrintFeature;
   PrintKotAreawiseFeature = this.global.PrintKotAreawiseFeature;
-  printKotFeature = this.global.printKot
+  printKotFeature = this.global.printKot;
+  DisableDineInKotPrintFeature = this.global.DisableDineInKotPrintFeature;
 
 
   roleType = this.global.getRoleTypeID();
@@ -1003,6 +1004,8 @@ export class Sale1Component implements OnInit {
 
   printKOT(invNo: any) {
 
+    if(this.DisableDineInKotPrintFeature && this.orderType == 'Dine In') return;
+
 
 
     if ((this.printKotFeature && !this.PrintKotAreawiseFeature) || this.global.getKOTApproval()) {
@@ -1015,7 +1018,7 @@ export class Sale1Component implements OnInit {
 
 
     if (this.PrintKotAreawiseFeature && this.printKotFeature) {
-      const printData = this.tableData;
+      const printData = this.tableData.filter((e: any) => e.entryType == 'New');
       if (printData.length > 0) {
         const dataRows = this.global.filterUniqueValuesByKey(printData, 'cookingAriaID');
 

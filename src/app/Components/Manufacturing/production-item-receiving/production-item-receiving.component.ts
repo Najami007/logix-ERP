@@ -201,7 +201,7 @@ export class ProductionItemReceivingComponent implements OnInit {
     this.PBarcode = '';
     this.getTotal();
 
-    $('.mbsearchProduct').trigger('focus');
+    $('.searchProduct').trigger('focus');
 
 
   }
