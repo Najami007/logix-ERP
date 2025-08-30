@@ -47,8 +47,8 @@ export class GlobalDataModule implements OnInit {
   // RestServiceCharges = 0;
   RestServiceCharges = this.getServiceCharges();  //////////// Jazeerra Food Service Charges
   validCharges(billTotal: any) {
-    if (billTotal > 3000) { ////////// Jazeera Foods Condition
-      //if (billTotal > 0) { ////////// Cake Corner Refreshment
+    // if (billTotal > 3000) { ////////// Jazeera Foods Condition
+    if (billTotal > 0) { ////////// Cake Corner Refreshment
       return true;
     } else {
       return false;

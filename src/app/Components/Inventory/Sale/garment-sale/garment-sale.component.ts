@@ -1031,7 +1031,7 @@ export class GarmentSaleComponent implements OnInit {
     this.getTotal();
   }
 
-  isValidSale = true;
+  isProcessing = false;
   save(paymentType: any, SendToFbr: any, printFlag: any) {
 
 
@@ -1062,7 +1062,7 @@ export class GarmentSaleComponent implements OnInit {
     }
 
 
-    if (this.isValidSale == true) {
+
 
 
       if (this.tableDataList == '') {
@@ -1162,7 +1162,9 @@ export class GarmentSaleComponent implements OnInit {
         });
         return;
       }
-      this.isValidSale = false;
+
+      if(this.isProcessing == true) return;
+      this.isProcessing = true;
       this.app.startLoaderDark();
       this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', postData).subscribe(
         (Response: any) => {
@@ -1185,19 +1187,19 @@ export class GarmentSaleComponent implements OnInit {
           } else {
             this.msg.WarnNotify(Response.msg);
           }
-          this.isValidSale = true;
+          this.isProcessing = false;
           this.app.stopLoaderDark();
 
         },
         (error: any) => {
-          this.isValidSale = true;
+          this.isProcessing = false;
           console.log(error);
           this.msg.WarnNotify('Unable to Save Check Connection');
 
           this.app.stopLoaderDark();
         }
       )
-    }
+    
 
 
 

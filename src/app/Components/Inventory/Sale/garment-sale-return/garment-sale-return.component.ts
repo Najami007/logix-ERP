@@ -1041,9 +1041,11 @@ export class GarmentSaleReturnComponent implements OnInit {
     }
     this.getTotal();
   }
-  isValidSale = true;
 
-  save(paymentType: any) {
+  
+  isProcessing = false;
+
+  save(paymentType: any,SendToFbr: any) {
 
 
     var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
@@ -1071,7 +1073,10 @@ export class GarmentSaleReturnComponent implements OnInit {
     }
 
 
-    if (this.isValidSale == true) {
+
+
+
+
       if (this.tableDataList == '') {
         this.msg.WarnNotify('No Product Seleted');
         return;
@@ -1139,7 +1144,7 @@ export class GarmentSaleReturnComponent implements OnInit {
         BillDiscount: Number(this.discount) + Number(this.offerDiscount),
         OtherCharges: this.otherCharges,
         NetTotal: this.netTotal,
-        SendToFbr: false,
+        SendToFbr: SendToFbr,
         CashRec: this.cash,
         Change: this.change,
         AdvTaxAmount: this.AdvTaxAmount || 0,
@@ -1153,7 +1158,8 @@ export class GarmentSaleReturnComponent implements OnInit {
       };
 
 
-      this.isValidSale = false;
+      if(this.isProcessing == true) return;
+      this.isProcessing = true
       this.app.startLoaderDark();
       this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySaleRtn', postData).subscribe(
         (Response: any) => {
@@ -1169,19 +1175,19 @@ export class GarmentSaleReturnComponent implements OnInit {
           } else {
             this.msg.WarnNotify(Response.msg);
           }
-          this.isValidSale = true;
+          this.isProcessing = false;
           this.app.stopLoaderDark();
 
         },
         (Error: any) => {
           console.log(Error);
-          this.isValidSale = true;
+          this.isProcessing = false;
           this.msg.WarnNotify(Error);
 
           this.app.stopLoaderDark();
         }
       )
-    }
+    
 
 
 

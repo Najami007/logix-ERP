@@ -51,30 +51,12 @@
 
     </div>
     <div class="row justify-content-center">
-        <!-- <mat-form-field appearance="fill" class="col-lg-3 me-2 matSmall">
-            <mat-label>Report Type</mat-label>
-            <mat-select [(ngModel)]="rptType" >
-                <mat-option *ngFor="let item of reportList"
-                    [value]="item.val">{{item.title}}</mat-option>
-            </mat-select>
-        </mat-form-field> -->
-        <div class="col-md-2">
-            <mat-form-field appearance="outline" class="w-100 matSmall">
-            <mat-label>Formate</mat-label>
-            <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
 
-                <mat-option [value]="1">Summary</mat-option>
-                <mat-option [value]="2">Detail</mat-option>
-                <!-- <mat-option [value]="3">Ledger</mat-option> -->
-            </mat-select>
-        </mat-form-field>
-        </div>
+     
         <div class="col-md-4 d-flex flex-wrap" *ngIf="crudList.r">
 
-            <!-- <button class="btn-rpt-success col-lg-4 me-1" (click)="getReport('summary')">Summary</button> -->
             <div class=" col-md-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('detail')">Get Report</button></div>
             <div class=" col-md-4 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
-            <!-- <div class=" col-lg-4 "><button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button></div> -->
             <div class=" col-md-4"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
         </div>
     </div>
@@ -117,95 +99,9 @@
             </div>
         </div>
 
+        <br>    
 
-        <table class="table-logix" id="detailTable" *ngIf="formateType == 2">
-            <thead>
-                <tr>
-                    <th>S#</th>
-                    <th>Bill #</th>
-                    <th style="width: 200px;">Date</th>
-                    <th>Title</th>
-                    <th>Qty</th>
-                    <th style="width: 120px;">Cost</th>
-                    <th style="width: 150px;">Avg Cost</th>
-                    <th style="width: 120px;">Sale</th>
-                    <th style="width: 120px;">Total</th>
-                    <th>Entered By</th>
-
-                </tr>
-
-
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of DetailList index as index">
-                    <td class="text-center">{{index + 1}}</td>
-                    <td [ngClass]="item.invType == 'PR' ? 'text-danger' : ''" class="text-center cursorPointer ">
-                        {{item.invBillNo}}</td>
-                    <td>{{item.invDate |date:'dd-MM-yyyy'}} ({{item.createdOn |date:'hh:mm:a'}})</td>
-                    <td>{{item.productTitle}}</td>
-                    <td class="text-center">{{item.quantity |number:'1.0-3'}}</td>
-                    <td class="text-end">{{item.costPrice |number:'1.0-0'}}</td>
-                    <td class="text-end">{{item.avgCostPrice|number:'1.0-0'}}</td>
-                    <td class="text-end">{{item.salePrice |number:'1.0-0'}}</td>
-                    <td [ngClass]="item.invType == 'PR' ? 'bg-danger text-white' : ''" class="text-end">{{item.costPrice
-                        * item.quantity |number:'1.0-0'}}</td>
-                    <td>{{item.entryUser}}</td>
-                </tr>
-                <tr>
-                    <td colspan="8"></td>
-                    <th class="text-end">{{grandTotal|number:'1.0-0'}}</th>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
-
-
-        <table class="table-logix" id="summaryTable" *ngIf="formateType == 1">
-            <thead>
-                <tr>
-                    <th>S#</th>
-                    <th>Bill No</th>
-                    <th>Date</th>
-                    <th>Booker</th>
-                    <th>Location</th>
-                    <th>Party</th>
-                    <th>Type</th>
-                    <th>Net Total</th>
-                    <th>Entered By</th>
-                    <th>Remarks</th>
-
-                </tr>
-
-
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of DetailList index as index">
-                    <td class="text-center">{{index + 1}}</td>
-                    <td [ngClass]="item.invType == 'PR' ? 'text-danger' : ''" class="text-center">{{item.invBillNo}}
-                    </td>
-                    <td>{{item.invDate |date:'dd-MM-yyyy'}}</td>
-                    <td>{{item.bookerName}}</td>
-                    <td>{{item.locationTitle}}</td>
-                    <td>{{item.partyName}}</td>
-                    <td>{{item.paymentType}}</td>
-                    <td [ngClass]="item.invType == 'PR' ? 'bg-danger text-white' : ''" class="text-end">{{item.netTotal
-                        + item.overHeadAmount +item.billDiscount |number:'1.0-0'}}</td>
-                    <td>{{item.entryUser}}</td>
-                    <td>{{item.remarks}}</td>
-                </tr>
-                <tr>
-                    <td colspan="7"></td>
-                    <th class="text-end">{{grandTotal|number:'1.0-0'}}</th>
-                    <td></td>
-                </tr>
-            </tbody>
-
-
-
-        </table>
-
-
-           <!-- <table class="table-logix" id="ledger" *ngIf="formateType == 3">
+           <table class="table-logix" id="ledger" >
             <thead>
                 <tr>
                     <th>S#</th>
@@ -265,7 +161,7 @@
                     <td class="text-end">{{item.balance |number:'1.0-0'}}</td>
                 </tr>
             </tbody>
-        </table> -->
+        </table>
 
 
     </div>

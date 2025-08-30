@@ -120,6 +120,7 @@ import { EditQtyModalComponent } from './Sale/garment-sale/edit-qty-modal/edit-q
 import { SaleVehicleComponent } from './Sale/sale-vehicle/sale-vehicle.component';
 import { SaleFurnitureComponent } from './Sale/sale-furniture/sale-furniture.component';
 import { BarcodeReportInvoicewiseComponent } from './InventoryReports/barcode-report-invoicewise/barcode-report-invoicewise.component';
+import { SupplierLedgerSpecialComponent } from './InventoryReports/supplier-ledger-special/supplier-ledger-special.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -173,7 +174,7 @@ export const inventoryRoutes: Route[] = [
   { path: 'customerissue', component: CustomerIssuanceComponent, data: { title: 'Customer Issue' }, canActivate: [AuthGuard] },
   { path: 'customerissuertn', component: CustomerIssueReturnComponent, data: { title: 'Customer Issue Return' }, canActivate: [AuthGuard] },
 
-    { path: 'saleFurniture', component: SaleFurnitureComponent, data: { title: 'Sale Furniture' }, canActivate: [AuthGuard] },
+  { path: 'saleFurniture', component: SaleFurnitureComponent, data: { title: 'Sale Furniture' }, canActivate: [AuthGuard] },
 
   //////// Purchase Pages////////////////////
 
@@ -193,7 +194,7 @@ export const inventoryRoutes: Route[] = [
   { path: 'stktrnsfr', component: StockTransferComponent, data: { title: 'Stock Transfer' }, canActivate: [AuthGuard] },
 
 
-    
+
 
 
   ////////////////////////// Reports Pages /////////////
@@ -222,8 +223,9 @@ export const inventoryRoutes: Route[] = [
   { path: 'srptv', component: VehicleSaleReportComponent, data: { title: 'Vehicle Sale Report' }, canActivate: [AuthGuard] },
   { path: 'reorderrpt', component: ReorderReportComponent, data: { title: 'ReOrder Report' }, canActivate: [AuthGuard] },
   { path: 'prodInOutHistory', component: ProductInOutHistoryComponent, data: { title: 'Product In Out Hisotry' }, canActivate: [AuthGuard] },
-    { path: 'barcodeReportInv', component: BarcodeReportInvoicewiseComponent, data: { title: 'Barcode Report Invoice' }, canActivate: [AuthGuard] },
+  { path: 'barcodeReportInv', component: BarcodeReportInvoicewiseComponent, data: { title: 'Barcode Report Invoice' }, canActivate: [AuthGuard] },
 
+  { path: 'suplierLedgerSpecial', component: SupplierLedgerSpecialComponent, data: { title: 'Supplier Ledger Special' }, canActivate: [AuthGuard] },
 
 
   { path: '**', redirectTo: 'home', data: { title: 'Home' }, pathMatch: 'full' }
@@ -323,6 +325,7 @@ export const inventoryRoutes: Route[] = [
     SaleVehicleComponent,
     SaleFurnitureComponent,
     BarcodeReportInvoicewiseComponent,
+    SupplierLedgerSpecialComponent,
 
 
 

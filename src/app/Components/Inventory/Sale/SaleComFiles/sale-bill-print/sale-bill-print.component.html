@@ -725,36 +725,25 @@
         <hr>
 
 
-        <div class="d-flex">
+        <div class="row">
 
-            <span class="col-md-4"><b>Bank Detail :-</b> {{companyBankTitle}}</span>
-            <span class="col-md-4"><b>Vendor #</b> {{companyRegistrationNo}}</span>
-            <span class="col-md-4"><b>Invoice #</b> {{myInvoiceNo}}</span>
+            <span class="col-sm-4"><b>Bank Detail :-</b> {{companyBankTitle}}</span>
+            <span class="col-sm-4"><b>Vendor #</b> {{companyRegistrationNo}}</span>
+            <span class="col-sm-4"><b>Invoice #</b> {{myInvoiceNo}}</span>
 
-        </div>
+            
+            <span class="col-sm-4"><b>Acc Title :-</b> {{companyAccTitle}}</span>
+            <span class="col-sm-4"><b>STRN #</b> {{CompanySTRN}}</span>
+            <span class="col-sm-4"><b>NTN #</b> {{CompanyNTN}}</span>
 
-        <div class="d-flex">
+              <span class="col-sm-4"><b>B Code :-</b> {{companyBankCode}}</span>
+            <span class="col-sm-4"><b>PNTN #</b> {{companyPNTN}}</span>
+            <span class="col-sm-4"><b>Date #</b> {{myInvDate | date:'dd-MM-yyyy'}}</span>
 
-            <span class="col-md-4"><b>Acc Title :-</b> {{companyAccTitle}}</span>
-            <span class="col-md-4"><b>STRN #</b> {{CompanySTRN}}</span>
-            <span class="col-md-4"><b>NTN #</b> {{CompanyNTN}}</span>
-
-        </div>
-
-        <div class="d-flex">
-
-            <span class="col-md-4"><b>B Code :-</b> {{companyBankCode}}</span>
-            <span class="col-md-4"><b>PNTN #</b> {{companyPNTN}}</span>
-            <span class="col-md-4"><b>Date #</b> {{myInvDate | date:'dd-MM-yyyy'}}</span>
+             <span class="col-sm-4"><b>Account :-</b> {{companyAccNumber}}</span>
 
         </div>
 
-        <div class="d-flex">
-
-            <span class="col-md-4"><b>Account :-</b> {{companyAccNumber}}</span>
-
-
-        </div>
 
         <br>
 
@@ -791,7 +780,7 @@
 
 <hr>
 
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between" style="min-height: 200px;">
 
             <div style="width: 40%;">
 
@@ -821,6 +810,14 @@
             </div>
 
         </div>
+
+        
+        <div class="text-center">
+
+            <small>Thank you for your trust with Northedge Enterprises!</small>
+
+        </div>
+
 
     </div>
 

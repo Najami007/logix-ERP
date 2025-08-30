@@ -12,11 +12,11 @@ import { environment } from 'src/environments/environment.development';
 import { SaleBillPrintComponent } from '../../Sale/SaleComFiles/sale-bill-print/sale-bill-print.component';
 
 @Component({
-  selector: 'app-purchase-report-supplierwise',
-  templateUrl: './purchase-report-supplierwise.component.html',
-  styleUrls: ['./purchase-report-supplierwise.component.scss']
+  selector: 'app-supplier-ledger-special',
+  templateUrl: './supplier-ledger-special.component.html',
+  styleUrls: ['./supplier-ledger-special.component.scss']
 })
-export class PurchaseReportSupplierwiseComponent implements OnInit {
+export class SupplierLedgerSpecialComponent implements OnInit {
 
 
 
@@ -68,7 +68,7 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
   DetailList: any = [];
   reportType: any;
 
-formateType = 1;
+formateType = 3;
 
 
 
@@ -119,80 +119,8 @@ formateType = 1;
 
       this.app.startLoaderDark();
 
-      if (this.formateType == 2) {
-
-        this.reportType = 'Detail';
-        this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseRptSupplierWiseDetail_5?reqUserID=' + this.userID + '&reqPartyID=' + this.partyID + '&FromDate=' +
-          this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
-            (Response: any) => {
-              this.DetailList = [];
-                  this.grandTotal = 0;
-
-              if (Response.length == 0 || Response == null) {
-                this.global.popupAlert('Data Not Found!');
-                this.app.stopLoaderDark();
-                return;
-
-              }
-              this.DetailList = Response;
-          
-              Response.forEach((e: any) => {
-                if (e.invType == 'P') {
-                  this.grandTotal += e.costPrice * e.quantity;
-                }
-
-                if (e.invType == 'PR') {
-                  this.grandTotal -= e.costPrice * e.quantity;
-                }
-
-              });
-
-              this.app.stopLoaderDark();
-
-            },
-            (Error: any) => {
-              console.log(Error);
-              this.app.stopLoaderDark();
-            }
-          )
-      }
-
-      if (this.formateType == 1) {
-        this.reportType = 'Summary';
-        this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseRptSupplierWiseSummary_4?reqUserID=' + this.userID + '&reqPartyID=' + this.partyID + '&FromDate=' +
-          this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
-            (Response: any) => {
-              this.DetailList = [];
-                this.grandTotal = 0;
-              if (Response.length == 0 || Response == null) {
-                this.global.popupAlert('Data Not Found!');
-                 this.app.stopLoaderDark();
-                return;
-              }
-              this.DetailList = Response;
-            
-              Response.forEach((e: any) => {
-                if (e.invType == 'P') {
-                  this.grandTotal += e.netTotal + e.overHeadAmount + e.billDiscount;
-                }
-                if (e.invType == 'PR') {
-                  this.grandTotal -= e.netTotal + e.overHeadAmount + e.billDiscount;
-                }
-              });
-
-              this.app.stopLoaderDark();
-
-            },
-            (Error: any) => {
-              console.log(Error);
-              this.app.stopLoaderDark();
-            }
-          )
-      }
-
-
       
-      if (this.formateType == 3) {
+
 
         this.reportType = ' Ledger';
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetLedgerRpt_11?FromDate=' +
@@ -216,7 +144,7 @@ formateType = 1;
               this.app.stopLoaderDark();
             }
           )
-      }
+      
 
 
     }
