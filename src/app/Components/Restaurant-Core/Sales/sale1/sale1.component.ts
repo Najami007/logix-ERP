@@ -16,7 +16,6 @@ import * as bootstrap from 'bootstrap';
 
 import * as $ from 'jquery';
 import { SaleSavedBillComponent } from '../SaleCommonComponent/sale-saved-bill/sale-saved-bill.component';
-import { time } from 'console';
 
 
 
@@ -627,7 +626,6 @@ export class Sale1Component implements OnInit {
         this.tableData[index].rowIndex = this.tableData[0].rowIndex + 1;
       } else {
 
-        console.log(item);
         this.tableData.push({
           rowIndex: this.tableData.length == 0 ? this.tableData.length + 1
             : this.tableData[0].rowIndex + 1,

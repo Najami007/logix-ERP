@@ -2,16 +2,21 @@
 
 <div id="printRestBill" *ngIf="!gstFeature">
     <div class="text-center d-flex flex-column">
-        <span *ngIf="showCmpNameFeature" style="font-family:Arial, Helvetica, sans-serif">{{companyName}}</span>
-        <span *ngIf="companyAddress != '-'"  class="fs-12 text-uppercase">{{companyAddress}}</span>
-        <span *ngIf="CompanyMobile != '-'"  class="fs-12">{{CompanyMobile}}</span>
+
         <div *ngIf="showCompanyLogo" class="justify-content-center">
-            <img  [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
+            <img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
         </div>
 
-        <h2 *ngIf="showOrderNo" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">ORDER NO: {{myOrderNo}}</h2>
+        <h2 *ngIf="showOrderNo" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">ORDER NO:
+            {{myOrderNo}}</h2>
+
+
+        <span *ngIf="showCmpNameFeature" style="font-family:Arial, Helvetica, sans-serif">{{companyName}}</span>
+        <span *ngIf="companyAddress != '-'" class="fs-12 text-uppercase">{{companyAddress}}</span>
+        <span *ngIf="CompanyMobile != '-'" class="fs-12">{{CompanyMobile}}</span>
 
     </div>
+<br>
 
 
     <div class="p-1">
@@ -51,7 +56,8 @@
 
 
         </div>
-        <h2 *ngIf="myPaymentType !== 'Complimentary' && myInvType == 'S'" class="w-100 text-center border border-dark">PAID</h2>
+        <h2 *ngIf="myPaymentType !== 'Complimentary' && myInvType == 'S'" class="w-100 text-center border border-dark">
+            PAID</h2>
         <h2 *ngIf="myPaymentType == 'Complimentary'" class="w-100 text-center">Complimentary</h2>
         <h2 *ngIf="myDuplicateFlag == true" class=" w-100 text-center">Duplicate</h2>
 
@@ -71,9 +77,9 @@
                     <tr *ngFor="let item of myPrintData index as index">
                         <td>{{index +1}}</td>
                         <td>{{item.productTitle}}</td>
-                        <td>{{item.quantity |number:'1.0-2'}}</td>
-                        <td>{{item.salePrice |number:'1.0-2'}}</td>
-                        <td>{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
+                        <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
+                        <td class="text-end"> {{item.quantity * item.salePrice |number:'1.0-2'}}</td>
 
                     </tr>
                 </tbody>
@@ -81,82 +87,108 @@
 
 
 
-            <table class="w-100 mt-2 fs-12" >
-                <tbody class="fw-bold">
-                     <tr class="text-center " *ngIf="myInvType == 'S'">
+            <div class="d-flex justify-content-between">
+                <div style="width: 40%;">
+                    <table class="w-100 mt-2" *ngIf="myInvType == 'S'">
+                        <tbody>
+                            <!-- <tr class="text-center " *ngIf="gstFeature">
+                            <td id="output" class="d-none"></td>
+                            <td id="qrCode" class="qr-code-generator" style="border: 0px solid black;"></td>
 
-                        <td width="40%" rowspan="7" style="font-size: 10px;">
-                            <img [src]="global.thankyouImage" height="60" width="60" /><br />
-                            FOR VISITING US.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Sub Total</td>
-                        <td class="text-end">&nbsp;{{mySubTotal |number:'1.0-0'}}</td>
-                        <td></td>
+                        </tr> -->
+                            <tr class="text-center " *ngIf="!gstFeature">
 
-                    </tr>
-                    <tr *ngIf="myOtherCharges > 0">
-                        <td *ngIf="myOrderType == 'Dine In'">Service Charges</td>
-                        <td *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</td>
-                        <td *ngIf="myOrderType == 'Take Away'">Other Charges</td>
-                        <td class="text-end">&nbsp;{{myOtherCharges|number:'1.0-0'}}</td>
-                        <td></td>
+                                <td style="font-size: 10px;">
+                                    <img [src]="global.thankyouImage" height="60" width="60" /><br />
+                                    FOR VISITING US.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                    </tr>
-                    <tr *ngIf="myDiscount > 0">
-                        <td>Discount</td>
-                        <td class="text-end">&nbsp;{{myDiscount|number:'1.0-0'}}</td>
-                        <td></td>
-
-                    </tr>
-
-                    <tr>
-                        <td>Net Total</td>
-                        <td class="text-end">&nbsp;{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-0'}}</td>
-                        <td></td>
-
-                    </tr>
-                    <tr *ngIf="(myPaymentType == 'Cash' || myPaymentType == 'Split' || myPaymentType == 'Credit') && myCash > 0">
-                        <td>Cash</td>
-                        <td class="text-end">&nbsp;{{myCash|number:'1.0-0'}}</td>
-                        <td></td>
-
-                    </tr>
-                    <tr *ngIf="(myPaymentType == 'Bank' || myPaymentType == 'Split' || myPaymentType == 'Credit') && myBank > 0  ">
-                        <td>Bank</td>
-                        <td class="text-end">&nbsp;{{myBank|number:'1.0-0'}}</td>
-                        <td></td>
-
-                    </tr>
-                    <tr *ngIf="myChange !== 0">
-                        <td>Change</td>
-                        <td class="text-end">{{myChange|number:'1.0-0'}}</td>
-                        <td></td>
-
-                    </tr>
-
-                    <tr  *ngIf="myPartyBalance !== 0" >
-                        <td class="fw-bold">prv Blnc</td>
-                        <td class="fw-bold text-end" *ngIf="myChange > 0">&nbsp;{{myPartyBalance | number:'1.0-1'}}</td>
-                        <td class="fw-bold text-end"*ngIf="myChange <= 0">&nbsp;{{myPartyBalance -  ( -1 * myChange) | number:'1.0-1'}}</td>
-                        <td></td>
-                    </tr>
-                    <tr  *ngIf="myPartyBalance !== 0">
-                        <td class="fw-bold">Net Blnc</td>
-                        <td class="fw-bold text-end">&nbsp;{{myPartyBalance | number:'1.0-1'}}</td>
-                        <td></td>
-
-                    </tr>
+                </div>
 
 
-                </tbody>
-            </table>
+                <div style="width: 60%;">
+                    <table class="w-100 mt-2 fs-12">
+                        <tbody class="fw-bold">
+
+                            <tr>
+                                <td>Sub Total</td>
+                                <td class="text-end">&nbsp;{{mySubTotal |number:'1.0-0'}}</td>
+                                <td></td>
+
+                            </tr>
+                            <tr *ngIf="myOtherCharges > 0">
+                                <td *ngIf="myOrderType == 'Dine In'">Service Charges</td>
+                                <td *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</td>
+                                <td *ngIf="myOrderType == 'Take Away'">Other Charges</td>
+                                <td class="text-end">&nbsp;{{myOtherCharges|number:'1.0-0'}}</td>
+                                <td></td>
+
+                            </tr>
+                            <tr *ngIf="myDiscount > 0">
+                                <td>Discount</td>
+                                <td class="text-end">&nbsp;{{myDiscount|number:'1.0-0'}}</td>
+                                <td></td>
+
+                            </tr>
+
+                            <tr>
+                                <td>Net Total</td>
+                                <td class="text-end">&nbsp;{{mySubTotal + myOtherCharges - myDiscount|number:'1.0-0'}}
+                                </td>
+                                <td></td>
+
+                            </tr>
+                            <tr
+                                *ngIf="(myPaymentType == 'Cash' || myPaymentType == 'Split' || myPaymentType == 'Credit') && myCash > 0">
+                                <td>Cash</td>
+                                <td class="text-end">&nbsp;{{myCash|number:'1.0-0'}}</td>
+                                <td></td>
+
+                            </tr>
+                            <tr
+                                *ngIf="(myPaymentType == 'Bank' || myPaymentType == 'Split' || myPaymentType == 'Credit') && myBank > 0  ">
+                                <td>Bank</td>
+                                <td class="text-end">&nbsp;{{myBank|number:'1.0-0'}}</td>
+                                <td></td>
+
+                            </tr>
+                            <tr *ngIf="myChange !== 0">
+                                <td>Change</td>
+                                <td class="text-end">{{myChange|number:'1.0-0'}}</td>
+                                <td></td>
+
+                            </tr>
+
+                            <tr *ngIf="myPartyBalance !== 0">
+                                <td class="fw-bold">prv Blnc</td>
+                                <td class="fw-bold text-end" *ngIf="myChange > 0">&nbsp;{{myPartyBalance |
+                                    number:'1.0-1'}}
+                                </td>
+                                <td class="fw-bold text-end" *ngIf="myChange <= 0">&nbsp;{{myPartyBalance - ( -1 *
+                                    myChange)
+                                    | number:'1.0-1'}}</td>
+                                <td></td>
+                            </tr>
+                            <tr *ngIf="myPartyBalance !== 0">
+                                <td class="fw-bold">Net Blnc</td>
+                                <td class="fw-bold text-end">&nbsp;{{myPartyBalance | number:'1.0-1'}}</td>
+                                <td></td>
+
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
         </div>
         <hr>
 
-          <div class="d-flex flex-column">
+        <div class="d-flex flex-column">
             <!-- <span style="font-size: 10px;">Wish To Serve You Again!</span> -->
             <span style="font-size: 10px;">Software By : <b>Logix Solutionz | Mobile# 0313-5300471</b></span>
         </div>
@@ -169,18 +201,19 @@
 
 <!--------------    Print For 5% and 16% Gst        ----------->
 
-<div id="printGSTRestBill"  *ngIf="gstFeature">
+<div id="printGSTRestBill" *ngIf="gstFeature">
     <div class=" d-flex flex-column text-center" *ngIf="type != 'hold'">
         <span *ngIf="showCmpNameFeature" style="font-family:Arial, Helvetica, sans-serif">{{companyName}}</span>
-        <span *ngIf="companyAddress != '-'"  class="fs-11 text-uppercase">{{companyAddress}}</span>
-        <span *ngIf="CompanyMobile != '-'"  class="fs-11">{{CompanyMobile}}</span>
-    
+        <span *ngIf="companyAddress != '-'" class="fs-11 text-uppercase">{{companyAddress}}</span>
+        <span *ngIf="CompanyMobile != '-'" class="fs-11">{{CompanyMobile}}</span>
+
         <span *ngIf="gstFeature && CompanyNTN != '-'" class="fs-11"><b>PNTN:</b>{{CompanyNTN}} </span>
         <span *ngIf="gstFeature && CompanySTRN != '-'" class="fs-11"><b>STRN:</b> {{CompanySTRN}}</span>
-    
+
         <span class="w-100 text-center"><img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth"></span>
 
-        <h2 *ngIf="showOrderNo" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">ORDER NO: {{myOrderNo}}</h2>
+        <h2 *ngIf="showOrderNo" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">ORDER NO:
+            {{myOrderNo}}</h2>
 
     </div>
 
@@ -259,10 +292,11 @@
 
             <table class="w-100 mt-2 " style="font-size: 10px;">
                 <tbody class="fw-bold">
-                    <tr class="text-center" *ngIf="gstFeature" >
+                    <tr class="text-center" *ngIf="gstFeature">
                         <td id="output" class="d-none"></td>
-                        <td id="qrCode" class="qr-code-generator" width="40%" rowspan="6" style="border: 0px solid black;"></td>
-                    
+                        <td id="qrCode" class="qr-code-generator" width="40%" rowspan="6"
+                            style="border: 0px solid black;"></td>
+
                     </tr>
                     <tr>
                         <td>Sub Total</td>
@@ -355,10 +389,11 @@
 
         <div class="d-flex flex-column text-center" style="border-top:1px dotted;" *ngIf="type != 'hold'">
 
-            <span style="font-size: 10px;">As per Pakistan Govt. Regulations {{cashGst}}% GST applied on Cash Payment, While {{cardGst}}% GST
+            <span style="font-size: 10px;">As per Pakistan Govt. Regulations {{cashGst}}% GST applied on Cash Payment,
+                While {{cardGst}}% GST
                 is Charged on Card Transacion.</span>
             <span style="font-size: 10px;">Wish To Serve You Again!</span>
-           
+
         </div>
         <div style="border-top:1px dotted;" *ngIf="type == 'hold'">
             <span style="font-size: 10px;">**This is not a Bill Please ask for the Bill**</span>

@@ -1,7 +1,7 @@
 <div id="printKOT">
     <div class="text-center p-1">
-        <h2 style="border: 1px solid black;text-align: center;"  >KOT {{myCookingAreaTitle}}</h2>
-        <h2 style="font-family: Arial, Helvetica, sans-serif;">ORDER NO: {{myOrderNo}}</h2>   
+        <!-- <h2 style="border: 1px solid black;text-align: center;"  >KOT {{myCookingAreaTitle}}</h2> -->
+        <h2 *ngIf="showOrderNo" style="font-family: Arial, Helvetica, sans-serif;">ORDER NO: {{myOrderNo}}</h2>   
       
     </div>
 
@@ -26,11 +26,13 @@
                     <td>{{myCounterName}}</td>
                     <td>{{mytableNo}}</td>
                 </tr>
+                <tr>
+                    <td colspan="4" class="fw-bold text-uppercase" style="font-size: 15px;">{{myCookingAreaTitle}}</td>
+                </tr>
 
             </tbody>
         </table>
     </div>
-    <br>
     <div>
         <table style="width: 100%; font-family: Arial, Helvetica, sans-serif;" >
             <thead >
@@ -42,7 +44,7 @@
                 text-transform: uppercase;
                 font-size: 10px;">
                     <th style="padding: 5px;">Product Name</th>
-                    <th style="padding: 5px;">Qty</th>
+                    <th style="padding: 5px;" class="text-center">Qty</th>
                 
                 </tr>
             </thead>
@@ -56,13 +58,13 @@
                 font-size: 10px;"
                  *ngFor="let item of myPrintData index as index">
                     <td style="padding: 5px;">{{item.productTitle}}</td>
-                    <td style="padding: 5px;">{{item.quantity |number:'1.0-2'}}</td>
+                    <td style="padding: 5px;" class="text-center">{{item.quantity |number:'1.0-2'}}</td>
 
                 </tr>
             </tbody>
         </table>
    </div>
-   <div>
+   <div *ngIf="!PrintKotAreawiseFeature">
     <table style="width: 100%;">
         <tbody>
             <tr>

@@ -86,7 +86,7 @@ export class ManufacturingSaleRptComponent implements OnInit {
       {
         next: (Response: any) => {
           this.reset();
-
+          console.log(Response);
 
           if (Response.length == 0 || Response == null) {
             this.global.popupAlert('Data Not Found!');
