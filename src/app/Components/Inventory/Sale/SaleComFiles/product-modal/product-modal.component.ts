@@ -13,23 +13,23 @@ export class ProductModalComponent implements OnInit {
 
 
   constructor(
-      public global: GlobalDataModule
- 
-    ) {
-     
-  
-    }
+    public global: GlobalDataModule
+
+  ) {
+
+
+  }
 
 
   ngOnInit(): void {
-      
+
   }
 
 
 
- @Input() productList:any = [];
- @Output() addProductEmitter = new EventEmitter();
- @Output()  reloadProdEmitter = new EventEmitter();
+  @Input() productList: any = [];
+  @Output() addProductEmitter = new EventEmitter();
+  @Output() reloadProdEmitter = new EventEmitter();
   productName = '';
 
 
@@ -37,13 +37,13 @@ export class ProductModalComponent implements OnInit {
   prodFocusedRow = 0;
   changeFocus(e: any, cls: any) {
 
-  
-      this.prodFocusedRow = 0;
-      /////move down
-      if (e.keyCode == 40) {
-        if (this.productList.length >= 1) {
-          $('.prodRow0').trigger('focus');
-        }
+
+    this.prodFocusedRow = 0;
+    /////move down
+    if (e.keyCode == 40) {
+      if (this.productList.length >= 1) {
+        $('.prodRow0').trigger('focus');
+      }
     }
   }
 
@@ -108,47 +108,49 @@ export class ProductModalComponent implements OnInit {
 
 
   handleProdFocus(item: any, e: KeyboardEvent, cls: string, endFocus: string, prodList: any[]) {
-  const key = e.keyCode;
+    const key = e.keyCode;
 
-  if (key === 9 && !e.shiftKey) {
-    this.prodFocusedRow++;
-  } else if (key === 9 && e.shiftKey) {
-    this.prodFocusedRow--;
-  } else if (key === 40) {
-    // Arrow Down
-    if (prodList.length > 0) {
+    if (key === 9 && !e.shiftKey) {
       this.prodFocusedRow++;
-      if (this.prodFocusedRow >= prodList.length) {
-        this.prodFocusedRow = prodList.length - 1;
+    } else if (key === 9 && e.shiftKey) {
+      this.prodFocusedRow--;
+    } else if (key === 40) {
+      if (this.prodFocusedRow >= 24) {
+        return;
+      }
+      // Arrow Down
+      if (prodList.length > 0) {
+        this.prodFocusedRow++;
+        if (this.prodFocusedRow >= prodList.length) {
+          this.prodFocusedRow = prodList.length - 1;
+        } else {
+          const clsName = cls + this.prodFocusedRow;
+          e.preventDefault();
+          $(clsName).trigger('focus');
+        }
+      }
+    } else if (key === 38) {
+
+      // Arrow Up
+      if (this.prodFocusedRow <= 0) {
+        this.prodFocusedRow = 0;
+        e.preventDefault();
+        $(endFocus).trigger('focus');
       } else {
+        this.prodFocusedRow--;
         const clsName = cls + this.prodFocusedRow;
         e.preventDefault();
         $(clsName).trigger('focus');
       }
     }
-  } else if (key === 38) {
-    // Arrow Up
-    if (this.prodFocusedRow <= 0) {
-      this.prodFocusedRow = 0;
-      e.preventDefault();
-      $(endFocus).trigger('focus');
-    } else {
-      this.prodFocusedRow--;
-      const clsName = cls + this.prodFocusedRow;
-      e.preventDefault();
-      $(clsName).trigger('focus');
-    }
   }
-}
 
 
-  selectProduct(item:any){
-
+  selectProduct(item: any) {
     this.addProductEmitter.emit(item);
-
   }
 
-  reloadProducts(){
+  reloadProducts() {
     this.reloadProdEmitter.emit()
   }
 

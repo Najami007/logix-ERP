@@ -232,7 +232,7 @@ export class MarbleSaleComponent implements OnInit {
   }
 
   handleProdFocus(item: any, e: any, cls: any, endFocus: any, prodList: []) {
-
+    
 
     /////// increment in prodfocus on tab click
     if (e.keyCode == 9 && !e.shiftKey) {
@@ -245,10 +245,12 @@ export class MarbleSaleComponent implements OnInit {
 
     }
     /////move down
+   
     if (e.keyCode == 40) {
 
-
+      
       if (prodList.length > 1) {
+         e.preventDefault();
         this.prodFocusedRow += 1;
         if (this.prodFocusedRow >= prodList.length) {
           this.prodFocusedRow -= 1
@@ -308,6 +310,7 @@ export class MarbleSaleComponent implements OnInit {
       /////move down
       if (e.keyCode == 40) {
         if (this.itemList.length >= 1) {
+          e.preventDefault();
           $('.prodRow0').trigger('focus');
         }
       }
@@ -549,6 +552,7 @@ export class MarbleSaleComponent implements OnInit {
 
 
   edit(item: any) {
+    this.reset();
     this.invBillNo = item.invBillNo;
     this.invoiceDate = new Date(item.invDate);
     this.partyID = item.partyID;
@@ -760,7 +764,7 @@ export class MarbleSaleComponent implements OnInit {
 
   }
 
-    printSaleInvoice(item: any) {
+  printSaleInvoice(item: any) {
 
     this.saleInvoicePrint.printChallan(item.invBillNo);
 

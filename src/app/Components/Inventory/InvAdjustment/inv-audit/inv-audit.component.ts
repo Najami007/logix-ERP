@@ -435,7 +435,9 @@ export class InvAuditComponent implements OnInit {
     }
     /////move down
     if (e.keyCode == 40) {
-
+       if (this.prodFocusedRow >= 24) {
+        return;
+      }
 
       if (prodList.length > 1) {
         this.prodFocusedRow += 1;
