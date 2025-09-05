@@ -29,6 +29,7 @@ export class AddFinishedItemComponent implements OnInit {
     this.getCategoryList();
 
     if (this.editData) {
+      console.log(this.editData);
       this.getItemDetail(this.editData.mnuItemID)
       this.MnuItemID = this.editData.mnuItemID;
       this.MnuItemCatID = this.editData.mnuItemCatID;
@@ -37,7 +38,8 @@ export class AddFinishedItemComponent implements OnInit {
       this.MnuItemSalePrice = this.editData.mnuItemSalePrice;
       this.MnuItemSize = this.editData.mnuItemSize;
       this.MnuItemDescription = this.editData.mnuItemDescription;
-      this.btnType = 'Update';
+      this.MnuLabourCharges = this.editData.mnuLabourCharges,
+        this.btnType = 'Update';
     }
 
   }
@@ -50,6 +52,7 @@ export class AddFinishedItemComponent implements OnInit {
   MnuItemCostPrice: any = '';
   MnuItemSalePrice: any = '';
   MnuItemCatID: any = '';
+  MnuLabourCharges: any = '';
   ProjectID: any = '';
 
 
@@ -64,11 +67,11 @@ export class AddFinishedItemComponent implements OnInit {
 
           if (Response.length > 0) {
 
-            Response.forEach((e: any,index:any) => {
+            Response.forEach((e: any, index: any) => {
               if (e.groupID == 1) {
                 this.tableDataList.push({
-                  groupID: e.groupID ,
-                  rowIndex:index,
+                  groupID: e.groupID,
+                  rowIndex: index,
                   productID: e.productID,
                   productTitle: e.productTitle,
                   quantity: e.quantity,
@@ -77,7 +80,7 @@ export class AddFinishedItemComponent implements OnInit {
               }
               if (e.groupID == 2) {
                 this.tmpLabourChargesList.push({
-                  groupID: e.groupID ,
+                  groupID: e.groupID,
                   productID: e.productID,
                   productTitle: e.productTitle,
                   quantity: e.quantity,
@@ -85,9 +88,9 @@ export class AddFinishedItemComponent implements OnInit {
                 })
               }
 
-               if (e.groupID == 3) {
+              if (e.groupID == 3) {
                 this.tmpOverHeadList.push({
-                  groupID: e.groupID ,
+                  groupID: e.groupID,
                   productID: e.productID,
                   productTitle: e.productTitle,
                   quantity: e.quantity,
@@ -276,7 +279,7 @@ export class AddFinishedItemComponent implements OnInit {
   }
 
 
-   changeFocus(e: any, cls: any) {
+  changeFocus(e: any, cls: any) {
 
     if (e.target.value == '') {
       if (e.keyCode == 40) {
@@ -290,7 +293,7 @@ export class AddFinishedItemComponent implements OnInit {
         }
       }
     }
-    
+
     // else {
     //   this.prodFocusedRow = 0;
     //   /////move down
@@ -657,12 +660,12 @@ export class AddFinishedItemComponent implements OnInit {
       return;
     }
 
-    if(this.tmpLabourChargesList.length == 0){
+    if (this.tmpLabourChargesList.length == 0) {
       this.msg.WarnNotify('Enter Labour Elements');
       return;
     }
 
-      if(this.tmpOverHeadList.length == 0){
+    if (this.tmpOverHeadList.length == 0) {
       this.msg.WarnNotify('Enter Overhead Element');
       return;
     }
@@ -679,6 +682,7 @@ export class AddFinishedItemComponent implements OnInit {
       MnuItemCostPrice: this.MnuItemCostPrice,
       MnuItemSalePrice: this.MnuItemSalePrice,
       MnuItemCatID: this.MnuItemCatID,
+      MnuLabourCharges: this.MnuLabourCharges,
       ProjectID: this.global.getProjectID(),
       ItemDetail: JSON.stringify(itemDetail),
       UserID: this.global.getUserID(),

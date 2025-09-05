@@ -1,1 +1,277 @@
-<p>production-audit works!</p>
+<div class=" body h-100">
+
+
+    <div class="row h-100 w-100">
+        <div class="col-lg-9">
+
+            <!-------------------- Top Date and location section --------------->
+
+
+
+            <div class="ps-1 d-flex flex-wrap">
+
+                <!-------------------- Product Search Bar --------------->
+
+                <div class="col-md-8  d-flex flex-column">
+                    <mat-label class="text-primary">Search Barcode / Product</mat-label>
+                    <input type="text" #pbarcode [(ngModel)]="PBarcode"
+                        (keydown)="searchByCode($event);changeFocus($event,'.prodRow')" id="searchProduct"
+                        class="p-1 ps-2 mb-2 searchProduct w-100" placeholder="Alt + b" autofocus autocomplete="off"
+                        accesskey="b">
+
+                    <div class="  d-flex flex-column SearchConatiner cursorPointer w-100"
+                        *ngIf="PBarcode != '' && PBarcode != undefined">
+                        <mat-card class="card "
+                            *ngFor="let item of itemList| filter:PBarcode | slice:0:25 index as index"
+                            (click)="holdDataFunction(item)">
+                            <button style="height: 40px; background: none;border: none;text-align: left;"
+                                class="prodRow{{index}} prodBtn justify-content-between d-flex"
+                                (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',itemList)">
+                                <p>{{item.mnuItemTitle}}</p>
+                                <p><strong>({{item.mnuItemCode}})</strong></p>
+                            </button>
+                        </mat-card>
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex flex-wrap ps-2">
+                    <div class="d-flex flex-column ">
+                        <mat-label class="text-primary">Quantity</mat-label>
+                        <input type="text" [(ngModel)]="tmpQuantity"
+                            (keydown)="onQtyinsert($event);global.handleNumKeys($event)"
+                            class="col-md-12 p-1 ps-2 mb-2 qtyInput" id="qtyInput" autofocus autocomplete="off"
+                            accesskey="">
+                    </div>
+                    <mat-checkbox class="mt-4 col-md-4" [(ngModel)]="autoInsert">Auto Insert</mat-checkbox>
+                    <mat-checkbox class="mt-4 col-md-2 d-none" [disabled]="tableDataList.length > 0"
+                        [(ngModel)]="autoMerge">Merge</mat-checkbox>
+                </div>
+
+
+
+            </div>
+
+
+
+            <!-------------------- Table Area for Products --------------->
+
+            <div class="p-1" style="max-height: 80vh;overflow-y:scroll !important;padding-bottom: 10px;">
+                <table class="table-hover table-logix">
+                    <thead>
+                        <tr>
+                            <th class="cursorPointer" (click)="changeOrder()">S#</th>
+                            <th>Barcode</th>
+                            <th class="col-3">Product Name</th>
+                            <th>Scan Qty</th>
+                            <!-- <th>AQ</th> -->
+                            <!-- <th >Dif</th> -->
+                            <!-- <th>Avg Cost</th>
+                            <th>Cost</th>
+                            <th>Avg Total</th>
+                            <th>Cost Total</th> -->
+
+
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of tableDataList index as index" (click)="rowFocused = index"
+                            [ngClass]="rowFocused == index ?'bg-dg':''">
+                            <td>{{index+1}}</td>
+                            <td>{{item.barcode}}</td>
+                            <td>{{item.productTitle}}</td>
+                            <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
+                                    (keydown)="handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);insertToLocalStorage()"
+                                    (keyup)="changeValue(item);getTotal();insertToLocalStorage()"
+                                    class="qty{{index}} text-center" style="width: 80px;"></td>
+       
+
+
+                            <td class="cursorPointer text-center  text-danger"><mat-icon
+                                    (click)="delRow(item)">delete</mat-icon></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+
+                            <th class="">{{totalQty |number:'1.0-3'}}</th>
+                            <!-- <th class="text-end">{{avgCostTotal |number:'1.0-2'}}</th>
+                            <th class="text-end">{{CostTotal |number:'1.0-2'}}</th> -->
+                            <td class="text-center"><mat-icon class="cursorPointer "
+                                    (click)="EmptyData()">delete</mat-icon></td>
+
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+
+        <div class="col-lg-3  border-start border-dark" style="height: 84vh;">
+
+            <div class="pt-2">
+                <mat-card class="p-1 w-100 ">
+                    <mat-card-content>
+                        <div class="text-center ">
+                            <div class="font-digit fs-50"><span class="text-danger">{{tmpAvailableQty |number:'1.0-2'}}
+                                </span>/ <span class="text-success">{{tmpPreviousEnteredQty | number:'1.0-2'}}</span>
+                            </div>
+                            <!-- <p class="font-digit fs-50">{{subTotal |number:'1.0-2'}}</p> -->
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="mt-2">
+                <mat-form-field appearance="outline" *ngIf="!disableDateFeature" class="w-100 matSmall">
+                    <mat-label>Invoice Date</mat-label>
+                    <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="invDate"
+                        [matDatepicker]="iDate">
+                    <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
+                    <mat-datepicker #iDate></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Location</mat-label>
+                    <mat-select [(ngModel)]="locationID" name="location" [disabled]="tableDataList.length > 0">
+                        <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of locationList | filter:locationSearch.value"
+                            [value]="item.locationID">{{item.locationTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Remarks</mat-label>
+                    <textarea matInput type="text" [(ngModel)]="invRemarks"></textarea>
+                </mat-form-field>
+            </div>
+
+
+            <div class="mt-1 row">
+                <div class="w-50 "><button *ngIf="crudList.c" class="btnhold w-100 " (click)="SaveBill('hold')">{{holdBtnType}}</button></div>
+                <div class="w-50"><button class="btnreset w-100" data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button></div>
+
+            </div>
+            <div class="mt-1 row">
+               <div class="w-100">
+                 <button *ngIf="roleTypeID < 3" class="btnsave w-100"
+                    (click)="global.openBootstrapModal('#AuditStart',true)">Others</button>
+               </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <!---------------     Modal Window for Retreiving Hold Bills --------------->
+    <div class="modal fade" id="holdModal" tabindex="-1" aria-labelledby="holdModalLabel">
+        <div class="modal-dialog modal-dialog-scrollable mt-5  modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="holdModalLabel">Bill Details</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="d-flex justify-content-between">
+                        <mat-form-field class="col-lg-4 matSmall" appearance="outline">
+                            <mat-label>Date</mat-label>
+                            <input matInput type="text" readonly="true" [(ngModel)]="Date" [matDatepicker]="hbDate">
+                            <mat-datepicker-toggle matSuffix [for]="hbDate"></mat-datepicker-toggle>
+                            <mat-datepicker #hbDate></mat-datepicker>
+                        </mat-form-field>
+
+                        <!-- 
+                        <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 bg-primary text-white btn-rpt"
+                            (click)="findHoldBills('HI')">Hold Bill</button> -->
+                        <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt"
+                            (click)="findHoldBills()">Get Bill</button>
+
+                        <mat-form-field class="col-lg-3 matSmall" appearance="outline">
+                            <mat-label>Search.......</mat-label>
+                            <input matInput #holdSearch type="text" class="col-lg-4">
+                        </mat-form-field>
+
+                    </div>
+
+                    <table class="table-logix">
+                        <thead>
+                            <tr>
+                                <th>S#</th>
+                                <th>Inv No.</th>
+                                <th>Date</th>
+                                <th>Location</th>
+                                <th>Audit Start</th>
+                                <th>Audit End</th>
+                                <th>Remarks</th>
+
+                                <th>User</th>
+                                <th *ngIf="crudList.r">Action</th>
+                                <th *ngIf="crudList.u">Retrive</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of savedInvoiceList  | filter:holdSearch.value index as index">
+                                <td>{{index+1}}</td>
+                                <td>{{item.auditInventoryID}}</td>
+                                <td>{{item.auditInvDate | date:'dd-MM-yyyy'}}</td>
+                                 <td>{{item.locationTitle}}</td>
+                                <td>{{item.auditStartDate | date:'dd-MM-yyyy'}}</td>
+                                <td>{{item.auditEndDate | date:'dd-MM-yyyy'}}</td>
+                                <td>{{item.remarks}}</td>
+
+                                <td>{{item.entryUser}}</td>
+                                <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary"
+                                        (click)="printBill(item)">print</mat-icon></td>
+                                <td class="text-center cursorPointer" *ngIf=" crudList.u && item.auditActiveStatus">
+                                    <mat-icon data-bs-dismiss="modal" (click)="retriveBill(item)">edit</mat-icon>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!----------- Print Area For Bill Print --------------------->
+
+        <app-production-audit-inv-print></app-production-audit-inv-print>
+
+
+
+    <!---------------     Modal Window for Audit Start Screen --------------->
+    <div class="modal fade" id="AuditStart" tabindex="-1" aria-labelledby="holdModalLabel">
+        <div class="modal-dialog modal-dialog-scrollable mt-5  modal-md ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="holdModalLabel">Audit</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="mt-4 d-flex justify-content-around">
+
+                        <button *ngIf="crudList.c" class="btnsave w-25" (click)="startAudit('start')">Start
+                            Audit</button>
+                        <button class="btnsave w-25" [disabled]="tableDataList.length > 0" (click)="startAudit('post')">Post Audit</button>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>

@@ -78,7 +78,8 @@
                                         *ngIf="showLess">{{item.productTitle |slice:0:24}}...</span>
                                     <ngx-barcode6 class="barcode" *ngIf="!hideBarcode" [bc-format]="'CODE128'"
                                         [bc-height]="40" [bc-background]="'none'" [bc-font-options]="'bold'"
-                                        [bc-value]="item.barcode2 ? item.barcode2 : item.barcode" [bc-width]='1.5'
+                                        [bc-width]="getBarcodeWidth(item.barcode2 ? item.barcode2 : item.barcode)"
+                                        [bc-value]="item.barcode2 ? item.barcode2 : item.barcode" 
                                         [bc-font-size]="10" [bc-text-margin]="-2" [bc-display-value]="true"
                                         [bc-text-position]="'bottom'" [bc-text-align]="'right'"></ngx-barcode6>
                                     <!-- <span class="barcodeText">{{item.barcode}}</span> -->

@@ -19,7 +19,7 @@
                         (click)="addMenuItem(item)">
                         <button style="height: 40px; background: none;border: none;text-align: left;"
                             class="prodRow{{index}} prodBtn justify-content-between d-flex"
-                            (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">
+                            (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',itemList)">
                             <p>{{item.mnuItemTitle}}</p>
                             <p><strong>({{item.mnuItemCode}})</strong></p>
                         </button>
@@ -37,7 +37,7 @@
                 <thead>
                     <tr>
                         <th class="cursorPointer" (click)="changeOrder()">S#</th>
-                        <th>Barcode</th>
+                        <!-- <th>Barcode</th> -->
                         <th>Product Name</th>
                         <th>Quantity</th>
 
@@ -51,25 +51,26 @@
                     <tr *ngFor="let item of tableDataList index as index" (click)="rowFocused = index"
                         [ngClass]="rowFocused == index ?'bg-dg':''">
                         <td>{{index+1}}</td>
-                        <td>{{item.barcode}}</td>
+                        <!-- <td>{{item.barcode}}</td> -->
                         <td>{{item.productTitle}}</td>
                         <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
                                 (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);"
                                 (keyup)="changeValue(item);getTotal();" class="qty{{index}} text-center"
                                 style="width: 80px;"></td>
 
-                        <td class="text-center"><input type="text" [(ngModel)]="item.labourCost" min="0"
+                        <td class="text-center"><input type="text" [(ngModel)]="item.mnuLabourCharges" min="0"
                                 (keydown)="this.handleUpdown(item,$event,'.lc',index);getTotal();changeValue(item);"
                                 (keyup)="changeValue(item);getTotal();" class="lc{{index}} text-center"
                                 style="width: 80px;"></td>
+                        <!-- <td class="text-end">{{item.mnuLabourCharges| number:'1.0-2'}}</td> -->
 
                         <!-- <td class="text-end">{{item.labourCost | number:'1.0-2'}}</td> -->
-                        <td class="text-end">{{item.labourCost * item.quantity | number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.mnuLabourCharges * item.quantity | number:'1.0-2'}}</td>
                         <td class="cursorPointer text-center text-danger"><mat-icon
                                 (click)="delRow(item)">delete</mat-icon></td>
                     </tr>
                     <tr>
-                        <td colspan="3"></td>
+                        <td colspan="2"></td>
                         <th class="text-center">{{totalQty |number:'1.0-2'}}</th>
                         <th colspan="1"></th>
                         <th class="text-end">{{CostTotal |number:'1.0-2'}}</th>
@@ -158,12 +159,12 @@
         <div class="d-flex flex-wrap">
 
             <div class="w-100 mb-1">
-                <button *ngIf="crudList.c" class="btnsave w-100" (click)="SaveBill('Save')">{{btnType}}</button>
+                <button *ngIf="crudList.c" class="btnsave w-100" (click)="SaveBill()">{{btnType}}</button>
             </div>
-            <div class="w-50 pe-1">
+            <!-- <div class="w-50 pe-1">
                 <button class="btnhold w-100" (click)="SaveBill('hold')">{{holdBtnType}}</button>
-            </div>
-            <div class="w-50">
+            </div> -->
+            <div class="w-100">
                 <button class="btnreset w-100" data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button>
             </div>
 
@@ -193,9 +194,7 @@
 
 
                         <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt"
-                            (click)="FindSavedBills('HIC')">Get Holded</button>
-                        <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt"
-                            (click)="FindSavedBills('IC')">Get Saved</button>
+                            (click)="FindSavedBills('PRD')">Get Saved</button>
 
                         <mat-form-field class="col-lg-3 matSmall" appearance="outline">
                             <mat-label>Search.......</mat-label>
@@ -203,6 +202,10 @@
                         </mat-form-field>
 
                     </div>
+                    <mat-radio-group [(ngModel)]="searchBillType" class="mt-2">
+                        <mat-radio-button value="all">All</mat-radio-button>
+                        <mat-radio-button value="Date">Datewise</mat-radio-button>
+                    </mat-radio-group>
 
                     <table class="table-logix">
                         <thead>
@@ -212,7 +215,7 @@
                                 <th>Date</th>
                                 <th>Type</th>
                                 <th>Location</th>
-                                <th>Customer</th>
+                                <th>Contractor</th>
                                 <th>Amount</th>
                                 <th>User</th>
                                 <th *ngIf="crudList.r">Action</th>
@@ -220,7 +223,7 @@
 
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of IssueBillList  | filter:holdSearch.value index as index">
+                            <tr *ngFor="let item of SavedBillList  | filter:holdSearch.value index as index">
                                 <td>{{index+1}}</td>
                                 <td>{{item.invBillNo}}</td>
                                 <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
@@ -233,6 +236,9 @@
 
                                     <mat-icon data-bs-dismiss="modal" *ngIf="item.approvedStatus == false"
                                         (click)="retriveBill(item)">edit_outline</mat-icon>
+                                    <mat-icon class="text-success"
+                                        (click)="item.approvedStatus ? '' : approveBill(item) ">{{item.approvedStatus ?
+                                        'done_all' :'check'}}</mat-icon>
                                     <mat-icon class="text-primary" (click)="printBill(item)">print</mat-icon>
                                     <mat-icon class="text-danger" *ngIf="item.approvedStatus == false"
                                         (click)="DeleteInv(item)">delete_outline</mat-icon>
@@ -249,6 +255,7 @@
         </div>
     </div>
 
+    <app-production-print></app-production-print>
 
     <!----------- Print Area For Bill Print --------------------->
 

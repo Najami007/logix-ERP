@@ -47,6 +47,7 @@ export class GarmentSaleComponent implements OnInit {
   CustomSaleGstFeatrue = this.global.CustomSaleGstFeature;
   showSaleAQFeature = this.global.showSaleAQFeature;
   showSaleCPFeature = this.global.showSaleCPFeature;
+  DashSlashBarcodeFeature = this.global.dashSlashBarcodeFeature;
 
 
 
@@ -254,21 +255,25 @@ export class GarmentSaleComponent implements OnInit {
     if (this.PBarcode !== '') {
       if (e.keyCode == 13) {
 
-        /// Seperating by / and coverting to Qty
-        if (this.PBarcode.split("/")[1] != undefined) {
-          barcode = this.PBarcode.split("/")[0];
-          qty = parseFloat(this.PBarcode.split("/")[1]);
-          BType = 'price';
+
+        if (this.DashSlashBarcodeFeature) {
+          /// Seperating by / and coverting to Qty
+          if (this.PBarcode.split("/")[1] != undefined) {
+            barcode = this.PBarcode.split("/")[0];
+            qty = parseFloat(this.PBarcode.split("/")[1]);
+            BType = 'price';
 
 
+          }
+          /// Seperating by - and coverting to Qty 
+          if (this.PBarcode.split("-")[1] != undefined) {
+            barcode = this.PBarcode.split("-")[0];
+            qty = parseFloat(this.PBarcode.split("-")[1]);
+            BType = 'qty';
+
+          }
         }
-        /// Seperating by - and coverting to Qty 
-        if (this.PBarcode.split("-")[1] != undefined) {
-          barcode = this.PBarcode.split("-")[0];
-          qty = parseFloat(this.PBarcode.split("-")[1]);
-          BType = 'qty';
 
-        }
 
         // this.app.startLoaderDark();
         this.global.getProdDetail(0, barcode).subscribe(
@@ -814,13 +819,13 @@ export class GarmentSaleComponent implements OnInit {
 
 
   editDiscProdQty(item: any) {
-    if(item.packing <= 1) return;
+    if (item.packing <= 1) return;
     this.dialog.open(EditQtyModalComponent, {
       width: '30%',
       data: item
     }).afterClosed().subscribe(value => {
-      if(Number(value) > 0){
-        var index = this.tableDataList.findIndex((e:any)=> e.barcode == item.barcode);
+      if (Number(value) > 0) {
+        var index = this.tableDataList.findIndex((e: any) => e.barcode == item.barcode);
         this.tableDataList[index].quantity = Number(value) * item.packing;
         this.getTotal();
 
@@ -1065,141 +1070,141 @@ export class GarmentSaleComponent implements OnInit {
 
 
 
-      if (this.tableDataList == '') {
-        this.msg.WarnNotify('No Product Seleted');
-        return;
-      }
-      if (paymentType == 'Cash' && this.partyID == 0 && (this.cash == 0 || this.cash == undefined || this.cash == null)) {
-        this.msg.WarnNotify('Enter Cash');
-        return;
-      }
+    if (this.tableDataList == '') {
+      this.msg.WarnNotify('No Product Seleted');
+      return;
+    }
+    if (paymentType == 'Cash' && this.partyID == 0 && (this.cash == 0 || this.cash == undefined || this.cash == null)) {
+      this.msg.WarnNotify('Enter Cash');
+      return;
+    }
 
-      if (paymentType == 'Cash' && this.partyID == 0 && this.cash < this.netTotal) {
-        this.msg.WarnNotify('Entered Cash is not Valid');
-        return;
-      }
-      if (paymentType == 'Split' && ((this.cash + this.bankCash) > this.netTotal || (this.cash + this.bankCash) < this.netTotal)) {
-        this.msg.WarnNotify('Sum Of Both Amount must be Equal to Net Total');
-        return;
-      }
+    if (paymentType == 'Cash' && this.partyID == 0 && this.cash < this.netTotal) {
+      this.msg.WarnNotify('Entered Cash is not Valid');
+      return;
+    }
+    if (paymentType == 'Split' && ((this.cash + this.bankCash) > this.netTotal || (this.cash + this.bankCash) < this.netTotal)) {
+      this.msg.WarnNotify('Sum Of Both Amount must be Equal to Net Total');
+      return;
+    }
 
-      if (this.paymentType == 'Split' && this.cash <= 0) {
-        this.msg.WarnNotify('Cash Amount is Not Valid');
-        return;
-      }
-      if (this.paymentType == 'Split' && this.bankCash <= 0) {
-        this.msg.WarnNotify('Bank Amount is Not Valid');
-        return;
-      }
-      if ((this.bookerID == 0 || this.bookerID == undefined) && this.BookerFeature) {
-        this.msg.WarnNotify('Select Booker');
-        return;
-      }
-      if (this.paymentType == 'Credit' && this.partyID == 0) {
-        this.msg.WarnNotify('Select Customer');
-        return;
-      }
-      if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
-        this.msg.WarnNotify('Enter Valid Amount');
-        return;
-      }
+    if (this.paymentType == 'Split' && this.cash <= 0) {
+      this.msg.WarnNotify('Cash Amount is Not Valid');
+      return;
+    }
+    if (this.paymentType == 'Split' && this.bankCash <= 0) {
+      this.msg.WarnNotify('Bank Amount is Not Valid');
+      return;
+    }
+    if ((this.bookerID == 0 || this.bookerID == undefined) && this.BookerFeature) {
+      this.msg.WarnNotify('Select Booker');
+      return;
+    }
+    if (this.paymentType == 'Credit' && this.partyID == 0) {
+      this.msg.WarnNotify('Select Customer');
+      return;
+    }
+    if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
+      this.msg.WarnNotify('Enter Valid Amount');
+      return;
+    }
 
-      if ((paymentType == 'Credit' || paymentType == 'Split' || paymentType == 'Bank') && this.bankCash > 0 && this.bankCoaID == 0) {
-        this.msg.WarnNotify('Select Bank');
-        return;
-      }
+    if ((paymentType == 'Credit' || paymentType == 'Split' || paymentType == 'Bank') && this.bankCash > 0 && this.bankCoaID == 0) {
+      this.msg.WarnNotify('Select Bank');
+      return;
+    }
 
-      if (this.VehicleSaleFeature && this.vehicleID == 0) {
-        this.msg.WarnNotify('Select Vehicle');
-        return;
-      }
-      if (this.VehicleSaleFeature && this.meterReading == '') {
-        this.msg.WarnNotify('Enter Meter Reading');
-        return;
-      }
-
-
-      var postData: any = {
-        InvDate: this.global.dateFormater(this.InvDate, '-'),
-        PartyID: this.partyID,
-        InvType: "S",
-        ProjectID: this.projectID,
-        BookerID: this.bookerID,
-        PaymentType: paymentType,
-        SendToFbr: SendToFbr,
-        PosFee: this.gstFeature ? this.PosFee : 0,
-        Remarks: this.billRemarks || '-',
-        OrderType: "Take Away",
-        BillTotal: this.subTotal,
-        BillDiscount: Number(this.discount) + Number(this.offerDiscount),
-        OtherCharges: this.otherCharges,
-        NetTotal: this.netTotal,
-        CashRec: this.cash,
-        Change: this.change,
-        AdvTaxAmount: this.AdvTaxAmount,
-        AdvTaxValue: this.AdvTaxValue,
-        BankCoaID: this.bankCoaID,
-        BankCash: this.bankCash,
-        CusContactNo: this.customerMobileno || '-',
-        CusName: this.customerName || '-',
-        SaleDetail: JSON.stringify(this.tableDataList),
-        VehicleID: this.vehicleID,
-        MeterReading: this.meterReading || '0',
-        UserID: this.global.getUserID()
-      }
+    if (this.VehicleSaleFeature && this.vehicleID == 0) {
+      this.msg.WarnNotify('Select Vehicle');
+      return;
+    }
+    if (this.VehicleSaleFeature && this.meterReading == '') {
+      this.msg.WarnNotify('Enter Meter Reading');
+      return;
+    }
 
 
-      if (this.global.SubscriptionExpired()) {
-        Swal.fire({
-          title: 'Alert!',
-          text: 'Unable To Save , Contact To Administrator!',
-          position: 'center',
-          icon: 'warning',
-          showCancelButton: false,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'OK',
-        });
-        return;
-      }
+    var postData: any = {
+      InvDate: this.global.dateFormater(this.InvDate, '-'),
+      PartyID: this.partyID,
+      InvType: "S",
+      ProjectID: this.projectID,
+      BookerID: this.bookerID,
+      PaymentType: paymentType,
+      SendToFbr: SendToFbr,
+      PosFee: this.gstFeature ? this.PosFee : 0,
+      Remarks: this.billRemarks || '-',
+      OrderType: "Take Away",
+      BillTotal: this.subTotal,
+      BillDiscount: Number(this.discount) + Number(this.offerDiscount),
+      OtherCharges: this.otherCharges,
+      NetTotal: this.netTotal,
+      CashRec: this.cash,
+      Change: this.change,
+      AdvTaxAmount: this.AdvTaxAmount,
+      AdvTaxValue: this.AdvTaxValue,
+      BankCoaID: this.bankCoaID,
+      BankCash: this.bankCash,
+      CusContactNo: this.customerMobileno || '-',
+      CusName: this.customerName || '-',
+      SaleDetail: JSON.stringify(this.tableDataList),
+      VehicleID: this.vehicleID,
+      MeterReading: this.meterReading || '0',
+      UserID: this.global.getUserID()
+    }
 
-      if(this.isProcessing == true) return;
-      this.isProcessing = true;
-      this.app.startLoaderDark();
-      this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', postData).subscribe(
-        (Response: any) => {
-          if (Response.msg == 'Data Saved Successfully') {
-            this.tmpCash = this.cash;
-            this.tmpChange = this.change;
-            this.reset();
-            this.msg.SuccessNotify(Response.msg);
 
-            if (printFlag) {
-              this.PrintAfterSave(Response.invNo);
-            }
+    if (this.global.SubscriptionExpired()) {
+      Swal.fire({
+        title: 'Alert!',
+        text: 'Unable To Save , Contact To Administrator!',
+        position: 'center',
+        icon: 'warning',
+        showCancelButton: false,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
 
-            if (paymentType != 'Cash') {
-              $('#searchProduct').trigger('focus');
-              this.global.closeBootstrapModal('#paymentMehtod', true);
+    if (this.isProcessing == true) return;
+    this.isProcessing = true;
+    this.app.startLoaderDark();
+    this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', postData).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully') {
+          this.tmpCash = this.cash;
+          this.tmpChange = this.change;
+          this.reset();
+          this.msg.SuccessNotify(Response.msg);
 
-            }
-
-          } else {
-            this.msg.WarnNotify(Response.msg);
+          if (printFlag) {
+            this.PrintAfterSave(Response.invNo);
           }
-          this.isProcessing = false;
-          this.app.stopLoaderDark();
 
-        },
-        (error: any) => {
-          this.isProcessing = false;
-          console.log(error);
-          this.msg.WarnNotify('Unable to Save Check Connection');
+          if (paymentType != 'Cash') {
+            $('#searchProduct').trigger('focus');
+            this.global.closeBootstrapModal('#paymentMehtod', true);
 
-          this.app.stopLoaderDark();
+          }
+
+        } else {
+          this.msg.WarnNotify(Response.msg);
         }
-      )
-    
+        this.isProcessing = false;
+        this.app.stopLoaderDark();
+
+      },
+      (error: any) => {
+        this.isProcessing = false;
+        console.log(error);
+        this.msg.WarnNotify('Unable to Save Check Connection');
+
+        this.app.stopLoaderDark();
+      }
+    )
+
 
 
 
@@ -1232,7 +1237,7 @@ export class GarmentSaleComponent implements OnInit {
     this.bankCoaID = 0;
     this.vehicleID = 0;
     this.meterReading = '';
-     this.AdvTaxAmount = 0;
+    this.AdvTaxAmount = 0;
     this.AdvTaxValue = 0;
 
 

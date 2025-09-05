@@ -38,6 +38,8 @@ import { ContractorProfileComponent } from './contractor-profile/contractor-prof
 import { AddContractorProfileComponent } from './contractor-profile/add-contractor-profile/add-contractor-profile.component';
 import { ProductionAuditComponent } from './production-audit/production-audit.component';
 import { ProductionItemReceivingComponent } from './production-item-receiving/production-item-receiving.component';
+import { ProductionAuditInvPrintComponent } from './production-audit/production-audit-inv-print/production-audit-inv-print.component';
+import { ProductionPrintComponent } from './production-item-receiving/production-print/production-print.component';
 
 
 
@@ -102,6 +104,8 @@ export const manufacturingRoutes: Route[] = [
     AddContractorProfileComponent,
     ProductionAuditComponent,
     ProductionItemReceivingComponent,
+    ProductionAuditInvPrintComponent,
+    ProductionPrintComponent,
 
 
   ],

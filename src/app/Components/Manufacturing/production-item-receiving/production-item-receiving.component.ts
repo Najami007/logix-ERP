@@ -11,6 +11,7 @@ import { Observable, retry } from 'rxjs';
 import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/addparty.component';
 import Swal from 'sweetalert2';
 import { CustomerIssueBillPrintComponent } from '../../Inventory/CusotmerIssuance/customer-issue-bill-print/customer-issue-bill-print.component';
+import { ProductionPrintComponent } from './production-print/production-print.component';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class ProductionItemReceivingComponent implements OnInit {
 
   apiReq: any = environment.mainApi + this.global.manufacturingLink;
 
-  @ViewChild(CustomerIssueBillPrintComponent) billPrint: any;
+  @ViewChild(ProductionPrintComponent) billPrint: any;
 
   crudList: any = { c: true, r: true, u: true, d: true };
   companyProfile: any = [];
@@ -83,7 +84,7 @@ export class ProductionItemReceivingComponent implements OnInit {
   productImage: any;
   subTotal: number = 0;
   totalQty: number = 0;
-  IssueBillList: any = [];
+  SavedBillList: any = [];
 
   salePriceTotal = 0;
   CostTotal = 0;
@@ -173,35 +174,59 @@ export class ProductionItemReceivingComponent implements OnInit {
   }
 
 
-  addMenuItem(item: any) {
 
-    var index = this.tableDataList.findIndex((e: any) => e.mnuItemID == item.mnuItemID);
-
-    if (index != -1) {
-      this.tableDataList[index].quantity += 1;
-      this.PBarcode = '';
-      $('.mbsearchProduct').trigger('focus');
-      this.getTotal();
-      return;
+  getSingleMenuItem(item: any): Observable<any> {
+    return this.http.get(this.apiReq + 'GetAllMnuItems?mnuItemID=' + item.mnuItemID).pipe(retry(3))
+  }
 
 
-    }
+  addMenuItem(data: any) {
 
 
-    this.tableDataList.push({
-      mnuItemID: item.mnuItemID,
-      barcode: item.mnuItemCode,
-      productTitle: item.mnuItemTitle,
-      quantity: 1,
-      labourCost: 0,
-      costPrice: item.mnuItemCostPrice,
-      salePrice: item.mnuItemSalePrice
-    })
+    this.getSingleMenuItem(data).subscribe(
+      {
+        next: (Response: any) => {
 
-    this.PBarcode = '';
-    this.getTotal();
+          if (Response.length > 0) {
+            var item = Response[0];
+            var index = this.tableDataList.findIndex((e: any) => e.mnuItemID == item.mnuItemID);
 
-    $('.searchProduct').trigger('focus');
+            if (index != -1) {
+              this.tableDataList[index].quantity += 1;
+              this.PBarcode = '';
+              $('.mbsearchProduct').trigger('focus');
+              this.getTotal();
+              return;
+
+
+            }
+
+
+            this.tableDataList.push({
+              ProductID: 0,
+              mnuItemID: item.mnuItemID,
+              barcode: item.mnuItemCode,
+              productTitle: item.mnuItemTitle,
+              quantity: 1,
+              mnuLabourCharges: 0,
+              costPrice: item.mnuItemCostPrice,
+              avgCostPrice: item.mnuItemCostPrice,
+              salePrice: item.mnuItemSalePrice
+            })
+
+            this.PBarcode = '';
+            this.getTotal();
+
+            $('.searchProduct').trigger('focus');
+
+          }
+
+        }
+      }
+    )
+
+
+
 
 
   }
@@ -241,12 +266,12 @@ export class ProductionItemReceivingComponent implements OnInit {
     this.salePriceTotal = 0;
     for (var i = 0; i < this.tableDataList.length; i++) {
 
-      this.subTotal += (Number(this.tableDataList[i].quantity) * Number(this.tableDataList[i].labourCost));
+      this.subTotal += (Number(this.tableDataList[i].quantity) * Number(this.tableDataList[i].mnuLabourCharges));
       this.totalQty += Number(this.tableDataList[i].quantity);
-      this.CostTotal += (Number(this.tableDataList[i].quantity) * Number(this.tableDataList[i].labourCost));
+      this.CostTotal += (Number(this.tableDataList[i].quantity) * Number(this.tableDataList[i].mnuLabourCharges));
       this.salePriceTotal += (Number(this.tableDataList[i].quantity) * Number(this.tableDataList[i].salePrice));
 
-      
+
       // this.myTotal = this.mySubtoatal - this.myDiscount;
       // this.myDue = this.myPaid - this.myTotal;\
     }
@@ -462,24 +487,11 @@ export class ProductionItemReceivingComponent implements OnInit {
 
 
   //////////////////////// Save Bill Fucntion ////////////////////
-  isValidSale = true;
-  SaveBill(type: any) {
+  SaveBill() {
 
 
-    var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
-    var inValidSaleProdList = this.tableDataList.filter((p: any) => p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
     var inValidQtyProdList = this.tableDataList.filter((p: any) => p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
-    var inValidDiscProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > (Number(p.salePrice) - (Number(p.discInR))));
 
-
-    if (inValidCostProdList.length > 0) {
-      this.msg.WarnNotify('(' + inValidCostProdList[0].productTitle + ') Cost Price greater than Sale Price');
-      return;
-    }
-    if (inValidSaleProdList.length > 0) {
-      this.msg.WarnNotify('(' + inValidSaleProdList[0].productTitle + ') Sale Price is not Valid');
-      return;
-    }
     if (inValidQtyProdList.length > 0) {
       this.msg.WarnNotify('(' + inValidQtyProdList[0].productTitle + ') Quantity is not Valid');
       return;
@@ -492,74 +504,74 @@ export class ProductionItemReceivingComponent implements OnInit {
       return;
     }
     if (this.locationID == undefined || this.locationID == 0) {
-      this.msg.WarnNotify('Select Warehouse Location');
+      this.msg.WarnNotify('Select Location');
       return;
     }
 
     if (this.partyID == undefined || this.partyID == 0) {
-      this.msg.WarnNotify('Select Customer');
+      this.msg.WarnNotify('Select Contractor');
       return;
     }
 
     var postData = {
-      InvType: 'IC',
+      InvType: 'PRD',
       InvBillNo: this.invBillNo,
       InvDate: this.global.dateFormater(this.invoiceDate, '-'),
+      PartyID: this.partyID,
       LocationID: this.locationID,
       ProjectID: this.projectID,
-      BookerID: this.bookerID,
+
       BillTotal: this.subTotal,
       NetTotal: this.subTotal,
       Remarks: this.invRemarks || '-',
-      PartyID: this.partyID,
-      InvDetail: JSON.stringify(this.tableDataList),
+
+      SaleDetail: JSON.stringify(this.tableDataList),
       PinCode: '',
       UserID: this.global.getUserID(),
     }
 
-    if (this.btnType == 'Save' && type == 'Save') {
-      postData.InvType = 'IC';
+    if (this.btnType == 'Save') {
       this.insert('insert', postData);
     }
 
-    if (this.holdBtnType == 'Hold' && type == 'hold') {
-      postData.InvType = 'HIC';
-      this.insert('insert', postData);
-    }
-
-    if (this.holdBtnType == 'ReHold' && type == 'hold') {
+    if (this.btnType == 'Update') {
 
       this.global.openPinCode().subscribe(pin => {
-        if (pin != '') {
+        if (pin !== '') {
           postData.PinCode = pin;
-          postData.InvType = 'HIC';
           this.insert('update', postData);
         }
-      })
+      });
+
+
     }
+
+
+
   }
 
 
 
   ///////////////// Insert Data to API ///////////////////////
 
+  isProcessing = false;
+
+
   insert(type: any, postData: any) {
 
-    if (!this.isValidSale) {
-      return;
-    }
-
+    console.log(postData);
     var url = '';
     if (type == 'insert') {
-      url = 'InsertIssueStockToCustomer';
+      url = 'InsertMnuProduction';
     }
     if (type == 'update') {
-      url = 'UpdateHoldedIssueInvoice';
+      url = 'UpdateMnuProduction';
     }
 
     this.app.startLoaderDark();
-    this.isValidSale = false;
-    this.http.post(environment.mainApi + this.global.inventoryLink + url, postData).subscribe(
+    if (this.isProcessing) return;
+    this.isProcessing = true;
+    this.http.post(environment.mainApi + this.global.manufacturingLink + url, postData).subscribe(
       (Response: any) => {
         if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
           this.msg.SuccessNotify(Response.msg);
@@ -570,12 +582,12 @@ export class ProductionItemReceivingComponent implements OnInit {
         }
         this.app.stopLoaderDark();
 
-        this.isValidSale = true
+        this.isProcessing = false
       },
       (Error: any) => {
         this.msg.WarnNotify(Error);
         this.app.stopLoaderDark();
-        this.isValidSale = true
+        this.isProcessing = false
       }
     )
 
@@ -598,7 +610,7 @@ export class ProductionItemReceivingComponent implements OnInit {
     this.btnType = 'Save';
     this.productImage = '';
     this.invBillNo = '-';
-    this.IssueBillList = [];
+    this.SavedBillList = [];
     this.CostTotal = 0;
     this.salePriceTotal = 0;
     this.partyID = 0;
@@ -608,28 +620,16 @@ export class ProductionItemReceivingComponent implements OnInit {
 
 
   //////////////////////////// Getting Saved Bill Function ///////////////////
+
+  searchBillType: any = 'Date';
+
   FindSavedBills(type: any) {
-    if (type == 'HIC') {
-      $('#edit').show();
-    }
 
-    if (type == 'IC') {
-      $('#edit').hide()
-    }
-
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetIssueInventoryBillSingleDate?Type=' + type + '&creationdate=' + this.global.dateFormater(this.Date, '-')).subscribe(
+    var date = this.searchBillType == 'Date' ? this.global.dateFormater(this.Date, '-') : '';
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetIssueInventoryBillSingleDate?Type=' + type + '&creationdate=' + date).subscribe(
       (Response: any) => {
-        this.IssueBillList = [];
-        if (type == 'HIC') {
-          Response.forEach((e: any) => {
-            if (e.approvedStatus == false) {
-              this.IssueBillList.push(e);
-            }
-          });
-        }
-        if (type == 'IC') {
-          this.IssueBillList = Response;
-        }
+        this.SavedBillList = Response;
+
       },
       (Error: any) => {
         this.msg.WarnNotify(Error);
@@ -645,7 +645,7 @@ export class ProductionItemReceivingComponent implements OnInit {
 
   retriveBill(item: any) {
     this.tableDataList = [];
-    this.holdBtnType = 'ReHold';
+    this.btnType = 'Update';
     this.invoiceDate = new Date(item.invDate);
     this.locationID = item.locationID;
     this.invRemarks = item.remarks;
@@ -655,35 +655,25 @@ export class ProductionItemReceivingComponent implements OnInit {
 
     this.getBillDetail(item.invBillNo).subscribe(
       (Response: any) => {
+        console.log(Response);
         this.totalQty = 0;
-        this.productImage = Response[Response.length - 1].productImage;
 
 
         Response.forEach((e: any) => {
           this.totalQty += e.quantity;
           this.tableDataList.push({
-            rowIndex: this.tableDataList.length + 1,
-            productID: e.productID,
-            productTitle: e.productTitle,
+            ProductID: 0,
+            mnuItemID: e.mnuItemID,
             barcode: e.barcode,
-            productImage: e.productImage,
+            productTitle: e.productTitle,
             quantity: e.quantity,
-            avgCostPrice: e.avgCostPrice,
+            mnuLabourCharges: e.mnuLabourCharges,
             costPrice: e.costPrice,
-            salePrice: e.salePrice,
-            expiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
-            batchNo: e.batchNo,
-            batchStatus: e.batchStatus,
-            uomID: e.uomID,
-            packing: e.packing,
-            discInP: e.discInP,
-            discInR: e.discInR,
+            avgCostPrice: e.avgCostPrice,
+            salePrice: e.salePrice
+
           })
         });
-
-        //////////sorting data table base on sort type
-        this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex)
-          : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
 
         this.getTotal();
 
@@ -693,7 +683,8 @@ export class ProductionItemReceivingComponent implements OnInit {
 
 
   public getBillDetail(billNo: any): Observable<any> {
-    return this.http.get(environment.mainApi + this.global.inventoryLink + 'GetIssueSingleBillDetail?reqInvBillNo=' + billNo).pipe(retry(3));
+    var url = `${this.apiReq}PrintMnuBill?BillNo=${billNo}`;
+    return this.http.get(url).pipe(retry(3));
   }
 
 
@@ -745,37 +736,45 @@ export class ProductionItemReceivingComponent implements OnInit {
 
 
 
-  ////////////////////////// To Edit Sale Price //////////////////
-  editSP(item: any) {
-    if (this.editSpFeature && this.crudList.u) {
-      Swal.fire({
-        title: "Enter Total Amount",
-        input: "text",
-        showCancelButton: true,
-        confirmButtonText: 'Save',
-        showLoaderOnConfirm: true,
-        preConfirm: (value) => {
+  /////////////////////////////////////////////////////
 
-          if (!value || isNaN(value) || value <= 0) {
-            return Swal.showValidationMessage("Enter Valid Amount");
-          }
-          const index = this.tableDataList.indexOf(item);
-          if (value < this.tableDataList[index].costPrice && this.LessToCostFeature == false) {
-            return Swal.showValidationMessage("Sale Price Is Less Then Cost Price");
-          }
 
-          this.tableDataList[index].salePrice = value;
-          this.getTotal();
-        }
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire({
-            title: "Sale Price Updated",
-            timer: 500,
-          });
-        }
-      })
-    }
+  approveBill(row: any) {
+    // alert(row.invBillNo);
+    $('#holdModal').hide();
+    this.global.openPinCode().subscribe(pin => {
+      $('#holdModal').show();
+      if (pin != '') {
+        this.app.startLoaderDark();
+        this.http.post(this.apiReq + 'PostProductionBill', {
+          InvBillNo: row.invBillNo,
+          Remarks: '-',
+          PinCode: pin,
+          UserID: this.global.getUserID()
+        }).subscribe(
+          {
+            next: (Response: any) => {
+              if (Response.msg == 'Data Posted Successfully') {
+                this.msg.SuccessNotify(Response.msg);
+                this.FindSavedBills('PRD');
+              } else {
+                this.msg.WarnNotify(Response.msg)
+              }
+              this.app.stopLoaderDark();
+            },
+            error: (Error: any) => {
+              console.log(Error);
+              this.msg.WarnNotify(Error);
+              this.app.stopLoaderDark();
+            }
+          }
+        )
+      }
+    })
   }
+
+
+
+
 
 }

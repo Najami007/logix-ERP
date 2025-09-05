@@ -126,7 +126,8 @@
             <!-- <span class="bcodet">{{item.productTitle
                 |slice:0:24}}...</span> -->
             <ngx-barcode6 class="barcode" [bc-format]="'CODE128'" [bc-height]="40" [bc-background]="'none'"
-                [bc-value]="curProductRow?.barcode2 ? curProductRow?.barcode2 : curProductRow?.barcode" [bc-width]='1.5'
+              [bc-width]="getBarcodeWidth(curProductRow?.barcode2 ? curProductRow?.barcode2 : curProductRow?.barcode || '')"
+                [bc-value]="curProductRow?.barcode2 ? curProductRow?.barcode2 : curProductRow?.barcode" 
                 [bc-font-size]="10" [bc-text-margin]="-2" [bc-display-value]="true" [bc-font-options]="'bold'" [bc-text-position]="'bottom'"
                 [bc-text-align]="'right'"></ngx-barcode6>
             <!-- <span class="barcodeText">{{item.barcode}}</span> -->

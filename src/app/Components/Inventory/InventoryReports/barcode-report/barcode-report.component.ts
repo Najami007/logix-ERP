@@ -204,4 +204,16 @@ export class BarcodeReportComponent implements OnInit {
   }
 
 
+
+getBarcodeWidth(value: string): number {
+  // Base width (e.g., 2px per character, adjust as needed)
+  const baseWidth = 1.5 
+
+  // Ensure a minimum width for short values
+  // return Math.max(2, baseWidth); 
+
+  // Or scale dynamically:
+  return Math.max(1, value.length < 10 ? 1.4 : 2 / value.length );
+}
+
 }

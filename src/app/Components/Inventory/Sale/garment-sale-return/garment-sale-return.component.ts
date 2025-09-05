@@ -42,7 +42,7 @@ export class GarmentSaleReturnComponent implements OnInit {
   urduBillFeature = this.global.urduBill;
   VehicleSaleFeature = this.global.VehicleSaleFeature;
   CustomSaleGstFeatrue = this.global.CustomSaleGstFeature;
-
+  DashSlashBarcodeFeature = this.global.dashSlashBarcodeFeature;
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
@@ -243,21 +243,24 @@ export class GarmentSaleReturnComponent implements OnInit {
     if (this.PBarcode !== '') {
       if (e.keyCode == 13) {
 
-        /// Seperating by / and coverting to Qty
-        if (this.PBarcode.split("/")[1] != undefined) {
-          barcode = this.PBarcode.split("/")[0];
-          qty = parseFloat(this.PBarcode.split("/")[1]);
-          BType = 'price';
+        if (this.DashSlashBarcodeFeature) {
+          /// Seperating by / and coverting to Qty
+          if (this.PBarcode.split("/")[1] != undefined) {
+            barcode = this.PBarcode.split("/")[0];
+            qty = parseFloat(this.PBarcode.split("/")[1]);
+            BType = 'price';
 
 
+          }
+          /// Seperating by - and coverting to Qty 
+          if (this.PBarcode.split("-")[1] != undefined) {
+            barcode = this.PBarcode.split("-")[0];
+            qty = parseFloat(this.PBarcode.split("-")[1]);
+            BType = 'qty';
+
+          }
         }
-        /// Seperating by - and coverting to Qty 
-        if (this.PBarcode.split("-")[1] != undefined) {
-          barcode = this.PBarcode.split("-")[0];
-          qty = parseFloat(this.PBarcode.split("-")[1]);
-          BType = 'qty';
 
-        }
 
         // this.app.startLoaderDark();
         this.global.getProdDetail(0, barcode).subscribe(

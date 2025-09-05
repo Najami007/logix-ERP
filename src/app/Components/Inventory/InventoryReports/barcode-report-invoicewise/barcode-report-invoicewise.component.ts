@@ -44,13 +44,13 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
 
   }
   ngOnInit(): void {
-   this.global.setHeaderTitle('Barcode Report Invoice')
+    this.global.setHeaderTitle('Barcode Report Invoice')
   }
 
 
 
-  showPrice:any = true;
-  showTitle:any = true;
+  showPrice: any = true;
+  showTitle: any = true;
 
 
   SearchDate: any = new Date();
@@ -165,7 +165,7 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
   }
 
 
-async  startPrinting() {
+  async startPrinting() {
     if (this.tableDataList.length == 0) return;
 
     this.printDataList = [];
@@ -186,7 +186,7 @@ async  startPrinting() {
       }
 
     }
-  await  printSequentially();
+    await printSequentially();
   }
 
 
@@ -205,6 +205,19 @@ async  startPrinting() {
         setTimeout(() => resolve(), 1000);
       }
     });
+  }
+
+
+  getBarcodeWidth(value: string): number {
+    // Base width (e.g., 2px per character, adjust as needed)
+    const baseWidth = 1.5
+    if(value.length == 0) return 1;
+
+    // Ensure a minimum width for short values
+    // return Math.max(2, baseWidth); 
+
+    // Or scale dynamically:
+    return Math.max(1, value.length < 10 ? 1.5 : 2 / value.length);
   }
 
 

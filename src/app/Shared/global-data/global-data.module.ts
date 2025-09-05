@@ -325,7 +325,7 @@ export class GlobalDataModule implements OnInit {
   PrintKotAreawiseFeature = this.getFeature('PrintKotAreawise');
   FurnitureSaleFeature = this.getFeature('FurnitureSale');
   DisableDineInKotPrintFeature = this.getFeature('DisableDineInKotPrint');
-
+  dashSlashBarcodeFeature = this.getFeature('dashSlashBarcode');
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
     this.BookerFeature = this.getFeature('Booker');
@@ -376,6 +376,7 @@ export class GlobalDataModule implements OnInit {
     this.PrintKotAreawiseFeature = this.getFeature('PrintKotAreawise');
     this.FurnitureSaleFeature = this.getFeature('FurnitureSale');
     this.DisableDineInKotPrintFeature = this.getFeature('DisableDineInKotPrint');
+    this.dashSlashBarcodeFeature = this.getFeature('dashSlashBarcode');
   }
 
 
@@ -602,9 +603,11 @@ export class GlobalDataModule implements OnInit {
   curDate: any = new Date();
   public SubscriptionExpired(): boolean {
     ///// yyyy-MM-dd /////////////
-    var ExpiryDate: any = '2030-09-05';
+    //var ExpiryDate: any = '2025-09-05 06:00:AM';
+    var ExpiryDate: any = 'TWpBek1DMHdPUzB3TlE9PQ==';
     var curDate = this.datePipe.transform(this.curDate, 'yyyy-MM-dd')
-    var status: any = curDate! >= ExpiryDate;
+    console.log(curDate , atob(atob(ExpiryDate))) ;
+    var status: any = curDate! >= atob(atob(ExpiryDate));
     return status;
 
 

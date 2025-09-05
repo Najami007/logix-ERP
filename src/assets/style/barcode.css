@@ -57,8 +57,8 @@
   }
   
   .bcodet {
-    padding-left: 1px;
-    padding-right: 1px;
+    /* padding-left: 1px;
+    padding-right: 1px; */
     /* margin-top: -3px; */
     display: flex;
     justify-content: center;

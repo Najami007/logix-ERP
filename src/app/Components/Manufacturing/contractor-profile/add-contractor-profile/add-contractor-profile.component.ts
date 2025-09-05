@@ -189,7 +189,6 @@ export class AddContractorProfileComponent implements OnInit {
       postData['PinCode'] = pinCode;
     }
 
-
     $('.loaderDark').show();
 
     this.http.post(environment.mainApi + this.global.companyLink + url, postData).subscribe(
