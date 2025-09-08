@@ -10,6 +10,7 @@ import { environment } from "src/environments/environment.development";
 import { DeliveryChallanComponent } from "../ManufacturingComFiles/delivery-challan/delivery-challan.component";
 import { OrderPrintComponent } from "../ManufacturingComFiles/order-print/order-print.component";
 import { MnuInvoicePrintComponent } from "../ManufacturingComFiles/mnu-invoice-print/mnu-invoice-print.component";
+import { Observable, retry } from "rxjs";
 
 
 
@@ -232,7 +233,7 @@ export class MarbleSaleComponent implements OnInit {
   }
 
   handleProdFocus(item: any, e: any, cls: any, endFocus: any, prodList: []) {
-    
+
 
     /////// increment in prodfocus on tab click
     if (e.keyCode == 9 && !e.shiftKey) {
@@ -245,12 +246,12 @@ export class MarbleSaleComponent implements OnInit {
 
     }
     /////move down
-   
+
     if (e.keyCode == 40) {
 
-      
+
       if (prodList.length > 1) {
-         e.preventDefault();
+        e.preventDefault();
         this.prodFocusedRow += 1;
         if (this.prodFocusedRow >= prodList.length) {
           this.prodFocusedRow -= 1
@@ -370,22 +371,53 @@ export class MarbleSaleComponent implements OnInit {
 
   tableDataList: any = [];
 
-  addMenuItem(item: any) {
-
-    var index = this.tableDataList.findIndex((e: any) => e.mnuItemID == item.mnuItemID);
-
-    if (index != -1) {
-      this.tableDataList[index].quantity += 1;
-      this.PBarcode = '';
-      $('.mbsearchProduct').trigger('focus');
-      this.getTotal();
-      return;
+  getSingleMenuItem(item: any): Observable<any> {
+    return this.http.get(this.apiReq + 'GetAllMnuItems?mnuItemID=' + item.mnuItemID).pipe(retry(3))
+  }
 
 
-    }
+  addMenuItem(data: any) {
+
+    this.getSingleMenuItem(data).subscribe(
+      {
+        next: (Response: any) => {
+          if (Response.length > 0) {
+            var item = Response[0];
+            var index = this.tableDataList.findIndex((e: any) => e.mnuItemID == item.mnuItemID);
+
+            if (index != -1) {
+              this.tableDataList[index].quantity += 1;
+              this.PBarcode = '';
+              $('.mbsearchProduct').trigger('focus');
+              this.getTotal();
+              return;
 
 
-    this.tableDataList.push({ mnuItemID: item.mnuItemID, productTitle: item.mnuItemTitle, quantity: 1, costPrice: item.mnuItemCostPrice, salePrice: item.mnuItemSalePrice })
+            }
+
+
+            this.tableDataList.push({
+              mnuItemID: item.mnuItemID,
+              productTitle: item.mnuItemTitle,
+              quantity: 1,
+              costPrice: item.mnuItemCostPrice,
+              salePrice: item.mnuItemSalePrice
+            })
+
+
+            this.PBarcode = '';
+            this.getTotal();
+
+            $('.searchProduct').trigger('focus');
+
+          }else{
+            this.msg.WarnNotify('No Product Found')
+          }
+
+        }
+      }
+    )
+
 
     this.PBarcode = '';
     this.getTotal();
@@ -724,6 +756,7 @@ export class MarbleSaleComponent implements OnInit {
             this.msg.SuccessNotify(Response.msg);
             this.reset();
             this.getSavedOrder();
+            this.getSavedSale();
             this.global.closeBootstrapModal('#saleModal', true);
           } else {
             this.msg.WarnNotify(Response.msg);

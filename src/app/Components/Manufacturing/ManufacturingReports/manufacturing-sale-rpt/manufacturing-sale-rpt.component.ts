@@ -86,8 +86,6 @@ export class ManufacturingSaleRptComponent implements OnInit {
       {
         next: (Response: any) => {
           this.reset();
-          console.log(Response);
-
           if (Response.length == 0 || Response == null) {
             this.global.popupAlert('Data Not Found!');
             this.app.stopLoaderDark();
@@ -96,7 +94,16 @@ export class ManufacturingSaleRptComponent implements OnInit {
           }
 
           if (Response.length > 0) {
+
             this.DataList = Response.filter((e: any) => e.invType == this.rptType);
+
+            if (this.DataList.length == 0 || this.DataList == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
+
             this.DataList.forEach((e: any) => {
               this.billTotal += e.billTotal;
               this.billDiscountTotal += e.billDiscount;

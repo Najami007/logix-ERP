@@ -63,12 +63,12 @@ export class ManufacturingSaleItemwiseComponent {
   }
 
   onUserSelected() {
-    if(this.userID == 0) return;
+    if (this.userID == 0) return;
     var curUser = this.userList.find((e: any) => e.userID == this.userID);
     this.userName = curUser.userName;
   }
 
-  mnuItemID:any = 0;
+  mnuItemID: any = 0;
   itemList: any = [];
   getItemList() {
 
@@ -95,7 +95,7 @@ export class ManufacturingSaleItemwiseComponent {
 
   getReport() {
 
-    if(this.mnuItemID == 0){
+    if (this.mnuItemID == 0) {
       this.msg.WarnNotify('Select Item');
       return;
     }
@@ -106,28 +106,36 @@ export class ManufacturingSaleItemwiseComponent {
     var toDate = this.global.dateFormater(this.toDate, '');
     var toTime = this.toTime;
 
-     this.app.startLoaderDark();
+    this.app.startLoaderDark();
     this.http.get(this.apiReq + `SaleDetailRptMnuItemWise?reqMnuItemID=${mnuItemID}&reqUID=${userID}&FromDate=${fromDate}
       &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`).subscribe(
       {
         next: (Response: any) => {
-           this.reset();
-              if (Response.length == 0 || Response == null) {
+          this.reset();
+          if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+
+          }
+
+          if (Response.length > 0) {
+            this.DataList = Response.filter((e: any) => e.invType == this.rptType);
+
+
+            if (this.DataList.length == 0 || this.DataList == null) {
               this.global.popupAlert('Data Not Found!');
               this.app.stopLoaderDark();
               return;
 
             }
-
-          if (Response.length > 0) {
-            this.DataList = Response.filter((e: any) => e.invType == this.rptType);
             this.DataList.forEach((e: any) => {
               this.costTotal += e.costPrice * e.quantity;
               this.saleTotal += e.salePrice * e.quantity;
             });
           }
 
-         this.app.stopLoaderDark();
+          this.app.stopLoaderDark();
 
         },
         error: error => {
@@ -153,7 +161,7 @@ export class ManufacturingSaleItemwiseComponent {
     this.global.ExportHTMLTabletoExcel('#printContainer', `Sale Report ${startDate} - ${endDate}`);
   }
 
-    reset() {
+  reset() {
     this.DataList = [];
     this.costTotal = 0;
     this.saleTotal = 0;

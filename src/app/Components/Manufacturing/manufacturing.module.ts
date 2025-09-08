@@ -40,6 +40,8 @@ import { ProductionAuditComponent } from './production-audit/production-audit.co
 import { ProductionItemReceivingComponent } from './production-item-receiving/production-item-receiving.component';
 import { ProductionAuditInvPrintComponent } from './production-audit/production-audit-inv-print/production-audit-inv-print.component';
 import { ProductionPrintComponent } from './production-item-receiving/production-print/production-print.component';
+import { ProductionReportComponent } from './ManufacturingReports/production-report/production-report.component';
+import { ManufacturingStockRegisterComponent } from './ManufacturingReports/manufacturing-stock-register/manufacturing-stock-register.component';
 
 
 
@@ -75,6 +77,9 @@ export const manufacturingRoutes: Route[] = [
   { path: 'itemsalerpt', component: ManufacturingSaleItemwiseComponent, data: { title: 'Sale Report Itemwise' }, canActivate: [AuthGuard] },
   { path: 'customersalerpt', component: ManufacturingSalePartywiseComponent, data: { title: 'Sale Report Customer' }, canActivate: [AuthGuard] },
   { path: 'categorysalerpt', component: ManufacturingSaleCategoryComponent, data: { title: 'Sale Report Category' }, canActivate: [AuthGuard] },
+  { path: 'productionRpt', component: ProductionReportComponent, data: { title: 'Production Report' }, canActivate: [AuthGuard] },
+  { path: 'mnuStockRegister', component: ManufacturingStockRegisterComponent, data: { title: 'Stock Register' }, canActivate: [AuthGuard] },
+
 
   { path: 'materialconsumption', component: MaterialConsumptionRptComponent, data: { title: 'Material Consumption' }, canActivate: [AuthGuard] },
 
@@ -106,6 +111,8 @@ export const manufacturingRoutes: Route[] = [
     ProductionItemReceivingComponent,
     ProductionAuditInvPrintComponent,
     ProductionPrintComponent,
+    ProductionReportComponent,
+    ManufacturingStockRegisterComponent,
 
 
   ],

@@ -416,6 +416,9 @@ export class VoidSaleReturnComponent implements OnInit {
 
     /////move down
     if (e.keyCode == 40) {
+       if (this.prodFocusedRow >= 24) {
+        return;
+      }
       if (prodList.length > 0) {
         this.prodFocusedRow += 1;
         if (this.prodFocusedRow >= prodList.length) {

@@ -114,6 +114,13 @@ export class ManufacturingSalePartywiseComponent {
 
           if (Response.length > 0) {
             this.DataList = Response.filter((e: any) => e.invType == this.rptType);
+            
+            if (this.DataList.length == 0 || this.DataList == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
             this.DataList.forEach((e: any) => {
               this.costTotal += e.costPrice * e.quantity;
               this.saleTotal += e.salePrice * e.quantity;

@@ -1,0 +1,102 @@
+<div class="container-fluid body">
+
+    <div class="row mt-2">
+
+
+        <div class="col-md-4">
+
+            <mat-form-field appearance="outline" class="col-md-12 matSmall">
+                <mat-label>Location</mat-label>
+                <mat-select [(ngModel)]="locationID" name="location">
+                    <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option [value]="0">All</mat-option>
+                    <mat-option *ngFor="let item of locationList | filter:locationSearch.value"
+                        [value]="item.locationID">{{item.locationTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-md-4 d-flex flex-wrap" *ngIf="crudList.r">
+            <div class="col-md-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport()">Get
+                    Report</button></div>
+            <div class="col-md-4 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
+            <div class="col-md-4"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
+        </div>
+    </div>
+
+
+
+
+
+    <div id="PrintDiv">
+
+        <!-------------------------    Top Logo Section -------------------->
+
+        <div class="hide">
+            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
+                        [width]="item.logo1Width">
+                </span>
+                <div class="d-flex flex-column">
+                    <span class="companyName">Stock Register </span>   
+
+
+                </div>
+                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                        height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                </span>
+
+
+            </div>
+        </div>
+
+        <div id="printContainer">
+
+            <table class="table-logix">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+
+                        <th>Item</th>
+                        <th>In</th>
+                        <th>Out</th>
+                        <th>Balance</th>
+                        <!-- <th>Cost</th>
+                        <th>Sale</th>
+                        <th>Cost Total</th>
+                        <th>Sale Total</th> -->
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of DataList index as index">
+                        <td class="text-center"> {{index + 1}}</td>
+
+                        <td>{{item.mnuItemTitle}}</td>
+                        <td class="text-center">{{item.qtyIn | number:'1.0-0'}}</td>
+                        <td class="text-center">{{item.qtyOut| number:'1.0-0'}}</td>
+                        <td class="text-center">{{item.qtyIn - item.qtyOut| number:'1.0-0'}}</td>
+                        <!-- <td class="text-end">{{item.costPrice | number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.salePrice | number:'1.0-0'}}</td>
+                          <td class="text-end">{{item.costPrice * (item.qtyIn - item.qtyOut) | number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.salePrice * (item.qtyIn - item.qtyOut) | number:'1.0-0'}}</td> -->
+
+                    </tr>
+                    <!-- <tr>
+                        <td colspan="7" class="fw-bold text-center">Total</td>
+
+                        <td class="text-end fw-bold">{{costTotal | number:'1.0-0'}}</td>
+                       <td class="text-end fw-bold">{{saleTotal | number:'1.0-0'}}</td>
+                    </tr> -->
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+    </div>
+
+</div>

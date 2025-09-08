@@ -59,7 +59,6 @@ export class ContractorProfileComponent implements OnInit {
     this.http.get(environment.mainApi + this.globaldata.companyLink + 'getParty').subscribe(
       {
         next: (Response: any) => {
-          console.log(Response);
           if (Response.length > 0) {
             this.dataList = Response.filter((e: any) => e.partyType == 'Labour');
 

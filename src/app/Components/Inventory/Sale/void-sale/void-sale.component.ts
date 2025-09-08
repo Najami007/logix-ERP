@@ -415,6 +415,9 @@ export class VoidSaleComponent implements OnInit {
 
     /////move down
     if (e.keyCode == 40) {
+      if (this.prodFocusedRow >= 24) {
+        return;
+      }
       if (prodList.length > 0) {
         this.prodFocusedRow += 1;
         if (this.prodFocusedRow >= prodList.length) {
@@ -880,7 +883,7 @@ export class VoidSaleComponent implements OnInit {
         disableClose: true,
         hasBackdrop: true,
       }).afterClosed().subscribe(qty => {
-       
+
         if (qty != '') {
 
           var updateQty = (Number(qty) * item.packing)
@@ -891,7 +894,7 @@ export class VoidSaleComponent implements OnInit {
               InvBillNo: this.invBillNo,
               ProductID: item.productID,
               barcode: item.barcode,
-              Quantity:  qty - (item.quantity / item.packing) ,
+              Quantity: qty - (item.quantity / item.packing),
 
               UserID: this.global.getUserID(),
             }
@@ -918,7 +921,7 @@ export class VoidSaleComponent implements OnInit {
               ProductID: item.productID,
               ProductTitle: item.productTitle,
               barcode: item.barcode,
-              Quantity:  (item.quantity / item.packing) - qty,
+              Quantity: (item.quantity / item.packing) - qty,
               CostPrice: item.costPrice,
               AvgCostPrice: item.avgCostPrice,
               SalePrice: item.salePrice,
@@ -943,7 +946,7 @@ export class VoidSaleComponent implements OnInit {
           }
         }
 
-         setTimeout(() => {
+        setTimeout(() => {
           $('.qty' + this.rowFocused.toString()).trigger('focus');
         }, 500);
       })

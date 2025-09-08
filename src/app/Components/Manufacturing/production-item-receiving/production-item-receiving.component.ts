@@ -112,7 +112,6 @@ export class ProductionItemReceivingComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.companyLink + 'getParty').subscribe(
       {
         next: (Response: any) => {
-          console.log(Response);
           if (Response.length > 0) {
             this.partyList = Response.filter((e: any) => e.partyType == 'Labour');
 
@@ -181,12 +180,9 @@ export class ProductionItemReceivingComponent implements OnInit {
 
 
   addMenuItem(data: any) {
-
-
     this.getSingleMenuItem(data).subscribe(
       {
         next: (Response: any) => {
-
           if (Response.length > 0) {
             var item = Response[0];
             var index = this.tableDataList.findIndex((e: any) => e.mnuItemID == item.mnuItemID);
@@ -208,7 +204,7 @@ export class ProductionItemReceivingComponent implements OnInit {
               barcode: item.mnuItemCode,
               productTitle: item.mnuItemTitle,
               quantity: 1,
-              mnuLabourCharges: 0,
+              mnuLabourCharges: item.mnuLabourCharges,
               costPrice: item.mnuItemCostPrice,
               avgCostPrice: item.mnuItemCostPrice,
               salePrice: item.mnuItemSalePrice
@@ -224,11 +220,6 @@ export class ProductionItemReceivingComponent implements OnInit {
         }
       }
     )
-
-
-
-
-
   }
 
 
@@ -559,7 +550,6 @@ export class ProductionItemReceivingComponent implements OnInit {
 
   insert(type: any, postData: any) {
 
-    console.log(postData);
     var url = '';
     if (type == 'insert') {
       url = 'InsertMnuProduction';
@@ -655,7 +645,6 @@ export class ProductionItemReceivingComponent implements OnInit {
 
     this.getBillDetail(item.invBillNo).subscribe(
       (Response: any) => {
-        console.log(Response);
         this.totalQty = 0;
 
 

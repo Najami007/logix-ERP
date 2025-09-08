@@ -177,7 +177,6 @@ export class AddContractorProfileComponent implements OnInit {
 
 
   insert(type: any, pinCode: any, postData: any) {
-    console.log(postData);
     var url = ''
 
     if (type == 'insert') {

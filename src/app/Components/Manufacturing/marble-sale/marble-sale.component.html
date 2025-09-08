@@ -59,7 +59,7 @@
 
                             <input type="text" (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event)"
                                 [(ngModel)]="PBarcode" id="mbsearchProduct" class="p-1 ps-2 mb-2 searchProduct w-100"
-                                placeholder="Search Barcode / Product (Alt + b)" autocomplete="off" accesskey="b">
+                                placeholder="Search (Alt + b)" autocomplete="off" accesskey="b">
 
                             <div class="d-flex flex-column SearchConatiner cursorPointer"
                                 *ngIf="PBarcode != '' && PBarcode != undefined ">

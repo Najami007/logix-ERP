@@ -1,0 +1,215 @@
+<div class="container-fluid body">
+
+    <div class="row mt-2">
+
+        <mat-form-field appearance="outline" class="col-lg-4  matSmall">
+            <mat-label>User</mat-label>
+            <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
+                <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option [value]="0">All User</mat-option>
+                <mat-option *ngFor="let item of userList | filter:usearch.value"
+                    [value]="item.userID">{{item.userName}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+            <mat-label>From Date</mat-label>
+            <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
+            <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
+            <mat-datepicker #sDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+            <mat-label>From Time</mat-label>
+            <input matInput [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+            <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #fTime></ngx-material-timepicker>
+        </mat-form-field>
+
+
+        <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+            <mat-label>To Date</mat-label>
+            <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
+            <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+            <mat-datepicker #eDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+            <mat-label>To Time</mat-label>
+            <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+            <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #tTime></ngx-material-timepicker>
+        </mat-form-field>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-2">
+            <mat-form-field appearance="outline" class="w-100  matSmall">
+                <mat-label>Item</mat-label>
+                <mat-select [disabled]="rptType == 1" [(ngModel)]="mnuItemID" (selectionChange)="onUserSelected()">
+                    <mat-option><ngx-mat-select-search #searchItem [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option [value]="0">ALL</mat-option>
+                    <mat-option *ngFor="let item of itemList | filter:searchItem.value | slice:0:25"
+                        [value]="item.mnuItemID">{{item.mnuItemTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="col-md-2">
+            <mat-form-field appearance="outline" class="w-100  matSmall">
+                <mat-label>Category</mat-label>
+                <mat-select [disabled]="rptType == 1" [(ngModel)]="mnuCategoryID" (selectionChange)="onUserSelected()">
+                    <mat-option><ngx-mat-select-search #searchItem [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option [value]="0">ALL</mat-option>
+
+                    <mat-option *ngFor="let item of categoryList | filter:searchItem.value | slice:0:25"
+                        [value]="item.mnuItemCatID">{{item.mnuItemCatTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="col-md-2">
+            <mat-form-field appearance="outline" class="w-100  matSmall">
+                <mat-label>Contractor</mat-label>
+                <mat-select [(ngModel)]="partyID" (selectionChange)="onUserSelected()">
+                    <mat-option><ngx-mat-select-search #searchItem [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option [value]="0">ALL</mat-option>
+
+                    <mat-option *ngFor="let item of partyList | filter:searchItem.value | slice:0:25"
+                        [value]="item.partyID">{{item.partyName}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="col-md-2">
+
+            <mat-form-field appearance="outline" class="w-100  matSmall">
+                <mat-label>Rpt Type</mat-label>
+                <mat-select [(ngModel)]="rptType" (selectionChange)="reset()">
+                    <mat-option [value]="1">Summary</mat-option>
+                    <mat-option [value]="2">Detail</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-md-4 d-flex flex-wrap" *ngIf="crudList.r">
+            <div class="col-md-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport()">Get
+                    Report</button></div>
+            <div class="col-md-4 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
+            <div class="col-md-4"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
+        </div>
+    </div>
+
+
+
+
+
+    <div id="PrintDiv">
+
+        <!-------------------------    Top Logo Section -------------------->
+
+        <div class="hide">
+            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
+                        [width]="item.logo1Width">
+                </span>
+                <div class="d-flex flex-column">
+                    <span class="companyName">Production Report </span>
+
+                    <span class="rptTitle">{{reportType}}</span>
+                    <span> <b *ngIf="userName != ''">User: {{userName}}</b></span>
+                    <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                        {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
+
+
+                </div>
+                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                        height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                </span>
+
+
+            </div>
+        </div>
+
+        <div id="printContainer">
+            <table class="table-logix" *ngIf="rptType == 1">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Inv #</th>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Location</th>
+                        <th>Party Name</th>
+                        <th>Total</th>
+                        <th>Entered By</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of DataList index as index">
+                        <td>{{index + 1}}</td>
+                        <td>{{item.invBillNo}}</td>
+                        <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.invType}}</td>
+                        <td>{{item.locationTitle}}</td>
+                        <td>{{item.partyName}}</td>
+                        <td class="text-end">{{item.netTotal| number:'1.0-0'}}</td>
+                        <td>{{item.entryUser}}</td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="fw-bold text-center">Total</td>
+
+                        <td class="text-end fw-bold">{{netTotal | number:'1.0-0'}}</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+            <table class="table-logix" *ngIf="rptType == 2">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Inv #</th>
+                        <th>Date</th>
+                        <th>Contractor</th>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Labour Charges</th>
+                        <th>Total</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of DataList index as index">
+                        <td class="text-center"> {{index + 1}}</td>
+                        <td>{{item.invBillNo}}</td>
+                        <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.partyName}}</td>
+
+                        <td>{{item.mnuItemTitle}}</td>
+                        <td class="text-center">{{item.quantity| number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.mnuLabourCharges| number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.mnuLabourCharges * item.quantity| number:'1.0-0'}}</td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="7" class="fw-bold text-center">Total</td>
+
+                        <td class="text-end fw-bold">{{netTotal | number:'1.0-0'}}</td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+    </div>
+
+</div>

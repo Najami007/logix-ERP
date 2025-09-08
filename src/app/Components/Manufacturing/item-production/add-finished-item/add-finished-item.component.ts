@@ -29,7 +29,6 @@ export class AddFinishedItemComponent implements OnInit {
     this.getCategoryList();
 
     if (this.editData) {
-      console.log(this.editData);
       this.getItemDetail(this.editData.mnuItemID)
       this.MnuItemID = this.editData.mnuItemID;
       this.MnuItemCatID = this.editData.mnuItemCatID;
@@ -284,7 +283,7 @@ export class AddFinishedItemComponent implements OnInit {
     if (e.target.value == '') {
       if (e.keyCode == 40) {
 
-        if (this.tableDataList.length >= 1) {
+        if (this.tableDataList.length >= 0) {
           this.rowFocused = 0;
           e.preventDefault();
           $('.qty0').trigger('select');
@@ -294,15 +293,16 @@ export class AddFinishedItemComponent implements OnInit {
       }
     }
 
-    // else {
-    //   this.prodFocusedRow = 0;
-    //   /////move down
-    //   if (e.keyCode == 40) {
-    //     if (this.productList.length >= 1) {
-    //       $('.prodRow0').trigger('focus');
-    //     }
-    //   }
-    // }
+    else {
+      this.prodFocusedRow = 0;
+      /////move down
+      if (e.keyCode == 40) {
+        if (this.productList.length >= 1) {
+          e.preventDefault();
+          $('.prodRow0').trigger('focus');
+        }
+      }
+    }
   }
 
 
@@ -551,9 +551,12 @@ export class AddFinishedItemComponent implements OnInit {
     }
     /////move down
     if (e.keyCode == 40) {
-
+      if (this.prodFocusedRow >= 24) {
+        return;
+      }
 
       if (prodList.length > 1) {
+        e.preventDefault();
         this.prodFocusedRow += 1;
         if (this.prodFocusedRow >= prodList.length) {
           this.prodFocusedRow -= 1
@@ -652,6 +655,11 @@ export class AddFinishedItemComponent implements OnInit {
     if (this.MnuItemSalePrice == 0 || this.MnuItemSalePrice == '0' ||
       this.MnuItemSalePrice == undefined || this.MnuItemSalePrice == '' || (Number(this.MnuItemCostPrice) > Number(this.MnuItemSalePrice))) {
       this.msg.WarnNotify('Sale Price Not Valid');
+      return;
+    }
+
+    if (this.MnuLabourCharges == 0 || this.MnuLabourCharges == '' || this.MnuLabourCharges == undefined) {
+      this.msg.WarnNotify('Enter Labour Charges');
       return;
     }
 
