@@ -34,13 +34,13 @@ export class ProductComponent implements OnInit {
 
 
   //////////////// Pagination Setting
-  @ViewChild(MatPaginator) paginator!: MatPaginator;  
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   AutoFillProdNameFeature = this.global.AutoFillNameFeature;
   discFeature = this.global.discFeature;
   MultiBarcode = this.global.MultiBarcode;
-  ManufacturingFeature =  this.global.ManufacturingFeature;
+  ManufacturingFeature = this.global.ManufacturingFeature;
   FurnitureSaleFeature = this.global.FurnitureSaleFeature;
 
 
@@ -283,7 +283,7 @@ export class ProductComponent implements OnInit {
     'Brand', 'UOM', 'Type', 'Cost Price', 'Average Cost', 'Sale Price', 'GST', 'Entered By', 'Active Status', 'Image', 'Edit', 'Delete']
 
 
-    ////// calculating Discount on Basis of Discount in Percentage click ////////////
+  ////// calculating Discount on Basis of Discount in Percentage click ////////////
 
   applyDiscount() {
     this.DiscRupee = (this.SalePrice == '' || this.SalePrice == undefined || this.SalePrice == null ? 0 : this.SalePrice * this.DiscPercent) / 100
@@ -382,7 +382,7 @@ export class ProductComponent implements OnInit {
 
 
 
-////////////////////// Sub Categories List /////////////
+  ////////////////////// Sub Categories List /////////////
 
   getSubCategory() {
     this.SubCategoryID = 0;
@@ -433,101 +433,101 @@ export class ProductComponent implements OnInit {
   }
 
 
-/////////////////////////// Save Function Product//////////////
+  /////////////////////////// Save Function Product//////////////
   save() {
 
 
     if (this.CategoryID == '' || this.CategoryID == undefined) {
       this.msg.WarnNotify('Select Category');
       return;
-    } 
-     if (this.SubCategoryID == '' || this.SubCategoryID == undefined) {
+    }
+    if (this.SubCategoryID == '' || this.SubCategoryID == undefined) {
       this.msg.WarnNotify('Select SubCategory');
       return;
-    } 
-     if (this.ProductName == '' || this.ProductName == undefined) {
+    }
+    if (this.ProductName == '' || this.ProductName == undefined) {
       this.msg.WarnNotify('Enter Product Name');
       return;
     }
-    
-     if (this.prodBarcodeType == 'manual' && (this.Barcode == '' || this.Barcode == undefined)) {
+
+    if (this.prodBarcodeType == 'manual' && (this.Barcode == '' || this.Barcode == undefined)) {
       this.msg.WarnNotify('Enter Barcode');
       return;
-    } 
-     if (this.BrandID == '' || this.BrandID == undefined) {
+    }
+    if (this.BrandID == '' || this.BrandID == undefined) {
       this.msg.WarnNotify('Select Brand');
       return;
-    } 
-     if (this.rackID == '' || this.rackID == undefined) {
+    }
+    if (this.rackID == '' || this.rackID == undefined) {
       this.msg.WarnNotify('Select Rack ');
       return;
-    } 
-     if (this.UOMID == '' || this.UOMID == undefined) {
+    }
+    if (this.UOMID == '' || this.UOMID == undefined) {
       this.msg.WarnNotify('Select Unit of Measurement');
       return;
-    } 
-     if ((this.CostPrice == '' || this.CostPrice <= 0 || this.CostPrice == undefined) && !this.ManufacturingFeature) {
+    }
+    if ((this.CostPrice == '' || this.CostPrice <= 0 || this.CostPrice == undefined) && !this.ManufacturingFeature) {
       this.msg.WarnNotify('Enter Cost Price');
       return;
-    } 
-     if ((this.SalePrice == '' || this.SalePrice <= 0 || this.SalePrice == undefined) && !this.ManufacturingFeature) {
+    }
+    if ((this.SalePrice == '' || this.SalePrice <= 0 || this.SalePrice == undefined) && !this.ManufacturingFeature) {
       this.msg.WarnNotify('Enter Sale Price');
       return;
-    } 
-     if (this.barcodeType == undefined) {
+    }
+    if (this.barcodeType == undefined) {
       this.msg.WarnNotify('Select Barcode Type');
       return;
-    } 
-     if (this.SalePrice < this.CostPrice) {
+    }
+    if (this.SalePrice < this.CostPrice) {
       this.msg.WarnNotify('Sale Price Is less Than Cost Price');
       return;
     }
 
 
-    if((Number(this.SalePrice) -  Number(this.DiscRupee)) < Number( this.CostPrice)){
+    if ((Number(this.SalePrice) - Number(this.DiscRupee)) < Number(this.CostPrice)) {
       this.msg.WarnNotify('Discount Not Valid');
       return;
     }
 
 
 
-      if (this.prodBarcodeType == 'auto' && (this.Barcode == '' || this.Barcode == undefined || this.Barcode == null)) {
-        this.Barcode = '-';
-      }
+    if (this.prodBarcodeType == 'auto' && (this.Barcode == '' || this.Barcode == undefined || this.Barcode == null)) {
+      this.Barcode = '-';
+    }
 
-      var postData = {
-        ProductID: this.ProductID,
-        CategoryID: this.CategoryID,
-        SubCategoryID: this.SubCategoryID,
-        BrandID: this.BrandID,
-        RackID: this.rackID,
-        ProductTitle: this.ProductName,
-        ProductCode: this.productCode || this.ProductName,
-        ProductTitleOtherLang: this.productNameOthLanguage || this.ProductName,
-        ProductDescription: this.Description || '-',
-        MinRol: this.minRol || 1,
-        MaxRol: this.maxRol || 2,
-        GST: this.gst || 0,
-        ET: this.Et || 0,
-        PCTCode: this.pctCode || '-',
-        AllowMinus: this.allowMinus,
-        CostPrice: this.CostPrice || 1,
-        SalePrice: this.SalePrice || 1,
-        DiscPercentage: this.DiscPercent,
-        DiscRupees: this.DiscRupee,
-        UomID: this.UOMID,
-        Barcode: this.Barcode,
-        BarcodeType: this.barcodeType,
-        ProductImage: this.productImg || '-',
-        ProductTypeID: this.prodTypeID,
-        UserID: this.global.getUserID()
-      };
-      if (this.btnType == 'Save') {
-        this.insert(postData);
-      } else if (this.btnType == 'Update') {
-        this.update(postData);
-      }
-    
+    var postData = {
+      ProductID: this.ProductID,
+      CategoryID: this.CategoryID,
+      SubCategoryID: this.SubCategoryID,
+      BrandID: this.BrandID,
+      RackID: this.rackID,
+      ProductTitle: this.ProductName,
+      ProductCode: this.productCode || this.ProductName,
+      ProductTitleOtherLang: this.productNameOthLanguage || this.ProductName,
+      ProductDescription: this.Description || '-',
+      MinRol: this.minRol || 1,
+      MaxRol: this.maxRol || 2,
+      GST: this.gst || 0,
+      ET: this.Et || 0,
+      PCTCode: this.pctCode || '-',
+      AllowMinus: this.allowMinus,
+      CostPrice: this.CostPrice || 1,
+      SalePrice: this.SalePrice || 1,
+      DiscPercentage: this.DiscPercent,
+      DiscRupees: this.DiscRupee,
+      UomID: this.UOMID,
+      Barcode: this.Barcode,
+      BarcodeType: this.barcodeType,
+      ProductImage: this.productImg || '-',
+      ProductTypeID: this.prodTypeID,
+      UserID: this.global.getUserID()
+    };
+    if (this.btnType == 'Save') {
+      this.insert(postData);
+    } else if (this.btnType == 'Update') {
+      this.update(postData);
+    }
+
 
   }
 
@@ -675,8 +675,19 @@ export class ProductComponent implements OnInit {
     this.btnType = 'Update';
     ////////////// Product Img Global Fucntion ///////////
     this.global.getProdImage(row.productID).subscribe(
-      (Response: any) => {
-        this.productImg = Response[0].productImage;
+      async (Response: any) => {
+        // this.productImg = Response[0].productImage;
+        console.log(Response);
+        if (Response[0].productImage !== '-') {
+          console.log(Response[0].productImage)
+          this.productImg = await this.compressBase64(Response[0].productImage, 400, 400, 0.5);
+          console.log(this.productImg)
+        } else {
+          this.productImg = Response[0].productImage;
+        }
+
+
+
       }
     )
 
@@ -802,27 +813,27 @@ export class ProductComponent implements OnInit {
 
 
   /////// to change the tab on edit
-  curFocusRow:any = -1;
+  curFocusRow: any = -1;
   changeTab(tabNum: any) {
     this.tabIndex = tabNum;
     setTimeout(() => {
-      if(this.tabIndex == 1 )this.scrollToRow(this.curFocusRow)
+      if (this.tabIndex == 1) this.scrollToRow(this.curFocusRow)
     }, 500);
   }
 
 
   scrollToRow(index: number) {
-  const row = document.getElementById('prod-' + index);
-  if (row) {
-    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const row = document.getElementById('prod-' + index);
+    if (row) {
+      row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   }
-}
 
 
   /////////////// to Add New Brand Short cut ///////////////
   @ViewChild('brand') mybrand: any;
   addBrand() {
-     /////// close List on Add Icon Click /////////
+    /////// close List on Add Icon Click /////////
     setTimeout(() => {
       this.mybrand.close()
     }, 200);
@@ -840,7 +851,7 @@ export class ProductComponent implements OnInit {
   //////////////// to Add New Rack Short Cut ///////////////
   @ViewChild('rack') myrack: any;
   addRack() {
-     /////// close List on Add Icon Click /////////
+    /////// close List on Add Icon Click /////////
     setTimeout(() => {
       this.myrack.close()
     }, 200);
@@ -859,7 +870,7 @@ export class ProductComponent implements OnInit {
   //////////////// to Add New Unit of Measurement Shortcut ///////////////
   @ViewChild('uom') myUom: any;
   addUOM() {
-     /////// close List on Add Icon Click /////////
+    /////// close List on Add Icon Click /////////
     setTimeout(() => {
       this.myUom.close()
 
@@ -879,7 +890,7 @@ export class ProductComponent implements OnInit {
   @ViewChild('category') myCategory: any;
   addCategory() {
     // alert()
- /////// close List on Add Icon Click /////////
+    /////// close List on Add Icon Click /////////
     setTimeout(() => {
       this.myCategory.close()
 
@@ -918,42 +929,125 @@ export class ProductComponent implements OnInit {
 
 
   ///////////////// Imaging Converting Base 64 Function //////////
+  // onImgSelected(event: any) {
+  //   var imgSize = event.target.files[0].size;
+  //   var isConvert: number = parseFloat((imgSize / 1048576).toFixed(2));
+
+  //   if (isConvert > 2) {
+
+  //     this.msg.WarnNotify('File Size is more than 2MB');
+  //   }
+  //   else {
+
+  //     ////////////// will check the file type ////////////////
+  //     if (this.global.getExtension(event.target.value) != 'pdf') {
+  //       let targetEvent = event.target;
+
+  //       /////////// assign the targeted file to file variable
+  //       let file: File = targetEvent.files[0];
+
+  //       let fileReader: FileReader = new FileReader();
+
+  //       //////////////// if the file is other than pdf eill assign to product img varialb
+  //       fileReader.onload = (e) => {
+  //         this.productImg = fileReader.result;
+  //       }
+
+  //       fileReader.readAsDataURL(file);
+
+  //     } else {
+
+  //       this.msg.WarnNotify('File Must Be in jpg or png formate');
+  //       event.target.value = '';
+  //       this.productImg = '';
+  //     }
+
+  //   }
+
+
+  // }
+
+
   onImgSelected(event: any) {
-    var imgSize = event.target.files[0].size;
-    var isConvert: number = parseFloat((imgSize / 1048576).toFixed(2));
+    const file = event.target.files[0];
+    if (!file) return;
 
-    if (isConvert > 2) {
+    const imgSize = file.size;
+    const isConvert: number = parseFloat((imgSize / 1048576).toFixed(2));
 
-      this.msg.WarnNotify('File Size is more than 2MB');
-    }
-    else {
+    ////////////// will check the file type ////////////////
+    if (this.global.getExtension(event.target.value) !== 'pdf') {
+      const fileReader: FileReader = new FileReader();
 
-      ////////////// will check the file type ////////////////
-      if (this.global.getExtension(event.target.value) != 'pdf') {
-        let targetEvent = event.target;
+      fileReader.onload = async () => {
+        const originalBase64 = fileReader.result as string;
 
-        /////////// assign the targeted file to file variable
-        let file: File = targetEvent.files[0];
-
-        let fileReader: FileReader = new FileReader();
-
-        //////////////// if the file is other than pdf eill assign to product img varialb
-        fileReader.onload = (e) => {
-          this.productImg = fileReader.result;
+        // 👉 if file size > 1MB, compress before assigning
+        if (isConvert > 1) {
+          this.msg.WarnNotify('File Size is more than 1MB, compressing...');
+          this.productImg = await this.compressBase64(originalBase64, 400, 400, 0.5);
+        } else {
+          // assign compressed anyway (smaller size, faster upload)
+          this.productImg = await this.compressBase64(originalBase64, 400, 400, 0.5);
         }
 
-        fileReader.readAsDataURL(file);
+        console.log(this.productImg);
+      };
 
-      } else {
+      fileReader.readAsDataURL(file);
 
-        this.msg.WarnNotify('File Must Be in jpg or png formate');
-        event.target.value = '';
-        this.productImg = '';
+      // reset file input
+      const input = event.target as HTMLInputElement;
+      if (input.files && input.files.length > 0) {
+        input.value = '';
       }
-
+    } else {
+      this.msg.WarnNotify('File Must Be in jpg or png format');
+      event.target.value = '';
+      this.productImg = '';
     }
+  }
 
 
+  // ✅ helper compression function
+  private compressBase64(base64: string, maxWidth: number = 800, maxHeight: number = 800, quality: number = 0.7): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = base64;
+
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject('Canvas not supported');
+          return;
+        }
+
+        let width = img.width;
+        let height = img.height;
+
+        // Scale down
+        if (width > maxWidth || height > maxHeight) {
+          if (width > height) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          } else {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // export as JPEG
+        const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+        resolve(compressedBase64);
+      };
+
+      img.onerror = (err) => reject(err);
+    });
   }
 
 
@@ -972,14 +1066,14 @@ export class ProductComponent implements OnInit {
 
   //////////////////////// Add multiple Barcodes Model///////////
 
-  openBarcodeModal(item:any){
-    this.dialogue.open(ProductBarcodesComponent,{
-      width:'80%',
-      data:item
+  openBarcodeModal(item: any) {
+    this.dialogue.open(ProductBarcodesComponent, {
+      width: '80%',
+      data: item
     }).afterClosed().subscribe(
-    val =>{
+      val => {
 
-    }
+      }
     )
 
 

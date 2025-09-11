@@ -256,7 +256,7 @@ export class ProductionReportComponent implements OnInit {
     var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
 
 
-    this.global.ExportHTMLTabletoExcel('#printContainer', `Production Report ${startDate} - ${endDate}`);
+    this.global.ExportHTMLTabletoExcel('printContainer', `Production Report ${startDate} - ${endDate}`);
   }
 
 

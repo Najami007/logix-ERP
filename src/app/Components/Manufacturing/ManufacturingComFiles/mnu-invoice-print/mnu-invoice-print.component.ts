@@ -93,13 +93,14 @@ export class MnuInvoicePrintComponent {
   myBillTotal = 0;
   myBillDiscount = 0;
   myNetTotal = 0;
-
+  myRemarks:any = '';
 
   tableDataList: any = [];
   printChallan(orderNo: any) {
     this.http.get(this.apiReq + `GetOrderDetail?BillNo=${orderNo}`).subscribe(
       {
         next: (Response: any) => {
+          console.log(Response);
           this.tableDataList = [];
           if (Response.length > 0) {
             Response.forEach((e: any) => {
@@ -120,6 +121,7 @@ export class MnuInvoicePrintComponent {
               this.myBillTotal = Response[0].billTotal;
               this.myBillDiscount = Response[0].billDiscount;
               this.myNetTotal = Response[0].netTotal;
+              this.myRemarks = Response[0].remarks;
             })
 
 

@@ -602,15 +602,16 @@ export class GlobalDataModule implements OnInit {
 
   curDate: any = new Date();
   public SubscriptionExpired(): boolean {
-    ///// yyyy-MM-dd /////////////
-    //var ExpiryDate: any = '2025-09-05 06:00:AM';
-    var ExpiryDate: any = 'TWpBek1DMHdPUzB3TlE9PQ==';
-    var curDate = this.datePipe.transform(this.curDate, 'yyyy-MM-dd')
-    console.log(curDate , atob(atob(ExpiryDate))) ;
-    var status: any = curDate! >= atob(atob(ExpiryDate));
+
+    var ExpiryDate: any = 'TWpBek1DMHdPUzB4TWc9PQ==';
+    const now = new Date();
+ 
+    const targetDate = new Date(atob(atob(ExpiryDate)));
+    targetDate.setHours(10, 0, 0, 0);      // Create target date at 10:00 AM  // 10:00 AM exactly
+    var status: any = now! >= targetDate;
+
+       console.log(now, targetDate);
     return status;
-
-
   }
 
   /////////////////////////////////////////////////////////////////////////////////

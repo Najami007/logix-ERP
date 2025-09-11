@@ -125,7 +125,7 @@ export class MaterialConsumptionRptComponent implements OnInit {
     var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
 
 
-    this.global.ExportHTMLTabletoExcel('#printContainer', `Consumption Report ${startDate} - ${endDate}`);
+    this.global.ExportHTMLTabletoExcel('printContainer', `Consumption Report ${startDate} - ${endDate}`);
   }
 
   reset() {

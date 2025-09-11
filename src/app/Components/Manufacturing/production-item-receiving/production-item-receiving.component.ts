@@ -616,13 +616,15 @@ export class ProductionItemReceivingComponent implements OnInit {
   FindSavedBills(type: any) {
 
     var date = this.searchBillType == 'Date' ? this.global.dateFormater(this.Date, '-') : '';
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetIssueInventoryBillSingleDate?Type=' + type + '&creationdate=' + date).subscribe(
+    var url = `${environment.mainApi}${this.global.inventoryLink}GetIssueInventoryBillSingleDate?Type=${type}&creationdate=${date}`
+    this.http.get(url).subscribe(
       (Response: any) => {
         this.SavedBillList = Response;
 
       },
       (Error: any) => {
         this.msg.WarnNotify(Error);
+        console.log(Error);
       }
     )
   }

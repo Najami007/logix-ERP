@@ -117,10 +117,7 @@ export class ManufacturingStockRegisterComponent implements OnInit {
   }
 
   export() {
-
-
-
-    this.global.ExportHTMLTabletoExcel('#printContainer', `Stock Register`);
+    this.global.ExportHTMLTabletoExcel('printContainer', `Stock Register`);
   }
 
 

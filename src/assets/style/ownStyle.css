@@ -546,3 +546,32 @@
 
 
 }
+
+ .invoice-title {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .invoice-title::before,
+    .invoice-title::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px solid #ccc; /* line color */
+    }
+
+    .invoice-title:not(:empty)::before {
+      margin-right: 10px;
+    }
+
+    .invoice-title:not(:empty)::after {
+      margin-left: 10px;
+    }
+
+    .invoice-title span {
+      font-size: 18px;
+      font-weight: bold;
+      color: #555; /* text color */
+      letter-spacing: 2px;
+    }
