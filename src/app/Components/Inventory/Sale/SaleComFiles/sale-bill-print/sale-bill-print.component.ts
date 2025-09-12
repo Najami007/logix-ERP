@@ -33,6 +33,7 @@ export class SaleBillPrintComponent implements OnInit {
   billFormate2 = this.global.BillFormate2Feature;
   VehicleSaleFeature = this.global.VehicleSaleFeature;
   northEdgeEnterPriseBillFeature = this.global.northEdgeEnterPriseBillFeature;
+    CusDiscFeature = this.global.CusDiscFeature;
 
 
 
@@ -137,6 +138,8 @@ export class SaleBillPrintComponent implements OnInit {
   myPOSFee = 0;
   myInvTime = new Date();
 
+  myCusDiscAmount:any = 0;
+
   myVehicleNo = '';
   myMeterReading = '';
   myVehicleName = '';
@@ -148,7 +151,7 @@ export class SaleBillPrintComponent implements OnInit {
       (Response: any) => {
         this.myPrintTableData = Response;
 
-
+        console.log(Response);
         this.myInvoiceNo = InvNo;
         this.myInvDate = Response[0].invDate;
         this.myCreatedDate = Response[0].createdOn;
@@ -183,10 +186,12 @@ export class SaleBillPrintComponent implements OnInit {
         this.myQtyTotal = 0;
         this.myOfferDiscount = 0;
         this.myGstTotal = 0;
+         this.myCusDiscAmount = 0;
         Response.forEach((e: any) => {
           this.myQtyTotal += e.quantity;
           this.myOfferDiscount += e.discInR * e.quantity;
           this.myGstTotal += (e.salePrice - (e.salePrice / ((e.gst + 100) / 100))) * e.quantity;
+          this.myCusDiscAmount += e.cusDiscAmount * e.quantity;
         });
 
         if (this.gstFeature) {

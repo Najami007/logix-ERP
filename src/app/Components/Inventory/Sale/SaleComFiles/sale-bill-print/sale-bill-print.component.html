@@ -93,7 +93,8 @@
                         <th style="width:20% !important;" *ngIf="gstFeature">Gst</th>
                         <th style="width:20% !important;">Price</th>
                         <th style="width:10% !important;" *ngIf="discFeature">Disc Rs</th>
-                        <th style="width:10% !important;" *ngIf="discFeature">Disc %</th>
+                        <!-- <th style="width:10% !important;" *ngIf="discFeature">Disc %</th>
+                        <th style="width:10% !important;" *ngIf="CusDiscFeature">Cus Disc</th> -->
 
                         <th style="width:20% !important;">Total</th>
 
@@ -114,11 +115,14 @@
                                     <td class="text-end" style="width:20% !important;">{{(item.salePrice / ((item.gst +
                                         100) / 100))|number:'1.0-1'}}</td>
                                     <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
-                                        {{item.discInR|number:'1.0-1'}}</td>
-                                    <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
-                                        {{item.discInP|number:'1.0-1'}}</td>
+                                        {{(item.discInR + item.cusDiscAmount) * item.quantity|number:'1.0-1'}}</td>
+                                    <!-- <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
+                                        {{item.discInP|number:'1.0-1'}}</td> -->
+                                    <!-- <td class="text-end" *ngIf="CusDiscFeature" style="width:10% !important;">
+                                        {{item.cusDiscAmount|number:'1.0-1'}}</td> -->
                                     <td class="text-end" style="width:20% !important;">{{(item.quantity *
-                                        item.salePrice) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
+                                        item.salePrice) - (item.discInR * item.quantity) - (item.cusDiscAmount *
+                                        item.quantity) |number:'1.0-1'}}</td>
                                 </tr>
                             </table>
                         </td>
@@ -128,7 +132,7 @@
                     <tr class="fs-11">
                         <td colspan="2" class="fw-bold">Total Items</td>
                         <td class="fw-bold fs-11">{{myQtyTotal | number:'1.0-2'}}</td>
-                        <td colspan="2" *ngIf="discFeature"></td>
+                        <td  *ngIf="discFeature"></td>
                     </tr>
 
                 </tbody>
@@ -144,7 +148,8 @@
                         <th>Qty</th>
                         <th>Price</th>
                         <th style="width:10% !important;" *ngIf="discFeature">D Rs</th>
-                        <th style="width:10% !important;" *ngIf="discFeature">D %</th>
+                        <!-- <th style="width:10% !important;" *ngIf="discFeature">D %</th>
+                        <th style="width:10% !important;" *ngIf="CusDiscFeature">CD</th> -->
                         <th>Total</th>
 
                     </tr>
@@ -157,11 +162,13 @@
                         <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
                         <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
                         <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
-                            {{item.discInR|number:'1.0-1'}}</td>
-                        <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
-                            {{item.discInP|number:'1.0-1'}}</td>
+                            {{(item.discInR + item.cusDiscAmount) * item.quantity|number:'1.0-1'}}</td>
+                        <!-- <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
+                            {{item.discInP|number:'1.0-1'}}</td> -->
+                        <!-- <td class="text-end" *ngIf="CusDiscFeature" style="width:10% !important;">
+                            {{item.cusDiscAmount|number:'1.0-1'}}</td> -->
                         <td class="text-end" style="width:20% !important;">{{(item.quantity *
-                            item.salePrice) - (item.discInR * item.quantity) |number:'1.0-1'}}</td>
+                            item.salePrice) - (item.discInR * item.quantity)- (item.cusDiscAmount * item.quantity) |number:'1.0-1'}}</td>
                     </tr>
 
                 </tbody>
@@ -224,8 +231,8 @@
                             </tr>
                             <tr class="text-end fs-14" *ngIf="gstFeature && myGstTotal > 0">
 
-                                <!-- <td colspan="2">Gst</td> -->
-                                <td colspan="2"><small class="fs-10">Total Includes Tax of 18%</small></td>
+                                <td colspan="2">Gst</td>
+                                <!-- <td colspan="2"><small class="fs-10">Total Includes Tax of 18%</small></td> -->
 
                                 <td></td>
                                 <td colspan="2">{{myGstTotal |number:'1.0-1'}}</td>
@@ -243,16 +250,22 @@
                                 <td colspan="2"> {{myOtherCharges|number:'1.0-1'}}</td>
 
                             </tr>
+                              <tr class="text-end fs-14" *ngIf="CusDiscFeature">
+                                <td colspan="2">Cus Disc</td>
+                                <td></td>
+                                <td colspan="2">{{myCusDiscAmount|number:'1.0-1'}}</td>
+
+                            </tr>
                             <tr class="text-end fs-14" *ngIf="myOfferDiscount > 0">
                                 <td colspan="2">Offer Disc</td>
                                 <td></td>
                                 <td colspan="2">{{myOfferDiscount|number:'1.0-1'}}</td>
 
                             </tr>
-                            <tr class="text-end fs-14" *ngIf="myDiscount - myOfferDiscount > 0">
+                            <tr class="text-end fs-14" *ngIf="myDiscount - myOfferDiscount - myCusDiscAmount > 0">
                                 <td colspan="2">Disc</td>
                                 <td></td>
-                                <td colspan="2">{{myDiscount - myOfferDiscount|number:'1.0-1'}}</td>
+                                <td colspan="2">{{myDiscount - myOfferDiscount - myCusDiscAmount|number:'1.0-1'}}</td>
 
                             </tr>
 
@@ -709,7 +722,7 @@
     <div class="p-1">
 
 
-          <h2 class="invoice-title"><span>SALES TAX INVOICE</span></h2>
+        <h2 class="invoice-title"><span>SALES TAX INVOICE</span></h2>
 
         <!--------------------- Company Detail Section  End------------------ -->
 
@@ -734,16 +747,16 @@
             <span class="col-sm-4"><b>Vendor #</b> {{companyRegistrationNo}}</span>
             <span class="col-sm-4"><b>Invoice #</b> {{myInvoiceNo}}</span>
 
-            
+
             <span class="col-sm-4"><b>Acc Title :-</b> {{companyAccTitle}}</span>
             <span class="col-sm-4"><b>STRN #</b> {{CompanySTRN}}</span>
             <span class="col-sm-4"><b>NTN #</b> {{CompanyNTN}}</span>
 
-              <span class="col-sm-4"><b>B Code :-</b> {{companyBankCode}}</span>
+            <span class="col-sm-4"><b>B Code :-</b> {{companyBankCode}}</span>
             <span class="col-sm-4"><b>PNTN #</b> {{companyPNTN}}</span>
             <span class="col-sm-4"><b>Date #</b> {{myInvDate | date:'dd-MM-yyyy'}}</span>
 
-             <span class="col-sm-4"><b>Account :-</b> {{companyAccNumber}}</span>
+            <span class="col-sm-4"><b>Account :-</b> {{companyAccNumber}}</span>
 
         </div>
 
@@ -781,7 +794,7 @@
 
         </div>
 
-<hr>
+        <hr>
 
         <div class="d-flex justify-content-between" style="min-height: 200px;">
 
@@ -814,7 +827,7 @@
 
         </div>
 
-        
+
         <div class="text-center">
 
             <small>Thank you for your trust with Northedge Enterprises!</small>

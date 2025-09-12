@@ -326,6 +326,7 @@ export class GlobalDataModule implements OnInit {
   FurnitureSaleFeature = this.getFeature('FurnitureSale');
   DisableDineInKotPrintFeature = this.getFeature('DisableDineInKotPrint');
   dashSlashBarcodeFeature = this.getFeature('dashSlashBarcode');
+  CusDiscFeature = this.getFeature('CusDisc');
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
     this.BookerFeature = this.getFeature('Booker');
@@ -377,6 +378,7 @@ export class GlobalDataModule implements OnInit {
     this.FurnitureSaleFeature = this.getFeature('FurnitureSale');
     this.DisableDineInKotPrintFeature = this.getFeature('DisableDineInKotPrint');
     this.dashSlashBarcodeFeature = this.getFeature('dashSlashBarcode');
+    this.CusDiscFeature = this.getFeature('CusDisc');
   }
 
 

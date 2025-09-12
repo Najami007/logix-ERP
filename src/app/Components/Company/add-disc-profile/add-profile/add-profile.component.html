@@ -1,0 +1,97 @@
+<div class="row pt-4">
+    <mat-form-field class="col-md-12 matSmall" appearance="outline">
+        <mat-label>Name *</mat-label>
+        <input [(ngModel)]="partyName" id="partyName" matInput type="text">
+    </mat-form-field>
+
+
+    <mat-form-field class="col-md-6 matSmall" appearance="outline">
+        <mat-label>Disc % *</mat-label>
+        <input [(ngModel)]="cusDisc" matInput type="text">
+    </mat-form-field>
+
+
+    <mat-form-field class="col-md-6 matSmall" appearance="outline">
+        <mat-label>CNIC</mat-label>
+        <input [(ngModel)]="partyCNIC" (keydown)="global.handleNumKeysandMinut($event)" maxlength="15" matInput
+            type="text">
+        <mat-hint>{{partyCNIC.length}} / 15</mat-hint>
+    </mat-form-field>
+
+    <!-- <mat-form-field class="col-lg-6 matSmall" appearance="outline">
+        <mat-label>Passport no.</mat-label>
+        <input [(ngModel)]="passportNo" matInput type="text">
+    </mat-form-field> -->
+    <mat-form-field class="col-md-6 matSmall" appearance="outline">
+        <mat-label>Mobile no.</mat-label>
+        <input [(ngModel)]="partyMobileno" maxlength="12" (keydown)="global.handleNumKeysandMinut($event)" matInput
+            type="text">
+        <mat-hint>{{partyMobileno?.length}} / 12</mat-hint>
+    </mat-form-field>
+    <!-- <mat-form-field class="col-lg-6 matSmall" appearance="outline">
+        <mat-label>Telephone no.</mat-label>
+        <input [(ngModel)]="partyTelephoneno" maxlength="11" (keydown)="global.handleNumKeysandMinut($event)" matInput
+            type="text">
+        <mat-hint>{{partyTelephoneno?.length}} / 11</mat-hint>
+    </mat-form-field> -->
+    <!-- 
+    <mat-form-field class="col-lg-6 matSmall" appearance="outline">
+        <mat-label>Bank Name</mat-label>
+        <input [(ngModel)]="bankName" matInput type="text">
+    </mat-form-field> -->
+
+    <!-- <mat-form-field class="col-lg-6 matSmall" appearance="outline">
+        <mat-label>Account Title</mat-label>
+        <input [(ngModel)]="accountTitle" matInput type="text">
+    </mat-form-field> -->
+
+    <!-- <mat-form-field class="col-lg-6 matSmall" appearance="outline">
+        <mat-label>Account No.</mat-label>
+        <input [(ngModel)]="accountNo" matInput type="text">
+    </mat-form-field> -->
+    <!-- 
+    <mat-form-field class="col-lg-6 matSmall" appearance="outline">
+        <mat-label>NTN / FTN</mat-label>
+        <input [(ngModel)]="ntn" matInput type="text">
+    </mat-form-field> -->
+
+    <!-- <mat-form-field class="col-lg-6 matSmall" appearance="outline">
+        <mat-label>STRN</mat-label>
+        <input [(ngModel)]="strn" matInput type="text">
+    </mat-form-field> -->
+
+
+    <mat-form-field class="col-md-6 matSmall" appearance="outline">
+        <mat-label>City *</mat-label>
+        <mat-select [(ngModel)]="cityID" #city>
+            <mat-option><ngx-mat-select-search #citySearch [placeholderLabel]="'Search...'"
+                    [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+            <mat-option *ngFor="let item of CitiesNames |filter:citySearch.value"
+                [value]="item.cityID">{{item.cityName}}</mat-option>
+        </mat-select>
+        <mat-icon matSuffix (click)="addCity()">add</mat-icon>
+    </mat-form-field>
+
+
+
+
+
+    <mat-form-field class="col-md-12 matSmall" appearance="outline">
+        <mat-label>Address</mat-label>
+        <textarea rows="1" [(ngModel)]="partyAddress" matInput type="text"></textarea>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-12 matSmall" appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea rows="1" [(ngModel)]="description" matInput type="text"></textarea>
+    </mat-form-field>
+
+</div>
+
+
+<div class="d-flex flex-wrap justify-content-between">
+    <div class="col-md-4 pe-1" *ngIf="crudList.c"><button class="btnsave w-100" (click)="save()">{{btnType}}</button>
+    </div>
+    <div class="col-md-4 "><button class="btnreset w-100" (click)="reset()">Reset</button></div>
+    <mat-checkbox [(ngModel)]="autoEmpty">Auto Empty</mat-checkbox>
+</div>

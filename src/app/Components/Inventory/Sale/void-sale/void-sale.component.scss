@@ -82,3 +82,21 @@
   background-color: black !important;
   color: white !important;
 }
+
+
+
+
+::ng-deep .mat-bottom-sheet-container{
+  --mat-bottom-sheet-container-background-color:rgb(244, 235, 235);
+  border-top-left-radius: 50px !important;
+  border-top-right-radius: 50px !important;
+  padding: 25px 32px;
+  min-height: 40vh !important;
+  outline: 2px dashed black !important;
+  display: block !important;
+  box-sizing: border-box  !important;
+  outline-width:3px ;
+  outline-offset: 5px;
+  overflow: auto;
+
+}

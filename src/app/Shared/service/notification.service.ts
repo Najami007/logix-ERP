@@ -35,7 +35,7 @@ export class NotificationService {
     toast: true,
     position: 'top',
     showConfirmButton: false,
-    timer: 1500,
+    timer: 2000,
     timerProgressBar: true,
     showLoaderOnConfirm:true,
      target: '.cdk-overlay-container',

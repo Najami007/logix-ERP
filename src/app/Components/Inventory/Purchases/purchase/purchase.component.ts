@@ -880,27 +880,27 @@ export class PurchaseComponent implements OnInit {
 
 
     if (this.tableDataList == '') {
-      this.msg.WarnNotify('Atleast One Product Must Be Selected')
-    } else if (this.bookerID == 0 || this.bookerID == undefined) {
-      this.msg.WarnNotify("Select Purchaser")
-    } else if (this.refInvNo == '' || this.refInvNo == undefined) {
-      this.msg.WarnNotify('Enter Reference Invoice No')
-    } else if (this.partyID == 0 || this.partyID == 0 || this.partyID == undefined) {
-      this.msg.WarnNotify('Select Supplier Party')
-    } else if (this.locationID == '' || this.locationID == undefined || this.locationID == 0) {
-      this.msg.WarnNotify('Select Warehouse Location')
-    } else {
+      this.msg.WarnNotify('Atleast One Product Must Be Selected');
+      return;
+    } 
+     if (this.bookerID == 0 || this.bookerID == undefined) {
+      this.msg.WarnNotify("Select Purchaser");
+      return;
+    } 
+     if (this.refInvNo == '' || this.refInvNo == undefined) {
+      this.msg.WarnNotify('Enter Reference Invoice No');
+      return;
+    } 
+     if (this.partyID == 0 || this.partyID == 0 || this.partyID == undefined) {
+      this.msg.WarnNotify('Select Supplier Party');
+      return;
+    } 
+     if (this.locationID == '' || this.locationID == undefined || this.locationID == 0) {
+      this.msg.WarnNotify('Select Warehouse Location');
+      return;
+    } 
 
 
-      if (this.discount == '' || this.discount == undefined) {
-        this.discount = 0;
-      }
-      if (this.overHead == '' || this.overHead == undefined) {
-        this.overHead = 0;
-      }
-      if (this.invRemarks == '' || this.invRemarks == undefined) {
-        this.invRemarks = '-';
-      }
 
 
       var postData = {
@@ -913,10 +913,10 @@ export class PurchaseComponent implements OnInit {
         ProjectID: this.projectID,
         BookerID: this.bookerID,
         BillTotal: this.subTotal,
-        BillDiscount: this.discount,
-        OverHeadAmount: this.overHead,
-        NetTotal: this.subTotal - this.discount,
-        Remarks: this.invRemarks,
+        BillDiscount: this.discount || 0,
+        OverHeadAmount: this.overHead || 0,
+        NetTotal: this.netTotal,
+        Remarks: this.invRemarks || '-',
         InvoiceDocument: "-",
         HoldInvNo: this.holdInvNo,
         discType: this.discType,
@@ -985,33 +985,12 @@ export class PurchaseComponent implements OnInit {
               if (Response == true) {
 
                    this.insert('purchase',postData);
-
-                // this.app.startLoaderDark();
-                // postData.InvType = 'P';
-                // this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchase', postData).subscribe(
-                //   (Response: any) => {
-                //     if (Response.msg == 'Data Saved Successfully') {
-                //       this.msg.SuccessNotify(Response.msg);
-                //       this.reset();
-
-                //     } else {
-                //       this.msg.WarnNotify(Response.msg);
-                //     }
-                //     this.app.stopLoaderDark();
-                //     this.validFlag = true;
-                //   },
-                //   (Error: any) => {
-                //     this.app.stopLoaderDark();
-                //     this.validFlag = true;
-                //   }
-                // )
-
               } 
             }
           )
         
 
-      }
+      
     }
   }
 
@@ -1107,12 +1086,12 @@ export class PurchaseComponent implements OnInit {
 
     for (var i = 0; i < this.tableDataList.length; i++) {
 
-      this.subTotal += (parseFloat(this.tableDataList[i].Quantity) * parseFloat(this.tableDataList[i].CostPrice));
-      this.myTotalQty += parseFloat(this.tableDataList[i].Quantity);
+      this.subTotal += (Number(this.tableDataList[i].Quantity) * Number(this.tableDataList[i].CostPrice));
+      this.myTotalQty += Number(this.tableDataList[i].Quantity);
 
 
     }
-    this.netTotal = (this.subTotal + parseFloat(this.overHead)) - parseFloat(this.discount)
+    this.netTotal = (this.subTotal + Number(this.overHead)) - Number(this.discount)
 
 
   }
@@ -1198,10 +1177,13 @@ export class PurchaseComponent implements OnInit {
   findHoldBills(type: any) {
     if (type == 'hp') {
       $('#edit').show();
+         $('#doc').hide();
+      
     }
 
     if (type == 'p') {
-      $('#edit').hide()
+      $('#edit').hide();
+         $('#doc').show();
     }
 
     var date = this.searchBillType == 'Date' ? this.global.dateFormater(this.Date, '-') : '';

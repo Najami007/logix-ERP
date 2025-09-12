@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -17,12 +17,22 @@ import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bil
 import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-mehtod.component';
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 
+import {
+  MatBottomSheet,
+  MatBottomSheetModule,
+  MatBottomSheetRef,
+} from '@angular/material/bottom-sheet';
+
+
+
 @Component({
   selector: 'app-void-sale',
   templateUrl: './void-sale.component.html',
   styleUrls: ['./void-sale.component.scss']
 })
 export class VoidSaleComponent implements OnInit {
+
+
 
 
   discFeature = this.global.discFeature;
@@ -43,6 +53,7 @@ export class VoidSaleComponent implements OnInit {
   urduBillFeature = this.global.urduBill;
   disablePrintPwd = this.global.DisablePrintPwd;
   VehicleSaleFeature = this.global.VehicleSaleFeature;
+  CusDiscFeature = this.global.CusDiscFeature;
 
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
@@ -75,7 +86,8 @@ export class VoidSaleComponent implements OnInit {
     public global: GlobalDataModule,
     private dialogue: MatDialog,
     private app: AppComponent,
-    private route: Router
+    private route: Router,
+    public bottomSheet: MatBottomSheet
   ) {
     this.global.getMenuList().subscribe((data) => {
       this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
@@ -121,6 +133,7 @@ export class VoidSaleComponent implements OnInit {
     this.getCurrentBill();
     this.getPartyList();
     this.getBooker();
+    this.getDiscCustomerlist();
     setTimeout(() => {
       $('#vssearchProduct').trigger('select');
       $('#vssearchProduct').trigger('focus');
@@ -131,6 +144,39 @@ export class VoidSaleComponent implements OnInit {
   }
 
 
+  openBottomSheet(templateRef: TemplateRef<any>) {
+    this.bottomSheet.open(templateRef);
+  }
+
+
+  tmpDiscCustomerList: any = [];
+
+  onCodeScan(e: any) {
+
+    if (e.keyCode == 13 && this.cusDiscCode !== '') {
+
+      var dataRow = this.discCustomerList.filter((e: any) => e.disCode == this.cusDiscCode);
+
+      if (dataRow.length > 0) {
+        this.tmpDiscCustomerList = dataRow[0];
+        this.cusDisc = dataRow[0].cusDisc;
+
+      } else {
+        this.msg.WarnNotify('Code not Valid');
+        this.tmpDiscCustomerList = [];
+        this.cusDisc = 0;
+
+      }
+      this.getTotal();
+      this.cusDiscCode = '';
+    }
+
+  }
+
+
+  cusDisc: any = 0;
+  CusDiscAmount: any = 0;
+  cusDiscCode: any = '';
 
   byNameSearch: any = false;
 
@@ -180,6 +226,27 @@ export class VoidSaleComponent implements OnInit {
   tmpCash = 0;
   tmpChange = 0;
 
+  //////////////////////////////////////////////////////////////
+
+
+  discCustomerList: any = [];
+
+  getDiscCustomerlist() {
+    this.http.get(environment.mainApi + this.global.companyLink + 'getParty').subscribe(
+      {
+        next: (Response: any) => {
+
+          if (Response.length > 0) {
+            this.discCustomerList = Response.filter((e: any) => e.partyType == 'Customer-Disc');
+            console.log(this.discCustomerList);
+          }
+        },
+        error: (error: any) => {
+          console.log(error);
+        }
+      }
+    )
+  }
 
 
   //////////////////////  get List of Banks//////////////////////
@@ -296,7 +363,7 @@ export class VoidSaleComponent implements OnInit {
         this.tableDataList = [];
         if (Response.length > 0) {
           this.invBillNo = Response[0].invBillNo;
-
+          console.log(Response);
           Response.forEach((e: any) => {
             this.tableDataList.push({
               productID: e.productID,
@@ -323,6 +390,8 @@ export class VoidSaleComponent implements OnInit {
               gstAmount: e.gstAmount,
               gstValue: e.gstValue,
               gst: this.gstFeature ? e.gst : 0,
+              cusDiscAmount: ((e.salePrice - e.avgCostPrice) * this.cusDisc) / 100,
+              cusDisc: this.cusDisc,
 
             })
           });
@@ -348,6 +417,7 @@ export class VoidSaleComponent implements OnInit {
     this.subTotal = 0;
     this.netTotal = 0;
     this.offerDiscount = 0;
+    this.CusDiscAmount = 0;
     this.tableDataList.forEach((e: any) => {
       // if (this.billDiscount > 0) {
       //   e.discInP = this.billDiscount;
@@ -357,6 +427,10 @@ export class VoidSaleComponent implements OnInit {
       this.qtyTotal += parseFloat(e.quantity);
       this.subTotal += parseFloat(e.quantity) * parseFloat(e.salePrice);
       this.offerDiscount += parseFloat(e.discInR) * parseFloat(e.quantity);
+
+      e.cusDisc = this.cusDisc;
+      e.cusDiscAmount = ((e.salePrice - e.avgCostPrice) * this.cusDisc) / 100;
+      this.CusDiscAmount += e.cusDiscAmount * e.quantity;
 
     });
 
@@ -373,10 +447,10 @@ export class VoidSaleComponent implements OnInit {
       this.subTotal = this.subTotal + this.PosFee;
     }
 
-    this.netTotal = this.subTotal - parseFloat(this.discount) - parseFloat(this.offerDiscount);
+    this.netTotal = this.subTotal - Number(this.discount) - Number(this.offerDiscount) - Number(this.CusDiscAmount);
 
     if (this.paymentType == 'Split') {
-      this.bankCash = this.netTotal - parseFloat(this.cash);
+      this.bankCash = this.netTotal - Number(this.cash);
     }
     if (this.paymentType == 'Bank') {
       this.bankCash = this.netTotal;
@@ -388,7 +462,7 @@ export class VoidSaleComponent implements OnInit {
       this.partyID = 0;
     }
 
-    this.change = (parseFloat(this.cash) + parseFloat(this.bankCash)) - this.netTotal;
+    this.change = (Number(this.cash) + Number(this.bankCash)) - this.netTotal;
 
 
   }
@@ -697,7 +771,7 @@ export class VoidSaleComponent implements OnInit {
   }
 
   //////////////////////////////// Sale Insert Function //////////////////////////////////////////////////
-  isValidSale = true;
+  isProcessing = false;
   save(paymentType: any, SendToFbr: any) {
 
     var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
@@ -783,7 +857,7 @@ export class VoidSaleComponent implements OnInit {
       Remarks: this.billRemarks || '-',
       OrderType: "Take Away",
       BillTotal: this.subTotal,
-      BillDiscount: Number(this.discount) + Number(this.offerDiscount),
+      BillDiscount: Number(this.discount) + Number(this.offerDiscount) + Number(this.CusDiscAmount),
       OtherCharges: this.otherCharges,
       NetTotal: this.netTotal,
       CashRec: this.cash,
@@ -793,14 +867,18 @@ export class VoidSaleComponent implements OnInit {
       CusContactNo: this.customerMobileno || '-',
       CusName: this.customerName || '-',
       SaleDetail: JSON.stringify(this.tableDataList),
-      UserID: this.global.getUserID()
+      UserID: this.global.getUserID(),
+      DiscPartyID: this.CusDiscFeature ? this.tmpDiscCustomerList.partyID : 0,
+      CusDisc: this.cusDisc,
+      CusDiscAmount: this.CusDiscAmount || 0,
+
     }
 
+    console.log(postData);
 
-
-    if (this.isValidSale) {
+    if (this.isProcessing) return;
       this.app.startLoaderDark();
-      this.isValidSale = false;
+      this.isProcessing = true;
       this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertVoidableSale', postData).subscribe(
         (Response: any) => {
           if (Response.msg == 'Data Saved Successfully') {
@@ -822,16 +900,16 @@ export class VoidSaleComponent implements OnInit {
             this.msg.WarnNotify(Response.msg);
           }
           this.app.stopLoaderDark();
-          this.isValidSale = true;
+          this.isProcessing = false;
         },
         (Error: any) => {
-          this.isValidSale = true;
+          this.isProcessing = false;
           this.msg.WarnNotify(Error);
           console.log(Error);
           this.app.stopLoaderDark();
         }
       )
-    }
+    
 
 
 
@@ -865,6 +943,11 @@ export class VoidSaleComponent implements OnInit {
     this.billRemarks = '';
     // this.PosFee = 0;
     this.offerDiscount = 0;
+    this.tmpDiscCustomerList = [];
+    this.cusDiscCode = '';
+    this.cusDisc = 0;
+    this.CusDiscAmount = 0;
+
 
   }
 
@@ -945,6 +1028,7 @@ export class VoidSaleComponent implements OnInit {
 
           }
         }
+        this.getTotal();
 
         setTimeout(() => {
           $('.qty' + this.rowFocused.toString()).trigger('focus');

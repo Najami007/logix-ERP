@@ -37,7 +37,11 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import {HotelDatePickerModule} from 'vue-hotel-datepicker';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import {MatChipsModule} from '@angular/material/chips';
-
+import {
+  MatBottomSheet,
+  MatBottomSheetModule,
+  MatBottomSheetRef,
+} from '@angular/material/bottom-sheet';
 
 
 
@@ -82,6 +86,7 @@ import {MatChipsModule} from '@angular/material/chips';
       applyLabel: 'Okay',
   }),
   MatChipsModule,
+  MatBottomSheetModule
   
     
 
@@ -118,7 +123,8 @@ import {MatChipsModule} from '@angular/material/chips';
     MatProgressBarModule,
     NgxPaginationModule,
     NgxDaterangepickerMd,
-    MatChipsModule
+    MatChipsModule,
+     MatBottomSheetModule
    
     
   ],

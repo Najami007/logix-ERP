@@ -301,7 +301,7 @@ export class PartyComponent implements OnInit {
     }
   }
 
-  ////////////Mobile no field formate//////////////////////////
+  ////////////Mobile no field format//////////////////////////
   mobileNoFormate() {
     if (this.partyMobileno.length == 4) {
       this.partyMobileno = this.partyMobileno + '-';

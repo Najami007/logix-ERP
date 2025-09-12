@@ -39,6 +39,8 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { VehicleComponent } from './vehicle/vehicle.component';
 import { AddVehicleComponent } from './vehicle/add-vehicle/add-vehicle.component';
 import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
+import { AddDiscProfileComponent } from './add-disc-profile/add-disc-profile.component';
+import { AddProfileComponent } from './add-disc-profile/add-profile/add-profile.component';
 
 
 export const MY_DATE_FORMAT = {
@@ -69,7 +71,7 @@ export const companyRoutes: Route[] = [
   { path: 'root', component: RootComponent, data: { title: 'Root' }, canActivate: [AuthGuard] },
   { path: 'area', component: AreaComponent, data: { title: 'Area' }, canActivate: [AuthGuard] },
   { path: 'vehicle', component: VehicleComponent, data: { title: 'Vehicle' }, canActivate: [AuthGuard] },
-
+   { path: 'addDiscProfile', component: AddDiscProfileComponent, data: { title: 'ADD Disc Profile' }, canActivate: [AuthGuard] },
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 
 
@@ -98,7 +100,9 @@ export const companyRoutes: Route[] = [
     RootComponent,
     AreaComponent,
     VehicleComponent,
-    AddVehicleComponent
+    AddVehicleComponent,
+    AddDiscProfileComponent,
+    AddProfileComponent
 
 
   ],
