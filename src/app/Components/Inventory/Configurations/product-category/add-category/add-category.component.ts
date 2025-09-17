@@ -47,6 +47,7 @@ export class AddCategoryComponent implements OnInit{
       this.http.post(environment.mainApi+this.global.inventoryLink+'insertcategory',{  
       CategoryTitle: this.categoryTitle,
       CategoryDescription: this.description,
+      CatImage:'',
       UserID: this.global.getUserID()
       }).subscribe(
         (Response:any)=>{

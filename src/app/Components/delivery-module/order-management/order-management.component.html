@@ -1,0 +1,289 @@
+<div class="body ">
+    <mat-sidenav-container hasBackdrop="false" (backdropClick)="orderPanel.close()">
+
+        <mat-sidenav #orderPanel mode="over" style="width:60%;" position="end" class="order-panel container">
+            <div class="container-fluid pt-1">
+                <div class="d-flex justify-content-between ">
+                    <div class="d-flex flex-column">
+                        <span>🛒 Order # 5456464 Pending</span>
+                        <span>Order placed on 16-09-2025</span>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <div class="d-flex cursorPointer" (click)="orderPanel.close()"><mat-icon
+                                class="fs-15px mt-1">clear</mat-icon><span>Close</span></div>
+                        <div class="d-flex text-dark"><mat-icon class="fs-15px mt-1">print</mat-icon><span>Print</span>
+                        </div>
+                        <div class="d-flex text-success"><mat-icon class="fs-15px mt-1">edit</mat-icon><span>Edit</span>
+                        </div>
+                        <div class="d-flex text-danger"><mat-icon
+                                class="fs-15px mt-1">delete_outline</mat-icon><span>Delete</span></div>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-4 ">
+                        <mat-label>Customer Info</mat-label>
+
+                        <div class="text-secondary d-flex flex-column fs-11px gap-2">
+                            <span><b>Name:</b> Najam Ali</span>
+                            <span><b>Email:</b> abc@mail.com</span>
+                            <span><b>Mobile:</b> 0311-5522525</span>
+                            <span><b>Address:</b> Fateh Jang</span>
+                        </div>
+                    </div>
+                    <div class="col-md-8 ">
+                        <mat-label>Delivery Details</mat-label>
+
+                        <div class="text-secondary d-flex flex-column fs-11px gap-2">
+                            <span><b>Name:</b> Najam Ali</span>
+                            <span><b>Email:</b> abc@mail.com</span>
+                            <span><b>Mobile:</b> 0311-5522525</span>
+                            <span><b>Address:</b> Fateh Jang</span>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <hr>
+
+
+                <div>
+
+                    <mat-label class="fw-bold">Order Breakdown</mat-label>
+
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>S#</th>
+                                <th>Product</th>
+                                <th>QTy</th>
+                                <th>Unit Price</th>
+                                <th>SubTotal</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>7up 1.5L</td>
+                                <td>5</td>
+                                <td>200</td>
+                                <td>1000</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>7up 1.5L</td>
+                                <td>5</td>
+                                <td>200</td>
+                                <td>1000</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>7up 1.5L</td>
+                                <td>5</td>
+                                <td>200</td>
+                                <td>1000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+
+
+        </mat-sidenav>
+
+
+        <mat-sidenav-content>
+            <div class="row container-fluid p-2">
+
+                <div class="col-md-2 filterSection" style="min-height: 600px;">
+
+                    <div class="d-flex justify-content-around ">
+                        <span (click)="setViewModeID(1)" class="viewButtons cursorPointer"
+                            [ngClass]="viewModeID == 1 ? 'selectedMode' :''">Card View</span>
+                        <span (click)="setViewModeID(2)" class="viewButtons cursorPointer"
+                            [ngClass]="viewModeID == 2 ? 'selectedMode' :''">Table View</span>
+                    </div>
+
+                    <div class="d-flex flex-column">
+                        <hr>
+                        <mat-label class="fw-bold">Filters</mat-label>
+
+                        <mat-radio-group [(ngModel)]="filterType" class="d-flex flex-column">
+                            <mat-radio-button *ngFor="let item of filterList"
+                                [value]="item.title">{{item.title}}</mat-radio-button>
+                        </mat-radio-group>
+
+
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="col-md-10 ">
+
+                    <div class="d-flex justify-content-end">
+                        <div class="col-md-2">
+                            <mat-form-field class="w-100 matSmall" appearance="outline">
+                                <mat-label>Search.....</mat-label>
+                                <input #searchOrder matInput type="search" class="text-secondary">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-4" *ngIf="viewModeID == 1">
+
+                        <div *ngFor="let item of dataList | filter:searchOrder.value|paginate:{
+                        itemsPerPage : tableSize,
+                        currentPage : page,
+                        totalItems :    count,
+                    }  ">
+
+                            <div class="p-2 slip">
+
+                                <div class="bill-paid" role="img" aria-label="Bill paid">
+                                    <!-- <div class="bp-badge">✓</div> -->
+                                    <div class="bp-text">
+                                        <div class="bp-title ">{{item.status}}</div>
+                                        <!-- <div class="bp-sub">easypaisa</div> -->
+                                    </div>
+                                </div>
+
+                                <div class="text-center d-flex flex-column">
+                                    <span class="fw-bold">{{item.title}}</span>
+                                    <span class="text-secondary fs-10px">Order # {{item.orderNo}}</span>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <span class="text-secondary fs-10px">{{item.orderDate | date:'dd-MM-yyyy'}}</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-secondary fs-10px"><b>Amount:</b>{{item.amount|number}}</span>
+                                    <span class="text-secondary fs-10px"><b>Item:</b> {{item.Item}}</span>
+
+                                </div>
+
+                                <div class="text-center title-border">
+                                    <span class="fs-12px fw-bold">Delivery Details</span>
+                                </div>
+
+
+                                <div class="d-flex flex-column text-secondary">
+                                    <span class="fs-10px fw-bold">Address:</span>
+                                    <span class="fs-11px" style="line-height: 10px;">{{item.deliveryAddress}}</span>
+                                    <span class="fs-10px fw-bold">Delivery date:</span>
+                                    <span class="fs-11px" style="line-height: 10px;">{{item.deliveryDate |
+                                        date:'dd-MM-yyyy'}}</span>
+                                </div>
+
+
+                                <div class="text-end">
+                                    <mat-icon class="fs-14px cursorPointer">print</mat-icon>
+                                    <mat-icon class="fs-14px cursorPointer"
+                                        (click)="orderPanel.toggle()">remove_red_eye</mat-icon>
+                                </div>
+
+
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div *ngIf="viewModeID == 2">
+
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>S#</th>
+                                    <th>Order #</th>
+                                    <th>Customer</th>
+                                    <th>Status</th>
+                                    <th>Item</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of dataList| filter:searchOrder.value|paginate:{
+                        itemsPerPage : tableSize,
+                        currentPage : page,
+                        totalItems :    count,
+                    }   index as index">
+                                    <td><mat-checkbox></mat-checkbox> {{index + 1}}</td>
+                                    <td>
+                                        <div class="d-flex flex-column text-secondary">
+                                            <span>{{item.orderNo}}</span>
+                                            <span>{{item.orderDate | date:'dd-MM-yyyy hh:mm a'}}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{item.title}}</td>
+                                    <td>{{item.status}}</td>
+                                    <td>{{item.Item}}</td>
+                                    <td>{{item.amount}}</td>
+                                    <td>
+                                        <div>
+                                            <mat-icon>print</mat-icon>
+                                            <mat-icon (click)="orderPanel.toggle()">remove_red_eye</mat-icon>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+
+                    <div class="d-flex"
+                        style="position: fixed; bottom: 32px !important; width: 100%; background-color: #fff; z-index: 2;">
+
+                        <pagination-controls previousLabel="Prev" nextLabel="Next"
+                            (pageChange)="onTableDataChange($event)"></pagination-controls>
+
+
+                        <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+                        <select class="text-white" style="height: 25px;background-color: rgb(75, 164, 248);"
+                            (change)="onTableSizeChange($event)" [(ngModel)]="tableSize">
+                            <option *ngFor=" let item of tableSizes" [selected]="tableSize == item">{{item}}</option>
+                        </select>
+
+                        <div class="jump-to-page">
+                            <input type="text" class="w-25" (keydown)="global.handleNumKeys($event)"
+                                [(ngModel)]="jumpPage" placeholder="Page #" min="1" [max]="count" />
+                            <button (click)="goToPage()" class="text-white"
+                                style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+        </mat-sidenav-content>
+
+   
+
+    </mat-sidenav-container>
+
+
+
+
+
+
+
+
+
+
+</div>

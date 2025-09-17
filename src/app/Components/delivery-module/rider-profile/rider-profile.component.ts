@@ -1,24 +1,21 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { AppComponent } from 'src/app/app.component';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
-import { AddcityComponent } from '../../Company/settings/city/addcity/addcity.component';
+import { AddRiderProfileComponent } from './add-rider-profile/add-rider-profile.component';
+import { MatDialog } from '@angular/material/dialog';
+import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
-import { AddProfileComponent } from './add-profile/add-profile.component';
-
 
 @Component({
-  selector: 'app-add-disc-profile',
-  templateUrl: './add-disc-profile.component.html',
-  styleUrls: ['./add-disc-profile.component.scss']
+  selector: 'app-rider-profile',
+  templateUrl: './rider-profile.component.html',
+  styleUrls: ['./rider-profile.component.scss']
 })
-export class AddDiscProfileComponent implements OnInit {
-
-  @ViewChild(AddProfileComponent) addProfile: any;
+export class RiderProfileComponent  {
+  @ViewChild(AddRiderProfileComponent) addProfile: any;
 
   crudList: any = { c: true, r: true, u: true, d: true };
 
@@ -40,7 +37,7 @@ export class AddDiscProfileComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.globaldata.setHeaderTitle('Contractor Profile');
+    this.globaldata.setHeaderTitle('Rider Profile');
     this.getSavedData();
 
       this.tableSizes = this.globaldata.paginationTableSizes;
@@ -97,23 +94,7 @@ export class AddDiscProfileComponent implements OnInit {
 
 
   edit(item: any) {
-    this.addProfile.partyID = item.partyID;
-    this.addProfile.partyType = item.partyType;
-    this.addProfile.partyName = item.partyName;
-    this.addProfile.partyCNIC = item.partyCNIC;
-    this.addProfile.cusDisc = item.cusDisc;
-    this.addProfile.passportNo = item.passportNo;
-    this.addProfile.partyMobileno = item.partyMobileNo;
-    this.addProfile.partyTelephoneno = item.telephoneNo;
-    this.addProfile.bankName = item.bankName;
-    this.addProfile.accountTitle = item.bankAccountTitle;
-    this.addProfile.accountNo = item.bankAccountNo;
-    this.addProfile.ntn = item.ntn;
-    this.addProfile.strn = item.strn;
-    this.addProfile.cityID = item.cityID;  
-    this.addProfile.partyAddress = item.partyAddress;
-    this.addProfile.description = item.partyDescription;
-    this.addProfile.btnType = 'Update';
+    
 
 
   }
@@ -164,10 +145,10 @@ export class AddDiscProfileComponent implements OnInit {
     this.globaldata.printData('#printDiv')
   }
 
-  
-
-
 
 
 }
+  
+
+
 

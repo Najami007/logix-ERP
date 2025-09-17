@@ -17,6 +17,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ProductBarcodesComponent } from './product-barcodes/product-barcodes.component';
+import Swal from 'sweetalert2';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-product',
@@ -24,6 +26,8 @@ import { ProductBarcodesComponent } from './product-barcodes/product-barcodes.co
   styleUrls: ['./product.component.scss']
 })
 export class ProductComponent implements OnInit {
+
+  @ViewChild('filterPanel') filterPanel!: MatSidenav;
 
   /////////// crud list to handle user wise restriction //////////
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -42,6 +46,7 @@ export class ProductComponent implements OnInit {
   MultiBarcode = this.global.MultiBarcode;
   ManufacturingFeature = this.global.ManufacturingFeature;
   FurnitureSaleFeature = this.global.FurnitureSaleFeature;
+  appConfigFeature = this.global.appConfigFeature;
 
 
 
@@ -53,7 +58,10 @@ export class ProductComponent implements OnInit {
     }
   }
 
+  showAllFilterSubCategories = false;
+  showAllFilterBrandList = false;
 
+  tmpSearch = '';
   loadingBar = 'start';
 
 
@@ -161,8 +169,86 @@ export class ProductComponent implements OnInit {
 
   filterType = 'brand';
 
+
+
+  tmpStatusList = [{ title: 'Active', value: true, isChecked: false }, { title: 'In Active', value: false, isChecked: false }]
+  tmpDiscFilterList = [{ title: 'With Disc', value: 1, isChecked: false }, { title: 'Without Disc', value: 0, isChecked: false }]
+  tmpApplinkedList = [{ title: 'Linked With APP', value: true, isChecked: false }, { title: 'Not Linked With App', value: false, isChecked: false }]
+
+
   subCategoryFilterList: any = [];
   tempProdList: any = [];
+
+
+
+
+
+  AdvaceFilter() {
+
+    this.app.startLoaderDark();
+
+    const subCatList = this.subCategoryFilterList
+      .filter((e: any) => e.isChecked)
+      .map((e: any) => e.subCategoryID);
+
+    const brandList = this.BrandList
+      .filter((e: any) => e.isChecked)
+      .map((e: any) => e.brandID);
+
+    const statusList = this.tmpStatusList
+      .filter((e: any) => e.isChecked)
+      .map((e: any) => e.value);
+
+    const linkAppList = this.tmpApplinkedList
+      .filter((e: any) => e.isChecked)
+      .map((e: any) => e.value);
+
+    const discList = this.tmpDiscFilterList
+      .filter((e: any) => e.isChecked)
+      .map((e: any) => e.value);
+
+    console.log("Selected SubCategories:", subCatList);
+    console.log("Selected Brands:", brandList);
+    console.log("Status LIst:", statusList);
+    console.log("Selected List:", discList);
+    console.log("Selected List:", linkAppList);
+
+    this.productList = this.tempProdList.filter((p: any) =>
+      (subCatList.length === 0 || subCatList.includes(p.subCategoryID)) &&
+      (brandList.length === 0 || brandList.includes(p.brandID)) &&
+      (statusList.length === 0 || statusList.includes(p.activeStatus)) &&
+      (linkAppList.length === 0 || linkAppList.includes(p.linkWithApp)) &&
+      (
+        discList.length === 0 ||                               // no discount filter
+        (discList.length === 1 && discList[0] === 1            // only 1 selected
+          ? p.discPercentage > 0
+          : discList.length === 1 && discList[0] === 0         // only 0 selected
+            ? p.discPercentage <= 0
+            : discList.includes(p.discPercentage)              // fallback for other cases
+        )
+      )
+    );
+
+
+    this.filterPanel.close();
+    this.app.stopLoaderDark();
+
+  }
+
+
+
+  clearFilter() {
+    // reset checkboxes
+    this.subCategoryFilterList.forEach((e: any) => e.isChecked = false);
+    this.BrandList.forEach((e: any) => e.isChecked = false);
+    this.tmpStatusList.forEach((e: any) => e.isChecked = false);
+    this.tmpDiscFilterList.forEach((e: any) => e.isChecked = false);
+    this.tmpApplinkedList.forEach((e: any) => e.isChecked = false);
+
+    // reset product list
+    this.productList = [...this.tempProdList];
+
+  }
 
   filterProductList(type: any) {
 
@@ -367,9 +453,12 @@ export class ProductComponent implements OnInit {
   getBrandList() {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetBrand').subscribe(
       (Response: any) => {
-        this.BrandList = Response;
+
         //////// assigning value on load/////////////
-        if (this.BrandList.length > 0) {
+        if (Response.length > 0) {
+          this.BrandList = Response.sort((a: any, b: any) =>
+            a.brandTitle.localeCompare(b.brandTitle)
+          );;
           this.BrandID = this.BrandList[0].brandID;
         }
       },
@@ -389,7 +478,13 @@ export class ProductComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSubCategory').subscribe(
       (Response: any) => {
         this.SubCategoriesList = Response.filter((e: any) => e.categoryID == this.CategoryID);
-        this.subCategoryFilterList = Response;
+
+        if (Response.length > 0) {
+          this.subCategoryFilterList = Response.sort((a: any, b: any) =>
+            a.subCategoryTitle.localeCompare(b.subCategoryTitle)
+          );
+        }
+
       }
     )
   }
@@ -816,6 +911,7 @@ export class ProductComponent implements OnInit {
   curFocusRow: any = -1;
   changeTab(tabNum: any) {
     this.tabIndex = tabNum;
+    this.filterPanel.close();
     setTimeout(() => {
       if (this.tabIndex == 1) this.scrollToRow(this.curFocusRow)
     }, 500);
@@ -1078,6 +1174,67 @@ export class ProductComponent implements OnInit {
 
 
   }
+
+
+
+
+
+  linkWithApp(item: any, type: any) {
+
+    var title = type == 'Pro' ? 'Do you want Link this product with app?' : 'Do you want to add product in Discount List?'
+
+    Swal.fire({
+      title: title,
+      showCancelButton: true,
+      confirmButtonText: "Confirm",
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+
+        var postData: any = {
+          FlagType: type,
+          FlagID: item.productID,
+          FlagStatus: type == 'Pro' ? !item.linkWithApp : !item.addInDiscList,
+        }
+
+        this.http.post(environment.mainApi + this.global.inventoryLink + 'LinkWithMobApp', postData).subscribe(
+          {
+            next: (Response: any) => {
+              if (Response.msg == 'Data Updated Successfully') {
+                this.msg.SuccessNotify(Response.msg);
+                if (type == 'Pro') {
+                  item.linkWithApp = !item.linkWithApp;
+                }
+                if (type == 'ProDisc') {
+                  item.addInDiscList = !item.addInDiscList;
+                }
+
+              } else {
+                this.msg.WarnNotify(Response.msg);
+              }
+              this.scrollToRow(this.curFocusRow);
+            },
+            error: error => {
+              this.scrollToRow(this.curFocusRow);
+              console.log(error);
+            }
+          }
+
+        )
+
+
+      } 
+      if(result.isDenied || result.isDismissed){
+       setTimeout(() => {
+         this.scrollToRow(this.curFocusRow);
+       }, 200);
+      }
+    });
+
+
+
+  }
+
 
 
 }

@@ -17,10 +17,12 @@ export class BrandComponent implements OnInit {
 
   crudList: any = { c: true, r: true, u: true, d: true };
 
+    appConfigFeature = this.globaldata.appConfigFeature;
+
   constructor(private http: HttpClient,
     private msg: NotificationService,
     private dialogue: MatDialog,
-    private globaldata: GlobalDataModule,
+    public globaldata: GlobalDataModule,
     private app: AppComponent,
     private route: Router,
     private titleService: Title
@@ -80,10 +82,26 @@ export class BrandComponent implements OnInit {
         this.description = '-';
       }
 
+
+      var postData: any = {
+        BrandID: this.brandID,
+        BrandTitle: this.brandTitle,
+        BrandCode: this.brandCode,
+        BrandDescription: this.description,
+        BrandImage:this.brandImage,
+        PinCode: '',
+        UserID: this.globaldata.getUserID()
+      }
+
       if (this.btnType == 'Save') {
-        this.insert();
+        this.insert(postData,'insert');
       } else if (this.btnType == 'Update') {
-        this.update();
+         this.globaldata.openPinCode().subscribe(pin => {
+          if (pin != '') {
+            postData.PinCode = pin;
+            this.insert(postData, 'update');
+          }
+        })
 
       }
 
@@ -93,16 +111,19 @@ export class BrandComponent implements OnInit {
 
 
 
-  insert() {
+  insert(postData: any, type: any) {
     this.app.startLoaderDark();
-    this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'insertbrand', {
-      BrandTitle: this.brandTitle,
-      BrandCode: this.brandCode,
-      BrandDescription: this.description,
-      UserID: this.globaldata.getUserID()
-    }).subscribe(
+    
+    var url = '';
+    if(type == 'insert'){
+      url = 'insertbrand'
+    }
+    if(type == 'update'){
+      url = 'updateBrand'
+    }
+    this.http.post(environment.mainApi + this.globaldata.inventoryLink + url,postData).subscribe(
       (Response: any) => {
-        if (Response.msg == 'Data Saved Successfully') {
+        if (Response.msg == 'Data Saved Successfully'|| Response.msg == 'Data Updated Successfully') {
           this.msg.SuccessNotify(Response.msg);
           this.getBrandList();
           this.reset();
@@ -119,42 +140,7 @@ export class BrandComponent implements OnInit {
     )
   }
 
-  update() {
-
-    this.globaldata.openPinCode().subscribe(pin => {
-
-      if (pin != '') {
-
-
-        this.app.startLoaderDark();
-        this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'updateBrand', {
-          BrandID: this.brandID,
-          BrandTitle: this.brandTitle,
-          BrandCode: this.brandCode,
-          BrandDescription: this.description,
-          PinCode: pin,
-          UserID: this.globaldata.getUserID()
-        }).subscribe(
-          (Response: any) => {
-            if (Response.msg == 'Data Updated Successfully') {
-              this.msg.SuccessNotify(Response.msg);
-              this.getBrandList();
-              this.reset();
-              this.app.stopLoaderDark();
-
-            } else {
-              this.msg.WarnNotify(Response.msg);
-              this.app.stopLoaderDark();
-            }
-          },
-          (error: any) => {
-            this.app.stopLoaderDark();
-          }
-        )
-      }
-    })
-
-  }
+ 
 
 
 
@@ -163,6 +149,7 @@ export class BrandComponent implements OnInit {
     this.description = '';
     this.brandTitle = '';
     this.brandID = 0;
+    this.brandImage = '';
     this.btnType = 'Save';
 
   }
@@ -173,6 +160,7 @@ export class BrandComponent implements OnInit {
     this.brandTitle = row.brandTitle;
     this.brandCode = row.brandCode;
     this.description = row.brandDescription;
+    this.brandImage = row.brandImage,
     this.btnType = 'Update';
 
   }
@@ -231,5 +219,140 @@ export class BrandComponent implements OnInit {
 
 
   }
+
+
+
+
+  brandImage: any = '';
+
+  onImgSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const imgSize = file.size;
+    const isConvert: number = parseFloat((imgSize / 1048576).toFixed(2));
+
+    ////////////// will check the file type ////////////////
+    if (this.globaldata.getExtension(event.target.value) !== 'pdf') {
+      const fileReader: FileReader = new FileReader();
+
+      fileReader.onload = async () => {
+        const originalBase64 = fileReader.result as string;
+
+        // 👉 if file size > 1MB, compress before assigning
+        if (isConvert > 1) {
+          this.msg.WarnNotify('File Size is more than 1MB, compressing...');
+          this.brandImage = await this.compressBase64(originalBase64, 400, 400, 0.5);
+        } else {
+          // assign compressed anyway (smaller size, faster upload)
+          this.brandImage = await this.compressBase64(originalBase64, 400, 400, 0.5);
+        }
+
+        console.log(this.brandImage);
+      };
+
+      fileReader.readAsDataURL(file);
+
+      // reset file input
+      const input = event.target as HTMLInputElement;
+      if (input.files && input.files.length > 0) {
+        input.value = '';
+      }
+    } else {
+      this.msg.WarnNotify('File Must Be in jpg or png format');
+      event.target.value = '';
+      this.brandImage = '';
+    }
+  }
+
+
+  // ✅ helper compression function
+  private compressBase64(base64: string, maxWidth: number = 800, maxHeight: number = 800, quality: number = 0.7): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = base64;
+
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject('Canvas not supported');
+          return;
+        }
+
+        let width = img.width;
+        let height = img.height;
+
+        // Scale down
+        if (width > maxWidth || height > maxHeight) {
+          if (width > height) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          } else {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // export as JPEG
+        const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+        resolve(compressedBase64);
+      };
+
+      img.onerror = (err) => reject(err);
+    });
+  }
+
+
+
+
+      linkWithApp(item: any) {
+    
+    
+    
+        Swal.fire({
+          title: 'Do you want to link Brand with app?',
+          showCancelButton: true,
+          confirmButtonText: "Confirm",
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+    
+            var postData: any = {
+              FlagType: 'Brand',
+              FlagID: item.brandID,
+              FlagStatus: !item.linkWithApp ,
+            }
+    
+            this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'LinkWithMobApp', postData).subscribe(
+              {
+                next: (Response: any) => {
+                  if (Response.msg == 'Data Updated Successfully') {
+                    this.msg.SuccessNotify(Response.msg);
+                    item.linkWithApp = !item.linkWithApp;
+    
+    
+                  } else {
+                    this.msg.WarnNotify(Response.msg);
+                  }
+                },
+                error: error => {
+                  console.log(error);
+                }
+              }
+    
+            )
+    
+          }
+        });
+    
+    
+    
+      }
+    
 
 }

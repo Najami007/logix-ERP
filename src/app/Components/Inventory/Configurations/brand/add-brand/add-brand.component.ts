@@ -53,6 +53,7 @@ export class AddBrandComponent implements OnInit {
         BrandTitle: this.brandTitle,
         BrandCode: this.brandCode,
         BrandDescription: this.description,
+        BrandImage:'',
         UserID: this.global.getUserID()
       }).subscribe(
         (Response:any)=>{

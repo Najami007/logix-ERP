@@ -1,37 +1,58 @@
-<div  class="row no-scroll vh-100 body ">
+<div class="row no-scroll vh-100 body ">
 
     <div class="col-lg-4 ps-4 pe-4 pt-3 border-end border-dark">
         <div class="border-bottom">
-            <h2 >Brand Detail's</h2>
+            <h2>Brand Detail's</h2>
         </div>
-        
 
 
-       <div class="row pt-4">
-         <mat-form-field class="w-100 matSmall" appearance="outline">
-            <mat-label>Brand Title</mat-label>
-            <input matInput type="text" [(ngModel)]="brandTitle" >
-        </mat-form-field>
 
-        <mat-form-field class="w-100 matSmall" appearance="outline">
-            <mat-label>Code</mat-label>
-            <input matInput type="text" [(ngModel)]="brandCode" >
-        </mat-form-field>
+        <div class="d-flex justify-content-center">
 
-        <mat-form-field class="w-100 matSmall" appearance="outline">
-            <mat-label>Description</mat-label>
-            <textarea matInput type="text" [(ngModel)]="description" ></textarea>
-        </mat-form-field>
+            <div class="avatar-upload " (click)="globaldata.showProductImage(brandImage,0)">
+                <div class="avatar-edit">
+                    <input type="file" accesskey="g" id="prodimg" accept="" #prodimg (change)="onImgSelected($event)" />
+                    <label for="prodimg"><mat-icon class=" mt-1">edit</mat-icon></label>
+                </div>
+                <div class="avatar-del">
+                    <label (click)="brandImage = ''"><mat-icon class=" mt-1">delete</mat-icon></label>
+                </div>
+                <div class="avatar-preview">
+                    <div accesskey="i" id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + brandImage + ')' }">
+                    </div>
+                </div>
+            </div>
+        </div>
 
-       </div>
-    
+
+
+        <div class="row pt-4">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label>Brand Title</mat-label>
+                <input matInput type="text" [(ngModel)]="brandTitle">
+            </mat-form-field>
+
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label>Code</mat-label>
+                <input matInput type="text" [(ngModel)]="brandCode">
+            </mat-form-field>
+
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label>Description</mat-label>
+                <textarea matInput type="text" [(ngModel)]="description"></textarea>
+            </mat-form-field>
+
+        </div>
+
 
         <div class="d-flex flex-wrap justify-content-around">
-            <div class="col-md-4 pe-1" *ngIf="crudList.u  && btnType == 'Update'" ><button class="btnsave w-100" (click)="save()">{{btnType}}</button></div>
-            <div class="col-md-4 pe-1" *ngIf="crudList.c  && btnType == 'Save'"><button class="btnsave w-100"  (click)="save()">{{btnType}}</button></div>
-            <div class="col-md-4 " ><button class="btnreset w-100" (click)="reset()">Reset</button></div>
+            <div class="col-md-4 pe-1" *ngIf="crudList.u  && btnType == 'Update'"><button class="btnsave w-100"
+                    (click)="save()">{{btnType}}</button></div>
+            <div class="col-md-4 pe-1" *ngIf="crudList.c  && btnType == 'Save'"><button class="btnsave w-100"
+                    (click)="save()">{{btnType}}</button></div>
+            <div class="col-md-4 "><button class="btnreset w-100" (click)="reset()">Reset</button></div>
         </div>
-        
+
 
     </div>
 
@@ -49,32 +70,41 @@
                 <thead>
                     <tr>
                         <th>S#</th>
+                        <th>Img</th>
                         <th>Title</th>
                         <th>Code</th>
                         <th *ngIf="crudList.u">Edit</th>
                         <th *ngIf="crudList.d">Delete</th>
+                        <th *ngIf="appConfigFeature">APP</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of BrandList | filter:txtSearch  index as index">
                         <td>{{index+1}}</td>
+                        <td> <img  (click)="globaldata.showProductImage(item.brandImage,0)" *ngIf="item.brandImage" [src]="item.brandImage" class="border"
+                                style="width: 40px;height: 40px;border-radius: 50%;" />
+                        </td>
                         <td class="text-start">{{item.brandTitle}}</td>
                         <td class="text-start">{{item.brandCode}}</td>
-                        <td *ngIf="crudList.u"><button mat-mini-fab  class="bg-success text-white h30px w30px" (click)="edit(item)"><mat-icon >edit</mat-icon></button></td>
-                        <td *ngIf="crudList.d"><button mat-mini-fab  color="warn" class="h30px w30px" (click)="delete(item)"><mat-icon>delete</mat-icon></button></td>
+                        <td *ngIf="crudList.u"><button mat-mini-fab class="bg-success text-white h30px w30px"
+                                (click)="edit(item)"><mat-icon>edit</mat-icon></button></td>
+                        <td *ngIf="crudList.d"><button mat-mini-fab color="warn" class="h30px w30px"
+                                (click)="delete(item)"><mat-icon>delete</mat-icon></button></td>
+                        <td *ngIf="appConfigFeature">
+                            <mat-icon matTooltip="Link Mobile App" (click)="linkWithApp(item)">{{item.linkWithApp
+                                ? 'check_box' :
+                                'check_box_outline_blank'}}</mat-icon>
+
+
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-    
+
 
 
     </div>
 
 
 </div>
-
-
-
-
-

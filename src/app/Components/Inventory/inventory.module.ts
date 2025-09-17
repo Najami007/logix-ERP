@@ -326,10 +326,7 @@ export const inventoryRoutes: Route[] = [
     SaleFurnitureComponent,
     BarcodeReportInvoicewiseComponent,
     SupplierLedgerSpecialComponent,
-
-
-
-
+    
 
 
 

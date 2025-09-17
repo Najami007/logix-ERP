@@ -67,6 +67,7 @@ export class AddProdSubCategoryComponent {
         CategoryID: this.categoryID,
         SubCategoryTitle: this.subCategoryTitle,
         SubCategoryDescription: this.description,
+        SubCatImage:'',
         UserID: this.global.getUserID()
       }).subscribe(
         (Response: any) => {
