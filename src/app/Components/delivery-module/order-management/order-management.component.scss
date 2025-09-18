@@ -8,7 +8,7 @@
 
 .slip{
   min-height: 200px;
-  min-width: 200px;
+  width: 250px;
    border:2px solid black ;
    border-style: dashed;
 }
@@ -99,6 +99,15 @@
     background-color: var(--app-primary);
     color: white;
     
+}
+
+
+.deliveryStatus{
+  background-color: rgb(248, 164, 108);
+  color: black !important;
+  border-radius: 15px;
+  padding: 0px 5px;
+  font-weight: bold;
 }
 
 

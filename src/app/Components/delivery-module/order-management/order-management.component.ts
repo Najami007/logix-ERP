@@ -1,11 +1,14 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSidenav } from '@angular/material/sidenav';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { error } from 'console';
 import { AppComponent } from 'src/app/app.component';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-order-management',
@@ -13,9 +16,9 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
   styleUrls: ['./order-management.component.scss']
 })
 export class OrderManagementComponent {
+  @ViewChild('orderDetailPanel') orderDetailPanel!: MatSidenav;
 
-
-
+  apiReq = environment.mainApi + this.global.mobileLink;
   page: number = 1;
   count: number = 0;
 
@@ -97,7 +100,7 @@ export class OrderManagementComponent {
   ngOnInit(): void {
     this.getViewModeID();
     this.global.setHeaderTitle('Order Management');
-
+    this.getSavedOrder();
     this.tableSize = this.global.paginationDefaultTalbeSize;
     this.tableSizes = this.global.paginationTableSizes;
 
@@ -132,7 +135,96 @@ export class OrderManagementComponent {
     if (value !== null) {
       this.viewModeID = JSON.parse(value);
     }
-   }
+  }
+
+  curDate = new Date();
+  fromDate: Date = new Date(this.curDate.getFullYear(), this.curDate.getMonth(), 1);
+  toDate: Date = new Date(this.curDate.getFullYear(), this.curDate.getMonth() + 1, 0);
+  fromTime = '00:00';
+  toTime = '23:59';
+
+  getSavedOrder() {
+
+    var fromDate = this.global.dateFormater(this.fromDate, '');
+    var toDate = this.global.dateFormater(this.toDate, '');
+    var fromTime = this.fromTime;
+    var toTime = this.toTime;
+
+    var url = `${this.apiReq}GetMobOrders?MobUserID=0&FromDate=${fromDate}&ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&reqFilter=-`
+    console.log(url)
+    this.http.get(url).subscribe(
+      {
+        next: (Response: any) => {
+          console.log(Response);
+          this.dataList = Response;
+
+        },
+        error: error => {
+          console.log(error);
+        }
+      }
+    )
+  }
+
+
+  tmpOrderRow: any = [];
+  SingleOrderDetail: any = [];
+
+  OrderDetailTotal = 0;
+
+
+  getSingleOrderDetail(orderNo: any) {
+
+    var url = `${this.apiReq}GetSingleOrderDetail?OrderNo=${orderNo}`
+    console.log(url)
+    this.http.get(url).subscribe(
+      {
+        next: (Response: any) => {
+          console.log(Response);
+          this.SingleOrderDetail = Response;
+          this.OrderDetailTotal = 0;
+          if (Response.length > 0) {
+            this.SingleOrderDetail.foreach((e:any)=>{
+              this.OrderDetailTotal += e.salePrice * e.quantity;
+            })
+
+          }
+
+        },
+        error: error => {
+          console.log(error);
+        }
+      }
+    )
+
+  }
+
+
+  closePanel() {
+    this.orderDetailPanel.close();
+    this.tmpOrderRow = [];
+    setTimeout(() => {
+      this.scrollToRow(this.curFocusRow)
+    }, 500);
+  }
+
+  curFocusRow = 0;
+
+  openDetailPanel(item: any, e: any) {
+    this.orderDetailPanel.open();
+    e.preventDefault();
+    this.tmpOrderRow = item;
+    this.getSingleOrderDetail(item.orderNo);
+  }
+
+
+
+  scrollToRow(index: number) {
+    const row = document.getElementById('order-' + index);
+    if (row) {
+      row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
 
 
 }
