@@ -22,6 +22,10 @@ import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { AuthGuard } from 'src/app/auth.guard';
+import { OrderReportRiderwiseComponent } from './OrderReports/order-report-riderwise/order-report-riderwise.component';
+import { OrderReportDatewieseComponent } from './OrderReports/order-report-datewiese/order-report-datewiese.component';
+import { OrderDetailComponent } from './order-management/order-detail/order-detail.component';
+import { OrderPrintComponent } from './order-management/order-print/order-print.component';
 
 
 
@@ -45,8 +49,14 @@ export const MY_DATE_FORMAT = {
 export const deliveryRoutes: Route[] = [
 
 
-    { path: 'ordermanage', component: OrderManagementComponent, canActivate: [AuthGuard] },
-      { path: 'riderProfile', component: RiderProfileComponent, canActivate: [AuthGuard] },
+  { path: 'ordermanage', component: OrderManagementComponent, canActivate: [AuthGuard] },
+  { path: 'riderProfile', component: RiderProfileComponent, canActivate: [AuthGuard] },
+
+
+
+  //////////////////////////////////// Reports //////////
+  { path: 'orderReportDatewise', component: OrderReportDatewieseComponent, canActivate: [AuthGuard] },
+  { path: 'orderReportRider', component: OrderReportRiderwiseComponent, canActivate: [AuthGuard] },
 
 ]
 
@@ -55,7 +65,11 @@ export const deliveryRoutes: Route[] = [
   declarations: [
     OrderManagementComponent,
     RiderProfileComponent,
-    AddRiderProfileComponent
+    AddRiderProfileComponent,
+    OrderReportRiderwiseComponent,
+    OrderReportDatewieseComponent,
+    OrderDetailComponent,
+    OrderPrintComponent
   ],
   imports: [
     CommonModule,

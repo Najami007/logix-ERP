@@ -1,0 +1,133 @@
+<div class="container-fluid body ">
+
+    <div class=" p-2 mt-2">
+
+        <div class="row ">
+
+
+            <mat-form-field appearance="outline" class="col-lg-4  matSmall">
+                <mat-label>Rider</mat-label>
+                <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
+                    <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option [value]="0">All</mat-option>
+                    <mat-option *ngFor="let item of riderList | filter:usearch.value"
+                        [value]="item.mobUserID">{{item.firstName}} {{item.lastName}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+                <mat-label>From Date</mat-label>
+                <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
+                <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
+                <mat-datepicker #sDate></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+                <mat-label>From Time</mat-label>
+                <input matInput [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+                <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
+                <ngx-material-timepicker #fTime></ngx-material-timepicker>
+            </mat-form-field>
+
+
+            <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+                <mat-label>To Date</mat-label>
+                <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
+                <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+                <mat-datepicker #eDate></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+                <mat-label>To Time</mat-label>
+                <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+                <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
+                <ngx-material-timepicker #tTime></ngx-material-timepicker>
+            </mat-form-field>
+
+
+
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <div class="col-md-4 d-flex flex-wrap" *ngIf="crudList.r">
+                <!-- <button class="btn-rpt-success col-lg-2  me-1" (click)="getReport('summary')">Summary</button>
+                <button class="btn-rpt-success col-lg-2  me-1" *ngIf="FBRFeature" (click)="getReport('taxSummary')">Tax Rpt</button> -->
+                <div class="col-md-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport()">Get
+                        Report</button></div>
+                <div class="col-md-4 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
+                <div class="col-md-4"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
+                <!-- <button style="width: 60px;font-size: 20px;" class="btn-rpt-primary" (click)="global.ExportHTMLTabletoExcel('PrintDiv','Summary')"><i class="bi bi-filetype-xlsx"></i></button> -->
+            </div>
+        </div>
+
+        <hr>
+
+        <div id="PrintDiv">
+
+            <!-------------------------    Top Logo Section -------------------->
+
+            <div class="hide">
+                <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                    <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset=""
+                            [height]="item.logo1Height" [width]="item.logo1Width">
+                    </span>
+                    <div class="d-flex flex-column">
+                        <span class="companyName">{{item.companyName}}</span>
+
+                        <span class="rptTitle">{{reportType}}</span>
+                        <span> <b *ngIf="userName != ''">User: {{userName}}</b></span>
+                        <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                            {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
+
+
+                    </div>
+                    <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                            height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                    </span>
+
+
+                </div>
+            </div>
+
+
+
+            <table class="table-logix" id="summaryTable">
+
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Order #</th>
+                        <th>Order Date</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                        <th>Item</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of dataList index as index">
+                        <td >{{index + 1}}</td>
+                        <td class="text-center cursorPointer" (click)="openDetail(item)">{{item.orderNo}}</td>
+                        <td>{{item.orderDate | date:'dd-MM-yyyy hh:mm a'}}</td>
+                        <td>{{item.customerName}}</td>
+                        <td>{{item.orderStatus}}</td>
+                        <td>{{item.totalItems}}</td>
+                        <td class="text-end">{{item.netTotal | number}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6"></td>
+                        <td class="text-end fw-bold">{{grandTotal|number}}</td>
+                    </tr>
+                </tbody>
+
+
+            </table>
+
+
+
+        </div>
+    </div>
+
+
+
+</div>

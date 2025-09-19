@@ -1,13 +1,15 @@
-<div class="body ">
-
-
-    <mat-sidenav #orderDetailPanel mode="over" style="width:60%;z-index: 1000;" position="end"
-        class="order-panel container">
+<mat-sidenav-container hasBackdrop="false">
+    <mat-sidenav #orderDetailPanel mode="over" style="width:50%;z-index: 1000;overflow: auto;position: fixed;"
+        position="end" class="order-panel container mt-5 pt-4">
         <div class="container-fluid pt-1">
             <div class="d-flex justify-content-between ">
                 <div class="d-flex flex-column">
-                    <span>🛒 Order # {{tmpOrderRow!.orderNo}} {{tmpOrderRow!.orderStatus}}</span>
-                    <span>Order placed on 16-09-2025</span>
+                    <span>🛒 Order # {{tmpOrderRow!.orderNo}}
+                        <select class="statusInput" [(ngModel)]="tmpOrderRow!.orderStatus">
+                            <option *ngFor="let item of statusList" [value]="item.orderStatusTitle">
+                                {{item.orderStatusTitle}}</option>
+                        </select> </span>
+                    <span>Order placed on {{tmpOrderRow?.orderDate | date:'dd-MM-yyyy hh:mm a'}}</span>
                 </div>
                 <div class="d-flex gap-2">
                     <div class="d-flex cursorPointer" (click)="closePanel()"><mat-icon
@@ -114,6 +116,8 @@
                     </tfoot>
                 </table>
 
+
+
             </div>
         </div>
 
@@ -121,151 +125,191 @@
 
     </mat-sidenav>
 
+    <mat-sidenav-content>
+        <div class="body ">
 
-    <div class="row container-fluid p-2">
+            <div class="row container-fluid p-2">
 
-        <div class="col-md-2 filterSection" style="min-height: 600px;">
+                <div class="col-md-2 filterSection" style="min-height: 600px;">
 
-            <div class="d-flex justify-content-around ">
-                <span (click)="setViewModeID(1)" class="viewButtons cursorPointer"
-                    [ngClass]="viewModeID == 1 ? 'selectedMode' :''">Card View</span>
-                <span (click)="setViewModeID(2)" class="viewButtons cursorPointer"
-                    [ngClass]="viewModeID == 2 ? 'selectedMode' :''">Table View</span>
-            </div>
+                    <div class="d-flex justify-content-around ">
+                        <span (click)="setViewModeID(1)" class="viewButtons cursorPointer"
+                            [ngClass]="viewModeID == 1 ? 'selectedMode' :''">Card View</span>
+                        <span (click)="setViewModeID(2)" class="viewButtons cursorPointer"
+                            [ngClass]="viewModeID == 2 ? 'selectedMode' :''">Table View</span>
+                    </div>
+                    <hr>
+                    <div>
+                        <mat-radio-group [(ngModel)]="searchType" (change)="getSavedOrder()">
+                            <mat-radio-button [value]="'date'">Date Wise</mat-radio-button>
+                            <mat-radio-button [value]="'all'">All</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
 
-            <div class="d-flex flex-column">
-                <hr>
-                <mat-label class="fw-bold">Filters</mat-label>
+                    <div class="d-flex flex-column">
 
-                <mat-radio-group [(ngModel)]="filterType" class="d-flex flex-column">
-                    <mat-radio-button *ngFor="let item of filterList"
-                        [value]="item.title">{{item.title}}</mat-radio-button>
-                </mat-radio-group>
+                        <mat-label class="fw-bold">Filters</mat-label>
 
-
-
-            </div>
+                        <mat-radio-group [(ngModel)]="filterType" (change)="getSavedOrder()" class="d-flex flex-column">
+                            <mat-radio-button *ngFor="let item of filterList"
+                                [value]="item.title">{{item.title}}</mat-radio-button>
+                        </mat-radio-group>
 
 
-        </div>
 
+                    </div>
 
-        <div class="col-md-10 ">
-
-            <div class="row">
-
-                <div class="col-md-2 matSmall">
-                    <mat-form-field class="w-100" appearance="outline">
-                        <mat-label>From Date</mat-label>
-                        <input (dateChange)="getSavedOrder()" matInput [(ngModel)]="fromDate" [matDatepicker]="picker2">
-                        <mat-datepicker-toggle matSuffix [for]="picker2" class="inputIcon"></mat-datepicker-toggle>
-                        <mat-datepicker #picker2></mat-datepicker>
-                    </mat-form-field>
-                </div>
-                <div class="col-md-2 matSmall">
-                    <mat-form-field class="w-100" appearance="outline">
-                        <mat-label>From Time</mat-label>
-                        <input matInput [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
-                        <ngx-material-timepicker-toggle [for]="fTime" class="inputIcon"
-                            matSuffix></ngx-material-timepicker-toggle>
-                        <ngx-material-timepicker #fTime></ngx-material-timepicker>
-                    </mat-form-field>
-
-                </div>
-                <div class="col-md-2 matSmall">
-                    <mat-form-field class="w-100 " appearance="outline">
-                        <mat-label>To Date</mat-label>
-                        <input (dateChange)="getSavedOrder()" matInput [(ngModel)]="toDate" [matDatepicker]="picker3">
-                        <mat-datepicker-toggle class="inputIcon" matSuffix [for]="picker3"></mat-datepicker-toggle>
-                        <mat-datepicker #picker3></mat-datepicker>
-                    </mat-form-field>
-                </div>
-                <div class="col-md-2 matSmall">
-                    <mat-form-field class="w-100" appearance="outline">
-                        <mat-label>To Time</mat-label>
-                        <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
-                        <ngx-material-timepicker-toggle [for]="tTime" class="inputIcon"
-                            matSuffix></ngx-material-timepicker-toggle>
-                        <ngx-material-timepicker #tTime></ngx-material-timepicker>
-                    </mat-form-field>
 
                 </div>
 
-                <div class="col-md-4 matSmall">
-                    <mat-form-field class="w-100 " appearance="outline">
-                        <mat-label>Search.....</mat-label>
-                        <input #searchOrder matInput type="search" class="text-secondary">
-                    </mat-form-field>
-                </div>
-            </div>
 
-            <div class="d-flex flex-wrap gap-4" *ngIf="viewModeID == 1">
+                <div class="col-md-10 ">
 
-                <div *ngFor="let item of dataList | filter:searchOrder.value|paginate:{
+                    <div class="row border-bottom">
+
+                        <div class="col-md-2 matSmall">
+                            <mat-form-field class="w-100" appearance="outline">
+                                <mat-label>From Date</mat-label>
+                                <input (dateChange)="getSavedOrder()" matInput [(ngModel)]="fromDate"
+                                    [matDatepicker]="picker2">
+                                <mat-datepicker-toggle matSuffix [for]="picker2"
+                                    class="inputIcon"></mat-datepicker-toggle>
+                                <mat-datepicker #picker2></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-2 matSmall">
+                            <mat-form-field class="w-100" appearance="outline">
+                                <mat-label>From Time</mat-label>
+                                <input matInput [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true"
+                                    readonly>
+                                <ngx-material-timepicker-toggle [for]="fTime" class="inputIcon"
+                                    matSuffix></ngx-material-timepicker-toggle>
+                                <ngx-material-timepicker #fTime></ngx-material-timepicker>
+                            </mat-form-field>
+
+                        </div>
+                        <div class="col-md-2 matSmall">
+                            <mat-form-field class="w-100 " appearance="outline">
+                                <mat-label>To Date</mat-label>
+                                <input (dateChange)="getSavedOrder()" matInput [(ngModel)]="toDate"
+                                    [matDatepicker]="picker3">
+                                <mat-datepicker-toggle class="inputIcon" matSuffix
+                                    [for]="picker3"></mat-datepicker-toggle>
+                                <mat-datepicker #picker3></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-2 matSmall">
+                            <mat-form-field class="w-100" appearance="outline">
+                                <mat-label>To Time</mat-label>
+                                <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true"
+                                    readonly>
+                                <ngx-material-timepicker-toggle [for]="tTime" class="inputIcon"
+                                    matSuffix></ngx-material-timepicker-toggle>
+                                <ngx-material-timepicker #tTime></ngx-material-timepicker>
+                            </mat-form-field>
+
+                        </div>
+
+                        <div class="col-md-4 matSmall">
+                            <mat-form-field class="w-100 " appearance="outline">
+                                <mat-label>Search.....</mat-label>
+                                <input #searchOrder matInput type="search" class="text-secondary">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div *ngIf="selectedRowList.length > 0" class="border-bottom mt-2">
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline" class="w-100 matSmall">
+                                    <mat-label>Status</mat-label>
+                                    <mat-select>
+                                        <mat-option *ngFor="let item of statusList"
+                                            [value]="item.orderStatusTitle">{{item.orderStatusTitle}}</mat-option>
+
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <div class=""><button class="btn-rpt-success w-100">Apply</button></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-4" *ngIf="viewModeID == 1">
+
+                        <div *ngFor="let item of dataList | filter:searchOrder.value|paginate:{
                         itemsPerPage : tableSize,
                         currentPage : page,
                         totalItems :    count,
                     }  ">
 
-                    <div class="p-2 slip">
+                            <div class="p-2 slip">
 
-                        <div class="bill-paid" role="img" aria-label="Bill paid">
-                            <!-- <div class="bp-badge">✓</div> -->
-                            <div class="bp-text">
-                                <div class="bp-title ">{{item.orderStatus}}</div>
-                                <!-- <div class="bp-sub">easypaisa</div> -->
-                            </div>
-                        </div>
+                                <div class="bill-paid" role="img" aria-label="Bill paid">
+                                    <!-- <div class="bp-badge">✓</div> -->
+                                    <div class="bp-text">
+                                        <div class="bp-title " (click)="openChangeStatusModal(item)">{{item.orderStatus}}</div>
+                                        <!-- <div class="bp-sub">easypaisa</div> -->
+                                    </div>
+                                </div>
 
-                        <div class="text-center d-flex flex-column">
-                            <span class="fw-bold">{{item.customerName}}</span>
-                            <span class="text-secondary fs-10px">Order # {{item.orderNo}}</span>
-                        </div>
-                        <div class="d-flex flex-column">
-                            <span class="text-secondary fs-10px">{{item.orderDate | date:'dd-MM-yyyy hh:mm a'}}</span>
-                        </div>
+                                <div class="text-center d-flex flex-column">
+                                    <span class="fw-bold">{{item.customerName}}</span>
+                                    <span class="text-secondary fs-10px">Order # {{item.orderNo}}</span>
+                                </div>
+                                <div class="d-flex flex-column text-secondary fs-10px">
+                                    <span >{{item.orderDate|date:'dd-MM-yyyy hh:mm'}}</span>
+                                </div>
 
-                        <div class="d-flex justify-content-between">
-                            <span class="text-secondary fs-10px"><b>Amount:</b>{{item.netTotal|number}}</span>
-                            <span class="text-secondary fs-10px"><b>Item:</b> {{item.totalItems}}</span>
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-secondary fs-10px"><b>Amount:</b>{{item.netTotal|number}}</span>
+                                    <span class="text-secondary fs-10px"><b>Item:</b> {{item.totalItems}}</span>
 
-                        </div>
-
-
+                                </div>
 
 
 
-                        <div class="d-flex flex-column text-secondary title-border">
-                            <div class="text-center ">
-                                <span class="fs-12px fw-bold">Delivery Details</span>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <span class="text-secondary fs-10px"><b>Contact:</b> {{item.deliveryContact}}</span>
-                                <span class="fs-10px deliveryStatus"> {{item.deliveryType}}</span>
 
-                            </div>
-                            <div class="fs-11px mt-1" style="line-height: 10px;">
-                                <span class="fs-10px fw-bold me-1">Address:</span>
-                                <span *ngIf="item.showFullAddress">{{item.deliveryAddress}}</span>
-                                <span *ngIf="!item.showFullAddress">{{item.deliveryAddress |slice:0:25}}</span>
-                                <span *ngIf="item.deliveryAddress?.length > 25"
-                                    class="ms-2 cursorPointer fs-8px text-mute"
-                                    (click)="item.showFullAddress = !item.showFullAddress">{{item.showFullAddress ?
-                                    'Less' : 'More...'}}</span>
-                            </div>
-                            <div class="fs-11px mt-1" style="line-height: 10px;">
-                                <span class="fs-10px fw-bold me-1">Instructions:</span>
-                                <span *ngIf="item.showFullInstruction">{{item.deliveryInstruction}}</span>
-                                <span *ngIf="!item.showFullInstruction">{{item.deliveryInstruction |slice:0:25}}</span>
-                                <span *ngIf="item.deliveryInstruction?.length > 25"
-                                    class="ms-2 cursorPointer fs-8px text-mute"
-                                    (click)="item.showFullInstruction = !item.showFullInstruction">{{item.showFullInstruction
-                                    ? 'Less' : 'More...'}}</span>
-                            </div>
 
-                        </div>
+                                <div class="d-flex flex-column text-secondary title-border">
+                                    <div class="text-center ">
+                                        <span class="fs-12px fw-bold">Delivery Details</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="text-secondary fs-10px"><b>Contact:</b>
+                                            {{item.deliveryContact}}</span>
+                                        <span class="fs-10px deliveryStatus"
+                                            [ngClass]="item.deliveryType == 'Urgent Delivery' ? 'urgentStatus' : 'normalStatus'">
+                                            {{item.deliveryType}}</span>
 
-                        <!-- <div class="d-flex flex-column text-secondary title-border" *ngIf="item.riderID > 0">
+                                    </div>
+                                    <div class="fs-11px mt-1" style="line-height: 10px;">
+                                        <span class="fs-10px fw-bold me-1">Address:</span>
+                                        <span *ngIf="item.showFullAddress">{{item.deliveryAddress}}</span>
+                                        <span *ngIf="!item.showFullAddress">{{item.deliveryAddress |slice:0:25}}</span>
+                                        <span *ngIf="item.deliveryAddress?.length > 25"
+                                            class="ms-2 cursorPointer fs-8px text-mute"
+                                            (click)="item.showFullAddress = !item.showFullAddress">{{item.showFullAddress
+                                            ?
+                                            'Less' : 'More...'}}</span>
+                                    </div>
+                                    <div class="fs-11px mt-1" style="line-height: 10px;">
+                                        <span class="fs-10px fw-bold me-1">Instructions:</span>
+                                        <span *ngIf="item.showFullInstruction">{{item.deliveryInstruction}}</span>
+                                        <span *ngIf="!item.showFullInstruction">{{item.deliveryInstruction
+                                            |slice:0:25}}</span>
+                                        <span *ngIf="item.deliveryInstruction?.length > 25"
+                                            class="ms-2 cursorPointer fs-8px text-mute"
+                                            (click)="item.showFullInstruction = !item.showFullInstruction">{{item.showFullInstruction
+                                            ? 'Less' : 'More...'}}</span>
+                                    </div>
+
+                                </div>
+
+                                <!-- <div class="d-flex flex-column text-secondary title-border" *ngIf="item.riderID > 0">
                                     <div class="text-center ">
                                     <span class="fs-12px fw-bold">Rider Details</span>
                                     </div>
@@ -284,123 +328,183 @@
 
 
 
-                        <div class="mt-2">
-                            <div class="text-end">
-                                <mat-icon class="fs-14px cursorPointer">print</mat-icon>
-                                <mat-icon class="fs-14px cursorPointer"
-                                    (click)="openDetailPanel(item,$event)">remove_red_eye</mat-icon>
+                                <div class="mt-2">
+                                    <div class="text-end">
+                                        <mat-icon class="fs-14px cursorPointer"
+                                            (click)="openRiderAssignModal(item)">motorcycle</mat-icon>
+                                        <mat-icon class="fs-14px cursorPointer">print</mat-icon>
+                                        <mat-icon class="fs-14px cursorPointer" matTooltip="View Order"
+                                            (click)="openDetailPanel(item,$event)">remove_red_eye</mat-icon>
+                                    </div>
+                                </div>
+
+
+
+
                             </div>
+
                         </div>
-
-
-
 
                     </div>
 
-                </div>
-
-            </div>
-
-            <div *ngIf="viewModeID == 2">
+                    <div *ngIf="viewModeID == 2">
 
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>S#</th>
-                            <th>Order #</th>
-                            <th>Customer</th>
-                            <th>Status</th>
-                            <th>Item</th>
-                            <th>Total</th>
-                            <th></th>
-                        </tr>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>S#</th>
+                                    <th>Order #</th>
+                                    <th>Customer</th>
+                                    <th>Status</th>
+                                    <th>Item</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
 
-                    </thead>
-                    <tbody>
-                        <tr [id]="'order-'+index" (click)="curFocusRow = index"
-                            [ngClass]="curFocusRow == index ? 'bg-dark-light' : ''" *ngFor="let item of dataList| filter:searchOrder.value|paginate:{
+                            </thead>
+                            <tbody>
+                                <tr [id]="'order-'+index" (click)="curFocusRow = index"
+                                    [ngClass]="curFocusRow == index ? 'bg-dark-light' : ''" *ngFor="let item of dataList| filter:searchOrder.value|paginate:{
                         itemsPerPage : tableSize,
                         currentPage : page,
                         totalItems :    count,
                     }   index as index">
-                            <td><mat-checkbox></mat-checkbox> {{index + 1}}</td>
-                            <td>
-                                <div class="d-flex flex-column text-secondary">
-                                    <span>{{item.orderNo}}</span>
-                                    <span>{{item.orderDate | date:'dd-MM-yyyy hh:mm a'}}</span>
-                                </div>
-                            </td>
-                            <td style="width: 250px;">
-                                <span>{{item.customerName}}</span>
-                                <div class="fs-11px mt-1" style="line-height: 10px;">
-                                    <span class="fs-10px fw-bold me-1">Address:</span>
-                                    <span *ngIf="item.showFullAddress">{{item.deliveryAddress}}</span>
-                                    <span *ngIf="!item.showFullAddress">{{item.deliveryAddress |slice:0:25}}</span>
-                                    <span *ngIf="item.deliveryAddress?.length > 25"
-                                        class="ms-2 cursorPointer fs-8px text-mute"
-                                        (click)="item.showFullAddress = !item.showFullAddress">{{item.showFullAddress ?
-                                        'Less' : 'More...'}}</span>
-                                </div>
-                                <div class="fs-11px mt-1" style="line-height: 10px;">
-                                    <span class="fs-10px fw-bold me-1">Instructions:</span>
-                                    <span *ngIf="item.showFullInstruction">{{item.deliveryInstruction}}</span>
-                                    <span *ngIf="!item.showFullInstruction">{{item.deliveryInstruction
-                                        |slice:0:25}}</span>
-                                    <span *ngIf="item.deliveryInstruction?.length > 25"
-                                        class="ms-2 cursorPointer fs-8px text-mute"
-                                        (click)="item.showFullInstruction = !item.showFullInstruction">{{item.showFullInstruction
-                                        ? 'Less' : 'More...'}}</span>
-                                </div>
-                            </td>
-                            <td>{{item.orderStatus}}</td>
-                            <td>{{item.totalItems}}</td>
-                            <td>{{item.netTotal}}</td>
-                            <td>
-                                <div>
-                                    <mat-icon>print</mat-icon>
-                                    <mat-icon (click)="openDetailPanel(item,$event)">remove_red_eye</mat-icon>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    <td><mat-checkbox (change)="findSelectedRow()" *ngIf="filterType !== 'All'"
+                                            [(ngModel)]="item.isChecked"></mat-checkbox> {{index + 1}}</td>
+                                    <td>
+                                        <div class="d-flex flex-column text-secondary">
+                                            <span>{{item.orderNo}}</span>
+                                            <span>{{item.orderDate | date:'dd-MM-yyyy hh:mm a'}}</span>
+                                        </div>
+                                    </td>
+                                    <td style="width: 250px;">
+                                        <span>{{item.customerName}}</span>
+                                        <div class="fs-11px mt-1" style="line-height: 10px;">
+                                            <span class="fs-10px fw-bold me-1">Address:</span>
+                                            <span *ngIf="item.showFullAddress">{{item.deliveryAddress}}</span>
+                                            <span *ngIf="!item.showFullAddress">{{item.deliveryAddress
+                                                |slice:0:25}}</span>
+                                            <span *ngIf="item.deliveryAddress?.length > 25"
+                                                class="ms-2 cursorPointer fs-8px text-mute"
+                                                (click)="item.showFullAddress = !item.showFullAddress">{{item.showFullAddress
+                                                ?
+                                                'Less' : 'More...'}}</span>
+                                        </div>
 
+                                    </td>
+                                    <td>
+                                        <span (click)="openChangeStatusModal(item)"
+                                            class="tableOrderStatus">{{item.orderStatus}}</span>
+
+                                    </td>
+                                    <td>{{item.totalItems}}</td>
+                                    <td>{{item.netTotal | number}}</td>
+                                    <td class="cursorPointer"><mat-icon
+                                            (click)="openRiderAssignModal(item)">motorcycle</mat-icon></td>
+                                    <td>
+                                        <div class="cursorPointer">
+                                            <mat-icon (click)="printOrder(item)">print</mat-icon>
+                                            <mat-icon matTooltip="View Order"
+                                                (click)="openDetailPanel(item,$event)">remove_red_eye</mat-icon>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+
+                    <div class="d-flex"
+                        style="position: fixed; bottom: 32px !important; width: 100%; background-color: #fff; z-index: 2;">
+
+                        <pagination-controls previousLabel="Prev" nextLabel="Next"
+                            (pageChange)="onTableDataChange($event)"></pagination-controls>
+
+
+                        <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+                        <select class="text-white" style="height: 25px;background-color: rgb(75, 164, 248);"
+                            (change)="onTableSizeChange($event)" [(ngModel)]="tableSize">
+                            <option *ngFor=" let item of tableSizes" [selected]="tableSize == item">{{item}}</option>
+                        </select>
+
+                        <div class="jump-to-page">
+                            <input type="text" class="w-25" (keydown)="global.handleNumKeys($event)"
+                                [(ngModel)]="jumpPage" placeholder="Page #" min="1" [max]="count" />
+                            <button (click)="goToPage()" class="text-white"
+                                style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <app-order-print class="printOrder d-none"></app-order-print>
+
+            </div>
+        </div>
+    </mat-sidenav-content>
+
+</mat-sidenav-container>
+
+
+
+<div class="modal fade" id="ChangeStatus" tabindex="-1" aria-labelledby="SavedBillModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-md">
+        <div class="modal-content">
+
+            <div class="modal-body">
+
+                <select class="tableStatusInput" [(ngModel)]="updateOrderStatus">
+                    <option *ngFor="let item of statusList" [value]="item.orderStatusTitle">
+                        {{item.orderStatusTitle}}</option>
+                </select>
 
             </div>
 
-            <div class="d-flex"
-                style="position: fixed; bottom: 32px !important; width: 100%; background-color: #fff; z-index: 2;">
+            <div class="modal-footer bg-mf-blue">
+                <button class="btnsave" (click)="changeOrderStatus(curSelectedRow)">Save</button>
+                <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
+            </div>
 
-                <pagination-controls previousLabel="Prev" nextLabel="Next"
-                    (pageChange)="onTableDataChange($event)"></pagination-controls>
+        </div>
+    </div>
+</div>
 
 
-                <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
-                <select class="text-white" style="height: 25px;background-color: rgb(75, 164, 248);"
-                    (change)="onTableSizeChange($event)" [(ngModel)]="tableSize">
-                    <option *ngFor=" let item of tableSizes" [selected]="tableSize == item">{{item}}</option>
-                </select>
 
-                <div class="jump-to-page">
-                    <input type="text" class="w-25" (keydown)="global.handleNumKeys($event)" [(ngModel)]="jumpPage"
-                        placeholder="Page #" min="1" [max]="count" />
-                    <button (click)="goToPage()" class="text-white"
-                        style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
+<div class="modal fade" id="assignOrder" tabindex="-1" aria-labelledby="SavedBillModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-md">
+        <div class="modal-content">
+
+            <div class="modal-body">
+
+                <div class="col-md-12">
+                    <mat-form-field appearance="outline" class="w-100  matSmall">
+                        <mat-label>Rider</mat-label>
+                        <mat-select [(ngModel)]="tmpRiderID">
+                            <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"
+                                    name="search"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of riderList | filter:usearch.value"
+                                [value]="item.mobUserID">{{item.firstName}} {{item.lastName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
 
             </div>
 
+            <div class="modal-footer bg-mf-blue">
+                <button class="btnsave" (click)="assignOrderToRider(curSelectedRow)">Save</button>
+                <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
+            </div>
 
         </div>
-
     </div>
-
-
-
-
-
-
-
-
 </div>

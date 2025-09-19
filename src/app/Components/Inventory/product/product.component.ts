@@ -78,7 +78,7 @@ export class ProductComponent implements OnInit {
     this.page = event;
     this.getProductList();
     setTimeout(() => {
-      this.filterProductList(this.filterType);
+      this.AdvanceFilter();
     }, 500);
   }
 
@@ -87,7 +87,7 @@ export class ProductComponent implements OnInit {
     this.page = 1;
     this.getProductList();
     setTimeout(() => {
-      this.filterProductList(this.filterType);
+      this.AdvanceFilter();
     }, 500);
   }
 
@@ -102,7 +102,7 @@ export class ProductComponent implements OnInit {
       this.page = this.jumpPage;
       this.getProductList();
       setTimeout(() => {
-        this.filterProductList(this.filterType);
+        this.AdvanceFilter();
       }, 500);
     }
   }
@@ -183,7 +183,7 @@ export class ProductComponent implements OnInit {
 
 
 
-  AdvaceFilter() {
+  AdvanceFilter() {
 
     this.app.startLoaderDark();
 
@@ -249,59 +249,6 @@ export class ProductComponent implements OnInit {
     this.productList = [...this.tempProdList];
 
   }
-
-  filterProductList(type: any) {
-
-    this.filterType = type;
-
-    if (type == 'brand') {
-      this.subCategoryFilterID = 0;
-      this.activeFilterID = '-';
-      this.discFilterID = 0;
-      this.productList = this.brandFilterID == 0 ? this.productList = this.tempProdList : this.tempProdList.filter((e: any) => e.brandID == this.brandFilterID);
-
-
-    }
-
-    if (type == 'subcat') {
-      this.brandFilterID = 0;
-      this.activeFilterID = '-';
-      this.discFilterID = 0;
-
-      this.productList = this.subCategoryFilterID == 0 ? this.productList = this.tempProdList : this.tempProdList.filter((e: any) => e.subCategoryID == this.subCategoryFilterID);
-
-    }
-
-
-
-    if (type == 'status') {
-      this.subCategoryFilterID = 0;
-      this.brandFilterID = 0;
-      this.discFilterID = 0;
-      this.productList = this.activeFilterID == '-'
-        ? this.productList = this.tempProdList
-        : this.tempProdList.filter((e: any) => e.activeStatus == this.activeFilterID);
-    }
-
-    if (type == 'disc') {
-      this.subCategoryFilterID = 0;
-      this.brandFilterID = 0;
-      this.activeFilterID = '-';
-
-      if (this.discFilterID == 0) {
-        this.productList = this.tempProdList;
-      } else if (this.discFilterID == 1) {
-        this.productList = this.tempProdList.filter((e: any) => e.discPercentage > 0);
-      } else if (this.discFilterID == 2) {
-        this.productList = this.tempProdList.filter((e: any) => e.discPercentage == 0);
-      }
-
-    }
-
-
-  }
-
-
 
 
 
@@ -383,7 +330,7 @@ export class ProductComponent implements OnInit {
       (Response: any) => {
         this.productList = Response;
         this.tempProdList = Response;
-        this.filterProductList(this.filterType);
+        this.AdvanceFilter();
 
       }
     )
@@ -670,7 +617,7 @@ export class ProductComponent implements OnInit {
                 this.reset('');
                 this.app.stopLoaderDark();
                 setTimeout(() => {
-                  this.filterProductList(this.filterType);
+                  this.AdvanceFilter();
                 }, 500);
 
               } else {

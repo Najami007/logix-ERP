@@ -18,42 +18,60 @@
         </div>
     </div>
 
- 
 
-    <div class="col-md-12 mt-2">
+
+    <div class="col-md-6 mt-2">
         <mat-form-field class="w-100 matSmall" appearance="outline">
-            <mat-label>Name *</mat-label>
-            <input [(ngModel)]="partyName" id="partyName" matInput type="text">
+            <mat-label>First Name *</mat-label>
+            <input [(ngModel)]="FirstName" id="partyName" matInput type="text">
+        </mat-form-field>
+    </div>
+
+    <div class="col-md-6 mt-2">
+        <mat-form-field class="w-100 matSmall" appearance="outline">
+            <mat-label>Last Name *</mat-label>
+            <input [(ngModel)]="LastName" id="partyName" matInput type="text">
+        </mat-form-field>
+    </div>
+
+    <div class="col-md-6 ">
+        <mat-form-field class="w-100 matSmall" appearance="outline">
+            <mat-label>Email *</mat-label>
+            <input [(ngModel)]="Email" id="partyName" matInput type="text">
         </mat-form-field>
     </div>
 
 
 
 
-    <div class="col-md-12">
+    <div class="col-md-6">
         <mat-form-field class="w-100 matSmall" appearance="outline">
-            <mat-label>Contact no.</mat-label>
-            <input [(ngModel)]="contactNo" maxlength="12" (keydown)="global.handleNumKeysandMinut($event)" matInput
+            <mat-label>Contact no *</mat-label>
+            <input [(ngModel)]="MobileNo" maxlength="12" (keydown)="global.handleNumKeysandMinut($event)" matInput
                 type="text">
-            <mat-hint>{{contactNo?.length}} / 12</mat-hint>
+            <mat-hint>{{MobileNo?.length}} / 12</mat-hint>
         </mat-form-field>
     </div>
 
 
-    <div class="col-md-12">
+    <!-- <div class="col-md-12">
 
         <mat-form-field class="w-100 matSmall" appearance="outline">
             <mat-label>Address</mat-label>
             <textarea rows="1" [(ngModel)]="partyAddress" matInput type="text"></textarea>
         </mat-form-field>
-    </div>
+    </div> -->
 
-    <div class="col-md-12">
-        <mat-form-field class="w-100 matSmall" appearance="outline">
-            <mat-label>Description</mat-label>
-            <textarea rows="1" [(ngModel)]="description" matInput type="text"></textarea>
+    <div class="col-md-12" >
+        <mat-form-field appearance="outline" class="w-100 matSmall">
+            <mat-label>Password *</mat-label>
+            <input [disabled]="MobUserID > 0" matInput type="password" [(ngModel)]="Password" id="pwd" #pwd>
+            <mat-icon matSuffix (click)="global.showPassword($event,'#pwd')">{{pwd.type == 'password'
+                ?'visibility_off':'visibility'}}</mat-icon>
+
         </mat-form-field>
     </div>
+
 
 </div>
 

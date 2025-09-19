@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { error } from 'jquery';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-add-rider-profile',
@@ -14,60 +16,168 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 export class AddRiderProfileComponent {
 
 
+  apiReq = environment.mainApi + this.global.mobileLink;
+  crudList: any = { c: true, r: true, u: true, d: true };
 
-    crudList: any = { c: true, r: true, u: true, d: true };
-  
-    constructor(private http: HttpClient,
-      private msg: NotificationService,
-      private dialogue: MatDialog,
-      public global: GlobalDataModule,
-      private route: Router,
-      private titleService: Title
-  
-    ) {
-  
-      this.global.getMenuList().subscribe((data) => {
-        this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
-  
+  @Output() updateEmitter = new EventEmitter();
+
+  constructor(private http: HttpClient,
+    private msg: NotificationService,
+    private dialogue: MatDialog,
+    public global: GlobalDataModule,
+    private route: Router,
+    private titleService: Title
+
+  ) {
+
+    this.global.getMenuList().subscribe((data) => {
+      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
+
+    })
+
+
+  }
+  ngOnInit(): void {
+  }
+
+
+  btnType = 'Save';
+
+
+  partyName: any = '';
+  contactNo: any = '';
+
+  partyAddress: any = '';
+  description: any = '';
+
+
+  MobUserID: any = 0;
+  FirstName: any = ''
+  LastName: any = '';
+  MobileNo: any = '';
+  Email: any = '';
+  Password: any = '';
+
+
+
+
+
+  save() {
+
+    if (this.FirstName == '') {
+      this.msg.WarnNotify('Enter First Name');
+      return;
+    }
+
+    if (this.LastName == '') {
+      this.msg.WarnNotify('Enter Last Name');
+      return;
+    }
+
+    if (this.Email == '') {
+      this.msg.WarnNotify('Enter Email');
+      return;
+    }
+
+    if (this.MobileNo == '') {
+      this.msg.WarnNotify('Enter Mobile No');
+      return;
+    }
+
+    if (this.Password == '' && this.MobUserID == 0) {
+      this.msg.WarnNotify('Enter Password');
+      return;
+    }
+
+    if (this.Password.length < 4 && this.MobUserID == 0) {
+      this.msg.WarnNotify('Password must be more then 4 digits');
+      return;
+    }
+
+
+    var postData: any = {
+      MobUserID:this.MobUserID,
+      FirstName: this.FirstName,
+      LastName: this.LastName,
+      MobileNo: this.MobileNo,
+      Email: this.Email,
+      Password: this.Password,
+      UserType: "Rider",
+      RegType: "Normal",
+      PinCode: ''
+    }
+
+    if (this.btnType == 'Save') {
+      this.insert(postData, 'insert')
+    }
+
+    if (this.btnType == 'Update') {
+      this.global.openPinCode().subscribe(pin => {
+        if (pin != '') {
+          postData.PinCode = pin;
+          this.insert(postData, 'update')
+        }
       })
-  
-  
-    }
-    ngOnInit(): void {
-    }
-
-
-    btnType = 'Save';
-
-
-    partyName:any = '';
-    contactNo:any = '';
-
-    partyAddress:any = '';
-    description:any = '';
-
-
-
-
-
-    save(){
 
     }
 
+  }
 
 
+  insert(postData: any, type: any) {
 
-    reset(){
-      
+    var url = ''
+
+    if (type == 'insert') {
+      url = 'InsertMobUser';
+    }
+    if (type == 'update') {
+      url = 'UpdateMobUser';
     }
 
+    this.http.post(this.apiReq + url, postData).subscribe(
+      {
+        next: (Response: any) => {
+
+          if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
+            this.msg.SuccessNotify(Response.msg);
+            this.reset();
+            this.updateEmitter.emit();
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+
+        },
+        error: error => {
+          console.log(error);
+        }
+      }
+    )
+
+  }
 
 
 
-    
-  partyImg:any = '';
 
-   onImgSelected(event: any) {
+  reset() {
+
+    this.FirstName = '';
+    this.LastName = '';
+    this.Email = '';
+    this.MobUserID = 0;
+    this.MobileNo = '';
+    this.Password = '';
+    this.btnType = 'Save';
+
+  }
+
+
+
+
+
+  partyImg: any = '';
+
+  onImgSelected(event: any) {
     const file = event.target.files[0];
     if (!file) return;
 

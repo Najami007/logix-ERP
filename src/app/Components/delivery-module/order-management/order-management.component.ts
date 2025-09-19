@@ -9,6 +9,8 @@ import { AppComponent } from 'src/app/app.component';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { environment } from 'src/environments/environment.development';
+import { OrderPrintComponent } from './order-print/order-print.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-order-management',
@@ -17,6 +19,8 @@ import { environment } from 'src/environments/environment.development';
 })
 export class OrderManagementComponent {
   @ViewChild('orderDetailPanel') orderDetailPanel!: MatSidenav;
+
+  @ViewChild(OrderPrintComponent) orderPrint: any;
 
   apiReq = environment.mainApi + this.global.mobileLink;
   page: number = 1;
@@ -101,26 +105,54 @@ export class OrderManagementComponent {
     this.getViewModeID();
     this.global.setHeaderTitle('Order Management');
     this.getSavedOrder();
+    this.getRiderList();
     this.tableSize = this.global.paginationDefaultTalbeSize;
     this.tableSizes = this.global.paginationTableSizes;
 
   }
 
 
-  dataList: any = [
-    { id: 1213212, orderNo: 465456, deliveryDate: new Date(), orderDate: new Date(), title: 'Najam Ali', Item: 4, amount: 4000, deliveryAddress: 'Kohat Road, Fateh Jang', status: 'Pending' },
-    { id: 1213212, orderNo: 465456, deliveryDate: new Date(), orderDate: new Date(), title: 'Najam Ali', Item: 4, amount: 4000, deliveryAddress: 'Kohat Road, Fateh Jang', status: 'Processing' },
-    { id: 1213212, orderNo: 465456, deliveryDate: new Date(), orderDate: new Date(), title: 'Najam Ali', Item: 4, amount: 4000, deliveryAddress: 'Kohat Road, Fateh Jang', status: 'Delivered' },
-    { id: 1213212, orderNo: 465456, deliveryDate: new Date(), orderDate: new Date(), title: 'Najam Ali', Item: 4, amount: 4000, deliveryAddress: 'Kohat Road, Fateh Jang', status: 'Cancelled' },
-
-  ]
+  dataList: any = []
 
 
   filterType: any = 'All';
   filterList: any = [
-    { title: 'All' }, { title: 'Pending' }, { title: 'Processing' }, { title: 'Delivered' }, { title: 'Cancelled' },
+    { title: 'All' }, { title: 'Pending' }, { title: 'Processing' }, { title: 'Dispatched' }, { title: 'Delivered' }, { title: 'Cancelled' },
   ]
 
+
+  statusList: any = [
+    { orderStatusID: 1, orderStatusTitle: 'Pending' },
+    { orderStatusID: 2, orderStatusTitle: 'Processing' },
+    { orderStatusID: 3, orderStatusTitle: 'Dispatched' },
+    { orderStatusID: 4, orderStatusTitle: 'Delivered' },
+    { orderStatusID: 5, orderStatusTitle: 'Cancelled' }
+  ]
+
+
+  getStatusColor() {
+
+  }
+
+
+  riderList: any = []
+
+  getRiderList() {
+    this.http.get(environment.mainApi + this.global.mobileLink + 'GetMobUser').subscribe(
+      {
+        next: (Response: any) => {
+
+          if (Response.length > 0) {
+            this.riderList = Response.filter((e: any) => e.userType == 'Rider');
+            console.log(this.riderList);
+          }
+        },
+        error: (error: any) => {
+          console.log(error);
+        }
+      }
+    )
+  }
 
 
   viewModeID = 1;
@@ -143,6 +175,8 @@ export class OrderManagementComponent {
   fromTime = '00:00';
   toTime = '23:59';
 
+  searchType = 'date';
+
   getSavedOrder() {
 
     var fromDate = this.global.dateFormater(this.fromDate, '');
@@ -150,13 +184,24 @@ export class OrderManagementComponent {
     var fromTime = this.fromTime;
     var toTime = this.toTime;
 
-    var url = `${this.apiReq}GetMobOrders?MobUserID=0&FromDate=${fromDate}&ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&reqFilter=-`
+    var reqFilter = this.searchType == 'all' ? 'All' : '-'
+
+    var url = `${this.apiReq}GetMobOrders?MobUserID=0&FromDate=${fromDate}&ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&reqFilter=${reqFilter}`
     console.log(url)
     this.http.get(url).subscribe(
       {
         next: (Response: any) => {
           console.log(Response);
-          this.dataList = Response;
+          if (Response.length > 0) {
+
+            this.dataList = this.filterType !== 'All'
+              ? Response.filter((e: any) => e.orderStatus == this.filterType)
+              : Response;
+
+
+
+          }
+
 
         },
         error: error => {
@@ -180,13 +225,12 @@ export class OrderManagementComponent {
     this.http.get(url).subscribe(
       {
         next: (Response: any) => {
-          console.log(Response);
           this.SingleOrderDetail = Response;
           this.OrderDetailTotal = 0;
-          if (Response.length > 0) {
-            this.SingleOrderDetail.foreach((e:any)=>{
+          if (this.SingleOrderDetail.length > 0) {
+            this.SingleOrderDetail.forEach((e: any) => {
               this.OrderDetailTotal += e.salePrice * e.quantity;
-            })
+            });
 
           }
 
@@ -226,5 +270,121 @@ export class OrderManagementComponent {
     }
   }
 
+
+  selectedRowList: any = [];
+
+  findSelectedRow() {
+    this.selectedRowList = this.dataList.filter((e: any) => e.isChecked == true)
+  }
+
+
+  printOrder(item: any) {
+
+    this.orderPrint.getSingleOrderDetail(item.orderNo);
+
+  }
+
+
+
+  curSelectedRow: any = [];
+  updateOrderStatus:any = '';
+
+  openChangeStatusModal(item:any) {
+    this.curSelectedRow = item;
+    this.updateOrderStatus = item.orderStatus;
+   this.global.openBootstrapModal('#ChangeStatus',true);
+
+  }
+
+  changeOrderStatus(item: any) {
+
+    
+
+    var postData: any = {
+      OrderNo: item.orderNo,
+      RiderID: item.riderID,
+      OrderStatus: this.updateOrderStatus,
+      UserID: this.global.getUserID()
+    }
+
+    console.log(postData);
+
+    this.app.startLoaderDark();
+    this.http.post(this.apiReq + 'ChangeOrderStatus', postData).subscribe({
+      next: (Response: any) => {
+        console.log(Response);
+        if(Response.msg == 'Data Updated Successfully'){
+          this.msg.SuccessNotify(Response.msg);
+          this.reset();
+          this.getSavedOrder();
+        }else{
+           this.msg.WarnNotify(Response.msg);
+        }
+        this.app.stopLoaderDark()
+        this.global.closeBootstrapModal('#ChangeStatus',true)
+      },
+      error: error => {
+         this.app.stopLoaderDark();
+        console.log(error);
+      }
+    })
+
+  }
+
+
+  openRiderAssignModal(item:any){
+   this.curSelectedRow = item;
+    this.tmpRiderID = item.riderID;
+   this.global.openBootstrapModal('#assignOrder',true);
+  }
+
+  tmpRiderID:any = 0;
+
+  assignOrderToRider(item: any) {
+
+    
+
+    if(this.tmpRiderID == 0 ){
+      this.msg.WarnNotify('Select Rider')
+      return;
+    }
+
+    var postData: any = {
+      OrderNo: item.orderNo,
+      RiderID: this.tmpRiderID,
+      UserID: this.global.getUserID()
+    }
+
+    console.log(postData);
+
+    this.app.startLoaderDark();
+    this.http.post(this.apiReq + 'OrderAssignToRider  ', postData).subscribe({
+      next: (Response: any) => {
+        console.log(Response);
+        if(Response.msg == 'Data Updated Successfully'){
+          this.msg.SuccessNotify(Response.msg);
+          this.reset();
+          this.getSavedOrder();
+        }else{
+           this.msg.WarnNotify(Response.msg);
+        }
+        this.app.stopLoaderDark()
+        this.global.closeBootstrapModal('#assignOrder',true)
+      },
+      error: error => {
+         this.app.stopLoaderDark();
+        console.log(error);
+      }
+    })
+
+  }
+
+
+  reset(){
+
+    this.curSelectedRow = [];
+    this.tmpRiderID = 0;
+    this.updateOrderStatus = '';
+  }
 
 }
