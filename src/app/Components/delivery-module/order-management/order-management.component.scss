@@ -106,9 +106,20 @@
 
   color: black !important;
   border-radius: 15px;
+  height: 20px !important;
   padding: 0px 5px;
   font-weight: bold;
 }
+
+
+.deliveryStatusDetail{
+   color: black !important;
+  border-radius: 15px;
+  height: 20px !important;
+  padding: 0px 5px !important;
+  font-weight: bold;
+}
+
 
 
 .urgentStatus{
@@ -119,12 +130,12 @@
   background-color: rgb(108, 248, 113);
 }
 
-.statusInput{
+.statusInputDetail{
   cursor: pointer;
   height: 20px;
   border-radius: 15px;
   padding: 0px 5px;
-  background-color: #0fa958 ;
+  background-color: #c7f4dc ;
   border: none;
   outline: none;
 }
@@ -145,8 +156,8 @@
     cursor: pointer;
   height: 40px !important;
   border-radius: 25px;
-  padding: 0px 5px;
-  background-color: #e7f7f4 ;
+  padding: 5px 15px;
+  color: white;
   border: none;
   outline: none;
 }

@@ -6,13 +6,13 @@
 
 
             <mat-form-field appearance="outline" class="col-lg-4  matSmall">
-                <mat-label>User</mat-label>
+                <mat-label>Customer</mat-label>
                 <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
                     <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
                             [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                    <mat-option [value]="0">All User</mat-option>
+                    <mat-option [value]="0">All</mat-option>
                     <mat-option *ngFor="let item of userList | filter:usearch.value"
-                        [value]="item.userID">{{item.userName}}</mat-option>
+                        [value]="item.mobUserID">{{item.firstName}} {{item.lastName}}</mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field class="col-lg-2 matSmall" appearance="outline">
@@ -111,7 +111,7 @@
                         <td>{{item.orderDate | date:'dd-MM-yyyy hh:mm a'}}</td>
                         <td>{{item.customerName}}</td>
                         <td>{{item.orderStatus}}</td>
-                        <td>{{item.totalItems}}</td>
+                        <td class="text-center">{{item.totalItems}}</td>
                         <td class="text-end">{{item.netTotal | number}}</td>
                     </tr>
                     <tr>

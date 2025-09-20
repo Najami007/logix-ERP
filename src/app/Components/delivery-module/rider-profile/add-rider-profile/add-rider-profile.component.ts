@@ -200,7 +200,6 @@ export class AddRiderProfileComponent {
           this.partyImg = await this.compressBase64(originalBase64, 400, 400, 0.5);
         }
 
-        console.log(this.partyImg);
       };
 
       fileReader.readAsDataURL(file);

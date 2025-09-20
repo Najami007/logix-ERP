@@ -4,22 +4,30 @@
         <div class="container-fluid pt-1">
             <div class="d-flex justify-content-between ">
                 <div class="d-flex flex-column">
-                    <span>🛒 Order # {{tmpOrderRow!.orderNo}}
-                        <select class="statusInput" [(ngModel)]="tmpOrderRow!.orderStatus">
+                    <div class="d-flex gap-2">
+                        <span>🛒 Order # {{tmpOrderRow!.orderNo}} </span>
+                        <span class="statusInputDetail"
+                            (click)="openChangeStatusModal(tmpOrderRow)">{{tmpOrderRow!.orderStatus}}</span>
+                        <span class="deliveryStatusDetail"
+                            [ngClass]="tmpOrderRow!.deliveryType == 'Urgent Delivery' ? 'urgentStatus' : 'normalStatus'">
+                            {{tmpOrderRow!.deliveryType}}</span>
+                        <!-- <select class="statusInput" [(ngModel)]="tmpOrderRow!.orderStatus">
                             <option *ngFor="let item of statusList" [value]="item.orderStatusTitle">
                                 {{item.orderStatusTitle}}</option>
-                        </select> </span>
+                        </select> -->
+                    </div>
                     <span>Order placed on {{tmpOrderRow?.orderDate | date:'dd-MM-yyyy hh:mm a'}}</span>
                 </div>
                 <div class="d-flex gap-2">
                     <div class="d-flex cursorPointer" (click)="closePanel()"><mat-icon
                             class="fs-15px mt-1">clear</mat-icon><span>Close</span></div>
-                    <div class="d-flex text-dark"><mat-icon class="fs-15px mt-1">print</mat-icon><span>Print</span>
+                    <div class="d-flex text-dark cursorPointer"><mat-icon class="fs-15px mt-1"
+                            (click)="printOrder(tmpOrderRow)">print</mat-icon><span>Print</span>
                     </div>
-                    <div class="d-flex text-success"><mat-icon class="fs-15px mt-1">edit</mat-icon><span>Edit</span>
+                    <!-- <div class="d-flex text-success"><mat-icon class="fs-15px mt-1">edit</mat-icon><span>Edit</span>
                     </div>
                     <div class="d-flex text-danger"><mat-icon
-                            class="fs-15px mt-1">delete_outline</mat-icon><span>Delete</span></div>
+                            class="fs-15px mt-1">delete_outline</mat-icon><span>Delete</span></div> -->
                 </div>
             </div>
             <hr>
@@ -100,8 +108,8 @@
                             <td>{{index +1}}</td>
                             <td>{{item.productTitle}}</td>
                             <td>{{item.quantity | number:'1.0-0'}}</td>
-                            <td>{{item.salePrice | number:'1.0-0'}}</td>
-                            <td>{{item.salePrice * item.quantity | number:'1.0-0'}}</td>
+                            <td>{{item.salePrice - item.discInR | number:'1.0-0'}}</td>
+                            <td>{{(item.salePrice - item.discInR) * item.quantity | number:'1.0-0'}}</td>
                         </tr>
 
                     </tbody>
@@ -111,7 +119,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>{{OrderDetailTotal | number:'1.0-0'}}</td>
+                            <td class="fw-bold">{{OrderDetailTotal | number:'1.0-0'}}</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -238,7 +246,7 @@
 
                     </div>
 
-                    <div class="d-flex flex-wrap gap-4" *ngIf="viewModeID == 1">
+                    <div class="d-flex flex-wrap gap-4 mb-4" *ngIf="viewModeID == 1">
 
                         <div *ngFor="let item of dataList | filter:searchOrder.value|paginate:{
                         itemsPerPage : tableSize,
@@ -250,8 +258,9 @@
 
                                 <div class="bill-paid" role="img" aria-label="Bill paid">
                                     <!-- <div class="bp-badge">✓</div> -->
-                                    <div class="bp-text">
-                                        <div class="bp-title " (click)="openChangeStatusModal(item)">{{item.orderStatus}}</div>
+                                    <div class="bp-text" [ngStyle]="{ 'color' : getStatusColor(item.orderStatus)}">
+                                        <div class="bp-title" (click)="openChangeStatusModal(item)">
+                                            {{item.orderStatus}}</div>
                                         <!-- <div class="bp-sub">easypaisa</div> -->
                                     </div>
                                 </div>
@@ -261,7 +270,7 @@
                                     <span class="text-secondary fs-10px">Order # {{item.orderNo}}</span>
                                 </div>
                                 <div class="d-flex flex-column text-secondary fs-10px">
-                                    <span >{{item.orderDate|date:'dd-MM-yyyy hh:mm'}}</span>
+                                    <span>{{item.orderDate|date:'dd-MM-yyyy hh:mm'}}</span>
                                 </div>
 
                                 <div class="d-flex justify-content-between">
@@ -329,10 +338,11 @@
 
 
                                 <div class="mt-2">
-                                    <div class="text-end">
-                                        <mat-icon class="fs-14px cursorPointer"
+                                    <div class="text-end"> 
+                                        <mat-icon class="fs-14px cursorPointer"  [ngClass]="item.riderID > 0 ? 'text-warning' : ''"
                                             (click)="openRiderAssignModal(item)">motorcycle</mat-icon>
-                                        <mat-icon class="fs-14px cursorPointer">print</mat-icon>
+                                        <mat-icon class="fs-14px cursorPointer"
+                                            (click)="printOrder(item)">print</mat-icon>
                                         <mat-icon class="fs-14px cursorPointer" matTooltip="View Order"
                                             (click)="openDetailPanel(item,$event)">remove_red_eye</mat-icon>
                                     </div>
@@ -347,7 +357,7 @@
 
                     </div>
 
-                    <div *ngIf="viewModeID == 2">
+                    <div *ngIf="viewModeID == 2" class="mb-4">
 
 
                         <table class="table">
@@ -395,13 +405,15 @@
 
                                     </td>
                                     <td>
-                                        <span (click)="openChangeStatusModal(item)"
+                                        <span [ngStyle]="{ 'background-color' : getStatusColor(item.orderStatus)}"
+                                            (click)="openChangeStatusModal(item)"
                                             class="tableOrderStatus">{{item.orderStatus}}</span>
 
                                     </td>
                                     <td>{{item.totalItems}}</td>
                                     <td>{{item.netTotal | number}}</td>
                                     <td class="cursorPointer"><mat-icon
+                                            [ngClass]="item.riderID > 0 ? 'text-warning' : ''"
                                             (click)="openRiderAssignModal(item)">motorcycle</mat-icon></td>
                                     <td>
                                         <div class="cursorPointer">
@@ -418,7 +430,7 @@
 
                     </div>
 
-                    <div class="d-flex"
+                    <div class="d-flex "
                         style="position: fixed; bottom: 32px !important; width: 100%; background-color: #fff; z-index: 2;">
 
                         <pagination-controls previousLabel="Prev" nextLabel="Next"
@@ -456,10 +468,19 @@
 
 
 <div class="modal fade" id="ChangeStatus" tabindex="-1" aria-labelledby="SavedBillModalLabel">
-    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-md">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-sm">
         <div class="modal-content">
 
             <div class="modal-body">
+
+                
+                    <div class="text-center border-bottom">
+                        <span class="text-secondary fs-15px ">
+                            Select the status below to change status.
+                        </span>
+                    </div>
+
+                <br>
 
                 <select class="tableStatusInput" [(ngModel)]="updateOrderStatus">
                     <option *ngFor="let item of statusList" [value]="item.orderStatusTitle">
@@ -480,10 +501,18 @@
 
 
 <div class="modal fade" id="assignOrder" tabindex="-1" aria-labelledby="SavedBillModalLabel">
-    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-md">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-sm">
         <div class="modal-content">
 
-            <div class="modal-body">
+            <div class="modal-body justify-content-center">
+
+                    <div class="text-center border-bottom">
+                        <span class="text-secondary fs-15px ">
+                            Select the rider below to assign rider to the order and press Save.
+                        </span>
+                    </div>
+
+                <br>
 
                 <div class="col-md-12">
                     <mat-form-field appearance="outline" class="w-100  matSmall">

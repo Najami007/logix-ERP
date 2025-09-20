@@ -54,11 +54,9 @@ export class OrderDetailComponent implements OnInit {
   getSingleOrderDetail(item: any) {
 
     var url = `${this.apiReq}GetSingleOrderDetail?OrderNo=${item.orderNo}`;
-    console.log(url)
     this.http.get(url).subscribe(
       {
         next: (Response: any) => {
-          console.log(Response);
           this.SingleOrderDetail = Response;
           this.OrderDetailTotal = 0;
           if (this.SingleOrderDetail.length > 0) {

@@ -1,76 +1,95 @@
-<div class="invoice-box" id="PrintOrder">
-    <h1>Hello</h1>
-    <div class="company-info">
-      <p><strong>HELLO SHOES CO.</strong></p>
-      <p>INVOICE NO.: #1703</p>
-      <p>ORDER DATE: 31/07/2019</p>
-      <p>PAYMENT: Visa (3119)</p>
-      <p>SHIPPING: Express shipping</p>
-    </div>
+<div class="invoice-box " id="PrintOrder">
 
-    <div class="flex">
-      <div>
-        <h3>BILL TO</h3>
-        <p>John Smith</p>
-        <p>150 Elgin Street, 8th Floor</p>
-        <p>Ottawa, ON K2P 1L4</p>
-        <p>Tel: 1-555-555-5555</p>
+  <div class="p-2">
+
+    <div class="d-flex ">
+      <div class="col-md-6">
+        <img *ngIf="companyLogo && showCompanyLogo" [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
       </div>
-      <div>
-        <h3>SHIP TO</h3>
-        <p>John Smith</p>
-        <p>150 Elgin Street, 8th Floor</p>
-        <p>Ottawa, ON K2P 1L4</p>
-        <p>Tel: 1-555-555-5555</p>
+
+
+      <div class="orderPrintCompanyInfo col-md-6">
+        <span class="fw-bold fs-16">{{companyName}}</span>
+        <span>INVOICE NO.: #1703</span>
+        <span>ORDER DATE: {{tmpOrderRow!.orderDate|date:'dd-MM-yyyy'}}</span>
+        <!-- <span>SHIPPING: Express shipping</span> -->
       </div>
     </div>
 
-    <table>
+    <br>
+
+    <div class="d-flex">
+      <div class="d-flex flex-column col-md-6">
+        <span class="fw-bold fs-14">BILL TO</span>
+        <span style="line-height: 20px;">{{tmpOrderRow!.customerName}}</span>
+        <span style="line-height: 20px;">{{tmpOrderRow!.mobileNo}}</span>
+      </div>
+      <div class="d-flex flex-column col-md-6">
+        <span class="fw-bold fs-14">SHIP TO</span>
+        <span>{{tmpOrderRow!.deliveryAddress}}</span>
+        <span>{{tmpOrderRow!.deliveryInstruction}}</span>
+
+      </div>
+    </div>
+
+    <br>
+
+    <table class="table border-top border-dark">
       <tr>
-        <th>ITEM DESCRIPTION</th>
+        <th>ITEM </th>
         <th>QTY</th>
         <th>PRICE</th>
         <th>TOTAL</th>
       </tr>
-      <tr>
-        <td>RAVEN BLACK/NUDE - 40 / M - BLACK<br><small>AS1471-9909 - M/Black</small></td>
-        <td>2</td>
-        <td>$120.00</td>
-        <td>$240.00</td>
+      <tr *ngFor="let item of SingleOrderDetail ">
+        <td>{{item.productTitle}}</td>
+        <td>{{item.quantity | number:'1.0-0'}}</td>
+        <td>{{item.salePrice | number:'1.0-0'}}</td>
+        <td>{{item.salePrice * item.quantity | number:'1.0-0'}}</td>
       </tr>
     </table>
 
-    <div class="totals">
+    <div class="orderPrintTotals">
       <table>
-        <tr>
-          <td>Discount LOYALTY</td>
-          <td>- $10.00</td>
-        </tr>
+
         <tr>
           <td>Subtotal</td>
-          <td>$230.00</td>
+          <td>{{OrderDetailTotal|number:'1.0-0'}}</td>
         </tr>
         <tr>
           <td>Shipping</td>
-          <td>$20.00</td>
+          <td>0</td>
         </tr>
-        <tr>
-          <td>Sales Tax</td>
-          <td>$28.76</td>
-        </tr>
+
         <tr>
           <td>Total</td>
-          <td>$250.00</td>
-        </tr>\n      </table>
+          <td>{{OrderDetailTotal|number:'1.0-0'}}</td>
+        </tr>
+      </table>
     </div>
+
+    <br>
 
     <div style="clear: both;"></div>
 
-    <div class="footer">
-      <p>If you have any questions, please get in contact.</p>
-      <p>150 Elgin Street, 8th Floor<br>Ottawa, ON K2P 1L4</p>
-      <p>hello@helloshoes.com | 555 565 5555</p>
-      <strong>THANKS FOR YOUR BUSINESS!</strong>
-      <p>helloshoes.com</p>
+    <hr>
+
+    <div class="d-flex justify-content-center text-secondary fs-13">
+      <span>If you have any questions, please get in contact.</span>
+    </div>
+    <br>
+    <div class="d-flex justify-content-center gap-1">
+
+      <div class="d-flex flex-column col-md-3 text-end">
+
+        <span>Mehria Mall,<br>Mehria Town Attock</span>
+        <span>abc@mail.com</span>
+        <span>555 000 5555</span>
+        <span>MehriaHyperMarket.com</span>
+      </div>
+      <div class="d-flex flex-column col-md-3">
+        <span class="StrongText">THANKS FOR YOUR BUSINESS!</span>
+      </div>
     </div>
   </div>
+</div>

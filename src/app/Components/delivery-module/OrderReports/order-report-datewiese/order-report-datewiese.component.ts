@@ -32,7 +32,7 @@ export class OrderReportDatewieseComponent implements OnInit {
     public global: GlobalDataModule,
     private route: Router,
     private datePipe: DatePipe,
-    private dialog:MatDialog
+    private dialog: MatDialog
   ) {
 
     this.global.getCompany().subscribe((data) => {
@@ -72,7 +72,26 @@ export class OrderReportDatewieseComponent implements OnInit {
   reportType: any;
 
   getUsers() {
-    this.global.getUserList().subscribe((data: any) => { this.userList = data; });
+     this.http.get(environment.mainApi + this.global.mobileLink + 'GetMobUser').subscribe(
+      {
+        next: (Response: any) => {
+  
+          if (Response.length > 0) {
+            this.userList = Response.filter((e: any) => e.userType == 'Customer');
+          }
+        },
+        error: (error: any) => {
+          console.log(error);
+        }
+      }
+    )
+    // this.global.getUserList().subscribe((data: any) => {
+
+    //   if (data.length > 0) {
+    //     this.userList = data.filter((e:any=> e.));
+    //   }
+
+    // });
   }
   locationID = 0;
   locationList: any = [];
@@ -160,10 +179,10 @@ export class OrderReportDatewieseComponent implements OnInit {
   }
 
 
-  openDetail(item:any){
-    this.dialog.open(OrderDetailComponent,{
-      width:'60%',
-      data:item
+  openDetail(item: any) {
+    this.dialog.open(OrderDetailComponent, {
+      width: '60%',
+      data: item
     }).afterClosed().subscribe();
   }
 

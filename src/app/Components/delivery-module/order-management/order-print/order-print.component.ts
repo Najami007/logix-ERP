@@ -36,6 +36,24 @@ export class OrderPrintComponent implements OnInit {
   companyName: any = '';
   crudList: any = { c: true, r: true, u: true, d: true };
 
+
+
+  
+  discFeature = this.global.discFeature;
+  BookerFeature = this.global.BookerFeature;
+  showCompanyName = this.global.showCmpNameFeature;
+  showCompanyLogo = this.global.showCompanyLogo;
+  gstFeature = this.global.gstFeature;
+  prodDetailFeature = this.global.prodDetailFeature;
+  FBRFeature = this.global.FBRFeature;
+  printKotFeature = this.global.printKot;
+  billFormate1 = this.global.BillFormate1Feature;
+  billFormate2 = this.global.BillFormate2Feature;
+  VehicleSaleFeature = this.global.VehicleSaleFeature;
+  northEdgeEnterPriseBillFeature = this.global.northEdgeEnterPriseBillFeature;
+    CusDiscFeature = this.global.CusDiscFeature;
+
+
   constructor(
       private http: HttpClient,
       private msg: NotificationService,
@@ -83,10 +101,10 @@ export class OrderPrintComponent implements OnInit {
   OrderDetailTotal = 0;
 
 
-  getSingleOrderDetail(orderNo: any) {
+  getSingleOrderDetail(item: any) {
+    this.tmpOrderRow = item;
 
-    var url = `${this.apiReq}GetSingleOrderDetail?OrderNo=${orderNo}`
-    console.log(url)
+    var url = `${this.apiReq}GetSingleOrderDetail?OrderNo=${item.orderNo}`
     this.http.get(url).subscribe(
       {
         next: (Response: any) => {
@@ -99,7 +117,9 @@ export class OrderPrintComponent implements OnInit {
 
           }
 
-          this.global.printData('#PrintOrder')
+          setTimeout(() => {
+            this.global.printData('#PrintOrder')
+          }, 200);
 
         },
         error: error => {

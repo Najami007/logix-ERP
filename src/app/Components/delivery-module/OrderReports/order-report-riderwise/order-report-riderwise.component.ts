@@ -138,7 +138,6 @@ export class OrderReportRiderwiseComponent implements OnInit {
   
           if (Response.length > 0) {
             this.riderList = Response.filter((e: any) => e.userType == 'Rider');
-            console.log(this.riderList);
           }
         },
         error: (error: any) => {

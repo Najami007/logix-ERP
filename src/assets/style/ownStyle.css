@@ -6,7 +6,7 @@
 
 @media print {
 
-  
+
 
   body {
     -webkit-print-color-adjust: exact !important;
@@ -157,7 +157,7 @@
 }
 
 .table-logix>thead>tr>th:last-child {
-    border-right: 1px solid #000 !important;
+  border-right: 1px solid #000 !important;
 }
 
 .table-logix>thead>th {
@@ -509,7 +509,7 @@
 }
 
 
-.bgNorthedge{
+.bgNorthedge {
   background-color: #5E5E5E !important;
   color: white !important;
 }
@@ -540,6 +540,7 @@
 
 
 }
+
 .table-sale-Furniture>tbody>tr {
   padding: 5px;
   /* border-bottom: 1px solid black !important; */
@@ -547,99 +548,94 @@
 
 }
 
- .invoice-title {
-      display: flex;
-      align-items: center;
-      text-align: center;
-      margin: 20px 0;
-    }
+.invoice-title {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+}
 
-    .invoice-title::before,
-    .invoice-title::after {
-      content: "";
-      flex: 1;
-      border-bottom: 1px solid #ccc; /* line color */
-    }
+.invoice-title::before,
+.invoice-title::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #ccc;
+  /* line color */
+}
 
-    .invoice-title:not(:empty)::before {
-      margin-right: 10px;
-    }
+.invoice-title:not(:empty)::before {
+  margin-right: 10px;
+}
 
-    .invoice-title:not(:empty)::after {
-      margin-left: 10px;
-    }
+.invoice-title:not(:empty)::after {
+  margin-left: 10px;
+}
 
-    .invoice-title span {
-      font-size: 18px;
-      font-weight: bold;
-      color: #555; /* text color */
-      letter-spacing: 2px;
-    }
-
-
-
+.invoice-title span {
+  font-size: 18px;
+  font-weight: bold;
+  color: #555;
+  /* text color */
+  letter-spacing: 2px;
+}
 
 
-    
-  
-    .company-info {
-      margin-bottom: 20px;
-    }
-    .company-info p {
-      margin: 2px 0;
-      font-size: 14px;
-    }
-    .flex {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-    }
-    .flex div {
-      width: 48%;
-    }
-    .flex h3 {
-      margin-bottom: 5px;
-      font-size: 16px;
-    }
-     table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-     table th, table td {
-      padding: 10px;
-      border-bottom: 1px solid #ddd;
-      font-size: 14px;
-      text-align: left;
-    }
-  
-     .totals {
-      margin-top: 20px;
-      float: right;
-      width: 50%;
-    }
-      .totals table {
-      width: 100%;
-      border: none;
-    }
-   .totals table td {
-      padding: 8px 0;
-      font-size: 14px;
-    }
-     .totals table tr:last-child td {
-      font-weight: bold;
-      font-size: 16px;
-      border-top: 2px solid #000;
-    }
-      .footer {
-      margin-top: 40px;
-      text-align: center;
-      font-size: 14px;
-      color: #666;
-    }
-     .footer strong {
-      display: block;
-      margin: 10px 0;
-      font-size: 16px;
-      color: #000;
-    }
+
+
+
+
+
+.orderPrintCompanyInfo{
+  display: flex;
+  flex-direction: column;
+  line-height: 25px;
+  font-size: 16px;
+}
+
+
+.orderPrintTotals {
+  margin-top: 20px;
+  float: right;
+  width: 50%;
+}
+
+.orderPrintTotals table {
+  width: 100%;
+  border: none;
+}
+
+.orderPrintTotals table td {
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.orderPrintTotals table tr:last-child td {
+  font-weight: bold;
+  font-size: 16px;
+  border-top: 2px solid #000;
+}
+
+.orderPrintFooter {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+
+
+}
+
+.orderPrintFooter{
+  display: flex;
+}
+
+
+
+.StrongText {
+  font-weight: bold;
+  display: block;
+  margin: 0px 0;
+  font-size: 26px;
+  color: #000;
+} 
