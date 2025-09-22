@@ -84,6 +84,18 @@ export class ProductSubCategoryComponent implements OnInit {
 
 
 
+    isBase64Image(str: string): boolean {
+    if (typeof str !== "string") {
+      return false;
+    }
+
+    // Regex for data:image/* base64 string
+    const base64ImageRegex = /^data:image\/(png|jpg|jpeg|gif|webp|bmp|svg\+xml);base64,[A-Za-z0-9+/]+={0,2}$/;
+
+    return base64ImageRegex.test(str);
+  }
+
+
 
 
   save() {
@@ -95,6 +107,10 @@ export class ProductSubCategoryComponent implements OnInit {
 
       if (this.description == '' || this.description == undefined) {
         this.description = '-';
+      }
+
+      if (!this.isBase64Image(this.subCatImage)) {
+        this.subCatImage = '-';
       }
 
 
@@ -178,7 +194,7 @@ export class ProductSubCategoryComponent implements OnInit {
     this.subCategoryID = row.subCategoryID;
     this.subCategoryTitle = row.subCategoryTitle;
     this.description = row.subCategoryDescription;
-    this.subCatImage = row.subCatImage;
+    this.subCatImage = row.imagesPath;;
     this.btnType = 'Update';
   }
 

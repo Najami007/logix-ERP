@@ -342,6 +342,11 @@ export class OrderManagementComponent {
 
 
   openRiderAssignModal(item: any) {
+
+    if(item.orderStatus == 'Dispatched' || item.orderStatus == 'Delivered' || item.orderStatus == 'Cancelled'){
+      return;
+    }
+
     this.curSelectedRow = item;
     this.tmpRiderID = item.riderID;
     this.global.openBootstrapModal('#assignOrder', true);

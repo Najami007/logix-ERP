@@ -17,7 +17,7 @@ export class BrandComponent implements OnInit {
 
   crudList: any = { c: true, r: true, u: true, d: true };
 
-    appConfigFeature = this.globaldata.appConfigFeature;
+  appConfigFeature = this.globaldata.appConfigFeature;
 
   constructor(private http: HttpClient,
     private msg: NotificationService,
@@ -69,6 +69,18 @@ export class BrandComponent implements OnInit {
   }
 
 
+  isBase64Image(str: string): boolean {
+    if (typeof str !== "string") {
+      return false;
+    }
+
+    // Regex for data:image/* base64 string
+    const base64ImageRegex = /^data:image\/(png|jpg|jpeg|gif|webp|bmp|svg\+xml);base64,[A-Za-z0-9+/]+={0,2}$/;
+
+    return base64ImageRegex.test(str);
+  }
+
+
 
 
   save() {
@@ -83,20 +95,24 @@ export class BrandComponent implements OnInit {
       }
 
 
+      if (!this.isBase64Image(this.brandImage)) {
+        this.brandImage = '-';
+      }
+
       var postData: any = {
         BrandID: this.brandID,
         BrandTitle: this.brandTitle,
         BrandCode: this.brandCode,
         BrandDescription: this.description,
-        BrandImage:this.brandImage,
+        BrandImage: this.brandImage,
         PinCode: '',
         UserID: this.globaldata.getUserID()
       }
 
       if (this.btnType == 'Save') {
-        this.insert(postData,'insert');
+        this.insert(postData, 'insert');
       } else if (this.btnType == 'Update') {
-         this.globaldata.openPinCode().subscribe(pin => {
+        this.globaldata.openPinCode().subscribe(pin => {
           if (pin != '') {
             postData.PinCode = pin;
             this.insert(postData, 'update');
@@ -113,17 +129,17 @@ export class BrandComponent implements OnInit {
 
   insert(postData: any, type: any) {
     this.app.startLoaderDark();
-    
+
     var url = '';
-    if(type == 'insert'){
+    if (type == 'insert') {
       url = 'insertbrand'
     }
-    if(type == 'update'){
+    if (type == 'update') {
       url = 'updateBrand'
     }
-    this.http.post(environment.mainApi + this.globaldata.inventoryLink + url,postData).subscribe(
+    this.http.post(environment.mainApi + this.globaldata.inventoryLink + url, postData).subscribe(
       (Response: any) => {
-        if (Response.msg == 'Data Saved Successfully'|| Response.msg == 'Data Updated Successfully') {
+        if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
           this.msg.SuccessNotify(Response.msg);
           this.getBrandList();
           this.reset();
@@ -140,7 +156,7 @@ export class BrandComponent implements OnInit {
     )
   }
 
- 
+
 
 
 
@@ -160,8 +176,8 @@ export class BrandComponent implements OnInit {
     this.brandTitle = row.brandTitle;
     this.brandCode = row.brandCode;
     this.description = row.brandDescription;
-    this.brandImage = row.brandImage,
-    this.btnType = 'Update';
+    this.brandImage = row.imagesPath,
+      this.btnType = 'Update';
 
   }
 
@@ -310,49 +326,49 @@ export class BrandComponent implements OnInit {
 
 
 
-      linkWithApp(item: any) {
-    
-    
-    
-        Swal.fire({
-          title: 'Do you want to link Brand with app?',
-          showCancelButton: true,
-          confirmButtonText: "Confirm",
-        }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
-          if (result.isConfirmed) {
-    
-            var postData: any = {
-              FlagType: 'Brand',
-              FlagID: item.brandID,
-              FlagStatus: !item.linkWithApp ,
-            }
-    
-            this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'LinkWithMobApp', postData).subscribe(
-              {
-                next: (Response: any) => {
-                  if (Response.msg == 'Data Updated Successfully') {
-                    this.msg.SuccessNotify(Response.msg);
-                    item.linkWithApp = !item.linkWithApp;
-    
-    
-                  } else {
-                    this.msg.WarnNotify(Response.msg);
-                  }
-                },
-                error: error => {
-                  console.log(error);
-                }
+  linkWithApp(item: any) {
+
+
+
+    Swal.fire({
+      title: 'Do you want to link Brand with app?',
+      showCancelButton: true,
+      confirmButtonText: "Confirm",
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+
+        var postData: any = {
+          FlagType: 'Brand',
+          FlagID: item.brandID,
+          FlagStatus: !item.linkWithApp,
+        }
+
+        this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'LinkWithMobApp', postData).subscribe(
+          {
+            next: (Response: any) => {
+              if (Response.msg == 'Data Updated Successfully') {
+                this.msg.SuccessNotify(Response.msg);
+                item.linkWithApp = !item.linkWithApp;
+
+
+              } else {
+                this.msg.WarnNotify(Response.msg);
               }
-    
-            )
-    
+            },
+            error: error => {
+              console.log(error);
+            }
           }
-        });
-    
-    
-    
+
+        )
+
       }
-    
+    });
+
+
+
+  }
+
 
 }

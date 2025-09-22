@@ -5,7 +5,7 @@
             <div class="d-flex justify-content-between ">
                 <div class="d-flex flex-column">
                     <div class="d-flex gap-2">
-                        <span>🛒 Order # {{tmpOrderRow!.orderNo}} </span>
+                        <span class="fw-bold">🛒 Order # {{tmpOrderRow!.orderNo}} </span>
                         <span class="statusInputDetail"
                             (click)="openChangeStatusModal(tmpOrderRow)">{{tmpOrderRow!.orderStatus}}</span>
                         <span class="deliveryStatusDetail"
@@ -267,7 +267,7 @@
 
                                 <div class="text-center d-flex flex-column">
                                     <span class="fw-bold">{{item.customerName}}</span>
-                                    <span class="text-secondary fs-10px">Order # {{item.orderNo}}</span>
+                                    <span class="text-secondary fs-10px fw-bold">Order # {{item.orderNo}}</span>
                                 </div>
                                 <div class="d-flex flex-column text-secondary fs-10px">
                                     <span>{{item.orderDate|date:'dd-MM-yyyy hh:mm'}}</span>

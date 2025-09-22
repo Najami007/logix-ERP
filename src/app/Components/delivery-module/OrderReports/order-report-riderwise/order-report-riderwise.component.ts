@@ -95,6 +95,8 @@ export class OrderReportRiderwiseComponent implements OnInit {
     var fromTime = this.fromTime;
     var toTime = this.toTime;
 
+    
+
     var url = `${this.apiReq}GetRiderMobOrders?RiderID=${this.userID}&FromDate=${fromDate}&ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&reqFilter=-`
 
 

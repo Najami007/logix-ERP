@@ -207,12 +207,6 @@ export class ProductComponent implements OnInit {
       .filter((e: any) => e.isChecked)
       .map((e: any) => e.value);
 
-    console.log("Selected SubCategories:", subCatList);
-    console.log("Selected Brands:", brandList);
-    console.log("Status LIst:", statusList);
-    console.log("Selected List:", discList);
-    console.log("Selected List:", linkAppList);
-
     this.productList = this.tempProdList.filter((p: any) =>
       (subCatList.length === 0 || subCatList.includes(p.subCategoryID)) &&
       (brandList.length === 0 || brandList.includes(p.brandID)) &&
@@ -475,6 +469,18 @@ export class ProductComponent implements OnInit {
   }
 
 
+
+  isBase64Image(str: string): boolean {
+    if (typeof str !== "string") {
+      return false;
+    }
+
+    // Regex for data:image/* base64 string
+    const base64ImageRegex = /^data:image\/(png|jpg|jpeg|gif|webp|bmp|svg\+xml);base64,[A-Za-z0-9+/]+={0,2}$/;
+
+    return base64ImageRegex.test(str);
+  }
+
   /////////////////////////// Save Function Product//////////////
   save() {
 
@@ -537,6 +543,11 @@ export class ProductComponent implements OnInit {
       this.Barcode = '-';
     }
 
+
+    if (!this.isBase64Image(this.productImg)) {
+      this.productImg = '-';
+    }
+
     var postData = {
       ProductID: this.ProductID,
       CategoryID: this.CategoryID,
@@ -564,6 +575,7 @@ export class ProductComponent implements OnInit {
       ProductTypeID: this.prodTypeID,
       UserID: this.global.getUserID()
     };
+    console.log(postData);
     if (this.btnType == 'Save') {
       this.insert(postData);
     } else if (this.btnType == 'Update') {
@@ -684,9 +696,12 @@ export class ProductComponent implements OnInit {
   }
 
 
+  tmpImgPath = "'C:\inetpub\wwwroot\ERP_Images\'"
+
 
   /////////////////// Product Edit //////////////////
   edit(row: any) {
+    console.log(row);
     this.SubCategoryID = 0;
     this.ProductID = row.productID;
     this.CategoryID = row.categoryID;
@@ -715,23 +730,21 @@ export class ProductComponent implements OnInit {
     this.prodTypeID = row.productTypeID;
     this.tabIndex = 0;
     this.btnType = 'Update';
+    this.productImg = row.imagesPath;
     ////////////// Product Img Global Fucntion ///////////
-    this.global.getProdImage(row.productID).subscribe(
-      async (Response: any) => {
-        // this.productImg = Response[0].productImage;
-        console.log(Response);
-        if (Response[0].productImage !== '-') {
-          console.log(Response[0].productImage)
-          this.productImg = await this.compressBase64(Response[0].productImage, 400, 400, 0.5);
-          console.log(this.productImg)
-        } else {
-          this.productImg = Response[0].productImage;
-        }
+    // this.global.getProdImage(row.productID).subscribe(
+    //   async (Response: any) => {
+    //     // this.productImg = Response[0].productImage;
+    //     if (Response[0].productImage !== '-') {
+    //       this.productImg = await this.compressBase64(Response[0].productImage, 400, 400, 0.5);
+    //     } else {
+    //       this.productImg = Response[0].productImage;
+    //     }
 
 
 
-      }
-    )
+    //   }
+    // )
 
 
 
@@ -972,43 +985,7 @@ export class ProductComponent implements OnInit {
 
 
   ///////////////// Imaging Converting Base 64 Function //////////
-  // onImgSelected(event: any) {
-  //   var imgSize = event.target.files[0].size;
-  //   var isConvert: number = parseFloat((imgSize / 1048576).toFixed(2));
 
-  //   if (isConvert > 2) {
-
-  //     this.msg.WarnNotify('File Size is more than 2MB');
-  //   }
-  //   else {
-
-  //     ////////////// will check the file type ////////////////
-  //     if (this.global.getExtension(event.target.value) != 'pdf') {
-  //       let targetEvent = event.target;
-
-  //       /////////// assign the targeted file to file variable
-  //       let file: File = targetEvent.files[0];
-
-  //       let fileReader: FileReader = new FileReader();
-
-  //       //////////////// if the file is other than pdf eill assign to product img varialb
-  //       fileReader.onload = (e) => {
-  //         this.productImg = fileReader.result;
-  //       }
-
-  //       fileReader.readAsDataURL(file);
-
-  //     } else {
-
-  //       this.msg.WarnNotify('File Must Be in jpg or png formate');
-  //       event.target.value = '';
-  //       this.productImg = '';
-  //     }
-
-  //   }
-
-
-  // }
 
 
   onImgSelected(event: any) {
@@ -1034,7 +1011,6 @@ export class ProductComponent implements OnInit {
           this.productImg = await this.compressBase64(originalBase64, 400, 400, 0.5);
         }
 
-        console.log(this.productImg);
       };
 
       fileReader.readAsDataURL(file);
@@ -1170,11 +1146,11 @@ export class ProductComponent implements OnInit {
         )
 
 
-      } 
-      if(result.isDenied || result.isDismissed){
-       setTimeout(() => {
-         this.scrollToRow(this.curFocusRow);
-       }, 200);
+      }
+      if (result.isDenied || result.isDismissed) {
+        setTimeout(() => {
+          this.scrollToRow(this.curFocusRow);
+        }, 200);
       }
     });
 

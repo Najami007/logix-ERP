@@ -19,7 +19,7 @@ export class ProductCategoryComponent implements OnInit {
   crudList: any = { c: true, r: true, u: true, d: true };
 
 
-    appConfigFeature = this.globaldata.appConfigFeature;
+  appConfigFeature = this.globaldata.appConfigFeature;
 
   constructor(private http: HttpClient,
     private msg: NotificationService,
@@ -80,6 +80,9 @@ export class ProductCategoryComponent implements OnInit {
         this.description = '-';
       }
 
+      if (!this.isBase64Image(this.catImage)) {
+        this.catImage = '-';
+      }
 
       var postData = {
 
@@ -91,6 +94,8 @@ export class ProductCategoryComponent implements OnInit {
         UserID: this.globaldata.getUserID()
 
       }
+
+
 
       if (this.btnType == 'Save') {
         this.insert(postData, 'insert');
@@ -152,11 +157,26 @@ export class ProductCategoryComponent implements OnInit {
   }
 
 
+
+
+  isBase64Image(str: string): boolean {
+    if (typeof str !== "string") {
+      return false;
+    }
+
+    // Regex for data:image/* base64 string
+    const base64ImageRegex = /^data:image\/(png|jpg|jpeg|gif|webp|bmp|svg\+xml);base64,[A-Za-z0-9+/]+={0,2}$/;
+
+    return base64ImageRegex.test(str);
+  }
+
+
   edit(row: any) {
+    console.log(row);
     this.categoryID = row.categoryID;
     this.categoryTitle = row.categoryTitle;
     this.description = row.categoryDescription;
-    this.catImage = row.catImage;
+    this.catImage = row.imagesPath;
     this.btnType = 'Update';
   }
 
@@ -322,7 +342,7 @@ export class ProductCategoryComponent implements OnInit {
         var postData: any = {
           FlagType: 'Cat',
           FlagID: item.categoryID,
-          FlagStatus: !item.linkWithApp ,
+          FlagStatus: !item.linkWithApp,
         }
 
         this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'LinkWithMobApp', postData).subscribe(

@@ -366,6 +366,8 @@
                                 <label (click)="productImg = ''"><mat-icon class=" mt-1">delete</mat-icon></label>
                             </div>
                             <div class="avatar-preview">
+                                
+                                <!-- <img [src]="productImg" > -->
                                 <div (click)="this.global.showProductImage(productImg,0)" accesskey="i"
                                     id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + productImg + ')' }">
                                 </div>
@@ -425,51 +427,7 @@
                                 (keypress)="onProdSearchKeyup($event,searchProduct)" matInput #searchProd
                                 [(ngModel)]="searchProduct">
                         </mat-form-field>
-                        <!-- <mat-form-field appearance="outline" class="col-md-2 matSmall">
-                            <mat-label>Sub Category</mat-label>
-
-                            <mat-select [(ngModel)]="subCategoryFilterID"
-                                (selectionChange)="filterProductList('subcat')">
-                                <mat-option><ngx-mat-select-search #scfs [placeholderLabel]="'Search...'"
-                                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                                <mat-option [value]="0">ALL</mat-option>
-                                <mat-option *ngFor="let item of subCategoryFilterList | filter:scfs.value"
-                                    [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
-                            </mat-select>
-                        </mat-form-field> -->
-
-                        <!-- <mat-form-field appearance="outline" class="col-md-2 matSmall" *ngIf="!ManufacturingFeature">
-                            <mat-label>Brand</mat-label>
-
-                            <mat-select [(ngModel)]="brandFilterID" (selectionChange)="filterProductList('brand')">
-                                <mat-option><ngx-mat-select-search #bfs [placeholderLabel]="'Search...'"
-                                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                                <mat-option [value]="0">ALL</mat-option>
-                                <mat-option *ngFor="let item of BrandList | filter:bfs.value"
-                                    [value]="item.brandID">{{item.brandTitle}}</mat-option>
-                            </mat-select>
-                        </mat-form-field> -->
-
-                        <!-- <mat-form-field appearance="outline" class="col-md-2 matSmall">
-                            <mat-label>Status</mat-label>
-
-                            <mat-select [(ngModel)]="activeFilterID" (selectionChange)="filterProductList('status')">
-                                <mat-option [value]="'-'">ALL</mat-option>
-                                <mat-option [value]="true">Active</mat-option>
-                                <mat-option [value]="false">Deactive</mat-option>
-                            </mat-select>
-                        </mat-form-field> -->
-                        <!-- <mat-form-field appearance="outline" class="col-md-1 matSmall" *ngIf="!ManufacturingFeature">
-                            <mat-label>Disc</mat-label>
-
-                            <mat-select [disabled]="!discFeature" [(ngModel)]="discFilterID"
-                                (selectionChange)="filterProductList('disc')">
-
-                                <mat-option *ngFor="let item of DiscFilterList "
-                                    [value]="item.val">{{item.title}}</mat-option>
-                            </mat-select>
-                        </mat-form-field> -->
-                        <div class="col-lg-1">
+                       <div class="col-lg-1">
                             <button style="height: 40px;" class="btn-rpt-primary w-100"
                                 (click)="global.printData('#prodTable')">Print</button>
                         </div>
@@ -530,9 +488,10 @@
                                     <td *ngIf="!ManufacturingFeature">{{item.gst}}%</td>
                                     <td>{{item.entryUser}}</td>
                                     <td class="cursorPointer hide-in-print" *ngIf="!ManufacturingFeature">
-                                        <mat-icon *ngIf="item.productImage == 'Yes'" class="text-primary"
-                                            (click)="this.global.showProductImage('',item.productID)">image</mat-icon>
-                                        <mat-icon *ngIf="item.productImage == '-'">cancel_presentation</mat-icon>
+                                        <img [src]="item.imagesPath" (click)="this.global.showProductImage(item.imagesPath,0)" width="20px" height="20px" >
+                                        <!-- <mat-icon *ngIf="item.productImage == 'Yes'" class="text-primary"
+                                            (click)="this.global.showProductImage('',item.productID)">image</mat-icon> -->
+                                        <!-- <mat-icon *ngIf="item.productImage == '-'">cancel_presentation</mat-icon> -->
                                     </td>
                                     <td *ngIf="MultiBarcode && !ManufacturingFeature"
                                         class="cursorPointer hide-in-print">
