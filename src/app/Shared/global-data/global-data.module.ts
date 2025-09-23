@@ -329,6 +329,7 @@ export class GlobalDataModule implements OnInit {
   dashSlashBarcodeFeature = this.getFeature('dashSlashBarcode');
   CusDiscFeature = this.getFeature('CusDisc');
   appConfigFeature = this.getFeature('appConfig');
+  ImageUrlFeature = this.getFeature('ImageUrl');
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
     this.BookerFeature = this.getFeature('Booker');
@@ -382,6 +383,7 @@ export class GlobalDataModule implements OnInit {
     this.dashSlashBarcodeFeature = this.getFeature('dashSlashBarcode');
     this.CusDiscFeature = this.getFeature('CusDisc');
     this.appConfigFeature = this.getFeature('appConfig');
+    this.ImageUrlFeature = this.getFeature('ImageUrl');
   }
 
 

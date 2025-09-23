@@ -4,7 +4,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { error } from 'console';
 import { AppComponent } from 'src/app/app.component';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
@@ -112,6 +111,9 @@ export class OrderManagementComponent {
   }
 
 
+
+  curUserRoleID = this.global.getRoleTypeID();
+
   dataList: any = []
 
 
@@ -206,7 +208,6 @@ export class OrderManagementComponent {
         next: (Response: any) => {
           this.dataList = [];
           if (Response.length > 0) {
-
             this.dataList = this.filterType !== 'All'
               ? Response.filter((e: any) => e.orderStatus == this.filterType)
               : Response;
@@ -235,7 +236,6 @@ export class OrderManagementComponent {
     this.http.get(url).subscribe(
       {
         next: (Response: any) => {
-          console.log(Response);
           this.SingleOrderDetail = Response;
           this.OrderDetailTotal = 0;
           if (this.SingleOrderDetail.length > 0) {
@@ -398,5 +398,13 @@ export class OrderManagementComponent {
     this.tmpRiderID = 0;
     this.updateOrderStatus = '';
   }
+
+
+  openImage(link: string) {
+    if(link == '-' || link == null || link == ''){
+      return;
+    }
+  window.open(link, '_blank');
+}
 
 }

@@ -57,6 +57,7 @@ export class AddRiderProfileComponent {
   MobileNo: any = '';
   Email: any = '';
   Password: any = '';
+  userAddress:any = '';
 
 
 
@@ -84,6 +85,11 @@ export class AddRiderProfileComponent {
       return;
     }
 
+        if (this.userAddress == '') {
+      this.msg.WarnNotify('Enter Address');
+      return;
+    }
+
     if (this.Password == '' && this.MobUserID == 0) {
       this.msg.WarnNotify('Enter Password');
       return;
@@ -102,6 +108,8 @@ export class AddRiderProfileComponent {
       MobileNo: this.MobileNo,
       Email: this.Email,
       Password: this.Password,
+      userAddress:this.userAddress || '-',
+      MobUserImage:this.partyImg,
       UserType: "Rider",
       RegType: "Normal",
       PinCode: ''
@@ -115,7 +123,12 @@ export class AddRiderProfileComponent {
       this.global.openPinCode().subscribe(pin => {
         if (pin != '') {
           postData.PinCode = pin;
-          this.insert(postData, 'update')
+
+          this.insert(postData, 'update');
+          if(this.isBase64Image(this.partyImg)){
+            alert();
+            this.insertUserImage(postData,'insert');
+          }
         }
       })
 
@@ -157,6 +170,53 @@ export class AddRiderProfileComponent {
   }
 
 
+   isBase64Image(str: string): boolean {
+    if (typeof str !== "string") {
+      return false;
+    }
+
+    // Regex for data:image/* base64 string
+    const base64ImageRegex = /^data:image\/(png|jpg|jpeg|gif|webp|bmp|svg\+xml);base64,[A-Za-z0-9+/]+={0,2}$/;
+
+    return base64ImageRegex.test(str);
+  }
+
+
+  
+  insertUserImage(postData: any, type: any) {
+
+    var url = ''
+
+    if (type == 'insert') {
+      url = 'UpdateMobUserImage';
+    }
+
+
+    this.http.post(this.apiReq + url, postData).subscribe(
+      {
+        next: (Response: any) => {
+
+          if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
+            this.msg.SuccessNotify(Response.msg);
+            this.reset();
+           setTimeout(() => {
+             this.updateEmitter.emit();
+           }, 1000);
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+
+        },
+        error: error => {
+          console.log(error);
+        }
+      }
+    )
+
+  }
+  
+
+
 
 
   reset() {
@@ -166,7 +226,9 @@ export class AddRiderProfileComponent {
     this.Email = '';
     this.MobUserID = 0;
     this.MobileNo = '';
+    this.userAddress = '';
     this.Password = '';
+    this.partyImg = '';
     this.btnType = 'Save';
 
   }
@@ -194,10 +256,10 @@ export class AddRiderProfileComponent {
         // 👉 if file size > 1MB, compress before assigning
         if (isConvert > 1) {
           this.msg.WarnNotify('File Size is more than 1MB, compressing...');
-          this.partyImg = await this.compressBase64(originalBase64, 400, 400, 0.5);
+          this.partyImg = await this.compressBase64(originalBase64, 400, 400, 0.6);
         } else {
           // assign compressed anyway (smaller size, faster upload)
-          this.partyImg = await this.compressBase64(originalBase64, 400, 400, 0.5);
+          this.partyImg = await this.compressBase64(originalBase64, 400, 400, 0.6);
         }
 
       };

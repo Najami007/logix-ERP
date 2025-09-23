@@ -48,6 +48,8 @@ export class ProductComponent implements OnInit {
   FurnitureSaleFeature = this.global.FurnitureSaleFeature;
   appConfigFeature = this.global.appConfigFeature;
 
+  ImageUrlFeature = this.global.ImageUrlFeature;
+
 
 
   applyFilter() {
@@ -730,21 +732,29 @@ export class ProductComponent implements OnInit {
     this.prodTypeID = row.productTypeID;
     this.tabIndex = 0;
     this.btnType = 'Update';
-    this.productImg = row.imagesPath;
-    ////////////// Product Img Global Fucntion ///////////
-    // this.global.getProdImage(row.productID).subscribe(
-    //   async (Response: any) => {
-    //     // this.productImg = Response[0].productImage;
-    //     if (Response[0].productImage !== '-') {
-    //       this.productImg = await this.compressBase64(Response[0].productImage, 400, 400, 0.5);
-    //     } else {
-    //       this.productImg = Response[0].productImage;
-    //     }
+
+    if (this.ImageUrlFeature) {
+      this.productImg = row.imagesPath;
+    }else{
+
+       ////////////// Product Img Global Fucntion ///////////
+    this.global.getProdImage(row.productID).subscribe(
+      async (Response: any) => {
+        // this.productImg = Response[0].productImage;
+        if (Response[0].productImage !== '-') {
+          this.productImg = await this.compressBase64(Response[0].productImage, 400, 400, 0.5);
+        } else {
+          this.productImg = Response[0].productImage;
+        }
 
 
 
-    //   }
-    // )
+      }
+    )
+
+    }
+
+   
 
 
 

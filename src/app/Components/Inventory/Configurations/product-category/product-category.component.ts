@@ -17,7 +17,7 @@ import Swal from 'sweetalert2';
 export class ProductCategoryComponent implements OnInit {
 
   crudList: any = { c: true, r: true, u: true, d: true };
-
+  ImageUrlFeature = this.globaldata.ImageUrlFeature;
 
   appConfigFeature = this.globaldata.appConfigFeature;
 
@@ -176,7 +176,7 @@ export class ProductCategoryComponent implements OnInit {
     this.categoryID = row.categoryID;
     this.categoryTitle = row.categoryTitle;
     this.description = row.categoryDescription;
-    this.catImage = row.imagesPath;
+    this.catImage = this.ImageUrlFeature ? row.imagesPath : row.catImage;
     this.btnType = 'Update';
   }
 

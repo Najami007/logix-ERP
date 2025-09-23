@@ -22,7 +22,7 @@ export class RiderProfileComponent  {
   constructor(private http: HttpClient,
     private msg: NotificationService,
     private dialogue: MatDialog,
-    private globaldata: GlobalDataModule,
+    public globaldata: GlobalDataModule,
     private app: AppComponent,
     private route: Router,
     private titleService: Title
@@ -75,7 +75,6 @@ export class RiderProfileComponent  {
     this.http.get(environment.mainApi + this.globaldata.mobileLink + 'GetMobUser').subscribe(
       {
         next: (Response: any) => {
-  
           if (Response.length > 0) {
             this.dataList = Response.filter((e: any) => e.userType == 'Rider');
           }
@@ -88,17 +87,22 @@ export class RiderProfileComponent  {
   }
 
 
+  
+ 
+
+
 
 
 
 
   edit(item: any) {
-
     this.addProfile.FirstName = item.firstName;
     this.addProfile.LastName = item.lastName;
     this.addProfile.MobUserID = item.mobUserID;
     this.addProfile.Email = item.email;
     this.addProfile.MobileNo = item.mobileNo;
+    this.addProfile.userAddress = item.userAddress;
+    this.addProfile.partyImg = item.imagesPath;
     this.addProfile.btnType = 'Update';
     
 

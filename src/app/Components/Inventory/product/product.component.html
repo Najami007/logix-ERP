@@ -488,10 +488,10 @@
                                     <td *ngIf="!ManufacturingFeature">{{item.gst}}%</td>
                                     <td>{{item.entryUser}}</td>
                                     <td class="cursorPointer hide-in-print" *ngIf="!ManufacturingFeature">
-                                        <img [src]="item.imagesPath" (click)="this.global.showProductImage(item.imagesPath,0)" width="20px" height="20px" >
-                                        <!-- <mat-icon *ngIf="item.productImage == 'Yes'" class="text-primary"
-                                            (click)="this.global.showProductImage('',item.productID)">image</mat-icon> -->
-                                        <!-- <mat-icon *ngIf="item.productImage == '-'">cancel_presentation</mat-icon> -->
+                                        <img [src]="item.imagesPath" *ngIf="ImageUrlFeature" (click)="this.global.showProductImage(item.imagesPath,0)" width="20px" height="20px" >
+                                        <mat-icon *ngIf="item.productImage == 'Yes' && !ImageUrlFeature" class="text-primary"
+                                            (click)="this.global.showProductImage('',item.productID)">image</mat-icon>
+                                        <mat-icon *ngIf="item.productImage == '-'  && !ImageUrlFeature">cancel_presentation</mat-icon>
                                     </td>
                                     <td *ngIf="MultiBarcode && !ManufacturingFeature"
                                         class="cursorPointer hide-in-print">

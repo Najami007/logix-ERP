@@ -46,6 +46,12 @@
                 <div class="col-md-4 ">
                     <mat-label class="fw-bold">Delivery Details</mat-label>
 
+                    <div class="d-flex fs-11px mt-1">
+                        <span class="fs-10px fw-bold me-1">Payment Method:</span>
+                        <span >{{tmpOrderRow!.paymentMethod}}</span>
+                        <span *ngIf="tmpOrderRow!.paymentMethod == 'IBFT'"> <mat-icon class="fs-16px" (click)="openImage(tmpOrderRow!.paymentReceiptDoc)">attachment</mat-icon></span>
+                    </div>
+
                     <div class="fs-11px mt-1">
                         <span class="fs-10px fw-bold me-1">Address:</span>
                         <span *ngIf="tmpOrderRow!.showFullAddress">{{tmpOrderRow!.deliveryAddress}}</span>
@@ -287,7 +293,12 @@
                                     <div class="text-center ">
                                         <span class="fs-12px fw-bold">Delivery Details</span>
                                     </div>
+                                    <div>
+                                         <span class="text-secondary fs-10px"><b>Payment Method:</b>
+                                            {{item.paymentMethod}}</span>
+                                    </div>
                                     <div class="d-flex justify-content-between">
+                                          
                                         <span class="text-secondary fs-10px"><b>Contact:</b>
                                             {{item.deliveryContact}}</span>
                                         <span class="fs-10px deliveryStatus"
@@ -483,7 +494,7 @@
                 <br>
 
                 <select class="tableStatusInput" [(ngModel)]="updateOrderStatus">
-                    <option *ngFor="let item of statusList" [value]="item.orderStatusTitle">
+                    <option [disabled]="item.orderStatusID > 2 && curUserRoleID > 2" *ngFor="let item of statusList" [value]="item.orderStatusTitle">
                         {{item.orderStatusTitle}}</option>
                 </select>
 

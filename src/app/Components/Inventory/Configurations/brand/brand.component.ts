@@ -18,6 +18,7 @@ export class BrandComponent implements OnInit {
   crudList: any = { c: true, r: true, u: true, d: true };
 
   appConfigFeature = this.globaldata.appConfigFeature;
+          ImageUrlFeature = this.globaldata.ImageUrlFeature;
 
   constructor(private http: HttpClient,
     private msg: NotificationService,
@@ -176,7 +177,7 @@ export class BrandComponent implements OnInit {
     this.brandTitle = row.brandTitle;
     this.brandCode = row.brandCode;
     this.description = row.brandDescription;
-    this.brandImage = row.imagesPath,
+    this.brandImage = this.ImageUrlFeature ? row.imagesPath : row.brandImage;
       this.btnType = 'Update';
 
   }

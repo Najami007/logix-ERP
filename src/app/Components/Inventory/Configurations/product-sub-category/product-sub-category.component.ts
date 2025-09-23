@@ -21,6 +21,7 @@ export class ProductSubCategoryComponent implements OnInit {
 
   crudList: any = { c: true, r: true, u: true, d: true };
       appConfigFeature = this.globaldata.appConfigFeature;
+        ImageUrlFeature = this.globaldata.ImageUrlFeature;
 
   constructor(private http: HttpClient,
     private msg: NotificationService,
@@ -194,7 +195,7 @@ export class ProductSubCategoryComponent implements OnInit {
     this.subCategoryID = row.subCategoryID;
     this.subCategoryTitle = row.subCategoryTitle;
     this.description = row.subCategoryDescription;
-    this.subCatImage = row.imagesPath;;
+    this.subCatImage = this.ImageUrlFeature ? row.imagesPath : row.subCatImage;
     this.btnType = 'Update';
   }
 

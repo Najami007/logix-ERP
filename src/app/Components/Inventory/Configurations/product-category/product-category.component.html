@@ -77,7 +77,7 @@
                     <tr *ngFor="let item of categoryList | filter:txtSearch index as index">
                         <td>{{index+1}}</td>
                         <td>
-                            <img (click)="globaldata.showProductImage(item.imagesPath,0)" *ngIf="item.imagesPath" [src]="item.imagesPath" class="border"
+                            <img (click)="globaldata.showProductImage(ImageUrlFeature? item.imagesPath:item.catImage,0)" *ngIf="ImageUrlFeature? item.imagesPath:item.catImage"  [src]="ImageUrlFeature? item.imagesPath:item.catImage" class="border"
                                 style="width: 40px;height: 40px;border-radius: 50%;" />
                         </td>
                         <td class="text-start">{{item.categoryTitle}}</td>
