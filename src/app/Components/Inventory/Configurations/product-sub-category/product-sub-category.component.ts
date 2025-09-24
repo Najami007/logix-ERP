@@ -147,7 +147,6 @@ export class ProductSubCategoryComponent implements OnInit {
 
   insert(postData: any, type: any) {
     this.app.startLoaderDark();
-    console.log(postData);
     var url = '';
     if (type == 'insert') {
       url = 'InsertSubCategory'

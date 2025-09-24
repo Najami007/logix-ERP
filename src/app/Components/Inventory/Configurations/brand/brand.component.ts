@@ -265,7 +265,6 @@ export class BrandComponent implements OnInit {
           this.brandImage = await this.compressBase64(originalBase64, 400, 400, 0.5);
         }
 
-        console.log(this.brandImage);
       };
 
       fileReader.readAsDataURL(file);

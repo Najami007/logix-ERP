@@ -44,7 +44,7 @@ export class OrderReportDatewieseComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Stock In Out Date wise');
+    this.global.setHeaderTitle('Order Report');
     this.getUsers();
 
 
@@ -113,8 +113,8 @@ export class OrderReportDatewieseComponent implements OnInit {
     var toDate = this.global.dateFormater(this.toDate, '');
     var fromTime = this.fromTime;
     var toTime = this.toTime;
-
-    var url = `${this.apiReq}GetMobOrders?MobUserID=0&FromDate=${fromDate}&ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&reqFilter=-`
+    var userID = this.userID;
+    var url = `${this.apiReq}GetMobOrders?MobUserID=${userID}&FromDate=${fromDate}&ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&reqFilter=-`
 
 
     this.app.startLoaderDark();

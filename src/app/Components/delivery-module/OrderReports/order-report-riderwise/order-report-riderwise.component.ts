@@ -44,7 +44,7 @@ export class OrderReportRiderwiseComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Stock In Out Date wise');
+    this.global.setHeaderTitle('Order Report Riderwise');
     this.getRiderList();
 
 

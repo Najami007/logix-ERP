@@ -113,9 +113,9 @@
                         <tr *ngFor="let item of SingleOrderDetail index as index">
                             <td>{{index +1}}</td>
                             <td>{{item.productTitle}}</td>
-                            <td>{{item.quantity | number:'1.0-0'}}</td>
-                            <td>{{item.salePrice - item.discInR | number:'1.0-0'}}</td>
-                            <td>{{(item.salePrice - item.discInR) * item.quantity | number:'1.0-0'}}</td>
+                            <td class="text-center">{{item.quantity | number:'1.0-0'}}</td>
+                            <td class="text-end">{{item.salePrice - item.discInR | number:'1.0-0'}}</td>
+                            <td class="text-end">{{(item.salePrice - item.discInR) * item.quantity | number:'1.0-0'}}</td>
                         </tr>
 
                     </tbody>
@@ -125,7 +125,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td class="fw-bold">{{OrderDetailTotal | number:'1.0-0'}}</td>
+                            <td class="fw-bold text-end">{{OrderDetailTotal | number:'1.0-0'}}</td>
                         </tr>
                     </tfoot>
                 </table>

@@ -26,6 +26,7 @@ import { OrderReportRiderwiseComponent } from './OrderReports/order-report-rider
 import { OrderReportDatewieseComponent } from './OrderReports/order-report-datewiese/order-report-datewiese.component';
 import { OrderDetailComponent } from './order-management/order-detail/order-detail.component';
 import { OrderPrintComponent } from './order-management/order-print/order-print.component';
+import { MobUserListComponent } from './OrderReports/mob-user-list/mob-user-list.component';
 
 
 
@@ -57,6 +58,7 @@ export const deliveryRoutes: Route[] = [
   //////////////////////////////////// Reports //////////
   { path: 'orderReportDatewise', component: OrderReportDatewieseComponent, canActivate: [AuthGuard] },
   { path: 'orderReportRider', component: OrderReportRiderwiseComponent, canActivate: [AuthGuard] },
+   { path: 'mobUserList', component: MobUserListComponent, canActivate: [AuthGuard] },
 
 ]
 
@@ -69,7 +71,8 @@ export const deliveryRoutes: Route[] = [
     OrderReportRiderwiseComponent,
     OrderReportDatewieseComponent,
     OrderDetailComponent,
-    OrderPrintComponent
+    OrderPrintComponent,
+    MobUserListComponent
   ],
   imports: [
     CommonModule,

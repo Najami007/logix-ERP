@@ -54,7 +54,6 @@ export class ProductCategoryComponent implements OnInit {
   getCategory() {
     this.http.get(environment.mainApi + this.globaldata.inventoryLink + 'GetCategory').subscribe(
       (Response: any) => {
-        console.log(Response);
         this.categoryList = Response;
       }
     )
@@ -118,7 +117,6 @@ export class ProductCategoryComponent implements OnInit {
 
   insert(postData: any, type: any) {
     this.app.startLoaderDark();
-    console.log(postData);
     var url = '';
     if (type == 'insert') {
       url = 'insertcategory'
@@ -172,7 +170,6 @@ export class ProductCategoryComponent implements OnInit {
 
 
   edit(row: any) {
-    console.log(row);
     this.categoryID = row.categoryID;
     this.categoryTitle = row.categoryTitle;
     this.description = row.categoryDescription;
@@ -263,7 +260,6 @@ export class ProductCategoryComponent implements OnInit {
           this.catImage = await this.compressBase64(originalBase64, 400, 400, 0.5);
         }
 
-        console.log(this.catImage);
       };
 
       fileReader.readAsDataURL(file);

@@ -161,6 +161,7 @@ export class ProductComponent implements OnInit {
     this.tableSize = this.global.paginationDefaultTalbeSize;
     this.tableSizes = this.global.paginationTableSizes;
     for (let i = 0; i <= 100; i++) { this.discountList.push({ value: i }); }
+
   }
 
   discountList: any = [];
@@ -577,7 +578,6 @@ export class ProductComponent implements OnInit {
       ProductTypeID: this.prodTypeID,
       UserID: this.global.getUserID()
     };
-    console.log(postData);
     if (this.btnType == 'Save') {
       this.insert(postData);
     } else if (this.btnType == 'Update') {
@@ -703,7 +703,6 @@ export class ProductComponent implements OnInit {
 
   /////////////////// Product Edit //////////////////
   edit(row: any) {
-    console.log(row);
     this.SubCategoryID = 0;
     this.ProductID = row.productID;
     this.CategoryID = row.categoryID;

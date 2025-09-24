@@ -7,11 +7,11 @@
 
             <mat-form-field appearance="outline" class="col-lg-4  matSmall">
                 <mat-label>Customer</mat-label>
-                <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
+                <mat-select [(ngModel)]="userID" >
                     <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
                             [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                     <mat-option [value]="0">All</mat-option>
-                    <mat-option *ngFor="let item of userList | filter:usearch.value"
+                    <mat-option *ngFor="let item of userList | filter:usearch.value | slice:0:30"
                         [value]="item.mobUserID">{{item.firstName}} {{item.lastName}}</mat-option>
                 </mat-select>
             </mat-form-field>
