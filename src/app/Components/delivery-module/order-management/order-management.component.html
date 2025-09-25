@@ -194,9 +194,9 @@
                         <div class="col-md-2 matSmall">
                             <mat-form-field class="w-100" appearance="outline">
                                 <mat-label>From Time</mat-label>
-                                <input matInput [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true"
+                                <input matInput  [format]="24" (ngModelChange)="getSavedOrder()" [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true"
                                     readonly>
-                                <ngx-material-timepicker-toggle [for]="fTime" class="inputIcon"
+                                <ngx-material-timepicker-toggle [for]="fTime" 
                                     matSuffix></ngx-material-timepicker-toggle>
                                 <ngx-material-timepicker #fTime></ngx-material-timepicker>
                             </mat-form-field>
@@ -215,9 +215,9 @@
                         <div class="col-md-2 matSmall">
                             <mat-form-field class="w-100" appearance="outline">
                                 <mat-label>To Time</mat-label>
-                                <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true"
+                                <input matInput  [format]="24" (ngModelChange)="getSavedOrder()"  [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true"
                                     readonly>
-                                <ngx-material-timepicker-toggle [for]="tTime" class="inputIcon"
+                                <ngx-material-timepicker-toggle [for]="tTime" 
                                     matSuffix></ngx-material-timepicker-toggle>
                                 <ngx-material-timepicker #tTime></ngx-material-timepicker>
                             </mat-form-field>
@@ -416,9 +416,11 @@
 
                                     </td>
                                     <td>
-                                        <span [ngStyle]="{ 'background-color' : getStatusColor(item.orderStatus)}"
+                                        <div class="tableOrderStatus" [ngStyle]="{ 'background-color' : getStatusColor(item.orderStatus)}">
+                                            <span  
                                             (click)="openChangeStatusModal(item)"
-                                            class="tableOrderStatus">{{item.orderStatus}}</span>
+                                            >{{item.orderStatus}}</span>
+                                        </div>
 
                                     </td>
                                     <td>{{item.totalItems}}</td>
@@ -492,11 +494,24 @@
                     </div>
 
                 <br>
-
+<!-- 
                 <select class="tableStatusInput" [(ngModel)]="updateOrderStatus">
                     <option [disabled]="item.orderStatusID > 2 && curUserRoleID > 2" *ngFor="let item of statusList" [value]="item.orderStatusTitle">
                         {{item.orderStatusTitle}}</option>
-                </select>
+                </select> -->
+
+                <mat-form-field class="matSmall w-100">
+                    <mat-label>Status</mat-label>
+                      <mat-select  [(ngModel)]="updateOrderStatus">
+                        <mat-option [disabled]="item.orderStatusID > 2 && curUserRoleID > 2" *ngFor="let item of statusList" [value]="item.orderStatusTitle">
+                        {{item.orderStatusTitle}}</mat-option>
+                      </mat-select>
+                </mat-form-field>
+                <br>
+                <mat-form-field *ngIf="updateOrderStatus ==  'Cancelled'" class="matSmall w-100">
+                    <mat-label>Remarks</mat-label>
+                    <textarea matInput [(ngModel)]="updateStatusRemarks"></textarea>
+                </mat-form-field>
 
             </div>
 

@@ -330,6 +330,7 @@ export class GlobalDataModule implements OnInit {
   CusDiscFeature = this.getFeature('CusDisc');
   appConfigFeature = this.getFeature('appConfig');
   ImageUrlFeature = this.getFeature('ImageUrl');
+  SaleSupplierFeature = this.getFeature('SaleSupplier');
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
     this.BookerFeature = this.getFeature('Booker');
@@ -384,6 +385,7 @@ export class GlobalDataModule implements OnInit {
     this.CusDiscFeature = this.getFeature('CusDisc');
     this.appConfigFeature = this.getFeature('appConfig');
     this.ImageUrlFeature = this.getFeature('ImageUrl');
+    this.SaleSupplierFeature = this.getFeature('SaleSupplier');
   }
 
 

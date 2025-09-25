@@ -299,6 +299,7 @@ export class OrderManagementComponent {
 
   curSelectedRow: any = [];
   updateOrderStatus: any = '';
+  updateStatusRemarks:any = '';
 
   openChangeStatusModal(item: any) {
     this.curSelectedRow = item;
@@ -309,12 +310,23 @@ export class OrderManagementComponent {
 
   changeOrderStatus(item: any) {
 
+    if(this.updateOrderStatus == 'Cancelled' && this.updateStatusRemarks == ''){
+      this.msg.WarnNotify('Enter Cancellation Remarks');
+      return;
+    }
+
+    if((this.updateOrderStatus == 'Dispatched' || this.updateOrderStatus == 'Delivered') && item.riderID == 0){
+      this.msg.WarnNotify('Assign Order to the Rider First');
+      return;
+    }
+
 
 
     var postData: any = {
       OrderNo: item.orderNo,
       RiderID: item.riderID,
       OrderStatus: this.updateOrderStatus,
+      Remarks:this.updateStatusRemarks || '-',
       UserID: this.global.getUserID()
     }
 
@@ -397,6 +409,7 @@ export class OrderManagementComponent {
     this.curSelectedRow = [];
     this.tmpRiderID = 0;
     this.updateOrderStatus = '';
+    this.updateStatusRemarks = '';
   }
 
 

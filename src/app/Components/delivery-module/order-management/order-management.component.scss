@@ -155,8 +155,12 @@
 .tableOrderStatus{
     cursor: pointer;
   height: 40px !important;
+  width: 120px !important;
+  display: flex;
+  justify-content: center;
+  text-align: center;
   border-radius: 25px;
-  padding: 5px 15px;
+  padding: 10px 15px;
   color: white;
   border: none;
   outline: none;

@@ -48,6 +48,7 @@ export class GarmentSaleComponent implements OnInit {
   showSaleAQFeature = this.global.showSaleAQFeature;
   showSaleCPFeature = this.global.showSaleCPFeature;
   DashSlashBarcodeFeature = this.global.dashSlashBarcodeFeature;
+  SaleSupplierFeature = this.global.SaleSupplierFeature;
 
 
 
@@ -207,7 +208,19 @@ export class GarmentSaleComponent implements OnInit {
   }
 
   getPartyList() {
-    this.global.getCustomerList().subscribe((data: any) => { this.partyList = data; });
+    if (this.SaleSupplierFeature) {
+      this.global.getPartyList().subscribe((data: any) => {
+        if (data.length > 0) {
+          this.partyList = data.filter((e:any)=> e.partyType == 'Customer' || e.partyType == 'Supplier');
+        }
+
+        console.log(data, 'all')
+      })
+    } else {
+      this.global.getCustomerList().subscribe((data: any) => { this.partyList = data; console.log(data, '-') });
+    }
+
+
   }
 
   ////////////////////////////////////////////

@@ -361,7 +361,7 @@
                             [(ngModel)]="partyID" (ngModelChange)="partySelect()" name="customer">
                             <ng-option [value]="0">WalkIn Customer</ng-option>
                             <ng-option *ngFor="let item of partyList " [value]="item.partyID">
-                                {{item.partyName}}</ng-option>
+                                {{item.partyName}} <small>({{item.partyType}})</small></ng-option>
                         </ng-select>
                     </div>
 
