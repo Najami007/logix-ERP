@@ -206,6 +206,7 @@ export class OrderManagementComponent {
     this.http.get(url).subscribe(
       {
         next: (Response: any) => {
+          console.log(Response);
           this.dataList = [];
           if (Response.length > 0) {
             this.dataList = this.filterType !== 'All'
@@ -304,6 +305,7 @@ export class OrderManagementComponent {
   openChangeStatusModal(item: any) {
     this.curSelectedRow = item;
     this.updateOrderStatus = item.orderStatus;
+    this.updateStatusRemarks = item.remarks;
     this.global.openBootstrapModal('#ChangeStatus', true);
 
   }
@@ -345,6 +347,7 @@ export class OrderManagementComponent {
         this.global.closeBootstrapModal('#ChangeStatus', true)
       },
       error: error => {
+        this.msg.WarnNotify(error.error.msg);
         this.app.stopLoaderDark();
         console.log(error);
       }

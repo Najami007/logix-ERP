@@ -2,146 +2,93 @@
 
 
     <div class="d-flex justify-content-center mt-2">
-        <div class="w-40 row">
+        <div class="w-40 d-flex flex-wrap ">
 
-            <div class="col-md-12">
-                <div class="banner ">
 
-                    <!-- <img [src]=""  > -->
+            <div (click)="openEditModal(item)" class="cursorPointer" *ngFor="let item of homePageDataList"
+                [ngClass]="item.type == 'banner' ? 'col-md-12' : 'col-md-6'">
 
+
+                <div class="p-1">
+                    <div *ngIf="item.type == 'banner'" class="banner " [ngStyle]="{ 'background-image': 'url(' + item.imagesPath + ')' }">
+
+                        <span *ngIf="item.title !== '-'" class="bannerTitle">{{item.title}}</span>
+
+                    </div>
                 </div>
+
+
+                <div class="p-1">
+                    <div class="categoryCard " *ngIf="item.type == 'category'">
+                        <div class="categoryCard-header">{{item.title}}</div>
+                        <div class="categoryCard-image">
+                            <img [src]="item.imagesPath">
+                        </div>
+                    </div>
+                </div>
+
+
+
+
             </div>
 
-
-            <div class="col-md-6">
-                <div class="category">
-
-                    <span class="label">Beverages</span>
-
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="category">
-
-                    <span class="label">Beverages</span>
-
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="category">
-
-                    <span class="label">Beverages</span>
-
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="category">
-
-                    <span class="label">Beverages</span>
-
-                </div>
-            </div>
-
-
-
-            <div class="col-md-12">
-                <div class="banner ">
-
-                    <!-- <img [src]=""  > -->
-
-                </div>
-            </div>
-
-            <div class="col-md-12">
-                <div class="banner ">
-
-                    <!-- <img [src]=""  > -->
-
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="banner ">
-
-                    <!-- <img [src]=""  > -->
-
-                </div>
-            </div>
-
-
-
-            <div class="col-md-6">
-                <div class="category">
-
-                    <span class="label">Beverages</span>
-
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="category">
-
-                    <span class="label">Beverages</span>
-
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="category">
-
-                    <span class="label">Beverages</span>
-
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="category">
-
-                    <span class="label">Beverages</span>
-
-                </div>
-            </div>
-
-
-
-            <div class="col-md-12">
-                <div class="banner ">
-
-                    <!-- <img [src]=""  > -->
-
-                </div>
-            </div>
-
-            <div class="col-md-12">
-                <div class="banner ">
-
-                    <!-- <img [src]=""  > -->
-
-                </div>
-            </div>
 
         </div>
+
     </div>
 
-</div>
 
 
 
+    <div class="modal fade" id="changeDetail" tabindex="-1" aria-labelledby="SavedBillModalLabel">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-sm">
+            <div class="modal-content">
 
-<div class="modal fade" id="changeDetail" tabindex="-1" aria-labelledby="SavedBillModalLabel">
-    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-sm">
-        <div class="modal-content">
+                <div class="modal-body justify-content-center">
 
-            <div class="modal-body justify-content-center">
+                    <div class="col-md-12">
+                        <mat-form-field class="matSmall w-100">
+                            <mat-label>Title</mat-label>
+                            <input matInput [(ngModel)]="containerTitle" />
+
+                        </mat-form-field>
+
+                    </div>
+
+                    <div class="col-md-12">
+                        <mat-form-field class="matSmall w-100">
+                            <mat-label>Type</mat-label>
+                            <mat-select disabled="true" [(ngModel)]="containerType">
+                                <mat-option value="banner">Banner</mat-option>
+                                <mat-option value="category">Category</mat-option>
+                            </mat-select>
+
+                        </mat-form-field>
+
+                    </div>
+
+                     <input type="file" class="hide" accesskey="g" id="prodimg" accept="" #prodimg
+                                (change)="onImgSelected($event)" />
+
+                    <div class="selectImgButton" >
+                        
+                        <label for="prodimg">Select Img</label>
+
+                    </div>
+
+                    <div [ngClass]="containerType == 'banner' ? 'containerBanner' : 'containerCategory'" class="bannerImagePreview" [ngStyle]="{ 'background-image': 'url(' + containerImg + ')' }">
+
+                    </div>
 
 
+
+                </div>
+
+                <div class="modal-footer bg-mf-blue">
+                    <button class="btnsave" (click)="updateBannerData()">Save</button>
+                    <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
+                </div>
 
             </div>
-
-            <div class="modal-footer bg-mf-blue">
-                <button class="btnsave">Save</button>
-                <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
-            </div>
-
         </div>
     </div>
-</div>

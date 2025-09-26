@@ -1,6 +1,6 @@
 <mat-sidenav-container hasBackdrop="false">
     <mat-sidenav #orderDetailPanel mode="over" style="width:50%;z-index: 1000;overflow: auto;position: fixed;"
-        position="end" class="order-panel container mt-5 pt-4">
+        position="end" class="order-panel container mt-5 pt-4 pb-5">
         <div class="container-fluid pt-1">
             <div class="d-flex justify-content-between ">
                 <div class="d-flex flex-column">
@@ -33,6 +33,11 @@
             <hr>
 
             <div class="row">
+                <div class="d-flex flex-column" *ngIf="tmpOrderRow?.orderStatus == 'Cancelled'">
+                    <span class="fw-bold ">Cancellation Remarks : </span>
+                    <span>{{tmpOrderRow?.remarks}}</span>
+                </div>
+                <hr>
                 <div class="col-md-4 ">
                     <mat-label class="fw-bold">Customer Info</mat-label>
 
