@@ -203,6 +203,7 @@ formateType =1;
           '&catID=' + this.CategoryID + '&subCatID=' + this.SubCategoryID + '&reqUserID=' + this.userID + '&FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
             (Response: any) => {
+              console.log(Response);
               this.SaleDetailList = [];
               this.qtyTotal = 0;
               this.detNetTotal = 0;

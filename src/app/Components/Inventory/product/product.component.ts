@@ -176,7 +176,12 @@ export class ProductComponent implements OnInit {
 
   tmpStatusList = [{ title: 'Active', value: true, isChecked: false }, { title: 'In Active', value: false, isChecked: false }]
   tmpDiscFilterList = [{ title: 'With Disc', value: 1, isChecked: false }, { title: 'Without Disc', value: 0, isChecked: false }]
-  tmpApplinkedList = [{ title: 'Linked With APP', value: true, isChecked: false }, { title: 'Not Linked With App', value: false, isChecked: false }]
+  tmpApplinkedList = [
+    { title: 'Linked With APP', value: true, isChecked: false },
+    { title: 'Not Linked With App', value: false, isChecked: false },
+  ]
+
+  costGreaterThenSaleFilter:any = false;
 
 
   subCategoryFilterList: any = [];
@@ -210,6 +215,10 @@ export class ProductComponent implements OnInit {
       .filter((e: any) => e.isChecked)
       .map((e: any) => e.value);
 
+    
+
+
+
     this.productList = this.tempProdList.filter((p: any) =>
       (subCatList.length === 0 || subCatList.includes(p.subCategoryID)) &&
       (brandList.length === 0 || brandList.includes(p.brandID)) &&
@@ -223,7 +232,8 @@ export class ProductComponent implements OnInit {
             ? p.discPercentage <= 0
             : discList.includes(p.discPercentage)              // fallback for other cases
         )
-      )
+      )&&
+      ( this.costGreaterThenSaleFilter ? p.costPrice >  p.salePrice : true)
     );
 
 
@@ -734,26 +744,26 @@ export class ProductComponent implements OnInit {
 
     if (this.ImageUrlFeature) {
       this.productImg = row.imagesPath;
-    }else{
+    } else {
 
-       ////////////// Product Img Global Fucntion ///////////
-    this.global.getProdImage(row.productID).subscribe(
-      async (Response: any) => {
-        // this.productImg = Response[0].productImage;
-        if (Response[0].productImage !== '-') {
-          this.productImg = await this.compressBase64(Response[0].productImage, 400, 400, 0.5);
-        } else {
-          this.productImg = Response[0].productImage;
+      ////////////// Product Img Global Fucntion ///////////
+      this.global.getProdImage(row.productID).subscribe(
+        async (Response: any) => {
+          // this.productImg = Response[0].productImage;
+          if (Response[0].productImage !== '-') {
+            this.productImg = await this.compressBase64(Response[0].productImage, 400, 400, 0.5);
+          } else {
+            this.productImg = Response[0].productImage;
+          }
+
+
+
         }
-
-
-
-      }
-    )
+      )
 
     }
 
-   
+
 
 
 

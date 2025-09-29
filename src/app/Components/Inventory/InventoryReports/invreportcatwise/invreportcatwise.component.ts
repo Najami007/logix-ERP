@@ -353,7 +353,7 @@ export class InvreportcatwiseComponent implements OnInit {
           // this.inventoryList = Response;
 
           this.app.stopLoaderDark();
-          
+
 
           if (Response != null)
             this.getTotal()
@@ -659,6 +659,7 @@ export class InvreportcatwiseComponent implements OnInit {
     { id: 5, title: 'Plus Only' },
     { id: 3, title: 'Hide Zero' },
     { id: 4, title: 'Zero Only' },
+    { id: 6, title: 'Cost > Sale' },
 
   ]
 
@@ -683,6 +684,10 @@ export class InvreportcatwiseComponent implements OnInit {
 
     if (this.filterID == 5) {
       this.inventoryList = this.tmpInventoryList.filter((e: any) => (e.qtyIn - e.qtyOut) > 0)
+    }
+
+     if (this.filterID == 6) {
+      this.inventoryList = this.tmpInventoryList.filter((e: any) => e.costPrice > e.salePrice )
     }
 
 

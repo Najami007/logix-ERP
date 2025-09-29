@@ -26,7 +26,8 @@
             <div>
                 <div class="d-flex justify-content-between">
                     <mat-label class="fw-bold">Sub Categories</mat-label>
-                    <mat-label  *ngIf="subCategoryFilterList!.length > 10" class="fs-10px text-secondary border-bottom cursorPointer"
+                    <mat-label *ngIf="subCategoryFilterList!.length > 10"
+                        class="fs-10px text-secondary border-bottom cursorPointer"
                         (click)="showAllFilterSubCategories = !showAllFilterSubCategories">{{showAllFilterSubCategories
                         ? 'Show Less' : 'Show all'}}</mat-label>
                 </div>
@@ -61,7 +62,7 @@
                         <mat-checkbox [(ngModel)]="item.isChecked"> {{item.brandTitle}}</mat-checkbox>
                     </div>
                 </div>
-                   <div class="d-flex flex-wrap" *ngIf="showAllFilterBrandList">
+                <div class="d-flex flex-wrap" *ngIf="showAllFilterBrandList">
                     <div *ngFor="let item of BrandList">
                         <mat-checkbox [(ngModel)]="item.isChecked"> {{item.brandTitle}}</mat-checkbox>
                     </div>
@@ -98,6 +99,11 @@
                     <div *ngFor="let item of tmpApplinkedList">
                         <mat-checkbox [(ngModel)]="item.isChecked"> {{item.title}}</mat-checkbox>
                     </div>
+
+                    <div>
+                        <mat-checkbox [(ngModel)]="costGreaterThenSaleFilter"> Cost Price > Sale Price</mat-checkbox>
+                    </div>
+
                 </div>
 
 
@@ -366,7 +372,7 @@
                                 <label (click)="productImg = ''"><mat-icon class=" mt-1">delete</mat-icon></label>
                             </div>
                             <div class="avatar-preview">
-                                
+
                                 <!-- <img [src]="productImg" > -->
                                 <div (click)="this.global.showProductImage(productImg,0)" accesskey="i"
                                     id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + productImg + ')' }">
@@ -427,7 +433,7 @@
                                 (keypress)="onProdSearchKeyup($event,searchProduct)" matInput #searchProd
                                 [(ngModel)]="searchProduct">
                         </mat-form-field>
-                       <div class="col-lg-1">
+                        <div class="col-lg-1">
                             <button style="height: 40px;" class="btn-rpt-primary w-100"
                                 (click)="global.printData('#prodTable')">Print</button>
                         </div>
@@ -488,10 +494,14 @@
                                     <td *ngIf="!ManufacturingFeature">{{item.gst}}%</td>
                                     <td>{{item.entryUser}}</td>
                                     <td class="cursorPointer hide-in-print" *ngIf="!ManufacturingFeature">
-                                        <img [src]="item.imagesPath" *ngIf="ImageUrlFeature" (click)="this.global.showProductImage(item.imagesPath,0)" width="20px" height="20px" >
-                                        <mat-icon *ngIf="item.productImage == 'Yes' && !ImageUrlFeature" class="text-primary"
+                                        <img [src]="item.imagesPath" *ngIf="ImageUrlFeature"
+                                            (click)="this.global.showProductImage(item.imagesPath,0)" width="20px"
+                                            height="20px">
+                                        <mat-icon *ngIf="item.productImage == 'Yes' && !ImageUrlFeature"
+                                            class="text-primary"
                                             (click)="this.global.showProductImage('',item.productID)">image</mat-icon>
-                                        <mat-icon *ngIf="item.productImage == '-'  && !ImageUrlFeature">cancel_presentation</mat-icon>
+                                        <mat-icon
+                                            *ngIf="item.productImage == '-'  && !ImageUrlFeature">cancel_presentation</mat-icon>
                                     </td>
                                     <td *ngIf="MultiBarcode && !ManufacturingFeature"
                                         class="cursorPointer hide-in-print">

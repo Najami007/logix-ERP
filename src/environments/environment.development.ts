@@ -11,14 +11,14 @@ export const environment = {
 
   //mainApi: 'http://192.168.100.37:1000/',
   // mainApi: 'http://localhost:5000/', 
-  // mainApi: 'http://localhost:8060/',         /////////// system own published API
+   mainApi: 'http://localhost:8060/',         /////////// system own published API
   // mainApi: 'http://10.73.14.19:8060/',    
   // mainApi: 'http://192.168.160.98:8060/',  ////////// live Server Dani System
   //mainApi: 'http://192.168.100.250:1007/',  ////////// live Server Dani System
   //mainApi: 'http://192.168.10.100:1003/',    /////////// Local Server Office
   // mainApi: 'http://192.168.18.206:8060/',
   //mainApi: 'http://159.69.174.21:1000/', /////// Logix Solutionz Published Accounts
-   mainApi: 'http://159.69.174.21:2016/',   /////// Erp Demo Live For Clients
+  // mainApi: 'http://159.69.174.21:2016/',   /////// Erp Demo Live For Clients
 
   //mainApi: 'http://192.168.1.150:8060/', ///////////// Mehria Enclave Store
 
@@ -63,9 +63,9 @@ export const environment = {
   // mainApi: 'http://192.168.123.100:8060/',    /////////// Jazeera Foods Commercial API Branch 2
 
 
-  //mainApi: 'http://192.168.100.100:8090/',    /////////// Awani Mall Attock Kamra
+  // mainApi: 'http://192.168.100.100:8090/',    /////////// Awani Mall Attock Kamra
   //mainApi: 'http://localhost:8080/',    /////////// Awani Mall Attock Kamra
-  //mainApi: 'http://159.69.174.21:2021/' //////////////// Awani Mall Live
+ // mainApi: 'http://159.69.174.21:2021/' //////////////// Awani Mall Live
 
   //mainApi: 'http://localhost:8080/',    /////////// Rahat Bakers Quetta
   //mainApi: 'http://192.168.10.100:8090/',    /////////// Rahat Bakers Quetta
