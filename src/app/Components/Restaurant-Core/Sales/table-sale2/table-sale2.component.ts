@@ -113,7 +113,6 @@ export class TableSale2Component implements OnInit {
     this.getBankList();
     this.getSavedBill();
     this.getBookerList();
-    
   }
 
 

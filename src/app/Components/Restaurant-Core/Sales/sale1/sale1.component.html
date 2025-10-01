@@ -1,6 +1,7 @@
-<div class="container-fluid d-flex  body" ondblclick="return false;">
+<div class="container-fluid d-flex  body SaleContainer webContainer" ondblclick="return false;">
 
-    <div class="col-lg-8 prodArea ">
+
+    <div class="col-md-8 ">
 
 
         <!-----------   categories Row ------------------->
@@ -63,17 +64,17 @@
 
     </div>
 
-    <div class=" col-lg-4 bg-gray billArea  border-0 border-start"
-        style="right: 0%; height: 100vh;position:fixed;overflow: scroll;">
+    <div class=" col-md-4 bg-gray  border-0 border-start"
+        style="right: 0%;top: 8%; height: 100vh;position:fixed;overflow: scroll;">
 
         <!-----------   Table Side First Row ------------------->
 
         <div class=" d-flex ">
-            <div class="col-lg-3  text-center pt-3 tn  border">
+            <div class="col-md-3  text-center pt-3  border">
                 <p style="font-size: 20px;"><strong>{{tableTitle}}</strong></p>
             </div>
 
-            <div class="col-lg-7 pt-3 text-center ot border">
+            <div class="col-md-7 pt-3 text-center  border">
 
                 <p style="font-size: 20px;"><strong>{{orderType}}</strong></p>
                 <!-- <select class="w-100 border-0 bg-gray" disabled="true" [(ngModel)]="orderType">
@@ -81,7 +82,7 @@
                 </select> -->
 
             </div>
-            <div class="col-lg-2 chng p-1 text-center  border">
+            <div class="col-md-2 chng p-1 text-center  border">
                 <button class="btn btn-warning" [disabled]="orderType == ''" data-bs-toggle="modal"
                     data-bs-target="#NewBill">Change</button>
 
@@ -91,7 +92,7 @@
         <div style="min-height: 400px;" class="p-2">
 
             <!-----------   Bill Area ------------------->
-            <div class="billTable" style="height: 47vh;">
+            <div style="height: 47vh;overflow-y: auto;">
 
                 <table class="table-logix cursorPointer">
                     <thead>
@@ -137,7 +138,7 @@
 
 
             <!-----------   Bill Total Amount Section ------------------->
-            <div class="d-flex bg-white border-top p-1 col-lg-4 btas" style="position: fixed;bottom: 45px;right: 0%;">
+            <div class="d-flex bg-white border-top p-1 col-lg-4" style="position: fixed;bottom: 45px;right: 0%;">
 
 
                 <div class="justify-content-between p-1 w-50 border-end">
@@ -145,9 +146,11 @@
                     <div class="d-flex justify-content-between w-100">
                         <p class="w-50 text-primary cursorPointer" style="font-size: 12px;"
                             (click)="global.openBootstrapModal('#disc',tableData.length > 0);focusTo('#discRs',$event)"
-                            accesskey="t">ADD DISCOUN<u>T</u><small>({{(billDiscount / subTotal) * 100 || 0}}%)</small>
+                            accesskey="t">ADD DISCOUN<u>T</u><small>({{(billDiscount / subTotal) * 100 ||
+                                0}}%)</small>
                         </p>
-                        <p class="text-center font-digit" style="font-size: 2rem;">{{billDiscount |number:'1.0-2'}}</p>
+                        <p class="text-center font-digit" style="font-size: 2rem;">{{billDiscount |number:'1.0-2'}}
+                        </p>
                         <!-- <input disabled="true" [(ngModel)]="billDiscount" class="w-50 text-end" (keyup)="getTotal();"
                             (keydown)="getTotal();this.global.handleNumKeys($event)" /> -->
                     </div>
@@ -269,7 +272,8 @@
         </div>
     </div>
 
-    <!-- <div class="hide col-lg-4 bg-gray billArea  border-0 border-start"
+
+    <!-- <div class="col-lg-4 bg-gray billArea  border-0 border-start"
         style="right: 0%; height: 100vh;position:fixed;overflow: scroll;">
 
 
@@ -421,182 +425,311 @@
 
 
 
-    <!----------------Modal Window for Void Quantity ---------->
+</div>
 
 
+<div class="container-fluid d-flex  body  SaleContainer  mobileContainer">
 
-    <div class="modal fade" id="voidQtyModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-labelledby="voidQtyModalLabel">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-                <div class="modal-body">
-                    <form method="post">
+    <div class="col-lg-12">
 
-                        <mat-label class="text-center">Enter Void Quantity</mat-label>
-                        <div class="d-flex">
+        <!-----------   Table Side First Row ------------------->
+        <div class="d-flex w-100 mb-2 border-bottom border-2">
+            <div class="w-25 text-center fw-bold pt-2"><span class="w-100">{{tableTitle}}</span></div>
 
-                            <mat-form-field appearance="outline" class="w-100 matSmall">
-                                <input class="voidQuantity text-center" name="voidQuantity" [(ngModel)]="voidQty"
-                                    (keydown)="this.global.handleNumKeys($event)" type="number" min="0" matInput />
-                            </mat-form-field>
-
-                        </div>
-
-                        <div class="text-center d-flex justify-content-between ">
-                            <button class="btn btn-success" data-bs-dismiss="modal"
-                                (click)="deleteRow(tempDeleteRow,voidQty)">Save</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                (click)="tempQty = 1">Close</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!---------------------------------------------------------->
-
-
-
-
-
-
-    <!----------------Modal Window for Merging Bill---------->
-
-
-
-    <div class="modal fade" id="mergeBill" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-labelledby="mergeBillLabel">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-scrollable modal-dialog-centered modal-sm">
-            <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-                <div class="modal-body">
-
-
-                    <mat-form-field appearance="outline" class="w-50 pe-2 matSmall">
-                        <mat-label>Bill No 1</mat-label>
-                        <mat-select [(ngModel)]="mergeBillNo1">
-                            <mat-option [disabled]="mergeBillNo2 == item.invBillNo" *ngFor="let item of holdBillList"
-                                [value]="item.invBillNo">{{item.tableTitle}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <mat-form-field appearance="outline" class="w-50  matSmall">
-                        <mat-label>Bill No 2</mat-label>
-                        <mat-select [(ngModel)]="mergeBillNo2">
-                            <mat-option [disabled]="mergeBillNo1 == item.invBillNo" *ngFor="let item of holdBillList"
-                                [value]="item.invBillNo">{{item.tableTitle}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-
-
-                </div>
-
-                <div class="modal-footer bg-mf-blue">
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal"
-                        (click)="mergeBills()">Print</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+            <div class="w-50 text-center fw-bold pt-2">{{orderType}}</div>
+            <div class="w-25 text-end ">
+                <button class="btn btn-warning w-50" [disabled]="orderType == ''" data-bs-toggle="modal"
+                    data-bs-target="#NewBill">Change</button>
 
             </div>
         </div>
-    </div>
 
-    <!---------------------------------------------------------->
+        <div class="border-top border-bottom border-dark d-flex justify-content-between mb-1">
+            <span>Total: <b>{{subTotal|number:'1.0-0'}}</b></span>
+            <span class="cursorPointer"
+                (click)="global.openBootstrapModal('#disc',tableData.length > 0);focusTo('#discRs',$event)">Disc:
+                <b>{{billDiscount|number:'1.0-0'}}</b></span>
+            <span class="cursorPointer" (click)="openOtherChargesModal();focusTo('#deliveryCharges',$event)">Service
+                Charges: <b>{{OtherCharges|number:'1.0-0'}}</b></span>
+            <span>Net: <b>{{netTotal|number:'1.0-0'}}</b></span>
+        </div>
+
+        <!-----------   Bill Total Amount Section ------------------->
+
+        <div class="w-100 d-flex justify-content-around">
 
 
+            <button mat-fab class="text-white bg-danger " matTooltip="Retrieve Hold Bills"
+                (click)="global.openBootstrapModal('#retrieveBill',true);getHoldBills()">Retrieve</button>
 
-    <!------------------------------ Design For Merged Bill Pirnt  --------------------->
+            <button mat-fab class="text-white bg-primary " *ngIf="holdbtnType == 'hold'"
+                (click)="save('hold',false,false)">HOLD</button>
+
+            <button mat-fab class="text-white bg-primary" *ngIf="holdbtnType == 'rehold'"
+                (click)="save('rehold',false,false)">ReHold</button>
 
 
+            <button mat-fab class="text-white bg-success"
+                (click)="global.openBootstrapModal('#paymentMehtod',this.tableData != '');focusTo('#cash',$event);generateGst()"><mat-icon>
+                    save</mat-icon></button>
 
-    <div id="mergePrint" class="d-none">
-        <div class="text-center">
-            <img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
-            <h2 *ngIf="showCmpNameFeature">{{companyName}}</h2>
-            <h2 *ngIf="!showCmpNameFeature"></h2>
-            <p style="margin-top: -10px;" class="fs-11 text-uppercase">{{companyAddress}}</p>
-            <p style="margin-top: -20px;" class="fs-11">{{CompanyMobile}}</p>
+
+            <button mat-fab class="text-white bg-warning" [disabled]="tableData != ''"
+                (click)="getTable();global.openBootstrapModal('#NewBill',true);reset()"><mat-icon>add</mat-icon></button>
+
+            <button mat-fab class="text-white bg-warning"
+                (click)="global.openBootstrapModal('#prodModal',true)"><mat-icon>
+                    restaurant_menu</mat-icon></button>
+            <!-- 
+                <button mat-fab class=" text-white bg-warning" accesskey="n" *ngIf="CommentCardFeature"
+                    (click)="global.openBootstrapModal('#holdedBillModal',true)"><mat-icon> comment</mat-icon></button> -->
 
         </div>
 
+        <div style="min-height: 400px;" class="mt-1">
 
-        <div class="p-1">
-            <div>
-                <table class="table-logix2">
+            <!-----------   Bill Area ------------------->
+            <div style="height: 65vh;overflow-y: auto;">
+
+                <table class="table cursorPointer table1 mb-4">
                     <thead>
-                        <tr>
-                            <th>Inv #</th>
-                            <th>Date</th>
-                            <th>Counter</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-center">
-                        <tr>
-                            <td>({{mergeBillNo1}}) ({{mergeBillNo2}})</td>
-                            <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
-                            <td>{{myCounter}}</td>
-                        </tr>
-
-                    </tbody>
-                </table>
-
-                <tr>
-                    <th>Remarks:-</th>
-                    <td class="ms-2">{{myRemarks}}</td>
-                </tr>
-            </div>
-
-            <div>
-                <table class="table-logix2">
-                    <thead>
-                        <tr>
+                        <tr class="border-top border-bottom border-dark">
                             <th>S#</th>
-                            <th>Table</th>
-                            <th>Title</th>
-                            <th>Qty</th>
-                            <th>Price</th>
-                            <th>Total</th>
-
+                            <th class="col-lg-4">Title</th>
+                            <th class="col-lg-2">Price</th>
+                            <th class="col-lg-2 text-center">Qty</th>
+                            <th class="col-lg-2">Total</th>
+                            <th class="cursorPointer" (click)="voidBill()">Del</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of myPrintData index as index">
+                        <tr *ngFor="let item of tableData index as index">
                             <td>{{index +1}}</td>
-                            <td class="text-start">{{item.tableTitle}}</td>
-                            <td class="text-start">{{item.productTitle}}</td>
-                            <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
-                            <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
-                            <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
+                            <td>{{item.productTitle}}</td>
+                            <td>{{item.salePrice |number:'1.0-1'}}</td>
+                            <td class="text-center" (click)="editQty(item,index)">
+                                {{item.quantity}}
+                            </td>
+                            <td>{{item.salePrice * item.quantity |number:'1.0-1'}}</td>
+                            <td><mat-icon class="text-danger" *ngIf="item.entryType == 'New'"
+                                    (click)="deleteRow(item,'')">delete</mat-icon>
+
+                                <!-------------- will Open void Qty modal when void button click ------------------->
+                                <mat-icon class="text-danger" data-bs-toggle="modal" data-bs-target="#voidQtyModal"
+                                    *ngIf="item.entryType == 'Saved'"
+                                    (click)="tempDeleteRow = item">indeterminate_check_box</mat-icon>
+                            </td>
 
                         </tr>
                     </tbody>
                 </table>
 
-                <table class="w-100 text-end mt-2">
-                    <tbody>
-                        <tr>
-                            <th>Sub Total</th>
-                            <td>{{mySubTotal |number:'1.0-0'}}</td>
 
-                        </tr>
-                        <tr *ngIf="myOtherCharges != 0">
-                            <!-- <th *ngIf="myOrderType == 'Dine In'">Service Charges</th> -->
-                            <!-- <th *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</th>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+<!----------------Modal Window for Void Quantity ---------->
+
+
+
+<div class="modal fade" id="voidQtyModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    aria-labelledby="voidQtyModalLabel">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+            <div class="modal-body">
+                <form method="post">
+
+                    <mat-label class="text-center">Enter Void Quantity</mat-label>
+                    <div class="d-flex">
+
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <input class="voidQuantity text-center" name="voidQuantity" [(ngModel)]="voidQty"
+                                (keydown)="this.global.handleNumKeys($event)" type="number" min="0" matInput />
+                        </mat-form-field>
+
+                    </div>
+
+                    <div class="text-center d-flex justify-content-between ">
+                        <button class="btn btn-success" data-bs-dismiss="modal"
+                            (click)="deleteRow(tempDeleteRow,voidQty)">Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            (click)="tempQty = 1">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------------------------->
+
+
+
+
+
+
+<!----------------Modal Window for Merging Bill---------->
+
+
+
+<div class="modal fade" id="mergeBill" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    aria-labelledby="mergeBillLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-scrollable modal-dialog-centered modal-sm">
+        <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+            <div class="modal-body">
+
+
+                <mat-form-field appearance="outline" class="w-50 pe-2 matSmall">
+                    <mat-label>Bill No 1</mat-label>
+                    <mat-select [(ngModel)]="mergeBillNo1">
+                        <mat-option [disabled]="mergeBillNo2 == item.invBillNo" *ngFor="let item of holdBillList"
+                            [value]="item.invBillNo">{{item.tableTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="w-50  matSmall">
+                    <mat-label>Bill No 2</mat-label>
+                    <mat-select [(ngModel)]="mergeBillNo2">
+                        <mat-option [disabled]="mergeBillNo1 == item.invBillNo" *ngFor="let item of holdBillList"
+                            [value]="item.invBillNo">{{item.tableTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+            </div>
+
+            <div class="modal-footer bg-mf-blue">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal"
+                    (click)="mergeBills()">Print</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------------------------->
+
+
+
+<!------------------------------ Design For Merged Bill Pirnt  --------------------->
+
+
+
+<div id="mergePrint" class="d-none">
+    <div class="text-center">
+        <img [src]="companyLogo" [height]="logoHeight" [width]="logoWidth">
+        <h2 *ngIf="showCmpNameFeature">{{companyName}}</h2>
+        <h2 *ngIf="!showCmpNameFeature"></h2>
+        <p style="margin-top: -10px;" class="fs-11 text-uppercase">{{companyAddress}}</p>
+        <p style="margin-top: -20px;" class="fs-11">{{CompanyMobile}}</p>
+
+    </div>
+
+
+    <div class="p-1">
+        <div>
+            <table class="table-logix2">
+                <thead>
+                    <tr>
+                        <th>Inv #</th>
+                        <th>Date</th>
+                        <th>Counter</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr>
+                        <td>({{mergeBillNo1}}) ({{mergeBillNo2}})</td>
+                        <td>{{myInvDate | date:'dd-MM-yyyy hh:mm:a'}}</td>
+                        <td>{{myCounter}}</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <tr>
+                <th>Remarks:-</th>
+                <td class="ms-2">{{myRemarks}}</td>
+            </tr>
+        </div>
+
+        <div>
+            <table class="table-logix2">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Table</th>
+                        <th>Title</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Total</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of myPrintData index as index">
+                        <td>{{index +1}}</td>
+                        <td class="text-start">{{item.tableTitle}}</td>
+                        <td class="text-start">{{item.productTitle}}</td>
+                        <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-2'}}</td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="w-100 text-end mt-2">
+                <tbody>
+                    <tr>
+                        <th>Sub Total</th>
+                        <td>{{mySubTotal |number:'1.0-0'}}</td>
+
+                    </tr>
+                    <tr *ngIf="myOtherCharges != 0">
+                        <!-- <th *ngIf="myOrderType == 'Dine In'">Service Charges</th> -->
+                        <!-- <th *ngIf="myOrderType == 'Home Delivery'">Delivery Charges</th>
                         <th *ngIf="myOrderType == 'Take Away'">Other Charges</th> -->
-                            <th>Service Charges</th>
-                            <td>{{myOtherCharges|number:'1.0-0'}}</td>
+                        <th>Service Charges</th>
+                        <td>{{myOtherCharges|number:'1.0-0'}}</td>
 
-                        </tr>
-                        <tr>
-                            <th>Net Total</th>
-                            <td>{{mySubTotal + myOtherCharges|number:'1.0-0'}}</td>
+                    </tr>
+                    <tr>
+                        <th>Net Total</th>
+                        <td>{{mySubTotal + myOtherCharges|number:'1.0-0'}}</td>
 
-                        </tr>
+                    </tr>
 
 
-                    </tbody>
-                </table>
+                </tbody>
+            </table>
 
-                <!-- <div class="d-flex  text-end" style="text-align: end;">
+            <!-- <div class="d-flex  text-end" style="text-align: end;">
     
                     <div class="col-lg-4"></div>
                     <div class="col-lg-4"></div>
@@ -614,131 +747,131 @@
     
                     </div>
                 </div> -->
-            </div>
-            <hr>
-            <p>Wish To Serve You Again!</p>
+        </div>
+        <hr>
+        <p>Wish To Serve You Again!</p>
+    </div>
+</div>
+
+
+<!---------------------------------------------------------------------------------->
+
+
+
+<!------------------------------ Design For Bill Pirnt  --------------------->
+
+<app-rest-sale-bill-print id="print-bill" class="hide"></app-rest-sale-bill-print>
+<app-rest-kot-print id="print-Kot" class="hide"></app-rest-kot-print>
+
+
+<!---------------------------------------------------------------------------------->
+
+
+<!----------------Modal Window for Discount ---------->
+
+
+<div class="modal fade" id="disc" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    aria-labelledby="discLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm">
+        <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+            <form method="post">
+                <div class="modal-body">
+
+
+
+                    <div class="row">
+                        <mat-form-field appearance="outline" class="w-50 matSmall">
+                            <mat-label>Disc %</mat-label>
+                            <input class="prodQty" [(ngModel)]="discPer" name="discountPercent" id="discPer"
+                                (keydown)="this.global.handleNumKeys($event);genDisc('perc')" (keyup)="genDisc('perc')"
+                                type="number" min="0" matInput #bDiscPer />
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" class="w-50 matSmall">
+                            <mat-label>Disc Amt</mat-label>
+                            <input class="prodQty" [(ngModel)]="discAmount" name="discountAmount" id="discRs"
+                                (keydown)="this.global.handleNumKeys($event);genDisc('amt')" (keyup)="genDisc('amt')"
+                                type="number" min="0" matInput #bDiscAmt />
+                        </mat-form-field>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer text-end p-3 bg-mf">
+                    <button class="btn btn-success" (click)="verifyDiscount();">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+
         </div>
     </div>
-
-
-    <!---------------------------------------------------------------------------------->
-
-
-
-    <!------------------------------ Design For Bill Pirnt  --------------------->
-
-    <app-rest-sale-bill-print id="print-bill" class="hide"></app-rest-sale-bill-print>
-    <app-rest-kot-print id="print-Kot" class="hide"></app-rest-kot-print>
-
-
-    <!---------------------------------------------------------------------------------->
-
-
-    <!----------------Modal Window for Discount ---------->
-
-
-    <div class="modal fade" id="disc" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-labelledby="discLabel">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm">
-            <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-                <form method="post">
-                    <div class="modal-body">
+</div>
 
 
 
+<!----------------Modal Window for Quantity ---------->
+
+
+
+<div class="modal fade" id="qtyModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    aria-labelledby="qtyModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm">
+        <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+            <div class="modal-body">
+                <div>
+                    <form method="post">
+                        <mat-label class="text-center">Enter Quantity</mat-label>
                         <div class="row">
-                            <mat-form-field appearance="outline" class="w-50 matSmall">
-                                <mat-label>Disc %</mat-label>
-                                <input class="prodQty" [(ngModel)]="discPer" name="discountPercent" id="discPer"
-                                    (keydown)="this.global.handleNumKeys($event);genDisc('perc')"
-                                    (keyup)="genDisc('perc')" type="number" min="0" matInput #bDiscPer />
+
+                            <mat-form-field appearance="outline" class="w-100 matSmall">
+                                <mat-icon (click)="increment('add',tempQty)" matPrefix>add</mat-icon>
+
+                                <input class="prodQty text-center" name="prodQty" [(ngModel)]="tempQty"
+                                    (keydown)="this.global.handleNumKeys($event);onPriceChange('qty')"
+                                    (keyup)="onPriceChange('qty')" type="number" min="0" matInput #prodQty />
+                                <mat-icon (click)="increment('minus',tempQty)" matSuffix>remove</mat-icon>
                             </mat-form-field>
-                            <mat-form-field appearance="outline" class="w-50 matSmall">
-                                <mat-label>Disc Amt</mat-label>
-                                <input class="prodQty" [(ngModel)]="discAmount" name="discountAmount" id="discRs"
-                                    (keydown)="this.global.handleNumKeys($event);genDisc('amt')"
-                                    (keyup)="genDisc('amt')" type="number" min="0" matInput #bDiscAmt />
+
+                            <mat-form-field appearance="outline" class="w-100 matSmall">
+                                <mat-label>Price</mat-label>
+                                <input class="text-center" name="prodPrice" (keyup)="onPriceChange('price')"
+                                    [(ngModel)]="tmpTotalPrice"
+                                    (keydown)="this.global.handleNumKeys($event);onPriceChange('price')" type="number"
+                                    min="0" matInput #prodPrice />
                             </mat-form-field>
+
                         </div>
 
-
-                    </div>
-                    <div class="modal-footer text-end p-3 bg-mf">
-                        <button class="btn btn-success" (click)="verifyDiscount();">Save</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </form>
-
-            </div>
-        </div>
-    </div>
-
-
-
-    <!----------------Modal Window for Quantity ---------->
-
-
-
-    <div class="modal fade" id="qtyModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-labelledby="qtyModalLabel">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm">
-            <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-                <div class="modal-body">
-                    <div>
-                        <form method="post">
-                            <mat-label class="text-center">Enter Quantity</mat-label>
-                            <div class="row">
-
-                                <mat-form-field appearance="outline" class="w-100 matSmall">
-                                    <mat-icon (click)="increment('add',tempQty)" matPrefix>add</mat-icon>
-
-                                    <input class="prodQty text-center" name="prodQty" [(ngModel)]="tempQty"
-                                        (keydown)="this.global.handleNumKeys($event);onPriceChange('qty')"
-                                        (keyup)="onPriceChange('qty')" type="number" min="0" matInput #prodQty />
-                                    <mat-icon (click)="increment('minus',tempQty)" matSuffix>remove</mat-icon>
-                                </mat-form-field>
-
-                                <mat-form-field appearance="outline" class="w-100 matSmall">
-                                    <mat-label>Price</mat-label>
-                                    <input class="text-center" name="prodPrice" (keyup)="onPriceChange('price')"
-                                        [(ngModel)]="tmpTotalPrice"
-                                        (keydown)="this.global.handleNumKeys($event);onPriceChange('price')"
-                                        type="number" min="0" matInput #prodPrice />
-                                </mat-form-field>
-
-                            </div>
-
-                            <div class="text-center d-flex justify-content-between ">
-                                <button class="btn btn-success" data-bs-dismiss="modal"
-                                    (click)="changeQty(tempQty);">Save</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                    (click)="tempQty = 1;recipeSearch.focus()">Close</button>
-                            </div>
-                        </form>
-                    </div>
+                        <div class="text-center d-flex justify-content-between ">
+                            <button class="btn btn-success" data-bs-dismiss="modal"
+                                (click)="changeQty(tempQty);">Save</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                (click)="tempQty = 1;recipeSearch.focus()">Close</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!---------------------------------------------------------->
-
-
-
-    <!----------------Modal Window for Payment Mehtod ---------->
+<!---------------------------------------------------------->
 
 
 
-    <div class="modal fade" id="paymentMehtod" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-labelledby="paymentMehtodLabel">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered ">
-            <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-                <div class="modal-header">
-                    <h2 class="modal-title" id="paymentMehtodLabel">Payment Method</h2>
-                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
-                </div>
-                <div class="modal-body">
-                    <!-- 
+<!----------------Modal Window for Payment Mehtod ---------->
+
+
+
+<div class="modal fade" id="paymentMehtod" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    aria-labelledby="paymentMehtodLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered ">
+        <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+            <div class="modal-header">
+                <h2 class="modal-title" id="paymentMehtodLabel">Payment Method</h2>
+                <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+            </div>
+            <div class="modal-body">
+                <!-- 
 
                     <div class="d-flex justify-content-between fw-bold">
                         <h4 class="text-center text-success">Bill Total: {{netTotal + GstAmount | number:'1.0-1'}}</h4>
@@ -748,227 +881,265 @@
                         </h4>
                         <h4 class="text-center text-danger">Change: {{ change | number:'1.0-1'}}</h4>
                     </div> -->
-                    <div class="row">
-                        <label class="fw-bold">Add Document</label>
-                        <div>
-                            <input accept=".pdf" (change)="onDocSelected($event)" #vDoc type="file" id="vDoc"
-                                class=" mb-2">
-                        </div>
-                        <mat-form-field *ngIf="!disableDate" appearance="outline" class="col-lg-12 matSmall">
-                            <mat-label>Date</mat-label>
-                            <input matInput type="text" readonly="true" [(ngModel)]="invoiceDate"
-                                [matDatepicker]="invDate">
-                            <mat-datepicker-toggle matSuffix [for]="invDate"></mat-datepicker-toggle>
-                            <mat-datepicker #invDate></mat-datepicker>
-                        </mat-form-field>
+                <div class="row">
+                    <label class="fw-bold">Add Document</label>
+                    <div>
+                        <input accept=".pdf" (change)="onDocSelected($event)" #vDoc type="file" id="vDoc" class=" mb-2">
+                    </div>
+                    <mat-form-field *ngIf="!disableDate" appearance="outline" class="col-lg-12 matSmall">
+                        <mat-label>Date</mat-label>
+                        <input matInput type="text" readonly="true" [(ngModel)]="invoiceDate" [matDatepicker]="invDate">
+                        <mat-datepicker-toggle matSuffix [for]="invDate"></mat-datepicker-toggle>
+                        <mat-datepicker #invDate></mat-datepicker>
+                    </mat-form-field>
 
-                        <mat-form-field appearance="outline" class="col-lg-6 matSmall">
-                            <mat-label>Customer Name</mat-label>
-                            <input type="text" matInput [(ngModel)]="customerName" />
-                        </mat-form-field>
-                        <mat-form-field appearance="outline" class="col-lg-6 matSmall">
-                            <mat-label>Customer Mobile</mat-label>
-                            <input matInput type="text" [textMask]="{mask:mobileMask}" [(ngModel)]="customerMobileno" />
-                        </mat-form-field>
+                    <mat-form-field appearance="outline" class="col-lg-6 matSmall">
+                        <mat-label>Customer Name</mat-label>
+                        <input type="text" matInput [(ngModel)]="customerName" />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="col-lg-6 matSmall">
+                        <mat-label>Customer Mobile</mat-label>
+                        <input matInput type="text" [textMask]="{mask:mobileMask}" [(ngModel)]="customerMobileno" />
+                    </mat-form-field>
 
 
-                        <div class="w-100 mb-3" *ngIf="customerFeature">
-                            <ng-select class="w-100 custom" placeholder="Customer" appearance="outline"
-                                [(ngModel)]="PartyID" (ngModelChange)="partySelect()" name="customer">
-                                <ng-option [value]="0">WalkIn Customer</ng-option>
-                                <ng-option *ngFor="let item of partyList " [value]="item.partyID">
-                                    {{item.partyName}}</ng-option>
-                            </ng-select>
-                        </div>
-
-                        <mat-form-field class="w-100 matSmall" appearance="outline" *ngIf="tabletPrintFeature">
-                            <mat-label>Remar<u>k</u>s</mat-label>
-                            <textarea rows="1" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
-                        </mat-form-field>
-
-                        <mat-form-field appearance="outline" class="w-100 matSmall">
-                            <mat-label>Payment Type</mat-label>
-                            <mat-select [(ngModel)]="paymentType"
-                                (selectionChange)="generateGst();PartyID = 0; cash = 0; bankCash = 0;getTotal()">
-                                <mat-option value="Credit" *ngIf="customerFeature">Credit</mat-option>
-                                <mat-option value="Cash">Cash</mat-option>
-                                <mat-option value="Bank">Bank</mat-option>
-                                <mat-option value="Split">Split</mat-option>
-                                <mat-option value="Complimentary">Complimentary</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-
-                        <mat-card class=" p-2 bg-warning" *ngIf="paymentType !== ''">
-
-                            <div class="d-flex justify-content-between text-center mb-2 ">
-                                <mat-label style="font-size: 25px;">Bill Total:</mat-label>
-                                <span class="fw-bold" style="font-size: 25px;">{{netTotal + GstAmount |
-                                    number:'1.0-1'}}</span>
-                            </div>
-                            <div class="d-flex justify-content-between text-center mb-2 " *ngIf="gstFeature">
-                                <mat-label style="font-size: 25px;">GST:</mat-label>
-                                <span class="fw-bold" style="font-size: 25px;">({{gstValue | number:'1.0-1'}}%)</span>
-                            </div>
-
-                            <div class="d-flex justify-content-between text-center mb-2 "
-                                *ngIf="paymentType == 'Cash' || paymentType == 'Split' || paymentType == 'Credit'">
-                                <mat-label style="font-size: 25px;">Cash:</mat-label>
-                                <input type="number" class="text-end" id="cash" style="font-size: 25px;width: 180px;"
-                                    (keydown)="this.global.handleNumKeys($event);getTotal();changeFocus('#save1',$event)"
-                                    (keyup)="getTotal()" [(ngModel)]="cash" />
-                            </div>
-
-                            <div class="d-flex justify-content-between  mb-2"
-                                *ngIf="paymentType == 'Bank' || paymentType == 'Split'  || paymentType == 'Credit'">
-                                <mat-label style="font-size: 25px;">Bank:</mat-label>
-                                <select [(ngModel)]="bankCoaID " style="width: 150px;"
-                                    (ngModelChange)="generateGst();getTotal()">
-                                    <option *ngFor="let item of bankCoaList" [value]="item.coaID">{{item.coaTitle}}
-                                    </option>
-                                </select>
-                                <!-- [disabled]="paymentType == 'Split' || paymentType == 'Bank'" -->
-
-                                <input type="number" style="font-size: 25px;width: 180px;" id="bank"
-                                    [disabled]="paymentType == 'Split' || paymentType == 'Bank'" class="text-end"
-                                    (keydown)="this.global.handleNumKeys($event);getTotal();changeFocus('#save1',$event)"
-                                    (keyup)="getTotal()" [(ngModel)]="bankCash" />
-                            </div>
-                            <div class="d-flex justify-content-between text-center mb-2 ">
-                                <mat-label style="font-size: 25px;">Change:</mat-label>
-                                <span class="fw-bold" style="font-size: 25px;">{{ change | number:'1.0-1'}}</span>
-                            </div>
-                        </mat-card>
+                    <div class="w-100 mb-3" *ngIf="customerFeature">
+                        <ng-select class="w-100 custom" placeholder="Customer" appearance="outline"
+                            [(ngModel)]="PartyID" (ngModelChange)="partySelect()" name="customer">
+                            <ng-option [value]="0">WalkIn Customer</ng-option>
+                            <ng-option *ngFor="let item of partyList " [value]="item.partyID">
+                                {{item.partyName}}</ng-option>
+                        </ng-select>
                     </div>
 
+                    <mat-form-field class="w-100 matSmall" appearance="outline" *ngIf="tabletPrintFeature">
+                        <mat-label>Remar<u>k</u>s</mat-label>
+                        <textarea rows="1" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
+                    </mat-form-field>
 
-                </div>
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Payment Type</mat-label>
+                        <mat-select [(ngModel)]="paymentType"
+                            (selectionChange)="generateGst();PartyID = 0; cash = 0; bankCash = 0;getTotal()">
+                            <mat-option value="Credit" *ngIf="customerFeature">Credit</mat-option>
+                            <mat-option value="Cash">Cash</mat-option>
+                            <mat-option value="Bank">Bank</mat-option>
+                            <mat-option value="Split">Split</mat-option>
+                            <mat-option value="Complimentary">Complimentary</mat-option>
+                        </mat-select>
+                    </mat-form-field>
 
-                <div class="modal-footer bg-mf-blue">
-                    <button class="btn btn-success" [disabled]="isProcessing" id="save1" ondblclick="return false"
-                        (click)="save('sale',true)">Save</button>
-                    <button class="btn btn-success d-none" id="save2" accesskey="."
-                        (click)="save('sale',false)">Save</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        (click)="paymentType = 'Cash';cash = 0; bankCash = 0">Close</button>
+                    <mat-card class=" p-2 bg-warning" *ngIf="paymentType !== ''">
+
+                        <div class="d-flex justify-content-between text-center mb-2 ">
+                            <mat-label style="font-size: 25px;">Bill Total:</mat-label>
+                            <span class="fw-bold" style="font-size: 25px;">{{netTotal + GstAmount |
+                                number:'1.0-1'}}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-center mb-2 " *ngIf="gstFeature">
+                            <mat-label style="font-size: 25px;">GST:</mat-label>
+                            <span class="fw-bold" style="font-size: 25px;">({{gstValue | number:'1.0-1'}}%)</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between text-center mb-2 "
+                            *ngIf="paymentType == 'Cash' || paymentType == 'Split' || paymentType == 'Credit'">
+                            <mat-label style="font-size: 25px;">Cash:</mat-label>
+                            <input type="number" class="text-end" id="cash" style="font-size: 25px;width: 180px;"
+                                (keydown)="this.global.handleNumKeys($event);getTotal();changeFocus('#save1',$event)"
+                                (keyup)="getTotal()" [(ngModel)]="cash" />
+                        </div>
+
+                        <div class="d-flex justify-content-between  mb-2"
+                            *ngIf="paymentType == 'Bank' || paymentType == 'Split'  || paymentType == 'Credit'">
+                            <mat-label style="font-size: 25px;">Bank:</mat-label>
+                            <select [(ngModel)]="bankCoaID " style="width: 150px;"
+                                (ngModelChange)="generateGst();getTotal()">
+                                <option *ngFor="let item of bankCoaList" [value]="item.coaID">{{item.coaTitle}}
+                                </option>
+                            </select>
+                            <!-- [disabled]="paymentType == 'Split' || paymentType == 'Bank'" -->
+
+                            <input type="number" style="font-size: 25px;width: 180px;" id="bank"
+                                [disabled]="paymentType == 'Split' || paymentType == 'Bank'" class="text-end"
+                                (keydown)="this.global.handleNumKeys($event);getTotal();changeFocus('#save1',$event)"
+                                (keyup)="getTotal()" [(ngModel)]="bankCash" />
+                        </div>
+                        <div class="d-flex justify-content-between text-center mb-2 ">
+                            <mat-label style="font-size: 25px;">Change:</mat-label>
+                            <span class="fw-bold" style="font-size: 25px;">{{ change | number:'1.0-1'}}</span>
+                        </div>
+                    </mat-card>
                 </div>
 
 
             </div>
-        </div>
-    </div>
 
-    <!---------------------------------------------------------->
-
-
-    <!----------------Modal Window for Selecteing New Bill---------->
-    <div class="modal fade" id="NewBill" tabindex="-1" aria-labelledby="NewBillLabel">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
-            <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-                <form method="post">
-                    <div class="modal-body">
-
-                        <div class="d-flex">
-                            <div class="col-lg-10" style="height: 50vh;overflow-y: scroll;">
-                                <table>
-                                    <tbody class="">
-                                        <tr style="display: inline-flex; " class="cursorPointer "
-                                            *ngFor="let item of tableList ">
-                                            <mat-card name="TableNo" class="btblbtn justify-content-center"
-                                                *ngIf="item.tableStatus == false"
-                                                [ngClass]="item.tableID == tempTableID ? 'bg-primary text-white' : 'bg-white'"
-                                                (click)="tempTableID = item.tableID">
-                                                <span>{{item.tableTitle}}</span>
-                                            </mat-card>
-                                            <mat-card name="TableNo"
-                                                class="btblbtn justify-content-center bg-warning text-white"
-                                                *ngIf="item.tableStatus == true">
-                                                <span>{{item.tableTitle}}</span>
-                                            </mat-card>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col-lg-2 border-start p-1">
-
-                                <mat-radio-group name="orderType" aria-label="Select an option"
-                                    [(ngModel)]="tempOrderType">
-                                    <mat-radio-button *ngFor="let item of orderTypeList"
-                                        [disabled]="invBillNo !== '' || tableData != ''"
-                                        (change)="onOrderTypeSelected(item.val)"
-                                        [value]="item.val">{{item.title}}</mat-radio-button>
-                                </mat-radio-group>
-
-                                <mat-form-field appearance="outline" class="w-100 pt-4 matSmall" *ngIf="coverOfFeature">
-                                    <mat-label>Cover</mat-label>
-                                    <input name="cover" type="number" (keydown)="this.global.handleNumKeys($event)"
-                                        matInput [(ngModel)]="coverOf" />
-                                </mat-form-field>
-
-                                <mat-form-field appearance="outline" class="col-lg-12 matSmall" *ngIf="waiterFeature">
-                                    <mat-label>Waiter</mat-label>
-                                    <mat-select [(ngModel)]="BookerID" name="waiter">
-                                        <mat-option class="d-none"><ngx-mat-select-search #bookerSearch
-                                                [placeholderLabel]="'Search...'"
-                                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                                        <mat-option *ngFor="let item of bookerList | filter:bookerSearch.value"
-                                            [value]="item.bookerID">{{item.bookerName}}</mat-option>
-                                    </mat-select>
-
-                                </mat-form-field>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="modal-footer bg-mf-blue">
-                        <button class="btn btn-success" (click)="selectT()">Save</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-
-                </form>
-
-
+            <div class="modal-footer bg-mf-blue">
+                <button class="btn btn-success" [disabled]="isProcessing" id="save1" ondblclick="return false"
+                    (click)="save('sale',true)">Save</button>
+                <button class="btn btn-success d-none" id="save2" accesskey="."
+                    (click)="save('sale',false)">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    (click)="paymentType = 'Cash';cash = 0; bankCash = 0">Close</button>
             </div>
+
+
         </div>
     </div>
+</div>
 
-    <!---------------------------------------------------------->
+<!---------------------------------------------------------->
 
 
-    <!----------------Modal Window for Retrieving Holded Bills ---------->
-    <div class="modal fade" id="retrieveBill" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-labelledby="retrieveBillLabel">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
-            <div class="modal-content " style="background-color: rgb(248, 247, 247);">
-
+<!----------------Modal Window for Selecteing New Bill---------->
+<div class="modal fade" id="NewBill" tabindex="-1" aria-labelledby="NewBillLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
+        <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+            <form method="post">
                 <div class="modal-body">
-                    <app-sale-holded-bill (billDetailEmitter)="getBillDetail($event)"
-                        [holdBillList]="holdBillList"></app-sale-holded-bill>
+
+                    <div class="border-start p-1 d-flex flex-wrap">
+
+                        <mat-radio-group name="tsOrderType" class="col-md-4" aria-label="Select an option"
+                            [(ngModel)]="tempOrderType">
+                            <mat-radio-button *ngFor="let item of orderTypeList" [disabled]="invBillNo !== '' "
+                                (change)="onOrderTypeSelected(item.val)"
+                                [value]="item.val">{{item.title}}</mat-radio-button>
+                        </mat-radio-group>
+
+                        <div class="col-md-2 pe-2">
+                            <mat-form-field appearance="outline" class="w-100 matSmall " *ngIf="coverOfFeature">
+                                <mat-label>Cover</mat-label>
+                                <input name="tsCover" type="number" (keydown)="this.global.handleNumKeys($event)"
+                                    matInput [(ngModel)]="coverOf" />
+                            </mat-form-field>
+                        </div>
+
+
+                        <div class="col-md-2">
+                            <mat-form-field appearance="outline" class="w-100 matSmall" *ngIf="waiterFeature">
+                                <mat-label>Waiter</mat-label>
+                                <mat-select [(ngModel)]="BookerID" name="waiter">
+                                    <mat-option class="d-none"><ngx-mat-select-search #bookerSearch
+                                            [placeholderLabel]="'Search...'"
+                                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                    <mat-option *ngFor="let item of bookerList | filter:bookerSearch.value"
+                                        [value]="item.bookerID">{{item.bookerName}}</mat-option>
+                                </mat-select>
+
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-12">
+                            <mat-form-field class="matSmall w-100">
+                                <mat-label>Search Table</mat-label>
+                                <input matInput #searchTable>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-lg-12" style="height: 50vh;overflow-y: scroll;">
+                        <table>
+                            <tbody class="">
+                                <tr style="display: inline-flex; " class="cursorPointer "
+                                    *ngFor="let item of tableList ">
+                                    <mat-card name="TableNo" class="btblbtn justify-content-center"
+                                        *ngIf="item.tableStatus == false"
+                                        [ngClass]="item.tableID == tempTableID ? 'bg-primary text-white' : 'bg-white'"
+                                        (click)="tempTableID = item.tableID">
+                                        <span>{{item.tableTitle}}</span>
+                                    </mat-card>
+                                    <mat-card name="TableNo"
+                                        class="btblbtn justify-content-center bg-warning text-white"
+                                        *ngIf="item.tableStatus == true">
+                                        <span>{{item.tableTitle}}</span>
+                                    </mat-card>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- <div class="col-lg-2 border-start p-1">
+
+                            <mat-radio-group name="orderType" aria-label="Select an option" [(ngModel)]="tempOrderType">
+                                <mat-radio-button *ngFor="let item of orderTypeList"
+                                    [disabled]="invBillNo !== '' || tableData != ''"
+                                    (change)="onOrderTypeSelected(item.val)"
+                                    [value]="item.val">{{item.title}}</mat-radio-button>
+                            </mat-radio-group>
+
+                            <mat-form-field appearance="outline" class="w-100 pt-4 matSmall" *ngIf="coverOfFeature">
+                                <mat-label>Cover</mat-label>
+                                <input name="cover" type="number" (keydown)="this.global.handleNumKeys($event)" matInput
+                                    [(ngModel)]="coverOf" />
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="col-lg-12 matSmall" *ngIf="waiterFeature">
+                                <mat-label>Waiter</mat-label>
+                                <mat-select [(ngModel)]="BookerID" name="waiter">
+                                    <mat-option class="d-none"><ngx-mat-select-search #bookerSearch
+                                            [placeholderLabel]="'Search...'"
+                                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                    <mat-option *ngFor="let item of bookerList | filter:bookerSearch.value"
+                                        [value]="item.bookerID">{{item.bookerName}}</mat-option>
+                                </mat-select>
+
+                            </mat-form-field>
+                        </div> -->
+
+
                 </div>
 
-
-
                 <div class="modal-footer bg-mf-blue">
+                    <button class="btn btn-success" (click)="selectT()">Save</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
 
-            </div>
+            </form>
+
+
         </div>
     </div>
+</div>
 
-    <!---------------------------------------------------------->
-
-    <!------------------------- Modal Window for Saved Bill =----------------->
+<!---------------------------------------------------------->
 
 
-    <div class="modal fade" id="SavedBillModal" tabindex="-1" aria-labelledby="SavedBillModalLabel">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-xl">
-            <div class="modal-content">
-                <app-sale-saved-bill (sendToFbrEmitter)="sendToFbr($event)"
-                    (printDuplicateEmitter)="printDuplicateBill($event)" (billDetailEmitter)="billDetails($event)"
-                    (postBillEmitter)="postSaleBill($event)" [savedbillList]="savedbillList"></app-sale-saved-bill>
+<!----------------Modal Window for Retrieving Holded Bills ---------->
+<div class="modal fade" id="retrieveBill" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    aria-labelledby="retrieveBillLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
+        <div class="modal-content " style="background-color: rgb(248, 247, 247);">
 
-                <!-- <div>
+            <div class="modal-body">
+                <app-sale-holded-bill (billDetailEmitter)="getBillDetail($event)"
+                    [holdBillList]="holdBillList"></app-sale-holded-bill>
+            </div>
+
+
+
+            <div class="modal-footer bg-mf-blue">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------------------------->
+
+<!------------------------- Modal Window for Saved Bill =----------------->
+
+
+<div class="modal fade" id="SavedBillModal" tabindex="-1" aria-labelledby="SavedBillModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-xl">
+        <div class="modal-content">
+            <app-sale-saved-bill (sendToFbrEmitter)="sendToFbr($event)"
+                (printDuplicateEmitter)="printDuplicateBill($event)" (billDetailEmitter)="billDetails($event)"
+                (postBillEmitter)="postSaleBill($event)" [savedbillList]="savedbillList"></app-sale-saved-bill>
+
+            <!-- <div>
 
                     <div class="text-end p-2">
                         <mat-form-field appearance="outline" class="w-100 matSmall">
@@ -1028,20 +1199,130 @@
                     </div>
                 </div> -->
 
-                <!------------------------------ Design For Bill Pirnt  --------------------->
+            <!------------------------------ Design For Bill Pirnt  --------------------->
 
-                <app-rest-sale-bill-print id="print-bill" class="hide"></app-rest-sale-bill-print>
+            <app-rest-sale-bill-print id="print-bill" class="hide"></app-rest-sale-bill-print>
 
 
-                <!---------------------------------------------------------------------------------->
-                <div class="text-end bg-mf-blue p-3">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+            <!---------------------------------------------------------------------------------->
+            <div class="text-end bg-mf-blue p-3">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
-
-
-
-
 </div>
+
+
+
+<!----------------Modal Window for Prod Selection ---------->
+
+
+
+<div class="modal fade" id="prodModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    aria-labelledby="prodModalModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
+        <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+            <div class="modal-body">
+
+
+                <!-----------   categories Row ------------------->
+
+                <div class="d-flex border-bottom">
+
+
+                    <mat-form-field class="w-25 m-1 matSmall" appearance="outline">
+                        <mat-label>Search.....</mat-label>
+                        <input #catSearch1 matInput type="search" class="text-secondary">
+                        <!-- <mat-icon matPrefix class="text-secondary">search</mat-icon> -->
+                    </mat-form-field>
+
+
+
+                    <div class="scrollContainer w-75">
+                        <button (click)="OnCatChange({recipeCatID:0,prodFlag:false})"
+                            [ngClass]="categoryID == 0  ? 'bg-blue' : ''"
+                            class="border item text-center m-1 p-1">ALL</button>
+                        <button *ngFor="let item of categoriesList|filter:catSearch1.value"
+                            (click)="OnCatChange(item);catSearch1.value = ''"
+                            [ngClass]="item.recipeCatID == categoryID  ? 'bg-blue' : ''"
+                            class="border item text-center m-1 p-1">{{item.recipeCatTitle}}</button>
+                    </div>
+                </div>
+
+                <div>
+                    <input autocomplete="false" matInput id="recSearch" class="w-100 p-1 border" style="height: 40px;"
+                        placeholder="Search Recipe...." #recipeSearch1>
+
+                </div>
+                <!-----------   Products Area ------------------->
+
+                <div class="row cursorPointer mt-1 w-100" style="height: 60vh;overflow-y: auto;">
+
+                    <div *ngFor="let item of RecipeList|filter:recipeSearch1.value" class="w-25">
+                        <mat-card style="width:90px;border-radius: 15px;" class="shadow recipecard"
+                            (click)=" productSelected(item,1)">
+
+                            <div class="text-center pt-1">
+                                <img *ngIf="item.recipeImage" style="border-radius: 10px;" [src]="item.recipeImage"
+                                    alt="" height="60px" width="80px">
+                            </div>
+
+                            <div class="text-center" style="height: 60px;">
+                                <p class="fs-12px" style="text-wrap: wrap;line-height: 15px;"> {{item.recipeTitle}}</p>
+                                <p style="margin-top: -15px;"><b>{{item.recipeSalePrice |number}}</b></p>
+
+                            </div>
+
+
+                        </mat-card>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer bg-mf-blue">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------------------------->
+
+
+
+
+
+<!----------------Modal Window for Changing Service Charges ---------->
+
+
+
+<div class="modal fade" id="OtherChargesModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    aria-labelledby="qtyModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm">
+        <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+            <div class="modal-body">
+                <form method="post">
+
+                    <div class="row">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <mat-label>Delivery Charges</mat-label>
+                            <input class="text-center" name="otherCharges" [(ngModel)]="OtherCharges"
+                                (keydown)="this.global.handleNumKeys($event);" type="number" min="0" matInput
+                                #deliveryCharges />
+                        </mat-form-field>
+
+                    </div>
+
+
+                </form>
+            </div>
+            <div class="modal-footer bg-mf-blue">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------------------------->

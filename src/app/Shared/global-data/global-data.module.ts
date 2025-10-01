@@ -1306,7 +1306,7 @@ export class GlobalDataModule implements OnInit {
   pin$ = of('1234');
   public openPinCode(): Observable<any> {
     return this.dialog.open(PincodeComponent, {
-      width: '30%',
+      width: 'auto',
       enterAnimationDuration: 500,
       // hasBackdrop: true,
       disableClose: true,
@@ -1345,7 +1345,7 @@ export class GlobalDataModule implements OnInit {
   ///////////// for opening Password modal window
   public openPassword(type: any): Observable<any> {
     return this.dialog.open(PincodeComponent, {
-      width: '30%',
+      width: 'auto',
       enterAnimationDuration: 500,
       hasBackdrop: true,
       disableClose: true,
@@ -1356,7 +1356,7 @@ export class GlobalDataModule implements OnInit {
 
   public confirmAlert(): Observable<any> {
     return this.dialog.open(ConfirmationAlertComponent, {
-      width: '30%',
+      width: 'auto%',
       enterAnimationDuration: 300,
       hasBackdrop: true,
       // disableClose:true,

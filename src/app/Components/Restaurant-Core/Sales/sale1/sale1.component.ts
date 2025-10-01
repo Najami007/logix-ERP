@@ -1811,4 +1811,10 @@ export class Sale1Component implements OnInit {
   }
 
 
+  openOtherChargesModal(){
+    if(this.tableData.length == 0)return;
+    if(this.orderType == 'Dine In' || this.orderType == 'Take Away') return;
+    this.global.openBootstrapModal('#OtherChargesModal',true)
+  }
+
 }

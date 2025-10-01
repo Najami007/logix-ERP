@@ -1,50 +1,41 @@
-
-@media only screen and (max-width:1000px){
-
-    .main{
-      display: flex;
-      flex-direction: column;
-    }
-
-    .prodArea{
-      width: 50%;
-    }
-
-    .billArea{
-      width: 50%;
-
-        .tn{
-              width: 20%;
-            }
-          .ot{
-            width: 50%;
-          }
-
-          .chng{
-            width: 30%;
-          }
-
-          .btas{
-            width: 50%;
-
-            .btn{
-              width: 100px;
-            }
-
-     }
-     
-    }
-
-    
+.SaleContainer {
+  display: none !important;
+}
 
 
+@media (min-width: 769px) {
+  .webContainer {
+    display: block !important;
+  }
+}
+
+/* Show container2 for small screens (mobile) */
+@media (max-width: 768px) {
+  .mobileContainer {
+    display: block !important;
+  }
+}
 
 
+  .btblbtn{
+    width: 70px;
+     height: 70px;
+    //  border-radius: 5px;
+     text-align: center;
+    //  justify-content:right;
+     font-weight: bold;
+     font-size: 15px;
+     margin: 10px;
+     border: 1px solid Black;
+     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   
- }
+   
+   }
 
 
- .btn-table{
+
+
+.btn-table {
   background-color: rgb(26, 26, 26);
   width: 100%;
   text-align: center;
@@ -52,30 +43,30 @@
   color: white;
 }
 
-.btn-table >thead>tr>th{
+.btn-table>thead>tr>th {
   padding: 5px;
   border: 1px solid rgb(248, 248, 248);
 
 }
 
-.btn-table >tbody>tr>td{
+.btn-table>tbody>tr>td {
   padding: 5px;
   border: 1px solid rgb(252, 248, 248);
-  
+
 }
 
-.btnHeight{
+.btnHeight {
   height: 60px !important;
 }
 
-.box{
+.box {
   font-size: 12px;
   min-width: 100px;
   height: 35px;
   color: white;
   background-color: rgb(17, 17, 17);
   border: 0px solid black;
-  border-radius: 10px ;
+  border-radius: 10px;
   text-align: center;
   justify-content: center;
   padding: 5px;

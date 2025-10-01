@@ -134,7 +134,6 @@ constructor(
   
 
   ngOnInit(){
-    
     this.global.getCompany();
     setTimeout(() => {
       this.stopLoaderDark();  

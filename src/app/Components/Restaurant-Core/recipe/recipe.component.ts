@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -10,6 +10,7 @@ import { PincodeComponent } from '../../User/pincode/pincode.component';
 import Swal from 'sweetalert2';
 import { MapWHProductComponent } from './map-whproduct/map-whproduct.component';
 import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-recipe',
@@ -157,6 +158,10 @@ export class RecipeComponent implements OnInit {
         this.cookingAreaList = Response;
         if (Response.length > 0) {
           this.cookingAriaID = Response[0].cookingAriaID;
+
+          this.cookingAreaFilterList = Response.sort((a: any, b: any) =>
+            a.cookingAriaTitle.localeCompare(b.cookingAriaTitle)
+          );
         }
       }
     )
@@ -168,30 +173,72 @@ export class RecipeComponent implements OnInit {
       (Response: any) => {
         this.categoriesList = Response.filter((e: any) => e.prodFlag == false);
 
+        if (Response.length > 0) {
+          this.categoryFilterList = Response.sort((a: any, b: any) =>
+            a.recipeCatTitle.localeCompare(b.recipeCatTitle)
+          );
+        }
+
       }
     )
   }
 
 
-  filterRecipe(type: any) {
 
-    if (type == 'cat') {
-      this.RecipeList = this.filterCategoryID == 0 ? this.tmpRecipeList : this.tmpRecipeList.filter((e: any) => e.recipeCatID == this.filterCategoryID);
-    }
+  @ViewChild('filterPanel') filterPanel!: MatSidenav;
 
-
-    if (type == 'ca') {
-      this.RecipeList = this.filterCookingAreaID == 0 ? this.tmpRecipeList : this.tmpRecipeList.filter((e: any) => e.cookingAriaID == this.filterCookingAreaID);
-    }
+  tmpLockStatusList = [{ title: 'Locked', value: true, isChecked: false }, { title: 'UnLocked', value: false, isChecked: false }]
+  tmpActiveStatusList = [{ title: 'Active', value: true, isChecked: false }, { title: 'InActive', value: false, isChecked: false }]
+  categoryFilterList: any = [];
+  cookingAreaFilterList: any = [];
+  showAllFilterCookingArea: any = false;
 
 
-    if (type == 'status') {
-      this.RecipeList = this.filterStatus == 0 ? this.tmpRecipeList : this.tmpRecipeList.filter((e: any) => e.approvedStatus == this.filterStatus);
-    }
+  showAllFilterCategories: any = false;
 
-    if (type == 'activeStatus') {
-      this.RecipeList = this.filterActiveStatus == 0 ? this.tmpRecipeList : this.tmpRecipeList.filter((e: any) => e.activeStatus == this.filterActiveStatus);
-    }
+  AdvanceFilter() {
+
+    this.app.startLoaderDark();
+
+
+    const catList = this.categoryFilterList
+      .filter((e: any) => e.isChecked)
+      .map((e: any) => e.recipeCatID);
+
+
+    const cookingAreaList = this.cookingAreaFilterList
+      .filter((e: any) => e.isChecked)
+      .map((e: any) => e.cookingAriaID);
+
+    const statusList = this.tmpLockStatusList
+      .filter((e: any) => e.isChecked)
+      .map((e: any) => e.value);
+    const activeStatusList = this.tmpActiveStatusList
+      .filter((e: any) => e.isChecked)
+      .map((e: any) => e.value);
+
+
+    this.RecipeList = this.tmpRecipeList.filter((p: any) =>
+      (catList.length === 0 || catList.includes(p.recipeCatID)) &&
+      (cookingAreaList.length === 0 || cookingAreaList.includes(p.cookingAriaID)) &&
+      (statusList.length === 0 || statusList.includes(p.approvedStatus)) &&
+      (activeStatusList.length === 0 || activeStatusList.includes(p.activeStatus))
+
+    );
+
+    this.filterPanel.close();
+    this.app.stopLoaderDark();
+
+  }
+
+  clearFilter() {
+
+    this.categoryFilterList.forEach((e: any) => e.isChecked = false);
+    this.cookingAreaFilterList.forEach((e: any) => e.isChecked = false);
+    this.tmpLockStatusList.forEach((e: any) => e.isChecked = false);
+    this.tmpActiveStatusList.forEach((e: any) => e.isChecked = false);
+    this.RecipeList = [...this.tmpRecipeList];
+
   }
 
 
@@ -206,6 +253,7 @@ export class RecipeComponent implements OnInit {
       (Response: any) => {
         this.RecipeList = Response;
         this.tmpRecipeList = Response;
+        this.AdvanceFilter();
       }
     )
   }

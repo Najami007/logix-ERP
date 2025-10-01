@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppComponent } from 'src/app/app.component';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 
 @Component({
@@ -8,10 +9,13 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 })
 export class HomeComponent implements OnInit{
 
-  constructor(private global:GlobalDataModule){}
+  constructor(
+    private global:GlobalDataModule,
+    private app:AppComponent
+  ){}
 
   ngOnInit(): void {
-    this.global.setHeaderTitle('HOME')
+    this.global.setHeaderTitle('HOME');
   }
 
 
