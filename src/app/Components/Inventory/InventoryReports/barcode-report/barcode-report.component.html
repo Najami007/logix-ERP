@@ -73,9 +73,9 @@
 
                                     <span class="cmpName" *ngIf="!hideCmp">{{companyName}}</span>
                                     <span class="bcodet" [ngClass]="hideBarcode ? '': 'mb-8px'"
-                                        *ngIf="!showLess && !hideName">{{item.productTitle}}</span>
+                                        *ngIf="!showLess && !hideName">{{item.flavourTitle ? item.flavourTitle : item.productTitle}}</span>
                                     <span class="bcodet" [ngClass]="hideBarcode ? '': 'mb-8px'"
-                                        *ngIf="showLess">{{item.productTitle |slice:0:24}}...</span>
+                                        *ngIf="showLess">{{item.flavourTitle ? item.flavourTitle : item.productTitle |slice:0:24}}...</span>
                                     <ngx-barcode6 class="barcode" *ngIf="!hideBarcode" [bc-format]="'CODE128'"
                                         [bc-height]="40" [bc-background]="'none'" [bc-font-options]="'bold'"
                                         [bc-width]="getBarcodeWidth(item.barcode2 ? item.barcode2 : item.barcode)"
@@ -90,8 +90,8 @@
                                         <span>Exp: {{expiryDate | date:'dd-MM-yyyy'}}</span>
                                     </div>
 
-                                    <span *ngIf="!hidePrice" class="bcodep text-end">Rs.{{item.salePrice *
-                                        item.quantity|number}}</span>
+                                    <span *ngIf="!hidePrice" class="bcodep text-end">Rs.{{(item.salePrice  *
+                                        item.quantity) -  item.discInR |number}}</span>
                                 </div>
 
 

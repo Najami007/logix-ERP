@@ -94,6 +94,13 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
   }
 
 
+  filterID: any = 1;
+
+  filterList: any = [
+    { id: 1, title: 'All' }, { id: 2, title: 'Discount Only' }, { id: 3, title: 'Without Disc Only' },
+  ]
+
+
 
   onUserSelected() {
     var curUser = this.userList.find((e: any) => e.userID == this.userID);
@@ -118,7 +125,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
 
   getReport(type: any) {
 
-    this.reportType =  this.reportsList.find((e: any) => e.invType == this.tmpRptType).invTypeTitle;
+    this.reportType = this.reportsList.find((e: any) => e.invType == this.tmpRptType).invTypeTitle;
 
     if (type == 'taxSummary' && (this.rptType != 'S')) {
       this.msg.WarnNotify('Tax Is Only For Sales')
@@ -146,11 +153,27 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
 
             }
 
-            var DataList:any = [];
-            if(this.locationID > 0){
-                DataList = Response.filter((e:any)=> e.locationID == this.locationID);
+            var DataList: any = [];
+           if (this.rptType == 'S' || this.rptType == 'SR') {
+              if (this.locationID > 0) {
+                DataList = Response.filter((e: any) =>
+                  (this.filterID == 2 ? e.percentageDiscount > 0 : this.filterID == 3 ? e.percentageDiscount == 0 : true)
+                  && (e.locationID == this.locationID));
+              } else {
+                DataList = Response.filter((e: any) =>
+                (this.filterID == 2
+                  ? e.percentageDiscount > 0
+                  : this.filterID == 3
+                    ? e.percentageDiscount == 0
+                    : true
+                ));
+              }
             }else{
-              DataList = Response;
+               if (this.locationID > 0) {
+                DataList = Response.filter((e: any) =>e.locationID == this.locationID);
+              } else {
+                DataList = Response;
+              }
             }
 
             if (this.rptType == 'R') {
@@ -185,67 +208,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
           }
         )
     }
-    if (this.formateType == 3) {
-      // this.reportType = 'Summary';
-      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
-        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
-          (Response: any) => {
-            this.SaleDetailList = [];
-            this.billTotal = 0;
-            this.chargesTotal = 0;
-            this.netGrandTotal = 0;
-            this.discountTotal = 0;
-            this.offerDiscTotal = 0;
-            this.summaryNetTotal = 0;
-            this.myTaxTotal = 0;
-            if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-              this.app.stopLoaderDark();
-              return;
 
-            }
-
-
-              var DataList:any = [];
-            if(this.locationID > 0){
-                DataList = Response.filter((e:any)=> e.locationID == this.locationID);
-            }else{
-              DataList = Response;
-            }
-
-
-            if (this.rptType == 'R') {
-              DataList.forEach((e: any) => {
-                if (e.issueType != 'Stock Transfer') {
-                  this.SaleDetailList.push(e);
-                }
-              }
-
-              )
-              // this.SaleDetailList = Response.fil;
-            } else {
-              this.SaleDetailList = DataList;
-            }
-
-
-            this.SaleDetailList.forEach((e: any) => {
-
-              this.billTotal += e.billTotal;
-              this.chargesTotal += e.otherCharges;
-              this.discountTotal += e.billDiscount - e.percentageDiscount;
-              this.offerDiscTotal += e.percentageDiscount;
-              this.summaryNetTotal += e.netTotal;
-              this.myTaxTotal += e.gstAmount;
-
-            });
-            this.app.stopLoaderDark();
-          },
-          (Error: any) => {
-            console.log(Error);
-            this.app.stopLoaderDark();
-          }
-        )
-    }
 
     if (this.formateType == 2) {
 
@@ -270,13 +233,35 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
             }
 
 
-            
-              var DataList:any = [];
-            if(this.locationID > 0){
-                DataList = Response.filter((e:any)=> e.locationID == this.locationID);
+
+            var DataList: any = [];
+
+             if (this.rptType == 'S' || this.rptType == 'SR') {
+              if (this.locationID > 0) {
+                DataList = Response.filter((e: any) =>
+                  (this.filterID == 2 ? e.percentageDiscount > 0 : this.filterID == 3 ? e.percentageDiscount == 0 : true)
+                  && (e.locationID == this.locationID));
+              } else {
+                DataList = Response.filter((e: any) =>
+                (this.filterID == 2
+                  ? e.discInR > 0
+                  : this.filterID == 3
+                    ? e.discInR == 0
+                    : true
+                ));
+              }
             }else{
-              DataList = Response;
+               if (this.locationID > 0) {
+                DataList = Response.filter((e: any) =>e.locationID == this.locationID);
+              } else {
+                DataList = Response;
+              }
             }
+            // if (this.locationID > 0) {
+            //   DataList = Response.filter((e: any) => e.locationID == this.locationID);
+            // } else {
+            //   DataList = Response;
+            // }
 
 
             if (this.rptType == 'R') {
@@ -310,6 +295,68 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
               else {
                 this.detNetTotal += e.avgCostPrice * e.quantity;
               }
+            });
+            this.app.stopLoaderDark();
+          },
+          (Error: any) => {
+            console.log(Error);
+            this.app.stopLoaderDark();
+          }
+        )
+    }
+
+    if (this.formateType == 3) {
+      // this.reportType = 'Summary';
+      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
+        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
+          (Response: any) => {
+            this.SaleDetailList = [];
+            this.billTotal = 0;
+            this.chargesTotal = 0;
+            this.netGrandTotal = 0;
+            this.discountTotal = 0;
+            this.offerDiscTotal = 0;
+            this.summaryNetTotal = 0;
+            this.myTaxTotal = 0;
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
+
+
+            var DataList: any = [];
+            if (this.locationID > 0) {
+              DataList = Response.filter((e: any) => e.locationID == this.locationID);
+            } else {
+              DataList = Response;
+            }
+
+
+            if (this.rptType == 'R') {
+              DataList.forEach((e: any) => {
+                if (e.issueType != 'Stock Transfer') {
+                  this.SaleDetailList.push(e);
+                }
+              }
+
+              )
+              // this.SaleDetailList = Response.fil;
+            } else {
+              this.SaleDetailList = DataList;
+            }
+
+
+            this.SaleDetailList.forEach((e: any) => {
+
+              this.billTotal += e.billTotal;
+              this.chargesTotal += e.otherCharges;
+              this.discountTotal += e.billDiscount - e.percentageDiscount;
+              this.offerDiscTotal += e.percentageDiscount;
+              this.summaryNetTotal += e.netTotal;
+              this.myTaxTotal += e.gstAmount;
+
             });
             this.app.stopLoaderDark();
           },
@@ -398,13 +445,13 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
   }
 
 
-    postSaleBill(item: any) {
+  postSaleBill(item: any) {
     if (!item.postedStatus) {
       this.global.postSaleInvoice(item).subscribe(
         (Response: any) => {
           if (Response.msg == 'Posted Successfully') {
             this.msg.SuccessNotify(Response.msg);
-        } else {
+          } else {
             this.msg.WarnNotify(Response.msg);
           }
         }

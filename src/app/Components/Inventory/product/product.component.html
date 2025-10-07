@@ -1,10 +1,10 @@
-<mat-sidenav-container hasBackdrop="false" (backdropClick)="filterPanel.close()">
+<mat-sidenav-container hasBackdrop="true" (backdropClick)="filterPanel.close()">
 
-    <mat-sidenav #filterPanel mode="over" style="width:30%;position: fixed;z-index: 100000;" position="end"
+    <mat-sidenav #filterPanel  mode="over"  style="width:30%;position: fixed;z-index: 100000;" position="end"
         class="order-panel bg-white container pt-4 mt-5">
 
 
-        <div class="container-fluid pt-3">
+        <div class="container-fluid pt-3 pb-5 mb-5">
             <div class="d-flex justify-content-between ">
                 <div class="d-flex flex-column">
                     <span>Filter Product List</span>
@@ -102,6 +102,7 @@
 
                     <div>
                         <mat-checkbox [(ngModel)]="costGreaterThenSaleFilter"> Cost Price > Sale Price</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="avgCostGreaterThenSaleFilter"> AvgCost Price > Sale Price</mat-checkbox>
                     </div>
 
                 </div>
@@ -114,7 +115,7 @@
 
     </mat-sidenav>
 
-    <mat-sidenav-content>
+    <mat-sidenav-content >
 
         <mat-tab-group mat-align-tabs="center" class="body h-100" [selectedIndex]="tabIndex"
             (selectedIndexChange)="changeTab($event)">
@@ -458,6 +459,7 @@
                                 <th *ngIf="!ManufacturingFeature ">Brand</th>
 
                                 <th class="cursorPointer" (click)="sortProds('costPrice')">Cost Price</th>
+                                <th class="cursorPointer" (click)="sortProds('avgCost')">Avg Cost</th>
                                 <th class="cursorPointer" (click)="sortProds('salePrice')">Sale Price</th>
                                 <th class="cursorPointer" (click)="sortProds('discPercentage')"
                                     *ngIf="discFeature && !ManufacturingFeature">Disc %</th>
@@ -489,6 +491,7 @@
                                     <td *ngIf="!ManufacturingFeature">{{item.brandTitle}}</td>
 
                                     <td>{{item.costPrice |number:'1.0-1'}}</td>
+                                      <td>{{item.avgCostPrice |number:'1.0-1'}}</td>
                                     <td>{{item.salePrice |number:'1.0-0'}}</td>
                                     <td *ngIf="discFeature && !ManufacturingFeature">{{item.discPercentage}}%</td>
                                     <td *ngIf="!ManufacturingFeature">{{item.gst}}%</td>

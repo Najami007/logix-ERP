@@ -182,6 +182,7 @@ export class ProductComponent implements OnInit {
   ]
 
   costGreaterThenSaleFilter:any = false;
+  avgCostGreaterThenSaleFilter:any = false;
 
 
   subCategoryFilterList: any = [];
@@ -233,7 +234,9 @@ export class ProductComponent implements OnInit {
             : discList.includes(p.discPercentage)              // fallback for other cases
         )
       )&&
-      ( this.costGreaterThenSaleFilter ? p.costPrice >  p.salePrice : true)
+      ( this.costGreaterThenSaleFilter ? p.costPrice >  p.salePrice : true)&&
+      ( this.avgCostGreaterThenSaleFilter ? p.avgCostPrice >  p.salePrice : true)
+      
     );
 
 
@@ -251,7 +254,8 @@ export class ProductComponent implements OnInit {
     this.tmpStatusList.forEach((e: any) => e.isChecked = false);
     this.tmpDiscFilterList.forEach((e: any) => e.isChecked = false);
     this.tmpApplinkedList.forEach((e: any) => e.isChecked = false);
-
+    this.costGreaterThenSaleFilter = false;
+    this.avgCostGreaterThenSaleFilter = false;
     // reset product list
     this.productList = [...this.tempProdList];
 

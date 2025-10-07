@@ -132,7 +132,7 @@
                     <tr class="fs-11">
                         <td colspan="2" class="fw-bold">Total Items</td>
                         <td class="fw-bold fs-11">{{myQtyTotal | number:'1.0-2'}}</td>
-                        <td  *ngIf="discFeature"></td>
+                        <td *ngIf="discFeature"></td>
                     </tr>
 
                 </tbody>
@@ -168,7 +168,8 @@
                         <!-- <td class="text-end" *ngIf="CusDiscFeature" style="width:10% !important;">
                             {{item.cusDiscAmount|number:'1.0-1'}}</td> -->
                         <td class="text-end" style="width:20% !important;">{{(item.quantity *
-                            item.salePrice) - (item.discInR * item.quantity)- (item.cusDiscAmount * item.quantity) |number:'1.0-1'}}</td>
+                            item.salePrice) - (item.discInR * item.quantity)- (item.cusDiscAmount * item.quantity)
+                            |number:'1.0-1'}}</td>
                     </tr>
 
                 </tbody>
@@ -250,7 +251,7 @@
                                 <td colspan="2"> {{myOtherCharges|number:'1.0-1'}}</td>
 
                             </tr>
-                              <tr class="text-end fs-14" *ngIf="CusDiscFeature">
+                            <tr class="text-end fs-14" *ngIf="CusDiscFeature">
                                 <td colspan="2">Cus Disc</td>
                                 <td></td>
                                 <td colspan="2">{{myCusDiscAmount|number:'1.0-1'}}</td>
@@ -743,6 +744,29 @@
 
         <div class="row">
 
+            <div class="col-sm-6 d-flex flex-column">
+                <span class="w-100"><b>Bank Detail :-</b> {{companyBankTitle}}</span>
+                <span class="w-100"><b>Acc Title :-</b> {{companyAccTitle}}</span>
+                <span class="w-100"><b>B Code :-</b> {{companyBankCode}}</span>
+                <span class="w-100"><b>Account :-</b> {{companyAccNumber}}</span>
+                <span class="w-100"><b>Date #</b> {{myInvDate | date:'dd-MM-yyyy'}}</span>
+            </div>
+            <div class="col-sm-6 d-flex flex-column">
+                <span class="w-100"><b>Invoice #</b> {{myInvoiceNo}}</span>
+                <span class="w-100"><b>Vendor #</b> {{companyRegistrationNo}}</span>
+                <span class="w-100"><b>STRN #</b> {{CompanySTRN}}</span>
+                <span class="w-100"><b>NTN #</b> {{CompanyNTN}}</span>
+                <span class="w-100"><b>PNTN #</b> {{companyPNTN}}</span>
+            </div>
+
+
+
+
+        </div>
+
+        <!-- 
+        <div class="row">
+
             <span class="col-sm-4"><b>Bank Detail :-</b> {{companyBankTitle}}</span>
             <span class="col-sm-4"><b>Vendor #</b> {{companyRegistrationNo}}</span>
             <span class="col-sm-4"><b>Invoice #</b> {{myInvoiceNo}}</span>
@@ -758,7 +782,7 @@
 
             <span class="col-sm-4"><b>Account :-</b> {{companyAccNumber}}</span>
 
-        </div>
+        </div> -->
 
 
         <br>

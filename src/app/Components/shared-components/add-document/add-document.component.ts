@@ -39,7 +39,6 @@ export class AddDocumentComponent implements OnInit {
         if (Response.length > 0) {
           this.documentList.push({ docID: 1, eDocName: Response[0].invBillNo, eDocExt: '', eDoc:Response[0].invDocument})
         }
-        console.log(Response);
       }
     )
   }
@@ -60,22 +59,18 @@ export class AddDocumentComponent implements OnInit {
       return;
     }
 
-    console.log(BillNo, document);
     this.http.post(environment.mainApi + this.global.inventoryLink + 'AddInvDocument', {
       InvBillNo: BillNo,
       InvDocument: document,
       UserID: this.global.getUserID()
     }).subscribe(
       (Response: any) => {
-        console.log(Response);
         if (Response.msg == 'Data Saved Successfully') {
           this.msg.SuccessNotify(Response.msg);
           this.UploadEmitter.emit();
         } else {
           this.msg.WarnNotify(Response.msg);
         }
-
-
       }
     )
 
@@ -101,7 +96,6 @@ export class AddDocumentComponent implements OnInit {
             UserID: this.global.getUserID()
           }).subscribe(
             (Response: any) => {
-              console.log(Response);
               if (Response.msg == 'Data Deleted Successfully') {
                 this.msg.SuccessNotify(Response.msg);
                 this.getDocument(this.billNo);
@@ -145,6 +139,7 @@ export class AddDocumentComponent implements OnInit {
 
     var vdoc = item.eDoc;
     // console.log(vdoc);
+
 
     var newImage = vdoc.replace('data:application/pdf;base64,','');
 

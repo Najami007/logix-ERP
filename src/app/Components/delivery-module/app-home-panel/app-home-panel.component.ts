@@ -39,6 +39,7 @@ export class AppHomePanelComponent {
   ngOnInit(): void {
     this.global.setHeaderTitle('APP Home Screen');
     this.getHomePageData();
+    this.getCategoryList();
 
   }
 
@@ -47,6 +48,9 @@ export class AppHomePanelComponent {
   containerTitle: any = '';
   containerType: any = '';
   containerImg: any = '';
+  categoryID: any = 0;
+  subCategoryID: any = 0;
+
 
   tmpContainerRow: any = [];
 
@@ -57,6 +61,9 @@ export class AppHomePanelComponent {
     this.containerTitle = item.title;
     this.containerType = item.type;
     this.containerImg = item.imagesPath;
+    this.categoryID = item.categoryID;
+    this.getSubCategory();
+    this.subCategoryID = item.subCategoryID;
     this.global.openBootstrapModal('#changeDetail', true)
   }
 
@@ -81,7 +88,7 @@ export class AppHomePanelComponent {
 
 
 
-  reset(){
+  reset() {
     this.containerID = 0;
     this.containerImg = '';
     this.containerTitle = '';
@@ -89,18 +96,63 @@ export class AppHomePanelComponent {
   }
 
 
+  categoryList: any = [];
+  subCategoryList: any = [];
+  tmpCategoryList: any = [];
+
+
+  getSubCategory() {
+    this.subCategoryID = 0;
+    this.subCategoryList = [];
+    if (this.categoryID > 0) {
+      this.subCategoryList = this.tmpCategoryList.filter((e: any) => e.subCategoryID > 0 && e.categoryID == this.categoryID);
+    }
+
+  }
+
+  getCategoryList() {
+
+    var url = this.apiReq + 'GetMobCategory';
+
+    this.http.get(url).subscribe(
+      {
+        next: (Response: any) => {
+          this.tmpCategoryList = Response;
+          if (Response.length > 0) {
+            this.categoryList = this.tmpCategoryList.filter((e: any) => e.subCategoryID == 0);
+          }
+        },
+        error: error => {
+          console.log(error);
+        }
+      }
+    )
+  }
+
+
+
   updateBannerData() {
-    if(this.containerTitle == ''){
+    if (this.containerTitle == '') {
       this.msg.WarnNotify('Enter Title');
       return;
     }
 
-    if(this.containerType == ''){
+    if (this.containerType == '') {
       this.msg.WarnNotify('Select type');
       return;
     }
 
-    if(this.containerImg == '' || this.containerImg == undefined || this.containerImg == null){
+    if (this.categoryID == 0) {
+      this.msg.WarnNotify('Select Category');
+      return;
+    }
+    if (this.subCategoryID == 0) {
+      this.msg.WarnNotify('Select Sub Category');
+      return;
+    }
+
+
+    if (this.containerImg == '' || this.containerImg == undefined || this.containerImg == null) {
       this.msg.WarnNotify('Select Img');
       return;
     }
@@ -109,26 +161,29 @@ export class AppHomePanelComponent {
       HpID: this.containerID,
       Title: this.containerTitle,
       Type: this.containerType,
-      HpImage: this.containerImg
+      CategoryID: this.categoryID,
+      SubCategoryID: this.subCategoryID,
+      HpImage: this.global.isBase64Image(this.containerImg) ? this.containerImg : '-'
     }
     console.log(postData)
     this.app.startLoaderDark();
-    this.http.post(this.apiReq+'AddHomePageImage',postData).subscribe(
+    this.http.post(this.apiReq + 'AddHomePageImage', postData).subscribe(
       {
-        next:(Response:any)=>{
+        next: (Response: any) => {
 
-          if(Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully'){
+          if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
             this.msg.SuccessNotify(Response.msg);
             this.reset();
             this.getHomePageData();
-          }else{
+          } else {
             this.msg.WarnNotify(Response.msg);
           }
           this.app.stopLoaderDark();
-           this.global.closeBootstrapModal('#changeDetail', true)
+          this.global.closeBootstrapModal('#changeDetail', true)
         },
-        error:error=>{
-           this.app.stopLoaderDark();
+        error: error => {
+          this.msg.WarnNotify(error.error.msg);
+          this.app.stopLoaderDark();
           console.log(error);
         }
       }

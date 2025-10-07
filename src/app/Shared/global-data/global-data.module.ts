@@ -78,7 +78,7 @@ export class GlobalDataModule implements OnInit {
   societyLink = 'prp/';
   propertyLink = 'prp/';
   manufacturingLink = 'mnu/';
-   mobileLink = 'mob/';
+  mobileLink = 'mob/';
 
   ////////////////////// API Module Start Points//////////////////
   Currency = 'AED';
@@ -254,6 +254,8 @@ export class GlobalDataModule implements OnInit {
           localStorage.removeItem('ftr');
           localStorage.removeItem('mid');
 
+          // localStorage.clear();
+
           // localStorage.removeItem('cmpnyVal');
           window.location.reload();
           // this.rout.navigate(['login']);
@@ -331,6 +333,7 @@ export class GlobalDataModule implements OnInit {
   appConfigFeature = this.getFeature('appConfig');
   ImageUrlFeature = this.getFeature('ImageUrl');
   SaleSupplierFeature = this.getFeature('SaleSupplier');
+  AttachDocPurchaseFeature = this.getFeature('AttachDocPurchase');
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
     this.BookerFeature = this.getFeature('Booker');
@@ -386,6 +389,7 @@ export class GlobalDataModule implements OnInit {
     this.appConfigFeature = this.getFeature('appConfig');
     this.ImageUrlFeature = this.getFeature('ImageUrl');
     this.SaleSupplierFeature = this.getFeature('SaleSupplier');
+    this.AttachDocPurchaseFeature = this.getFeature('AttachDocPurchase');
   }
 
 
@@ -614,12 +618,12 @@ export class GlobalDataModule implements OnInit {
 
     var ExpiryDate: any = 'TWpBek1DMHdPUzB4TWc9PQ==';
     const now = new Date();
- 
+
     const targetDate = new Date(atob(atob(ExpiryDate)));
     targetDate.setHours(10, 0, 0, 0);      // Create target date at 10:00 AM  // 10:00 AM exactly
     var status: any = now! >= targetDate;
 
-       console.log(now, targetDate);
+    console.log(now, targetDate);
     return status;
   }
 
@@ -1356,7 +1360,7 @@ export class GlobalDataModule implements OnInit {
 
   public confirmAlert(): Observable<any> {
     return this.dialog.open(ConfirmationAlertComponent, {
-      width: 'auto%',
+      width: 'auto',
       enterAnimationDuration: 300,
       hasBackdrop: true,
       // disableClose:true,
@@ -1788,6 +1792,21 @@ export class GlobalDataModule implements OnInit {
     link.click();
     document.body.removeChild(link);
   }
+
+
+  isBase64Image(str: string): boolean {
+    if (typeof str !== "string") {
+      return false;
+    }
+
+    // Regex for data:image/* base64 string
+    const base64ImageRegex = /^data:image\/(png|jpg|jpeg|gif|webp|bmp|svg\+xml);base64,[A-Za-z0-9+/]+={0,2}$/;
+
+    return base64ImageRegex.test(str);
+  }
+
+
+
 
 
 

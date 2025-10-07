@@ -139,19 +139,19 @@
                             <th class="col-1">Sale Price</th>
                             <th class="col-1">Cost Total</th>
                             <th class="col-1">AQ</th>
-                            <th >Margin</th>
+                            <th>Margin</th>
                             <th>Action</th>
                         </tr>
 
                     </thead>
 
                     <tbody style="height: 30px;">
-                        <tr *ngFor="let item of tableDataList index as index"
+                        <tr *ngFor="let item of tableDataList; index as index"
                             [ngClass]="rowFocused == index ?'bg-dg':''" (click)="showImg(item);rowFocused = index">
                             <td class="text-center">{{index+1}}</td>
-                            <td style="min-width: 120px;">{{item.barcode}}</td>
+                            <td style="min-width: 120px;">{{item.barcode}} </td>
                             <td style="min-width: 120px;">{{item.ProductTitle}}</td>
-                            <td ><input type="date" class="expDate{{index}}" [(ngModel)]="item.ExpiryDate"
+                            <td><input type="date" class="expDate{{index}} amtInput" [(ngModel)]="item.ExpiryDate"
                                     (keydown)="rowFocused = index" (keyup)="rowFocused = index"
                                     style="height: 25px; width: 150px;"></td>
 
@@ -164,13 +164,13 @@
                                     (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);onFieldsUpdate('qty',item)"
                                     (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('qty',item)"
                                     (change)="getTotal();changeValue(item)" [accessKey]="index +1 "
-                                    class="qty{{index}} text-center" style="width: 80px;"></td>
+                                    class="qty{{index}} text-center amtInput" style="width: 80px;"></td>
 
                             <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
                                     [(ngModel)]="item.tempCostPrice" min="0" draggable="false"
                                     (keydown)="changeValue(item);this.handleUpdown(item,$event,'.tcp',index);getTotal();onFieldsUpdate('tcp',item)"
                                     (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('tcp',item)"
-                                    (change)="getTotal();changeValue(item)" class="tcp{{index}} text-center"
+                                    (change)="getTotal();changeValue(item)" class="tcp{{index}} text-center amtInput"
                                     style="width: 80px;"></td>
 
 
@@ -179,29 +179,29 @@
                                     [(ngModel)]="item.discInP" min="0" draggable="false" dropzone="false"
                                     (keydown)="this.handleUpdown(item,$event,'.discP',index);getTotal();changeValue(item);onFieldsUpdate('dp',item)"
                                     (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('dp',item)"
-                                    (change)="getTotal();changeValue(item)" class="discP{{index}} text-center"
+                                    (change)="getTotal();changeValue(item)" class="discP{{index}} text-center amtInput"
                                     style="width: 80px;"></td>
 
 
-                            <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
+                            <td class="text-center " *ngIf="DetailedPurchaseFeature"><input type="text"
                                     [(ngModel)]="item.discInR" min="0" draggable="false" dropzone="false"
                                     (keydown)="this.handleUpdown(item,$event,'.discR',index);getTotal();changeValue(item);onFieldsUpdate('dR',item);"
                                     (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('dR',item)"
-                                    (change)="getTotal();changeValue(item)" class="discR{{index}} text-center"
+                                    (change)="getTotal();changeValue(item)" class="discR{{index}} text-center amtInput"
                                     style="width: 80px;"></td>
 
                             <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
                                     [(ngModel)]="item.gst" min="0" draggable="false" dropzone="false"
                                     (keydown)="this.handleUpdown(item,$event,'.gst',index);getTotal();changeValue(item);onFieldsUpdate('gst',item);"
                                     (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('gst',item);"
-                                    (change)="getTotal();changeValue(item)" class="gst{{index}} text-center"
+                                    (change)="getTotal();changeValue(item)" class="gst{{index}} text-center amtInput"
                                     style="width: 80px;"></td>
 
                             <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
                                     [(ngModel)]="item.et" min="0" draggable="false" dropzone="false"
                                     (keydown)="this.handleUpdown(item,$event,'.et',index);getTotal();changeValue(item);onFieldsUpdate('et',item);"
                                     (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('et',item);"
-                                    (change)="getTotal();changeValue(item)" class="et{{index}} text-center"
+                                    (change)="getTotal();changeValue(item)" class="et{{index}} text-center amtInput"
                                     style="width: 80px;"></td>
 
 
@@ -211,7 +211,7 @@
                                     draggable="false"
                                     (keydown)="changeValue(item);this.handleUpdown(item,$event,'.cp',index);getTotal();"
                                     (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index"
-                                    (change)="getTotal();changeValue(item)" class="cp{{index}} text-center"
+                                    (change)="getTotal();changeValue(item)" class="cp{{index}} text-center amtInput"
                                     style="width: 80px;">
                             </td>
 
@@ -221,7 +221,7 @@
                                     draggable="false"
                                     (keydown)="changeValue(item);this.handleUpdown(item,$event,'.sp',index);"
                                     (keyup)="changeValue(item);showImg(item);rowFocused = index"
-                                    (change)="getTotal();changeValue(item)" class="sp{{index}} text-center"
+                                    (change)="getTotal();changeValue(item)" class="sp{{index}} text-center amtInput"
                                     style="width: 80px;">
                             </td>
 
@@ -234,7 +234,7 @@
                                     draggable="false"
                                     (keydown)="onMarginChange(item,index); this.handleUpdown(item,$event,'.mg',index);"
                                     (keyup)="onMarginChange(item,index);showImg(item);rowFocused = index"
-                                    class="mg{{index}} text-center" style="width: 80px;">
+                                    class="mg{{index}} text-center amtInput" style="width: 80px;">
                             </td>
                             <td class="text-danger text-center cursorPointer"><mat-icon
                                     (click)="delRow(item)">delete</mat-icon>
@@ -297,8 +297,10 @@
                     </div>
                 </div>
 
-                <div class="mt-2 text-center">
-                    <button class=" w-50 btnsave" id="savebtn" accesskey="s" *ngIf="crudList.c"
+                <div class="mt-2 text-center d-flex justify-content-center gap-1">
+                    <div class="attachmentButton w-25" (click)="openAttachDocumentModal()"><mat-icon
+                            class="mt-2">attachment</mat-icon></div>
+                    <button class="w-50 btnsave" id="savebtn" accesskey="s" *ngIf="crudList.c"
                         (click)="SaveBill('purchase')"><u>S</u>ave</button>
                 </div>
                 <div class="mt-2 text-center">
@@ -414,13 +416,16 @@
                             <td>{{item.locationTitle}}</td>
                             <td class="text-end">{{(item.billTotal + item.overHeadAmount) | number:'1.0-0'}}</td>
                             <td>{{item.entryUser}}</td>
-                            <td class="text-center cursorPointer" >
-                                <mat-icon *ngIf="crudList.r" class="text-primary"(click)="printBill(item)">print</mat-icon>
-                                <mat-icon data-bs-dismiss="modal" *ngIf=" item.invType == 'HP' && crudList.u" (click)="retriveBill(item)">edit</mat-icon>
-                                <mat-icon *ngIf=" item.invType == 'HP' && crudList.u" class="text-danger cursorPointer" matTooltip="Delete"
-                                    (click)="deleteProd(item)">delete</mat-icon>
-                            
-                                <mat-icon  *ngIf=" item.invType == 'P'"(click)="openDocumentModal(item)">note_add</mat-icon>
+                            <td class="text-center cursorPointer">
+                                <mat-icon *ngIf="crudList.r" class="text-primary"
+                                    (click)="printBill(item)">print</mat-icon>
+                                <mat-icon data-bs-dismiss="modal" *ngIf=" item.invType == 'HP' && crudList.u"
+                                    (click)="retriveBill(item)">edit</mat-icon>
+                                <mat-icon *ngIf=" item.invType == 'HP' && crudList.u" class="text-danger cursorPointer"
+                                    matTooltip="Delete" (click)="deleteProd(item)">delete</mat-icon>
+
+                                <mat-icon *ngIf=" item.invType == 'P'"
+                                    (click)="openDocumentModal(item)">note_add</mat-icon>
                             </td>
 
                         </tr>
@@ -437,7 +442,7 @@
 
 
 
-
+<!--------------------- To Attach Document After Saved --------------->
 
 <div class="modal" id="DocumentModal" tabindex="-1" data-bs-backdrop="true" aria-labelledby="DocumentModalLabel">
     <div class="modal-dialog modal-dialog-scrollable modal-md">
@@ -453,6 +458,60 @@
                     (UploadEmitter)="global.closeBootstrapModal('#DocumentModal',true)"></app-add-document>
             </div>
         </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal" id="attchDocumentModal" tabindex="-1" data-bs-backdrop="true" aria-labelledby="DocumentModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-sm   ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="DocumentModalLabel">Add Document</h2>
+                <button type="button" class="btn-close" aria-label="Close"
+                    (click)="global.closeBootstrapModal('#attchDocumentModal',true)"></button>
+            </div>
+            <div class="modal-body">
+
+                <div>
+
+                    <div>
+
+                        <div class="d-flex flex-column gap-2">
+                            <span class="fw-bold" style="font-size: 20px;">Attachment Must be PDF</span>
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div style="border: 2px solid black;
+                                                border-style: dashed;
+                                                width: 100%;
+                                                height: 250px;" class="d-flex flex-column">
+
+                                        <div class="d-flex justify-content-center mt-5 pt-5">
+                                            {{documentName || 'Not Selected'}}
+
+                                        </div>
+
+                                    </div>
+                                    <button class="btn btn-primary w-100 mt-2" for="fileInput"
+                                        (click)="fileInput.click()">Browse</button>
+                                    <input #fileInput id="fileInput" type="file" (change)="onFilesSelected($event)"
+                                        accept=".pdf" hidden />
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </div>
 

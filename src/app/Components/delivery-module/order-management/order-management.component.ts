@@ -300,7 +300,7 @@ export class OrderManagementComponent {
 
   curSelectedRow: any = [];
   updateOrderStatus: any = '';
-  updateStatusRemarks:any = '';
+  updateStatusRemarks: any = '';
 
   openChangeStatusModal(item: any) {
     this.curSelectedRow = item;
@@ -312,12 +312,12 @@ export class OrderManagementComponent {
 
   changeOrderStatus(item: any) {
 
-    if(this.updateOrderStatus == 'Cancelled' && this.updateStatusRemarks == ''){
+    if (this.updateOrderStatus == 'Cancelled' && this.updateStatusRemarks == '') {
       this.msg.WarnNotify('Enter Cancellation Remarks');
       return;
     }
 
-    if((this.updateOrderStatus == 'Dispatched' || this.updateOrderStatus == 'Delivered') && item.riderID == 0){
+    if ((this.updateOrderStatus == 'Dispatched' || this.updateOrderStatus == 'Delivered') && item.riderID == 0) {
       this.msg.WarnNotify('Assign Order to the Rider First');
       return;
     }
@@ -328,7 +328,7 @@ export class OrderManagementComponent {
       OrderNo: item.orderNo,
       RiderID: item.riderID,
       OrderStatus: this.updateOrderStatus,
-      Remarks:this.updateStatusRemarks || '-',
+      Remarks: this.updateStatusRemarks || '-',
       UserID: this.global.getUserID()
     }
 
@@ -358,7 +358,7 @@ export class OrderManagementComponent {
 
   openRiderAssignModal(item: any) {
 
-    if(item.orderStatus == 'Dispatched' || item.orderStatus == 'Delivered' || item.orderStatus == 'Cancelled'){
+    if (item.orderStatus == 'Dispatched' || item.orderStatus == 'Delivered' || item.orderStatus == 'Cancelled') {
       return;
     }
 
@@ -417,10 +417,10 @@ export class OrderManagementComponent {
 
 
   openImage(link: string) {
-    if(link == '-' || link == null || link == ''){
+    if (link == '-' || link == null || link == '') {
       return;
     }
-  window.open(link, '_blank');
-}
+    window.open(link, '_blank');
+  }
 
 }

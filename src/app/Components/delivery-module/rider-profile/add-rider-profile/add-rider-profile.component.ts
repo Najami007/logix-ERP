@@ -57,7 +57,7 @@ export class AddRiderProfileComponent {
   MobileNo: any = '';
   Email: any = '';
   Password: any = '';
-  userAddress:any = '';
+  userAddress: any = '';
 
 
 
@@ -85,7 +85,7 @@ export class AddRiderProfileComponent {
       return;
     }
 
-        if (this.userAddress == '') {
+    if (this.userAddress == '') {
       this.msg.WarnNotify('Enter Address');
       return;
     }
@@ -102,14 +102,14 @@ export class AddRiderProfileComponent {
 
 
     var postData: any = {
-      MobUserID:this.MobUserID,
+      MobUserID: this.MobUserID,
       FirstName: this.FirstName,
       LastName: this.LastName,
       MobileNo: this.MobileNo,
       Email: this.Email,
       Password: this.Password,
-      userAddress:this.userAddress || '-',
-      MobUserImage:this.partyImg,
+      userAddress: this.userAddress || '-',
+      MobUserImage: this.partyImg,
       UserType: "Rider",
       RegType: "Normal",
       PinCode: ''
@@ -125,9 +125,8 @@ export class AddRiderProfileComponent {
           postData.PinCode = pin;
 
           this.insert(postData, 'update');
-          if(this.isBase64Image(this.partyImg)){
-            alert();
-            this.insertUserImage(postData,'insert');
+          if (this.isBase64Image(this.partyImg)) {
+            this.insertUserImage(postData, 'insert');
           }
         }
       })
@@ -163,6 +162,7 @@ export class AddRiderProfileComponent {
         },
         error: error => {
           console.log(error);
+          this.msg.WarnNotify(error.error.msg);
         }
       }
     )
@@ -170,7 +170,7 @@ export class AddRiderProfileComponent {
   }
 
 
-   isBase64Image(str: string): boolean {
+  isBase64Image(str: string): boolean {
     if (typeof str !== "string") {
       return false;
     }
@@ -182,7 +182,7 @@ export class AddRiderProfileComponent {
   }
 
 
-  
+
   insertUserImage(postData: any, type: any) {
 
     var url = ''
@@ -199,9 +199,9 @@ export class AddRiderProfileComponent {
           if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
             this.msg.SuccessNotify(Response.msg);
             this.reset();
-           setTimeout(() => {
-             this.updateEmitter.emit();
-           }, 1000);
+            setTimeout(() => {
+              this.updateEmitter.emit();
+            }, 1000);
           } else {
             this.msg.WarnNotify(Response.msg);
           }
@@ -214,7 +214,7 @@ export class AddRiderProfileComponent {
     )
 
   }
-  
+
 
 
 

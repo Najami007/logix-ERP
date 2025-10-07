@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -29,8 +29,17 @@ export class PurchaseComponent implements OnInit {
   @ViewChild(PurchaseBillPrintComponent) billPrint: any;
   @ViewChild(AddDocumentComponent) AddDocument: any;
 
+
+  @HostListener('document:visibilitychange', ['$event'])
+
+  appVisibility() {
+    if (document.hidden) { } else { this.importFromLocalStorage(); }
+  }
+
+
   disableDateFeature = this.global.DisableInvDate;
   DetailedPurchaseFeature = this.global.DetailedPurchase;
+  AttachDocPurchaseFeature = this.global.AttachDocPurchaseFeature;
 
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -68,6 +77,8 @@ export class PurchaseComponent implements OnInit {
         this.locationID = data[0].locationID
       }
     });
+
+    this.importFromLocalStorage();
 
 
   }
@@ -153,7 +164,6 @@ export class PurchaseComponent implements OnInit {
       var costWithGst = costWithDiscR + ((costWithDiscR * item.gst) / 100);
       var costWithEt = costWithGst + etAmount;
 
-      console.log(costWithDiscP, costWithDiscR, costWithGst, costWithEt)
       item.CostPrice = costWithEt;
     }
     if (this.discType == 'bd') {
@@ -734,59 +744,94 @@ export class PurchaseComponent implements OnInit {
     if (this.tableDataList == '') {
       this.msg.WarnNotify('Atleast One Product Must Be Selected');
       return;
-    } 
-     if (this.bookerID == 0 || this.bookerID == undefined) {
+    }
+    if (this.bookerID == 0 || this.bookerID == undefined) {
       this.msg.WarnNotify("Select Purchaser");
       return;
-    } 
-     if (this.refInvNo == '' || this.refInvNo == undefined) {
+    }
+    if (this.refInvNo == '' || this.refInvNo == undefined) {
       this.msg.WarnNotify('Enter Reference Invoice No');
       return;
-    } 
-     if (this.partyID == 0 || this.partyID == 0 || this.partyID == undefined) {
+    }
+    if (this.partyID == 0 || this.partyID == 0 || this.partyID == undefined) {
       this.msg.WarnNotify('Select Supplier Party');
       return;
-    } 
-     if (this.locationID == '' || this.locationID == undefined || this.locationID == 0) {
+    }
+    if (this.locationID == '' || this.locationID == undefined || this.locationID == 0) {
       this.msg.WarnNotify('Select Warehouse Location');
       return;
-    } 
+    }
+
+    if (this.AttachDocPurchaseFeature && this.InvoiceDocument == '' && type == 'purchase') {
+      this.msg.WarnNotify('Must Attach Document Before Save');
+      return;
+    }
 
 
 
-
-      var postData = {
-        InvBillNo: this.holdInvNo,
-        InvType: "P",
-        InvDate: this.global.dateFormater(this.invoiceDate, '-'),
-        RefInvoiceNo: this.refInvNo,
-        PartyID: this.partyID,
-        LocationID: this.locationID,
-        ProjectID: this.projectID,
-        BookerID: this.bookerID,
-        BillTotal: this.subTotal,
-        BillDiscount: this.discount || 0,
-        OverHeadAmount: this.overHead || 0,
-        NetTotal: this.netTotal,
-        Remarks: this.invRemarks || '-',
-        InvoiceDocument: "-",
-        HoldInvNo: this.holdInvNo,
-        discType: this.discType,
-        InvDetail: JSON.stringify(this.tableDataList),
-        UserID: this.global.getUserID()
-      };
+    this.sortType == 'desc'
+      ? this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex)
+      : this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex);
 
 
- 
-        if (type == 'hold') {
-          if (this.holdBtnType == 'Hold') {
 
-            this.insert('hold',postData)
-            // this.app.startLoaderDark();
-            // postData.InvType = 'HP';
-            // this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchase', postData).subscribe(
+    var postData = {
+      InvBillNo: this.holdInvNo,
+      InvType: "P",
+      InvDate: this.global.dateFormater(this.invoiceDate, '-'),
+      RefInvoiceNo: this.refInvNo,
+      PartyID: this.partyID,
+      LocationID: this.locationID,
+      ProjectID: this.projectID,
+      BookerID: this.bookerID,
+      BillTotal: this.subTotal,
+      BillDiscount: this.discount || 0,
+      OverHeadAmount: this.overHead || 0,
+      NetTotal: this.netTotal,
+      Remarks: this.invRemarks || '-',
+      InvoiceDocument: '-',
+      HoldInvNo: this.holdInvNo,
+      discType: this.discType,
+      InvDetail: JSON.stringify(this.tableDataList),
+      UserID: this.global.getUserID()
+    };
+
+
+
+    if (type == 'hold') {
+      if (this.holdBtnType == 'Hold') {
+
+        this.insert('hold', postData)
+        // this.app.startLoaderDark();
+        // postData.InvType = 'HP';
+        // this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchase', postData).subscribe(
+        //   (Response: any) => {
+        //     if (Response.msg == 'Data Saved Successfully') {
+        //       this.msg.SuccessNotify(Response.msg);
+        //       this.reset();
+
+        //     } else {
+        //       this.msg.WarnNotify(Response.msg);
+        //     }
+        //     this.app.stopLoaderDark();
+        //     this.validFlag = true;
+        //   },
+        //   (Error: any) => {
+        //     this.app.stopLoaderDark();
+        //     this.validFlag = true;
+        //   }
+        // )
+      } else if (this.holdBtnType == 'ReHold') {
+        this.global.openPinCode().subscribe(pin => {
+          if (pin != '') {
+            this.app.startLoaderDark();
+            postData['PinCode'] = pin;
+
+            this.insert('rehold', postData);
+
+            // this.http.post(environment.mainApi + this.global.inventoryLink + 'UpdateHoldInvoice', postData).subscribe(
             //   (Response: any) => {
-            //     if (Response.msg == 'Data Saved Successfully') {
+            //     if (Response.msg == 'Data Updated Successfully') {
             //       this.msg.SuccessNotify(Response.msg);
             //       this.reset();
 
@@ -794,6 +839,7 @@ export class PurchaseComponent implements OnInit {
             //       this.msg.WarnNotify(Response.msg);
             //     }
             //     this.app.stopLoaderDark();
+
             //     this.validFlag = true;
             //   },
             //   (Error: any) => {
@@ -801,83 +847,65 @@ export class PurchaseComponent implements OnInit {
             //     this.validFlag = true;
             //   }
             // )
-          } else if (this.holdBtnType == 'ReHold') {
-            this.global.openPinCode().subscribe(pin => {
-              if (pin != '') {
-                this.app.startLoaderDark();
-                postData['PinCode'] = pin;
+          } else {
+            this.sortType == 'desc'
+              ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex)
+              : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
 
-                this.insert('rehold',postData);
-                // this.http.post(environment.mainApi + this.global.inventoryLink + 'UpdateHoldInvoice', postData).subscribe(
-                //   (Response: any) => {
-                //     if (Response.msg == 'Data Updated Successfully') {
-                //       this.msg.SuccessNotify(Response.msg);
-                //       this.reset();
-
-                //     } else {
-                //       this.msg.WarnNotify(Response.msg);
-                //     }
-                //     this.app.stopLoaderDark();
-
-                //     this.validFlag = true;
-                //   },
-                //   (Error: any) => {
-                //     this.app.stopLoaderDark();
-                //     this.validFlag = true;
-                //   }
-                // )
-              } 
-            })
           }
+        })
+      }
 
-        } else if (type == 'purchase') {
+    } else if (type == 'purchase') {
 
-          this.global.confirmAlert().subscribe(
-            (Response: any) => {
-              if (Response == true) {
+      this.global.confirmAlert().subscribe(
+        (Response: any) => {
+          if (Response == true) {
 
-                   this.insert('purchase',postData);
-              } 
-            }
-          )
-        
+            this.insert('purchase', postData);
+          }
+        }
+      )
 
-      
+
+
     }
   }
 
 
 
   isProcessing = false;
-  insert(type: any,postData:any) {
-
-
+  insert(type: any, postData: any) {
 
     this.app.startLoaderDark();
 
-    if(type == 'purchase'){
-     postData.InvType = 'P';
+    if (type == 'purchase') {
+      postData.InvType = 'P';
     }
-    if(type == 'hold'){
+    if (type == 'hold') {
       postData.InvType = 'HP';
     }
 
     var url = 'InsertPurchase';
 
-    if(type == 'rehold'){
+    if (type == 'rehold') {
       url = 'UpdateHoldInvoice'
     }
 
-    if(this.isProcessing == true) return;
-    
+    if (this.isProcessing == true) return;
+
     this.isProcessing = true;
 
-    console.log(postData,url);
     this.http.post(environment.mainApi + this.global.inventoryLink + url, postData).subscribe(
       (Response: any) => {
-        if (Response.msg == 'Data Saved Successfully' ||  Response.msg == 'Data Updated Successfully') {
+        if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
           this.msg.SuccessNotify(Response.msg);
+
+          if (type == 'purchase' && this.InvoiceDocument !== '') {
+            this.uploadDocument(Response.invNo, this.InvoiceDocument);
+          }
           this.reset();
+
 
         } else {
           this.msg.WarnNotify(Response.msg);
@@ -891,6 +919,43 @@ export class PurchaseComponent implements OnInit {
         this.isProcessing = false;
       }
     )
+
+  }
+
+
+
+  uploadDocument(billNo: any, invDoc: any) {
+
+
+    const BillNo = billNo;
+    const document = invDoc;
+
+    if (BillNo == '' || BillNo == undefined) {
+      this.msg.WarnNotify('Bill No Empty');
+      return;
+    }
+    if (document == '' || document == undefined) {
+      this.msg.WarnNotify('No Document selected');
+      return;
+    }
+
+    var postData: any = {
+      InvBillNo: BillNo,
+      InvDocument: document,
+      UserID: this.global.getUserID()
+    }
+    this.http.post(environment.mainApi + this.global.inventoryLink + 'AddInvDocument', postData).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully') {
+          this.msg.SuccessNotify(Response.msg);
+          this.reset();
+        } else {
+          this.msg.WarnNotify(Response.msg);
+        }
+      }
+    )
+
+
 
   }
 
@@ -913,7 +978,9 @@ export class PurchaseComponent implements OnInit {
     this.holdBtnType = 'Hold';
     this.holdBillList = [];
     this.netTotal = 0;
-
+    this.InvoiceDocument = '';
+    this.documentName = '';
+    this.removeLocalStorage();
 
 
   }
@@ -945,6 +1012,7 @@ export class PurchaseComponent implements OnInit {
     }
     this.netTotal = (this.subTotal + Number(this.overHead)) - Number(this.discount)
 
+    this.insertToLocalStorage();
 
   }
 
@@ -977,7 +1045,6 @@ export class PurchaseComponent implements OnInit {
     this.getBillDetail(item.invBillNo).subscribe(
       (Response: any) => {
         console.log(Response);
-
         this.myTotalQty = 0;
         this.productImage = Response[Response.length - 1].productImage;
         this.discType = Response[0].discType;
@@ -1029,13 +1096,13 @@ export class PurchaseComponent implements OnInit {
   findHoldBills(type: any) {
     if (type == 'hp') {
       $('#edit').show();
-         $('#doc').hide();
-      
+      $('#doc').hide();
+
     }
 
     if (type == 'p') {
       $('#edit').hide();
-         $('#doc').show();
+      $('#doc').show();
     }
 
     var date = this.searchBillType == 'Date' ? this.global.dateFormater(this.Date, '-') : '';
@@ -1148,6 +1215,184 @@ export class PurchaseComponent implements OnInit {
     this.getTotal();
 
   }
+
+  ///////////////////////////////////////// Attach Document Functionality /////////////////////////////////
+  InvoiceDocument: any = '';
+  documentName: any = '';
+
+  onFilesSelected(event: any): void {
+
+
+
+    if (this.global.getExtension(event.target.value) == 'pdf') {
+      let targetEvent = event.target;
+
+      let file: File = targetEvent.files[0];
+
+      let fileReader: FileReader = new FileReader();
+
+
+      fileReader.onload = (e) => {
+        this.InvoiceDocument = fileReader.result;
+        this.documentName = file.name;
+      }
+
+      fileReader.readAsDataURL(file);
+
+    } else {
+      this.msg.WarnNotify('File Must Be pdf Only');
+      event.target.value = '';
+      this.InvoiceDocument = '';
+    }
+
+  }
+
+
+  viewDocumentAttached(document: any) {
+    // const fileUrl = filesUrl;
+    // const link = document.createElement('a');
+    // link.href = fileUrl;
+    // link.target = '_blank'; // Open in new tab if download attribute is not supported
+    // link.download = 'filename'; // This will force download in supported browsers
+    // document.body.appendChild(link);
+    // link.click();
+    // document.body.removeChild(link);
+
+
+    var vdoc = document;
+    // console.log(vdoc);
+
+    var newImage = vdoc.replace('data:application/pdf;base64,', '');
+
+    const byteArray = new Uint8Array(atob(newImage).split('').map(char => char.charCodeAt(0)));
+
+    const file = new Blob([byteArray], { type: 'application/pdf' });
+
+    const fileURl = URL.createObjectURL(file);
+
+    let fileName = '-';
+    let link = document.createElement('a');
+    link.download = fileName;
+    link.target = '_blank';
+    link.href = fileURl;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+
+  openAttachDocumentModal() {
+    this.global.openBootstrapModal('#attchDocumentModal', true)
+  }
+
+
+  openImage(link: string) {
+    if (link == '-' || link == null || link == '') {
+      return;
+    }
+    window.open(link, '_blank');
+  }
+
+
+
+  removeLocalStorage() {
+    localStorage.removeItem('tmpPurchaseData');
+    localStorage.removeItem('tmpPLocationID');
+    localStorage.removeItem('tmpPInvoiceDate');
+    localStorage.removeItem('tmpPRefInvNo');
+    localStorage.removeItem('tmpPPartyID');
+    localStorage.removeItem('tmpPRemarks');
+    localStorage.removeItem('tmpPHoldINvNo')
+    localStorage.removeItem('tmpPHoldBtnType');
+    localStorage.removeItem('tmpPBookerID');
+    localStorage.removeItem('tmpPOverhead');
+    localStorage.removeItem('tmpPDiscount');
+
+  }
+
+
+  insertToLocalStorage() {
+    this.removeLocalStorage();
+
+    var prodData = JSON.stringify(this.tableDataList);
+    localStorage.setItem('tmpPurchaseData', prodData);
+
+    var locationID = JSON.stringify(this.locationID);
+    localStorage.setItem('tmpPLocationID', locationID);
+
+    var date = JSON.stringify(this.invoiceDate);
+    localStorage.setItem('tmpPInvoiceDate', date);
+
+    var RefNo = JSON.stringify(this.refInvNo);
+    localStorage.setItem('tmpPRefInvNo', RefNo);
+
+    var partyID = JSON.stringify(this.partyID);
+    localStorage.setItem('tmpPPartyID', partyID);
+
+    var remarks = JSON.stringify(this.invRemarks);
+    localStorage.setItem('tmpPRemarks', remarks);
+
+    var holdInvNo = JSON.stringify(this.holdInvNo);
+    localStorage.setItem('tmpPHoldINvNo', holdInvNo);
+
+    var holdBtnType = JSON.stringify(this.holdBtnType);
+    localStorage.setItem('tmpPHoldBtnType', holdBtnType);
+
+
+
+    var bookerID = JSON.stringify(this.bookerID);
+    localStorage.setItem('tmpPBookerID', bookerID);
+
+
+    var overHead = JSON.stringify(this.overHead);
+    localStorage.setItem('tmpPOverhead', overHead);
+
+    var discount = JSON.stringify(this.discount);
+    localStorage.setItem('tmpPDiscount', discount);
+
+  }
+
+  importFromLocalStorage() {
+
+    var data = JSON.parse(localStorage.getItem('tmpPurchaseData') || '[]');
+
+
+
+    if (this.tableDataList.length > 0) {
+      if (data == '0' || data == '') {
+        Swal.fire({
+          title: "No Data Found",
+          text: "Storage Limit Exceed Please Hold the Bill Else Data will be Lost on Reload?",
+          icon: "warning"
+        });
+        // this.msg.WarnNotify('Storage Limit Exceed Please Hold the Bill Else Data will be vanished on Reload?')
+        return;
+      }
+    }
+
+    this.invRemarks = JSON.parse(localStorage.getItem('tmpPRemarks') || '');
+    this.partyID = JSON.parse(localStorage.getItem('tmpPPartyID') || '0');
+    this.invoiceDate = JSON.parse(localStorage.getItem('tmpPInvoiceDate') || '');
+    this.locationID = JSON.parse(localStorage.getItem('tmpPLocationID') || '0');
+    this.refInvNo = JSON.parse(localStorage.getItem('tmpPRefInvNo') || '');
+    this.holdInvNo = JSON.parse(localStorage.getItem('tmpPHoldINvNo') || '');
+    this.holdBtnType = JSON.parse(localStorage.getItem('tmpPHoldBtnType') || 'Hold');
+    this.bookerID = JSON.parse(localStorage.getItem('tmpPBookerID') || '0');
+    this.overHead = JSON.parse(localStorage.getItem('tmpPOverhead') || '0');
+    this.discount = JSON.parse(localStorage.getItem('tmpPDiscount') || '0');
+    this.tableDataList = data;
+    this.getTotal();
+
+    // if (this.AuditInventoryID > 0) {
+    //   this.holdBtnType = 'Rehold'
+    // }
+
+
+
+  }
+
+
 
 
 }

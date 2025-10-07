@@ -91,6 +91,7 @@ export class BarcodeReportComponent implements OnInit {
         ///// check the product in product list by barcode
         this.global.getProdDetail(0, this.PBarcode).subscribe(
           (Response: any) => {
+            console.log(Response);
             if (Response.length > 0) {
               this.curProduct = Response;
             } else {

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Observable, retry } from 'rxjs';
@@ -23,6 +23,13 @@ import { PurchaseBillPrintComponent } from '../purchase-bill-print/purchase-bill
 export class PurchaseReturnComponent implements OnInit {
 
   @ViewChild(PurchaseBillPrintComponent) billPrint: any;
+
+
+  @HostListener('document:visibilitychange', ['$event'])
+
+  appVisibility() {
+    if (document.hidden) { } else { this.importFromLocalStorage(); }
+  }
 
   disableDateFeature = this.global.DisableInvDate;
 
@@ -63,6 +70,7 @@ export class PurchaseReturnComponent implements OnInit {
       if (data.length > 0) { this.locationID = data[0].locationID }
     });
 
+    this.importFromLocalStorage();
   }
 
   getProducts() {
@@ -80,9 +88,9 @@ export class PurchaseReturnComponent implements OnInit {
   productImage: any;
   projectID = this.global.getProjectID();
   PBarcode: string = '';   /// for Search barcode field
-  productsData: any;   //// for showing the products
+  productsData: any = '';   //// for showing the products
   tableDataList: any = [];          //////will hold data temporarily
-  suppliersList: any;      //////  will shows the supplier list
+  suppliersList: any = [];      //////  will shows the supplier list
   supplierDetail: any = [];
 
   myTotalQty: any = 0;
@@ -91,9 +99,9 @@ export class PurchaseReturnComponent implements OnInit {
   myDue: any;
   holdBillList: any = [];
 
-  refInvNo: any;
-  invRemarks: any;
-  locationID: any;
+  refInvNo: any = '';
+  invRemarks: any = '';
+  locationID: any = 0;
   overHead: any = 0;
   discount: any = 0;
   holdInvNo: any = '-';
@@ -112,7 +120,7 @@ export class PurchaseReturnComponent implements OnInit {
   currentPartyCNIC: any;     /////////// will shows the current party CNIC on page
 
 
-  partyID: any;               /////// will get the party id for Api
+  partyID: any = 0;               /////// will get the party id for Api
   invoiceDate = new Date;    //////////// invoice date for api
 
 
@@ -555,6 +563,8 @@ export class PurchaseReturnComponent implements OnInit {
     }
     this.netTotal = (this.subTotal + parseFloat(this.overHead)) - parseFloat(this.discount)
 
+    this.insertToLocalStorage();
+
   }
 
   delRow(item: any) {
@@ -851,6 +861,10 @@ export class PurchaseReturnComponent implements OnInit {
     } else {
 
 
+          this.sortType == 'desc'
+      ? this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex)
+      : this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex);
+
 
       var postData = {
         InvBillNo: this.holdInvNo,
@@ -920,8 +934,11 @@ export class PurchaseReturnComponent implements OnInit {
                     this.validFlag = true;
                   }
                 )
-              }else{
+              } else {
                 this.validFlag = true;
+                 this.sortType == 'desc'
+              ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex)
+              : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
               }
             })
           }
@@ -987,6 +1004,9 @@ export class PurchaseReturnComponent implements OnInit {
     this.holdBillList = [];
     this.supplierDetail = [];
     this.netTotal = 0;
+
+       this.removeLocalStorage();
+
 
 
 
@@ -1069,7 +1089,7 @@ export class PurchaseReturnComponent implements OnInit {
 
         //////////sorting data table base on sort type
         this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-
+        this.getTotal();
       }
     )
 
@@ -1152,6 +1172,105 @@ export class PurchaseReturnComponent implements OnInit {
       }
     })
   }
+
+
+
+  removeLocalStorage() {
+    localStorage.removeItem('tmpPurchaseReturnData');
+    localStorage.removeItem('tmpPRLocationID');
+    localStorage.removeItem('tmpPRInvoiceDate');
+    localStorage.removeItem('tmpPRRefInvNo');
+    localStorage.removeItem('tmpPRPartyID');
+    localStorage.removeItem('tmpPRRemarks');
+    localStorage.removeItem('tmpPRHoldINvNo')
+    localStorage.removeItem('tmpPRHoldBtnType');
+    localStorage.removeItem('tmpPRBookerID');
+    localStorage.removeItem('tmpPROverhead');
+    localStorage.removeItem('tmpPRDiscount');
+
+  }
+
+
+  insertToLocalStorage() {
+    this.removeLocalStorage();
+
+
+    var prodData = JSON.stringify(this.tableDataList);
+    localStorage.setItem('tmpPurchaseReturnData', prodData);
+
+    var locationID = JSON.stringify(this.locationID);
+    localStorage.setItem('tmpPRLocationID', locationID);
+
+    var date = JSON.stringify(this.invoiceDate);
+    localStorage.setItem('tmpPRInvoiceDate', date);
+
+    var RefNo = JSON.stringify(this.refInvNo);
+    localStorage.setItem('tmpPRRefInvNo', RefNo);
+
+    var partyID = JSON.stringify(this.partyID);
+    localStorage.setItem('tmpPRPartyID', partyID);
+
+    var remarks = JSON.stringify(this.invRemarks);
+    localStorage.setItem('tmpPRRemarks', remarks);
+
+    var holdInvNo = JSON.stringify(this.holdInvNo);
+    localStorage.setItem('tmpPRHoldINvNo', holdInvNo);
+
+    var holdBtnType = JSON.stringify(this.holdBtnType);
+    localStorage.setItem('tmpPRHoldBtnType', holdBtnType);
+
+    var bookerID = JSON.stringify(this.bookerID);
+    localStorage.setItem('tmpPRBookerID', bookerID);
+
+    var overHead = JSON.stringify(this.overHead);
+    localStorage.setItem('tmpPROverhead', overHead);
+
+    var discount = JSON.stringify(this.discount);
+    localStorage.setItem('tmpPRDiscount', discount);
+
+  }
+
+
+
+
+  importFromLocalStorage() {
+
+    var data = JSON.parse(localStorage.getItem('tmpPurchaseReturnData') || '[]');
+
+
+    if (this.tableDataList.length > 0) {
+      if (data == '0' || data == '') {
+        Swal.fire({
+          title: "No Data Found",
+          text: "Storage Limit Exceed Please Hold the Bill Else Data will be Lost on Reload?",
+          icon: "warning"
+        });
+        // this.msg.WarnNotify('Storage Limit Exceed Please Hold the Bill Else Data will be vanished on Reload?')
+        return;
+      }
+    }
+
+    this.invRemarks = JSON.parse(localStorage.getItem('tmpPRRemarks') || '');
+    this.partyID = JSON.parse(localStorage.getItem('tmpPRPartyID') || '0');
+    this.invoiceDate = JSON.parse(localStorage.getItem('tmpPRInvoiceDate') || '');
+    this.locationID = JSON.parse(localStorage.getItem('tmpPRLocationID') || '0');
+    this.refInvNo = JSON.parse(localStorage.getItem('tmpPRRefInvNo') || '');
+    this.holdInvNo = JSON.parse(localStorage.getItem('tmpPRHoldINvNo') || '');
+    this.holdBtnType = JSON.parse(localStorage.getItem('tmpPRHoldBtnType') || 'Hold');
+    this.bookerID = JSON.parse(localStorage.getItem('tmpPRBookerID') || '0');
+    this.overHead = JSON.parse(localStorage.getItem('tmpPROverhead') || '0');
+    this.discount = JSON.parse(localStorage.getItem('tmpPRDiscount') || '0');
+    this.tableDataList = data;
+    this.getTotal();
+
+    // if (this.AuditInventoryID > 0) {
+    //   this.holdBtnType = 'Rehold'
+    // }
+
+
+
+  }
+
 
 
 }
