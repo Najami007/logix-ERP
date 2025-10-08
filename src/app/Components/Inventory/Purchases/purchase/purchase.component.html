@@ -364,7 +364,7 @@
             <div class="modal-body">
 
                 <div class="d-flex justify-content-between">
-                    <mat-form-field class="col-lg-4 matSmall" appearance="outline">
+                    <mat-form-field class="col-md-4 matSmall" appearance="outline">
                         <mat-label>Date</mat-label>
                         <input matInput type="text" readonly="true" [(ngModel)]="Date" [matDatepicker]="hbDate">
                         <mat-datepicker-toggle matSuffix [for]="hbDate"></mat-datepicker-toggle>
@@ -372,24 +372,35 @@
                     </mat-form-field>
 
 
-                    <button mat-raised-button *ngIf="crudList.r" class="col-lg-2  bg-primary text-white btn-rpt"
-                        (click)="findHoldBills('hp')">Hold
-                        Bill</button>
-                    <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt"
-                        (click)="findHoldBills('p')">Saved Bill</button>
+                    <!-- <button mat-raised-button *ngIf="crudList.r" class="col-lg-2  bg-primary text-white btn-rpt"
+                        (click)="findHoldBills()">Hold
+                        Bill</button> -->
+                    <button mat-raised-button *ngIf="crudList.r" style="height: 45px !important;"
+                        class="col-md-3 bg-primary text-white" (click)="findHoldBills()">Get Invoices</button>
 
-                    <mat-form-field class="col-lg-3 matSmall" appearance="outline">
+                    <mat-form-field class="col-lg-4 matSmall" appearance="outline">
                         <mat-label>Search.......</mat-label>
-                        <input matInput #holdSearch type="text" class="col-lg-4">
+                        <input matInput #holdSearch type="text" class="col-md-4">
                     </mat-form-field>
 
                 </div>
 
 
-                <mat-radio-group [(ngModel)]="searchBillType" class="mt-2">
-                    <mat-radio-button value="all">All</mat-radio-button>
-                    <mat-radio-button value="Date">Datewise</mat-radio-button>
-                </mat-radio-group>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <mat-radio-group [(ngModel)]="searchBillType" class="mt-2">
+                            <mat-radio-button value="all">All</mat-radio-button>
+                            <mat-radio-button value="Date">Datewise</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div>
+                        <mat-radio-group [(ngModel)]="tmpSearchInvType" class="mt-2">
+                            <mat-radio-button value="HP">Holded Invoices</mat-radio-button>
+                            <mat-radio-button value="P">Saved Invoices</mat-radio-button>
+                            <mat-radio-button value="PO">Purchase Order</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
 
                 <table class="table-logix">
                     <thead>
@@ -417,8 +428,10 @@
                             <td class="text-end">{{(item.billTotal + item.overHeadAmount) | number:'1.0-0'}}</td>
                             <td>{{item.entryUser}}</td>
                             <td class="text-center cursorPointer">
-                                <mat-icon *ngIf="crudList.r" class="text-primary"
+                                <mat-icon *ngIf="crudList.r && item.invType !== 'PO'" class="text-primary"
                                     (click)="printBill(item)">print</mat-icon>
+                                <mat-icon data-bs-dismiss="modal" *ngIf=" item.invType == 'PO' && crudList.u"
+                                    (click)="RetreivePurchaseOrder(item)">edit</mat-icon>
                                 <mat-icon data-bs-dismiss="modal" *ngIf=" item.invType == 'HP' && crudList.u"
                                     (click)="retriveBill(item)">edit</mat-icon>
                                 <mat-icon *ngIf=" item.invType == 'HP' && crudList.u" class="text-danger cursorPointer"

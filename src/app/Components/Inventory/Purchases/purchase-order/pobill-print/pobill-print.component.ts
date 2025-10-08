@@ -7,11 +7,11 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { environment } from 'src/environments/environment.development';
 
 @Component({
-  selector: 'app-purchase-bill-print',
-  templateUrl: './purchase-bill-print.component.html',
-  styleUrls: ['./purchase-bill-print.component.scss']
+  selector: 'app-pobill-print',
+  templateUrl: './pobill-print.component.html',
+  styleUrls: ['./pobill-print.component.scss']
 })
-export class PurchaseBillPrintComponent {
+export class POBillPrintComponent  {
 
 
  
@@ -106,34 +106,36 @@ export class PurchaseBillPrintComponent {
 
 
 
+        this.myTableDataList = Response;
+
         Response.forEach((e: any) => {
           this.myBillTotalQty += e.quantity;
           this.mywohCPTotal += (e.costPrice - overhead) * e.quantity;
           this.myCPTotal += e.costPrice * e.quantity;
           this.mySPTotal += e.salePrice * e.quantity;
 
-          this.myTableDataList.push({
-            ProductID: e.productID,
-            ProductTitle: e.productTitle,
-            barcode: e.barcode,
-            productImage: e.productImage,
-            Quantity: e.quantity,
-            wohCP: (e.costPrice - overhead),
-            tempCostPrice: e.tempCostPrice,
-            CostPrice: e.costPrice,
-            SalePrice: e.salePrice,
-            ExpiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
-            BatchNo: e.batchNo,
-            BatchStatus: e.batchStatus,
-            UomID: e.uomID,
-            Packing: e.packing,
-            discInP: e.discInP,
-            discInR: e.discInR,
-            gst: e.gst,
-            et: e.et,
-            aq:e.aq,
+          // this.myTableDataList.push({
+          //   ProductID: e.productID,
+          //   ProductTitle: e.productTitle,
+          //   barcode: e.barcode,
+          //   productImage: e.productImage,
+          //   Quantity: e.quantity,
+          //   wohCP: (e.costPrice - overhead),
+          //   tempCostPrice: e.tempCostPrice,
+          //   CostPrice: e.costPrice,
+          //   SalePrice: e.salePrice,
+          //   ExpiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
+          //   BatchNo: e.batchNo,
+          //   BatchStatus: e.batchStatus,
+          //   UomID: e.uomID,
+          //   Packing: e.packing,
+          //   discInP: e.discInP,
+          //   discInR: e.discInR,
+          //   gst: e.gst,
+          //   et: e.et,
+          //   aq:e.aq,
 
-          })
+          // })
         });
 
 

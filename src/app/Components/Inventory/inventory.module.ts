@@ -121,6 +121,8 @@ import { SaleVehicleComponent } from './Sale/sale-vehicle/sale-vehicle.component
 import { SaleFurnitureComponent } from './Sale/sale-furniture/sale-furniture.component';
 import { BarcodeReportInvoicewiseComponent } from './InventoryReports/barcode-report-invoicewise/barcode-report-invoicewise.component';
 import { SupplierLedgerSpecialComponent } from './InventoryReports/supplier-ledger-special/supplier-ledger-special.component';
+import { POBillPrintComponent } from './Purchases/purchase-order/pobill-print/pobill-print.component';
+import { SalesmanTargetComponent } from './Configurations/salesman-target/salesman-target.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -155,6 +157,7 @@ export const inventoryRoutes: Route[] = [
   { path: 'pckr', component: PriceCheckerComponent, data: { title: 'Price Checker' }, canActivate: [AuthGuard] },
   { path: 'suppay', component: PaymentComponent, data: { title: 'Payment' }, canActivate: [AuthGuard] },
   { path: 'prodeditbulk', component: ProductEditBulkComponent, data: { title: 'Product Edit Bulk' }, canActivate: [AuthGuard] },
+  { path: 'salesmantarget', component: SalesmanTargetComponent, canActivate: [AuthGuard] },
 
   //////// Sale Pages////////////////////
 
@@ -326,6 +329,8 @@ export const inventoryRoutes: Route[] = [
     SaleFurnitureComponent,
     BarcodeReportInvoicewiseComponent,
     SupplierLedgerSpecialComponent,
+    POBillPrintComponent,
+    SalesmanTargetComponent,
     
 
 

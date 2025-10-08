@@ -1092,39 +1092,82 @@ export class PurchaseComponent implements OnInit {
 
 
   searchBillType: any = 'Date';
+  tmpSearchInvType: any = 'P'
 
-  findHoldBills(type: any) {
-    if (type == 'hp') {
-      $('#edit').show();
-      $('#doc').hide();
-
-    }
-
-    if (type == 'p') {
-      $('#edit').hide();
-      $('#doc').show();
-    }
+  findHoldBills() {
 
     var date = this.searchBillType == 'Date' ? this.global.dateFormater(this.Date, '-') : '';
 
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryBillSingleDate?Type=' + type + '&creationdate=' + date).subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryBillSingleDate?Type=' + this.tmpSearchInvType + '&creationdate=' + date).subscribe(
       (Response: any) => {
 
         this.holdBillList = [];
-        if (type == 'hp') {
-          Response.forEach((e: any) => {
-            if (e.approvedStatus == false) {
-              this.holdBillList.push(e);
-            }
-          });
+        if (this.tmpSearchInvType == 'HP' || this.tmpSearchInvType == 'PO') {
+
+          this.holdBillList = Response.filter((e: any) => e.approvedStatus == false)
+
+          // Response.forEach((e: any) => {
+          //   if (e.approvedStatus == false) {
+          //     this.holdBillList.push(e);
+          //   }
+          // });
         }
-        if (type == 'p') {
+        if (this.tmpSearchInvType == 'P') {
           this.holdBillList = Response;
         }
+
       }
     )
   }
 
+
+  RetreivePurchaseOrder(item: any) {
+
+    this.tableDataList = [];
+    this.partyID = item.partyID;
+    this.getBillDetail(item.invBillNo).subscribe(
+      (Response: any) => {
+        console.log(Response);
+        this.myTotalQty = 0;
+        this.productImage = Response[Response.length - 1].productImage;
+        Response.forEach((e: any) => {
+
+          this.myTotalQty += e.quantity;
+          this.tableDataList.push({
+            rowIndex: this.tableDataList.length + 1,
+            ProductID: e.productID,
+            ProductTitle: e.productTitle,
+            barcode: e.barcode,
+            productImage: e.productImage,
+            Quantity: e.quantity,
+            wohCP: e.costPrice,
+            tempCostPrice: e.tempCostPrice,
+            margin: ((e.salePrice - e.costPrice) / e.costPrice) * 100,
+            CostPrice: e.costPrice,
+            SalePrice: e.salePrice,
+            ExpiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
+            BatchNo: e.batchNo,
+            BatchStatus: e.batchStatus,
+            UomID: e.uomID,
+            Packing: e.packing,
+            discInP: e.discInP,
+            discInR: e.discInR,
+            AQ: '',
+            gst: e.gst,
+            et: e.et,
+          })
+        });
+
+        this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+        this.getTotal();
+
+
+      }
+    )
+
+
+
+  }
 
 
 
@@ -1157,7 +1200,7 @@ export class PurchaseComponent implements OnInit {
         this.http.post(environment.mainApi + this.global.inventoryLink + 'DeleteBill', postData).subscribe((Response: any) => {
           if (Response.msg == 'Data Deleted Successfully') {
             this.msg.SuccessNotify(Response.msg);
-            this.findHoldBills('hp');
+            this.findHoldBills();
 
             //this.app.stopLoaderDark();
 

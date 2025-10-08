@@ -83,6 +83,7 @@
                     <th class=" text-center">Cost Total</th>
                     <th class=" text-center" *ngIf="myInvType !== 'PO' ">Sale Total</th>
                     <th class=" text-center" *ngIf="myInvType !== 'PO' ">Margin</th>
+                    <th class=" text-center" *ngIf="myInvType == 'PO' ">On Hand</th>
 
                 </tr>
             </thead>
@@ -118,8 +119,10 @@
                     <td class="text-end " *ngIf="myInvType !== 'PO' ">{{item.SalePrice * item.Quantity |number:
                         '1.0-2'}}</td>
 
-                    <td class="text-end " *ngIf="myInvType !== 'PO' ">{{((item.SalePrice - item.CostPrice ) / item.CostPrice) * 100  |number:
+                    <td class="text-end " *ngIf="myInvType !== 'PO' ">{{((item.SalePrice - item.CostPrice ) /
+                        item.CostPrice) * 100 |number:
                         '1.0-2'}}%</td>
+                    <td class="text-end " *ngIf="myInvType == 'PO'">{{item.aq}}</td>
 
 
                 </tr>

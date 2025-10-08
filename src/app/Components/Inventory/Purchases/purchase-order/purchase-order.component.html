@@ -108,7 +108,7 @@
                         <td class="text-end">{{item.costPrice | number:'1.0-2'}}</td>
 
                         <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
-                        <td class="text-center">{{item.aq |number:'1.0-3'}}</td>
+                        <td class="text-center">{{item.aq |number:'1.0-1'}}</td>
                         <td class="cursorPointer text-center text-danger"><mat-icon
                                 (click)="delRow(item)">delete</mat-icon></td>
                     </tr>
@@ -263,7 +263,7 @@
     <!----------- Print Area For Bill Print --------------------->
 
 
-    <app-purchase-bill-print></app-purchase-bill-print>
+    <app-pobill-print></app-pobill-print>
 
 
 </div>

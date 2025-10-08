@@ -1,0 +1,109 @@
+<div class="row no-scroll vh-100 body ">
+
+    <div class="col-lg-4 ps-4 pe-4 pt-3 border-end border-dark">
+
+        <div class="row pt-4">
+
+            <div class="col-md-12">
+                <mat-form-field appearance="outline" class="w-100 matSmall ">
+                    <mat-label>Sales man</mat-label>
+                    <mat-select [(ngModel)]="bookerID" name="location">
+                        <mat-option><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of BookerList | filter:bookerSearch.value"
+                            [value]="item.bookerID">{{item.bookerName}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-12">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Category *</mat-label>
+
+                    <mat-select [(ngModel)]="categoryID" #category (selectionChange)="getSubCategory()"
+                        name="pCategory">
+                        <mat-option><ngx-mat-select-search #catsearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of CategoriesList | filter:catsearch.value"
+                            [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
+
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-12">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Sub Category *</mat-label>
+
+                    <mat-select [(ngModel)]="subCategoryID" #subCategory name="pSubCategory">
+                        <mat-option><ngx-mat-select-search #subcatsearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of SubCategoriesList| filter:subcatsearch.value "
+                            [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
+                    </mat-select>
+
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-12">
+                <mat-form-field class="w-100 matSmall" appearance="outline">
+                    <mat-label>Target</mat-label>
+                    <input matInput type="text">
+                </mat-form-field>
+            </div>
+
+            <div  class="col-md-12">
+                <mat-form-field class="w-100 matSmall" appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput type="text" [(ngModel)]="description"></textarea>
+                </mat-form-field>
+            </div>
+
+        </div>
+
+
+        <div class="d-flex flex-wrap justify-content-around">
+            <div class="col-md-4 pe-1" *ngIf="crudList.u  && btnType == 'Update'"><button class="btnsave w-100"
+                    (click)="save()">{{btnType}}</button></div>
+            <div class="col-md-4 pe-1" *ngIf="crudList.c  && btnType == 'Save'"><button class="btnsave w-100"
+                    (click)="save()">{{btnType}}</button></div>
+            <div class="col-md-4 "><button class="btnreset w-100" (click)="reset()">Reset</button></div>
+        </div>
+
+
+    </div>
+
+    <div class="col-lg-8 p-4 fh-config">
+
+
+        <mat-form-field class="w-100 matSmall" appearance="outline">
+            <mat-label>Search.....</mat-label>
+            <input [(ngModel)]="txtSearch" matInput type="search" class="text-secondary">
+        </mat-form-field>
+
+
+        <div>
+            <table class="table-logix2" *ngIf="crudList.r">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Sales man</th>
+                        <th>Target</th>
+                        <th>Category</th>
+                        <th *ngIf="crudList.u">Edit</th>
+                        <th *ngIf="crudList.d">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of BrandList | filter:txtSearch  index as index">
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+    </div>
+
+
+</div>

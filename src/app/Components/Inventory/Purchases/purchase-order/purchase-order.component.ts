@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { Observable, retry } from 'rxjs';
 import { AdjBillPrintComponent } from '../../InvAdjustment/adj-bill-print/adj-bill-print.component';
 import { PurchaseBillPrintComponent } from '../purchase-bill-print/purchase-bill-print.component';
+import { POBillPrintComponent } from './pobill-print/pobill-print.component';
 
 @Component({
   selector: 'app-purchase-order',
@@ -18,7 +19,7 @@ import { PurchaseBillPrintComponent } from '../purchase-bill-print/purchase-bill
 })
 export class PurchaseOrderComponent implements OnInit {
 
-  @ViewChild(PurchaseBillPrintComponent) billPrint: any;
+  @ViewChild(POBillPrintComponent) billPrint: any;
 
   crudList: any = { c: true, r: true, u: true, d: true };
   companyProfile: any = [];
@@ -831,6 +832,7 @@ export class PurchaseOrderComponent implements OnInit {
     var date = this.searchBillType == 'Date' ? this.global.dateFormater(this.Date, '-') : '';
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryBillSingleDate?Type=PO&creationdate=' + date).subscribe(
       (Response: any) => {
+        console.log(Response);
         this.IssueBillList = Response;
 
       },
@@ -1005,7 +1007,6 @@ export class PurchaseOrderComponent implements OnInit {
             })
 
           }
-          console.log(Response);
         }
       }
     )
