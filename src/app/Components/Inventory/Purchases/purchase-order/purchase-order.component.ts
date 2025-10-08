@@ -24,6 +24,7 @@ export class PurchaseOrderComponent implements OnInit {
   companyProfile: any = [];
 
   disableDateFeature = this.global.DisableInvDate;
+   ImageUrlFeature = this.global.ImageUrlFeature;
 
   constructor(
     private http: HttpClient,
@@ -315,6 +316,15 @@ export class PurchaseOrderComponent implements OnInit {
 
 
   pushProdData(data: any, qty: any) {
+
+    if(this.partyID == 0){
+      this.msg.WarnNotify('Select Supplier');
+      return;
+
+    }
+
+
+
     /////// check already present in the table or not
     var condition = this.tableDataList.find(
       (x: any) => x.productID == data.productID
@@ -331,7 +341,7 @@ export class PurchaseOrderComponent implements OnInit {
         productID: data.productID,
         productTitle: data.productTitle,
         barcode: data.barcode,
-        productImage: data.productImage,
+        productImage:this.ImageUrlFeature ? data.imagesPath : data.productImage,
         quantity: qty,
         wohCP: data.costPrice,
         tempCostPrice: data.costPrice,
@@ -824,8 +834,9 @@ export class PurchaseOrderComponent implements OnInit {
         this.IssueBillList = Response;
 
       },
-      (Error: any) => {
-        this.msg.WarnNotify(Error);
+      (error: any) => {
+        this.msg.WarnNotify(error.error.msg);
+        console.log(error)
         this.app.stopLoaderDark();
       }
     )
@@ -974,6 +985,30 @@ export class PurchaseOrderComponent implements OnInit {
           this.reset();
         }
       })
+  }
+
+
+
+
+  getSupplierProductList() {
+
+    if(this.partyID == 0){
+      this.msg.WarnNotify('Select Supplier');
+      return;
+    }
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSupplierProducts_17?reqSupId=' + this.partyID).subscribe(
+      {
+        next: (Response: any) => {
+          if (Response.length > 0) {
+            Response.forEach((e: any) => {
+              this.pushProdData(e,1);
+            })
+
+          }
+          console.log(Response);
+        }
+      }
+    )
   }
 
 

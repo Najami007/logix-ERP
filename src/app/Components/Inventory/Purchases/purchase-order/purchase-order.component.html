@@ -1,14 +1,16 @@
-<div class="row body h-100 w-100" >
+<div class="row body h-100 w-100">
 
     <div class="col-lg-9 ">
         <div class="row ps-1 pe-1 pt-1 justify-content-between ">
-            <mat-form-field appearance="outline" *ngIf="!disableDateFeature" class="col-lg-2 matSmall">
-                <mat-label>Invoice Date</mat-label>
-                <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput type="text"
-                    name="invDate" [matDatepicker]="iDate">
-                <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
-                <mat-datepicker #iDate></mat-datepicker>
-            </mat-form-field>
+            <div class="col-md-2">
+                <mat-form-field appearance="outline" *ngIf="!disableDateFeature" class="w-100 matSmall">
+                    <mat-label>Invoice Date</mat-label>
+                    <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput
+                        type="text" name="invDate" [matDatepicker]="iDate">
+                    <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
+                    <mat-datepicker #iDate></mat-datepicker>
+                </mat-form-field>
+            </div>
 
             <!-- <mat-form-field appearance="outline" class="col-lg-2 matSmall">
                 <mat-label>Location</mat-label>
@@ -20,9 +22,10 @@
                 </mat-select>
             </mat-form-field> -->
 
-            <mat-form-field appearance="outline" class="col-lg-4 matSmall">
+            <div class="col-md-3">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
                     <mat-label>Supplier</mat-label>
-                    <mat-select [(ngModel)]="partyID" #supplier  name="customer">
+                    <mat-select [disabled]="tableDataList.length > 0" [(ngModel)]="partyID" #supplier name="customer">
                         <mat-option><ngx-mat-select-search #partySearch [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                         <mat-option *ngFor="let item of suppliersList | filter:partySearch.value"
@@ -30,14 +33,18 @@
 
                     </mat-select>
                 </mat-form-field>
+            </div>
+            <div class="col-md-2 pe-1">
+                <button class="btn-rpt-primary w-100" (click)="getSupplierProductList()">Import</button></div>
 
 
 
-
-            <mat-form-field appearance="outline" class="matSmall" [ngClass]="disableDateFeature ? 'col-lg-8' :'col-lg-6'">
-                <mat-label>Remarks</mat-label>
-                <input matInput type="text" [(ngModel)]="invRemarks">
-            </mat-form-field>
+            <div [ngClass]="disableDateFeature ? 'col-lg-7' :'col-lg-5'">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Remarks</mat-label>
+                    <input matInput type="text" [(ngModel)]="invRemarks">
+                </mat-form-field>
+            </div>
         </div>
 
 
@@ -93,12 +100,13 @@
                         <td>{{index+1}}</td>
                         <td>{{item.barcode}}</td>
                         <td>{{item.productTitle}}</td>
-                        <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0" [accessKey]="index +1 "
+                        <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
+                                [accessKey]="index +1 "
                                 (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);"
                                 (keyup)="changeValue(item);getTotal();showImg(item);" class="qty{{index}} text-center"
                                 style="width: 80px;"></td>
                         <td class="text-end">{{item.costPrice | number:'1.0-2'}}</td>
-                          
+
                         <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
                         <td class="text-center">{{item.aq |number:'1.0-3'}}</td>
                         <td class="cursorPointer text-center text-danger"><mat-icon
@@ -153,12 +161,15 @@
 
         <div class="mt-4 text-center">
             <!-- <button mat-raised-button class="bg-primary text-white w-25" (click)="SaveBill('hold')">{{holdBtnType}}</button> -->
-            <button *ngIf="crudList.c" class="btnsave w-100" [attr.accesskey]="btnType == 'Save' ? 's':'u'" (click)="SaveBill('issue')">
-                <span *ngIf="btnType=='Save'"><u>S</u>ave</span><span *ngIf="btnType=='Update'"><u>U</u>pdate</span></button>
+            <button *ngIf="crudList.c" class="btnsave w-100" [attr.accesskey]="btnType == 'Save' ? 's':'u'"
+                (click)="SaveBill('issue')">
+                <span *ngIf="btnType=='Save'"><u>S</u>ave</span><span
+                    *ngIf="btnType=='Update'"><u>U</u>pdate</span></button>
 
         </div>
         <div class="mt-4 text-center">
-            <button class="btnreset w-100" data-bs-toggle="modal" data-bs-target="#holdModal" accesskey="r"><u>R</u>etrieve</button>
+            <button class="btnreset w-100" data-bs-toggle="modal" data-bs-target="#holdModal"
+                accesskey="r"><u>R</u>etrieve</button>
 
 
 
@@ -187,13 +198,13 @@
                         </mat-form-field>
 
 
-                        <button *ngIf="crudList.r" class="col-lg-2 btn btnhold mt-1"
-                            (click)="FindSavedBills()">Get Invoices</button>
+                        <button *ngIf="crudList.r" class="col-lg-2 btn btnhold mt-1" (click)="FindSavedBills()">Get
+                            Invoices</button>
 
-                            <mat-radio-group [(ngModel)]="searchBillType" class="mt-2" >
-                                <mat-radio-button value="all">All</mat-radio-button>
-                                <mat-radio-button value="Date">Datewise</mat-radio-button>
-                            </mat-radio-group>  
+                        <mat-radio-group [(ngModel)]="searchBillType" class="mt-2">
+                            <mat-radio-button value="all">All</mat-radio-button>
+                            <mat-radio-button value="Date">Datewise</mat-radio-button>
+                        </mat-radio-group>
 
                         <mat-form-field class="col-lg-3 matSmall" appearance="outline">
                             <mat-label>Search.......</mat-label>
@@ -252,7 +263,7 @@
     <!----------- Print Area For Bill Print --------------------->
 
 
-     <app-purchase-bill-print></app-purchase-bill-print>
+    <app-purchase-bill-print></app-purchase-bill-print>
 
 
 </div>
