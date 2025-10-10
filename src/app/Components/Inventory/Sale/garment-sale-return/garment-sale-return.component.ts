@@ -44,6 +44,8 @@ export class GarmentSaleReturnComponent implements OnInit {
   CustomSaleGstFeatrue = this.global.CustomSaleGstFeature;
   DashSlashBarcodeFeature = this.global.dashSlashBarcodeFeature;
 
+    ImageUrlFeature = this.global.ImageUrlFeature;
+
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
   companyProfile: any = [];
@@ -349,7 +351,7 @@ export class GarmentSaleReturnComponent implements OnInit {
         productTitle: data.productTitle,
         barcode: tmpBarcode,
         flavourTitle: data.flavourTitle,
-        productImage: data.productImage,
+        productImage: this.ImageUrlFeature ? data.imagesPath : data.productImage,
         quantity: tmpQuantity,
         wohCP: data.costPrice,
         avgCostPrice: data.avgCostPrice,
@@ -375,7 +377,7 @@ export class GarmentSaleReturnComponent implements OnInit {
       //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
       this.sortTableData();
       this.getTotal();
-      this.productImage = data.productImage;
+      this.productImage = this.ImageUrlFeature ? data.imagesPath : data.productImage;
 
 
 

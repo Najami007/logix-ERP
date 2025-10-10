@@ -41,6 +41,9 @@ export class PurchaseComponent implements OnInit {
   DetailedPurchaseFeature = this.global.DetailedPurchase;
   AttachDocPurchaseFeature = this.global.AttachDocPurchaseFeature;
 
+
+  ImageUrlFeature = this.global.ImageUrlFeature;
+
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
   constructor(
@@ -331,7 +334,7 @@ export class PurchaseComponent implements OnInit {
         ProductID: data.productID,
         ProductTitle: data.productTitle,
         barcode: data.barcode,
-        productImage: data.productImage,
+        productImage: this.ImageUrlFeature ? data.imagesPath : data.productImage,
         Quantity: qty,
         wohCP: data.costPrice,
         tempCostPrice: data.costPrice,
@@ -357,7 +360,7 @@ export class PurchaseComponent implements OnInit {
       //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
       this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
       this.getTotal();
-      this.productImage = data.productImage;
+      this.productImage = this.ImageUrlFeature ? data.imagesPath : data.productImage;
 
 
 
@@ -515,14 +518,10 @@ export class PurchaseComponent implements OnInit {
 
 
   showImg(item: any) {
-
-    // this.global.getProdImage(item.productID).subscribe((data:any)=>{
-    //   this.productImage = data[0].productImage;
-
-    // });
-
     var index = this.tableDataList.findIndex((e: any) => e.ProductID == item.ProductID);
-    this.productImage = this.tableDataList[index].productImage;
+    !this.ImageUrlFeature
+      ? this.getProductImage(item)
+      : this.productImage = this.tableDataList[index].productImage;
 
   }
 
@@ -1044,7 +1043,6 @@ export class PurchaseComponent implements OnInit {
 
     this.getBillDetail(item.invBillNo).subscribe(
       (Response: any) => {
-        console.log(Response);
         this.myTotalQty = 0;
         this.productImage = Response[Response.length - 1].productImage;
         this.discType = Response[0].discType;
@@ -1102,15 +1100,14 @@ export class PurchaseComponent implements OnInit {
       (Response: any) => {
 
         this.holdBillList = [];
-        if (this.tmpSearchInvType == 'HP' || this.tmpSearchInvType == 'PO') {
+        if (this.tmpSearchInvType == 'HP') {
 
           this.holdBillList = Response.filter((e: any) => e.approvedStatus == false)
+        }
 
-          // Response.forEach((e: any) => {
-          //   if (e.approvedStatus == false) {
-          //     this.holdBillList.push(e);
-          //   }
-          // });
+        if (this.tmpSearchInvType == 'PO') {
+
+          this.holdBillList = Response.filter((e: any) => e.approvedStatus == true)
         }
         if (this.tmpSearchInvType == 'P') {
           this.holdBillList = Response;
@@ -1127,7 +1124,6 @@ export class PurchaseComponent implements OnInit {
     this.partyID = item.partyID;
     this.getBillDetail(item.invBillNo).subscribe(
       (Response: any) => {
-        console.log(Response);
         this.myTotalQty = 0;
         this.productImage = Response[Response.length - 1].productImage;
         Response.forEach((e: any) => {
@@ -1152,7 +1148,7 @@ export class PurchaseComponent implements OnInit {
             Packing: e.packing,
             discInP: e.discInP,
             discInR: e.discInR,
-            AQ: '',
+            AQ: 0,
             gst: e.gst,
             et: e.et,
           })
@@ -1436,6 +1432,18 @@ export class PurchaseComponent implements OnInit {
   }
 
 
+
+  getProductImage(item: any) {
+    console.log(item);
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductImage?ProductID=' + item.ProductID).subscribe(
+      (Response: any) => {
+
+        this.productImage = Response[0].productImage;
+
+        $('.loaderDark').fadeOut();
+      }
+    )
+  }
 
 
 }

@@ -795,6 +795,23 @@ export class VoidSaleReturnComponent implements OnInit {
       UserID: this.global.getUserID()
     }
 
+
+
+        if (this.global.SubscriptionExpired()) {
+          Swal.fire({
+            title: 'Alert!',
+            text: 'Unable To Save , Contact To Administrator!',
+            position: 'center',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK',
+          });
+          return;
+        }
+    
+
     if (this.isValidSale) {
       this.app.startLoaderDark();
       this.isValidSale = false;

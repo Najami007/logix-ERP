@@ -283,7 +283,10 @@ export class InvrptprodwiseComponent implements OnInit {
      if(this.formateType == 2){
       tableID = 'Detail'
     }
-    this.global.ExportHTMLTabletoExcel('Detail', `${type}(${startDate} - ${endDate}`)
+
+    
+
+    this.global.ExportHTMLTabletoExcel(tableID, `${type}(${startDate} - ${endDate}`)
   }
 
 

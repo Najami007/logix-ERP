@@ -25,8 +25,8 @@
                     <button class="w-25 btnreset me-1" style="height: 50px;" accesskey="r" data-bs-toggle="modal"
                         data-bs-target="#purRtnholdModal"><u>R</u>etrieve</button>
                   
-                        <button class="w-25 btnText" [disabled]="validFlag" id="refresh" accesskey="r"
-                            (click)="validFlag =  true">Refresh</button>
+                        <button class="w-25 btnText" [disabled]="!isProcessing" id="refresh" accesskey="r"
+                            (click)="isProcessing =  false">Refresh</button>
                   
 
                 </div>
@@ -307,7 +307,7 @@
                 <div class="modal-body">
 
                     <div class="d-flex justify-content-between">
-                        <mat-form-field class="col-lg-4 matSmall" appearance="outline">
+                        <mat-form-field class="col-md-4 matSmall" appearance="outline">
                             <mat-label>Date</mat-label>
                             <input matInput type="text" readonly="true" [(ngModel)]="Date" [matDatepicker]="hbrDate">
                             <mat-datepicker-toggle matSuffix [for]="hbrDate"></mat-datepicker-toggle>
@@ -315,23 +315,34 @@
                         </mat-form-field>
 
 
-                        <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 bg-primary text-white btn-rpt"
+                        <!-- <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 bg-primary text-white btn-rpt"
                             (click)="findHoldBills('hpr')">Hold
-                            Bill</button>
-                        <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt"
-                            (click)="findHoldBills('pr')">Saved Bill</button>
+                            Bill</button> -->
+                        <button mat-raised-button *ngIf="crudList.r" class="col-md-3 btn-rpt"
+                            (click)="findHoldBills()">Get Invoices</button>
 
-                        <mat-form-field class="col-lg-3 matSmall" appearance="outline">
+                        <mat-form-field class="col-md-4 matSmall" appearance="outline">
                             <mat-label>Search.......</mat-label>
-                            <input matInput #holdSearch type="text" class="col-lg-4">
+                            <input matInput #holdSearch type="text" >
                         </mat-form-field>
 
                     </div>
 
-                    <mat-radio-group [(ngModel)]="searchBillType" class="mt-2">
-                        <mat-radio-button value="all">All</mat-radio-button>
-                        <mat-radio-button value="Date">Datewise</mat-radio-button>
-                    </mat-radio-group>
+                          <div class="d-flex justify-content-between">
+                    <div>
+                        <mat-radio-group [(ngModel)]="searchBillType" class="mt-2">
+                            <mat-radio-button value="all">All</mat-radio-button>
+                            <mat-radio-button value="Date">Datewise</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div>
+                        <mat-radio-group [(ngModel)]="tmpSearchInvType" class="mt-2" (ngModelChange)="holdBillList = []">
+                            <mat-radio-button value="HPR">Holded Invoices</mat-radio-button>
+                            <mat-radio-button value="PR">Saved Invoices</mat-radio-button>
+                            <mat-radio-button value="P">Purchase Invoices</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
 
                     <table class="table-logix">
                         <thead>
@@ -343,8 +354,8 @@
                                 <th>Location</th>
                                 <th>Amount</th>
                                 <th>User</th>
-                                <th *ngIf="crudList.r">Action</th>
-                                <th *ngIf="crudList.u" id="edit">Retrive</th>
+                                <th >Action</th>
+                                
                             </tr>
 
                         </thead>
@@ -357,10 +368,10 @@
                                 <td>{{item.locationTitle}}</td>
                                 <td class="text-end">{{(item.billTotal + item.overHeadAmount) | number:'1.0-0'}}</td>
                                 <td>{{item.entryUser}}</td>
-                                <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary"
-                                        (click)="printBill(item)">print</mat-icon></td>
-                                <td class="text-center cursorPointer" *ngIf=" item.invType == 'HPR' && crudList.u">
-                                    <mat-icon data-bs-dismiss="modal" (click)="retriveBill(item)">edit</mat-icon>
+                                <td class="text-center cursorPointer" >
+                                    <mat-icon  class="text-primary" (click)="printBill(item)">print</mat-icon>
+                                    <mat-icon *ngIf="tmpSearchInvType == 'HPR' && crudList.u" data-bs-dismiss="modal" (click)="retriveBill(item)">edit</mat-icon>
+                                     <mat-icon *ngIf="tmpSearchInvType == 'P'  && crudList.u" data-bs-dismiss="modal" (click)="RetreivePurchaseBill(item)">edit</mat-icon>
                                 </td>
 
                             </tr>

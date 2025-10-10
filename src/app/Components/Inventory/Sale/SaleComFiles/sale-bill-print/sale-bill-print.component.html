@@ -251,7 +251,7 @@
                                 <td colspan="2"> {{myOtherCharges|number:'1.0-1'}}</td>
 
                             </tr>
-                            <tr class="text-end fs-14" *ngIf="CusDiscFeature">
+                            <tr class="text-end fs-14" *ngIf="CusDiscFeature && myCusDiscAmount > 0">
                                 <td colspan="2">Cus Disc</td>
                                 <td></td>
                                 <td colspan="2">{{myCusDiscAmount|number:'1.0-1'}}</td>

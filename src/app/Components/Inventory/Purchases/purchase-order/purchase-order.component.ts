@@ -50,7 +50,7 @@ export class PurchaseOrderComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.global.setHeaderTitle('Opening Stock');
+    this.global.setHeaderTitle('Purchase Order');
     this.getLocation();
     $('.searchProduct').trigger('focus');
     this.getSuppliers();
@@ -832,7 +832,6 @@ export class PurchaseOrderComponent implements OnInit {
     var date = this.searchBillType == 'Date' ? this.global.dateFormater(this.Date, '-') : '';
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryBillSingleDate?Type=PO&creationdate=' + date).subscribe(
       (Response: any) => {
-        console.log(Response);
         this.IssueBillList = Response;
 
       },
@@ -955,7 +954,7 @@ export class PurchaseOrderComponent implements OnInit {
         }
         this.http.post(environment.mainApi + this.global.inventoryLink + 'ApproveInventoryBill', postData).subscribe(
           (Response: any) => {
-            if (Response.msg == 'Data Approved Successfully') {
+            if (Response.msg == 'Bill Approved Successfully') {
 
               this.msg.SuccessNotify(Response.msg);
               this.FindSavedBills();

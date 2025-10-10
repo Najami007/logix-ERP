@@ -1,0 +1,229 @@
+<div class="body container-fluid">
+
+    <div class="row mt-2">
+
+
+
+        <mat-form-field appearance="outline" class="col-md-8     matSmall">
+            <mat-label>Proudct</mat-label>
+            <mat-select [(ngModel)]="productID" (selectionChange)="onProdSelected()">
+                <mat-option><ngx-mat-select-search #prodsearch [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of productList | filter:prodsearch.value | slice:0:25"
+                    [value]="item.productID">{{item.productTitle}} <b>({{item.barcode}})</b></mat-option>
+            </mat-select>
+        </mat-form-field>
+
+
+
+        <div class="col-md-4 d-flex flex-wrap" *ngIf="crudList.r">
+
+            <div class="col-md-3 pe-1"><button class=" btn-rpt-success w-100" (click)="getReport()">Get Detail</button>
+            </div>
+            <div class="col-md-3 pe-1"><button class="  btn-rpt-primary w-100" (click)="print()">Print</button></div>
+
+            <div class=" col-md-3"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
+
+        </div>
+
+    </div>
+
+
+
+    <hr>
+
+
+
+    <div id="PrintDiv">
+
+        <!-------------------------    Top Logo Section -------------------->
+
+        <div class="hide">
+            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
+                        [width]="item.logo1Width">
+                </span>
+                <div class="d-flex flex-column">
+
+
+                    <span class="companyName">{{item.companyName}}</span>
+
+                    <span class="rptTitle">Detail Report<span *ngIf="userName != ''">({{userName}})</span></span>
+                    <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                        {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
+
+
+                </div>
+                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                        height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                </span>
+
+
+            </div>
+        </div>
+
+
+        <div>
+            <table class="table-logix">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Barcode</th>
+                        <th>Category</th>
+                        <th>Sub Category</th>
+                        <th>Brand</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of dataList index as index">
+                        <td>{{item.productTitle}}</td>
+                        <td>{{item.barcode}}</td>
+                        <td>{{item.categoryTitle}}</td>
+                        <td>{{item.subCategoryTitle}}</td>
+                        <td>{{item.brandTitle}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+
+            <mat-label class="fw-bold">Price Detail's:-</mat-label>
+            <table class="table table-bordered border-dark text-center">
+
+
+                <thead>
+                    <tr>
+                        <th>Cost</th>
+                        <th>Avg Cost</th>
+                        <th>Sale</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of dataList index as index" class="text-center">
+                        <td>{{item.costPrice | number:'1.0-3'}}</td>
+                        <td>{{item.avgCostPrice | number:'1.0-3'}}</td>
+                        <td>{{item.salePrice | number:'1.0-3'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <br>
+
+
+            <mat-label class="fw-bold">Purchase Detail's:-</mat-label>
+
+            <table class="table table-bordered border-dark text-center">
+
+
+                <thead>
+                    <tr>
+                        <th>First Pur Date</th>
+                        <th>First Pur Price</th>
+                        <th>First Pur Qty</th>
+                        <th>Last Pur Date</th>
+                        <th>Last Pur Price</th>
+                        <th>Last Pur Qty</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of dataList index as index" class="text-center">
+                        <td>{{item.firstPurchaseDate| date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.firstPurchasePrice | number:'1.0-3'}}</td>
+                        <td>{{item.firstPurchaseQty | number:'1.0-3'}}</td>
+                        <td>{{item.lastPurchaseDate| date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.lastPurchasePrice | number:'1.0-3'}}</td>
+                        <td>{{item.lastPurchaseQty | number:'1.0-3'}}</td>
+
+
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+
+            <mat-label class="fw-bold">Sale Detail's:-</mat-label>
+            <table class="table table-bordered border-dark text-center">
+
+
+                <thead>
+
+                    <tr>
+                        <th>First Sale Date</th>
+                        <th>First Sale Price</th>
+                        <th>First Sale Qty</th>
+                        <th>Last Sale Date</th>
+                        <th>Last Sale Price</th>
+                        <th>Last Sale Qty</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of dataList index as index" class="text-center">
+                        <td>{{item.firstSaleDate| date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.firstSalePrice | number:'1.0-3'}}</td>
+                        <td>{{item.firstSaleQty | number:'1.0-3'}}</td>
+                        <td>{{item.lastSaleDate| date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.lastSalePrice | number:'1.0-3'}}</td>
+                        <td>{{item.lastSaleQty | number:'1.0-3'}}</td>
+
+
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <mat-label class="fw-bold">Stock Detail's:-</mat-label>
+
+            <table class="table table-bordered border-dark text-center">
+                <thead>
+                    <tr>
+                        <th colspan="4">IN</th>
+                        <th colspan="5">OUT</th>
+                        <th></th>
+
+                    </tr>
+                </thead>
+
+                <thead>
+                    <tr>
+                        <th>Opening</th>
+                        <th>Purchase</th>
+                        <th>Sale Return</th>
+                        <th>Adjustment In</th>
+                        <th>Sale</th>
+                        <th>purchaseReturn</th>
+                        <th>Adjustment Out</th>
+                        <th>Damage Loss</th>
+                        <th>Expiry</th>
+                        <th>Available</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of dataList index as index" class="text-center">
+                        <td>{{item.totalOsQty | number:'1.0-3'}}</td>
+                        <td>{{item.totalPQty | number:'1.0-3'}}</td>
+                        <td>{{item.totalSrQty | number:'1.0-3'}}</td>
+                        <td>{{item.totalAiQty | number:'1.0-3'}}</td>
+                        <td>{{item.totalSQty | number:'1.0-3'}}</td>
+                        <td>{{item.totalPrQty | number:'1.0-3'}}</td>
+                        <td>{{item.totalAoQty | number:'1.0-3'}}</td>
+                        <td>{{item.totalDlQty | number:'1.0-3'}}</td>
+                        <td>{{item.totalEQty | number:'1.0-3'}}</td>
+                        <td>{{(item.totalOsQty + item.totalPQty + item.totalSrQty + item.totalAiQty) -
+                            (item.totalSQty + item.totalPrQty + item.totalAoQty + item.totalDlQty + item.totalEQty) |
+                            number:'1.0-3'}}</td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+    </div>
+
+
+
+</div>

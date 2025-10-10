@@ -876,6 +876,23 @@ export class VoidSaleComponent implements OnInit {
 
     console.log(postData);
 
+
+        if (this.global.SubscriptionExpired()) {
+          Swal.fire({
+            title: 'Alert!',
+            text: 'Unable To Save , Contact To Administrator!',
+            position: 'center',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK',
+          });
+          return;
+        }
+    
+
+
     if (this.isProcessing) return;
       this.app.startLoaderDark();
       this.isProcessing = true;

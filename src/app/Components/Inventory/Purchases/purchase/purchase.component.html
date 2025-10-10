@@ -394,7 +394,7 @@
                         </mat-radio-group>
                     </div>
                     <div>
-                        <mat-radio-group [(ngModel)]="tmpSearchInvType" class="mt-2">
+                        <mat-radio-group [(ngModel)]="tmpSearchInvType" class="mt-2" (ngModelChange)="holdBillList = []">
                             <mat-radio-button value="HP">Holded Invoices</mat-radio-button>
                             <mat-radio-button value="P">Saved Invoices</mat-radio-button>
                             <mat-radio-button value="PO">Purchase Order</mat-radio-button>
@@ -412,7 +412,7 @@
                             <th>Location</th>
                             <th>Amount</th>
                             <th>User</th>
-                            <th *ngIf="crudList.r">Action</th>
+                            <th >Action</th>
                             <!-- <th *ngIf="crudList.u" id="edit">Retrive</th>
                             <th id="doc">Document</th> -->
                         </tr>

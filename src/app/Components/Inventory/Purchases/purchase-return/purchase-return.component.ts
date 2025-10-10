@@ -32,6 +32,7 @@ export class PurchaseReturnComponent implements OnInit {
   }
 
   disableDateFeature = this.global.DisableInvDate;
+    ImageUrlFeature = this.global.ImageUrlFeature;
 
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -45,16 +46,11 @@ export class PurchaseReturnComponent implements OnInit {
   ) {
     this.global.getMenuList().subscribe((data) => {
       this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
-
     })
 
     this.global.getCompany().subscribe((data) => {
       this.companyProfile = data;
     });
-
-
-
-
   }
 
 
@@ -261,7 +257,7 @@ export class PurchaseReturnComponent implements OnInit {
         ProductID: data.productID,
         ProductTitle: data.productTitle,
         barcode: data.barcode,
-        productImage: data.productImage,
+        productImage: this.ImageUrlFeature ? data.imagesPath : data.productImage,
         Quantity: qty,
         wohCP: data.costPrice,
         CostPrice: data.costPrice,
@@ -282,7 +278,7 @@ export class PurchaseReturnComponent implements OnInit {
       //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
       this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
       this.getTotal();
-      this.productImage = data.productImage;
+      this.productImage = this.ImageUrlFeature ? data.imagesPath : data.productImage;
 
 
 
@@ -827,7 +823,7 @@ export class PurchaseReturnComponent implements OnInit {
 
 
 
-  validFlag = true;
+
   SaveBill(type: any) {
 
 
@@ -861,9 +857,9 @@ export class PurchaseReturnComponent implements OnInit {
     } else {
 
 
-          this.sortType == 'desc'
-      ? this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex)
-      : this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex);
+      this.sortType == 'desc'
+        ? this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex)
+        : this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex);
 
 
       var postData = {
@@ -886,95 +882,40 @@ export class PurchaseReturnComponent implements OnInit {
         UserID: this.global.getUserID()
       };
 
-      if (this.validFlag == true) {
-        this.validFlag = false;
-        if (type == 'hold') {
-          if (this.holdBtnType == 'Hold') {
-            this.app.startLoaderDark();
-            postData.InvType = 'HPR';
-            this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchaseRtn', postData).subscribe(
-              (Response: any) => {
-                if (Response.msg == 'Data Saved Successfully') {
-                  this.msg.SuccessNotify(Response.msg);
-                  this.reset();
-
-                } else {
-                  this.msg.WarnNotify(Response.msg);
-                }
-                this.app.stopLoaderDark();
-                this.validFlag = true;
-              },
-              (Error: any) => {
-                this.msg.WarnNotify(Error);
-                this.app.stopLoaderDark();
-                this.validFlag = true;
-              }
-            )
-          } else if (this.holdBtnType == 'ReHold') {
-            this.global.openPinCode().subscribe(pin => {
-              if (pin != '') {
-                this.app.startLoaderDark();
-                postData['PinCode'] = pin;
-                this.http.post(environment.mainApi + this.global.inventoryLink + 'UpdateHoldInvoice', postData).subscribe(
-                  (Response: any) => {
-                    if (Response.msg == 'Data Updated Successfully') {
-                      this.msg.SuccessNotify(Response.msg);
-                      this.reset();
 
 
-                    } else {
-                      this.msg.WarnNotify(Response.msg);
-                    }
-                    this.validFlag = true;
-                    this.app.stopLoaderDark();
-                  },
-                  (Error: any) => {
-                    this.msg.WarnNotify(Error);
-                    this.app.stopLoaderDark();
-                    this.validFlag = true;
-                  }
-                )
-              } else {
-                this.validFlag = true;
-                 this.sortType == 'desc'
-              ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex)
-              : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-              }
-            })
-          }
+      if (type == 'hold') {
+        if (this.holdBtnType == 'Hold') {
+          this.insert('hold', postData)
+        } else if (this.holdBtnType == 'ReHold') {
+          this.global.openPinCode().subscribe(pin => {
+            if (pin != '') {
+              this.app.startLoaderDark();
+              postData['PinCode'] = pin;
+              this.insert('rehold', postData);
+            } else {
+              this.sortType == 'desc'
+                ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex)
+                : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
 
-        } else if (type == 'purchase') {
-
-          this.global.confirmAlert().subscribe(
-            (Response: any) => {
-              if (Response == true) {
-                this.app.startLoaderDark();
-                postData.InvType = 'PR';
-                this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchaseRtn', postData).subscribe(
-                  (Response: any) => {
-                    if (Response.msg == 'Data Saved Successfully') {
-                      this.msg.SuccessNotify(Response.msg);
-                      this.reset();
-
-                    } else {
-                      this.msg.WarnNotify(Response.msg);
-                    }
-                    this.app.stopLoaderDark();
-                    this.validFlag = true;
-                  },
-                  (Error: any) => {
-                    this.msg.WarnNotify(Error);
-                    this.app.stopLoaderDark();
-                    this.validFlag = true;
-
-                  }
-                )
-              }
-            })
+            }
+          })
         }
 
-      }
+      } else if (type == 'purchase') {
 
+        this.global.confirmAlert().subscribe(
+          (Response: any) => {
+            if (Response == true) {
+
+              this.insert('purchaseReturn', postData);
+            }
+          }
+        )
+
+
+
+      }
 
 
     }
@@ -982,6 +923,54 @@ export class PurchaseReturnComponent implements OnInit {
 
 
   }
+
+
+
+  isProcessing = false;
+  insert(type: any, postData: any) {
+    console.log(postData);
+    this.app.startLoaderDark();
+
+    if (type == 'purchaseReturn') {
+      postData.InvType = 'PR';
+    }
+    if (type == 'hold') {
+      postData.InvType = 'HPR';
+    }
+
+    var url = 'InsertPurchaseRtn';
+
+    if (type == 'rehold') {
+      url = 'UpdateHoldInvoice'
+    }
+
+    if (this.isProcessing == true) return;
+
+    this.isProcessing = true;
+
+    this.http.post(environment.mainApi + this.global.inventoryLink + url, postData).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
+          this.msg.SuccessNotify(Response.msg);
+          this.reset();
+
+
+        } else {
+          this.msg.WarnNotify(Response.msg);
+        }
+        this.app.stopLoaderDark();
+        this.isProcessing = false;
+      },
+      (Error: any) => {
+        console.log(Error);
+        this.app.stopLoaderDark();
+        this.isProcessing = false;
+      }
+    )
+
+  }
+
+
 
 
   reset() {
@@ -1005,7 +994,7 @@ export class PurchaseReturnComponent implements OnInit {
     this.supplierDetail = [];
     this.netTotal = 0;
 
-       this.removeLocalStorage();
+    this.removeLocalStorage();
 
 
 
@@ -1102,32 +1091,81 @@ export class PurchaseReturnComponent implements OnInit {
 
 
   searchBillType: any = 'Date';
-  findHoldBills(type: any) {
-    if (type == 'hpr') {
-      $('#edit').show();
-    }
+  tmpSearchInvType: any = 'PR'
+  findHoldBills() {
 
-    if (type == 'pr') {
-      $('#edit').hide()
-    }
     var date = this.searchBillType == 'Date' ? this.global.dateFormater(this.Date, '-') : '';
 
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryBillSingleDate?Type=' + type + '&creationdate=' + date).subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryBillSingleDate?Type=' + this.tmpSearchInvType + '&creationdate=' + date).subscribe(
       (Response: any) => {
         this.holdBillList = [];
 
-        if (type == 'hpr') {
-          Response.forEach((e: any) => {
-            if (e.approvedStatus == false) {
-              this.holdBillList.push(e);
-            }
-          });
+        if (this.tmpSearchInvType == 'HPR') {
+          this.holdBillList = Response.filter((e: any) => e.approvedStatus == false)
         }
-        if (type == 'pr') {
+        if (this.tmpSearchInvType == 'P') {
+          this.holdBillList = Response.filter((e: any) => e.approvedStatus == true)
+        }
+        if (this.tmpSearchInvType == 'PR') {
           this.holdBillList = Response;
         }
       }
     )
+  }
+
+
+
+  RetreivePurchaseBill(item: any) {
+
+    this.tableDataList = [];
+    this.locationID = item.locationID;
+    this.refInvNo = item.refInvoiceNo;
+    this.discount = item.billDiscount;
+    // this.overHead = item.overHeadAmount;
+    this.invRemarks = item.remarks;
+    this.holdInvNo = item.invBillNo;
+    this.bookerID = item.bookerID;
+    this.partyID = item.partyID;
+    this.subTotal = item.billTotal;
+    this.onPartySelected();
+
+    this.getBillDetail(item.invBillNo).subscribe(
+      (Response: any) => {
+        this.myTotalQty = 0;
+        this.productImage = Response[Response.length - 1].productImage;
+        Response.forEach((e: any) => {
+
+          this.myTotalQty += e.quantity;
+          this.tableDataList.push({
+            rowIndex: this.tableDataList.length + 1,
+            ProductID: e.productID,
+            ProductTitle: e.productTitle,
+            barcode: e.barcode,
+            productImage: e.productImage,
+            Quantity: e.quantity,
+            wohCP: e.costPrice,
+            CostPrice: e.costPrice,
+            SalePrice: e.salePrice,
+            ExpiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
+            BatchNo: e.batchNo,
+            BatchStatus: e.batchStatus,
+            UomID: e.uomID,
+            Packing: e.packing,
+            discInP: e.discInP,
+            discInR: e.discInR,
+            AQ: 0,
+          })
+        });
+
+        this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+        this.getTotal();
+
+
+      }
+    )
+
+
+
   }
 
 

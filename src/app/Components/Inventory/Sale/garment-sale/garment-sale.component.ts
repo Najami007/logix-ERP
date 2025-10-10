@@ -50,7 +50,7 @@ export class GarmentSaleComponent implements OnInit {
   DashSlashBarcodeFeature = this.global.dashSlashBarcodeFeature;
   SaleSupplierFeature = this.global.SaleSupplierFeature;
 
-
+  ImageUrlFeature = this.global.ImageUrlFeature;
 
 
   companyProfile: any = [];
@@ -211,7 +211,7 @@ export class GarmentSaleComponent implements OnInit {
     if (this.SaleSupplierFeature) {
       this.global.getPartyList().subscribe((data: any) => {
         if (data.length > 0) {
-          this.partyList = data.filter((e:any)=> e.partyType == 'Customer' || e.partyType == 'Supplier');
+          this.partyList = data.filter((e: any) => e.partyType == 'Customer' || e.partyType == 'Supplier');
         }
 
         console.log(data, 'all')
@@ -375,7 +375,7 @@ export class GarmentSaleComponent implements OnInit {
         productTitle: data.productTitle,
         barcode: tmpBarcode,
         flavourTitle: data.flavourTitle,
-        productImage: data.productImage,
+        productImage: this.ImageUrlFeature ? data.imagesPath : data.productImage,
         quantity: tmpQuantity,
         wohCP: data.costPrice,
         avgCostPrice: data.avgCostPrice,
@@ -401,7 +401,7 @@ export class GarmentSaleComponent implements OnInit {
       //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
       this.sortTableData();
       this.getTotal();
-      this.productImage = data.productImage;
+      this.productImage = this.ImageUrlFeature ? data.imagesPath : data.productImage;
 
 
 
