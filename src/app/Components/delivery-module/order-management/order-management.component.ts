@@ -10,6 +10,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { environment } from 'src/environments/environment.development';
 import { OrderPrintComponent } from './order-print/order-print.component';
 import Swal from 'sweetalert2';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-order-management',
@@ -18,6 +19,7 @@ import Swal from 'sweetalert2';
 })
 export class OrderManagementComponent {
   @ViewChild('orderDetailPanel') orderDetailPanel!: MatSidenav;
+  @ViewChild('orderDetailMobilePanel') orderDetailMobilePanel!: MatSidenav;
 
   @ViewChild(OrderPrintComponent) orderPrint: any;
 
@@ -82,6 +84,11 @@ export class OrderManagementComponent {
 
   crudList: any = { c: true, r: true, u: true, d: true };
 
+
+  private subscription!: Subscription;
+
+
+
   constructor(private http: HttpClient,
     private msg: NotificationService,
     private dialogue: MatDialog,
@@ -108,9 +115,15 @@ export class OrderManagementComponent {
     this.tableSize = this.global.paginationDefaultTalbeSize;
     this.tableSizes = this.global.paginationTableSizes;
 
+    this.subscription = interval(3000).subscribe(() => {
+      this.MatchOrderList();
+    });
+
   }
 
-
+  ngOnDestroy() {
+    this.subscription?.unsubscribe();
+  }
 
   curUserRoleID = this.global.getRoleTypeID();
 
@@ -193,6 +206,61 @@ export class OrderManagementComponent {
 
   searchType = 'date';
 
+  tmpOrderList: any = [];
+  tmpPendingOrderList: any = [];
+
+  MatchOrderList() {
+
+    var fromDate = this.global.dateFormater(this.fromDate, '');
+    var toDate = this.global.dateFormater(this.toDate, '');
+    var fromTime = this.fromTime;
+    var toTime = this.toTime;
+
+    var reqFilter = this.searchType == 'all' ? 'All' : '-'
+    var url = `${this.apiReq}GetMobOrders?MobUserID=0&FromDate=${fromDate}&ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&reqFilter=ALL`
+    this.http.get(url).subscribe(
+      {
+        next: (Response: any) => {
+          console.log(Response);
+          if (Response.length > 0) {
+            var pendingList = Response.filter((e: any) => e.orderStatus == 'Pending');
+
+            if (pendingList.length > this.tmpPendingOrderList.length) {
+              this.tmpPendingOrderList = Response.filter((e: any) => e.orderStatus == 'Pending');
+              this.RefreshAlert()
+            }
+
+          }
+
+
+
+
+
+        },
+        error: error => {
+          console.log(error);
+        }
+      }
+    )
+
+  }
+
+  RefreshAlert() {
+    Swal.fire({
+      title: "New Order",
+      text: "New Order Arrived Refresh List",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Refresh"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.getSavedOrder();
+      }
+    });
+  }
+
   getSavedOrder() {
 
     var fromDate = this.global.dateFormater(this.fromDate, '');
@@ -207,6 +275,7 @@ export class OrderManagementComponent {
       {
         next: (Response: any) => {
           console.log(Response);
+          this.tmpOrderList = Response;
           this.dataList = [];
           if (Response.length > 0) {
             this.dataList = this.filterType !== 'All'
@@ -258,6 +327,7 @@ export class OrderManagementComponent {
 
   closePanel() {
     this.orderDetailPanel.close();
+    this.orderDetailMobilePanel.close();
     this.tmpOrderRow = [];
     setTimeout(() => {
       this.scrollToRow(this.curFocusRow)
@@ -268,6 +338,7 @@ export class OrderManagementComponent {
 
   openDetailPanel(item: any, e: any) {
     this.orderDetailPanel.open();
+    this.orderDetailMobilePanel.open();
     e.preventDefault();
     this.tmpOrderRow = item;
     this.getSingleOrderDetail(item.orderNo);
@@ -319,6 +390,11 @@ export class OrderManagementComponent {
 
     if ((this.updateOrderStatus == 'Dispatched' || this.updateOrderStatus == 'Delivered') && item.riderID == 0) {
       this.msg.WarnNotify('Assign Order to the Rider First');
+      return;
+    }
+
+    if (this.updateOrderStatus == this.curSelectedRow.orderStatus) {
+      this.msg.WarnNotify(`Already Status is ${this.updateOrderStatus}`)
       return;
     }
 
@@ -421,6 +497,15 @@ export class OrderManagementComponent {
       return;
     }
     window.open(link, '_blank');
+  }
+
+
+  openFilterModal() {
+    this.global.openBootstrapModal('#filterModal', true);
+  }
+
+  applyFilter() {
+
   }
 
 }

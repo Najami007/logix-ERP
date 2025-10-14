@@ -1,3 +1,6 @@
+
+
+
 :root{
   --bp-accent: #0fa958;    /* green */
   --bp-accent-dark: #0b7a41;
@@ -165,6 +168,35 @@
   border: none;
   outline: none;
 }
+
+
+
+
+.orderContainer {
+  display: none !important;
+}
+
+
+@media (min-width: 769px) {
+  .webContainer {
+    display: block !important;
+  }
+}
+
+/* Show container2 for small screens (mobile) */
+@media (max-width: 768px) {
+  .mobileContainer {
+    display: block !important;
+  }
+
+  .bill-paid{
+    font-size: 10px !important;
+  }
+
+
+
+}
+
 
 
 

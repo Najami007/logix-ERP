@@ -49,8 +49,6 @@ import { DirectivesModule } from './Shared/directives/directives.module';
 
 
 
-
-
 @NgModule({
   declarations: [   
     AppComponent, 
@@ -102,7 +100,8 @@ import { DirectivesModule } from './Shared/directives/directives.module';
     NgxPaginationModule,
     SharedServicesDataModule,
     SharedFieldValidationModule,
-    DirectivesModule
+    DirectivesModule,
+    
     
   
 

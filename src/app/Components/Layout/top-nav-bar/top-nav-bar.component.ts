@@ -25,9 +25,11 @@ export class TopNavBarComponent implements OnInit{
     public  menuList?:any = [];
     moduleID?: string | null;
     
+    NotificationFeature = this.globalData.NotificationFeature;
     
 
     subscriptionFeature = this.globalData.getFeature('')
+
    
     @Output() toggleMySideBar : EventEmitter<any> = new EventEmitter();
     toggleControl: any;

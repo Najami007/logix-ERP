@@ -1,90 +1,100 @@
-<mat-toolbar class="w-100 " >
+<mat-toolbar class="w-100 ">
 
   <mat-toolbar-row class="justify-content-between " style="box-shadow: 0px 1px 5px 0px rgb(228, 225, 225);">
 
-    
+
     <div class=" d-flex ">
       <div class="d-flex">
         <button class="mIcon" mat-icon-button (click)="toggleSideBar()"><mat-icon>{{Menu}}</mat-icon> </button>
         <div class="logo ps-2  pe-2">
-          <img [src]="logo1" class="topNavLogo" >
+          <img [src]="logo1" class="topNavLogo">
         </div>
       </div>
-    
+
       <div class="d-flex topNavMenuList border-start nav">
         <ul class="nav " *ngFor="let item of menuList; let i = index">
-         <li class="nav-item" *ngIf="item.parentMenuID == 0 && item.isParentMenu == false"> 
-          <a  class="list-itm"
-          routerLink="/{{item.moduleLink}}/{{item.menuLink}}" routerLinkActive="active">
-          {{ item.menuTitle }}
-        </a>
-         </li>
+          <li class="nav-item" *ngIf="item.parentMenuID == 0 && item.isParentMenu == false">
+            <a class="list-itm" routerLink="/{{item.moduleLink}}/{{item.menuLink}}" routerLinkActive="active">
+              {{ item.menuTitle }}
+            </a>
+          </li>
 
-         
 
-          <li class="nav-item dropdown cursorPointer"  *ngIf="item.isParentMenu == true">
 
-              
+          <li class="nav-item dropdown cursorPointer" *ngIf="item.isParentMenu == true">
+
+
             <a class="list-itm" [matMenuTriggerFor]="menu">{{ item.menuTitle }}<mat-icon
                 class="sideicon mb-1">arrow_drop_down</mat-icon></a>
-  
-            <div >
-              <mat-menu #menu="matMenu" [scrollLeft]="false"class="dropdown-content">
-                <span  *ngFor="let row of menuList"  >
+
+            <div>
+              <mat-menu #menu="matMenu" [scrollLeft]="false" class="dropdown-content">
+                <span *ngFor="let row of menuList">
                   <a *ngIf="item.menuID == row.parentMenuID" style="min-width: 200px !important;" class="list-itm"
                     routerLink="/{{row.moduleLink}}/{{row.menuLink}}" routerLinkActive="active">{{row.menuTitle}}</a>
                 </span>
-  
+
               </mat-menu>
-  
+
             </div>
           </li>
-  
+
         </ul>
-  
-  
-  
-  
-      </div>
+
+
+
 
       </div>
 
-     <div class="d-flex">
-    
+    </div>
+
+    <div class="d-flex gap-4">
+
+
+      <div *ngIf="NotificationFeature">
+
+        <mat-icon [matMenuTriggerFor]="NotifcationMenu" class="cursorPointer"
+          style="font-size: 40px;height: 40px;width: 40px;">notifications</mat-icon>
+
+        <mat-menu #NotifcationMenu>
+
+        </mat-menu>
+      </div>
+
       <div class="shadow logoutIcon">
-      <p class="mt-1 pe-1 ps-2 uname ">
-        {{ UserName }}
-      </p>
-      <button mat-mini-fab class="bg-success" [matMenuTriggerFor]="userMenu" aria-label="">
-        <mat-icon>person</mat-icon>
-      </button>
-      <mat-menu #userMenu="matMenu">
-        <button mat-menu-item (click)="logout()">
-          <mat-icon>settings_power</mat-icon>
-          <span>Log out</span>
+        <p class="mt-1 pe-1 ps-2 uname ">
+          {{ UserName }}
+        </p>
+        <button mat-mini-fab class="bg-success" [matMenuTriggerFor]="userMenu" aria-label="">
+          <mat-icon>person</mat-icon>
         </button>
-        <button mat-menu-item (click)="changePassword()">
-          <mat-icon>lock</mat-icon>
-          <span>Change Password</span>
-        </button>
-        <button mat-menu-item (click)="changePin()">
-          <mat-icon>vpn_key</mat-icon>
-          <span>Change Pin</span>
-        </button>
-        <button mat-menu-item (click)="updateSubscription()">
-          <mat-icon>subscriptions</mat-icon>
-          <span>Update Subscription</span>
-        </button>
-      </mat-menu>
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>settings_power</mat-icon>
+            <span>Log out</span>
+          </button>
+          <button mat-menu-item (click)="changePassword()">
+            <mat-icon>lock</mat-icon>
+            <span>Change Password</span>
+          </button>
+          <button mat-menu-item (click)="changePin()">
+            <mat-icon>vpn_key</mat-icon>
+            <span>Change Pin</span>
+          </button>
+          <button mat-menu-item (click)="updateSubscription()">
+            <mat-icon>subscriptions</mat-icon>
+            <span>Update Subscription</span>
+          </button>
+        </mat-menu>
 
 
 
-       
-  
-       </div>   
-     </div>
 
-   
+
+      </div>
+    </div>
+
+
 
   </mat-toolbar-row>
 

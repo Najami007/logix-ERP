@@ -334,6 +334,7 @@ export class GlobalDataModule implements OnInit {
   ImageUrlFeature = this.getFeature('ImageUrl');
   SaleSupplierFeature = this.getFeature('SaleSupplier');
   AttachDocPurchaseFeature = this.getFeature('AttachDocPurchase');
+  NotificationFeature = this.getFeature('Notification');
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
     this.BookerFeature = this.getFeature('Booker');
@@ -390,6 +391,7 @@ export class GlobalDataModule implements OnInit {
     this.ImageUrlFeature = this.getFeature('ImageUrl');
     this.SaleSupplierFeature = this.getFeature('SaleSupplier');
     this.AttachDocPurchaseFeature = this.getFeature('AttachDocPurchase');
+    this.NotificationFeature = this.getFeature('Notification');
   }
 
 

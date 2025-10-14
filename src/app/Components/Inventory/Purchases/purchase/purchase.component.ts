@@ -722,10 +722,18 @@ export class PurchaseComponent implements OnInit {
 
 
 
+    var inValidAmountProdList = this.tableDataList.filter((p: any) => (Number(p.CostPrice) * Number(p.Quantity)) > (Number(p.SalePrice) * Number(p.Quantity)) || (Number(p.CostPrice) * Number(p.Quantity)) < 0);
 
-    var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.CostPrice) > Number(p.SalePrice) || p.CostPrice == 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null);
-    var inValidSaleProdList = this.tableDataList.filter((p: any) => p.SalePrice == 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null);
-    var inValidQtyProdList = this.tableDataList.filter((p: any) => p.Quantity == 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '')
+
+    var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.CostPrice) > Number(p.SalePrice) || p.CostPrice == 0 || p.CostPrice < 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null);
+    var inValidSaleProdList = this.tableDataList.filter((p: any) => p.SalePrice == 0 || p.SalePrice < 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null);
+    var inValidQtyProdList = this.tableDataList.filter((p: any) => p.Quantity == 0 || p.Quantity < 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '')
+
+    if (inValidAmountProdList.length > 0) {
+      this.msg.WarnNotify('(' + inValidCostProdList[0].ProductTitle + ') Total Not Valid');
+      return;
+    }
+
     if (inValidCostProdList.length > 0) {
       this.msg.WarnNotify('(' + inValidCostProdList[0].ProductTitle + ') Cost Price greater than Sale Price');
       return;
@@ -877,6 +885,7 @@ export class PurchaseComponent implements OnInit {
   insert(type: any, postData: any) {
 
     this.app.startLoaderDark();
+    console.log(postData);
 
     if (type == 'purchase') {
       postData.InvType = 'P';
@@ -1141,7 +1150,7 @@ export class PurchaseComponent implements OnInit {
             margin: ((e.salePrice - e.costPrice) / e.costPrice) * 100,
             CostPrice: e.costPrice,
             SalePrice: e.salePrice,
-            ExpiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
+            ExpiryDate: this.global.dateFormater(new Date(), '-'),
             BatchNo: e.batchNo,
             BatchStatus: e.batchStatus,
             UomID: e.uomID,

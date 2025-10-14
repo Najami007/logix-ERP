@@ -25,7 +25,7 @@ export class PurchaseOrderComponent implements OnInit {
   companyProfile: any = [];
 
   disableDateFeature = this.global.DisableInvDate;
-   ImageUrlFeature = this.global.ImageUrlFeature;
+  ImageUrlFeature = this.global.ImageUrlFeature;
 
   constructor(
     private http: HttpClient,
@@ -107,148 +107,6 @@ export class PurchaseOrderComponent implements OnInit {
 
 
 
-  // searchByCode(e:any){
-
-  //   if(this.PBarcode !== ''){
-  //     if(e.keyCode == 13){
-  //       ///// check the product in product list by barcode
-  //       var row =  this.productList.find((p:any)=> p.barcode == this.PBarcode);
-
-  //       /////// check already present in the table or not
-  //       if(row !== undefined){
-  //         var condition = this.tableDataList.find(
-  //           (x: any) => x.productID == row.productID
-  //         );
-
-  //         var index = this.tableDataList.indexOf(condition);
-
-  //         //// push the data using index
-  //         if (condition == undefined) {
-
-  //           this.global.getProdDetail(0,this.PBarcode).subscribe(
-  //             (Response:any)=>{
-
-  //                 this.tableDataList.push({
-  //                   rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1 
-  //                   : this.sortType == 'desc' ?  this.tableDataList[0].rowIndex + 1 
-  //                   : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
-  //                   productID:Response[0].productID,
-  //                   productTitle:Response[0].productTitle,
-  //                   barcode:Response[0].barcode,
-  //                   productImage:Response[0].productImage,
-  //                   quantity:1,
-  //                   costPrice:Response[0].costPrice,
-  //                   avgCostPrice:Response[0].avgCostPrice,
-  //                   salePrice:Response[0].salePrice,
-  //                   expiryDate:this.global.dateFormater(new Date(),'-'),
-  //                   batchNo:'-',
-  //                   batchStatus:'-',
-  //                   uomID:Response[0].uomID,
-  //                   packing:1,
-  //                   discInP:0,
-  //                   discInR:0,
-  //                   aq:Response[0].aq,
-
-  //                 });
-  //                 this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
-
-  //                 this.getTotal();
-
-
-  //              this.productImage = Response[0].productImage;
-  //             }
-  //           )
-
-
-  //         this.PBarcode = '';
-  //         $('#searchProduct').trigger('focus');
-  //       }else {
-  //         this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
-  //         this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length -1].rowIndex + 1 ;
-  //         this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
-  //         this.productImage = this.tableDataList[index].productImage;
-
-  //         this.PBarcode = '';
-  //         $('#searchProduct').trigger('focus');
-  //       }
-  //       }else{
-  //         this.msg.WarnNotify('Product Not Found')
-  //       }
-
-
-  //      this.PBarcode = '';
-  //      this.getTotal();
-
-  //      }
-  //   }
-
-
-  // }
-
-  // holdDataFunction(data:any){
-  // var condition = this.tableDataList.find(
-  //     (x: any) => x.productID == data.productID
-  //   );
-
-  //   var index = this.tableDataList.indexOf(condition);
-
-  //   if (condition == undefined) {
-
-  //     this.global.getProdDetail(data.productID,'').subscribe(
-  //       (Response:any)=>{
-
-
-
-  //           this.tableDataList.push({
-  //             rowIndex:this.tableDataList.length == 0 ? this.tableDataList.length + 1 
-  //             : this.sortType == 'desc' ?  this.tableDataList[0].rowIndex + 1 
-  //             : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
-  //             productID:Response[0].productID,
-  //             productTitle:Response[0].productTitle,
-  //             barcode:Response[0].barcode,
-  //             productImage:Response[0].productImage,
-  //             quantity:1,
-  //             costPrice:Response[0].costPrice,
-  //             avgCostPrice:Response[0].avgCostPrice,
-  //             salePrice:Response[0].salePrice,
-  //             expiryDate:this.global.dateFormater(new Date(),'-'),
-  //             batchNo:'-',
-  //             batchStatus:'-',
-  //             uomID:Response[0].uomID,
-  //             packing:1,
-  //             discInP:0,
-  //             discInR:0,
-  //             aq:Response[0].aq,
-
-  //           });
-  //            //////////sorting data table base on sort type
-  //            this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
-
-  //           this.getTotal();
-
-
-  //        this.productImage = Response[0].productImage;
-  //       }
-  //     )
-
-  //   this.PBarcode = '';
-  //   $('#searchProduct').trigger('focus');
-  // }else {
-  //   this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
-  //   this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length -1].rowIndex + 1 ;
-  //   this.sortType == 'desc' ? this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex) : this.tableDataList.sort((a:any,b:any)=> a.rowIndex - b.rowIndex);
-  //   this.productImage = this.tableDataList[index].productImage;
-
-  //   this.PBarcode = '';
-  //   $('#searchProduct').trigger('focus');
-  // }
-
-  // this.getTotal();
-  //   this.PBarcode = '';
-  //   return false;
-  // }
-
-
   searchByCode(e: any) {
 
     var barcode = this.PBarcode;
@@ -318,7 +176,7 @@ export class PurchaseOrderComponent implements OnInit {
 
   pushProdData(data: any, qty: any) {
 
-    if(this.partyID == 0){
+    if (this.partyID == 0) {
       this.msg.WarnNotify('Select Supplier');
       return;
 
@@ -342,7 +200,7 @@ export class PurchaseOrderComponent implements OnInit {
         productID: data.productID,
         productTitle: data.productTitle,
         barcode: data.barcode,
-        productImage:this.ImageUrlFeature ? data.imagesPath : data.productImage,
+        productImage: this.ImageUrlFeature ? data.imagesPath : data.productImage,
         quantity: qty,
         wohCP: data.costPrice,
         tempCostPrice: data.costPrice,
@@ -993,7 +851,7 @@ export class PurchaseOrderComponent implements OnInit {
 
   getSupplierProductList() {
 
-    if(this.partyID == 0){
+    if (this.partyID == 0) {
       this.msg.WarnNotify('Select Supplier');
       return;
     }
@@ -1002,9 +860,10 @@ export class PurchaseOrderComponent implements OnInit {
         next: (Response: any) => {
           if (Response.length > 0) {
             Response.forEach((e: any) => {
-              this.pushProdData(e,1);
+              this.pushProdData(e, 1);
             })
-
+          }else{
+            this.msg.WarnNotify('No Products Found')
           }
         }
       }

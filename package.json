@@ -56,6 +56,8 @@
     "ngx-material-timepicker": "^13.1.1",
     "ngx-pagination": "^6.0.3",
     "ngx-toastr": "^16.1.0",
+    "onesignal-cordova-plugin": "^5.2.15",
+    "onesignal-ngx": "^2.3.0",
     "perfect-scrollbar": "^1.5.6",
     "popper.js": "^1.16.1",
     "rxjs": "~7.8.0",
