@@ -206,29 +206,33 @@ export class OrderManagementComponent {
 
   searchType = 'date';
 
-  tmpOrderList: any = [];
-  tmpPendingOrderList: any = [];
-
+  lastOrderNo = 0;
   MatchOrderList() {
 
     var fromDate = this.global.dateFormater(this.fromDate, '');
     var toDate = this.global.dateFormater(this.toDate, '');
     var fromTime = this.fromTime;
     var toTime = this.toTime;
-
-    var reqFilter = this.searchType == 'all' ? 'All' : '-'
     var url = `${this.apiReq}GetMobOrders?MobUserID=0&FromDate=${fromDate}&ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&reqFilter=ALL`
     this.http.get(url).subscribe(
       {
         next: (Response: any) => {
           console.log(Response);
           if (Response.length > 0) {
-            var pendingList = Response.filter((e: any) => e.orderStatus == 'Pending');
 
-            if (pendingList.length > this.tmpPendingOrderList.length) {
-              this.tmpPendingOrderList = Response.filter((e: any) => e.orderStatus == 'Pending');
-              this.RefreshAlert()
+            if (this.lastOrderNo == 0 && Response.length > 0) {
+              this.lastOrderNo = Response[0].orderNo;
+              return;
             }
+
+            if (Response.length > 0) {
+              if (Response[0].orderNo > this.lastOrderNo) {
+                this.RefreshAlert();
+                this.lastOrderNo = Response[0].orderNo;
+              }
+            }
+
+
 
           }
 
@@ -250,12 +254,13 @@ export class OrderManagementComponent {
       title: "New Order",
       text: "New Order Arrived Refresh List",
       icon: "warning",
-      showCancelButton: true,
+      showCancelButton: false,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Refresh"
     }).then((result) => {
       if (result.isConfirmed) {
+        this.searchType = 'all';
         this.getSavedOrder();
       }
     });
@@ -275,9 +280,10 @@ export class OrderManagementComponent {
       {
         next: (Response: any) => {
           console.log(Response);
-          this.tmpOrderList = Response;
+
           this.dataList = [];
           if (Response.length > 0) {
+
             this.dataList = this.filterType !== 'All'
               ? Response.filter((e: any) => e.orderStatus == this.filterType)
               : Response;

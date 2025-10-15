@@ -393,7 +393,6 @@
                                         <th>Item</th>
                                         <th>Total</th>
                                         <th></th>
-                                        <th></th>
                                     </tr>
 
                                 </thead>
@@ -438,11 +437,11 @@
                                         </td>
                                         <td>{{item.totalItems}}</td>
                                         <td>{{item.netTotal | number}}</td>
-                                        <td class="cursorPointer"><mat-icon
-                                                [ngClass]="item.riderID > 0 ? 'text-warning' : ''"
-                                                (click)="openRiderAssignModal(item)">motorcycle</mat-icon></td>
                                         <td>
-                                            <div class="cursorPointer">
+                                            <div class="cursorPointer d-flex gap-2">
+                                                <mat-icon
+                                                [ngClass]="item.riderID > 0 ? 'text-warning' : ''"
+                                                (click)="openRiderAssignModal(item)">motorcycle</mat-icon>
                                                 <mat-icon (click)="printOrder(item)">print</mat-icon>
                                                 <mat-icon matTooltip="View Order"
                                                     (click)="openDetailPanel(item,$event)">remove_red_eye</mat-icon>
@@ -841,11 +840,11 @@
                                     </td>
                                     <!-- <td>{{item.totalItems}}</td>
                                     <td>{{item.netTotal | number}}</td> -->
-                                    <td class="cursorPointer"><mat-icon
-                                            [ngClass]="item.riderID > 0 ? 'text-warning' : ''"
-                                            (click)="openRiderAssignModal(item)">motorcycle</mat-icon></td>
                                     <td>
-                                        <div class="cursorPointer">
+                                        <div class="cursorPointer d-flex gap-2">
+                                            <mat-icon
+                                            [ngClass]="item.riderID > 0 ? 'text-warning' : ''"
+                                            (click)="openRiderAssignModal(item)">motorcycle</mat-icon>
                                             <mat-icon (click)="printOrder(item)">print</mat-icon>
                                             <mat-icon matTooltip="View Order"
                                                 (click)="openDetailPanel(item,$event)">remove_red_eye</mat-icon>
