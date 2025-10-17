@@ -254,6 +254,7 @@ export class OrderManagementComponent {
       title: "New Order",
       text: "New Order Arrived Refresh List",
       icon: "warning",
+      backdrop:true,
       showCancelButton: false,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",

@@ -106,8 +106,8 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of dataList index as index">
-                        <td >{{index + 1}}</td>
-                        <td class="text-center cursorPointer" (click)="openDetail(item)">{{item.orderNo}}</td>
+                        <td class="text-center">{{index + 1}}</td>
+                        <td class="text-center cursorPointer text-primary" (click)="openDetail(item)">{{item.orderNo}}</td>
                         <td>{{item.orderDate | date:'dd-MM-yyyy hh:mm a'}}</td>
                         <td>{{item.customerName}}</td>
                         <td>{{item.orderStatus}}</td>
