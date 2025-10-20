@@ -618,7 +618,7 @@ export class GlobalDataModule implements OnInit {
   curDate: any = new Date();
   public SubscriptionExpired(): boolean {
 
-    var ExpiryDate: any = 'TWpBeU5TMHhNQzB3T0E9PQ==';
+    var ExpiryDate: any = 'TWpBek1DMHhNQzB3T0E9PQ==';
     const now = new Date();
 
     const targetDate = new Date(atob(atob(ExpiryDate)));
