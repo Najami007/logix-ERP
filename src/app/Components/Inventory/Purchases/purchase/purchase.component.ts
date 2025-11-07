@@ -33,6 +33,8 @@ export class PurchaseComponent implements OnInit {
   @HostListener('document:visibilitychange', ['$event'])
 
   appVisibility() {
+     ////////////// restrict to save in localstorage///////
+    if(!this.insertLocalStorageFeature)return;
     if (document.hidden) { } else { this.importFromLocalStorage(); }
   }
 
@@ -40,6 +42,7 @@ export class PurchaseComponent implements OnInit {
   disableDateFeature = this.global.DisableInvDate;
   DetailedPurchaseFeature = this.global.DetailedPurchase;
   AttachDocPurchaseFeature = this.global.AttachDocPurchaseFeature;
+  insertLocalStorageFeature = this.global.insertLocalStorageFeature;
 
 
   ImageUrlFeature = this.global.ImageUrlFeature;
@@ -1019,7 +1022,10 @@ export class PurchaseComponent implements OnInit {
 
     }
     this.netTotal = (this.subTotal + Number(this.overHead)) - Number(this.discount)
-
+    
+    
+    ////////////// restrict to save in localstorage///////
+    if(!this.insertLocalStorageFeature)return;
     this.insertToLocalStorage();
 
   }

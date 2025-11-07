@@ -335,6 +335,8 @@ export class GlobalDataModule implements OnInit {
   SaleSupplierFeature = this.getFeature('SaleSupplier');
   AttachDocPurchaseFeature = this.getFeature('AttachDocPurchase');
   NotificationFeature = this.getFeature('Notification');
+  insertLocalStorageFeature = this.getFeature('insertLocalStorage');
+  showLogixDetailFeature = this.getFeature('showLogixDetail');
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
     this.BookerFeature = this.getFeature('Booker');
@@ -392,6 +394,8 @@ export class GlobalDataModule implements OnInit {
     this.SaleSupplierFeature = this.getFeature('SaleSupplier');
     this.AttachDocPurchaseFeature = this.getFeature('AttachDocPurchase');
     this.NotificationFeature = this.getFeature('Notification');
+    this.insertLocalStorageFeature = this.getFeature('insertLocalStorage');
+    this.showLogixDetailFeature = this.getFeature('showLogixDetail');
   }
 
 
@@ -1808,6 +1812,17 @@ export class GlobalDataModule implements OnInit {
   }
 
 
+
+  ////////////////// will auto change start zero value on input click//////////////////
+  handleInputChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.value.length > 1 && input.value.startsWith('0')) {
+      input.value = input.value.replace(/^0+/, '');
+    }
+    if (input.value === '') {
+      input.value = '0';
+    }
+  }
 
 
 

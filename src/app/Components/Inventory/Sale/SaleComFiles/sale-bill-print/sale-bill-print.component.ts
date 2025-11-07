@@ -34,6 +34,7 @@ export class SaleBillPrintComponent implements OnInit {
   VehicleSaleFeature = this.global.VehicleSaleFeature;
   northEdgeEnterPriseBillFeature = this.global.northEdgeEnterPriseBillFeature;
     CusDiscFeature = this.global.CusDiscFeature;
+    showLogixDetailFeature = this.global.showLogixDetailFeature;
 
 
 

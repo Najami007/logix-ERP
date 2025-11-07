@@ -28,11 +28,14 @@ export class PurchaseReturnComponent implements OnInit {
   @HostListener('document:visibilitychange', ['$event'])
 
   appVisibility() {
+    if(!this.insertLocalStorageFeature)return;
     if (document.hidden) { } else { this.importFromLocalStorage(); }
   }
 
   disableDateFeature = this.global.DisableInvDate;
-    ImageUrlFeature = this.global.ImageUrlFeature;
+  ImageUrlFeature = this.global.ImageUrlFeature;
+  insertLocalStorageFeature = this.global.insertLocalStorageFeature;
+
 
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -559,6 +562,7 @@ export class PurchaseReturnComponent implements OnInit {
     }
     this.netTotal = (this.subTotal + parseFloat(this.overHead)) - parseFloat(this.discount)
 
+    if(!this.insertLocalStorageFeature)return;
     this.insertToLocalStorage();
 
   }
