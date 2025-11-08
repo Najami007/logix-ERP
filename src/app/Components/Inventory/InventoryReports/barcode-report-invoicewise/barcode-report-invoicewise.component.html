@@ -70,11 +70,46 @@
         <div class="col-md-6 card p-2 ">
 
             <div class="d-flex gap-2 justify-content-end">
+                 <mat-checkbox [(ngModel)]="showCompany">Show Company</mat-checkbox>
                 <mat-checkbox [(ngModel)]="showPrice">Show Price</mat-checkbox>
                 <mat-checkbox [(ngModel)]="showTitle">Show Title</mat-checkbox>
+                <mat-checkbox [(ngModel)]="showBarcode">Show Barcode</mat-checkbox>
 
-                <button class="btnsave" (click)="startPrinting()">Start Printing</button>
+                <button class="btnsave" (click)="startPrinting()">Print Barcode</button>
+
+                <button class="btnsave" (click)="printTags()">Print Tags</button>
             </div>
+
+
+            <div class="row">
+                <div class="col-lg-8 pe-1  d-flex flex-column ">
+                    <mat-label class="text-primary">Search Barcode / Product</mat-label>
+                    <input type="text" #pbarcode [(ngModel)]="PBarcode"
+                        (keydown)="changeFocus($event,'.prodRow');searchByCode($event)" id="searchProduct"
+                        class="p-1 ps-2 mb-2 searchProduct" placeholder="Alt + b" autofocus autocomplete="off"
+                        accesskey="b">
+
+                    <div class="  d-flex flex-column SearchConatiner cursorPointer "
+                        *ngIf="PBarcode != '' && PBarcode != undefined">
+                        <mat-card class="card "
+                            *ngFor="let item of productList| filter:PBarcode | slice:0:25 index as index">
+                            <button style="height: 40px; background: none;border: none;text-align: left;"
+                                class="prodRow{{index}} prodBtn justify-content-between d-flex"
+                                (click)="onProductSelected(item);"
+                                (keydown)=" handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">
+                                <p>{{item.productTitle}}</p>
+                                <p><strong>({{item.barcode}})</strong></p>
+                            </button>
+                        </mat-card>
+                    </div>
+
+                </div>
+                <div class="col-md-4 text-start pt-3 mt-1">
+                    <button class="btnload w-100 " style="height: 40px;" (click)="ngOnInit()">Load</button>
+
+                </div>
+            </div>
+
 
             <div style="height: 65vh;overflow-y: auto;">
                 <table class="table">
@@ -93,7 +128,7 @@
                             <td><mat-checkbox [(ngModel)]="item.isChecked"></mat-checkbox>{{index +1}}</td>
                             <td>{{item.productTitle}}</td>
                             <td>{{item.barcode}}</td>
-                            <td>{{item.quantity}}</td>
+                            <td class="cursorPointer" (click)="editQty(item)">{{item.quantity}}</td>
                             <td>{{item.costPrice}}</td>
                             <td>{{item.salePrice}}</td>
                         </tr>
@@ -121,15 +156,15 @@
         <div id="PrintDiv" class="border">
 
 
-            <div class="cmpName">{{companyName}}</div>
+            <div class="cmpName" *ngIf="showCompany">{{companyName}}</div>
             <div class="bcodet" *ngIf="showTitle">{{curProductRow.productTitle|slice:0:24}}</div>
             <!-- <span class="bcodet">{{item.productTitle
                 |slice:0:24}}...</span> -->
             <ngx-barcode6 class="barcode" [bc-format]="'CODE128'" [bc-height]="40" [bc-background]="'none'"
-              [bc-width]="getBarcodeWidth(curProductRow?.barcode2 ? curProductRow?.barcode2 : curProductRow?.barcode || '')"
-                [bc-value]="curProductRow?.barcode2 ? curProductRow?.barcode2 : curProductRow?.barcode" 
-                [bc-font-size]="10" [bc-text-margin]="-2" [bc-display-value]="true" [bc-font-options]="'bold'" [bc-text-position]="'bottom'"
-                [bc-text-align]="'right'"></ngx-barcode6>
+                [bc-width]="getBarcodeWidth(curProductRow?.barcode2 ? curProductRow?.barcode2 : curProductRow?.barcode || '')"
+                [bc-value]="curProductRow?.barcode2 ? curProductRow?.barcode2 : curProductRow?.barcode"
+                [bc-font-size]="10" [bc-text-margin]="-2" [bc-display-value]="true" [bc-font-options]="'bold'"
+                [bc-text-position]="'bottom'" [bc-text-align]="'right'"></ngx-barcode6>
             <!-- <span class="barcodeText">{{item.barcode}}</span> -->
             <!-- <div class="font-barcode" >*{{item.barcode}}*</div>
                         <div class="bcodeC">{{item.barcode}}</div> -->
@@ -137,6 +172,29 @@
                 *ngIf="showPrice">Rs.{{curProductRow?.salePrice|number}}</div>
         </div>
 
+
+    </div>
+</div>
+
+
+<div class="hide">
+    <div id="PrintTags" >
+       <div class="d-flex flex-wrap gap-2 justify-content-between p-1">
+         <div *ngFor="let item of tagList"  style="width: 48%;">
+            <div class="border border-dark p-1">
+                <h2 class="cmpName text-center" *ngIf="showCompany">{{companyName}}</h2>
+                <div style="font-size: 25px;" class="fw-bold text-center" *ngIf="showTitle">{{item.productTitle}}</div>
+
+                <div class="d-flex justify-content-around" style="margin-top: -10px !important;" *ngIf="showBarcode || showPrice">
+                    <span *ngIf="showBarcode" class="fw-bold text-center" style="font-size: 25px;">{{item.barcode2 ? item.barcode2 : item.barcode}}</span>
+                    <span class=" text-end fw-bold" style="font-size: 25px;"
+                    *ngIf="showPrice">Rs.{{item?.salePrice|number}}</span>
+                </div>
+             
+            </div>
+        </div>
+
+       </div>
 
     </div>
 </div>
