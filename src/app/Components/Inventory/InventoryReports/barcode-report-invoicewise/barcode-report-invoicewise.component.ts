@@ -17,6 +17,10 @@ import Swal from 'sweetalert2';
 export class BarcodeReportInvoicewiseComponent implements OnInit {
 
   companyProfile: any = [];
+  companyLogo:any = '';
+  logoHeight:any = 0;
+  logoWidth:any = 0;
+  printDate:any = new Date();
 
   companyName = '';
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -35,6 +39,9 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
       this.companyProfile = data;
       if (data != '') {
         this.companyName = data[0].companyName;
+        this.companyLogo = data[0].companyLogo1;
+        this.logoHeight = data[0].logo1Height;
+        this.logoWidth = data[0].logo1Width;
       }
     });
 

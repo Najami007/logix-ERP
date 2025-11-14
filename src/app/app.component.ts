@@ -20,7 +20,7 @@ export class AppComponent {
 
 
   ////////////// will Log OUt all Tabs When user LogOUt /////////////
-  @HostListener('document:visibilitychange', ['$event'])
+  @HostListener('document:visibilitychange', [])
 
   appVisibility() {
     if (document.hidden ) { 

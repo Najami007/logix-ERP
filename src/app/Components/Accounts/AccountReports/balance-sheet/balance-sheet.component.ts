@@ -104,93 +104,149 @@ export class BalanceSheetComponent implements OnInit {
 
   getBalanceSheet(param: any) {
 
-   
-      this.projectName = '';
-      var projectID = this.projectID;
-      this.projectName = projectID > 0 ? this.projectList.find((e: any) => e.projectID == this.projectID).projectTitle : '';
+
+    this.projectName = '';
+    var projectID = this.projectID;
+    this.projectName = projectID > 0 ? this.projectList.find((e: any) => e.projectID == this.projectID).projectTitle : '';
 
 
 
-      this.currentYear = this.getYear();
-      this.previousYear = this.currentYear - 1
+    this.currentYear = this.getYear();
+    this.previousYear = this.currentYear - 1
 
-      var url = '';
-      if (this.balanceSheetTypeID == 1) {
-        url = `GetMainBalanceSheet?todate= ${this.globalData.dateFormater(this.toDate, '-')}&projectid=${projectID}`
-      }
-      if (this.balanceSheetTypeID == 2) {
-        url = `GetMainBalanceSheet_2?todate= ${this.globalData.dateFormater(this.toDate, '-')}&projectid=${projectID}`
-      }
+    var url = '';
+    if (this.balanceSheetTypeID == 1) {
+      url = `GetMainBalanceSheet?todate= ${this.globalData.dateFormater(this.toDate, '-')}&projectid=${projectID}`
+    }
+    if (this.balanceSheetTypeID == 2) {
+      url = `GetMainBalanceSheet_2?todate= ${this.globalData.dateFormater(this.toDate, '-')}&projectid=${projectID}`
+    }
 
 
-      this.assetList = [];
-      this.liabilityList = [];
-      this.capitalList = [];
-      this.accumulatedPL = [];
-      this.assetTotal = 0;
-      this.liabilityTotal = 0;
-      this.capitalTotal = 0;
-      this.accumulatedTotal = 0;
-      this.oAssetTotal = 0;
-      this.oLiabilityTotal = 0;
-      this.oCapitalTotal = 0;
-      this.oAccumulatedTotal = 0;
+    this.assetList = [];
+    this.liabilityList = [];
+    this.capitalList = [];
+    this.accumulatedPL = [];
+    this.assetTotal = 0;
+    this.liabilityTotal = 0;
+    this.capitalTotal = 0;
+    this.accumulatedTotal = 0;
+    this.oAssetTotal = 0;
+    this.oLiabilityTotal = 0;
+    this.oCapitalTotal = 0;
+    this.oAccumulatedTotal = 0;
 
-      this.app.startLoaderDark();
-      this.http.get(environment.mainApi + this.globalData.accountLink + url).subscribe(
-        (Response: any) => {
-          if (Response.length == 0 || Response == null) {
-            this.globalData.popupAlert('Data Not Found!');
-            this.app.stopLoaderDark();
-            return;
+    this.app.startLoaderDark();
+    this.http.get(environment.mainApi + this.globalData.accountLink + url).subscribe(
+      (Response: any) => {
+        if (Response.length == 0 || Response == null) {
+          this.globalData.popupAlert('Data Not Found!');
+          this.app.stopLoaderDark();
+          return;
+        }
+        $('#printRpt').show();
+
+        Response.forEach((e: any) => {
+
+
+          if (e.coaTypeID == 1) {
+            this.assetList.push(e);
+
+            this.assetTotal += e.nTotal;
+            this.oAssetTotal += e.oTotal;
           }
-          $('#printRpt').show();
 
-          Response.forEach((e: any) => {
-
-            if (e.coaTypeID == 1) {
-              this.assetList.push(e);
-
-              this.assetTotal += e.nTotal;
-              this.oAssetTotal += e.oTotal;
-            }
-
-            if (e.coaTypeID == 4) {
-              this.liabilityList.push(e);
-              this.liabilityTotal += e.nTotal;
-              this.oLiabilityTotal += e.oTotal;
-            }
-            if (e.coaTypeID == 5) {
-              this.capitalList.push(e);
-              this.capitalTotal += e.nTotal;
-              this.oCapitalTotal += e.oTotal;
-            }
-
-            if (e.noteID == 0.2) {
-              this.accumulatedTotal -= e.nTotal;
-              this.oAccumulatedTotal -= e.oTotal;
-            }
-
-            if (e.noteID == 0.3) {
-              this.accumulatedTotal += e.nTotal;
-              this.oAccumulatedTotal += e.oTotal;
-            }
-
-            this.app.stopLoaderDark();
-          },
-          (Error:any)=>{
-            console.log(Error);
-            this.app.stopLoaderDark();
+          if (e.coaTypeID == 4) {
+            this.liabilityList.push(e);
+            this.liabilityTotal += e.nTotal;
+            this.oLiabilityTotal += e.oTotal;
           }
-          )
+          if (e.coaTypeID == 5) {
+            this.capitalList.push(e);
+            this.capitalTotal += e.nTotal;
+            this.oCapitalTotal += e.oTotal;
+          }
+
+          if (e.noteID == 0.2) {
+            this.accumulatedTotal -= e.nTotal;
+            this.oAccumulatedTotal -= e.oTotal;
+          }
+
+          if (e.noteID == 0.3) {
+            this.accumulatedTotal += e.nTotal;
+            this.oAccumulatedTotal += e.oTotal;
+          }
+
+        });
+
+        if (this.formateId == 3) {
+          this.getNoteLedger(projectID, 'all');
+          return;
         }
 
-      )
-    
-
-
-
+        this.app.stopLoaderDark();
+      },
+      (Error: any) => {
+        console.log(Error);
+        this.app.stopLoaderDark();
+      }
+    )
   }
+
+
+
+
+getNoteLedger(projectID: any, type: any, noteID = 0) {
+
+  let url = '';
+
+  if (type === 'all') {
+    url = `GetNoteLedgerRpt?reqType=All&NoteID=1.01&todate=${this.globalData.dateFormater(this.toDate, '-')}&projectid=${projectID}`;
+  }
+
+  if (type === 'single') {
+    url = `GetNoteLedgerRpt?reqType=Single&NoteID=${noteID}&todate=${this.globalData.dateFormater(this.toDate, '-')}&projectid=${projectID}`;
+  }
+
+  this.http.get(environment.mainApi + this.globalData.accountLink + url)
+    .subscribe(
+      (Response: any) => {
+        Response.forEach((item: any) => {
+
+          // ASSET
+          const matchedAsset = this.assetList.find((a: any) => a.noteID == item.noteID);
+          if (matchedAsset) {
+            if (!matchedAsset.noteDetail) matchedAsset.noteDetail = [];
+            matchedAsset.noteDetail.push(item);
+          }
+
+          // LIABILITY  (FIXED HERE)
+          const matchedLiability = this.liabilityList.find((a: any) => a.noteID == item.noteID);
+          if (matchedLiability) {
+            if (!matchedLiability.noteDetail) matchedLiability.noteDetail = [];
+            matchedLiability.noteDetail.push(item); // ← FIXED
+          }
+
+          // EQUITY
+          const matchedEquity = this.capitalList.find((a: any) => a.noteID == item.noteID);
+          if (matchedEquity) {
+            if (!matchedEquity.noteDetail) matchedEquity.noteDetail = [];
+            matchedEquity.noteDetail.push(item);
+          }
+
+        });
+
+        this.app.stopLoaderDark();
+      },
+
+      (err: any) => {
+        console.log(err);
+        this.app.stopLoaderDark();
+      }
+    );
+}
+
+
 
   getYear() {
 
@@ -214,12 +270,25 @@ export class BalanceSheetComponent implements OnInit {
       this.globalData.ExportHTMLTabletoExcel(this.rptType, 'Balance Sheet ' + '(' + toDate + ')')
     }
 
+
+    
+
   }
 
 
 
 
-
+  reset(){
+    this.assetList = [];
+    this.liabilityList = [];
+    this.capitalList = [];
+    this.assetTotal = 0;
+    this.capitalTotal= 0;
+    this.liabilityTotal= 0;
+    this.accumulatedTotal = 0;
+    
+  
+  }
 
 
 

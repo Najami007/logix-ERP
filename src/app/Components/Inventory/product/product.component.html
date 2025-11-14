@@ -295,7 +295,16 @@
                             </mat-form-field>
                         </div>
 
-                        <div class="col-md-12 row" *ngIf="!ManufacturingFeature">
+                         <div class="col-md-3 " *ngIf="!ManufacturingFeature">
+                            <mat-form-field appearance="outline" class="w-100 matSmall">
+                                <mat-label>MRP</mat-label>
+                                <input matInput  type="number" 
+                                    [(ngModel)]="mrp" (change)="global.avoidMinus($event)">
+                            </mat-form-field>
+                        </div>
+
+
+                        <div class="col-md-9 row" *ngIf="!ManufacturingFeature">
                             <mat-form-field appearance="outline" class="col-md-10 matSmall">
                                 <mat-label>Generate Price</mat-label>
                                 <input matInput type="number" [(ngModel)]="salePercent" (keyup)="generatePrice($event)">
@@ -428,7 +437,7 @@
 
                     <div class="row pt-2 pb-1">
 
-                        <mat-form-field appearance="outline" class="col-md-10 matSmall">
+                        <mat-form-field appearance="outline" class="col-md-9 matSmall">
                             <mat-label>Search.....</mat-label>
                             <input type="text" id="searchProduct" (keydown)="onProdSearchKeyup($event,searchProduct)"
                                 (keypress)="onProdSearchKeyup($event,searchProduct)" matInput #searchProd
@@ -437,6 +446,10 @@
                         <div class="col-lg-1">
                             <button style="height: 40px;" class="btn-rpt-primary w-100"
                                 (click)="global.printData('#prodTable')">Print</button>
+                        </div>
+                        <div class="col-lg-1">
+                            <button style="height: 40px;" class="btn-rpt-primary w-100"
+                                (click)="openImagesScreen()">Add Images</button>
                         </div>
                         <div class="col-lg-1">
                             <button style="height: 40px;" class="btn-rpt-export w-100"

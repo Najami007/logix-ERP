@@ -17,7 +17,7 @@
 
                 <mat-form-field class="col-lg-2 matSmall" appearance="outline">
                     <mat-label>Project </mat-label>
-                    <mat-select [(ngModel)]="projectID" name="project">
+                    <mat-select [(ngModel)]="projectID" [disabled]="searchTypeID == 1" name="project">
                         <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch" [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                         <mat-option [value]="0">All</mat-option>
@@ -29,7 +29,7 @@
 
                 <mat-form-field class="col-lg-3 matSmall" appearance="outline">
                     <mat-label>From Date</mat-label>
-                    <input matInput type="text" readonly="true" [(ngModel)]="startDate" [matDatepicker]="sDate">
+                    <input matInput type="text" readonly="true" [disabled]="searchTypeID == 1" [(ngModel)]="startDate" [matDatepicker]="sDate">
                     <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
                     <mat-datepicker #sDate></mat-datepicker>
                 </mat-form-field>
@@ -42,17 +42,27 @@
                 </mat-form-field>
 
 
-                <div class="col-lg-12 text-center d-flex flex-wrap justify-content-center" *ngIf="crudList.r">
+                <div class="col-lg-12 text-center d-flex flex-wrap row" *ngIf="crudList.r">
                     <!-- <button class=" col-lg-2 btn-rpt-success  me-1"
                         (click)="getLedgerReport('project')">ProjectWise</button> -->
 
-                   <div class=" col-lg-2 pe-1">
-                     <button class="btn-rpt-success w-100" (click)="getLedgerReport('all')">Get Report</button>
-                   </div>
+                    <mat-form-field class="col-lg-4 matSmall" appearance="outline">
+                        <mat-label>Type </mat-label>
+                        <mat-select [(ngModel)]="searchTypeID" name="type">
+                            <mat-option [value]="0">Datewise</mat-option>
+                            <mat-option [value]="1">All Time</mat-option>
+                        </mat-select>
+                    </mat-form-field>
 
-                    <div class=" col-lg-2 pe-1"><button class="w-100 btn-rpt-primary" (click)="PrintTable()"> Print</button></div>
+                    <div class=" col-lg-2 pe-1">
+                        <button class="btn-rpt-success w-100" (click)="getLedgerReport('all')">Get Report</button>
+                    </div>
 
-                    <div class=" col-lg-2 pe-1"><button class="w-100 btn-rpt-export" (click)="export()">Export</button></div>
+                    <div class=" col-lg-2 pe-1"><button class="w-100 btn-rpt-primary" (click)="PrintTable()">
+                            Print</button></div>
+
+                    <div class=" col-lg-2 pe-1"><button class="w-100 btn-rpt-export" (click)="export()">Export</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,10 +84,10 @@
                         <span class="companyName">{{item.companyName}}</span>
 
 
-                        <span class="rptTitle" >Ledger Report ( {{curCOATitle}} ) </span>
-                        <span class="projtitl" *ngIf="projectName != ''" ><b>Project:</b>
+                        <span class="rptTitle">Ledger Report ( {{curCOATitle}} ) </span>
+                        <span class="projtitl" *ngIf="projectName != ''"><b>Project:</b>
                             {{projectName}}</span>
-                        <span ><b>From:</b> {{startDate | date:'dd-MM-yyyy'}} <b>To:</b> {{EndDate
+                        <span><b>From:</b> {{startDate | date:'dd-MM-yyyy'}} <b>To:</b> {{EndDate
                             | date:'dd-MM-yyyy'}}</span>
 
                     </div>

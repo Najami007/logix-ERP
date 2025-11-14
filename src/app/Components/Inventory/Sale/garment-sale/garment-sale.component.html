@@ -69,7 +69,7 @@
                             (keydown)="getTotal();this.global.handleNumKeys($event);focusto('#save',$event)" />
                     </div>
                     <div>
-                        <div class="pt-3 d-flex justify-content-between">
+                        <div class="pt-3 d-flex justify-content-between" *ngIf="!hideNetTotalFeature">
                             <p style="font-size: 12px;" class="mt-1">NET TOTAL</p>
                             <p style="font-size: 2rem;color: rgb(19, 83, 27);" class="font-digit pt-1 text-end">
                                 {{netTotal || 0|number:'1.0-1'}}</p>
@@ -149,15 +149,15 @@
                 </div>
 
                 <div *ngIf="BankShortCutsFeature">
-                    <mat-radio-group name="bankSC" [(ngModel)]="bankCoaID">
+                    <mat-radio-group name="bankSC" [(ngModel)]="bankCoaID" >
                         <mat-radio-button (change)="onCashSelected()" [value]="0">Cash</mat-radio-button>
-                        <mat-radio-button (change)="onBankSelected()" *ngFor="let item of bankCoaList"
-                            [value]="item.coaID">{{item.coaTitle}}</mat-radio-button>
+                        <mat-radio-button   #bankRadios  (change)="onBankSelected()" *ngFor="let item of bankCoaList index as index"
+                            [value]="item.coaID" >{{item.coaTitle}}</mat-radio-button>
                     </mat-radio-group>
                 </div>
 
                 <div class="fw-bold">
-                    <span> Prev Cash / Change : {{this.tmpCash | number}} / {{this.tmpChange | number}}</span>
+                    <span> Prev Cash / Change : {{this.tmpCash | number:'1.0-0'}} / {{this.tmpChange | number:'1.0-0'}}</span>
 
                 </div>
             </div>

@@ -38,7 +38,6 @@ export class SaleBillPrintComponent implements OnInit {
 
 
 
-
   billPrintType: any = '';;
   companyProfile: any = [];
   companyLogo: any = '';

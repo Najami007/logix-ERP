@@ -58,8 +58,6 @@ export class LedgerComponent {
 
     this.globalData.setHeaderTitle('Ledger');
     this.getProject();
-
-
     this.getCoa();
 
 
@@ -76,7 +74,7 @@ export class LedgerComponent {
   curCOATitle: any;
 
 
-
+  searchTypeID = 0;
 
 
   tableData: any = [];
@@ -182,6 +180,14 @@ export class LedgerComponent {
       return;
     }
 
+    var startDate = this.globalData.dateFormater(this.startDate, '-');
+    var endDate  =  this.globalData.dateFormater(this.EndDate, '-'); 
+
+    if(this.searchTypeID == 1){
+     var date = new Date('01-01-1917');
+      startDate = this.globalData.dateFormater(date, '-');
+       var endDate =  this.globalData.dateFormater(new Date(), '-')
+    }
 
       this.projectName = '';
 
@@ -197,7 +203,7 @@ export class LedgerComponent {
       this.tableData = [];
       this.app.startLoaderDark();
       this.http.get(environment.mainApi + this.globalData.accountLink + 'GetLedgerRpt?coaid=' + this.coaID + '&fromdate='
-        + this.globalData.dateFormater(this.startDate, '-') + '&todate=' + this.globalData.dateFormater(this.EndDate, '-') + '&projectID=' + this.projectID).subscribe(
+        + startDate+ '&todate=' + endDate + '&projectID=' + this.projectID).subscribe(
           (Response: any) => {
 
             if (Response.length == 0 || Response == null) {

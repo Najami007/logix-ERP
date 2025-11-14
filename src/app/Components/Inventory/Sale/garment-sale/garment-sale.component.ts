@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
@@ -14,6 +14,7 @@ import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sale
 import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bill-print.component';
 import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-mehtod.component';
 import { EditQtyModalComponent } from './edit-qty-modal/edit-qty-modal.component';
+import { MatRadioButton } from '@angular/material/radio';
 
 
 
@@ -23,6 +24,25 @@ import { EditQtyModalComponent } from './edit-qty-modal/edit-qty-modal.component
   styleUrls: ['./garment-sale.component.scss'],
 })
 export class GarmentSaleComponent implements OnInit {
+
+@ViewChildren('bankRadios') bankRadios!: QueryList<MatRadioButton>;
+
+
+
+
+  @HostListener('document:keydown', ['$event'])
+  handleShortcut(event: KeyboardEvent) {
+    // Alt + V → focus on first bank radio
+    if (event.altKey && event.key.toLowerCase() === 'v') {
+      const firstBankRadio = this.bankRadios.first;
+      if (firstBankRadio) {
+        firstBankRadio._inputElement.nativeElement.focus();
+        event.preventDefault();
+      }
+    }
+  }
+
+
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
   disableDate = this.global.DisableDateSale;
@@ -51,6 +71,8 @@ export class GarmentSaleComponent implements OnInit {
   SaleSupplierFeature = this.global.SaleSupplierFeature;
 
   ImageUrlFeature = this.global.ImageUrlFeature;
+  hideNetTotalFeature = this.global.hideNetTotalFeature;
+
 
 
   companyProfile: any = [];

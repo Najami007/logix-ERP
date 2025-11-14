@@ -43,6 +43,8 @@ export class GarmentSaleReturnComponent implements OnInit {
   VehicleSaleFeature = this.global.VehicleSaleFeature;
   CustomSaleGstFeatrue = this.global.CustomSaleGstFeature;
   DashSlashBarcodeFeature = this.global.dashSlashBarcodeFeature;
+    hideNetTotalFeature = this.global.hideNetTotalFeature;
+
 
     ImageUrlFeature = this.global.ImageUrlFeature;
 

@@ -164,6 +164,9 @@ export class ProductComponent implements OnInit {
 
   }
 
+
+  mrp:any = 0;
+
   discountList: any = [];
   brandFilterID = 0;
   subCategoryFilterID = 0;
@@ -590,6 +593,7 @@ export class ProductComponent implements OnInit {
       BarcodeType: this.barcodeType,
       ProductImage: this.productImg || '-',
       ProductTypeID: this.prodTypeID,
+      mrp:this.mrp || 0,
       UserID: this.global.getUserID()
     };
     if (this.btnType == 'Save') {
@@ -745,6 +749,7 @@ export class ProductComponent implements OnInit {
     this.prodTypeID = row.productTypeID;
     this.tabIndex = 0;
     this.btnType = 'Update';
+    this.mrp = row.mrp;
 
     if (this.ImageUrlFeature) {
       this.productImg = row.imagesPath;
@@ -1181,6 +1186,11 @@ export class ProductComponent implements OnInit {
 
   }
 
+
+
+  openImagesScreen(){
+  this.route.navigate(["inv/product/addProductImages"]);
+  }
 
 
 }

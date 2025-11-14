@@ -6,6 +6,8 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { environment } from 'src/environments/environment.development';
 
+import * as $ from 'jquery';
+
 @Component({
   selector: 'app-purchase-bill-print',
   templateUrl: './purchase-bill-print.component.html',
@@ -14,7 +16,7 @@ import { environment } from 'src/environments/environment.development';
 export class PurchaseBillPrintComponent {
 
 
- 
+
   DetailedPurchaseFeature = this.global.DetailedPurchase;
 
 
@@ -71,6 +73,8 @@ export class PurchaseBillPrintComponent {
   myInvType = '';
 
   printBill(item: any) {
+
+    $('.loaderDark').show();
 
     this.myTableDataList = [];
     this.myInvoiceNo = item.invBillNo;
@@ -131,16 +135,21 @@ export class PurchaseBillPrintComponent {
             discInR: e.discInR,
             gst: e.gst,
             et: e.et,
-            aq:e.aq,
+            aq: e.aq,
 
           })
         });
 
 
         setTimeout(() => {
+          $('.loaderDark').fadeOut(100);
           this.global.printData('#printDiv')
         }, 200);
 
+      },
+      (Error: any) => {
+        console.log(Error);
+        $('.loaderDark').fadeOut(100);
       }
     )
   }
@@ -153,7 +162,7 @@ export class PurchaseBillPrintComponent {
     } else if (type == 'HPR' || type == 'PR') {
       this.myInvoiceTitle = 'Goods Return Note';
     }
-   if (type == 'PO') {
+    if (type == 'PO') {
       this.myInvoiceTitle = 'Purchase Order';
     }
 

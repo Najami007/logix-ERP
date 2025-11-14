@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { environment } from 'src/environments/environment.development';
+import * as $ from 'jquery';
+
+
 
 @Component({
   selector: 'app-voucher-print',
@@ -59,7 +62,8 @@ export class VoucherPrintComponent {
 
   printBill(row: any) {
 
-
+    this.lblDebitTotal = 0;
+    this.lblCreditTotal = 0;
     this.lblInvoiceNo = row.invoiceNo;
     this.lblInvoiceDate = row.invoiceDate;
     this.lblRemarks = row.invoiceRemarks;
@@ -76,6 +80,8 @@ export class VoucherPrintComponent {
 
   getInvoiceDetail(invoiceNo: any) {
 
+    $('.loaderDark').show();
+
     this.lblDebitTotal = 0;
     this.lblCreditTotal = 0;
     this.invoiceDetails = [];
@@ -84,7 +90,7 @@ export class VoucherPrintComponent {
     this.http.get(environment.mainApi + this.globalData.accountLink + 'GetSpecificVocherDetail?InvoiceNo=' + invoiceNo).subscribe(
       (Response: any) => {
         this.invoiceDetails = Response;
-   
+
         this.lblRemarks = Response[0].invoiceRemarks;
         // this.lblInvoiceNo = Response[0].invoiceNo;
         // this.lblInvoiceDate = Response[0].invoiceDate;
@@ -100,13 +106,14 @@ export class VoucherPrintComponent {
         }
 
         setTimeout(() => {
-
+          $('.loaderDark').fadeOut(200);
           this.globalData.printData('#InvociePrint');
 
         }, 200);
       },
       (error: any) => {
         console.log(error);
+           $('.loaderDark').fadeOut(200);
         this.msg.WarnNotify('Error Occured While Printing');
       }
     )

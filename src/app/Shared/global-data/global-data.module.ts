@@ -337,6 +337,7 @@ export class GlobalDataModule implements OnInit {
   NotificationFeature = this.getFeature('Notification');
   insertLocalStorageFeature = this.getFeature('insertLocalStorage');
   showLogixDetailFeature = this.getFeature('showLogixDetail');
+  hideNetTotalFeature = this.getFeature('hideNetTotal');
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
     this.BookerFeature = this.getFeature('Booker');
@@ -396,6 +397,7 @@ export class GlobalDataModule implements OnInit {
     this.NotificationFeature = this.getFeature('Notification');
     this.insertLocalStorageFeature = this.getFeature('insertLocalStorage');
     this.showLogixDetailFeature = this.getFeature('showLogixDetail');
+    this.hideNetTotalFeature = this.getFeature('hideNetTotal');
   }
 
 

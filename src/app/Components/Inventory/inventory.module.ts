@@ -124,6 +124,8 @@ import { SupplierLedgerSpecialComponent } from './InventoryReports/supplier-ledg
 import { POBillPrintComponent } from './Purchases/purchase-order/pobill-print/pobill-print.component';
 import { SalesmanTargetComponent } from './Configurations/salesman-target/salesman-target.component';
 import { ProductDetailReportComponent } from './InventoryReports/product-detail-report/product-detail-report.component';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { AddProductImagesComponent } from './product/add-product-images/add-product-images.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -230,7 +232,8 @@ export const inventoryRoutes: Route[] = [
   { path: 'barcodeReportInv', component: BarcodeReportInvoicewiseComponent, data: { title: 'Barcode Report Invoice' }, canActivate: [AuthGuard] },
 
   { path: 'suplierLedgerSpecial', component: SupplierLedgerSpecialComponent, data: { title: 'Supplier Ledger Special' }, canActivate: [AuthGuard] },
-    { path: 'productdetail', component: ProductDetailReportComponent, canActivate: [AuthGuard] },
+  { path: 'productdetail', component: ProductDetailReportComponent, canActivate: [AuthGuard] },
+  { path: 'product/addProductImages', component: AddProductImagesComponent },
 
 
   { path: '**', redirectTo: 'home', data: { title: 'Home' }, pathMatch: 'full' }
@@ -334,7 +337,8 @@ export const inventoryRoutes: Route[] = [
     POBillPrintComponent,
     SalesmanTargetComponent,
     ProductDetailReportComponent,
-    
+    AddProductImagesComponent,
+
 
 
 
@@ -358,7 +362,8 @@ export const inventoryRoutes: Route[] = [
     NgSelectModule,
     SharedComponentsModule,
     CompanyModule,
-    DirectivesModule
+    DirectivesModule,
+    ZXingScannerModule
 
   ],
   exports: [

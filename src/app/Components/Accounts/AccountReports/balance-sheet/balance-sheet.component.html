@@ -1,7 +1,7 @@
 <div class="container-fluid body">
     <div class="row bg-white border-bottom pt-2">
 
-        <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+        <mat-form-field class="col-lg-4 matSmall" appearance="outline">
             <mat-label>Project </mat-label>
             <mat-select [(ngModel)]="projectID">
                 <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch" [placeholderLabel]="'Search...'"
@@ -21,41 +21,42 @@
 
         <mat-form-field class="col-lg-2 matSmall" appearance="outline">
             <mat-label>Format</mat-label>
-            <mat-select [(ngModel)]="formateId">
+            <mat-select [(ngModel)]="formateId" (selectionChange)="reset()">
 
                 <mat-option [value]="1">Summary</mat-option>
                 <mat-option [value]="2">Financial Year</mat-option>
+                <mat-option [value]="3">Detailed</mat-option>
             </mat-select>
         </mat-form-field>
 
-        <div class="col-lg-6 d-flex flex-wrap pt-1" *ngIf="crudList.r">
-            <div class="col-md-5 pe-1">
+        <div class="col-lg-4 d-flex flex-wrap " *ngIf="crudList.r">
+            <!-- <div class="col-md-5 pe-1">
                 <mat-radio-group [(ngModel)]="balanceSheetTypeID">
                 <mat-radio-button [value]="1">Inv Date</mat-radio-button>
                 <mat-radio-button [value]="2">Date Created</mat-radio-button>
             </mat-radio-group>
-            </div>
+            </div> -->
             <!-- <button class="btn-rpt-success  col-lg-2  me-1" (click)="getBalanceSheet('project')">
                 ProjectWise
             </button> -->
-           <div class=" col-lg-2 pe-1">
-             <button class="btn-rpt-success w-100" (click)="getBalanceSheet('all')">
-                Get Report
-            </button>
-           </div>
+            <div class=" col-lg-3 pe-1">
+                <button class="btn-rpt-success w-100" (click)="getBalanceSheet('all')">
+                    Get Report
+                </button>
+            </div>
 
 
-           <div class=" col-lg-2 pe-1">
-             <button class="btn-rpt-primary w-100" (click)="PrintTable()">
-                Print
-            </button>
-           </div>
-            <div class=" col-lg-2 pe-1"><button class="w-100 btn-rpt-export" (click)="export()">Export</button></div>
+            <div class=" col-lg-3 pe-1">
+                <button class="btn-rpt-primary w-100" (click)="PrintTable()">
+                    Print
+                </button>
+            </div>
+            <div class=" col-lg-3    pe-1"><button class="w-100 btn-rpt-export" (click)="export()">Export</button></div>
 
         </div>
     </div>
 
-    <div id="printRpt" >
+    <div id="printRpt">
 
 
         <!-------------------------    Top Logo Section -------------------->
@@ -69,9 +70,9 @@
                 <div class="d-flex flex-column">
                     <span class="companyName">{{item.companyName}}</span>
                     <span class="rptTitle">Balance Sheet</span>
-                    <span class="projtitl" *ngIf="projectName != ''" ><b>Project:</b>
+                    <span class="projtitl" *ngIf="projectName != ''"><b>Project:</b>
                         {{projectName}}</span>
-                    <span ><b>AS On:</b> {{toDate |date:'dd-MM-yyyy'}}</span>
+                    <span><b>AS On:</b> {{toDate |date:'dd-MM-yyyy'}}</span>
 
                 </div>
                 <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
@@ -282,6 +283,141 @@
             </tbody>
         </table>
 
+
+        <!----------------------------             Summary 1 Section ----------------->
+
+        <table class="mt-3 table-logix " *ngIf="formateId == 3" id="balanceSheet3">
+            <thead>
+                <tr>
+                    <th>Asset</th>
+                    <th> Note</th>
+                    <th> Amount</th>
+                </tr>
+            </thead>
+            <tbody class="h-50">
+                <tr *ngFor="let item of assetList;index as index">
+
+                    <td>
+                        <div class="d-flex flex-column">
+                            <span class="fw-bold fs-13px">{{item.noteTitle}}</span>
+                            <span  *ngFor="let ledger of item.noteDetail">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ledger.coaTitle}}</span>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="d-flex flex-column justify-content-start">
+                            <span class="fw-bold fs-13px">{{item.noteID}}</span>
+                            <span class="text-center" *ngFor="let ledger of item.noteDetail">&nbsp; </span>
+                        </div>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex flex-column">
+                            <span class="fw-bold fs-14px">{{item.nTotal | number:'1.0-0'}}</span>
+                            <span *ngFor="let ledger of item.noteDetail">{{ledger.debit - ledger.credit |
+                                number:'1.0-0'}}</span>
+                        </div>
+                    </td>
+
+
+                </tr>
+
+                <tr>
+                    <td colspan="2"></td>
+                    <th class="text-end text-danger">
+                        <h1>{{assetTotal |number:'1.0-0'}}</h1>
+                    </th>
+                </tr>
+
+
+
+
+                <tr>
+
+                    <th>Capital + Liability</th>
+                    <th> Note</th>
+                    <th> Amount</th>
+                </tr>
+
+
+                <tr *ngFor="let item of liabilityList; index as index">
+
+                 
+                    <td>
+                        <div class="d-flex flex-column">
+                            <span class="fw-bold fs-13px">{{item.noteTitle}}</span>
+                            <span  *ngFor="let ledger of item.noteDetail">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ledger.coaTitle}}</span>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="d-flex flex-column justify-content-start">
+                            <span class="fw-bold fs-13px">{{item.noteID}}</span>
+                            <span class="text-center" *ngFor="let ledger of item.noteDetail">&nbsp; </span>
+                        </div>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex flex-column">
+                            <span class="fw-bold fs-14px">{{item.nTotal | number:'1.0-0'}}</span>
+                            <span *ngFor="let ledger of item.noteDetail">{{ledger.debit - ledger.credit |
+                                number:'1.0-0'}}</span>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2"></td>
+                    <th class="text-end">{{liabilityTotal |number:'1.0-0'}}</th>
+                </tr>
+
+                <tr *ngFor="let item of capitalList; index as index">
+
+                    <td>
+                        <div class="d-flex flex-column">
+                            <span class="fw-bold fs-13px">{{item.noteTitle}}</span>
+                            <span  *ngFor="let ledger of item.noteDetail">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ledger.coaTitle}}</span>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="d-flex flex-column justify-content-start">
+                            <span class="fw-bold fs-13px">{{item.noteID}}</span>
+                            <span class="text-center" *ngFor="let ledger of item.noteDetail">&nbsp; </span>
+                        </div>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex flex-column">
+                            <span class="fw-bold fs-14px">{{item.nTotal | number:'1.0-0'}}</span>
+                            <span *ngFor="let ledger of item.noteDetail">{{ledger.debit - ledger.credit |
+                                number:'1.0-0'}}</span>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2"></td>
+                    <th class="text-end">{{capitalTotal |number:'1.0-0'}}</th>
+                </tr>
+
+                <tr>
+
+                    <td class="fw-bold">Accumulated Profit/Lose</td>
+                    <td></td>
+                    <td class="text-end fw-bold">{{accumulatedTotal |number:'1.0-0'}}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="2"></td>
+                    <th class="text-end fw-bold">{{accumulatedTotal |number:'1.0-0'}}</th>
+                </tr>
+
+                <tr>
+                    <td colspan="2"></td>
+                    <th class="text-end text-danger">
+                        <h1>{{capitalTotal + liabilityTotal + accumulatedTotal | number:'1.0-0'}}</h1>
+                    </th>
+                </tr>
+
+
+
+            </tbody>
+        </table>
 
     </div>
 

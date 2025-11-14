@@ -1,0 +1,122 @@
+<div class="body container">
+
+
+
+    <div class="ps-1 row justify-content-center mt-1">
+
+        <!-------------------- Product Search Bar --------------->
+
+        <div class="col-md-10  d-flex flex-column">
+
+            <input type="text" #pbarcode [(ngModel)]="PBarcode"
+                (keydown)="searchByCode($event);this.changeFocus($event,'.prodRow')" id="searchProduct"
+                class="p-1 ps-2 mb-2 psearchProduct w-100" placeholder="Search Barcode   Alt + b" autofocus autocomplete="off"
+                accesskey="b">
+
+            <div class="  d-flex flex-column SearchConatiner cursorPointer w-100"
+                *ngIf="PBarcode != '' && PBarcode != undefined">
+                <mat-card class="card " *ngFor="let item of productList| filter:PBarcode | slice:0:25 index as index"
+                    (click)="holdDataFunction(item)">
+                    <button style="height: 40px; background: none;border: none;text-align: left;"
+                        class="prodRow{{index}} prodBtn justify-content-between d-flex"
+                        (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">
+                        <p>{{item.productTitle}}</p>
+                        <!-- <p><strong>({{item.barcode}})</strong></p> -->
+                    </button>
+                </mat-card>
+            </div>
+        </div>
+        <div class="col-md-2 text-start ps-2 ">
+            <button class="btnload " style="height: 40px;width: 100%;" (click)="searchProduct()">Search</button>
+        </div>
+
+        <!-- <div class="col-md-2 text-start ps-1 pe-1 pt-3 mt-1">
+              <button (click)="openScanner()" class="btnload w-100">
+                📷
+            </button>
+        </div> -->
+
+
+    </div>
+
+    <br>
+  
+
+
+    <div class="d-flex flex-column text-center justify-content-center fw-bold">
+
+        <span class="fs-15px">{{productDetailRow.productTitle}}</span>
+        <span class="fs-13px">{{productDetailRow.barcode}}</span>
+        <span class="fs-13px">{{productDetailRow.productCode}}</span>
+    </div>
+
+
+
+    <div class="d-flex justify-content-center">
+      
+
+        <div class="avatar-upload col-md-12 ">
+            <button class="btn btn-primary w-100 mb-2" for="prodimg" (click)="fileInput.click()">Browse</button>
+            <input #fileInput id="prodimg" #prodimg type="file" (change)="onImgSelected($event)" accept="" hidden />
+            <br>
+            <br>
+            <!-- <div class="avatar-edit">
+                <input type="file" accesskey="g" id="prodimg" accept="" #prodimg (change)="onImgSelected($event)" />
+                <label for="prodimg"><mat-icon class=" mt-1">edit</mat-icon></label>
+            </div> -->
+            <!-- <div class="avatar-del">
+                <label (click)="productImg = ''"><mat-icon class=" mt-1">delete</mat-icon></label>
+            </div> -->
+            <div class="avatar-preview">
+
+                <!-- <img [src]="productImg" > -->
+                <div (click)="this.global.showProductImage(productImg,0)" accesskey="i" id="imagePreview"
+                    [ngStyle]="{ 'background-image': 'url(' + productImg + ')' }">
+                </div>
+            </div>
+
+            
+
+
+            <br>
+          
+
+            <br>
+            <button class="btn btn-success w-100 mt-2" for="prodimg" (click)="saveProductImage()">Save</button>
+
+        
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<div class="modal" id="scanBarcodeModal" tabindex="-1" data-bs-backdrop="true" aria-labelledby="holdModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable mt-5 ">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title" id="holdModalLabel">Scan Barcode</h2>
+                <!-- <button type="button" class="btn-close" id="clsMdl" data-bs-dismiss="modal" aria-label="Close"></button> -->
+            </div>
+
+
+            <div *ngIf="showScanner" class="scanner-modal">
+
+                <zxing-scanner [autostart]="true" [device]="selectedDevice" (scanSuccess)="onScanSuccess($event)"
+                    (camerasFound)="onCamerasFound($event)">
+                </zxing-scanner>
+
+            </div>
+
+
+            <div class="text-end bg-mf-blue p-3">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    (click)="closeScanner()">Close</button>
+            </div>
+            
+        </div>
+    </div>
+</div>

@@ -68,7 +68,7 @@
                             (keydown)="getTotal();this.global.handleNumKeys($event);focusto('#save',$event)" />
                     </div>
                     <div>
-                        <div class="pt-1 d-flex justify-content-between">
+                        <div class="pt-1 d-flex justify-content-between" *ngIf="!hideNetTotalFeature">
                             <p style="font-size:12px;color: rgb(3, 3, 3)" class="mt-1">NET TOTAL</p>
                             <p style="font-size: 2rem;color: rgb(19, 83, 27);" class="font-digit pt-1 text-end">
                                 {{netTotal || 0|number:'1.0-1'}}</p>

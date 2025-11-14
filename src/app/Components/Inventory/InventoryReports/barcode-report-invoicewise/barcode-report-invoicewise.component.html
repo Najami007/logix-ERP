@@ -70,7 +70,7 @@
         <div class="col-md-6 card p-2 ">
 
             <div class="d-flex gap-2 justify-content-end">
-                 <mat-checkbox [(ngModel)]="showCompany">Show Company</mat-checkbox>
+                <mat-checkbox [(ngModel)]="showCompany">Show Company</mat-checkbox>
                 <mat-checkbox [(ngModel)]="showPrice">Show Price</mat-checkbox>
                 <mat-checkbox [(ngModel)]="showTitle">Show Title</mat-checkbox>
                 <mat-checkbox [(ngModel)]="showBarcode">Show Barcode</mat-checkbox>
@@ -178,23 +178,37 @@
 
 
 <div class="hide">
-    <div id="PrintTags" >
-       <div class="d-flex flex-wrap gap-2 justify-content-between p-1">
-         <div *ngFor="let item of tagList"  style="width: 48%;">
-            <div class="border border-dark p-1">
-                <h2 class="cmpName text-center" *ngIf="showCompany">{{companyName}}</h2>
-                <div style="font-size: 25px;" class="fw-bold text-center" *ngIf="showTitle">{{item.productTitle}}</div>
+    <div id="PrintTags">
+        <div class="d-flex flex-wrap gap-2 justify-content-between p-1">
+            <div *ngFor="let item of tagList" style="width: 49%;">
 
-                <div class="d-flex justify-content-around" style="margin-top: -10px !important;" *ngIf="showBarcode || showPrice">
-                    <span *ngIf="showBarcode" class="fw-bold text-center" style="font-size: 25px;">{{item.barcode2 ? item.barcode2 : item.barcode}}</span>
-                    <span class=" text-end fw-bold" style="font-size: 25px;"
-                    *ngIf="showPrice">Rs.{{item?.salePrice|number}}</span>
+                <div class="d-flex border border-dark">
+                    <div class="col-md-6 d-flex flex-column justify-content-center" *ngIf="showCompany">
+                        <img src="{{companyLogo}}" style="color: black;" alt="" srcset="" [height]="logoHeight"
+                            [width]="logoWidth">
+                        <div class="text-center fw-bold">
+                            {{printDate|date:'dd-MM-yyyy'}}
+                        </div>
+                    </div>
+                    <div class=" p-1 " [ngClass]="showCompany ? 'col-md-6' : 'col-md-12'">
+                        <!-- <h2 class="cmpName text-center" *ngIf="showCompany">{{companyName}}</h2> -->
+                        <div *ngIf="showBarcode" class="fw-bold text-center" style="font-size: 20px;">{{item.barcode2 ?
+                            item.barcode2 : item.barcode}}</div>
+                        <div style="font-size: 15px;line-height: 15px;" class="fw-bold text-center" *ngIf="showTitle">
+                            {{item.productTitle}}
+                        </div>
+
+
+
+                        <div class=" text-center fw-bold" style="font-size: 20px;" *ngIf="showPrice">
+                            Rs.{{item?.salePrice|number}}</div>
+
+
+                    </div>
                 </div>
-             
             </div>
-        </div>
 
-       </div>
+        </div>
 
     </div>
 </div>

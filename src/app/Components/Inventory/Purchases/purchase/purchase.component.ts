@@ -6,14 +6,11 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
-import { PincodeComponent } from '../../../User/pincode/pincode.component';
-import { error } from 'jquery';
+
 import { Observable, retry } from 'rxjs';
 import * as $ from 'jquery';
 import Swal from 'sweetalert2';
 import { AddpartyComponent } from '../../../Company/party/addparty/addparty.component';
-import { MatSelect } from '@angular/material/select';
-import { ProductModalComponent } from '../../Sale/SaleComFiles/product-modal/product-modal.component';
 import { PurchaseBillPrintComponent } from '../purchase-bill-print/purchase-bill-print.component';
 import { AddDocumentComponent } from 'src/app/Components/shared-components/add-document/add-document.component';
 
@@ -356,6 +353,7 @@ export class PurchaseComponent implements OnInit {
         AQ: data.aq,
         gst: 0,
         et: 0,
+        mrp:data.mrp,
 
 
       });
@@ -620,14 +618,44 @@ export class PurchaseComponent implements OnInit {
     var myQty = this.tableDataList[myIndex].Quantity;
     var myCP = this.tableDataList[myIndex].CostPrice;
     var mySP = this.tableDataList[myIndex].SalePrice;
+    var mytmpCost = this.tableDataList[myIndex].tempCostPrice;
+    var mydiscInP = this.tableDataList[myIndex].discInP;
+    var mydiscInR = this.tableDataList[myIndex].discInR;
+    var mygst = this.tableDataList[myIndex].gst;
+    var myet = this.tableDataList[myIndex].et;
+    
+
+    
+
     if (myCP == null || myCP == '' || myCP == undefined) {
 
       this.tableDataList[myIndex].CostPrice = 0;
-    } else if (myQty == null || myQty == '' || myQty == undefined) {
+    } 
+     if (myQty == null || myQty == '' || myQty == undefined) {
       this.tableDataList[myIndex].Quantity = 0;
-    } else if (mySP == null || mySP == '' || mySP == undefined) {
+    } 
+     if (mySP == null || mySP == '' || mySP == undefined) {
       this.tableDataList[myIndex].SalePrice = 0;
     }
+      if (mytmpCost == null || mytmpCost == '' || mytmpCost == undefined) {
+      this.tableDataList[myIndex].tmpCost = 0;
+    }
+    if (mydiscInP == null || mydiscInP == '' || mydiscInP == undefined) {
+      this.tableDataList[myIndex].discInP = 0;
+    }
+    if (mydiscInR == null || mydiscInR == '' || mydiscInR == undefined) {
+      this.tableDataList[myIndex].discInR = 0;
+    }
+
+     if (mygst == null || mygst == '' || mygst == undefined) {
+      this.tableDataList[myIndex].gst = 0;
+    }
+
+
+     if (myet == null || myet == '' || myet == undefined) {
+      this.tableDataList[myIndex].et = 0;
+    }
+
 
     item.margin = ((Number(item.SalePrice) - Number(item.CostPrice)) / Number(item.CostPrice)) * 100
 
@@ -725,6 +753,8 @@ export class PurchaseComponent implements OnInit {
 
 
 
+
+
     var inValidAmountProdList = this.tableDataList.filter((p: any) => (Number(p.CostPrice) * Number(p.Quantity)) > (Number(p.SalePrice) * Number(p.Quantity)) || (Number(p.CostPrice) * Number(p.Quantity)) < 0);
 
 
@@ -749,6 +779,27 @@ export class PurchaseComponent implements OnInit {
       this.msg.WarnNotify('(' + inValidQtyProdList[0].ProductTitle + ') Quantity is not Valid');
       return;
     }
+
+    this.tableDataList.forEach((e:any) => {
+        if(e.tmpCost == null || e.tmpCost == '' || e.tmpCost == undefined){
+          e.tmpCost = 0;
+        }
+         if(e.discInP == null || e.discInP == '' || e.discInP == undefined){
+          e.discInP = 0;
+        }
+         if(e.discInR == null || e.discInR == '' || e.discInR == undefined){
+          e.discInR = 0;
+        }
+         if(e.gst == null || e.gst == '' || e.gst == undefined){
+          e.gst = 0;
+        }
+         if(e.et == null || e.et == '' || e.et == undefined){
+          e.et = 0;
+        }
+        if(e.mrp == null || e.mrp == '' || e.mrp == undefined){
+          e.mrp = 0;
+        }
+    });
 
 
     if (this.tableDataList == '') {
@@ -1086,6 +1137,7 @@ export class PurchaseComponent implements OnInit {
             AQ: e.aq,
             gst: e.gst,
             et: e.et,
+            mrp:e.mrp,
           })
         });
 
