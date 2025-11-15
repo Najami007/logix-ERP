@@ -129,12 +129,26 @@
                 <tr>
                     <th colspan="2"></th>
                     <th class="text-center">{{myBillTotalQty}}</th>
+<!-- 
+                    <th *ngIf="DetailedPurchaseFeature &&  (myInvType === 'P' || myInvType === 'HP')">CP:
+                        {{myTmpCostTotal| number:'1.0-2'}}</th>
+                    <th colspan="2" *ngIf="DetailedPurchaseFeature &&  (myInvType === 'P' || myInvType === 'HP')">
+                        Disc: {{myDiscTotal| number:'1.0-2'}}</th>
+                    <th *ngIf="DetailedPurchaseFeature &&  (myInvType === 'P' || myInvType === 'HP')">
+                        G: {{myGstTotal| number:'1.0-2'}}</th>
+                    <th *ngIf="DetailedPurchaseFeature &&  (myInvType === 'P' || myInvType === 'HP')">
+                        ET: {{myEtTotal| number:'1.0-2'}}</th>
+                    <th colspan="1" *ngIf="DetailedPurchaseFeature &&  (myInvType === 'P' || myInvType === 'HP')"></th>
+                     -->
+                    
                     <th></th>
                     <th colspan="5" *ngIf="DetailedPurchaseFeature &&  (myInvType === 'P' || myInvType === 'HP')"></th>
+
                     <th *ngIf="myInvType !== 'PO' "></th>
                     <th class="text-end">{{myCPTotal | number:'1.0-2'}}</th>
                     <th class="text-end" *ngIf="myInvType !== 'PO' ">{{mySPTotal | number:'1.0-2'}}</th>
-
+                    <th class="text-end" *ngIf="myInvType !== 'PO' ">{{ ((mySPTotal - myCPTotal) / mySPTotal) * 100 |
+                        number:'1.0-2'}}%</th>
                     <!-- <th></th>
                         <th></th> -->
                 </tr>

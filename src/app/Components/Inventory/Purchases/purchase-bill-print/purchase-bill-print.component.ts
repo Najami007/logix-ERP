@@ -72,6 +72,12 @@ export class PurchaseBillPrintComponent {
   myBillStatus = false;
   myInvType = '';
 
+  myDiscType = '';
+  myGstTotal = 0;
+  myEtTotal = 0;
+  myDiscTotal = 0;
+  myTmpCostTotal = 0;
+
   printBill(item: any) {
 
     $('.loaderDark').show();
@@ -92,6 +98,8 @@ export class PurchaseBillPrintComponent {
       (Response: any) => {
         this.setInvoiceTitle(Response[0].invType);
         this.myInvType = Response[0].invType;
+        console.log(Response);
+        this.myDiscType = Response[0].discType;
         var totalQty = 0;
         var overhead = 0
         this.myBillTotalQty = 0;
@@ -109,12 +117,33 @@ export class PurchaseBillPrintComponent {
         }
 
 
-
+        this.myGstTotal = 0;
+        this.myEtTotal = 0;
+        this.myDiscTotal = 0;
+        this.myTmpCostTotal = 0;
         Response.forEach((e: any) => {
           this.myBillTotalQty += e.quantity;
           this.mywohCPTotal += (e.costPrice - overhead) * e.quantity;
           this.myCPTotal += e.costPrice * e.quantity;
           this.mySPTotal += e.salePrice * e.quantity;
+
+          if (this.myDiscType == 'ad') {
+            this.myTmpCostTotal += e.tempCostPrice * e.quantity;
+            this.myGstTotal += ((e.tempCostPrice * e.gst) / 100) * e.quantity;
+            this.myDiscTotal += ((((e.tempCostPrice * e.discInP) / 100) + (e.discInR / e.quantity))) * e.quantity;
+            this.myEtTotal += (((Number(e.tempCostPrice) +
+              Number(((e.tempCostPrice * e.gst) / 100)) - this.myDiscTotal) * e.et) / 100)
+          }
+
+          if (this.myDiscType == 'bd') {
+            this.myTmpCostTotal += e.tempCostPrice * e.quantity;
+            this.myGstTotal += ((e.tempCostPrice * e.gst) / 100) * e.quantity;
+            this.myDiscTotal += (((item.tempCostPrice * item.discInP) / 100) + (item.discInR / item.Quantity)) * e.quantity;
+            this.myEtTotal += (((Number(item.tempCostPrice) +
+              Number(((e.tempCostPrice * e.gst) / 100)) - this.myDiscTotal) * item.et) / 100)
+          }
+
+          console.log(this.myGstTotal, this.myDiscTotal, this.myEtTotal);
 
           this.myTableDataList.push({
             ProductID: e.productID,
