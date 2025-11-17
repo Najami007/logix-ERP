@@ -191,6 +191,41 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
   }
 
 
+  printBarcodeNew(data:any){
+
+    
+
+  }
+
+
+    startPrintingNew() {
+    if (this.tableDataList.length == 0) return;
+
+    this.printDataList = [];
+    let dataRows = this.tableDataList.filter((e: any) => e.isChecked);
+
+
+
+      for (const e of dataRows) {
+        for (let i = 0; i < e.quantity; i++) {
+          this.curProductRow = e;
+          // this.curProductRow.push({ ...e });
+          this.printDataList.push({ ...e });
+        }
+      }
+
+
+      setTimeout(() => {
+        console.log(this.printDataList);
+        this.global.printBarcode('#PrintDivNew');
+        alert();
+      }, 500);
+
+    
+    
+  }
+
+
   async startPrinting() {
     if (this.tableDataList.length == 0) return;
 

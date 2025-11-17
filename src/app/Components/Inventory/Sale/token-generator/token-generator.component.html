@@ -1,0 +1,181 @@
+<div class="body">
+
+    <div class="p-2 row justify-content-center">
+        <div class="col-md-2 pb-1" *ngIf="crudList.c">
+            <button autofocus (click)="generateToken()" style="height: 42px;" class="btnsave w-100">Generate
+                Token</button>
+        </div>
+        <!-- <button type="button" mat-mini-fab class="btnadd" *ngIf="crudList.c" autofocus (click)="add()"><mat-icon>add</mat-icon></button> -->
+        <div [ngClass]="crudList.c == false ? 'col-md-12' : 'col-md-10' ">
+            <mat-form-field appearance="outline" class="matSmall w-100">
+                <mat-label>Search....</mat-label>
+                <input matInput #search />
+            </mat-form-field>
+        </div>
+    </div>
+
+
+    <div class="p-2">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Date</th>
+                    <th>Bill #</th>
+                    <th>Token No</th>
+                    <th>Name</th>
+                    <th>Phone No</th>
+                    <th>CNIC</th>
+                    <th>Remarks</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr *ngFor="let item of savedTokenList | filter:search.value index as index " >
+                    <td>{{index + 1}}</td>
+                    <td>{{item.createdOn | date:'dd-MM-yyyy hh:mm a'}}</td>
+                    <td>{{item.invBillNo}}  {{item.invBillNo2}}  {{item.invBillNo3}}</td>
+                    <td>{{item.tokenNo}}</td>
+                    <td>{{item.cusName}}</td>
+                    <td>{{item.cusContactNo}}</td>
+                    <td>{{item.cusCNIC}}</td>
+                    <td>{{item.cusDetail}}</td>
+                    <td>
+                        <mat-icon (click)="printToken(item)">print</mat-icon>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+<!------------------------- Modal Window for Saved Bill =----------------->
+
+
+<div class="modal fade" id="tokenModal" tabindex="-1" aria-labelledby="SavedBillModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered ">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title" id="paymentMehtodLabel">Token Generator Total({{InvBillNoAmount +InvBillNo2Amount+InvBillNo3Amount|number}})</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field appearance="outline" class="matSmall w-100">
+                                <mat-label>Bill #1</mat-label>
+                                <input matInput #search [(ngModel)]="InvBillNo" />
+                            </mat-form-field>
+                        </div>
+                         <div class="col-md-4">
+                            <mat-form-field appearance="outline" class="matSmall w-100">
+                                <mat-label>Amount</mat-label>
+                                <input (input)="OnBillNoChange($event,1)"  [disabled]="true" matInput #search [(ngModel)]="InvBillNoAmount" />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4 pb-1">
+                            <button autofocus (click)="checkInvoice(InvBillNo,1)" style="height: 44px;"
+                                class="btnsave w-100">Enter</button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field appearance="outline" class="matSmall w-100">
+                                <mat-label>Bill #2</mat-label>
+                                <input (input)="OnBillNoChange($event,1)" [disabled]="InvBillNoAmount <= 0" matInput #search [(ngModel)]="InvBillNo2" />
+                            </mat-form-field>
+                        </div>
+                         <div class="col-md-4">
+                            <mat-form-field appearance="outline" class="matSmall w-100">
+                                <mat-label>Amount</mat-label>
+                                <input  [disabled]="true" matInput #search [(ngModel)]="InvBillNo2Amount" />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4 pb-1">
+                            <button autofocus (click)="checkInvoice(InvBillNo2,2)" style="height: 44px;"
+                                class="btnsave w-100">Enter</button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field appearance="outline" class="matSmall w-100">
+                                <mat-label>Bill #3</mat-label>
+                                <input (input)="OnBillNoChange($event,1)"  [disabled]="InvBillNo2Amount <= 0" matInput #search [(ngModel)]="InvBillNo3" />
+                            </mat-form-field>
+                        </div>
+                         <div class="col-md-4">
+                            <mat-form-field appearance="outline" class="matSmall w-100">
+                                <mat-label>Amount</mat-label>
+                                <input [disabled]="true" matInput #search [(ngModel)]="InvBillNo3Amount" />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4 pb-1">
+                            <button autofocus (click)="checkInvoice(InvBillNo3,3)" style="height: 44px;"
+                                class="btnsave w-100">Enter</button>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <mat-form-field appearance="outline" class="matSmall w-100">
+                            <mat-label>Customer Name</mat-label>
+                            <input matInput #search [(ngModel)]="CusName" />
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-12">
+                        <mat-form-field appearance="outline" class="matSmall w-100">
+                            <mat-label>Mobile No</mat-label>
+                            <input matInput maxlength="12" [(ngModel)]="CusContactNo" />
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-12">
+                        <mat-form-field appearance="outline" class="matSmall w-100">
+                            <mat-label>CNIC</mat-label>
+                            <input matInput maxlength="15" [(ngModel)]="CusCNIC" />
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-12">
+                        <mat-form-field appearance="outline" class="matSmall w-100">
+                            <mat-label>Remarks</mat-label>
+                            <textarea matInput [(ngModel)]="CusDetail"></textarea>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="modal-footer bg-mf-blue">
+                <button class="btnsave" (click)="saveToken()">Save</button>
+                <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<app-token-print id="printToken" class="hide"></app-token-print>

@@ -126,6 +126,8 @@ import { SalesmanTargetComponent } from './Configurations/salesman-target/salesm
 import { ProductDetailReportComponent } from './InventoryReports/product-detail-report/product-detail-report.component';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { AddProductImagesComponent } from './product/add-product-images/add-product-images.component';
+import { TokenGeneratorComponent } from './Sale/token-generator/token-generator.component';
+import { TokenPrintComponent } from './Sale/token-generator/token-print/token-print.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -235,6 +237,9 @@ export const inventoryRoutes: Route[] = [
   { path: 'productdetail', component: ProductDetailReportComponent, canActivate: [AuthGuard] },
   { path: 'product/addProductImages', component: AddProductImagesComponent },
 
+    { path: 'tokengenerator', component: TokenGeneratorComponent, canActivate: [AuthGuard] },
+
+
 
   { path: '**', redirectTo: 'home', data: { title: 'Home' }, pathMatch: 'full' }
 
@@ -338,6 +343,8 @@ export const inventoryRoutes: Route[] = [
     SalesmanTargetComponent,
     ProductDetailReportComponent,
     AddProductImagesComponent,
+    TokenGeneratorComponent,
+    TokenPrintComponent,
 
 
 

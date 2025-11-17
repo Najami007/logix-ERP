@@ -87,7 +87,7 @@
     font-size: 8px;
   }
    .expiry span{
-        margin-top: -4px;
+    line-height: 15px;
     text-align: center !important;
   }
   .bcodeC{
