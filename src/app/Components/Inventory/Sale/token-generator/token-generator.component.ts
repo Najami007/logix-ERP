@@ -72,17 +72,21 @@ export class TokenGeneratorComponent implements OnInit {
   InvBillNo3Amount: any = 0;
 
   OnBillNoChange(e:any,billNo:any){
-    if(e.keyCode == 13){
+  
       if(billNo == 1){
         this.InvBillNoAmount = 0;
+        this.InvBillNo2 = '';
+        this.InvBillNo2Amount = 0;
       }
        if(billNo == 2){
         this.InvBillNo2Amount = 0;
+        this.InvBillNo3Amount = 0;
+        this.InvBillNo3 = '';
       }
        if(billNo == 3){
         this.InvBillNo3Amount = 0;
       }
-    }
+    
   }
 
 
@@ -110,7 +114,6 @@ export class TokenGeneratorComponent implements OnInit {
             this.InvBillNo3Amount = Response.length > 0 ? Response[0].billTotal : 0;
           }
 
-          console.log(Response);
         }
       }
     )
@@ -142,7 +145,6 @@ export class TokenGeneratorComponent implements OnInit {
     this.http.get(environment.mainApi + this.globaldata.inventoryLink + `gettoken?reqType=All`).subscribe(
       {
         next: (Response: any) => {
-          console.log(Response);
           this.savedTokenList = Response;
         },
         error: (Error: any) => {
@@ -170,6 +172,12 @@ export class TokenGeneratorComponent implements OnInit {
   saveToken() {
 
     var billAmount = this.InvBillNoAmount + this.InvBillNo2Amount + this.InvBillNo3Amount;
+
+
+    if( this.InvBillNo == this.InvBillNo2 || this.InvBillNo2 == this.InvBillNo3 || this.InvBillNo == this.InvBillNo3 ){
+      this.msg.WarnNotify('Invoice Numbers must be different');
+      return;
+    }
 
     if (billAmount < 10000) {
       this.msg.WarnNotify(`Bill Total is less than 10,000`);
@@ -199,9 +207,9 @@ export class TokenGeneratorComponent implements OnInit {
 
     var postData = {
       TokenNo: 0,
-      InvBillNo: this.InvBillNo,
-      InvBillNo2: this.InvBillNo2 || '-',
-      InvBillNo3: this.InvBillNo3 || '-',
+      InvBillNo: this.InvBillNo2Amount <= 0 ? '-' : this.InvBillNo,
+      InvBillNo2: this.InvBillNo2Amount <= 0 ? '-' :  this.InvBillNo2,
+      InvBillNo3: this.InvBillNo3Amount <= 0 ? '-' : this.InvBillNo3 ,
       CusName: this.CusName,
       CusContactNo: this.CusContactNo,
       CusCNIC: this.CusCNIC,
@@ -211,11 +219,9 @@ export class TokenGeneratorComponent implements OnInit {
       tokenQty: tokenQty
     }
 
-    console.log(postData);
     this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'InsertToken', postData).subscribe(
       {
         next: (Response: any) => {
-          console.log(Response);
           if (Response.msg == 'Data Saved Successfully') {
             this.msg.SuccessNotify('Token Generated Successfully');
             this.reset();

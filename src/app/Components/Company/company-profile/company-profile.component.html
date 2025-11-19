@@ -246,7 +246,7 @@
       <div class="d-flex justify-content-start">
         <div class="avatar-upload col-md-4">
 
-          <div class="avatar-preview">
+          <div class="avatar-preview" (click)="global.showProductImage(logo1,0)">
             <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + logo1  + ')' }"></div>
           </div>
           <div class="text-center" *ngIf=" companyProfile != '' ">
@@ -257,7 +257,7 @@
 
         <div class="avatar-upload col-md-4">
 
-          <div class="avatar-preview">
+          <div class="avatar-preview" (click)="global.showProductImage(logo2,0)">
             <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + logo2 +  ')' }"></div>
           </div>
           <div class="text-center" *ngIf=" companyProfile != '' ">
@@ -267,7 +267,7 @@
 
         <div class="avatar-upload col-md-4">
 
-          <div class="avatar-preview">
+          <div class="avatar-preview" (click)="global.showProductImage(logo3,0)">
             <div id="imagePreview" [ngStyle]="{ 'background-image': 'url(' +logo3  + ')' }"></div>
           </div>
           <div class="text-center" *ngIf=" companyProfile != '' ">

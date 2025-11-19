@@ -45,7 +45,7 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
     this.global.setHeaderTitle('Purchase History Supplier wise');
     this.getUsers();
     this.getSupplier();
-  
+
 
   }
 
@@ -68,7 +68,7 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
   DetailList: any = [];
   reportType: any;
 
-formateType = 1;
+  formateType = 1;
 
 
 
@@ -107,15 +107,25 @@ formateType = 1;
 
   grandTotal = 0;
 
-  ledgerDetailList:any =[];
+  ledgerDetailList: any = [];
+  summaryDataList:any = [];
+  sumCostTotal = 0;
+  sumSaleTotal = 0;
   getReport(type: any) {
 
     // alert(this.recipeCatID);
 
-    if (this.partyID == 0 || this.partyID == undefined) {
+
+    var fromDate =   this.global.dateFormater(this.fromDate, '-');
+    var toDate = this.global.dateFormater(this.toDate,'-');
+    var fromTime = this.fromTime;
+    var toTime = this.toTime;
+
+    if ((this.partyID == 0 || this.partyID == undefined) && this.formateType < 3) {
       this.msg.WarnNotify('Select Supplier')
     } else {
-      this.partyName = this.supplierList.find((e: any) => e.partyID == this.partyID).partyName;
+
+      this.partyName = this.partyID > 0 ? this.supplierList.find((e: any) => e.partyID == this.partyID).partyName : '';
 
       this.app.startLoaderDark();
 
@@ -126,7 +136,7 @@ formateType = 1;
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
             (Response: any) => {
               this.DetailList = [];
-                  this.grandTotal = 0;
+              this.grandTotal = 0;
 
               if (Response.length == 0 || Response == null) {
                 this.global.popupAlert('Data Not Found!');
@@ -135,7 +145,7 @@ formateType = 1;
 
               }
               this.DetailList = Response;
-          
+
               Response.forEach((e: any) => {
                 if (e.invType == 'P') {
                   this.grandTotal += e.costPrice * e.quantity;
@@ -163,14 +173,14 @@ formateType = 1;
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
             (Response: any) => {
               this.DetailList = [];
-                this.grandTotal = 0;
+              this.grandTotal = 0;
               if (Response.length == 0 || Response == null) {
                 this.global.popupAlert('Data Not Found!');
-                 this.app.stopLoaderDark();
+                this.app.stopLoaderDark();
                 return;
               }
               this.DetailList = Response;
-            
+
               Response.forEach((e: any) => {
                 if (e.invType == 'P') {
                   this.grandTotal += e.netTotal + e.overHeadAmount + e.billDiscount;
@@ -191,46 +201,45 @@ formateType = 1;
       }
 
 
-      
+
       if (this.formateType == 3) {
 
-        this.reportType = ' Ledger';
-        this.http.get(environment.mainApi + this.global.inventoryLink + 'GetLedgerRpt_11?FromDate=' +
-          this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + '&PartyID=' + this.partyID).subscribe(
-            (Response: any) => {
-              this.ledgerDetailList = [];
+        var type3Url = `${environment.mainApi + this.global.inventoryLink}GetPurchaseSummaryDateWise?FromDate=${fromDate}&ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`;
+        this.http.get(type3Url).subscribe(
+          {
+            next: (Response: any) => {
               if (Response.length == 0 || Response == null) {
                 this.global.popupAlert('Data Not Found!');
                 this.app.stopLoaderDark();
                 return;
-
               }
-              this.ledgerDetailList = Response.map((e: any) => {
-                if (e.billDetail != '-') {
-                  (e.billDetailList = JSON.parse(e.billDetail));
 
-                }
-                (e.invoiceDate = new Date(e.invoiceDate))
-                return e;
+
+              this.summaryDataList = Response;
+              Response.forEach((e:any)=>{
+                this.sumCostTotal += e.costTotal;
+                this.sumSaleTotal += e.saleTotal;
               })
+
+
               this.app.stopLoaderDark();
+
+            },
+            error: (Error: any) => {
+              this.app.stopLoaderDark();
+              console.log(Error);
             }
-          )
+          }
+        )
       }
 
 
     }
 
-
-
-    
-
-
-
   }
 
 
-  reset(){
+  reset() {
     this.DetailList = [];
     this.grandTotal = 0;
   }
@@ -251,19 +260,31 @@ formateType = 1;
   }
 
 
-  
+
   export() {
     if (this.DetailList.length == 0) return;
-    var partyName = this.supplierList.filter((e:any)=> e.partyID === this.partyID)[0].partyName;
+    var partyName = this.supplierList.filter((e: any) => e.partyID === this.partyID)[0].partyName;
     var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
     var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
-    this.global.ExportHTMLTabletoExcel(`${this.formateType == 1 ? 'summaryTable' : 'detailTable'}`,
-       `Purchase History Supplier(${partyName}) (${startDate} - ${endDate})`)
+
+    var tableID = '';
+    if(this. formateType == 1){
+      tableID = 'summaryTable';
+    }
+       if(this. formateType == 2){
+      tableID = 'detailTable';
+    }
+       if(this. formateType == 3){
+      tableID = 'AllSummaryTable';
+    }
+
+    this.global.ExportHTMLTabletoExcel(`${tableID}`,
+      `Purchase History Supplier(${partyName}) (${startDate} - ${endDate})`)
   }
 
 
 
-  
+
   sortTable() {
     this.ledgerDetailList.sort((a: any, b: any) => a.invoiceDate - b.invoiceDate)
   }

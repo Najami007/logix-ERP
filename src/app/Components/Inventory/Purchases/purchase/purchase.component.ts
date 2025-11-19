@@ -334,7 +334,7 @@ export class PurchaseComponent implements OnInit {
         ProductID: data.productID,
         ProductTitle: data.productTitle,
         barcode: data.barcode,
-        productImage: this.ImageUrlFeature ? data.imagesPath : data.productImage,
+        productImage:  this.ImageUrlFeature ? data.imagesPath : '-',
         Quantity: qty,
         wohCP: data.costPrice,
         tempCostPrice: data.costPrice,
@@ -1120,7 +1120,7 @@ export class PurchaseComponent implements OnInit {
             ProductID: e.productID,
             ProductTitle: e.productTitle,
             barcode: e.barcode,
-            productImage: e.productImage,
+            productImage: '-' , // e.productImage,
             Quantity: e.quantity,
             wohCP: e.costPrice,
             tempCostPrice: e.tempCostPrice,
@@ -1420,7 +1420,7 @@ export class PurchaseComponent implements OnInit {
 
   insertToLocalStorage() {
     this.removeLocalStorage();
-
+    
     var prodData = JSON.stringify(this.tableDataList);
     localStorage.setItem('tmpPurchaseData', prodData);
 

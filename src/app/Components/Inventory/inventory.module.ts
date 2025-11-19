@@ -128,6 +128,7 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { AddProductImagesComponent } from './product/add-product-images/add-product-images.component';
 import { TokenGeneratorComponent } from './Sale/token-generator/token-generator.component';
 import { TokenPrintComponent } from './Sale/token-generator/token-print/token-print.component';
+import { PurchaseSummaryCategorywiseComponent } from './InventoryReports/purchase-summary-categorywise/purchase-summary-categorywise.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -236,8 +237,9 @@ export const inventoryRoutes: Route[] = [
   { path: 'suplierLedgerSpecial', component: SupplierLedgerSpecialComponent, data: { title: 'Supplier Ledger Special' }, canActivate: [AuthGuard] },
   { path: 'productdetail', component: ProductDetailReportComponent, canActivate: [AuthGuard] },
   { path: 'product/addProductImages', component: AddProductImagesComponent },
+  { path: 'purSummaryCatwise', component: PurchaseSummaryCategorywiseComponent , canActivate: [AuthGuard] },
 
-    { path: 'tokengenerator', component: TokenGeneratorComponent, canActivate: [AuthGuard] },
+  { path: 'tokengenerator', component: TokenGeneratorComponent, canActivate: [AuthGuard] },
 
 
 
@@ -345,6 +347,7 @@ export const inventoryRoutes: Route[] = [
     AddProductImagesComponent,
     TokenGeneratorComponent,
     TokenPrintComponent,
+    PurchaseSummaryCategorywiseComponent,
 
 
 

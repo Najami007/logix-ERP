@@ -23,7 +23,7 @@ export class CompanyProfileComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private global: GlobalDataModule,
+    public global: GlobalDataModule,
     private msg: NotificationService,
     private app: AppComponent,
     private dialogue: MatDialog,

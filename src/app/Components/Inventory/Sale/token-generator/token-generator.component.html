@@ -67,7 +67,7 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h2 class="modal-title" id="paymentMehtodLabel">Token Generator Total({{InvBillNoAmount +InvBillNo2Amount+InvBillNo3Amount|number}})</h2>
+                <h2 class="modal-title" id="paymentMehtodLabel">Token Generator Total ({{InvBillNoAmount +InvBillNo2Amount+InvBillNo3Amount|number}})</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -78,13 +78,13 @@
                         <div class="col-md-4">
                             <mat-form-field appearance="outline" class="matSmall w-100">
                                 <mat-label>Bill #1</mat-label>
-                                <input matInput #search [(ngModel)]="InvBillNo" />
+                                <input (input)="OnBillNoChange($event,1)"  matInput #search [(ngModel)]="InvBillNo" />
                             </mat-form-field>
                         </div>
                          <div class="col-md-4">
                             <mat-form-field appearance="outline" class="matSmall w-100">
                                 <mat-label>Amount</mat-label>
-                                <input (input)="OnBillNoChange($event,1)"  [disabled]="true" matInput #search [(ngModel)]="InvBillNoAmount" />
+                                <input  [disabled]="true" matInput #search [(ngModel)]="InvBillNoAmount" />
                             </mat-form-field>
                         </div>
                         <div class="col-md-4 pb-1">
@@ -97,7 +97,7 @@
                         <div class="col-md-4">
                             <mat-form-field appearance="outline" class="matSmall w-100">
                                 <mat-label>Bill #2</mat-label>
-                                <input (input)="OnBillNoChange($event,1)" [disabled]="InvBillNoAmount <= 0" matInput #search [(ngModel)]="InvBillNo2" />
+                                <input (input)="OnBillNoChange($event,2)" [disabled]="InvBillNoAmount <= 0" matInput #search [(ngModel)]="InvBillNo2" />
                             </mat-form-field>
                         </div>
                          <div class="col-md-4">
@@ -116,7 +116,7 @@
                         <div class="col-md-4">
                             <mat-form-field appearance="outline" class="matSmall w-100">
                                 <mat-label>Bill #3</mat-label>
-                                <input (input)="OnBillNoChange($event,1)"  [disabled]="InvBillNo2Amount <= 0" matInput #search [(ngModel)]="InvBillNo3" />
+                                <input (input)="OnBillNoChange($event,3)"  [disabled]="InvBillNo2Amount <= 0" matInput #search [(ngModel)]="InvBillNo3" />
                             </mat-form-field>
                         </div>
                          <div class="col-md-4">

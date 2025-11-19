@@ -63,8 +63,9 @@
             <mat-label>Format</mat-label>
             <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
 
-                <mat-option [value]="1">Summary</mat-option>
+                <mat-option [value]="1">Summary (Supplierwise)</mat-option>
                 <mat-option [value]="2">Detail</mat-option>
+                <mat-option [value]="3">Summary ALL </mat-option>
                 <!-- <mat-option [value]="3">Ledger</mat-option> -->
             </mat-select>
         </mat-form-field>
@@ -205,67 +206,41 @@
         </table>
 
 
-           <!-- <table class="table-logix" id="ledger" *ngIf="formateType == 3">
+          <table class="table-logix" id="AllSummaryTable" *ngIf="formateType == 3">
             <thead>
                 <tr>
                     <th>S#</th>
-                    <th class="cursorPointer" (click)="sortTable()">Date</th>
-                    <th>Inv No</th>
-                    <th>Particular</th>
-                    <th>Remarks</th>
-                    <th>Debit</th>
-                    <th>Credit</th>
-                    <th>Balance</th>
+                    <th>Supplier Name</th>
+                    <th>Pur Cost</th>
+                    <th>Pur Sale</th>
+                    <th>Margin</th>
+                    
 
                 </tr>
 
 
             </thead>
-
-
             <tbody>
-
-                <tr *ngFor="let item of ledgerDetailList index as index">
-                    <td class="text-center">{{index + 1}}</td>
-                    <td>{{item.invoiceDate |date:'dd-MM-yyyy'}}</td>
-
-                    <td class="text-center cursorPointer">
-                        <div class="d-flex flex-column">
-                            <span ><u>{{item.invBillNo}}</u></span>
-                            <span>{{item.invoiceNo}}</span>
-                        </div>
-                    </td>
-                    <td>{{item.particular}}</td>
-                    <td>
-                        <div>
-                            <span>{{item.invoiceRemarks}}</span>
-                            <span class="d-flex flex-column">
-                                <div *ngFor="let row of item.billDetailList">
-                                    <div *ngIf="row.ProductID > 0">
-                                        <span>{{row.ProductTitle}}
-                                            <b>({{row.CostPrice | number:'1.0-0'}} x {{row.Quantity | number:'1.0-3'}} = {{row.CostPrice *
-                                                row.Quantity | number:'1.0-0'}})</b>
-                                        </span>
-                                    </div>
-                                    <div class="fw-bold" *ngIf="row.ProductID == 0 
-                                     && (row.ProductTitle != 'CGS' && row.ProductTitle != 'Sales Income')">
-                                        <span>{{row.ProductTitle}}
-                                            <b>({{row.Debit + row.Credit | number:'1.0-0'}})</b>
-                                        </span>
-                                    </div>
-
-
-                                </div>
-                            </span>
-                        </div>
-
-                    </td>
-                    <td class="text-end">{{item.debit |number:'1.0-0'}}</td>
-                    <td class="text-end">{{item.credit |number:'1.0-0'}}</td>
-                    <td class="text-end">{{item.balance |number:'1.0-0'}}</td>
+                <tr *ngFor="let item of summaryDataList index as index">
+                    <td>{{index + 1}}</td>
+                    <td>{{item.partyName}}</td>
+                    <td class="text-end">{{item.costTotal | number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.saleTotal | number:'1.0-0'}}</td>
+                    <td class="text-end">{{((item.saleTotal - item.costTotal) / item.costTotal) * 100 | number:'1.0-0'}}%</td>
                 </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td class="fw-bold text-end">{{sumCostTotal | number:'1.0-0'}}</td>
+                     <td class="fw-bold text-end">{{sumSaleTotal | number:'1.0-0'}}</td>
+                      <td class="fw-bold text-end">{{((sumSaleTotal - sumCostTotal) / sumCostTotal) * 100 | number:'1.0-0'}}%</td>
+                </tr>
+                
             </tbody>
-        </table> -->
+
+
+
+        </table>
+
 
 
     </div>
