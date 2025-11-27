@@ -37,6 +37,12 @@ export class MaterialConsumptionRptComponent implements OnInit {
   ngOnInit(): void {
     this.global.setHeaderTitle('Material consumption');
     this.getUsers();
+    this.getProducts();
+    this.getMenuItemList();
+    setTimeout(() => {
+      $('#detailTable').hide();
+      $('#summaryTable').hide();
+    }, 200);
   }
 
 
@@ -65,6 +71,48 @@ export class MaterialConsumptionRptComponent implements OnInit {
   }
 
 
+  MenuItemList: any = '';
+  mnuItemID: any = 0;
+
+  getMenuItemList() {
+
+    this.http.get(this.apiReq + 'GetAllMnuItems').subscribe(
+      {
+        next: (Response: any) => {
+          this.MenuItemList = Response;
+        },
+        error: error => {
+          console.log(error);
+        }
+      }
+    )
+
+  }
+
+  tempRecipeTitle: any = [];
+  OnRecipeSelected() {
+    this.tempRecipeTitle = this.MenuItemList.find((e: any) => e.mnuItemID == this.mnuItemID).mnuItemTitle;
+    var index = this.MenuItemList.findIndex((e: any) => e.mnuItemID == this.mnuItemID);
+    this.MenuItemList[index].indexNo = this.MenuItemList[0].indexNo + 1;
+    this.MenuItemList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+  }
+
+  productList: any = [];
+  getProducts() {
+    this.global.getProducts().subscribe(
+      (data: any) => { this.productList = data;
+        console.log(data);
+       });
+  }
+
+
+  onProdSelected() {
+    var index = this.productList.findIndex((e: any) => e.productID == this.productID);
+    this.productList[index].indexNo = this.productList[0].indexNo + 1;
+    this.productList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+  }
+
+
   DataList: any = [];
 
   billTotal = 0;
@@ -72,6 +120,9 @@ export class MaterialConsumptionRptComponent implements OnInit {
   netTotal = 0;
 
   getReport() {
+
+    $('#detailTable').hide();
+    $('#summaryTable').show();
 
     var userID = this.userID;
     var fromDate = this.global.dateFormater(this.fromDate, '');
@@ -113,6 +164,108 @@ export class MaterialConsumptionRptComponent implements OnInit {
     )
 
   }
+
+
+  qtyTotal: any = 0;
+  amountTotal: any = 0;
+  productID: any = 0;
+  getIngredientwise() {
+    $('#detailTable').show();
+    $('#summaryTable').hide();
+    if (this.productID == 0 || this.productID == undefined) {
+      this.msg.WarnNotify('Select Product')
+    } else {
+      this.DataList = [];
+      this.qtyTotal = 0;
+      this.amountTotal = 0;
+      this.app.startLoaderDark();
+      this.http.get(this.apiReq + 'GetConsumptionRptProductAndDateWise?reqUID=' + this.userID + '&FromDate=' +
+        this.global.dateFormater(this.fromDate, '-') + '&ToDate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime +
+        '&ProductID=' + this.productID).subscribe(
+          (Response: any) => {
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
+            this.DataList = Response;
+            if (Response.length > 0) {
+              this.qtyTotal = 0;
+              this.amountTotal = 0;
+              Response.forEach((e: any) => {
+                this.qtyTotal += e.quantity;
+                this.amountTotal += e.avgCostPriceTotal;
+
+              });
+            }
+
+
+            this.app.stopLoaderDark();
+
+
+          },
+          (error: any) => {
+            console.log(error);
+            this.app.stopLoaderDark();
+          }
+        )
+    }
+
+
+  }
+
+
+
+
+  getMnuItemwise() {
+    $('#detailTable').show();
+    $('#summaryTable').hide();
+    if (this.mnuItemID == 0 || this.mnuItemID == undefined) {
+      this.msg.WarnNotify('Select Item')
+    } else {
+      this.DataList = [];
+      this.qtyTotal = 0;
+      this.amountTotal = 0;
+      this.app.startLoaderDark();
+      this.http.get(this.apiReq + 'GetConsumptionRptMnuItemAndDateWise?reqUID=' + this.userID + '&FromDate=' +
+        this.global.dateFormater(this.fromDate, '-') + '&ToDate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime +
+        '&MnuItemID=' + this.mnuItemID).subscribe(
+          (Response: any) => {
+            this.DataList = [];
+            this.qtyTotal = 0;
+            this.amountTotal = 0;
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
+            this.DataList = Response;
+            if (Response.length > 0) {
+              Response.forEach((e: any) => {
+                this.qtyTotal += e.quantity;
+                this.amountTotal += e.avgCostPriceTotal;
+              });
+            }
+
+            this.app.stopLoaderDark();
+
+
+
+          },
+          (error: any) => {
+            console.log(error);
+            this.app.stopLoaderDark();
+
+
+          }
+        )
+    }
+
+
+  }
+
 
 
   print() {

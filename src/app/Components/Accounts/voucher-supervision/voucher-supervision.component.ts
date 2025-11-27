@@ -130,7 +130,6 @@ export class VoucherSupervisionComponent {
       this.http.get(environment.mainApi+this.globalData.accountLink+'GetSavedVoucherDetailDateWise?fromdate='+this.globalData.dateFormater(this.fromDate,'-')+
       '&todate='+this.globalData.dateFormater(this.toDate,'-')).subscribe(
         (Response:any)=>{
-          console.log(Response);
           if(param == 'all'){
             this.voucherList = Response;
 

@@ -238,7 +238,6 @@ export class VoidSaleComponent implements OnInit {
 
           if (Response.length > 0) {
             this.discCustomerList = Response.filter((e: any) => e.partyType == 'Customer-Disc');
-            console.log(this.discCustomerList);
           }
         },
         error: (error: any) => {
@@ -318,13 +317,75 @@ export class VoidSaleComponent implements OnInit {
 
 
 
+  searchSpecialBarcode(barcode: any) {
+
+    //////////////// For Special Barcode setting /////////////////////////
+
+    var txtBCode = barcode;
+    var reqQty: any = 0;
+    var reqQtyDot: any = 0;
+    var prodQty: any = 0;
+    var tmpPrice: any = 0;
+
+    txtBCode = txtBCode.substring(2, 7);  /////////// extracting product barcode from special barcode
+    txtBCode = parseInt(txtBCode);
+    txtBCode = txtBCode.toString();
+
+    /////////// verifying whether exists in product list or not
+    var prodDetail = this.productList.find((p: any) => p.barcode == txtBCode);
+
+
+    this.global.getProdDetail(0, txtBCode).subscribe(
+      (Response: any) => {
+
+        if (Response == '' || Response == null || Response == undefined) {
+          this.msg.WarnNotify('Product Not Found');
+          return;
+        }
+
+        /////////// extracting price from special barcode based on UOM
+        if (Response[0].uomTitle == 'price') {
+          reqQty = barcode.substring(12 - 5);
+          reqQtyDot = reqQty.substring(0, 5);
+          tmpPrice = reqQtyDot;
+
+        } else if (Response[0].uomTitle == 'piece') {
+          reqQty = barcode.substring(12 - 5);
+          reqQtyDot = reqQty.substring(6 - 4);
+          reqQtyDot = reqQtyDot.substring(0, 3);
+          reqQty = reqQty.substring(0, 5);
+          prodQty = parseFloat(reqQty);
+
+        }
+        else {
+          /////////// extracting quantity from special barcode based on UOM
+          reqQty = barcode.substring(12 - 5);
+          reqQtyDot = reqQty.substring(6 - 4);
+          reqQtyDot = reqQtyDot.substring(0, 3);
+          reqQty = reqQty.substring(0, 2);
+          prodQty = parseFloat(reqQty + '.' + reqQtyDot);
+        }
+
+
+        this.insertProductData(Response[0].productID, '', 0, prodQty || 1)
+
+
+      }
+    )
+
+
+  }
+
+
+
 
 
   ///////////////////////////////  Send Product to To API and Recall get Funciton///////////////////////////////////////////////////
 
-  insertProductData(productID = 0, barcode = '', PartyID = 0) {
+  insertProductData(productID = 0, barcode = '', PartyID = 0, quantity = 1) {
 
     var postData = {
+      quantity: quantity,
       PartyID: 0,
       ProductID: productID,
       Barcode: barcode,
@@ -335,7 +396,12 @@ export class VoidSaleComponent implements OnInit {
         if (Response.msg == 'Data Saved Successfully') {
           this.getCurrentBill();
         } else {
-          this.msg.WarnNotify(Response.msg);
+
+          if (barcode.length == 13) {
+            this.searchSpecialBarcode(barcode)
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
         }
       },
       (Error: any) => {
@@ -363,7 +429,6 @@ export class VoidSaleComponent implements OnInit {
         this.tableDataList = [];
         if (Response.length > 0) {
           this.invBillNo = Response[0].invBillNo;
-          console.log(Response);
           Response.forEach((e: any) => {
             this.tableDataList.push({
               productID: e.productID,
@@ -651,6 +716,12 @@ export class VoidSaleComponent implements OnInit {
 
 
     if (this.invBillNo != '') {
+
+      if (this.tableDataList.length == 1) {
+        this.voidBill();
+        return;
+      }
+
       Swal.fire({
         title: 'Alert!',
         text: 'Confirm to Void Product',
@@ -673,6 +744,7 @@ export class VoidSaleComponent implements OnInit {
               }).subscribe(
                 (Response: any) => {
                   if (Response.msg == 'Password Matched Successfully') {
+
                     this.voidProduct(item);
                   } else {
                     this.msg.WarnNotify(Response.msg);
@@ -873,59 +945,56 @@ export class VoidSaleComponent implements OnInit {
 
     }
 
-    console.log(postData);
+    if (this.global.SubscriptionExpired()) {
+      Swal.fire({
+        title: 'Alert!',
+        text: 'Unable To Save , Contact To Administrator!',
+        position: 'center',
+        icon: 'warning',
+        showCancelButton: false,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
 
-
-        if (this.global.SubscriptionExpired()) {
-          Swal.fire({
-            title: 'Alert!',
-            text: 'Unable To Save , Contact To Administrator!',
-            position: 'center',
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'OK',
-          });
-          return;
-        }
-    
 
 
     if (this.isProcessing) return;
-      this.app.startLoaderDark();
-      this.isProcessing = true;
-      this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertVoidableSale', postData).subscribe(
-        (Response: any) => {
-          if (Response.msg == 'Data Saved Successfully') {
-            this.msg.SuccessNotify(Response.msg);
-            this.tmpCash = this.cash;
-            this.tmpChange = this.change;
-            this.PrintAfterSave(Response.invNo);
-            this.reset();
-            this.getCurrentBill();
+    this.app.startLoaderDark();
+    this.isProcessing = true;
+    this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertVoidableSale', postData).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully') {
+          this.msg.SuccessNotify(Response.msg);
+          this.tmpCash = this.cash;
+          this.tmpChange = this.change;
+          this.PrintAfterSave(Response.invNo);
+          this.reset();
+          this.getCurrentBill();
 
-            if (paymentType != 'Cash') {
-              $('#vssearchProduct').trigger('focus');  /// setting focus to prodsearch field
-              this.global.closeBootstrapModal('#paymentMehtod', true);     //// hiding payment Mehtod Modal window
+          if (paymentType != 'Cash') {
+            $('#vssearchProduct').trigger('focus');  /// setting focus to prodsearch field
+            this.global.closeBootstrapModal('#paymentMehtod', true);     //// hiding payment Mehtod Modal window
 
-            }
-
-
-          } else {
-            this.msg.WarnNotify(Response.msg);
           }
-          this.app.stopLoaderDark();
-          this.isProcessing = false;
-        },
-        (Error: any) => {
-          this.isProcessing = false;
-          this.msg.WarnNotify(Error);
-          console.log(Error);
-          this.app.stopLoaderDark();
+
+
+        } else {
+          this.msg.WarnNotify(Response.msg);
         }
-      )
-    
+        this.app.stopLoaderDark();
+        this.isProcessing = false;
+      },
+      (Error: any) => {
+        this.isProcessing = false;
+        this.msg.WarnNotify(Error);
+        console.log(Error);
+        this.app.stopLoaderDark();
+      }
+    )
+
 
 
 

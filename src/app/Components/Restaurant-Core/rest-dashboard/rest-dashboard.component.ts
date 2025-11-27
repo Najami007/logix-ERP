@@ -45,7 +45,6 @@ export class RestDashboardComponent  {
   getCardsData(){
     this.http.get(environment.mainApi+this.globalData.restaurentLink+'GetTotals').subscribe(
       (Response:any)=>{
-        console.log(Response,'Card Totals');
         this.cardDataList = Response;
          
       }
@@ -126,7 +125,6 @@ export class RestDashboardComponent  {
     this.http.get(environment.mainApi+this.globalData.restaurentLink+'GetCatTotals').subscribe(
       (Response:any)=>{
         
-        console.log(Response);
         Response.forEach((e:any) => {
           this.swingsList.push(e.catTitle);
           var tmpArry:any = [];

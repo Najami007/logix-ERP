@@ -38,11 +38,13 @@ export class VsenterqtyComponent implements OnInit {
 
 
 
-  changeQty(e:any){
+  changeQty(e:any,qty:any){
+
     if(e.target.value == ''){
-      e.target.value = 0;
+      this.tempQty = 0;
     }
-    this.tempQty = parseFloat(e.target.value);
+     
+   
     if(e.keyCode == 40){
       this.increment('minus',this.tempQty)
     }
@@ -59,6 +61,9 @@ export class VsenterqtyComponent implements OnInit {
     if(type == 'minus'){
       if(this.tempQty > 0){
         this.tempQty -= 1;
+      }
+      if(this.tempQty < 0){
+        this.tempQty  = 0;
       }
      
     }

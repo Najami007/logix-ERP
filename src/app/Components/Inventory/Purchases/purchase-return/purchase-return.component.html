@@ -86,22 +86,25 @@
 
 
                     <td class="text-center"><input type="text" [(ngModel)]="item.Quantity" min="0"
-                            (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);"
-                            (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index"
+                            (input)="getTotal();changeValue(item);"
+                            (keydown)="this.handleUpdown(item,$event,'.qty',index);"
+                            (keyup)="showImg(item);rowFocused = index"
                             class="qty{{index}} text-center" [accessKey]="index +1 " style="width: 80px;"></td>
 
 
                     <td class="text-center"><input type="text" [(ngModel)]="item.CostPrice" min="0"
-                            (keydown)="changeValue(item);this.handleUpdown(item,$event,'.cp',index);getTotal();"
-                            (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index"
+                         (input)="getTotal();changeValue(item);"
+                            (keydown)="this.handleUpdown(item,$event,'.cp',index);"
+                            (keyup)="showImg(item);rowFocused = index"
                             class="cp{{index}} text-center" style="width: 80px;"></td>
 
                     <!-- <td class="text-center">{{item.CostPrice |number}}</td> -->
 
 
                     <td class="text-center"><input type="text" [(ngModel)]="item.SalePrice" min="0"
-                            (keydown)="changeValue(item);this.handleUpdown(item,$event,'.sp',index);"
-                            (keyup)="changeValue(item);showImg(item);rowFocused = index" class="sp{{index}} text-center"
+                             (input)="getTotal();changeValue(item);"
+                            (keydown)="this.handleUpdown(item,$event,'.sp',index);"
+                            (keyup)="showImg(item);rowFocused = index" class="sp{{index}} text-center"
                             style="width: 80px;">
                     </td>
 

@@ -217,7 +217,6 @@ export class OrderManagementComponent {
     this.http.get(url).subscribe(
       {
         next: (Response: any) => {
-          console.log(Response);
           if (Response.length > 0) {
 
             if (this.lastOrderNo == 0 && Response.length > 0) {
@@ -280,7 +279,6 @@ export class OrderManagementComponent {
     this.http.get(url).subscribe(
       {
         next: (Response: any) => {
-          console.log(Response);
 
           this.dataList = [];
           if (Response.length > 0) {

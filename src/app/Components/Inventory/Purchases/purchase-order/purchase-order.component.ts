@@ -26,6 +26,7 @@ export class PurchaseOrderComponent implements OnInit {
 
   disableDateFeature = this.global.DisableInvDate;
   ImageUrlFeature = this.global.ImageUrlFeature;
+  PONewCostFeature = this.global.PONewCostFeature;
 
   constructor(
     private http: HttpClient,
@@ -82,6 +83,8 @@ export class PurchaseOrderComponent implements OnInit {
 
   salePriceTotal = 0;
   CostTotal = 0;
+  newCostTotal = 0;
+
 
   projectID = this.global.getProjectID();
   partyID: any = 0;
@@ -121,15 +124,12 @@ export class PurchaseOrderComponent implements OnInit {
           barcode = this.PBarcode.split("/")[0];
           qty = parseFloat(this.PBarcode.split("/")[1]);
           BType = 'price';
-
-
         }
         /// Seperating by - and coverting to Qty 
         if (this.PBarcode.split("-")[1] != undefined) {
           barcode = this.PBarcode.split("-")[0];
           qty = parseFloat(this.PBarcode.split("-")[1]);
           BType = 'qty';
-
         }
 
         // this.app.startLoaderDark();
@@ -206,6 +206,7 @@ export class PurchaseOrderComponent implements OnInit {
         tempCostPrice: data.costPrice,
         costPrice: data.costPrice,
         avgCostPrice: data.avgCostPrice,
+        newCostPrice: data.costPrice,
         salePrice: data.salePrice,
         ovhPercent: 0,
         ovhAmount: 0,
@@ -343,12 +344,15 @@ export class PurchaseOrderComponent implements OnInit {
     this.subTotal = 0;
     this.totalQty = 0;
     this.CostTotal = 0;
+    this.newCostTotal = 0;
     this.salePriceTotal = 0;
     for (var i = 0; i < this.tableDataList.length; i++) {
 
       this.subTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].costPrice));
       this.totalQty += parseFloat(this.tableDataList[i].quantity);
       this.CostTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].costPrice));
+      this.newCostTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].newCostPrice));
+
       this.salePriceTotal += (parseFloat(this.tableDataList[i].quantity) * parseFloat(this.tableDataList[i].salePrice))
       // this.myTotal = this.mySubtoatal - this.myDiscount;
       // this.myDue = this.myPaid - this.myTotal;\
@@ -560,22 +564,27 @@ export class PurchaseOrderComponent implements OnInit {
 
   SaveBill(type: any) {
     var isValidFlag = true;
-    this.tableDataList.forEach((p: any) => {
+    // this.tableDataList.forEach((p: any) => {
 
-      p.quantity = parseFloat(p.quantity);
-      p.salePrice = parseFloat(p.salePrice);
-      p.costPrice = parseFloat(p.costPrice);
-
-
-      if (p.quantity == 0 || p.quantity == '0' || p.quantity == '' || p.quantity == undefined || p.quantity == null) {
-        this.msg.WarnNotify('(' + p.productTitle + ') Quantity is not Valid');
-        isValidFlag = false;
-        return;
-      }
+    //   p.quantity = parseFloat(p.quantity);
+    //   p.salePrice = parseFloat(p.salePrice);
+    //   p.costPrice = parseFloat(p.costPrice);
 
 
-    });
+    //   if (p.quantity == 0 || p.quantity == '0' || p.quantity == '' || p.quantity == undefined || p.quantity == null) {
+    //     this.msg.WarnNotify('(' + p.productTitle + ') Quantity is not Valid');
+    //     isValidFlag = false;
+    //     return;
+    //   }
 
+
+    // });
+
+    var productList = this.tableDataList.filter((e: any) => Number(e.quantity) > 0)
+    if (productList.length == 0) {
+      this.msg.WarnNotify('No Quantity added of any product');
+      return;
+    }
 
     var postData: any = {
       InvType: 'PO',
@@ -589,7 +598,7 @@ export class PurchaseOrderComponent implements OnInit {
       NetTotal: this.subTotal,
       Remarks: this.invRemarks || '-',
       InvoiceDocument: "-",
-      InvDetail: JSON.stringify(this.tableDataList),
+      InvDetail: JSON.stringify(productList),
       UserID: this.global.getUserID(),
     };
 
@@ -619,6 +628,7 @@ export class PurchaseOrderComponent implements OnInit {
               }
             },
             (Error: any) => {
+              console.log(Error);
               this.msg.WarnNotify(Error);
               this.app.stopLoaderDark();
             }
@@ -645,6 +655,7 @@ export class PurchaseOrderComponent implements OnInit {
                   }
                 },
                 (Error: any) => {
+                  console.log(Error);
                   this.msg.WarnNotify(Error);
                   this.app.stopLoaderDark();
                 }
@@ -680,6 +691,7 @@ export class PurchaseOrderComponent implements OnInit {
     this.adjustmentType = '';
     this.CostTotal = 0;
     this.salePriceTotal = 0;
+    this.newCostTotal = 0;
 
   }
 
@@ -703,8 +715,9 @@ export class PurchaseOrderComponent implements OnInit {
 
 
 
-  printBill(item: any) {
+  printBill(item: any, type: any) {
     this.billPrint.printBill(item);
+    this.billPrint.hidePrices = type == 'all' ? false : true;
 
   }
 
@@ -737,6 +750,7 @@ export class PurchaseOrderComponent implements OnInit {
             avgCostPrice: e.avgCostPrice,
             costPrice: e.costPrice,
             salePrice: e.salePrice,
+            newCostPrice:e.newCostPrice,
             expiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
             batchNo: e.batchNo,
             batchStatus: e.batchStatus,
@@ -860,9 +874,9 @@ export class PurchaseOrderComponent implements OnInit {
         next: (Response: any) => {
           if (Response.length > 0) {
             Response.forEach((e: any) => {
-              this.pushProdData(e, 1);
+              this.pushProdData(e, 0);
             })
-          }else{
+          } else {
             this.msg.WarnNotify('No Products Found')
           }
         }

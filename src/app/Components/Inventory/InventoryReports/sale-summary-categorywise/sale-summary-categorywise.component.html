@@ -108,7 +108,7 @@
                     </span>
                     <div class="d-flex flex-column">
                         <span class="companyName">{{item.companyName}}</span>
-                        <span class="rptTitle">Purchase Summary Report</span>
+                        <span class="rptTitle">Sale Summary</span>
                         <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}})
                             <b>To:</b>
                             {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
@@ -130,9 +130,9 @@
                         <th>S#</th>
 
                         <th>Title</th>
-                        <th>Pur Cost</th>
-                        <th>Pur Sale</th>
-                        <th>Margin</th>
+                        <!-- <th>Sale Cost</th> -->
+                        <th>Amount</th>
+                        <!-- <th>Margin</th> -->
 
                     </tr>
 
@@ -143,17 +143,17 @@
                         <td class="text-center">{{index + 1}}</td>
 
                         <td>{{item.title}}</td>
-                        <td class="text-end">{{item.costTotal | number:'1.0-0'}}</td>
+                        <!-- <td class="text-end">{{item.costTotal | number:'1.0-0'}}</td> -->
                         <td class="text-end">{{item.saleTotal |number:'1.0-0'}}</td>
-                        <td class="text-end">{{((item.saleTotal - item.costTotal) / item.costTotal) * 100 |number:'1.0-1'}}%</td>
+                        <!-- <td class="text-end">{{((item.saleTotal - item.costTotal) / item.costTotal) * 100 |number:'1.0-1'}}%</td> -->
 
 
                     </tr>
                     <tr>
                         <td colspan="2"></td>
-                        <td class="text-end fw-bold">{{netCostTotal|number:'1.0-0'}}</td>
+                        <!-- <td class="text-end fw-bold">{{netCostTotal|number:'1.0-0'}}</td> -->
                         <td class="text-end fw-bold">{{netSaleTotal|number:'1.0-0'}}</td>
-                          <td class="text-end fw-bold">{{((netSaleTotal - netCostTotal) / netCostTotal) * 100|number:'1.0-1'}}%</td>
+                          <!-- <td class="text-end fw-bold">{{((netSaleTotal - netCostTotal) / netCostTotal) * 100|number:'1.0-1'}}%</td> -->
                     </tr>
                 </tbody>
 
@@ -168,3 +168,4 @@
 
 
 </div>
+

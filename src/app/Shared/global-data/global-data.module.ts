@@ -338,6 +338,7 @@ export class GlobalDataModule implements OnInit {
   insertLocalStorageFeature = this.getFeature('insertLocalStorage');
   showLogixDetailFeature = this.getFeature('showLogixDetail');
   hideNetTotalFeature = this.getFeature('hideNetTotal');
+  PONewCostFeature = this.getFeature('PONewCost');
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
     this.BookerFeature = this.getFeature('Booker');
@@ -398,6 +399,7 @@ export class GlobalDataModule implements OnInit {
     this.insertLocalStorageFeature = this.getFeature('insertLocalStorage');
     this.showLogixDetailFeature = this.getFeature('showLogixDetail');
     this.hideNetTotalFeature = this.getFeature('hideNetTotal');
+     this.PONewCostFeature = this.getFeature('PONewCost');
   }
 
 
@@ -630,8 +632,7 @@ export class GlobalDataModule implements OnInit {
     const targetDate = new Date(atob(atob(ExpiryDate)));
     targetDate.setHours(10, 0, 0, 0);      // Create target date at 10:00 AM  // 10:00 AM exactly
     var status: any = now! >= targetDate;
-
-    console.log(now, targetDate);
+    console.log(targetDate);
     return status;
   }
 
@@ -1301,7 +1302,6 @@ export class GlobalDataModule implements OnInit {
       locationID = 0;
     }
     var url = environment.mainApi + this.inventoryLink + `GetSingleProductDetail?ProductID=${id}&Barcode=${barcode}&LocID=${locationID}`
-    console.log(url);
     return this.http.get(url).pipe(retry(3));
   }
 
@@ -1639,7 +1639,6 @@ export class GlobalDataModule implements OnInit {
       // 3968 17 20
 
     }
-    // console.log(value);
     return value;
 
   }
@@ -1735,7 +1734,6 @@ export class GlobalDataModule implements OnInit {
 
     }
     value = btoa(btoa(value + code));
-    //  console.log(value);
     return value;
   }
 

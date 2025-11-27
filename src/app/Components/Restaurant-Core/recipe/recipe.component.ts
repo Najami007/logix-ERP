@@ -920,7 +920,6 @@ export class RecipeComponent implements OnInit {
 
         if (type == 'hide') {
           this.recipeImg = Response[0].recipeImage
-          //    console.log( Response[0].recipeImage)
           // this.recipeImg = await this.compressBase64( Response[0].recipeImage,400,400,0.5);
 
           // console.log(this.recipeImg)

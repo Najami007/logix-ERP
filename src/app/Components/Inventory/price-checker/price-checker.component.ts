@@ -54,8 +54,8 @@ export class PriceCheckerComponent implements OnInit {
     if(e.keyCode == 13){
       this.global.getProdDetail(0,this.barcode).subscribe(
         (Response:any)=>{
-          this.productName = Response[0].productTitle;
-          this.productPrice = Response[0].salePrice;
+          this.productName = Response[0].flavourTitle ? Response[0].flavourTitle : Response[0].productTitle;
+          this.productPrice = (Response[0].salePrice * Response[0].quantity) - Response[0].discInR ;
           this.barcode = '';
         }
       )

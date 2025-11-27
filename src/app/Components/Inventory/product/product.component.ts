@@ -165,7 +165,7 @@ export class ProductComponent implements OnInit {
   }
 
 
-  mrp:any = 0;
+  mrp: any = 0;
 
   discountList: any = [];
   brandFilterID = 0;
@@ -184,8 +184,8 @@ export class ProductComponent implements OnInit {
     { title: 'Not Linked With App', value: false, isChecked: false },
   ]
 
-  costGreaterThenSaleFilter:any = false;
-  avgCostGreaterThenSaleFilter:any = false;
+  costGreaterThenSaleFilter: any = false;
+  avgCostGreaterThenSaleFilter: any = false;
 
 
   subCategoryFilterList: any = [];
@@ -219,7 +219,7 @@ export class ProductComponent implements OnInit {
       .filter((e: any) => e.isChecked)
       .map((e: any) => e.value);
 
-    
+
 
 
 
@@ -236,10 +236,10 @@ export class ProductComponent implements OnInit {
             ? p.discPercentage <= 0
             : discList.includes(p.discPercentage)              // fallback for other cases
         )
-      )&&
-      ( this.costGreaterThenSaleFilter ? p.costPrice >  p.salePrice : true)&&
-      ( this.avgCostGreaterThenSaleFilter ? p.avgCostPrice >  p.salePrice : true)
-      
+      ) &&
+      (this.costGreaterThenSaleFilter ? p.costPrice > p.salePrice : true) &&
+      (this.avgCostGreaterThenSaleFilter ? p.avgCostPrice > p.salePrice : true)
+
     );
 
 
@@ -332,8 +332,16 @@ export class ProductComponent implements OnInit {
 
   ////// calculating Discount on Basis of Discount in Percentage click ////////////
 
-  applyDiscount() {
-    this.DiscRupee = (this.SalePrice == '' || this.SalePrice == undefined || this.SalePrice == null ? 0 : this.SalePrice * this.DiscPercent) / 100
+  applyDiscount(type: any) {
+
+    if (type == 'perc' || type == 'sale') {
+      this.DiscRupee = (this.SalePrice == '' || this.SalePrice == undefined || this.SalePrice == null ? 0 : Number(this.SalePrice) * this.DiscPercent) / 100
+    }
+
+    if(type == 'rs'){
+      this.DiscPercent =  (this.SalePrice == '' || this.SalePrice == undefined || this.SalePrice == null ? 0 : this.DiscRupee /  this.SalePrice ) * 100
+    }
+
   }
 
 
@@ -593,7 +601,7 @@ export class ProductComponent implements OnInit {
       BarcodeType: this.barcodeType,
       ProductImage: this.productImg || '-',
       ProductTypeID: this.prodTypeID,
-      mrp:this.mrp || 0,
+      mrp: this.mrp || 0,
       UserID: this.global.getUserID()
     };
     if (this.btnType == 'Save') {
@@ -617,6 +625,7 @@ export class ProductComponent implements OnInit {
           this.getProductList();
           this.reset('');
           this.app.stopLoaderDark();
+          $('#title2').trigger('select');
         } else {
           this.msg.WarnNotify(Response.msg);
           this.app.stopLoaderDark();
@@ -651,6 +660,8 @@ export class ProductComponent implements OnInit {
                 setTimeout(() => {
                   this.AdvanceFilter();
                 }, 500);
+
+                $('#title2').trigger('select');
 
               } else {
                 this.msg.WarnNotify(Response.msg);
@@ -1188,8 +1199,8 @@ export class ProductComponent implements OnInit {
 
 
 
-  openImagesScreen(){
-  this.route.navigate(["inv/product/addProductImages"]);
+  openImagesScreen() {
+    this.route.navigate(["inv/product/addProductImages"]);
   }
 
 

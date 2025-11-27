@@ -39,12 +39,23 @@
         </mat-form-field>
 
     </div>
-    <div class="row text-center justify-content-center pb-2">
+    <div class="row  pb-2">
 
-        <div class="col-lg-3 d-flex flex-wrap" *ngIf="crudList.r">
+        <div class="col-md-3">
+            <mat-form-field appearance="outline" class="w-100 matSmall">
+                <mat-label>Report Type</mat-label>
+                <mat-select [(ngModel)]="rptType" (selectionChange)="reset()">
+                    <mat-option [value]="1">Summary</mat-option>
+                       <mat-option [value]="2">Detail</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
 
-            <div class="col-md-4  pe-1"><button class="btn-rpt-success w-100" (click)="getReport('')">Get Report</button></div>
-            <div  class="col-md-4  pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
+        <div class="col-md-3 d-flex flex-wrap" *ngIf="crudList.r">
+
+            <div class="col-md-4  pe-1"><button class="btn-rpt-success w-100" (click)="getReport('')">Get
+                    Report</button></div>
+            <div class="col-md-4  pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
             <!-- <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button> -->
             <div class=" col-md-4"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
         </div>
@@ -67,9 +78,9 @@
                 </span>
                 <div class="d-flex flex-column">
                     <span class="companyName">{{item.companyName}}</span>
-                    <span class="rptTitle" >Purchase Sale Comparison Report </span>
-                    <span >Supplier: <b>{{partyName}}</b></span>
-                    <span ><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                    <span class="rptTitle">Purchase Sale Comparison Report </span>
+                    <span>Supplier: <b>{{partyName}}</b></span>
+                    <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
                 </div>
                 <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
@@ -82,7 +93,7 @@
         </div>
 
 
-        <table class="table-logix" id="detailTable">
+        <table class="table-logix" id="detailTable" *ngIf="rptType == 2">
             <thead>
                 <tr>
                     <th>S#</th>
@@ -120,6 +131,43 @@
 
 
         </table>
+
+
+        <table class="table-logix" id="SummaryTable" *ngIf="rptType == 1">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Title</th>
+                
+                    <th>Pur Total</th>
+                    <th>Sale Total</th>
+                    <th>Difference</th>
+
+                </tr>
+
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of DetailList index as index">
+                    <td class="text-center">{{index + 1}}</td>
+                    <td>{{item.partyName}}</td>
+                    <td class="text-end">{{item.purTotal |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.saleTotal |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.purTotal - item.saleTotal |number:'1.0-0'}}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+
+                    <th class="text-end">{{purchaseTotal|number:'1.0-0'}}</th>
+                    <th class="text-end">{{saleTotal|number:'1.0-0'}}</th>
+                    <th class="text-end">{{purchaseTotal - saleTotal |number:'1.0-0'}}</th>
+                </tr>
+            </tbody>
+
+
+
+        </table>
+
 
 
 

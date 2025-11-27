@@ -162,48 +162,48 @@
 
                             <td class="text-center"><input type="text" [(ngModel)]="item.Quantity" min="0"
                                     draggable="false" dropzone="false"
-                                    (input)="global.handleInputChange($event);getTotal();changeValue(item)"
-                                    (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);onFieldsUpdate('qty',item)"
-                                    (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('qty',item)"
+                                    (input)="global.handleInputChange($event);getTotal();changeValue(item);onFieldsUpdate('qty',item)"
+                                    (keydown)="this.handleUpdown(item,$event,'.qty',index)"
+                                    (keyup)="showImg(item);rowFocused = index;"
                                     [accessKey]="index +1 " class="qty{{index}} text-center amtInput"
                                     style="width: 80px;"></td>
 
                             <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
                                     [(ngModel)]="item.tempCostPrice" min="0" draggable="false"
-                                    (input)="global.handleInputChange($event);getTotal();changeValue(item)"
-                                    (keydown)="changeValue(item);this.handleUpdown(item,$event,'.tcp',index);getTotal();onFieldsUpdate('tcp',item)"
-                                    (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('tcp',item)"
+                                    (input)="global.handleInputChange($event);getTotal();changeValue(item);onFieldsUpdate('tcp',item)"
+                                    (keydown)="this.handleUpdown(item,$event,'.tcp',index)"
+                                    (keyup)="showImg(item);rowFocused = index;"
                                     class="tcp{{index}} text-center amtInput" style="width: 80px;"></td>
 
 
 
                             <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
                                     [(ngModel)]="item.discInP" min="0" draggable="false" dropzone="false"
-                                    (input)="global.handleInputChange($event);getTotal();changeValue(item)"
-                                    (keydown)="this.handleUpdown(item,$event,'.discP',index);getTotal();changeValue(item);onFieldsUpdate('dp',item)"
-                                    (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('dp',item)"
+                                    (input)="global.handleInputChange($event);getTotal();changeValue(item);onFieldsUpdate('dp',item)"
+                                    (keydown)="this.handleUpdown(item,$event,'.discP',index)"
+                                    (keyup)="showImg(item);rowFocused = index;"
                                     class="discP{{index}} text-center amtInput" style="width: 80px;"></td>
 
 
                             <td class="text-center " *ngIf="DetailedPurchaseFeature"><input type="text"
                                     [(ngModel)]="item.discInR" min="0" draggable="false" dropzone="false"
-                                    (input)="global.handleInputChange($event);getTotal();changeValue(item)"
-                                    (keydown)="this.handleUpdown(item,$event,'.discR',index);getTotal();changeValue(item);onFieldsUpdate('dR',item);"
-                                    (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('dR',item)"
+                                    (input)="global.handleInputChange($event);getTotal();changeValue(item);onFieldsUpdate('dR',item);"
+                                    (keydown)="this.handleUpdown(item,$event,'.discR',index);"
+                                    (keyup)="showImg(item);rowFocused = index;"
                                     class="discR{{index}} text-center amtInput" style="width: 80px;"></td>
 
                             <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
                                     [(ngModel)]="item.gst" min="0" draggable="false" dropzone="false"
-                                    (input)="global.handleInputChange($event);getTotal();changeValue(item)"
-                                    (keydown)="this.handleUpdown(item,$event,'.gst',index);getTotal();changeValue(item);onFieldsUpdate('gst',item);"
-                                    (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('gst',item);"
+                                    (input)="global.handleInputChange($event);getTotal();changeValue(item);onFieldsUpdate('gst',item);"
+                                    (keydown)="this.handleUpdown(item,$event,'.gst',index);"
+                                    (keyup)="showImg(item);rowFocused = index;"
                                     class="gst{{index}} text-center amtInput" style="width: 80px;"></td>
 
                             <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
                                     [(ngModel)]="item.et" min="0" draggable="false" dropzone="false"
-                                    (input)="global.handleInputChange($event);getTotal();changeValue(item)"
-                                    (keydown)="this.handleUpdown(item,$event,'.et',index);getTotal();changeValue(item);onFieldsUpdate('et',item);"
-                                    (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index;onFieldsUpdate('et',item);"
+                                    (input)="global.handleInputChange($event);getTotal();changeValue(item);onFieldsUpdate('et',item);"
+                                    (keydown)="this.handleUpdown(item,$event,'.et',index);"
+                                    (keyup)="showImg(item);rowFocused = index;"
                                     class="et{{index}} text-center amtInput" style="width: 80px;"></td>
 
 
@@ -211,9 +211,9 @@
                                 <span *ngIf="DetailedPurchaseFeature">{{item.CostPrice |number:'1.0-1'}} </span>
                                 <input type="text" [(ngModel)]="item.CostPrice" min="0" *ngIf="!DetailedPurchaseFeature"
                                     draggable="false"
-                                    (input)="global.handleInputChange($event);getTotal();changeValue(item)"
-                                    (keydown)="changeValue(item);this.handleUpdown(item,$event,'.cp',index);getTotal();"
-                                    (keyup)="changeValue(item);getTotal();showImg(item);rowFocused = index"
+                                    (input)="global.handleInputChange($event);getTotal();changeValue(item);"
+                                    (keydown)="this.handleUpdown(item,$event,'.cp',index);"
+                                    (keyup)="showImg(item);rowFocused = index"
                                     class="cp{{index}} text-center amtInput" style="width: 80px;">
                             </td>
 
@@ -221,9 +221,9 @@
 
                             <td class="text-center"><input type="text" [(ngModel)]="item.SalePrice" min="0"
                                     draggable="false"
-                                    (input)="global.handleInputChange($event);getTotal();changeValue(item)"
-                                    (keydown)="changeValue(item);this.handleUpdown(item,$event,'.sp',index);"
-                                    (keyup)="changeValue(item);showImg(item);rowFocused = index"
+                                    (input)="global.handleInputChange($event);getTotal();changeValue(item);"
+                                    (keydown)="this.handleUpdown(item,$event,'.sp',index);"
+                                    (keyup)="showImg(item);rowFocused = index"
                                     class="sp{{index}} text-center amtInput" style="width: 80px;">
                             </td>
 
@@ -239,8 +239,9 @@
                             </td>
                             <td class="text-center minWidth"><input type="text" [(ngModel)]="item.margin" min="0"
                                     draggable="false"
-                                    (keydown)="onMarginChange(item,index); this.handleUpdown(item,$event,'.mg',index);"
-                                    (keyup)="onMarginChange(item,index);showImg(item);rowFocused = index"
+                                    (input)="onMarginChange(item,index)"
+                                    (keydown)="this.handleUpdown(item,$event,'.mg',index);"
+                                    (keyup)="showImg(item);rowFocused = index" maxlength="3"
                                     class="mg{{index}} text-center amtInput" style="width: 80px;">
                             </td>
 

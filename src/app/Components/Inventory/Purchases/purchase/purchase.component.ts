@@ -260,20 +260,20 @@ export class PurchaseComponent implements OnInit {
       if (e.keyCode == 13) {
 
         /// Seperating by / and coverting to Qty
-        if (this.PBarcode.split("/")[1] != undefined) {
-          barcode = this.PBarcode.split("/")[0];
-          qty = parseFloat(this.PBarcode.split("/")[1]);
-          BType = 'price';
+        // if (this.PBarcode.split("/")[1] != undefined) {
+        //   barcode = this.PBarcode.split("/")[0];
+        //   qty = parseFloat(this.PBarcode.split("/")[1]);
+        //   BType = 'price';
 
 
-        }
-        /// Seperating by - and coverting to Qty 
-        if (this.PBarcode.split("-")[1] != undefined) {
-          barcode = this.PBarcode.split("-")[0];
-          qty = parseFloat(this.PBarcode.split("-")[1]);
-          BType = 'qty';
+        // }
+        // /// Seperating by - and coverting to Qty 
+        // if (this.PBarcode.split("-")[1] != undefined) {
+        //   barcode = this.PBarcode.split("-")[0];
+        //   qty = parseFloat(this.PBarcode.split("-")[1]);
+        //   BType = 'qty';
 
-        }
+        // }
 
         // this.app.startLoaderDark();
         this.global.getProdDetail(0, barcode).subscribe(
@@ -758,9 +758,9 @@ export class PurchaseComponent implements OnInit {
     var inValidAmountProdList = this.tableDataList.filter((p: any) => (Number(p.CostPrice) * Number(p.Quantity)) > (Number(p.SalePrice) * Number(p.Quantity)) || (Number(p.CostPrice) * Number(p.Quantity)) < 0);
 
 
-    var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.CostPrice) > Number(p.SalePrice) || p.CostPrice == 0 || p.CostPrice < 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null);
-    var inValidSaleProdList = this.tableDataList.filter((p: any) => p.SalePrice == 0 || p.SalePrice < 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null);
-    var inValidQtyProdList = this.tableDataList.filter((p: any) => p.Quantity == 0 || p.Quantity < 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '')
+    var inValidCostProdList = this.tableDataList.filter((p: any) =>  isNaN(p.CostPrice) || Number(p.CostPrice) > Number(p.SalePrice) || p.CostPrice == 0 || p.CostPrice < 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null);
+    var inValidSaleProdList = this.tableDataList.filter((p: any) => isNaN(p.SalePrice) ||  p.SalePrice == 0 || p.SalePrice < 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null);
+    var inValidQtyProdList = this.tableDataList.filter((p: any) => isNaN(p.Quantity) || p.Quantity == 0 || p.Quantity < 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '')
 
     if (inValidAmountProdList.length > 0) {
       this.msg.WarnNotify('(' + inValidCostProdList[0].ProductTitle + ') Total Not Valid');
@@ -857,8 +857,6 @@ export class PurchaseComponent implements OnInit {
       UserID: this.global.getUserID()
     };
 
-
-
     if (type == 'hold') {
       if (this.holdBtnType == 'Hold') {
 
@@ -939,7 +937,6 @@ export class PurchaseComponent implements OnInit {
   insert(type: any, postData: any) {
 
     this.app.startLoaderDark();
-    console.log(postData);
 
     if (type == 'purchase') {
       postData.InvType = 'P';
@@ -1315,9 +1312,13 @@ export class PurchaseComponent implements OnInit {
 
 
   onMarginChange(item: any, index: any) {
+    if(item.CostPrice <= 0){
+      item.margin = 0;
+      return;
+    }
     var margin = Number(item.margin);
 
-    item.SalePrice = Number(item.CostPrice) + (Number(item.CostPrice) * (margin / 100));
+    item.SalePrice = Number(item.CostPrice) + (Number(item.CostPrice * margin) / 100);
     this.getTotal();
 
   }
@@ -1366,7 +1367,6 @@ export class PurchaseComponent implements OnInit {
 
 
     var vdoc = document;
-    // console.log(vdoc);
 
     var newImage = vdoc.replace('data:application/pdf;base64,', '');
 
@@ -1501,7 +1501,6 @@ export class PurchaseComponent implements OnInit {
 
 
   getProductImage(item: any) {
-    console.log(item);
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductImage?ProductID=' + item.ProductID).subscribe(
       (Response: any) => {
 

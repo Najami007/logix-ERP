@@ -248,7 +248,6 @@ export class RestSaleBillPrintComponent {
     //   $('#qrCode').empty();
     //   $('#qrCode').prepend('<img src="' + imageData + '" width="90" height="90" />')
 
-    //   console.log('Image generated:', imageData);
     // }).catch((error) => {
     //   console.error('Error generating image:', error);
     // });

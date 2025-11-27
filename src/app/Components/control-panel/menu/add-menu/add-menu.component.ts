@@ -33,7 +33,6 @@ export class AddMenuComponent implements OnInit {
       this.menuTitle = this.editData.menuTitle;
       this.moduleID = this.editData.moduleID;
     }
-    //console.log(this.editData.parentMenuID);
   }
 
   UserId = this.global.getUserID();
@@ -53,7 +52,6 @@ export class AddMenuComponent implements OnInit {
     this.dataServie.getHttp(this.global.contorlPanelLink + 'getMenu', '').subscribe(
       (Response: any) => {
         this.parentMenuList = Response.filter((e: any) => e.isParentMenu == true);
-        // console.log(this.parentMenuList);
       }
     )
   }
@@ -62,7 +60,6 @@ export class AddMenuComponent implements OnInit {
     this.dataServie.getHttp(this.global.userLink + 'getModule', '').subscribe(
       (Response: any) => {
         this.moduleList = Response;
-        // console.log(Response);
       }
     )
   }

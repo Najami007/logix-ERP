@@ -13,7 +13,7 @@
                     <mat-icon (click)="increment('add',prodQty.value)" matPrefix>add</mat-icon>
 
                     <input class="prodQty text-center" [(ngModel)]="tempQty" id="qty" name="qty"
-                        (keydown)="this.global.handleNumKeys($event);changeQty($event);" (change)="changeQty($event);"
+                        (keydown)="this.global.handleNumKeys($event);changeQty($event,tempQty);" (change)="changeQty($event,tempQty);"
                         type="text" min="0" matInput #prodQty />
                     <mat-icon (click)="increment('minus',prodQty.value)" matSuffix>remove</mat-icon>
                 </mat-form-field>

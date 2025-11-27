@@ -113,7 +113,6 @@ export class AddPropertyComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.companyLink+'GetArea').subscribe(
       (Response:any)=>{
         this.areaList = Response.filter((e:any)=> e.cityID == this.CityID);
-        //console.log(Response);
       },
       (Error)=>{
         this.msg.WarnNotify('Error Occured while Loading Countries List')
@@ -125,7 +124,6 @@ export class AddPropertyComponent implements OnInit {
     this.http.get(environment.mainApi+this.global.companyLink+'getcity').subscribe(
       (Response:any)=>{
         this.citiesList = Response.filter((e:any)=> e.countryID == this.CountryID);
-        //console.log(value);
       },
       
      
@@ -172,7 +170,6 @@ export class AddPropertyComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.propertyLink + 'GetPropertyType').subscribe(
       (Response) => {
         this.peopertyTypeList = Response;
-        //console.log(Response);
       },
       (Error) => {
         this.msg.WarnNotify('Error Occured while Loading Countries List')

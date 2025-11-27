@@ -50,7 +50,6 @@ export class SharedServicesDataModule {
 
   // Http POST
   public createRequest(functionName: string, data: any): Observable<any> {
-    //console.log('to send', data);
     return this.http
       .post(this.baseURL + functionName, data)
       .pipe(retry(3), catchError(this.handleError));

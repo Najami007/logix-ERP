@@ -16,7 +16,13 @@ export class POBillPrintComponent  {
 
  
   DetailedPurchaseFeature = this.global.DetailedPurchase;
+    PONewCostFeature = this.global.PONewCostFeature;
 
+
+
+  hidePrices = false;
+
+  
 
   billPrintType: any = '';;
   companyProfile: any = [];
@@ -69,6 +75,7 @@ export class POBillPrintComponent  {
   mySPTotal = 0;
   myBillStatus = false;
   myInvType = '';
+  myNewCPTotal = 0;
 
   printBill(item: any) {
 
@@ -94,6 +101,8 @@ export class POBillPrintComponent  {
         this.mywohCPTotal = 0;
         this.myCPTotal = 0;
         this.mySPTotal = 0;
+        this.myNewCPTotal  = 0;
+
 
         if (item.overHeadAmount > 0) {
           Response.forEach((j: any) => {
@@ -113,6 +122,7 @@ export class POBillPrintComponent  {
           this.mywohCPTotal += (e.costPrice - overhead) * e.quantity;
           this.myCPTotal += e.costPrice * e.quantity;
           this.mySPTotal += e.salePrice * e.quantity;
+          this.myNewCPTotal += e.newCostPrice * e.quantity;
 
           // this.myTableDataList.push({
           //   ProductID: e.productID,

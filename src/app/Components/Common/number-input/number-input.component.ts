@@ -25,7 +25,6 @@ export class NumberInputComponent implements OnInit{
 
   Number:any;
   change(){
-    console.log(this.Number);
   }
 
   

@@ -183,7 +183,6 @@ export class AddProfileComponent implements OnInit {
 
   insert(type: any, pinCode: any, postData: any) {
     var url = ''
-    console.log(postData);
     if (type == 'insert') {
       url = 'insertparty'
     }

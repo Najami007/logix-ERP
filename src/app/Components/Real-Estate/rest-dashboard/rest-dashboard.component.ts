@@ -86,7 +86,6 @@ export class RestDashboardComponent implements OnInit {
         Response.forEach((j:any) => {
 
           this.monthDaysList.forEach((e:any) => {
-            // console.log(this.global.dateFormater(new Date(j.additionalRateDate),'-'),e.fullDate)
             if(this.global.dateFormater(new Date(j.additionalRateDate),'-') == e.fullDate){
               e.additionalRate = j.additionalRate;
             }

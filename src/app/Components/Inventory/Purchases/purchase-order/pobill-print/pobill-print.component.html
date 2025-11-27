@@ -66,8 +66,12 @@
                     <th class="col-lg-3">Product Name</th>
                     <th class="text-center">Order Qty</th>
 
-                    <th class=" text-center">Cost Price</th>
-                    <th class=" text-center">Cost Total</th>
+                    <th class=" text-center" *ngIf="!hidePrices">Cost Price</th>
+                    <th class=" text-center" *ngIf="!hidePrices && PONewCostFeature">New Cost</th>
+
+                    <th class=" text-center" *ngIf="!hidePrices">Cost Total</th>
+                    <th class=" text-center" *ngIf="!hidePrices && PONewCostFeature"> New Cost Total</th>
+
                     <th class=" text-center">On Hand</th>
 
                 </tr>
@@ -85,19 +89,29 @@
                         </div>
                     </td>
                     <!-- <td s></td> -->
-                    <td class="text-center ">{{item.quantity |number}}</td>
-                   
-                    <td class="text-end ">{{item.costPrice |number: '1.0-2'}}</td>
-                    <td class="text-end ">{{item.costPrice * item.quantity |number: '1.0-2'}}</td>
-                    <td class="text-end " >{{item.aq}}</td>
+                    <td class="text-center "> {{item.quantity |number}}</td>
+
+                    <td class="text-end " *ngIf="!hidePrices">{{item.costPrice |number: '1.0-2'}}</td>
+                    <td class="text-end " *ngIf="!hidePrices && PONewCostFeature">{{item.newCostPrice |number: '1.0-2'}}
+                    </td>
+
+
+                    <td class="text-end " *ngIf="!hidePrices">{{item.costPrice * item.quantity |number: '1.0-2'}}</td>
+                    <td class="text-end " *ngIf="!hidePrices && PONewCostFeature">{{item.newCostPrice * item.quantity
+                        |number: '1.0-2'}}</td>
+
+                    <td class="text-center ">{{item.aq}}</td>
 
 
                 </tr>
                 <tr>
                     <th colspan="2"></th>
                     <th class="text-center">{{myBillTotalQty}}</th>
-                    <th></th>
-                    <th class="text-end">{{myCPTotal | number:'1.0-2'}}</th>
+                    <th *ngIf="!hidePrices"></th>
+                    <th *ngIf="!hidePrices && PONewCostFeature"></th>
+                    <th class="text-end" *ngIf="!hidePrices ">{{myCPTotal | number:'1.0-2'}}</th>
+                    <th class="text-end" *ngIf="!hidePrices && PONewCostFeature">{{myNewCPTotal | number:'1.0-2'}}</th>
+
                 </tr>
             </tbody>
 

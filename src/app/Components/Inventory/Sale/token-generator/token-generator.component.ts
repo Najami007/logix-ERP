@@ -71,22 +71,22 @@ export class TokenGeneratorComponent implements OnInit {
   InvBillNo3: any = '';
   InvBillNo3Amount: any = 0;
 
-  OnBillNoChange(e:any,billNo:any){
-  
-      if(billNo == 1){
-        this.InvBillNoAmount = 0;
-        this.InvBillNo2 = '';
-        this.InvBillNo2Amount = 0;
-      }
-       if(billNo == 2){
-        this.InvBillNo2Amount = 0;
-        this.InvBillNo3Amount = 0;
-        this.InvBillNo3 = '';
-      }
-       if(billNo == 3){
-        this.InvBillNo3Amount = 0;
-      }
-    
+  OnBillNoChange(e: any, billNo: any) {
+
+    if (billNo == 1) {
+      this.InvBillNoAmount = 0;
+      this.InvBillNo2 = '';
+      this.InvBillNo2Amount = 0;
+    }
+    if (billNo == 2) {
+      this.InvBillNo2Amount = 0;
+      this.InvBillNo3Amount = 0;
+      this.InvBillNo3 = '';
+    }
+    if (billNo == 3) {
+      this.InvBillNo3Amount = 0;
+    }
+
   }
 
 
@@ -155,29 +155,53 @@ export class TokenGeneratorComponent implements OnInit {
   }
 
 
-  getCount(amount: number): number {
-    return Math.ceil(amount / 10000) - 1;
-  }
+ getCount(amount: number): number {
+  const tokenValue = 10000;
 
-  getTotalInvoice(){
-      let count = 0;
+  if (!amount || amount <= 0) return 0;
 
-      if (this.InvBillNoAmount > 0) count++;
-      if (this.InvBillNo2Amount > 0) count++;
-      if (this.InvBillNo3Amount > 0) count++;
+  return Math.floor(amount / tokenValue);
+}
 
-      return count;
-    };
+  getTotalInvoice() {
+    let count = 0;
+
+    if (this.InvBillNoAmount > 0) count++;
+    if (this.InvBillNo2Amount > 0) count++;
+    if (this.InvBillNo3Amount > 0) count++;
+
+    return count;
+  };
 
   saveToken() {
 
-    var billAmount = this.InvBillNoAmount + this.InvBillNo2Amount + this.InvBillNo3Amount;
+    var billAmount = Number(this.InvBillNoAmount) + Number(this.InvBillNo2Amount) + Number(this.InvBillNo3Amount);
 
 
-    if( this.InvBillNo == this.InvBillNo2 || this.InvBillNo2 == this.InvBillNo3 || this.InvBillNo == this.InvBillNo3 ){
-      this.msg.WarnNotify('Invoice Numbers must be different');
+    if (this.InvBillNo != '' && this.InvBillNo2 != '' && this.InvBillNo == this.InvBillNo2) {
+      this.msg.WarnNotify('Invoice Numbers 1 and 2 are same');
       return;
     }
+
+
+    if (this.InvBillNo2 != '' && this.InvBillNo3 != '' && this.InvBillNo2 == this.InvBillNo3) {
+      this.msg.WarnNotify('Invoice Numbers 2 and 3 are same');
+      return;
+    }
+
+
+    if (this.InvBillNo3 != '' && this.InvBillNo != '' && this.InvBillNo == this.InvBillNo3) {
+      this.msg.WarnNotify('Invoice Numbers 1 and 3 are same');
+      return;
+    }
+
+
+    // if( (this.InvBillNo == this.InvBillNo2 &&   this.InvBillNo  !== '' && this.InvBillNo2 !== '')
+    //     || (this.InvBillNo2 == this.InvBillNo3 &&   this.InvBillNo2  !== '' &&  this.InvBillNo3 !== '') 
+    //   ||( this.InvBillNo == this.InvBillNo3 &&   this.InvBillNo2  !== '' &&  this.InvBillNo3 !== '') ){
+    //   this.msg.WarnNotify('Invoice Numbers must be different');
+    //   return;
+    // }
 
     if (billAmount < 10000) {
       this.msg.WarnNotify(`Bill Total is less than 10,000`);
@@ -198,8 +222,8 @@ export class TokenGeneratorComponent implements OnInit {
     }
 
 
-    this.TotalInvoices = this.getTotalInvoice();
 
+    this.TotalInvoices = this.getTotalInvoice();
     var tokenQty = this.getCount(billAmount);
 
 
@@ -207,9 +231,9 @@ export class TokenGeneratorComponent implements OnInit {
 
     var postData = {
       TokenNo: 0,
-      InvBillNo: this.InvBillNo2Amount <= 0 ? '-' : this.InvBillNo,
-      InvBillNo2: this.InvBillNo2Amount <= 0 ? '-' :  this.InvBillNo2,
-      InvBillNo3: this.InvBillNo3Amount <= 0 ? '-' : this.InvBillNo3 ,
+      InvBillNo: this.InvBillNoAmount <= 0 ? '-' : this.InvBillNo,
+      InvBillNo2: this.InvBillNo2Amount <= 0 ? '-' : this.InvBillNo2,
+      InvBillNo3: this.InvBillNo3Amount <= 0 ? '-' : this.InvBillNo3,
       CusName: this.CusName,
       CusContactNo: this.CusContactNo,
       CusCNIC: this.CusCNIC,
@@ -240,7 +264,36 @@ export class TokenGeneratorComponent implements OnInit {
 
 
   printToken(item: any) {
+
+    var curDate = new Date();
+    var valid = this.isMoreThan30Minutes(curDate, new Date(item.createdOn));
+
+    if (valid && this.globaldata.getRoleTypeID() > 2) {
+      this.msg.WarnNotify('Not Allowed to Generate Print')
+      return;
+    }
+
     this.tokenPrint.printToken([item]);
+  }
+
+
+  isMoreThan30Minutes(curDate: Date, createdDate: Date): boolean {
+    // Ensure both are valid Date objects
+    const current = new Date(curDate).getTime();
+    const created = new Date(createdDate).getTime();
+
+    if (isNaN(current) || isNaN(created)) return false;
+
+    // Check if current date is greater
+    if (current <= created) return false;
+
+    // Calculate difference in milliseconds
+    const diffMs = current - created;
+
+    // 30 minutes in milliseconds
+    const thirtyMinutes = 10 * 60 * 1000;
+
+    return diffMs >= thirtyMinutes;
   }
 
 

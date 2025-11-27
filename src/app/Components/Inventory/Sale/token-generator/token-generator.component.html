@@ -141,6 +141,7 @@
                         <mat-form-field appearance="outline" class="matSmall w-100">
                             <mat-label>Mobile No</mat-label>
                             <input matInput maxlength="12" [(ngModel)]="CusContactNo" />
+                                     <mat-hint>{{CusContactNo.length }} / 12</mat-hint>
                         </mat-form-field>
                     </div>
 
@@ -148,6 +149,7 @@
                         <mat-form-field appearance="outline" class="matSmall w-100">
                             <mat-label>CNIC</mat-label>
                             <input matInput maxlength="15" [(ngModel)]="CusCNIC" />
+                            <mat-hint>{{CusCNIC.length}} / 15</mat-hint>
                         </mat-form-field>
                     </div>
 
@@ -164,7 +166,8 @@
 
             <div class="modal-footer bg-mf-blue">
                 <button class="btnsave" (click)="saveToken()">Save</button>
-                <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btnreset" (click)="reset()">Reset</button>
+                <button type="button" class="btnclose" data-bs-dismiss="modal" >Close</button>
             </div>
 
 

@@ -28,7 +28,7 @@ export class SalePurchaseComparisonRptsupplierwiseComponent implements OnInit {
     private global: GlobalDataModule,
     private route: Router,
     private dialog: MatDialog,
-    private datePipe:DatePipe
+    private datePipe: DatePipe
 
   ) {
 
@@ -54,6 +54,8 @@ export class SalePurchaseComparisonRptsupplierwiseComponent implements OnInit {
 
   }
 
+
+  rptType: any = 1;
 
 
 
@@ -108,28 +110,28 @@ export class SalePurchaseComparisonRptsupplierwiseComponent implements OnInit {
   getReport(type: any) {
 
     // alert(this.recipeCatID);
-    if (this.partyID == 0) {
+    if (this.partyID == 0 && this.rptType == 2) {
       this.msg.WarnNotify('Select Supplier')
     } else {
 
+
+
       this.reportType = 'Detail';
-      this.app.startLoaderDark();
+
+      if(this.rptType == 2){
+         this.app.startLoaderDark();
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseSaleComparisonRptSupplierWise_7?reqPartyID=' + this.partyID + '&FromDate=' + this.global.dateFormater(this.fromDate, '-') +
         '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
-            this.DetailList = [];
-             this.purQtyTotal = 0;
-            this.saleQtyTotal = 0;
-            this.purchaseTotal = 0;
-            this.saleTotal = 0;
+            this.reset();
             if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
-                this.app.stopLoaderDark();
+              this.app.stopLoaderDark();
               return;
-              
+
             }
             this.DetailList = Response;
-           
+
             Response.forEach((e: any) => {
 
               this.purQtyTotal += e.purQty;
@@ -145,9 +147,52 @@ export class SalePurchaseComparisonRptsupplierwiseComponent implements OnInit {
             this.app.stopLoaderDark();
           }
         )
+      }
+
+
+      if(this.rptType == 1){
+         this.app.startLoaderDark();
+      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseSaleComparisonSummaryRptSupplierWise_19?FromDate=' + this.global.dateFormater(this.fromDate, '-') +
+        '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
+          (Response: any) => {
+            console.log(Response);
+            this.reset();
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
+            this.DetailList = Response;
+
+            Response.forEach((e: any) => {
+
+     
+              this.purchaseTotal += e.purTotal;
+              this.saleTotal += e.saleTotal;
+
+            });
+            this.app.stopLoaderDark();
+          },
+          (Error: any) => {
+            console.log(Error);
+            this.app.stopLoaderDark();
+          }
+        )
+      }
+     
     }
 
 
+  }
+
+
+  reset() {
+    this.DetailList = [];
+    this.purQtyTotal = 0;
+    this.saleQtyTotal = 0;
+    this.purchaseTotal = 0;
+    this.saleTotal = 0;
   }
 
 
@@ -168,14 +213,14 @@ export class SalePurchaseComparisonRptsupplierwiseComponent implements OnInit {
   }
 
 
-    export() {
+  export() {
 
     if (this.DetailList.length == 0) return;
 
-    var partyName = this.supplierList.filter((e:any)=> e.partyID === this.partyID)[0].partyName;
+    var partyName =this.rptType == 2 ? this.supplierList.filter((e: any) => e.partyID === this.partyID)[0].partyName : '';
     var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
     var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
-    var tableID = 'detailTable';
+    var tableID = this.rptType == 2 ? 'detailTable' : 'SummaryTable';
 
     this.global.ExportHTMLTabletoExcel(tableID,
       `Sale Purchase Comparison (${partyName})(${startDate} - ${endDate})`)

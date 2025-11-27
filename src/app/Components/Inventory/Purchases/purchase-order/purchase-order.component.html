@@ -91,7 +91,9 @@
                         <th>Quantity</th>
 
                         <th>Cost</th>
+                        <th *ngIf="PONewCostFeature">New Cost</th>
                         <th>Cost Total</th>
+                        <th *ngIf="PONewCostFeature">New Cost Total</th>
                         <th>AQ</th>
                         <th>Action</th>
                     </tr>
@@ -107,9 +109,17 @@
                                 (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);"
                                 (keyup)="changeValue(item);getTotal();showImg(item);" class="qty{{index}} text-center"
                                 style="width: 80px;"></td>
-                        <td class="text-end">{{item.costPrice | number:'1.0-2'}}</td>
+                        <td class="text-end"> {{item.costPrice | number:'1.0-2'}} </td>
+                        <td class="text-center" *ngIf="PONewCostFeature">
+                            <input type="text" [(ngModel)]="item.newCostPrice" min="0" draggable="false"
+                                (input)="global.handleInputChange($event);getTotal();changeValue(item);"
+                                (keydown)="this.handleUpdown(item,$event,'.ncp',index)"
+                                (keyup)="showImg(item);rowFocused = index;" class="ncp{{index}} text-center amtInput"
+                                style="width: 80px;">
+                        </td>
 
                         <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
+                        <td class="text-end" *ngIf="PONewCostFeature">{{item.newCostPrice * item.quantity |number:'1.0-2'}}</td>
                         <td class="text-center">{{item.aq |number:'1.0-1'}}</td>
                         <td class="cursorPointer text-center text-danger"><mat-icon
                                 (click)="delRow(item)">delete</mat-icon></td>
@@ -118,7 +128,9 @@
                         <td colspan="3"></td>
                         <th class="text-center">{{totalQty |number:'1.0-2'}}</th>
                         <th></th>
+                        <th *ngIf="PONewCostFeature"> </th>
                         <th class="text-end">{{CostTotal |number:'1.0-2'}}</th>
+                        <th class="text-end" *ngIf="PONewCostFeature">{{newCostTotal |number:'1.0-2'}}</th>
                         <th></th>
 
                         <td class="text-center"><mat-icon class="cursorPointer " (click)="EmptyData()">delete</mat-icon>
@@ -245,7 +257,9 @@
                                     <mat-icon class="text-success"
                                         (click)="item.approvedStatus ? '' : approveBill(item) ">{{item.approvedStatus ?
                                         'done_all' :'check'}}</mat-icon>
-                                    <mat-icon class="text-primary" (click)="printBill(item)">print</mat-icon>
+                                    <mat-icon class="text-primary" (click)="printBill(item,'all')">print</mat-icon>
+
+                                    <mat-icon class="text-dark" (click)="printBill(item,'Sup')">print</mat-icon>
                                     <!-- <mat-icon class="text-danger" *ngIf="item.approvedStatus == false"
                                         (click)="DeleteInv(item)">delete_outline</mat-icon> -->
                                 </td>

@@ -18,7 +18,7 @@
             <mat-select [(ngModel)]="partyID" (selectionChange)="onSupplierSelected()">
                 <mat-option><ngx-mat-select-search #supSearch [placeholderLabel]="'Search...'"
                         [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                <mat-option *ngFor="let item of supplierList | filter:supSearch.value"
+                <mat-option *ngFor="let item of supplierList | filter:supSearch.value | slice:0:30"
                     [value]="item.partyID">{{item.partyName}}</mat-option>
             </mat-select>
         </mat-form-field>

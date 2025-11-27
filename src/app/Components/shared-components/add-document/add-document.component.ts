@@ -138,7 +138,6 @@ export class AddDocumentComponent implements OnInit {
 
 
     var vdoc = item.eDoc;
-    // console.log(vdoc);
 
 
     var newImage = vdoc.replace('data:application/pdf;base64,','');
@@ -162,7 +161,7 @@ export class AddDocumentComponent implements OnInit {
 
   onFilesSelected(event: Event): void {
 
-   if(this.documentList.length == 0){
+   if(true){
      const input = event.target as HTMLInputElement;
     if (input.files) {
 
@@ -174,6 +173,7 @@ export class AddDocumentComponent implements OnInit {
           reader.onload = (e) => {
             const preview = (e.target as FileReader).result as string;
             //  this.customerDocumentList.push({ file, preview });
+             this.documentList = [];
             this.documentList.push({ docID: 0, eDocName: fileName, eDocExt: extension, eDoc: preview });
 
           };
@@ -207,6 +207,7 @@ export class AddDocumentComponent implements OnInit {
 
         if (extension == 'pdf') {
           reader.onload = () => {
+            this.documentList = [];
             this.documentList.push({ docID: 0, eDocName: name, eDocExt: extension, eDoc: reader.result });
           };
 

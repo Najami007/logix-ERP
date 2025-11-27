@@ -102,9 +102,6 @@ dataList:any  = [];
     this.http.get(url).subscribe(
       {
         next:(Response:any)=>{
-
-          console.log(Response);
-
           this.dataList = Response;
 
         },

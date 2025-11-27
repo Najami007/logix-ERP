@@ -50,7 +50,6 @@ export class PropertyTypeComponent {
     this.http.get(environment.mainApi + this.globaldata.propertyLink + 'GetPropertyType').subscribe(
       (Response) => {
         this.SavedDataList = Response;
-        //console.log(Response);
       },
       (Error) => {
         this.msg.WarnNotify('Error Occured while Loading Countries List')

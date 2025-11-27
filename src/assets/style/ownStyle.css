@@ -389,6 +389,7 @@
 .fs-8px {
   font-size: 8px !important;
 }
+
 .fs-9 {
   font-size: 9px !important;
 }
@@ -602,7 +603,7 @@
 
 
 
-.orderPrintCompanyInfo{
+.orderPrintCompanyInfo {
   display: flex;
   flex-direction: column;
   line-height: 25px;
@@ -643,7 +644,7 @@
 
 }
 
-.orderPrintFooter{
+.orderPrintFooter {
   display: flex;
 }
 
@@ -655,7 +656,7 @@
   margin: 0px 0;
   font-size: 26px;
   color: #000;
-} 
+}
 
 
 
@@ -672,19 +673,61 @@
   max-width: 100%;
   background: #ffffff;
   /* display: flex; */
-  border-style: dashed;
-  border-radius: 10px;
   overflow: hidden;
   margin: 10px auto;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
+
+.saleTokenStore {
+  border-style: dashed;
+  border-radius: 10px;
+
+
+}
+
+.saleTokenCustomer {
+  border-style: dashed;
+  border-radius: 10px;
+
+}
+
+.saleTokenCustomer .left {
+  width: 40% !important;
+  background: #fff;
+  color: #000;
+  padding: 20px !important;
+  text-align: start;
+  position: relative;
+}
+
+
+.saleTokenCustomer .left h2 {
+  font-size: 40px;
+  margin: 0;
+  font-weight: 800;
+  line-height: 40px;
+}
+
+
+
+.saleTokenCustomer .right {
+  width: 60% !important;
+  background: #fff;
+  font-size: 12px;
+  color: #000;
+  padding: 0px !important;
+  text-align: left;
+  position: relative;
+}
+
+
 
 /* Left Part */
 .saleToken .left {
-  width: 30%;
+  width: 40% !important;
   background: #fff;
   color: #000;
-  padding: 40px;
+  padding: 20px !important;
   text-align: center;
   position: relative;
 }
@@ -696,14 +739,15 @@
 
 .saleToken .left .value-text {
   font-size: 18px;
-  margin-top: 10px;
+  margin-top: 0px;
   letter-spacing: 2px;
 }
 
 /* Right Part */
 .saleToken .middle {
-  width: 40%;
-  padding: 40px;
+
+  width: 60% !important;
+  padding: 20px !important;
   background: #FFF;
   color: #000;
 }
@@ -730,13 +774,3 @@
   text-align: center;
   position: relative;
 }
-
-
-
-
-
-
-
-
-
-

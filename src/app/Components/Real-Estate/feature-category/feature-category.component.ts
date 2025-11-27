@@ -49,7 +49,6 @@ export class FeatureCategoryComponent {
     this.http.get(environment.mainApi + this.globaldata.propertyLink + 'getPropertyCategory').subscribe(
       (Response) => {
         this.SavedDataList = Response;
-        //console.log(Response);
       },
       (Error) => {
         this.msg.WarnNotify('Error Occured while Loading Countries List')

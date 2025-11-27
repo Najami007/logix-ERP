@@ -81,7 +81,6 @@ export class AddDiscProfileComponent implements OnInit {
   
           if (Response.length > 0) {
             this.dataList = Response.filter((e: any) => e.partyType == 'Customer-Disc');
-            console.log(this.dataList);
           }
         },
         error: (error: any) => {

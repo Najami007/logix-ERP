@@ -35,11 +35,8 @@ export class AuthGuard implements CanActivate {
     
 
     
-  //  console.log(this.global.Menulist);
     this.curComponent =  this.global.glbMenulist.find((e:any)=>e.menuLink == route.url[0].path.toString());
-    
-    // console.log(this.curComponent);
-    
+        
     if(this.curComponent != undefined){ 
      
             return true;      

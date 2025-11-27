@@ -121,7 +121,6 @@ export class VrtnsavedbillComponent implements OnInit {
               this.myDuplicateFlag = true;
               this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+item.invBillNo).subscribe(
                 (Response:any)=>{
-                  //console.log(Response);
                   this.myPrintData = Response;
                 }
               )
@@ -138,7 +137,6 @@ export class VrtnsavedbillComponent implements OnInit {
         )
       }
     })
-    //console.log(item)
   
   }
 

@@ -40,19 +40,39 @@
         </mat-form-field>
     </div>
 
-    <div class="d-flex justify-content-center">
+    <div class="row ">
 
-        <div class="col-md-4 d-flex flex-wrap" *ngIf="crudList.r">
-            <div class="col-md-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport()">Get
-                    Report</button></div>
-            <div class="col-md-4 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
-            <div class="col-md-4"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
+        <mat-form-field appearance="outline" class="col-md-2 matSmall">
+            <mat-label>Proudct</mat-label>
+            <mat-select [(ngModel)]="productID" (selectionChange)="onProdSelected()">
+                <mat-option><ngx-mat-select-search #prodsearch [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of productList | filter:prodsearch.value | slice:0:25"
+                    [value]="item.productID">{{item.productTitle}} <b>({{item.barcode}})</b></mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-md-2  matSmall  ">
+            <mat-label>Menu Item</mat-label>
+            <mat-select [(ngModel)]="mnuItemID" (selectionChange)="OnRecipeSelected()">
+                <mat-option><ngx-mat-select-search #recSearch [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of MenuItemList | filter:recSearch.value | slice:0:25"
+                    [value]="item.mnuItemID">{{item.mnuItemTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div class="col-md-8 d-flex flex-wrap" *ngIf="crudList.r">
+            <div class="col-md-2 pe-1"><button class="btn-rpt-success w-100" (click)="getReport()">Get Report</button></div>
+            <div class="col-md-2 pe-1"> <button class="btn-rpt-success w-100" (click)="getIngredientwise()">Productwise</button></div>
+            <div class="col-md-2 pe-1"><button class="btn-rpt-primary w-100" (click)="getMnuItemwise()">Itemwise</button></div>
+            <div class="col-md-2 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
+            <div class="col-md-2"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
         </div>
     </div>
 
 
 
-<br>
+    <br>
 
     <div id="PrintDiv">
 
@@ -83,34 +103,74 @@
             </div>
         </div>
 
-       <div id="printContainer">
-         <table class="table-logix">
-            <thead>
-                <tr>
-                    <th>S#</th>
-                    <th>Product Title</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-     
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of DataList index as index">
-                    <td>{{index + 1}}</td>
-                    <td>{{item.productTitle}}</td>
-                    <td class="text-center">{{item.quantity | number:'1.0-0'}}</td>
-                    <td class="text-end">{{item.avgCostPriceTotal | number:'1.0-0'}}</td>
-                    
-                </tr>
-                <tr>
-                    <td colspan="3" class="fw-bold text-center">Total</td>
-                    <td class="text-end fw-bold" >{{netTotal | number:'1.0-0'}}</td>
-                </tr>
-            </tbody>
+        <div id="printContainer">
+            <table class="table-logix" id="summaryTable">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Product Title</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
 
-        </table>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of DataList index as index">
+                        <td>{{index + 1}}</td>
+                        <td>{{item.productTitle}}</td>
+                        <td class="text-center">{{item.quantity | number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.avgCostPriceTotal | number:'1.0-0'}}</td>
 
-       </div>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="fw-bold text-center">Total</td>
+                        <td class="text-end fw-bold">{{netTotal | number:'1.0-0'}}</td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+
+
+            <table class="table-logix" id="detailTable">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Product</th>
+                        <th>Menu Item</th>
+                        <th>Qty</th>
+                        <!-- <th>Cost</th> -->
+                        <th>Total</th>
+
+
+                    </tr>
+
+
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of DataList index as index">
+                        <td class="text-center">{{index +1}}</td>
+                        <td>{{item.productTitle}}</td>
+                        <td>{{item.mnuItemTitle}}</td>
+                        <td class="text-center">{{item.quantity | number:'1.0-0'}} </td>
+                        <!-- <td >{{item.quantity  > 1  ?  item.quantity   :  item.quantity * 1000 | number:'0.0-3'}} {{item.quantity < 1  ? 'gm' : 'kg'}}</td> -->
+                        <td class="text-end">{{item.avgCostPriceTotal | number:'1.0-0'}}</td>
+                        <!-- <td class="text-end">{{ item.quantity  * item.avgCostPriceTotal | number:'0.0-2'}}</td> -->
+
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <td class="text-center fw-bold">{{qtyTotal | number:'1.0-0'}}</td>
+                        <td class="text-end fw-bold">{{amountTotal | number:'1.0-0'}}</td>
+                    </tr>
+
+
+                </tbody>
+
+
+            </table>
+
+        </div>
 
 
     </div>

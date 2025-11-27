@@ -129,6 +129,7 @@ import { AddProductImagesComponent } from './product/add-product-images/add-prod
 import { TokenGeneratorComponent } from './Sale/token-generator/token-generator.component';
 import { TokenPrintComponent } from './Sale/token-generator/token-print/token-print.component';
 import { PurchaseSummaryCategorywiseComponent } from './InventoryReports/purchase-summary-categorywise/purchase-summary-categorywise.component';
+import { SaleSummaryCategorywiseComponent } from './InventoryReports/sale-summary-categorywise/sale-summary-categorywise.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -238,7 +239,7 @@ export const inventoryRoutes: Route[] = [
   { path: 'productdetail', component: ProductDetailReportComponent, canActivate: [AuthGuard] },
   { path: 'product/addProductImages', component: AddProductImagesComponent },
   { path: 'purSummaryCatwise', component: PurchaseSummaryCategorywiseComponent , canActivate: [AuthGuard] },
-
+  { path: 'saleSummaryCatwise', component: SaleSummaryCategorywiseComponent , canActivate: [AuthGuard] },
   { path: 'tokengenerator', component: TokenGeneratorComponent, canActivate: [AuthGuard] },
 
 
@@ -348,6 +349,7 @@ export const inventoryRoutes: Route[] = [
     TokenGeneratorComponent,
     TokenPrintComponent,
     PurchaseSummaryCategorywiseComponent,
+    SaleSummaryCategorywiseComponent,
 
 
 

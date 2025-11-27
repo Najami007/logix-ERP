@@ -182,7 +182,6 @@ constructor(
 
   captureUrlParams(): void {
     const urlParams = new URLSearchParams(window.location.search);
-    // console.log(urlParams);
     const currentUserParam = urlParams.get('currentUser');
     const moduleIdParam = urlParams.get('moduleId');
 
@@ -193,8 +192,6 @@ constructor(
 
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
         localStorage.setItem('moduleId', moduleId);
-
-        // console.log('Captured Data:', { currentUser, moduleId });
 
         // Navigate to the home page after storing the data
         this.route.navigate(['/home']);

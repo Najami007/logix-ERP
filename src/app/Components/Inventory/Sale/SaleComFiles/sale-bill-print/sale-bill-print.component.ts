@@ -150,8 +150,6 @@ export class SaleBillPrintComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
       (Response: any) => {
         this.myPrintTableData = Response;
-
-        console.log(Response);
         this.myInvoiceNo = InvNo;
         this.myInvDate = Response[0].invDate;
         this.myCreatedDate = Response[0].createdOn;
@@ -267,7 +265,6 @@ export class SaleBillPrintComponent implements OnInit {
     //   $('#qrCode').empty();
     //   $('#qrCode').prepend('<img src="' + imageData + '" width="90" height="90" />')
 
-    //   console.log('Image generated:', imageData);
     // }).catch((error) => {
     //   console.error('Error generating image:', error);
     // });
@@ -282,7 +279,6 @@ export class SaleBillPrintComponent implements OnInit {
       // data.forEach((e) => {
       //   this.myPrintData = [];
       //   this.myPrintData.push(e);
-      //   console.log(this.myPrintData);
       //   this.global.printFastFoodKOT('#printKOT');  
       // });
       this.myPrintData = data;

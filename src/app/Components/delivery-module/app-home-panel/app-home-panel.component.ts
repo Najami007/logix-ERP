@@ -75,7 +75,6 @@ export class AppHomePanelComponent {
         next: (Response: any) => {
 
           this.homePageDataList = Response;
-          console.log(Response);
 
         },
         error: error => {
@@ -165,7 +164,6 @@ export class AppHomePanelComponent {
       SubCategoryID: this.subCategoryID,
       HpImage: this.global.isBase64Image(this.containerImg) ? this.containerImg : '-'
     }
-    console.log(postData)
     this.app.startLoaderDark();
     this.http.post(this.apiReq + 'AddHomePageImage', postData).subscribe(
       {

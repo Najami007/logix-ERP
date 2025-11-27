@@ -185,20 +185,20 @@ export class PurchaseReturnComponent implements OnInit {
       if (e.keyCode == 13) {
 
         /// Seperating by / and coverting to Qty
-        if (this.PBarcode.split("/")[1] != undefined) {
-          barcode = this.PBarcode.split("/")[0];
-          qty = parseFloat(this.PBarcode.split("/")[1]);
-          BType = 'price';
+        // if (this.PBarcode.split("/")[1] != undefined) {
+        //   barcode = this.PBarcode.split("/")[0];
+        //   qty = parseFloat(this.PBarcode.split("/")[1]);
+        //   BType = 'price';
 
 
-        }
-        /// Seperating by - and coverting to Qty 
-        if (this.PBarcode.split("-")[1] != undefined) {
-          barcode = this.PBarcode.split("-")[0];
-          qty = parseFloat(this.PBarcode.split("-")[1]);
-          BType = 'qty';
+        // }
+        // /// Seperating by - and coverting to Qty 
+        // if (this.PBarcode.split("-")[1] != undefined) {
+        //   barcode = this.PBarcode.split("-")[0];
+        //   qty = parseFloat(this.PBarcode.split("-")[1]);
+        //   BType = 'qty';
 
-        }
+        // }
 
         // this.app.startLoaderDark();
         this.global.getProdDetail(0, barcode).subscribe(
@@ -932,7 +932,6 @@ export class PurchaseReturnComponent implements OnInit {
 
   isProcessing = false;
   insert(type: any, postData: any) {
-    console.log(postData);
     this.app.startLoaderDark();
 
     if (type == 'purchaseReturn') {

@@ -221,7 +221,6 @@ export class AddReservationComponent implements OnInit {
      }else {
       this.TotalNights = Math.round(days);
      }
-     console.log(this.TotalNights);
    }
   
 /////////////////// will give the difference of arrival and departure date

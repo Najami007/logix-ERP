@@ -251,14 +251,74 @@ export class VoidSaleReturnComponent implements OnInit {
   }
 
 
+    searchSpecialBarcode(barcode: any) {
+
+    //////////////// For Special Barcode setting /////////////////////////
+
+    var txtBCode = barcode;
+    var reqQty: any = 0;
+    var reqQtyDot: any = 0;
+    var prodQty: any = 0;
+    var tmpPrice: any = 0;
+
+    txtBCode = txtBCode.substring(2, 7);  /////////// extracting product barcode from special barcode
+    txtBCode = parseInt(txtBCode);
+    txtBCode = txtBCode.toString();
+
+    /////////// verifying whether exists in product list or not
+    var prodDetail = this.productList.find((p: any) => p.barcode == txtBCode);
+
+
+    this.global.getProdDetail(0, txtBCode).subscribe(
+      (Response: any) => {
+
+        if (Response == '' || Response == null || Response == undefined) {
+          this.msg.WarnNotify('Product Not Found');
+          return;
+        }
+
+        /////////// extracting price from special barcode based on UOM
+        if (Response[0].uomTitle == 'price') {
+          reqQty = barcode.substring(12 - 5);
+          reqQtyDot = reqQty.substring(0, 5);
+          tmpPrice = reqQtyDot;
+
+        } else if (Response[0].uomTitle == 'piece') {
+          reqQty = barcode.substring(12 - 5);
+          reqQtyDot = reqQty.substring(6 - 4);
+          reqQtyDot = reqQtyDot.substring(0, 3);
+          reqQty = reqQty.substring(0, 5);
+          prodQty = parseFloat(reqQty);
+
+        }
+        else {
+          /////////// extracting quantity from special barcode based on UOM
+          reqQty = barcode.substring(12 - 5);
+          reqQtyDot = reqQty.substring(6 - 4);
+          reqQtyDot = reqQtyDot.substring(0, 3);
+          reqQty = reqQty.substring(0, 2);
+          prodQty = parseFloat(reqQty + '.' + reqQtyDot);
+        }
+
+      
+          this.insertProductData(Response[0].productID,'',0, prodQty || 1)
+
+
+      }
+    )
+
+
+  }
+
 
 
 
   ///////////////////////////////  Send Product to To API and Recall get Funciton///////////////////////////////////////////////////
 
-  insertProductData(productID = 0, barcode = '', PartyID = 0) {
+  insertProductData(productID = 0, barcode = '', PartyID = 0,quantity=1) {
 
     var postData = {
+       quantity:quantity,
       PartyID: 0,
       ProductID: productID,
       Barcode: barcode,
@@ -269,7 +329,11 @@ export class VoidSaleReturnComponent implements OnInit {
         if (Response.msg == 'Data Saved Successfully') {
           this.getCurrentBill();
         } else {
-          this.msg.WarnNotify(Response.msg);
+           if(barcode.length == 13){
+            this.searchSpecialBarcode(barcode)
+          }else{
+            this.msg.WarnNotify(Response.msg);
+          }
         }
       },
       (Error: any) => {

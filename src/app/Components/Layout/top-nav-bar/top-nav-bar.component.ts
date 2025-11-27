@@ -19,53 +19,53 @@ import { UpdateSubscriptionComponent } from '../../User/update-subscription/upda
   templateUrl: './top-nav-bar.component.html',
   styleUrls: ['./top-nav-bar.component.scss']
 })
-export class TopNavBarComponent implements OnInit{
+export class TopNavBarComponent implements OnInit {
   clickEventSubscription: Subscription;
 
-    public  menuList?:any = [];
-    moduleID?: string | null;
-    
-    NotificationFeature = this.globalData.NotificationFeature;
-    
+  public menuList?: any = [];
+  moduleID?: string | null;
 
-    subscriptionFeature = this.globalData.getFeature('')
+  NotificationFeature = this.globalData.NotificationFeature;
 
-   
-    @Output() toggleMySideBar : EventEmitter<any> = new EventEmitter();
-    toggleControl: any;
-  constructor(private globalData:GlobalDataModule,
-    private msg:NotificationService,
-    private http:HttpClient,
-    private route:Router,
-    private dialogue:MatDialog,
-    private app:AppComponent,
-    private m :MainComponent,
-    private overlay :OverlayContainer,
 
-    private render:Renderer2,
-    ){
+  subscriptionFeature = this.globalData.getFeature('')
 
-      this.clickEventSubscription = this.globalData
+
+  @Output() toggleMySideBar: EventEmitter<any> = new EventEmitter();
+  toggleControl: any;
+  constructor(private globalData: GlobalDataModule,
+    private msg: NotificationService,
+    private http: HttpClient,
+    private route: Router,
+    private dialogue: MatDialog,
+    private app: AppComponent,
+    private m: MainComponent,
+    private overlay: OverlayContainer,
+
+    private render: Renderer2,
+  ) {
+
+    this.clickEventSubscription = this.globalData
       .getMenuItem()
       .subscribe((value: any) => {
         this.moduleID = this.globalData.getModuleID() || value; // value;
         this.getMenu();
-       
+
       });
-      
-      // this.moduleID = this.globalData.getModuleID();
-      // this.getMenu();
+
+    // this.moduleID = this.globalData.getModuleID();
+    // this.getMenu();
 
   }
 
-   
+
   ngOnInit(): void {
 
     this.moduleID = this.globalData.getModuleID();
     this.UserName = this.globalData.getUserName();
     this.getMenu();
     this.getCompany();
-  
+
 
   }
 
@@ -80,49 +80,49 @@ export class TopNavBarComponent implements OnInit{
 
 
   Menu = "menu";
-  
-  toggleSideBar(){
-    this.toggleMySideBar.emit(); 
-    
-  if(this.m.sideBarOpen){
+
+  toggleSideBar() {
+    this.toggleMySideBar.emit();
+
+    if (this.m.sideBarOpen) {
       this.Menu = "menu_open";
-     
-    }else{
+
+    } else {
       this.Menu = "menu";
 
     }
   }
 
- 
- 
 
 
 
-    UserName:any = 'abc';
-    companyProfile:any;
-    logo1:any = '../../../../assets/Images/logo.png';
-    height:any = 0;
-    width:any = 0;
 
-    ////////////////////////////////////////////////////////////////////////
-  getCompany(){
-    this.http.get(environment.mainApi+this.globalData.companyLink+'getcompanyprofile').subscribe(
-      (Response:any)=>{
-        if(Response != ''){
+
+  UserName: any = 'abc';
+  companyProfile: any;
+  logo1: any = '../../../../assets/Images/logo.png';
+  height: any = 0;
+  width: any = 0;
+
+  ////////////////////////////////////////////////////////////////////////
+  getCompany() {
+    this.http.get(environment.mainApi + this.globalData.companyLink + 'getcompanyprofile').subscribe(
+      (Response: any) => {
+        if (Response != '') {
           this.companyProfile = Response;
-        this.logo1 = this.companyProfile[0].companyLogo3; 
-        this.height = this.companyProfile[0].logo3Height;
-        this.width = this.companyProfile[0].logo3Width;
-        this.globalData.comapnayProfile = Response[0];      
+          this.logo1 = this.companyProfile[0].companyLogo3;
+          this.height = this.companyProfile[0].logo3Height;
+          this.width = this.companyProfile[0].logo3Width;
+          this.globalData.comapnayProfile = Response[0];
         }
-        
+
       }
     )
   }
 
 
 
-  
+
   hideFlag = true;
 
   // hideUnhide(){
@@ -138,88 +138,106 @@ export class TopNavBarComponent implements OnInit{
   //  }
 
   // }
- 
-    
-   
-  
-    getMenu(){
 
-      if (
-        this.moduleID != null &&
-        (typeof this.moduleID == 'string' || typeof this.moduleID == 'number')
-      ){
 
-  
 
-        this.http.get(environment.mainApi+this.globalData.userLink+'getusermenu?userid='+this.globalData.getUserID()+'&moduleid='+this.moduleID).subscribe(
-          (Response:any)=>{
-           this.menuList = Response;
-          this.globalData.glbMenulist = Response;
+
+  getMenu() {
+
+    if (
+      this.moduleID != null &&
+      (typeof this.moduleID == 'string' || typeof this.moduleID == 'number')
+    ) {
+
+
+
+      this.http.get(environment.mainApi + this.globalData.userLink + 'getusermenu?userid=' + this.globalData.getUserID() + '&moduleid=' + this.moduleID).subscribe(
+        (Response: any) => {
+
+            
+          // if (Response.length > 0) {
+          //   var list = Response.filter((e:any)=> e.isParentMenu == true);
+          //   list.forEach((e:any) => {
+          //       Response.forEach((m:any) => {
+          //           if(m.parentMenuID == e.menuID){
+          //             e.haveMenu = true;
+          //           }
+          //       });
+          //   });
            
-          }
-        )
+          //   setTimeout(() => {
+          //     this.menuList = Response;
+          //   }, 200);
+          // } else {
+            this.menuList = Response;
+          //}
 
-      }
+          this.globalData.glbMenulist = Response;
 
-      
+        }
+      )
+
     }
 
 
+  }
 
 
-    setSidebarMenu(module: any) {
-
-      this.route.navigate([module]);
-    }
-
-    // setMenuID(item:any){
-    //   this.globalData.setMenuList(item);
-
-    // }
-  
-    
-    logout(){
-      this.globalData.logout();
-    }
 
 
-    changePassword(){    
-    this.dialogue.open(ChangePasswordComponent,{
-      width:"30%",
-      data:this.globalData.getUserID()
-    }).afterClosed().subscribe(val=>{  
+  setSidebarMenu(module: any) {
+
+    this.route.navigate([module]);
+  }
+
+  // setMenuID(item:any){
+  //   this.globalData.setMenuList(item);
+
+  // }
+
+
+  logout() {
+    this.globalData.logout();
+  }
+
+
+  changePassword() {
+    this.dialogue.open(ChangePasswordComponent, {
+      width: "30%",
+      data: this.globalData.getUserID()
+    }).afterClosed().subscribe(val => {
 
 
     })
-    }
-
-    changePin(){
-        
-      this.dialogue.open(ChangePINComponent,{
-        width:"30%",
-      }).afterClosed().subscribe(val=>{  
-  
-        
-      })
-      }
-  
-
-
-
-      setMenu(item: any) {
-
-        this.route.navigate(['home']);
-        localStorage.setItem('mid',JSON.stringify(item.moduleID));
-        this.globalData.setMenuItem(item.moduleID);
-        // window.location.reload();
-        
-    
-      }
-
-
-      updateSubscription(){
-        this.globalData.updateSubscription({UserID:this.globalData.getUserID()})
-      }
-
-  
   }
+
+  changePin() {
+
+    this.dialogue.open(ChangePINComponent, {
+      width: "30%",
+    }).afterClosed().subscribe(val => {
+
+
+    })
+  }
+
+
+
+
+  setMenu(item: any) {
+
+    this.route.navigate(['home']);
+    localStorage.setItem('mid', JSON.stringify(item.moduleID));
+    this.globalData.setMenuItem(item.moduleID);
+    // window.location.reload();
+
+
+  }
+
+
+  updateSubscription() {
+    this.globalData.updateSubscription({ UserID: this.globalData.getUserID() })
+  }
+
+
+}

@@ -190,7 +190,6 @@ export class ProductInOutHistoryComponent implements OnInit {
 
 
         });
-        console.log(this.invDetailList);
         this.app.stopLoaderDark();
 
       },

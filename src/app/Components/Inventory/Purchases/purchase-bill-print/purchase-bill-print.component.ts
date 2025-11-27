@@ -98,7 +98,6 @@ export class PurchaseBillPrintComponent {
       (Response: any) => {
         this.setInvoiceTitle(Response[0].invType);
         this.myInvType = Response[0].invType;
-        console.log(Response);
         this.myDiscType = Response[0].discType;
         var totalQty = 0;
         var overhead = 0
@@ -142,8 +141,6 @@ export class PurchaseBillPrintComponent {
             this.myEtTotal += (((Number(item.tempCostPrice) +
               Number(((e.tempCostPrice * e.gst) / 100)) - this.myDiscTotal) * item.et) / 100)
           }
-
-          console.log(this.myGstTotal, this.myDiscTotal, this.myEtTotal);
 
           this.myTableDataList.push({
             ProductID: e.productID,

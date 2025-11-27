@@ -39,7 +39,7 @@ export class ReorderReportComponent {
     this.getUsers();
     this.getCategory();
     this.getBrandList();
-
+    this.getSupplier();
   }
 
 
@@ -72,6 +72,47 @@ export class ReorderReportComponent {
       }
     )
   }
+
+
+  supplierList:any = [];
+  partyID:any = 0;
+  getSupplier() {
+    this.global.getSupplierList().subscribe((data: any) => {
+      if (data.length > 0) {
+        this.supplierList = data.map((e: any, index: any) => {
+          (e.indexNo = index + 1);
+          return e;
+        });
+        this.supplierList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+      }
+    });
+
+  }
+    partyName:any
+   onSupplierSelected() {
+    var index = this.supplierList.findIndex((e: any) => e.partyID == this.partyID);
+    this.supplierList[index].indexNo = this.supplierList[0].indexNo + 1;
+    this.supplierList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+
+  }
+
+  updateRptTitle(){
+    if(this.rptType == 'cw'){
+      this.rptTitle = this.CategoriesList.find((e:any)=> e.categoryID == this.CategoryID).categoryTitle;
+    }
+      if(this.rptType == 'scw'){
+      this.rptTitle = this.SubCategoriesList.find((e:any)=> e.subCategoryID == this.SubCategoryID).subCategoryTitle;
+    }
+      if(this.rptType == 'bw'){
+      this.rptTitle = this.BrandList.find((e:any)=> e.brandID == this.BrandID).brandTitle;
+    }
+      if(this.rptType == 'sup'){
+      this.rptTitle = this.supplierList.find((e: any) => e.partyID == this.partyID).partyName;
+    }
+
+  }
+
+  rptTitle = '';
 
 
 
@@ -107,7 +148,13 @@ export class ReorderReportComponent {
       return;
     }
 
-    var url = `${this.global.inventoryLink}GetMinRolRpt?rptType=${this.rptType}&cid=${this.CategoryID}&scid=${this.SubCategoryID}&bid=${this.BrandID}`
+    if(this.rptType == 'spw' && this.partyID == 0){
+      this.msg.WarnNotify('Select Supplier');
+      return;
+    }
+
+    var url = `${this.global.inventoryLink}GetMinRolRpt?rptType=${this.rptType}&cid=${this.CategoryID}
+    &scid=${this.SubCategoryID}&bid=${this.BrandID}&pid=${this.partyID}`
     this.app.startLoaderDark();
     this.http.get(environment.mainApi + url).subscribe(
       (Response: any) => {
@@ -118,6 +165,7 @@ export class ReorderReportComponent {
           return;
         }
         this.detailList = Response;
+          this.updateRptTitle();
         this.app.stopLoaderDark();
       },
       (Error: any) => {

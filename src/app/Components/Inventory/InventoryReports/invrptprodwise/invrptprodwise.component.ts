@@ -239,7 +239,6 @@ export class InvrptprodwiseComponent implements OnInit {
 
 
         });
-        console.log(this.invDetailList);
         this.app.stopLoaderDark();
 
       },

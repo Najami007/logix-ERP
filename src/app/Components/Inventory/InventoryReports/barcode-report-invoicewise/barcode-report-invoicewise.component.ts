@@ -216,7 +216,6 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
 
 
       setTimeout(() => {
-        console.log(this.printDataList);
         this.global.printBarcode('#PrintDivNew');
         alert();
       }, 500);
@@ -455,8 +454,6 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
   printTags(){
 
     this.tagList = this.tableDataList.filter((e:any)=> e.isChecked == true);
-
-    console.log(this.tagList);
 
     setTimeout(() => {
           this.global.printData('#PrintTags');

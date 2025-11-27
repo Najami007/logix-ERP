@@ -54,7 +54,6 @@ export class FeaturesComponent {
   this.http.get(environment.mainApi + this.globaldata.propertyLink + 'GetPropertyCategory').subscribe(
     (Response) => {
       this.featureCategoryList = Response;
-      //console.log(Response);
     },
     (Error) => {
       this.msg.WarnNotify('Error Occured while Loading Countries List')
@@ -69,7 +68,6 @@ export class FeaturesComponent {
    this.http.get(environment.mainApi + this.globaldata.propertyLink + 'GetPropertyFeature').subscribe(
      (Response) => {
        this.SavedDataList = Response;
-       //console.log(Response);
      },
      (Error) => {
        this.msg.WarnNotify('Error Occured while Loading Countries List')
@@ -98,7 +96,6 @@ export class FeaturesComponent {
 
 insert() {
   $('.loaderDark').show();
-  console.log(this.PropertyCategoryID,this.PropertyFeatureTitle);
   this.http.post(environment.mainApi + this.globaldata.propertyLink + 'InsertPropertyFeature', {
    PropertyCategoryID: this.PropertyCategoryID,
     PropertyFeatureTitle: this.PropertyFeatureTitle,

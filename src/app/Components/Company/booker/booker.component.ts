@@ -49,7 +49,6 @@ export class BookerComponent implements OnInit {
     this.http.get(environment.mainApi+this.globaldata.inventoryLink+'getBooker').subscribe(
       (Response)=>{
         this.bookerList = Response;
-        //console.log(Response);
       },
       (Error)=>{
         this.msg.WarnNotify('Error Occured')

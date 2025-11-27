@@ -298,7 +298,6 @@ export class AddProductImagesComponent implements OnInit {
   saveProductImage() {
 
     var productID = this.productDetailRow.productID;
-    console.log(productID);
     if(productID == 0 || productID == '0' || productID < 1 || productID == undefined){
       this.msg.WarnNotify('Select Product');
       return;

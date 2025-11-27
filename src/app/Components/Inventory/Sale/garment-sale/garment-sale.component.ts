@@ -235,11 +235,9 @@ export class GarmentSaleComponent implements OnInit {
         if (data.length > 0) {
           this.partyList = data.filter((e: any) => e.partyType == 'Customer' || e.partyType == 'Supplier');
         }
-
-        console.log(data, 'all')
       })
     } else {
-      this.global.getCustomerList().subscribe((data: any) => { this.partyList = data; console.log(data, '-') });
+      this.global.getCustomerList().subscribe((data: any) => { this.partyList = data;  });
     }
 
 

@@ -10,11 +10,11 @@ import { SaleBillPrintComponent } from '../../Sale/SaleComFiles/sale-bill-print/
 import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-purchase-summary-categorywise',
-  templateUrl: './purchase-summary-categorywise.component.html',
-  styleUrls: ['./purchase-summary-categorywise.component.scss']
+  selector: 'app-sale-summary-categorywise',
+  templateUrl: './sale-summary-categorywise.component.html',
+  styleUrls: ['./sale-summary-categorywise.component.scss']
 })
-export class PurchaseSummaryCategorywiseComponent implements OnInit {
+export class SaleSummaryCategorywiseComponent implements OnInit {
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
@@ -40,7 +40,7 @@ export class PurchaseSummaryCategorywiseComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Purchase Summary Report');
+    this.global.setHeaderTitle('Sale Summary Report');
 
     this.getCategory();
     this.getBrandList();
@@ -100,15 +100,9 @@ export class PurchaseSummaryCategorywiseComponent implements OnInit {
     var fromTime = this.fromTime;
     var toTime = this.toTime;
 
-
-
-
-
-
-
       this.app.startLoaderDark();
 
-      var url = `${environment.mainApi + this.global.inventoryLink}GetPurchaseSummaryCatWise?reqType=${this.catType}&FromDate=${fromDate}&ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`
+      var url = `${environment.mainApi + this.global.inventoryLink}GetSaleSummaryCatWise?reqType=${this.catType}&FromDate=${fromDate}&ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`
       this.http.get(url).subscribe(
         {
           next: (Response: any) => {
@@ -135,10 +129,6 @@ export class PurchaseSummaryCategorywiseComponent implements OnInit {
           }
         }
       )
-
-    
-
-
   }
 
 
@@ -153,14 +143,11 @@ export class PurchaseSummaryCategorywiseComponent implements OnInit {
     if (item.invType == 'S' || item.invType == 'SR') {
       this.billPrint.PrintBill(item.invBillNo);
       this.billPrint.billType = 'Duplicate';
-
     }
   }
 
 
   export() {
-
-
     var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
     var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
     this.global.ExportHTMLTabletoExcel(`${'summaryTable'}`, `Purchase Summary((${startDate} - ${endDate})`)
@@ -171,9 +158,8 @@ export class PurchaseSummaryCategorywiseComponent implements OnInit {
     this.DataList = [];
     this.netCostTotal = 0;
     this.netSaleTotal = 0;
-
-
   }
 
 }
+
 

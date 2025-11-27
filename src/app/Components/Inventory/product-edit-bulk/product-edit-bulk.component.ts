@@ -40,6 +40,7 @@ export class ProductEditBulkComponent implements OnInit {
     this.global.setHeaderTitle('Product Edit Bulk');
     this.getCategory();
     this.getBrandList();
+    this.getAllProductList();
 
     for (let i = 0; i <= 100; i++) { this.discountList.push({ value: i }); }
 
@@ -51,9 +52,31 @@ export class ProductEditBulkComponent implements OnInit {
   reqType: any = 'OTHER';
 
 
+  discPercSpecial = 0;
+
+
   rptType: any = 'full'
   productList: any = [];
   tempProdList: any = [];
+
+
+  getAllProductList() {
+    
+    this.app.startLoaderDark();
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProduct').subscribe(
+      (Response: any) => {
+
+        this.tempProdList = Response;
+        // this.getProductList();
+        this.app.stopLoaderDark();
+      },
+      (Error: any) => {
+        console.log(Error);
+        this.app.stopLoaderDark();
+      }
+    )
+
+  }
 
 
   /////////////////// getting Product List global Function //////////
@@ -73,33 +96,29 @@ export class ProductEditBulkComponent implements OnInit {
     }
 
     this.app.startLoaderDark();
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProduct').subscribe(
-      (Response: any) => {
+
+    if (this.tempProdList.length == 0) {
+      this.getAllProductList();
+    }
 
 
-        if (this.rptType == 'full') {
-          this.productList = Response;
-        }
+    if (this.rptType == 'full') {
+      this.productList = this.tempProdList;
+    }
 
-        if (this.rptType == 'cw') {
-          this.productList = Response.filter((e: any) => e.categoryID == this.CategoryID);
-        }
-        if (this.rptType == 'scw') {
-          this.productList = Response.filter((e: any) => e.categoryID == this.CategoryID && e.subCategoryID == this.SubCategoryID);
-        }
-        if (this.rptType == 'bw') {
-          this.productList = Response.filter((e: any) => e.brandID == this.BrandID);
-        }
+    if (this.rptType == 'cw') {
+      this.productList = this.tempProdList.filter((e: any) => e.categoryID == this.CategoryID);
+    }
+    if (this.rptType == 'scw') {
+      this.productList = this.tempProdList.filter((e: any) => e.categoryID == this.CategoryID && e.subCategoryID == this.SubCategoryID);
+    }
+    if (this.rptType == 'bw') {
+      this.productList = this.tempProdList.filter((e: any) => e.brandID == this.BrandID);
+    }
 
-        this.tempProdList = this.productList;
-        console.log(Response);
-        this.app.stopLoaderDark();
-      },
-      (Error: any) => {
-        console.log(Error);
-        this.app.stopLoaderDark();
-      }
-    )
+    this.app.stopLoaderDark();
+
+
   }
 
 
@@ -113,21 +132,21 @@ export class ProductEditBulkComponent implements OnInit {
 
   CategoriesList: any = [];
   SubCategoriesList: any = [];
-  updateSubCategoryList:any = [];
+  updateSubCategoryList: any = [];
   SubCategoryID = 0;
   CategoryID = 0;
-  getSubCategory(type:any) {
-    
+  getSubCategory(type: any) {
+
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSubCategory').subscribe(
       (Response: any) => {
-       if(type == 'filter'){
-        this.SubCategoryID = 0;
-        this.SubCategoriesList = Response.filter((e: any) => e.categoryID == this.CategoryID);
-       } 
-       if(type == 'update'){
-        this.updateSubCategoryID = 0;
-        this.updateSubCategoryList = Response.filter((e: any) => e.categoryID == this.updateCategoryID);
-       }
+        if (type == 'filter') {
+          this.SubCategoryID = 0;
+          this.SubCategoriesList = Response.filter((e: any) => e.categoryID == this.CategoryID);
+        }
+        if (type == 'update') {
+          this.updateSubCategoryID = 0;
+          this.updateSubCategoryList = Response.filter((e: any) => e.categoryID == this.updateCategoryID);
+        }
       }
     )
   }
@@ -176,10 +195,10 @@ export class ProductEditBulkComponent implements OnInit {
   updateProdList() {
 
 
-    var invalidProdList = this.productList.filter((e:any)=> Number(e.salePrice < e.costPrice));
+    var invalidProdList = this.productList.filter((e: any) => Number(e.salePrice < e.costPrice));
 
-    if(invalidProdList.length > 0 && this.reqType == 'OTHER'){
-      this.msg.WarnNotify(`${invalidProdList[0].productTitle} Sale Price Is not Valid` );
+    if (invalidProdList.length > 0 && this.reqType == 'OTHER') {
+      this.msg.WarnNotify(`${invalidProdList[0].productTitle} Sale Price Is not Valid`);
       return;
     }
 
@@ -196,13 +215,13 @@ export class ProductEditBulkComponent implements OnInit {
       return
     }
 
-    if(this.updateCategoryFlag && (this.updateCategoryID == 0 || this.updateSubCategoryID == 0)){
+    if (this.updateCategoryFlag && (this.updateCategoryID == 0 || this.updateSubCategoryID == 0)) {
       this.msg.WarnNotify('Category or Sub Category Not Selected');
       return;
     }
 
-    
-    if(this.updateBrandFlag && this.UpdateBrandID == 0 ){
+
+    if (this.updateBrandFlag && this.UpdateBrandID == 0) {
       this.msg.WarnNotify('Brand Not Selected');
       return;
     }
@@ -213,7 +232,7 @@ export class ProductEditBulkComponent implements OnInit {
       PinCode: '',
       UserID: this.global.getUserID(),
       CategoryID: this.updateCategoryFlag ? this.updateCategoryID : 0,       /////////// conditional Inserting ID
-      SubCategoryID: this.updateCategoryFlag  ? this.updateSubCategoryID : 0,
+      SubCategoryID: this.updateCategoryFlag ? this.updateSubCategoryID : 0,
       BrandID: this.updateBrandFlag ? this.UpdateBrandID : 0
 
     }
@@ -225,7 +244,6 @@ export class ProductEditBulkComponent implements OnInit {
         if (pin != '') {
           postData.PinCode = pin; ///// inserting pin to data modal
           this.app.startLoaderDark();
-          console.log(postData);
           this.http.post(environment.mainApi + this.global.inventoryLink + 'UpdateProductsList', postData).subscribe(
             (Response: any) => {
 
@@ -266,7 +284,7 @@ export class ProductEditBulkComponent implements OnInit {
 
   onGstAllUpdate(e: any, type: any) {
 
-    if(this.reqType == 'CAT'){
+    if (this.reqType == 'CAT') {
       return;
     }
 
@@ -285,15 +303,40 @@ export class ProductEditBulkComponent implements OnInit {
   }
 
 
-  reset(){
+  reset() {
     this.updateCategoryFlag = false;
     this.updateSubcategoryFlag = false;
     this.updateBrandFlag = false;
     this.productList = [];
     this.tempProdList = [];
     this.updateCategoryID = 0;
-    this. updateSubCategoryID = 0;
+    this.updateSubCategoryID = 0;
     this.UpdateBrandID = 0;
+  }
+
+
+  updateDisc() {
+    if (this.reqType === 'CAT') return;
+
+    this.productList.forEach((p: any) => {
+      if (!p.isChecked) return;
+
+      const cost = Number(p.costPrice) || 0;
+      const sale = Number(p.salePrice) || 0;
+      const disc = Number(this.discPercSpecial) || 0;
+
+      if (sale > 0) {
+        const value = sale - (cost + ((cost * disc) / 100));
+        const percentage = (value / sale) * 100
+
+        p.discPercentage = percentage < 0 ? 0 : percentage;
+        p.discRupees = (sale * p.discPercentage) / 100;
+      } else {
+        p.discPercentage = 0; // Avoid Infinity/NaN
+      }
+    });
+
+    this.global.closeBootstrapModal('#updateDiscModal', true);
   }
 
 
