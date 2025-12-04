@@ -59,6 +59,7 @@ export class ProductionItemReceivingComponent implements OnInit {
     this.getLocation();
     this.getPartyList();
     this.getItemList();
+    this.getProjectList();
     $('.searchProduct').trigger('focus');
 
     this.global.getProducts().subscribe(
@@ -74,6 +75,7 @@ export class ProductionItemReceivingComponent implements OnInit {
   holdBtnType = 'Hold';
   invoiceDate: Date = new Date();
   locationID = 0;
+  invLocationID = 0;
   locationList: any = [];
   invRemarks: any;
   PBarcode: any;
@@ -85,6 +87,8 @@ export class ProductionItemReceivingComponent implements OnInit {
   subTotal: number = 0;
   totalQty: number = 0;
   SavedBillList: any = [];
+
+  roleTypeID = this.global.getRoleTypeID();
 
   salePriceTotal = 0;
   CostTotal = 0;
@@ -102,7 +106,19 @@ export class ProductionItemReceivingComponent implements OnInit {
 
 
   getLocation() {
-    this.global.getWarehouseLocationList().subscribe((data: any) => { this.locationList = data; });
+    this.global.getWarehouseLocationList().subscribe((data: any) => { 
+      this.locationList = data; 
+    
+    });
+  }
+
+projectList:any = [];
+    getProjectList(){
+    this.http.get(environment.mainApi+this.global.companyLink+'getproject').subscribe(
+      (Response:any)=>{
+        this.projectList = Response;
+      }
+    )
   }
 
 
@@ -511,7 +527,6 @@ export class ProductionItemReceivingComponent implements OnInit {
       PartyID: this.partyID,
       LocationID: this.locationID,
       ProjectID: this.projectID,
-
       BillTotal: this.subTotal,
       NetTotal: this.subTotal,
       Remarks: this.invRemarks || '-',

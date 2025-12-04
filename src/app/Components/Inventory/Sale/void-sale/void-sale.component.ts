@@ -22,6 +22,7 @@ import {
   MatBottomSheetModule,
   MatBottomSheetRef,
 } from '@angular/material/bottom-sheet';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 
 
@@ -54,13 +55,15 @@ export class VoidSaleComponent implements OnInit {
   disablePrintPwd = this.global.DisablePrintPwd;
   VehicleSaleFeature = this.global.VehicleSaleFeature;
   CusDiscFeature = this.global.CusDiscFeature;
+  RestBillUserwise = this.global.RestBillUserwise;
+
 
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
   ////////////////// will give the current tab visible status
 
-  @HostListener('document:visibilitychange', ['$event'])
+  @HostListener('document:visibilitychange', [])
 
   appVisibility() {
     if (document.hidden) {
@@ -69,6 +72,16 @@ export class VoidSaleComponent implements OnInit {
     else {
       this.getCurrentBill();
 
+    }
+  }
+
+
+  @HostListener('document:keydown', ['$event'])
+
+  handleKeyboardEventSearchByNaem(event: KeyboardEvent) {
+    if (event.altKey && event.key.toLowerCase() === 'n') {
+      this.byNameSearch = !this.byNameSearch;
+      $('#vssearchProduct').trigger('focus');
     }
   }
   companyProfile: any = [];
@@ -389,6 +402,7 @@ export class VoidSaleComponent implements OnInit {
       PartyID: 0,
       ProductID: productID,
       Barcode: barcode,
+      ProjectID: this.projectID,
       UserID: this.global.getUserID()
     }
     this.http.post(environment.mainApi + this.global.inventoryLink + 'AddSaleProduct', postData).subscribe(
@@ -836,10 +850,25 @@ export class VoidSaleComponent implements OnInit {
 
   showImg(item: any) {
 
-    var index = this.tableDataList.findIndex((e: any) => e.productID == item.productID);
-    this.productImage = this.tableDataList[index].productImage;
+    // var index = this.tableDataList.findIndex((e: any) => e.productID == item.productID);
+    // this.productImage = this.tableDataList[index].productImage;
+
+    this.getProductImage(item)
 
   }
+
+
+  getProductImage(item: any) {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductImage?ProductID=' + item.productID).subscribe(
+      (Response: any) => {
+
+        this.productImage = Response[0].productImage;
+
+        $('.loaderDark').fadeOut();
+      }
+    )
+  }
+
 
   //////////////////////////////// Sale Insert Function //////////////////////////////////////////////////
   isProcessing = false;
@@ -1278,10 +1307,33 @@ export class VoidSaleComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetOpenDaySale').subscribe(
       (Response: any) => {
         this.savedbillList = [];
+        var userID: any = this.global.getUserID();
+        var roleTypeId: any = this.global.getRoleTypeID();
+        var projectID: any = this.global.getProjectID();
+
         Response.forEach((e: any) => {
-          if (e.invType == 'S') {
-            this.savedbillList.push(e);
+
+
+          /////////////// if Feature false all Bills will Display
+          if (!this.RestBillUserwise) {
+            if (e.invType == 'S') {
+              this.savedbillList.push(e);
+            }
+            return;
           }
+
+
+           /////////////// Filtering Bills with UserID and ProjectID
+          if (roleTypeId == 3 || roleTypeId == 2) { ///////////if Admin or User
+            if (e.invType == 'S' && e.userID == userID && e.projectID == projectID) {
+              this.savedbillList.push(e);
+            }
+          } else { /////////// if Superadmin
+            if (e.invType == 'S') {
+              this.savedbillList.push(e);
+            }
+          }
+
         });
       }
     )
@@ -1340,10 +1392,7 @@ export class VoidSaleComponent implements OnInit {
 
 
   printDuplicateBill(item: any) {
-
-
     $('#SavedBillModal').hide();
-
     if (this.disablePrintPwd) {
       this.billPrint.PrintBill(item.invBillNo);
       this.billPrint.billType = 'Duplicate';
@@ -1358,16 +1407,9 @@ export class VoidSaleComponent implements OnInit {
           }).subscribe(
             (Response: any) => {
               if (Response.msg == 'Password Matched Successfully') {
-
-
                 $('#SavedBillModal').show();
                 this.billPrint.PrintBill(item.invBillNo);
                 this.billPrint.billType = 'Duplicate';
-                // setTimeout(() => {
-                //   this.global.printData('#print-bill')
-                // }, 200);
-
-
 
               } else {
                 this.msg.WarnNotify(Response.msg);

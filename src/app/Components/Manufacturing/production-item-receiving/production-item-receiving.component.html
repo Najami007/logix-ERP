@@ -132,6 +132,17 @@
                 </mat-select>
             </mat-form-field>
 
+            
+            <mat-form-field appearance="outline" class="col-md-12 matSmall">
+                <mat-label>Project</mat-label>
+                <mat-select [(ngModel)]="projectID" name="location" [disabled]="roleTypeID > 2">
+                    <mat-option><ngx-mat-select-search #projectSearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option  *ngFor="let item of projectList | filter:projectSearch.value"
+                        [value]="item.projectID">{{item.projectTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
 
             <mat-form-field appearance="outline" class="col-md-12 matSmall">
                 <mat-label>Contractor</mat-label>

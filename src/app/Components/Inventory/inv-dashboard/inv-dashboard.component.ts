@@ -126,36 +126,73 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
   saleAmountList: any = [];
   purchaseAmountList: any = [];
 
-  GetSalePurchaseData() {
-    this.http.get(environment.mainApi + this.globalData.inventoryLink + 'GetSalePurchaseData').subscribe(
-      (Response: any) => {
-        this.saleAmountList = [];
-        this.purchaseAmountList = [];
-        this.salePurchaseMonthList = [];
-        if (Response.length > 0) {
-          Response.forEach((e: any) => {
-            if (e.invType == 'S') {
-              this.saleAmountList.push(Math.round(e.amount));
-            }
-            if (e.invType == 'P') {
-              this.purchaseAmountList.push(Math.round(e.amount))
-            }
-
-          });
-           var monthList = this.globalData.filterUniqueValuesByKey(Response, 'month');
-          monthList.forEach((e: any) => {
-            this.salePurchaseMonthList.push(this.MonthNameList[e.month - 1]);
-          })
-        
-        }
+  // GetSalePurchaseData() {
+  //   this.http.get(environment.mainApi + this.globalData.inventoryLink + 'GetSalePurchaseData').subscribe(
+  //     (Response: any) => {
+  //       this.saleAmountList = [];
+  //       this.purchaseAmountList = [];
+  //       this.salePurchaseMonthList = [];
+  //       if (Response.length > 0) {
+  //         Response.forEach((e: any) => {
+  //           console.log(Response);
+  //           if (e.invType == 'S') {
+  //             this.saleAmountList.push(Math.round(e.amount));
+  //           }
+  //           if (e.invType == 'P') {
+  //             this.purchaseAmountList.push(Math.round(e.amount))
+  //           }
 
 
-        this.barChart();
-      }
+  //         });
+  //          var monthList = this.globalData.filterUniqueValuesByKey(Response, 'month');
+  //         monthList.forEach((e: any) => {
+  //           this.salePurchaseMonthList.push(this.MonthNameList[e.month - 1]);
+  //         })  
+  //       }
+  //       this.barChart();
+  //     }
 
        
-    )
-  }
+  //   )
+  // }
+
+
+  GetSalePurchaseData() {
+  this.http.get(environment.mainApi + this.globalData.inventoryLink + 'GetSalePurchaseData')
+    .subscribe((Response: any ) => {
+
+      this.saleAmountList = [];
+      this.purchaseAmountList = [];
+      this.salePurchaseMonthList = [];
+
+      if (Response.length > 0) {
+
+        // 1️⃣ Get unique & sorted months
+        const uniqueMonths = [...new Set(Response.map(x => x.month))].sort((a:any, b:any) => a - b);
+
+        // 2️⃣ Loop through each month in correct order
+        uniqueMonths.forEach((month:any) => {
+
+          // Filter sales of this month
+          const saleItems = Response.filter(x => x.month === month && x.invType === 'S');
+          const totalSale = saleItems.reduce((sum, x) => sum + x.amount, 0);
+
+          // Filter purchase of this month
+          const purchaseItems = Response.filter(x => x.month === month && x.invType === 'P');
+          const totalPurchase = purchaseItems.reduce((sum, x) => sum + x.amount, 0);
+
+          // Push values
+          this.saleAmountList.push(Math.round(totalSale));
+          this.purchaseAmountList.push(Math.round(totalPurchase));
+
+          // Month name
+          this.salePurchaseMonthList.push(this.MonthNameList[month - 1]);
+        });
+      }
+
+      this.barChart();
+    });
+}
 
 
 

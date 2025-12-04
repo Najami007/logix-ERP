@@ -17,10 +17,10 @@ import Swal from 'sweetalert2';
 export class BarcodeReportInvoicewiseComponent implements OnInit {
 
   companyProfile: any = [];
-  companyLogo:any = '';
-  logoHeight:any = 0;
-  logoWidth:any = 0;
-  printDate:any = new Date();
+  companyLogo: any = '';
+  logoHeight: any = 0;
+  logoWidth: any = 0;
+  printDate: any = new Date();
 
   companyName = '';
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -66,8 +66,8 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
   productList: any = [];
   showPrice: any = true;
   showTitle: any = true;
-  showBarcode:any = true;
-  showCompany:any = true;
+  showBarcode: any = true;
+  showCompany: any = true;
 
   PBarcode: any = '';
 
@@ -118,28 +118,38 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
         Response.forEach((e: any) => {
 
           this.myTotalQty += e.quantity;
-          this.pushProdData(e, false,'bill');
+          this.pushProdData(e, false, 'bill');
         });
       }
     )
 
   }
 
-  pushProdData(item: any, isChecked: any,type:any) {
+  pushProdData(item: any, isChecked: any, type: any) {
+
+    var salePrice = 0;
+    if (type == 'extra') {
+      salePrice = (item.salePrice * item.quantity) -  item.discInR;
+    } else {
+      salePrice = item.salePrice
+
+    }
 
     this.tableDataList.push({
       isChecked: isChecked,
       rowIndex: this.tableDataList.length + 1,
       productID: item.productID,
       productTitle: item.productTitle,
+      flavourTitle: item.flavourTitle || '',
       barcode: item.barcode,
+      barcode2: item.barcode2 || '',
       productImage: item.productImage,
       quantity: item.quantity,
       wohCP: item.costPrice,
       tempCostPrice: item.tempCostPrice,
       margin: ((item.salePrice - item.costPrice) / item.costPrice) * 100,
       costPrice: item.costPrice,
-      salePrice: item.salePrice,
+      salePrice: salePrice,
       // expiryDate: this.global.dateFormater(new Date(item.expiryDate), '-'),
       BatchNo: item.batchNo,
       BatchStatus: item.batchStatus,
@@ -150,7 +160,7 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
       AQ: item.aq,
       gst: item.gst,
       et: item.et,
-      type:type
+      type: type
 
     })
   }
@@ -191,38 +201,7 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
   }
 
 
-  printBarcodeNew(data:any){
 
-    
-
-  }
-
-
-    startPrintingNew() {
-    if (this.tableDataList.length == 0) return;
-
-    this.printDataList = [];
-    let dataRows = this.tableDataList.filter((e: any) => e.isChecked);
-
-
-
-      for (const e of dataRows) {
-        for (let i = 0; i < e.quantity; i++) {
-          this.curProductRow = e;
-          // this.curProductRow.push({ ...e });
-          this.printDataList.push({ ...e });
-        }
-      }
-
-
-      setTimeout(() => {
-        this.global.printBarcode('#PrintDivNew');
-        alert();
-      }, 500);
-
-    
-    
-  }
 
 
   async startPrinting() {
@@ -345,7 +324,7 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
     this.global.getProdDetail(item.productID, '').subscribe(
       (Response: any) => {
         if (Response.length > 0) {
-          this.pushProdData(Response[0], true,'extra')
+          this.pushProdData(Response[0], true, 'extra')
         } else {
           this.msg.WarnNotify('Product Not Found!')
         }
@@ -419,50 +398,50 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
 
   editQty(item: any) {
 
-    if(item.type == 'bill')return;
+    if (item.type == 'bill') return;
 
-        Swal.fire({
-          title: "Enter Total Amount",
-          input: "text",
-          showCancelButton: true,
-          confirmButtonText: 'Save',
-          showLoaderOnConfirm: true,
-          preConfirm: (value) => {
-  
-            if (!value || isNaN(value) || value <= 0) {
-              return Swal.showValidationMessage("Enter Valid Qty");
-            }
-            const index = this.tableDataList.indexOf(item);
-         
-  
-            this.tableDataList[index].quantity = value;
-          }
-        }).then((result) => {
-          if (result.isConfirmed) {
-            Swal.fire({
-              title: "Quantity Updated",
-              timer: 500,
-            });
-          }
-        })
+    Swal.fire({
+      title: "Enter Total Amount",
+      input: "text",
+      showCancelButton: true,
+      confirmButtonText: 'Save',
+      showLoaderOnConfirm: true,
+      preConfirm: (value) => {
+
+        if (!value || isNaN(value) || value <= 0) {
+          return Swal.showValidationMessage("Enter Valid Qty");
+        }
+        const index = this.tableDataList.indexOf(item);
+
+
+        this.tableDataList[index].quantity = value;
       }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Quantity Updated",
+          timer: 500,
+        });
+      }
+    })
+  }
 
 
 
-  tagList:any = [];
+  tagList: any = [];
 
-  printTags(){
+  printTags() {
 
-    this.tagList = this.tableDataList.filter((e:any)=> e.isChecked == true);
+    this.tagList = this.tableDataList.filter((e: any) => e.isChecked == true);
 
     setTimeout(() => {
-          this.global.printData('#PrintTags');
+      this.global.printData('#PrintTags');
 
     }, 200);
 
 
   }
-    
+
 
 
 }

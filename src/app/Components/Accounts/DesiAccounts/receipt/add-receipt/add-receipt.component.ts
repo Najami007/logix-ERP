@@ -122,39 +122,44 @@ export class AddReceiptComponent implements OnInit {
 
   Save() {
     if (this.partyID == 0 || this.partyID == undefined) {
-      this.msg.WarnNotify('Select Supplier')
-    } else if (this.paymentType == '' || this.paymentType == undefined) {
-      this.msg.WarnNotify('Select Payment Type')
-    } else if (this.coaID == 0 || this.coaID == undefined) {
-      this.msg.WarnNotify('Select COA')
-    } else if (this.amount == 0 || this.amount == undefined || this.amount == null) {
-      this.msg.WarnNotify('Enter Amount')
-    } else {
+      this.msg.WarnNotify('Select Supplier');
+      return;
+    } 
+     if (this.paymentType == '' || this.paymentType == undefined) {
+      this.msg.WarnNotify('Select Payment Type');
+       return;
+    } 
+     if (this.coaID == 0 || this.coaID == undefined) {
+      this.msg.WarnNotify('Select COA');
+       return;
+    } 
+     if (this.amount == 0 || this.amount == undefined || this.amount == null) {
+      this.msg.WarnNotify('Enter Amount');
+       return;
+    } 
 
-      if (this.bankReceiptNo == '' || this.bankReceiptNo == null || this.bankReceiptNo == undefined) {
-        this.bankReceiptNo = '-';
+
+
+
+
+        ////////////////// will verify selected COA is in Cash and ban COA list or not
+      var verifyCoaList = this.coaList.filter((e: any) => e.coaID == this.coaID);
+      if (verifyCoaList.length == 0) {
+        this.msg.WarnNotify('Select Chart of Account');
+        return;
       }
-
-      if (this.discount == '' || this.discount == undefined || this.discount == null) {
-        this.discount = 0;
-      }
-
-      if (this.remarks == '' || this.remarks == undefined || this.remarks == null) {
-        this.remarks = '-';
-      }
-
 
       var postData = {
-            InvoiceNo: this.invoiceNo,
+        InvoiceNo: this.invoiceNo,
         InvoiceDate: this.global.dateFormater(this.invoiceDate, '-'),
         PartyID: this.partyID,
         Type: this.paymentType,
-        InvoiceRemarks: this.remarks,
-        BankReceiptNo: this.bankReceiptNo,
+        InvoiceRemarks: this.remarks || '-',
+        BankReceiptNo: this.bankReceiptNo || '-',
         COAID: this.coaID,
         Amount: this.amount,
         ProjectID: this.projectID,
-        Discount: this.discount,
+        Discount: this.discount || 0,
         UserID: this.global.getUserID()
       }
 
@@ -165,13 +170,10 @@ export class AddReceiptComponent implements OnInit {
       if (this.btnType == 'Update') {
         this.Update(postData);
       }
-
-
-    }
   }
 
 
-  insert(postData:any) {
+  insert(postData: any) {
     $('.loaderDark').show();
     this.http.post(environment.mainApi + this.global.accountLink + 'InsertReceipt', postData).subscribe(
       (Response: any) => {
@@ -193,7 +195,7 @@ export class AddReceiptComponent implements OnInit {
     )
   }
 
-  Update(postData:any) {
+  Update(postData: any) {
 
     this.global.openPinCode().subscribe(pin => {
       if (pin != '') {

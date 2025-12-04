@@ -1,6 +1,6 @@
 <mat-sidenav-container hasBackdrop="true" (backdropClick)="filterPanel.close()">
 
-    <mat-sidenav #filterPanel  mode="over"  style="width:30%;position: fixed;z-index: 100000;" position="end"
+    <mat-sidenav #filterPanel mode="over" style="width:30%;position: fixed;z-index: 100000;" position="end"
         class="order-panel bg-white container pt-4 mt-5">
 
 
@@ -22,7 +22,7 @@
             </div>
             <hr>
 
-
+            <!----------- Sub Categories Filter -->
             <div>
                 <div class="d-flex justify-content-between">
                     <mat-label class="fw-bold">Sub Categories</mat-label>
@@ -48,6 +48,9 @@
 
             </div>
             <hr>
+
+
+            <!----------- Brand Filter -->
             <div>
                 <div class="d-flex justify-content-between">
                     <mat-label class="fw-bold">Brands</mat-label>
@@ -94,6 +97,15 @@
                         <mat-checkbox [(ngModel)]="item.isChecked"> {{item.title}}</mat-checkbox>
                     </div>
                 </div>
+
+                <mat-label class="fw-bold">GST</mat-label>
+
+
+                <div class="d-flex flex-wrap">
+                    <div *ngFor="let item of tmpGstFilterList">
+                        <mat-checkbox [(ngModel)]="item.isChecked"> {{item.title}}</mat-checkbox>
+                    </div>
+                </div>
                 <mat-label class="fw-bold">Others</mat-label>
                 <div class="d-flex flex-wrap" *ngIf="appConfigFeature">
                     <div *ngFor="let item of tmpApplinkedList">
@@ -102,7 +114,8 @@
 
                     <div>
                         <mat-checkbox [(ngModel)]="costGreaterThenSaleFilter"> Cost Price > Sale Price</mat-checkbox>
-                        <mat-checkbox [(ngModel)]="avgCostGreaterThenSaleFilter"> AvgCost Price > Sale Price</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="avgCostGreaterThenSaleFilter"> AvgCost Price > Sale
+                            Price</mat-checkbox>
                     </div>
 
                 </div>
@@ -115,7 +128,7 @@
 
     </mat-sidenav>
 
-    <mat-sidenav-content >
+    <mat-sidenav-content>
 
         <mat-tab-group mat-align-tabs="center" class="body h-100" [selectedIndex]="tabIndex"
             (selectedIndexChange)="changeTab($event)">
@@ -263,7 +276,8 @@
                                 <mat-label>Cost Price *</mat-label>
                                 <!-- <input matInput type="number" [(ngModel)]="CostPrice" (change)="global.avoidMinus($event)"> -->
                                 <input matInput type="number" [(ngModel)]="CostPrice"
-                                    (change)="global.avoidMinus($event)" (input)="global.handleInputChange($event)" [disabled]="btnType == 'Update'">
+                                    (change)="global.avoidMinus($event)" (input)="global.handleInputChange($event)"
+                                    [disabled]="btnType == 'Update'">
                             </mat-form-field>
                         </div>
 
@@ -271,7 +285,8 @@
                         <div class="col-md-3" *ngIf="!ManufacturingFeature">
                             <mat-form-field appearance="outline" class="w-100 matSmall">
                                 <mat-label>Sale Price *</mat-label>
-                                <input matInput (keyup)="applyDiscount('sale')" (input)="global.handleInputChange($event)" type="number" [(ngModel)]="SalePrice"
+                                <input matInput (keyup)="applyDiscount('sale')"
+                                    (input)="global.handleInputChange($event)" type="number" [(ngModel)]="SalePrice"
                                     (change)="global.avoidMinus($event)">
                             </mat-form-field>
                         </div>
@@ -279,7 +294,8 @@
                         <div class="col-md-3" *ngIf="!ManufacturingFeature">
                             <mat-form-field appearance="outline" class="w-100 matSmall" *ngIf="!ManufacturingFeature">
                                 <mat-label>Discount Percentage</mat-label>
-                                <input matInput [(ngModel)]="DiscPercent" name="billDiscount" [disabled]="!discFeature" (input)="applyDiscount('perc')"  />
+                                <input matInput [(ngModel)]="DiscPercent" name="billDiscount" [disabled]="!discFeature"
+                                    (input)="applyDiscount('perc')" />
                                 <!-- <mat-select [(ngModel)]="DiscPercent" name="billDiscount" [disabled]="!discFeature"
                                     (selectionChange)="applyDiscount()">
                                     <mat-option *ngFor="let item of discountList"
@@ -291,16 +307,15 @@
                         <div class="col-md-3 " *ngIf="!ManufacturingFeature">
                             <mat-form-field appearance="outline" class="w-100 matSmall">
                                 <mat-label>Discount Rupees</mat-label>
-                                <input matInput  type="number"  [disabled]="!discFeature"  (input)="applyDiscount('rs')"
+                                <input matInput type="number" [disabled]="!discFeature" (input)="applyDiscount('rs')"
                                     [(ngModel)]="DiscRupee" (change)="global.avoidMinus($event)">
                             </mat-form-field>
                         </div>
 
-                         <div class="col-md-3 " *ngIf="!ManufacturingFeature">
+                        <div class="col-md-3 " *ngIf="!ManufacturingFeature">
                             <mat-form-field appearance="outline" class="w-100 matSmall">
                                 <mat-label>MRP</mat-label>
-                                <input matInput  type="number" 
-                                    [(ngModel)]="mrp" (change)="global.avoidMinus($event)">
+                                <input matInput type="number" [(ngModel)]="mrp" (change)="global.avoidMinus($event)">
                             </mat-form-field>
                         </div>
 
@@ -318,28 +333,32 @@
                         <div class="col-md-3" *ngIf="!ManufacturingFeature">
                             <mat-form-field appearance="outline" class="w-100 matSmall">
                                 <mat-label>Min ROL</mat-label>
-                                <input matInput type="number" (input)="global.handleInputChange($event)" [(ngModel)]="minRol" (change)="global.avoidMinus($event)">
+                                <input matInput type="number" (input)="global.handleInputChange($event)"
+                                    [(ngModel)]="minRol" (change)="global.avoidMinus($event)">
                             </mat-form-field>
 
                         </div>
                         <div class="col-md-3 " *ngIf="!ManufacturingFeature">
                             <mat-form-field appearance="outline" class="w-100 matSmall">
                                 <mat-label>Max ROL</mat-label>
-                                <input matInput type="number" (input)="global.handleInputChange($event)" [(ngModel)]="maxRol" (change)="global.avoidMinus($event)">
+                                <input matInput type="number" (input)="global.handleInputChange($event)"
+                                    [(ngModel)]="maxRol" (change)="global.avoidMinus($event)">
                             </mat-form-field>
                         </div>
 
                         <div class="col-md-3" *ngIf="!ManufacturingFeature">
                             <mat-form-field appearance="outline" class="w-100 matSmall">
                                 <mat-label>GST(General Sales Tax)</mat-label>
-                                <input matInput type="number" (input)="global.handleInputChange($event)" [(ngModel)]="gst" (change)="global.avoidMinus($event)">
+                                <input matInput type="number" (input)="global.handleInputChange($event)"
+                                    [(ngModel)]="gst" (change)="global.avoidMinus($event)">
                             </mat-form-field>
                         </div>
 
                         <div class="col-md-3 " *ngIf="!ManufacturingFeature">
                             <mat-form-field appearance="outline" class="w-100 matSmall">
                                 <mat-label>ET(Extra Tax)</mat-label>
-                                <input matInput type="number" (input)="global.handleInputChange($event)" [(ngModel)]="Et" (change)="global.avoidMinus($event)">
+                                <input matInput type="number" (input)="global.handleInputChange($event)"
+                                    [(ngModel)]="Et" (change)="global.avoidMinus($event)">
                             </mat-form-field>
                         </div>
 
@@ -449,8 +468,8 @@
                                 (click)="global.printData('#prodTable')">Print</button>
                         </div>
                         <div class="col-lg-1">
-                            <button style="height: 40px;" class="btn-rpt-primary w-100"
-                                (click)="openImagesScreen()">Add Images</button>
+                            <button style="height: 40px;" class="btn-rpt-primary w-100" (click)="openImagesScreen()">Add
+                                Images</button>
                         </div>
                         <div class="col-lg-1">
                             <button style="height: 40px;" class="btn-rpt-export w-100"
@@ -469,6 +488,7 @@
                                 <th class="cursorPointer" (click)="sortProds('barcode')" *ngIf="!ManufacturingFeature">
                                     Product
                                     Barcode</th>
+                                <th>Category</th>
                                 <th>Sub Category</th>
                                 <th *ngIf="!ManufacturingFeature ">Brand</th>
 
@@ -501,14 +521,16 @@
                                     <td *ngIf="!AutoFillProdNameFeature && !ManufacturingFeature">
                                         {{item.productTitleOtherLang}}</td>
                                     <td *ngIf="!ManufacturingFeature">{{item.barcode}}</td>
+                                      <td>{{item.categoryTitle}}</td>
                                     <td>{{item.subCategoryTitle}}</td>
                                     <td *ngIf="!ManufacturingFeature">{{item.brandTitle}}</td>
 
                                     <td>{{item.costPrice |number:'1.0-1'}}</td>
-                                      <td>{{item.avgCostPrice |number:'1.0-1'}}</td>
+                                    <td>{{item.avgCostPrice |number:'1.0-1'}}</td>
                                     <td>{{item.salePrice |number:'1.0-0'}}</td>
-                                    <td *ngIf="discFeature && !ManufacturingFeature">{{item.discPercentage}}%</td>
-                                    <td *ngIf="!ManufacturingFeature">{{item.gst}}%</td>
+                                    <td *ngIf="discFeature && !ManufacturingFeature">{{item.discPercentage
+                                        |number:'1.0-1'}}%</td>
+                                    <td *ngIf="!ManufacturingFeature">{{item.gst |number:'1.0-1'}}%</td>
                                     <td>{{item.entryUser}}</td>
                                     <td class="cursorPointer hide-in-print" *ngIf="!ManufacturingFeature">
                                         <img [src]="item.imagesPath" *ngIf="ImageUrlFeature"

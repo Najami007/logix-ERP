@@ -144,6 +144,15 @@ export class AddPaymentComponent {
     }
 
 
+     ////////////////// will verify selected COA is in Cash and ban COA list or not
+    
+    var verifyCoaList = this.coaList.filter((e:any)=> e.coaID == this.coaID);
+    if(verifyCoaList.length == 0){
+      this.msg.WarnNotify('Select Chart of Account');
+      return;
+    }
+
+
     var postData = {
       InvoiceNo: this.invoiceNo,
       InvoiceDate: this.global.dateFormater(this.invoiceDate, '-'),
@@ -157,6 +166,7 @@ export class AddPaymentComponent {
       ProjectID: this.projectID,
       UserID: this.global.getUserID()
     }
+    console.log(postData);
 
     if (this.btnType == 'Save') {
       this.insert(postData)

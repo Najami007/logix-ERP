@@ -32,7 +32,11 @@
             </thead>
             <tbody>
 
-                <tr *ngFor="let item of savedTokenList | filter:search.value index as index " >
+                <tr *ngFor="let item of savedTokenList | filter:search.value |paginate:{
+                        itemsPerPage : tableSize,
+                        currentPage : page,
+                        totalItems :    count,
+                    }  index as index " >
                     <td>{{index + 1}}</td>
                     <td>{{item.createdOn | date:'dd-MM-yyyy hh:mm a'}}</td>
                     <td>{{item.invBillNo}}  {{item.invBillNo2}}  {{item.invBillNo3}}</td>
@@ -50,6 +54,29 @@
         </table>
 
     </div>
+
+
+    <div class="d-flex" 
+    style="position: fixed; bottom: 32px !important; width: 100%; background-color: #fff; z-index: 2;">
+
+    <pagination-controls previousLabel="Prev" nextLabel="Next"
+        (pageChange)="onTableDataChange($event)"></pagination-controls>
+
+
+    <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+    <select class="text-white" style="height: 25px;background-color: rgb(75, 164, 248);"
+        (change)="onTableSizeChange($event)" [(ngModel)]="tableSize">
+        <option *ngFor=" let item of tableSizes" [selected]="tableSize == item">{{item}}</option>
+    </select>
+
+    <div class="jump-to-page">
+        <input type="text" class="w-25" (keydown)="globaldata.handleNumKeys($event)" [(ngModel)]="jumpPage"
+            placeholder="Page #" min="1" [max]="count" />
+        <button (click)="goToPage()" class="text-white"
+            style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
+    </div>
+
+</div>
 
 
 </div>

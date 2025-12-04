@@ -107,6 +107,8 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     this.userName = curUser.userName;
   }
 
+  projectID:any = 0;
+
   billTotal = 0;
   chargesTotal = 0;
   netGrandTotal = 0;
@@ -139,13 +141,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
-            this.SaleDetailList = [];
-            this.billTotal = 0;
-            this.chargesTotal = 0;
-            this.netGrandTotal = 0;
-            this.discountTotal = 0;
-            this.offerDiscTotal = 0;
-            this.summaryNetTotal = 0;
+           this.reset();
             if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
               this.app.stopLoaderDark();
@@ -216,15 +212,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryDetailDateWise_3?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
-            this.SaleDetailList = [];
-            this.qtyTotal = 0;
-            this.detNetTotal = 0;
-            this.profitPercentTotal = 0;
-            this.profitTotal = 0;
-            this.discountTotal = 0;
-            this.salePriceTotal = 0;
-            this.costPriceTotal = 0;
-            this.avgCostTotal = 0;
+            this.reset();
             if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
               this.app.stopLoaderDark();
@@ -310,14 +298,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
         this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
-            this.SaleDetailList = [];
-            this.billTotal = 0;
-            this.chargesTotal = 0;
-            this.netGrandTotal = 0;
-            this.discountTotal = 0;
-            this.offerDiscTotal = 0;
-            this.summaryNetTotal = 0;
-            this.myTaxTotal = 0;
+         this.reset();
             if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
               this.app.stopLoaderDark();
@@ -357,6 +338,88 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
               this.summaryNetTotal += e.netTotal;
               this.myTaxTotal += e.gstAmount;
 
+            });
+            this.app.stopLoaderDark();
+          },
+          (Error: any) => {
+            console.log(Error);
+            this.app.stopLoaderDark();
+          }
+        )
+    }
+
+
+      if (this.formateType == 4) {
+
+      // this.reportType = 'Detail';
+      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryTypeAndDateWise_20?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
+        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime+'&ProjectID='+this.projectID).subscribe(
+          (Response: any) => {
+            this.reset()
+            if (Response.length == 0 || Response == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
+
+
+
+            var DataList: any = [];
+
+             if (this.rptType == 'S' || this.rptType == 'SR') {
+              if (this.locationID > 0) {
+                DataList = Response.filter((e: any) =>
+                  (this.filterID == 2 ? e.percentageDiscount > 0 : this.filterID == 3 ? e.percentageDiscount == 0 : true)
+                  && (e.locationID == this.locationID));
+              } else {
+                DataList = Response.filter((e: any) =>
+                (this.filterID == 2
+                  ? e.discInR > 0
+                  : this.filterID == 3
+                    ? e.discInR == 0
+                    : true
+                ));
+              }
+            }else{
+               if (this.locationID > 0) {
+                DataList = Response.filter((e: any) =>e.locationID == this.locationID);
+              } else {
+                DataList = Response;
+              }
+            }
+            // if (this.locationID > 0) {
+            //   DataList = Response.filter((e: any) => e.locationID == this.locationID);
+            // } else {
+            //   DataList = Response;
+            // }
+
+
+            if (this.rptType == 'R') {
+              DataList.forEach((e: any) => {
+                if (e.issueType != 'Stock Transfer') {
+                  this.SaleDetailList.push(e);
+                }
+              }
+
+              )
+              // this.SaleDetailList = Response.fil;
+            } else {
+              this.SaleDetailList = DataList;
+            }
+
+
+            this.SaleDetailList.forEach((e: any) => {
+              this.qtyTotal += e.quantity;
+              if (this.rptType == 'S' || this.rptType == 'SR' || this.rptType == 'IC' || this.rptType == 'RIC') {
+                this.detNetTotal += e.salePrice ;
+              }
+              else if (this.rptType == 'P' || this.rptType == 'PR') {
+                this.detNetTotal += e.costPrice ;
+              }
+              else {
+                this.detNetTotal += e.avgCostPrice ;
+              }
             });
             this.app.stopLoaderDark();
           },
@@ -437,7 +500,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     this.qtyTotal = 0;
     this.costPriceTotal = 0;
     this.avgCostTotal = 0;
-
+    
     this.salePriceTotal = 0;
     this.detNetTotal = 0;
 

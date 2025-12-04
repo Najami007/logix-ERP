@@ -25,10 +25,65 @@ export class TokenGeneratorComponent implements OnInit {
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
 
+
+
+  
+  page: number = 1;
+  count: number = 0;
+
+  tableSize: number = 0;
+  tableSizes: any = [];
+  jumpPage: any = 0;
+  tmpPage: number = 0;
+
+  onTableDataChange(event: any) {
+
+    this.page = event;
+    this.getSavedToken();
+ 
+  }
+
+  onTableSizeChange(event: any): void {
+    this.tableSize = event.target.value;
+    this.page = 1;
+    this.getSavedToken();
+
+  }
+
+  goToPage(): void {
+    var count = this.savedTokenList.length / this.tableSize;
+    if (parseFloat(this.jumpPage) > count) {
+      this.msg.WarnNotify('Invalid Value')
+      return;
+    }
+
+    if (this.jumpPage >= 1) {
+      this.page = this.jumpPage;
+      this.getSavedToken();
+    
+    }
+  }
+
+  onProdSearchKeyup(e: any, value: any) {
+
+    if (e.target.value.length == 0 && this.tmpPage == 0) {
+      this.tmpPage = this.page;
+      this.page = 1;
+    }
+    if (e.key == 'Backspace') {
+      if (value.length == 1) {
+        this.page = this.tmpPage;
+        this.tmpPage = 0;
+      }
+    }
+
+
+  }
+
   constructor(private http: HttpClient,
     private msg: NotificationService,
     private dialogue: MatDialog,
-    private globaldata: GlobalDataModule,
+    public globaldata: GlobalDataModule,
     private app: AppComponent,
     private route: Router
 
@@ -47,6 +102,8 @@ export class TokenGeneratorComponent implements OnInit {
   ngOnInit(): void {
     this.globaldata.setHeaderTitle('Generate Token');
     this.getSavedToken();
+    this.tableSize = this.globaldata.paginationDefaultTalbeSize;
+    this.tableSizes = this.globaldata.paginationTableSizes;
   }
 
 

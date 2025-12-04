@@ -90,6 +90,7 @@
                 <mat-select [(ngModel)]="rptType" (selectionChange)="reset()">
                     <mat-option [value]="1">Summary</mat-option>
                     <mat-option [value]="2">Detail</mat-option>
+                    <mat-option [value]="3">Itemwise Summary</mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
@@ -200,6 +201,33 @@
                     </tr>
                     <tr>
                         <td colspan="7" class="fw-bold text-center">Total</td>
+
+                        <td class="text-end fw-bold">{{netTotal | number:'1.0-0'}}</td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+              <table class="table-logix" *ngIf="rptType == 3">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Labour Charges</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of DataList index as index">
+                        <td class="text-center"> {{index + 1}}</td>
+                        <td>{{item.mnuItemTitle}}</td>
+                        <td class="text-center">{{item.quantity| number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.mnuLabourCharges| number:'1.0-0'}}</td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="fw-bold text-center">Total</td>
 
                         <td class="text-end fw-bold">{{netTotal | number:'1.0-0'}}</td>
                     </tr>

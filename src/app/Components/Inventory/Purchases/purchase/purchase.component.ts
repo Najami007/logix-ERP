@@ -30,10 +30,12 @@ export class PurchaseComponent implements OnInit {
   @HostListener('document:visibilitychange', ['$event'])
 
   appVisibility() {
-     ////////////// restrict to save in localstorage///////
-    if(!this.insertLocalStorageFeature)return;
+    ////////////// restrict to save in localstorage///////
+    if (!this.insertLocalStorageFeature) return;
     if (document.hidden) { } else { this.importFromLocalStorage(); }
   }
+
+
 
 
   disableDateFeature = this.global.DisableInvDate;
@@ -334,7 +336,7 @@ export class PurchaseComponent implements OnInit {
         ProductID: data.productID,
         ProductTitle: data.productTitle,
         barcode: data.barcode,
-        productImage:  this.ImageUrlFeature ? data.imagesPath : '-',
+        productImage: this.ImageUrlFeature ? data.imagesPath : '-',
         Quantity: qty,
         wohCP: data.costPrice,
         tempCostPrice: data.costPrice,
@@ -353,7 +355,7 @@ export class PurchaseComponent implements OnInit {
         AQ: data.aq,
         gst: 0,
         et: 0,
-        mrp:data.mrp,
+        mrp: data.mrp,
 
 
       });
@@ -623,21 +625,21 @@ export class PurchaseComponent implements OnInit {
     var mydiscInR = this.tableDataList[myIndex].discInR;
     var mygst = this.tableDataList[myIndex].gst;
     var myet = this.tableDataList[myIndex].et;
-    
 
-    
+
+
 
     if (myCP == null || myCP == '' || myCP == undefined) {
 
       this.tableDataList[myIndex].CostPrice = 0;
-    } 
-     if (myQty == null || myQty == '' || myQty == undefined) {
+    }
+    if (myQty == null || myQty == '' || myQty == undefined) {
       this.tableDataList[myIndex].Quantity = 0;
-    } 
-     if (mySP == null || mySP == '' || mySP == undefined) {
+    }
+    if (mySP == null || mySP == '' || mySP == undefined) {
       this.tableDataList[myIndex].SalePrice = 0;
     }
-      if (mytmpCost == null || mytmpCost == '' || mytmpCost == undefined) {
+    if (mytmpCost == null || mytmpCost == '' || mytmpCost == undefined) {
       this.tableDataList[myIndex].tmpCost = 0;
     }
     if (mydiscInP == null || mydiscInP == '' || mydiscInP == undefined) {
@@ -647,12 +649,12 @@ export class PurchaseComponent implements OnInit {
       this.tableDataList[myIndex].discInR = 0;
     }
 
-     if (mygst == null || mygst == '' || mygst == undefined) {
+    if (mygst == null || mygst == '' || mygst == undefined) {
       this.tableDataList[myIndex].gst = 0;
     }
 
 
-     if (myet == null || myet == '' || myet == undefined) {
+    if (myet == null || myet == '' || myet == undefined) {
       this.tableDataList[myIndex].et = 0;
     }
 
@@ -758,9 +760,11 @@ export class PurchaseComponent implements OnInit {
     var inValidAmountProdList = this.tableDataList.filter((p: any) => (Number(p.CostPrice) * Number(p.Quantity)) > (Number(p.SalePrice) * Number(p.Quantity)) || (Number(p.CostPrice) * Number(p.Quantity)) < 0);
 
 
-    var inValidCostProdList = this.tableDataList.filter((p: any) =>  isNaN(p.CostPrice) || Number(p.CostPrice) > Number(p.SalePrice) || p.CostPrice == 0 || p.CostPrice < 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null);
-    var inValidSaleProdList = this.tableDataList.filter((p: any) => isNaN(p.SalePrice) ||  p.SalePrice == 0 || p.SalePrice < 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null);
+    var inValidCostProdList = this.tableDataList.filter((p: any) => isNaN(p.CostPrice) || Number(p.CostPrice) > Number(p.SalePrice) || p.CostPrice == 0 || p.CostPrice < 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null);
+    var inValidSaleProdList = this.tableDataList.filter((p: any) => isNaN(p.SalePrice) || p.SalePrice == 0 || p.SalePrice < 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null);
     var inValidQtyProdList = this.tableDataList.filter((p: any) => isNaN(p.Quantity) || p.Quantity == 0 || p.Quantity < 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '')
+
+    var invalidExpiryList = this.tableDataList.filter((p: any) => p.ExpiryDate == '' || p.ExpiryDate == null);
 
     if (inValidAmountProdList.length > 0) {
       this.msg.WarnNotify('(' + inValidCostProdList[0].ProductTitle + ') Total Not Valid');
@@ -780,25 +784,32 @@ export class PurchaseComponent implements OnInit {
       return;
     }
 
-    this.tableDataList.forEach((e:any) => {
-        if(e.tmpCost == null || e.tmpCost == '' || e.tmpCost == undefined){
-          e.tmpCost = 0;
-        }
-         if(e.discInP == null || e.discInP == '' || e.discInP == undefined){
-          e.discInP = 0;
-        }
-         if(e.discInR == null || e.discInR == '' || e.discInR == undefined){
-          e.discInR = 0;
-        }
-         if(e.gst == null || e.gst == '' || e.gst == undefined){
-          e.gst = 0;
-        }
-         if(e.et == null || e.et == '' || e.et == undefined){
-          e.et = 0;
-        }
-        if(e.mrp == null || e.mrp == '' || e.mrp == undefined){
-          e.mrp = 0;
-        }
+
+    console.log(this.tableDataList);
+    if (invalidExpiryList.length > 0) {
+      this.msg.WarnNotify('(' + invalidExpiryList[0].ProductTitle + ') Expiry is not Valid');
+      return;
+    }
+
+    this.tableDataList.forEach((e: any) => {
+      if (e.tmpCost == null || e.tmpCost == '' || e.tmpCost == undefined) {
+        e.tmpCost = 0;
+      }
+      if (e.discInP == null || e.discInP == '' || e.discInP == undefined) {
+        e.discInP = 0;
+      }
+      if (e.discInR == null || e.discInR == '' || e.discInR == undefined) {
+        e.discInR = 0;
+      }
+      if (e.gst == null || e.gst == '' || e.gst == undefined) {
+        e.gst = 0;
+      }
+      if (e.et == null || e.et == '' || e.et == undefined) {
+        e.et = 0;
+      }
+      if (e.mrp == null || e.mrp == '' || e.mrp == undefined) {
+        e.mrp = 0;
+      }
     });
 
 
@@ -856,6 +867,8 @@ export class PurchaseComponent implements OnInit {
       InvDetail: JSON.stringify(this.tableDataList),
       UserID: this.global.getUserID()
     };
+
+    console.log(postData);
 
     if (type == 'hold') {
       if (this.holdBtnType == 'Hold') {
@@ -1070,10 +1083,10 @@ export class PurchaseComponent implements OnInit {
 
     }
     this.netTotal = (this.subTotal + Number(this.overHead)) - Number(this.discount)
-    
-    
+
+
     ////////////// restrict to save in localstorage///////
-    if(!this.insertLocalStorageFeature)return;
+    if (!this.insertLocalStorageFeature) return;
     this.insertToLocalStorage();
 
   }
@@ -1117,7 +1130,7 @@ export class PurchaseComponent implements OnInit {
             ProductID: e.productID,
             ProductTitle: e.productTitle,
             barcode: e.barcode,
-            productImage: '-' , // e.productImage,
+            productImage: '-', // e.productImage,
             Quantity: e.quantity,
             wohCP: e.costPrice,
             tempCostPrice: e.tempCostPrice,
@@ -1134,7 +1147,7 @@ export class PurchaseComponent implements OnInit {
             AQ: e.aq,
             gst: e.gst,
             et: e.et,
-            mrp:e.mrp,
+            mrp: e.mrp,
           })
         });
 
@@ -1312,7 +1325,7 @@ export class PurchaseComponent implements OnInit {
 
 
   onMarginChange(item: any, index: any) {
-    if(item.CostPrice <= 0){
+    if (item.CostPrice <= 0) {
       item.margin = 0;
       return;
     }
@@ -1420,7 +1433,7 @@ export class PurchaseComponent implements OnInit {
 
   insertToLocalStorage() {
     this.removeLocalStorage();
-    
+
     var prodData = JSON.stringify(this.tableDataList);
     localStorage.setItem('tmpPurchaseData', prodData);
 

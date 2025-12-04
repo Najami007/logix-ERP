@@ -183,6 +183,7 @@ export class GlobalDataModule implements OnInit {
             _reqCsG: Response._reqCsG,
             _reqPrjID: Response._reqPrjID,
             _reqRTID: Response._reqRTID,
+            _cuName:Response._cuName || 'WVdKag==',
           };
           var flt: any = [];
           ///Encripting The Features List
@@ -222,7 +223,7 @@ export class GlobalDataModule implements OnInit {
         }
       },
       error: error => {
-
+        console.log(error);
         this.msg.WarnNotify('Error Occurred While Login Process')
         $('.loaderDark').fadeOut(500);
       }
@@ -564,7 +565,7 @@ export class GlobalDataModule implements OnInit {
   getUserName() {
     var credentials = JSON.parse(localStorage.getItem('curVal') || '{}');
 
-    return atob(atob(credentials.value._culName)).toString();
+    return atob(atob(credentials.value._cuName)).toString();
     // return atob(atob(this.cookie.get('un'))).toString();
 
   }

@@ -24,11 +24,12 @@ export const environment = {
 
 
 
-  mainApi: 'http://192.168.100.100:8060/',           /////////// Crave & bake Rwp
-  //mainApi: 'http://159.69.174.21:2031/',             ///////////////// Crave & Bake Live 
+  //mainApi: 'http://192.168.100.100:8060/',           /////////// Crave & bake Rwp
+ // mainApi: 'http://159.69.174.21:2031/',             ///////////////// Crave & Bake Live 
 
 
-  // mainApi: 'http://192.168.0.140:8060/', ///////////// Mehria Enclave Store
+   mainApi: 'http://192.168.0.140:8060/', ///////////// Mehria Enclave Store
+  // mainApi: 'http://159.69.174.21:2032/',   ////////////////// Mehria Enclave Live
 
   // mainApi: 'http://159.69.174.21:2029/',   /////// AM Fast Food Salif 
   //mainApi: 'http://159.69.174.21:2027/', /////////////// Makkah Oil Islamabad

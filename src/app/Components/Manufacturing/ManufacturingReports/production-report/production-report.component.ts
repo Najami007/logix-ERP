@@ -51,6 +51,7 @@ export class ProductionReportComponent implements OnInit {
   userList: any = [];
   userID = 0;
   userName = '';
+  projectID: any = 0;
 
   fromDate: Date = new Date();
   fromTime: any = '00:00';
@@ -152,6 +153,11 @@ export class ProductionReportComponent implements OnInit {
       &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`;
     }
 
+    if (this.rptType == 3) {
+      url = `${this.apiReq}ProductionRptSummaryItemWise?reqUID=${userID}&FromDate=${fromDate}
+      &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&ProjectID=${this.projectID}`;
+    }
+
 
 
     this.app.startLoaderDark();
@@ -208,7 +214,7 @@ export class ProductionReportComponent implements OnInit {
 
                 return isValid; // ✅ Imp
               });
-                if (this.DataList.length == 0 || this.DataList == null) {
+              if (this.DataList.length == 0 || this.DataList == null) {
                 this.global.popupAlert('Data Not Found!');
                 this.app.stopLoaderDark();
                 return;
@@ -220,6 +226,10 @@ export class ProductionReportComponent implements OnInit {
 
           }
 
+          if(this.rptType == 3){
+             this.DataList = Response;
+          }
+
 
           this.DataList.forEach((e: any) => {
             if (this.rptType == 1) {
@@ -228,6 +238,9 @@ export class ProductionReportComponent implements OnInit {
 
             if (this.rptType == 2) {
               this.netTotal += e.mnuLabourCharges * e.quantity;
+            }
+              if (this.rptType == 3) {
+              this.netTotal += e.mnuLabourCharges;
             }
 
           });

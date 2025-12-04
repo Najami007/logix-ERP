@@ -178,7 +178,13 @@ export class ProductComponent implements OnInit {
 
 
   tmpStatusList = [{ title: 'Active', value: true, isChecked: false }, { title: 'In Active', value: false, isChecked: false }]
-  tmpDiscFilterList = [{ title: 'With Disc', value: 1, isChecked: false }, { title: 'Without Disc', value: 0, isChecked: false }]
+  tmpDiscFilterList = [
+    { title: 'With Disc', value: 1, isChecked: false },
+    { title: 'Without Disc', value: 0, isChecked: false }];
+
+  tmpGstFilterList = [
+    { title: 'With GST', value: 1, isChecked: false },
+    { title: 'Without GST', value: 0, isChecked: false }]
   tmpApplinkedList = [
     { title: 'Linked With APP', value: true, isChecked: false },
     { title: 'Not Linked With App', value: false, isChecked: false },
@@ -219,6 +225,10 @@ export class ProductComponent implements OnInit {
       .filter((e: any) => e.isChecked)
       .map((e: any) => e.value);
 
+        const gstList = this.tmpGstFilterList
+      .filter((e: any) => e.isChecked)
+      .map((e: any) => e.value);
+
 
 
 
@@ -235,6 +245,15 @@ export class ProductComponent implements OnInit {
           : discList.length === 1 && discList[0] === 0         // only 0 selected
             ? p.discPercentage <= 0
             : discList.includes(p.discPercentage)              // fallback for other cases
+        )
+      ) &&
+      (
+        gstList.length === 0 ||                               // no GST filter
+        (gstList.length === 1 && gstList[0] === 1            // only 1 selected
+          ? p.gst > 0
+          : gstList.length === 1 && gstList[0] === 0         // only 0 selected
+            ? p.gst <= 0
+            : gstList.includes(p.gst)              // fallback for other cases
         )
       ) &&
       (this.costGreaterThenSaleFilter ? p.costPrice > p.salePrice : true) &&
@@ -338,8 +357,8 @@ export class ProductComponent implements OnInit {
       this.DiscRupee = (this.SalePrice == '' || this.SalePrice == undefined || this.SalePrice == null ? 0 : Number(this.SalePrice) * this.DiscPercent) / 100
     }
 
-    if(type == 'rs'){
-      this.DiscPercent =  (this.SalePrice == '' || this.SalePrice == undefined || this.SalePrice == null ? 0 : this.DiscRupee /  this.SalePrice ) * 100
+    if (type == 'rs') {
+      this.DiscPercent = (this.SalePrice == '' || this.SalePrice == undefined || this.SalePrice == null ? 0 : this.DiscRupee / this.SalePrice) * 100
     }
 
   }

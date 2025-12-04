@@ -44,13 +44,15 @@ export class VoidSaleReturnComponent implements OnInit {
   urduBillFeature = this.global.urduBill;
   disablePrintPwd = this.global.DisablePrintPwd;
   VehicleSaleFeature = this.global.VehicleSaleFeature;
+    RestBillUserwise = this.global.RestBillUserwise;
+
 
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
   ////////////////// will give the current tab visible status
 
-  @HostListener('document:visibilitychange', ['$event'])
+  @HostListener('document:visibilitychange', [])
 
   appVisibility() {
     if (document.hidden) {
@@ -59,6 +61,15 @@ export class VoidSaleReturnComponent implements OnInit {
     else {
       this.getCurrentBill();
 
+    }
+  }
+
+   @HostListener('document:keydown', ['$event'])
+
+  handleKeyboardEventSearchByNaem(event: KeyboardEvent) {
+    if (event.altKey && event.key.toLowerCase() === 'n') {
+      this.byNameSearch = !this.byNameSearch;
+      $('#vssearchProduct').trigger('focus');
     }
   }
   companyProfile: any = [];
@@ -251,7 +262,7 @@ export class VoidSaleReturnComponent implements OnInit {
   }
 
 
-    searchSpecialBarcode(barcode: any) {
+  searchSpecialBarcode(barcode: any) {
 
     //////////////// For Special Barcode setting /////////////////////////
 
@@ -300,8 +311,8 @@ export class VoidSaleReturnComponent implements OnInit {
           prodQty = parseFloat(reqQty + '.' + reqQtyDot);
         }
 
-      
-          this.insertProductData(Response[0].productID,'',0, prodQty || 1)
+
+        this.insertProductData(Response[0].productID, '', 0, prodQty || 1)
 
 
       }
@@ -315,13 +326,14 @@ export class VoidSaleReturnComponent implements OnInit {
 
   ///////////////////////////////  Send Product to To API and Recall get Funciton///////////////////////////////////////////////////
 
-  insertProductData(productID = 0, barcode = '', PartyID = 0,quantity=1) {
+  insertProductData(productID = 0, barcode = '', PartyID = 0, quantity = 1) {
 
     var postData = {
-       quantity:quantity,
+      quantity: quantity,
       PartyID: 0,
       ProductID: productID,
       Barcode: barcode,
+      ProjectID: this.projectID,
       UserID: this.global.getUserID()
     }
     this.http.post(environment.mainApi + this.global.inventoryLink + 'AddSaleProduct', postData).subscribe(
@@ -329,9 +341,9 @@ export class VoidSaleReturnComponent implements OnInit {
         if (Response.msg == 'Data Saved Successfully') {
           this.getCurrentBill();
         } else {
-           if(barcode.length == 13){
+          if (barcode.length == 13) {
             this.searchSpecialBarcode(barcode)
-          }else{
+          } else {
             this.msg.WarnNotify(Response.msg);
           }
         }
@@ -480,7 +492,7 @@ export class VoidSaleReturnComponent implements OnInit {
 
     /////move down
     if (e.keyCode == 40) {
-       if (this.prodFocusedRow >= 24) {
+      if (this.prodFocusedRow >= 24) {
         return;
       }
       if (prodList.length > 0) {
@@ -756,9 +768,25 @@ export class VoidSaleReturnComponent implements OnInit {
 
   showImg(item: any) {
 
-    var index = this.tableDataList.findIndex((e: any) => e.productID == item.productID);
-    this.productImage = this.tableDataList[index].productImage;
+    // var index = this.tableDataList.findIndex((e: any) => e.productID == item.productID);
+    // this.productImage = this.tableDataList[index].productImage;
 
+        this.getProductImage(item)
+
+
+  }
+
+  
+
+  getProductImage(item: any) {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductImage?ProductID=' + item.productID).subscribe(
+      (Response: any) => {
+        console.log(Response);
+        this.productImage = Response[0].productImage;
+
+        $('.loaderDark').fadeOut();
+      }
+    )
   }
 
   //////////////////////////////// Sale Insert Function //////////////////////////////////////////////////
@@ -861,20 +889,20 @@ export class VoidSaleReturnComponent implements OnInit {
 
 
 
-        if (this.global.SubscriptionExpired()) {
-          Swal.fire({
-            title: 'Alert!',
-            text: 'Unable To Save , Contact To Administrator!',
-            position: 'center',
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'OK',
-          });
-          return;
-        }
-    
+    if (this.global.SubscriptionExpired()) {
+      Swal.fire({
+        title: 'Alert!',
+        text: 'Unable To Save , Contact To Administrator!',
+        position: 'center',
+        icon: 'warning',
+        showCancelButton: false,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
 
     if (this.isValidSale) {
       this.app.startLoaderDark();
@@ -1176,16 +1204,40 @@ export class VoidSaleReturnComponent implements OnInit {
   /////////////////// Saved Bill Functions ///////////
 
   savedbillList: any = []
-  getSavedBill() {
+   getSavedBill() {
 
 
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetOpenDaySale').subscribe(
       (Response: any) => {
+        console.log(Response);
         this.savedbillList = [];
+        var userID: any = this.global.getUserID();
+        var roleTypeId: any = this.global.getRoleTypeID();
+        var projectID: any = this.global.getProjectID();
+
         Response.forEach((e: any) => {
-          if (e.invType == 'SR') {
-            this.savedbillList.push(e);
+
+
+          /////////////// if Feature false all Bills will Display
+          if (!this.RestBillUserwise) {
+            if (e.invType == 'SR') {
+              this.savedbillList.push(e);
+            }
+            return;
           }
+
+
+           /////////////// Filtering Bills with UserID and ProjectID
+          if (roleTypeId == 3 || roleTypeId == 2) { ///////////if Admin or User
+            if (e.invType == 'SR' && e.userID == userID && e.projectID == projectID) {
+              this.savedbillList.push(e);
+            }
+          } else { /////////// if Superadmin
+            if (e.invType == 'SR') {
+              this.savedbillList.push(e);
+            }
+          }
+
         });
       }
     )

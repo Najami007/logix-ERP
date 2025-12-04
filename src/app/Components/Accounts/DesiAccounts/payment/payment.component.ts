@@ -90,6 +90,7 @@ export class PaymentComponent {
     this.http.get(environment.mainApi + this.globaldata.accountLink + 'GetPayRec?reqType=PAY').subscribe(
       (Response: any) => {
         this.paymentList = Response;
+        console.log(Response);
       },
       (Error: any) => {
         this.msg.WarnNotify(Error);
@@ -98,6 +99,7 @@ export class PaymentComponent {
   }
 
   edit(item: any) {
+    console.log(item);
     this.dialogue.open(AddPaymentComponent, {
       width: '30%',
       data: item,

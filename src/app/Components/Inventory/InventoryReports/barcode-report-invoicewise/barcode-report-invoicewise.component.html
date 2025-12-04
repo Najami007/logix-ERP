@@ -126,8 +126,8 @@
                     <tbody>
                         <tr *ngFor="let item of tableDataList index as index">
                             <td><mat-checkbox [(ngModel)]="item.isChecked"></mat-checkbox>{{index +1}}</td>
-                            <td>{{item.productTitle}}</td>
-                            <td>{{item.barcode}}</td>
+                            <td>{{item.flavourTitle ? item.flavourTitle : item.productTitle}}</td>
+                            <td>{{item.barcode2 ?  item.barcode2 : item.barcode}}</td>
                             <td class="cursorPointer" (click)="editQty(item)">{{item.quantity}}</td>
                             <td>{{item.costPrice}}</td>
                             <td>{{item.salePrice}}</td>
@@ -157,7 +157,7 @@
 
 
             <div class="cmpName" *ngIf="showCompany">{{companyName}}</div>
-            <div class="bcodet" *ngIf="showTitle">{{curProductRow.productTitle|slice:0:24}}</div>
+            <div class="bcodet" *ngIf="showTitle">{{curProductRow.flavourTitle ? curProductRow.flavourTitle : curProductRow.productTitle|slice:0:24}}</div>
             <!-- <span class="bcodet">{{item.productTitle
                 |slice:0:24}}...</span> -->
             <ngx-barcode6 class="barcode" [bc-format]="'CODE128'" [bc-height]="40" [bc-background]="'none'"
@@ -169,7 +169,7 @@
             <!-- <div class="font-barcode" >*{{item.barcode}}*</div>
                         <div class="bcodeC">{{item.barcode}}</div> -->
             <div [ngClass]="showPrice ? 'bcodep' : '' " class=" text-end" style="margin-top: -10px !important;"
-                *ngIf="showPrice">Rs.{{curProductRow?.salePrice|number}}</div>
+                *ngIf="showPrice">Rs.{{curProductRow?.salePrice|number:'1.0-0'}}</div>
         </div>
 
 
@@ -177,32 +177,7 @@
 </div>
 
 
-<div class="hide">
-    <div class="d-flex  justify-content-center ">
-        <div id="PrintDivNew" class="border">
 
-            <div *ngFor="let item of printDataList" style="height: 100%;">
-
-                <div class="cmpName" *ngIf="showCompany">{{companyName}}</div>
-                <div class="bcodet" *ngIf="showTitle">{{item?.productTitle|slice:0:24}}</div>
-                <!-- <span class="bcodet">{{item.productTitle
-                |slice:0:24}}...</span> -->
-                <ngx-barcode6 class="barcode" [bc-format]="'CODE128'" [bc-height]="40" [bc-background]="'none'"
-                    [bc-width]="getBarcodeWidth(item?.barcode2 ? item?.barcode2 : item?.barcode || '')"
-                    [bc-value]="item?.barcode2 ? item?.barcode2 : item?.barcode"
-                    [bc-font-size]="10" [bc-text-margin]="-2" [bc-display-value]="true" [bc-font-options]="'bold'"
-                    [bc-text-position]="'bottom'" [bc-text-align]="'right'"></ngx-barcode6>
-                <!-- <span class="barcodeText">{{item.barcode}}</span> -->
-                <!-- <div class="font-barcode" >*{{item.barcode}}*</div>
-                        <div class="bcodeC">{{item.barcode}}</div> -->
-                <div [ngClass]="showPrice ? 'bcodep' : '' " class=" text-end" style="margin-top: -10px !important;"
-                    *ngIf="showPrice">Rs.{{item?.salePrice|number}}</div>
-            </div>
-        </div>
-
-
-    </div>
-</div>
 
 
 <div class="hide">
@@ -223,13 +198,13 @@
                         <div *ngIf="showBarcode" class="fw-bold text-center" style="font-size: 20px;">{{item.barcode2 ?
                             item.barcode2 : item.barcode}}</div>
                         <div style="font-size: 15px;line-height: 15px;" class="fw-bold text-center" *ngIf="showTitle">
-                            {{item.productTitle}}
+                            {{item.flavourTitle ? item.flavourTitle : item.productTitle}}
                         </div>
 
 
 
                         <div class=" text-center fw-bold" style="font-size: 20px;" *ngIf="showPrice">
-                            Rs.{{item?.salePrice|number}}</div>
+                            Rs.{{ item.salePrice |number:'1.0-0'}}</div>
 
 
                     </div>

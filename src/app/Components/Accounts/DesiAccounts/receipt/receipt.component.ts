@@ -97,6 +97,7 @@ export class ReceiptComponent {
   }
 
   edit(item:any){
+    console.log(item);
     this.dialogue.open(AddReceiptComponent,{
       width:'30%',
       data:item,

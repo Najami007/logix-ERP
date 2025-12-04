@@ -49,7 +49,7 @@
             <div class="col-md-4 ">
                 <mat-form-field class="w-100 matSmall" appearance="outline">
                     <mat-label>Reports</mat-label>
-                    <mat-select [(ngModel)]="tmpRptType">
+                    <mat-select [(ngModel)]="tmpRptType" (selectionChange)="reset()">
                         <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                         <mat-option *ngFor="let item of reportsList | filter:rptSearch.value"
@@ -76,6 +76,7 @@
                         <mat-option [value]="1">Summary</mat-option>
                         <mat-option [value]="2">Detail</mat-option>
                         <mat-option *ngIf="FBRFeature" [value]="3">Tax Detail</mat-option>
+                             <mat-option [value]="4">Product Summary</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -345,6 +346,49 @@
                     </tr>
                 </tbody>
 
+
+            </table>
+
+
+            
+            <table class="table-logix" id="detailTable" *ngIf="formateType == 4">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Title</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                  
+
+                    </tr>
+
+
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of SaleDetailList index as index">
+                        <td class="text-center">{{index + 1}}</td>
+                        <td>{{item.productTitle}}</td>
+                        <td class="text-center">{{item.quantity |number:"1.0-3"}}</td>
+                        <td class="text-end" *ngIf="rptType == 'P'|| rptType == 'PR'">{{item.costPrice |number:'1.0-1'}}</td>
+                        <td class="text-end" *ngIf="rptType == 'I' || rptType == 'R'|| rptType == 'AI'|| rptType == 'AO'|| rptType == 'DL'|| rptType == 'E'|| rptType == 'OS'">{{item.avgCostPrice |number:'1.0-1'}}</td>
+                        <td class="text-end"  *ngIf="rptType == 'S' || rptType == 'SR' || rptType == 'IC' || rptType == 'RIC' ">{{item.salePrice |number:'1.0-1'}}</td>
+                       
+                       
+                     
+
+                    </tr>
+                    <tr>
+                        <td colspan="1"></td>
+                      
+                        <td ></td>
+                        <td class="fw-bold text-center">{{qtyTotal |number:'1.0-0'}}</td>
+                       
+                        
+
+                        <td class="fw-bold text-end">{{detNetTotal |number:'1.0-0'}}</td>
+                
+                    </tr>
+                </tbody>
 
             </table>
 
