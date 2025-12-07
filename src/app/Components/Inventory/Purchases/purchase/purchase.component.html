@@ -164,9 +164,8 @@
                                     draggable="false" dropzone="false"
                                     (input)="global.handleInputChange($event);getTotal();changeValue(item);onFieldsUpdate('qty',item)"
                                     (keydown)="this.handleUpdown(item,$event,'.qty',index)"
-                                    (keyup)="showImg(item);rowFocused = index;"
-                                    [accessKey]="index +1 " class="qty{{index}} text-center amtInput"
-                                    style="width: 80px;"></td>
+                                    (keyup)="showImg(item);rowFocused = index;" [accessKey]="index +1 "
+                                    class="qty{{index}} text-center amtInput" style="width: 80px;"></td>
 
                             <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
                                     [(ngModel)]="item.tempCostPrice" min="0" draggable="false"
@@ -203,8 +202,8 @@
                                     [(ngModel)]="item.et" min="0" draggable="false" dropzone="false"
                                     (input)="global.handleInputChange($event);getTotal();changeValue(item);onFieldsUpdate('et',item);"
                                     (keydown)="this.handleUpdown(item,$event,'.et',index);"
-                                    (keyup)="showImg(item);rowFocused = index;"
-                                    class="et{{index}} text-center amtInput" style="width: 80px;"></td>
+                                    (keyup)="showImg(item);rowFocused = index;" class="et{{index}} text-center amtInput"
+                                    style="width: 80px;"></td>
 
 
                             <td class="text-center">
@@ -213,8 +212,8 @@
                                     draggable="false"
                                     (input)="global.handleInputChange($event);getTotal();changeValue(item);"
                                     (keydown)="this.handleUpdown(item,$event,'.cp',index);"
-                                    (keyup)="showImg(item);rowFocused = index"
-                                    class="cp{{index}} text-center amtInput" style="width: 80px;">
+                                    (keyup)="showImg(item);rowFocused = index" class="cp{{index}} text-center amtInput"
+                                    style="width: 80px;">
                             </td>
 
 
@@ -223,8 +222,8 @@
                                     draggable="false"
                                     (input)="global.handleInputChange($event);getTotal();changeValue(item);"
                                     (keydown)="this.handleUpdown(item,$event,'.sp',index);"
-                                    (keyup)="showImg(item);rowFocused = index"
-                                    class="sp{{index}} text-center amtInput" style="width: 80px;">
+                                    (keyup)="showImg(item);rowFocused = index" class="sp{{index}} text-center amtInput"
+                                    style="width: 80px;">
                             </td>
 
 
@@ -238,8 +237,7 @@
                                     style="width: 80px;">
                             </td>
                             <td class="text-center minWidth"><input type="text" [(ngModel)]="item.margin" min="0"
-                                    draggable="false"
-                                    (input)="onMarginChange(item,index)"
+                                    draggable="false" (input)="onMarginChange(item,index)"
                                     (keydown)="this.handleUpdown(item,$event,'.mg',index);"
                                     (keyup)="showImg(item);rowFocused = index" maxlength="3"
                                     class="mg{{index}} text-center amtInput" style="width: 80px;">
@@ -410,6 +408,8 @@
                             <mat-radio-button value="HP">Holded Invoices</mat-radio-button>
                             <mat-radio-button value="P">Saved Invoices</mat-radio-button>
                             <mat-radio-button value="PO">Purchase Order</mat-radio-button>
+                            <mat-radio-button value="IC" *ngIf="ImportFromServerFeature">Import Warehouse Invoice</mat-radio-button>
+
                         </mat-radio-group>
                     </div>
                 </div>
@@ -442,11 +442,13 @@
                             <td class="text-center cursorPointer">
                                 <mat-icon *ngIf="crudList.r && item.invType !== 'PO'" class="text-primary"
                                     (click)="printBill(item)">print</mat-icon>
-                                <mat-icon data-bs-dismiss="modal" *ngIf=" item.invType == 'PO' && crudList.u"
+                                <mat-icon data-bs-dismiss="modal" *ngIf=" item.invType == 'PO' && !item.refPoNoStatus"
                                     (click)="RetreivePurchaseOrder(item)">edit</mat-icon>
-                                <mat-icon data-bs-dismiss="modal" *ngIf=" item.invType == 'HP' && crudList.u"
+                                <mat-icon data-bs-dismiss="modal" *ngIf=" item.invType == 'HP'  && crudList.u"
                                     (click)="retriveBill(item)">edit</mat-icon>
-                                <mat-icon *ngIf=" item.invType == 'HP' && crudList.u" class="text-danger cursorPointer"
+                                 <mat-icon data-bs-dismiss="modal" *ngIf=" item.invType == 'IC' && !item.refPoNoStatus"
+                                    (click)="retrieICInvoice(item)">edit</mat-icon>
+                                <mat-icon *ngIf=" (item.invType == 'HP' ) && crudList.u" class="text-danger cursorPointer"
                                     matTooltip="Delete" (click)="deleteProd(item)">delete</mat-icon>
 
                                 <mat-icon *ngIf=" item.invType == 'P'"

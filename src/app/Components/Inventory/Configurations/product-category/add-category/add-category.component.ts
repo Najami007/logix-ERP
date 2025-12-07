@@ -13,6 +13,10 @@ import { environment } from 'src/environments/environment.development';
 })
 export class AddCategoryComponent implements OnInit{
 
+
+      AddNewProductRestrictionFeature = this.global.AddNewProductRestrictionFeature;
+
+
   constructor(
     private http:HttpClient,
     private dialogRef: MatDialogRef<AddCategoryComponent>,
@@ -36,6 +40,13 @@ export class AddCategoryComponent implements OnInit{
 
 
   save(){
+
+
+    if(this.AddNewProductRestrictionFeature){
+      this.msg.WarnNotify('Not Allowed to Add New Category');
+      return;
+    }
+    
     if(this.categoryTitle == '' || this.categoryTitle == undefined){
       this.msg.WarnNotify('Enter Category Title')
     }else {

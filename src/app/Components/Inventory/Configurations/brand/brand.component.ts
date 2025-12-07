@@ -18,7 +18,9 @@ export class BrandComponent implements OnInit {
   crudList: any = { c: true, r: true, u: true, d: true };
 
   appConfigFeature = this.globaldata.appConfigFeature;
-          ImageUrlFeature = this.globaldata.ImageUrlFeature;
+  ImageUrlFeature = this.globaldata.ImageUrlFeature;
+  AddNewProductRestrictionFeature = this.globaldata.AddNewProductRestrictionFeature;
+
 
   constructor(private http: HttpClient,
     private msg: NotificationService,
@@ -85,6 +87,13 @@ export class BrandComponent implements OnInit {
 
 
   save() {
+
+    if(this.AddNewProductRestrictionFeature && this.btnType == 'Save'){
+      this.msg.WarnNotify('Not Allowed to Add New Brand');
+      return;
+    }
+
+
     if (this.brandTitle == '' || this.brandTitle == undefined) {
       this.msg.WarnNotify('Enter Category Title')
     } else if (this.brandCode == '' || this.brandCode == undefined) {
@@ -178,7 +187,7 @@ export class BrandComponent implements OnInit {
     this.brandCode = row.brandCode;
     this.description = row.brandDescription;
     this.brandImage = this.ImageUrlFeature ? row.imagesPath : row.brandImage;
-      this.btnType = 'Update';
+    this.btnType = 'Update';
 
   }
 

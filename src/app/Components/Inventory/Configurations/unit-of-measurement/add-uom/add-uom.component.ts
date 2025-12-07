@@ -13,6 +13,8 @@ import { environment } from 'src/environments/environment.development';
 })
 export class AddUOMComponent {
 
+    AddNewProductRestrictionFeature = this.global.AddNewProductRestrictionFeature;
+
 
   constructor(
     private http:HttpClient,
@@ -34,6 +36,13 @@ export class AddUOMComponent {
 
   
   save(){
+
+    
+     if(this.AddNewProductRestrictionFeature ){
+      this.msg.WarnNotify('Not Allowed to Add New Unit Of Measurement');
+      return;
+    }
+
     if(this.uomTitle == '' || this.uomTitle == undefined){
       this.msg.WarnNotify('Enter Category Title')
     }else{

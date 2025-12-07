@@ -67,6 +67,7 @@ export class CustomerIssueBillPrintComponent {
     myAvgCPTotal = 0;
     mySPTotal = 0;
     myBillStatus = false;
+    myPartyName = '';
 
 
     printBill(item:any){
@@ -80,6 +81,7 @@ export class CustomerIssueBillPrintComponent {
       this.myInvRemarks = item.remarks;
       this.mySubTotal = item.billTotal;
       this.myBillStatus = item.approvedStatus;
+      this.myPartyName = item.partyName;
   
   
       this.getBillDetail(item.invBillNo).subscribe(

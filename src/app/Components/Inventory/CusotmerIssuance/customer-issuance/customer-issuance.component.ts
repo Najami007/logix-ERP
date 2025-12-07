@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
@@ -20,13 +20,43 @@ import { CustomerIssueBillPrintComponent } from '../customer-issue-bill-print/cu
 })
 export class CustomerIssuanceComponent implements OnInit {
 
-  @ViewChild(CustomerIssueBillPrintComponent) billPrint: any;
-
   crudList: any = { c: true, r: true, u: true, d: true };
   companyProfile: any = [];
   disableDateFeature = this.global.DisableInvDate;
   editSpFeature = this.global.editSpFeature;
   LessToCostFeature = this.global.LessToCostFeature;
+  CTCCustomerIssuanceFeature = this.global.CTCCustomerIssuanceFeature;
+  insertLocalStorageFeature = this.global.insertLocalStorageFeature;
+
+  ImageUrlFeature = this.global.ImageUrlFeature;
+
+
+
+  @ViewChild(CustomerIssueBillPrintComponent) billPrint: any;
+
+  @HostListener('document:visibilitychange', [])
+
+  appVisibility() {
+    ////////////// restrict to save in localstorage///////
+    if (!this.insertLocalStorageFeature) return;
+    if (document.hidden) { } else { this.importFromLocalStorage(); }
+
+    this.importFromLocalStorage();
+
+  }
+
+
+  @HostListener('document:keydown', ['$event'])
+
+  handleKeyboardEventSearchByNaem(event: KeyboardEvent) {
+    if (event.altKey && event.key.toLowerCase() === 'n') {
+      this.byNameSearch = !this.byNameSearch;
+      $('#vssearchProduct').trigger('focus');
+    }
+  }
+
+
+
 
   constructor(
     private http: HttpClient,
@@ -58,6 +88,9 @@ export class CustomerIssuanceComponent implements OnInit {
 
     this.global.getProducts().subscribe(
       (data: any) => { this.productList = data; })
+
+    this.importFromLocalStorage();
+
   }
 
 
@@ -70,11 +103,13 @@ export class CustomerIssuanceComponent implements OnInit {
   invoiceDate: Date = new Date();
   locationID = 0;
   locationList: any = [];
-  invRemarks: any;
-  PBarcode: any;
+  invRemarks: any = '';
+  PBarcode: any = '';
   productList: any = [];
   tableDataList: any = [];
   partyList: any = []
+
+  holdInvNo: any = '-';
 
   productImage: any;
   subTotal: number = 0;
@@ -87,6 +122,8 @@ export class CustomerIssuanceComponent implements OnInit {
   projectID = this.global.getProjectID();
   bookerID = 1;
   partyID = 0;
+
+  byNameSearch: any = false;
 
 
   changeOrder() {
@@ -220,12 +257,12 @@ export class CustomerIssuanceComponent implements OnInit {
         productID: data.productID,
         productTitle: data.productTitle,
         barcode: data.barcode,
-        productImage: data.productImage,
+        productImage: this.ImageUrlFeature ? data.imagesPath : '-',
         quantity: qty,
         wohCP: data.costPrice,
         avgCostPrice: data.avgCostPrice,
         costPrice: data.costPrice,
-        salePrice: data.salePrice,
+        salePrice: this.CTCCustomerIssuanceFeature ? data.costPrice : data.salePrice,
         ovhPercent: 0,
         ovhAmount: 0,
         expiryDate: this.global.dateFormater(new Date(), '-'),
@@ -392,10 +429,27 @@ export class CustomerIssuanceComponent implements OnInit {
   ///////////////////////// Show Image Modal Function
   showImg(item: any) {
 
+    // var index = this.tableDataList.findIndex((e: any) => e.productID == item.productID);
+    // this.productImage = this.tableDataList[index].productImage;
+
     var index = this.tableDataList.findIndex((e: any) => e.productID == item.productID);
-    this.productImage = this.tableDataList[index].productImage;
+    !this.ImageUrlFeature
+      ? this.getProductImage(item)
+      : this.productImage = this.tableDataList[index].productImage;
 
   }
+
+
+    getProductImage(item: any) {
+      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductImage?ProductID=' + item.productID).subscribe(
+        (Response: any) => {
+  
+          this.productImage = Response[0].productImage;
+  
+          $('.loaderDark').fadeOut();
+        }
+      )
+    }
 
 
 
@@ -416,6 +470,10 @@ export class CustomerIssuanceComponent implements OnInit {
       // this.myTotal = this.mySubtoatal - this.myDiscount;
       // this.myDue = this.myPaid - this.myTotal;\
     }
+
+    ////////////// restrict to save in localstorage///////
+    if (!this.insertLocalStorageFeature) return;
+    this.insertToLocalStorage();
   }
 
 
@@ -467,7 +525,7 @@ export class CustomerIssuanceComponent implements OnInit {
     }
     /////move down
     if (e.keyCode == 40) {
-       if (this.prodFocusedRow >= 24) {
+      if (this.prodFocusedRow >= 24) {
         return;
       }
 
@@ -634,9 +692,9 @@ export class CustomerIssuanceComponent implements OnInit {
   SaveBill(type: any) {
 
 
-    var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
-    var inValidSaleProdList = this.tableDataList.filter((p: any) => p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
-    var inValidQtyProdList = this.tableDataList.filter((p: any) => p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
+    var inValidCostProdList = this.tableDataList.filter((p: any) => isNaN(p.costPrice) || Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
+    var inValidSaleProdList = this.tableDataList.filter((p: any) => isNaN(p.salePrice) || p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
+    var inValidQtyProdList = this.tableDataList.filter((p: any) => isNaN(p.quantity) || p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
     var inValidDiscProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > (Number(p.salePrice) - (Number(p.discInR))));
 
 
@@ -670,8 +728,9 @@ export class CustomerIssuanceComponent implements OnInit {
     }
 
     var postData = {
+      HoldInvNo: this.holdInvNo,
       InvType: 'IC',
-      InvBillNo: this.invBillNo,
+      InvBillNo: this.holdInvNo,
       InvDate: this.global.dateFormater(this.invoiceDate, '-'),
       LocationID: this.locationID,
       ProjectID: this.projectID,
@@ -684,6 +743,7 @@ export class CustomerIssuanceComponent implements OnInit {
       PinCode: '',
       UserID: this.global.getUserID(),
     }
+    console.log(postData);
 
     if (this.btnType == 'Save' && type == 'Save') {
       postData.InvType = 'IC';
@@ -770,7 +830,10 @@ export class CustomerIssuanceComponent implements OnInit {
     this.CostTotal = 0;
     this.salePriceTotal = 0;
     this.partyID = 0;
+    this.holdInvNo = '-';
 
+
+    this.removeLocalStorage();
   }
 
 
@@ -818,6 +881,8 @@ export class CustomerIssuanceComponent implements OnInit {
     this.locationID = item.locationID;
     this.invRemarks = item.remarks;
     this.invBillNo = item.invBillNo;
+    this.holdInvNo = item.invBillNo;
+
     this.subTotal = item.billTotal;
     this.partyID = item.partyID;
 
@@ -834,7 +899,7 @@ export class CustomerIssuanceComponent implements OnInit {
             productID: e.productID,
             productTitle: e.productTitle,
             barcode: e.barcode,
-            productImage: e.productImage,
+            productImage: '-',
             quantity: e.quantity,
             avgCostPrice: e.avgCostPrice,
             costPrice: e.costPrice,
@@ -887,7 +952,7 @@ export class CustomerIssuanceComponent implements OnInit {
             this.app.stopLoaderDark();
 
           },
-          (Error:any)=>{
+          (Error: any) => {
             console.log(Error);
           }
         )
@@ -900,8 +965,8 @@ export class CustomerIssuanceComponent implements OnInit {
   //////////////////////// Empty Whole Bill Funciton //////////////
 
   EmptyData() {
-        if(this.tableDataList.length == 0) return;
-        
+    if (this.tableDataList.length == 0) return;
+
     this.global.confirmAlert().subscribe(
       (Response: any) => {
         if (Response == true) {
@@ -944,6 +1009,94 @@ export class CustomerIssuanceComponent implements OnInit {
         }
       })
     }
+  }
+
+
+  //////////////////////////////////////////////////////////
+
+
+  removeLocalStorage() {
+    localStorage.removeItem('tmpICData');
+    localStorage.removeItem('tmpICLocationID');
+    localStorage.removeItem('tmpICInvoiceDate');
+    localStorage.removeItem('tmpICPartyID');
+    localStorage.removeItem('tmpICRemarks');
+    localStorage.removeItem('tmpICHoldINvNo')
+    localStorage.removeItem('tmpICHoldBtnType');
+    localStorage.removeItem('tmpICBookerID');
+
+
+  }
+
+
+  insertToLocalStorage() {
+    this.removeLocalStorage();
+
+    var prodData = JSON.stringify(this.tableDataList);
+    localStorage.setItem('tmpICData', prodData);
+
+    var locationID = JSON.stringify(this.locationID);
+    localStorage.setItem('tmpICLocationID', locationID);
+
+    var date = JSON.stringify(this.invoiceDate);
+    localStorage.setItem('tmpICInvoiceDate', date);
+
+
+
+    var partyID = JSON.stringify(this.partyID);
+    localStorage.setItem('tmpICPartyID', partyID);
+
+    var remarks = JSON.stringify(this.invRemarks);
+    localStorage.setItem('tmpICRemarks', remarks);
+
+    var holdInvNo = JSON.stringify(this.holdInvNo);
+    localStorage.setItem('tmpICHoldINvNo', holdInvNo);
+
+    var holdBtnType = JSON.stringify(this.holdBtnType);
+    localStorage.setItem('tmpICHoldBtnType', holdBtnType);
+
+
+
+    var bookerID = JSON.stringify(this.bookerID);
+    localStorage.setItem('tmpICBookerID', bookerID);
+
+
+  }
+
+  importFromLocalStorage() {
+
+    var data = JSON.parse(localStorage.getItem('tmpICData') || '[]');
+
+
+
+    if (this.tableDataList.length > 0) {
+      if (data == '0' || data == '') {
+        Swal.fire({
+          title: "No Data Found",
+          text: "Storage Limit Exceed Please Hold the Bill Else Data will be Lost on Reload?",
+          icon: "warning"
+        });
+        // this.msg.WarnNotify('Storage Limit Exceed Please Hold the Bill Else Data will be vanished on Reload?')
+        return;
+      }
+    }
+
+    this.invRemarks = JSON.parse(localStorage.getItem('tmpICRemarks') || '');
+    this.partyID = JSON.parse(localStorage.getItem('tmpICPartyID') || '0');
+    this.invoiceDate = JSON.parse(localStorage.getItem('tmpICInvoiceDate') || '');
+    this.locationID = JSON.parse(localStorage.getItem('tmpICLocationID') || '0');
+    this.holdInvNo = JSON.parse(localStorage.getItem('tmpICHoldINvNo') || '');
+    this.holdBtnType = JSON.parse(localStorage.getItem('tmpICHoldBtnType') || 'Hold');
+    this.bookerID = JSON.parse(localStorage.getItem('tmpICBookerID') || '0');
+    this.tableDataList = data;
+    this.getTotal();
+
+    // if (this.AuditInventoryID > 0) {
+    //   this.holdBtnType = 'Rehold'
+    // }
+
+
+
   }
 
 }

@@ -557,7 +557,7 @@
                                             (click)="activeProduct(item)">{{item.activeStatus ? 'check' :
                                             'close'}}</mat-icon>
 
-                                        <mat-icon *ngIf="crudList.d" class="text-danger cursorPointer"
+                                        <mat-icon *ngIf="crudList.d && !AddNewProductRestrictionFeature" class="text-danger cursorPointer"
                                             matTooltip="Delete" (click)="deleteProd(item)">delete</mat-icon>
 
                                         <mat-icon class="cursorPointer" matTooltip="Copy"

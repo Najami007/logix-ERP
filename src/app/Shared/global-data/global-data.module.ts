@@ -183,7 +183,7 @@ export class GlobalDataModule implements OnInit {
             _reqCsG: Response._reqCsG,
             _reqPrjID: Response._reqPrjID,
             _reqRTID: Response._reqRTID,
-            _cuName:Response._cuName || 'WVdKag==',
+            _cuName: Response._cuName || 'WVdKag==',
           };
           var flt: any = [];
           ///Encripting The Features List
@@ -340,6 +340,9 @@ export class GlobalDataModule implements OnInit {
   showLogixDetailFeature = this.getFeature('showLogixDetail');
   hideNetTotalFeature = this.getFeature('hideNetTotal');
   PONewCostFeature = this.getFeature('PONewCost');
+  CTCCustomerIssuanceFeature = this.getFeature('CTCCustomerIssuance');
+  AddNewProductRestrictionFeature = this.getFeature('AddNewProductRestriction');
+  ImportFromServerFeature = this.getFeature('ImportFromServer');
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
     this.BookerFeature = this.getFeature('Booker');
@@ -400,7 +403,10 @@ export class GlobalDataModule implements OnInit {
     this.insertLocalStorageFeature = this.getFeature('insertLocalStorage');
     this.showLogixDetailFeature = this.getFeature('showLogixDetail');
     this.hideNetTotalFeature = this.getFeature('hideNetTotal');
-     this.PONewCostFeature = this.getFeature('PONewCost');
+    this.PONewCostFeature = this.getFeature('PONewCost');
+    this.CTCCustomerIssuanceFeature = this.getFeature('CTCCustomerIssuance');
+    this.AddNewProductRestrictionFeature = this.getFeature('AddNewProductRestriction');
+    this.ImportFromServerFeature = this.getFeature('ImportFromServer');
   }
 
 
@@ -622,10 +628,16 @@ export class GlobalDataModule implements OnInit {
 
     // Return the difference in hours.
     return differenceInHours;
+
+    //'TWpBek1DMHhNQzB3T0E9PQ=='
+
   }
 
   curDate: any = new Date();
   public SubscriptionExpired(): boolean {
+
+
+
 
     var ExpiryDate: any = 'TWpBek1DMHhNQzB3T0E9PQ==';
     const now = new Date();
@@ -633,7 +645,6 @@ export class GlobalDataModule implements OnInit {
     const targetDate = new Date(atob(atob(ExpiryDate)));
     targetDate.setHours(10, 0, 0, 0);      // Create target date at 10:00 AM  // 10:00 AM exactly
     var status: any = now! >= targetDate;
-    console.log(targetDate);
     return status;
   }
 

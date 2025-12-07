@@ -49,6 +49,7 @@ export class ProductComponent implements OnInit {
   appConfigFeature = this.global.appConfigFeature;
 
   ImageUrlFeature = this.global.ImageUrlFeature;
+  AddNewProductRestrictionFeature = this.global.AddNewProductRestrictionFeature;
 
 
 
@@ -530,6 +531,12 @@ export class ProductComponent implements OnInit {
 
   /////////////////////////// Save Function Product//////////////
   save() {
+
+
+    if(this.AddNewProductRestrictionFeature && this.btnType == 'Save'){
+      this.msg.WarnNotify('Not Allowed to Add New Product');
+      return;
+    }
 
 
     if (this.CategoryID == '' || this.CategoryID == undefined) {

@@ -438,7 +438,7 @@ export class VoidSaleComponent implements OnInit {
   getCurrentBill() {
 
 
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleExistingBill?reqUserID=' + this.global.getUserID()).subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleExistingBill?reqUserID=' + this.global.getUserID()+'&reqType=HS').subscribe(
       (Response: any) => {
         this.tableDataList = [];
         if (Response.length > 0) {

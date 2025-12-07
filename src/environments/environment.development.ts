@@ -11,14 +11,14 @@ export const environment = {
 
   //mainApi: 'http://192.168.100.37:1000/',
   // mainApi: 'http://localhost:5000/', 
-  //mainApi: 'http://localhost:8060/',         /////////// system own published API
+  mainApi: 'http://localhost:8060/',         /////////// system own published API
   // mainApi: 'http://10.73.14.19:8060/',    
   // mainApi: 'http://192.168.160.98:8060/',  ////////// live Server Dani System
   //mainApi: 'http://192.168.100.250:1007/',  ////////// live Server Dani System
   //mainApi: 'http://192.168.10.100:1003/',    /////////// Local Server Office
   // mainApi: 'http://192.168.18.206:8060/',
   //mainApi: 'http://159.69.174.21:1000/', /////// Logix Solutionz Published Accounts
-  //mainApi: 'http://159.69.174.21:2016/',   /////// Erp Demo Live For Clients
+ // mainApi: 'http://159.69.174.21:2016/',   /////// Erp Demo Live For Clients
 
 
 
@@ -28,7 +28,7 @@ export const environment = {
  // mainApi: 'http://159.69.174.21:2031/',             ///////////////// Crave & Bake Live 
 
 
-   mainApi: 'http://192.168.0.140:8060/', ///////////// Mehria Enclave Store
+  // mainApi: 'http://192.168.0.140:8060/', ///////////// Mehria Enclave Store
   // mainApi: 'http://159.69.174.21:2032/',   ////////////////// Mehria Enclave Live
 
   // mainApi: 'http://159.69.174.21:2029/',   /////// AM Fast Food Salif 
@@ -49,8 +49,8 @@ export const environment = {
   // mainApi: 'http://159.69.174.21:2012/',  ////////// live Server for Alsheikh HassanAbdal
   //mainApi: 'http://192.168.18.100:8081/',   ///Stylish Garment Wahcant
   //mainApi : 'http://localhost:8081/'       ///Baraka Bakery Jazeera Food && Jazeera Warehouse
-  //mainApi: 'http://192.168.1.95:8081/',    /////////// Blaster Chicken Rwp
- // mainApi: 'http://192.168.18.100:8060/',    /////////// Blaster Chicken PWD
+  //mainApi: 'http://192.168.1.95:8081/',    /////////// Blaster Chicken Commercial
+  // mainApi: 'http://192.168.18.100:8060/',    /////////// Blaster Chicken PWD
   // mainApi : 'http://localhost:8081/'        ///Food Mood /// Prime BBQ\
 
 

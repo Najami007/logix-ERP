@@ -22,6 +22,8 @@ export class ProductSubCategoryComponent implements OnInit {
   crudList: any = { c: true, r: true, u: true, d: true };
       appConfigFeature = this.globaldata.appConfigFeature;
         ImageUrlFeature = this.globaldata.ImageUrlFeature;
+            AddNewProductRestrictionFeature = this.globaldata.AddNewProductRestrictionFeature;
+
 
   constructor(private http: HttpClient,
     private msg: NotificationService,
@@ -100,6 +102,13 @@ export class ProductSubCategoryComponent implements OnInit {
 
 
   save() {
+
+    
+    if(this.AddNewProductRestrictionFeature && this.btnType == 'Save'){
+      this.msg.WarnNotify('Not Allowed to add new Sub Category');
+      return;
+    }
+
     if (this.categoryID == '' || this.categoryID == undefined) {
       this.msg.WarnNotify('Enter Category Title')
     } else if (this.subCategoryTitle == '' || this.subCategoryTitle == undefined) {

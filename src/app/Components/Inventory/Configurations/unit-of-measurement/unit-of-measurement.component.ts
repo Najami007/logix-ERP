@@ -15,6 +15,9 @@ import Swal from 'sweetalert2';
 })
 export class UnitOfMeasurementComponent implements OnInit {
 
+
+      AddNewProductRestrictionFeature = this.globaldata.AddNewProductRestrictionFeature;
+
   crudList: any = { c: true, r: true, u: true, d: true };
 
   constructor(private http: HttpClient,
@@ -58,6 +61,15 @@ export class UnitOfMeasurementComponent implements OnInit {
 
 
   save() {
+
+
+
+     if(this.AddNewProductRestrictionFeature && this.btnType == 'Save' ){
+      this.msg.WarnNotify('Not Allowed to Add New Unit Of Measurement');
+      return;
+    }
+
+
     if (this.uomTitle == '' || this.uomTitle == undefined) {
       this.msg.WarnNotify('Enter Category Title')
     } else {

@@ -20,6 +20,8 @@ export class ProductCategoryComponent implements OnInit {
   ImageUrlFeature = this.globaldata.ImageUrlFeature;
 
   appConfigFeature = this.globaldata.appConfigFeature;
+      AddNewProductRestrictionFeature = this.globaldata.AddNewProductRestrictionFeature;
+
 
   constructor(private http: HttpClient,
     private msg: NotificationService,
@@ -71,6 +73,13 @@ export class ProductCategoryComponent implements OnInit {
 
 
   save() {
+
+
+     if(this.AddNewProductRestrictionFeature && this.btnType == 'Save'){
+      this.msg.WarnNotify('Not Allowed to Add New Category');
+      return;
+    }
+
     if (this.categoryTitle == '' || this.categoryTitle == undefined) {
       this.msg.WarnNotify('Enter Category Title')
     } else {

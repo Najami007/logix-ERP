@@ -13,6 +13,7 @@ import * as $ from 'jquery';
 })
 export class AddProdSubCategoryComponent {
 
+    AddNewProductRestrictionFeature = this.global.AddNewProductRestrictionFeature;
 
 
   constructor(
@@ -52,6 +53,12 @@ export class AddProdSubCategoryComponent {
 
 
   save() {
+
+    if(this.AddNewProductRestrictionFeature){
+      this.msg.WarnNotify('Not Allowed to add new Sub Category');
+      return;
+    }
+
     if (this.categoryID == '' || this.categoryID == undefined) {
       this.msg.WarnNotify('Enter Category Title')
     } else if (this.subCategoryTitle == '' || this.subCategoryTitle == undefined) {

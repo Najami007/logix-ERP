@@ -51,7 +51,7 @@
                         <th>S#</th>
                         <th>Title</th>
                         <th *ngIf="crudList.u">Edit</th>
-                        <th *ngIf="crudList.d">Delete</th>
+                        <th *ngIf="crudList.d && !AddNewProductRestrictionFeature">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,7 +59,7 @@
                         <td>{{index+1}}</td>
                         <td class="text-start">{{item.rackTitle}}</td>
                         <td *ngIf="crudList.u"><button mat-mini-fab  class="bg-success text-white h30px w30px" (click)="edit(item)"><mat-icon >edit</mat-icon></button></td>
-                        <td *ngIf="crudList.d"><button mat-mini-fab  color="warn" class="h30px w30px" (click)="delete(item)"><mat-icon>delete</mat-icon></button></td>
+                        <td *ngIf="crudList.d && !AddNewProductRestrictionFeature"><button mat-mini-fab  color="warn" class="h30px w30px" (click)="delete(item)"><mat-icon>delete</mat-icon></button></td>
                     </tr>
                 </tbody>
             </table>

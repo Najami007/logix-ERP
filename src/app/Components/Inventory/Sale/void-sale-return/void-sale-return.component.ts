@@ -10,9 +10,6 @@ import Swal from 'sweetalert2';
 
 import * as $ from 'jquery';
 
-import { Observable, retry } from 'rxjs';
-import { VrtnenterqtyComponent } from './vrtnenterqty/vrtnenterqty.component';
-import { VrtnsavedbillComponent } from './vrtnsavedbill/vrtnsavedbill.component';
 import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bill-print.component';
 import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-mehtod.component';
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
@@ -336,7 +333,7 @@ export class VoidSaleReturnComponent implements OnInit {
       ProjectID: this.projectID,
       UserID: this.global.getUserID()
     }
-    this.http.post(environment.mainApi + this.global.inventoryLink + 'AddSaleProduct', postData).subscribe(
+    this.http.post(environment.mainApi + this.global.inventoryLink + 'AddSaleRtnProduct', postData).subscribe(
       (Response: any) => {
         if (Response.msg == 'Data Saved Successfully') {
           this.getCurrentBill();
@@ -368,7 +365,7 @@ export class VoidSaleReturnComponent implements OnInit {
   getCurrentBill() {
 
 
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleExistingBill?reqUserID=' + this.global.getUserID()).subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleExistingBill?reqUserID=' + this.global.getUserID()+'&reqType=HSR').subscribe(
       (Response: any) => {
         this.tableDataList = [];
         if (Response.length > 0) {

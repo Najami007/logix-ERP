@@ -6,7 +6,7 @@
 
             <!-------------------- Product Search Bar --------------->
 
-            <div class="col-lg-10  d-flex flex-column">
+            <div class="col-lg-9  d-flex flex-column">
                 <mat-label class="text-primary">Search Barcode / Product</mat-label>
                 <input type="text" #pbarcode [(ngModel)]="PBarcode"
                     (keydown)="searchByCode($event);this.changeFocus($event,'.prodRow')" id="searchProduct"
@@ -14,7 +14,7 @@
                     autocomplete="off" accesskey="b">
 
                 <div class="w-100 d-flex flex-column SearchConatiner cursorPointer"
-                    *ngIf="PBarcode != '' && PBarcode != undefined">
+                    *ngIf="PBarcode != '' && PBarcode != undefined && byNameSearch">
                     <mat-card class="card "
                         *ngFor="let item of productList| filter:PBarcode | slice:0:25 index as index"
                         (click)="holdDataFunction(item)">
@@ -27,8 +27,10 @@
                     </mat-card>
                 </div>
             </div>
-            <div class="col-lg-2 text-start ps-1 pt-3 mt-1">
-                <button class="btnload w-100 " style="height: 40px;" (click)="ngOnInit()">Load</button>
+            <div class="col-lg-3 text-start ps-1 pt-3 mt-1">
+                <button class="btnload w-50 " style="height: 40px;" (click)="ngOnInit()">Load</button>
+                <mat-checkbox class="w-50 " [(ngModel)]="byNameSearch">Name Search</mat-checkbox>
+
             </div>
 
         </div>
@@ -44,9 +46,9 @@
 
                         <th>Cost</th>
                         <!-- <th>Avg Cost</th> -->
-                        <th>Sale</th>
+                        <th *ngIf="!this.CTCCustomerIssuanceFeature">Sale</th>
                         <!-- <th>Cost Total</th> -->
-                        <th>Sale Total</th>
+                        <th>Total</th>
                         <th>AQ</th>
                         <th>Action</th>
                     </tr>
@@ -68,7 +70,8 @@
                                 style="width: 80px;"></td> -->
                         <!-- <td class="text-end">{{item.avgCostPrice | number:'1.0-2'}}</td> -->
                         <td class="text-end">{{item.costPrice | number:'1.0-2'}}</td>
-                        <td class="text-end" [ngClass]="editSpFeature ? 'cursorPointer' : ''" (click)="editSP(item)">
+                        <td class="text-end" *ngIf="!this.CTCCustomerIssuanceFeature"
+                            [ngClass]="editSpFeature ? 'cursorPointer' : ''" (click)="editSP(item)">
                             {{item.salePrice | number:'1.0-2'}}</td>
                         <!-- <td class="text-center"><input type="text" [(ngModel)]="item.salePrice" min="0"
                                 draggable="false"
@@ -85,7 +88,8 @@
                     <tr>
                         <td colspan="3"></td>
                         <th class="text-center">{{totalQty |number:'1.0-2'}}</th>
-                        <th colspan="2"></th>
+                        <th></th>
+                        <th *ngIf="!this.CTCCustomerIssuanceFeature"></th>
                         <!-- <th class="text-end">{{CostTotal |number:'1.0-2'}}</th> -->
                         <th class="text-end"> {{salePriceTotal |number:'1.0-2'}}</th>
                         <th></th>
@@ -140,7 +144,7 @@
 
             <mat-form-field appearance="outline" class="col-md-12 matSmall">
                 <mat-label>Location</mat-label>
-                <mat-select [(ngModel)]="locationID" name="location">
+                <mat-select [(ngModel)]="locationID" name="location" (selectionChange)="insertToLocalStorage()">
                     <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
                             [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                     <mat-option *ngFor="let item of locationList | filter:locationSearch.value"
@@ -151,7 +155,7 @@
 
             <mat-form-field appearance="outline" class="col-md-12 matSmall">
                 <mat-label>Customer</mat-label>
-                <mat-select [(ngModel)]="partyID" #party name="customer">
+                <mat-select [(ngModel)]="partyID" #party name="customer" (selectionChange)="insertToLocalStorage()">
                     <mat-option><ngx-mat-select-search #partySearch [placeholderLabel]="'Search...'"
                             [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                     <mat-option *ngFor="let item of partyList | filter:partySearch.value"
@@ -166,7 +170,7 @@
 
             <mat-form-field appearance="outline" class="col-md-12 matSmall">
                 <mat-label>Remarks</mat-label>
-                <input matInput type="text" [(ngModel)]="invRemarks">
+                <input matInput type="text" [(ngModel)]="invRemarks" (input)="insertToLocalStorage()">
             </mat-form-field>
         </div>
 
@@ -270,7 +274,7 @@
     <!----------- Print Area For Bill Print --------------------->
 
 
-   <app-customer-issue-bill-print></app-customer-issue-bill-print>
+    <app-customer-issue-bill-print></app-customer-issue-bill-print>
 
 
 </div>

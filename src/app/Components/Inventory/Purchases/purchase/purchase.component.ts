@@ -27,7 +27,7 @@ export class PurchaseComponent implements OnInit {
   @ViewChild(AddDocumentComponent) AddDocument: any;
 
 
-  @HostListener('document:visibilitychange', ['$event'])
+  @HostListener('document:visibilitychange', [])
 
   appVisibility() {
     ////////////// restrict to save in localstorage///////
@@ -42,6 +42,7 @@ export class PurchaseComponent implements OnInit {
   DetailedPurchaseFeature = this.global.DetailedPurchase;
   AttachDocPurchaseFeature = this.global.AttachDocPurchaseFeature;
   insertLocalStorageFeature = this.global.insertLocalStorageFeature;
+  ImportFromServerFeature = this.global.ImportFromServerFeature;
 
 
   ImageUrlFeature = this.global.ImageUrlFeature;
@@ -121,6 +122,7 @@ export class PurchaseComponent implements OnInit {
   overHead: any = 0;
   discount: any = 0;
   holdInvNo: any = '-';
+  RefPoNo :any = '-';
   bookerID: any = 0;
 
 
@@ -865,7 +867,8 @@ export class PurchaseComponent implements OnInit {
       HoldInvNo: this.holdInvNo,
       discType: this.discType,
       InvDetail: JSON.stringify(this.tableDataList),
-      UserID: this.global.getUserID()
+      UserID: this.global.getUserID(),
+      RefPoNo :this.RefPoNo,
     };
 
     console.log(postData);
@@ -1045,6 +1048,7 @@ export class PurchaseComponent implements OnInit {
     this.partyID = 0;
     this.myTotalQty = 0;
     this.holdInvNo = '-';
+    this.RefPoNo = '-';
     this.bookerID = 0;
     this.invRemarks = '';
     this.holdBtnType = 'Hold';
@@ -1103,6 +1107,8 @@ export class PurchaseComponent implements OnInit {
   cpTotal = 0;
   wohCPTotal = 0;
   retriveBill(item: any) {
+
+    console.log(item);
     this.tableDataList = [];
     this.holdBtnType = 'ReHold'
     this.invoiceDate = new Date(item.invDate);
@@ -1114,6 +1120,7 @@ export class PurchaseComponent implements OnInit {
     this.holdInvNo = item.invBillNo;
     this.bookerID = item.bookerID;
     this.partyID = item.partyID;
+    this.RefPoNo = item.refPoNo;
 
     this.onPartySelected();
 
@@ -1161,6 +1168,66 @@ export class PurchaseComponent implements OnInit {
   }
 
 
+
+  retrieICInvoice(item: any) {
+    this.tableDataList = [];
+    this.holdBtnType = 'Hold'
+    this.invoiceDate = new Date();
+    this.locationID = 0;
+    this.refInvNo = '';
+    this.discount = 0;
+    this.overHead = 0;
+    this.invRemarks = '';
+    this.holdInvNo = '';
+    this.bookerID = 0;
+    this.partyID = 0;
+    this.RefPoNo = item.invBillNo;
+
+    this.onPartySelected();
+
+    this.getBillDetail(item.invBillNo).subscribe(
+      (Response: any) => {
+        this.myTotalQty = 0;
+        this.productImage = Response[Response.length - 1].productImage;
+        this.discType = Response[0].discType;
+        Response.forEach((e: any) => {
+
+          this.myTotalQty += e.quantity;
+          this.tableDataList.push({
+            rowIndex: this.tableDataList.length + 1,
+            ProductID: e.productID,
+            ProductTitle: e.productTitle,
+            barcode: e.barcode,
+            productImage: '-', // e.productImage,
+            Quantity: e.quantity,
+            wohCP: e.costPrice,
+            tempCostPrice: e.tempCostPrice,
+            margin: ((e.salePrice - e.costPrice) / e.costPrice) * 100,
+            CostPrice: e.costPrice,
+            SalePrice: e.salePrice,
+            ExpiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
+            BatchNo: e.batchNo,
+            BatchStatus: e.batchStatus,
+            UomID: e.uomID,
+            Packing: e.packing,
+            discInP: e.discInP,
+            discInR: e.discInR,
+            AQ: e.aq,
+            gst: e.gst,
+            et: e.et,
+            mrp: e.mrp,
+          })
+        });
+
+        this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+        this.getTotal();
+
+
+      }
+    )
+
+  }
+
   public getBillDetail(billNo: any): Observable<any> {
     return this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSingleBillDetail?reqInvBillNo=' + billNo).pipe(retry(3));
   }
@@ -1190,6 +1257,10 @@ export class PurchaseComponent implements OnInit {
           this.holdBillList = Response;
         }
 
+          if (this.tmpSearchInvType == 'IC') {
+          this.holdBillList = Response;
+        }
+
       }
     )
   }
@@ -1199,6 +1270,7 @@ export class PurchaseComponent implements OnInit {
 
     this.tableDataList = [];
     this.partyID = item.partyID;
+    this.RefPoNo = item.invBillNo;
     this.getBillDetail(item.invBillNo).subscribe(
       (Response: any) => {
         this.myTotalQty = 0;

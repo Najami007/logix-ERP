@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
@@ -27,6 +27,37 @@ export class CustomerIssueReturnComponent implements OnInit {
   disableDateFeature = this.global.DisableInvDate;
   editSpFeature = this.global.editSpFeature;
   LessToCostFeature = this.global.LessToCostFeature;
+  CTCCustomerIssuanceFeature = this.global.CTCCustomerIssuanceFeature;
+
+
+  insertLocalStorageFeature = this.global.insertLocalStorageFeature;
+    ImageUrlFeature = this.global.ImageUrlFeature;
+
+
+
+
+  @HostListener('document:visibilitychange', [])
+
+  appVisibility() {
+    ////////////// restrict to save in localstorage///////
+    if (!this.insertLocalStorageFeature) return;
+    if (document.hidden) { } else { this.importFromLocalStorage(); }
+
+    this.importFromLocalStorage();
+
+  }
+
+  
+
+  @HostListener('document:keydown', ['$event'])
+
+  handleKeyboardEventSearchByNaem(event: KeyboardEvent) {
+    if (event.altKey && event.key.toLowerCase() === 'n') {
+      this.byNameSearch = !this.byNameSearch;
+      $('#vssearchProduct').trigger('focus');
+    }
+  }
+
 
   constructor(
     private http: HttpClient,
@@ -57,7 +88,9 @@ export class CustomerIssueReturnComponent implements OnInit {
     $('.searchProduct').trigger('focus');
 
     this.global.getProducts().subscribe(
-      (data: any) => { this.productList = data; })
+      (data: any) => { this.productList = data; });
+    this.importFromLocalStorage();
+
   }
 
 
@@ -70,11 +103,13 @@ export class CustomerIssueReturnComponent implements OnInit {
   invoiceDate: Date = new Date();
   locationID = 0;
   locationList: any = [];
-  invRemarks: any;
-  PBarcode: any;
+  invRemarks: any = '';
+  PBarcode: any = '';
   productList: any = [];
   tableDataList: any = [];
-  partyList: any = []
+  partyList: any = [];
+  holdInvNo: any = '-';
+
 
   productImage: any;
   subTotal: number = 0;
@@ -87,6 +122,7 @@ export class CustomerIssueReturnComponent implements OnInit {
   projectID = this.global.getProjectID();
   bookerID = 1;
   partyID = 0;
+  byNameSearch:any = false;
 
 
   changeOrder() {
@@ -220,12 +256,12 @@ export class CustomerIssueReturnComponent implements OnInit {
         productID: data.productID,
         productTitle: data.productTitle,
         barcode: data.barcode,
-        productImage: data.productImage,
+        productImage: this.ImageUrlFeature ? data.imagesPath : '-',
         quantity: qty,
         wohCP: data.costPrice,
         avgCostPrice: data.avgCostPrice,
         costPrice: data.costPrice,
-        salePrice: data.salePrice,
+        salePrice: this.CTCCustomerIssuanceFeature ? data.costPrice : data.salePrice,
         ovhPercent: 0,
         ovhAmount: 0,
         expiryDate: this.global.dateFormater(new Date(), '-'),
@@ -392,10 +428,27 @@ export class CustomerIssueReturnComponent implements OnInit {
   ///////////////////////// Show Image Modal Function
   showImg(item: any) {
 
-    var index = this.tableDataList.findIndex((e: any) => e.productID == item.productID);
-    this.productImage = this.tableDataList[index].productImage;
+    // var index = this.tableDataList.findIndex((e: any) => e.productID == item.productID);
+    // this.productImage = this.tableDataList[index].productImage;
+
+       var index = this.tableDataList.findIndex((e: any) => e.productID == item.productID);
+    !this.ImageUrlFeature
+      ? this.getProductImage(item)
+      : this.productImage = this.tableDataList[index].productImage;
 
   }
+
+   getProductImage(item: any) {
+      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductImage?ProductID=' + item.productID).subscribe(
+        (Response: any) => {
+  
+          this.productImage = Response[0].productImage;
+  
+          $('.loaderDark').fadeOut();
+        }
+      )
+    }
+
 
 
 
@@ -416,6 +469,10 @@ export class CustomerIssueReturnComponent implements OnInit {
       // this.myTotal = this.mySubtoatal - this.myDiscount;
       // this.myDue = this.myPaid - this.myTotal;\
     }
+
+    ////////////// restrict to save in localstorage///////
+    if (!this.insertLocalStorageFeature) return;
+    this.insertToLocalStorage();
   }
 
 
@@ -467,7 +524,7 @@ export class CustomerIssueReturnComponent implements OnInit {
     }
     /////move down
     if (e.keyCode == 40) {
-       if (this.prodFocusedRow >= 24) {
+      if (this.prodFocusedRow >= 24) {
         return;
       }
 
@@ -634,9 +691,9 @@ export class CustomerIssueReturnComponent implements OnInit {
   SaveBill(type: any) {
 
 
-    var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
-    var inValidSaleProdList = this.tableDataList.filter((p: any) => p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
-    var inValidQtyProdList = this.tableDataList.filter((p: any) => p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
+     var inValidCostProdList = this.tableDataList.filter((p: any) =>  isNaN(p.costPrice) || Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
+    var inValidSaleProdList = this.tableDataList.filter((p: any) => isNaN(p.salePrice) || p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
+    var inValidQtyProdList = this.tableDataList.filter((p: any) =>  isNaN(p.quantity) || p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
     var inValidDiscProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > (Number(p.salePrice) - (Number(p.discInR))));
 
 
@@ -772,6 +829,9 @@ export class CustomerIssueReturnComponent implements OnInit {
     this.CostTotal = 0;
     this.salePriceTotal = 0;
     this.partyID = 0;
+    this.invBillNo = '';
+    this.holdInvNo = '-'
+    this.removeLocalStorage();
 
   }
 
@@ -836,7 +896,7 @@ export class CustomerIssueReturnComponent implements OnInit {
             productID: e.productID,
             productTitle: e.productTitle,
             barcode: e.barcode,
-            productImage: e.productImage,
+            productImage: '-',
             quantity: e.quantity,
             avgCostPrice: e.avgCostPrice,
             costPrice: e.costPrice,
@@ -892,10 +952,10 @@ export class CustomerIssueReturnComponent implements OnInit {
             this.app.stopLoaderDark();
 
           },
-          (Error:any)=>{
+          (Error: any) => {
             console.log(Error);
             this.app.stopLoaderDark();
-      }
+          }
         )
       }
     })
@@ -906,9 +966,9 @@ export class CustomerIssueReturnComponent implements OnInit {
   //////////////////////// Empty Whole Bill Funciton //////////////
 
   EmptyData() {
-    
-    if(this.tableDataList.length == 0) return;
-    
+
+    if (this.tableDataList.length == 0) return;
+
 
     this.global.confirmAlert().subscribe(
       (Response: any) => {
@@ -952,6 +1012,97 @@ export class CustomerIssueReturnComponent implements OnInit {
         }
       })
     }
+  }
+
+
+
+  /////////////////////////////////////////////////////////////////
+
+  //////////////////////////////////////////////////////////
+
+
+  removeLocalStorage() {
+    localStorage.removeItem('tmpICRData');
+    localStorage.removeItem('tmpICRLocationID');
+    localStorage.removeItem('tmpICRInvoiceDate');
+    localStorage.removeItem('tmpICRPartyID');
+    localStorage.removeItem('tmpICRRemarks');
+    localStorage.removeItem('tmpICRHoldINvNo')
+    localStorage.removeItem('tmpICRHoldBtnType');
+    localStorage.removeItem('tmpICRBookerID');
+
+
+  }
+
+
+  insertToLocalStorage() {
+    this.removeLocalStorage();
+
+    var prodData = JSON.stringify(this.tableDataList);
+    localStorage.setItem('tmpICRData', prodData);
+
+    var locationID = JSON.stringify(this.locationID);
+    localStorage.setItem('tmpICRLocationID', locationID);
+
+    var date = JSON.stringify(this.invoiceDate);
+    localStorage.setItem('tmpICRInvoiceDate', date);
+
+
+
+    var partyID = JSON.stringify(this.partyID);
+    localStorage.setItem('tmpICRPartyID', partyID);
+
+    var remarks = JSON.stringify(this.invRemarks);
+    localStorage.setItem('tmpICRRemarks', remarks);
+
+    var holdInvNo = JSON.stringify(this.holdInvNo);
+    localStorage.setItem('tmpICRHoldINvNo', holdInvNo);
+
+    var holdBtnType = JSON.stringify(this.holdBtnType);
+    localStorage.setItem('tmpICRHoldBtnType', holdBtnType);
+
+
+
+    var bookerID = JSON.stringify(this.bookerID);
+    localStorage.setItem('tmpICRBookerID', bookerID);
+
+
+  }
+
+  importFromLocalStorage() {
+
+    var data = JSON.parse(localStorage.getItem('tmpICRData') || '[]');
+
+
+
+    if (this.tableDataList.length > 0) {
+      if (data == '0' || data == '') {
+        Swal.fire({
+          title: "No Data Found",
+          text: "Storage Limit Exceed Please Hold the Bill Else Data will be Lost on Reload?",
+          icon: "warning"
+        });
+        // this.msg.WarnNotify('Storage Limit Exceed Please Hold the Bill Else Data will be vanished on Reload?')
+        return;
+      }
+    }
+
+    this.invRemarks = JSON.parse(localStorage.getItem('tmpICRRemarks') || '');
+    this.partyID = JSON.parse(localStorage.getItem('tmpICRPartyID') || '0');
+    this.invoiceDate = JSON.parse(localStorage.getItem('tmpICRInvoiceDate') || '');
+    this.locationID = JSON.parse(localStorage.getItem('tmpICRLocationID') || '0');
+    this.holdInvNo = JSON.parse(localStorage.getItem('tmpICRHoldINvNo') || '');
+    this.holdBtnType = JSON.parse(localStorage.getItem('tmpICRHoldBtnType') || 'Hold');
+    this.bookerID = JSON.parse(localStorage.getItem('tmpICRBookerID') || '0');
+    this.tableDataList = data;
+    this.getTotal();
+
+    // if (this.AuditInventoryID > 0) {
+    //   this.holdBtnType = 'Rehold'
+    // }
+
+
+
   }
 
 }

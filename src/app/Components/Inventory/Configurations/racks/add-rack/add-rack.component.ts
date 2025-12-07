@@ -13,6 +13,7 @@ import { environment } from 'src/environments/environment.development';
 })
 export class AddRackComponent {
 
+    AddNewProductRestrictionFeature = this.global.AddNewProductRestrictionFeature;
 
   
   constructor(
@@ -38,7 +39,16 @@ export class AddRackComponent {
 
 
 
+  
   save(){
+
+
+
+    
+     if(this.AddNewProductRestrictionFeature ){
+      this.msg.WarnNotify('Not Allowed to Add New Rack');
+      return;
+    }
 
     if(this.rackTitle == '' || this.rackTitle == undefined){
       this.msg.WarnNotify('Enter Category Title')

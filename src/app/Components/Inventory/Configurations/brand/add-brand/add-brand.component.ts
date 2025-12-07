@@ -14,6 +14,9 @@ import { environment } from 'src/environments/environment.development';
 })
 export class AddBrandComponent implements OnInit {
 
+    AddNewProductRestrictionFeature = this.global.AddNewProductRestrictionFeature;
+
+
   constructor(
     private http:HttpClient,
     private dialogRef: MatDialogRef<AddBrandComponent>,
@@ -38,6 +41,12 @@ export class AddBrandComponent implements OnInit {
 
 
   save(){
+
+     if(this.AddNewProductRestrictionFeature ){
+      this.msg.WarnNotify('Not Allowed to Add New Brand');
+      return;
+    }
+
     if(this.brandTitle == '' || this.brandTitle == undefined){
       this.msg.WarnNotify('Enter Category Title')
     }else if(this.brandCode == '' || this.brandCode == undefined){

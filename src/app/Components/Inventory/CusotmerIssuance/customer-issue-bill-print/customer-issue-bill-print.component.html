@@ -28,11 +28,14 @@
             <div class="row">
                 <label class="fw-bold">Date:</label>
                 <label class="fw-bold">Inv No:</label>
+                <label class="fw-bold">Customer:</label>
 
             </div>
             <div class="row">
                 <label>{{myInvoiceDate | date:'dd-MM-yyyy'}}</label>
                 <label>{{myInvoiceNo}}</label>
+                <label>{{myPartyName}}</label>
+
 
             </div>
         </div>
@@ -71,8 +74,8 @@
 
                 <td>
                     <div class="d-flex">
-                        <span >{{item.ProductTitle}}</span>
-                        <span >({{item.barcode}})</span>
+                        <span>{{item.ProductTitle}}</span>
+                        <span>({{item.barcode}})</span>
                     </div>
                 </td>
 
@@ -117,6 +120,3 @@
         <label class="border-0 border-top border-dark fw-bold">Approved By</label>
     </div>
 </div>
-
-
-

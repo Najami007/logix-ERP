@@ -17,6 +17,8 @@ import Swal from 'sweetalert2';
 export class RacksComponent implements OnInit {
 
   crudList: any = { c: true, r: true, u: true, d: true };
+      AddNewProductRestrictionFeature = this.globaldata.AddNewProductRestrictionFeature;
+
 
   constructor(private http: HttpClient,
     private msg: NotificationService,
@@ -64,6 +66,14 @@ export class RacksComponent implements OnInit {
 
 
   save() {
+
+
+     if(this.AddNewProductRestrictionFeature && this.btnType == 'Save'){
+      this.msg.WarnNotify('Not Allowed to Add New Rack');
+      return;
+    }
+
+
     if (this.rackTitle == '' || this.rackTitle == undefined) {
       this.msg.WarnNotify('Enter Category Title')
     } else {
