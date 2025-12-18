@@ -720,7 +720,7 @@ export class PurchaseComponent implements OnInit {
 
     ////removeing row
     if (e.keyCode == 46) {
-
+      e.preventDefault();
       this.delRow(item);
       this.rowFocused = 0;
     }
@@ -870,8 +870,6 @@ export class PurchaseComponent implements OnInit {
       UserID: this.global.getUserID(),
       RefPoNo :this.RefPoNo,
     };
-
-    console.log(postData);
 
     if (type == 'hold') {
       if (this.holdBtnType == 'Hold') {
@@ -1108,7 +1106,6 @@ export class PurchaseComponent implements OnInit {
   wohCPTotal = 0;
   retriveBill(item: any) {
 
-    console.log(item);
     this.tableDataList = [];
     this.holdBtnType = 'ReHold'
     this.invoiceDate = new Date(item.invDate);
@@ -1240,7 +1237,15 @@ export class PurchaseComponent implements OnInit {
 
     var date = this.searchBillType == 'Date' ? this.global.dateFormater(this.Date, '-') : '';
 
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryBillSingleDate?Type=' + this.tmpSearchInvType + '&creationdate=' + date).subscribe(
+    var url = '';
+
+    if(this.tmpSearchInvType == 'IC'){
+      url = `${environment.icApiUrl}${this.global.inventoryLink}GetInventoryBillSingleDate?Type=${this.tmpSearchInvType}&creationdate=${date}`
+    }else{
+      url = `${environment.mainApi}${this.global.inventoryLink}GetInventoryBillSingleDate?Type=${this.tmpSearchInvType}&creationdate=${date}`
+    }
+
+    this.http.get(url).subscribe(
       (Response: any) => {
 
         this.holdBillList = [];

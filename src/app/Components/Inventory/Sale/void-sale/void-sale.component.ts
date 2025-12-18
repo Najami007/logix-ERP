@@ -974,6 +974,7 @@ export class VoidSaleComponent implements OnInit {
 
     }
 
+
     if (this.global.SubscriptionExpired()) {
       Swal.fire({
         title: 'Alert!',
@@ -1340,6 +1341,7 @@ export class VoidSaleComponent implements OnInit {
   }
 
   sendToFbr(item: any) {
+    this.app.startLoaderDark();
     this.http.post(environment.mainApi + this.global.inventoryLink + 'InvSendToFbr', {
       InvBillNo: item.invBillNo,
       UserID: this.global.getUserID()
@@ -1351,6 +1353,11 @@ export class VoidSaleComponent implements OnInit {
         } else {
           this.msg.WarnNotify(Response.msg);
         }
+        this.app.stopLoaderDark();
+      },
+      (Error:any)=>{
+        console.log(Error);
+        this.app.stopLoaderDark();
       }
     )
   }

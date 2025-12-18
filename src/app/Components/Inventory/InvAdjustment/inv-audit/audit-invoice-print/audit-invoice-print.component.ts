@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment.development';
 export class AuditInvoicePrintComponent {
 
 
-
+  
 
 
   discFeature = this.global.discFeature;
@@ -21,7 +21,7 @@ export class AuditInvoicePrintComponent {
   showCompanyLogo = this.global.showCompanyLogo;
   gstFeature = this.global.gstFeature;
   prodDetailFeature = this.global.prodDetailFeature;
-
+  hidePriceFlag = false;
 
   billPrintType: any = '';;
   companyProfile: any = [];
@@ -132,5 +132,10 @@ export class AuditInvoicePrintComponent {
   public getBillDetail(billNo: any): Observable<any> {
     return this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSingleAuditInvDetail?reqInvID=' + billNo).pipe(retry(3));
   }
+
+
+  
+
+
 
 }

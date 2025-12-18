@@ -25,7 +25,7 @@ export class PurchaseReturnComponent implements OnInit {
   @ViewChild(PurchaseBillPrintComponent) billPrint: any;
 
 
-  @HostListener('document:visibilitychange', ['$event'])
+  @HostListener('document:visibilitychange', [])
 
   appVisibility() {
     if(!this.insertLocalStorageFeature)return;
@@ -795,7 +795,7 @@ export class PurchaseReturnComponent implements OnInit {
 
     ////removeing row
     if (e.keyCode == 46) {
-
+      e.preventDefault();
       this.delRow(item);
       this.rowFocused = 0;
     }

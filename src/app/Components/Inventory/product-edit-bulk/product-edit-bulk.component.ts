@@ -61,7 +61,7 @@ export class ProductEditBulkComponent implements OnInit {
 
 
   getAllProductList() {
-    
+
     this.app.startLoaderDark();
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProduct').subscribe(
       (Response: any) => {
@@ -196,9 +196,16 @@ export class ProductEditBulkComponent implements OnInit {
 
 
     var invalidProdList = this.productList.filter((e: any) => Number(e.salePrice < e.costPrice));
+    var invalidDiscList = this.productList.filter((e: any) => Number((e.salePrice - e.discRupees) < e.costPrice));
+
 
     if (invalidProdList.length > 0 && this.reqType == 'OTHER') {
       this.msg.WarnNotify(`${invalidProdList[0].productTitle} Sale Price Is not Valid`);
+      return;
+    }
+
+    if (invalidDiscList.length > 0 && this.reqType == 'OTHER') {
+      this.msg.WarnNotify(`${invalidDiscList[0].productTitle} Discount Is not Valid`);
       return;
     }
 

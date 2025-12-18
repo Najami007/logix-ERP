@@ -56,12 +56,12 @@
                 <th>S#</th>
                 <th class="col-lg-3">Product Name</th>
                 <th class="text-center">Scan Qty</th>
-                <th class="text-center">AQ</th>
-                <th class="text-center">Dif</th>
+                <th class="text-center" *ngIf="!hidePriceFlag">AQ</th>
+                <th class="text-center" *ngIf="!hidePriceFlag">Dif</th>
                 <!-- <th class=" text-center">Cost Price</th> -->
-                <th class=" text-center">Average Cost</th>
+                <th class=" text-center" *ngIf="!hidePriceFlag">Average Cost</th>
                 <!-- <th class=" text-center">Cost Total</th> -->
-                <th class=" text-center">Avg Cost Total</th>
+                <th class=" text-center" *ngIf="!hidePriceFlag">Avg Cost Total</th>
 
             </tr>
         </thead>
@@ -70,32 +70,32 @@
                 <td class="text-center">{{index+1}}</td>
 
                 <td>
-                    <div class="d-flex">
-                        <span style="width: 100px;">{{item.productTitle}}</span>
-                        <span style="width: 150px;">({{item.barcode}})</span>
+                    <div class="d-flex flex-column">
+                        <span >{{item.productTitle}}</span>
+                        <span >({{item.barcode}})</span>
                     </div>
                 </td>
 
                 <td class="text-center ">{{item.quantity |number:'1.0-1'}}</td>
-                <td class="text-center ">{{item.avlQuantity |number:'1.0-1'}}</td>
-                <td class="text-center ">{{item.quantity - item.avlQuantity |number:'1.0-1'}}</td>
+                <td class="text-center " *ngIf="!hidePriceFlag">{{item.avlQuantity |number:'1.0-1'}}</td>
+                <td class="text-center " *ngIf="!hidePriceFlag">{{item.quantity - item.avlQuantity |number:'1.0-1'}}</td>
 
                 <!-- <td class="text-end ">{{item.costPrice |number: '1.0-1'}}</td> -->
-                <td class="text-end ">{{item.avgCostPrice |number: '1.0-1'}}</td>
+                <td class="text-end " *ngIf="!hidePriceFlag">{{item.avgCostPrice |number: '1.0-1'}}</td>
                 <!-- <td class="text-end ">{{item.costPrice * (item.quantity - item.avlQuantity)|number: '1.0-1'}}</td> -->
-                <td class="text-end ">{{item.avgCostPrice * (item.quantity - item.avlQuantity) |number: '1.0-1'}}</td>
-
+                <td class="text-end " *ngIf="!hidePriceFlag">{{item.avgCostPrice * (item.quantity - item.avlQuantity) |number: '1.0-1'}}</td>
+                <td style="width: 80px;" *ngIf="hidePriceFlag" class="border-bottom border-dark">_________</td>
             </tr>
             <tr>
                 <th colspan="2"></th>
                 <th></th>
                 <!-- <th class="text-center">{{myBillTotalQty}}</th> -->
                 <!-- <th></th> -->
-                <th></th>
-                <th></th>
-                <th></th>
+                <th *ngIf="!hidePriceFlag"></th>
+                <th *ngIf="!hidePriceFlag"></th>
+                <th *ngIf="!hidePriceFlag"></th>
                 <!-- <th class="text-end">{{myCPTotal | number:'1.0-1'}}</th> -->
-                <th class="text-end">{{myAvgCPTotal | number:'1.0-1'}}</th>
+                <th *ngIf="!hidePriceFlag" class="text-end">{{myAvgCPTotal | number:'1.0-1'}}</th>
                 <th></th>
             </tr>
         </tbody>
@@ -103,3 +103,6 @@
 
 
 </div>
+
+
+

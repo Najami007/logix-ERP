@@ -28,6 +28,7 @@ export class BarcodeReportComponent implements OnInit {
   ) {
 
     this.global.getCompany().subscribe((data) => {
+      
       this.companyProfile = data;
       if (data != '') {
         this.companyName = data[0].companyName;

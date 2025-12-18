@@ -116,6 +116,7 @@
                         <mat-checkbox [(ngModel)]="costGreaterThenSaleFilter"> Cost Price > Sale Price</mat-checkbox>
                         <mat-checkbox [(ngModel)]="avgCostGreaterThenSaleFilter"> AvgCost Price > Sale
                             Price</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="discSalePriceLessThenCostFilter"> (Sale Price - Disc) < Cost Price</mat-checkbox>
                     </div>
 
                 </div>
@@ -500,7 +501,7 @@
                                 <th *ngIf="!ManufacturingFeature">GST</th>
                                 <th>Entered By</th>
                                 <th class="hide-in-print" *ngIf="!ManufacturingFeature">Img</th>
-                                <th *ngIf="MultiBarcode && !ManufacturingFeature" class="hide-in-print">UOM</th>
+                                <th *ngIf="MultiBarcode && !ManufacturingFeature && !AddNewProductRestrictionFeature" class="hide-in-print">UOM</th>
                                 <!-- <th class="hide-in-print" *ngIf="crudList.u">Edit</th>
                         <th class="hide-in-print">Active Status</th>
 
@@ -521,7 +522,7 @@
                                     <td *ngIf="!AutoFillProdNameFeature && !ManufacturingFeature">
                                         {{item.productTitleOtherLang}}</td>
                                     <td *ngIf="!ManufacturingFeature">{{item.barcode}}</td>
-                                      <td>{{item.categoryTitle}}</td>
+                                    <td>{{item.categoryTitle}}</td>
                                     <td>{{item.subCategoryTitle}}</td>
                                     <td *ngIf="!ManufacturingFeature">{{item.brandTitle}}</td>
 
@@ -542,7 +543,7 @@
                                         <mat-icon
                                             *ngIf="item.productImage == '-'  && !ImageUrlFeature">cancel_presentation</mat-icon>
                                     </td>
-                                    <td *ngIf="MultiBarcode && !ManufacturingFeature"
+                                    <td *ngIf="MultiBarcode && !ManufacturingFeature && !AddNewProductRestrictionFeature"
                                         class="cursorPointer hide-in-print">
                                         <mat-icon (click)="openBarcodeModal(item)">add_to_photos</mat-icon>
                                     </td>
@@ -557,8 +558,9 @@
                                             (click)="activeProduct(item)">{{item.activeStatus ? 'check' :
                                             'close'}}</mat-icon>
 
-                                        <mat-icon *ngIf="crudList.d && !AddNewProductRestrictionFeature" class="text-danger cursorPointer"
-                                            matTooltip="Delete" (click)="deleteProd(item)">delete</mat-icon>
+                                        <mat-icon *ngIf="crudList.d && !AddNewProductRestrictionFeature"
+                                            class="text-danger cursorPointer" matTooltip="Delete"
+                                            (click)="deleteProd(item)">delete</mat-icon>
 
                                         <mat-icon class="cursorPointer" matTooltip="Copy"
                                             (click)="copyProd(item)">save</mat-icon>
@@ -673,6 +675,93 @@
             <div class="text-end bg-mf-blue p-3">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="productEditModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    aria-labelledby="paymentMehtodLabel">
+    <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered ">
+        <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+            <div class="modal-header">
+                <h2 class="modal-title" id="paymentMehtodLabel">Product Detail</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="reset('btn')"></button>
+            </div>
+            <div class="modal-body row">
+
+                <div class="d-flex flex-column">
+                    <span style="line-height: 20px;font-size: 20px;">Title: {{ProductName}}</span>
+                    <span style="line-height: 20px;font-size: 15px;">Barcode: {{Barcode}}</span>
+
+                </div>
+                <br>
+                <br>
+
+
+                <div class="col-md-6" *ngIf="!ManufacturingFeature">
+                    <mat-form-field appearance="outline" class="w-100 matSmall" *ngIf="!ManufacturingFeature">
+                        <mat-label>Discount %</mat-label>
+                        <input matInput [(ngModel)]="DiscPercent" name="billDiscount" [disabled]="!discFeature"
+                            (input)="applyDiscount('perc')" />
+                        <!-- <mat-select [(ngModel)]="DiscPercent" name="billDiscount" [disabled]="!discFeature"
+                                    (selectionChange)="applyDiscount()">
+                                    <mat-option *ngFor="let item of discountList"
+                                        [value]="item.value">{{item.value}}%</mat-option>
+                                </mat-select> -->
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-6 " *ngIf="!ManufacturingFeature">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Discount Rs</mat-label>
+                        <input matInput type="number" [disabled]="!discFeature" (input)="applyDiscount('rs')"
+                            [(ngModel)]="DiscRupee" (change)="global.avoidMinus($event)">
+                    </mat-form-field>
+                </div>
+
+
+                <div class="col-md-6" *ngIf="!ManufacturingFeature">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Min ROL</mat-label>
+                        <input matInput type="number" (input)="global.handleInputChange($event)" [(ngModel)]="minRol"
+                            (change)="global.avoidMinus($event)">
+                    </mat-form-field>
+
+                </div>
+                <div class="col-md-6" *ngIf="!ManufacturingFeature">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Max ROL</mat-label>
+                        <input matInput type="number" (input)="global.handleInputChange($event)" [(ngModel)]="maxRol"
+                            (change)="global.avoidMinus($event)">
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-12" *ngIf="!ManufacturingFeature">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Rack *</mat-label>
+                        <mat-select [(ngModel)]="rackID" #rack>
+                            <mat-option><ngx-mat-select-search #rackSearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of RacksList |filter:rackSearch.value"
+                                [value]="item.rackID">{{item.rackTitle}}</mat-option>
+                        </mat-select>
+                        <mat-icon class="cursorPointer" (click)="addRack()" matSuffix>add</mat-icon>
+
+                    </mat-form-field>
+                </div>
+
+
+            </div>
+
+            <div class="modal-footer bg-mf-blue">
+
+                <button class="btnsave" (click)="save()">{{btnType}}</button>
+                <button type="button" class="btnclose" data-bs-dismiss="modal" (click)="reset('btn')">Close</button>
+            </div>
+
+
         </div>
     </div>
 </div>

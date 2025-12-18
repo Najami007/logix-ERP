@@ -193,6 +193,7 @@ export class ProductComponent implements OnInit {
 
   costGreaterThenSaleFilter: any = false;
   avgCostGreaterThenSaleFilter: any = false;
+  discSalePriceLessThenCostFilter :any = false;
 
 
   subCategoryFilterList: any = [];
@@ -226,7 +227,7 @@ export class ProductComponent implements OnInit {
       .filter((e: any) => e.isChecked)
       .map((e: any) => e.value);
 
-        const gstList = this.tmpGstFilterList
+    const gstList = this.tmpGstFilterList
       .filter((e: any) => e.isChecked)
       .map((e: any) => e.value);
 
@@ -258,7 +259,8 @@ export class ProductComponent implements OnInit {
         )
       ) &&
       (this.costGreaterThenSaleFilter ? p.costPrice > p.salePrice : true) &&
-      (this.avgCostGreaterThenSaleFilter ? p.avgCostPrice > p.salePrice : true)
+      (this.avgCostGreaterThenSaleFilter ? p.avgCostPrice > p.salePrice : true) &&
+      (this.discSalePriceLessThenCostFilter ? (p.salePrice - p.discRupees) < p.costPrice : true)
 
     );
 
@@ -533,7 +535,7 @@ export class ProductComponent implements OnInit {
   save() {
 
 
-    if(this.AddNewProductRestrictionFeature && this.btnType == 'Save'){
+    if (this.AddNewProductRestrictionFeature && this.btnType == 'Save') {
       this.msg.WarnNotify('Not Allowed to Add New Product');
       return;
     }
@@ -633,6 +635,11 @@ export class ProductComponent implements OnInit {
     if (this.btnType == 'Save') {
       this.insert(postData);
     } else if (this.btnType == 'Update') {
+
+      if(this.AddNewProductRestrictionFeature){
+        this.global.closeBootstrapModal('#productEditModal',true)
+      }
+
       this.update(postData);
     }
 
@@ -705,6 +712,9 @@ export class ProductComponent implements OnInit {
 
         if (pin == '') {
           this.openFlag = false;
+          if(this.AddNewProductRestrictionFeature){
+            this.global.openBootstrapModal('#productEditModal',true);
+          }
         }
       }
       )
@@ -784,7 +794,14 @@ export class ProductComponent implements OnInit {
     this.Description = row.productDescription;
 
     this.prodTypeID = row.productTypeID;
-    this.tabIndex = 0;
+
+    if (this.AddNewProductRestrictionFeature) {
+      this.global.openBootstrapModal('#productEditModal', true);
+    } else {
+      this.tabIndex = 0;
+    }
+
+
     this.btnType = 'Update';
     this.mrp = row.mrp;
 

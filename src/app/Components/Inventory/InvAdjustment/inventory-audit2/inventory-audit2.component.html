@@ -278,7 +278,7 @@
                                 <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary"
                                         (click)="printBill(item,'')">print</mat-icon>
                                     <mat-icon class="text-dark" (click)="printBill(item,'wop')">print</mat-icon>
-                                    <mat-icon 
+                                    <mat-icon *ngIf="item.auditActiveStatus"
                                     (click)="openDocumentModal(item)">note_add</mat-icon>
                                 </td>
 

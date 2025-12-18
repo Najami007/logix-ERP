@@ -806,6 +806,7 @@ export class GarmentSaleComponent implements OnInit {
 
     // Delete key → Remove the row
     if (key === 46) {
+      e.preventDefault();
       this.delRow(item);
       this.rowFocused = 0;
       return;

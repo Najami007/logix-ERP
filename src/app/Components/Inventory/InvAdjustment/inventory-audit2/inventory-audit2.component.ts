@@ -9,17 +9,15 @@ import { PincodeComponent } from '../../../User/pincode/pincode.component';
 import { Router } from '@angular/router';
 import { Observable, retry } from 'rxjs';
 import Swal from 'sweetalert2';
-import { AdjBillPrintComponent } from '../adj-bill-print/adj-bill-print.component';
-import { AuditInvoicePrintComponent } from './audit-invoice-print/audit-invoice-print.component';
-import { event } from 'jquery';
 import { AddDocumentComponent } from 'src/app/Components/shared-components/add-document/add-document.component';
+import { AuditInvoicePrintComponent } from '../inv-audit/audit-invoice-print/audit-invoice-print.component';
 
 @Component({
-  selector: 'app-inv-audit',
-  templateUrl: './inv-audit.component.html',
-  styleUrls: ['./inv-audit.component.scss']
+  selector: 'app-inventory-audit2',
+  templateUrl: './inventory-audit2.component.html',
+  styleUrls: ['./inventory-audit2.component.scss']
 })
-export class InvAuditComponent implements OnInit {
+export class InventoryAudit2Component implements OnInit {
 
   @ViewChild(AuditInvoicePrintComponent) billPrint: any;
   @ViewChild(AddDocumentComponent) AddDocument: any;
@@ -28,7 +26,9 @@ export class InvAuditComponent implements OnInit {
   @HostListener('document:visibilitychange', [])
 
   appVisibility() {
-    if (document.hidden) { } else { this.importFromLocalStorage(); }
+    if (document.hidden) { } else { 
+      //this.importFromLocalStorage();
+       }
   }
 
 
@@ -77,7 +77,7 @@ export class InvAuditComponent implements OnInit {
     this.global.getProducts().subscribe(
       (data: any) => { this.productList = data; })
 
-    this.importFromLocalStorage();
+    // this.importFromLocalStorage();
 
     this.getBrandList();
     this.getSubCategory();
@@ -300,7 +300,7 @@ export class InvAuditComponent implements OnInit {
       Qty = '';
       this.tempProdRow = '';
       this.tmpQuantity = '';
-      this.insertToLocalStorage();
+      // this.insertToLocalStorage();
 
     }
   }
@@ -662,7 +662,7 @@ export class InvAuditComponent implements OnInit {
             $('.qty' + this.rowFocused).trigger('focus');
           }
 
-          this.insertToLocalStorage();
+          // this.insertToLocalStorage();
         }
       }
     )
@@ -678,7 +678,7 @@ export class InvAuditComponent implements OnInit {
       (Response: any) => {
         if (Response == true) {
           this.reset();
-          this.insertToLocalStorage();
+          // this.insertToLocalStorage();
         }
       })
   }
@@ -871,7 +871,7 @@ export class InvAuditComponent implements OnInit {
         if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
           this.msg.SuccessNotify(Response.msg);
           this.reset();
-          this.insertToLocalStorage();
+          // this.insertToLocalStorage();
         } else {
           this.msg.WarnNotify(Response.msg);
         }
@@ -986,7 +986,7 @@ export class InvAuditComponent implements OnInit {
 
         this.getTotal();
 
-        this.insertToLocalStorage();
+        // this.insertToLocalStorage();
 
       }
     )
@@ -1017,4 +1017,3 @@ export class InvAuditComponent implements OnInit {
 
 
 }
-

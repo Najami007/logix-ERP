@@ -445,7 +445,7 @@ export class IssueStockRerturnComponent implements OnInit {
 
     ////removeing row
     if (e.keyCode == 46) {
-
+      e.preventDefault();
       this.delRow(item);
       this.rowFocused = 0;
     }
@@ -509,7 +509,7 @@ export class IssueStockRerturnComponent implements OnInit {
 
     ////removeing row
     if (e.keyCode == 46) {
-
+      e.preventDefault();
       this.delRow(item);
       this.rowFocused = 0;
     }

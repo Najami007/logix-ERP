@@ -93,7 +93,7 @@
 
         </div>
 
-           <mat-radio-group [(ngModel)]="filterID" *ngIf="tmpRptType == 'S' || tmpRptType == 'SR'">
+           <mat-radio-group [(ngModel)]="filterID" *ngIf="(tmpRptType == 'S' || tmpRptType == 'SR') && formateType < 2">
                 <mat-radio-button *ngFor="let item of filterList" [value]="item.id">{{item.title}}</mat-radio-button>
             </mat-radio-group>
 
