@@ -348,7 +348,7 @@ export class GarmentSaleReturnComponent implements OnInit {
       this.tableDataList.push({
         rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
           : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
-            : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
+          : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
         productID: data.productID,
         productTitle: data.productTitle,
         barcode: tmpBarcode,
@@ -368,8 +368,8 @@ export class GarmentSaleReturnComponent implements OnInit {
         gst: this.gstFeature ? data.gst : 0,
         et: data.et,
         packing: data.packing,
-        discInP: discPerc,
-        discInR: discRupee,
+         discInP: this.discFeature ? discPerc : 0,
+        discInR: this.discFeature ? discRupee : 0,
         aq: data.aq,
         total: (data.salePrice * qty) - (discRupee * qty),
         productDetail: '',

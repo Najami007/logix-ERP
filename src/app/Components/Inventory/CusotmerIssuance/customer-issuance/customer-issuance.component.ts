@@ -176,21 +176,21 @@ export class CustomerIssuanceComponent implements OnInit {
     if (this.PBarcode !== '') {
       if (e.keyCode == 13) {
 
-        /// Seperating by / and coverting to Qty
-        if (this.PBarcode.split("/")[1] != undefined) {
-          barcode = this.PBarcode.split("/")[0];
-          qty = parseFloat(this.PBarcode.split("/")[1]);
-          BType = 'price';
+        // /// Seperating by / and coverting to Qty
+        // if (this.PBarcode.split("/")[1] != undefined) {
+        //   barcode = this.PBarcode.split("/")[0];
+        //   qty = parseFloat(this.PBarcode.split("/")[1]);
+        //   BType = 'price';
 
 
-        }
-        /// Seperating by - and coverting to Qty 
-        if (this.PBarcode.split("-")[1] != undefined) {
-          barcode = this.PBarcode.split("-")[0];
-          qty = parseFloat(this.PBarcode.split("-")[1]);
-          BType = 'qty';
+        // }
+        // /// Seperating by - and coverting to Qty 
+        // if (this.PBarcode.split("-")[1] != undefined) {
+        //   barcode = this.PBarcode.split("-")[0];
+        //   qty = parseFloat(this.PBarcode.split("-")[1]);
+        //   BType = 'qty';
 
-        }
+        // }
 
         // this.app.startLoaderDark();
         this.global.getProdDetail(0, barcode).subscribe(
@@ -262,7 +262,7 @@ export class CustomerIssuanceComponent implements OnInit {
         wohCP: data.costPrice,
         avgCostPrice: data.avgCostPrice,
         costPrice: data.costPrice,
-        salePrice: this.CTCCustomerIssuanceFeature ? data.costPrice : data.salePrice,
+        salePrice:  data.salePrice,
         ovhPercent: 0,
         ovhAmount: 0,
         expiryDate: this.global.dateFormater(new Date(), '-'),
@@ -463,7 +463,7 @@ export class CustomerIssuanceComponent implements OnInit {
     this.salePriceTotal = 0;
     for (var i = 0; i < this.tableDataList.length; i++) {
 
-      this.subTotal += (Number(this.tableDataList[i].quantity) * Number(this.tableDataList[i].salePrice));
+      this.subTotal += (Number(this.tableDataList[i].quantity) * Number(this.tableDataList[i].costPrice));
       this.totalQty += Number(this.tableDataList[i].quantity);
       this.CostTotal += (Number(this.tableDataList[i].quantity) * Number(this.tableDataList[i].costPrice));
       this.salePriceTotal += (Number(this.tableDataList[i].quantity) * Number(this.tableDataList[i].salePrice))
@@ -836,11 +836,15 @@ export class CustomerIssuanceComponent implements OnInit {
     this.removeLocalStorage();
   }
 
-
+  searchBillType:any = 'Date';
+  tmpSearchInvType:any = 'IC'
 
   //////////////////////////// Getting Saved Bill Function ///////////////////
   FindSavedBills(type: any) {
-    if (type == 'HIC') {
+
+        var date = this.searchBillType == 'Date' ? this.global.dateFormater(this.Date, '-') : '';
+
+    if (type == 'HIC' && type == 'P') {
       $('#edit').show();
     }
 
@@ -848,7 +852,17 @@ export class CustomerIssuanceComponent implements OnInit {
       $('#edit').hide()
     }
 
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetIssueInventoryBillSingleDate?Type=' + type + '&creationdate=' + this.global.dateFormater(this.Date, '-')).subscribe(
+   // GetIssueInventoryBillSingleDate
+
+    var url = '';
+     if(this.tmpSearchInvType == 'P'){
+      url = `${environment.mainApi}${this.global.inventoryLink}GetInventoryBillSingleDate?Type=${this.tmpSearchInvType}&creationdate=${date}`
+    }else{
+      url = `${environment.mainApi}${this.global.inventoryLink}GetInventoryBillSingleDate?Type=${this.tmpSearchInvType}&creationdate=${date}`
+    }
+
+
+    this.http.get(url).subscribe(
       (Response: any) => {
         this.IssueBillList = [];
         if (type == 'HIC') {
@@ -859,6 +873,9 @@ export class CustomerIssuanceComponent implements OnInit {
           });
         }
         if (type == 'IC') {
+          this.IssueBillList = Response;
+        }
+        if(type == 'P'){
           this.IssueBillList = Response;
         }
       },
@@ -876,15 +893,15 @@ export class CustomerIssuanceComponent implements OnInit {
 
   retriveBill(item: any) {
     this.tableDataList = [];
-    this.holdBtnType = 'ReHold';
-    this.invoiceDate = new Date(item.invDate);
-    this.locationID = item.locationID;
-    this.invRemarks = item.remarks;
-    this.invBillNo = item.invBillNo;
-    this.holdInvNo = item.invBillNo;
+    this.holdBtnType = item.invType == 'HIC' ?'ReHold' : 'Hold';
+    this.invoiceDate =item.invType == 'HIC' ? new Date(item.invDate) : new Date();
+    this.locationID =item.invType == 'HIC' ? item.locationID : 0;
+    this.invRemarks = item.invType == 'HIC' ? item.remarks : '';
+    this.invBillNo = item.invType == 'HIC' ? item.invBillNo : '';
+    this.holdInvNo = item.invType == 'HIC' ? item.invBillNo : '';
 
     this.subTotal = item.billTotal;
-    this.partyID = item.partyID;
+    this.partyID =item.invType == 'HIC' ? item.partyID : 0;
 
     this.getBillDetail(item.invBillNo).subscribe(
       (Response: any) => {
@@ -893,25 +910,30 @@ export class CustomerIssuanceComponent implements OnInit {
 
 
         Response.forEach((e: any) => {
+
           this.totalQty += e.quantity;
-          this.tableDataList.push({
-            rowIndex: this.tableDataList.length + 1,
-            productID: e.productID,
-            productTitle: e.productTitle,
-            barcode: e.barcode,
-            productImage: '-',
-            quantity: e.quantity,
-            avgCostPrice: e.avgCostPrice,
-            costPrice: e.costPrice,
-            salePrice: e.salePrice,
-            expiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
-            batchNo: e.batchNo,
-            batchStatus: e.batchStatus,
-            uomID: e.uomID,
-            packing: e.packing,
-            discInP: e.discInP,
-            discInR: e.discInR,
-          })
+
+          this.pushProdData(e,e.quantity);
+
+          // this.tableDataList.push({
+          //   rowIndex: this.tableDataList.length + 1,
+          //   productID: e.productID,
+          //   productTitle: e.productTitle,
+          //   barcode: e.barcode,
+          //   productImage: '-',
+          //   quantity: e.quantity,
+          //   avgCostPrice: e.avgCostPrice,
+          //   costPrice: e.costPrice,
+          //   salePrice: e.salePrice,
+          //   expiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
+          //   batchNo: e.batchNo,
+          //   batchStatus: e.batchStatus,
+          //   uomID: e.uomID,
+          //   packing: e.packing,
+          //   discInP: e.discInP,
+          //   discInR: e.discInR,
+
+          // })
         });
 
         //////////sorting data table base on sort type
@@ -924,6 +946,7 @@ export class CustomerIssuanceComponent implements OnInit {
     )
   }
 
+ 
 
   public getBillDetail(billNo: any): Observable<any> {
     return this.http.get(environment.mainApi + this.global.inventoryLink + 'GetIssueSingleBillDetail?reqInvBillNo=' + billNo).pipe(retry(3));
@@ -1098,5 +1121,8 @@ export class CustomerIssuanceComponent implements OnInit {
 
 
   }
+
+
+
 
 }

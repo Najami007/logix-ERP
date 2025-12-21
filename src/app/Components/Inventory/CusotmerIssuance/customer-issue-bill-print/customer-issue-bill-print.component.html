@@ -59,9 +59,9 @@
                 <th>S#</th>
                 <th class="col-lg-3">Product Name</th>
                 <th class="text-center">Quantity</th>
-                <!-- <th class=" text-center">Cost Price</th> -->
+                <th class=" text-center">Cost Price</th>
                 <!-- <th class=" text-center">Average Cost</th> -->
-                <th class=" text-center">Price</th>
+                <th class=" text-center">Sale Price</th>
                 <!-- <th class=" text-center">Cost Total</th>
                 <th class=" text-center">Avg Cost Total</th> -->
                 <th class=" text-center">Total</th>
@@ -80,23 +80,23 @@
                 </td>
 
                 <td class="text-center ">{{item.Quantity |number}}</td>
-                <!-- <td class="text-end ">{{item.CostPrice |number: '1.0-1'}}</td> -->
+                <td class="text-end ">{{item.CostPrice |number: '1.0-1'}}</td>
                 <!-- <td class="text-end ">{{item.avgCostPrice |number: '1.0-1'}}</td> -->
                 <td class="text-end ">{{item.SalePrice |number: '1.0-1'}}</td>
                 <!-- <td class="text-end ">{{item.CostPrice * item.Quantity |number: '1.0-1'}}</td>
                 <td class="text-end ">{{item.avgCostPrice * item.Quantity |number: '1.0-1'}}</td> -->
-                <td class="text-end ">{{item.SalePrice * item.Quantity |number: '1.0-1'}}</td>
+                <td class="text-end ">{{item.CostPrice * item.Quantity |number: '1.0-1'}}</td>
 
             </tr>
             <tr>
                 <th colspan="2"></th>
                 <th class="text-center">{{myBillTotalQty | number:'1.0-1'}}</th>
                 <th></th>
-                <!-- <th></th>
-                <th></th> -->
+                <!-- <th></th> -->
+                <th></th>
                 <!-- <th class="text-end">{{myCPTotal | number:'1.0-1'}}</th>
                 <th class="text-end">{{myAvgCPTotal | number:'1.0-1'}}</th> -->
-                <th class="text-end">{{mySPTotal | number:'1.0-1'}}</th>
+                <th class="text-end">{{myCPTotal | number:'1.0-1'}}</th>
 
             </tr>
         </tbody>

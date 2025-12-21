@@ -28,11 +28,15 @@
             <div class="row">
                 <label class="fw-bold">Date:</label>
                 <label class="fw-bold">Inv No:</label>
+                <label class="fw-bold" *ngIf="myLocationTwoTitle">Issue To:</label>
+
 
             </div>
             <div class="row">
                 <label>{{myInvoiceDate | date:'dd-MM-yyyy'}}</label>
                 <label>{{myInvoiceNo}}</label>
+                <label *ngIf="myLocationTwoTitle">{{myLocationTwoTitle}}</label>
+
 
             </div>
         </div>
@@ -122,5 +126,3 @@
         <label class="border-0 border-top border-dark fw-bold">Approved By</label>
     </div>
 </div>
-
-

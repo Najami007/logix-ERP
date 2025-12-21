@@ -1182,7 +1182,7 @@ export class PurchaseComponent implements OnInit {
 
     this.onPartySelected();
 
-    this.getBillDetail(item.invBillNo).subscribe(
+    this.http.get(environment.icApiUrl + this.global.inventoryLink + 'GetSingleBillDetail?reqInvBillNo=' + item.invBillNo).subscribe(
       (Response: any) => {
         this.myTotalQty = 0;
         this.productImage = Response[Response.length - 1].productImage;

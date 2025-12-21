@@ -2,8 +2,8 @@
 
     <div class="col-lg-9 ">
         <div class="row ps-1 pe-1 pt-1 ">
-            <div class="col-md-2">
-                <mat-form-field appearance="outline" *ngIf="!disableDateFeature" class="w-100 matSmall">
+            <div class="col-md-2" *ngIf="!disableDateFeature">
+                <mat-form-field appearance="outline"  class="w-100 matSmall">
                     <mat-label>Invoice Date</mat-label>
                     <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput
                         type="text" name="invDate" [matDatepicker]="iDate">

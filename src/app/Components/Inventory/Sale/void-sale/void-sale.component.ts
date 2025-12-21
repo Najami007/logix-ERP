@@ -971,6 +971,7 @@ export class VoidSaleComponent implements OnInit {
       DiscPartyID: this.CusDiscFeature ? this.tmpDiscCustomerList.partyID : 0,
       CusDisc: this.cusDisc,
       CusDiscAmount: this.CusDiscAmount || 0,
+      
 
     }
 

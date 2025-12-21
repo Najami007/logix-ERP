@@ -31,7 +31,7 @@ export class CustomerIssueReturnComponent implements OnInit {
 
 
   insertLocalStorageFeature = this.global.insertLocalStorageFeature;
-    ImageUrlFeature = this.global.ImageUrlFeature;
+  ImageUrlFeature = this.global.ImageUrlFeature;
 
 
 
@@ -47,7 +47,7 @@ export class CustomerIssueReturnComponent implements OnInit {
 
   }
 
-  
+
 
   @HostListener('document:keydown', ['$event'])
 
@@ -122,7 +122,7 @@ export class CustomerIssueReturnComponent implements OnInit {
   projectID = this.global.getProjectID();
   bookerID = 1;
   partyID = 0;
-  byNameSearch:any = false;
+  byNameSearch: any = false;
 
 
   changeOrder() {
@@ -176,20 +176,20 @@ export class CustomerIssueReturnComponent implements OnInit {
       if (e.keyCode == 13) {
 
         /// Seperating by / and coverting to Qty
-        if (this.PBarcode.split("/")[1] != undefined) {
-          barcode = this.PBarcode.split("/")[0];
-          qty = parseFloat(this.PBarcode.split("/")[1]);
-          BType = 'price';
+        //if (this.PBarcode.split("/")[1] != undefined) {
+        //   barcode = this.PBarcode.split("/")[0];
+        //   qty = parseFloat(this.PBarcode.split("/")[1]);
+        //   BType = 'price';
 
 
-        }
-        /// Seperating by - and coverting to Qty 
-        if (this.PBarcode.split("-")[1] != undefined) {
-          barcode = this.PBarcode.split("-")[0];
-          qty = parseFloat(this.PBarcode.split("-")[1]);
-          BType = 'qty';
+        // }
+        // /// Seperating by - and coverting to Qty 
+        // if (this.PBarcode.split("-")[1] != undefined) {
+        //   barcode = this.PBarcode.split("-")[0];
+        //   qty = parseFloat(this.PBarcode.split("-")[1]);
+        //   BType = 'qty';
 
-        }
+        // }
 
         // this.app.startLoaderDark();
         this.global.getProdDetail(0, barcode).subscribe(
@@ -261,7 +261,7 @@ export class CustomerIssueReturnComponent implements OnInit {
         wohCP: data.costPrice,
         avgCostPrice: data.avgCostPrice,
         costPrice: data.costPrice,
-        salePrice: this.CTCCustomerIssuanceFeature ? data.costPrice : data.salePrice,
+        salePrice: data.salePrice,
         ovhPercent: 0,
         ovhAmount: 0,
         expiryDate: this.global.dateFormater(new Date(), '-'),
@@ -431,23 +431,23 @@ export class CustomerIssueReturnComponent implements OnInit {
     // var index = this.tableDataList.findIndex((e: any) => e.productID == item.productID);
     // this.productImage = this.tableDataList[index].productImage;
 
-       var index = this.tableDataList.findIndex((e: any) => e.productID == item.productID);
+    var index = this.tableDataList.findIndex((e: any) => e.productID == item.productID);
     !this.ImageUrlFeature
       ? this.getProductImage(item)
       : this.productImage = this.tableDataList[index].productImage;
 
   }
 
-   getProductImage(item: any) {
-      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductImage?ProductID=' + item.productID).subscribe(
-        (Response: any) => {
-  
-          this.productImage = Response[0].productImage;
-  
-          $('.loaderDark').fadeOut();
-        }
-      )
-    }
+  getProductImage(item: any) {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductImage?ProductID=' + item.productID).subscribe(
+      (Response: any) => {
+
+        this.productImage = Response[0].productImage;
+
+        $('.loaderDark').fadeOut();
+      }
+    )
+  }
 
 
 
@@ -462,7 +462,7 @@ export class CustomerIssueReturnComponent implements OnInit {
     this.salePriceTotal = 0;
     for (var i = 0; i < this.tableDataList.length; i++) {
 
-      this.subTotal += (Number(this.tableDataList[i].quantity) * Number(this.tableDataList[i].salePrice));
+      this.subTotal += (Number(this.tableDataList[i].quantity) * Number(this.tableDataList[i].costPrice));
       this.totalQty += Number(this.tableDataList[i].quantity);
       this.CostTotal += (Number(this.tableDataList[i].quantity) * Number(this.tableDataList[i].costPrice));
       this.salePriceTotal += (Number(this.tableDataList[i].quantity) * Number(this.tableDataList[i].salePrice))
@@ -691,9 +691,9 @@ export class CustomerIssueReturnComponent implements OnInit {
   SaveBill(type: any) {
 
 
-     var inValidCostProdList = this.tableDataList.filter((p: any) =>  isNaN(p.costPrice) || Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
+    var inValidCostProdList = this.tableDataList.filter((p: any) => isNaN(p.costPrice) || Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
     var inValidSaleProdList = this.tableDataList.filter((p: any) => isNaN(p.salePrice) || p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
-    var inValidQtyProdList = this.tableDataList.filter((p: any) =>  isNaN(p.quantity) || p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
+    var inValidQtyProdList = this.tableDataList.filter((p: any) => isNaN(p.quantity) || p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
     var inValidDiscProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > (Number(p.salePrice) - (Number(p.discInR))));
 
 
@@ -835,11 +835,14 @@ export class CustomerIssueReturnComponent implements OnInit {
 
   }
 
-
+  searchBillType: any = 'Date';
+  tmpSearchInvType: any = 'IC'
 
   //////////////////////////// Getting Saved Bill Function ///////////////////
   FindSavedBills(type: any) {
-    if (type == 'HRIC') {
+    var date = this.searchBillType == 'Date' ? this.global.dateFormater(this.Date, '-') : '';
+
+    if (type == 'HRIC' || type == 'IC') {
       $('#edit').show();
     }
 
@@ -847,7 +850,12 @@ export class CustomerIssueReturnComponent implements OnInit {
       $('#edit').hide()
     }
 
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetIssueInventoryBillSingleDate?Type=' + type + '&creationdate=' + this.global.dateFormater(this.Date, '-')).subscribe(
+
+   //// environment.mainApi + this.global.inventoryLink + 'GetIssueInventoryBillSingleDate?Type=' + type + '&creationdate=' + this.global.dateFormater(this.Date, '-')
+    var   url = `${environment.mainApi}${this.global.inventoryLink}GetInventoryBillSingleDate?Type=${this.tmpSearchInvType}&creationdate=${date}`
+
+
+    this.http.get(url).subscribe(
       (Response: any) => {
         this.IssueBillList = [];
         if (type == 'HRIC') {
@@ -857,7 +865,7 @@ export class CustomerIssueReturnComponent implements OnInit {
             }
           });
         }
-        if (type == 'RIC') {
+        if (type == 'RIC' || type == 'IC') {
           this.IssueBillList = Response;
         }
       },

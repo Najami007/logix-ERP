@@ -108,7 +108,7 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
   grandTotal = 0;
 
   ledgerDetailList: any = [];
-  summaryDataList:any = [];
+  summaryDataList: any = [];
   sumCostTotal = 0;
   sumSaleTotal = 0;
   getReport(type: any) {
@@ -116,8 +116,8 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
     // alert(this.recipeCatID);
 
 
-    var fromDate =   this.global.dateFormater(this.fromDate, '-');
-    var toDate = this.global.dateFormater(this.toDate,'-');
+    var fromDate = this.global.dateFormater(this.fromDate, '-');
+    var toDate = this.global.dateFormater(this.toDate, '-');
     var fromTime = this.fromTime;
     var toTime = this.toTime;
 
@@ -216,7 +216,7 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
 
 
               this.summaryDataList = Response;
-              Response.forEach((e:any)=>{
+              Response.forEach((e: any) => {
                 this.sumCostTotal += e.costTotal;
                 this.sumSaleTotal += e.saleTotal;
               })
@@ -233,6 +233,31 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
         )
       }
 
+      if (this.formateType == 4) {
+
+
+
+        this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSupplierProducts_17?reqSupId=' + this.partyID).subscribe(
+          {
+            next: (Response: any) => {
+              if (Response.length == 0 || Response == null) {
+                this.global.popupAlert('Data Not Found!');
+                this.app.stopLoaderDark();
+                return;
+              }
+              this.DetailList = Response;
+              this.app.stopLoaderDark();
+
+            },
+            error: (Error: any) => {
+              this.app.stopLoaderDark();
+              console.log(Error);
+            }
+          }
+        )
+
+      }
+
 
     }
 
@@ -241,6 +266,9 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
 
   reset() {
     this.DetailList = [];
+    this.summaryDataList = [];
+    this.sumCostTotal = 0;
+    this.sumSaleTotal = 0;
     this.grandTotal = 0;
   }
 
@@ -268,13 +296,13 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
     var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
 
     var tableID = '';
-    if(this. formateType == 1){
+    if (this.formateType == 1) {
       tableID = 'summaryTable';
     }
-       if(this. formateType == 2){
+    if (this.formateType == 2) {
       tableID = 'detailTable';
     }
-       if(this. formateType == 3){
+    if (this.formateType == 3) {
       tableID = 'AllSummaryTable';
     }
 

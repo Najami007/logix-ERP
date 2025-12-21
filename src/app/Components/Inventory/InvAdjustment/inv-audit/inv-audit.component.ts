@@ -254,8 +254,18 @@ export class InvAuditComponent implements OnInit {
 
     if (this.tempProdRow != '') {
 
+      // var tmpBarcode = '';
+      // console.log(this.tempProdRow[0]);
+      // if (this.tempProdRow[0].barcode2) {
+      //   tmpBarcode = this.tempProdRow[0].barcode2;
+      // } else {
+      //   tmpBarcode = this.tempProdRow[0].barcode;
+      // }
+
       var condition: any = this.tableDataList.filter((e: any) => e.productID == this.tempProdRow[0].productID);
       var index = this.tableDataList.indexOf(condition[0]);
+
+
 
       this.tmpPreviousEnteredQty = 0;
 
@@ -266,7 +276,7 @@ export class InvAuditComponent implements OnInit {
               : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
           productID: this.tempProdRow[0].productID,
           productTitle: this.tempProdRow[0].productTitle,
-          barcode: this.tempProdRow[0].barcode,
+          barcode:this.tempProdRow[0].barcode, //tmpBarcode,
           // productImage: this.tempProdRow[0].productImage,
           quantity: Qty,
           scanTime: new Date(),
@@ -301,6 +311,7 @@ export class InvAuditComponent implements OnInit {
       this.tempProdRow = '';
       this.tmpQuantity = '';
       this.insertToLocalStorage();
+      // console.log(this.tableDataList);
 
     }
   }

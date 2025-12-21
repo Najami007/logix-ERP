@@ -46,7 +46,7 @@
 
                         <th>Cost</th>
                         <!-- <th>Avg Cost</th> -->
-                        <th *ngIf="!this.CTCCustomerIssuanceFeature">Sale</th>
+                        <th >Sale</th>
                         <!-- <th>Cost Total</th> -->
                         <th>Total</th>
                         <th>AQ</th>
@@ -70,7 +70,7 @@
                                 style="width: 80px;"></td> -->
                         <!-- <td class="text-end">{{item.avgCostPrice | number:'1.0-2'}}</td> -->
                         <td class="text-end">{{item.costPrice | number:'1.0-2'}}</td>
-                        <td class="text-end" *ngIf="!this.CTCCustomerIssuanceFeature"
+                        <td class="text-end" 
                             [ngClass]="editSpFeature ? 'cursorPointer' : ''" (click)="editSP(item)">
                             {{item.salePrice | number:'1.0-2'}}</td>
                         <!-- <td class="text-center"><input type="text" [(ngModel)]="item.salePrice" min="0"
@@ -80,7 +80,7 @@
                                 class="sp{{index}} text-center" style="width: 80px;">
                         </td> -->
                         <!-- <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-2'}}</td> -->
-                        <td class="text-end">{{item.salePrice * item.quantity |number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
                         <td class="text-center">{{item.aq |number:'1.0-3'}}</td>
                         <td class="cursorPointer text-center text-danger"><mat-icon
                                 (click)="delRow(item)">delete</mat-icon></td>
@@ -89,9 +89,9 @@
                         <td colspan="3"></td>
                         <th class="text-center">{{totalQty |number:'1.0-2'}}</th>
                         <th></th>
-                        <th *ngIf="!this.CTCCustomerIssuanceFeature"></th>
+                        <th></th>
                         <!-- <th class="text-end">{{CostTotal |number:'1.0-2'}}</th> -->
-                        <th class="text-end"> {{salePriceTotal |number:'1.0-2'}}</th>
+                        <th class="text-end"> {{CostTotal |number:'1.0-2'}}</th>
                         <th></th>
 
                         <td class="text-center"><mat-icon class="cursorPointer " (click)="EmptyData()">delete</mat-icon>
@@ -212,18 +212,38 @@
                             <mat-datepicker #hbDate></mat-datepicker>
                         </mat-form-field>
 
-
+<!-- 
                         <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt"
-                            (click)="FindSavedBills('HIC')">Get Holded</button>
-                        <button mat-raised-button *ngIf="crudList.r" class="col-lg-2 btn-rpt"
-                            (click)="FindSavedBills('IC')">Get Saved</button>
+                            (click)="FindSavedBills('HIC')">Get Holded</button> -->
+                        <button mat-raised-button *ngIf="crudList.r" class="col-lg-3 btn-rpt"
+                            (click)="FindSavedBills(tmpSearchInvType)">Get Saved</button>
 
-                        <mat-form-field class="col-lg-3 matSmall" appearance="outline">
+                        <mat-form-field class="col-lg-4 matSmall" appearance="outline">
                             <mat-label>Search.......</mat-label>
                             <input matInput #holdSearch type="text" class="col-lg-4">
                         </mat-form-field>
 
                     </div>
+                     <div class="d-flex justify-content-between">
+                        <div>
+                        <mat-radio-group [(ngModel)]="searchBillType" class="mt-2">
+                            <mat-radio-button value="all">All</mat-radio-button>
+                            <mat-radio-button value="Date">Datewise</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div>
+                        <mat-radio-group [(ngModel)]="tmpSearchInvType" class="mt-2"
+                            (ngModelChange)="IssueBillList = []">
+                            <mat-radio-button value="HIC">Holded Invoices</mat-radio-button>
+                            <mat-radio-button value="IC">Saved Invoices</mat-radio-button>
+                            <mat-radio-button value="P">Purchase Invoice</mat-radio-button>
+
+                        </mat-radio-group>
+                    </div>
+                     </div>
+
+                     <div class="d-flex justify-content-between">
+                   
 
                     <table class="table-logix">
                         <thead>
@@ -252,9 +272,9 @@
                                 <td>{{item.entryUser}}</td>
                                 <td class="text-center cursorPointer" *ngIf="crudList.r">
 
-                                    <mat-icon data-bs-dismiss="modal" *ngIf="item.approvedStatus == false"
+                                    <mat-icon data-bs-dismiss="modal" *ngIf="item.invType == 'HIC' || item.invType == 'P'"
                                         (click)="retriveBill(item)">edit_outline</mat-icon>
-                                    <mat-icon class="text-primary" (click)="printBill(item)">print</mat-icon>
+                                    <mat-icon class="text-primary" *ngIf="item.invType == 'HIC' || item.invType == 'IC'" (click)="printBill(item)">print</mat-icon>
                                     <mat-icon class="text-danger" *ngIf="item.approvedStatus == false"
                                         (click)="DeleteInv(item)">delete_outline</mat-icon>
                                 </td>
