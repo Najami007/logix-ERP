@@ -90,7 +90,6 @@ export class VehicleSaleReportComponent {
     this.app.startLoaderDark();
     this.http.get(environment.mainApi + 'veh/' + url).subscribe(
       (Response: any) => {
-        console.log(Response);
         this.SaleDetail = [];
         this.billGrandTotal = 0;
         this.DiscTotal = 0;

@@ -122,7 +122,6 @@ export class VssavedbillComponent implements OnInit {
               this.myDuplicateFlag = true;
               this.http.get(environment.mainApi+this.global.inventoryLink+'PrintBill?BillNo='+item.invBillNo).subscribe(
                 (Response:any)=>{
-                  //console.log(Response);
                   this.myPrintData = Response;
                 }
               )

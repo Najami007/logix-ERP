@@ -166,7 +166,6 @@ export class AddPaymentComponent {
       ProjectID: this.projectID,
       UserID: this.global.getUserID()
     }
-    console.log(postData);
 
     if (this.btnType == 'Save') {
       this.insert(postData)

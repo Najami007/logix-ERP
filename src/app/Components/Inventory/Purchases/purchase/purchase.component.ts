@@ -160,32 +160,32 @@ export class PurchaseComponent implements OnInit {
 
     if (this.discType == 'ad') {
 
-      var gstAmount = ((item.tempCostPrice * item.gst) / 100)
-      var discP = ((item.tempCostPrice * item.discInP) / 100);
-      var discR = (item.discInR / item.Quantity);
-      var etAmount = (((Number(item.tempCostPrice) + Number(gstAmount) - discP - discR) * item.et) / 100);
+      var gstAmount = ((item.tempcostPrice * item.gst) / 100)
+      var discP = ((item.tempcostPrice * item.discInP) / 100);
+      var discR = (item.discInR / item.quantity);
+      var etAmount = (((Number(item.tempcostPrice) + Number(gstAmount) - discP - discR) * item.et) / 100);
 
-      var totalCost = item.tempCostPrice * item.Quantity;
-      var costWithDiscP = item.tempCostPrice - discP;
+      var totalCost = item.tempcostPrice * item.quantity;
+      var costWithDiscP = item.tempcostPrice - discP;
       var costWithDiscR = costWithDiscP - discR;
       var costWithGst = costWithDiscR + ((costWithDiscR * item.gst) / 100);
       var costWithEt = costWithGst + etAmount;
 
-      item.CostPrice = costWithEt;
+      item.costPrice = costWithEt;
     }
     if (this.discType == 'bd') {
 
-      var totalCost = item.tempCostPrice * item.Quantity;
-      var gstAmount = ((item.tempCostPrice * item.gst) / 100);
-      var etAmount = (((Number(item.tempCostPrice) + Number(gstAmount)) * item.et) / 100);
-      var discP = (((item.tempCostPrice - gstAmount) * item.discInP) / 100);
-      var discR = (item.discInR / item.Quantity);
+      var totalCost = item.tempcostPrice * item.quantity;
+      var gstAmount = ((item.tempcostPrice * item.gst) / 100);
+      var etAmount = (((Number(item.tempcostPrice) + Number(gstAmount)) * item.et) / 100);
+      var discP = (((item.tempcostPrice - gstAmount) * item.discInP) / 100);
+      var discR = (item.discInR / item.quantity);
 
 
-      var costWithGst = Number(item.tempCostPrice) - Number(discR) + gstAmount;
-      var costWithDisc = (Number(item.tempCostPrice) - Number(gstAmount)) - Number(discP) - Number(discR) + Number(gstAmount);
+      var costWithGst = Number(item.tempcostPrice) - Number(discR) + gstAmount;
+      var costWithDisc = (Number(item.tempcostPrice) - Number(gstAmount)) - Number(discP) - Number(discR) + Number(gstAmount);
 
-      item.CostPrice = item.discInP > 0
+      item.costPrice = item.discInP > 0
         ? costWithDisc + ((costWithDisc * item.et) / 100)
         : costWithGst + ((costWithGst * item.et) / 100);
     }
@@ -324,7 +324,7 @@ export class PurchaseComponent implements OnInit {
   pushProdData(data: any, qty: any) {
     /////// check already present in the table or not
     var condition = this.tableDataList.find(
-      (x: any) => x.ProductID == data.productID
+      (x: any) => x.productID == data.productID
     );
 
     var index = this.tableDataList.indexOf(condition);
@@ -335,26 +335,26 @@ export class PurchaseComponent implements OnInit {
         rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
           : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
             : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
-        ProductID: data.productID,
-        ProductTitle: data.productTitle,
+        productID: data.productID,
+        productTitle: data.productTitle,
         barcode: data.barcode,
         productImage: this.ImageUrlFeature ? data.imagesPath : '-',
-        Quantity: qty,
+        quantity: qty,
         wohCP: data.costPrice,
-        tempCostPrice: data.costPrice,
+        tempcostPrice: data.costPrice,
         margin: ((data.salePrice - data.costPrice) / data.costPrice) * 100,
-        CostPrice: data.costPrice,
-        SalePrice: data.salePrice,
+        costPrice: data.costPrice,
+        salePrice: data.salePrice,
         ovhPercent: 0,
         ovhAmount: 0,
-        ExpiryDate: this.global.dateFormater(new Date(), '-'),
-        BatchNo: '-',
-        BatchStatus: '-',
-        UomID: data.uomID,
-        Packing: 1,
+        expiryDate: this.global.dateFormater(new Date(), '-'),
+        batchNo: '-',
+        batchStatus: '-',
+        uomID: data.uomID,
+        packing: 1,
         discInP: 0,
         discInR: 0,
-        AQ: data.aq,
+        aq: data.aq,
         gst: 0,
         et: 0,
         mrp: data.mrp,
@@ -373,9 +373,9 @@ export class PurchaseComponent implements OnInit {
     } else {
       if (this.PBarcode.split("/")[1] != undefined) {
         var total: any = this.PBarcode.split("/")[1];
-        qty = total / this.tableDataList[index].SalePrice;
+        qty = total / this.tableDataList[index].salePrice;
       }
-      this.tableDataList[index].Quantity = parseFloat(this.tableDataList[index].Quantity) + qty;
+      this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + qty;
 
       /////// Sorting Table
       this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
@@ -433,7 +433,7 @@ export class PurchaseComponent implements OnInit {
         }
 
         var condition = this.tableDataList.find(
-          (x: any) => x.ProductID == Response[0].productID
+          (x: any) => x.productID == Response[0].productID
         );
         var index = this.tableDataList.indexOf(condition);
         if (condition == undefined) {
@@ -444,11 +444,11 @@ export class PurchaseComponent implements OnInit {
         } else {
           /////////// changing qty if product already scanned
           if (Response[0].uomTitle == 'price') {
-            var total = (parseFloat(this.tableDataList[index].CostPrice) * parseFloat(this.tableDataList[index].Quantity));
-            this.tableDataList[index].Quantity = parseFloat(this.tableDataList[index].Quantity) + 1;
-            this.tableDataList[index].CostPrice = (total + parseFloat(tmpPrice)) / parseFloat(this.tableDataList[index].Quantity);
+            var total = (parseFloat(this.tableDataList[index].costPrice) * parseFloat(this.tableDataList[index].quantity));
+            this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + 1;
+            this.tableDataList[index].costPrice = (total + parseFloat(tmpPrice)) / parseFloat(this.tableDataList[index].quantity);
           } else {
-            this.tableDataList[index].Quantity = parseFloat(this.tableDataList[index].Quantity) + parseFloat(prodQty);
+            this.tableDataList[index].quantity = parseFloat(this.tableDataList[index].quantity) + parseFloat(prodQty);
           }
           this.tableDataList[index].rowIndex = this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1 : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1;
           this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
@@ -523,7 +523,7 @@ export class PurchaseComponent implements OnInit {
 
 
   showImg(item: any) {
-    var index = this.tableDataList.findIndex((e: any) => e.ProductID == item.ProductID);
+    var index = this.tableDataList.findIndex((e: any) => e.productID == item.productID);
     !this.ImageUrlFeature
       ? this.getProductImage(item)
       : this.productImage = this.tableDataList[index].productImage;
@@ -619,10 +619,10 @@ export class PurchaseComponent implements OnInit {
   changeValue(item: any) {
     var myIndex = this.tableDataList.indexOf(item);
 
-    var myQty = this.tableDataList[myIndex].Quantity;
-    var myCP = this.tableDataList[myIndex].CostPrice;
-    var mySP = this.tableDataList[myIndex].SalePrice;
-    var mytmpCost = this.tableDataList[myIndex].tempCostPrice;
+    var myQty = this.tableDataList[myIndex].quantity;
+    var myCP = this.tableDataList[myIndex].costPrice;
+    var mySP = this.tableDataList[myIndex].salePrice;
+    var mytmpCost = this.tableDataList[myIndex].tempcostPrice;
     var mydiscInP = this.tableDataList[myIndex].discInP;
     var mydiscInR = this.tableDataList[myIndex].discInR;
     var mygst = this.tableDataList[myIndex].gst;
@@ -633,13 +633,13 @@ export class PurchaseComponent implements OnInit {
 
     if (myCP == null || myCP == '' || myCP == undefined) {
 
-      this.tableDataList[myIndex].CostPrice = 0;
+      this.tableDataList[myIndex].costPrice = 0;
     }
     if (myQty == null || myQty == '' || myQty == undefined) {
-      this.tableDataList[myIndex].Quantity = 0;
+      this.tableDataList[myIndex].quantity = 0;
     }
     if (mySP == null || mySP == '' || mySP == undefined) {
-      this.tableDataList[myIndex].SalePrice = 0;
+      this.tableDataList[myIndex].salePrice = 0;
     }
     if (mytmpCost == null || mytmpCost == '' || mytmpCost == undefined) {
       this.tableDataList[myIndex].tmpCost = 0;
@@ -661,7 +661,7 @@ export class PurchaseComponent implements OnInit {
     }
 
 
-    item.margin = ((Number(item.SalePrice) - Number(item.CostPrice)) / Number(item.CostPrice)) * 100
+    item.margin = ((Number(item.salePrice) - Number(item.costPrice)) / Number(item.costPrice)) * 100
 
   }
 
@@ -759,37 +759,36 @@ export class PurchaseComponent implements OnInit {
 
 
 
-    var inValidAmountProdList = this.tableDataList.filter((p: any) => (Number(p.CostPrice) * Number(p.Quantity)) > (Number(p.SalePrice) * Number(p.Quantity)) || (Number(p.CostPrice) * Number(p.Quantity)) < 0);
+    var inValidAmountProdList = this.tableDataList.filter((p: any) => (Number(p.costPrice) * Number(p.quantity)) > (Number(p.salePrice) * Number(p.quantity)) || (Number(p.costPrice) * Number(p.quantity)) < 0);
 
 
-    var inValidCostProdList = this.tableDataList.filter((p: any) => isNaN(p.CostPrice) || Number(p.CostPrice) > Number(p.SalePrice) || p.CostPrice == 0 || p.CostPrice < 0 || p.CostPrice == '0' || p.CostPrice == '' || p.CostPrice == undefined || p.CostPrice == null);
-    var inValidSaleProdList = this.tableDataList.filter((p: any) => isNaN(p.SalePrice) || p.SalePrice == 0 || p.SalePrice < 0 || p.SalePrice == '0' || p.SalePrice == '' || p.SalePrice == undefined || p.SalePrice == null);
-    var inValidQtyProdList = this.tableDataList.filter((p: any) => isNaN(p.Quantity) || p.Quantity == 0 || p.Quantity < 0 || p.Quantity == '0' || p.Quantity == null || p.Quantity == undefined || p.Quantity == '')
+    var inValidCostProdList = this.tableDataList.filter((p: any) => isNaN(p.costPrice) || Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice < 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
+    var inValidSaleProdList = this.tableDataList.filter((p: any) => isNaN(p.salePrice) || p.salePrice == 0 || p.salePrice < 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
+    var inValidQtyProdList = this.tableDataList.filter((p: any) => isNaN(p.quantity) || p.quantity == 0 || p.quantity < 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
 
-    var invalidExpiryList = this.tableDataList.filter((p: any) => p.ExpiryDate == '' || p.ExpiryDate == null);
+    var invalidExpiryList = this.tableDataList.filter((p: any) => p.expiryDate == '' || p.expiryDate == null);
 
     if (inValidAmountProdList.length > 0) {
-      this.msg.WarnNotify('(' + inValidCostProdList[0].ProductTitle + ') Total Not Valid');
+      this.msg.WarnNotify('(' + inValidCostProdList[0].productTitle + ') Total Not Valid');
       return;
     }
 
     if (inValidCostProdList.length > 0) {
-      this.msg.WarnNotify('(' + inValidCostProdList[0].ProductTitle + ') Cost Price greater than Sale Price');
+      this.msg.WarnNotify('(' + inValidCostProdList[0].productTitle + ') Cost Price greater than Sale Price');
       return;
     }
     if (inValidSaleProdList.length > 0) {
-      this.msg.WarnNotify('(' + inValidSaleProdList[0].ProductTitle + ') Sale Price is not Valid');
+      this.msg.WarnNotify('(' + inValidSaleProdList[0].productTitle + ') Sale Price is not Valid');
       return;
     }
     if (inValidQtyProdList.length > 0) {
-      this.msg.WarnNotify('(' + inValidQtyProdList[0].ProductTitle + ') Quantity is not Valid');
+      this.msg.WarnNotify('(' + inValidQtyProdList[0].productTitle + ') quantity is not Valid');
       return;
     }
 
 
-    console.log(this.tableDataList);
     if (invalidExpiryList.length > 0) {
-      this.msg.WarnNotify('(' + invalidExpiryList[0].ProductTitle + ') Expiry is not Valid');
+      this.msg.WarnNotify('(' + invalidExpiryList[0].productTitle + ') Expiry is not Valid');
       return;
     }
 
@@ -863,7 +862,7 @@ export class PurchaseComponent implements OnInit {
       OverHeadAmount: this.overHead || 0,
       NetTotal: this.netTotal,
       Remarks: this.invRemarks || '-',
-      InvoiceDocument: '-',
+      InvoiceDocument: this.InvoiceDocument || '-',
       HoldInvNo: this.holdInvNo,
       discType: this.discType,
       InvDetail: JSON.stringify(this.tableDataList),
@@ -871,29 +870,12 @@ export class PurchaseComponent implements OnInit {
       RefPoNo :this.RefPoNo,
     };
 
+
     if (type == 'hold') {
       if (this.holdBtnType == 'Hold') {
 
         this.insert('hold', postData)
-        // this.app.startLoaderDark();
-        // postData.InvType = 'HP';
-        // this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchase', postData).subscribe(
-        //   (Response: any) => {
-        //     if (Response.msg == 'Data Saved Successfully') {
-        //       this.msg.SuccessNotify(Response.msg);
-        //       this.reset();
-
-        //     } else {
-        //       this.msg.WarnNotify(Response.msg);
-        //     }
-        //     this.app.stopLoaderDark();
-        //     this.validFlag = true;
-        //   },
-        //   (Error: any) => {
-        //     this.app.stopLoaderDark();
-        //     this.validFlag = true;
-        //   }
-        // )
+      
       } else if (this.holdBtnType == 'ReHold') {
         this.global.openPinCode().subscribe(pin => {
           if (pin != '') {
@@ -902,24 +884,7 @@ export class PurchaseComponent implements OnInit {
 
             this.insert('rehold', postData);
 
-            // this.http.post(environment.mainApi + this.global.inventoryLink + 'UpdateHoldInvoice', postData).subscribe(
-            //   (Response: any) => {
-            //     if (Response.msg == 'Data Updated Successfully') {
-            //       this.msg.SuccessNotify(Response.msg);
-            //       this.reset();
-
-            //     } else {
-            //       this.msg.WarnNotify(Response.msg);
-            //     }
-            //     this.app.stopLoaderDark();
-
-            //     this.validFlag = true;
-            //   },
-            //   (Error: any) => {
-            //     this.app.stopLoaderDark();
-            //     this.validFlag = true;
-            //   }
-            // )
+           
           } else {
             this.sortType == 'desc'
               ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex)
@@ -1079,8 +1044,8 @@ export class PurchaseComponent implements OnInit {
 
     for (var i = 0; i < this.tableDataList.length; i++) {
 
-      this.subTotal += (Number(this.tableDataList[i].Quantity) * Number(this.tableDataList[i].CostPrice));
-      this.myTotalQty += Number(this.tableDataList[i].Quantity);
+      this.subTotal += (Number(this.tableDataList[i].quantity) * Number(this.tableDataList[i].costPrice));
+      this.myTotalQty += Number(this.tableDataList[i].quantity);
 
 
     }
@@ -1131,24 +1096,24 @@ export class PurchaseComponent implements OnInit {
           this.myTotalQty += e.quantity;
           this.tableDataList.push({
             rowIndex: this.tableDataList.length + 1,
-            ProductID: e.productID,
-            ProductTitle: e.productTitle,
+            productID: e.productID,
+            productTitle: e.productTitle,
             barcode: e.barcode,
             productImage: '-', // e.productImage,
-            Quantity: e.quantity,
+            quantity: e.quantity,
             wohCP: e.costPrice,
-            tempCostPrice: e.tempCostPrice,
+            tempcostPrice: e.tempcostPrice,
             margin: ((e.salePrice - e.costPrice) / e.costPrice) * 100,
-            CostPrice: e.costPrice,
-            SalePrice: e.salePrice,
-            ExpiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
-            BatchNo: e.batchNo,
-            BatchStatus: e.batchStatus,
-            UomID: e.uomID,
-            Packing: e.packing,
+            costPrice: e.costPrice,
+            salePrice: e.salePrice,
+            expiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
+            batchNo: e.batchNo,
+            batchStatus: e.batchStatus,
+            uomID: e.uomID,
+            packing: e.packing,
             discInP: e.discInP,
             discInR: e.discInR,
-            AQ: e.aq,
+            aq: e.aq,
             gst: e.gst,
             et: e.et,
             mrp: e.mrp,
@@ -1171,11 +1136,11 @@ export class PurchaseComponent implements OnInit {
     this.holdBtnType = 'Hold'
     this.invoiceDate = new Date();
     this.locationID = 0;
-    this.refInvNo = '';
+    this.refInvNo = '-';
     this.discount = 0;
     this.overHead = 0;
     this.invRemarks = '';
-    this.holdInvNo = '';
+    this.holdInvNo = '-';
     this.bookerID = 0;
     this.partyID = 0;
     this.RefPoNo = item.invBillNo;
@@ -1186,30 +1151,29 @@ export class PurchaseComponent implements OnInit {
       (Response: any) => {
         this.myTotalQty = 0;
         this.productImage = Response[Response.length - 1].productImage;
-        this.discType = Response[0].discType;
+        // this.discType = Response[0].discType;
         Response.forEach((e: any) => {
-
           this.myTotalQty += e.quantity;
           this.tableDataList.push({
             rowIndex: this.tableDataList.length + 1,
-            ProductID: e.productID,
-            ProductTitle: e.productTitle,
+            productID: e.productID,
+            productTitle: e.productTitle,
             barcode: e.barcode,
             productImage: '-', // e.productImage,
-            Quantity: e.quantity,
+            quantity: e.quantity,
             wohCP: e.costPrice,
-            tempCostPrice: e.tempCostPrice,
+            tempcostPrice: e.costPrice,
             margin: ((e.salePrice - e.costPrice) / e.costPrice) * 100,
-            CostPrice: e.costPrice,
-            SalePrice: e.salePrice,
-            ExpiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
-            BatchNo: e.batchNo,
-            BatchStatus: e.batchStatus,
-            UomID: e.uomID,
-            Packing: e.packing,
+            costPrice: e.costPrice,
+            salePrice: e.salePrice,
+            expiryDate: this.global.dateFormater(new Date(), '-'),
+            batchNo: e.batchNo,
+            batchStatus: e.batchStatus,
+            uomID: e.uomID,
+            packing: e.packing,
             discInP: e.discInP,
             discInR: e.discInR,
-            AQ: e.aq,
+            aq: e.aq,
             gst: e.gst,
             et: e.et,
             mrp: e.mrp,
@@ -1272,8 +1236,16 @@ export class PurchaseComponent implements OnInit {
 
 
   RetreivePurchaseOrder(item: any) {
-
     this.tableDataList = [];
+    this.holdBtnType = 'Hold'
+    this.invoiceDate = new Date(item.invDate);
+    this.locationID = 0;
+    this.refInvNo = '-';
+    this.discount = 0;
+    this.overHead = 0;
+    this.invRemarks = '';
+    this.holdInvNo = '-';
+    this.bookerID = 0;
     this.partyID = item.partyID;
     this.RefPoNo = item.invBillNo;
     this.getBillDetail(item.invBillNo).subscribe(
@@ -1285,24 +1257,24 @@ export class PurchaseComponent implements OnInit {
           this.myTotalQty += e.quantity;
           this.tableDataList.push({
             rowIndex: this.tableDataList.length + 1,
-            ProductID: e.productID,
-            ProductTitle: e.productTitle,
+            productID: e.productID,
+            productTitle: e.productTitle,
             barcode: e.barcode,
             productImage: e.productImage,
-            Quantity: e.quantity,
+            quantity: e.quantity,
             wohCP: e.costPrice,
-            tempCostPrice: e.tempCostPrice,
+            tempcostPrice: e.tempcostPrice,
             margin: ((e.salePrice - e.costPrice) / e.costPrice) * 100,
-            CostPrice: e.costPrice,
-            SalePrice: e.salePrice,
-            ExpiryDate: this.global.dateFormater(new Date(), '-'),
-            BatchNo: e.batchNo,
-            BatchStatus: e.batchStatus,
-            UomID: e.uomID,
-            Packing: e.packing,
+            costPrice: e.costPrice,
+            salePrice: e.salePrice,
+            expiryDate: this.global.dateFormater(new Date(), '-'),
+            batchNo: e.batchNo,
+            batchStatus: e.batchStatus,
+            uomID: e.uomID,
+            packing: e.packing,
             discInP: e.discInP,
             discInR: e.discInR,
-            AQ: 0,
+            aq: 0,
             gst: e.gst,
             et: e.et,
           })
@@ -1388,7 +1360,7 @@ export class PurchaseComponent implements OnInit {
           return Swal.showValidationMessage("Enter Valid Amount");
         }
         const index = this.tableDataList.indexOf(item);
-        this.tableDataList[index].CostPrice = value / item.Quantity;
+        this.tableDataList[index].costPrice = value / item.quantity;
       }
     }).then((result) => {
       if (result.isConfirmed) {
@@ -1402,13 +1374,13 @@ export class PurchaseComponent implements OnInit {
 
 
   onMarginChange(item: any, index: any) {
-    if (item.CostPrice <= 0) {
+    if (item.costPrice <= 0) {
       item.margin = 0;
       return;
     }
     var margin = Number(item.margin);
 
-    item.SalePrice = Number(item.CostPrice) + (Number(item.CostPrice * margin) / 100);
+    item.salePrice = Number(item.costPrice) + (Number(item.costPrice * margin) / 100);
     this.getTotal();
 
   }
@@ -1591,7 +1563,7 @@ export class PurchaseComponent implements OnInit {
 
 
   getProductImage(item: any) {
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductImage?ProductID=' + item.ProductID).subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductImage?productID=' + item.productID).subscribe(
       (Response: any) => {
 
         this.productImage = Response[0].productImage;

@@ -100,7 +100,6 @@ export class MnuInvoicePrintComponent {
     this.http.get(this.apiReq + `GetOrderDetail?BillNo=${orderNo}`).subscribe(
       {
         next: (Response: any) => {
-          console.log(Response);
           this.tableDataList = [];
           if (Response.length > 0) {
             Response.forEach((e: any) => {

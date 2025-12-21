@@ -155,7 +155,6 @@ export class SalePurchaseComparisonRptsupplierwiseComponent implements OnInit {
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseSaleComparisonSummaryRptSupplierWise_19?FromDate=' + this.global.dateFormater(this.fromDate, '-') +
         '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
           (Response: any) => {
-            console.log(Response);
             this.reset();
             if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');

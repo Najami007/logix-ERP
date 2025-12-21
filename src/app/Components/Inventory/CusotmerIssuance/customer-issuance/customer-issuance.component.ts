@@ -743,7 +743,6 @@ export class CustomerIssuanceComponent implements OnInit {
       PinCode: '',
       UserID: this.global.getUserID(),
     }
-    console.log(postData);
 
     if (this.btnType == 'Save' && type == 'Save') {
       postData.InvType = 'IC';
@@ -897,8 +896,8 @@ export class CustomerIssuanceComponent implements OnInit {
     this.invoiceDate =item.invType == 'HIC' ? new Date(item.invDate) : new Date();
     this.locationID =item.invType == 'HIC' ? item.locationID : 0;
     this.invRemarks = item.invType == 'HIC' ? item.remarks : '';
-    this.invBillNo = item.invType == 'HIC' ? item.invBillNo : '';
-    this.holdInvNo = item.invType == 'HIC' ? item.invBillNo : '';
+    this.invBillNo = item.invType == 'HIC' ? item.invBillNo : '-';
+    this.holdInvNo = item.invType == 'HIC' ? item.invBillNo : '-';
 
     this.subTotal = item.billTotal;
     this.partyID =item.invType == 'HIC' ? item.partyID : 0;

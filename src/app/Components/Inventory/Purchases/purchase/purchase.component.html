@@ -127,7 +127,7 @@
                             <th>Barcode</th>
                             <th class="col-3">Product Name</th>
                             <th>Expiry</th>
-                            <th>Quantity</th>
+                            <th>quantity</th>
                             <th *ngIf="DetailedPurchaseFeature">Cost Price</th>
                             <th *ngIf="DetailedPurchaseFeature">Disc %</th>
                             <th *ngIf="DetailedPurchaseFeature">Disc Rs</th>
@@ -151,8 +151,8 @@
                             [ngClass]="rowFocused == index ?'bg-dg':''" (click)="showImg(item);rowFocused = index">
                             <td class="text-center">{{index+1}}</td>
                             <td style="min-width: 120px;">{{item.barcode}} </td>
-                            <td style="min-width: 120px;">{{item.ProductTitle}}</td>
-                            <td><input type="date" class="expDate{{index}} amtInput" [(ngModel)]="item.ExpiryDate"
+                            <td style="min-width: 120px;">{{item.productTitle}}</td>
+                            <td><input type="date" class="expDate{{index}} amtInput" [(ngModel)]="item.expiryDate"
                                     (keydown)="rowFocused = index" (keyup)="rowFocused = index"
                                     style="height: 25px; width: 150px;"></td>
 
@@ -160,7 +160,7 @@
 
 
 
-                            <td class="text-center"><input type="text" [(ngModel)]="item.Quantity" min="0"
+                            <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
                                     draggable="false" dropzone="false"
                                     (input)="global.handleInputChange($event);getTotal();changeValue(item);onFieldsUpdate('qty',item)"
                                     (keydown)="this.handleUpdown(item,$event,'.qty',index)"
@@ -168,7 +168,7 @@
                                     class="qty{{index}} text-center amtInput" style="width: 80px;"></td>
 
                             <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
-                                    [(ngModel)]="item.tempCostPrice" min="0" draggable="false"
+                                    [(ngModel)]="item.tempcostPrice" min="0" draggable="false"
                                     (input)="global.handleInputChange($event);getTotal();changeValue(item);onFieldsUpdate('tcp',item)"
                                     (keydown)="this.handleUpdown(item,$event,'.tcp',index)"
                                     (keyup)="showImg(item);rowFocused = index;"
@@ -207,8 +207,8 @@
 
 
                             <td class="text-center">
-                                <span *ngIf="DetailedPurchaseFeature">{{item.CostPrice |number:'1.0-1'}} </span>
-                                <input type="text" [(ngModel)]="item.CostPrice" min="0" *ngIf="!DetailedPurchaseFeature"
+                                <span *ngIf="DetailedPurchaseFeature">{{item.costPrice |number:'1.0-1'}} </span>
+                                <input type="text" [(ngModel)]="item.costPrice" min="0" *ngIf="!DetailedPurchaseFeature"
                                     draggable="false"
                                     (input)="global.handleInputChange($event);getTotal();changeValue(item);"
                                     (keydown)="this.handleUpdown(item,$event,'.cp',index);"
@@ -218,7 +218,7 @@
 
 
 
-                            <td class="text-center"><input type="text" [(ngModel)]="item.SalePrice" min="0"
+                            <td class="text-center"><input type="text" [(ngModel)]="item.salePrice" min="0"
                                     draggable="false"
                                     (input)="global.handleInputChange($event);getTotal();changeValue(item);"
                                     (keydown)="this.handleUpdown(item,$event,'.sp',index);"
@@ -227,10 +227,10 @@
                             </td>
 
 
-                            <td class="text-end minWidth" (click)="editTotal(item)">{{item.CostPrice * item.Quantity
+                            <td class="text-end minWidth" (click)="editTotal(item)">{{item.costPrice * item.quantity
                                 |number:'1.0-1'}}
                             </td>
-                            <td class="text-center minWidth">{{item.AQ |number:'1.0-3'}}</td>
+                            <td class="text-center minWidth">{{item.aq |number:'1.0-3'}}</td>
                             <td class="text-center minWidth"><input type="text" [(ngModel)]="item.mrp" min="0"
                                     draggable="false" (keydown)="this.handleUpdown(item,$event,'.mrp',index);"
                                     (keyup)="showImg(item);rowFocused = index" class="mrp{{index}} text-center amtInput"
@@ -251,7 +251,7 @@
                         </tr>
                         <tr>
                             <td colspan="4"></td>
-                            <td class="text-center">{{myTotalQty|number:'1.0-3' }}</td>
+                            <td class="text-center fw-bold">{{myTotalQty|number:'1.0-3' }}</td>
                             <td colspan="5"></td>
                             <td colspan="6" *ngIf="DetailedPurchaseFeature"></td>
                             <td class="text-center"><mat-icon class="cursorPointer"

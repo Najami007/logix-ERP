@@ -179,6 +179,7 @@ export class DayopencloseComponent implements OnInit {
 
     this.app.startLoaderDark();
     this.http.post(environment.mainApi + this.global.userLink + url, {
+      ProjectID:this.projectID,
       DayOpenDate: this.global.dateFormater(this.date, '-'),
       UserID: this.global.getUserID()
     }).subscribe(
@@ -202,7 +203,7 @@ export class DayopencloseComponent implements OnInit {
 
 
   postingRemarks: any;
-  projectID = this.global.InvProjectID;
+  projectID = this.global.getProjectID();
 
 
 

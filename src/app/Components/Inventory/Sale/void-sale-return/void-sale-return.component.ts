@@ -778,7 +778,6 @@ export class VoidSaleReturnComponent implements OnInit {
   getProductImage(item: any) {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductImage?ProductID=' + item.productID).subscribe(
       (Response: any) => {
-        console.log(Response);
         this.productImage = Response[0].productImage;
 
         $('.loaderDark').fadeOut();
@@ -1206,7 +1205,6 @@ export class VoidSaleReturnComponent implements OnInit {
 
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetOpenDaySale').subscribe(
       (Response: any) => {
-        console.log(Response);
         this.savedbillList = [];
         var userID: any = this.global.getUserID();
         var roleTypeId: any = this.global.getRoleTypeID();

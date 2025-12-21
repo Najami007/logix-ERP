@@ -727,6 +727,7 @@ export class CustomerIssueReturnComponent implements OnInit {
     }
 
     var postData = {
+      HoldInvNo: this.holdInvNo,
       InvType: 'RIC',
       InvBillNo: this.invBillNo,
       InvDate: this.global.dateFormater(this.invoiceDate, '-'),
@@ -741,6 +742,7 @@ export class CustomerIssueReturnComponent implements OnInit {
       PinCode: '',
       UserID: this.global.getUserID(),
     }
+
 
     if (this.btnType == 'Save' && type == 'Save') {
       postData.InvType = 'RIC';
@@ -851,8 +853,8 @@ export class CustomerIssueReturnComponent implements OnInit {
     }
 
 
-   //// environment.mainApi + this.global.inventoryLink + 'GetIssueInventoryBillSingleDate?Type=' + type + '&creationdate=' + this.global.dateFormater(this.Date, '-')
-    var   url = `${environment.mainApi}${this.global.inventoryLink}GetInventoryBillSingleDate?Type=${this.tmpSearchInvType}&creationdate=${date}`
+    //// environment.mainApi + this.global.inventoryLink + 'GetIssueInventoryBillSingleDate?Type=' + type + '&creationdate=' + this.global.dateFormater(this.Date, '-')
+    var url = `${environment.mainApi}${this.global.inventoryLink}GetInventoryBillSingleDate?Type=${this.tmpSearchInvType}&creationdate=${date}`
 
 
     this.http.get(url).subscribe(
@@ -883,13 +885,15 @@ export class CustomerIssueReturnComponent implements OnInit {
 
   retriveBill(item: any) {
     this.tableDataList = [];
-    this.holdBtnType = 'ReHold';
-    this.invoiceDate = new Date(item.invDate);
-    this.locationID = item.locationID;
-    this.invRemarks = item.remarks;
-    this.invBillNo = item.invBillNo;
+    this.holdBtnType = item.invType == 'HRIC' ? 'ReHold' : 'Hold';
+    this.invoiceDate = item.invType == 'HRIC' ? new Date(item.invDate) : new Date();
+    this.locationID = item.invType == 'HRIC' ? item.locationID : 0;
+    this.invRemarks = item.invType == 'HRIC' ? item.remarks : '';
+    this.invBillNo = item.invType == 'HRIC' ? item.invBillNo : '-';
     this.subTotal = item.billTotal;
-    this.partyID = item.partyID;
+    this.partyID = item.invType == 'HRIC' ? item.partyID : 0;
+    this.holdInvNo = item.invType == 'HRIC' ? item.invBillNo : '-';
+
 
     this.getBillDetail(item.invBillNo).subscribe(
       (Response: any) => {
