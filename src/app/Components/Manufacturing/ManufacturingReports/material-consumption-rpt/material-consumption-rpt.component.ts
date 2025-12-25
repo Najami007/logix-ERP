@@ -14,6 +14,8 @@ import { environment } from 'src/environments/environment.development';
 })
 export class MaterialConsumptionRptComponent implements OnInit {
 
+  ProjectwiseFeature = this.global.ProjectwiseFeature;
+
   apiReq = environment.mainApi + this.global.manufacturingLink;
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -38,6 +40,7 @@ export class MaterialConsumptionRptComponent implements OnInit {
     this.global.setHeaderTitle('Material consumption');
     this.getUsers();
     this.getProducts();
+    this.getProject();
     this.getMenuItemList();
     setTimeout(() => {
       $('#detailTable').hide();
@@ -71,6 +74,18 @@ export class MaterialConsumptionRptComponent implements OnInit {
   }
 
 
+  projectTitle: any = '';
+  projectID: any = this.global.getProjectID();
+  projectList: any = [];
+  getProject() {
+    this.http.get(environment.mainApi + 'cmp/getproject').subscribe(
+      (Response: any) => {
+        this.projectList = Response;
+      }
+    )
+  }
+
+
   MenuItemList: any = '';
   mnuItemID: any = 0;
 
@@ -100,9 +115,10 @@ export class MaterialConsumptionRptComponent implements OnInit {
   productList: any = [];
   getProducts() {
     this.global.getProducts().subscribe(
-      (data: any) => { this.productList = data;
+      (data: any) => {
+        this.productList = data;
         console.log(data);
-       });
+      });
   }
 
 
@@ -120,7 +136,7 @@ export class MaterialConsumptionRptComponent implements OnInit {
   netTotal = 0;
 
   getReport() {
-
+    this.reset();
     $('#detailTable').hide();
     $('#summaryTable').show();
 
@@ -129,10 +145,19 @@ export class MaterialConsumptionRptComponent implements OnInit {
     var fromTime = this.fromTime;
     var toDate = this.global.dateFormater(this.toDate, '');
     var toTime = this.toTime;
+    var projectID = this.projectID;
+
+    this.projectTitle = '';
+    if (projectID > 0) {
+      this.projectTitle = this.projectList.filter((e: any) => e.projectID == this.projectID)[0].projectTitle;
+    }
+
+
+    var url = `${this.apiReq}GetConsumptionRptDateWise?reqUID=${userID}&FromDate=${fromDate}
+      &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&projectID=${projectID}`
 
     this.app.startLoaderDark();
-    this.http.get(this.apiReq + `GetConsumptionRptDateWise?reqUID=${userID}&FromDate=${fromDate}
-      &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`).subscribe(
+    this.http.get(url).subscribe(
       {
         next: (Response: any) => {
           this.reset();
@@ -170,47 +195,65 @@ export class MaterialConsumptionRptComponent implements OnInit {
   amountTotal: any = 0;
   productID: any = 0;
   getIngredientwise() {
+     this.reset();
     $('#detailTable').show();
     $('#summaryTable').hide();
     if (this.productID == 0 || this.productID == undefined) {
-      this.msg.WarnNotify('Select Product')
-    } else {
-      this.DataList = [];
-      this.qtyTotal = 0;
-      this.amountTotal = 0;
-      this.app.startLoaderDark();
-      this.http.get(this.apiReq + 'GetConsumptionRptProductAndDateWise?reqUID=' + this.userID + '&FromDate=' +
-        this.global.dateFormater(this.fromDate, '-') + '&ToDate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime +
-        '&ProductID=' + this.productID).subscribe(
-          (Response: any) => {
-            if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-              this.app.stopLoaderDark();
-              return;
-
-            }
-            this.DataList = Response;
-            if (Response.length > 0) {
-              this.qtyTotal = 0;
-              this.amountTotal = 0;
-              Response.forEach((e: any) => {
-                this.qtyTotal += e.quantity;
-                this.amountTotal += e.avgCostPriceTotal;
-
-              });
-            }
-
-
-            this.app.stopLoaderDark();
-
-
-          },
-          (error: any) => {
-            console.log(error);
-            this.app.stopLoaderDark();
-          }
-        )
+      this.msg.WarnNotify('Select Product');
+     
+      return;
     }
+
+    var userID = this.userID;
+    var fromDate = this.global.dateFormater(this.fromDate, '');
+    var fromTime = this.fromTime;
+    var toDate = this.global.dateFormater(this.toDate, '');
+    var toTime = this.toTime;
+    var productID = this.productID;
+    var projectID = this.projectID;
+
+    this.projectTitle = '';
+    if (projectID > 0) {
+      this.projectTitle = this.projectList.filter((e: any) => e.projectID == this.projectID)[0].projectTitle;
+    }
+
+    var url = `${this.apiReq}GetConsumptionRptProductAndDateWise?reqUID=${userID}&FromDate=${fromDate}
+      &ToDate=${toDate}&fromtime=${fromTime}&totime=${toTime}&ProductID=${productID}&projectID=${projectID}`
+
+    this.DataList = [];
+    this.qtyTotal = 0;
+    this.amountTotal = 0;
+    this.app.startLoaderDark();
+    this.http.get(url).subscribe(
+      (Response: any) => {
+        if (Response.length == 0 || Response == null) {
+          this.global.popupAlert('Data Not Found!');
+          this.app.stopLoaderDark();
+          return;
+
+        }
+        this.DataList = Response;
+        if (Response.length > 0) {
+          this.qtyTotal = 0;
+          this.amountTotal = 0;
+          Response.forEach((e: any) => {
+            this.qtyTotal += e.quantity;
+            this.amountTotal += e.avgCostPriceTotal;
+
+          });
+        }
+
+
+        this.app.stopLoaderDark();
+
+
+      },
+      (error: any) => {
+        console.log(error);
+        this.app.stopLoaderDark();
+      }
+    )
+
 
 
   }
@@ -219,49 +262,67 @@ export class MaterialConsumptionRptComponent implements OnInit {
 
 
   getMnuItemwise() {
+     this.reset();
     $('#detailTable').show();
     $('#summaryTable').hide();
     if (this.mnuItemID == 0 || this.mnuItemID == undefined) {
-      this.msg.WarnNotify('Select Item')
-    } else {
-      this.DataList = [];
-      this.qtyTotal = 0;
-      this.amountTotal = 0;
-      this.app.startLoaderDark();
-      this.http.get(this.apiReq + 'GetConsumptionRptMnuItemAndDateWise?reqUID=' + this.userID + '&FromDate=' +
-        this.global.dateFormater(this.fromDate, '-') + '&ToDate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime +
-        '&MnuItemID=' + this.mnuItemID).subscribe(
-          (Response: any) => {
-            this.DataList = [];
-            this.qtyTotal = 0;
-            this.amountTotal = 0;
-            if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-              this.app.stopLoaderDark();
-              return;
-
-            }
-            this.DataList = Response;
-            if (Response.length > 0) {
-              Response.forEach((e: any) => {
-                this.qtyTotal += e.quantity;
-                this.amountTotal += e.avgCostPriceTotal;
-              });
-            }
-
-            this.app.stopLoaderDark();
-
-
-
-          },
-          (error: any) => {
-            console.log(error);
-            this.app.stopLoaderDark();
-
-
-          }
-        )
+      this.msg.WarnNotify('Select Item');
+      return;
     }
+
+
+    var userID = this.userID;
+    var fromDate = this.global.dateFormater(this.fromDate, '');
+    var fromTime = this.fromTime;
+    var toDate = this.global.dateFormater(this.toDate, '');
+    var toTime = this.toTime;
+    var mnuItemID = this.mnuItemID;
+    var projectID = this.projectID;
+
+    this.projectTitle = '';
+    if (projectID > 0) {
+      this.projectTitle = this.projectList.filter((e: any) => e.projectID == this.projectID)[0].projectTitle;
+    }
+
+    var url = `${this.apiReq}GetConsumptionRptMnuItemAndDateWise?reqUID=${userID}&FromDate=${fromDate}&ToDate=${toDate}
+      &fromtime=${fromTime}&totime=${toTime}&MnuItemID=${mnuItemID}&projectID=${projectID}`
+
+    this.DataList = [];
+    this.qtyTotal = 0;
+    this.amountTotal = 0;
+    this.app.startLoaderDark();
+    this.http.get(url).subscribe(
+      (Response: any) => {
+        this.DataList = [];
+        this.qtyTotal = 0;
+        this.amountTotal = 0;
+        if (Response.length == 0 || Response == null) {
+          this.global.popupAlert('Data Not Found!');
+          this.app.stopLoaderDark();
+          return;
+
+        }
+        this.DataList = Response;
+        if (Response.length > 0) {
+          Response.forEach((e: any) => {
+            this.qtyTotal += e.quantity;
+            this.amountTotal += e.avgCostPriceTotal;
+          });
+        }
+
+        this.app.stopLoaderDark();
+
+
+
+      },
+      (error: any) => {
+        console.log(error);
+        this.app.stopLoaderDark();
+
+
+      }
+    )
+
 
 
   }
@@ -285,6 +346,8 @@ export class MaterialConsumptionRptComponent implements OnInit {
     this.billTotal = 0;
     this.billDiscountTotal = 0;
     this.netTotal = 0;
+    this.qtyTotal = 0;
+    this.amountTotal = 0;
 
     this.DataList = [];
   }

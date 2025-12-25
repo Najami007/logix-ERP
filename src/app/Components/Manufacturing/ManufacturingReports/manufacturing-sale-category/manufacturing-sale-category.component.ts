@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment.development';
 })
 export class ManufacturingSaleCategoryComponent {
 
+  ProjectwiseFeature = this.global.ProjectwiseFeature;
 
 
   apiReq = environment.mainApi + this.global.manufacturingLink;
@@ -40,6 +41,7 @@ export class ManufacturingSaleCategoryComponent {
     this.global.setHeaderTitle('Sale Report');
     this.getCategoryList();
     this.getUsers();
+    this.getProject();
   }
 
 
@@ -57,6 +59,21 @@ export class ManufacturingSaleCategoryComponent {
   SaleDetailList: any = [];
 
   reportType: any;
+
+
+  projectTitle:any = '';
+  categoryTitle:any = '';
+  projectID: any = this.global.getProjectID();
+  projectList: any = [];
+  getProject() {
+    this.http.get(environment.mainApi + 'cmp/getproject').subscribe(
+      (Response: any) => {
+        this.projectList = Response;
+      }
+    )
+  }
+
+
 
   getUsers() {
     this.global.getUserList().subscribe((data: any) => { this.userList = data; });
@@ -106,10 +123,23 @@ export class ManufacturingSaleCategoryComponent {
     var fromTime = this.fromTime;
     var toDate = this.global.dateFormater(this.toDate, '');
     var toTime = this.toTime;
+    var projectID = this.projectID;
+
+    this.projectTitle = '';
+    if(projectID > 0){
+      this.projectTitle = this.projectList.filter((e:any)=> e.projectID == this.projectID)[0].projectTitle;
+    }
+    this.categoryTitle = '';
+    if(mnuItemID > 0){
+      this.categoryTitle = this.categoryList.filter((e:any)=> e.mnuItemCatID == this.mnuCategoryID )[0].mnuItemCatTitle;
+    }
+
+    var url =  `${this.apiReq}SaleDetailRptCatagoryWise?reqCatID=${mnuItemID}&reqUID=${userID}&FromDate=${fromDate}
+        &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&projectID=${projectID}`
+    
 
     this.app.startLoaderDark();
-    this.http.get(this.apiReq + `SaleDetailRptCatagoryWise?reqCatID=${mnuItemID}&reqUID=${userID}&FromDate=${fromDate}
-        &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`).subscribe(
+    this.http.get(url).subscribe(
       {
         next: (Response: any) => {
           this.reset();
@@ -123,7 +153,7 @@ export class ManufacturingSaleCategoryComponent {
 
           if (Response.length > 0) {
             this.DataList = Response.filter((e: any) => e.invType == this.rptType);
-            
+
             if (this.DataList.length == 0 || this.DataList == null) {
               this.global.popupAlert('Data Not Found!');
               this.app.stopLoaderDark();
@@ -162,7 +192,7 @@ export class ManufacturingSaleCategoryComponent {
     this.global.ExportHTMLTabletoExcel('printContainer', `Sale Report ${startDate} - ${endDate}`);
   }
 
-    reset() {
+  reset() {
     this.DataList = [];
     this.costTotal = 0;
     this.saleTotal = 0;

@@ -660,6 +660,7 @@ export class InvreportcatwiseComponent implements OnInit {
     { id: 3, title: 'Hide Zero' },
     { id: 4, title: 'Zero Only' },
     { id: 6, title: 'Cost > Sale' },
+    { id: 7, title: 'Avg Cost > Sale' },
 
   ]
 
@@ -689,6 +690,20 @@ export class InvreportcatwiseComponent implements OnInit {
      if (this.filterID == 6) {
       this.inventoryList = this.tmpInventoryList.filter((e: any) => e.costPrice > e.salePrice )
     }
+
+     if (this.filterID == 7) {
+      this.inventoryList = this.tmpInventoryList.filter((e: any) => e.avgCostPrice > e.salePrice )
+    }
+
+    
+    // this.inventoryList = this.tmpInventoryList.filter((p: any) =>{
+    //   (this.filterID  == 1 ? true : true)&&
+    //   (this.filterID  == 2  ? (p.qtyIn - p.qtyOut) < 0 : true)&&
+    //   (this.filterID  == 3  ? (p.qtyIn - p.qtyOut) > 0 || (p.qtyIn - p.qtyOut) < 0 : true)&&
+    //   (this.filterID  == 4  ? (p.qtyIn - p.qtyOut) == 0 : true)&&
+    //   (this.filterID  == 5  ? (p.qtyIn - p.qtyOut) > 0 : true)&&
+    //   (this.filterID  == 6  ?  p.costPrice > p.salePrice : true)
+    // });
 
 
     setTimeout(() => {

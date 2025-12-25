@@ -39,7 +39,7 @@ export const environment = {
 
 
 
-   mainApi: 'http://192.168.20.99:7005/', ///////////// MHM Mehria Town Mehria Mall
+  // mainApi: 'http://192.168.20.99:7005/', ///////////// MHM Mehria Town Mehria Mall
   //  mainApi: 'http://159.69.174.21:2034/',  /////////// MHM Mehria Town LIVE API
 
 
@@ -47,7 +47,7 @@ export const environment = {
 
   // mainApi: 'http://159.69.174.21:2029/',   /////// AM Fast Food Salif 
   //mainApi: 'http://159.69.174.21:2027/', /////////////// Makkah Oil Islamabad
-  // mainApi: 'http://159.69.174.21:2030/',   /////// Mehria Tuff Tile
+   mainApi: 'http://159.69.174.21:2030/',   /////// Mehria Tuff Tile
 
 
 

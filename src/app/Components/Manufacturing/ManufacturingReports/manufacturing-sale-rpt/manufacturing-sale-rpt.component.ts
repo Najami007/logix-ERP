@@ -15,6 +15,9 @@ import { environment } from 'src/environments/environment.development';
 })
 export class ManufacturingSaleRptComponent implements OnInit {
 
+
+    ProjectwiseFeature = this.global.ProjectwiseFeature;
+
   apiReq = environment.mainApi + this.global.manufacturingLink;
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -38,6 +41,7 @@ export class ManufacturingSaleRptComponent implements OnInit {
   ngOnInit(): void {
     this.global.setHeaderTitle('Sale Report');
     this.getUsers();
+    this.getProject();
   }
 
 
@@ -60,6 +64,20 @@ export class ManufacturingSaleRptComponent implements OnInit {
     this.global.getUserList().subscribe((data: any) => { this.userList = data; });
   }
 
+
+  
+  projectTitle:any = '';
+  projectID: any = this.global.getProjectID();
+  projectList: any = [];
+  getProject() {
+    this.http.get(environment.mainApi + 'cmp/getproject').subscribe(
+      (Response: any) => {
+        this.projectList = Response;
+      }
+    )
+  }
+
+
   onUserSelected() {
     var curUser = this.userList.find((e: any) => e.userID == this.userID);
     this.userName = curUser.userName;
@@ -79,10 +97,20 @@ export class ManufacturingSaleRptComponent implements OnInit {
     var fromTime = this.fromTime;
     var toDate = this.global.dateFormater(this.toDate, '');
     var toTime = this.toTime;
+     var projectID = this.projectID;
+
+    this.projectTitle = '';
+    if(projectID > 0){
+      this.projectTitle = this.projectList.filter((e:any)=> e.projectID == this.projectID)[0].projectTitle;
+    }
+
+    var url = `${this.apiReq}ManufacturingSaleSummaryRpt?reqUID=${userID}&FromDate=${fromDate}
+      &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&projectID=${projectID}`;
+
+      console.log(url);
 
     this.app.startLoaderDark();
-    this.http.get(this.apiReq + `ManufacturingSaleSummaryRpt?reqUID=${userID}&FromDate=${fromDate}
-      &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`).subscribe(
+    this.http.get(url).subscribe(
       {
         next: (Response: any) => {
           this.reset();

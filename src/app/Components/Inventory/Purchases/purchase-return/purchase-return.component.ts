@@ -28,13 +28,15 @@ export class PurchaseReturnComponent implements OnInit {
   @HostListener('document:visibilitychange', [])
 
   appVisibility() {
-    if(!this.insertLocalStorageFeature)return;
+    if (!this.insertLocalStorageFeature) return;
     if (document.hidden) { } else { this.importFromLocalStorage(); }
   }
 
   disableDateFeature = this.global.DisableInvDate;
   ImageUrlFeature = this.global.ImageUrlFeature;
   insertLocalStorageFeature = this.global.insertLocalStorageFeature;
+  ProjectwiseFeature = this.global.ProjectwiseFeature;
+
 
 
   companyProfile: any = [];
@@ -61,6 +63,7 @@ export class PurchaseReturnComponent implements OnInit {
     this.global.setHeaderTitle('Purchase Return');
 
     this.getSuppliers();
+    this.getProject();
     $('.searchProduct').trigger('focus');
     this.getProducts();
     this.global.getBookerList().subscribe((data: any) => { this.BookerList = data; });
@@ -165,6 +168,18 @@ export class PurchaseReturnComponent implements OnInit {
 
 
 
+  }
+
+
+  projectList: any = [];
+  getProject() {
+    this.http.get(environment.mainApi + 'cmp/getproject').subscribe(
+      (Response: any) => {
+        this.projectList = Response;
+
+
+      }
+    )
   }
 
 
@@ -562,7 +577,7 @@ export class PurchaseReturnComponent implements OnInit {
     }
     this.netTotal = (this.subTotal + parseFloat(this.overHead)) - parseFloat(this.discount)
 
-    if(!this.insertLocalStorageFeature)return;
+    if (!this.insertLocalStorageFeature) return;
     this.insertToLocalStorage();
 
   }
@@ -996,6 +1011,7 @@ export class PurchaseReturnComponent implements OnInit {
     this.holdBillList = [];
     this.supplierDetail = [];
     this.netTotal = 0;
+    this.projectID = this.global.getProjectID();
 
     this.removeLocalStorage();
 
@@ -1041,6 +1057,7 @@ export class PurchaseReturnComponent implements OnInit {
     this.holdBtnType = 'ReHold'
     this.invoiceDate = new Date(item.invDate);
     this.locationID = item.locationID;
+    this.projectID = item.projectID;
     this.refInvNo = item.refInvoiceNo;
     this.discount = item.billDiscount;
     this.overHead = item.overHeadAmount;
@@ -1219,6 +1236,9 @@ export class PurchaseReturnComponent implements OnInit {
   removeLocalStorage() {
     localStorage.removeItem('tmpPurchaseReturnData');
     localStorage.removeItem('tmpPRLocationID');
+    localStorage.removeItem('tmpPRProjectID');
+
+
     localStorage.removeItem('tmpPRInvoiceDate');
     localStorage.removeItem('tmpPRRefInvNo');
     localStorage.removeItem('tmpPRPartyID');
@@ -1242,6 +1262,9 @@ export class PurchaseReturnComponent implements OnInit {
     var locationID = JSON.stringify(this.locationID);
     localStorage.setItem('tmpPRLocationID', locationID);
 
+    var projectID = JSON.stringify(this.projectID);
+    localStorage.setItem('tmpPRProjectID', projectID);
+
     var date = JSON.stringify(this.invoiceDate);
     localStorage.setItem('tmpPRInvoiceDate', date);
 
@@ -1251,7 +1274,7 @@ export class PurchaseReturnComponent implements OnInit {
     var partyID = JSON.stringify(this.partyID);
     localStorage.setItem('tmpPRPartyID', partyID);
 
-    var remarks = JSON.stringify(this.invRemarks);
+    var remarks = JSON.stringify(this.invRemarks ? this.invRemarks : '-');
     localStorage.setItem('tmpPRRemarks', remarks);
 
     var holdInvNo = JSON.stringify(this.holdInvNo);
@@ -1293,8 +1316,13 @@ export class PurchaseReturnComponent implements OnInit {
 
     this.invRemarks = JSON.parse(localStorage.getItem('tmpPRRemarks') || '');
     this.partyID = JSON.parse(localStorage.getItem('tmpPRPartyID') || '0');
-    this.invoiceDate = JSON.parse(localStorage.getItem('tmpPRInvoiceDate') || '');
+
+    var tmpDate: any = JSON.parse(localStorage.getItem('tmpPRInvoiceDate') || '');
+    this.invoiceDate = new Date(tmpDate ? tmpDate : new Date());
+
     this.locationID = JSON.parse(localStorage.getItem('tmpPRLocationID') || '0');
+    this.projectID = JSON.parse(localStorage.getItem('tmpPRProjectID') || '0');
+
     this.refInvNo = JSON.parse(localStorage.getItem('tmpPRRefInvNo') || '');
     this.holdInvNo = JSON.parse(localStorage.getItem('tmpPRHoldINvNo') || '');
     this.holdBtnType = JSON.parse(localStorage.getItem('tmpPRHoldBtnType') || 'Hold');

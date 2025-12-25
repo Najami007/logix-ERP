@@ -506,6 +506,9 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     this.qtyTotal = 0;
     this.costPriceTotal = 0;
     this.avgCostTotal = 0;
+    this.profitPercentTotal = 0;
+    this.profitTotal = 0;
+    this.detNetTotal = 0;
     
     this.salePriceTotal = 0;
     this.detNetTotal = 0;

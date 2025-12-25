@@ -16,6 +16,7 @@ export class ManufacturingSalePartywiseComponent {
 
 
 
+  ProjectwiseFeature = this.global.ProjectwiseFeature;
 
   apiReq = environment.mainApi + this.global.manufacturingLink;
   companyProfile: any = [];
@@ -41,6 +42,7 @@ export class ManufacturingSalePartywiseComponent {
     this.global.setHeaderTitle('Sale Report Customer');
     this.getUsers();
     this.getPartyList();
+    this.getProject();
   }
 
 
@@ -56,6 +58,19 @@ export class ManufacturingSalePartywiseComponent {
   toTime: any = '23:59';
 
   SaleDetailList: any = [];
+
+  partyTitle:any = '';
+  projectTitle: any = '';
+  projectID: any = this.global.getProjectID();
+  projectList: any = [];
+  getProject() {
+    this.http.get(environment.mainApi + 'cmp/getproject').subscribe(
+      (Response: any) => {
+        this.projectList = Response;
+      }
+    )
+  }
+
 
   reportType: any;
 
@@ -96,11 +111,25 @@ export class ManufacturingSalePartywiseComponent {
     var fromTime = this.fromTime;
     var toDate = this.global.dateFormater(this.toDate, '');
     var toTime = this.toTime;
+    var projectID = this.projectID;
 
+    this.projectTitle = '';
+    if (projectID > 0) {
+      this.projectTitle = this.projectList.filter((e: any) => e.projectID == this.projectID)[0].projectTitle;
+    }
+    this.partyTitle = '';
+
+    if(partyID > 0){
+      this.partyTitle = this.partyList.filter((e: any) => e.partyID == partyID)[0].partyName;
+    }
+
+    
+
+    var url = `${this.apiReq}SaleDetailRptPartyWise?reqPartyID=${partyID}&reqUID=${userID}&FromDate=${fromDate}
+      &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&projectID=${projectID}`
 
     this.app.startLoaderDark();
-    this.http.get(this.apiReq + `SaleDetailRptPartyWise?reqPartyID=${partyID}&reqUID=${userID}&FromDate=${fromDate}
-      &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`).subscribe(
+    this.http.get(url).subscribe(
       {
         next: (Response: any) => {
           this.reset();
@@ -114,7 +143,7 @@ export class ManufacturingSalePartywiseComponent {
 
           if (Response.length > 0) {
             this.DataList = Response.filter((e: any) => e.invType == this.rptType);
-            
+
             if (this.DataList.length == 0 || this.DataList == null) {
               this.global.popupAlert('Data Not Found!');
               this.app.stopLoaderDark();

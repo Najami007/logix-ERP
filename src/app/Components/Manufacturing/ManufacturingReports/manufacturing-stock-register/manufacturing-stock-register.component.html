@@ -1,7 +1,16 @@
 <div class="container-fluid body">
 
     <div class="row mt-2">
-
+        <div class="col-md-4 ">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label>Project </mat-label>
+                <mat-select [(ngModel)]="projectID" name="mbsProject" [disabled]="!ProjectwiseFeature">
+                    <mat-option [value]="0">All</mat-option>
+                    <mat-option *ngFor="let item of projectList "
+                        [value]="item.projectID">{{item.projectTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
 
         <div class="col-md-4">
 
@@ -39,7 +48,8 @@
                         [width]="item.logo1Width">
                 </span>
                 <div class="d-flex flex-column">
-                    <span class="companyName">Stock Register </span>   
+                    <span class="companyName">Stock Register </span>
+                    <span> <b *ngIf="projectTitle != ''">Project: {{projectTitle}}</b></span>
 
 
                 </div>
@@ -54,7 +64,7 @@
 
         <div id="printContainer">
 
-            <table class="table-logix" >
+            <table class="table-logix">
                 <thead>
                     <tr>
                         <th>S#</th>

@@ -46,6 +46,7 @@ export class PurchaseComponent implements OnInit {
 
 
   ImageUrlFeature = this.global.ImageUrlFeature;
+  ProjectwiseFeature = this.global.ProjectwiseFeature;
 
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -74,6 +75,7 @@ export class PurchaseComponent implements OnInit {
     this.global.setHeaderTitle('Purchase');
     // this.getProducts();
     this.getSuppliers();
+    this.getProject();
     $('.searchBarcode').trigger('focus');
     this.getProducts();
     this.global.getBookerList().subscribe((data: any) => { this.BookerList = data; });
@@ -122,7 +124,7 @@ export class PurchaseComponent implements OnInit {
   overHead: any = 0;
   discount: any = 0;
   holdInvNo: any = '-';
-  RefPoNo :any = '-';
+  RefPoNo: any = '-';
   bookerID: any = 0;
 
 
@@ -160,13 +162,13 @@ export class PurchaseComponent implements OnInit {
 
     if (this.discType == 'ad') {
 
-      var gstAmount = ((item.tempcostPrice * item.gst) / 100)
-      var discP = ((item.tempcostPrice * item.discInP) / 100);
+      var gstAmount = ((item.tempCostPrice * item.gst) / 100)
+      var discP = ((item.tempCostPrice * item.discInP) / 100);
       var discR = (item.discInR / item.quantity);
-      var etAmount = (((Number(item.tempcostPrice) + Number(gstAmount) - discP - discR) * item.et) / 100);
+      var etAmount = (((Number(item.tempCostPrice) + Number(gstAmount) - discP - discR) * item.et) / 100);
 
-      var totalCost = item.tempcostPrice * item.quantity;
-      var costWithDiscP = item.tempcostPrice - discP;
+      var totalCost = item.tempCostPrice * item.quantity;
+      var costWithDiscP = item.tempCostPrice - discP;
       var costWithDiscR = costWithDiscP - discR;
       var costWithGst = costWithDiscR + ((costWithDiscR * item.gst) / 100);
       var costWithEt = costWithGst + etAmount;
@@ -175,15 +177,15 @@ export class PurchaseComponent implements OnInit {
     }
     if (this.discType == 'bd') {
 
-      var totalCost = item.tempcostPrice * item.quantity;
-      var gstAmount = ((item.tempcostPrice * item.gst) / 100);
-      var etAmount = (((Number(item.tempcostPrice) + Number(gstAmount)) * item.et) / 100);
-      var discP = (((item.tempcostPrice - gstAmount) * item.discInP) / 100);
+      var totalCost = item.tempCostPrice * item.quantity;
+      var gstAmount = ((item.tempCostPrice * item.gst) / 100);
+      var etAmount = (((Number(item.tempCostPrice) + Number(gstAmount)) * item.et) / 100);
+      var discP = (((item.tempCostPrice - gstAmount) * item.discInP) / 100);
       var discR = (item.discInR / item.quantity);
 
 
-      var costWithGst = Number(item.tempcostPrice) - Number(discR) + gstAmount;
-      var costWithDisc = (Number(item.tempcostPrice) - Number(gstAmount)) - Number(discP) - Number(discR) + Number(gstAmount);
+      var costWithGst = Number(item.tempCostPrice) - Number(discR) + gstAmount;
+      var costWithDisc = (Number(item.tempCostPrice) - Number(gstAmount)) - Number(discP) - Number(discR) + Number(gstAmount);
 
       item.costPrice = item.discInP > 0
         ? costWithDisc + ((costWithDisc * item.et) / 100)
@@ -212,6 +214,18 @@ export class PurchaseComponent implements OnInit {
     this.global.getSupplierList().subscribe((data: any) => { this.suppliersList = data; });
 
   }
+
+  projectList: any = [];
+  getProject() {
+    this.http.get(environment.mainApi + 'cmp/getproject').subscribe(
+      (Response: any) => {
+        this.projectList = Response;
+       
+
+      }
+    )
+  }
+
 
 
   focusto(cls: any, e: any) {
@@ -341,7 +355,7 @@ export class PurchaseComponent implements OnInit {
         productImage: this.ImageUrlFeature ? data.imagesPath : '-',
         quantity: qty,
         wohCP: data.costPrice,
-        tempcostPrice: data.costPrice,
+        tempCostPrice: data.costPrice,
         margin: ((data.salePrice - data.costPrice) / data.costPrice) * 100,
         costPrice: data.costPrice,
         salePrice: data.salePrice,
@@ -622,7 +636,7 @@ export class PurchaseComponent implements OnInit {
     var myQty = this.tableDataList[myIndex].quantity;
     var myCP = this.tableDataList[myIndex].costPrice;
     var mySP = this.tableDataList[myIndex].salePrice;
-    var mytmpCost = this.tableDataList[myIndex].tempcostPrice;
+    var mytmpCost = this.tableDataList[myIndex].tempCostPrice;
     var mydiscInP = this.tableDataList[myIndex].discInP;
     var mydiscInR = this.tableDataList[myIndex].discInR;
     var mygst = this.tableDataList[myIndex].gst;
@@ -867,7 +881,7 @@ export class PurchaseComponent implements OnInit {
       discType: this.discType,
       InvDetail: JSON.stringify(this.tableDataList),
       UserID: this.global.getUserID(),
-      RefPoNo :this.RefPoNo,
+      RefPoNo: this.RefPoNo,
     };
 
 
@@ -875,7 +889,7 @@ export class PurchaseComponent implements OnInit {
       if (this.holdBtnType == 'Hold') {
 
         this.insert('hold', postData)
-      
+
       } else if (this.holdBtnType == 'ReHold') {
         this.global.openPinCode().subscribe(pin => {
           if (pin != '') {
@@ -884,7 +898,7 @@ export class PurchaseComponent implements OnInit {
 
             this.insert('rehold', postData);
 
-           
+
           } else {
             this.sortType == 'desc'
               ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex)
@@ -1019,6 +1033,7 @@ export class PurchaseComponent implements OnInit {
     this.netTotal = 0;
     this.InvoiceDocument = '';
     this.documentName = '';
+    this.projectID = this.global.getProjectID();
     this.removeLocalStorage();
 
 
@@ -1029,8 +1044,6 @@ export class PurchaseComponent implements OnInit {
 
   getTotal() {
 
-    // alert(this.overHead);
-    // alert(this.discount);
     this.subTotal = 0;
     this.myTotalQty = 0;
     this.netTotal = 0;
@@ -1070,7 +1083,7 @@ export class PurchaseComponent implements OnInit {
   cpTotal = 0;
   wohCPTotal = 0;
   retriveBill(item: any) {
-
+    console.log(item);
     this.tableDataList = [];
     this.holdBtnType = 'ReHold'
     this.invoiceDate = new Date(item.invDate);
@@ -1082,6 +1095,7 @@ export class PurchaseComponent implements OnInit {
     this.holdInvNo = item.invBillNo;
     this.bookerID = item.bookerID;
     this.partyID = item.partyID;
+    this.projectID = item.projectID;
     this.RefPoNo = item.refPoNo;
 
     this.onPartySelected();
@@ -1092,7 +1106,7 @@ export class PurchaseComponent implements OnInit {
         this.productImage = Response[Response.length - 1].productImage;
         this.discType = Response[0].discType;
         Response.forEach((e: any) => {
-
+          console.log(Response);
           this.myTotalQty += e.quantity;
           this.tableDataList.push({
             rowIndex: this.tableDataList.length + 1,
@@ -1102,7 +1116,7 @@ export class PurchaseComponent implements OnInit {
             productImage: '-', // e.productImage,
             quantity: e.quantity,
             wohCP: e.costPrice,
-            tempcostPrice: e.tempcostPrice,
+            tempCostPrice: e.tempCostPrice,
             margin: ((e.salePrice - e.costPrice) / e.costPrice) * 100,
             costPrice: e.costPrice,
             salePrice: e.salePrice,
@@ -1162,7 +1176,7 @@ export class PurchaseComponent implements OnInit {
             productImage: '-', // e.productImage,
             quantity: e.quantity,
             wohCP: e.costPrice,
-            tempcostPrice: e.costPrice,
+            tempCostPrice: e.costPrice,
             margin: ((e.salePrice - e.costPrice) / e.costPrice) * 100,
             costPrice: e.costPrice,
             salePrice: e.salePrice,
@@ -1203,9 +1217,9 @@ export class PurchaseComponent implements OnInit {
 
     var url = '';
 
-    if(this.tmpSearchInvType == 'IC'){
+    if (this.tmpSearchInvType == 'IC') {
       url = `${environment.icApiUrl}${this.global.inventoryLink}GetInventoryBillSingleDate?Type=${this.tmpSearchInvType}&creationdate=${date}`
-    }else{
+    } else {
       url = `${environment.mainApi}${this.global.inventoryLink}GetInventoryBillSingleDate?Type=${this.tmpSearchInvType}&creationdate=${date}`
     }
 
@@ -1226,7 +1240,7 @@ export class PurchaseComponent implements OnInit {
           this.holdBillList = Response;
         }
 
-          if (this.tmpSearchInvType == 'IC') {
+        if (this.tmpSearchInvType == 'IC') {
           this.holdBillList = Response;
         }
 
@@ -1263,7 +1277,7 @@ export class PurchaseComponent implements OnInit {
             productImage: e.productImage,
             quantity: e.quantity,
             wohCP: e.costPrice,
-            tempcostPrice: e.tempcostPrice,
+            tempCostPrice: e.costPrice,
             margin: ((e.salePrice - e.costPrice) / e.costPrice) * 100,
             costPrice: e.costPrice,
             salePrice: e.salePrice,
@@ -1467,6 +1481,8 @@ export class PurchaseComponent implements OnInit {
   removeLocalStorage() {
     localStorage.removeItem('tmpPurchaseData');
     localStorage.removeItem('tmpPLocationID');
+    localStorage.removeItem('tmpPProjectID');
+
     localStorage.removeItem('tmpPInvoiceDate');
     localStorage.removeItem('tmpPRefInvNo');
     localStorage.removeItem('tmpPPartyID');
@@ -1489,6 +1505,9 @@ export class PurchaseComponent implements OnInit {
     var locationID = JSON.stringify(this.locationID);
     localStorage.setItem('tmpPLocationID', locationID);
 
+    var projectID = JSON.stringify(this.projectID);
+    localStorage.setItem('tmpPProjectID', projectID);
+
     var date = JSON.stringify(this.invoiceDate);
     localStorage.setItem('tmpPInvoiceDate', date);
 
@@ -1498,7 +1517,7 @@ export class PurchaseComponent implements OnInit {
     var partyID = JSON.stringify(this.partyID);
     localStorage.setItem('tmpPPartyID', partyID);
 
-    var remarks = JSON.stringify(this.invRemarks);
+    var remarks = JSON.stringify(this.invRemarks ? this.invRemarks : '-');
     localStorage.setItem('tmpPRemarks', remarks);
 
     var holdInvNo = JSON.stringify(this.holdInvNo);
@@ -1518,6 +1537,9 @@ export class PurchaseComponent implements OnInit {
 
     var discount = JSON.stringify(this.discount);
     localStorage.setItem('tmpPDiscount', discount);
+
+
+
 
   }
 
@@ -1541,8 +1563,13 @@ export class PurchaseComponent implements OnInit {
 
     this.invRemarks = JSON.parse(localStorage.getItem('tmpPRemarks') || '');
     this.partyID = JSON.parse(localStorage.getItem('tmpPPartyID') || '0');
-    this.invoiceDate = JSON.parse(localStorage.getItem('tmpPInvoiceDate') || '');
+
+    var tmpDate: any = JSON.parse(localStorage.getItem('tmpPInvoiceDate') || '');
+    this.invoiceDate = new Date(tmpDate ? tmpDate : new Date());
+
     this.locationID = JSON.parse(localStorage.getItem('tmpPLocationID') || '0');
+    this.projectID = JSON.parse(localStorage.getItem('tmpPProjectID') || '0');
+
     this.refInvNo = JSON.parse(localStorage.getItem('tmpPRefInvNo') || '');
     this.holdInvNo = JSON.parse(localStorage.getItem('tmpPHoldINvNo') || '');
     this.holdBtnType = JSON.parse(localStorage.getItem('tmpPHoldBtnType') || 'Hold');
@@ -1551,12 +1578,6 @@ export class PurchaseComponent implements OnInit {
     this.discount = JSON.parse(localStorage.getItem('tmpPDiscount') || '0');
     this.tableDataList = data;
     this.getTotal();
-
-    // if (this.AuditInventoryID > 0) {
-    //   this.holdBtnType = 'Rehold'
-    // }
-
-
 
   }
 

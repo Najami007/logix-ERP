@@ -774,3 +774,22 @@
   text-align: center;
   position: relative;
 }
+
+
+
+
+  .original-price {
+  color: #3d3c3c !important;
+  text-decoration: line-through !important;
+  font-size: 18px !important;
+}
+
+.discounted-price {
+  color: black !important;
+  font-size: 20px !important;
+  font-weight: bold !important;
+}
+
+
+
+

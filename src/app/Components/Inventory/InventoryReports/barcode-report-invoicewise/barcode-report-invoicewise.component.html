@@ -127,7 +127,7 @@
                         <tr *ngFor="let item of tableDataList index as index">
                             <td><mat-checkbox [(ngModel)]="item.isChecked"></mat-checkbox>{{index +1}}</td>
                             <td>{{item.flavourTitle ? item.flavourTitle : item.productTitle}}</td>
-                            <td>{{item.barcode2 ?  item.barcode2 : item.barcode}}</td>
+                            <td>{{item.barcode2 ? item.barcode2 : item.barcode}}</td>
                             <td class="cursorPointer" (click)="editQty(item)">{{item.quantity}}</td>
                             <td>{{item.costPrice}}</td>
                             <td>{{item.salePrice}}</td>
@@ -157,7 +157,8 @@
 
 
             <div class="cmpName" *ngIf="showCompany">{{companyName}}</div>
-            <div class="bcodet" *ngIf="showTitle">{{curProductRow.flavourTitle ? curProductRow.flavourTitle : curProductRow.productTitle|slice:0:24}}</div>
+            <div class="bcodet" *ngIf="showTitle">{{curProductRow.flavourTitle ? curProductRow.flavourTitle :
+                curProductRow.productTitle|slice:0:24}}</div>
             <!-- <span class="bcodet">{{item.productTitle
                 |slice:0:24}}...</span> -->
             <ngx-barcode6 class="barcode" [bc-format]="'CODE128'" [bc-height]="40" [bc-background]="'none'"
@@ -203,8 +204,10 @@
 
 
 
-                        <div class=" text-center fw-bold" style="font-size: 20px;" *ngIf="showPrice">
+                        <div class=" text-center fw-bold" [ngClass]="item.discInR > 0 ? 'original-price' : ''" style="font-size: 20px;" *ngIf="showPrice">
                             Rs.{{ item.salePrice |number:'1.0-0'}}</div>
+                        <div class=" text-center fw-bold discounted-price " *ngIf="showPrice && item.discInR > 0 " style="font-size: 20px;" >
+                            Rs.{{ item.salePrice - item.discInR |number:'1.0-0'}}</div>
 
 
                     </div>

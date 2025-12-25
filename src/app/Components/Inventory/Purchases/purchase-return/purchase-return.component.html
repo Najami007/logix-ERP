@@ -24,10 +24,10 @@
                             *ngIf="holdBtnType == 'ReHold'">Re<u>H</u>old</span> </button>
                     <button class="w-25 btnreset me-1" style="height: 50px;" accesskey="r" data-bs-toggle="modal"
                         data-bs-target="#purRtnholdModal"><u>R</u>etrieve</button>
-                  
-                        <button class="w-25 btnText" [disabled]="!isProcessing" id="refresh" accesskey="r"
-                            (click)="isProcessing =  false">Refresh</button>
-                  
+
+                    <button class="w-25 btnText" [disabled]="!isProcessing" id="refresh" accesskey="r"
+                        (click)="isProcessing =  false">Refresh</button>
+
 
                 </div>
             </div>
@@ -88,21 +88,21 @@
                     <td class="text-center"><input type="text" [(ngModel)]="item.Quantity" min="0"
                             (input)="getTotal();changeValue(item);"
                             (keydown)="this.handleUpdown(item,$event,'.qty',index);"
-                            (keyup)="showImg(item);rowFocused = index"
-                            class="qty{{index}} text-center" [accessKey]="index +1 " style="width: 80px;"></td>
+                            (keyup)="showImg(item);rowFocused = index" class="qty{{index}} text-center"
+                            [accessKey]="index +1 " style="width: 80px;"></td>
 
 
                     <td class="text-center"><input type="text" [(ngModel)]="item.CostPrice" min="0"
-                         (input)="getTotal();changeValue(item);"
+                            (input)="getTotal();changeValue(item);"
                             (keydown)="this.handleUpdown(item,$event,'.cp',index);"
-                            (keyup)="showImg(item);rowFocused = index"
-                            class="cp{{index}} text-center" style="width: 80px;"></td>
+                            (keyup)="showImg(item);rowFocused = index" class="cp{{index}} text-center"
+                            style="width: 80px;"></td>
 
                     <!-- <td class="text-center">{{item.CostPrice |number}}</td> -->
 
 
                     <td class="text-center"><input type="text" [(ngModel)]="item.SalePrice" min="0"
-                             (input)="getTotal();changeValue(item);"
+                            (input)="getTotal();changeValue(item);"
                             (keydown)="this.handleUpdown(item,$event,'.sp',index);"
                             (keyup)="showImg(item);rowFocused = index" class="sp{{index}} text-center"
                             style="width: 80px;">
@@ -142,7 +142,7 @@
             <div class="row ps-1 pt-3">
                 <mat-form-field appearance="outline" *ngIf="!disableDateFeature" class="col-lg-2 matSmall">
                     <mat-label>Invoice Date</mat-label>
-                    <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
+                    <input [(ngModel)]="invoiceDate" (dateChange)="insertToLocalStorage()" readonly="true" matInput type="text" name="voucherDate"
                         [matDatepicker]="voucherDate">
                     <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
                     <mat-datepicker #voucherDate></mat-datepicker>
@@ -150,7 +150,7 @@
 
                 <mat-form-field appearance="outline" class="col-lg-3 matSmall">
                     <mat-label>Location</mat-label>
-                    <mat-select [(ngModel)]="locationID" name="location">
+                    <mat-select [(ngModel)]="locationID" name="location" (selectionChange)="insertToLocalStorage()">
                         <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                         <mat-option *ngFor="let item of locationList | filter:locationSearch.value"
@@ -159,7 +159,7 @@
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="col-lg-3 matSmall">
                     <mat-label>Purchaser</mat-label>
-                    <mat-select [(ngModel)]="bookerID" name="location">
+                    <mat-select [(ngModel)]="bookerID" name="location" (selectionChange)="insertToLocalStorage()">
                         <mat-option><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                         <mat-option *ngFor="let item of BookerList | filter:bookerSearch.value"
@@ -170,7 +170,7 @@
                 <mat-form-field appearance="outline" class="matSmall"
                     [ngClass]="disableDateFeature ? 'col-lg-3' :'col-lg-2'">
                     <mat-label>Ref Inv No.</mat-label>
-                    <input matInput [(ngModel)]="refInvNo" type="text" name="refInvNo">
+                    <input matInput [(ngModel)]="refInvNo" (input)="insertToLocalStorage()" type="text" name="refInvNo">
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="matSmall"
                     [ngClass]="disableDateFeature ? 'col-lg-3' :'col-lg-2'">
@@ -182,10 +182,24 @@
             <mat-label>OverHead</mat-label>
             <input matInput (keyup)="distributeOverHead();this.global.avoidMinus($event);" [(ngModel)]="overHead" type="number" name="refInvNo">
         </mat-form-field> -->
-                <mat-form-field appearance="outline" class="col-lg-12 matSmall">
+
+
+                <div class="col-md-4" *ngIf="ProjectwiseFeature">
+                    <mat-form-field class="w-100 matMini" appearance="outline">
+                        <mat-label>Project </mat-label>
+                        <mat-select [(ngModel)]="projectID" name="PRProject" [disabled]="!ProjectwiseFeature" (selectionChange)="insertToLocalStorage()">
+                            <mat-option *ngFor="let item of projectList "
+                                [value]="item.projectID">{{item.projectTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+              <div [ngClass]="ProjectwiseFeature ? 'col-md-8' : 'col-md-12'">
+                  <mat-form-field appearance="outline" class="w-100 matSmall">
                     <mat-label>Remarks</mat-label>
-                    <textarea matInput rows="1" [(ngModel)]="invRemarks" type="text" name="remarks"></textarea>
+                    <textarea matInput rows="1" (input)="insertToLocalStorage()" [(ngModel)]="invRemarks" type="text" name="remarks"></textarea>
                 </mat-form-field>
+              </div>
 
 
 
@@ -326,26 +340,27 @@
 
                         <mat-form-field class="col-md-4 matSmall" appearance="outline">
                             <mat-label>Search.......</mat-label>
-                            <input matInput #holdSearch type="text" >
+                            <input matInput #holdSearch type="text">
                         </mat-form-field>
 
                     </div>
 
-                          <div class="d-flex justify-content-between">
-                    <div>
-                        <mat-radio-group [(ngModel)]="searchBillType" class="mt-2">
-                            <mat-radio-button value="all">All</mat-radio-button>
-                            <mat-radio-button value="Date">Datewise</mat-radio-button>
-                        </mat-radio-group>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <mat-radio-group [(ngModel)]="searchBillType" class="mt-2">
+                                <mat-radio-button value="all">All</mat-radio-button>
+                                <mat-radio-button value="Date">Datewise</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                        <div>
+                            <mat-radio-group [(ngModel)]="tmpSearchInvType" class="mt-2"
+                                (ngModelChange)="holdBillList = []">
+                                <mat-radio-button value="HPR">Holded Invoices</mat-radio-button>
+                                <mat-radio-button value="PR">Saved Invoices</mat-radio-button>
+                                <mat-radio-button value="P">Purchase Invoices</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
                     </div>
-                    <div>
-                        <mat-radio-group [(ngModel)]="tmpSearchInvType" class="mt-2" (ngModelChange)="holdBillList = []">
-                            <mat-radio-button value="HPR">Holded Invoices</mat-radio-button>
-                            <mat-radio-button value="PR">Saved Invoices</mat-radio-button>
-                            <mat-radio-button value="P">Purchase Invoices</mat-radio-button>
-                        </mat-radio-group>
-                    </div>
-                </div>
 
                     <table class="table-logix">
                         <thead>
@@ -357,8 +372,8 @@
                                 <th>Location</th>
                                 <th>Amount</th>
                                 <th>User</th>
-                                <th >Action</th>
-                                
+                                <th>Action</th>
+
                             </tr>
 
                         </thead>
@@ -371,10 +386,12 @@
                                 <td>{{item.locationTitle}}</td>
                                 <td class="text-end">{{(item.billTotal + item.overHeadAmount) | number:'1.0-0'}}</td>
                                 <td>{{item.entryUser}}</td>
-                                <td class="text-center cursorPointer" >
-                                    <mat-icon  class="text-primary" (click)="printBill(item)">print</mat-icon>
-                                    <mat-icon *ngIf="tmpSearchInvType == 'HPR' && crudList.u" data-bs-dismiss="modal" (click)="retriveBill(item)">edit</mat-icon>
-                                     <mat-icon *ngIf="tmpSearchInvType == 'P'  && crudList.u" data-bs-dismiss="modal" (click)="RetreivePurchaseBill(item)">edit</mat-icon>
+                                <td class="text-center cursorPointer">
+                                    <mat-icon class="text-primary" (click)="printBill(item)">print</mat-icon>
+                                    <mat-icon *ngIf="tmpSearchInvType == 'HPR' && crudList.u" data-bs-dismiss="modal"
+                                        (click)="retriveBill(item)">edit</mat-icon>
+                                    <mat-icon *ngIf="tmpSearchInvType == 'P'  && crudList.u" data-bs-dismiss="modal"
+                                        (click)="RetreivePurchaseBill(item)">edit</mat-icon>
                                 </td>
 
                             </tr>

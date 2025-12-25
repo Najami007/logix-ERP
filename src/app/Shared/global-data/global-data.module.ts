@@ -343,6 +343,7 @@ export class GlobalDataModule implements OnInit {
   CTCCustomerIssuanceFeature = this.getFeature('CTCCustomerIssuance');
   AddNewProductRestrictionFeature = this.getFeature('AddNewProductRestriction');
   ImportFromServerFeature = this.getFeature('ImportFromServer');
+  ProjectwiseFeature = this.getFeature('Projectwise');
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
     this.BookerFeature = this.getFeature('Booker');
@@ -407,6 +408,7 @@ export class GlobalDataModule implements OnInit {
     this.CTCCustomerIssuanceFeature = this.getFeature('CTCCustomerIssuance');
     this.AddNewProductRestrictionFeature = this.getFeature('AddNewProductRestriction');
     this.ImportFromServerFeature = this.getFeature('ImportFromServer');
+    this.ProjectwiseFeature = this.getFeature('Projectwise');
   }
 
 

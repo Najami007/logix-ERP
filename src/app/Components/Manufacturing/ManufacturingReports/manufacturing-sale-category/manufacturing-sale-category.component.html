@@ -42,7 +42,19 @@
 
     <div class="row">
 
-        <div class="col-md-4">
+     <div class="col-md-2 ">
+           <mat-form-field class="w-100 matSmall" appearance="outline">
+            <mat-label>Project </mat-label>
+            <mat-select [(ngModel)]="projectID" name="mbsProject"
+                [disabled]="!ProjectwiseFeature">
+                <mat-option [value]="0">All</mat-option>
+                <mat-option *ngFor="let item of projectList "
+                    [value]="item.projectID">{{item.projectTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+     </div>
+
+        <div class="col-md-2">
             <mat-form-field appearance="outline" class="w-100  matSmall">
                 <mat-label>Category</mat-label>
                 <mat-select [(ngModel)]="mnuCategoryID" (selectionChange)="onUserSelected()">
@@ -89,8 +101,9 @@
                 <div class="d-flex flex-column">
                     <span class="companyName">{{item.companyName}}</span>
 
-                    <span class="rptTitle">Sale Report Category</span>
+                    <span class="rptTitle">Sale Report Category ({{categoryTitle}})</span>
                     <span> <b *ngIf="userName != ''">User: {{userName}}</b></span>
+                    <span> <b *ngIf="projectTitle != ''">Project: {{projectTitle}}</b></span>
                     <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
 
@@ -112,6 +125,7 @@
                         <th>S#</th>
                         <th>Inv #</th>
                         <th>Date</th>
+                        <th>Project</th>
                         <th>Item Name</th>
                         <th>Quantity</th>
                         <!-- <th>Cost</th> -->
@@ -125,6 +139,7 @@
                         <td>{{index + 1}}</td>
                         <td>{{item.invBillNo}}</td>
                         <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.projectTitle}}</td>
                         <td>{{item.productTitle}}</td>
                         <td class="text-center">{{item.quantity}}</td>
                         <!-- <td class="text-end">{{item.costPrice | number:'1.0-0'}}</td> -->
@@ -133,7 +148,7 @@
                         <td class="text-end">{{item.salePrice * item.quantity | number:'1.0-0'}}</td>
                     </tr>
                     <tr>
-                        <td colspan="6" class="fw-bold text-center">Total</td>
+                        <td colspan="7" class="fw-bold text-center">Total</td>
                         <!-- <td class="text-end fw-bold">{{costTotal | number:'1.0-0'}}</td> -->
                         <td class="text-end fw-bold">{{saleTotal | number:'1.0-0'}}</td>
                     </tr>

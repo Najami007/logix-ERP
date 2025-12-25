@@ -116,7 +116,8 @@
                         <mat-checkbox [(ngModel)]="costGreaterThenSaleFilter"> Cost Price > Sale Price</mat-checkbox>
                         <mat-checkbox [(ngModel)]="avgCostGreaterThenSaleFilter"> AvgCost Price > Sale
                             Price</mat-checkbox>
-                        <mat-checkbox [(ngModel)]="discSalePriceLessThenCostFilter"> (Sale Price - Disc) < Cost Price</mat-checkbox>
+                        <mat-checkbox [(ngModel)]="discSalePriceLessThenCostFilter"> (Sale Price - Disc) < Cost
+                                Price</mat-checkbox>
                     </div>
 
                 </div>
@@ -496,12 +497,15 @@
                                 <th class="cursorPointer" (click)="sortProds('costPrice')">Cost Price</th>
                                 <th class="cursorPointer" (click)="sortProds('avgCost')">Avg Cost</th>
                                 <th class="cursorPointer" (click)="sortProds('salePrice')">Sale Price</th>
+                                <th class="cursorPointer">Margin</th>
                                 <th class="cursorPointer" (click)="sortProds('discPercentage')"
                                     *ngIf="discFeature && !ManufacturingFeature">Disc %</th>
+                                <th *ngIf="discFeature && !ManufacturingFeature">Sale - Disc</th>
                                 <th *ngIf="!ManufacturingFeature">GST</th>
                                 <th>Entered By</th>
                                 <th class="hide-in-print" *ngIf="!ManufacturingFeature">Img</th>
-                                <th *ngIf="MultiBarcode && !ManufacturingFeature && !AddNewProductRestrictionFeature" class="hide-in-print">UOM</th>
+                                <th *ngIf="MultiBarcode && !ManufacturingFeature && !AddNewProductRestrictionFeature"
+                                    class="hide-in-print">UOM</th>
                                 <!-- <th class="hide-in-print" *ngIf="crudList.u">Edit</th>
                         <th class="hide-in-print">Active Status</th>
 
@@ -529,8 +533,11 @@
                                     <td>{{item.costPrice |number:'1.0-1'}}</td>
                                     <td>{{item.avgCostPrice |number:'1.0-1'}}</td>
                                     <td>{{item.salePrice |number:'1.0-0'}}</td>
+                                    <td>{{ ((item.salePrice - item.costPrice) / item.salePrice) *100 |number:'1.0-1'}}%
+                                    </td>
                                     <td *ngIf="discFeature && !ManufacturingFeature">{{item.discPercentage
                                         |number:'1.0-1'}}%</td>
+                                    <td *ngIf="discFeature && !ManufacturingFeature">{{item.salePrice - item.discRupees |number:'1.0-0'}}</td>
                                     <td *ngIf="!ManufacturingFeature">{{item.gst |number:'1.0-1'}}%</td>
                                     <td>{{item.entryUser}}</td>
                                     <td class="cursorPointer hide-in-print" *ngIf="!ManufacturingFeature">
@@ -701,6 +708,29 @@
 
 
                 <div class="col-md-6" *ngIf="!ManufacturingFeature">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Cost Price *</mat-label>
+                        <!-- <input matInput type="number" [(ngModel)]="CostPrice" (change)="global.avoidMinus($event)"> -->
+                        <input matInput type="number" [(ngModel)]="CostPrice" (change)="global.avoidMinus($event)"
+                            (input)="global.handleInputChange($event)" [disabled]="btnType == 'Update'">
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-6" *ngIf="!ManufacturingFeature">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Sale Price *</mat-label>
+                        <input matInput (keyup)="applyDiscount('sale')" (input)="global.handleInputChange($event)"
+                            type="number" [(ngModel)]="SalePrice" (change)="global.avoidMinus($event)">
+                    </mat-form-field>
+                </div>
+
+
+
+
+                <div class="col-md-6" *ngIf="!ManufacturingFeature">
+
+
+
                     <mat-form-field appearance="outline" class="w-100 matSmall" *ngIf="!ManufacturingFeature">
                         <mat-label>Discount %</mat-label>
                         <input matInput [(ngModel)]="DiscPercent" name="billDiscount" [disabled]="!discFeature"

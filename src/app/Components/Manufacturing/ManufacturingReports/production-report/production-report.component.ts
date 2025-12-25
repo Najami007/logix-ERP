@@ -16,6 +16,9 @@ import { environment } from 'src/environments/environment.development';
 })
 export class ProductionReportComponent implements OnInit {
 
+      ProjectwiseFeature = this.global.ProjectwiseFeature;
+
+
   apiReq = environment.mainApi + this.global.manufacturingLink;
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -42,6 +45,7 @@ export class ProductionReportComponent implements OnInit {
     this.getItemList();
     this.getCategoryList();
     this.getPartyList();
+    this.getProject();
   }
 
 
@@ -51,7 +55,6 @@ export class ProductionReportComponent implements OnInit {
   userList: any = [];
   userID = 0;
   userName = '';
-  projectID: any = 0;
 
   fromDate: Date = new Date();
   fromTime: any = '00:00';
@@ -70,6 +73,18 @@ export class ProductionReportComponent implements OnInit {
     var curUser = this.userList.find((e: any) => e.userID == this.userID);
     this.userName = curUser.userName;
   }
+
+  projectTitle: any = '';
+  projectID: any = this.global.getProjectID();
+  projectList: any = [];
+  getProject() {
+    this.http.get(environment.mainApi + 'cmp/getproject').subscribe(
+      (Response: any) => {
+        this.projectList = Response;
+      }
+    )
+  }
+
 
 
   mnuItemID: any = 0;
@@ -140,22 +155,28 @@ export class ProductionReportComponent implements OnInit {
     var fromTime = this.fromTime;
     var toDate = this.global.dateFormater(this.toDate, '');
     var toTime = this.toTime;
+      var projectID = this.projectID;
+
+    this.projectTitle = '';
+    if(projectID > 0){
+      this.projectTitle = this.projectList.filter((e:any)=> e.projectID == this.projectID)[0].projectTitle;
+    }
 
     var url = '';
 
     if (this.rptType == 1) {
       url = `${this.apiReq}ProductionRptSummary?reqUID=${userID}&FromDate=${fromDate}
-      &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`;
+      &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&projectID=${projectID}`;
     }
 
     if (this.rptType == 2) {
       url = `${this.apiReq}ProductionRptDetail?reqUID=${userID}&FromDate=${fromDate}
-      &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`;
+      &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&projectID=${projectID}`;
     }
 
     if (this.rptType == 3) {
       url = `${this.apiReq}ProductionRptSummaryItemWise?reqUID=${userID}&FromDate=${fromDate}
-      &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&ProjectID=${this.projectID}`;
+      &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&ProjectID=${this.projectID}&projectID=${projectID}`;
     }
 
 
@@ -226,8 +247,8 @@ export class ProductionReportComponent implements OnInit {
 
           }
 
-          if(this.rptType == 3){
-             this.DataList = Response;
+          if (this.rptType == 3) {
+            this.DataList = Response;
           }
 
 
@@ -239,7 +260,7 @@ export class ProductionReportComponent implements OnInit {
             if (this.rptType == 2) {
               this.netTotal += e.mnuLabourCharges * e.quantity;
             }
-              if (this.rptType == 3) {
+            if (this.rptType == 3) {
               this.netTotal += e.mnuLabourCharges;
             }
 

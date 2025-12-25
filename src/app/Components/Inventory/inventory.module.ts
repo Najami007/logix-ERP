@@ -131,6 +131,7 @@ import { TokenPrintComponent } from './Sale/token-generator/token-print/token-pr
 import { PurchaseSummaryCategorywiseComponent } from './InventoryReports/purchase-summary-categorywise/purchase-summary-categorywise.component';
 import { SaleSummaryCategorywiseComponent } from './InventoryReports/sale-summary-categorywise/sale-summary-categorywise.component';
 import { InventoryAudit2Component } from './InvAdjustment/inventory-audit2/inventory-audit2.component';
+import { FindBillDetailComponent } from './InvAdjustment/find-bill-detail/find-bill-detail.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -243,7 +244,7 @@ export const inventoryRoutes: Route[] = [
   { path: 'saleSummaryCatwise', component: SaleSummaryCategorywiseComponent , canActivate: [AuthGuard] },
   { path: 'tokengenerator', component: TokenGeneratorComponent, canActivate: [AuthGuard] },
     { path: 'invadtwls', component: InventoryAudit2Component, canActivate: [AuthGuard] },
-
+     { path: 'fndBillDet', component: FindBillDetailComponent, canActivate: [AuthGuard] },
 
 
 
@@ -354,6 +355,7 @@ export const inventoryRoutes: Route[] = [
     PurchaseSummaryCategorywiseComponent,
     SaleSummaryCategorywiseComponent,
     InventoryAudit2Component,
+    FindBillDetailComponent,
 
 
 

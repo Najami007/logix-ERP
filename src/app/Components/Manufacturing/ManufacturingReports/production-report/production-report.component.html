@@ -2,7 +2,7 @@
 
     <div class="row mt-2">
 
-        <mat-form-field appearance="outline" class="col-lg-4  matSmall">
+        <mat-form-field appearance="outline" class="col-lg-2  matSmall">
             <mat-label>User</mat-label>
             <mat-select [(ngModel)]="userID" (selectionChange)="onUserSelected()">
                 <mat-option><ngx-mat-select-search #usearch [placeholderLabel]="'Search...'"
@@ -12,6 +12,17 @@
                     [value]="item.userID">{{item.userName}}</mat-option>
             </mat-select>
         </mat-form-field>
+
+         
+            <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                <mat-label>Project </mat-label>
+                <mat-select [(ngModel)]="projectID" name="mbsProject" [disabled]="!ProjectwiseFeature">
+                    <mat-option [value]="0">All</mat-option>
+                    <mat-option *ngFor="let item of projectList "
+                        [value]="item.projectID">{{item.projectTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+     
         <mat-form-field class="col-lg-2 matSmall" appearance="outline">
             <mat-label>From Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
@@ -121,6 +132,8 @@
 
                     <span class="rptTitle">{{reportType}}</span>
                     <span> <b *ngIf="userName != ''">User: {{userName}}</b></span>
+                    <span> <b *ngIf="projectTitle != ''">Project: {{projectTitle}}</b></span>
+
                     <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
 
@@ -142,6 +155,7 @@
                         <th>S#</th>
                         <th>Inv #</th>
                         <th>Date</th>
+                        <th>Project</th>
                         <th>Type</th>
                         <th>Location</th>
                         <th>Party Name</th>
@@ -155,6 +169,7 @@
                         <td>{{index + 1}}</td>
                         <td>{{item.invBillNo}}</td>
                         <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.projectTitle}}</td>
                         <td>{{item.invType}}</td>
                         <td>{{item.locationTitle}}</td>
                         <td>{{item.partyName}}</td>
@@ -163,7 +178,7 @@
 
                     </tr>
                     <tr>
-                        <td colspan="6" class="fw-bold text-center">Total</td>
+                        <td colspan="7" class="fw-bold text-center">Total</td>
 
                         <td class="text-end fw-bold">{{netTotal | number:'1.0-0'}}</td>
                         <td></td>
@@ -178,6 +193,7 @@
                         <th>S#</th>
                         <th>Inv #</th>
                         <th>Date</th>
+                        <th>Project</th>
                         <th>Contractor</th>
                         <th>Item</th>
                         <th>Quantity</th>
@@ -191,8 +207,8 @@
                         <td class="text-center"> {{index + 1}}</td>
                         <td>{{item.invBillNo}}</td>
                         <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.projectTitle}}</td>
                         <td>{{item.partyName}}</td>
-
                         <td>{{item.mnuItemTitle}}</td>
                         <td class="text-center">{{item.quantity| number:'1.0-0'}}</td>
                         <td class="text-end">{{item.mnuLabourCharges| number:'1.0-0'}}</td>
@@ -200,7 +216,7 @@
 
                     </tr>
                     <tr>
-                        <td colspan="7" class="fw-bold text-center">Total</td>
+                        <td colspan="8" class="fw-bold text-center">Total</td>
 
                         <td class="text-end fw-bold">{{netTotal | number:'1.0-0'}}</td>
                     </tr>
@@ -208,10 +224,11 @@
 
             </table>
 
-              <table class="table-logix" *ngIf="rptType == 3">
+            <table class="table-logix" *ngIf="rptType == 3">
                 <thead>
                     <tr>
                         <th>S#</th>
+                        <th *ngIf="projectID > 0">Project</th>
                         <th>Item</th>
                         <th>Quantity</th>
                         <th>Labour Charges</th>
@@ -221,12 +238,14 @@
                 <tbody>
                     <tr *ngFor="let item of DataList index as index">
                         <td class="text-center"> {{index + 1}}</td>
+                        <td *ngIf="projectID > 0">{{item.projectTitle}}</td>
                         <td>{{item.mnuItemTitle}}</td>
                         <td class="text-center">{{item.quantity| number:'1.0-0'}}</td>
                         <td class="text-end">{{item.mnuLabourCharges| number:'1.0-0'}}</td>
 
                     </tr>
                     <tr>
+                        <td *ngIf="projectID > 0"></td>
                         <td colspan="3" class="fw-bold text-center">Total</td>
 
                         <td class="text-end fw-bold">{{netTotal | number:'1.0-0'}}</td>

@@ -42,6 +42,17 @@
 
     <div class="row">
 
+        <div class="col-md-4 ">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label>Project </mat-label>
+                <mat-select [(ngModel)]="projectID" name="mbsProject" [disabled]="!ProjectwiseFeature">
+                    <mat-option [value]="0">All</mat-option>
+                    <mat-option *ngFor="let item of projectList "
+                        [value]="item.projectID">{{item.projectTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
         <div class="col-md-4">
 
             <mat-form-field appearance="outline" class="w-100  matSmall">
@@ -78,6 +89,7 @@
                     <span class="companyName">Sale Report </span>
 
                     <span class="rptTitle">{{reportType}}</span>
+                    <span> <b *ngIf="projectTitle != ''">Project: {{projectTitle}}</b></span>
                     <span> <b *ngIf="userName != ''">User: {{userName}}</b></span>
                     <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
@@ -100,6 +112,7 @@
                         <th>S#</th>
                         <th>Inv #</th>
                         <th>Date</th>
+                        <th>Project</th>
                         <th>Customer</th>
                         <th>Delivery To</th>
                         <th>Delivery Date</th>
@@ -115,17 +128,18 @@
                         <td>{{index + 1}}</td>
                         <td>{{item.invBillNo}}</td>
                         <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.projectTitle}}</td>
                         <td>{{item.partyName}}</td>
                         <td>{{item.deliverTo}}</td>
                         <td>{{item.deliveryDate | date:'dd-MM-yyyy'}}</td>
                         <td>{{item.deliveryAddress}}</td>
-                          <td>{{item.shpCmpName}}</td>
+                        <td>{{item.shpCmpName}}</td>
                         <td class="text-end" *ngIf="rptType == 'S'">{{item.billTotal | number:'1.0-0'}}</td>
                         <td class="text-end" *ngIf="rptType == 'S'">{{item.billDiscount | number:'1.0-0'}}</td>
                         <td class="text-end">{{item.netTotal | number:'1.0-0'}}</td>
                     </tr>
                     <tr>
-                        <td colspan="8" class="fw-bold text-center">Total</td>
+                        <td colspan="9" class="fw-bold text-center">Total</td>
                         <td class="text-end fw-bold" *ngIf="rptType == 'S'">{{billTotal | number:'1.0-0'}}</td>
                         <td class="text-end fw-bold" *ngIf="rptType == 'S'">{{billDiscountTotal | number:'1.0-0'}}</td>
                         <td class="text-end fw-bold">{{netTotal | number:'1.0-0'}}</td>

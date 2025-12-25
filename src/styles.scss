@@ -60,6 +60,60 @@
 }
 
 
+.matMini {
+  @include mat.form-field-density(-3);
+  // @include mat.button-density(-1);
+  --mat-form-field-container-height: 10px !important;
+  --mat-form-field-container-vertical-padding: 4px !important;
+
+
+  // .mat-mdc-form-field{
+  //   height: 80px;
+  // }
+  .mat-mdc-text-field-wrapper {
+    min-height: 24px !important;
+  }
+
+  ///////////////////////// setting size of material Input field
+  .mat-mdc-form-field-infix {
+    // padding-top: 2px !important;
+    // padding-bottom: 2px !important;
+    min-height: 24px !important;
+  }
+
+
+  /////////////////// setting the size of material Date picker ///////////
+
+  .mdc-icon-button{
+     font-size: 38px !important;
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .mat-datepicker-toggle-default-icon{
+    padding-right: 2px !important;
+     font-size: 10px !important;
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+
+
+  mat-label {
+    font-size: 10px !important;
+  }
+
+
+  mat-icon {
+    font-size: 18px !important;
+  }
+
+
+
+}
+
+
+
 
 $my-primary: mat.define-palette(mat.$indigo-palette, 500);
 $my-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);

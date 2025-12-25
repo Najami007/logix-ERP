@@ -54,7 +54,19 @@
             </mat-form-field>
         </div>
 
-        <div class="col-md-4">
+               <div class="col-md-2 ">
+           <mat-form-field class="w-100 matSmall" appearance="outline">
+            <mat-label>Project </mat-label>
+            <mat-select [(ngModel)]="projectID" name="mbsProject"
+                [disabled]="!ProjectwiseFeature">
+                <mat-option [value]="0">All</mat-option>
+                <mat-option *ngFor="let item of projectList "
+                    [value]="item.projectID">{{item.projectTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+     </div>
+
+        <div class="col-md-2">
 
             <mat-form-field appearance="outline" class="w-100  matSmall">
                 <mat-label>Type</mat-label>
@@ -89,7 +101,8 @@
                 <div class="d-flex flex-column">
                     <span class="companyName">{{item.companyName}}</span>
 
-                    <span class="rptTitle">Sale Report Customer</span>
+                    <span class="rptTitle">Sale Report Customer ({{partyTitle}})</span>
+                    <span> <b *ngIf="projectTitle != ''">Project: {{projectTitle}}</b></span>
                     <span> <b *ngIf="userName != ''">User: {{userName}}</b></span>
                     <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
@@ -112,6 +125,7 @@
                         <th>S#</th>
                         <th>Inv #</th>
                         <th>Date</th>
+                        <th>Project</th>
                         <th>Item Name</th>
                         <th>Quantity</th>
                         <!-- <th>Cost</th> -->
@@ -125,6 +139,7 @@
                         <td>{{index + 1}}</td>
                         <td>{{item.invBillNo}}</td>
                         <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.projectTitle}}</td>
                         <td>{{item.productTitle}}</td>
                         <td class="text-center">{{item.quantity}}</td>
                         <!-- <td class="text-end">{{item.costPrice | number:'1.0-0'}}</td> -->

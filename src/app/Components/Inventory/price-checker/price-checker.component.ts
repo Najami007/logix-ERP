@@ -49,6 +49,10 @@ export class PriceCheckerComponent implements OnInit {
 
   productName:any = '';
   productPrice:any = 0;
+  productDisc:any = 0;
+  subCategory:any = '';
+  brand:any = '';
+  
 
   seacrhBarcode(e:any){
     if(e.keyCode == 13){
@@ -56,7 +60,10 @@ export class PriceCheckerComponent implements OnInit {
         (Response:any)=>{
           this.productName = Response[0].flavourTitle ? Response[0].flavourTitle : Response[0].productTitle;
           this.productPrice = (Response[0].salePrice * Response[0].quantity) - Response[0].discInR ;
+          this.subCategory = Response[0].subCategoryTitle;
+          this.brand = Response[0].brandTitle;
           this.barcode = '';
+          
         }
       )
 

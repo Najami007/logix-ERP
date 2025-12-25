@@ -4,59 +4,99 @@
         <div class="col-md-10 ps-1 pe-1  pt-2">
 
             <div class="row ">
-                <mat-form-field appearance="outline" *ngIf="!disableDateFeature" class="col-md-2 matSmall">
-                    <mat-label>Invoice Date</mat-label>
-                    <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
-                        [matDatepicker]="voucherDate">
-                    <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
-                    <mat-datepicker #voucherDate></mat-datepicker>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" class="col-md-2 matSmall ">
-                    <mat-label>Purchaser</mat-label>
-                    <mat-select [(ngModel)]="bookerID" name="location">
-                        <mat-option><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
-                                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                        <mat-option *ngFor="let item of BookerList | filter:bookerSearch.value"
-                            [value]="item.bookerID">{{item.bookerName}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="col-md-2 matSmall">
-                    <mat-label>Ref Inv No.</mat-label>
-                    <input matInput [(ngModel)]="refInvNo" type="text" name="refInvNo">
-                </mat-form-field>
+                <div class="col-md-2">
+                    <mat-form-field appearance="outline" *ngIf="!disableDateFeature" class="w-100 matSmall">
+                        <mat-label>Invoice Date</mat-label>
+                        <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
+                            [matDatepicker]="voucherDate">
+                        <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
+                        <mat-datepicker #voucherDate></mat-datepicker>
+                    </mat-form-field>
+                </div>
 
 
-                <mat-form-field appearance="outline" class="col-md-2 matSmall">
-                    <mat-label>Supplier</mat-label>
-                    <mat-select [(ngModel)]="partyID" #supplier (selectionChange)="onPartySelected()" name="customer">
-                        <mat-option><ngx-mat-select-search #partySearch [placeholderLabel]="'Search...'"
-                                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                        <mat-option *ngFor="let item of suppliersList | filter:partySearch.value"
-                            [value]="item.partyID">{{item.partyName}}</mat-option>
 
-                    </mat-select>
-                    <mat-icon class="cursorPointer" (click)="addParty()" matSuffix>add</mat-icon>
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="col-md-2 matSmall">
-                    <mat-label>Location</mat-label>
-                    <mat-select [(ngModel)]="locationID" name="location">
-                        <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
-                                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
-                        <mat-option *ngFor="let item of locationList | filter:locationSearch.value"
-                            [value]="item.locationID">{{item.locationTitle}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <div class="col-md-2">
+                    <mat-form-field appearance="outline" class="w-100 matSmall ">
+                        <mat-label>Purchaser</mat-label>
+                        <mat-select [(ngModel)]="bookerID" name="location" (selectionChange)="insertToLocalStorage()">
+                            <mat-option><ngx-mat-select-search #bookerSearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"
+                                    name="search"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of BookerList | filter:bookerSearch.value"
+                                [value]="item.bookerID">{{item.bookerName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                    <mat-form-field class="w-100 matSmall" appearance="outline">
+                        <mat-label>Project </mat-label>
+                        <mat-select [(ngModel)]="projectID" name="purchaseProject" [disabled]="!ProjectwiseFeature"
+                            (selectionChange)="insertToLocalStorage()">
+                            <mat-option *ngFor="let item of projectList "
+                                [value]="item.projectID">{{item.projectTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Ref Inv No.</mat-label>
+                        <input matInput [(ngModel)]="refInvNo" (input)="insertToLocalStorage()" type="text"
+                            name="refInvNo">
+                    </mat-form-field>
+                </div>
 
-                <mat-form-field appearance="outline" class="matSmall"
-                    [ngClass]="disableDateFeature ? 'col-md-4' :'col-md-2'">
-                    <mat-label>Remarks</mat-label>
-                    <textarea matInput rows="1" [(ngModel)]="invRemarks" type="text" name="remarks"></textarea>
-                </mat-form-field>
+
+                <div class="col-md-2">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Supplier</mat-label>
+                        <mat-select [(ngModel)]="partyID" #supplier
+                            (selectionChange)="onPartySelected();insertToLocalStorage()" name="customer">
+                            <mat-option><ngx-mat-select-search #partySearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"
+                                    name="search"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of suppliersList | filter:partySearch.value"
+                                [value]="item.partyID">{{item.partyName}}</mat-option>
+
+                        </mat-select>
+                        <mat-icon class="cursorPointer" (click)="addParty()" matSuffix>add</mat-icon>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Location</mat-label>
+                        <mat-select [(ngModel)]="locationID" (selectionChange)="insertToLocalStorage()" name="location">
+                            <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"
+                                    name="search"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of locationList | filter:locationSearch.value"
+                                [value]="item.locationID">{{item.locationTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-10">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Remarks</mat-label>
+                        <textarea matInput rows="1" [(ngModel)]="invRemarks" type="text" name="remarks"
+                            (input)="insertToLocalStorage()"></textarea>
+                    </mat-form-field>
+
+                </div>
+
+                <div class="col-md-2" *ngIf="DetailedPurchaseFeature">
+                    <mat-form-field class="matSmall w-100" appearance="outline">
+                        <mat-select [(ngModel)]="discType" [disabled]="tableDataList.length > 0">
+                            <mat-option value="bd">Before Disc</mat-option>
+                            <mat-option value="ad">After Disc</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
 
             </div>
             <!------------------- Product search Area -------->
-            <div class="row prod">
+            <div class="row prod pb-2">
                 <div class="col-md-8 d-flex">
                     <input type="text" [(ngModel)]="PBarcode"
                         (keydown)="focusto('#ovhd',$event);changeFocus($event,'.prodRow');searchByCode($event);"
@@ -84,14 +124,7 @@
                             matTooltip="Retrieve Bill"><u>R</u>etrieve</button>
 
                     </div>
-                    <div class="col-md-4" *ngIf="DetailedPurchaseFeature">
-                        <mat-form-field class="matSmall w-100" appearance="outline">
-                            <mat-select [(ngModel)]="discType" [disabled]="tableDataList.length > 0">
-                                <mat-option value="bd">Before Disc</mat-option>
-                                <mat-option value="ad">After Disc</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
+
 
 
                 </div>
@@ -100,10 +133,10 @@
         </div>
 
         <div class="col-md-2 pb-1 pt-2 d-flex justify-content-end pe-1">
-            <mat-card class=" border border-primary  p-1" style="width: 100%;height: 140px;">
+            <mat-card class=" border border-primary  p-1" style="width: 100%;height: 200px;">
                 <div class="text-center " *ngIf="tableDataList != ''" accesskey="i"
                     (click)="this.global.showProductImage(this.productImage,0)">
-                    <img [src]="productImage" alt="Img not Found" height="130px" width="130px">
+                    <img [src]="productImage" alt="Img not Found" height="160px" width="130px">
                 </div>
             </mat-card>
         </div>
@@ -168,7 +201,7 @@
                                     class="qty{{index}} text-center amtInput" style="width: 80px;"></td>
 
                             <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
-                                    [(ngModel)]="item.tempcostPrice" min="0" draggable="false"
+                                    [(ngModel)]="item.tempCostPrice" min="0" draggable="false"
                                     (input)="global.handleInputChange($event);getTotal();changeValue(item);onFieldsUpdate('tcp',item)"
                                     (keydown)="this.handleUpdown(item,$event,'.tcp',index)"
                                     (keyup)="showImg(item);rowFocused = index;"
@@ -408,7 +441,8 @@
                             <mat-radio-button value="HP">Holded Invoices</mat-radio-button>
                             <mat-radio-button value="P">Saved Invoices</mat-radio-button>
                             <mat-radio-button value="PO">Purchase Order</mat-radio-button>
-                            <mat-radio-button value="IC" *ngIf="ImportFromServerFeature">Import Warehouse Invoice</mat-radio-button>
+                            <mat-radio-button value="IC" *ngIf="ImportFromServerFeature">Import Warehouse
+                                Invoice</mat-radio-button>
 
                         </mat-radio-group>
                     </div>
@@ -422,6 +456,8 @@
                             <th>Date</th>
                             <th>Party</th>
                             <th>Location</th>
+                            <th>Project</th>
+                            <th>Remarks</th>
                             <th>Amount</th>
                             <th>User</th>
                             <th>Action</th>
@@ -437,6 +473,8 @@
                             <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
                             <td>{{item.partyName}}</td>
                             <td>{{item.locationTitle}}</td>
+                            <td>{{item.projectTitle}}</td>
+                            <td>{{item.remarks}}</td>
                             <td class="text-end">{{(item.billTotal + item.overHeadAmount) | number:'1.0-0'}}</td>
                             <td>{{item.entryUser}}</td>
                             <td class="text-center cursorPointer">
@@ -446,10 +484,11 @@
                                     (click)="RetreivePurchaseOrder(item)">edit</mat-icon>
                                 <mat-icon data-bs-dismiss="modal" *ngIf=" item.invType == 'HP'  && crudList.u"
                                     (click)="retriveBill(item)">edit</mat-icon>
-                                 <mat-icon data-bs-dismiss="modal" *ngIf=" item.invType == 'IC' && !item.refPoNoStatus"
+                                <mat-icon data-bs-dismiss="modal" *ngIf=" item.invType == 'IC' && !item.refPoNoStatus"
                                     (click)="retrieICInvoice(item)">edit</mat-icon>
-                                <mat-icon *ngIf=" (item.invType == 'HP' ) && crudList.u" class="text-danger cursorPointer"
-                                    matTooltip="Delete" (click)="deleteProd(item)">delete</mat-icon>
+                                <mat-icon *ngIf=" (item.invType == 'HP' ) && crudList.u"
+                                    class="text-danger cursorPointer" matTooltip="Delete"
+                                    (click)="deleteProd(item)">delete</mat-icon>
 
                                 <mat-icon *ngIf=" item.invType == 'P'"
                                     (click)="openDocumentModal(item)">note_add</mat-icon>

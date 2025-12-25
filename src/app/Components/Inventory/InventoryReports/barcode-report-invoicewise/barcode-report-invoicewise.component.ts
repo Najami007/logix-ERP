@@ -129,7 +129,7 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
 
     var salePrice = 0;
     if (type == 'extra') {
-      salePrice = (item.salePrice * item.quantity) -  item.discInR;
+      salePrice = (item.salePrice * item.quantity);
     } else {
       salePrice = item.salePrice
 
@@ -163,6 +163,9 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
       type: type
 
     })
+
+    console.log(this.tableDataList);
+
   }
 
 

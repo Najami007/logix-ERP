@@ -15,6 +15,8 @@ import { environment } from 'src/environments/environment.development';
 })
 export class ManufacturingStockRegisterComponent implements OnInit {
 
+      ProjectwiseFeature = this.global.ProjectwiseFeature;
+
   apiReq = environment.mainApi + this.global.manufacturingLink;
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -38,6 +40,7 @@ export class ManufacturingStockRegisterComponent implements OnInit {
   ngOnInit(): void {
     this.global.setHeaderTitle('Stock Register');
     this.getLocation();
+    this.getProject();
   }
 
 
@@ -50,7 +53,16 @@ export class ManufacturingStockRegisterComponent implements OnInit {
   reportType: any;
 
 
-
+  projectTitle: any = '';
+  projectID: any = this.global.getProjectID();
+  projectList: any = [];
+  getProject() {
+    this.http.get(environment.mainApi + 'cmp/getproject').subscribe(
+      (Response: any) => {
+        this.projectList = Response;
+      }
+    )
+  }
 
   getLocation() {
     this.global.getWarehouseLocationList().subscribe((data: any) => { this.locationList = data; });
@@ -63,16 +75,22 @@ export class ManufacturingStockRegisterComponent implements OnInit {
   saleTotal = 0;
 
   getReport() {
+    var projectID = this.projectID;
+
+    this.projectTitle = '';
+    if (projectID > 0) {
+      this.projectTitle = this.projectList.filter((e: any) => e.projectID == projectID)[0].projectTitle;
+    }
 
 
     var url = '';
 
     if (this.locationID == 0) {
-      url = `${this.apiReq}GetMnuInventoryRpt?rptType=full`;
+      url = `${this.apiReq}GetMnuInventoryRpt?rptType=full&projectID=${projectID}`;
     }
 
     if (this.locationID > 0) {
-      url = `${this.apiReq}GetMnuInventoryRpt?rptType=LW&LID=${this.locationID}`;
+      url = `${this.apiReq}GetMnuInventoryRpt?rptType=LW&LID=${this.locationID}&projectID=${projectID}`;
     }
 
 
@@ -124,8 +142,6 @@ export class ManufacturingStockRegisterComponent implements OnInit {
   reset() {
     this.costTotal = 0;
     this.saleTotal = 0;
-
-
     this.DataList = [];
 
   }

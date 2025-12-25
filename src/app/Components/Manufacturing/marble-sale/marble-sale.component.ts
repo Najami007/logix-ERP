@@ -21,6 +21,9 @@ import { Observable, retry } from "rxjs";
 })
 export class MarbleSaleComponent implements OnInit {
 
+  ProjectwiseFeature = this.global.ProjectwiseFeature;
+
+
   @ViewChild(DeliveryChallanComponent) deliveryChallan: any;
   @ViewChild(OrderPrintComponent) orderPrint: any;
   @ViewChild(MnuInvoicePrintComponent) saleInvoicePrint: any;
@@ -38,6 +41,63 @@ export class MarbleSaleComponent implements OnInit {
 
 
   mobileMask = this.global.mobileMask;
+
+
+
+
+
+  page: number = 1;
+  count: number = 0;
+
+  tableSize: number = 0;
+  tableSizes: any = [];
+  jumpPage: any = 0;
+  tmpPage: number = 0;
+
+  onTableDataChange(event: any) {
+
+    this.page = event;
+    this.getSavedOrder();
+    this.getSavedSale();
+  }
+
+  onTableSizeChange(event: any): void {
+    this.tableSize = event.target.value;
+    this.page = 1;
+    this.getSavedOrder();
+    this.getSavedSale();
+  }
+
+  goToPage(): void {
+    var count = this.productList.length / this.tableSize;
+    if (parseFloat(this.jumpPage) > count) {
+      this.msg.WarnNotify('Invalid Value')
+      return;
+    }
+
+    if (this.jumpPage >= 1) {
+      this.page = this.jumpPage;
+      this.getSavedOrder();
+      this.getSavedSale();
+
+    }
+  }
+
+  onProdSearchKeyup(e: any, value: any) {
+
+    if (e.target.value.length == 0 && this.tmpPage == 0) {
+      this.tmpPage = this.page;
+      this.page = 1;
+    }
+    if (e.key == 'Backspace') {
+      if (value.length == 1) {
+        this.page = this.tmpPage;
+        this.tmpPage = 0;
+      }
+    }
+
+
+  }
 
   constructor(
     private http: HttpClient,
@@ -69,10 +129,14 @@ export class MarbleSaleComponent implements OnInit {
   ngOnInit(): void {
     this.getSavedOrder();
     this.getSavedSale();
+    this.getProject();
     this.global.setHeaderTitle('Sale');
     this.getItemList();
     this.getShippingCompany();
     this.getPartyList();
+
+    this.tableSize = this.global.paginationDefaultTalbeSize;
+    this.tableSizes = this.global.paginationTableSizes;
 
   }
 
@@ -102,6 +166,14 @@ export class MarbleSaleComponent implements OnInit {
   remarks: any = '';
   netTotal = 0;
   projectID = this.global.getProjectID();
+
+  soSearchProjectID = 0;
+  siSearchProjectID = 0;
+
+
+  onProjectSearch(type: any) {
+
+  }
 
 
   getPartyList() {
@@ -147,6 +219,17 @@ export class MarbleSaleComponent implements OnInit {
     )
 
   }
+
+
+  projectList: any = [];
+  getProject() {
+    this.http.get(environment.mainApi + 'cmp/getproject').subscribe(
+      (Response: any) => {
+        this.projectList = Response;
+      }
+    )
+  }
+
 
 
 
@@ -410,7 +493,7 @@ export class MarbleSaleComponent implements OnInit {
 
             $('.searchProduct').trigger('focus');
 
-          }else{
+          } else {
             this.msg.WarnNotify('No Product Found')
           }
 
@@ -636,7 +719,11 @@ export class MarbleSaleComponent implements OnInit {
     this.http.get(this.apiReq + `GetOrder?reqUID=0&FromDate=${fromDate}&ToDate=${toDate}&FromTime=00:00&ToTime=23:59:59`).subscribe(
       {
         next: (Response: any) => {
-          this.savedDataList = Response;
+          this.savedDataList = [];
+          if (Response.length > 0) {
+            this.savedDataList = this.soSearchProjectID == 0 ? Response : Response.filter((e: any) => e.projectID == this.soSearchProjectID);
+          }
+
         },
         error: error => {
           console.log(error);
@@ -653,7 +740,10 @@ export class MarbleSaleComponent implements OnInit {
     this.http.get(this.apiReq + `GetMnuSale?reqUID=0&FromDate=${fromDate}&ToDate=${toDate}&FromTime=00:00&ToTime=23:59:59`).subscribe(
       {
         next: (Response: any) => {
-          this.saleSavedDataList = Response;
+          this.saleSavedDataList = [];
+          if (Response.length > 0) {
+            this.saleSavedDataList = this.siSearchProjectID == 0 ? Response : Response.filter((e: any) => e.projectID == this.siSearchProjectID);
+          }
         },
         error: error => {
           console.log(error);
