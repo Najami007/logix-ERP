@@ -117,7 +117,6 @@ export class MaterialConsumptionRptComponent implements OnInit {
     this.global.getProducts().subscribe(
       (data: any) => {
         this.productList = data;
-        console.log(data);
       });
   }
 

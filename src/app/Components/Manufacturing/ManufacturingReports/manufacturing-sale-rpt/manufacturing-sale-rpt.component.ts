@@ -107,8 +107,6 @@ export class ManufacturingSaleRptComponent implements OnInit {
     var url = `${this.apiReq}ManufacturingSaleSummaryRpt?reqUID=${userID}&FromDate=${fromDate}
       &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&projectID=${projectID}`;
 
-      console.log(url);
-
     this.app.startLoaderDark();
     this.http.get(url).subscribe(
       {

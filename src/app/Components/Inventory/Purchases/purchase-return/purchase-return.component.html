@@ -142,8 +142,8 @@
             <div class="row ps-1 pt-3">
                 <mat-form-field appearance="outline" *ngIf="!disableDateFeature" class="col-lg-2 matSmall">
                     <mat-label>Invoice Date</mat-label>
-                    <input [(ngModel)]="invoiceDate" (dateChange)="insertToLocalStorage()" readonly="true" matInput type="text" name="voucherDate"
-                        [matDatepicker]="voucherDate">
+                    <input [(ngModel)]="invoiceDate" (dateChange)="insertToLocalStorage()" readonly="true" matInput
+                        type="text" name="voucherDate" [matDatepicker]="voucherDate">
                     <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
                     <mat-datepicker #voucherDate></mat-datepicker>
                 </mat-form-field>
@@ -187,19 +187,21 @@
                 <div class="col-md-4" *ngIf="ProjectwiseFeature">
                     <mat-form-field class="w-100 matMini" appearance="outline">
                         <mat-label>Project </mat-label>
-                        <mat-select [(ngModel)]="projectID" name="PRProject" [disabled]="!ProjectwiseFeature" (selectionChange)="insertToLocalStorage()">
+                        <mat-select [(ngModel)]="projectID" name="PRProject" [disabled]="!ProjectwiseFeature"
+                            (selectionChange)="insertToLocalStorage()">
                             <mat-option *ngFor="let item of projectList "
                                 [value]="item.projectID">{{item.projectTitle}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
 
-              <div [ngClass]="ProjectwiseFeature ? 'col-md-8' : 'col-md-12'">
-                  <mat-form-field appearance="outline" class="w-100 matSmall">
-                    <mat-label>Remarks</mat-label>
-                    <textarea matInput rows="1" (input)="insertToLocalStorage()" [(ngModel)]="invRemarks" type="text" name="remarks"></textarea>
-                </mat-form-field>
-              </div>
+                <div [ngClass]="ProjectwiseFeature ? 'col-md-8' : 'col-md-12'">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Remarks</mat-label>
+                        <textarea matInput rows="1" (input)="insertToLocalStorage()" [(ngModel)]="invRemarks"
+                            type="text" name="remarks"></textarea>
+                    </mat-form-field>
+                </div>
 
 
 
@@ -370,6 +372,8 @@
                                 <th>Date</th>
                                 <th>Party</th>
                                 <th>Location</th>
+                                <th>Project</th>
+                                <th>Remarks</th>
                                 <th>Amount</th>
                                 <th>User</th>
                                 <th>Action</th>
@@ -384,6 +388,8 @@
                                 <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
                                 <td>{{item.partyName}}</td>
                                 <td>{{item.locationTitle}}</td>
+                                <td>{{item.projectTitle}}</td>
+                                <td>{{item.remarks}}</td>
                                 <td class="text-end">{{(item.billTotal + item.overHeadAmount) | number:'1.0-0'}}</td>
                                 <td>{{item.entryUser}}</td>
                                 <td class="text-center cursorPointer">

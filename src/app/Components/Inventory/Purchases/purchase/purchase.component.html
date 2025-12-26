@@ -136,7 +136,7 @@
             <mat-card class=" border border-primary  p-1" style="width: 100%;height: 200px;">
                 <div class="text-center " *ngIf="tableDataList != ''" accesskey="i"
                     (click)="this.global.showProductImage(this.productImage,0)">
-                    <img [src]="productImage" alt="Img not Found" height="160px" width="130px">
+                    <img [src]="productImage" alt="Img not Found" height="160px" width="160px">
                 </div>
             </mat-card>
         </div>
@@ -157,8 +157,10 @@
                     <thead>
                         <tr>
                             <th class="cursorPointer" (click)="changeOrder()">S#</th>
-                            <th>Barcode</th>
-                            <th class="col-3">Product Name</th>
+                            <th style="min-width: 150px;">Barcode</th>
+                            <th style="min-width: 150px;">Product Name</th>
+                            <th style="min-width: 150px;">Category</th>
+                            <th style="min-width: 150px;">Brand</th>
                             <th>Expiry</th>
                             <th>quantity</th>
                             <th *ngIf="DetailedPurchaseFeature">Cost Price</th>
@@ -183,8 +185,24 @@
                         <tr *ngFor="let item of tableDataList; index as index"
                             [ngClass]="rowFocused == index ?'bg-dg':''" (click)="showImg(item);rowFocused = index">
                             <td class="text-center">{{index+1}}</td>
-                            <td style="min-width: 120px;">{{item.barcode}} </td>
-                            <td style="min-width: 120px;">{{item.productTitle}}</td>
+                            <td style="width: 150px;">{{item.barcode}} </td>
+                            <td style="width: 150px;">{{item.productTitle}}</td>
+                            <td>
+                                 <mat-select [disabled]="AddNewProductRestrictionFeature" [(ngModel)]="item.subCategoryID" (selectionChange)="insertToLocalStorage()">
+                                    <mat-option><ngx-mat-select-search #catSearch [placeholderLabel]="'Search...'"
+                                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                    <mat-option *ngFor="let row of SubCategoriesList | filter:catSearch.value"
+                                        [value]="row.subCategoryID"> {{row.subCategoryTitle}}</mat-option>
+                                </mat-select>
+                            </td>
+                            <td>
+                                 <mat-select [disabled]="AddNewProductRestrictionFeature" [(ngModel)]="item.brandID" (selectionChange)="insertToLocalStorage()">
+                                    <mat-option><ngx-mat-select-search #brandSearch [placeholderLabel]="'Search...'"
+                                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                    <mat-option *ngFor="let row of BrandList | filter:brandSearch.value"
+                                        [value]="row.brandID"> {{row.brandTitle}}</mat-option>
+                                </mat-select>
+                            </td>
                             <td><input type="date" class="expDate{{index}} amtInput" [(ngModel)]="item.expiryDate"
                                     (keydown)="rowFocused = index" (keyup)="rowFocused = index"
                                     style="height: 25px; width: 150px;"></td>
@@ -284,6 +302,8 @@
                         </tr>
                         <tr>
                             <td colspan="4"></td>
+                            <td></td>
+                            <td></td>
                             <td class="text-center fw-bold">{{myTotalQty|number:'1.0-3' }}</td>
                             <td colspan="5"></td>
                             <td colspan="6" *ngIf="DetailedPurchaseFeature"></td>

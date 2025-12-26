@@ -41,6 +41,7 @@ export class ProductEditBulkComponent implements OnInit {
     this.getCategory();
     this.getBrandList();
     this.getAllProductList();
+    this.getSuppliers();
 
     for (let i = 0; i <= 100; i++) { this.discountList.push({ value: i }); }
 
@@ -114,6 +115,10 @@ export class ProductEditBulkComponent implements OnInit {
     }
     if (this.rptType == 'bw') {
       this.productList = this.tempProdList.filter((e: any) => e.brandID == this.BrandID);
+    }
+
+    if (this.rptType == 'sw') {
+      this.getSupplierProductList()
     }
 
     this.app.stopLoaderDark();
@@ -345,6 +350,42 @@ export class ProductEditBulkComponent implements OnInit {
 
     this.global.closeBootstrapModal('#updateDiscModal', true);
   }
+
+
+
+  suppliersList: any = []
+
+  getSuppliers() {
+    this.global.getSupplierList().subscribe((data: any) => { this.suppliersList = data; });
+
+  }
+
+  partyID: any = 0;
+  getSupplierProductList() {
+
+    if (this.partyID == 0) {
+      this.msg.WarnNotify('Select Supplier');
+      return;
+    }
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSupplierProducts_17?reqSupId=' + this.partyID).subscribe(
+      {
+        next: (Response: any) => {
+          if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+
+          }
+          if (Response.length > 0) {
+            this.productList = Response;
+          } else {
+            this.msg.WarnNotify('No Products Found')
+          }
+        }
+      }
+    )
+  }
+
 
 
 }

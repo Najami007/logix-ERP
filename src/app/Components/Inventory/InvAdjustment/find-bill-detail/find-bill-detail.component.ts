@@ -123,11 +123,28 @@ export class FindBillDetailComponent implements OnInit {
   myVehicleName = '';
   partyNtn = '';
 
+  myOverheadAmount = 0;
+  myBillDiscount = 0;
+
   findSaleBill(InvNo: any) {
     this.app.startLoaderDark();
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
+
+    var url = '';
+
+    if(this.tmpRptType == 'S' || this.tmpRptType == 'SR'|| this.tmpRptType == 'SR'|| this.tmpRptType == 'SR'){
+       url = `PrintBill?BillNo=${InvNo}`;
+    }
+    if(this.tmpRptType == 'P' || this.tmpRptType == 'PR'){
+       url = `GetSingleBillDetail?reqInvBillNo=${InvNo}`;
+    }
+
+    if(this.tmpRptType == 'AI' || this.tmpRptType == 'AO'|| this.tmpRptType == 'DL'|| this.tmpRptType == 'E'
+      || this.tmpRptType == 'OS'|| this.tmpRptType == 'IC'|| this.tmpRptType == 'RIC'){
+      url = `GetIssueSingleBillDetail?reqInvBillNo=${InvNo}`
+    }
+
+    this.http.get(environment.mainApi + this.global.inventoryLink + url).subscribe(
       (Response: any) => {
-        console.log(Response);
         if (Response == null) {
           this.global.popupAlert('Data Not Found!');
           this.app.stopLoaderDark();
@@ -139,7 +156,6 @@ export class FindBillDetailComponent implements OnInit {
           return;
         }
 
-        console.log(Response);
         this.myPrintTableData = Response;
         this.myInvoiceNo = InvNo;
         this.myInvDate = Response[0].invDate;
@@ -170,6 +186,9 @@ export class FindBillDetailComponent implements OnInit {
         this.myVehicleName = Response[0].vehicleName;
         this.partyNtn = Response[0].ntn;
         this.myInvTime = new Date();
+        this.myOverheadAmount = Response[0].overHeadAmount;
+        this.myBillDiscount = Response[0].billDiscount;
+
 
 
         this.myQtyTotal = 0;

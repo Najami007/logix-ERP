@@ -214,7 +214,7 @@ export class PurchaseOrderComponent implements OnInit {
         batchNo: '-',
         batchStatus: '-',
         uomID: data.uomID,
-        packing: 1,
+        packing: data.packing,
         discInP: 0,
         discInR: 0,
         aq: data.aq,

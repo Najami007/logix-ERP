@@ -43,6 +43,8 @@ export class PurchaseComponent implements OnInit {
   AttachDocPurchaseFeature = this.global.AttachDocPurchaseFeature;
   insertLocalStorageFeature = this.global.insertLocalStorageFeature;
   ImportFromServerFeature = this.global.ImportFromServerFeature;
+    AddNewProductRestrictionFeature = this.global.AddNewProductRestrictionFeature;
+
 
 
   ImageUrlFeature = this.global.ImageUrlFeature;
@@ -76,6 +78,8 @@ export class PurchaseComponent implements OnInit {
     // this.getProducts();
     this.getSuppliers();
     this.getProject();
+    this.getSubCategory();
+    this.getBrandList();
     $('.searchBarcode').trigger('focus');
     this.getProducts();
     this.global.getBookerList().subscribe((data: any) => { this.BookerList = data; });
@@ -153,6 +157,31 @@ export class PurchaseComponent implements OnInit {
   discType: any = 'ad';
 
 
+
+  BrandList: any = [];
+  getBrandList() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetBrand').subscribe(
+      (Response: any) => {
+        this.BrandList = Response;
+
+      },
+      (Error: any) => {
+        this.msg.WarnNotify(Error);
+
+      }
+    )
+  }
+
+  SubCategoriesList: any = [];
+  getSubCategory() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSubCategory').subscribe(
+      (Response: any) => {
+        this.SubCategoriesList = Response;
+      }
+    )
+  }
+
+
   onFieldsUpdate(type: any, item: any) {
 
 
@@ -220,7 +249,7 @@ export class PurchaseComponent implements OnInit {
     this.http.get(environment.mainApi + 'cmp/getproject').subscribe(
       (Response: any) => {
         this.projectList = Response;
-       
+
 
       }
     )
@@ -372,6 +401,8 @@ export class PurchaseComponent implements OnInit {
         gst: 0,
         et: 0,
         mrp: data.mrp,
+        subCategoryID: data.subCategoryID,
+        brandID: data.brandID,
 
 
       });
@@ -1083,7 +1114,6 @@ export class PurchaseComponent implements OnInit {
   cpTotal = 0;
   wohCPTotal = 0;
   retriveBill(item: any) {
-    console.log(item);
     this.tableDataList = [];
     this.holdBtnType = 'ReHold'
     this.invoiceDate = new Date(item.invDate);
@@ -1106,7 +1136,6 @@ export class PurchaseComponent implements OnInit {
         this.productImage = Response[Response.length - 1].productImage;
         this.discType = Response[0].discType;
         Response.forEach((e: any) => {
-          console.log(Response);
           this.myTotalQty += e.quantity;
           this.tableDataList.push({
             rowIndex: this.tableDataList.length + 1,
@@ -1131,6 +1160,8 @@ export class PurchaseComponent implements OnInit {
             gst: e.gst,
             et: e.et,
             mrp: e.mrp,
+            subCategoryID: e.subCategoryID,
+            brandID: e.brandID,
           })
         });
 
@@ -1191,6 +1222,8 @@ export class PurchaseComponent implements OnInit {
             gst: e.gst,
             et: e.et,
             mrp: e.mrp,
+            subCategoryID: e.subCategoryID,
+            brandID: e.brandID,
           })
         });
 
@@ -1291,6 +1324,9 @@ export class PurchaseComponent implements OnInit {
             aq: 0,
             gst: e.gst,
             et: e.et,
+            mrp:e.mrp,
+            subCategoryID: e.subCategoryID,
+            brandID: e.brandID,
           })
         });
 

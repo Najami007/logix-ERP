@@ -321,8 +321,15 @@
                             </mat-form-field>
                         </div>
 
+                           <div class="col-md-3 " *ngIf="!ManufacturingFeature">
+                            <mat-form-field appearance="outline" class="w-100 matSmall">
+                                <mat-label>Packing</mat-label>
+                                <input matInput type="number" [(ngModel)]="packing" (change)="global.avoidMinus($event)">
+                            </mat-form-field>
+                        </div>
 
-                        <div class="col-md-9 row" *ngIf="!ManufacturingFeature">
+
+                        <div class="col-md-6 row" *ngIf="!ManufacturingFeature">
                             <mat-form-field appearance="outline" class="col-md-10 matSmall">
                                 <mat-label>Generate Price</mat-label>
                                 <input matInput type="number" [(ngModel)]="salePercent" (keyup)="generatePrice($event)">

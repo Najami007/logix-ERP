@@ -30,258 +30,253 @@
 
     <div class="p-2">
 
-      <div *ngIf="tmpRptType == 'S' || tmpRptType == 'SR'">
+        <div >
 
-          <div class="mt-2">
-            <table class="table-logix2 fs-15px">
-                <thead>
+            <div class="mt-2">
+                <table>
                     <tr>
                         <th>Inv #</th>
-                        <th>Date</th>
-                        <th>Counter</th>
-                    </tr>
-                </thead>
-                <tbody class="text-center">
-                    <tr>
                         <td>{{myInvoiceNo}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Date</th>
                         <td>
                             <span *ngIf="!VehicleSaleFeature">{{myCreatedDate | date:'dd-MM-yyyy hh:mm:a'}}</span>
                             <span *ngIf="VehicleSaleFeature">{{myInvDate | date:'dd-MM-yyyy'}}</span>
                         </td>
+                    </tr>
+                    <tr *ngIf="myCounterName">
+                        <th>Counter</th>
                         <td>{{myCounterName}}</td>
                     </tr>
 
 
-                </tbody>
-            </table>
-
-            <table>
-                <tr *ngIf="myFbrStatus">
-                    <th class="fs-12">FBR Inv:-</th>
-                    <td class="ms-2 fs-11 fw-bold">{{myFbrInvoiceNo}}</td>
-                </tr>
-                <tr *ngIf="VehicleSaleFeature">
-                    <th class="fs-12">Vehicle No:-</th>
-                    <td class="ms-2 fs-11">{{myVehicleNo}} <small>({{myVehicleName}})</small> </td>
-                </tr>
-                <tr *ngIf="VehicleSaleFeature">
-                    <th class="fs-12">Reading:-</th>
-                    <td class="ms-2 fs-11">{{myMeterReading}}</td>
-                </tr>
-                <tr *ngIf="myCustomerName != null">
-                    <th class="fs-12">Customer:-</th>
-                    <td class="ms-2 fs-11">{{myCustomerName}}</td>
-                </tr>
-                <tr *ngIf="myBookerName != null">
-                    <th class="fs-12">Booker:- </th>
-                    <td class="ms-2 fs-11">{{myBookerName}}</td>
-                </tr>
-
-                <tr class="fs-11">
-                    <th class="fs-12">Remarks:- </th>
-                    <td class="ms-2 fs-11">{{myRemarks}}</td>
-                </tr>
-
-
-
-
-            </table>
-        </div>
-
-
-        <div>
-
-            <p class="border border-dark text-center fw-bold">{{myInvType == 'S' ? 'Sale' : myInvType == 'SR'
-                ?'SaleReturn' :''}}</p>
-            <p *ngIf="myPaymentType == 'Complimentary'" class="border border-dark text-center fw-bold">Complimentary</p>
-            <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center fw-bold">Duplicate</p>
-        </div>
-
-        <div>
-
-       
-
-            <table class="table table-sale">
-                <thead>
-                    <tr class="fs-10">
-                        <th>S#</th>
-                        <th>Item</th>
-
-                        <th>Qty</th>
-                        <th class="text-end" style="width:20% !important;" *ngIf="gstFeature">Gst</th>
-                        <th class="text-end">Price</th>
-
-                        <th class="text-end" style="width:10% !important;" *ngIf="discFeature">D Rs</th>
-                        <!-- <th style="width:10% !important;" *ngIf="discFeature">D %</th>
-                        <th style="width:10% !important;" *ngIf="CusDiscFeature">CD</th> -->
-                        <th class="text-end">Total</th>
-
+                    <tr *ngIf="myFbrStatus">
+                        <th class="fs-12">FBR Inv:-</th>
+                        <td class="ms-2 fs-11 fw-bold">{{myFbrInvoiceNo}}</td>
                     </tr>
-                </thead>
-                <tbody>
-
-                    <tr *ngFor="let item of myPrintTableData index as index" class="fs-12">
-                        <td>{{index +1}}</td>
-                        <td class="text-start">{{item.productTitle}} <small>{{item.flavourTitle}}</small></td>
-                       
-
-                        <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
-                         <td class="text-end" *ngIf="gstFeature" style="width:20% !important;">
-                                        {{item.salePrice - (item.salePrice / ((item.gst + 100) / 100)) |number:'1.0-1'}}
-                                    </td>
-                         <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
-                         
-                        <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
-                            {{(item.discInR + item.cusDiscAmount) * item.quantity|number:'1.0-1'}}</td>
-                        <!-- <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
-                            {{item.discInP|number:'1.0-1'}}</td> -->
-                        <!-- <td class="text-end" *ngIf="CusDiscFeature" style="width:10% !important;">
-                            {{item.cusDiscAmount|number:'1.0-1'}}</td> -->
-                        <td class="text-end" style="width:20% !important;">{{(item.quantity *
-                            item.salePrice) - (item.discInR * item.quantity)- (item.cusDiscAmount * item.quantity)
-                            |number:'1.0-1'}}</td>
+                    <tr *ngIf="VehicleSaleFeature">
+                        <th class="fs-12">Vehicle No:-</th>
+                        <td class="ms-2 fs-11">{{myVehicleNo}} <small>({{myVehicleName}})</small> </td>
+                    </tr>
+                    <tr *ngIf="VehicleSaleFeature">
+                        <th class="fs-12">Reading:-</th>
+                        <td class="ms-2 fs-11">{{myMeterReading}}</td>
+                    </tr>
+                    <tr *ngIf="myCustomerName != null">
+                        <th class="fs-12">Customer:-</th>
+                        <td class="ms-2 fs-11">{{myCustomerName}}</td>
+                    </tr>
+                    <tr *ngIf="myBookerName != null">
+                        <th class="fs-12">Booker:- </th>
+                        <td class="ms-2 fs-11">{{myBookerName}}</td>
                     </tr>
 
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="2" style="border:none !important; "></td>
-                        <td class="fw-bold fs-11 text-center" style="border: 1px solid black;">{{myQtyTotal | number:'1.0-2'}}</td>
-
+                    <tr class="fs-11">
+                        <th class="fs-12">Remarks:- </th>
+                        <td class="ms-2 fs-11">{{myRemarks}}</td>
                     </tr>
-                </tfoot>
-            </table>
-
-
-            <!---------------------- Bill Table End------------------>
 
 
 
 
-            <!--------------------------Bill Total Area Start ---------------------->
+                </table>
+            </div>
 
-
-
-            <div class="d-flex justify-content-between">
-
-                <div style="width: 40%;">
-
-
-                </div>
-
-                <div style="width: 60%;">
-                    <table class="w-100  text-uppercase">
-                        <tbody>
-                            <tr class="text-end fw-bold" *ngIf="myPOSFee > 0">
-                                <td colspan="2">POS FEE</td>
-                                <td></td>
-                                <td colspan="2">{{myPOSFee | number:'1.0-0'}}</td>
-                            </tr>
-
-
-                            <tr class="text-end fw-bold fs-16">
-                                <td colspan="2">Sub Total</td>
-                                <td></td>
-                                <td colspan="2">{{mySubTotal |number:'1.0-0'}}</td>
-
-                            </tr>
-                            <tr class="text-end fs-14" *ngIf="gstFeature && myGstTotal > 0">
-
-                                <td colspan="2">Gst</td>
-                                <!-- <td colspan="2"><small class="fs-10">Total Includes Tax of 18%</small></td> -->
-
-                                <td></td>
-                                <td colspan="2">{{myGstTotal |number:'1.0-0'}}</td>
-
-                            </tr>
-                            <tr class="text-end fs-14" *ngIf="myAdvTaxValue > 0">
-                                <td colspan="2">Adv Tax ({{myAdvTaxValue}}%)</td>
-                                <td></td>
-                                <td colspan="2"> {{myAdvTaxAmount|number:'1.0-0'}}</td>
-
-                            </tr>
-                            <tr class="text-end fs-14" *ngIf="myOtherCharges > 0">
-                                <td colspan="2">Other Charges</td>
-                                <td></td>
-                                <td colspan="2"> {{myOtherCharges|number:'1.0-0'}}</td>
-
-                            </tr>
-                            <tr class="text-end fs-14" *ngIf="CusDiscFeature && myCusDiscAmount > 0">
-                                <td colspan="2">Cus Disc</td>
-                                <td></td>
-                                <td colspan="2">{{myCusDiscAmount|number:'1.0-0'}}</td>
-
-                            </tr>
-                            <tr class="text-end fs-14" *ngIf="myOfferDiscount > 0">
-                                <td colspan="2">Offer Disc</td>
-                                <td></td>
-                                <td colspan="2">{{myOfferDiscount|number:'1.0-0'}}</td>
-
-                            </tr>
-                            <tr class="text-end fs-14" *ngIf="myDiscount - myOfferDiscount - myCusDiscAmount > 0">
-                                <td colspan="2">Disc</td>
-                                <td></td>
-                                <td colspan="2">{{myDiscount - myOfferDiscount - myCusDiscAmount|number:'1.0-0'}}</td>
-
-                            </tr>
-
-                            <tr class="text-end fw-bold fs-16">
-                                <td colspan="2">Net Total</td>
-                                <td></td>
-                                <td colspan="2">{{myNetTotal|number:'1.0-0'}}</td>
-
-                            </tr>
-                            <tr class="text-end fs-14" *ngIf="myCash > 0">
-                                <td colspan="2">Cash</td>
-                                <td></td>
-                                <td colspan="2">{{myCash|number:'1.0-0'}}</td>
-
-                            </tr>
-                            <tr class="text-end fs-14" *ngIf="myBank > 0 ">
-                                <td colspan="2">Bank</td>
-                                <td></td>
-                                <td colspan="2">{{ myBank |number:'1.0-1'}}</td>
-                            </tr>
-                            <tr class="text-end fs-14" *ngIf="myChange !== 0">
-                                <td colspan="2">Change</td>
-                                <td></td>
-                                <td colspan="2">{{myChange|number:'1.0-0'}}</td>
-
-
-                            </tr>
-
-                            <tr class="text-end fw-bold" *ngIf="myCusBalance !== 0">
-                                <td colspan="2">prv Blnc</td>
-                                <td></td>
-                                <td colspan="2" *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}</td>
-                                <td colspan="2" *ngIf="myChange <= 0 && myInvType == 'S'">{{myCusBalance - ( -1 *
-                                    myChange) |
-                                    number:'1.0-0'}}
-                                <td colspan="2" *ngIf="myChange <= 0 && myInvType == 'SR'">{{myCusBalance + ( -1 *
-                                    myChange) |
-                                    number:'1.0-0'}}
-                                </td>
-
-                            </tr>
-                            <tr class="text-end fw-bold" *ngIf="myCusBalance !== 0">
-                                <td colspan="2"> Net Blnc</td>
-                                <td></td>
-                                <td colspan="2">{{myCusBalance | number:'1.0-0'}}</td>
-
-                            </tr>
-
-
-                        </tbody>
-
-                    </table>
-
-                </div>
+            <div>
 
             </div>
 
 
+            <div>
+
+                <p class="border border-dark text-center fw-bold">{{myInvType == 'S' ? 'Sale' : myInvType == 'SR'
+                    ?'SaleReturn' :''}}</p>
+                <p *ngIf="myPaymentType == 'Complimentary'" class="border border-dark text-center fw-bold">Complimentary
+                </p>
+                <p *ngIf="myDuplicateFlag == true" class="border border-dark text-center fw-bold">Duplicate</p>
+            </div>
+
+            <div>
+
+
+
+                <table class="table-logix">
+                    <thead>
+                        <tr class="fs-10">
+                            <th>S#</th>
+                            <th>Item</th>
+
+                            <th>Qty</th>
+                            <th class="text-end" style="width:20% !important;" *ngIf="gstFeature">Gst</th>
+                            <th class="text-end">Cost Price</th>
+                            <th class="text-end">Avg Cost</th>
+                            <th class="text-end">Sale Price</th>
+
+
+                            <th class="text-end" style="width:10% !important;" *ngIf="discFeature && (myInvType == 'S' || myInvType == 'SR')">Disc</th>
+                            <!-- <th style="width:10% !important;" *ngIf="discFeature">D %</th>
+                        <th style="width:10% !important;" *ngIf="CusDiscFeature">CD</th> -->
+                            <th class="text-end">Total</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr *ngFor="let item of myPrintTableData index as index" class="fs-12">
+                            <td>{{index +1}}</td>
+                            <td class="text-start">{{item.productTitle}} <small>{{item.flavourTitle}}</small></td>
+
+
+                            <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
+                            <td class="text-end" *ngIf="gstFeature" style="width:20% !important;">
+                                {{item.salePrice - (item.salePrice / ((item.gst + 100) / 100)) |number:'1.0-1'}}
+                            </td>
+                            <td class="text-end">{{item.costPrice |number:'1.0-2'}}</td>
+                            <td class="text-end">{{item.avgCostPrice |number:'1.0-2'}}</td>
+                            <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
+
+                            <td class="text-end" *ngIf="discFeature &&(myInvType == 'S' || myInvType == 'SR') " style="width:10% !important;">
+                                {{(item.discInR + item.cusDiscAmount) * item.quantity|number:'1.0-1'}}<small
+                                    class="fs-8px fw-semibold">({{item.discInP|number:'1.0-1'}}%)</small></td>
+                            <!-- <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
+                            {{item.discInP|number:'1.0-1'}}</td> -->
+                            <!-- <td class="text-end" *ngIf="CusDiscFeature" style="width:10% !important;">
+                            {{item.cusDiscAmount|number:'1.0-1'}}</td> -->
+                            <td class="text-end" style="width:20% !important;" *ngIf="(myInvType == 'S' || myInvType == 'SR') ">{{(item.quantity *
+                                item.salePrice) - (item.discInR * item.quantity)- (item.cusDiscAmount * item.quantity)
+                                |number:'1.0-1'}}</td>
+                                 <td class="text-end" style="width:20% !important;" *ngIf="(myInvType == 'P' || myInvType == 'PR') ">{{(item.quantity *
+                                item.costPrice) 
+                                |number:'1.0-1'}}</td>
+
+                                <td class="text-end" style="width:20% !important;" *ngIf="(item.invType == 'AI' || item.invType == 'AO'
+                                || item.invType == 'DL'|| item.invType == 'E'|| item.invType == 'OS'|| item.invType == 'IC'|| item.invType == 'RIC') ">{{(item.quantity *
+                                item.avgCostPrice) 
+                                |number:'1.0-1'}}</td>
+                        </tr>
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2" style="border:none !important; "></td>
+                            <td class="fw-bold fs-11 text-center" style="border: 1px solid black;">{{myQtyTotal |
+                                number:'1.0-2'}}</td>
+
+                        </tr>
+                    </tfoot>
+                </table>
+
+
+                <!---------------------- Bill Table End------------------>
+
+
+
+
+                <!--------------------------Bill Total Area Start ---------------------->
+
+
+
+                <div class="d-flex justify-content-between">
+
+                    <div style="width: 40%;">
+
+
+                    </div>
+
+                    <div style="width: 60%;">
+                        <table class="w-100  text-uppercase">
+                            <tbody>
+                                <tr class="text-end fw-bold" *ngIf="myPOSFee > 0">
+                                    <td colspan="2">POS FEE</td>
+                                    <td></td>
+                                    <td colspan="2">{{myPOSFee | number:'1.0-0'}}</td>
+                                </tr>
+
+
+                                <tr class="text-end fw-bold fs-16">
+                                    <td colspan="2">Sub Total</td>
+                                    <td></td>
+                                    <td colspan="2">{{mySubTotal |number:'1.0-0'}}</td>
+
+                                </tr>
+                                <tr class="text-end fs-14" *ngIf="gstFeature && myGstTotal > 0">
+
+                                    <td colspan="2">Gst</td>
+                                    <!-- <td colspan="2"><small class="fs-10">Total Includes Tax of 18%</small></td> -->
+
+                                    <td></td>
+                                    <td colspan="2">{{myGstTotal |number:'1.0-0'}}</td>
+
+                                </tr>
+                                <tr class="text-end fs-14" *ngIf="myAdvTaxValue > 0">
+                                    <td colspan="2">Adv Tax ({{myAdvTaxValue}}%)</td>
+                                    <td></td>
+                                    <td colspan="2"> {{myAdvTaxAmount|number:'1.0-0'}}</td>
+
+                                </tr>
+                                <tr class="text-end fs-14" *ngIf="myOtherCharges > 0">
+                                    <td colspan="2">Other Charges</td>
+                                    <td></td>
+                                    <td colspan="2"> {{myOtherCharges|number:'1.0-0'}}</td>
+
+                                </tr>
+                                <tr class="text-end fs-14" *ngIf="CusDiscFeature && myCusDiscAmount > 0">
+                                    <td colspan="2">Cus Disc</td>
+                                    <td></td>
+                                    <td colspan="2">{{myCusDiscAmount|number:'1.0-0'}}</td>
+
+                                </tr>
+                                <tr class="text-end fs-14" *ngIf="myOfferDiscount > 0">
+                                    <td colspan="2">Offer Disc</td>
+                                    <td></td>
+                                    <td colspan="2">{{myOfferDiscount|number:'1.0-0'}}</td>
+
+                                </tr>
+                                <tr class="text-end fs-14" *ngIf="myDiscount - myOfferDiscount - myCusDiscAmount > 0">
+                                    <td colspan="2">Disc</td>
+                                    <td></td>
+                                    <td colspan="2">{{myDiscount - myOfferDiscount - myCusDiscAmount|number:'1.0-0'}}
+                                    </td>
+
+                                </tr>
+
+                                  <tr class="text-end fw-bold fs-16" *ngIf="(myInvType == 'P' || myInvType == 'PR')">
+                                    <td colspan="2">Overhead</td>
+                                    <td></td>
+                                    <td colspan="2">{{myOverheadAmount|number:'1.0-0'}}</td>
+
+                                </tr>
+                                  <tr class="text-end fw-bold fs-16" *ngIf="(myInvType == 'P' || myInvType == 'PR')">
+                                    <td colspan="2">BillDiscount</td>
+                                    <td></td>
+                                    <td colspan="2">{{myBillDiscount|number:'1.0-0'}}</td>
+
+                                </tr>
+
+                                <tr class="text-end fw-bold fs-16">
+                                    <td colspan="2">Net Total</td>
+                                    <td></td>
+                                    <td colspan="2">{{myNetTotal|number:'1.0-0'}}</td>
+
+                                </tr>
+                         
+
+                            
+
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+            </div>
         </div>
-      </div>
 
     </div>
 

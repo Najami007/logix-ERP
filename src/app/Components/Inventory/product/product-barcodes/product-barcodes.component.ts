@@ -31,11 +31,14 @@ export class ProductBarcodesComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    if(this.data){
+    if (this.data) {
       this.productDetail = this.data;
     }
     this.getProductDiscList();
   }
+
+
+  proDiscID = 0;
 
   productDetail: any = [];
 
@@ -76,14 +79,14 @@ export class ProductBarcodesComponent implements OnInit {
       return;
     }
 
-    if((this.productDetail.costPrice * Number(this.quantity)) > ((this.productDetail.salePrice   * Number(this.quantity) ) - Number(this.discInR)  )){
+    if ((this.productDetail.costPrice * Number(this.quantity)) > ((this.productDetail.salePrice * Number(this.quantity)) - Number(this.discInR))) {
       this.msg.WarnNotify('Discount Not Valid');
       return;
     }
 
 
     var postData = {
-
+      ProDiscID: this.proDiscID,
       ProductID: this.productDetail.productID,
       FlavourTitle: this.flavourTitle,
       Barcode: this.barcode,
@@ -96,19 +99,27 @@ export class ProductBarcodesComponent implements OnInit {
 
     }
 
-    if (this.btnType == 'Save') {
-      this.global.openPinCode().subscribe(
-        pin => {
 
-          if (pin != '') {
-            postData.PinCode = pin;
+    this.global.openPinCode().subscribe(
+      pin => {
+
+        if (pin != '') {
+          postData.PinCode = pin;
+          if (this.btnType == 'Save') {
             this.insertProductDiscount('insert', postData)
           }
 
-        }
-      )
+          if (this.btnType == 'Update') {
+            this.insertProductDiscount('update', postData)
+          }
 
-    }
+        }
+
+      }
+    )
+
+
+
 
 
 
@@ -117,8 +128,17 @@ export class ProductBarcodesComponent implements OnInit {
 
 
   insertProductDiscount(type: any, postData: any) {
+
+    var url = ''
+
+    if(type == 'insert'){
+      url = 'InsertProductDiscount';
+    }
+    if(type == 'update'){
+      url = 'UpdateProductDiscount';
+    }
     $('.loaderDark').show();
-    this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertProductDiscount', postData).subscribe(
+    this.http.post(environment.mainApi + this.global.inventoryLink + url, postData).subscribe(
       (Response: any) => {
         if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
           this.msg.SuccessNotify(Response.msg);
@@ -143,45 +163,45 @@ export class ProductBarcodesComponent implements OnInit {
 
     var postData = {
       ProDiscID: item.proDiscID,
-      barcode:item.barcode,
+      barcode: item.barcode,
       PinCode: '',
       UserID: this.global.getUserID()
     }
 
     this.global.openPinCode().subscribe(
       pin => {
-       if(pin != ''){
-         postData.PinCode = pin;
-        $('.loaderDark').show();
-        this.http.post(environment.mainApi + this.global.inventoryLink + 'DeleteProductDiscount', postData).subscribe(
-          (Response: any) => {
-            if (Response.msg == 'Data Deleted Successfully') {
-              this.msg.SuccessNotify(Response.msg);
-              this.reset();
-              this.getProductDiscList();
-            } else {
-              this.msg.WarnNotify(Response.msg);
+        if (pin != '') {
+          postData.PinCode = pin;
+          $('.loaderDark').show();
+          this.http.post(environment.mainApi + this.global.inventoryLink + 'DeleteProductDiscount', postData).subscribe(
+            (Response: any) => {
+              if (Response.msg == 'Data Deleted Successfully') {
+                this.msg.SuccessNotify(Response.msg);
+                this.reset();
+                this.getProductDiscList();
+              } else {
+                this.msg.WarnNotify(Response.msg);
+
+              }
+              $('.loaderDark').hide();
+            },
+            (Error: any) => {
+              console.log(Error);
+              $('.loaderDark').hide();
 
             }
-            $('.loaderDark').hide();
-          },
-          (Error: any) => {
-            console.log(Error);
-            $('.loaderDark').hide();
-
-          }
-        )
-       }
+          )
+        }
       }
     )
 
   }
 
 
-  activeDisc(item:any){
-     var postData = {
+  activeDisc(item: any) {
+    var postData = {
       ProDiscID: item.proDiscID,
-      barcode:item.barcode,
+      barcode: item.barcode,
       ActiveStatus: !item.activeStatus,
       PinCode: '',
       UserID: this.global.getUserID()
@@ -189,31 +209,42 @@ export class ProductBarcodesComponent implements OnInit {
 
     this.global.openPinCode().subscribe(
       pin => {
-       if(pin != ''){
-         postData.PinCode = pin;
-        $('.loaderDark').show();
-        this.http.post(environment.mainApi + this.global.inventoryLink + 'ActiveProductDiscount', postData).subscribe(
-          (Response: any) => {
-            if (Response.msg == 'Data Updated Successfully') {
-              this.msg.SuccessNotify(Response.msg);
-              this.reset();
-              this.getProductDiscList();
-            } else {
-              this.msg.WarnNotify(Response.msg);
+        if (pin != '') {
+          postData.PinCode = pin;
+          $('.loaderDark').show();
+          this.http.post(environment.mainApi + this.global.inventoryLink + 'ActiveProductDiscount', postData).subscribe(
+            (Response: any) => {
+              if (Response.msg == 'Data Updated Successfully') {
+                this.msg.SuccessNotify(Response.msg);
+                this.reset();
+                this.getProductDiscList();
+              } else {
+                this.msg.WarnNotify(Response.msg);
+
+              }
+              $('.loaderDark').hide();
+            },
+            (Error: any) => {
+              console.log(Error);
+              $('.loaderDark').hide();
 
             }
-            $('.loaderDark').hide();
-          },
-          (Error: any) => {
-            console.log(Error);
-            $('.loaderDark').hide();
-
-          }
-        )
-       }
+          )
+        }
       }
     )
 
+  }
+
+
+  editProdDisc(item: any) {
+    this.proDiscID = item.proDiscID;
+    this.flavourTitle = item.flavourTitle;
+    this.barcode = item.barcode;
+    this.quantity = item.quantity;
+    this.discInP = item.discInP;
+    this.discInR = item.discInR;
+    this.btnType = 'Update';
   }
 
 
@@ -221,6 +252,7 @@ export class ProductBarcodesComponent implements OnInit {
 
 
   reset() {
+    this.proDiscID = 0;
     this.flavourTitle = '';
     this.barcode = '';
     this.quantity = '';
@@ -230,25 +262,25 @@ export class ProductBarcodesComponent implements OnInit {
   }
 
 
-  closeDialog(){
+  closeDialog() {
     this.dialogRef.close();
   }
 
 
-  onDiscChange(type:any){
+  onDiscChange(type: any) {
 
-    if(this.quantity == 0 || this.quantity == '') {
+    if (this.quantity == 0 || this.quantity == '') {
       this.discInP = 0;
       this.discInR = 0;
       this.msg.WarnNotify('Quantity Not Valid')
       return;
     }
-    
-    if(type === 'perc'){
-      this.discInR = ((this.productDetail.salePrice * this.quantity) *  this.discInP) / 100;
+
+    if (type === 'perc') {
+      this.discInR = ((this.productDetail.salePrice * this.quantity) * this.discInP) / 100;
     }
-     if(type === 'amount'){
-      this.discInP = (this.discInR / (this.productDetail.salePrice * this.quantity) ) * 100
+    if (type === 'amount') {
+      this.discInP = (this.discInR / (this.productDetail.salePrice * this.quantity)) * 100
     }
   }
 

@@ -314,6 +314,7 @@ export class ProductComponent implements OnInit {
   SalePrice: any = '';
   productType: any = 0;
   productImg: any = '';
+  packing:any = 1;
 
   BrandID: any = 0;
   rackID: any = 0;
@@ -630,6 +631,7 @@ export class ProductComponent implements OnInit {
       ProductImage: this.productImg || '-',
       ProductTypeID: this.prodTypeID,
       mrp: this.mrp || 0,
+      Packing:this.packing,
       UserID: this.global.getUserID()
     };
     if (this.btnType == 'Save') {
@@ -753,6 +755,7 @@ export class ProductComponent implements OnInit {
       // this.Barcode = '';
       this.prodBarcodeType = 'auto'
       this.barcodeType = 'Basic';
+      this.packing = 1;
       // this.prodTypeID = 0;
 
       //this.btnType = 'Save';
@@ -794,6 +797,8 @@ export class ProductComponent implements OnInit {
     this.Description = row.productDescription;
 
     this.prodTypeID = row.productTypeID;
+
+    this.packing = row.packing;
 
     if (this.AddNewProductRestrictionFeature) {
       this.global.openBootstrapModal('#productEditModal', true);
@@ -1245,6 +1250,8 @@ export class ProductComponent implements OnInit {
   openImagesScreen() {
     this.route.navigate(["inv/product/addProductImages"]);
   }
+
+
 
 
 }

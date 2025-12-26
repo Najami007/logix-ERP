@@ -368,6 +368,7 @@ export class GarmentSaleReturnComponent implements OnInit {
         gst: this.gstFeature ? data.gst : 0,
         et: data.et,
         packing: data.packing,
+        multyQty: data.multyQty,
          discInP: this.discFeature ? discPerc : 0,
         discInR: this.discFeature ? discRupee : 0,
         aq: data.aq,
@@ -750,7 +751,7 @@ export class GarmentSaleReturnComponent implements OnInit {
     // Enter key → Focus the product search input
     if (key === 13) {
       e.preventDefault();
-      if (item.packing > 1) {
+      if (item.multyQty > 1) {
         this.editDiscProdQty(item);
       } else {
         $('#psearchProduct').trigger('select').trigger('focus');
@@ -808,14 +809,14 @@ export class GarmentSaleReturnComponent implements OnInit {
 
 
   editDiscProdQty(item: any) {
-    if (item.packing <= 1) return;
+    if (item.multyQty <= 1) return;
     this.dialog.open(EditQtyModalComponent, {
       width: '30%',
       data: item
     }).afterClosed().subscribe(value => {
       if (Number(value) > 0) {
         var index = this.tableDataList.findIndex((e: any) => e.barcode == item.barcode);
-        this.tableDataList[index].quantity = Number(value) * item.packing;
+        this.tableDataList[index].quantity = Number(value) * item.multyQty;
         this.getTotal();
 
       }

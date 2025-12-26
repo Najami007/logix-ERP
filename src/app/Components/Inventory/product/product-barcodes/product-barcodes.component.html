@@ -11,26 +11,26 @@
 
         <mat-form-field appearance="outline" class="col-md-2 matSmall">
             <mat-label>Barcode *</mat-label>
-            <input matInput id="title2" autocomplete="off" [(ngModel)]="barcode" accesskey="false" type="text">
+            <input matInput id="title2" [disabled]="proDiscID > 0" autocomplete="off" [(ngModel)]="barcode" accesskey="false" type="text">
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="col-md-2 matSmall">
             <mat-label>Quantity *</mat-label>
-            <input matInput id="quantity" (keydown)="global.handleNumKeys($event)" autocomplete="off"
+            <input matInput id="quantity" (keydown)="global.handleNumKeys($event)"  (input)="onDiscChange('perc');"  autocomplete="off"
                 [(ngModel)]="quantity" accesskey="false" type="text">
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="col-md-2 matSmall">
             <mat-label>Disc %</mat-label>
             <input matInput id="discInP" [disabled]="!discFeature"
-                (keydown)="onDiscChange('perc');global.handleNumKeys($event)" (keyup)="onDiscChange('perc')"
+                (keydown)="global.handleNumKeys($event)" (keyup)="onDiscChange('perc')" (input)="onDiscChange('perc');"
                 autocomplete="off" [(ngModel)]="discInP" accesskey="false" type="text">
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="col-md-2 matSmall">
             <mat-label>Disc Amount</mat-label>
             <input matInput id="discInR" [disabled]="!discFeature" autocomplete="off"
-                (keydown)="onDiscChange('amount');global.handleNumKeys($event)" (keyup)="onDiscChange('amount')"
+                (keydown)="global.handleNumKeys($event)" (keyup)="onDiscChange('amount')"  (input)="onDiscChange('amount');"
                 [(ngModel)]="discInR" accesskey="false" type="text">
         </mat-form-field>
 
@@ -63,10 +63,11 @@
                     <td>{{index +1 }}</td>
                     <td>{{item.barcode }}</td>
                     <td>{{item.flavourTitle}}</td>
-                    <td>{{item.quantity }}</td>
-                    <td>{{item.discInP }}</td>
-                    <td>{{item.discInR }}</td>
+                    <td>{{item.quantity |number:'1.0-3'}}</td>
+                    <td>{{item.discInP |number:'1.0-1'}}</td>
+                    <td>{{item.discInR |number:'1.0-1'}}</td>
                     <td>
+                        <mat-icon (click)="editProdDisc(item)">edit</mat-icon>
                         <mat-icon class="text-success cursorPointer" matTooltip="Active / Inactive"
                             [ngClass]="item.activeStatus ? 'text-success' :'text-danger'"
                             (click)="activeDisc(item)">{{item.activeStatus ? 'check' : 'close'}}</mat-icon>

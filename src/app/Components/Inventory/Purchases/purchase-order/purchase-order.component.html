@@ -88,6 +88,7 @@
                         <th class="cursorPointer" (click)="changeOrder()">S#</th>
                         <th>Barcode</th>
                         <th>Product Name</th>
+                        <th>Packing</th>
                         <th>Quantity</th>
 
                         <th>Cost</th>
@@ -104,6 +105,7 @@
                         <td>{{index+1}}</td>
                         <td>{{item.barcode}}</td>
                         <td>{{item.productTitle}}</td>
+                        <td class="text-center">{{item.packing}}</td>
                         <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
                                 [accessKey]="index +1 "
                                 (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);"

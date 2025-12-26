@@ -164,8 +164,6 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
 
     })
 
-    console.log(this.tableDataList);
-
   }
 
 

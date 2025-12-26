@@ -41,7 +41,7 @@ export class VoidSaleReturnComponent implements OnInit {
   urduBillFeature = this.global.urduBill;
   disablePrintPwd = this.global.DisablePrintPwd;
   VehicleSaleFeature = this.global.VehicleSaleFeature;
-    RestBillUserwise = this.global.RestBillUserwise;
+  RestBillUserwise = this.global.RestBillUserwise;
 
 
 
@@ -61,7 +61,7 @@ export class VoidSaleReturnComponent implements OnInit {
     }
   }
 
-   @HostListener('document:keydown', ['$event'])
+  @HostListener('document:keydown', ['$event'])
 
   handleKeyboardEventSearchByNaem(event: KeyboardEvent) {
     if (event.altKey && event.key.toLowerCase() === 'n') {
@@ -365,7 +365,7 @@ export class VoidSaleReturnComponent implements OnInit {
   getCurrentBill() {
 
 
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleExistingBill?reqUserID=' + this.global.getUserID()+'&reqType=HSR').subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleExistingBill?reqUserID=' + this.global.getUserID() + '&reqType=HSR').subscribe(
       (Response: any) => {
         this.tableDataList = [];
         if (Response.length > 0) {
@@ -378,7 +378,7 @@ export class VoidSaleReturnComponent implements OnInit {
               barcode: e.barcode,
               flavourTitle: e.flavourTitle,
               productImage: e.productImage,
-              quantity: e.quantity * e.packing,
+              quantity: e.quantity * e.multyQty,
               wohCP: e.costPrice,
               costPrice: e.costPrice,
               avgCostPrice: e.avgCostPrice,
@@ -390,8 +390,10 @@ export class VoidSaleReturnComponent implements OnInit {
               batchStatus: '-',
               uomID: e.uomID,
               packing: e.packing,
+              multyQty: e.multyQty,
+
               discInP: e.discInP,
-              discInR: e.discInR / e.packing,
+              discInR: e.discInR / e.multyQty,
               aq: e.aq,
               autoInvDetID: e.autoInvDetID,
               gstAmount: e.gstAmount,
@@ -768,12 +770,12 @@ export class VoidSaleReturnComponent implements OnInit {
     // var index = this.tableDataList.findIndex((e: any) => e.productID == item.productID);
     // this.productImage = this.tableDataList[index].productImage;
 
-        this.getProductImage(item)
+    this.getProductImage(item)
 
 
   }
 
-  
+
 
   getProductImage(item: any) {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProductImage?ProductID=' + item.productID).subscribe(
@@ -983,7 +985,7 @@ export class VoidSaleReturnComponent implements OnInit {
 
         if (qty != '') {
 
-          var updateQty = (Number(qty) * item.packing)
+          var updateQty = (Number(qty) * item.multyQty)
           /////////////////////////// checking whether quantity increase and trigger api
           if (updateQty > item.quantity) {
 
@@ -991,7 +993,7 @@ export class VoidSaleReturnComponent implements OnInit {
               InvBillNo: this.invBillNo,
               ProductID: item.productID,
               barcode: item.barcode,
-              Quantity: qty - (item.quantity / item.packing),
+              Quantity: qty - (item.quantity / item.multyQty),
 
               UserID: this.global.getUserID(),
             }
@@ -1018,7 +1020,7 @@ export class VoidSaleReturnComponent implements OnInit {
               ProductID: item.productID,
               ProductTitle: item.productTitle,
               barcode: item.barcode,
-              Quantity: (item.quantity / item.packing) - qty,
+              Quantity: (item.quantity / item.multyQty) - qty,
               CostPrice: item.costPrice,
               AvgCostPrice: item.avgCostPrice,
               SalePrice: item.salePrice,
@@ -1139,7 +1141,7 @@ export class VoidSaleReturnComponent implements OnInit {
       InvBillNo: this.invBillNo,
       ProductID: item.productID,
       ProductTitle: item.productTitle,
-      Quantity: item.quantity / item.packing,
+      Quantity: item.quantity / item.multyQty,
       barcode: item.barcode,
       CostPrice: item.costPrice,
       AvgCostPrice: item.avgCostPrice,
@@ -1200,7 +1202,7 @@ export class VoidSaleReturnComponent implements OnInit {
   /////////////////// Saved Bill Functions ///////////
 
   savedbillList: any = []
-   getSavedBill() {
+  getSavedBill() {
 
 
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetOpenDaySale').subscribe(
@@ -1222,7 +1224,7 @@ export class VoidSaleReturnComponent implements OnInit {
           }
 
 
-           /////////////// Filtering Bills with UserID and ProjectID
+          /////////////// Filtering Bills with UserID and ProjectID
           if (roleTypeId == 3 || roleTypeId == 2) { ///////////if Admin or User
             if (e.invType == 'SR' && e.userID == userID && e.projectID == projectID) {
               this.savedbillList.push(e);

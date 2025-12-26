@@ -21,12 +21,14 @@
                     <mat-option value="cw">Categorywise</mat-option>
                     <mat-option value="scw">Sub Categorywise</mat-option>
                     <mat-option value="bw">Brandwise</mat-option>
+                    <mat-option value="sw">Supplierwise</mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline" class="col-lg-2 matSmall" *ngIf="rptType == 'cw' || rptType == 'scw'">
                 <mat-label>Category</mat-label>
 
-                <mat-select [(ngModel)]="CategoryID" #category (selectionChange)="getSubCategory('filter')" name="pCategory">
+                <mat-select [(ngModel)]="CategoryID" #category (selectionChange)="getSubCategory('filter')"
+                    name="pCategory">
                     <mat-option><ngx-mat-select-search #catsearch [placeholderLabel]="'Search...'"
                             [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
                     <mat-option *ngFor="let item of CategoriesList | filter:catsearch.value"
@@ -55,10 +57,23 @@
                 </mat-select>
             </mat-form-field>
 
+
+            <mat-form-field appearance="outline" class="col-lg-2 matSmall" *ngIf="rptType == 'sw'">
+                <mat-label>Supplier</mat-label>
+                <mat-select [(ngModel)]="partyID" #supplier name="customer">
+                    <mat-option><ngx-mat-select-search #partySearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of suppliersList | filter:partySearch.value"
+                        [value]="item.partyID">{{item.partyName}}</mat-option>
+
+                </mat-select>
+            </mat-form-field>
+
             <div class="col-lg-4 pb-2" *ngIf="crudList.r">
                 <button class="btn-rpt-success col-lg-4  me-1" (click)="getProductList()">Get Product List</button>
                 <button class="btn-rpt-success col-lg-4  me-1" (click)="updateProdList()">Update Product</button>
-                  <button class="btn-rpt-success col-lg-3 " (click)="global.openBootstrapModal('#updateDiscModal',true)">Disc Special</button>   
+                <button class="btn-rpt-success col-lg-3 "
+                    (click)="global.openBootstrapModal('#updateDiscModal',true)">Disc Special</button>
 
             </div>
         </div>
@@ -78,17 +93,21 @@
 
                 <th class="cursorPointer" (click)="sortProds('costPrice')">Cost Price</th>
                 <th class="cursorPointer" (click)="sortProds('salePrice')">Sale Price</th>
-                <th class="cursorPointer"  *ngIf="discFeature">
-                        <div class="d-flex flex-column">
-                        <span><input [(ngModel)]="discountAll" class="input" (keydown)="onGstAllUpdate($event,'disc')" /></span>
-                          <span (click)="sortProds('discPercentage')">Disc %</span>
+                <th class="cursorPointer" *ngIf="discFeature">
+                    <div class="d-flex flex-column">
+                        <span><input [(ngModel)]="discountAll" class="input"
+                                (keydown)="onGstAllUpdate($event,'disc')" /></span>
+                        <span (click)="sortProds('discPercentage')">Disc %</span>
                     </div>
                 </th>
+              
                 <th class="cursorPointer" *ngIf="discFeature">Disc Rs</th>
+                  <th>Sale - Disc</th>
                 <th>
                     <div class="d-flex flex-column">
-                        <span><input [(ngModel)]="gstAll" class="input" (keydown)="onGstAllUpdate($event,'gst')" /></span>
-                          <span>GST</span>
+                        <span><input [(ngModel)]="gstAll" class="input"
+                                (keydown)="onGstAllUpdate($event,'gst')" /></span>
+                        <span>GST</span>
                     </div>
                 </th>
                 <th>Entered By</th>
@@ -128,7 +147,8 @@
                         <div *ngIf="reqType == 'OTHER'">
                             <span *ngIf="!item.isChecked">{{item.discPercentage |number:'1.0-1'}}</span>
                             <span *ngIf="item.isChecked">
-                                <input class="w-100 input" [(ngModel)]="item.discPercentage"   (input)="onDiscountChange(item)" />
+                                <input class="w-100 input" [(ngModel)]="item.discPercentage"
+                                    (input)="onDiscountChange(item)" />
                                 <!-- <select [(ngModel)]="item.discPercentage" class="w-100 input"
                                     (ngModelChange)="onDiscountChange(item)">
                                     <option *ngFor="let item of discountList" [value]="item.value">{{item.value}}%
@@ -138,11 +158,13 @@
                         </div>
                     </td>
                     <td *ngIf="discFeature">{{item.discRupees |number:'1.0-1'}}</td>
+                    <td *ngIf="discFeature">{{item.salePrice - item.discRupees |number:'1.0-1'}}</td>
                     <td>
                         <span *ngIf="reqType == 'CAT'">{{item.gst |number:'1.0-1'}}</span>
                         <div *ngIf="reqType == 'OTHER'">
                             <span *ngIf="!item.isChecked">{{item.gst |number:'1.0-1'}}%</span>
-                            <span *ngIf="item.isChecked"><input  (keydown)="global.handleNumKeys($event)" [(ngModel)]="item.gst" class="w-100 input" /></span>
+                            <span *ngIf="item.isChecked"><input (keydown)="global.handleNumKeys($event)"
+                                    [(ngModel)]="item.gst" class="w-100 input" /></span>
                         </div>
                     </td>
                     <td>{{item.entryUser}}</td>
@@ -159,51 +181,51 @@
     <div class="w-100" style="position: fixed;bottom: 4%;background-color: azure;" *ngIf="reqType == 'CAT'">
 
 
-        
-      <div class="row w-100">
-          <div class="col-lg-3">
-            <mat-checkbox [(ngModel)]="updateCategoryFlag">Update Category</mat-checkbox>
-            <mat-form-field appearance="outline" class="w-100 matSmall">
-            <mat-label>Category</mat-label>
 
-            <mat-select [(ngModel)]="updateCategoryID" #updateCategorySearch (selectionChange)="getSubCategory('update')"
-                name="pCategory">
-                <mat-option><ngx-mat-select-search #catsearch [placeholderLabel]="'Search...'"
-                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                <mat-option *ngFor="let item of CategoriesList | filter:updateCategorySearch.value"
-                    [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
+        <div class="row w-100">
+            <div class="col-lg-3">
+                <mat-checkbox [(ngModel)]="updateCategoryFlag">Update Category</mat-checkbox>
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Category</mat-label>
 
-            </mat-select>
-        </mat-form-field>
-          </div>
-        <div class="col-lg-3 ">
-             <mat-checkbox [(ngModel)]="updateSubcategoryFlag" [disabled]="true"></mat-checkbox>
-            <mat-form-field appearance="outline" class="w-100 matSmall">
-            <mat-label>Sub Category</mat-label>
+                    <mat-select [(ngModel)]="updateCategoryID" #updateCategorySearch
+                        (selectionChange)="getSubCategory('update')" name="pCategory">
+                        <mat-option><ngx-mat-select-search #catsearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of CategoriesList | filter:updateCategorySearch.value"
+                            [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
 
-            <mat-select [(ngModel)]="updateSubCategoryID" #subCategory name="pSubCategory">
-                <mat-option><ngx-mat-select-search #updateSubCategorySearch [placeholderLabel]="'Search...'"
-                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                <mat-option *ngFor="let item of updateSubCategoryList| filter:updateSubCategorySearch.value "
-                    [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
-            </mat-select>
-        </mat-form-field>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-3 ">
+                <mat-checkbox [(ngModel)]="updateSubcategoryFlag" [disabled]="true"></mat-checkbox>
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Sub Category</mat-label>
+
+                    <mat-select [(ngModel)]="updateSubCategoryID" #subCategory name="pSubCategory">
+                        <mat-option><ngx-mat-select-search #updateSubCategorySearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of updateSubCategoryList| filter:updateSubCategorySearch.value "
+                            [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-3">
+                <mat-checkbox [(ngModel)]="updateBrandFlag">Update Brand</mat-checkbox>
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Brand</mat-label>
+                    <mat-select [(ngModel)]="UpdateBrandID" #brand>
+                        <mat-option><ngx-mat-select-search #UpdateBrancSearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of BrandList | filter:UpdateBrancSearch.value"
+                            [value]="item.brandID">{{item.brandTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
         </div>
-
-      <div class="col-lg-3">
-         <mat-checkbox [(ngModel)]="updateBrandFlag">Update Brand</mat-checkbox>
-          <mat-form-field appearance="outline" class="w-100 matSmall">
-            <mat-label>Brand</mat-label>
-            <mat-select [(ngModel)]="UpdateBrandID" #brand>
-                <mat-option><ngx-mat-select-search #UpdateBrancSearch [placeholderLabel]="'Search...'"
-                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                <mat-option *ngFor="let item of BrandList | filter:UpdateBrancSearch.value"
-                    [value]="item.brandID">{{item.brandTitle}}</mat-option>
-            </mat-select>
-        </mat-form-field>
-      </div>
-
-      </div>
     </div>
 
 
@@ -212,29 +234,26 @@
 
 
 
-    <div class="modal fade" id="updateDiscModal" tabindex="-1" aria-labelledby="SavedBillModalLabel">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-md">
-            <div class="modal-content">
+<div class="modal fade" id="updateDiscModal" tabindex="-1" aria-labelledby="SavedBillModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-md">
+        <div class="modal-content">
 
-                <div class="modal-body">
+            <div class="modal-body">
 
-                    <small>Add profit percentage which you want get on Cost</small>
+                <small>Add profit percentage which you want get on Cost</small>
 
-                    <mat-form-field class="matSmall w-100">
-                        <mat-label>Profit %</mat-label>
-                        <input matInput [(ngModel)]="discPercSpecial"  />
-                    </mat-form-field>
-                 
-                </div>
-
-                <div class="modal-footer bg-mf-blue">
-                       <button type="button" class="btnsave" data-bs-dismiss="modal" (click)="updateDisc()"
-                       >Save</button>
-                    <button type="button" class="btnclose" data-bs-dismiss="modal"
-                       >Close</button>
-                </div>
+                <mat-form-field class="matSmall w-100">
+                    <mat-label>Profit %</mat-label>
+                    <input matInput [(ngModel)]="discPercSpecial" />
+                </mat-form-field>
 
             </div>
+
+            <div class="modal-footer bg-mf-blue">
+                <button type="button" class="btnsave" data-bs-dismiss="modal" (click)="updateDisc()">Save</button>
+                <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
+            </div>
+
         </div>
     </div>
-
+</div>

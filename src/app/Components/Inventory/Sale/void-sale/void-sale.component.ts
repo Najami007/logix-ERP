@@ -323,9 +323,29 @@ export class VoidSaleComponent implements OnInit {
   searchByCode(e: any) {
     if (this.PBarcode !== '') {
       if (e.keyCode == 13) {
-        this.insertProductData(0, this.PBarcode);
+         this.insertProductData(0, this.PBarcode);
+
+        // this.global.getProdDetail(0, this.PBarcode).subscribe(
+        //   (Response: any) => {
+        //     if (Response == '' || Response == null || Response == undefined) {
+        //       this.searchSpecialBarcode(this.PBarcode);
+        //       return;
+        //     } else {
+
+        //       if(Response[0].barcode2){
+        //         var qty = Response[0].quantity;
+        //       }
+              
+
+        //       this.insertProductData(0, this.PBarcode,0,qty);
+        //     }
+        //   }
+        // )
+
       }
     }
+
+
   }
 
 
@@ -438,7 +458,7 @@ export class VoidSaleComponent implements OnInit {
   getCurrentBill() {
 
 
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleExistingBill?reqUserID=' + this.global.getUserID()+'&reqType=HS').subscribe(
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSaleExistingBill?reqUserID=' + this.global.getUserID() + '&reqType=HS').subscribe(
       (Response: any) => {
         this.tableDataList = [];
         if (Response.length > 0) {
@@ -450,7 +470,7 @@ export class VoidSaleComponent implements OnInit {
               barcode: e.barcode,
               flavourTitle: e.flavourTitle,
               productImage: e.productImage,
-              quantity: e.quantity * e.packing,
+              quantity: e.quantity * e.multyQty,
               wohCP: e.costPrice,
               costPrice: e.costPrice,
               avgCostPrice: e.avgCostPrice,
@@ -462,8 +482,9 @@ export class VoidSaleComponent implements OnInit {
               batchStatus: '-',
               uomID: e.uomID,
               packing: e.packing,
+              multyQty:e.multyQty,
               discInP: e.discInP,
-              discInR: e.discInR / e.packing,
+              discInR: e.discInR / e.multyQty,
               aq: e.aq,
               autoInvDetID: e.autoInvDetID,
               gstAmount: e.gstAmount,
@@ -971,7 +992,7 @@ export class VoidSaleComponent implements OnInit {
       DiscPartyID: this.CusDiscFeature ? this.tmpDiscCustomerList.partyID : 0,
       CusDisc: this.cusDisc,
       CusDiscAmount: this.CusDiscAmount || 0,
-      
+
 
     }
 
@@ -1085,7 +1106,7 @@ export class VoidSaleComponent implements OnInit {
 
         if (qty != '') {
 
-          var updateQty = (Number(qty) * item.packing)
+          var updateQty = (Number(qty) * item.multyQty)
           /////////////////////////// checking whether quantity increase and trigger api
           if (updateQty > item.quantity) {
 
@@ -1093,7 +1114,7 @@ export class VoidSaleComponent implements OnInit {
               InvBillNo: this.invBillNo,
               ProductID: item.productID,
               barcode: item.barcode,
-              Quantity: qty - (item.quantity / item.packing),
+              Quantity: qty - (item.quantity / item.multyQty),
 
               UserID: this.global.getUserID(),
             }
@@ -1120,7 +1141,7 @@ export class VoidSaleComponent implements OnInit {
               ProductID: item.productID,
               ProductTitle: item.productTitle,
               barcode: item.barcode,
-              Quantity: (item.quantity / item.packing) - qty,
+              Quantity: (item.quantity / item.multyQty) - qty,
               CostPrice: item.costPrice,
               AvgCostPrice: item.avgCostPrice,
               SalePrice: item.salePrice,
@@ -1242,7 +1263,7 @@ export class VoidSaleComponent implements OnInit {
       ProductID: item.productID,
       ProductTitle: item.productTitle,
       barcode: item.barcode,
-      Quantity: item.quantity / item.packing,
+      Quantity: item.quantity / item.multyQty,
       CostPrice: item.costPrice,
       AvgCostPrice: item.avgCostPrice,
       SalePrice: item.salePrice,
@@ -1325,7 +1346,7 @@ export class VoidSaleComponent implements OnInit {
           }
 
 
-           /////////////// Filtering Bills with UserID and ProjectID
+          /////////////// Filtering Bills with UserID and ProjectID
           if (roleTypeId == 3 || roleTypeId == 2) { ///////////if Admin or User
             if (e.invType == 'S' && e.userID == userID && e.projectID == projectID) {
               this.savedbillList.push(e);
@@ -1356,7 +1377,7 @@ export class VoidSaleComponent implements OnInit {
         }
         this.app.stopLoaderDark();
       },
-      (Error:any)=>{
+      (Error: any) => {
         console.log(Error);
         this.app.stopLoaderDark();
       }

@@ -20,8 +20,8 @@ export class EditQtyModalComponent {
       @Inject(MAT_DIALOG_DATA) public data : any,
     ){}
     ngOnInit(): void {
-      this.tempQty = this.data.quantity / this.data.packing;
-       this.tempPacking = this.data.packing;
+      this.tempQty = this.data.quantity / this.data.multyQty;
+       this.tempPacking = this.data.multyQty;
   
      setTimeout(() => {
        $('#qty').trigger('select');

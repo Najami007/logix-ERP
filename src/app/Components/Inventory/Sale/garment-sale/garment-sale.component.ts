@@ -25,7 +25,7 @@ import { MatRadioButton } from '@angular/material/radio';
 })
 export class GarmentSaleComponent implements OnInit {
 
-@ViewChildren('bankRadios') bankRadios!: QueryList<MatRadioButton>;
+  @ViewChildren('bankRadios') bankRadios!: QueryList<MatRadioButton>;
 
 
 
@@ -237,7 +237,7 @@ export class GarmentSaleComponent implements OnInit {
         }
       })
     } else {
-      this.global.getCustomerList().subscribe((data: any) => { this.partyList = data;  });
+      this.global.getCustomerList().subscribe((data: any) => { this.partyList = data; });
     }
 
 
@@ -410,6 +410,8 @@ export class GarmentSaleComponent implements OnInit {
         gst: this.gstFeature ? data.gst : 0,
         et: data.et,
         packing: data.packing,
+        multyQty: data.multyQty,
+
         discInP: this.discFeature ? discPerc : 0,
         discInR: this.discFeature ? discRupee : 0,
         aq: data.aq,
@@ -635,7 +637,7 @@ export class GarmentSaleComponent implements OnInit {
 
   getTotal() {
 
-  
+
     this.qtyTotal = 0;
     this.subTotal = 0;
     this.netTotal = 0;
@@ -795,7 +797,7 @@ export class GarmentSaleComponent implements OnInit {
     // Enter key → Focus the product search input
     if (key === 13) {
       e.preventDefault();
-      if (item.packing > 1) {
+      if (item.multyQty > 1) {
         this.editDiscProdQty(item);
       } else {
         $('#psearchProduct').trigger('select').trigger('focus');
@@ -853,14 +855,14 @@ export class GarmentSaleComponent implements OnInit {
 
 
   editDiscProdQty(item: any) {
-    if (item.packing <= 1) return;
+    if (item.multyQty <= 1) return;
     this.dialog.open(EditQtyModalComponent, {
       width: '30%',
       data: item
     }).afterClosed().subscribe(value => {
       if (Number(value) > 0) {
         var index = this.tableDataList.findIndex((e: any) => e.barcode == item.barcode);
-        this.tableDataList[index].quantity = Number(value) * item.packing;
+        this.tableDataList[index].quantity = Number(value) * item.multyQty;
         this.getTotal();
 
       }

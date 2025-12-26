@@ -290,6 +290,8 @@ export class PurchaseReturnComponent implements OnInit {
         discInP: 0,
         discInR: 0,
         AQ: data.aq,
+        subCategoryID: data.subCategoryID,
+        brandID: data.brandID,
 
       });
 
@@ -1093,6 +1095,8 @@ export class PurchaseReturnComponent implements OnInit {
             discInP: e.discInP,
             discInR: e.discInR,
             AQ: e.aq,
+            subCategoryID: e.subCategoryID,
+            brandID: e.brandID,
           })
         });
 
@@ -1174,6 +1178,8 @@ export class PurchaseReturnComponent implements OnInit {
             discInP: e.discInP,
             discInR: e.discInR,
             AQ: 0,
+            subCategoryID: e.subCategoryID,
+            brandID: e.brandID,
           })
         });
 

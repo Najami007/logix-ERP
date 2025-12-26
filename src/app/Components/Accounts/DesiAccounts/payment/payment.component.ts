@@ -99,7 +99,6 @@ export class PaymentComponent {
   }
 
   edit(item: any) {
-    console.log(item);
     this.dialogue.open(AddPaymentComponent, {
       width: '30%',
       data: item,

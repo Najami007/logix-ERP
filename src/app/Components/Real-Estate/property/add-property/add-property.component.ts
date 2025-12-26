@@ -350,7 +350,6 @@ export class AddPropertyComponent implements OnInit {
         
         // Only process image files (optional check)
         if (file.type.startsWith('image/')) {
-          console.log(file.type);
             const reader = new FileReader();
             var list:any = [];
             reader.onload = function (e:any) {
