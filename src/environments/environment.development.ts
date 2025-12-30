@@ -13,7 +13,7 @@ export const environment = {
 
   //mainApi: 'http://192.168.100.37:1000/',
   // mainApi: 'http://localhost:5000/', 
-   mainApi: 'http://localhost:8060/',         /////////// system own published API
+  // mainApi: 'http://localhost:8060/',         /////////// system own published API
    //mainApi: 'http://10.73.14.19:8060/',    
   // mainApi: 'http://192.168.160.98:8060/',  ////////// live Server Dani System
   //mainApi: 'http://192.168.100.250:1007/',  ////////// live Server Dani System
@@ -35,12 +35,12 @@ export const environment = {
 
 
   // mainApi: 'http://192.168.20.99:7004/', ///////////// MHM Warehouse Mehria Town Mehria Mall
- //  mainApi: 'http://159.69.174.21:2033/',  /////////// MHM Mehria Warehouse LIVE API
+  //  mainApi: 'http://159.69.174.21:2033/',  /////////// MHM Mehria Warehouse LIVE API
 
 
 
   // mainApi: 'http://192.168.20.99:7005/', ///////////// MHM Mehria Town Mehria Mall
-  //  mainApi: 'http://159.69.174.21:2034/',  /////////// MHM Mehria Town LIVE API
+    mainApi: 'http://159.69.174.21:2034/',  /////////// MHM Mehria Town LIVE API
 
 
 
