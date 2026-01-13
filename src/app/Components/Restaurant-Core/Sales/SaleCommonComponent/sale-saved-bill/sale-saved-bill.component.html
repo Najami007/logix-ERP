@@ -1,56 +1,67 @@
-    <div>
+<div>
 
-                    <div class="text-end p-2">
-                        <mat-form-field appearance="outline" class="w-100 matSmall">
-                            <mat-label>Search...</mat-label>
-                            <input matInput type="text" #searchSavedBill />
-                        </mat-form-field>
-                    </div>
-                    <div class="p-2" style="max-height: 400px;overflow-y: scroll;">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>S#</th>
-                                    <th>Bill #</th>
-                                    <th>Order</th>
-                                    <th>Date</th>
-                                    <th>Table No</th>
-                                    <th>Type</th>
-                                    <th *ngIf="customerFeature">Customer</th>
-                                    <th>Amount</th>
-                                    <th>Print</th>
-                                    <th>Detail</th>
-                                    <th *ngIf="postBillFeature">Post</th>
-                                </tr>
+    <div class="text-end p-2">
+        <mat-form-field appearance="outline" class="w-100 matSmall">
+            <mat-label>Search...</mat-label>
+            <input matInput type="text" #searchSavedBill />
+        </mat-form-field>
+    </div>
+    <div class="p-2" style="max-height: 400px;overflow-y: scroll;">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                        <th>Order</th>
+                    <th>Bill #</th>
+                
+                    <th *ngIf="buzzerNoFeature">Buzzer#</th>
+                    <th>Date</th>
+                    <th>Table No</th>
+                    <th>Type</th>
+                    <th *ngIf="customerFeature">Customer</th>
+                    <th>Amount</th>
+                    <th>Print</th>
+                    <th >Action</th>
 
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let item of savedbillList |filter:searchSavedBill.value index as index">
-                                    <td>{{index+1}}</td>
-                                    <td>{{item.invBillNo}}</td>
-                                    <td>{{item.orderNo}}</td>
-                                    <td>{{item.invDate|date:'dd-MM-yyyy'}} ({{item.createdOn|date:'hh:mm:a'}})</td>
-                                    <td>{{item.tableTitle}}</td>
-                                    <td>{{item.paymentType}}</td>
-                                    <td *ngIf="customerFeature">{{item.partyName}}</td>
-                                    <td>{{item.netTotal |number:'1.0-0'}}</td>
-                                    <td class="cursorPointer"><mat-icon class="text-primary "
-                                            (click)="printDuplicateBill(item)">print</mat-icon>
-                                        <mat-icon
-                                            *ngIf="gstFeature && !item.fbrStatus && item.paymentType !== 'Complimentary'"
-                                            (click)="sendToFbr(item)">send</mat-icon>
-                                    </td>
-                                    <td class="text-success cursorPointer"><mat-icon
-                                            (click)="billDetails(item)">receipt</mat-icon></td>
-                                    <td *ngIf="postBillFeature" class="text-success cursorPointer"><mat-icon (click)="postSaleBill(item)">
-                                            {{!item.postedStatus ? 'check_box_outline_blank' : 'check_box'}}</mat-icon>
-                                    </td>
-                                </tr>
-                            </tbody>
+                    <th *ngIf="postBillFeature">Post</th>
+                </tr>
 
-                        </table>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of savedbillList |filter:searchSavedBill.value index as index">
+                    <td>{{index+1}}</td>
+                    <td>{{item.orderNo}}</td>
+                    <td>{{item.invBillNo}}</td>
+                    <td *ngIf="buzzerNoFeature">{{item.buzzerNo}}</td>
+                    <td>{{item.invDate|date:'dd-MM-yyyy'}} ({{item.createdOn|date:'hh:mm:a'}})</td>
+                    <td>{{item.tableTitle}}</td>
+                    <td>{{item.paymentType}}</td>
+                    <td *ngIf="customerFeature">{{item.partyName}}</td>
+                    <td>{{item.netTotal |number:'1.0-0'}}</td>
+                    <td class="cursorPointer"><mat-icon class="text-primary "
+                            (click)="printDuplicateBill(item)">print</mat-icon>
+                        <mat-icon *ngIf="gstFeature && !item.fbrStatus && item.paymentType !== 'Complimentary'"
+                            (click)="sendToFbr(item)">send</mat-icon>
+                    </td>
+
+                    <td >
+                        <mat-icon *ngIf="editRestSaleFeature && !item.postedStatus" matTooltip="Edit" class="text-success cursorPointer"
+                            (click)="editSale(item)">edit</mat-icon>
+                        <mat-icon *ngIf="delRestSaleFeature  && !item.postedStatus" matTooltip="delete" class="text-danger cursorPointer"
+                            (click)="deleteSale(item)">delete</mat-icon>
+                        <mat-icon  class="text-success cursorPointer" (click)="billDetails(item)">receipt</mat-icon>
+                    </td>
+
+                    <td *ngIf="postBillFeature" class="text-success cursorPointer"><mat-icon
+                            (click)="postSaleBill(item)">
+                            {{!item.postedStatus ? 'check_box_outline_blank' : 'check_box'}}</mat-icon>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
 
 
-                    </div>
+    </div>
 
-                </div>
+</div>

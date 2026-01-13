@@ -344,6 +344,13 @@ export class GlobalDataModule implements OnInit {
   AddNewProductRestrictionFeature = this.getFeature('AddNewProductRestriction');
   ImportFromServerFeature = this.getFeature('ImportFromServer');
   ProjectwiseFeature = this.getFeature('Projectwise');
+  editRestSaleFeature = this.getFeature('editRestSale');
+  delRestSaleFeature = this.getFeature('delRestSale');
+  buzzerNoFeature = this.getFeature('buzzerNo');
+  showKotRemarksFeature = this.getFeature('showKotRemarks');
+  orderwiseDashboardFeature = this.getFeature('orderwiseDashboard');
+  editInvSaleFeature  = this.getFeature('editInvSale');
+  delInvSaleFeature = this.getFeature('delInvSale');
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
     this.BookerFeature = this.getFeature('Booker');
@@ -409,6 +416,13 @@ export class GlobalDataModule implements OnInit {
     this.AddNewProductRestrictionFeature = this.getFeature('AddNewProductRestriction');
     this.ImportFromServerFeature = this.getFeature('ImportFromServer');
     this.ProjectwiseFeature = this.getFeature('Projectwise');
+    this.editRestSaleFeature = this.getFeature('editRestSale');
+    this.delRestSaleFeature = this.getFeature('delRestSale');
+    this.buzzerNoFeature = this.getFeature('buzzerNo');
+    this.showKotRemarksFeature = this.getFeature('showKotRemarks');
+    this.orderwiseDashboardFeature = this.getFeature('orderwiseDashboard');
+    this.editInvSaleFeature  = this.getFeature('editInvSale');
+    this.delInvSaleFeature = this.getFeature('delInvSale');
   }
 
 

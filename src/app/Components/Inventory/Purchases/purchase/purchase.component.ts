@@ -49,7 +49,8 @@ export class PurchaseComponent implements OnInit {
 
   ImageUrlFeature = this.global.ImageUrlFeature;
   ProjectwiseFeature = this.global.ProjectwiseFeature;
-
+  
+  cmpBranchID:any = 0;
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
   constructor(
@@ -66,6 +67,7 @@ export class PurchaseComponent implements OnInit {
 
     this.global.getCompany().subscribe((data) => {
       this.companyProfile = data;
+      this.cmpBranchID = data[0].branchID;
     });
 
 
@@ -885,6 +887,11 @@ export class PurchaseComponent implements OnInit {
       return;
     }
 
+    if(this.ProjectwiseFeature && this.projectID == 0){
+      this.msg.WarnNotify('Select Project');
+      return;
+    }
+
 
 
     this.sortType == 'desc'
@@ -900,7 +907,7 @@ export class PurchaseComponent implements OnInit {
       RefInvoiceNo: this.refInvNo,
       PartyID: this.partyID,
       LocationID: this.locationID,
-      ProjectID: this.projectID,
+      ProjectID: this.projectID == 0 ? this.global.getProjectID() : this.projectID,
       BookerID: this.bookerID,
       BillTotal: this.subTotal,
       BillDiscount: this.discount || 0,
@@ -1258,7 +1265,7 @@ export class PurchaseComponent implements OnInit {
 
     this.http.get(url).subscribe(
       (Response: any) => {
-
+        console.log(Response);
         this.holdBillList = [];
         if (this.tmpSearchInvType == 'HP') {
 
@@ -1274,7 +1281,7 @@ export class PurchaseComponent implements OnInit {
         }
 
         if (this.tmpSearchInvType == 'IC') {
-          this.holdBillList = Response;
+          this.holdBillList = Response.length > 0 ? Response.filter((e:any)=> e.partyID == this.cmpBranchID) : [];
         }
 
       }

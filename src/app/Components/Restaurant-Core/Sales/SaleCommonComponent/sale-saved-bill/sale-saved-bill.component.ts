@@ -35,6 +35,11 @@ export class SaleSavedBillComponent implements OnInit {
   autoTableSelectFeature = this.global.AutoTableSelect;
   postBillFeature = this.global.postSale;
 
+   delRestSaleFeature = this.global.delRestSaleFeature;
+
+  editRestSaleFeature = this.global.editRestSaleFeature;
+  buzzerNoFeature = this.global.buzzerNoFeature;
+
   constructor(
  
     
@@ -54,6 +59,8 @@ export class SaleSavedBillComponent implements OnInit {
     @Output() printDuplicateEmitter = new EventEmitter();
     @Output() billDetailEmitter = new EventEmitter();
     @Output() postBillEmitter = new EventEmitter();
+    @Output() editSaleBill = new EventEmitter();
+    @Output() deleteSaleBill = new EventEmitter();
     @Input()  savedbillList:any = [];
     crudList: any = { c: true, r: true, u: true, d: true };
   
@@ -76,6 +83,14 @@ export class SaleSavedBillComponent implements OnInit {
     }
     postSaleBill(item:any){
       this.postBillEmitter.emit(item);
+    }
+
+     editSale(item:any){
+      this.editSaleBill.emit(item);
+    }
+
+    deleteSale(item:any){
+      this.deleteSaleBill.emit(item);
     }
  
 

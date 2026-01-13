@@ -130,7 +130,7 @@
 
                 <div class="row">
                     <div class="col-md-3 pb-1">
-                        <button class="btnduplicate w-100" accesskey="u" *ngIf="crudList.u"
+                        <button class="btnduplicate w-100" accesskey="u"
                             (click)="openDuplicateModal()">D<u>u</u>plicate</button>
                     </div>
 
@@ -450,7 +450,7 @@
 
                 <app-saved-bill (changePaymentEmitter)="changePayment($event)" (sendToFbrEmitter)="sendToFbr($event)"
                     (printDuplicateEmitter)="printDuplicateBill($event)" (billDetailEmitter)="billDetails($event)"
-                    (postBillEmitter)="postSaleBill($event)" [savedbillList]="savedbillList"></app-saved-bill>
+                    (postBillEmitter)="postSaleBill($event)" (editInvSaleBill)="validateEditSale($event)" [savedbillList]="savedbillList"></app-saved-bill>
 
 
                 <app-sale-bill-print id="print-bill" class="hide"></app-sale-bill-print>

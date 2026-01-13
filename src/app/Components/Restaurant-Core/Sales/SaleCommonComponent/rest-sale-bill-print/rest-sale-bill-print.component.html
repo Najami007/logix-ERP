@@ -47,6 +47,10 @@
                     <th>Waiter</th>
                     <td>{{myBookerName}}</td>
                 </tr>
+                <tr *ngIf="buzzerNoFeature">
+                    <th>Buzzer No</th>
+                    <td>{{myBuzzerNo}}</td>
+                </tr>
                 <tr>
                     <th>Remarks:-</th>
                     <td>{{myRemarks}}</td>

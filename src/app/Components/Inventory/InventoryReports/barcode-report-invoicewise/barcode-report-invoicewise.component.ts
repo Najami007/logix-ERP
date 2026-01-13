@@ -53,13 +53,26 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
   }
   ngOnInit(): void {
     this.global.setHeaderTitle('Barcode Report Invoice');
+    this.getBrandList();
+    this.getSubCategory();
+    this.getProductList();
 
+    
+  }
 
-    this.global.getProducts().subscribe(
+  getProductList(){
+     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProduct').subscribe(
       (Response: any) => {
         this.productList = Response;
+     
       }
     )
+
+    // this.global.getProducts().subscribe(
+    //   (Response: any) => {
+    //     this.productList = Response;
+    //   }
+    // )
   }
 
 
@@ -119,7 +132,11 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
 
           this.myTotalQty += e.quantity;
           this.pushProdData(e, false, 'bill');
+
+         
         });
+
+        this.global.closeBootstrapModal('#savedBillModal',true);
       }
     )
 
@@ -134,6 +151,9 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
       salePrice = item.salePrice
 
     }
+    console.log(item);
+    var discInR = item.discRupees ? item.discRupees : item.discInR;
+     var discInP = item.discPercentage ? item.discPercentage : item.discInP;
 
     this.tableDataList.push({
       isChecked: isChecked,
@@ -155,8 +175,8 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
       BatchStatus: item.batchStatus,
       UomID: item.uomID,
       Packing: item.packing,
-      discInP: item.discInP,
-      discInR: item.discInR,
+      discInP: discInP,
+      discInR: discInR,
       AQ: item.aq,
       gst: item.gst,
       et: item.et,
@@ -442,6 +462,53 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
 
 
   }
+
+
+  openSavedBillModal() {
+    this.global.openBootstrapModal('#savedBillModal', true);
+  }
+
+  catType = 'SubCat';
+  CategoriesList: any = [];
+  SubCategoriesList: any = [];
+  SubCategoryID = 0;
+  getSubCategory() {
+    this.SubCategoryID = 0;
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSubCategory').subscribe(
+      (Response: any) => {
+        this.SubCategoriesList = Response;
+      }
+    )
+  }
+
+
+  BrandList: any = [];
+  BrandID = 0;
+  getBrandList() {
+    this.global.getBrandList().subscribe((data: any) => { this.BrandList = data; });
+  }
+
+  filterProduct() {
+
+    var prodList = [];
+    if (this.catType == 'Brand') {
+      prodList = this.productList.filter((e: any) => e.brand == this.BrandID);
+    }
+
+     if (this.catType == 'SubCat') {
+      prodList = this.productList.filter((e: any) => e.subCategoryID == this.SubCategoryID);
+    }
+
+    if(prodList.length == 0){
+      this.msg.WarnNotify('No Product Found');
+      return;
+    }
+        this.tableDataList = [];
+    prodList.forEach((e: any) => {
+      this.pushProdData(e,true,'Other')
+    });
+  }
+
 
 
 

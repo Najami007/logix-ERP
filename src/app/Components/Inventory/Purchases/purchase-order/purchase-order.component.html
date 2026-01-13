@@ -5,7 +5,7 @@
             <div class="col-md-2" *ngIf="!disableDateFeature">
                 <mat-form-field appearance="outline"  class="w-100 matSmall">
                     <mat-label>Invoice Date</mat-label>
-                    <input [(ngModel)]="invoiceDate" [disabled]="global.DisableDate" readonly="true" matInput
+                    <input [(ngModel)]="invoiceDate" (dateChange)="insertToLocalStorage()" [disabled]="global.DisableDate" readonly="true" matInput
                         type="text" name="invDate" [matDatepicker]="iDate">
                     <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
                     <mat-datepicker #iDate></mat-datepicker>
@@ -25,7 +25,7 @@
             <div class="col-md-3">
                 <mat-form-field appearance="outline" class="w-100 matSmall">
                     <mat-label>Supplier</mat-label>
-                    <mat-select [disabled]="tableDataList.length > 0" [(ngModel)]="partyID" #supplier name="customer">
+                    <mat-select [disabled]="tableDataList.length > 0" (selectionChange)="insertToLocalStorage()" [(ngModel)]="partyID" #supplier name="customer">
                         <mat-option><ngx-mat-select-search #partySearch [placeholderLabel]="'Search...'"
                                 [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                         <mat-option *ngFor="let item of suppliersList | filter:partySearch.value"
@@ -44,7 +44,7 @@
             <div [ngClass]="disableDateFeature ? 'col-md-7' :'col-md-5'">
                 <mat-form-field appearance="outline" class="w-100 matSmall">
                     <mat-label>Remarks</mat-label>
-                    <input matInput type="text" [(ngModel)]="invRemarks">
+                    <input matInput type="text" (input)="insertToLocalStorage()" [(ngModel)]="invRemarks">
                 </mat-form-field>
             </div>
         </div>
@@ -127,7 +127,7 @@
                                 (click)="delRow(item)">delete</mat-icon></td>
                     </tr>
                     <tr>
-                        <td colspan="3"></td>
+                        <td colspan="4"></td>
                         <th class="text-center">{{totalQty |number:'1.0-2'}}</th>
                         <th></th>
                         <th *ngIf="PONewCostFeature"> </th>

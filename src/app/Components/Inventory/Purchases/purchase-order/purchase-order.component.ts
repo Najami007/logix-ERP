@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
@@ -11,6 +11,7 @@ import { Observable, retry } from 'rxjs';
 import { AdjBillPrintComponent } from '../../InvAdjustment/adj-bill-print/adj-bill-print.component';
 import { PurchaseBillPrintComponent } from '../purchase-bill-print/purchase-bill-print.component';
 import { POBillPrintComponent } from './pobill-print/pobill-print.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-purchase-order',
@@ -27,6 +28,17 @@ export class PurchaseOrderComponent implements OnInit {
   disableDateFeature = this.global.DisableInvDate;
   ImageUrlFeature = this.global.ImageUrlFeature;
   PONewCostFeature = this.global.PONewCostFeature;
+  insertLocalStorageFeature = this.global.insertLocalStorageFeature;
+
+
+
+  @HostListener('document:visibilitychange', [])
+
+  appVisibility() {
+    ////////////// restrict to save in localstorage///////
+    if (!this.insertLocalStorageFeature) return;
+    if (document.hidden) { } else { this.importFromLocalStorage(); }
+  }
 
   constructor(
     private http: HttpClient,
@@ -58,6 +70,9 @@ export class PurchaseOrderComponent implements OnInit {
 
     this.global.getProducts().subscribe(
       (data: any) => { this.productList = data; })
+
+    this.importFromLocalStorage();
+
   }
 
 
@@ -119,18 +134,18 @@ export class PurchaseOrderComponent implements OnInit {
     if (this.PBarcode !== '') {
       if (e.keyCode == 13) {
 
-        /// Seperating by / and coverting to Qty
-        if (this.PBarcode.split("/")[1] != undefined) {
-          barcode = this.PBarcode.split("/")[0];
-          qty = parseFloat(this.PBarcode.split("/")[1]);
-          BType = 'price';
-        }
-        /// Seperating by - and coverting to Qty 
-        if (this.PBarcode.split("-")[1] != undefined) {
-          barcode = this.PBarcode.split("-")[0];
-          qty = parseFloat(this.PBarcode.split("-")[1]);
-          BType = 'qty';
-        }
+        // /// Seperating by / and coverting to Qty
+        // if (this.PBarcode.split("/")[1] != undefined) {
+        //   barcode = this.PBarcode.split("/")[0];
+        //   qty = parseFloat(this.PBarcode.split("/")[1]);
+        //   BType = 'price';
+        // }
+        // /// Seperating by - and coverting to Qty 
+        // if (this.PBarcode.split("-")[1] != undefined) {
+        //   barcode = this.PBarcode.split("-")[0];
+        //   qty = parseFloat(this.PBarcode.split("-")[1]);
+        //   BType = 'qty';
+        // }
 
         // this.app.startLoaderDark();
         this.global.getProdDetail(0, barcode).subscribe(
@@ -149,6 +164,7 @@ export class PurchaseOrderComponent implements OnInit {
         this.PBarcode = '';
         this.getTotal();
         $('#searchProduct').trigger('focus');
+
 
       }
     }
@@ -357,6 +373,9 @@ export class PurchaseOrderComponent implements OnInit {
       // this.myTotal = this.mySubtoatal - this.myDiscount;
       // this.myDue = this.myPaid - this.myTotal;\
 
+      ////////////// restrict to save in localstorage///////
+      if (!this.insertLocalStorageFeature) return;
+      this.insertToLocalStorage();
 
 
     }
@@ -586,12 +605,17 @@ export class PurchaseOrderComponent implements OnInit {
       return;
     }
 
+    this.sortType == 'desc'
+      ? productList.sort((a: any, b: any) => a.rowIndex - b.rowIndex)
+      : productList.sort((a: any, b: any) => b.rowIndex - a.rowIndex);
+
+
     var postData: any = {
       InvType: 'PO',
       InvDate: this.global.dateFormater(this.invoiceDate, '-'),
       InvBillNo: this.invBillNo,
       LocationID: this.locationID,
-      ProjectID: this.projectID,
+      ProjectID: this.projectID == 0 ? this.global.getProjectID() : this.projectID,
       PartyID: this.partyID,
       BookerID: this.bookerID,
       BillTotal: this.subTotal,
@@ -602,17 +626,12 @@ export class PurchaseOrderComponent implements OnInit {
       UserID: this.global.getUserID(),
     };
 
-
     if (this.tableDataList == '') {
       this.msg.WarnNotify('Atleast One Product Must Be Selected')
     } else if (this.partyID == 0) {
       this.msg.WarnNotify('Select Supplier')
     } else {
-
-
       if (isValidFlag == true) {
-
-
         if (this.btnType == 'Save') {
           this.app.startLoaderDark();
           this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertPurchaseOrder', postData).subscribe(
@@ -631,6 +650,8 @@ export class PurchaseOrderComponent implements OnInit {
               console.log(Error);
               this.msg.WarnNotify(Error);
               this.app.stopLoaderDark();
+
+            
             }
           )
         }
@@ -639,9 +660,7 @@ export class PurchaseOrderComponent implements OnInit {
           this.global.openPinCode().subscribe(pin => {
             if (pin != '') {
               this.app.startLoaderDark();
-
               postData['PinCode'] = pin;
-
               this.http.post(environment.mainApi + this.global.inventoryLink + 'UpdatePurchaseOrder', postData).subscribe(
                 (Response: any) => {
                   if (Response.msg == 'Data Updated Successfully') {
@@ -658,6 +677,7 @@ export class PurchaseOrderComponent implements OnInit {
                   console.log(Error);
                   this.msg.WarnNotify(Error);
                   this.app.stopLoaderDark();
+                 
                 }
               )
             }
@@ -692,6 +712,9 @@ export class PurchaseOrderComponent implements OnInit {
     this.CostTotal = 0;
     this.salePriceTotal = 0;
     this.newCostTotal = 0;
+
+
+    this.removeLocalStorage();
 
   }
 
@@ -737,7 +760,6 @@ export class PurchaseOrderComponent implements OnInit {
         this.totalQty = 0;
         this.productImage = Response[Response.length - 1].productImage;
 
-
         Response.forEach((e: any) => {
           this.totalQty += e.quantity;
           this.tableDataList.push({
@@ -750,7 +772,7 @@ export class PurchaseOrderComponent implements OnInit {
             avgCostPrice: e.avgCostPrice,
             costPrice: e.costPrice,
             salePrice: e.salePrice,
-            newCostPrice:e.newCostPrice,
+            newCostPrice: e.newCostPrice,
             expiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
             batchNo: e.batchNo,
             batchStatus: e.batchStatus,
@@ -763,7 +785,8 @@ export class PurchaseOrderComponent implements OnInit {
         });
 
         //////////sorting data table base on sort type
-        this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex)
+        this.sortType == 'desc'
+          ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex)
           : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
 
         this.getTotal();
@@ -884,6 +907,77 @@ export class PurchaseOrderComponent implements OnInit {
     )
   }
 
+
+
+
+
+  removeLocalStorage() {
+    localStorage.removeItem('tmpPOInvBillNo');
+    localStorage.removeItem('tmpPOData');
+    localStorage.removeItem('tmpPOProjectID');
+    localStorage.removeItem('tmpPOPartyID');
+    localStorage.removeItem('tmpPOInvoiceDate');
+    localStorage.removeItem('tmpPORemarks');
+    localStorage.removeItem('tmpPOBtnType');
+
+  }
+
+
+  insertToLocalStorage() {
+    this.removeLocalStorage();
+
+    var invBillNo = JSON.stringify(this.invBillNo);
+    localStorage.setItem('tmpPOInvBillNo', invBillNo);
+
+    var prodData = JSON.stringify(this.tableDataList);
+    localStorage.setItem('tmpPOData', prodData);
+
+    var projectID = JSON.stringify(this.projectID);
+    localStorage.setItem('tmpPOProjectID', projectID);
+
+    var partyID = JSON.stringify(this.partyID);
+    localStorage.setItem('tmpPOPartyID', partyID);
+
+    var date = JSON.stringify(this.invoiceDate);
+    localStorage.setItem('tmpPOInvoiceDate', date);
+
+    var remarks = JSON.stringify(this.invRemarks ? this.invRemarks : '-');
+    localStorage.setItem('tmpPORemarks', remarks);
+
+    var BtnType = JSON.stringify(this.btnType);
+    localStorage.setItem('tmpPOBtnType', BtnType);
+
+
+  }
+
+  importFromLocalStorage() {
+
+
+
+    var data = JSON.parse(localStorage.getItem('tmpPOData') || '[]');
+
+    if (this.tableDataList.length > 0) {
+      if (data == '0' || data == '') {
+        Swal.fire({
+          title: "No Data Found",
+          text: "Storage Limit Exceed Please Hold the Bill Else Data will be Lost on Reload?",
+          icon: "warning"
+        });
+        // this.msg.WarnNotify('Storage Limit Exceed Please Hold the Bill Else Data will be vanished on Reload?')
+        return;
+      }
+    }
+    this.invBillNo = JSON.parse(localStorage.getItem('tmpPOInvBillNo') || '-');
+    this.projectID = JSON.parse(localStorage.getItem('tmpPOProjectID') || '0');
+    this.partyID = JSON.parse(localStorage.getItem('tmpPOPartyID') || '0');
+    var tmpDate: any = JSON.parse(localStorage.getItem('tmpPOInvoiceDate') || '');
+    this.invoiceDate = new Date(tmpDate ? tmpDate : new Date());
+    this.invRemarks = JSON.parse(localStorage.getItem('tmpPORemarks') || '');
+    this.btnType = JSON.parse(localStorage.getItem('tmpPOBtnType') || 'Save');
+    this.tableDataList = data;
+    this.getTotal();
+
+  }
 
 
 

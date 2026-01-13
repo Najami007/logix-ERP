@@ -25,6 +25,7 @@ export class RestSaleBillPrintComponent {
   FBRFeature = this.global.FBRFeature;
   showOrderNo = this.global.showOrderNo;
   customerFeature = this.global.customerFeature;
+     buzzerNoFeature = this.global.buzzerNoFeature;
 
   crudList: any = [];
   companyProfile: any = [];
@@ -109,7 +110,7 @@ export class RestSaleBillPrintComponent {
   myPartyName = '';
   myPartyBalance = 0;
   myInvType = '';
-
+  myBuzzerNo = 0;
 
 
   printBill(invNo: any) {
@@ -143,6 +144,7 @@ export class RestSaleBillPrintComponent {
         this.myPartyName = Response[0].partyName;
         this.myPartyBalance = Response[0].cusBalance;
         this.myInvType = Response[0].invType;
+         this.myBuzzerNo  = Response[0].buzzerNo;
 
 
         if (this.myPaymentType == 'Bank') {

@@ -140,9 +140,9 @@
         <div class=" col-lg-7 card" style="background-color: rgb(248, 237, 217);">
 
             <div class="row ps-1 pt-3">
-                <mat-form-field appearance="outline" *ngIf="!disableDateFeature" class="col-lg-2 matSmall">
+                <mat-form-field appearance="outline"  class="col-lg-2 matSmall">
                     <mat-label>Invoice Date</mat-label>
-                    <input [(ngModel)]="invoiceDate" (dateChange)="insertToLocalStorage()" readonly="true" matInput
+                    <input [(ngModel)]="invoiceDate" [disabled]="disableDateFeature" (dateChange)="insertToLocalStorage()" readonly="true" matInput
                         type="text" name="voucherDate" [matDatepicker]="voucherDate">
                     <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
                     <mat-datepicker #voucherDate></mat-datepicker>
@@ -167,13 +167,11 @@
                     </mat-select>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="matSmall"
-                    [ngClass]="disableDateFeature ? 'col-lg-3' :'col-lg-2'">
+                <mat-form-field appearance="outline" class="matSmall col-lg-2">
                     <mat-label>Ref Inv No.</mat-label>
                     <input matInput [(ngModel)]="refInvNo" (input)="insertToLocalStorage()" type="text" name="refInvNo">
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="matSmall"
-                    [ngClass]="disableDateFeature ? 'col-lg-3' :'col-lg-2'">
+                <mat-form-field appearance="outline" class="matSmall col-lg-2">
                     <mat-label>Discount</mat-label>
                     <input matInput [(ngModel)]="discount" (keyup)="this.global.handleNumKeys($event);getTotal()"
                         (keydown)="this.global.handleNumKeys($event);getTotal()" type="text" name="dicount">

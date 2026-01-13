@@ -13,22 +13,22 @@ export class SavedBillComponent {
 
 
 
-    constructor(
+  constructor(
 
-      public global: GlobalDataModule,
-      private route: Router,
-      private http:HttpClient,
-      
+    public global: GlobalDataModule,
+    private route: Router,
+    private http: HttpClient,
 
-    ) {
 
-      this.global.getMenuList().subscribe((data) => {
-        this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
-  
-      })
-  
-  
-    }
+  ) {
+
+    this.global.getMenuList().subscribe((data) => {
+      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
+
+    })
+
+
+  }
 
 
   discFeature = this.global.discFeature;
@@ -45,7 +45,9 @@ export class SavedBillComponent {
   changePaymentMehtodFeature = this.global.changePaymentMehtodFeature;
   onlySaveBillFeature = this.global.onlySaveBillFeature;
   disableDate = this.global.DisableDateSale;
-   postBillFeature = this.global.postSale;
+  postBillFeature = this.global.postSale;
+  editInvSaleFeature = this.global.editInvSaleFeature;
+  delInvSaleFeature = this.global.delInvSaleFeature;
 
 
 
@@ -54,7 +56,10 @@ export class SavedBillComponent {
   @Output() printDuplicateEmitter = new EventEmitter();
   @Output() billDetailEmitter = new EventEmitter();
   @Output() postBillEmitter = new EventEmitter();
-  @Input()  savedbillList:any = [];
+  @Output() editInvSaleBill = new EventEmitter();
+  @Output() delInvSaleBill = new EventEmitter();
+
+  @Input() savedbillList: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
 
 
@@ -62,22 +67,29 @@ export class SavedBillComponent {
 
 
 
-  changePayment(item:any){
+  changePayment(item: any) {
     this.changePaymentEmitter.emit(item);
   }
-  printDuplicateBill(item:any){
+  printDuplicateBill(item: any) {
     this.printDuplicateEmitter.emit(item);
   }
 
-  sendToFbr(item:any){
+  sendToFbr(item: any) {
     this.sendToFbrEmitter.emit(item);
   }
 
-  billDetails(item:any){
+  billDetails(item: any) {
     this.billDetailEmitter.emit(item);
   }
-  postSaleBill(item:any){
+  postSaleBill(item: any) {
     this.postBillEmitter.emit(item);
+  }
+  editSaleBill(item: any) {
+    this.editInvSaleBill.emit(item);
+  }
+
+  deleteSaleBill(item: any) {
+    this.delInvSaleBill.emit(item);
   }
 
 }

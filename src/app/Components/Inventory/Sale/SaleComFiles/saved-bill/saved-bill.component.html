@@ -22,7 +22,7 @@
                     <th>Customer</th>
                     <th>Amount</th>
                     <th>Print</th>
-                    <th>Detail</th>
+                    <th>Action</th>
                     <th *ngIf="postBillFeature">Post</th>
                 </tr>
 
@@ -47,8 +47,11 @@
                             (click)="sendToFbr(item)">send</mat-icon>
                         </div>
                     </td>
-                    <td class="text-success cursorPointer"><mat-icon
-                            (click)="billDetails(item)">receipt</mat-icon></td>
+                    <td class="cursorPointer">
+                        <mat-icon *ngIf="crudList.u && editInvSaleFeature" (click)="editSaleBill(item)" class="text-success ">edit</mat-icon>
+                        <mat-icon *ngIf="crudList.d && delInvSaleFeature" (click)="deleteSaleBill(item)" class="text-danger ">delete</mat-icon>
+                        <mat-icon (click)="billDetails(item)" class="text-dark ">receipt</mat-icon>
+                    </td>
                     <td class="text-success cursorPointer" *ngIf="postBillFeature"><mat-icon 
                             (click)="postSaleBill(item)"> {{!item.postedStatus ? 'check_box_outline_blank' : 'check_box'}}</mat-icon></td>
                 </tr>

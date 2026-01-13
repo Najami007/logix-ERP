@@ -313,7 +313,7 @@ export class ProductComponent implements OnInit {
   CostPrice: any = '';
   SalePrice: any = '';
   productType: any = 0;
-  productImg: any = '';
+  productImg: any = '-';
   packing:any = 1;
 
   BrandID: any = 0;
@@ -542,11 +542,11 @@ export class ProductComponent implements OnInit {
     }
 
 
-    if (this.CategoryID == '' || this.CategoryID == undefined) {
+    if (this.CategoryID == '' || this.CategoryID == 0 || this.CategoryID == undefined) {
       this.msg.WarnNotify('Select Category');
       return;
     }
-    if (this.SubCategoryID == '' || this.SubCategoryID == undefined) {
+    if (this.SubCategoryID == '' || this.SubCategoryID == 0 || this.SubCategoryID == undefined) {
       this.msg.WarnNotify('Select SubCategory');
       return;
     }
@@ -559,18 +559,24 @@ export class ProductComponent implements OnInit {
       this.msg.WarnNotify('Enter Barcode');
       return;
     }
-    if (this.BrandID == '' || this.BrandID == undefined) {
+    if (this.BrandID == '' || this.BrandID == 0  || this.BrandID == undefined) {
       this.msg.WarnNotify('Select Brand');
       return;
     }
-    if (this.rackID == '' || this.rackID == undefined) {
+    if (this.rackID == '' || this.rackID == 0 ||  this.rackID == undefined) {
       this.msg.WarnNotify('Select Rack ');
       return;
     }
-    if (this.UOMID == '' || this.UOMID == undefined) {
+    if (this.UOMID == '' || this.UOMID == 0 || this.UOMID == undefined) {
       this.msg.WarnNotify('Select Unit of Measurement');
       return;
     }
+
+     if (this.prodTypeID == '' || this.prodTypeID == 0 || this.prodTypeID == undefined) {
+      this.msg.WarnNotify('Select Product Type');
+      return;
+    }
+
     if ((this.CostPrice == '' || this.CostPrice <= 0 || this.CostPrice == undefined) && !this.ManufacturingFeature) {
       this.msg.WarnNotify('Enter Cost Price');
       return;
@@ -729,7 +735,7 @@ export class ProductComponent implements OnInit {
   reset(type: any) {
     this.ProductID = 0;
     this.Barcode = '';
-    this.productImg = '';
+    this.productImg = '-';
     this.btnType = 'Save';
     this.salePercent = '';
     if (this.autoEmpty == true || type == 'btn') {

@@ -19,6 +19,8 @@ export class RestKotPrintComponent {
   showCmpNameFeature: any = this.global.showCmpNameFeature;
   showOrderNo = this.global.showOrderNo;
   PrintKotAreawiseFeature = this.global.PrintKotAreawiseFeature;
+  showKotRemarksFeature = this.global.showKotRemarksFeature;
+   buzzerNoFeature = this.global.buzzerNoFeature;
 
   crudList: any = [];
   companyProfile: any = [];
@@ -84,6 +86,7 @@ export class RestKotPrintComponent {
   myTime: any;
   myCounter: any = '';
   myOrderNo = 0;
+  myBuzzerNo = 0;
 
 
   printBill(invNo: any, voidFlag: any, isKOT: boolean = false, kotItems: any) {
@@ -93,6 +96,7 @@ export class RestKotPrintComponent {
       (Response: any) => {
 
         // -------- Header Data (always from API) ----------
+        this.myBuzzerNo  =  Response[0].buzzerNo;
         this.myInvoiceNo = Response[0].invBillNo;
         this.myInvDate = Response[0].invDate;
         this.myOrderType = Response[0].orderType;

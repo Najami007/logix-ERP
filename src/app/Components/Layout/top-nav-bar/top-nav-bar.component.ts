@@ -140,7 +140,7 @@ export class TopNavBarComponent implements OnInit {
   // }
 
 
-
+  tmpMenuList:any = [];
 
   getMenu() {
 
@@ -154,24 +154,13 @@ export class TopNavBarComponent implements OnInit {
       this.http.get(environment.mainApi + this.globalData.userLink + 'getusermenu?userid=' + this.globalData.getUserID() + '&moduleid=' + this.moduleID).subscribe(
         (Response: any) => {
 
-            
-          // if (Response.length > 0) {
-          //   var list = Response.filter((e:any)=> e.isParentMenu == true);
-          //   list.forEach((e:any) => {
-          //       Response.forEach((m:any) => {
-          //           if(m.parentMenuID == e.menuID){
-          //             e.haveMenu = true;
-          //           }
-          //       });
-          //   });
-           
-          //   setTimeout(() => {
-          //     this.menuList = Response;
-          //   }, 200);
-          // } else {
-            this.menuList = Response;
-          //}
-
+          this.tmpMenuList = Response;
+          this.menuList = Response.map((e: any) => {
+            if (e.isParentMenu) {
+              e.childCount =  this.haveChildMenu(e);
+            }
+            return e;
+          })
           this.globalData.glbMenulist = Response;
 
         }
@@ -180,6 +169,12 @@ export class TopNavBarComponent implements OnInit {
     }
 
 
+  }
+
+
+  haveChildMenu(item: any) {
+    var checkMenuList = this.tmpMenuList.filter((e: any) => e.parentMenuID == item.menuID);
+    return checkMenuList.length;
   }
 
 

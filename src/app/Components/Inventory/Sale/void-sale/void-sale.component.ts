@@ -462,8 +462,10 @@ export class VoidSaleComponent implements OnInit {
       (Response: any) => {
         this.tableDataList = [];
         if (Response.length > 0) {
+            console.log(Response);
           this.invBillNo = Response[0].invBillNo;
           Response.forEach((e: any) => {
+          
             this.tableDataList.push({
               productID: e.productID,
               productTitle: e.productTitle,
@@ -497,6 +499,7 @@ export class VoidSaleComponent implements OnInit {
           });
 
           this.productImage = Response[0].productImage;
+          // this.tableDataList.sort((a: any, b: any) => b.autoInvDetID - a.autoInvDetID)
 
           this.getTotal();
         }

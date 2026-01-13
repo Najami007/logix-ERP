@@ -18,6 +18,9 @@ import { interval, Subscription } from 'rxjs';
 
 export class OrderDashboardComponent implements OnInit {
 
+
+  orderwiseDashboardFeature = this.global.orderwiseDashboardFeature;
+
   mySubscription: Subscription;
   constructor(
     private http: HttpClient,
@@ -79,36 +82,6 @@ export class OrderDashboardComponent implements OnInit {
 
 
 
-  // getVoidList() {
-  //   var type = '';
-  //   if (this.locationID == 0) {
-  //     type = 'void';
-  //   } else {
-  //     type = 'locwisevoid&locid=' + this.locationID;
-  //   }
-
-  //   this.tempVoidList = this.voidOrderList;
-
-  //   this.http.get(environment.mainApi + this.global.restaurentLink + 'GetOrdersAndVoidItemsDetail?todate=' + this.global.dateFormater(this.curDate, '-')
-  //     + '&type=' + type).subscribe(
-  //       (Response: any) => {
-  //         this.voidOrderList = [];
-  //         this.voidOrderList = Response;
-
-  //         this.filterVoidOrderList = this.filterUniqueValues(this.voidOrderList);
-
-
-  //         if (this.tempVoidList != '' && (this.voidOrderList.length > this.tempVoidList.length)) {
-
-  //           this.beep();
-  //         }
-
-
-  //       }
-  //     )
-  // }
-
-
   getVoidList() {
 
     const prevCount = this.voidOrderList.length;
@@ -166,7 +139,6 @@ export class OrderDashboardComponent implements OnInit {
       `GetOrdersAndVoidItemsDetail?todate=${this.global.dateFormater(this.curDate, '-')}&type=${type}`;
 
     this.http.get(url).subscribe((response: any) => {
-
       if (!response) return;
 
       this.newOrderList = response.filter(e => !e.reqStatus);

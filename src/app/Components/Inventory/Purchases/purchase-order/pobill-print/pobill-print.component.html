@@ -100,13 +100,13 @@
                     <td class="text-end " *ngIf="!hidePrices && PONewCostFeature">{{item.newCostPrice * item.quantity
                         |number: '1.0-2'}}</td>
 
-                    <td class="text-center ">{{item.aq}}</td>
+                    <td class="text-center ">{{item.aq| number:'1.0-2'}}</td>
 
 
                 </tr>
                 <tr>
                     <th colspan="2"></th>
-                    <th class="text-center">{{myBillTotalQty}}</th>
+                    <th class="text-center">{{myBillTotalQty| number:'1.0-2'}}</th>
                     <th *ngIf="!hidePrices"></th>
                     <th *ngIf="!hidePrices && PONewCostFeature"></th>
                     <th class="text-end" *ngIf="!hidePrices ">{{myCPTotal | number:'1.0-2'}}</th>

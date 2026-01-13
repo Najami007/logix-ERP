@@ -15,6 +15,7 @@ import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bil
 import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-mehtod.component';
 import { EditQtyModalComponent } from './edit-qty-modal/edit-qty-modal.component';
 import { MatRadioButton } from '@angular/material/radio';
+import { retry } from 'rxjs';
 
 
 
@@ -501,40 +502,6 @@ export class GarmentSaleComponent implements OnInit {
           /////////// inserting data into tableDataList
           Response[0].salePrice = tmpPrice || Response[0].salePrice;
           this.pushProdData(Response[0], prodQty || 1)
-          // this.tableDataList.push({
-          //   rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
-          //     : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
-          //       : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
-          //   productID: Response[0].productID,
-          //   productTitle: Response[0].productTitle,
-          //   barcode: Response[0].barcode,
-          //   productImage: Response[0].productImage,
-          //   quantity: prodQty || 1,
-          //   wohCP: Response[0].costPrice,
-          //   avgCostPrice: Response[0].avgCostPrice,
-          //   costPrice: Response[0].costPrice,
-          //   //salePrice: (tmpPrice / Response[0].salePrice) || Response[0].salePrice,
-          //   salePrice: tmpPrice || Response[0].salePrice,
-          //   ovhPercent: 0,
-          //   ovhAmount: 0,
-          //   expiryDate: this.global.dateFormater(new Date(), '-'),
-          //   batchNo: '-',
-          //   batchStatus: '-',
-          //   uomID: Response[0].uomID,
-          //   gst: this.gstFeature ? Response[0].gst : 0,
-          //   et: Response[0].et,
-          //   packing: 1,
-          //   discInP: this.discFeature ? Response[0].discPercentage : 0,
-          //   discInR: this.discFeature ? Response[0].discRupees : 0,
-          //   aq: Response[0].aq,
-          //   total: (Response[0].salePrice * qty) - (Response[0].discRupees * qty),
-          //   productDetail: '',
-
-          // });
-          // //this.tableDataList.sort((a:any,b:any)=> b.rowIndex - a.rowIndex);
-          // this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
-          // this.getTotal();
-          // this.productImage = Response[0].productImage;
 
         } else {
           /////////// changing qty if product already scanned
@@ -1375,37 +1342,50 @@ export class GarmentSaleComponent implements OnInit {
 
   billDetails(item: any) {
 
-
     $('#SavedBillModal').hide();
-    // $('#paymentMehtod').hide();
-    // $('.modal-backdrop').remove();
 
-    this.global.openPassword('Password').subscribe(pin => {
-      if (pin !== '') {
-        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
-          RestrictionCodeID: 5,
-          Password: pin,
-          UserID: this.global.getUserID()
+    if (this.disablePrintPwd) {
+      $('#SavedBillModal').show();
+      this.dialog.open(SaleBillDetailComponent, {
+        width: '50%',
+        data: item,
+        disableClose: true,
+      }).afterClosed().subscribe(value => {
 
-        }).subscribe(
-          (Response: any) => {
-            if (Response.msg == 'Password Matched Successfully') {
-              $('#SavedBillModal').show();
-              this.dialog.open(SaleBillDetailComponent, {
-                width: '50%',
-                data: item,
-                disableClose: true,
-              }).afterClosed().subscribe(value => {
+      })
 
-              })
-            } else {
-              this.msg.WarnNotify(Response.msg);
+      return;
+    }
+
+    if (!this.disablePrintPwd) {
+
+      this.global.openPassword('Password').subscribe(pin => {
+        if (pin !== '') {
+          this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+            RestrictionCodeID: 5,
+            Password: pin,
+            UserID: this.global.getUserID()
+
+          }).subscribe(
+            (Response: any) => {
+              if (Response.msg == 'Password Matched Successfully') {
+                $('#SavedBillModal').show();
+                this.dialog.open(SaleBillDetailComponent, {
+                  width: '50%',
+                  data: item,
+                  disableClose: true,
+                }).afterClosed().subscribe(value => {
+
+                })
+              } else {
+                this.msg.WarnNotify(Response.msg);
+              }
             }
-          }
-        )
-      }
-    })
+          )
+        }
+      })
 
+    }
 
   }
 
@@ -1417,6 +1397,7 @@ export class GarmentSaleComponent implements OnInit {
       (Response: any) => {
         this.savedbillList = [];
         Response.forEach((e: any) => {
+
           if (e.invType == 'S') {
             this.savedbillList.push(e);
           }
@@ -1528,5 +1509,116 @@ export class GarmentSaleComponent implements OnInit {
     this.global.closeBootstrapModal('#addVehicleModal', true);
   }
 
+
+  validateEditSale(item: any) {
+
+    $('#SavedBillModal').hide();
+    this.global.openPassword('Password').subscribe(pin => {
+      if (pin !== '') {
+        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+          RestrictionCodeID: 6,
+          Password: pin,
+          UserID: this.global.getUserID()
+
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Password Matched Successfully') {
+
+              this.editSaleBill(item);
+
+            } else {
+              this.msg.WarnNotify(Response.msg);
+              $('#SavedBillModal').show();
+            }
+          }
+        )
+      }
+    })
+
+  }
+
+  editSaleBill(item: any) {
+
+    this.getBillDetail(item.invBillNo).subscribe(
+      {
+        next: (Response: any) => {
+          console.log(Response);
+          if (Response.length > 0) {
+
+            this.InvDate = new Date(Response[0].invDate);
+            this.partyID = Response[0].partyID;
+            this.projectID = Response[0].projectID;
+            this.bookerID = Response[0].bookerID;
+            this.paymentType = Response[0].paymentType;
+            this.PosFee = Response[0].posFee;
+            this.billRemarks = Response[0].remarks;
+            this.otherCharges = Response[0].otherCharges;
+            this.cash = Response[0].cashRec;
+
+
+            // this.change = Response[0].change;
+            this.AdvTaxAmount = Response[0].advTaxAmount;
+            this.AdvTaxValue = Response[0].advTaxValue;
+            this.bankCoaID = Response[0].bankCoaID;
+            this.bankCash = Response[0].bankCash;
+            this.customerMobileno = Response[0].cusContactNo;
+            this.customerName = Response[0].cusName;
+            this.vehicleID = Response[0].vehicleID;
+            this.meterReading = Response[0].meterReading;
+
+
+
+
+
+            Response.forEach((data: any) => {
+              this.tableDataList.push({
+                rowIndex: this.tableDataList.length + 1,
+                productID: data.productID,
+                productTitle: data.productTitle,
+                barcode: data.barcode,
+                flavourTitle: data.flavourTitle,
+                productImage: this.ImageUrlFeature ? data.imagesPath : data.productImage,
+                quantity: data.quantity,
+                wohCP: data.costPrice,
+                avgCostPrice: data.avgCostPrice,
+                costPrice: data.costPrice,
+                salePrice: data.salePrice,
+                ovhPercent: 0,
+                ovhAmount: 0,
+                expiryDate: this.global.dateFormater(new Date(), '-'),
+                batchNo: '-',
+                batchStatus: '-',
+                uomID: data.uomID,
+                gst: this.gstFeature ? data.gst : 0,
+                et: data.et,
+                packing: data.packing,
+                multyQty: data.multyQty,
+
+                discInP: data.discInP,
+                discInR: data.discInR,
+                aq: data.aq,
+                total: (data.salePrice * data.quantity) - (data.discInR * data.quantity),
+                productDetail: '',
+
+              })
+            })
+          }
+
+          this.getTotal();
+          this.discount = this.offerDiscount - Response[0].billDiscount ;
+
+        },
+        error: (error: any) => {
+          console.log(error);
+        }
+      }
+    )
+
+  }
+
+
+  getBillDetail(invBillNo: any) {
+    return this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + invBillNo).pipe(retry(3));
+  }
 
 }

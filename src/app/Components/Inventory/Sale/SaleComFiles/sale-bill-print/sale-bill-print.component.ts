@@ -33,8 +33,9 @@ export class SaleBillPrintComponent implements OnInit {
   billFormate2 = this.global.BillFormate2Feature;
   VehicleSaleFeature = this.global.VehicleSaleFeature;
   northEdgeEnterPriseBillFeature = this.global.northEdgeEnterPriseBillFeature;
-    CusDiscFeature = this.global.CusDiscFeature;
-    showLogixDetailFeature = this.global.showLogixDetailFeature;
+  CusDiscFeature = this.global.CusDiscFeature;
+  showLogixDetailFeature = this.global.showLogixDetailFeature;
+
 
 
 
@@ -51,7 +52,7 @@ export class SaleBillPrintComponent implements OnInit {
   companyAccNumber = '';
   companyIBAN = '';
   companyRegistrationNo = '';
-  footerText:any ='';
+  footerText: any = '';
 
   logoHeight: any = 0;
   logoWidth: any = 0;
@@ -79,8 +80,8 @@ export class SaleBillPrintComponent implements OnInit {
       this.logoWidth = data[0].logo1Width;
       this.companyPNTN = data[0].pntn;
       this.companyFTN = data[0].ftn;
-      this.companyBankTitle =data[0].bankName;
-      this.companyBankCode =data[0].bankCode;
+      this.companyBankTitle = data[0].bankName;
+      this.companyBankCode = data[0].bankCode;
       this.companyAccTitle = data[0].accTitle;
       this.companyAccNumber = data[0].accNumber;
       this.companyIBAN = data[0].iban;
@@ -138,7 +139,7 @@ export class SaleBillPrintComponent implements OnInit {
   myPOSFee = 0;
   myInvTime = new Date();
 
-  myCusDiscAmount:any = 0;
+  myCusDiscAmount: any = 0;
 
   myVehicleNo = '';
   myMeterReading = '';
@@ -184,7 +185,7 @@ export class SaleBillPrintComponent implements OnInit {
         this.myQtyTotal = 0;
         this.myOfferDiscount = 0;
         this.myGstTotal = 0;
-         this.myCusDiscAmount = 0;
+        this.myCusDiscAmount = 0;
         Response.forEach((e: any) => {
           this.myQtyTotal += e.quantity;
           this.myOfferDiscount += e.discInR * e.quantity;

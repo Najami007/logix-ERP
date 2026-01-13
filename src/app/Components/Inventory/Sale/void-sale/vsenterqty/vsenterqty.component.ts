@@ -69,7 +69,16 @@ export class VsenterqtyComponent implements OnInit {
     }
   }
 
-  closeDialog(value:any){
+  closeDialog(){
+   
+    this.dialogRef.close('');
+  }
+
+  saveQty(value:any){
+     if(value == 0 || value == '0'){
+      this.msg.WarnNotify('Not a valid Quantity');
+      return;
+    }
     this.dialogRef.close(value);
   }
 

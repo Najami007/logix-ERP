@@ -124,9 +124,8 @@
                                     (click)="deleteRow(item,'')">delete</mat-icon>
 
                                 <!-------------- will Open void Qty modal when void button click ------------------->
-                                <mat-icon class="text-danger" data-bs-toggle="modal" data-bs-target="#voidQtyModal"
-                                    *ngIf="item.entryType == 'Saved'"
-                                    (click)="tempDeleteRow = item">indeterminate_check_box</mat-icon>
+                                <mat-icon class="text-danger" (click)="openVoidModal(item)" 
+                                    *ngIf="item.entryType == 'Saved'">indeterminate_check_box</mat-icon>
                             </td>
 
                         </tr>
@@ -172,6 +171,12 @@
                         <p class="fw-bold" style="font-size: 12px;">NET TOTAL</p>
                         <p class="text-center font-digit" style="font-size: 30px;">{{netTotal |number:'1.0-1'}}</p>
                     </div>
+                    <div class="d-flex justify-content-between w-100 pt-1 pb-1" *ngIf="buzzerNoFeature">
+                        <p class="w-75 fw-bold" style="font-size: 12px;"><u>B</u>uzzer No</p>
+                       
+                        <input  [(ngModel)]="buzzerNo" accesskey="b" id="buzzerNOInput" (click)="onBuzzerClick()" class="w-25 text-end"  (keydown)="this.global.handleNumKeys($event)" />
+                    </div>
+
                     <mat-form-field class="w-100 matSmall" appearance="outline" *ngIf="!tabletPrintFeature">
                         <mat-label>Remar<u>k</u>s</mat-label>
                         <textarea rows="1" matInput [(ngModel)]="billRemarks" accesskey="k"></textarea>
@@ -212,15 +217,15 @@
 
 
 
-                    <button class="m-1 btn text-white bg-primary col-lg-5 fs-12px"
+                    <button class="m-1 btn text-white bg-primary col-lg-5 fs-12px" [disabled]="disableHoldButton"
                         *ngIf="holdbtnType == 'hold' && !RestSimpleSaleFeature" matTooltip="Hold Current Bill"
                         matTooltipPosition="left" (click)="save('hold',false)" accesskey="h">HOLD</button>
 
-                    <button class="m-1 btn text-white bg-primary col-lg-5 fs-12px"
+                    <button class="m-1 btn text-white bg-primary col-lg-5 fs-12px" [disabled]="disableHoldButton"
                         *ngIf="holdbtnType == 'rehold' && !RestSimpleSaleFeature" matTooltipPosition="left"
                         matTooltip="ReHold Current Bill" (click)="save('rehold',false)">ReHold</button>
 
-                    <button class="m-1 btn text-white bg-danger col-lg-5 fs-12px" *ngIf="!RestSimpleSaleFeature"
+                    <button class="m-1 btn text-white bg-danger col-lg-5 fs-12px" *ngIf="!RestSimpleSaleFeature" [disabled]="disableHoldButton"
                         matTooltip="Retrieve Hold Bills" matTooltipPosition="right"
                         (click)="global.openBootstrapModal('#retrieveBill',true);getHoldBills();"
                         accesskey="r"><u>R</u>etrieve</button>
@@ -237,7 +242,7 @@
                         accesskey="s"><u>S</u>ave</button>
 
 
-                    <button matTooltip="Print  Current Bill" matTooltipPosition="left" mat-raised-button
+                    <button matTooltip="Print  Current Bill" matTooltipPosition="left" mat-raised-button [disabled]="disableHoldButton"
                         *ngIf="!RestSimpleSaleFeature" class="m-1 text-white btn bg-primary col-lg-5 fs-12px"
                         (click)="HOldandPrint('rehold')" accesskey="p">H & <u>P</u>rint</button>
 
@@ -245,7 +250,7 @@
                         class="m-1 btn btn-danger  col-lg-5 fs-12px"
                         (click)="global.openBootstrapModal('#SavedBillModal',true);this.getSavedBill() ">D<u>u</u>plicate</button>
 
-                    <button matTooltip="Void Full Bill" matTooltipPosition="left" *ngIf="!RestSimpleSaleFeature"
+                    <button matTooltip="Void Full Bill" matTooltipPosition="left" *ngIf="!RestSimpleSaleFeature" [disabled]="disableHoldButton"
                         class="m-1 text-white btn bg-info col-lg-5 fs-12px" (click)="voidBill()"
                         accesskey="v"><u>V</u>oid Bill</button>
 
@@ -515,9 +520,8 @@
                                     (click)="deleteRow(item,'')">delete</mat-icon>
 
                                 <!-------------- will Open void Qty modal when void button click ------------------->
-                                <mat-icon class="text-danger" data-bs-toggle="modal" data-bs-target="#voidQtyModal"
-                                    *ngIf="item.entryType == 'Saved'"
-                                    (click)="tempDeleteRow = item">indeterminate_check_box</mat-icon>
+                                <mat-icon class="text-danger" *ngIf="item.entryType == 'Saved'"
+                                 (click)="openVoidModal(item)" >indeterminate_check_box</mat-icon>
                             </td>
 
                         </tr>
@@ -1137,7 +1141,8 @@
         <div class="modal-content">
             <app-sale-saved-bill (sendToFbrEmitter)="sendToFbr($event)"
                 (printDuplicateEmitter)="printDuplicateBill($event)" (billDetailEmitter)="billDetails($event)"
-                (postBillEmitter)="postSaleBill($event)" [savedbillList]="savedbillList"></app-sale-saved-bill>
+                (postBillEmitter)="postSaleBill($event)" [savedbillList]="savedbillList" (editSaleBill)="validateEditSale($event)"
+                (deleteSaleBill)="validateDeleteBill($event)"></app-sale-saved-bill>
 
             <!-- <div>
 

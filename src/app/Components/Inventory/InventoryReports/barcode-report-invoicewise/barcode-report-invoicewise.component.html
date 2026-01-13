@@ -2,79 +2,68 @@
 
 
     <div class="row mt-2">
-        <div class="col-md-6 card p-2">
+        <div class="col-md-3 card p-2">
 
-            <div class="d-flex justify-content-between">
-                <mat-form-field class="col-lg-4 matSmall" appearance="outline">
-                    <mat-label>Date</mat-label>
-                    <input matInput type="text" readonly="true" [(ngModel)]="SearchDate" [matDatepicker]="hbDate">
-                    <mat-datepicker-toggle matSuffix [for]="hbDate"></mat-datepicker-toggle>
-                    <mat-datepicker #hbDate></mat-datepicker>
-                </mat-form-field>
+            <div>
+                <div class="w-100">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Type</mat-label>
 
+                        <mat-select [(ngModel)]="catType" name="catType">
+                            <mat-option value="SubCat">Sub Categorywise</mat-option>
+                            <mat-option value="Brand">Brandwise</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
 
+                <div class="w-100 " *ngIf="catType == 'SubCat'">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Sub Category</mat-label>
 
-                <button mat-raised-button *ngIf="crudList.r" class="col-lg-4 bg-success text-white"
-                    style="height: 45px;" (click)="findHoldBills('p')">Get Bill</button>
+                        <mat-select [(ngModel)]="SubCategoryID" #subCategory name="pSubCategory">
+                            <mat-option><ngx-mat-select-search #subcatsearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of SubCategoriesList| filter:subcatsearch.value "
+                                [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
 
-                <mat-form-field class="col-lg-3 matSmall" appearance="outline">
-                    <mat-label>Search.......</mat-label>
-                    <input matInput #holdSearch type="text" class="col-lg-4">
-                </mat-form-field>
+                <div class="w-100" *ngIf="catType == 'Brand'">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Brand</mat-label>
+                        <mat-select [(ngModel)]="BrandID" #brand>
+                            <mat-option><ngx-mat-select-search #brandSearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of BrandList | filter:brandSearch.value"
+                                [value]="item.brandID">{{item.brandTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
 
             </div>
 
-
-            <mat-radio-group [(ngModel)]="searchBillType" class="mt-2">
-                <mat-radio-button value="all">All</mat-radio-button>
-                <mat-radio-button value="Date">Datewise</mat-radio-button>
-            </mat-radio-group>
-
-            <div style="height: 65vh;overflow-y: auto;">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th> S#</th>
-                            <th>Inv No.</th>
-                            <th>Date</th>
-                            <th>Party</th>
-                            <th>Location</th>
-                            <th>Amount</th>
-                            <th>User</th>
-                            <th>Action</th>
-                        </tr>
-
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of invoiceList | filter:holdSearch.value index as index">
-                            <td> {{index+1}}</td>
-                            <td>{{item.invBillNo}}</td>
-                            <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
-                            <td>{{item.partyName}}</td>
-                            <td>{{item.locationTitle}}</td>
-                            <td class="text-end">{{(item.billTotal + item.overHeadAmount) | number:'1.0-0'}}</td>
-                            <td>{{item.entryUser}}</td>
-                            <td><mat-icon class="cursorPointer" (click)="selectBill(item)">edit</mat-icon></td>
+            <div class="d-flex justify-content-around">
+                <button mat-raised-button  class="col-md-4 bg-success text-white"
+                    style="height: 45px;" (click)="filterProduct()">Get Products</button>
+                <button mat-raised-button  class="col-md-4 bg-success text-white"
+                    style="height: 45px;" (click)="openSavedBillModal()">Purchases</button>
+            </div>
 
 
-
-                        </tr>
-                    </tbody>
-                </table>
-
+            <div class="d-flex flex-column">
+                <mat-checkbox [(ngModel)]="showCompany">Show Company</mat-checkbox>
+                <mat-checkbox [(ngModel)]="showPrice">Show Price</mat-checkbox>
+                <mat-checkbox [(ngModel)]="showTitle">Show Title</mat-checkbox>
+                <mat-checkbox [(ngModel)]="showBarcode">Show Barcode</mat-checkbox>
             </div>
 
 
 
         </div>
-        <div class="col-md-6 card p-2 ">
+        <div class="col-md-9 card p-2 ">
 
             <div class="d-flex gap-2 justify-content-end">
-                <mat-checkbox [(ngModel)]="showCompany">Show Company</mat-checkbox>
-                <mat-checkbox [(ngModel)]="showPrice">Show Price</mat-checkbox>
-                <mat-checkbox [(ngModel)]="showTitle">Show Title</mat-checkbox>
-                <mat-checkbox [(ngModel)]="showBarcode">Show Barcode</mat-checkbox>
-
                 <button class="btnsave" (click)="startPrinting()">Print Barcode</button>
 
                 <button class="btnsave" (click)="printTags()">Print Tags</button>
@@ -82,7 +71,7 @@
 
 
             <div class="row">
-                <div class="col-lg-8 pe-1  d-flex flex-column ">
+                <div class="col-lg-10 pe-1  d-flex flex-column ">
                     <mat-label class="text-primary">Search Barcode / Product</mat-label>
                     <input type="text" #pbarcode [(ngModel)]="PBarcode"
                         (keydown)="changeFocus($event,'.prodRow');searchByCode($event)" id="searchProduct"
@@ -104,7 +93,7 @@
                     </div>
 
                 </div>
-                <div class="col-md-4 text-start pt-3 mt-1">
+                <div class="col-md-2 text-start pt-3 mt-1">
                     <button class="btnload w-100 " style="height: 40px;" (click)="ngOnInit()">Load</button>
 
                 </div>
@@ -128,9 +117,9 @@
                             <td><mat-checkbox [(ngModel)]="item.isChecked"></mat-checkbox>{{index +1}}</td>
                             <td>{{item.flavourTitle ? item.flavourTitle : item.productTitle}}</td>
                             <td>{{item.barcode2 ? item.barcode2 : item.barcode}}</td>
-                            <td class="cursorPointer" (click)="editQty(item)">{{item.quantity}}</td>
-                            <td>{{item.costPrice}}</td>
-                            <td>{{item.salePrice}}</td>
+                            <td class="cursorPointer" (click)="editQty(item)">{{item.quantity | number:'1.0-0'}}</td>
+                            <td>{{item.costPrice | number:'1.0-0'}}</td>
+                            <td>{{item.salePrice | number:'1.0-0'}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -196,7 +185,8 @@
                     </div>
                     <div class=" p-1 " [ngClass]="showCompany ? 'col-md-6' : 'col-md-12'">
                         <!-- <h2 class="cmpName text-center" *ngIf="showCompany">{{companyName}}</h2> -->
-                        <div *ngIf="showBarcode" class="fw-bold text-center" style="font-size: 20px;">{{item.barcode2 ?
+                        <div *ngIf="showBarcode" class="fw-bold text-center" style="font-size: 20px;">
+                            {{item.barcode2 ?
                             item.barcode2 : item.barcode}}</div>
                         <div style="font-size: 15px;line-height: 15px;" class="fw-bold text-center" *ngIf="showTitle">
                             {{item.flavourTitle ? item.flavourTitle : item.productTitle}}
@@ -204,9 +194,11 @@
 
 
 
-                        <div class=" text-center fw-bold" [ngClass]="item.discInR > 0 ? 'original-price' : ''" style="font-size: 20px;" *ngIf="showPrice">
+                        <div class=" text-center fw-bold" [ngClass]="item.discInR > 0 ? 'original-price' : ''"
+                            style="font-size: 20px;" *ngIf="showPrice">
                             Rs.{{ item.salePrice |number:'1.0-0'}}</div>
-                        <div class=" text-center fw-bold discounted-price " *ngIf="showPrice && item.discInR > 0 " style="font-size: 20px;" >
+                        <div class=" text-center fw-bold discounted-price " *ngIf="showPrice && item.discInR > 0 "
+                            style="font-size: 20px;">
                             Rs.{{ item.salePrice - item.discInR |number:'1.0-0'}}</div>
 
 
@@ -216,5 +208,94 @@
 
         </div>
 
+    </div>
+</div>
+
+
+<div class="modal" id="savedBillModal" tabindex="-1" data-bs-backdrop="true" aria-labelledby="holdModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title" id="holdModalLabel">Bill Details</h2>
+                <button type="button" class="btn-close" id="clsMdl" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="w-100">
+
+                    <div class="d-flex justify-content-between">
+                        <mat-form-field class="col-lg-4 matSmall" appearance="outline">
+                            <mat-label>Date</mat-label>
+                            <input matInput type="text" readonly="true" [(ngModel)]="SearchDate"
+                                [matDatepicker]="hbDate">
+                            <mat-datepicker-toggle matSuffix [for]="hbDate"></mat-datepicker-toggle>
+                            <mat-datepicker #hbDate></mat-datepicker>
+                        </mat-form-field>
+
+
+
+                        <button mat-raised-button *ngIf="crudList.r" class="col-lg-4 bg-success text-white"
+                            style="height: 45px;" (click)="findHoldBills('p')">Get Bill</button>
+
+                        <mat-form-field class="col-lg-3 matSmall" appearance="outline">
+                            <mat-label>Search.......</mat-label>
+                            <input matInput #holdSearch type="text" class="col-lg-4">
+                        </mat-form-field>
+
+                    </div>
+
+
+                    <mat-radio-group [(ngModel)]="searchBillType" class="mt-2">
+                        <mat-radio-button value="all">All</mat-radio-button>
+                        <mat-radio-button value="Date">Datewise</mat-radio-button>
+                    </mat-radio-group>
+
+                    <div >
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th> S#</th>
+                                    <th>Inv No.</th>
+                                    <th>Date</th>
+                                    <th>Party</th>
+                                    <th>Location</th>
+                                    <th>Amount</th>
+                                    <th>User</th>
+                                    <th>Action</th>
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of invoiceList | filter:holdSearch.value index as index">
+                                    <td> {{index+1}}</td>
+                                    <td>{{item.invBillNo}}</td>
+                                    <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
+                                    <td>{{item.partyName}}</td>
+                                    <td>{{item.locationTitle}}</td>
+                                    <td class="text-end">{{(item.billTotal + item.overHeadAmount) | number:'1.0-0'}}
+                                    </td>
+                                    <td>{{item.entryUser}}</td>
+                                    <td><mat-icon class="cursorPointer" (click)="selectBill(item)">edit</mat-icon>
+                                    </td>
+
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+
+
+                </div>
+
+
+
+
+            </div>
+
+        </div>
     </div>
 </div>

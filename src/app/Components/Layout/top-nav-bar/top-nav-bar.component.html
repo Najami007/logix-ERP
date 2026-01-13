@@ -21,7 +21,7 @@
 
 
 
-          <li class="nav-item dropdown cursorPointer" *ngIf="item.isParentMenu == true">
+          <li class="nav-item dropdown cursorPointer" *ngIf="item.isParentMenu == true && item.childCount > 0">
 
 
             <a class="list-itm" [matMenuTriggerFor]="menu">{{ item.menuTitle }}<mat-icon

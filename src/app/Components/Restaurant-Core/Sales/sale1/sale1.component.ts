@@ -16,6 +16,7 @@ import * as bootstrap from 'bootstrap';
 
 import * as $ from 'jquery';
 import { SaleSavedBillComponent } from '../SaleCommonComponent/sale-saved-bill/sale-saved-bill.component';
+import { retry } from 'rxjs';
 
 
 
@@ -51,6 +52,10 @@ export class Sale1Component implements OnInit {
   PrintKotAreawiseFeature = this.global.PrintKotAreawiseFeature;
   printKotFeature = this.global.printKot;
   DisableDineInKotPrintFeature = this.global.DisableDineInKotPrintFeature;
+  delRestSaleFeature = this.global.delRestSaleFeature;
+
+  editRestSaleFeature = this.global.editRestSaleFeature;
+  buzzerNoFeature = this.global.buzzerNoFeature;
 
 
   roleType = this.global.getRoleTypeID();
@@ -156,8 +161,11 @@ export class Sale1Component implements OnInit {
     { val: 'Home Delivery', title: 'Home Delivery' },
   ]
 
+
+  disableHoldButton = false;
   categoriesList: any = [];
   tmpInvBillNO = '';
+  tmpHoldInvNo = '';
   serviceCharges = this.global.getServiceCharges();
   bankCoaID = 0;
   OtherCharges: any = 0;
@@ -181,7 +189,7 @@ export class Sale1Component implements OnInit {
   bankCoaList: any = [];
   gstValue = 0;
   GstAmount = 0;
-
+  buzzerNo: any = 0;
   tableID = 0;
   tempTableID = 0;
   tempOrderType = 'Dine In';
@@ -211,6 +219,11 @@ export class Sale1Component implements OnInit {
   //////For Temp Use///////////
   discPer = 0;
   discAmount = 0;
+
+
+  onBuzzerClick() {
+    $('#buzzerNOInput').trigger('select');
+  }
 
   getOrderType() {
     return this.defaultOrderTypeFeature ? 'Take Away' : this.global.getRestOrderType() == '' ? '' : this.global.getRestOrderType()
@@ -837,6 +850,15 @@ export class Sale1Component implements OnInit {
       return;
     }
 
+    if (this.buzzerNoFeature && (this.buzzerNo == 0 || this.buzzerNo == '' || this.buzzerNo == undefined)) {
+      this.msg.WarnNotify('Enter Buzzer No');
+      return;
+    }
+
+    if (!this.buzzerNoFeature) {
+      this.buzzerNo = 1;
+    }
+
 
     if (this.billDiscount == '' || this.billDiscount == undefined || this.billDiscount == null) {
       this.billDiscount = 0;
@@ -868,6 +890,7 @@ export class Sale1Component implements OnInit {
       GstAmount: 0,
       GstValue: 0,
       SaleDetail: JSON.stringify(this.tableData),
+      BuzzerNo: this.buzzerNo,
       UserID: this.global.getUserID()
 
     }
@@ -1002,7 +1025,7 @@ export class Sale1Component implements OnInit {
 
   printKOT(invNo: any) {
 
-    if(this.DisableDineInKotPrintFeature && this.orderType == 'Dine In') return;
+    if (this.DisableDineInKotPrintFeature && this.orderType == 'Dine In') return;
 
 
 
@@ -1024,7 +1047,7 @@ export class Sale1Component implements OnInit {
           for (const e of dataRows) {
             const kotItems = printData.filter((p: any) => e.cookingAriaID == p.cookingAriaID);
             // 👇 wait for each print to finish
-            await this.printKotAsync(invNo, kotItems);
+            await this.printKotAsync(invNo, false, true, kotItems);
           }
         };
 
@@ -1036,19 +1059,19 @@ export class Sale1Component implements OnInit {
   }
 
 
-  private printKotAsync(invNo: any, kotItems: any[]): Promise<void> {
-  return new Promise((resolve) => {
-    // if KotPrint.printBill has a callback/event, hook it here
-    this.KotPrint.printBill(invNo, false, true, kotItems);
+  private printKotAsync(invNo: any, voidFlag: any, isKOT: boolean = false, kotItems: any[]): Promise<void> {
+    return new Promise((resolve) => {
+      // if KotPrint.printBill has a callback/event, hook it here
+      this.KotPrint.printBill(invNo, voidFlag, isKOT, kotItems);
 
-    // 👇 if printBill is instant and doesn't return promise,
-    // add a small delay so printer catches up
-    setTimeout(() => resolve(), 800); // adjust delay as needed
-  });
-}
+      // 👇 if printBill is instant and doesn't return promise,
+      // add a small delay so printer catches up
+      setTimeout(() => resolve(), 800); // adjust delay as needed
+    });
+  }
 
 
-  
+
 
   //////////////////////////////////////////////////////////////////
   isProcessing = false;
@@ -1063,7 +1086,8 @@ export class Sale1Component implements OnInit {
 
     let postData = {
 
-      HoldInvNo: this.invBillNo,
+      HoldInvNo: this.saleMode == 'edit' ? this.tmpHoldInvNo : this.invBillNo,
+      InvBillNo: this.invBillNo,
       OrderNo: this.orderNo,
       InvDate: this.global.dateFormater(this.invoiceDate, '-'),
       TableID: this.tableID,
@@ -1091,15 +1115,25 @@ export class Sale1Component implements OnInit {
       CusName: this.customerName || '-',
       SendToFbr: SendToFbr,
       SaleDetail: JSON.stringify(this.tableData),
+      BuzzerNo: this.buzzerNo,
       UserID: this.global.getUserID()
     }
+
 
     if (this.isProcessing) return;
     this.isProcessing = true;
     this.app.startLoaderDark()
-    this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertSale', postData).subscribe(
+
+    var url = '';
+    if (this.saleMode == 'edit') {
+      url = 'UpdateSale';
+
+    } else {
+      url = 'InsertSale';
+    }
+    this.http.post(environment.mainApi + this.global.restaurentLink + url, postData).subscribe(
       (Response: any) => {
-        if (Response.msg == 'Data Saved Successfully') {
+        if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
 
           this.printKOT(Response.invNo); /////// Will Print KOT ////////////////
           this.msg.SuccessNotify(Response.msg);
@@ -1176,7 +1210,6 @@ export class Sale1Component implements OnInit {
     this.coverOf = item.coverOf;
     this.prevTableID = item.tmpTableID;
     this.billDiscount = item.billDiscount;
-    this.OtherCharges = item.otherCharges;
     this.invoiceDate = new Date(item.invDate);
 
 
@@ -1185,6 +1218,7 @@ export class Sale1Component implements OnInit {
 
         this.tableData = [];
         this.orderNo = Response[0].orderNo;
+        this.buzzerNo = Response[0].buzzerNo;
         Response.forEach((e: any) => {
           this.tableData.push({
             rowIndex: this.tableData.length == 0 ? 1
@@ -1197,6 +1231,7 @@ export class Sale1Component implements OnInit {
             salePrice: e.salePrice,
             recipeID: e.recipeID,
             cookingAriaID: e.cookingAriaID,
+            cookingAriaTitle: e.cookingAriaTitle,
             cookingTime: e.cookingTime,
             requestType: e.requestType,
             entryType: e.entryType,
@@ -1222,7 +1257,9 @@ export class Sale1Component implements OnInit {
   ///////////////////////////////////////////////////////////////
 
   voidQty = 1;
-  openVoidModal() {
+  openVoidModal(item: any) {
+    this.tempDeleteRow = item;
+    this.voidQty = item.quantity;
     this.global.openBootstrapModal('#voidQtyModal', true);
     setTimeout(() => {
 
@@ -1238,6 +1275,7 @@ export class Sale1Component implements OnInit {
       var index = this.tableData.indexOf(item);
       this.tableData.splice(index, 1);
       this.getTotal();
+      return;
     }
 
     if (voidQty > item.quantity) {
@@ -1245,10 +1283,9 @@ export class Sale1Component implements OnInit {
       return;
     } else {
       if (item.entryType == 'Saved') {
-
-
         if (this.tableData.length == 1 && item.quantity == voidQty) {
           this.voidBill();
+          return;
         } else {
           this.global.openPassword('Password').subscribe(pin => {
             if (pin !== '') {
@@ -1284,12 +1321,14 @@ export class Sale1Component implements OnInit {
                           this.msg.SuccessNotify('Item Void');
 
                           /////// Will Print KOT ////////////////
-                          if (this.global.getKOTApproval() == true) {
-                            this.KotPrint.myPrintData = [{
+                          if (this.printKotFeature) {
+                            var printData = [{
                               productTitle: item.productTitle,
                               quantity: voidQty,
+                              cookingAriaTitle: item.cookingAriaTitle,
                             }];
-                            this.KotPrint.printBill(this.invBillNo, true);
+
+                            this.KotPrint.printBill(this.invBillNo, true, true, printData);
 
                             // setTimeout(() => {
                             //   this.global.printData('#print-Kot');
@@ -1297,7 +1336,7 @@ export class Sale1Component implements OnInit {
                           }
 
 
-                          if (item.quantity <= 1 || voidQty == item.quantity) {
+                          if (voidQty == item.quantity) {
                             var index = this.tableData.indexOf(item);
                             this.tableData.splice(index, 1);
                           } else {
@@ -1372,14 +1411,25 @@ export class Sale1Component implements OnInit {
                         if (Response.msg == 'Data Saved Successfully') {
 
                           /////// Will Print KOT ////////////////
-                          if (this.global.getKOTApproval() == true) {
-                            this.KotPrint.myPrintData = this.tableData;
-                            this.KotPrint.printBill(this.invBillNo, true);
-
-                            // setTimeout(() => {
-                            //   this.global.printData('#print-Kot');
-                            // }, 200);
+                          if (this.printKotFeature) {
+                            this.KotPrint.printBill(this.invBillNo, true, true, this.tableData);
                           }
+                          // if (this.PrintKotAreawiseFeature && this.printKotFeature) {
+                          //   const printData = this.tableData;
+                          //   if (printData.length > 0) {
+                          //     const dataRows = this.global.filterUniqueValuesByKey(printData, 'cookingAriaID');
+
+                          //     const printSequentially = async () => {
+                          //       for (const e of dataRows) {
+                          //         const kotItems = printData.filter((p: any) => e.cookingAriaID == p.cookingAriaID);
+                          //         // 👇 wait for each print to finish
+                          //         await this.printKotAsync(this.invBillNo,true,true, kotItems);
+                          //       }
+                          //     };
+
+                          //     printSequentially();
+                          //   }
+                          // }
 
 
                           this.msg.SuccessNotify('Bill Void');
@@ -1417,17 +1467,11 @@ export class Sale1Component implements OnInit {
 
   }
 
-
-
-
-
-
-
   ///////////////////////////////////////////////////////////////
 
   reset() {
     this.change = 0;
-
+    this.saleMode = 'sale'
     this.OtherCharges = 0;
     this.billDiscount = 0;
     this.invBillNo = '';
@@ -1462,7 +1506,9 @@ export class Sale1Component implements OnInit {
     this.invDocument = '';
     this.mergeBillNo1 = '';
     this.mergeBillNo2 = '';
-
+    this.buzzerNo = 0;
+    this.disableHoldButton = false;
+    this.tmpHoldInvNo = '';
   }
 
   resetPrint() {
@@ -1487,8 +1533,6 @@ export class Sale1Component implements OnInit {
     this.mergeBillNo2 = '';
   }
 
-
-
   myPrintData: any = [];
   myInvoiceNo = '';
   mytableNo = '';
@@ -1511,13 +1555,7 @@ export class Sale1Component implements OnInit {
 
 
   printAfterSave(invNo: any) {
-
     this.billPrint.printBill(invNo);
-    // setTimeout(() => {
-    //   this.global.printData('#print-bill');
-    // }, 200);
-
-
   }
 
   HOldandPrint(type: any) {
@@ -1601,10 +1639,6 @@ export class Sale1Component implements OnInit {
   }
   /////////////////////////////////////////////////
 
-
-
-
-
   savedbillList: any = [];
 
   mergeBillNo1 = '';
@@ -1659,8 +1693,6 @@ export class Sale1Component implements OnInit {
     }
   }
 
-
-
   /////////////////////////////////////////////////////////////////////////////
 
   getSavedBill() {
@@ -1669,8 +1701,6 @@ export class Sale1Component implements OnInit {
         this.savedbillList = Response;
       }
     )
-
-
   }
 
 
@@ -1718,7 +1748,22 @@ export class Sale1Component implements OnInit {
 
   billDetails(item: any) {
     $('#SavedBillModal').hide();
-    this.global.openPassword('Password').subscribe(pin => {
+
+    if (this.disablePrintPwd) {
+      $('#SavedBillModal').show();
+      this.dialogue.open(SaleBillDetailComponent, {
+        width: '50%',
+        data: item,
+        disableClose: true,
+      }).afterClosed().subscribe(value => {
+
+      })
+      return;
+    }
+
+
+   if(!this.disablePrintPwd){
+     this.global.openPassword('Password').subscribe(pin => {
       if (pin !== '') {
         this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
           RestrictionCodeID: 5,
@@ -1744,11 +1789,10 @@ export class Sale1Component implements OnInit {
         )
       }
     })
+   }
 
 
   }
-
-
 
   sendToFbr(item: any) {
     this.http.post(environment.mainApi + this.global.restaurentLink + 'ResSendToPra', {
@@ -1774,11 +1818,17 @@ export class Sale1Component implements OnInit {
     this.getTotal();
 
   }
+
+
+
+
   onCashSelected() {
     this.paymentType = 'Cash';
     this.getTotal();
 
   }
+
+
 
 
 
@@ -1791,6 +1841,8 @@ export class Sale1Component implements OnInit {
     })
 
   }
+
+
 
 
 
@@ -1811,10 +1863,176 @@ export class Sale1Component implements OnInit {
   }
 
 
-  openOtherChargesModal(){
-    if(this.tableData.length == 0)return;
-    if(this.orderType == 'Dine In' || this.orderType == 'Take Away') return;
-    this.global.openBootstrapModal('#OtherChargesModal',true)
+
+
+
+  openOtherChargesModal() {
+    if (this.tableData.length == 0) return;
+    if (this.orderType == 'Dine In' || this.orderType == 'Take Away') return;
+    this.global.openBootstrapModal('#OtherChargesModal', true)
+  }
+
+
+  validateEditSale(item: any) {
+
+    $('#SavedBillModal').hide();
+    this.global.openPassword('Password').subscribe(pin => {
+      if (pin !== '') {
+        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+          RestrictionCodeID: 6,
+          Password: pin,
+          UserID: this.global.getUserID()
+
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Password Matched Successfully') {
+
+              this.editSaleBill(item);
+
+            } else {
+              this.msg.WarnNotify(Response.msg);
+              $('#SavedBillModal').show();
+            }
+          }
+        )
+      }
+    })
+
+  }
+
+
+
+
+  saleMode = 'sale';
+  editSaleBill(item: any) {
+    this.saleMode = 'edit';
+    this.disableHoldButton = true;
+    this.invBillNo = item.invBillNo;
+
+    this.tableID = item.tableID;
+    this.tempTableID = item.tableID;
+    this.tempOrderType = item.orderType;
+    this.tableTitle = '';
+    if (item.orderType == 'Dine In') {
+      this.tableTitle = item.tableTitle;
+    }
+    this.invoiceDate = new Date(item.createdOn);
+    this.orderType = item.orderType;
+    this.OtherCharges = item.otherCharges;
+    this.PartyID = item.partyID;
+    this.ProjectID = item.projectID;
+    this.BookerID = item.bookerID;
+    this.coverOf = item.coverOf;
+    this.billRemarks = item.remarks;
+    this.billDiscount = item.billDiscount;
+    // this.cash = item.cashRec;
+    // this.bankCash = item.paymentType == 'Bank' || item.paymentType == 'Split' ? item.netTotal - item.cashRec : 0;
+    // this.change = item.change;
+    // this.paymentType = item.paymentType;
+
+    this.getDetails(item).subscribe(
+      (Response: any) => {
+        this.bankCoaID = Response[0].bankCoaID;
+        this.tableData = [];
+        this.orderNo = Response[0].orderNo;
+        this.buzzerNo = Response[0].buzzerNo;
+        this.tmpHoldInvNo = Response[0].holdInvNo;
+
+        Response.forEach((e: any) => {
+          this.tableData.push({
+            rowIndex: this.tableData.length == 0 ? 1
+              : this.tableData[0].rowIndex + 1,
+            productID: e.productID,
+            productTitle: e.productTitle,
+            quantity: e.quantity,
+            costPrice: e.costPrice,
+            avgCostPrice: e.avgCostPrice,
+            salePrice: e.salePrice,
+            recipeID: e.recipeID,
+            cookingAriaID: e.cookingAriaID,
+            cookingAriaTitle: e.cookingAriaTitle,
+            cookingTime: e.cookingTime,
+            requestType: e.requestType,
+            entryType: 'New',
+            autoInvDetID: e.autoInvDetID,
+          });
+
+
+        });
+        this.getTotal();
+        this.orderDataTable();
+
+        this.global.closeBootstrapModal('#SavedBillModal', true);
+      }
+    )
+
+
+
+  }
+
+
+
+
+
+  validateDeleteBill(item: any) {
+
+    $('#SavedBillModal').hide();
+    this.global.openPassword('Password').subscribe(pin => {
+      if (pin !== '') {
+        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+          RestrictionCodeID: 6,
+          Password: pin,
+          UserID: this.global.getUserID()
+
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Password Matched Successfully') {
+              $('#SavedBillModal').show();
+              this.deleteSaleBill(item);
+
+            } else {
+              this.msg.WarnNotify(Response.msg);
+              $('#SavedBillModal').show();
+            }
+          }
+        )
+      }
+    })
+
+  }
+
+  deleteSaleBill(item: any) {
+
+    var postData: any = {
+      InvBillNo: item.invBillNo,
+      userID: this.global.getUserID(),
+
+    }
+
+    this.http.post(environment.mainApi + this.global.restaurentLink + 'deleteSaleBill', postData).subscribe(
+      {
+        next: (Response: any) => {
+          if (Response.msg == 'Data Deleted Successfully') {
+            this.msg.SuccessNotify(Response.msg);
+            this.getSavedBill();
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+        },
+        error: (error: any) => {
+          console.log(error);
+        }
+      }
+    )
+
+  }
+
+
+
+  getDetails(item: any) {
+
+    return this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + item.invBillNo).pipe(retry(3));
+
   }
 
 }

@@ -64,12 +64,12 @@
                                 (keyup)="changeValue(item);getTotal();showImg(item);" class="qty{{index}} text-center"
                                 style="width: 80px;"></td>
 
-                        <!-- <td class="text-center"><input type="text" [(ngModel)]="item.costPrice" min="0"
+                        <td class="text-center"><input type="text" [(ngModel)]="item.costPrice" min="0"
                                 (keydown)="handleUpdown(item,$event,'.cp',index);getTotal();changeValue(item);"
                                 (keyup)="changeValue(item);getTotal();showImg(item);" class="cp{{index}} text-center"
-                                style="width: 80px;"></td> -->
+                                style="width: 80px;"></td>
                         <!-- <td class="text-end">{{item.avgCostPrice | number:'1.0-2'}}</td> -->
-                        <td class="text-end">{{item.costPrice | number:'1.0-2'}}</td>
+                        <!-- <td class="text-end">{{item.costPrice | number:'1.0-2'}}</td> -->
                         <td class="text-end" 
                             [ngClass]="editSpFeature ? 'cursorPointer' : ''" (click)="editSP(item)">
                             {{item.salePrice | number:'1.0-2'}}</td>

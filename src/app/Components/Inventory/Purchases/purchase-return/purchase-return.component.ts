@@ -866,16 +866,32 @@ export class PurchaseReturnComponent implements OnInit {
 
 
     if (this.tableDataList == '') {
-      this.msg.WarnNotify('Atleast One Product Must Be Selected')
-    } else if (this.locationID == '' || this.locationID == undefined || this.locationID == 0) {
-      this.msg.WarnNotify('Select Warehouse Location')
-    } else if (this.bookerID == 0 || this.bookerID == undefined) {
-      this.msg.WarnNotify("Select Purchaser")
-    } else if (this.refInvNo == '' || this.refInvNo == undefined) {
-      this.msg.WarnNotify('Enter Reference Invoice No')
-    } else if (this.partyID == '' || this.partyID == 0 || this.partyID == undefined) {
-      this.msg.WarnNotify('Select Supplier Party')
-    } else {
+      this.msg.WarnNotify('Atleast One Product Must Be Selected');
+      return;
+    }
+     if (this.locationID == '' || this.locationID == undefined || this.locationID == 0) {
+      this.msg.WarnNotify('Select Warehouse Location');
+      return;
+    } 
+     if (this.bookerID == 0 || this.bookerID == undefined) {
+      this.msg.WarnNotify("Select Purchaser");
+      return;
+    } 
+     if (this.refInvNo == '' || this.refInvNo == undefined) {
+      this.msg.WarnNotify('Enter Reference Invoice No');
+      return;
+    } 
+     if (this.partyID == '' || this.partyID == 0 || this.partyID == undefined) {
+      this.msg.WarnNotify('Select Supplier Party');
+      return;
+    } 
+
+
+     if(this.ProjectwiseFeature && this.projectID == 0){
+      this.msg.WarnNotify('Select Project');
+      return;
+    }
+
 
 
       this.sortType == 'desc'
@@ -890,7 +906,7 @@ export class PurchaseReturnComponent implements OnInit {
         RefInvoiceNo: this.refInvNo,
         PartyID: this.partyID,
         LocationID: this.locationID,
-        ProjectID: this.projectID,
+        ProjectID: this.projectID == 0 ? this.global.getProjectID() : this.projectID,
         BookerID: this.bookerID,
         BillTotal: this.subTotal,
         BillDiscount: this.discount || 0,
@@ -939,7 +955,7 @@ export class PurchaseReturnComponent implements OnInit {
       }
 
 
-    }
+    
 
 
 

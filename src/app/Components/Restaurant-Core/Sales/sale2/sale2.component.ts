@@ -172,7 +172,7 @@ export class Sale2Component implements OnInit {
   bankCoaList: any = [];
   gstValue = 0;
   GstAmount = 0;
-
+  buzzerNo:any = 1;
   tableID = 0;
   tempTableID = 0;
   tempOrderType = 'Dine In';
@@ -852,6 +852,7 @@ export class Sale2Component implements OnInit {
       GstAmount: 0,
       GstValue: 0,
       SaleDetail: JSON.stringify(this.tableData),
+      BuzzerNo:this.buzzerNo,
       UserID: this.global.getUserID()
 
     }
@@ -1033,6 +1034,7 @@ export class Sale2Component implements OnInit {
       CusName: this.customerName || '-',
       SendToFbr: SendToFbr,
       SaleDetail: JSON.stringify(this.tableData),
+      BuzzerNo:this.buzzerNo,
       UserID: this.global.getUserID()
     }
 

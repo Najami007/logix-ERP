@@ -697,14 +697,14 @@ export class CustomerIssueReturnComponent implements OnInit {
     var inValidDiscProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > (Number(p.salePrice) - (Number(p.discInR))));
 
 
-    if (inValidCostProdList.length > 0) {
-      this.msg.WarnNotify('(' + inValidCostProdList[0].productTitle + ') Cost Price greater than Sale Price');
-      return;
-    }
-    if (inValidSaleProdList.length > 0) {
-      this.msg.WarnNotify('(' + inValidSaleProdList[0].productTitle + ') Sale Price is not Valid');
-      return;
-    }
+    // if (inValidCostProdList.length > 0) {
+    //   this.msg.WarnNotify('(' + inValidCostProdList[0].productTitle + ') Cost Price greater than Sale Price');
+    //   return;
+    // }
+    // if (inValidSaleProdList.length > 0) {
+    //   this.msg.WarnNotify('(' + inValidSaleProdList[0].productTitle + ') Sale Price is not Valid');
+    //   return;
+    // }
     if (inValidQtyProdList.length > 0) {
       this.msg.WarnNotify('(' + inValidQtyProdList[0].productTitle + ') Quantity is not Valid');
       return;

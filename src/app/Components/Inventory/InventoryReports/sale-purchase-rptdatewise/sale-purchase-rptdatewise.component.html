@@ -204,6 +204,7 @@
                         <th>S#</th>
                         <th>Bill #</th>
                         <th>Date</th>
+                        <th>Barcode</th>
                         <!-- <th *ngIf="rptType == 's'">Table</th> -->
                         <th>Title</th>
                         <th>Qty</th>
@@ -226,6 +227,7 @@
                         <td class="text-center">{{item.invBillNo}}</td>
                         <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
                         <!-- <td *ngIf="rptType == 's'">{{item.tableTitle}}</td> -->
+                         <td>{{item.barcode}}</td>
                         <td>{{item.productTitle}}</td>
                         <td class="text-center">{{item.quantity |number:"1.0-3"}}</td>
                         <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
@@ -256,6 +258,7 @@
                         <td colspan="2"></td>
                         <td *ngIf="rptType == 'S'"></td>
                         <td></td>
+                         <td></td>
                         <td *ngIf="rptType != 'S'"></td>
                         <td class="fw-bold text-center">{{qtyTotal |number:'1.0-0'}}</td>
                         <td></td>
@@ -355,6 +358,7 @@
                 <thead>
                     <tr>
                         <th>S#</th>
+                        <th>Barcode</th>
                         <th>Title</th>
                         <th>Qty</th>
                         <th>Total</th>
@@ -367,6 +371,7 @@
                 <tbody>
                     <tr *ngFor="let item of SaleDetailList index as index">
                         <td class="text-center">{{index + 1}}</td>
+                        <td>{{item.barcode}}</td>
                         <td>{{item.productTitle}}</td>
                         <td class="text-center">{{item.quantity |number:"1.0-3"}}</td>
                         <td class="text-end" *ngIf="rptType == 'P'|| rptType == 'PR'">{{item.costPrice |number:'1.0-1'}}</td>
@@ -381,6 +386,7 @@
                         <td colspan="1"></td>
                       
                         <td ></td>
+                        <td></td>
                         <td class="fw-bold text-center">{{qtyTotal |number:'1.0-0'}}</td>
                        
                         
