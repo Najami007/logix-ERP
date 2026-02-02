@@ -277,7 +277,9 @@
                                                 (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();changeValue(item);"
                                                 (keyup)="changeValue(item);getTotal();showImg(item);"
                                                 (click)="rowFocused = index" class="qty{{index}} text-center"
-                                                style="width: 80px;"></td>
+                                                style="width: 80px;">
+                                                 <!-- <small>({{item.packing}})</small>  -->
+                                                </td>
 
                                         <td>{{item.avgCostPrice | number:'1.0-2'}}</td>
                                         <!-- <td>{{item.costPrice | number:'1.0-2'}}</td> -->

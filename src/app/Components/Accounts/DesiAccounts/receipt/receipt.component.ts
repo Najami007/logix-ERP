@@ -163,7 +163,7 @@ export class ReceiptComponent {
  lblPartyType = '';
  lblInvAmount = 0;
  lblPartyName = '';
-
+  lblCreatedOn = new Date();
    ///////////////////////////////////////////////////
 
    printBill(row:any){
@@ -171,6 +171,7 @@ export class ReceiptComponent {
     
     this.lblInvoiceNo = row.invoiceNo;
     this.lblInvoiceDate = row.invoiceDate;
+    this.lblCreatedOn = row.createdOn;
     this.lblRemarks = row.invoiceRemarks;
     this.lblVoucherType = row.type;
     this.lblProjectName = row.projectTitle;

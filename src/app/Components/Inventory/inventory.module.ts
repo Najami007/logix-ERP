@@ -132,6 +132,7 @@ import { PurchaseSummaryCategorywiseComponent } from './InventoryReports/purchas
 import { SaleSummaryCategorywiseComponent } from './InventoryReports/sale-summary-categorywise/sale-summary-categorywise.component';
 import { InventoryAudit2Component } from './InvAdjustment/inventory-audit2/inventory-audit2.component';
 import { FindBillDetailComponent } from './InvAdjustment/find-bill-detail/find-bill-detail.component';
+import { OpeningStockAllComponent } from './InvAdjustment/opening-stock-all/opening-stock-all.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -204,6 +205,7 @@ export const inventoryRoutes: Route[] = [
   { path: 'stkadj', component: StockAdjustmentComponent, data: { title: 'Stock Adjustment' }, canActivate: [AuthGuard] },
   { path: 'opnstk', component: OpeningStockComponent, data: { title: 'Opening Stock' }, canActivate: [AuthGuard] },
   { path: 'stktrnsfr', component: StockTransferComponent, data: { title: 'Stock Transfer' }, canActivate: [AuthGuard] },
+    { path: 'opnstkall', component: OpeningStockAllComponent, data: { title: 'Opening Stock' }, canActivate: [AuthGuard] },
 
 
 
@@ -356,6 +358,7 @@ export const inventoryRoutes: Route[] = [
     SaleSummaryCategorywiseComponent,
     InventoryAudit2Component,
     FindBillDetailComponent,
+    OpeningStockAllComponent,
 
 
 

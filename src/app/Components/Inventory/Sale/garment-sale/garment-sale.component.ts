@@ -73,7 +73,7 @@ export class GarmentSaleComponent implements OnInit {
 
   ImageUrlFeature = this.global.ImageUrlFeature;
   hideNetTotalFeature = this.global.hideNetTotalFeature;
-
+  showUomTitleFeature = this.global.showUomTitleFeature;
 
 
   companyProfile: any = [];
@@ -412,7 +412,7 @@ export class GarmentSaleComponent implements OnInit {
         et: data.et,
         packing: data.packing,
         multyQty: data.multyQty,
-
+        uomTitle:data.uomTitle,
         discInP: this.discFeature ? discPerc : 0,
         discInR: this.discFeature ? discRupee : 0,
         aq: data.aq,
@@ -468,6 +468,11 @@ export class GarmentSaleComponent implements OnInit {
 
         if (Response == '' || Response == null || Response == undefined) {
           this.msg.WarnNotify('Product Not Found');
+          return;
+        }
+
+            if (Response[0].barcodeType !== 'Special') {
+           this.msg.WarnNotify('Product Not Found');
           return;
         }
 
@@ -1045,10 +1050,10 @@ export class GarmentSaleComponent implements OnInit {
 
 
 
-    var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
-    var inValidSaleProdList = this.tableDataList.filter((p: any) => p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
-    var inValidQtyProdList = this.tableDataList.filter((p: any) => p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
-    var inValidDiscProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > (Number(p.salePrice) - (Number(p.discInR))));
+    var inValidCostProdList = this.tableDataList.filter((p: any) => isNaN(p.costPrice) || Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
+    var inValidSaleProdList = this.tableDataList.filter((p: any) => isNaN(p.salePrice) ||  p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
+    var inValidQtyProdList = this.tableDataList.filter((p: any) => isNaN(p.quantity) || p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
+    var inValidDiscProdList = this.tableDataList.filter((p: any) => isNaN(p.discInR) || Number(p.costPrice) > (Number(p.salePrice) - (Number(p.discInR))));
 
 
     if (inValidCostProdList.length > 0 && !this.LessToCostFeature) {
@@ -1542,7 +1547,6 @@ export class GarmentSaleComponent implements OnInit {
     this.getBillDetail(item.invBillNo).subscribe(
       {
         next: (Response: any) => {
-          console.log(Response);
           if (Response.length > 0) {
 
             this.InvDate = new Date(Response[0].invDate);

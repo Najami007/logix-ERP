@@ -462,7 +462,6 @@ export class VoidSaleComponent implements OnInit {
       (Response: any) => {
         this.tableDataList = [];
         if (Response.length > 0) {
-            console.log(Response);
           this.invBillNo = Response[0].invBillNo;
           Response.forEach((e: any) => {
           

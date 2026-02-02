@@ -169,13 +169,14 @@ export class PaymentComponent {
   lblPartyType = '';
   lblInvAmount = 0;
   lblPartyName = '';
+  lblCreatedOn = new Date();
   ///////////////////////////////////////////////////
 
   printBill(row: any) {
 
-
     this.lblInvoiceNo = row.invoiceNo;
     this.lblInvoiceDate = row.invoiceDate;
+    this.lblCreatedOn = row.createdOn;
     this.lblRemarks = row.invoiceRemarks;
     this.lblVoucherType = row.type;
     this.lblPartyType = row.partyType;

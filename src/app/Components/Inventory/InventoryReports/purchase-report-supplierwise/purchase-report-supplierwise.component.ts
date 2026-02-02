@@ -67,7 +67,8 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
 
   DetailList: any = [];
   reportType: any;
-
+  reportsList: any = [{ invType: 'P', invTypeTitle: 'Purchase' }, { invType: 'HPR', invTypeTitle: 'Purchase Return (Holded)' }]
+  tmpRptType: any = 'P';
   formateType = 1;
 
 
@@ -120,6 +121,7 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
     var toDate = this.global.dateFormater(this.toDate, '-');
     var fromTime = this.fromTime;
     var toTime = this.toTime;
+    var rptType = this.tmpRptType;
 
     if ((this.partyID == 0 || this.partyID == undefined) && this.formateType < 3) {
       this.msg.WarnNotify('Select Supplier')
@@ -135,8 +137,7 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseRptSupplierWiseDetail_5?reqUserID=' + this.userID + '&reqPartyID=' + this.partyID + '&FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
             (Response: any) => {
-              this.DetailList = [];
-              this.grandTotal = 0;
+              this.reset();
 
               if (Response.length == 0 || Response == null) {
                 this.global.popupAlert('Data Not Found!');
@@ -172,8 +173,7 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetPurchaseRptSupplierWiseSummary_4?reqUserID=' + this.userID + '&reqPartyID=' + this.partyID + '&FromDate=' +
           this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
             (Response: any) => {
-              this.DetailList = [];
-              this.grandTotal = 0;
+              this.reset();
               if (Response.length == 0 || Response == null) {
                 this.global.popupAlert('Data Not Found!');
                 this.app.stopLoaderDark();
@@ -204,10 +204,11 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
 
       if (this.formateType == 3) {
 
-        var type3Url = `${environment.mainApi + this.global.inventoryLink}GetPurchaseSummaryDateWise?FromDate=${fromDate}&ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}`;
+        var type3Url = `${environment.mainApi + this.global.inventoryLink}GetPurchaseSummaryDateWise?FromDate=${fromDate}&ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&InvType=${rptType}`;
         this.http.get(type3Url).subscribe(
           {
             next: (Response: any) => {
+              this.reset();
               if (Response.length == 0 || Response == null) {
                 this.global.popupAlert('Data Not Found!');
                 this.app.stopLoaderDark();
@@ -240,6 +241,7 @@ export class PurchaseReportSupplierwiseComponent implements OnInit {
         this.http.get(environment.mainApi + this.global.inventoryLink + 'GetSupplierProducts_17?reqSupId=' + this.partyID).subscribe(
           {
             next: (Response: any) => {
+              this.reset();
               if (Response.length == 0 || Response == null) {
                 this.global.popupAlert('Data Not Found!');
                 this.app.stopLoaderDark();

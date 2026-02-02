@@ -557,7 +557,7 @@
                                         <mat-icon
                                             *ngIf="item.productImage == '-'  && !ImageUrlFeature">cancel_presentation</mat-icon>
                                     </td>
-                                    <td *ngIf="MultiBarcode && !ManufacturingFeature && !AddNewProductRestrictionFeature"
+                                    <td *ngIf="MultiBarcode && !ManufacturingFeature"
                                         class="cursorPointer hide-in-print">
                                         <mat-icon (click)="openBarcodeModal(item)">add_to_photos</mat-icon>
                                     </td>

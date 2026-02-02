@@ -58,24 +58,37 @@
                     [value]="item.val">{{item.title}}</mat-option>
             </mat-select>
         </mat-form-field> -->
+
+        <div class="col-md-2">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label>Reports</mat-label>
+                <mat-select [(ngModel)]="tmpRptType">
+                    <mat-option><ngx-mat-select-search #rptSearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of reportsList | filter:rptSearch.value"
+                        [value]="item.invType">{{item.invTypeTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
         <div class="col-md-2">
             <mat-form-field appearance="outline" class="w-100 matSmall">
-            <mat-label>Format</mat-label>
-            <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
+                <mat-label>Format</mat-label>
+                <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
 
-                <mat-option [value]="1">Summary (Supplierwise)</mat-option>
-                <mat-option [value]="2">Detail</mat-option>
-                <mat-option [value]="3">Summary ALL </mat-option>
-                 <mat-option [value]="4">Product List </mat-option>
+                    <mat-option [value]="1">Summary (Supplierwise)</mat-option>
+                    <mat-option [value]="2">Detail</mat-option>
+                    <mat-option [value]="3">Summary ALL </mat-option>
+                    <mat-option [value]="4">Product List </mat-option>
 
-                <!-- <mat-option [value]="3">Ledger</mat-option> -->
-            </mat-select>
-        </mat-form-field>
+                    <!-- <mat-option [value]="3">Ledger</mat-option> -->
+                </mat-select>
+            </mat-form-field>
         </div>
         <div class="col-md-4 d-flex flex-wrap" *ngIf="crudList.r">
 
             <!-- <button class="btn-rpt-success col-lg-4 me-1" (click)="getReport('summary')">Summary</button> -->
-            <div class=" col-md-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('detail')">Get Report</button></div>
+            <div class=" col-md-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('detail')">Get
+                    Report</button></div>
             <div class=" col-md-4 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
             <!-- <div class=" col-lg-4 "><button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button></div> -->
             <div class=" col-md-4"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
@@ -101,9 +114,9 @@
 
 
                     <span class="companyName">{{item.companyName}}</span>
-                    <span class="rptPartyName" >{{partyName}} </span>
-                    <span class="rptTitle" >Purchase {{reportType}} Report </span>
-                    <span  *ngIf="userName != ''"> <b *ngIf="userName != ''">User:
+                    <span class="rptPartyName">{{partyName}} </span>
+                    <span class="rptTitle">Purchase {{reportType}} Report </span>
+                    <span *ngIf="userName != ''"> <b *ngIf="userName != ''">User:
                             {{userName}} |</b> </span>
                     <span style="margin-top:-10px"><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}})
                         <b>To:</b>
@@ -208,7 +221,7 @@
         </table>
 
 
-          <table class="table-logix" id="AllSummaryTable" *ngIf="formateType == 3">
+        <table class="table-logix" id="AllSummaryTable" *ngIf="formateType == 3">
             <thead>
                 <tr>
                     <th>S#</th>
@@ -216,7 +229,7 @@
                     <th>Pur Cost</th>
                     <th>Pur Sale</th>
                     <th>Margin</th>
-                    
+
 
                 </tr>
 
@@ -228,15 +241,17 @@
                     <td>{{item.partyName}}</td>
                     <td class="text-end">{{item.costTotal | number:'1.0-0'}}</td>
                     <td class="text-end">{{item.saleTotal | number:'1.0-0'}}</td>
-                    <td class="text-end">{{((item.saleTotal - item.costTotal) / item.costTotal) * 100 | number:'1.0-0'}}%</td>
+                    <td class="text-end">{{((item.saleTotal - item.costTotal) / item.costTotal) * 100 |
+                        number:'1.0-0'}}%</td>
                 </tr>
                 <tr>
                     <td colspan="2"></td>
                     <td class="fw-bold text-end">{{sumCostTotal | number:'1.0-0'}}</td>
-                     <td class="fw-bold text-end">{{sumSaleTotal | number:'1.0-0'}}</td>
-                      <td class="fw-bold text-end">{{((sumSaleTotal - sumCostTotal) / sumCostTotal) * 100 | number:'1.0-0'}}%</td>
+                    <td class="fw-bold text-end">{{sumSaleTotal | number:'1.0-0'}}</td>
+                    <td class="fw-bold text-end">{{((sumSaleTotal - sumCostTotal) / sumCostTotal) * 100 |
+                        number:'1.0-0'}}%</td>
                 </tr>
-                
+
             </tbody>
 
 
@@ -244,14 +259,14 @@
         </table>
 
 
-           <table class="table-logix" id="productListTable" *ngIf="formateType == 4">
+        <table class="table-logix" id="productListTable" *ngIf="formateType == 4">
             <thead>
                 <tr>
                     <th>S#</th>
                     <th>Product</th>
                     <th>Barcode</th>
                     <th>Available Qty</th>
-                    
+
 
                 </tr>
 
@@ -261,11 +276,11 @@
                 <tr *ngFor="let item of DetailList index as index">
                     <td>{{index + 1}}</td>
                     <td>{{item.productTitle}}</td>
-                    <td >{{item.barcode }}</td>
+                    <td>{{item.barcode }}</td>
                     <td class="text-end">{{item.aq | number:'1.0-0'}}</td>
                 </tr>
 
-                
+
             </tbody>
 
 

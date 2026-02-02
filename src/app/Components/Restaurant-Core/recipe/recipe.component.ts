@@ -308,7 +308,7 @@ export class RecipeComponent implements OnInit {
 
             this.global.getProdDetail(0, this.PBarcode).subscribe(
               (Response: any) => {
-
+                console.log(Response);  
                 if (this.recipeType == 'Dine In') {
                   this.menuProdList.push({
                     productID: Response[0].productID,
@@ -326,7 +326,7 @@ export class RecipeComponent implements OnInit {
                     batchNo: '-',
                     batchStatus: '-',
                     uomID: Response[0].uomID,
-                    packing: 1,
+                    packing: Response[0].packing,
                     discInP: 0,
                     discInR: 0,
                     aq: Response[0].aq,
@@ -349,7 +349,7 @@ export class RecipeComponent implements OnInit {
                     batchNo: '-',
                     batchStatus: '-',
                     uomID: Response[0].uomID,
-                    packing: 1,
+                     packing: Response[0].packing,
                     discInP: 0,
                     discInR: 0,
                     aq: Response[0].aq,
@@ -418,7 +418,7 @@ export class RecipeComponent implements OnInit {
               batchNo: '-',
               batchStatus: '-',
               uomID: Response[0].uomID,
-              packing: 1,
+              packing: Response[0].packing,
               discInP: 0,
               discInR: 0,
               aq: Response[0].aq,
@@ -442,7 +442,7 @@ export class RecipeComponent implements OnInit {
               batchNo: '-',
               batchStatus: '-',
               uomID: Response[0].uomID,
-              packing: 1,
+              packing: Response[0].packing,
               discInP: 0,
               discInR: 0,
               aq: Response[0].aq,
@@ -955,6 +955,7 @@ export class RecipeComponent implements OnInit {
 
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetSingleRecipeDetail?recipeid=' + item.recipeID).subscribe(
       (Response: any) => {
+        console.log(Response);
         this.menuProdList = [];
         Response.forEach((e: any) => {
           this.menuProdList.push({

@@ -17,6 +17,8 @@ import * as $ from 'jquery';
 export class ProductBarcodesComponent implements OnInit {
 
   discFeature = this.global.discFeature;
+  AddNewProductRestrictionFeature = this.global.AddNewProductRestrictionFeature;
+
 
 
   constructor(
@@ -131,10 +133,10 @@ export class ProductBarcodesComponent implements OnInit {
 
     var url = ''
 
-    if(type == 'insert'){
+    if (type == 'insert') {
       url = 'InsertProductDiscount';
     }
-    if(type == 'update'){
+    if (type == 'update') {
       url = 'UpdateProductDiscount';
     }
     $('.loaderDark').show();

@@ -107,7 +107,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     this.userName = curUser.userName;
   }
 
-  projectID:any = 0;
+  projectID: any = 0;
 
   billTotal = 0;
   chargesTotal = 0;
@@ -139,9 +139,14 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     if (this.formateType == 1) {
       // this.reportType = 'Summary';
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
-        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
+        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + 'reqProjectID=' + this.locationID).subscribe(
           (Response: any) => {
-           this.reset();
+            this.reset();
+             if (Response == null) {
+              this.global.popupAlert('Null Returned!');
+              this.app.stopLoaderDark();
+              return;
+            }
             if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
               this.app.stopLoaderDark();
@@ -149,26 +154,27 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
 
             }
 
+
             var DataList: any = [];
-           if (this.rptType == 'S' || this.rptType == 'SR') {
+            if (this.rptType == 'S' || this.rptType == 'SR') {
               if (this.locationID > 0) {
                 DataList = Response.filter((e: any) =>
                   (this.filterID == 2 ? e.percentageDiscount > 0 : this.filterID == 3 ? e.percentageDiscount == 0 : true)
                   && (e.locationID == this.locationID));
               } else {
-                DataList = Response.filter((e: any) =>
-                (this.filterID == 2
-                  ? e.percentageDiscount > 0
-                  : this.filterID == 3
-                    ? e.percentageDiscount == 0
-                    : true
-                ));
+              DataList = Response.filter((e: any) =>
+              (this.filterID == 2
+                ? e.percentageDiscount > 0
+                : this.filterID == 3
+                  ? e.percentageDiscount == 0
+                  : true
+              ));
               }
-            }else{
+            } else {
                if (this.locationID > 0) {
                 DataList = Response.filter((e: any) =>e.locationID == this.locationID);
               } else {
-                DataList = Response;
+              DataList = Response;
               }
             }
 
@@ -210,9 +216,15 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
 
       // this.reportType = 'Detail';
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryDetailDateWise_3?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
-        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
+        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + 'reqProjectID=' + this.locationID).subscribe(
           (Response: any) => {
+            console.log(Response);
             this.reset();
+            if (Response == null) {
+              this.global.popupAlert('Null Returned!');
+              this.app.stopLoaderDark();
+              return;
+            }
             if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
               this.app.stopLoaderDark();
@@ -224,7 +236,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
 
             var DataList: any = [];
 
-             if (this.rptType == 'S' || this.rptType == 'SR') {
+            if (this.rptType == 'S' || this.rptType == 'SR') {
               if (this.locationID > 0) {
                 DataList = Response.filter((e: any) =>
                   (this.filterID == 2 ? e.percentageDiscount > 0 : this.filterID == 3 ? e.percentageDiscount == 0 : true)
@@ -238,9 +250,9 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
                     : true
                 ));
               }
-            }else{
-               if (this.locationID > 0) {
-                DataList = Response.filter((e: any) =>e.locationID == this.locationID);
+            } else {
+              if (this.locationID > 0) {
+                DataList = Response.filter((e: any) => e.locationID == this.locationID);
               } else {
                 DataList = Response;
               }
@@ -296,9 +308,14 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     if (this.formateType == 3) {
       // this.reportType = 'Summary';
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
-        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
+        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + 'reqProjectID=' + this.locationID).subscribe(
           (Response: any) => {
-         this.reset();
+            this.reset();
+             if (Response == null) {
+              this.global.popupAlert('Null Returned!');
+              this.app.stopLoaderDark();
+              return;
+            }
             if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
               this.app.stopLoaderDark();
@@ -349,13 +366,18 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     }
 
 
-      if (this.formateType == 4) {
+    if (this.formateType == 4) {
 
       // this.reportType = 'Detail';
       this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryTypeAndDateWise_20?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
-        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime+'&ProjectID='+this.projectID).subscribe(
+        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + '&ProjectID=' + this.locationID).subscribe(
           (Response: any) => {
             this.reset()
+             if (Response == null) {
+              this.global.popupAlert('Null Returned!');
+              this.app.stopLoaderDark();
+              return;
+            }
             if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
               this.app.stopLoaderDark();
@@ -367,7 +389,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
 
             var DataList: any = [];
 
-             if (this.rptType == 'S' || this.rptType == 'SR') {
+            if (this.rptType == 'S' || this.rptType == 'SR') {
               if (this.locationID > 0) {
                 DataList = Response.filter((e: any) =>
                   (this.filterID == 2 ? e.percentageDiscount > 0 : this.filterID == 3 ? e.percentageDiscount == 0 : true)
@@ -381,9 +403,9 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
                     : true
                 ));
               }
-            }else{
-               if (this.locationID > 0) {
-                DataList = Response.filter((e: any) =>e.locationID == this.locationID);
+            } else {
+              if (this.locationID > 0) {
+                DataList = Response.filter((e: any) => e.locationID == this.locationID);
               } else {
                 DataList = Response;
               }
@@ -412,13 +434,13 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
             this.SaleDetailList.forEach((e: any) => {
               this.qtyTotal += e.quantity;
               if (this.rptType == 'S' || this.rptType == 'SR' || this.rptType == 'IC' || this.rptType == 'RIC') {
-                this.detNetTotal += e.salePrice ;
+                this.detNetTotal += e.salePrice;
               }
               else if (this.rptType == 'P' || this.rptType == 'PR') {
-                this.detNetTotal += e.costPrice ;
+                this.detNetTotal += e.costPrice;
               }
               else {
-                this.detNetTotal += e.avgCostPrice ;
+                this.detNetTotal += e.avgCostPrice;
               }
             });
             this.app.stopLoaderDark();
@@ -455,7 +477,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
         }
         this.app.stopLoaderDark();
       },
-      (Error:any)=>{
+      (Error: any) => {
         console.log(Error);
         this.app.stopLoaderDark();
       }
@@ -509,7 +531,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     this.profitPercentTotal = 0;
     this.profitTotal = 0;
     this.detNetTotal = 0;
-    
+
     this.salePriceTotal = 0;
     this.detNetTotal = 0;
 

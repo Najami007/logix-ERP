@@ -108,14 +108,14 @@
                             <table class="table-garment-sale-2">
                                 <tr>
                                     <td class="text-center" style="width:10% !important;">{{item.quantity
-                                        |number:'1.0-2'}}</td>
+                                        |number:'1.0-2'}} <small class="fw-semibold"> {{item.uomTitle}}</small></td>
                                     <td class="text-end" *ngIf="gstFeature" style="width:20% !important;">
                                         {{item.salePrice - (item.salePrice / ((item.gst + 100) / 100)) |number:'1.0-1'}}
                                     </td>
                                     <td class="text-end" style="width:20% !important;">{{(item.salePrice / ((item.gst +
                                         100) / 100))|number:'1.0-1'}}</td>
                                     <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
-                                        {{(item.discInR + item.cusDiscAmount) * item.quantity|number:'1.0-1'}}<small
+                                        {{(item.discInR + item.cusDiscAmount) * item.quantity|number:'1.0-1'}}<small *ngIf="showUomTitleFeature"
                                             class="fs-8px fw-semibold">({{item.discInP|number:'1.0-1'}}%)</small></td>
                                     <!-- <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
                                         {{item.discInP|number:'1.0-1'}}</td> -->
@@ -130,7 +130,7 @@
 
 
                     </tr>
-                    <tr class="fs-11">
+                    <tr class="fs-11" *ngIf="showTotalQtyFeature">
                         <td colspan="2" class="fw-bold">Total Items</td>
                         <td class="fw-bold fs-11">{{myQtyTotal | number:'1.0-2'}}</td>
                         <td *ngIf="discFeature"></td>
@@ -163,9 +163,10 @@
                         <td class="text-start">{{item.productTitle}} <small>{{item.flavourTitle}}</small></td>
                         <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
 
-                        <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
+                        <td class="text-center">{{item.quantity |number:'1.0-2'}} <small *ngIf="showUomTitleFeature" class="fw-semibold"> {{item.uomTitle}}</small></td>
                         <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
-                            {{(item.discInR + item.cusDiscAmount) * item.quantity|number:'1.0-1'}}</td>
+                            {{(item.discInR + item.cusDiscAmount) * item.quantity|number:'1.0-1'}}<small
+                                            class="fs-8px fw-semibold">({{item.discInP|number:'1.0-1'}}%)</small></td>
                         <!-- <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
                             {{item.discInP|number:'1.0-1'}}</td> -->
                         <!-- <td class="text-end" *ngIf="CusDiscFeature" style="width:10% !important;">
@@ -176,7 +177,7 @@
                     </tr>
 
                 </tbody>
-                <tfoot>
+                <tfoot *ngIf="showTotalQtyFeature">
                     <tr>
                         <td colspan="3" style="border:none !important; "></td>
                         <td class="fw-bold fs-11" style="border: 1px solid black;">{{myQtyTotal | number:'1.0-2'}}</td>

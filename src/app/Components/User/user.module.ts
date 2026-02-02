@@ -26,6 +26,7 @@ import { UpdateSubscriptionComponent } from './update-subscription/update-subscr
 import { SubscriptionKeyGeneratorComponent } from './subscription-key-generator/subscription-key-generator.component';
 import { UserFormComponent } from './add-user/user-form/user-form.component';
 import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
+import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 
 
 
@@ -55,7 +56,8 @@ export const userRoutes: Route[] = [
     DayopencloseComponent,
     UpdateSubscriptionComponent,
     SubscriptionKeyGeneratorComponent,
-    UserFormComponent,   
+    UserFormComponent,
+    ConfirmationModalComponent,   
   ],
   
   imports: [

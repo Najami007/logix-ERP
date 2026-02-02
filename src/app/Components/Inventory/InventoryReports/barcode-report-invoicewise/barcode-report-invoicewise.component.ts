@@ -151,7 +151,6 @@ export class BarcodeReportInvoicewiseComponent implements OnInit {
       salePrice = item.salePrice
 
     }
-    console.log(item);
     var discInR = item.discRupees ? item.discRupees : item.discInR;
      var discInP = item.discPercentage ? item.discPercentage : item.discInP;
 

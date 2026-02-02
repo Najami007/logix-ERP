@@ -43,10 +43,9 @@ export class GarmentSaleReturnComponent implements OnInit {
   VehicleSaleFeature = this.global.VehicleSaleFeature;
   CustomSaleGstFeatrue = this.global.CustomSaleGstFeature;
   DashSlashBarcodeFeature = this.global.dashSlashBarcodeFeature;
-    hideNetTotalFeature = this.global.hideNetTotalFeature;
-
-
-    ImageUrlFeature = this.global.ImageUrlFeature;
+  hideNetTotalFeature = this.global.hideNetTotalFeature;
+  showUomTitleFeature = this.global.showUomTitleFeature;
+  ImageUrlFeature = this.global.ImageUrlFeature;
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
@@ -348,7 +347,7 @@ export class GarmentSaleReturnComponent implements OnInit {
       this.tableDataList.push({
         rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
           : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
-          : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
+            : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
         productID: data.productID,
         productTitle: data.productTitle,
         barcode: tmpBarcode,
@@ -369,7 +368,7 @@ export class GarmentSaleReturnComponent implements OnInit {
         et: data.et,
         packing: data.packing,
         multyQty: data.multyQty,
-         discInP: this.discFeature ? discPerc : 0,
+        discInP: this.discFeature ? discPerc : 0,
         discInR: this.discFeature ? discRupee : 0,
         aq: data.aq,
         total: (data.salePrice * qty) - (discRupee * qty),
@@ -422,8 +421,14 @@ export class GarmentSaleReturnComponent implements OnInit {
     this.global.getProdDetail(0, txtBCode).subscribe(
       (Response: any) => {
 
+
         if (Response == '' || Response == null || Response == undefined) {
           this.msg.WarnNotify('Product Not Found');
+          return;
+        }
+
+         if (Response[0].barcodeType !== 'Special') {
+           this.msg.WarnNotify('Product Not Found');
           return;
         }
 
@@ -1050,16 +1055,16 @@ export class GarmentSaleReturnComponent implements OnInit {
     this.getTotal();
   }
 
-  
+
   isProcessing = false;
 
-  save(paymentType: any,SendToFbr: any) {
+  save(paymentType: any, SendToFbr: any) {
 
 
-    var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
-    var inValidSaleProdList = this.tableDataList.filter((p: any) => p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
-    var inValidQtyProdList = this.tableDataList.filter((p: any) => p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
-    var inValidDiscProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > (Number(p.salePrice) - (Number(p.discInR))));
+    var inValidCostProdList = this.tableDataList.filter((p: any) => isNaN(p.costPrice) || Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
+    var inValidSaleProdList = this.tableDataList.filter((p: any) =>isNaN(p.salePrice) || p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
+    var inValidQtyProdList = this.tableDataList.filter((p: any) =>isNaN(p.quantity) || p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
+    var inValidDiscProdList = this.tableDataList.filter((p: any) =>isNaN(p.discInR) || Number(p.costPrice) > (Number(p.salePrice) - (Number(p.discInR))));
 
 
     if (inValidCostProdList.length > 0 && !this.LessToCostFeature) {
@@ -1085,117 +1090,117 @@ export class GarmentSaleReturnComponent implements OnInit {
 
 
 
-      if (this.tableDataList == '') {
-        this.msg.WarnNotify('No Product Seleted');
-        return;
-      }
-      if (paymentType == 'Cash' && this.partyID == 0 && (this.cash == 0 || this.cash == undefined || this.cash == null)) {
-        this.msg.WarnNotify('Enter Cash');
-        return;
-      }
+    if (this.tableDataList == '') {
+      this.msg.WarnNotify('No Product Seleted');
+      return;
+    }
+    if (paymentType == 'Cash' && this.partyID == 0 && (this.cash == 0 || this.cash == undefined || this.cash == null)) {
+      this.msg.WarnNotify('Enter Cash');
+      return;
+    }
 
-      if (paymentType == 'Cash' && this.partyID == 0 && this.cash < this.netTotal) {
-        this.msg.WarnNotify('Entered Cash is not Valid');
-        return;
-      }
-      if (paymentType == 'Split' && ((this.cash + this.bankCash) > this.netTotal || (this.cash + this.bankCash) < this.netTotal)) {
-        this.msg.WarnNotify('Sum Of Both Amount must be Equal to Net Total');
-        return;
-      }
+    if (paymentType == 'Cash' && this.partyID == 0 && this.cash < this.netTotal) {
+      this.msg.WarnNotify('Entered Cash is not Valid');
+      return;
+    }
+    if (paymentType == 'Split' && ((this.cash + this.bankCash) > this.netTotal || (this.cash + this.bankCash) < this.netTotal)) {
+      this.msg.WarnNotify('Sum Of Both Amount must be Equal to Net Total');
+      return;
+    }
 
-      if (this.paymentType == 'Split' && this.cash <= 0) {
-        this.msg.WarnNotify('Cash Amount is Not Valid');
-        return;
-      }
-      if (this.paymentType == 'Split' && this.bankCash <= 0) {
-        this.msg.WarnNotify('Bank Amount is Not Valid');
-        return;
-      }
-      if ((this.bookerID == 0 || this.bookerID == undefined) && this.BookerFeature) {
-        this.msg.WarnNotify('Select Booker');
-        return;
-      }
-      if (this.paymentType == 'Credit' && this.partyID == 0) {
-        this.msg.WarnNotify('Select Customer');
-        return;
-      }
-      if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
-        this.msg.WarnNotify('Enter Valid Amount');
-        return;
-      }
+    if (this.paymentType == 'Split' && this.cash <= 0) {
+      this.msg.WarnNotify('Cash Amount is Not Valid');
+      return;
+    }
+    if (this.paymentType == 'Split' && this.bankCash <= 0) {
+      this.msg.WarnNotify('Bank Amount is Not Valid');
+      return;
+    }
+    if ((this.bookerID == 0 || this.bookerID == undefined) && this.BookerFeature) {
+      this.msg.WarnNotify('Select Booker');
+      return;
+    }
+    if (this.paymentType == 'Credit' && this.partyID == 0) {
+      this.msg.WarnNotify('Select Customer');
+      return;
+    }
+    if (paymentType == 'Bank' && (this.bankCash < this.netTotal) || (this.bankCash > this.netTotal)) {
+      this.msg.WarnNotify('Enter Valid Amount');
+      return;
+    }
 
-      if ((paymentType == 'Credit' || paymentType == 'Split' || paymentType == 'Bank') && this.bankCash > 0 && this.bankCoaID == 0) {
-        this.msg.WarnNotify('Select Bank');
-        return;
-      }
+    if ((paymentType == 'Credit' || paymentType == 'Split' || paymentType == 'Bank') && this.bankCash > 0 && this.bankCoaID == 0) {
+      this.msg.WarnNotify('Select Bank');
+      return;
+    }
 
-      if (this.VehicleSaleFeature && this.vehicleID == 0) {
-        this.msg.WarnNotify('Select Vehicle');
-        return;
-      }
-      if (this.VehicleSaleFeature && this.meterReading == '') {
-        this.msg.WarnNotify('Enter Meter Reading');
-        return;
-      }
-
-
-      var postData = {
-        InvDate: this.global.dateFormater(this.InvDate, '-'),
-        PartyID: this.partyID,
-        InvType: "SR",
-        ProjectID: this.projectID,
-        BookerID: this.bookerID,
-        PaymentType: paymentType,
-        Remarks: this.billRemarks || '-',
-        OrderType: "Take Away",
-        BillTotal: this.subTotal,
-        BillDiscount: Number(this.discount) + Number(this.offerDiscount),
-        OtherCharges: this.otherCharges,
-        NetTotal: this.netTotal,
-        SendToFbr: SendToFbr,
-        CashRec: this.cash,
-        Change: this.change,
-        AdvTaxAmount: this.AdvTaxAmount || 0,
-        AdvTaxValue: this.AdvTaxValue || 0,
-        BankCoaID: this.bankCoaID,
-        BankCash: this.bankCash,
-        SaleDetail: JSON.stringify(this.tableDataList),
-        VehicleID: this.vehicleID,
-        MeterReading: this.meterReading || '0',
-        UserID: this.global.getUserID()
-      };
+    if (this.VehicleSaleFeature && this.vehicleID == 0) {
+      this.msg.WarnNotify('Select Vehicle');
+      return;
+    }
+    if (this.VehicleSaleFeature && this.meterReading == '') {
+      this.msg.WarnNotify('Enter Meter Reading');
+      return;
+    }
 
 
-      if(this.isProcessing == true) return;
-      this.isProcessing = true
-      this.app.startLoaderDark();
-      this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySaleRtn', postData).subscribe(
-        (Response: any) => {
-          if (Response.msg == 'Data Saved Successfully') {
-            this.msg.SuccessNotify(Response.msg);
-            this.reset();
-            this.PrintAfterSave(Response.invNo);
-            if (paymentType != 'Cash') {
-              $('#searchProduct').trigger('focus');
-              $('#paymentMehtod').hide();
-              $('.modal-backdrop').remove();
-            }
-          } else {
-            this.msg.WarnNotify(Response.msg);
+    var postData = {
+      InvDate: this.global.dateFormater(this.InvDate, '-'),
+      PartyID: this.partyID,
+      InvType: "SR",
+      ProjectID: this.projectID,
+      BookerID: this.bookerID,
+      PaymentType: paymentType,
+      Remarks: this.billRemarks || '-',
+      OrderType: "Take Away",
+      BillTotal: this.subTotal,
+      BillDiscount: Number(this.discount) + Number(this.offerDiscount),
+      OtherCharges: this.otherCharges,
+      NetTotal: this.netTotal,
+      SendToFbr: SendToFbr,
+      CashRec: this.cash,
+      Change: this.change,
+      AdvTaxAmount: this.AdvTaxAmount || 0,
+      AdvTaxValue: this.AdvTaxValue || 0,
+      BankCoaID: this.bankCoaID,
+      BankCash: this.bankCash,
+      SaleDetail: JSON.stringify(this.tableDataList),
+      VehicleID: this.vehicleID,
+      MeterReading: this.meterReading || '0',
+      UserID: this.global.getUserID()
+    };
+
+
+    if (this.isProcessing == true) return;
+    this.isProcessing = true
+    this.app.startLoaderDark();
+    this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySaleRtn', postData).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully') {
+          this.msg.SuccessNotify(Response.msg);
+          this.reset();
+          this.PrintAfterSave(Response.invNo);
+          if (paymentType != 'Cash') {
+            $('#searchProduct').trigger('focus');
+            $('#paymentMehtod').hide();
+            $('.modal-backdrop').remove();
           }
-          this.isProcessing = false;
-          this.app.stopLoaderDark();
-
-        },
-        (Error: any) => {
-          console.log(Error);
-          this.isProcessing = false;
-          this.msg.WarnNotify(Error);
-
-          this.app.stopLoaderDark();
+        } else {
+          this.msg.WarnNotify(Response.msg);
         }
-      )
-    
+        this.isProcessing = false;
+        this.app.stopLoaderDark();
+
+      },
+      (Error: any) => {
+        console.log(Error);
+        this.isProcessing = false;
+        this.msg.WarnNotify(Error);
+
+        this.app.stopLoaderDark();
+      }
+    )
+
 
 
 

@@ -197,7 +197,7 @@
                                         (keydown)="handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item)"
                                         (keyup)="getTotal();showImg(item);changeValue(item)"
                                         (click)="rowFocused = index;editDiscProdQty(item)" [accessKey]="index +1 "
-                                        class="qty{{index}} text-center" style="width: 80px;"></td>
+                                        class="qty{{index}} text-center" style="width: 80px;"> <small *ngIf="showUomTitleFeature" class="fw-semibold"> {{item.uomTitle}}</small></td>
                                 <!-- <td class="text-center"><input type="text" [(ngModel)]="item.salePrice" min="0" draggable="false"
                                     (keydown)="changeValue(item);this.handleUpdown(item,$event,'.sp',index);"
                                     (keyup)="changeValue(item);showImg(item);rowFocused = index"
@@ -289,7 +289,7 @@
             <div class="modal-content " style="background-color: rgb(248, 247, 247);">
 
                 <div class="modal-body">
-                    <app-product-modal [productList]="productList" (reloadProdEmitter)="getProducts()"
+                    <app-product-modal [productList]="productList" (reloadProdEmitter)="ngOnInit()"
                         (addProductEmitter)="holdDataFunction($event)"></app-product-modal>
 
                 </div>

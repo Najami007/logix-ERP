@@ -135,6 +135,7 @@
                         <th>S#</th>
                         <th>Bill #</th>
                         <th>Date</th>
+                        <th>Location</th>
                         <th *ngIf="rptType == 'I' || rptType == 'R'|| rptType == 'S' || rptType == 'SR'">Type</th>
                         <!-- <th>Location</th> -->
                         <th *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'">Party</th>
@@ -158,6 +159,7 @@
                                 [ngClass]="item.invType == 'S' || item.invType == 'SR' || item.invType == 'P'|| item.invType == 'PR' ? 'text-primary' : '' ">{{item.invBillNo}}</span>
                         </td>
                         <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
+                        <td>{{item.locationTitle}}</td>
                         <td *ngIf="rptType == 'I' || rptType == 'R'">{{item.issueType}}</td>
                         <td *ngIf="rptType == 'S' || rptType == 'SR'">{{item.paymentType}}</td>
                         <!-- <td >{{item.locationTitle}}</td> -->
@@ -176,7 +178,7 @@
                         <td>{{item.remarks}}</td>
                     </tr>
                     <tr>
-                        <td colspan="3"></td>
+                        <td colspan="4"></td>
 
                         <td *ngIf="rptType == 'P' ||rptType == 'PR' || rptType == 'S' || rptType == 'SR'"></td>
                         <td *ngIf="rptType == 'I' || rptType == 'R' || rptType == 'S' || rptType == 'SR'"></td>
@@ -204,6 +206,7 @@
                         <th>S#</th>
                         <th>Bill #</th>
                         <th>Date</th>
+                        <th>Location</th>
                         <th>Barcode</th>
                         <!-- <th *ngIf="rptType == 's'">Table</th> -->
                         <th>Title</th>
@@ -226,6 +229,8 @@
                         <td class="text-center">{{index + 1}}</td>
                         <td class="text-center">{{item.invBillNo}}</td>
                         <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
+                        
+                        <td>{{item.locationTitle}}</td>
                         <!-- <td *ngIf="rptType == 's'">{{item.tableTitle}}</td> -->
                          <td>{{item.barcode}}</td>
                         <td>{{item.productTitle}}</td>
@@ -255,7 +260,7 @@
 
                     </tr>
                     <tr>
-                        <td colspan="2"></td>
+                        <td colspan="3"></td>
                         <td *ngIf="rptType == 'S'"></td>
                         <td></td>
                          <td></td>

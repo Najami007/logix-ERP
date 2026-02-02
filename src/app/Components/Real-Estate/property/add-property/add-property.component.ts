@@ -181,7 +181,6 @@ export class AddPropertyComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.propertyLink + 'GetPropertyStatus').subscribe(
       (Response) => {
         this.peopertyStatusList = Response;
-        //console.log(Response);
       },
       (Error) => {
         this.msg.WarnNotify('Error Occured while Loading Countries List')
@@ -211,7 +210,6 @@ export class AddPropertyComponent implements OnInit {
             propertyCategoryID:e.propertyCategoryID,status:false})
         });
       }
-      //console.log(Response);
     },
     (Error) => {
       this.msg.WarnNotify('Error Occured while Loading Countries List')
@@ -409,9 +407,7 @@ export class AddPropertyComponent implements OnInit {
         Response.forEach((e:any) => {
           this.imagesList.push({propertyImage:e.propertyImage,name:e.name,width:e.width,height:e.height,sizeInMB:e.sizeInMB,fileName:e.fileName});
         });
-       
-        //console.log(Response);
-      }
+             }
     )
   }
 
@@ -425,9 +421,7 @@ export class AddPropertyComponent implements OnInit {
                 }
             });
         });
-        
-        //console.log(Response);
-      }
+              }
     )
   }
 

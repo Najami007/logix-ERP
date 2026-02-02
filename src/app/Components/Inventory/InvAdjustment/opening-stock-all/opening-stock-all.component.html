@@ -1,0 +1,69 @@
+<div class="body ">
+
+
+    <div class="p-1">
+        <div class="row">
+            <mat-form-field appearance="outline" *ngIf="!disableDateFeature" class="col-lg-3 matSmall">
+                <mat-label>Invoice Date</mat-label>
+                <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="invDate"
+                    [matDatepicker]="iDate">
+                <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
+                <mat-datepicker #iDate></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="col-lg-3 matSmall">
+                <mat-label>Location</mat-label>
+                <mat-select [(ngModel)]="locationID" [disabled]="invBillNo != '-'" name="location">
+                    <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of locationList | filter:locationSearch.value"
+                        [value]="item.locationID">{{item.locationTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+
+
+            <mat-form-field appearance="outline" class="matSmall"
+                [ngClass]="disableDateFeature  ? 'col-lg-7' :'col-lg-4'">
+                <mat-label>Remarks</mat-label>
+                <input matInput type="text" [(ngModel)]="invRemarks">
+            </mat-form-field>
+
+            <div class="col-md-2"><button class="btn-rpt-success w-100" (click)="insertOpening()">Save</button></div>
+        </div>
+        <div class="w-100">
+            <mat-form-field appearance="outline" class="matSmall w-100">
+                <mat-label>Search.....</mat-label>
+                <input matInput type="text" #searchProduct>
+            </mat-form-field>
+        </div>
+
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Product Title</th>
+                        <th>Barcode</th>
+                        <th>Cost Price</th>
+                        <th>Sale Price</th>
+                        <th class="text-center">Stock</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of productList | filter:searchProduct.value index as index">
+                        <td>{{index+1}}</td>
+                        <td>{{item.productTitle}}</td>
+                        <td>{{item.barcode}}</td>
+                        <td>{{item.costPrice}}</td>
+                        <td>{{item.salePrice}}</td>
+                        <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
+                                (keydown)="this.handleUpdown(item,$event,'.qty',index);" (click)="rowFocused = index"
+                                class="qty{{index}} text-center" style="width: 80px;"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>

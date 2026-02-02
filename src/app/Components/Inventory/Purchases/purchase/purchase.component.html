@@ -5,10 +5,10 @@
 
             <div class="row ">
                 <div class="col-md-2">
-                    <mat-form-field appearance="outline"  class="w-100 matSmall">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
                         <mat-label>Invoice Date</mat-label>
-                        <input [(ngModel)]="invoiceDate" readonly="true" [disabled]="disableDateFeature" matInput type="text" name="voucherDate"
-                            [matDatepicker]="voucherDate">
+                        <input [(ngModel)]="invoiceDate" readonly="true" [disabled]="disableDateFeature" matInput
+                            type="text" name="voucherDate" [matDatepicker]="voucherDate">
                         <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
                         <mat-datepicker #voucherDate></mat-datepicker>
                     </mat-form-field>
@@ -84,7 +84,7 @@
 
                 </div>
 
-                <div class="col-md-2" *ngIf="DetailedPurchaseFeature">
+                <div class="col-md-2 d-none " *ngIf="DetailedPurchaseFeature">
                     <mat-form-field class="matSmall w-100" appearance="outline">
                         <mat-select [(ngModel)]="discType" [disabled]="tableDataList.length > 0">
                             <mat-option value="bd">Before Disc</mat-option>
@@ -188,7 +188,8 @@
                             <td style="width: 150px;">{{item.barcode}} </td>
                             <td style="width: 150px;">{{item.productTitle}}</td>
                             <td>
-                                 <mat-select [disabled]="AddNewProductRestrictionFeature" [(ngModel)]="item.subCategoryID" (selectionChange)="insertToLocalStorage()">
+                                <mat-select [disabled]="AddNewProductRestrictionFeature"
+                                    [(ngModel)]="item.subCategoryID" (selectionChange)="insertToLocalStorage()">
                                     <mat-option><ngx-mat-select-search #catSearch [placeholderLabel]="'Search...'"
                                             [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
                                     <mat-option *ngFor="let row of SubCategoriesList | filter:catSearch.value"
@@ -196,7 +197,8 @@
                                 </mat-select>
                             </td>
                             <td>
-                                 <mat-select [disabled]="AddNewProductRestrictionFeature" [(ngModel)]="item.brandID" (selectionChange)="insertToLocalStorage()">
+                                <mat-select [disabled]="AddNewProductRestrictionFeature" [(ngModel)]="item.brandID"
+                                    (selectionChange)="insertToLocalStorage()">
                                     <mat-option><ngx-mat-select-search #brandSearch [placeholderLabel]="'Search...'"
                                             [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
                                     <mat-option *ngFor="let row of BrandList | filter:brandSearch.value"
@@ -305,7 +307,11 @@
                             <td></td>
                             <td></td>
                             <td class="text-center fw-bold">{{myTotalQty|number:'1.0-3' }}</td>
-                            <td colspan="5"></td>
+                            <td class="text-center fw-bold">{{costTotal|number:'1.0-1'}}</td>
+                            <td class="text-center fw-bold">{{DiscPTotal|number:'1.0-1'}}</td>
+                            <td class="text-center fw-bold">{{DiscRTotal|number:'1.0-1'}}</td>
+                            <td class="text-center fw-bold">{{gstTotal|number:'1.0-1'}}</td>
+                            <td class="text-center fw-bold">{{advTaxTotal|number:'1.0-1'}}</td>
                             <td colspan="6" *ngIf="DetailedPurchaseFeature"></td>
                             <td class="text-center"><mat-icon class="cursorPointer"
                                     (click)="EmptyData()">delete</mat-icon>

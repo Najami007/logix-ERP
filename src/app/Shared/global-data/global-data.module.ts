@@ -351,6 +351,8 @@ export class GlobalDataModule implements OnInit {
   orderwiseDashboardFeature = this.getFeature('orderwiseDashboard');
   editInvSaleFeature  = this.getFeature('editInvSale');
   delInvSaleFeature = this.getFeature('delInvSale');
+  showTotalQtyFeature = this.getFeature('showTotalQty');
+  showUomTitleFeature = this.getFeature('showUomTitle');
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
     this.BookerFeature = this.getFeature('Booker');
@@ -423,6 +425,8 @@ export class GlobalDataModule implements OnInit {
     this.orderwiseDashboardFeature = this.getFeature('orderwiseDashboard');
     this.editInvSaleFeature  = this.getFeature('editInvSale');
     this.delInvSaleFeature = this.getFeature('delInvSale');
+    this.showTotalQtyFeature = this.getFeature('showTotalQty');
+    this.showUomTitleFeature = this.getFeature('showUomTitle');
   }
 
 
@@ -1345,40 +1349,40 @@ export class GlobalDataModule implements OnInit {
 
   pin$ = of('1234');
   public openPinCode(): Observable<any> {
-    return this.dialog.open(PincodeComponent, {
-      width: 'auto',
-      enterAnimationDuration: 500,
-      // hasBackdrop: true,
-      disableClose: true,
-    }).afterClosed().pipe(retry(3));
+    // return this.dialog.open(PincodeComponent, {
+    //   width: 'auto',
+    //   enterAnimationDuration: 500,
+    //   // hasBackdrop: true,
+    //   disableClose: true,
+    // }).afterClosed().pipe(retry(3));
 
-    // if (this.PinCodeFeature) {
-    //   return this.dialog.open(PincodeComponent, {
-    //     width: '30%',
-    //     enterAnimationDuration: 500,
-    //     hasBackdrop: true,
-    //     disableClose: true,
-    //   }).afterClosed().pipe(retry(3));
-    // } else {
+    if (this.PinCodeFeature) {
+      return this.dialog.open(PincodeComponent, {
+        width: '30%',
+        enterAnimationDuration: 500,
+        hasBackdrop: true,
+        disableClose: true,
+      }).afterClosed().pipe(retry(3));
+    } else {
 
-    //   return from(
-    //     Swal.fire({
-    //       title: "Confirm To Proceed",
-    //       showCancelButton: true,
-    //       confirmButtonText: 'Confirm',
-    //       showLoaderOnConfirm: true,
-    //     })
-    //   ).pipe(
-    //     switchMap((result) => {
-    //       if (result.isConfirmed) {
-    //         return this.pin$.pipe(map(pin => '*' + pin)); // transform and return pin
-    //       } else {
-    //         return of(''); // return null if cancelled
-    //       }
-    //     })
-    //   );
+      return from(
+        Swal.fire({
+          title: "Confirm To Proceed",
+          showCancelButton: true,
+          confirmButtonText: 'Confirm',
+          showLoaderOnConfirm: true,
+        })
+      ).pipe(
+        switchMap((result) => {
+          if (result.isConfirmed) {
+            return this.pin$.pipe(map(pin => `*${pin}`)); // transform and return pin
+          } else {
+            return of(''); // return null if cancelled
+          }
+        })
+      );
 
-    // }
+    }
   }
 
 

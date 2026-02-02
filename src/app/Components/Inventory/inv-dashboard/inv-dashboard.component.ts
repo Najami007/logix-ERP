@@ -134,7 +134,6 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
   //       this.salePurchaseMonthList = [];
   //       if (Response.length > 0) {
   //         Response.forEach((e: any) => {
-  //           console.log(Response);
   //           if (e.invType == 'S') {
   //             this.saleAmountList.push(Math.round(e.amount));
   //           }

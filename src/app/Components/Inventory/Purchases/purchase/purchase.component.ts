@@ -43,14 +43,14 @@ export class PurchaseComponent implements OnInit {
   AttachDocPurchaseFeature = this.global.AttachDocPurchaseFeature;
   insertLocalStorageFeature = this.global.insertLocalStorageFeature;
   ImportFromServerFeature = this.global.ImportFromServerFeature;
-    AddNewProductRestrictionFeature = this.global.AddNewProductRestrictionFeature;
+  AddNewProductRestrictionFeature = this.global.AddNewProductRestrictionFeature;
 
 
 
   ImageUrlFeature = this.global.ImageUrlFeature;
   ProjectwiseFeature = this.global.ProjectwiseFeature;
-  
-  cmpBranchID:any = 0;
+
+  cmpBranchID: any = 0;
   companyProfile: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
   constructor(
@@ -188,40 +188,38 @@ export class PurchaseComponent implements OnInit {
 
 
     if (!this.DetailedPurchaseFeature) return;
-
-
-
     if (this.discType == 'ad') {
-
+      var tempCostPrice = Number(item.tempCostPrice);
       var gstAmount = ((item.tempCostPrice * item.gst) / 100)
       var discP = ((item.tempCostPrice * item.discInP) / 100);
       var discR = (item.discInR / item.quantity);
-      var etAmount = (((Number(item.tempCostPrice) + Number(gstAmount) - discP - discR) * item.et) / 100);
+      var etAmount =  ((item.tempCostPrice * item.et) / 100);
+      //var etAmount = (((Number(item.tempCostPrice) + Number(gstAmount) - discP - discR) * item.et) / 100);
+      // var totalCost = item.tempCostPrice * item.quantity;
+      // var costWithDiscP = item.tempCostPrice - discP;
+      // var costWithDiscR = costWithDiscP - discR;
+      // var costWithGst = costWithDiscR + ((costWithDiscR * item.gst) / 100);
+      // var costWithEt = costWithGst + etAmount;
+      //item.costPrice = costWithEt;
 
-      var totalCost = item.tempCostPrice * item.quantity;
-      var costWithDiscP = item.tempCostPrice - discP;
-      var costWithDiscR = costWithDiscP - discR;
-      var costWithGst = costWithDiscR + ((costWithDiscR * item.gst) / 100);
-      var costWithEt = costWithGst + etAmount;
-
-      item.costPrice = costWithEt;
+      item.costPrice = (tempCostPrice - discP - discR) + gstAmount + etAmount;
     }
-    if (this.discType == 'bd') {
+    // if (this.discType == 'bd') {
 
-      var totalCost = item.tempCostPrice * item.quantity;
-      var gstAmount = ((item.tempCostPrice * item.gst) / 100);
-      var etAmount = (((Number(item.tempCostPrice) + Number(gstAmount)) * item.et) / 100);
-      var discP = (((item.tempCostPrice - gstAmount) * item.discInP) / 100);
-      var discR = (item.discInR / item.quantity);
+    //   var totalCost = item.tempCostPrice * item.quantity;
+    //   var gstAmount = ((item.tempCostPrice * item.gst) / 100);
+    //   var etAmount = (((Number(item.tempCostPrice) + Number(gstAmount)) * item.et) / 100);
+    //   var discP = (((item.tempCostPrice - gstAmount) * item.discInP) / 100);
+    //   var discR = (item.discInR / item.quantity);
 
 
-      var costWithGst = Number(item.tempCostPrice) - Number(discR) + gstAmount;
-      var costWithDisc = (Number(item.tempCostPrice) - Number(gstAmount)) - Number(discP) - Number(discR) + Number(gstAmount);
+    //   var costWithGst = Number(item.tempCostPrice) - Number(discR) + gstAmount;
+    //   var costWithDisc = (Number(item.tempCostPrice) - Number(gstAmount)) - Number(discP) - Number(discR) + Number(gstAmount);
 
-      item.costPrice = item.discInP > 0
-        ? costWithDisc + ((costWithDisc * item.et) / 100)
-        : costWithGst + ((costWithGst * item.et) / 100);
-    }
+    //   item.costPrice = item.discInP > 0
+    //     ? costWithDisc + ((costWithDisc * item.et) / 100)
+    //     : costWithGst + ((costWithGst * item.et) / 100);
+    // }
     this.getTotal();
 
   }
@@ -887,7 +885,7 @@ export class PurchaseComponent implements OnInit {
       return;
     }
 
-    if(this.ProjectwiseFeature && this.projectID == 0){
+    if (this.ProjectwiseFeature && this.projectID == 0) {
       this.msg.WarnNotify('Select Project');
       return;
     }
@@ -1080,11 +1078,25 @@ export class PurchaseComponent implements OnInit {
 
   netTotal = 0;
 
+  costTotal = 0;
+  DiscPTotal = 0;
+  DiscRTotal = 0;
+  gstTotal = 0;
+  advTaxTotal = 0;
+  salePriceTotal = 0;
+
+
   getTotal() {
 
     this.subTotal = 0;
     this.myTotalQty = 0;
     this.netTotal = 0;
+    this.costTotal = 0;
+    this.DiscPTotal = 0;
+    this.DiscRTotal = 0;
+    this.gstTotal = 0;
+    this.advTaxTotal = 0;
+    this.salePriceTotal = 0;
 
     if (this.discount == '') {
       this.discount = 0;
@@ -1093,12 +1105,25 @@ export class PurchaseComponent implements OnInit {
       this.overHead = 0;
     }
 
+
+
     for (var i = 0; i < this.tableDataList.length; i++) {
+      var quantity = Number(this.tableDataList[i].quantity);
+      var tempCostPrice = Number(this.tableDataList[i].tempCostPrice);
+      var discInP = Number(this.tableDataList[i].discInP);
+      var discInR = Number(this.tableDataList[i].discInR);
+      var gst = Number(this.tableDataList[i].gst);
+      var et = Number(this.tableDataList[i].et);
+      var costPrice = Number(this.tableDataList[i].costPrice);
+      var salePrice = Number(this.tableDataList[i].salePrice);
 
-      this.subTotal += (Number(this.tableDataList[i].quantity) * Number(this.tableDataList[i].costPrice));
-      this.myTotalQty += Number(this.tableDataList[i].quantity);
-
-
+      this.subTotal += quantity * costPrice;
+      this.myTotalQty += quantity;
+      this.costTotal += quantity * tempCostPrice;
+      this.DiscPTotal += quantity * ((tempCostPrice * discInP) / 100);
+      this.gstTotal += quantity * ((tempCostPrice * gst) / 100);
+      this.DiscRTotal += discInR;
+      this.advTaxTotal += quantity * ((tempCostPrice * et) / 100)
     }
     this.netTotal = (this.subTotal + Number(this.overHead)) - Number(this.discount)
 
@@ -1265,7 +1290,6 @@ export class PurchaseComponent implements OnInit {
 
     this.http.get(url).subscribe(
       (Response: any) => {
-        console.log(Response);
         this.holdBillList = [];
         if (this.tmpSearchInvType == 'HP') {
 
@@ -1281,7 +1305,7 @@ export class PurchaseComponent implements OnInit {
         }
 
         if (this.tmpSearchInvType == 'IC') {
-          this.holdBillList = Response.length > 0 ? Response.filter((e:any)=> e.partyID == this.cmpBranchID) : [];
+          this.holdBillList = Response.length > 0 ? Response.filter((e: any) => e.partyID == this.cmpBranchID) : [];
         }
 
       }
@@ -1331,7 +1355,7 @@ export class PurchaseComponent implements OnInit {
             aq: 0,
             gst: e.gst,
             et: e.et,
-            mrp:e.mrp,
+            mrp: e.mrp,
             subCategoryID: e.subCategoryID,
             brandID: e.brandID,
           })
@@ -1418,6 +1442,7 @@ export class PurchaseComponent implements OnInit {
         }
         const index = this.tableDataList.indexOf(item);
         this.tableDataList[index].costPrice = value / item.quantity;
+        this.getTotal();
       }
     }).then((result) => {
       if (result.isConfirmed) {
