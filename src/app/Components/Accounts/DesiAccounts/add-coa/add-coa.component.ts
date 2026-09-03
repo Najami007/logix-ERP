@@ -142,24 +142,42 @@ export class AddCoaComponent implements OnInit {
 
 
     if (this.btnType == 'Save') {
-      if (this.CoaTypeID == 2) {
-        this.globaldata.getCashBankCoa('EXP').subscribe((Response: any) => {
-          var level:any =  parseFloat(Response.sort((a: any, b: any) => b.accountCode - a.accountCode)[0].accountCode.split('.')[1]) + 1;
-          postData.Level1 = level.toString();
-          // this.level1 = Response.length + 1; 
+
+      if (this.CoaTypeID == 2 || this.CoaTypeID == 3) {
+
+        const coaCode = this.CoaTypeID == 2 ? 'EXP' : 'INC';
+
+        this.globaldata.getCashBankCoa(coaCode).subscribe((response: any[]) => {
+
+          const maxLevel = Math.max(
+            0,
+            ...response.map(item => Number(item.accountCode?.split('.')[1] || 0))
+          );
+
+          postData.Level1 = (maxLevel + 1).toString();
+
           this.insert(postData);
-        })
+        });
+
       }
+      // if (this.CoaTypeID == 2) {
+      //   this.globaldata.getCashBankCoa('EXP').subscribe((Response: any) => {
+      //     var level: any = parseFloat(Response.sort((a: any, b: any) => b.accountCode - a.accountCode)[0].accountCode.split('.')[1]) + 1;
+      //     postData.Level1 = level.toString();
+      //     // this.level1 = Response.length + 1; 
+      //     this.insert(postData);
+      //   })
+      // }
 
 
-      if (this.CoaTypeID == 3) {
-        this.globaldata.getCashBankCoa('INC').subscribe((Response: any) => {
-           var level:any =  parseFloat(Response.sort((a: any, b: any) => b.accountCode - a.accountCode)[0].accountCode.split('.')[1]) + 1;
-               postData.Level1 = level.toString();
-          // this.level1 = Response.length + 1;
-          this.insert(postData);
-        })
-      }
+      // if (this.CoaTypeID == 3) {
+      //   this.globaldata.getCashBankCoa('INC').subscribe((Response: any) => {
+      //     var level: any = parseFloat(Response.sort((a: any, b: any) => b.accountCode - a.accountCode)[0].accountCode.split('.')[1]) + 1;
+      //     postData.Level1 = level.toString();
+      //     // this.level1 = Response.length + 1;
+      //     this.insert(postData);
+      //   })
+      // }
 
     } else if (this.btnType == 'Update') {
       this.update(postData);
@@ -181,9 +199,9 @@ export class AddCoaComponent implements OnInit {
         }
         this.app.stopLoaderDark();
       },
-      (Error:any)=>{
+      (Error: any) => {
         console.log(Error);
-         this.app.stopLoaderDark();
+        this.app.stopLoaderDark();
       }
 
     )
@@ -206,10 +224,10 @@ export class AddCoaComponent implements OnInit {
             }
             this.app.stopLoaderDark();
           },
-      (Error:any)=>{
-        console.log(Error);
-         this.app.stopLoaderDark();
-      }
+          (Error: any) => {
+            console.log(Error);
+            this.app.stopLoaderDark();
+          }
         )
       }
     })

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
+import { ASSETS } from 'src/assets/Constants/assets';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +20,6 @@ export class HomeComponent implements OnInit{
   }
 
 
-  logoUrl:any = '../../../assets/Images/logix2.gif';
+  logoUrl:any = ASSETS.logixAnimation;   //'../../../assets/Images/logix2.gif';
 
 }

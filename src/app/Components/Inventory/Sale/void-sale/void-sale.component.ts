@@ -56,6 +56,11 @@ export class VoidSaleComponent implements OnInit {
   VehicleSaleFeature = this.global.VehicleSaleFeature;
   CusDiscFeature = this.global.CusDiscFeature;
   RestBillUserwise = this.global.RestBillUserwise;
+  NonFBRFeature = this.global.NonFBRFeature;
+  DisableVoidpwdFeature = this.global.DisableVoidpwdFeature;
+  disableDiscPwd = this.global.DisableDiscPwd;
+
+
 
 
 
@@ -323,7 +328,7 @@ export class VoidSaleComponent implements OnInit {
   searchByCode(e: any) {
     if (this.PBarcode !== '') {
       if (e.keyCode == 13) {
-         this.insertProductData(0, this.PBarcode);
+        this.insertProductData(0, this.PBarcode);
 
         // this.global.getProdDetail(0, this.PBarcode).subscribe(
         //   (Response: any) => {
@@ -335,7 +340,7 @@ export class VoidSaleComponent implements OnInit {
         //       if(Response[0].barcode2){
         //         var qty = Response[0].quantity;
         //       }
-              
+
 
         //       this.insertProductData(0, this.PBarcode,0,qty);
         //     }
@@ -464,13 +469,14 @@ export class VoidSaleComponent implements OnInit {
         if (Response.length > 0) {
           this.invBillNo = Response[0].invBillNo;
           Response.forEach((e: any) => {
-          
+
             this.tableDataList.push({
               productID: e.productID,
               productTitle: e.productTitle,
               barcode: e.barcode,
               flavourTitle: e.flavourTitle,
               productImage: e.productImage,
+              tmpQuantity: e.quantity * e.multyQty,
               quantity: e.quantity * e.multyQty,
               wohCP: e.costPrice,
               costPrice: e.costPrice,
@@ -483,7 +489,7 @@ export class VoidSaleComponent implements OnInit {
               batchStatus: '-',
               uomID: e.uomID,
               packing: e.packing,
-              multyQty:e.multyQty,
+              multyQty: e.multyQty,
               discInP: e.discInP,
               discInR: e.discInR / e.multyQty,
               aq: e.aq,
@@ -645,6 +651,8 @@ export class VoidSaleComponent implements OnInit {
 
         if (this.tableDataList.length >= 1) {
           this.rowFocused = 0;
+          e.preventDefault();
+          $('.qty0').trigger('select');
           $('.qty0').trigger('focus');
 
         }
@@ -654,6 +662,7 @@ export class VoidSaleComponent implements OnInit {
       /////move down
       if (e.keyCode == 40) {
         if (this.productList.length >= 1) {
+
           $('.prodRow0').trigger('focus');
         }
       }
@@ -720,6 +729,8 @@ export class VoidSaleComponent implements OnInit {
       if (this.tableDataList.length > 1 && this.rowFocused < this.tableDataList.length - 1) {
         this.rowFocused += 1;
         const clsName = cls + this.rowFocused;
+        e.preventDefault();
+        $(clsName).trigger('select');
         $(clsName).trigger('focus'); // still using jQuery here
       }
     }
@@ -731,6 +742,8 @@ export class VoidSaleComponent implements OnInit {
       } else if (this.tableDataList.length > 1) {
         this.rowFocused -= 1;
         const clsName = cls + this.rowFocused;
+        e.preventDefault();
+        $(clsName).trigger('select');
         $(clsName).trigger('focus');
       }
     }
@@ -746,64 +759,6 @@ export class VoidSaleComponent implements OnInit {
 
 
 
-  ///////////////////////   For Voiding the product row  ///////////////////////////////////////////////////////////
-
-
-  delRow(item: any) {
-
-
-    if (this.invBillNo != '') {
-
-      if (this.tableDataList.length == 1) {
-        this.voidBill();
-        return;
-      }
-
-      Swal.fire({
-        title: 'Alert!',
-        text: 'Confirm to Void Product',
-        position: 'center',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Confirm',
-      }).then((result) => {
-
-        if (result.isConfirmed) {
-          this.global.openPassword('Password').subscribe(pin => {
-            if (pin !== '') {
-              this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
-                RestrictionCodeID: 1,
-                Password: pin,
-                UserID: this.global.getUserID()
-
-              }).subscribe(
-                (Response: any) => {
-                  if (Response.msg == 'Password Matched Successfully') {
-
-                    this.voidProduct(item);
-                  } else {
-                    this.msg.WarnNotify(Response.msg);
-                  }
-                }
-              )
-
-
-
-            }
-          })
-        }
-
-
-      })
-    }
-
-
-
-
-
-  }
 
 
 
@@ -833,37 +788,52 @@ export class VoidSaleComponent implements OnInit {
     if (amount > this.netTotal) {
       this.msg.WarnNotify('Discount is not Valid!')
     } else {
-      this.global.openPassword('Password').subscribe(pin => {
-        if (pin !== '') {
-          this.app.startLoaderDark();
-          this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
-            RestrictionCodeID: 2,
-            Password: pin,
-            UserID: this.global.getUserID()
-
-          }).subscribe(
-            (Response: any) => {
-              if (Response.msg == 'Password Matched Successfully') {
-                $('#cash').trigger('focus');
-                if (amount == '' || amount == undefined) {
-                  this.discount = 0;
-                } else {
-                  this.discount = amount;
-                }
-                this.getTotal()
-
-              } else {
-                this.msg.WarnNotify(Response.msg);
-              }
-
-              this.app.stopLoaderDark();
-            }
-          )
 
 
+      if (this.disableDiscPwd == true) {
 
+        $('#cash').trigger('focus');
+        if (amount == '' || amount == undefined) {
+          this.discount = 0;
+        } else {
+          this.discount = amount;
         }
-      })
+        this.getTotal()
+      } else {
+
+        this.global.openPassword('Password').subscribe(pin => {
+          if (pin !== '') {
+            this.app.startLoaderDark();
+            this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+              RestrictionCodeID: 2,
+              Password: pin,
+              UserID: this.global.getUserID()
+
+            }).subscribe(
+              (Response: any) => {
+                if (Response.msg == 'Password Matched Successfully') {
+                  $('#cash').trigger('focus');
+                  if (amount == '' || amount == undefined) {
+                    this.discount = 0;
+                  } else {
+                    this.discount = amount;
+                  }
+                  this.getTotal()
+
+                } else {
+                  this.msg.WarnNotify(Response.msg);
+                }
+
+                this.app.stopLoaderDark();
+              }
+            )
+          }
+        })
+
+      }
+
+
+
     }
   }
 
@@ -896,6 +866,8 @@ export class VoidSaleComponent implements OnInit {
   //////////////////////////////// Sale Insert Function //////////////////////////////////////////////////
   isProcessing = false;
   save(paymentType: any, SendToFbr: any) {
+
+    if (this.isProcessing) { return; }
 
     var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
     var inValidSaleProdList = this.tableDataList.filter((p: any) => p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
@@ -1015,9 +987,11 @@ export class VoidSaleComponent implements OnInit {
 
 
 
-    if (this.isProcessing) return;
-    this.app.startLoaderDark();
+
     this.isProcessing = true;
+    this.app.startLoaderDark();
+
+
     this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertVoidableSale', postData).subscribe(
       (Response: any) => {
         if (Response.msg == 'Data Saved Successfully') {
@@ -1094,9 +1068,86 @@ export class VoidSaleComponent implements OnInit {
 
 
 
+
+
+  onQtyFocusIn(event: FocusEvent, item: any) {
+    item.tmpQuantity = item.quantity;
+  }
+
+  onQtyFocusOut(event: FocusEvent, item: any) {
+
+    if(item.multyQty > 1) return;
+
+    var updateQty = (Number(item.quantity) * item.multyQty)
+
+
+    /////////////////////////// checking whether quantity increase and trigger api
+    if (updateQty > item.tmpQuantity) {
+
+      var updatePostData = {
+        InvBillNo: this.invBillNo,
+        ProductID: item.productID,
+        barcode: item.barcode,
+        Quantity: Number(item.quantity) - (item.tmpQuantity / item.multyQty),
+
+        UserID: this.global.getUserID(),
+      }
+      this.http.post(environment.mainApi + this.global.inventoryLink + 'AddSaleQuantity', updatePostData).subscribe(
+        (Response: any) => {
+          if (Response.msg == 'Data Updated Successfully') {
+            this.getCurrentBill();
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+        },
+        (Error: any) => {
+          this.msg.WarnNotify(Error);
+          this.app.stopLoaderDark();
+        }
+      )
+    }
+
+    /////////////////////////// checking whether quantity decrease and trigger void
+    if (updateQty < item.quantity) {
+
+      var postData = {
+        InvBillNo: this.invBillNo,
+        ProductID: item.productID,
+        ProductTitle: item.productTitle,
+        barcode: item.barcode,
+        Quantity: (item.tmpQuantity / item.multyQty) - Number(item.quantity),
+        CostPrice: item.costPrice,
+        AvgCostPrice: item.avgCostPrice,
+        SalePrice: item.salePrice,
+        ReqRefNo: item.autoInvDetID,
+
+        UserID: this.global.getUserID(),
+      }
+      this.http.post(environment.mainApi + this.global.inventoryLink + 'VoidProduct', postData).subscribe(
+        (Response: any) => {
+          if (Response.msg == 'Data Saved Successfully') {
+            this.getCurrentBill();
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+        },
+        (Error: any) => {
+          this.msg.WarnNotify(Error);
+          this.app.stopLoaderDark();
+        }
+      )
+
+    }
+  }
+
+
+
   /////////////////////////////// Quantity Edit Modal  ///////////////////////////////////////////////////
 
   openQtyModal(e: any, item: any) {
+
+    // if (this.DisableVoidpwdFeature &&  !(item.multyQty > 1)) return;
+
     if (e.keyCode == 13 || e.button == 0) {
       //  $('#qtyModal').show();
       this.dialogue.open(VsenterqtyComponent, {
@@ -1108,64 +1159,7 @@ export class VoidSaleComponent implements OnInit {
 
         if (qty != '') {
 
-          var updateQty = (Number(qty) * item.multyQty)
-          /////////////////////////// checking whether quantity increase and trigger api
-          if (updateQty > item.quantity) {
-
-            var updatePostData = {
-              InvBillNo: this.invBillNo,
-              ProductID: item.productID,
-              barcode: item.barcode,
-              Quantity: qty - (item.quantity / item.multyQty),
-
-              UserID: this.global.getUserID(),
-            }
-            this.http.post(environment.mainApi + this.global.inventoryLink + 'AddSaleQuantity', updatePostData).subscribe(
-              (Response: any) => {
-                if (Response.msg == 'Data Updated Successfully') {
-                  this.getCurrentBill();
-                } else {
-                  this.msg.WarnNotify(Response.msg);
-                }
-              },
-              (Error: any) => {
-                this.msg.WarnNotify(Error);
-                this.app.stopLoaderDark();
-              }
-            )
-          }
-
-          /////////////////////////// checking whether quantity decrease and trigger void
-          if (updateQty < item.quantity) {
-
-            var postData = {
-              InvBillNo: this.invBillNo,
-              ProductID: item.productID,
-              ProductTitle: item.productTitle,
-              barcode: item.barcode,
-              Quantity: (item.quantity / item.multyQty) - qty,
-              CostPrice: item.costPrice,
-              AvgCostPrice: item.avgCostPrice,
-              SalePrice: item.salePrice,
-              ReqRefNo: item.autoInvDetID,
-
-              UserID: this.global.getUserID(),
-            }
-            this.http.post(environment.mainApi + this.global.inventoryLink + 'VoidProduct', postData).subscribe(
-              (Response: any) => {
-                if (Response.msg == 'Data Saved Successfully') {
-                  this.getCurrentBill();
-                } else {
-                  this.msg.WarnNotify(Response.msg);
-                }
-              },
-              (Error: any) => {
-                this.msg.WarnNotify(Error);
-                this.app.stopLoaderDark();
-              }
-            )
-
-          }
+          this.updateQty(item, qty);
         }
         this.getTotal();
 
@@ -1178,19 +1172,89 @@ export class VoidSaleComponent implements OnInit {
   }
 
 
+  updateQty(item: any, qty: any) {
+
+    var updateQty = (Number(qty) * item.multyQty)
+
+
+    /////////////////////////// checking whether quantity increase and trigger api
+    if (updateQty > item.quantity) {
+
+      var updatePostData = {
+        InvBillNo: this.invBillNo,
+        ProductID: item.productID,
+        barcode: item.barcode,
+        Quantity: qty - (item.quantity / item.multyQty),
+
+        UserID: this.global.getUserID(),
+      }
+      this.http.post(environment.mainApi + this.global.inventoryLink + 'AddSaleQuantity', updatePostData).subscribe(
+        (Response: any) => {
+          if (Response.msg == 'Data Updated Successfully') {
+            this.getCurrentBill();
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+        },
+        (Error: any) => {
+          this.msg.WarnNotify(Error);
+          this.app.stopLoaderDark();
+        }
+      )
+    }
+
+    /////////////////////////// checking whether quantity decrease and trigger void
+    if (updateQty < item.quantity) {
+
+      var postData = {
+        InvBillNo: this.invBillNo,
+        ProductID: item.productID,
+        ProductTitle: item.productTitle,
+        barcode: item.barcode,
+        Quantity: (item.quantity / item.multyQty) - qty,
+        CostPrice: item.costPrice,
+        AvgCostPrice: item.avgCostPrice,
+        SalePrice: item.salePrice,
+        ReqRefNo: item.autoInvDetID,
+
+        UserID: this.global.getUserID(),
+      }
+      this.http.post(environment.mainApi + this.global.inventoryLink + 'VoidProduct', postData).subscribe(
+        (Response: any) => {
+          if (Response.msg == 'Data Saved Successfully') {
+            this.getCurrentBill();
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+        },
+        (Error: any) => {
+          this.msg.WarnNotify(Error);
+          this.app.stopLoaderDark();
+        }
+      )
+
+    }
+  }
 
 
 
+  ///////////////////////   For Voiding the product row  ///////////////////////////////////////////////////////////
 
-  ///////////////////////////  Void Full Bill ///////////////////////////////////////////////////////
+
+  delRow(item: any) {
 
 
-  voidBill() {
+    if (this.invBillNo != '') {
 
-    if (this.tableDataList.length > 0) {
+      if (this.tableDataList.length == 1) {
+
+        this.voidBill();
+        return;
+      }
+
       Swal.fire({
         title: 'Alert!',
-        text: 'Confirm to Void Full Bill',
+        text: 'Confirm to Void Product',
         position: 'center',
         icon: 'warning',
         showCancelButton: true,
@@ -1200,57 +1264,38 @@ export class VoidSaleComponent implements OnInit {
       }).then((result) => {
 
         if (result.isConfirmed) {
-          this.global.openPassword('Password').subscribe(pin => {
-            if (pin !== '') {
-              this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
-                RestrictionCodeID: 1,
-                Password: pin,
-                UserID: this.global.getUserID()
 
-              }).subscribe(
-                (Response: any) => {
-                  if (Response.msg == 'Password Matched Successfully') {
+          if (this.DisableVoidpwdFeature) {
+            this.voidProduct(item);
 
-                    this.http.post(environment.mainApi + this.global.inventoryLink + 'VoidAllProducts', {
-                      InvBillNo: this.invBillNo,
-                      SaleDetail: JSON.stringify(this.tableDataList),
-                      UserID: this.global.getUserID(),
-                    }).subscribe(
-                      (Response: any) => {
-                        if (Response.msg == 'Data Saved Successfully') {
-                          this.getCurrentBill();
-                          this.reset();
-                          $('#vssearchProduct').trigger('focus');
-                        } else {
-                          this.msg.WarnNotify(Response.msg);
-                        }
+          } else {
 
-                        $('#vssearchProduct').trigger('focus');
-                      }
-                    )
+            this.global.openPassword('Password').subscribe(pin => {
+              if (pin !== '') {
+                this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+                  RestrictionCodeID: 1,
+                  Password: pin,
+                  UserID: this.global.getUserID()
 
-                  } else {
-                    this.msg.WarnNotify(Response.msg);
+                }).subscribe(
+                  (Response: any) => {
+                    if (Response.msg == 'Password Matched Successfully') {
+
+                      this.voidProduct(item);
+                    } else {
+                      this.msg.WarnNotify(Response.msg);
+                    }
                   }
-                },
-                (Error: any) => {
-                  this.msg.WarnNotify(Error);
-                  this.app.stopLoaderDark();
-                }
-              )
-
-
-
-            }
-          })
+                )
+              }
+            })
+          }
         }
-
-
       })
     }
-
-
   }
+
+
 
 
 
@@ -1293,6 +1338,100 @@ export class VoidSaleComponent implements OnInit {
       }
     )
   }
+
+
+  ///////////////////////////  Void Full Bill ///////////////////////////////////////////////////////
+
+
+  voidBill() {
+
+    if (this.tableDataList.length > 0) {
+
+      Swal.fire({
+        title: 'Alert!',
+        text: 'Confirm to Void Full Bill',
+        position: 'center',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Confirm',
+      }).then((result) => {
+
+        if (result.isConfirmed) {
+          if (this.DisableVoidpwdFeature) {
+
+            this.http.post(environment.mainApi + this.global.inventoryLink + 'VoidAllProducts', {
+              InvBillNo: this.invBillNo,
+              SaleDetail: JSON.stringify(this.tableDataList),
+              UserID: this.global.getUserID(),
+            }).subscribe(
+              (Response: any) => {
+                if (Response.msg == 'Data Saved Successfully') {
+                  this.getCurrentBill();
+                  this.reset();
+                  $('#vssearchProduct').trigger('focus');
+                } else {
+                  this.msg.WarnNotify(Response.msg);
+                }
+
+                $('#vssearchProduct').trigger('focus');
+              }
+            )
+          } else {
+
+            this.global.openPassword('Password').subscribe(pin => {
+              if (pin !== '') {
+                this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+                  RestrictionCodeID: 1,
+                  Password: pin,
+                  UserID: this.global.getUserID()
+
+                }).subscribe(
+                  (Response: any) => {
+                    if (Response.msg == 'Password Matched Successfully') {
+
+                      this.http.post(environment.mainApi + this.global.inventoryLink + 'VoidAllProducts', {
+                        InvBillNo: this.invBillNo,
+                        SaleDetail: JSON.stringify(this.tableDataList),
+                        UserID: this.global.getUserID(),
+                      }).subscribe(
+                        (Response: any) => {
+                          if (Response.msg == 'Data Saved Successfully') {
+                            this.getCurrentBill();
+                            this.reset();
+                            $('#vssearchProduct').trigger('focus');
+                          } else {
+                            this.msg.WarnNotify(Response.msg);
+                          }
+
+                          $('#vssearchProduct').trigger('focus');
+                        }
+                      )
+
+                    } else {
+                      this.msg.WarnNotify(Response.msg);
+                    }
+                  },
+                  (Error: any) => {
+                    this.msg.WarnNotify(Error);
+                    this.app.stopLoaderDark();
+                  }
+                )
+              }
+            })
+
+          }
+        }
+      })
+
+
+
+    }
+
+
+  }
+
 
 
 

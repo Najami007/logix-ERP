@@ -62,7 +62,7 @@
                         <tr>
                             <th class="cursorPointer" (click)="changeOrder()">S#</th>
                             <th>Barcode</th>
-                            <th class="col-3" >Product Name</th>
+                            <th class="col-3">Product Name</th>
                             <th>Scan Qty</th>
                             <!-- <th>AQ</th> -->
                             <!-- <th >Dif</th> -->
@@ -80,7 +80,8 @@
                         <tr *ngFor="let item of tableDataList index as index" (click)="showImg(item);rowFocused = index"
                             [ngClass]="rowFocused == index ?'bg-dg':''">
                             <td>{{index+1}}</td>
-                            <td matTooltip="{{item.costPrice+' , '+item.avgCostPrice+' , '+item.salePrice}}">{{item.barcode}}</td>
+                            <td matTooltip="{{item.costPrice+' , '+item.avgCostPrice+' , '+item.salePrice}}">
+                                {{item.barcode}}</td>
                             <td>{{item.productTitle}}</td>
                             <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
                                     (keydown)="handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);insertToLocalStorage()"
@@ -180,6 +181,17 @@
                     <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
                     <mat-datepicker #iDate></mat-datepicker>
                 </mat-form-field>
+
+
+                <mat-form-field class="w-100 matSmall" appearance="outline">
+                    <mat-label>Project </mat-label>
+                    <mat-select [(ngModel)]="projectID" name="purchaseProject" [disabled]="!ProjectwiseFeature"
+                        (selectionChange)="insertToLocalStorage()">
+                        <mat-option *ngFor="let item of projectList "
+                            [value]="item.projectID">{{item.projectTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
                 <mat-form-field appearance="outline" class="w-100 matSmall">
                     <mat-label>Location</mat-label>
                     <mat-select [(ngModel)]="locationID" name="location" [disabled]="tableDataList.length > 0"
@@ -266,7 +278,8 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of savedInvoiceList  | filter:holdSearch.value index as index">
-                                <td class="text-center"><span class="logix-badge-success" *ngIf="!item.auditActiveStatus">Posted</span> {{index+1}}</td>
+                                <td class="text-center"><span class="logix-badge-success"
+                                        *ngIf="!item.auditActiveStatus">Posted</span> {{index+1}}</td>
                                 <td class="text-center">{{item.auditInventoryID}}</td>
                                 <td>{{item.auditInvDate | date:'dd-MM-yyyy'}}</td>
                                 <td>{{item.locationTitle}}</td>
@@ -278,11 +291,10 @@
                                 <td class="text-center cursorPointer" *ngIf="crudList.r"><mat-icon class="text-primary"
                                         (click)="printBill(item,'')">print</mat-icon>
                                     <mat-icon class="text-dark" (click)="printBill(item,'wop')">print</mat-icon>
-                                    <mat-icon 
-                                    (click)="openDocumentModal(item)">note_add</mat-icon>
+                                    <mat-icon (click)="openDocumentModal(item)">note_add</mat-icon>
                                 </td>
 
-                                
+
                                 <td class="text-center cursorPointer" *ngIf=" crudList.u && item.auditActiveStatus">
                                     <mat-icon data-bs-dismiss="modal" (click)="retriveBill(item)">edit</mat-icon>
                                 </td>

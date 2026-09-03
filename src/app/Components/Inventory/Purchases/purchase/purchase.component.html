@@ -59,7 +59,7 @@
                                 [value]="item.partyID">{{item.partyName}}</mat-option>
 
                         </mat-select>
-                        <mat-icon class="cursorPointer" (click)="addParty()" matSuffix>add</mat-icon>
+                        <mat-icon class="cursorPointer" (click)="addParty('open')" matSuffix>add</mat-icon>
                     </mat-form-field>
                 </div>
                 <div class="col-md-2">
@@ -155,6 +155,13 @@
 
                 <table class="table-hover table-logix ">
                     <thead>
+                        <!-- <tr>
+                            <th colspan="10"></th>
+
+                            <th *ngIf="DetailedPurchaseFeature"><input [(ngModel)]="detDiscPerc"
+                                    (keydown)="updaetProdList($event,'discPerc')" /> </th>
+
+                        </tr> -->
                         <tr>
                             <th class="cursorPointer" (click)="changeOrder()">S#</th>
                             <th style="min-width: 150px;">Barcode</th>
@@ -162,12 +169,32 @@
                             <th style="min-width: 150px;">Category</th>
                             <th style="min-width: 150px;">Brand</th>
                             <th>Expiry</th>
-                            <th>quantity</th>
+                            <th>Qty</th>
+                            <th *ngIf="uomPurchaseFeature">Packing</th>
+                            <th *ngIf="uomPurchaseFeature">UOM</th>
                             <th *ngIf="DetailedPurchaseFeature">Cost Price</th>
-                            <th *ngIf="DetailedPurchaseFeature">Disc %</th>
+                            <th *ngIf="DetailedPurchaseFeature">
+                                <div class="d-flex flex-column">
+                                    <span><input [(ngModel)]="detDiscPerc" style="max-width: 80px;"
+                                            (keydown)="updaetProdList($event,'discPerc')" /></span>
+                                    <span>Disc %</span>
+                                </div>
+                            </th>
                             <th *ngIf="DetailedPurchaseFeature">Disc Rs</th>
-                            <th *ngIf="DetailedPurchaseFeature">GST</th>
-                            <th *ngIf="DetailedPurchaseFeature">Adv Tax</th>
+                            <th *ngIf="DetailedPurchaseFeature">
+                                <div class="d-flex flex-column">
+                                    <span><input [(ngModel)]="detGst" style="max-width: 80px;"
+                                            (keydown)="updaetProdList($event,'gst')" /></span>
+                                    <span>GST</span>
+                                </div>
+                            </th>
+                            <th *ngIf="DetailedPurchaseFeature">
+                                <div class="d-flex flex-column">
+                                    <span><input [(ngModel)]="detAT" style="max-width: 80px;"
+                                            (keydown)="updaetProdList($event,'at')" /></span>
+                                    <span>Adv Tax</span>
+                                </div>
+                            </th>
 
                             <th class="col-1">Cost Price</th>
 
@@ -196,6 +223,7 @@
                                         [value]="row.subCategoryID"> {{row.subCategoryTitle}}</mat-option>
                                 </mat-select>
                             </td>
+
                             <td>
                                 <mat-select [disabled]="AddNewProductRestrictionFeature" [(ngModel)]="item.brandID"
                                     (selectionChange)="insertToLocalStorage()">
@@ -219,6 +247,16 @@
                                     (keydown)="this.handleUpdown(item,$event,'.qty',index)"
                                     (keyup)="showImg(item);rowFocused = index;" [accessKey]="index +1 "
                                     class="qty{{index}} text-center amtInput" style="width: 80px;"></td>
+
+                            <td class="text-center" *ngIf="uomPurchaseFeature"><input type="text"
+                                    [(ngModel)]="item.packing" min="0" draggable="false" dropzone="false"
+                                    (input)="global.handleInputChange($event);getTotal();changeValue(item);onFieldsUpdate('packing',item)"
+                                    (keydown)="this.handleUpdown(item,$event,'.qty',index)"
+                                    (keyup)="showImg(item);rowFocused = index;" [accessKey]="index +1 "
+                                    class="packing{{index}} text-center amtInput" style="width: 80px;">
+
+                            </td>
+                            <td *ngIf="uomPurchaseFeature">{{item.uomTitle}}</td>
 
                             <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
                                     [(ngModel)]="item.tempCostPrice" min="0" draggable="false"
@@ -263,7 +301,7 @@
                                 <span *ngIf="DetailedPurchaseFeature">{{item.costPrice |number:'1.0-1'}} </span>
                                 <input type="text" [(ngModel)]="item.costPrice" min="0" *ngIf="!DetailedPurchaseFeature"
                                     draggable="false"
-                                    (input)="global.handleInputChange($event);getTotal();changeValue(item);"
+                                    (input)="global.handleInputChange($event);getTotal();changeValue(item);onFieldsUpdate('cp',item)"
                                     (keydown)="this.handleUpdown(item,$event,'.cp',index);"
                                     (keyup)="showImg(item);rowFocused = index" class="cp{{index}} text-center amtInput"
                                     style="width: 80px;">
@@ -307,12 +345,18 @@
                             <td></td>
                             <td></td>
                             <td class="text-center fw-bold">{{myTotalQty|number:'1.0-3' }}</td>
-                            <td class="text-center fw-bold">{{costTotal|number:'1.0-1'}}</td>
-                            <td class="text-center fw-bold">{{DiscPTotal|number:'1.0-1'}}</td>
-                            <td class="text-center fw-bold">{{DiscRTotal|number:'1.0-1'}}</td>
-                            <td class="text-center fw-bold">{{gstTotal|number:'1.0-1'}}</td>
-                            <td class="text-center fw-bold">{{advTaxTotal|number:'1.0-1'}}</td>
-                            <td colspan="6" *ngIf="DetailedPurchaseFeature"></td>
+                            <td *ngIf="uomPurchaseFeature"></td>
+                            <td *ngIf="uomPurchaseFeature"></td>
+                            <td></td>
+                        
+                            <td class="text-center fw-bold" *ngIf="DetailedPurchaseFeature">{{DiscPTotal|number:'1.0-1'}}</td>
+                            <td class="text-center fw-bold" *ngIf="DetailedPurchaseFeature">{{DiscRTotal|number:'1.0-1'}}</td>
+                            <td class="text-center fw-bold" *ngIf="DetailedPurchaseFeature">{{gstTotal|number:'1.0-1'}}</td>
+                            <td class="text-center fw-bold" *ngIf="DetailedPurchaseFeature">{{advTaxTotal|number:'1.0-1'}}</td>
+                            <td></td>
+                            <td *ngIf="DetailedPurchaseFeature"></td>
+                                <td class="text-center fw-bold">{{costTotal|number:'1.0-1'}}</td>
+                            <td colspan="3" ></td>
                             <td class="text-center"><mat-icon class="cursorPointer"
                                     (click)="EmptyData()">delete</mat-icon>
                             </td>
@@ -368,7 +412,7 @@
                 <div class="mt-2 text-center d-flex justify-content-center gap-1">
                     <div class="attachmentButton w-25" (click)="openAttachDocumentModal()"><mat-icon
                             class="mt-2">attachment</mat-icon></div>
-                    <button class="w-50 btnsave" id="savebtn" accesskey="s" *ngIf="crudList.c"
+                    <button class="w-50 btnsave" id="savebtn" accesskey="s" [disabled]="isProcessing" *ngIf="crudList.c"
                         (click)="SaveBill('purchase')"><u>S</u>ave</button>
                 </div>
                 <div class="mt-2 text-center">
@@ -548,6 +592,29 @@
 
                 <app-add-document [billNo]="docInvBillNo"
                     (UploadEmitter)="global.closeBootstrapModal('#DocumentModal',true)"></app-add-document>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!--------------------- Add Party --------------->
+
+<div class="modal" id="addPartyModal" tabindex="-1" data-bs-backdrop="true" aria-labelledby="DocumentModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="DocumentModalLabel">Add Party</h2>
+                <button type="button" class="btn-close" (click)="addParty('close')"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <app-addparty
+                    (updateEmitter)="addParty('close')"></app-addparty>
             </div>
         </div>
     </div>

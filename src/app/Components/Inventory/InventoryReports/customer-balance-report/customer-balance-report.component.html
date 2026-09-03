@@ -1,11 +1,26 @@
 <div class=" body">
 
-    <div class="container pt-5">
-        <button mat-mini-fab class="bg-primary text-white" *ngIf="crudList.r"
-            (click)="print()"><mat-icon>print</mat-icon></button>
+    <div class="container pt-5 row">
+
+        <div class="col-md-6">
+
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label>Route</mat-label>
+                <mat-select [(ngModel)]="routeID" #route (selectionChange)="getParty()">
+                    <mat-option><ngx-mat-select-search #routeSearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of routeList |filter:routeSearch.value"
+                        [value]="item.routeID">{{item.routeTitle}}</mat-option>
+                </mat-select>
+                <!-- <mat-icon matSuffix (click)="addCity()">add</mat-icon> -->
+            </mat-form-field>
+        </div>
+        <div class="col-md-2">
+            <button class="btn-rpt-primary w-100" (click)="print()">Print</button>
+        </div>
     </div>
 
-    <div id="PrintDiv" class="container-fluid p-5">
+    <div id="PrintDiv" class="container-fluid">
 
 
 
@@ -22,7 +37,8 @@
 
                     <span class="companyName">{{item.companyName}}</span>
 
-                    <span class="rptTitle" >Cusotmer Balance Report</span>
+                    <span class="rptTitle">Cusotmer Balance Report</span>
+                    <span *ngIf="routeTitle != ''" class="fw-bold">Route: ({{routeTitle}})</span>
 
                 </div>
                 <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
@@ -50,7 +66,7 @@
 
                 </tr>
             </thead>
-            
+
             <tbody>
                 <tr *ngFor="let item of TableData index as index">
                     <td class="text-center">{{index + 1}}</td>

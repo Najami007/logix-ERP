@@ -73,7 +73,6 @@ import { NgxBarcode6Module } from 'ngx-barcode6';
 
 import { SaleBillPrintComponent } from './Sale/SaleComFiles/sale-bill-print/sale-bill-print.component';
 import { WholeSaleComponent } from './Sale/whole-sale/whole-sale.component';
-import { WhsSavedBillComponent } from './Sale/whole-sale/whs-saved-bill/whs-saved-bill.component';
 import { WholeSaleReturnComponent } from './Sale/whole-sale-return/whole-sale-return.component';
 import { SalePurchaseRptcatwiseComponent } from './InventoryReports/sale-purchase-rptcatwise/sale-purchase-rptcatwise.component';
 import { PurchaseMobShopComponent } from './Purchases/purchase-mob-shop/purchase-mob-shop.component';
@@ -133,6 +132,23 @@ import { SaleSummaryCategorywiseComponent } from './InventoryReports/sale-summar
 import { InventoryAudit2Component } from './InvAdjustment/inventory-audit2/inventory-audit2.component';
 import { FindBillDetailComponent } from './InvAdjustment/find-bill-detail/find-bill-detail.component';
 import { OpeningStockAllComponent } from './InvAdjustment/opening-stock-all/opening-stock-all.component';
+import { ProductionReceivingComponent } from './Production/production-receiving/production-receiving.component';
+import { ProductionPrintComponent } from './Production/production-print/production-print.component';
+import { ProductionReturnComponent } from './Production/production-return/production-return.component';
+import { ProductRecipeComponent } from './product/product-recipe/product-recipe.component';
+import { TokenReportComponent } from './InventoryReports/token-report/token-report.component';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { TransporterProfileComponent } from './Configurations/transporter-profile/transporter-profile.component';
+import { AddTransporterProfileComponent } from './Configurations/transporter-profile/add-transporter-profile/add-transporter-profile.component';
+import { AuditReportComponent } from './InventoryReports/audit-report/audit-report.component';
+import { AIStockAnalysisReportComponent } from './InventoryReports/aistock-analysis-report/aistock-analysis-report.component';
+import { DigitalInvoicePrintComponent } from './Sale/SaleComFiles/digital-invoice-print/digital-invoice-print.component';
+import { AddpartyComponent } from '../Company/party/addparty/addparty.component';
+import { DigitalInvoicesSaleComponent } from './Sale/digital-invoices-sale/digital-invoices-sale.component';
+import { ProdQtyModalComponent } from './Sale/SaleComFiles/prod-qty-modal/prod-qty-modal.component';
+import { ExpiryItemReportComponent } from './InventoryReports/expiry-item-report/expiry-item-report.component';
+import { MarqueeSaleComponent } from './Sale/marquee-sale/marquee-sale.component';
+import { MrqSaleBillPrintComponent } from './Sale/SaleComFiles/mrq-sale-bill-print/mrq-sale-bill-print.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -168,6 +184,7 @@ export const inventoryRoutes: Route[] = [
   { path: 'suppay', component: PaymentComponent, data: { title: 'Payment' }, canActivate: [AuthGuard] },
   { path: 'prodeditbulk', component: ProductEditBulkComponent, data: { title: 'Product Edit Bulk' }, canActivate: [AuthGuard] },
   { path: 'salesmantarget', component: SalesmanTargetComponent, canActivate: [AuthGuard] },
+  { path: 'transporterProfile', component: TransporterProfileComponent, canActivate: [AuthGuard] },
 
   //////// Sale Pages////////////////////
 
@@ -183,11 +200,12 @@ export const inventoryRoutes: Route[] = [
   { path: 'mobslrtn', component: SaleReturnMobComponent, data: { title: 'Mob Sale Return' }, canActivate: [AuthGuard] },
   { path: 'ffsl', component: FastFoodSaleComponent, data: { title: 'Fast Food Sale' }, canActivate: [AuthGuard] },
   { path: 'salevehicle', component: SaleVehicleComponent, data: { title: 'Sale Vehicle' }, canActivate: [AuthGuard] },
+  { path: 'saleFurniture', component: DigitalInvoicesSaleComponent, data: { title: 'Digital Invoices' }, canActivate: [AuthGuard] },
+  { path: 'saleMrq', component: MarqueeSaleComponent, data: { title: 'Sale Mrq' }, canActivate: [AuthGuard] },
 
   { path: 'customerissue', component: CustomerIssuanceComponent, data: { title: 'Customer Issue' }, canActivate: [AuthGuard] },
   { path: 'customerissuertn', component: CustomerIssueReturnComponent, data: { title: 'Customer Issue Return' }, canActivate: [AuthGuard] },
 
-  { path: 'saleFurniture', component: SaleFurnitureComponent, data: { title: 'Sale Furniture' }, canActivate: [AuthGuard] },
 
   //////// Purchase Pages////////////////////
 
@@ -205,7 +223,9 @@ export const inventoryRoutes: Route[] = [
   { path: 'stkadj', component: StockAdjustmentComponent, data: { title: 'Stock Adjustment' }, canActivate: [AuthGuard] },
   { path: 'opnstk', component: OpeningStockComponent, data: { title: 'Opening Stock' }, canActivate: [AuthGuard] },
   { path: 'stktrnsfr', component: StockTransferComponent, data: { title: 'Stock Transfer' }, canActivate: [AuthGuard] },
-    { path: 'opnstkall', component: OpeningStockAllComponent, data: { title: 'Opening Stock' }, canActivate: [AuthGuard] },
+  { path: 'opnstkall', component: OpeningStockAllComponent, data: { title: 'Opening Stock' }, canActivate: [AuthGuard] },
+  { path: 'productionReceiving', component: ProductionReceivingComponent, data: { title: 'Production' }, canActivate: [AuthGuard] },
+  { path: 'productionReturn', component: ProductionReturnComponent, data: { title: 'Production Return' }, canActivate: [AuthGuard] },
 
 
 
@@ -242,11 +262,19 @@ export const inventoryRoutes: Route[] = [
   { path: 'suplierLedgerSpecial', component: SupplierLedgerSpecialComponent, data: { title: 'Supplier Ledger Special' }, canActivate: [AuthGuard] },
   { path: 'productdetail', component: ProductDetailReportComponent, canActivate: [AuthGuard] },
   { path: 'product/addProductImages', component: AddProductImagesComponent },
-  { path: 'purSummaryCatwise', component: PurchaseSummaryCategorywiseComponent , canActivate: [AuthGuard] },
-  { path: 'saleSummaryCatwise', component: SaleSummaryCategorywiseComponent , canActivate: [AuthGuard] },
+  { path: 'purSummaryCatwise', component: PurchaseSummaryCategorywiseComponent, canActivate: [AuthGuard] },
+  { path: 'saleSummaryCatwise', component: SaleSummaryCategorywiseComponent, canActivate: [AuthGuard] },
   { path: 'tokengenerator', component: TokenGeneratorComponent, canActivate: [AuthGuard] },
-    { path: 'invadtwls', component: InventoryAudit2Component, canActivate: [AuthGuard] },
-     { path: 'fndBillDet', component: FindBillDetailComponent, canActivate: [AuthGuard] },
+  { path: 'invadtwls', component: InventoryAudit2Component, canActivate: [AuthGuard] },
+  { path: 'fndBillDet', component: FindBillDetailComponent, canActivate: [AuthGuard] },
+  { path: 'tokenReport', component: TokenReportComponent, canActivate: [AuthGuard] },
+  { path: 'auditReport', component: AuditReportComponent, canActivate: [AuthGuard] },
+  { path: 'aiSummary', component: AIStockAnalysisReportComponent, canActivate: [AuthGuard] },
+    { path: 'expiry-report', component: ExpiryItemReportComponent, canActivate: [AuthGuard] },
+
+
+
+
 
 
 
@@ -304,7 +332,6 @@ export const inventoryRoutes: Route[] = [
     PriceCheckerComponent,
 
     WholeSaleComponent,
-    WhsSavedBillComponent,
     GarmentSaleComponent,
     SaleReportCustomerwiseComponent,
     InvAuditComponent,
@@ -359,6 +386,22 @@ export const inventoryRoutes: Route[] = [
     InventoryAudit2Component,
     FindBillDetailComponent,
     OpeningStockAllComponent,
+    ProductionReceivingComponent,
+    ProductionPrintComponent,
+    ProductionReturnComponent,
+    ProductRecipeComponent,
+    TokenReportComponent,
+    TransporterProfileComponent,
+    AddTransporterProfileComponent,
+    AuditReportComponent,
+    AIStockAnalysisReportComponent,
+    DigitalInvoicePrintComponent,
+    DigitalInvoicesSaleComponent,
+    ProdQtyModalComponent,
+    ExpiryItemReportComponent,
+    MarqueeSaleComponent,
+    MrqSaleBillPrintComponent,
+    
 
 
 
@@ -384,17 +427,20 @@ export const inventoryRoutes: Route[] = [
     SharedComponentsModule,
     CompanyModule,
     DirectivesModule,
-    ZXingScannerModule
+    ZXingScannerModule,
+    NgxMaskDirective,
 
   ],
   exports: [
     RouterModule,
     CashierClosingRptComponent,
-    ProductModalComponent
+    ProductModalComponent,
+    TransporterProfileComponent
   ],
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
+    provideNgxMask()
   ]
 
 })

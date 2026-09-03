@@ -12,6 +12,12 @@
                         <mat-datepicker-toggle matSuffix [for]="mDate"></mat-datepicker-toggle>
                         <mat-datepicker #mDate></mat-datepicker>
                     </mat-form-field>
+
+                    <mat-radio-group [(ngModel)]="formateID" class="col-lg-3 ">
+                        <mat-radio-button *ngFor="let item of formateList"
+                            [value]="item.id">{{item.title}}</mat-radio-button>
+                    </mat-radio-group>
+
                     <mat-form-field appearance="outline" class="col-lg-3 matSmall">
                         <mat-label>Expiry</mat-label>
                         <input matInput type="text" readonly="true" [(ngModel)]="expiryDate" [matDatepicker]="expDate">
@@ -25,31 +31,31 @@
 
                         <div class="row">
                             <div class="col-lg-8 pe-1  d-flex flex-column ">
-                            <mat-label class="text-primary">Search Barcode / Product</mat-label>
-                            <input type="text" #pbarcode [(ngModel)]="PBarcode"
-                                (keydown)="changeFocus($event,'.prodRow');searchByCode($event)" id="searchProduct"
-                                class="p-1 ps-2 mb-2 searchProduct" placeholder="Alt + b" autofocus autocomplete="off"
-                                accesskey="b">
+                                <mat-label class="text-primary">Search Barcode / Product</mat-label>
+                                <input type="text" #pbarcode [(ngModel)]="PBarcode"
+                                    (keydown)="changeFocus($event,'.prodRow');searchByCode($event)" id="searchProduct"
+                                    class="p-1 ps-2 mb-2 searchProduct" placeholder="Alt + b" autofocus
+                                    autocomplete="off" accesskey="b">
 
-                            <div class="  d-flex flex-column SearchConatiner cursorPointer "
-                                *ngIf="PBarcode != '' && PBarcode != undefined">
-                                <mat-card class="card "
-                                    *ngFor="let item of productList| filter:PBarcode | slice:0:25 index as index">
-                                    <button style="height: 40px; background: none;border: none;text-align: left;"
-                                        class="prodRow{{index}} prodBtn justify-content-between d-flex"
-                                        (click)="onProductSelected(item);"
-                                        (keydown)=" handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">
-                                        <p>{{item.productTitle}}</p>
-                                        <p><strong>({{item.barcode}})</strong></p>
-                                    </button>
-                                </mat-card>
+                                <div class="  d-flex flex-column SearchConatiner cursorPointer "
+                                    *ngIf="PBarcode != '' && PBarcode != undefined">
+                                    <mat-card class="card "
+                                        *ngFor="let item of productList| filter:PBarcode | slice:0:25 index as index">
+                                        <button style="height: 40px; background: none;border: none;text-align: left;"
+                                            class="prodRow{{index}} prodBtn justify-content-between d-flex"
+                                            (click)="onProductSelected(item);"
+                                            (keydown)=" handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">
+                                            <p>{{item.productTitle}}</p>
+                                            <p><strong>({{item.barcode}})</strong></p>
+                                        </button>
+                                    </mat-card>
+                                </div>
+
                             </div>
+                            <div class="col-md-4 text-start pt-3 mt-1">
+                                <button class="btnload w-100 " style="height: 40px;" (click)="ngOnInit()">Load</button>
 
-                        </div>
-                        <div class="col-md-4 text-start pt-3 mt-1">
-                            <button class="btnload w-100 " style="height: 40px;" (click)="ngOnInit()">Load</button>
-
-                        </div>
+                            </div>
                         </div>
 
                         <div>
@@ -59,6 +65,7 @@
                             <mat-checkbox [(ngModel)]="showLess">less \ Full</mat-checkbox>
                             <mat-checkbox [(ngModel)]="hideName">Hide Name</mat-checkbox>
                             <mat-checkbox [(ngModel)]="hideCmp">Hide Cmp</mat-checkbox>
+                            <mat-checkbox [(ngModel)]="hideDisc">Without Disc</mat-checkbox>
                         </div>
 
 
@@ -68,30 +75,65 @@
                                     (click)="print()"><mat-icon>print</mat-icon></button></div>
 
                             <div *ngFor="let item of curProduct" class="d-flex  justify-content-center ">
-                                <div id="PrintDiv" class="border">
+                                <div id="PrintDiv" class="border" *ngIf="formateID == 1">
 
 
                                     <span class="cmpName" *ngIf="!hideCmp">{{companyName}}</span>
                                     <span class="bcodet" [ngClass]="hideBarcode ? '': 'mb-8px'"
-                                        *ngIf="!showLess && !hideName">{{item.flavourTitle ? item.flavourTitle : item.productTitle}}</span>
+                                        *ngIf="!showLess && !hideName">{{item.flavourTitle ? item.flavourTitle :
+                                        item.productTitle}}</span>
                                     <span class="bcodet" [ngClass]="hideBarcode ? '': 'mb-8px'"
-                                        *ngIf="showLess">{{item.flavourTitle ? item.flavourTitle : item.productTitle |slice:0:24}}...</span>
+                                        *ngIf="showLess">{{item.flavourTitle ? item.flavourTitle : item.productTitle
+                                        |slice:0:24}}...</span>
                                     <ngx-barcode6 class="barcode" *ngIf="!hideBarcode" [bc-format]="'CODE128'"
                                         [bc-height]="40" [bc-background]="'none'" [bc-font-options]="'bold'"
                                         [bc-width]="getBarcodeWidth(item.barcode2 ? item.barcode2 : item.barcode)"
-                                        [bc-value]="item.barcode2 ? item.barcode2 : item.barcode" 
-                                        [bc-font-size]="10" [bc-text-margin]="-2" [bc-display-value]="true"
-                                        [bc-text-position]="'bottom'" [bc-text-align]="'right'"></ngx-barcode6>
+                                        [bc-value]="item.barcode2 ? item.barcode2 : item.barcode" [bc-font-size]="10"
+                                        [bc-text-margin]="-2" [bc-display-value]="true" [bc-text-position]="'bottom'"
+                                        [bc-text-align]="'right'"></ngx-barcode6>
                                     <!-- <span class="barcodeText">{{item.barcode}}</span> -->
                                     <!-- <div class="font-barcode" >*{{item.barcode}}*</div>
                         <div class="bcodeC">{{item.barcode}}</div> -->
-                                    <div *ngIf="!hideExpiry"  class="expiry">
+                                    <div *ngIf="!hideExpiry" class="expiry">
                                         <span>Mfg: {{manufactureDate | date:'dd-MM-yyyy'}}</span>
                                         <span>Exp: {{expiryDate | date:'dd-MM-yyyy'}}</span>
                                     </div>
 
-                                    <span *ngIf="!hidePrice" class="bcodep text-end">Rs.{{(item.salePrice  *
+                                    <span *ngIf="!hidePrice && hideDisc" class="bcodep text-end">Rs.{{(item.salePrice *
                                         item.quantity) |number:'1.0-0'}}</span>
+                                    <span *ngIf="!hidePrice && !hideDisc" class="bcodep text-end">Rs.{{(item.salePrice *
+                                        item.quantity)- (item.discInR) |number:'1.0-0'}}</span>
+                                </div>
+
+                                <div id="PrintDiv" class="border" *ngIf="formateID == 2">
+
+
+                                    <span class="cmpName" *ngIf="!hideCmp">{{companyName}}</span>
+                                    <span class="product-title" [ngClass]="hideBarcode ? '': 'mb-8px'"
+                                        *ngIf="!showLess && !hideName">{{item.flavourTitle ? item.flavourTitle :
+                                        item.productTitle}}</span>
+                                    <span class="bcodet" [ngClass]="hideBarcode ? '': 'mb-8px'"
+                                        *ngIf="showLess">{{item.flavourTitle ? item.flavourTitle : item.productTitle
+                                        |slice:0:24}}...</span>
+
+
+                                    <div class="retail-price">
+                                        <span class="label">Retail Price :</span>
+                                        <span class="cross-text">
+                                            <span>{{item.mrp |number:'1.0-0'}}</span>
+                                        </span>
+                                    </div>
+                                    <div class="our-price" *ngIf="!hidePrice && hideDisc">
+                                        <span class="label">Our Price :</span>
+                                        <span> {{(item.salePrice *
+                                            item.quantity) |number:'1.0-0'}}</span>
+                                    </div>
+                                    <!-- <span *ngIf="!hidePrice && hideDisc" class="bcodep2 text-end">Our Price
+                                        Rs.{{(item.salePrice *
+                                        item.quantity) |number:'1.0-0'}}</span>
+                                    <span *ngIf="!hidePrice && !hideDisc" class="bcodep2 text-end">Rs.{{(item.salePrice
+                                        *
+                                        item.quantity)- (item.discInR) |number:'1.0-0'}}</span> -->
                                 </div>
 
 

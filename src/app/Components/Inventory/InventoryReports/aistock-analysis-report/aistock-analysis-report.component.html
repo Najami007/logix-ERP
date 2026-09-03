@@ -1,0 +1,211 @@
+<div class="container-fluid body ">
+
+    <div class=" p-2 mt-2">
+
+        <div class="row">
+
+
+            <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                <mat-label>From Date</mat-label>
+                <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
+                <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
+                <mat-datepicker #sDate></mat-datepicker>
+            </mat-form-field>
+
+
+
+            <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                <mat-label>To Date</mat-label>
+                <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
+                <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+                <mat-datepicker #eDate></mat-datepicker>
+            </mat-form-field>
+
+
+
+            <div class="col-md-2">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Type</mat-label>
+
+                    <mat-select [(ngModel)]="catType" name="catType">
+
+                        <mat-option value="Cat">Categorywise</mat-option>
+                        <mat-option value="SubCat">Sub Categorywise</mat-option>
+                        <mat-option value="Brand">Brandwise</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-2">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label></mat-label>
+
+                    <mat-select [(ngModel)]="searchType" name="searchType">
+
+                        <mat-option value="simple">Simple</mat-option>
+                        <mat-option value="ai">AI Analysis</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <!-- <div class="col-md-2" *ngIf="catType == 'Cat' || catType == 'SubCat'">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Category</mat-label>
+
+                    <mat-select [(ngModel)]="CategoryID" #category (selectionChange)="getSubCategory()"
+                        name="pCategory">
+                        <mat-option><ngx-mat-select-search #catsearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of CategoriesList | filter:catsearch.value"
+                            [value]="item.categoryID">{{item.categoryTitle}}</mat-option>
+
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-md-2 " *ngIf="catType == 'SubCat'">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Sub Category</mat-label>
+
+                    <mat-select [(ngModel)]="SubCategoryID" #subCategory name="pSubCategory">
+                        <mat-option><ngx-mat-select-search #subcatsearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of SubCategoriesList| filter:subcatsearch.value "
+                            [value]="item.subCategoryID">{{item.subCategoryTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-2 " *ngIf="catType == 'Brand'">
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Brand</mat-label>
+                    <mat-select [(ngModel)]="BrandID" #brand>
+                        <mat-option><ngx-mat-select-search #brandSearch [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of BrandList | filter:brandSearch.value"
+                            [value]="item.brandID">{{item.brandTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div> -->
+
+            <div class="col-md-3 d-flex flex-wrap" *ngIf="crudList.r">
+                <!-- <button class="btn-rpt-success col-lg-3  me-1" (click)="getReport('summary')">Summary</button> -->
+                <div class="col-md-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('detail')">Get
+                        Report</button></div>
+                <div class="col-md-4 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
+                <div class=" col-md-4"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
+
+
+            </div>
+        </div>
+
+
+        <div id="PrintDiv">
+
+            <!-------------------------    Top Logo Section -------------------->
+
+            <div class="hide">
+                <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                    <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset=""
+                            [height]="item.logo1Height" [width]="item.logo1Width">
+                    </span>
+                    <div class="d-flex flex-column">
+                        <span class="companyName">{{item.companyName}}</span>
+                        <span class="rptTitle">Purchase Summary Report</span>
+                        <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}})
+                            <b>To:</b>
+                            {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
+                    </div>
+                    <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                            height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                    </span>
+
+
+                </div>
+            </div>
+
+
+
+            <table class="table-logix" id="summaryTable">
+                <thead>
+
+                    <tr>
+                        <th rowspan="2">S#</th>
+
+                        <th rowspan="2">Title</th>
+                        <th rowspan="2">Opening Stock</th>
+                        <th class="text-center" colspan="4">Stock In</th>
+                        <th class="text-center" colspan="4">Stock Out</th>
+                        <th rowspan="2" class="border-start border-white">Closing Stock</th>
+                        <th rowspan="2" class="border-start border-white">AI Observation</th>
+
+
+                    </tr>
+                    <tr>
+                        <th class="border-top border-white">Purchase</th>
+                        <th class="border-top border-white">Sale Return</th>
+                        <th class="border-top border-white">Adjustment In</th>
+                        <th class="border-top border-white">Total In</th>
+
+                        <th class="border-top border-white">Sale</th>
+                        <th class="border-top border-white">Purchase Return</th>
+                        <th class="border-top border-white">Adjustment Out </th>
+                        <th class="border-top  border-white ">Total Out</th>
+
+                    </tr>
+
+
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of DataList index as index">
+                        <td class="text-center">{{index + 1}}</td>
+
+                        <td>{{item.Title}}</td>
+                        <td class="text-end">{{item.OpeningStockAmount | number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.PurchaseAmount |number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.SaleReturnAmount |number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.AdjustmentInAmount |number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.PurchaseAmount + item.SaleReturnAmount + item.AdjustmentInAmount
+                            |number:'1.0-0'}}</td>
+
+                        <td class="text-end">{{item.SaleAmount |number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.PurchaseReturnAmount |number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.AdjustmentOutAmount |number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.SaleAmount + item.PurchaseReturnAmount + item.AdjustmentOutAmount
+                            |number:'1.0-0'}}</td>
+
+
+                        <td class="text-end">{{item.ClosingStockAmount |number:'1.0-1'}}</td>
+                        <td >{{item.Observation}}</td>
+
+
+
+                    </tr>
+                    <tr class="fw-bold text-end">
+                        <td colspan="2"></td>
+                        <td>{{openingTotal|number:'1.0-1'}}</td>
+                        <td>{{purchaseTotal|number:'1.0-1'}}</td>
+                        <td>{{saleReturnTotal|number:'1.0-1'}}</td>
+                        <td>{{adjustmentInTotal|number:'1.0-1'}}</td>
+                        <td>{{netTotalIn|number:'1.0-1'}}</td>
+                        <td>{{saleTotal|number:'1.0-1'}}</td>
+                        <td>{{purchaseReturnTotal|number:'1.0-1'}}</td>
+                        <td>{{adjustmentOutTotal|number:'1.0-1'}}</td>
+                        <td>{{netTotalOut|number:'1.0-1'}}</td>
+                        <td>{{closingTotal|number:'1.0-1'}}</td>
+
+
+                    </tr>
+
+                </tbody>
+
+
+            </table>
+
+
+
+        </div>
+    </div>
+
+
+
+</div>

@@ -22,15 +22,15 @@ export class ConfirmationModalComponent {
 
   }
 
-  title:any = 'Alert!';
-  modalText:any = 'Cofirm to Proceed!';
+  title: any = 'Alert!';
+  modalText: any = 'Cofirm to Proceed!';
 
 
-  save(){
-
+  save() {
+    this.dialogRef.close('1234');
   }
-  
-  closeDialogue(){
+
+  closeDialogue() {
     this.dialogRef.close('');
   }
 

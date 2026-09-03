@@ -1,0 +1,543 @@
+<div class="container-fluid py-3 bg-light body">
+
+    <!-- Main Card -->
+    <div class="card border-0 shadow-sm rounded-4">
+
+
+
+        <!-- ================= FORM ================= -->
+
+        <div class="card-body ">
+
+            <div class="row">
+
+
+
+
+                <!-- LEFT -->
+
+                <div class="col-12 col-md-6 col-xl-4 mb-3">
+
+                    <div class="row">
+
+
+                        <div class="col-12">
+
+                            <mat-form-field appearance="outline"  class="w-100 matSmall">
+                                <mat-label>Invoice Date</mat-label>
+                                <input [(ngModel)]="invoiceDate" [disabled]="disableDate" readonly="true" matInput type="text" name="voucherDate"
+                                    [matDatepicker]="voucherDate">
+                                <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
+                                <mat-datepicker #voucherDate></mat-datepicker>
+                            </mat-form-field>
+
+                        </div>
+                        <!-- Customer -->
+
+                        <div class="col-12">
+
+                            <mat-form-field appearance="outline" class="w-100 matSmall">
+                                <mat-label *ngIf="customerFeature">Customer</mat-label>
+                                <mat-select [(ngModel)]="partyID" [disabled]="!customerFeature" (selectionChange)="partySelect()" #supplier
+                                    name="customer">
+                                    <mat-option><ngx-mat-select-search #customerSearch [placeholderLabel]="'Search...'"
+                                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                            <mat-option [value]="0">Simple Customer</mat-option>
+                                    <mat-option *ngFor="let item of partyList |filter:customerSearch.value "
+                                        [value]="item.partyID">{{item.partyName}} <small
+                                            class="fs-10px">({{item.businessName}}) NTN/FTN -
+                                            {{item.ntn}}</small></mat-option>
+
+
+                                </mat-select>
+                                <mat-icon *ngIf="customerFeature" class="cursorPointer" (click)="addParty('open')" matSuffix>add</mat-icon>
+                            </mat-form-field>
+
+                        </div>
+
+
+
+                        <!-- Remarks -->
+
+                        <div class="col-12">
+
+                            <mat-form-field appearance="outline" class="w-100 matSmall">
+                                <mat-label>Remarks</mat-label>
+                                <textarea matInput [rows]="3" [(ngModel)]="billRemarks"></textarea>
+                            </mat-form-field>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-12 col-md-6 col-xl-2 mb-3">
+
+
+                    <div style="height: 230px;" class="border">
+
+                        <mat-card class="p-1 w-100" style="height: 230px;">
+                            <div class="text-center w-100 product-preview" *ngIf="tableDataList != ''" accesskey="i"
+                                (click)="this.global.showProductImage(this.productImage,0)">
+                                <img [src]="productImage" alt="Img not Found" height="140px">
+                            </div>
+                        </mat-card>
+
+
+                    </div>
+
+                </div>
+
+                <!-- RIGHT SUMMARY -->
+
+
+                <div class="col-12 col-md-6 col-xl-6">
+
+                    <div class="summary-card row">
+
+                        <div class="col-md-6">
+                            <div class="summary-row" style="line-height: 50px !important;">
+
+                                <h4> Total </h4>
+
+                                <h3 class="font-digit" style="font-size:30px !important;">{{subTotal |number:'1.0-1'}}</h3>
+
+                            </div>
+
+                            <hr>
+
+                            <div class="summary-row">
+                                <h4>Discount</h4>
+
+                                <div class="discount-area">
+                                    <input class="form-control text-end font-digit" id="disc" accesskey="t"
+                                        style="font-size: 1.5rem;" type="text" [(ngModel)]="discount"
+                                        (keyup)="getTotal()" autocomplete="off"
+                                        (keydown)="getTotal();this.global.handleNumKeys($event);focusto('#cash',$event)">
+                                </div>
+                            </div>
+
+
+
+                            <hr>
+
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+
+                                <h4>NET TOTAL</h4>
+
+                                <h2 class=" font-digit net-total" style="font-size:40px !important;">{{netTotal || 0|number:'1.0-1'}}</h2>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+
+
+                            <div class="summary-row" style="line-height: 45px !important;">
+
+                                <h4>GST</h4>
+                                <h3 class="font-digit" style="font-size:30px !important;">{{AdvTaxAmount|number:'1.0-1'}}</h3>
+
+                            </div>
+
+                            <hr>
+
+
+                            <div class="summary-row">
+                                <h4> Cash Received </h4>
+                                <div class="discount-area">
+                                    <input class="form-control text-end font-digit" [disabled]="paymentType == 'Bank' "
+                                        autocomplete="off" id="cash" accesskey="c" style="font-size: 1.5rem;"
+                                        type="text" [(ngModel)]="cash" (keyup)="getTotal()"
+                                        (keydown)="getTotal();this.global.handleNumKeys($event);focusto('#save',$event)">
+                                </div>
+
+                            </div>
+
+
+                            <hr>
+
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+
+                                <h4>Change</h4>
+
+                                <h3 class="net-total font-digit" style="font-size:40px !important;">{{change || 0|number:'1.0-1'}}</h3>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+    <!-- ================= PRODUCT DETAILS ================= -->
+
+    <div class="card border-0 shadow-sm rounded-4 mt-3">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between  mb-3">
+
+
+                <!-- Search -->
+
+                <div class="col-md-6">
+                    <!-- 
+                    <label class="form-label fw-semibold">
+                        1. Search (Code / Search with Name)
+                    </label> -->
+
+                    <div class="input-group">
+                        <input class="form-control form-control-lg searchProduct" placeholder="Search by code or name..."
+                            [(ngModel)]="PBarcode"
+                            (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event);focusto('#cash',$event);"
+                            (focus)="rowFocused = -1" autofocus autocomplete="off" accesskey="b">
+
+
+                        <span class="input-group-text bg-white" matTooltip="Search Product By Name (alt + n)">
+                            <mat-icon accesskey="n" (click)="searchProductByName()">search</mat-icon>
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 ps-4 row justify-content-end">
+
+                    <div class="col-md-3">
+                        <button class="btn btn-success w-100 form-control" id="save"
+                            (click)="save(paymentType,true,true)" accesskey="P">Save & <u>P</u>rint</button>
+                        <button class="w-100 btnsave d-none" (click)="save(paymentType,false,true)"
+                            accesskey="."><u>S</u>ave</button>
+                    </div>
+                    <div class="col-md-3 pb-1">
+                        <button class="btnduplicate w-100 form-control" accesskey="u" *ngIf="crudList.u"
+                            (click)="openDuplicateModal()">D<u>u</u>plicate</button>
+                    </div>
+
+                    <div class="col-md-3">
+                        <button accesskey="o" class="btnload pt-2 d-flex justify-content-between w-100 form-control"
+                            (click)="openPaymentModal()">
+                            <span><u>O</u>ther</span> <mat-icon>keyboard_arrow_right</mat-icon>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table class="table table-hover product-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th width="90">Serial No.</th>
+
+                            <th width="340">Product Description</th>
+
+
+                            <th width="140">Qty</th>
+
+                            <th width="150">Price</th>
+
+                            <th width="130">GST (%)</th>
+
+                            <th>Price Inc Gst</th>
+
+                            <th *ngIf="discFeature">Disc Rs</th>
+                            <th *ngIf="discFeature">Disc %</th>
+                            <th>Total</th>
+                            <th *ngIf="prodDetailFeature">Detail</th>
+                            <th *ngIf="showSaleAQFeature">AQ</th>
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <!-- Row 1 -->
+
+                        <tr *ngFor="let item of tableDataList index as index"
+                            [ngClass]="index == rowFocused ? 'bg-dg' : ''">
+
+                            <td class="text-center cursorPointer"
+                                [matTooltip]="showSaleCPFeature? item.costPrice + ' , ' + item.avgCostPrice : '' ">
+                                {{index+1}}</td>
+
+                            <td>{{item.productTitle}} <b>({{item.barcode}})</b> <small>
+                                    {{item.flavourTitle}}</small></td>
+
+                            <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
+                                    [readonly]="item.packing > 1"
+                                    (keydown)="handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item)"
+                                    (keyup)="getTotal();showImg(item);changeValue(item)"
+                                    (click)="rowFocused = index;editDiscProdQty(item)" [accessKey]="index +1 "
+                                    class="form-control qty{{index}} text-center" style="width: 80px;"></td>
+
+
+                            <td class=" cursorPointer" (click)="editSP(item)">{{item.salePrice
+                                |number:'1.0-3'}}
+                            </td>
+                            <td class=" cursorPointer" (click)="editGst(item)">{{item.gst}}</td>
+                            <td class=" cursorPointer" (click)="editSP(item)">{{item.salePrice +
+                                (item.salePrice
+                                * (item.gst / 100)) |number:'1.0-3'}}</td>
+
+                            <td *ngIf="discFeature" class=" cursorPointer"
+                                (click)="tempProdData = item;editDR(item)">{{item.discInR
+                                |number:'1.0-3'}}</td>
+                            <td *ngIf="discFeature" class=" cursorPointer"
+                                (click)="tempProdData = item;editDP(item)">{{item.discInP
+                                |number:'1.0-3'}}</td>
+
+                            <td class=" cursorPointer" (click)="EditTotal(item)">{{((item.salePrice +
+                                (item.salePrice * (item.gst / 100)) ) *
+                                item.quantity)-(item.discInR * item.quantity)|number:'1.0-3'}}</td>
+                            <!-- <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-3'}}</td> -->
+
+                            <td class="text-center text-white" [ngClass]="item.aq > 0 ? 'bgSuccessLight' : 'bg-danger'"
+                                *ngIf="showSaleAQFeature">
+                                {{item.aq |number:'1.0-3'}}</td>
+
+                            <td class="cursorPointer text-danger "><mat-icon
+                                    (click)="delRow(item)">close</mat-icon></td>
+
+                        </tr>
+
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+</div>
+
+
+
+
+
+
+<!----------------Modal Window For Products list ---------->
+
+
+
+<div class="modal fade" id="prodModal" tabindex="-1" role="dialog" aria-labelledby="paymentMehtodLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl  modal-dialog-centered ">
+        <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+
+            <div class="modal-body">
+                <app-product-modal [productList]="productList" (reloadProdEmitter)="getProducts()"
+                    (addProductEmitter)="holdDataFunction($event)"></app-product-modal>
+
+            </div>
+
+            <div class="modal-footer bg-mf-blue">
+                <button type="button" class="btnclose" data-bs-dismiss="modal">Close</button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------------------------->
+
+
+<!----------------Modal Window for Payment Mehtod ---------->
+
+
+
+<div class="modal fade" id="paymentMehtod" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+    aria-labelledby="paymentMehtodLabel">
+    <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered ">
+        <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+            <div class="modal-header">
+                <h2 class="modal-title" id="paymentMehtodLabel">Payment Method</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="onPaymentModalClose()"></button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="d-flex justify-content-between">
+                    <h2 class="text-center text-success">Bill Total: <b class="font-digit">{{netTotal |
+                            number:'1.0-1'}}</b></h2>
+                    <h2 class="text-center text-danger">Change: <b class="font-digit">{{ change |
+                            number:'1.0-1'}}</b></h2>
+                </div>
+
+                <mat-form-field appearance="outline" *ngIf="disableDate" class="w-100 matSmall">
+                    <mat-label>Invoice Date</mat-label>
+                    <input [(ngModel)]="InvDate" readonly="true" matInput type="text" name="voucherDate"
+                        [matDatepicker]="voucherDate">
+                    <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
+                    <mat-datepicker #voucherDate></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-lg-6 pe-1 matSmall">
+                    <mat-label>Customer Name</mat-label>
+                    <input type="text" matInput [(ngModel)]="customerName" />
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-lg-6 w-50 matSmall">
+                    <mat-label>Customer Mobile</mat-label>
+                    <input matInput type="text" maxlength="12" [textMask]="{mask:mobileMask}"
+                        [(ngModel)]="customerMobileno" />
+                    <mat-hint class="w-100 text-end fw-bold text-secondary">{{customerMobileno.length}} /
+                        12</mat-hint>
+                </mat-form-field>
+
+                <!-- <mat-form-field appearance="outline" class="w-100 matSmall" *ngIf="customerFeature">
+                        <mat-label>Customer</mat-label>
+                        <mat-select class="w-100" [(ngModel)]="partyID" (selectionChange)="partySelect()" #supplier name="customer">
+                            <mat-option [value]="0">WalkIn Customer</mat-option>
+                            <mat-option *ngFor="let item of partyList "
+                                [value]="item.partyID">{{item.partyName}}</mat-option>
+
+                        </mat-select>
+                        <mat-icon class="cursorPointer" (click)="addParty()" matSuffix>add</mat-icon>
+                    </mat-form-field> -->
+
+                <div class="w-100 mb-3" *ngIf="customerFeature">
+                    <ng-select class="w-100 custom" placeholder="Customer" appearance="outline" [(ngModel)]="partyID"
+                        (ngModelChange)="partySelect()" name="customer">
+                        <ng-option [value]="0">WalkIn Customer</ng-option>
+                        <ng-option *ngFor="let item of partyList " [value]="item.partyID">
+                            {{item.partyName}}</ng-option>
+                    </ng-select>
+                </div>
+
+
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Remarks</mat-label>
+                    <textarea matInput rows="1" [(ngModel)]="billRemarks"></textarea>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="w-100 matSmall">
+                    <mat-label>Payment Type</mat-label>
+                    <mat-select #pType [(ngModel)]="paymentType" (selectionChange)="cash = 0;getTotal()">
+                        <mat-option value="Credit" *ngIf="customerFeature">Credit</mat-option>
+                        <mat-option value="Cash">Cash</mat-option>
+                        <mat-option value="Bank">Bank</mat-option>
+                        <mat-option value="Split">Split</mat-option>
+
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-card class=" p-2 bg-warning" *ngIf="paymentType !== ''">
+
+                    <div class="d-flex justify-content-between text-center mb-2"
+                        *ngIf="paymentType == 'Cash' || paymentType == 'Split' || paymentType == 'Credit'">
+                        <div style="width: 150px;"></div>
+                        <mat-label style="font-size: 25px;" class="text-end">Cash:</mat-label>
+                        <input type="number" style="font-size: 25px;width: 120px;" class="font-digit text-end"
+                            (keydown)="this.global.handleNumKeys($event);getTotal()" (keyup)="getTotal()"
+                            [(ngModel)]="cash" />
+                    </div>
+
+                    <div class="d-flex justify-content-between  "
+                        *ngIf="paymentType == 'Bank' || paymentType == 'Split' || paymentType == 'Credit'">
+                        <select [(ngModel)]="bankCoaID " style="width: 150px;">
+                            <option *ngFor="let item of bankCoaList" [value]="item.coaID">{{item.coaTitle}}</option>
+                        </select>
+                        <mat-label style="font-size: 25px;">Bank:</mat-label>
+
+                        <input type="number" [disabled]="paymentType == 'Bank' || paymentType == 'Split'"
+                            style="font-size: 25px;width: 120px;" class="font-digit text-end"
+                            (keydown)="this.global.handleNumKeys($event);getTotal()" (keyup)="getTotal()"
+                            [(ngModel)]="bankCash" />
+                    </div>
+
+                </mat-card>
+
+
+            </div>
+
+            <div class="modal-footer bg-mf-blue">
+                <button class="btnText" [disabled]="isValidSale" id="refresh" accesskey="r"
+                    (click)="isValidSale =  true">Refresh</button>
+                <button class="btnsave" (click)="save(pType.value,true,true)">Save</button>
+                <button type="button" class="btnclose" data-bs-dismiss="modal"
+                    (click)="onPaymentModalClose()">Close</button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------------------------->
+
+<!------------------------------ Design For Bill Pirnt  --------------------->
+
+
+<app-mrq-sale-bill-print id="print-bill" class="hide"></app-mrq-sale-bill-print>
+
+
+<!---------------------------------------------------------------------------------->
+
+
+
+
+
+<!------------------------- Modal Window for Saved Bill =----------------->
+
+
+<div class="modal fade" id="SavedBillModal" tabindex="-1" aria-labelledby="SavedBillModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-xl">
+        <div class="modal-content">
+
+            <app-saved-bill (changePaymentEmitter)="changePayment($event)" (sendToFbrEmitter)="sendToFbr($event)"
+                (printDuplicateEmitter)="printDuplicateBill($event)" (billDetailEmitter)="billDetails($event)"
+                (postBillEmitter)="postSaleBill($event)" [savedbillList]="savedbillList"></app-saved-bill>
+
+
+            <app-digital-invoice-print id="print-bill" class="hide"></app-digital-invoice-print>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--------------------- Add Party --------------->
+
+<div class="modal" id="addPartyModal" tabindex="-1" data-bs-backdrop="true" aria-labelledby="DocumentModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="DocumentModalLabel">Add Party</h2>
+                <button type="button" class="btn-close" (click)="addParty('close')" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <app-addparty (updateEmitter)="addParty('close')"></app-addparty>
+            </div>
+        </div>
+    </div>
+</div>

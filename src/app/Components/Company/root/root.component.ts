@@ -16,62 +16,62 @@ import { Router } from '@angular/router';
   templateUrl: './root.component.html',
   styleUrls: ['./root.component.scss']
 })
-export class RootComponent  implements OnInit{
-  crudList:any = {c:true,r:true,u:true,d:true};
+export class RootComponent implements OnInit {
+  crudList: any = { c: true, r: true, u: true, d: true };
 
-  constructor(private http:HttpClient,
-    private msg:NotificationService,
+  constructor(private http: HttpClient,
+    private msg: NotificationService,
     private dialogue: MatDialog,
-    private globaldata:GlobalDataModule,
-    private app:AppComponent,
-    private route:Router
-    
-    ){
+    private globaldata: GlobalDataModule,
+    private app: AppComponent,
+    private route: Router
 
-      this.globaldata.getMenuList().subscribe((data)=>{
-        this.crudList = data.find((e:any)=>e.menuLink == this.route.url.split("/").pop());
-      })
+  ) {
 
-    }
+    this.globaldata.getMenuList().subscribe((data) => {
+      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
+    })
+
+  }
   ngOnInit(): void {
     this.globaldata.setHeaderTitle('Rout');
-    this.get();
+    this.getRoutes();
   }
 
 
-  
-  routTitle:any;
-  routID:any;
-  description:any;
+
+  routeTitle: any;
+  routeID: any;
+  description: any;
   actionbtn = 'Save';
-  txtSearch:any;
+  txtSearch: any;
 
-  departmentList:any = [];
-
-
-
-
-
-
-  
+  departmentList: any = [];
 
 
 
 
 
-  save(){
 
-    if(this.routTitle == '' || this.routTitle == undefined){
+
+
+
+
+
+
+  save() {
+
+    if (this.routeTitle == '' || this.routeTitle == undefined) {
       this.msg.WarnNotify('Enter Rout Name')
-    }else{
-      if(this.actionbtn == 'Save'){
-        this.insert();
-      }else if(this.actionbtn == 'Update'){
-        
-        this.globaldata.openPinCode().subscribe(pin=>{
-        
-          if(pin != ''){
-            this.update(pin);
+    } else {
+      if (this.actionbtn == 'Save') {
+        this.insert('insert', '');
+      } else if (this.actionbtn == 'Update') {
+
+        this.globaldata.openPinCode().subscribe(pin => {
+
+          if (pin != '') {
+            this.insert('update', pin);
           }
         }
 
@@ -81,21 +81,26 @@ export class RootComponent  implements OnInit{
   }
 
 
-  insert(){
-    $(".loaderDark").show()
-    this.http.post(environment.mainApi+this.globaldata.companyLink+'insertrout',{
-      RoutTitle: this.routTitle,
-      RoutDescription:this.description,
+  insert(type: any, pin: any) {
+
+    var postData = {
+      PinCode: pin,
+      RouteID: this.routeID,
+      RouteTitle: this.routeTitle,
       UserID: this.globaldata.getUserID()
-    }).subscribe(
-      (Response:any)=>{
-        if(Response.msg == 'Data Saved Successfully'){
+    }
+
+    var url = type == 'insert' ? 'insertroute' : 'updateroute'
+    $(".loaderDark").show()
+    this.http.post(environment.mainApi + this.globaldata.inventoryLink + url, postData).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
           this.msg.SuccessNotify(Response.msg);
-          this.get();
+          this.getRoutes();
           this.reset();
           $(".loaderDark").fadeOut(500);
-  
-        }else{
+
+        } else {
           this.msg.WarnNotify(Response.msg);
           $(".loaderDark").fadeOut(500);
         }
@@ -103,103 +108,66 @@ export class RootComponent  implements OnInit{
     )
 
   }
-  
-  update(pin:any){
-    $(".loaderDark").show()
-    this.http.post(environment.mainApi+this.globaldata.companyLink+'updaterout',{
-      PinCode:pin,
-     RoutID : this.routID,
-     RoutTitle: this.routTitle,
-     RoutDescription:this.description,
-      UserID: this.globaldata.getUserID()
-    }).subscribe(
-      (Response:any)=>{
-        if(Response.msg == 'Data Updated Successfully'){
-          this.msg.SuccessNotify(Response.msg);
-          this.get();
-          this.reset();
-          $(".loaderDark").fadeOut(500);
-          
-        }else{
-          this.msg.WarnNotify(Response.msg);
-          $(".loaderDark").fadeOut(500);
-        }
-      }
-    )
-  }
 
 
-  reset(){
-    this.routTitle = '';
+
+
+  reset() {
+    this.routeTitle = '';
     this.description = '';
     this.actionbtn = 'Save';
   }
 
 
-  
 
 
 
-  get(){
-    this.http.get(environment.mainApi+this.globaldata.companyLink+'getrout').subscribe(
-      (Response)=>{
+
+  getRoutes() {
+    this.http.get(environment.mainApi + this.globaldata.inventoryLink + 'getroute').subscribe(
+      (Response) => {
         this.departmentList = Response;
       },
-      (Error)=>{
+      (Error) => {
         this.msg.WarnNotify('Error Occured')
       }
     )
   }
 
 
-  edit(row:any){
-  this.routID = row.routID
-  this.routTitle = row.routTitle;
-  this.description = row.routDescription;
-  this.actionbtn = 'Update';
+  edit(row: any) {
+    this.routeID = row.routeID
+    this.routeTitle = row.routeTitle;
+    this.description = row.routeDescription;
+    this.actionbtn = 'Update';
   }
 
 
-  delete(row:any){
+  delete(row: any) {
 
-    this.globaldata.openPinCode().subscribe(pin=>{
-      if(pin != ''){
+    this.globaldata.openPinCode().subscribe(pin => {
+      if (pin != '') {
 
+        this.http.post(environment.mainApi + this.globaldata.inventoryLink + 'deleteroute', {
+          PinCode: pin,
+          RouteID: row.routeID,
+          UserID: this.globaldata.getUserID(),
+        }).subscribe(
+          (Response: any) => {
+            if (Response.msg == 'Data Deleted Successfully') {
+              this.msg.SuccessNotify(Response.msg);
 
-        Swal.fire({
-          title:'Alert!',
-          text:'Confirm to Delete the Data',
-          position:'center',
-          icon:'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Confirm',
-        }).then((result)=>{
-          if(result.isConfirmed){
-        this.app.startLoaderDark();    
-          this.http.post(environment.mainApi+this.globaldata.companyLink+'deleterout000',{
-            PinCode:pin,
-            RoutID:row.routID,
-            UserID:this.globaldata.getUserID(),
-          }).subscribe(
-            (Response:any)=>{
-              if(Response.msg == 'Data Deleted Successfully'){
-                this.msg.SuccessNotify(Response.msg);
-                
-                this.get();
-                this.app.stopLoaderDark();
-              }else{
-                this.msg.WarnNotify(Response.msg);
-                this.app.stopLoaderDark();
-              }
+              this.getRoutes();
+              this.app.stopLoaderDark();
+            } else {
+              this.msg.WarnNotify(Response.msg);
+              this.app.stopLoaderDark();
             }
-          )
+          }
+        )
 
-          }})
-        
 
-        
+
       }
     })
 

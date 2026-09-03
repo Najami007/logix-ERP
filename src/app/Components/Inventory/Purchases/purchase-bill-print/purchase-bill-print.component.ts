@@ -32,6 +32,7 @@ export class PurchaseBillPrintComponent {
   constructor(
     private http: HttpClient,
     public global: GlobalDataModule,
+    private msg:NotificationService
   ) {
 
 
@@ -96,6 +97,11 @@ export class PurchaseBillPrintComponent {
     this.myBillStatus = item.approvedStatus;
     this.getBillDetail(item.invBillNo).subscribe(
       (Response: any) => {
+
+        if(Response == null){
+          this.msg.WarnNotify('Null Returned');
+        };
+
         this.setInvoiceTitle(Response[0].invType);
         this.myInvType = Response[0].invType;
         this.myDiscType = Response[0].discType;

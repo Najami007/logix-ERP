@@ -60,14 +60,10 @@ export class AccountSummaryReportComponent implements OnInit {
 
   fromDate: any = new Date();
   toDate: any = new Date();
-  TrialBalanceData: any = [];
+  DataList: any = [];
 
-  oDebitTotal: any = 0;
-  oCreditTotal: any = 0;
   debitTotal: any = 0;
   creditTotal: any = 0;
-  cDebitTotal: any = 0;
-  cCreditTotal: any = 0;
 
   notesList: any = [];
 
@@ -85,78 +81,51 @@ export class AccountSummaryReportComponent implements OnInit {
   }
 
 
-  getTrialBalance(param: any) {
-    if (this.projectID == 0 && param == 'project') {
-      this.msg.WarnNotify('Select Project')
-    } else {
-      this.getNotes();
-      this.projectName = '';
+  getReport(param: any) {
 
-      if (this.projectID != 0) {
-        this.projectName = this.projectList.find((e: any) => e.projectID == this.projectID).projectTitle;
-      }
-
-      this.rptType = 'summary1';
-
-      this.TrialBalanceData = [];
-      this.app.startLoaderDark();
-
-      this.oDebitTotal = 0;
-      this.oCreditTotal = 0;
-      this.debitTotal = 0;
-      this.creditTotal = 0;
-      this.cDebitTotal = 0;
-      this.cCreditTotal = 0;
-      this.TrialBalanceData = [];
-      this.http.get(environment.mainApi + this.globalData.accountLink + 'GetTrailBalanceRpt?fromdate='
-        + this.globalData.dateFormater(this.fromDate, '-') + '&todate=' + this.globalData.dateFormater(this.toDate, '-') + '&projectID=' + this.projectID).subscribe(
-          (Response: any) => {
-            if (Response.length == 0 || Response == null) {
-              this.globalData.popupAlert('Data Not Found!');
-              this.app.stopLoaderDark();
-              return;
-            }
-            this.TrialBalanceData = Response.length > 0 ? Response.filter((e: any) => e.debit > 0 || e.credit > 0) : [];
-
-            if (Response != null) {
-
-              for (var i = 0; i < this.TrialBalanceData.length; i++) {
-
-                if (this.TrialBalanceData[i].coaTypeID == 2) {
-                  this.TrialBalanceData[i].noteID = 0.2;
-                }
-
-                if (this.TrialBalanceData[i].coaTypeID == 3) {
-                  this.TrialBalanceData[i].noteID = 0.3;
-                }
-                this.oDebitTotal += this.TrialBalanceData[i].oDebit;
-                this.oCreditTotal += this.TrialBalanceData[i].oCredit;
-                this.debitTotal += this.TrialBalanceData[i].debit;
-                this.creditTotal += this.TrialBalanceData[i].credit;
-                this.cDebitTotal += this.TrialBalanceData[i].cDebit;
-                this.cCreditTotal += this.TrialBalanceData[i].cCredit;
-
-
-                this.notesList.forEach((n: any) => {
-
-                  if (n.noteID == this.TrialBalanceData[i].noteID) {
-                    n.debitTotal += this.TrialBalanceData[i].cDebit;
-                    n.creditTotal += this.TrialBalanceData[i].cCredit;
-                  }
-
-                });
-
-              }
-            }
-            this.app.stopLoaderDark();
-          },
-          (Error) => {
-            this.app.stopLoaderDark();
-            this.msg.WarnNotify('Error Occured')
-          }
-        )
-
+    if (param === 'project' && this.projectID === 0) {
+      this.msg.WarnNotify('Select Project');
+      return;
     }
+
+
+    this.projectName =
+      this.projectList.find((e: any) => e.projectID === this.projectID)?.projectTitle || '';
+
+    this.rptType = 'summary1';
+
+    this.rptType = 'summary1';
+    this.DataList = [];
+    this.debitTotal = 0;
+    this.creditTotal = 0;
+
+    const fromDate = this.globalData.dateFormater(this.fromDate, '-');
+    const toDate = this.globalData.dateFormater(this.toDate, '-');
+
+    this.http.get(`${environment.mainApi}${this.globalData.accountLink}GetTrailBalanceRpt?fromdate=${fromDate}&todate=${toDate}&projectID=${this.projectID}`).subscribe(
+      (Response: any) => {
+        if (!Response || Response.length === 0) {
+          this.globalData.popupAlert('Data Not Found!');
+          this.app.stopLoaderDark();
+          return;
+        }
+        this.DataList = Response
+          .filter(item => item.debit > 0 || item.credit > 0)
+          .sort((a, b) => a.coaTypeID - b.coaTypeID);
+        for (var i = 0; i < this.DataList.length; i++) {
+          this.debitTotal += this.DataList[i].debit;
+          this.creditTotal += this.DataList[i].credit;
+        }
+
+        this.app.stopLoaderDark();
+      },
+      (Error) => {
+        this.app.stopLoaderDark();
+        this.msg.WarnNotify('Error Occured')
+      }
+    )
+
+
 
 
 
@@ -166,16 +135,8 @@ export class AccountSummaryReportComponent implements OnInit {
 
   getTotal(note: any) {
 
-    this.oDebitTotal = 0;
-    this.oCreditTotal = 0;
     this.debitTotal = 0;
     this.creditTotal = 0;
-    this.cDebitTotal = 0;
-    this.cCreditTotal = 0;
-    for (var i = 0; i < this.TrialBalanceData.length; i++) {
-
-
-    }
   }
 
 

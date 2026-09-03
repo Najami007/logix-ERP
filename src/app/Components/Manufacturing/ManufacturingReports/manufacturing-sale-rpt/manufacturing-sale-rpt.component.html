@@ -53,13 +53,23 @@
             </mat-form-field>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-2">
 
             <mat-form-field appearance="outline" class="w-100  matSmall">
                 <mat-label>Type</mat-label>
                 <mat-select [(ngModel)]="rptType" (selectionChange)="reset()">
                     <mat-option value="ORDER">Order Report</mat-option>
                     <mat-option value="S">Sale Report</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        
+        <div class="col-md-2">
+
+            <mat-form-field appearance="outline" class="w-100  matSmall">
+                <mat-label>Formate</mat-label>
+                <mat-select [(ngModel)]="formateTypeID" (selectionChange)="reset()">
+                    <mat-option *ngFor="let item of formateTypeList" [value]="item.id">{{item.title}}</mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
@@ -106,7 +116,7 @@
         </div>
 
         <div id="printContainer">
-            <table class="table-logix">
+            <table class="table-logix" *ngIf="formateTypeID == 1">
                 <thead>
                     <tr>
                         <th>S#</th>
@@ -133,7 +143,7 @@
                         <td>{{item.deliverTo}}</td>
                         <td>{{item.deliveryDate | date:'dd-MM-yyyy'}}</td>
                         <td>{{item.deliveryAddress}}</td>
-                        <td>{{item.shpCmpName}}</td>
+                        <td>{{item.transportPartyName}}</td>
                         <td class="text-end" *ngIf="rptType == 'S'">{{item.billTotal | number:'1.0-0'}}</td>
                         <td class="text-end" *ngIf="rptType == 'S'">{{item.billDiscount | number:'1.0-0'}}</td>
                         <td class="text-end">{{item.netTotal | number:'1.0-0'}}</td>
@@ -147,6 +157,53 @@
                 </tbody>
 
             </table>
+
+              <table class="table-logix" *ngIf="formateTypeID == 2">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Inv #</th>
+                        <th>Date</th>
+                        <th>Project</th>
+                        <th>Customer</th>
+                        <th>Item</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Labour</th>
+                        <th>Total</th>
+                        <!-- <th>Shipping Company</th>
+                        <th *ngIf="rptType == 'S'">Bill Total</th>
+                        <th *ngIf="rptType == 'S'">Bill Disc</th>
+                        <th>Net Total</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of DataList index as index">
+                        <td>{{index + 1}}</td>
+                        <td>{{item.invBillNo}}</td>
+                        <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.projectTitle}}</td>
+                        <td>{{item.partyName}}</td>
+                        <td>{{item.productTitle}}</td>
+                        <td class="text-center">{{item.quantity  | number:'1.0-1'}}</td>
+                        <td class="text-end">{{item.salePrice | number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.loadingLabourCharges | number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.quantity * (item.salePrice + item.loadingLabourCharges)  | number:'1.0-1'}}</td>
+                        <!-- <td>{{item.transportPartyName}}</td>
+                        <td class="text-end" *ngIf="rptType == 'S'">{{item.billTotal | number:'1.0-0'}}</td>
+                        <td class="text-end" *ngIf="rptType == 'S'">{{item.billDiscount | number:'1.0-0'}}</td>
+                        <td class="text-end">{{item.netTotal | number:'1.0-0'}}</td> -->
+                    </tr>
+                    <tr>
+                        <td colspan="9" class="fw-bold text-center">Total</td>
+                        <!-- <td class="text-end fw-bold" *ngIf="rptType == 'S'">{{billTotal | number:'1.0-0'}}</td>
+                        <td class="text-end fw-bold" *ngIf="rptType == 'S'">{{billDiscountTotal | number:'1.0-0'}}</td> -->
+                        <td class="text-end fw-bold">{{netTotal | number:'1.0-0'}}</td>
+                    </tr>
+                </tbody>
+
+            </table>
+
 
         </div>
 

@@ -28,6 +28,7 @@ import { OrderDetailComponent } from './order-management/order-detail/order-deta
 import { OrderPrintComponent } from './order-management/order-print/order-print.component';
 import { MobUserListComponent } from './OrderReports/mob-user-list/mob-user-list.component';
 import { AppHomePanelComponent } from './app-home-panel/app-home-panel.component';
+import { ModifyOrderComponent } from './order-management/modify-order/modify-order.component';
 
 
 
@@ -74,7 +75,8 @@ export const deliveryRoutes: Route[] = [
     OrderDetailComponent,
     OrderPrintComponent,
     MobUserListComponent,
-    AppHomePanelComponent
+    AppHomePanelComponent,
+    ModifyOrderComponent
   ],
   imports: [
     CommonModule,

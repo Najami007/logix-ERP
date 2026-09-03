@@ -570,6 +570,11 @@ searchCoa = ''
       return;
     }
 
+    if((this.addCoa.CoaType == 1 || this.addCoa.CoaType == 4 || this.addCoa.CoaType == 5) && this.addCoa.TransactionAllowed && this.addCoa.NoteID == 0){
+      this.msg.WarnNotify('Select Note');
+      return;
+    }
+
 
 
 

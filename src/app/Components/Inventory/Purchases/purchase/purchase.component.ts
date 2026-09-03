@@ -44,11 +44,10 @@ export class PurchaseComponent implements OnInit {
   insertLocalStorageFeature = this.global.insertLocalStorageFeature;
   ImportFromServerFeature = this.global.ImportFromServerFeature;
   AddNewProductRestrictionFeature = this.global.AddNewProductRestrictionFeature;
-
-
-
   ImageUrlFeature = this.global.ImageUrlFeature;
   ProjectwiseFeature = this.global.ProjectwiseFeature;
+  uomPurchaseFeature = this.global.uomPurchaseFeature;
+
 
   cmpBranchID: any = 0;
   companyProfile: any = [];
@@ -114,6 +113,7 @@ export class PurchaseComponent implements OnInit {
   productName = '';
   PBarcode: string = '';   /// for Search barcode field
   productsData: any;   //// for showing the products
+  tmpTableDataList: any = [];
   tableDataList: any = [];          //////will hold data temporarily
   suppliersList: any = [];      //////  will shows the supplier list
   supplierDetail: any = [];
@@ -186,14 +186,14 @@ export class PurchaseComponent implements OnInit {
 
   onFieldsUpdate(type: any, item: any) {
 
-
+  // if (this.DetailedPurchaseFeature && type !== 'tcp') { item.tempCostPrice = item.costPrice; }
     if (!this.DetailedPurchaseFeature) return;
     if (this.discType == 'ad') {
       var tempCostPrice = Number(item.tempCostPrice);
       var gstAmount = ((item.tempCostPrice * item.gst) / 100)
       var discP = ((item.tempCostPrice * item.discInP) / 100);
       var discR = (item.discInR / item.quantity);
-      var etAmount =  ((item.tempCostPrice * item.et) / 100);
+      var etAmount = ((item.tempCostPrice * item.et) / 100);
       //var etAmount = (((Number(item.tempCostPrice) + Number(gstAmount) - discP - discR) * item.et) / 100);
       // var totalCost = item.tempCostPrice * item.quantity;
       // var costWithDiscP = item.tempCostPrice - discP;
@@ -202,7 +202,7 @@ export class PurchaseComponent implements OnInit {
       // var costWithEt = costWithGst + etAmount;
       //item.costPrice = costWithEt;
 
-      item.costPrice = (tempCostPrice - discP - discR) + gstAmount + etAmount;
+      item.costPrice = (Number(tempCostPrice) - Number(discP) - Number(discR)) + Number(gstAmount) + Number(etAmount);
     }
     // if (this.discType == 'bd') {
 
@@ -249,8 +249,6 @@ export class PurchaseComponent implements OnInit {
     this.http.get(environment.mainApi + 'cmp/getproject').subscribe(
       (Response: any) => {
         this.projectList = Response;
-
-
       }
     )
   }
@@ -394,7 +392,8 @@ export class PurchaseComponent implements OnInit {
         batchNo: '-',
         batchStatus: '-',
         uomID: data.uomID,
-        packing: 1,
+        packing: data.packing,
+        uomTitle: data.uomTitle,
         discInP: 0,
         discInR: 0,
         aq: data.aq,
@@ -719,13 +718,17 @@ export class PurchaseComponent implements OnInit {
       $('#psearchProduct').trigger('focus');
     }
 
-    if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
-      // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
-    }
-    else {
-      e.preventDefault();
-    }
+    // Allowed keys
+    const allowedKeys = [
+      'Backspace', 'Tab', 'Enter', 'Shift', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown',
+      'Delete', '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Numpad0', 'Numpad1', 'Numpad2', 'Numpad3', 'Numpad4', 'Numpad5', 'Numpad6', 'Numpad7', 'Numpad8', 'Numpad9', 'Decimal'
+    ];
 
+    // Block keys not allowed
+    if (!allowedKeys.includes(e.key)) {
+      e.preventDefault();
+      return;
+    }
 
 
     /////move down
@@ -782,18 +785,21 @@ export class PurchaseComponent implements OnInit {
 
   @ViewChild('supplier') myParty: any;
 
-  addParty() {
-    setTimeout(() => {
+  addParty(status:any) {
+   if(status == 'open'){
+   setTimeout(() => {
       this.myParty.close()
     }, 200);
-    this.dialogue.open(AddpartyComponent, {
-      width: "50%"
-    }).afterClosed().subscribe(value => {
-      if (value == 'Update') {
-        this.getSuppliers();
-      }
-    });
+     this.global.openBootstrapModal('#addPartyModal',true);
+   } 
+   if(status == 'close') {
+    this.global.closeBootstrapModal('#addPartyModal',true);
+     this.getSuppliers();
+   }
   }
+
+
+  
 
 
 
@@ -897,6 +903,25 @@ export class PurchaseComponent implements OnInit {
       : this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex);
 
 
+    this.tmpTableDataList = this.tableDataList;
+
+    if (this.uomPurchaseFeature) {
+      var changeTableDataList = this.tableDataList.map((e: any) => {
+        const packing = e.packing || 1;
+
+        return {
+          ...e,
+          quantity: e.quantity * packing,
+          tempCostPrice: this.normalizePrice(e.tempCostPrice, packing),
+          costPrice: this.normalizePrice(e.costPrice, packing),
+          salePrice: this.normalizePrice(e.salePrice, packing)
+        };
+      });
+
+      this.tableDataList = changeTableDataList;
+
+    }
+
 
     var postData = {
       InvBillNo: this.holdInvNo,
@@ -939,6 +964,7 @@ export class PurchaseComponent implements OnInit {
             this.sortType == 'desc'
               ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex)
               : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+            this.tableDataList = this.tmpTableDataList; //// if andy error occurred tableDataList will be restored
 
           }
         })
@@ -951,6 +977,9 @@ export class PurchaseComponent implements OnInit {
           if (Response == true) {
 
             this.insert('purchase', postData);
+          } else {
+            this.tableDataList = this.tmpTableDataList; //// if andy error occurred tableDataList will be restored
+
           }
         }
       )
@@ -958,6 +987,18 @@ export class PurchaseComponent implements OnInit {
 
 
     }
+  }
+
+
+  ///////////// will apply if UOMPurchase Feature is enabled
+  normalizePrice(price: number, packing: number): number {
+    if (!price || !packing) return 0;
+    return +(((price / (packing * 1000)) * 1000).toFixed(2));
+  }
+
+  denormalizePrice(price: number, packing: number): number {
+    if (!price || !packing) return 0;
+    return +(((price * (packing * 1000)) / 1000).toFixed(2));
   }
 
 
@@ -997,6 +1038,7 @@ export class PurchaseComponent implements OnInit {
 
         } else {
           this.msg.WarnNotify(Response.msg);
+          this.tableDataList = this.tmpTableDataList;  //// if andy error occurred tableDataList will be restored
         }
         this.app.stopLoaderDark();
         this.isProcessing = false;
@@ -1005,6 +1047,7 @@ export class PurchaseComponent implements OnInit {
         console.log(Error);
         this.app.stopLoaderDark();
         this.isProcessing = false;
+        this.tableDataList = this.tmpTableDataList; //// if andy error occurred tableDataList will be restored
       }
     )
 
@@ -1071,6 +1114,7 @@ export class PurchaseComponent implements OnInit {
     this.documentName = '';
     this.projectID = this.global.getProjectID();
     this.removeLocalStorage();
+    this.costTotal = 0;
 
 
   }
@@ -1087,7 +1131,6 @@ export class PurchaseComponent implements OnInit {
 
 
   getTotal() {
-
     this.subTotal = 0;
     this.myTotalQty = 0;
     this.netTotal = 0;
@@ -1109,7 +1152,7 @@ export class PurchaseComponent implements OnInit {
 
     for (var i = 0; i < this.tableDataList.length; i++) {
       var quantity = Number(this.tableDataList[i].quantity);
-      var tempCostPrice = Number(this.tableDataList[i].tempCostPrice);
+      var tmpCostPrice = Number(this.tableDataList[i].tempCostPrice);
       var discInP = Number(this.tableDataList[i].discInP);
       var discInR = Number(this.tableDataList[i].discInR);
       var gst = Number(this.tableDataList[i].gst);
@@ -1119,11 +1162,11 @@ export class PurchaseComponent implements OnInit {
 
       this.subTotal += quantity * costPrice;
       this.myTotalQty += quantity;
-      this.costTotal += quantity * tempCostPrice;
-      this.DiscPTotal += quantity * ((tempCostPrice * discInP) / 100);
-      this.gstTotal += quantity * ((tempCostPrice * gst) / 100);
+      this.costTotal += quantity * (this.DetailedPurchaseFeature  ? tmpCostPrice  : costPrice);
+      this.DiscPTotal += quantity * ((tmpCostPrice * discInP) / 100);
+      this.gstTotal += quantity * ((tmpCostPrice * gst) / 100);
       this.DiscRTotal += discInR;
-      this.advTaxTotal += quantity * ((tempCostPrice * et) / 100)
+      this.advTaxTotal += quantity * ((tmpCostPrice * et) / 100)
     }
     this.netTotal = (this.subTotal + Number(this.overHead)) - Number(this.discount)
 
@@ -1167,34 +1210,50 @@ export class PurchaseComponent implements OnInit {
         this.myTotalQty = 0;
         this.productImage = Response[Response.length - 1].productImage;
         this.discType = Response[0].discType;
+
+
         Response.forEach((e: any) => {
+
+          // Reverse UOM calculation here
+          const original = this.uomPurchaseFeature
+            ? this.reverseUomCalculation(e)
+            : e;
           this.myTotalQty += e.quantity;
+
+
           this.tableDataList.push({
             rowIndex: this.tableDataList.length + 1,
-            productID: e.productID,
-            productTitle: e.productTitle,
-            barcode: e.barcode,
-            productImage: '-', // e.productImage,
-            quantity: e.quantity,
-            wohCP: e.costPrice,
-            tempCostPrice: e.tempCostPrice,
-            margin: ((e.salePrice - e.costPrice) / e.costPrice) * 100,
-            costPrice: e.costPrice,
-            salePrice: e.salePrice,
-            expiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
-            batchNo: e.batchNo,
-            batchStatus: e.batchStatus,
-            uomID: e.uomID,
-            packing: e.packing,
-            discInP: e.discInP,
-            discInR: e.discInR,
-            aq: e.aq,
-            gst: e.gst,
-            et: e.et,
-            mrp: e.mrp,
-            subCategoryID: e.subCategoryID,
-            brandID: e.brandID,
-          })
+            productID: original.productID,
+            productTitle: original.productTitle,
+            barcode: original.barcode,
+            productImage: '-',
+            quantity: original.quantity,
+            wohCP: original.costPrice,
+            tempCostPrice: original.tempCostPrice,
+            margin:
+              original.costPrice
+                ? ((original.salePrice - original.costPrice) / original.costPrice) * 100
+                : 0,
+            costPrice: original.costPrice,
+            salePrice: original.salePrice,
+            expiryDate: this.global.dateFormater(
+              new Date(original.expiryDate),
+              '-'
+            ),
+            batchNo: original.batchNo,
+            batchStatus: original.batchStatus,
+            uomID: original.uomID,
+            uomTitle: original.uomTitle,
+            packing: original.packing,
+            discInP: original.discInP,
+            discInR: original.discInR,
+            aq: original.aq,
+            gst: original.gst,
+            et: original.et,
+            mrp: original.mrp,
+            subCategoryID: original.subCategoryID,
+            brandID: original.brandID,
+          });
         });
 
         this.sortType == 'desc' ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex) : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
@@ -1204,6 +1263,19 @@ export class PurchaseComponent implements OnInit {
       }
     )
 
+  }
+
+
+  reverseUomCalculation(row: any): any {
+    const packing = row.packing || 1;
+
+    return {
+      ...row,
+      quantity: row.quantity / packing,
+      costPrice: this.denormalizePrice(row.costPrice, packing),
+      tempCostPrice: this.denormalizePrice(row.tempCostPrice, packing),
+      salePrice: this.denormalizePrice(row.salePrice, packing)
+    };
   }
 
 
@@ -1660,6 +1732,48 @@ export class PurchaseComponent implements OnInit {
         $('.loaderDark').fadeOut();
       }
     )
+  }
+
+
+
+  detDiscPerc = 0;
+  detGst = 0;
+  detAT = 0;
+
+  updaetProdList(e: any, type: any) {
+
+    if (e.key == 'Enter') {
+
+      if (type == 'discPerc') {
+
+          this.tableDataList.forEach((e:any) => {
+            e.discInP = this.detDiscPerc;
+            this.onFieldsUpdate('dp',e);
+        });
+
+      }
+
+      if (type == 'gst') {
+         this.tableDataList.forEach((e:any) => {
+            e.gst = this.detGst;
+            this.onFieldsUpdate('gst',e);
+        });
+
+      }
+
+      if (type == 'at') {
+
+           this.tableDataList.forEach((e:any) => {
+            e.et = this.detAT;
+            this.onFieldsUpdate('et',e);
+        });
+
+      }
+
+      this.getTotal();
+
+    }
+
   }
 
 

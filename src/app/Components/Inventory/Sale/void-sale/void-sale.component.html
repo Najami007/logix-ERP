@@ -67,15 +67,17 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of tableDataList index as index"
-                                (click)="showImg(item);rowFocused = index;" [ngClass]="item.quantity > item.aq ? 'bg-danger text-white' : ''">
+                                (click)="showImg(item);rowFocused = index;"
+                                [ngClass]="item.quantity > item.aq ? 'bg-danger text-white' : ''">
                                 <td class="text-center">{{index +1}}</td>
                                 <td>{{item.productTitle}} <b>({{item.barcode}})</b> <small>{{item.flavourTitle}}</small>
                                 </td>
 
-                                <td class="text-center"><input type="text" [readOnly]="true" [(ngModel)]="item.quantity"
-                                        min="0" (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();"
+                                <td class="text-center"><input type="text" min="0" [(ngModel)]="item.quantity"
+                                        [readOnly]="true"
+                                        (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();"
                                         (keyup)="getTotal();showImg(item);" (keypress)="openQtyModal($event,item)"
-                                        (click)="openQtyModal($event,item)" class="qty{{index}} text-center"
+                                        (click)="rowFocused = index;openQtyModal($event,item)" class="qty{{index}} text-center"
                                         style="width: 80px;"></td>
                                 <td class="text-end cursorPointer" *ngIf="gstFeature">{{item.salePrice / ((item.gst
                                     /100) + 1) |number:'1.0-1'}}</td>
@@ -92,8 +94,8 @@
                                 <td class="text-end"> {{(item.quantity * item.salePrice) - (item.discInR *
                                     item.quantity) - (item.cusDiscAmount * item.quantity) |number:'1.0-0'}}</td>
                                 <td class="text-end">{{item.aq|number:'1.0-3'}}</td>
-                                <td class="cursorPointer text-center "><mat-icon
-                                        (click)="delRow(item)">close</mat-icon></td>
+                                <td class="cursorPointer text-center "><mat-icon (click)="delRow(item)">close</mat-icon>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -186,10 +188,10 @@
                             (click)="voidBill()"><mat-icon>delete_outline</mat-icon></button>
                     </div>
                     <div class="col-md-9">
-                        <button class="btnsave w-100 " accesskey="s" id="save"
-                            (click)="save('Cash',true)"><u>S</u>ave</button>
-                        <button class="btnsave w-100 text-center d-none" accesskey="." id="save"
-                            (click)="save('Cash',false)"><u>S</u>ave</button>
+                        <button class="btnsave w-100 " [disabled]="isProcessing" ondblclick="return false" ;
+                            accesskey="s" id="save" (click)="save('Cash',true)"><u>S</u>ave</button>
+                        <button class="btnsave w-100 text-center d-none" [disabled]="isProcessing" *ngIf="NonFBRFeature"
+                            accesskey="." id="save" (click)="save('Cash',false)"><u>S</u>ave</button>
                     </div>
 
 
@@ -207,6 +209,11 @@
                                 <span><mat-icon>keyboard_arrow_right</mat-icon></span>
                             </div>
                         </button>
+                    </div>
+
+                    <div class="col-md-12 pt-1">
+                        <button class="btnText" [disabled]="!isProcessing" id="refresh" accesskey="r"
+                            (click)="isProcessing =  false">Refresh</button>
                     </div>
 
 

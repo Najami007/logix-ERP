@@ -38,6 +38,7 @@ export class AddFinishedItemComponent implements OnInit {
       this.MnuItemSize = this.editData.mnuItemSize;
       this.MnuItemDescription = this.editData.mnuItemDescription;
       this.MnuLabourCharges = this.editData.mnuLabourCharges,
+      this.loadingLabourCharges = this.editData.loadingLabourCharges;
         this.btnType = 'Update';
     }
 
@@ -53,6 +54,7 @@ export class AddFinishedItemComponent implements OnInit {
   MnuItemCatID: any = '';
   MnuLabourCharges: any = '';
   ProjectID: any = '';
+  loadingLabourCharges:any = '';
 
 
 
@@ -691,11 +693,13 @@ export class AddFinishedItemComponent implements OnInit {
       MnuItemSalePrice: this.MnuItemSalePrice,
       MnuItemCatID: this.MnuItemCatID,
       MnuLabourCharges: this.MnuLabourCharges,
+      LoadingLabourCharges:this.loadingLabourCharges || 0,
       ProjectID: this.global.getProjectID(),
       ItemDetail: JSON.stringify(itemDetail),
       UserID: this.global.getUserID(),
 
     }
+
 
     if (this.btnType == 'Save') {
       this.insert('insert', postData)

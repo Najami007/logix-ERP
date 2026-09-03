@@ -35,12 +35,13 @@ export class CustomerBalanceReportComponent {
   ngOnInit(): void {
     this.global.setHeaderTitle('Customer Balances');
     this.getParty();
+    this.getRoutes();
   }
 
 
 
   TableData: any = [];
-
+  routeTitle:any = '';
   payableBalance = 0;
   ReceiveableBalance = 0;
   NetBalance = 0;
@@ -59,16 +60,45 @@ export class CustomerBalanceReportComponent {
           return;
 
         }
-        this.TableData = Response;
-        this.TableData.forEach((e: any) => {
-          if (e.balance > 0) {
-            this.payableBalance += e.balance;
-          }
-          if (e.balance < 0) {
-            this.ReceiveableBalance += e.balance;
-          }
-          this.NetBalance += e.balance
-        });
+
+        if (this.routeID == 0) {
+          this.TableData = Response;
+          this.TableData.forEach((e: any) => {
+            if (e.balance > 0) {
+              this.payableBalance += e.balance;
+            }
+            if (e.balance < 0) {
+              this.ReceiveableBalance += e.balance;
+            }
+            this.NetBalance += e.balance
+          });
+        }
+
+        if (this.routeID > 0) {
+
+          this.routeTitle = this.routeList.filter((e:any)=> e.routeID == this.routeID)[0].routeTitle
+
+          this.TableData = Response.filter((e: any) => e.routeID == this.routeID);
+
+          this.payableBalance = 0;
+          this.ReceiveableBalance = 0;
+          this.NetBalance = 0;
+
+          this.TableData.forEach((e: any) => {
+            const balance = Number(e.balance) || 0;
+
+            if (balance > 0) {
+              this.payableBalance += balance;
+            } else if (balance < 0) {
+              this.ReceiveableBalance += balance;
+            }
+
+            this.NetBalance += balance;
+          });
+
+        }
+
+
         this.app.stopLoaderDark();
       },
       (Error: any) => {
@@ -77,6 +107,24 @@ export class CustomerBalanceReportComponent {
 
       }
     )
+
+  }
+
+
+  routeID = 0;
+  routeList: any = [];
+  getRoutes() {
+    this.http.get(environment.mainApi + this.global.inventoryLink + 'getroute').subscribe(
+      (Response) => {
+        this.routeList = Response;
+      },
+      (Error) => {
+        this.msg.WarnNotify('Error Occured')
+      }
+    )
+  }
+
+  filterByRoute() {
 
   }
 

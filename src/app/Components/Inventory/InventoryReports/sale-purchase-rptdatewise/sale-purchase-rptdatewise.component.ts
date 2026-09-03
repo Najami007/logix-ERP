@@ -48,7 +48,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     this.global.setHeaderTitle('Stock In Out Date wise');
     this.getUsers();
     this.getReportTypes();
-    this.getLocation();
+    this.getProjectList();
 
   }
 
@@ -84,6 +84,16 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     });
   }
 
+  projectID = 0;
+  projectList: any = [];
+  getProjectList() {
+    this.http.get(environment.mainApi + 'cmp/getproject').subscribe(
+      (Response: any) => {
+        this.projectList = Response;
+
+      }
+    )
+  }
 
   getReportTypes() {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInvoiceTypes_15').subscribe(
@@ -107,7 +117,6 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     this.userName = curUser.userName;
   }
 
-  projectID: any = 0;
 
   billTotal = 0;
   chargesTotal = 0;
@@ -129,6 +138,14 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
 
     this.reportType = this.reportsList.find((e: any) => e.invType == this.tmpRptType).invTypeTitle;
 
+    var rptType =  this.tmpRptType;
+    var fromDate = this.global.dateFormater(this.fromDate, '-');
+    var fromTime = this.fromTime;
+    var toDate = this.global.dateFormater(this.toDate, '-');
+    var toTime = this.toTime;
+    var userID = this.userID;
+    var locationID = this.projectID;
+
     if (type == 'taxSummary' && (this.rptType != 'S')) {
       this.msg.WarnNotify('Tax Is Only For Sales')
       return;
@@ -138,30 +155,31 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     this.rptType = this.tmpRptType;
     if (this.formateType == 1) {
       // this.reportType = 'Summary';
-      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
-        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + 'reqProjectID=' + this.locationID).subscribe(
-          (Response: any) => {
-            this.reset();
-             if (Response == null) {
-              this.global.popupAlert('Null Returned!');
-              this.app.stopLoaderDark();
-              return;
-            }
-            if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-              this.app.stopLoaderDark();
-              return;
+      var url = `${environment.mainApi + this.global.inventoryLink}GetInventorySummaryDateWise_2?reqType=${rptType}&reqUserID=${userID}&FromDate=${fromDate}
+      &todate=${toDate}&fromtime=${fromTime}&totime=${toTime}&reqProjectID=${locationID}`;
+      this.http.get(url).subscribe(
+        (Response: any) => {
+          this.reset();
+          if (Response == null) {
+            this.global.popupAlert('Null Returned!');
+            this.app.stopLoaderDark();
+            return;
+          }
+          if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
 
-            }
+          }
 
 
-            var DataList: any = [];
-            if (this.rptType == 'S' || this.rptType == 'SR') {
-              if (this.locationID > 0) {
-                DataList = Response.filter((e: any) =>
-                  (this.filterID == 2 ? e.percentageDiscount > 0 : this.filterID == 3 ? e.percentageDiscount == 0 : true)
-                  && (e.locationID == this.locationID));
-              } else {
+          var DataList: any = [];
+          if (this.rptType == 'S' || this.rptType == 'SR') {
+            if (this.locationID > 0) {
+              DataList = Response.filter((e: any) =>
+                (this.filterID == 2 ? e.percentageDiscount > 0 : this.filterID == 3 ? e.percentageDiscount == 0 : true)
+                && (e.locationID == this.locationID));
+            } else {
               DataList = Response.filter((e: any) =>
               (this.filterID == 2
                 ? e.percentageDiscount > 0
@@ -169,287 +187,300 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
                   ? e.percentageDiscount == 0
                   : true
               ));
-              }
-            } else {
-               if (this.locationID > 0) {
-                DataList = Response.filter((e: any) =>e.locationID == this.locationID);
-              } else {
-              DataList = Response;
-              }
             }
-
-            if (this.rptType == 'R') {
-              DataList.forEach((e: any) => {
-                if (e.issueType != 'Stock Transfer') {
-                  this.SaleDetailList.push(e);
-                }
-              }
-
-              )
-              // this.SaleDetailList = Response.fil;
-            } else {
-              this.SaleDetailList = DataList;
-            }
-
-
-            this.SaleDetailList.forEach((e: any) => {
-
-              this.billTotal += e.billTotal;
-              this.chargesTotal += e.otherCharges;
-              this.netGrandTotal += e.billTotal + e.overHeadAmount;
-              this.discountTotal += e.billDiscount - e.percentageDiscount;
-              this.offerDiscTotal += e.percentageDiscount;
-              this.summaryNetTotal += e.netTotal;
-
-            });
-            this.app.stopLoaderDark();
-          },
-          (Error: any) => {
-            console.log(Error);
-            this.app.stopLoaderDark();
           }
-        )
+          
+          else {
+
+            
+
+            if (this.locationID > 0) {
+              DataList = Response.filter((e: any) => e.locationID == this.locationID);
+            } else {
+              DataList = Response;
+            }
+          }
+
+          if (this.rptType == 'R') {
+            DataList.forEach((e: any) => {
+              if (e.issueType != 'Stock Transfer') {
+                this.SaleDetailList.push(e);
+              }
+            }
+
+            )
+            // this.SaleDetailList = Response.fil;
+          } else {
+            this.SaleDetailList = DataList;
+          }
+
+
+          this.SaleDetailList.forEach((e: any) => {
+
+            this.billTotal += e.billTotal;
+            this.chargesTotal += e.otherCharges;
+            this.netGrandTotal += e.billTotal + e.overHeadAmount;
+            this.discountTotal += e.billDiscount - e.percentageDiscount;
+            this.offerDiscTotal += e.percentageDiscount;
+            this.summaryNetTotal += e.netTotal;
+
+          });
+
+          this.app.stopLoaderDark();
+        },
+        (Error: any) => {
+          console.log(Error);
+          this.app.stopLoaderDark();
+        }
+      )
     }
 
 
     if (this.formateType == 2) {
 
       // this.reportType = 'Detail';
-      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryDetailDateWise_3?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
-        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + 'reqProjectID=' + this.locationID).subscribe(
-          (Response: any) => {
-            console.log(Response);
-            this.reset();
-            if (Response == null) {
-              this.global.popupAlert('Null Returned!');
-              this.app.stopLoaderDark();
-              return;
-            }
-            if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-              this.app.stopLoaderDark();
-              return;
 
-            }
+      var url = `${environment.mainApi + this.global.inventoryLink}GetInventoryDetailDateWise_3?reqType=${rptType}&reqUserID=${userID}&FromDate=${fromDate}
+      &todate=${toDate}&fromtime=${fromTime}&totime=${toTime}&reqProjectID=${locationID}`;
 
-
-
-            var DataList: any = [];
-
-            if (this.rptType == 'S' || this.rptType == 'SR') {
-              if (this.locationID > 0) {
-                DataList = Response.filter((e: any) =>
-                  (this.filterID == 2 ? e.percentageDiscount > 0 : this.filterID == 3 ? e.percentageDiscount == 0 : true)
-                  && (e.locationID == this.locationID));
-              } else {
-                DataList = Response.filter((e: any) =>
-                (this.filterID == 2
-                  ? e.discInR > 0
-                  : this.filterID == 3
-                    ? e.discInR == 0
-                    : true
-                ));
-              }
-            } else {
-              if (this.locationID > 0) {
-                DataList = Response.filter((e: any) => e.locationID == this.locationID);
-              } else {
-                DataList = Response;
-              }
-            }
-            // if (this.locationID > 0) {
-            //   DataList = Response.filter((e: any) => e.locationID == this.locationID);
-            // } else {
-            //   DataList = Response;
-            // }
-
-
-            if (this.rptType == 'R') {
-              DataList.forEach((e: any) => {
-                if (e.issueType != 'Stock Transfer') {
-                  this.SaleDetailList.push(e);
-                }
-              }
-
-              )
-              // this.SaleDetailList = Response.fil;
-            } else {
-              this.SaleDetailList = DataList;
-            }
-
-
-            this.SaleDetailList.forEach((e: any) => {
-              this.qtyTotal += e.quantity;
-              if (this.rptType == 'S' || this.rptType == 'SR' || this.rptType == 'IC' || this.rptType == 'RIC') {
-                this.detNetTotal += (e.salePrice - e.discInR) * e.quantity;
-                this.profitTotal += ((e.salePrice - e.discInR) * e.quantity) - (e.avgCostPrice * e.quantity);
-                this.discountTotal += e.discInR * e.quantity;
-                this.salePriceTotal += e.quantity * e.salePrice;
-                this.costPriceTotal += e.quantity * e.costPrice;
-                this.avgCostTotal += e.quantity * e.avgCostPrice;
-                //this.profitPercentTotal += ((e.salePrice - e.discInR) * e.quantity) - (e.avgCostPrice * e.quantity) / ;
-              }
-              else if (this.rptType == 'P' || this.rptType == 'PR') {
-                this.detNetTotal += e.costPrice * e.quantity;
-              }
-              else {
-                this.detNetTotal += e.avgCostPrice * e.quantity;
-              }
-            });
+      this.http.get(url).subscribe(
+        (Response: any) => {
+          console.log(Response);
+          this.reset();
+          if (Response == null) {
+            this.global.popupAlert('Null Returned!');
             this.app.stopLoaderDark();
-          },
-          (Error: any) => {
-            console.log(Error);
-            this.app.stopLoaderDark();
+            return;
           }
-        )
-    }
+          if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
 
-    if (this.formateType == 3) {
-      // this.reportType = 'Summary';
-      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryDateWise_2?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
-        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + 'reqProjectID=' + this.locationID).subscribe(
-          (Response: any) => {
-            this.reset();
-             if (Response == null) {
-              this.global.popupAlert('Null Returned!');
-              this.app.stopLoaderDark();
-              return;
+          }
+
+
+
+          var DataList: any = [];
+
+          if (this.rptType == 'S' || this.rptType == 'SR') {
+            if (this.locationID > 0) {
+              DataList = Response.filter((e: any) =>
+                (this.filterID == 2 ? e.percentageDiscount > 0 : this.filterID == 3 ? e.percentageDiscount == 0 : true)
+                && (e.locationID == this.locationID));
+            } else {
+              DataList = Response.filter((e: any) =>
+              (this.filterID == 2
+                ? e.discInR > 0
+                : this.filterID == 3
+                  ? e.discInR == 0
+                  : true
+              ));
             }
-            if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-              this.app.stopLoaderDark();
-              return;
-
-            }
-
-
-            var DataList: any = [];
+          } else {
             if (this.locationID > 0) {
               DataList = Response.filter((e: any) => e.locationID == this.locationID);
             } else {
               DataList = Response;
             }
+          }
+          // if (this.locationID > 0) {
+          //   DataList = Response.filter((e: any) => e.locationID == this.locationID);
+          // } else {
+          //   DataList = Response;
+          // }
 
 
-            if (this.rptType == 'R') {
-              DataList.forEach((e: any) => {
-                if (e.issueType != 'Stock Transfer') {
-                  this.SaleDetailList.push(e);
-                }
+          if (this.rptType == 'R') {
+            DataList.forEach((e: any) => {
+              if (e.issueType != 'Stock Transfer') {
+                this.SaleDetailList.push(e);
               }
-
-              )
-              // this.SaleDetailList = Response.fil;
-            } else {
-              this.SaleDetailList = DataList;
             }
 
-
-            this.SaleDetailList.forEach((e: any) => {
-
-              this.billTotal += e.billTotal;
-              this.chargesTotal += e.otherCharges;
-              this.discountTotal += e.billDiscount - e.percentageDiscount;
-              this.offerDiscTotal += e.percentageDiscount;
-              this.summaryNetTotal += e.netTotal;
-              this.myTaxTotal += e.gstAmount;
-
-            });
-            this.app.stopLoaderDark();
-          },
-          (Error: any) => {
-            console.log(Error);
-            this.app.stopLoaderDark();
+            )
+            // this.SaleDetailList = Response.fil;
+          } else {
+            this.SaleDetailList = DataList;
           }
-        )
+
+
+          this.SaleDetailList.forEach((e: any) => {
+            this.qtyTotal += e.quantity;
+            if (this.rptType == 'S' || this.rptType == 'SR' || this.rptType == 'IC' || this.rptType == 'RIC') {
+              this.detNetTotal += (e.salePrice - e.discInR) * e.quantity;
+              this.profitTotal += ((e.salePrice - e.discInR) * e.quantity) - (e.avgCostPrice * e.quantity);
+              this.discountTotal += e.discInR * e.quantity;
+              this.salePriceTotal += e.quantity * e.salePrice;
+              this.costPriceTotal += e.quantity * e.costPrice;
+              this.avgCostTotal += e.quantity * e.avgCostPrice;
+              //this.profitPercentTotal += ((e.salePrice - e.discInR) * e.quantity) - (e.avgCostPrice * e.quantity) / ;
+            }
+            else if (this.rptType == 'P' || this.rptType == 'PR'|| rptType == 'HPR' || rptType == 'HP') {
+              this.detNetTotal += e.costPrice * e.quantity;
+            }
+            else {
+              this.detNetTotal += e.avgCostPrice * e.quantity;
+            }
+          });
+          this.app.stopLoaderDark();
+        },
+        (Error: any) => {
+          console.log(Error);
+          this.app.stopLoaderDark();
+        }
+      )
+    }
+
+    if (this.formateType == 3) {
+      // this.reportType = 'Summary';
+
+      var url = `${environment.mainApi + this.global.inventoryLink}GetInventorySummaryDateWise_2?reqType=${rptType}&reqUserID=${userID}&FromDate=${fromDate}
+      &todate=${toDate}&fromtime=${fromTime}&totime=${toTime}&reqProjectID=${locationID}`
+
+      this.http.get(url).subscribe(
+        (Response: any) => {
+          this.reset();
+          if (Response == null) {
+            this.global.popupAlert('Null Returned!');
+            this.app.stopLoaderDark();
+            return;
+          }
+          if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+
+          }
+
+
+          var DataList: any = [];
+          if (this.locationID > 0) {
+            DataList = Response.filter((e: any) => e.locationID == this.locationID);
+          } else {
+            DataList = Response;
+          }
+
+
+          if (this.rptType == 'R') {
+            DataList.forEach((e: any) => {
+              if (e.issueType != 'Stock Transfer') {
+                this.SaleDetailList.push(e);
+              }
+            }
+
+            )
+            // this.SaleDetailList = Response.fil;
+          } else {
+            this.SaleDetailList = DataList;
+          }
+
+
+          this.SaleDetailList.forEach((e: any) => {
+
+            this.billTotal += e.billTotal;
+            this.chargesTotal += e.otherCharges;
+            this.discountTotal += e.billDiscount - e.percentageDiscount;
+            this.offerDiscTotal += e.percentageDiscount;
+            this.summaryNetTotal += e.netTotal;
+            this.myTaxTotal += e.gstAmount;
+
+          });
+          this.app.stopLoaderDark();
+        },
+        (Error: any) => {
+          console.log(Error);
+          this.app.stopLoaderDark();
+        }
+      )
     }
 
 
     if (this.formateType == 4) {
 
+      var url = `${environment.mainApi + this.global.inventoryLink}GetInventorySummaryTypeAndDateWise_20?reqType=${rptType}&reqUserID=${userID}&FromDate=${fromDate}
+      &todate=${toDate}&fromtime=${fromTime}&totime=${toTime}&reqProjectID=${locationID}`
       // this.reportType = 'Detail';
-      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventorySummaryTypeAndDateWise_20?reqType=' + this.rptType + '&reqUserID=' + this.userID + '&FromDate=' +
-        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime + '&ProjectID=' + this.locationID).subscribe(
-          (Response: any) => {
-            this.reset()
-             if (Response == null) {
-              this.global.popupAlert('Null Returned!');
-              this.app.stopLoaderDark();
-              return;
-            }
-            if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-              this.app.stopLoaderDark();
-              return;
-
-            }
-
-
-
-            var DataList: any = [];
-
-            if (this.rptType == 'S' || this.rptType == 'SR') {
-              if (this.locationID > 0) {
-                DataList = Response.filter((e: any) =>
-                  (this.filterID == 2 ? e.percentageDiscount > 0 : this.filterID == 3 ? e.percentageDiscount == 0 : true)
-                  && (e.locationID == this.locationID));
-              } else {
-                DataList = Response.filter((e: any) =>
-                (this.filterID == 2
-                  ? e.discInR > 0
-                  : this.filterID == 3
-                    ? e.discInR == 0
-                    : true
-                ));
-              }
-            } else {
-              if (this.locationID > 0) {
-                DataList = Response.filter((e: any) => e.locationID == this.locationID);
-              } else {
-                DataList = Response;
-              }
-            }
-            // if (this.locationID > 0) {
-            //   DataList = Response.filter((e: any) => e.locationID == this.locationID);
-            // } else {
-            //   DataList = Response;
-            // }
-
-
-            if (this.rptType == 'R') {
-              DataList.forEach((e: any) => {
-                if (e.issueType != 'Stock Transfer') {
-                  this.SaleDetailList.push(e);
-                }
-              }
-
-              )
-              // this.SaleDetailList = Response.fil;
-            } else {
-              this.SaleDetailList = DataList;
-            }
-
-
-            this.SaleDetailList.forEach((e: any) => {
-              this.qtyTotal += e.quantity;
-              if (this.rptType == 'S' || this.rptType == 'SR' || this.rptType == 'IC' || this.rptType == 'RIC') {
-                this.detNetTotal += e.salePrice;
-              }
-              else if (this.rptType == 'P' || this.rptType == 'PR') {
-                this.detNetTotal += e.costPrice;
-              }
-              else {
-                this.detNetTotal += e.avgCostPrice;
-              }
-            });
+      this.http.get(url).subscribe(
+        (Response: any) => {
+          this.reset()
+          if (Response == null) {
+            this.global.popupAlert('Null Returned!');
             this.app.stopLoaderDark();
-          },
-          (Error: any) => {
-            console.log(Error);
-            this.app.stopLoaderDark();
+            return;
           }
-        )
+          if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+
+          }
+
+
+
+          var DataList: any = [];
+
+          if (this.rptType == 'S' || this.rptType == 'SR') {
+            if (this.locationID > 0) {
+              DataList = Response.filter((e: any) =>
+                (this.filterID == 2 ? e.percentageDiscount > 0 : this.filterID == 3 ? e.percentageDiscount == 0 : true)
+                && (e.locationID == this.locationID));
+            } else {
+              DataList = Response.filter((e: any) =>
+              (this.filterID == 2
+                ? e.discInR > 0
+                : this.filterID == 3
+                  ? e.discInR == 0
+                  : true
+              ));
+            }
+          } else {
+            if (this.locationID > 0) {
+              DataList = Response.filter((e: any) => e.locationID == this.locationID);
+            } else {
+              DataList = Response;
+            }
+          }
+          // if (this.locationID > 0) {
+          //   DataList = Response.filter((e: any) => e.locationID == this.locationID);
+          // } else {
+          //   DataList = Response;
+          // }
+
+
+          if (this.rptType == 'R') {
+            DataList.forEach((e: any) => {
+              if (e.issueType != 'Stock Transfer') {
+                this.SaleDetailList.push(e);
+              }
+            }
+
+            )
+            // this.SaleDetailList = Response.fil;
+          } else {
+            this.SaleDetailList = DataList;
+          }
+
+
+          this.SaleDetailList.forEach((e: any) => {
+            this.qtyTotal += e.quantity;
+            if (this.rptType == 'S' || this.rptType == 'SR' || this.rptType == 'IC' || this.rptType == 'RIC') {
+              this.detNetTotal += e.salePrice;
+            }
+            else if (this.rptType == 'P' || this.rptType == 'PR'|| rptType == 'HPR' || rptType == 'HP') {
+              this.detNetTotal += e.costPrice;
+            }
+            else {
+              this.detNetTotal += e.avgCostPrice;
+            }
+          });
+          this.app.stopLoaderDark();
+        },
+        (Error: any) => {
+          console.log(Error);
+          this.app.stopLoaderDark();
+        }
+      )
     }
 
   }
@@ -493,7 +524,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
 
     }
 
-    if (item.invType == 'P' || item.invType == 'PR') {
+    if (item.invType == 'P' || item.invType == 'PR' || item.invType == 'HPR' || item.invType == 'HP') {
       this.purchaseBill.printBill(item);
     }
 
@@ -511,6 +542,7 @@ export class SalePurchaseRptdatewiseComponent implements OnInit {
     if (this.formateType == 1) tableID = 'summaryTable';
     if (this.formateType == 2) tableID = 'detailTable';
     if (this.formateType == 3) tableID = 'TaxsummaryTable';
+    if(this.formateType == 4) tableID = 'productSummaryTable';
 
 
     this.global.ExportHTMLTabletoExcel(tableID, type + '(' + startDate + ' - ' + endDate + ')')

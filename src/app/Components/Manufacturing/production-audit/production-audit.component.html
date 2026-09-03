@@ -83,7 +83,7 @@
                                     (keydown)="handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item);insertToLocalStorage()"
                                     (keyup)="changeValue(item);getTotal();insertToLocalStorage()"
                                     class="qty{{index}} text-center" style="width: 80px;"></td>
-       
+
 
 
                             <td class="cursorPointer text-center  text-danger"><mat-icon
@@ -130,6 +130,15 @@
                     <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
                     <mat-datepicker #iDate></mat-datepicker>
                 </mat-form-field>
+
+                <mat-form-field class="w-100 matSmall" appearance="outline">
+                    <mat-label>Project </mat-label>
+                    <mat-select [(ngModel)]="projectID" name="purchaseProject" [disabled]="!ProjectwiseFeature"
+                        (selectionChange)="insertToLocalStorage()">
+                        <mat-option *ngFor="let item of projectList "
+                            [value]="item.projectID">{{item.projectTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
                 <mat-form-field appearance="outline" class="w-100 matSmall">
                     <mat-label>Location</mat-label>
                     <mat-select [(ngModel)]="locationID" name="location" [disabled]="tableDataList.length > 0">
@@ -147,15 +156,17 @@
 
 
             <div class="mt-1 row">
-                <div class="w-50 "><button *ngIf="crudList.c" class="btnhold w-100 " (click)="SaveBill('hold')">{{holdBtnType}}</button></div>
-                <div class="w-50"><button class="btnreset w-100" data-bs-toggle="modal" data-bs-target="#holdModal">Retrieve</button></div>
+                <div class="w-50 "><button *ngIf="crudList.c" class="btnhold w-100 "
+                        (click)="SaveBill('hold')">{{holdBtnType}}</button></div>
+                <div class="w-50"><button class="btnreset w-100" data-bs-toggle="modal"
+                        data-bs-target="#holdModal">Retrieve</button></div>
 
             </div>
             <div class="mt-1 row">
-               <div class="w-100">
-                 <button *ngIf="roleTypeID < 3" class="btnsave w-100"
-                    (click)="global.openBootstrapModal('#AuditStart',true)">Others</button>
-               </div>
+                <div class="w-100">
+                    <button *ngIf="roleTypeID < 3" class="btnsave w-100"
+                        (click)="global.openBootstrapModal('#AuditStart',true)">Others</button>
+                </div>
             </div>
 
 
@@ -216,7 +227,7 @@
                                 <td>{{index+1}}</td>
                                 <td>{{item.auditInventoryID}}</td>
                                 <td>{{item.auditInvDate | date:'dd-MM-yyyy'}}</td>
-                                 <td>{{item.locationTitle}}</td>
+                                <td>{{item.locationTitle}}</td>
                                 <td>{{item.auditStartDate | date:'dd-MM-yyyy'}}</td>
                                 <td>{{item.auditEndDate | date:'dd-MM-yyyy'}}</td>
                                 <td>{{item.remarks}}</td>
@@ -242,7 +253,7 @@
 
     <!----------- Print Area For Bill Print --------------------->
 
-        <app-production-audit-inv-print></app-production-audit-inv-print>
+    <app-production-audit-inv-print></app-production-audit-inv-print>
 
 
 
@@ -260,7 +271,8 @@
 
                         <button *ngIf="crudList.c" class="btnsave w-25" (click)="startAudit('start')">Start
                             Audit</button>
-                        <button class="btnsave w-25" [disabled]="tableDataList.length > 0" (click)="startAudit('post')">Post Audit</button>
+                        <button class="btnsave w-25" [disabled]="tableDataList.length > 0"
+                            (click)="startAudit('post')">Post Audit</button>
                     </div>
 
 

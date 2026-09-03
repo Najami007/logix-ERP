@@ -19,6 +19,9 @@ import { DatePipe } from '@angular/common';
 })
 export class SaleReportCustomerwiseComponent implements OnInit {
 
+  SaleSupplierFeature = this.global.SaleSupplierFeature;
+
+
   @ViewChild(SaleBillPrintComponent) billPrint: any;
 
   companyProfile: any = [];
@@ -50,7 +53,7 @@ export class SaleReportCustomerwiseComponent implements OnInit {
 
   }
 
-  
+
 
   hideProfit = false;
   hideCost = false;
@@ -84,15 +87,29 @@ export class SaleReportCustomerwiseComponent implements OnInit {
 
 
   getParty() {
-    this.global.getCustomerList().subscribe((data: any) => {
-      if (data.length > 0) {
-        this.partyList = data.map((e: any, index: any) => {
-          (e.indexNo = index + 1);
-          return e;
-        });
-        this.partyList.sort((a: any, b: any) => b.indexNo - a.indexNo);
-      }
-    });
+
+
+    if (this.SaleSupplierFeature) {
+      this.global.getPartyList().subscribe((data: any) => {
+        if (data.length > 0) {
+          this.partyList = data.map((e: any, index: any) => {
+            (e.indexNo = index + 1);
+            return e;
+          });
+          this.partyList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+        }
+      })
+    } else {
+      this.global.getCustomerList().subscribe((data: any) => {
+        if (data.length > 0) {
+          this.partyList = data.map((e: any, index: any) => {
+            (e.indexNo = index + 1);
+            return e;
+          });
+          this.partyList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+        }
+      });
+    }
 
 
   }

@@ -17,12 +17,12 @@ export class SaleSavedBillComponent implements OnInit {
 
 
 
-  
+
   showCmpNameFeature: any = this.global.showCmpNameFeature;
   waiterFeature = this.global.waiterFeature;
   FBRFeature = this.global.FBRFeature;
   gstFeature = this.global.gstFeature;
-  
+
   serviceChargesFeature = this.global.serviceChargeFeature;
   RestSimpleSaleFeature = this.global.RestSimpleSaleFeature;
   BankShortCutsFeature = this.global.BankShortCutsFeature;
@@ -35,14 +35,18 @@ export class SaleSavedBillComponent implements OnInit {
   autoTableSelectFeature = this.global.AutoTableSelect;
   postBillFeature = this.global.postSale;
 
-   delRestSaleFeature = this.global.delRestSaleFeature;
+  delRestSaleFeature = this.global.delRestSaleFeature;
 
   editRestSaleFeature = this.global.editRestSaleFeature;
   buzzerNoFeature = this.global.buzzerNoFeature;
+  changePaymentMehtodFeature = this.global.changePaymentMehtodFeature;
+
+  userRoleType = this.global.getRoleTypeID();
+
 
   constructor(
- 
-    
+
+
     public global: GlobalDataModule,
     private dialog: MatDialog,
     public http: HttpClient,
@@ -54,44 +58,44 @@ export class SaleSavedBillComponent implements OnInit {
 
 
 
-    @Output() changePaymentEmitter = new EventEmitter();
-    @Output() sendToFbrEmitter = new EventEmitter();
-    @Output() printDuplicateEmitter = new EventEmitter();
-    @Output() billDetailEmitter = new EventEmitter();
-    @Output() postBillEmitter = new EventEmitter();
-    @Output() editSaleBill = new EventEmitter();
-    @Output() deleteSaleBill = new EventEmitter();
-    @Input()  savedbillList:any = [];
-    crudList: any = { c: true, r: true, u: true, d: true };
-  
-  
-  
-  
-    changePayment(item:any){
-      this.changePaymentEmitter.emit(item);
-    }
-    printDuplicateBill(item:any){
-      this.printDuplicateEmitter.emit(item);
-    }
-  
-    sendToFbr(item:any){
-      this.sendToFbrEmitter.emit(item);
-    }
-  
-    billDetails(item:any){
-      this.billDetailEmitter.emit(item);
-    }
-    postSaleBill(item:any){
-      this.postBillEmitter.emit(item);
-    }
+  @Output() changePaymentEmitter = new EventEmitter();
+  @Output() sendToFbrEmitter = new EventEmitter();
+  @Output() printDuplicateEmitter = new EventEmitter();
+  @Output() billDetailEmitter = new EventEmitter();
+  @Output() postBillEmitter = new EventEmitter();
+  @Output() editSaleBill = new EventEmitter();
+  @Output() deleteSaleBill = new EventEmitter();
+  @Input() savedbillList: any = [];
+  crudList: any = { c: true, r: true, u: true, d: true };
 
-     editSale(item:any){
-      this.editSaleBill.emit(item);
-    }
 
-    deleteSale(item:any){
-      this.deleteSaleBill.emit(item);
-    }
- 
+
+
+  changePayment(item: any) {
+    this.changePaymentEmitter.emit(item);
+  }
+  printDuplicateBill(item: any) {
+    this.printDuplicateEmitter.emit(item);
+  }
+
+  sendToFbr(item: any) {
+    this.sendToFbrEmitter.emit(item);
+  }
+
+  billDetails(item: any) {
+    this.billDetailEmitter.emit(item);
+  }
+  postSaleBill(item: any) {
+    this.postBillEmitter.emit(item);
+  }
+
+  editSale(item: any) {
+    this.editSaleBill.emit(item);
+  }
+
+  deleteSale(item: any) {
+    this.deleteSaleBill.emit(item);
+  }
+
 
 }

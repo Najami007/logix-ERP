@@ -1,0 +1,604 @@
+/* ============================
+   Google Font
+============================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:host{
+    display:block;
+}
+
+.feedback-page{
+
+    min-height:100vh;
+
+    font-family:'Poppins',sans-serif;
+
+    background:#f7f4ef;
+
+}
+
+
+/* ============================
+Hero
+============================= */
+
+.hero-section{
+
+    position:relative;
+
+    height:380px;
+
+    background-image:url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4');
+
+    background-size:cover;
+
+    background-position:center;
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+.overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.55));
+
+}
+
+.hero-card{
+
+    position:relative;
+
+    color:white;
+
+    padding:45px;
+
+    border-radius:28px;
+
+    backdrop-filter:blur(16px);
+
+    background:rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    animation:fadeUp .7s;
+
+}
+
+.hero-card h1{
+
+    font-size:44px;
+
+    font-weight:700;
+
+    margin-top:20px;
+
+}
+
+.hero-card p{
+
+    font-size:17px;
+
+    opacity:.95;
+
+    max-width:650px;
+
+    margin:auto;
+
+}
+
+.restaurant-logo{
+
+    width:90px;
+
+    height:90px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    background:white;
+
+    color:#355c4c;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.25);
+
+}
+
+.restaurant-logo mat-icon{
+
+    font-size:48px;
+
+    width:48px;
+
+    height:48px;
+
+}
+
+
+/* ============================
+Glass Card
+============================= */
+
+.glass-card{
+
+    border-radius:24px !important;
+
+    padding:28px;
+
+    border:none !important;
+
+    background:rgba(255,255,255,.85);
+
+    backdrop-filter:blur(20px);
+
+    box-shadow:0 15px 45px rgba(0,0,0,.08);
+
+    transition:.35s;
+
+}
+
+.glass-card:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 25px 60px rgba(0,0,0,.12);
+
+}
+
+
+/* ============================
+Section Heading
+============================= */
+
+.section-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:18px;
+
+}
+
+.section-title h3{
+
+    margin:0;
+
+    font-weight:600;
+
+    color:#2f3a35;
+
+}
+
+.section-title mat-icon{
+
+    color:#c59b4d;
+
+}
+
+
+
+
+
+.selectedEmojiCard{
+    background-color: gold !important;
+}
+
+.selectedStar{
+    color: gold !important;
+}
+
+
+
+/* ==========================================
+   Material Form Fields
+========================================== */
+
+.mat-mdc-form-field{
+
+    width:100%;
+
+}
+
+.mdc-text-field--outlined{
+
+    border-radius:18px !important;
+
+}
+
+.mat-mdc-form-field-focus-overlay{
+
+    border-radius:18px;
+
+}
+
+textarea{
+
+    resize:none;
+
+}
+
+
+/* ==========================================
+   Voice Recorder
+========================================== */
+
+.voice-recorder{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:35px 20px;
+
+    border-radius:22px;
+
+    background:linear-gradient(135deg,#fffdf9,#f9f6ef);
+
+    border:2px dashed #e6d7bb;
+
+}
+
+.record-btn{
+
+    width:90px !important;
+
+    height:90px !important;
+
+    transition:.35s;
+
+    box-shadow:0 12px 35px rgba(53,92,76,.25);
+
+}
+
+.record-btn:hover{
+
+    transform:scale(1.08);
+
+}
+
+.record-btn mat-icon{
+
+    font-size:38px;
+
+    width:38px;
+
+    height:38px;
+
+}
+
+.timer{
+
+    margin-top:25px;
+
+    font-size:42px;
+
+    font-weight:700;
+
+    color:#355c4c;
+
+    letter-spacing:3px;
+
+}
+
+.voice-recorder p{
+
+    color:#777;
+
+    margin-top:8px;
+
+}
+
+
+/* ==========================================
+   Recording Animation
+========================================== */
+
+.recording{
+
+    animation:pulse 1.5s infinite;
+
+}
+
+@keyframes pulse{
+
+    0%{
+
+        box-shadow:0 0 0 0 rgba(220,53,69,.55);
+
+    }
+
+    70%{
+
+        box-shadow:0 0 0 25px rgba(220,53,69,0);
+
+    }
+
+    100%{
+
+        box-shadow:0 0 0 0 rgba(220,53,69,0);
+
+    }
+
+}
+
+
+/* ==========================================
+   Audio Player
+========================================== */
+
+.audio-player{
+
+    text-align:center;
+
+}
+
+.audio-player audio{
+
+    width:100%;
+
+    max-width:650px;
+
+    border-radius:12px;
+
+}
+
+
+/* ==========================================
+   Submit Button
+========================================== */
+
+.submit-btn{
+
+    min-width:280px;
+
+    height:60px;
+
+    border-radius:40px !important;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    background:linear-gradient(135deg,#355c4c,#4f7d65) !important;
+
+    color:white !important;
+
+    transition:.35s;
+
+    box-shadow:0 12px 35px rgba(53,92,76,.35);
+
+}
+
+.submit-btn:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 20px 45px rgba(53,92,76,.45);
+
+}
+
+.submit-btn mat-icon{
+
+    margin-right:10px;
+
+}
+
+
+/* ==========================================
+   Material Buttons
+========================================== */
+
+.mat-mdc-raised-button,
+.mat-mdc-fab,
+.mat-mdc-mini-fab{
+
+    transition:.3s !important;
+
+}
+
+.mat-mdc-raised-button:hover,
+.mat-mdc-fab:hover,
+.mat-mdc-mini-fab:hover{
+
+    transform:translateY(-2px);
+
+}
+
+
+/* ==========================================
+   Divider
+========================================== */
+
+.mat-divider{
+
+    opacity:.08;
+
+}
+
+
+/* ==========================================
+   Page Animation
+========================================== */
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(35px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+.glass-card{
+
+    animation:fadeUp .6s ease;
+
+}
+
+
+/* ==========================================
+   Scrollbar
+========================================== */
+
+::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#c6b08a;
+
+    border-radius:30px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#f7f4ef;
+
+}
+
+
+/* ==========================================
+   Mobile
+========================================== */
+
+@media(max-width:992px){
+
+.hero-section{
+
+    height:300px;
+
+}
+
+.hero-card{
+
+    padding:30px;
+
+}
+
+.hero-card h1{
+
+    font-size:32px;
+
+}
+
+.emoji-container{
+
+    justify-content:center;
+
+}
+
+
+.submit-btn{
+
+    width:100%;
+
+}
+
+.timer{
+
+    font-size:34px;
+
+}
+
+}
+
+@media(max-width:576px){
+
+.hero-section{
+
+    height:250px;
+
+}
+
+.restaurant-logo{
+
+    width:70px;
+
+    height:70px;
+
+}
+
+.restaurant-logo mat-icon{
+
+    font-size:38px;
+
+}
+
+.hero-card{
+
+    padding:20px;
+
+}
+
+.hero-card h1{
+
+    font-size:28px;
+
+}
+
+.hero-card p{
+
+    font-size:14px;
+
+}
+
+
+
+
+
+.glass-card{
+
+    padding:20px;
+
+}
+
+.record-btn{
+
+    width:75px !important;
+
+    height:75px !important;
+
+}
+
+.timer{
+
+    font-size:28px;
+
+}
+
+}

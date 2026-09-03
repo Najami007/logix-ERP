@@ -20,6 +20,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import Swal from 'sweetalert2';
 import { UpdateSubscriptionComponent } from 'src/app/Components/User/update-subscription/update-subscription.component';
 import { SubscriptionKeyGeneratorComponent } from 'src/app/Components/User/subscription-key-generator/subscription-key-generator.component';
+import { ConfirmationModalComponent } from 'src/app/Components/User/confirmation-modal/confirmation-modal.component';
 
 
 
@@ -59,8 +60,8 @@ export class GlobalDataModule implements OnInit {
   ////////////////////////
 
 
-  ResCardGst = 5; // this.getCardGst();
-  ResCashGst = 16; // this.getCashGst();
+  ResCardGst = this.GetGSTValue('Bank');  // 5; // this.getCardGst();
+  ResCashGst = this.GetGSTValue('Cash'); //16; // this.getCashGst();
   POSFee = this.getPosFee();
   InvProjectID = 1;
   parkProjectID = 6;
@@ -211,6 +212,7 @@ export class GlobalDataModule implements OnInit {
           )
           this.getCompany();
           this.refreshFeatures();
+          this.GetGSTValue('Cash');
 
 
           this.rout.navigate(["home"]);
@@ -327,7 +329,7 @@ export class GlobalDataModule implements OnInit {
   showSaleAQFeature = this.getFeature('showSaleAQ');
   showSaleCPFeature = this.getFeature('showSaleCP');
   PrintKotAreawiseFeature = this.getFeature('PrintKotAreawise');
-  FurnitureSaleFeature = this.getFeature('FurnitureSale');
+  DigitalInvoicesFeature = this.getFeature('DigitalInvoices');
   DisableDineInKotPrintFeature = this.getFeature('DisableDineInKotPrint');
   dashSlashBarcodeFeature = this.getFeature('dashSlashBarcode');
   CusDiscFeature = this.getFeature('CusDisc');
@@ -349,10 +351,23 @@ export class GlobalDataModule implements OnInit {
   buzzerNoFeature = this.getFeature('buzzerNo');
   showKotRemarksFeature = this.getFeature('showKotRemarks');
   orderwiseDashboardFeature = this.getFeature('orderwiseDashboard');
-  editInvSaleFeature  = this.getFeature('editInvSale');
+  editInvSaleFeature = this.getFeature('editInvSale');
   delInvSaleFeature = this.getFeature('delInvSale');
   showTotalQtyFeature = this.getFeature('showTotalQty');
   showUomTitleFeature = this.getFeature('showUomTitle');
+  productRecipeFeature = this.getFeature('productRecipe');
+  uomPurchaseFeature = this.getFeature('uomPurchase');
+  disableOtherDiscFeature = this.getFeature('disableOtherDisc');
+  DisablePoPartyFeature = this.getFeature('DisablePoParty');
+  TransporterFeature = this.getFeature('Transporter');
+  AdvanceTaxFeature = this.getFeature('AdvanceTax');
+  RouteFeature = this.getFeature('Route');
+  SteelTypeFeature = this.getFeature('SteelType');
+  NonFBRFeature = this.getFeature('NonFBR');
+  qtyPopupFeature = this.getFeature('qtyPopup');
+  DisableVoidpwdFeature = this.getFeature('DisableVoidpwd');
+  MutliplePricesFeature = this.getFeature('MutliplePrices');
+  AutoEnterCashFeature = this.getFeature('AutoEnterCash');
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
     this.BookerFeature = this.getFeature('Booker');
@@ -401,7 +416,7 @@ export class GlobalDataModule implements OnInit {
     this.showSaleAQFeature = this.getFeature('showSaleAQ');
     this.showSaleCPFeature = this.getFeature('showSaleCP');
     this.PrintKotAreawiseFeature = this.getFeature('PrintKotAreawise');
-    this.FurnitureSaleFeature = this.getFeature('FurnitureSale');
+    this.DigitalInvoicesFeature = this.getFeature('FurnitureSale');
     this.DisableDineInKotPrintFeature = this.getFeature('DisableDineInKotPrint');
     this.dashSlashBarcodeFeature = this.getFeature('dashSlashBarcode');
     this.CusDiscFeature = this.getFeature('CusDisc');
@@ -423,15 +438,27 @@ export class GlobalDataModule implements OnInit {
     this.buzzerNoFeature = this.getFeature('buzzerNo');
     this.showKotRemarksFeature = this.getFeature('showKotRemarks');
     this.orderwiseDashboardFeature = this.getFeature('orderwiseDashboard');
-    this.editInvSaleFeature  = this.getFeature('editInvSale');
+    this.editInvSaleFeature = this.getFeature('editInvSale');
     this.delInvSaleFeature = this.getFeature('delInvSale');
     this.showTotalQtyFeature = this.getFeature('showTotalQty');
     this.showUomTitleFeature = this.getFeature('showUomTitle');
+    this.productRecipeFeature = this.getFeature('productRecipe');
+    this.uomPurchaseFeature = this.getFeature('uomPurchase');
+    this.disableOtherDiscFeature = this.getFeature('disableOtherDisc');
+    this.DisablePoPartyFeature = this.getFeature('DisablePoParty');
+    this.TransporterFeature = this.getFeature('Transporter');
+    this.AdvanceTaxFeature = this.getFeature('AdvanceTax');
+    this.RouteFeature = this.getFeature('Route');
+    this.SteelTypeFeature = this.getFeature('SteelType');
+    this.NonFBRFeature = this.getFeature('NonFBR');
+    this.qtyPopupFeature = this.getFeature('qtyPopup');
+    this.DisableVoidpwdFeature = this.getFeature('DisableVoidpwd');
+    this.MutliplePricesFeature = this.getFeature('MutliplePrices');
+    this.AutoEnterCashFeature = this.getFeature('AutoEnterCash');
   }
 
 
   getFeature(value: any) {
-
     var credentials = JSON.parse(localStorage.getItem('ftr') || '""');
     var returnStatus = false;
     if (credentials != '') {
@@ -503,6 +530,19 @@ export class GlobalDataModule implements OnInit {
     return value;
   }
 
+  getPrintSize() {
+    var value = '';
+    var credentials = localStorage.getItem('printSize');
+    if (credentials == null) {
+      value = 'thermal';
+    } else {
+      value = credentials;
+    }
+
+    return value;
+  }
+
+
 
 
   getModuleList(): Observable<any> {
@@ -547,16 +587,20 @@ export class GlobalDataModule implements OnInit {
 
 
 
-  getCardGst() {
-    var credentials = JSON.parse(localStorage.getItem('curVal') || "0");
-    return credentials != 0 ? parseInt(atob(atob(credentials.value._reqCrG))) : 0;
+GetGSTValue(type: 'Cash' | 'Bank'): number {
+  const credentials = JSON.parse(localStorage.getItem('curVal') || '0');
+
+  if (!credentials) {
+    return 0;
   }
 
-  getCashGst() {
-    var credentials = JSON.parse(localStorage.getItem('curVal') || "0");
+  const key = type === 'Cash' ? '_reqCsG' : '_reqCrG';
+  const value = credentials?.value?.[key];
 
-    return credentials != 0 ? parseInt(atob(atob(credentials.value._reqCsG))) : 0;
-  }
+  return value ? parseInt(atob(atob(value)), 10) : 0;
+}
+
+ 
 
 
   getPosFee() {
@@ -565,7 +609,7 @@ export class GlobalDataModule implements OnInit {
   }
 
   getServiceCharges() {
-    var val = 2.5;
+    var val = 5.5;
     return val;
   }
 
@@ -658,8 +702,8 @@ export class GlobalDataModule implements OnInit {
 
 
 
-
-    var ExpiryDate: any = 'TWpBek1DMHhNQzB3T0E9PQ==';
+    // TWpBek1DMHhNQzB3T0E9PQ==
+    var ExpiryDate: any = 'TWpBek1DMHdOUzB4TUE9PQ==';
     const now = new Date();
 
     const targetDate = new Date(atob(atob(ExpiryDate)));
@@ -1365,22 +1409,29 @@ export class GlobalDataModule implements OnInit {
       }).afterClosed().pipe(retry(3));
     } else {
 
-      return from(
-        Swal.fire({
-          title: "Confirm To Proceed",
-          showCancelButton: true,
-          confirmButtonText: 'Confirm',
-          showLoaderOnConfirm: true,
-        })
-      ).pipe(
-        switchMap((result) => {
-          if (result.isConfirmed) {
-            return this.pin$.pipe(map(pin => `*${pin}`)); // transform and return pin
-          } else {
-            return of(''); // return null if cancelled
-          }
-        })
-      );
+      // return from(
+      //   Swal.fire({
+      //     title: "Confirm To Proceed",
+      //     showCancelButton: true,
+      //     confirmButtonText: 'Confirm',
+      //     showLoaderOnConfirm: true,
+      //   })
+      // ).pipe(
+      //   switchMap((result) => {
+      //     if (result.isConfirmed) {
+      //       return this.pin$.pipe(map(pin => `*${pin}`)); // transform and return pin
+      //     } else {
+      //       return of(''); // return null if cancelled
+      //     }
+      //   })
+      // );
+
+      return this.dialog.open(ConfirmationModalComponent, {
+        width: '30%',
+        enterAnimationDuration: 500,
+        hasBackdrop: true,
+        disableClose: true,
+      }).afterClosed().pipe(retry(3))
 
     }
   }
@@ -1526,9 +1577,9 @@ export class GlobalDataModule implements OnInit {
     return result;
   }
 
-  openBootstrapModal(modalID: any, condition: any, keyboard?: any) {
+  openBootstrapModal(modalID: any, condition: any, keyboard?: any,focus?:any) {
     if (condition) {
-      const myModal = new bootstrap.Modal(modalID, { keyboard: keyboard || false, backdrop: keyboard || false });
+      const myModal = new bootstrap.Modal(modalID, { keyboard: keyboard || false,  focus: keyboard || false, backdrop: keyboard || false });
       myModal.show();
 
     }
@@ -1800,17 +1851,15 @@ export class GlobalDataModule implements OnInit {
       ProjectID: this.getProjectID(),
       UserID: this.getUserID()
     }).pipe(retry(3));
+  }
 
-
-    // .subscribe(
-    //   (Response: any) => {
-    //     if (Response.msg == 'Data Updated Successfully') {
-    //       this.msg.SuccessNotify(Response.msg);
-    //     } else {
-    //       this.msg.WarnNotify(Response.msg);
-    //     }
-    //   }
-    // )
+  public unPostSaleInvoice(item: any) {
+    return this.http.post(environment.mainApi + this.inventoryLink + 'UnPostInvoiceManual', {
+      InvBillNo: item.invBillNo,
+      partyID: item.partyID,
+      ProjectID: this.getProjectID(),
+      UserID: this.getUserID()
+    }).pipe(retry(3));
   }
 
   scrollToSection(id: string) {
@@ -1848,15 +1897,72 @@ export class GlobalDataModule implements OnInit {
   ////////////////// will auto change start zero value on input click//////////////////
   handleInputChange(event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (input.value.length > 1 && input.value.startsWith('0')) {
-      input.value = input.value.replace(/^0+/, '');
-    }
+    // if (input.value.length > 1 && input.value.startsWith('0')) {
+    //   input.value = input.value.replace(/^0+/, '');
+    // }
     if (input.value === '') {
       input.value = '0';
     }
   }
 
 
+
+  convertAmountToWords(amount: number): string {
+
+    const ones = [
+      '', 'One', 'Two', 'Three', 'Four', 'Five',
+      'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+      'Eleven', 'Twelve', 'Thirteen', 'Fourteen',
+      'Fifteen', 'Sixteen', 'Seventeen',
+      'Eighteen', 'Nineteen'
+    ];
+
+    const tens = [
+      '', '', 'Twenty', 'Thirty', 'Forty',
+      'Fifty', 'Sixty', 'Seventy',
+      'Eighty', 'Ninety'
+    ];
+
+
+    const convert = (num: number): string => {
+
+      if (num < 20)
+        return ones[num];
+
+
+      if (num < 100)
+        return tens[Math.floor(num / 10)] +
+          (num % 10 ? ' ' + ones[num % 10] : '');
+
+
+      if (num < 1000)
+        return ones[Math.floor(num / 100)] +
+          ' Hundred ' +
+          convert(num % 100);
+
+
+      if (num < 100000)
+        return convert(Math.floor(num / 1000)) +
+          ' Thousand ' +
+          convert(num % 1000);
+
+
+      if (num < 10000000)
+        return convert(Math.floor(num / 100000)) +
+          ' Lakh ' +
+          convert(num % 100000);
+
+
+      return convert(Math.floor(num / 10000000)) +
+        ' Crore ' +
+        convert(num % 10000000);
+
+    }
+
+
+    return convert(amount) + ' Only';
+
+  }
 
 
 }

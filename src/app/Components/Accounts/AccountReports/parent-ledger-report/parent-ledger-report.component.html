@@ -1,0 +1,154 @@
+<div class=" body">
+    <div class="container-fluid p-2">
+        <div class="container-fluid ">
+
+
+            <!----------------           Date Section ------------------------------->
+            <div class="row ">
+                <mat-form-field class="col-lg-4 matSmall" appearance="outline">
+                    <mat-label>Coa Title</mat-label>
+                    <mat-select [(ngModel)]="coaID" name="coaTitle" (selectionChange)="onCoaChange()">
+                        <mat-option><ngx-mat-select-search [(ngModel)]="txtSearch" [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                        <mat-option *ngFor="let item of CoaList | filter:txtSearch | slice:0:20 "
+                            value="{{item.coaID}}">{{item.coaTitle}}- ({{item.accountCode}})</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="col-lg-2 matSmall" appearance="outline">
+                    <mat-label>Project </mat-label>
+                    <mat-select [(ngModel)]="projectID" [disabled]="searchTypeID == 1" name="project">
+                        <mat-option><ngx-mat-select-search [(ngModel)]="projectSearch" [placeholderLabel]="'Search...'"
+                                [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                        <mat-option [value]="0">All</mat-option>
+
+                        <mat-option *ngFor="let item of projectList|filter:projectSearch "
+                            value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="col-lg-3 matSmall" appearance="outline">
+                    <mat-label>From Date</mat-label>
+                    <input matInput type="text" readonly="true" [disabled]="searchTypeID == 1" [(ngModel)]="startDate" [matDatepicker]="sDate">
+                    <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
+                    <mat-datepicker #sDate></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field class="col-lg-3 matSmall" appearance="outline">
+                    <mat-label>To Date</mat-label>
+                    <input matInput type="text" readonly="true" [(ngModel)]="EndDate" [matDatepicker]="eDate">
+                    <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+                    <mat-datepicker #eDate></mat-datepicker>
+                </mat-form-field>
+
+
+                <div class="col-lg-12 text-center d-flex flex-wrap row" *ngIf="crudList.r">
+                    <!-- <button class=" col-lg-2 btn-rpt-success  me-1"
+                        (click)="getLedgerReport('project')">ProjectWise</button> -->
+
+                    <mat-form-field class="col-lg-4 matSmall" appearance="outline">
+                        <mat-label>Type </mat-label>
+                        <mat-select [(ngModel)]="searchTypeID" name="type">
+                            <mat-option [value]="0">Datewise</mat-option>
+                            <mat-option [value]="1">All Time</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <div class=" col-lg-2 pe-1">
+                        <button class="btn-rpt-success w-100" (click)="getLedgerReport('all')">Get Report</button>
+                    </div>
+
+                    <div class=" col-lg-2 pe-1"><button class="w-100 btn-rpt-primary" (click)="PrintTable()">
+                            Print</button></div>
+
+                    <div class=" col-lg-2 pe-1"><button class="w-100 btn-rpt-export" (click)="export()">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <!------------------- Table Area ---------------------- -->
+        <div id="printRpt" class=" printDiv p-3 pt-0">
+
+
+            <!-------------------------    Top Logo Section -------------------->
+            <div class="hide">
+                <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                    <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                        <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset=""
+                            [height]="item.logo1Height" [width]="item.logo1Width">
+                    </span>
+                    <div class="d-flex flex-column">
+
+
+                        <span class="companyName">{{item.companyName}}</span>
+
+
+                        <span class="rptTitle">Ledger Report ( {{curCOATitle}} ) </span>
+                        <span class="projtitl" *ngIf="projectName != ''"><b>Project:</b>
+                            {{projectName}}</span>
+                        <span><b>From:</b> {{startDate | date:'dd-MM-yyyy'}} <b>To:</b> {{EndDate
+                            | date:'dd-MM-yyyy'}}</span>
+
+                    </div>
+                    <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                        <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                            height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                    </span>
+
+
+                </div>
+            </div>
+
+            <table class=" table-logix" id="ledger">
+
+                <thead>
+                    <tr class="text-center">
+                        <th>S#</th>
+                        <th class="wide cursorPointer" (click)="sortData('date')">Date</th>
+                        <th class="wide cursorPointer" (click)="sortData('invNo')">Inv #</th>
+                        <th>Project</th>
+                        <th>COA</th>
+                        <th>Particular</th>
+                        <th>Narration</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                        <!-- <th>Balance</th> -->
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of tableData let i=index">
+                        <td class="text-center">{{i+1}}</td>
+                        <td>{{item.invoiceDate | date:'dd-MM-yyyy'}}</td>
+                        <td class="  cursorPointer text-primary " (click)="VoucherDetails(item)"><span
+                                class="border-bottom">{{item.invoiceNo}}</span></td>
+                        <td>{{item.projectTitle}}</td>
+                        <td>{{item.coaTitle}}</td>
+                        <td>{{item.particular}}</td>
+                        <td>{{item.detailNarration}}</td>
+                        <td class=" text-end">{{item.debit |number:'1.0-0'}}</td>
+                        <td class=" text-end">{{item.credit |number:'1.0-0'}}</td>
+                        <!-- <td class=" text-end">{{item.balance |number:'1.0-0'}}</td> -->
+
+
+
+                    </tr>
+                    <tr class="fw-bold">
+                        <td class="text-center" colspan="7">Total</td>
+                        <td class="text-end">{{debitTotal |number:'1.0-0'}}</td>
+                        <td class="text-end">{{creditTotal |number:'1.0-0'}}</td>
+                        <!-- <td class="text-end">{{debitTotal - creditTotal |number:'1.0-0'}}</td> -->
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+        </div>
+
+
+
+    </div>
+</div>

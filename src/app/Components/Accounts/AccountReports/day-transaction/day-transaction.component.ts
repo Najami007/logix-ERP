@@ -109,6 +109,7 @@ export class DayTransactionComponent implements OnInit {
     this.http.get(environment.mainApi + this.global.accountLink + 'GetDayTransaction?FromDate=' + this.global.dateFormater(this.fromDate, '-') +
       '&ToDate=' + this.global.dateFormater(this.toDate, '-')).subscribe(
         (Response: any) => {
+          
             if (Response.length == 0 || Response == null) {
             this.global.popupAlert('Data Not Found!');
             this.app.stopLoaderDark();
@@ -170,6 +171,29 @@ export class DayTransactionComponent implements OnInit {
 
     })
   }
+
+
+ sortData(type: any) {
+  this.reportData = [...this.tmpReportData].sort((a: any, b: any) => {
+
+
+     if (type === 'date') {
+      return new Date(a.invoiceDate).getTime() - new Date(b.invoiceDate).getTime();
+    }
+
+    if (type === 'invNo') {
+
+      const getPrefix = (val: string) => val.split('-')[0];
+
+      const prefixA = getPrefix(a.invoiceNo);
+      const prefixB = getPrefix(b.invoiceNo);
+
+      return prefixA.localeCompare(prefixB); // A → Z (CPV → JV)
+    }
+
+    return 0;
+  });
+}
 
 
 

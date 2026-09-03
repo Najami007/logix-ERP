@@ -1,0 +1,148 @@
+<div class="container py-5 d-none">
+
+    <div class="card shadow-lg border-0 rounded-4">
+
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">
+                🎤 Voice Recorder
+            </h3>
+        </div>
+
+        <div class="card-body text-center">
+
+            <div class="display-5 fw-bold mb-4">
+                {{recordingTime}}
+            </div>
+
+            <div class="mb-4">
+
+                <button class="btn btn-success me-2" (click)="startRecording()" [disabled]="isRecording">
+
+                    <i class="bi bi-mic-fill"></i>
+                    Start
+
+                </button>
+
+                <button class="btn btn-danger" (click)="stopRecording()" [disabled]="!isRecording">
+
+                    <i class="bi bi-stop-fill"></i>
+                    Stop
+
+                </button>
+
+            </div>
+
+            <div *ngIf="audioUrl">
+
+                <audio controls [src]="audioUrl"></audio>
+
+                <br><br>
+
+                <button class="btn btn-outline-primary" (click)="downloadAudio()">
+
+                    Download Recording
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<div class="container-fluid ">
+
+
+    <!-- <button mat-mini-fab color="primary" class="mic-fab" (click)="showRecorder = !showRecorder">
+
+        <mat-icon>
+            {{ showRecorder ? 'close' : 'mic' }}
+        </mat-icon>
+
+    </button> -->
+
+    <div class="row justify-content-center align-items-center h-100">
+
+        <div class="col-xl-8 col-lg-10">
+
+            <div class="voice-card" >
+
+                <!-- Left -->
+                <div class="voice-info">
+
+                    <div class="mic-circle">
+
+                        <i class="bi bi-mic-fill"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h4 class="mb-1 fw-bold">
+                            Voice Recorder
+                        </h4>
+
+                        <small class="text-muted">
+                            Record your voice and save it instantly
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <!-- Center -->
+                <div class="timer-section">
+
+                    {{recordingTime}}
+
+                </div>
+
+                <!-- Right -->
+                <div class="button-section">
+
+                    <button class="btn start-btn" (click)="startRecording()" [disabled]="isRecording">
+
+                        <i class="bi bi-record-circle"></i>
+
+                        Start
+
+                    </button>
+
+                    <button class="btn stop-btn" (click)="stopRecording()" [disabled]="!isRecording">
+
+                        <i class="bi bi-stop-circle"></i>
+
+                        Stop
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- Player -->
+
+            <div class="player-card mt-4" *ngIf="audioUrl">
+
+                <audio controls [src]="audioUrl"></audio>
+
+                <button class="btn btn-outline-primary rounded-pill" (click)="downloadAudio()">
+
+                    <i class="bi bi-download"></i>
+
+                    Download
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

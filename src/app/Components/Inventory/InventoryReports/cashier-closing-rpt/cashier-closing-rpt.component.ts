@@ -98,7 +98,9 @@ export class CashierClosingRptComponent implements OnInit {
 
   getReport(type: any) {
 
-    var url = type == 'date' ? `GetDayClosingRpt_9?reqDate=${this.global.dateFormater(this.Date, '-')}` : 'GetCurrentOpenDayClosingRpt_14'
+    var url = type == 'date'
+      ? `${environment.mainApi + this.global.inventoryLink}GetDayClosingRpt_9?reqDate=${this.global.dateFormater(this.Date, '-')}`
+      : `${environment.mainApi + this.global.inventoryLink}GetCurrentOpenDayClosingRpt_14`
     this.app.startLoaderDark();
     this.TotalSales = 0
     this.totalSaleReturn = 0
@@ -111,9 +113,15 @@ export class CashierClosingRptComponent implements OnInit {
     this.totalCredit = 0;
     this.totalPosFee = 0;
     this.ClosingDetail = [];
-    this.http.get(environment.mainApi + this.global.inventoryLink + url).subscribe(
+    this.http.get(url).subscribe(
       (Response: any) => {
-        if (Response.length == 0 || Response == null) {
+
+        if (Response == null) {
+          this.global.popupAlert('Null Returned');
+          this.app.stopLoaderDark();
+          return;
+        }
+        if (Response == null || Response.length == 0) {
           this.global.popupAlert('Data Not Found!');
           this.app.stopLoaderDark();
           return;
@@ -140,7 +148,7 @@ export class CashierClosingRptComponent implements OnInit {
         });
         this.app.stopLoaderDark();
       },
-      (Error:any)=>{
+      (Error: any) => {
         console.log(Error);
         this.app.stopLoaderDark();
       }
@@ -150,34 +158,34 @@ export class CashierClosingRptComponent implements OnInit {
 
 
   /////////////////////////////// Bank Detail Function  ////////////////
- BankDetail: any[] = [];
-BankSummaryList: any[] = [];
+  BankDetail: any[] = [];
+  BankSummaryList: any[] = [];
 
-getBankDetail(date: any): void {
-  const formattedDate = this.global.dateFormater(date, '-');
-  const url = `${environment.mainApi}${this.global.inventoryLink}GetBankSummaryRpt_10?reqDate=${formattedDate}`;
+  getBankDetail(date: any): void {
+    const formattedDate = this.global.dateFormater(date, '-');
+    const url = `${environment.mainApi}${this.global.inventoryLink}GetBankSummaryRpt_10?reqDate=${formattedDate}`;
 
-  this.http.get(url).subscribe((response: any) => {
-    this.BankDetail = response || [];
+    this.http.get(url).subscribe((response: any) => {
+      this.BankDetail = response || [];
 
-    // Create a summary map to accumulate unique banks and their amounts
-    const summaryMap = new Map<number, { coaID: number, coaTitle: string, amount: number }>();
+      // Create a summary map to accumulate unique banks and their amounts
+      const summaryMap = new Map<number, { coaID: number, coaTitle: string, amount: number }>();
 
-    for (const item of this.BankDetail) {
-      if (summaryMap.has(item.coaID)) {
-        summaryMap.get(item.coaID)!.amount += item.debit - item.credit;
-      } else {
-        summaryMap.set(item.coaID, {
-          coaID: item.coaID,
-          coaTitle: item.coaTitle,
-          amount: item.debit - item.credit
-        });
+      for (const item of this.BankDetail) {
+        if (summaryMap.has(item.coaID)) {
+          summaryMap.get(item.coaID)!.amount += item.debit - item.credit;
+        } else {
+          summaryMap.set(item.coaID, {
+            coaID: item.coaID,
+            coaTitle: item.coaTitle,
+            amount: item.debit - item.credit
+          });
+        }
       }
-    }
 
-    this.BankSummaryList = Array.from(summaryMap.values());
-  });
-}
+      this.BankSummaryList = Array.from(summaryMap.values());
+    });
+  }
 
 
 

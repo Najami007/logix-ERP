@@ -19,6 +19,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ProductBarcodesComponent } from './product-barcodes/product-barcodes.component';
 import Swal from 'sweetalert2';
 import { MatSidenav } from '@angular/material/sidenav';
+import { retry } from 'rxjs';
+import { ProductRecipeComponent } from './product-recipe/product-recipe.component';
 
 @Component({
   selector: 'app-product',
@@ -28,6 +30,8 @@ import { MatSidenav } from '@angular/material/sidenav';
 export class ProductComponent implements OnInit {
 
   @ViewChild('filterPanel') filterPanel!: MatSidenav;
+
+  @ViewChild(ProductRecipeComponent) productRecipeComp: any
 
   /////////// crud list to handle user wise restriction //////////
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -45,11 +49,13 @@ export class ProductComponent implements OnInit {
   discFeature = this.global.discFeature;
   MultiBarcode = this.global.MultiBarcode;
   ManufacturingFeature = this.global.ManufacturingFeature;
-  FurnitureSaleFeature = this.global.FurnitureSaleFeature;
   appConfigFeature = this.global.appConfigFeature;
 
   ImageUrlFeature = this.global.ImageUrlFeature;
   AddNewProductRestrictionFeature = this.global.AddNewProductRestrictionFeature;
+  productRecipeFeature = this.global.productRecipeFeature;
+  DigitalInvoicesFeature = this.global.DigitalInvoicesFeature;
+  MutliplePricesFeature = this.global.MutliplePricesFeature;
 
 
 
@@ -161,7 +167,10 @@ export class ProductComponent implements OnInit {
     this.getProductList();
     this.tableSize = this.global.paginationDefaultTalbeSize;
     this.tableSizes = this.global.paginationTableSizes;
-    for (let i = 0; i <= 100; i++) { this.discountList.push({ value: i }); }
+    for (let i = 0; i <= 100; i++) { this.discountList.push({ value: i }); };
+
+
+    this.hideFields();
 
   }
 
@@ -191,9 +200,15 @@ export class ProductComponent implements OnInit {
     { title: 'Not Linked With App', value: false, isChecked: false },
   ]
 
+  tmpProductNatureFilterList = [
+    { title: 'General', value: 'General', isChecked: false },
+    { title: 'Raw', value: 'Raw', isChecked: false },
+    { title: 'Finished', value: 'Finished', isChecked: false },
+  ]
+
   costGreaterThenSaleFilter: any = false;
   avgCostGreaterThenSaleFilter: any = false;
-  discSalePriceLessThenCostFilter :any = false;
+  discSalePriceLessThenCostFilter: any = false;
 
 
   subCategoryFilterList: any = [];
@@ -231,7 +246,9 @@ export class ProductComponent implements OnInit {
       .filter((e: any) => e.isChecked)
       .map((e: any) => e.value);
 
-
+    const prodNatureList = this.tmpProductNatureFilterList
+      .filter((e: any) => e.isChecked)
+      .map((e: any) => e.value);
 
 
 
@@ -260,7 +277,8 @@ export class ProductComponent implements OnInit {
       ) &&
       (this.costGreaterThenSaleFilter ? p.costPrice > p.salePrice : true) &&
       (this.avgCostGreaterThenSaleFilter ? p.avgCostPrice > p.salePrice : true) &&
-      (this.discSalePriceLessThenCostFilter ? (p.salePrice - p.discRupees) < p.costPrice : true)
+      (this.discSalePriceLessThenCostFilter ? (p.salePrice - p.discRupees) < p.costPrice : true) &&
+      (prodNatureList.length === 0 || prodNatureList.includes(p.productNature))
 
     );
 
@@ -312,9 +330,11 @@ export class ProductComponent implements OnInit {
   Barcode: any = '';
   CostPrice: any = '';
   SalePrice: any = '';
+  ctoCPrice: any = '';
+  wholeSalePrice: any = '';
   productType: any = 0;
   productImg: any = '-';
-  packing:any = 1;
+  packing: any = 1;
 
   BrandID: any = 0;
   rackID: any = 0;
@@ -330,6 +350,13 @@ export class ProductComponent implements OnInit {
   pctCode: any = '';
   UOMID: any = 0;
   prodTypeID: any = 0;
+  ProductNature: any = 'General';
+
+  ProductNatureTypeList: any = [
+    { title: 'General' },
+    { title: 'Raw' },
+    { title: 'Finished' },
+  ]
 
   discFilterID = 0;
   DiscFilterList: any = [
@@ -368,13 +395,16 @@ export class ProductComponent implements OnInit {
   }
 
 
-
+  RawProductList: any = [];
   /////////////////// getting Product List global Function //////////
   getProductList() {
     this.http.get(environment.mainApi + this.global.inventoryLink + 'GetProduct').subscribe(
       (Response: any) => {
         this.productList = Response;
         this.tempProdList = Response;
+
+        this.RawProductList = Response.length > 0 ? Response.filter((e: any) => e.productNature == 'Raw') : [];
+
         this.AdvanceFilter();
 
       }
@@ -536,6 +566,10 @@ export class ProductComponent implements OnInit {
   save() {
 
 
+    if (this.btnType == 'Update' && this.CostPrice == 0) {
+      this.CostPrice = 1;
+    }
+
     if (this.AddNewProductRestrictionFeature && this.btnType == 'Save') {
       this.msg.WarnNotify('Not Allowed to Add New Product');
       return;
@@ -559,11 +593,11 @@ export class ProductComponent implements OnInit {
       this.msg.WarnNotify('Enter Barcode');
       return;
     }
-    if (this.BrandID == '' || this.BrandID == 0  || this.BrandID == undefined) {
+    if (this.BrandID == '' || this.BrandID == 0 || this.BrandID == undefined) {
       this.msg.WarnNotify('Select Brand');
       return;
     }
-    if (this.rackID == '' || this.rackID == 0 ||  this.rackID == undefined) {
+    if (this.rackID == '' || this.rackID == 0 || this.rackID == undefined) {
       this.msg.WarnNotify('Select Rack ');
       return;
     }
@@ -572,7 +606,7 @@ export class ProductComponent implements OnInit {
       return;
     }
 
-     if (this.prodTypeID == '' || this.prodTypeID == 0 || this.prodTypeID == undefined) {
+    if (this.prodTypeID == '' || this.prodTypeID == 0 || this.prodTypeID == undefined) {
       this.msg.WarnNotify('Select Product Type');
       return;
     }
@@ -581,6 +615,26 @@ export class ProductComponent implements OnInit {
       this.msg.WarnNotify('Enter Cost Price');
       return;
     }
+
+    if ((this.ctoCPrice == '' || this.ctoCPrice <= 0 || this.ctoCPrice == undefined) && this.MutliplePricesFeature) {
+      this.msg.WarnNotify('Enter CTC Price');
+      return;
+    }
+
+    if ((this.ctoCPrice < this.CostPrice || this.ctoCPrice > this.wholeSalePrice || this.ctoCPrice > this.SalePrice) && this.MutliplePricesFeature) {
+      this.msg.WarnNotify('CTC Price not valid!');
+      return;
+    }
+    if ((this.wholeSalePrice < this.ctoCPrice || this.wholeSalePrice > this.SalePrice) && this.MutliplePricesFeature) {
+      this.msg.WarnNotify('Whole Sale Price not valid!');
+      return;
+    }
+
+    if ((this.wholeSalePrice == '' || this.wholeSalePrice <= 0 || this.wholeSalePrice == undefined) && this.MutliplePricesFeature) {
+      this.msg.WarnNotify('Enter Whole Sale Price');
+      return;
+    }
+
     if ((this.SalePrice == '' || this.SalePrice <= 0 || this.SalePrice == undefined) && !this.ManufacturingFeature) {
       this.msg.WarnNotify('Enter Sale Price');
       return;
@@ -611,6 +665,12 @@ export class ProductComponent implements OnInit {
       this.productImg = '-';
     }
 
+    var tmpCostPrice = this.CostPrice || 1;
+    if (this.ProductNature == 'Finished' && this.btnType == 'Save') {
+      tmpCostPrice = 0
+    }
+
+
     var postData = {
       ProductID: this.ProductID,
       CategoryID: this.CategoryID,
@@ -627,7 +687,9 @@ export class ProductComponent implements OnInit {
       ET: this.Et || 0,
       PCTCode: this.pctCode || '-',
       AllowMinus: this.allowMinus,
-      CostPrice: this.CostPrice || 1,
+      CostPrice: tmpCostPrice,// this.ProductNature == 'Finished' ? 0 : this.CostPrice || 1,
+      CtoCPrice: this.ctoCPrice || 0,
+      WholeSalePrice: this.wholeSalePrice || 0,
       SalePrice: this.SalePrice || 1,
       DiscPercentage: this.DiscPercent,
       DiscRupees: this.DiscRupee,
@@ -637,17 +699,17 @@ export class ProductComponent implements OnInit {
       ProductImage: this.productImg || '-',
       ProductTypeID: this.prodTypeID,
       mrp: this.mrp || 0,
-      Packing:this.packing,
-      UserID: this.global.getUserID()
+      Packing: this.packing,
+      UserID: this.global.getUserID(),
+      ProductNature: this.ProductNature,
     };
 
-    console.log(postData);
     if (this.btnType == 'Save') {
       this.insert(postData);
     } else if (this.btnType == 'Update') {
 
-      if(this.AddNewProductRestrictionFeature){
-        this.global.closeBootstrapModal('#productEditModal',true)
+      if (this.AddNewProductRestrictionFeature) {
+        this.global.closeBootstrapModal('#productEditModal', true)
       }
 
       this.update(postData);
@@ -722,8 +784,8 @@ export class ProductComponent implements OnInit {
 
         if (pin == '') {
           this.openFlag = false;
-          if(this.AddNewProductRestrictionFeature){
-            this.global.openBootstrapModal('#productEditModal',true);
+          if (this.AddNewProductRestrictionFeature) {
+            this.global.openBootstrapModal('#productEditModal', true);
           }
         }
       }
@@ -757,6 +819,8 @@ export class ProductComponent implements OnInit {
       this.allowMinus = false;
       this.CostPrice = '';
       this.SalePrice = '';
+      this.ctoCPrice = '';
+      this.wholeSalePrice = '';
       this.DiscPercent = 0;
       this.DiscRupee = 0;
       // this.UOMID = 0;
@@ -764,11 +828,16 @@ export class ProductComponent implements OnInit {
       this.prodBarcodeType = 'auto'
       this.barcodeType = 'Basic';
       this.packing = 1;
+      this.ProductNature = 'General'
       // this.prodTypeID = 0;
 
       //this.btnType = 'Save';
       // this.productImg= '';
+
+
+
     }
+
 
 
   }
@@ -792,6 +861,8 @@ export class ProductComponent implements OnInit {
     this.rackID = row.rackID;
     this.UOMID = row.uomID;
     this.CostPrice = row.costPrice;
+    this.ctoCPrice = row.ctoCPrice;
+    this.wholeSalePrice = row.wholeSalePrice;
     this.SalePrice = row.salePrice;
     this.DiscPercent = row.discPercentage;
     this.DiscRupee = row.discRupees;
@@ -807,7 +878,7 @@ export class ProductComponent implements OnInit {
     this.prodTypeID = row.productTypeID;
 
     this.packing = row.packing;
-
+    this.ProductNature = row.productNature;
     if (this.AddNewProductRestrictionFeature) {
       this.global.openBootstrapModal('#productEditModal', true);
     } else {
@@ -1257,6 +1328,152 @@ export class ProductComponent implements OnInit {
 
   openImagesScreen() {
     this.route.navigate(["inv/product/addProductImages"]);
+  }
+
+
+
+
+  openProductRecipeModal(item: any) {
+    this.global.openBootstrapModal('#productRecipeModal', true);
+    this.productRecipeComp.productRecipeID = item.productID;
+    this.getProductRecipe(item.productID).subscribe(
+      {
+        next: (Response: any) => {
+          this.productRecipeComp.recipeProductList = [];
+          if (Response.length == 0) {
+            this.productRecipeComp.recipeBtnType = 'Save';
+            return;
+          }
+          this.productRecipeComp.recipeBtnType = 'Update';
+          Response.forEach((e: any) => {
+            this.productRecipeComp.pushProdData(e, e.quantity);
+          });
+
+        },
+        error: (error: any) => {
+          console.log(error);
+        }
+      }
+    );
+
+
+  }
+
+  getProductRecipe(ProductRecipeID: any) {
+    return this.http.get(`${environment.mainApi + this.global.inventoryLink}GetProductRecipeDetail?reqProductRecipeID=${ProductRecipeID}`).pipe(retry(3));
+  }
+
+  //////////////////////////////////////////////////////////////////////////
+
+
+
+  fields = {
+    category: { show: true, size: 'col-md-6' },
+    subCategory: { show: true, size: 'col-md-6' },
+    productName: { show: true, size: 'col-md-6' },
+    productName2: { show: true, size: 'col-md-6' },
+    productCode: { show: true, size: 'col-md-6' },
+    productBarcodeType: { show: true, size: 'col-md-2' },
+    barcode: { show: true, size: 'col-md-4' },
+    brand: { show: true, size: 'col-md-3' },
+    rack: { show: true, size: 'col-md-3' },
+    uom: { show: true, size: 'col-md-3' },
+    productType: { show: true, size: 'col-md-3' },
+    costPrice: { show: true, size: 'col-md-3' },
+    ctoCPrice: { show: true, size: 'col-md-3' },
+    wholeSalePrice: { show: true, size: 'col-md-3' },
+    salePrice: { show: true, size: 'col-md-3' },
+    discPercentage: { show: true, size: 'col-md-3' },
+    discRupee: { show: true, size: 'col-md-3' },
+    mrp: { show: true, size: 'col-md-3' },
+    packing: { show: true, size: 'col-md-3' },
+    generatePrice: { show: true, size: 'col-md-6' },
+    minRol: { show: true, size: 'col-md-3' },
+    maxRol: { show: true, size: 'col-md-3' },
+    gst: { show: true, size: 'col-md-3' },
+    et: { show: true, size: 'col-md-3' },
+    pctCode: { show: true, size: 'col-md-3' },
+    productNature: { show: true, size: 'col-md-3' },
+    allowMinus: { show: true, size: 'col-md-3' },
+    barcodeType: { show: true, size: 'col-md-3' },
+    productImg: { show: true, size: 'col-md-2' },
+    description: { show: true, size: 'col-md-10' }
+  };
+
+
+
+  hideFields() {
+
+
+    if (this.ManufacturingFeature) {
+
+      [
+        'productName2',
+        'productCode',
+        'productBarcodeType',
+        'barcode',
+        'brand',
+        'rack',
+        'uom',
+        'productType',
+        'costPrice',
+        'ctoCPrice',
+        'wholeSalePrice',
+        'salePrice',
+        'discPercentage',
+        'discRupee',
+        'mrp',
+        'packing',
+        'generatePrice',
+        'minRol',
+        'maxRol',
+        'gst',
+        'et',
+        'productNature',
+        'allowMinus',
+        'barcodeType',
+        'productImg'
+      ].forEach(field => {
+        this.fields[field].show = false;
+      });
+
+
+      this.fields.description.size = 'col-md-12';
+      this.fields.pctCode.size = 'col-md-6';
+    }
+
+    if (!this.MutliplePricesFeature) {
+      [
+        'ctoCPrice',
+        'wholeSalePrice',
+      ].forEach(field => {
+        this.fields[field].show = false;
+      });
+    }
+
+
+    if (this.DigitalInvoicesFeature) {
+
+      [
+        'productName2',
+        'rack',
+        'productType',
+        'discPercentage',
+        'discRupee',
+        'mrp',
+        'packing',
+        'generatePrice',
+        'productNature',
+        'allowMinus',
+        'barcodeType'
+      ].forEach(field => {
+        this.fields[field].show = false;
+      });
+
+
+      this.fields.pctCode.size = 'col-md-6';
+    }
+
   }
 
 

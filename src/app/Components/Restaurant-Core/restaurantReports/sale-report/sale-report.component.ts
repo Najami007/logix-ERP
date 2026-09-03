@@ -149,6 +149,12 @@ export class SaleReportComponent implements OnInit {
             this.chargesTotal = 0;
             this.netGrandTotal = 0;
             this.discountTotal = 0;
+            if (Response == null) {
+              this.global.popupAlert('Null Returned!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
             if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
               this.app.stopLoaderDark();
@@ -189,6 +195,12 @@ export class SaleReportComponent implements OnInit {
             this.netGrandTotal = 0;
             this.discountTotal = 0;
             this.gstTotal = 0;
+            if (Response == null) {
+              this.global.popupAlert('Null Returned!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
             if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
               this.app.stopLoaderDark();
@@ -227,6 +239,12 @@ export class SaleReportComponent implements OnInit {
             this.qtyTotal = 0;
             this.detSaleTotal = 0;
             this.detCostTotal = 0;
+            if (Response == null) {
+              this.global.popupAlert('Null Returned!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
             if (Response.length == 0 || Response == null) {
               this.global.popupAlert('Data Not Found!');
               this.app.stopLoaderDark();
@@ -257,42 +275,54 @@ export class SaleReportComponent implements OnInit {
       $('#qsmtable').show();
       this.reportType = 'Detail';
       this.app.startLoaderDark();
-      this.http.get(environment.mainApi + this.global.inventoryLink + 'GetInventoryDetailDateWise_3?reqType=s&reqUserID=' + this.userID + '&FromDate=' +
-        this.global.dateFormater(this.fromDate, '-') + '&todate=' + this.global.dateFormater(this.toDate, '-') + '&fromtime=' + this.fromTime + '&totime=' + this.toTime).subscribe(
-          (Response: any) => {
-            this.qtySummaryList = [];
-            if (Response.length == 0 || Response == null) {
-              this.global.popupAlert('Data Not Found!');
-              this.app.stopLoaderDark();
-              return;
+      this.http.get(
+        environment.mainApi +
+        this.global.inventoryLink +
+        'GetInventoryDetailDateWise_3?reqType=s&reqUserID=' +
+        this.userID +
+        '&FromDate=' + this.global.dateFormater(this.fromDate, '-') +
+        '&todate=' + this.global.dateFormater(this.toDate, '-') +
+        '&fromtime=' + this.fromTime +
+        '&totime=' + this.toTime
+      ).subscribe(
+        (response: any) => {
 
+          this.qtySummaryList = [];
+
+          if (!response || response.length === 0) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+          }
+
+          const summaryMap = new Map();
+
+          response.forEach((e: any) => {
+
+            if (!summaryMap.has(e.recipeID)) {
+              summaryMap.set(e.recipeID, {
+                recipeID: e.recipeID,
+                productTitle: e.productTitle,
+                quantity: 0,
+                saleTotal: 0
+              });
             }
 
-            this.filterUniqueValues(Response).forEach((e: any) => {
-              this.qtySummaryList.push({ recipeID: e.recipeID, productTitle: e.productTitle, quantity: 0, saleTotal: 0 })
-            });
+            const item = summaryMap.get(e.recipeID);
 
-            setTimeout(() => {
-              Response.forEach((e: any) => {
+            item.quantity += Number(e.quantity);
+            item.saleTotal += Number(e.quantity) * Number(e.salePrice);
+          });
 
-                this.qtySummaryList.forEach((j: any) => {
-                  if (e.recipeID == j.recipeID) {
+          this.qtySummaryList = Array.from(summaryMap.values());
 
-                    j.quantity += e.quantity;
-                    j.saleTotal += e.quantity * e.salePrice;
-                  }
-                });
-
-              })
-            }, 200);
-
-
-            this.app.stopLoaderDark();
-          },
-          (Error: any) => {
-            this.app.stopLoaderDark();
-          }
-        )
+          this.app.stopLoaderDark();
+        },
+        (error: any) => {
+          this.app.stopLoaderDark();
+          console.error(error);
+        }
+      );
     }
 
   }

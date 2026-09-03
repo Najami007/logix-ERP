@@ -47,6 +47,10 @@ export class InvAuditComponent implements OnInit {
   crudList: any = { c: true, r: true, u: true, d: true };
   companyProfile: any = [];
   disableDateFeature = this.global.DisableInvDate;
+  ProjectwiseFeature = this.global.ProjectwiseFeature;
+
+
+
   constructor(
     private http: HttpClient,
     private msg: NotificationService,
@@ -78,7 +82,7 @@ export class InvAuditComponent implements OnInit {
       (data: any) => { this.productList = data; })
 
     this.importFromLocalStorage();
-
+    this.getProject();
     this.getBrandList();
     this.getSubCategory();
 
@@ -134,6 +138,16 @@ export class InvAuditComponent implements OnInit {
       }
     )
   }
+
+  projectList: any = [];
+  getProject() {
+    this.http.get(environment.mainApi + 'cmp/getproject').subscribe(
+      (Response: any) => {
+        this.projectList = Response;
+      }
+    )
+  }
+
 
   SubCategoriesList: any = [];
   getSubCategory() {
@@ -276,7 +290,7 @@ export class InvAuditComponent implements OnInit {
               : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
           productID: this.tempProdRow[0].productID,
           productTitle: this.tempProdRow[0].productTitle,
-          barcode:this.tempProdRow[0].barcode, //tmpBarcode,
+          barcode: this.tempProdRow[0].barcode, //tmpBarcode,
           // productImage: this.tempProdRow[0].productImage,
           quantity: Qty,
           scanTime: new Date(),
@@ -321,6 +335,7 @@ export class InvAuditComponent implements OnInit {
     var invDate = JSON.stringify(this.global.dateFormater(this.invoiceDate, '-'))
     var prodData = JSON.stringify(this.tableDataList);
     var locationID = JSON.stringify(this.locationID);
+    var projectID = JSON.stringify(this.projectID);
     var AuditInventoryID = JSON.stringify(this.AuditInventoryID);
     var autMerge = JSON.stringify(this.autoMerge);
     var AuditID = JSON.stringify(this.auditID);
@@ -329,6 +344,8 @@ export class InvAuditComponent implements OnInit {
     localStorage.removeItem('tmpAuditDate');
     localStorage.removeItem('tmpAuditData');
     localStorage.removeItem('tmpAuditLocation');
+    localStorage.removeItem('tmpAuditProjectID');
+
     localStorage.removeItem('tmpAuditInventoryID');
     localStorage.removeItem('tmpAuditID');
     localStorage.removeItem('tmpAutoMerge');
@@ -337,6 +354,7 @@ export class InvAuditComponent implements OnInit {
     localStorage.setItem('tmpAuditDate', invDate);
     localStorage.setItem('tmpAuditData', prodData);
     localStorage.setItem('tmpAuditLocation', locationID);
+    localStorage.setItem('tmpAuditProjectID', projectID);
     localStorage.setItem('tmpAuditInventoryID', AuditInventoryID);
     localStorage.setItem('tmpAuditID', AuditID);
     localStorage.setItem('tmpAutoMerge', autMerge);
@@ -370,6 +388,8 @@ export class InvAuditComponent implements OnInit {
     this.auditID = JSON.parse(localStorage.getItem('tmpAuditID') || '0');
     this.AuditInventoryID = JSON.parse(localStorage.getItem('tmpAuditInventoryID') || '0');
     this.locationID = JSON.parse(localStorage.getItem('tmpAuditLocation') || '0');
+    this.projectID = JSON.parse(localStorage.getItem('tmpAuditProjectID') || '0');
+
     this.tableDataList = data;
     this.getTotal();
 
@@ -545,11 +565,16 @@ export class InvAuditComponent implements OnInit {
       $('#searchProduct').trigger('focus');
     }
 
-    if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
-      // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
-    }
-    else {
+    // Allowed keys
+    const allowedKeys = [
+      'Backspace', 'Tab', 'Enter', 'Shift', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown',
+      'Delete', '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Numpad0', 'Numpad1', 'Numpad2', 'Numpad3', 'Numpad4', 'Numpad5', 'Numpad6', 'Numpad7', 'Numpad8', 'Numpad9', 'Decimal'
+    ];
+
+    // Block keys not allowed
+    if (!allowedKeys.includes(e.key)) {
       e.preventDefault();
+      return;
     }
 
     /////move down
@@ -834,7 +859,7 @@ export class InvAuditComponent implements OnInit {
       ? this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex)
       : this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex);
 
-
+    
     var postData = {
       AuditInventoryID: this.AuditInventoryID,
       AuditID: this.auditID,
@@ -960,7 +985,7 @@ export class InvAuditComponent implements OnInit {
     this.holdBtnType = 'ReHold'
     this.invoiceDate = new Date(item.auditInvDate);
     this.locationID = item.locationID;
-
+    this.projectID = item.projectID;
 
     this.invRemarks = item.remarks;
     this.auditID = item.auditID;

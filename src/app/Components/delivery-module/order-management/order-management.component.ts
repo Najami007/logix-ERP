@@ -11,6 +11,8 @@ import { environment } from 'src/environments/environment.development';
 import { OrderPrintComponent } from './order-print/order-print.component';
 import Swal from 'sweetalert2';
 import { interval, Subscription } from 'rxjs';
+import { ModifyOrderComponent } from './modify-order/modify-order.component';
+
 
 @Component({
   selector: 'app-order-management',
@@ -20,6 +22,8 @@ import { interval, Subscription } from 'rxjs';
 export class OrderManagementComponent {
   @ViewChild('orderDetailPanel') orderDetailPanel!: MatSidenav;
   @ViewChild('orderDetailMobilePanel') orderDetailMobilePanel!: MatSidenav;
+
+  @ViewChild(ModifyOrderComponent) modifyOrder: any;
 
   @ViewChild(OrderPrintComponent) orderPrint: any;
 
@@ -103,6 +107,11 @@ export class OrderManagementComponent {
       this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
 
     })
+
+    this.subscription = interval(3000).subscribe(() => {
+      this.MatchOrderList();
+    });
+
   }
 
 
@@ -115,9 +124,7 @@ export class OrderManagementComponent {
     this.tableSize = this.global.paginationDefaultTalbeSize;
     this.tableSizes = this.global.paginationTableSizes;
 
-    this.subscription = interval(3000).subscribe(() => {
-      this.MatchOrderList();
-    });
+
 
   }
 
@@ -231,13 +238,7 @@ export class OrderManagementComponent {
               }
             }
 
-
-
           }
-
-
-
-
 
         },
         error: error => {
@@ -253,7 +254,7 @@ export class OrderManagementComponent {
       title: "New Order",
       text: "New Order Arrived Refresh List",
       icon: "warning",
-      backdrop:true,
+      backdrop: true,
       showCancelButton: false,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
@@ -367,9 +368,7 @@ export class OrderManagementComponent {
 
 
   printOrder(item: any) {
-
     this.orderPrint.getSingleOrderDetail(item);
-
   }
 
 

@@ -5,6 +5,7 @@ import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module'
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import { TopNavBarComponent } from '../top-nav-bar/top-nav-bar.component';
+import { ASSETS } from 'src/assets/Constants/assets';
 
 @Component({
   selector: 'app-header',
@@ -25,6 +26,9 @@ export class HeaderComponent implements OnInit {
     ) { 
     
   }
+
+  logixLogo = ASSETS.logixLogo;
+
    title = 'Title';
    moduleTitle = '';
    UserName = '';

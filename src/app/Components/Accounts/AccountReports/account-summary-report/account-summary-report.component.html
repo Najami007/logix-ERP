@@ -34,7 +34,7 @@
                 <!-- <button class="btn-rpt-success col-lg-2 me-1 " (click)="getTrialBalance('project')">
                     ProjectWise
                 </button> -->
-                <div class=" col-lg-4 pe-1"><button class="btn-rpt-success w-100" (click)="getTrialBalance('all')">
+                <div class=" col-lg-4 pe-1"><button class="btn-rpt-success w-100" (click)="getReport('all')">
                     Get Report
                 </button></div>
                 <div class=" col-lg-4 pe-1"><button class="btn-rpt-primary w-100" (click)="PrintTable()">Print</button></div>
@@ -92,7 +92,7 @@
                     </thead>
 
                     <tbody>
-                        <tr class="" *ngFor="let item of TrialBalanceData;index as index">
+                        <tr class="" *ngFor="let item of DataList;index as index">
                             <td class=" ps-2 ">{{index+1}}</td>
                             <td class=" ps-2 ">{{item.accountCode}}</td>
                             <td class=" fw-bold ps-2 ">{{item.coaTitle}}</td>

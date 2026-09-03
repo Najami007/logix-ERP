@@ -90,6 +90,7 @@ export class DeliveryChallanComponent {
   tmpDeliveryRemarks = '';
   tmpShippingCompany = '';
   tmpCustomerName = '';
+  tmpProjectTitle = '';
 
 
   tableDataList: any = [];
@@ -113,6 +114,7 @@ export class DeliveryChallanComponent {
               this.tmpDeliveryRemarks = Response[0].deliveryRemarks;
               this.tmpShippingCompany = Response[0].shpCmpName;
               this.tmpCustomerName = Response[0].partyName;
+              this.tmpProjectTitle = Response[0].projectTitle;
             })
 
 

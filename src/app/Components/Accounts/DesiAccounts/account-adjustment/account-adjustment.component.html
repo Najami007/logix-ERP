@@ -1,1 +1,93 @@
-<p>account-adjustment works!</p>
+<div class="body container">
+
+    <div class="p-2 row justify-content-center">
+        <div class="col-md-2 pb-1" *ngIf="crudList.c">
+            <button autofocus (click)="add()" style="height: 42px;" class="btnsave w-100">Add</button>
+        </div>
+        <!-- <button type="button" mat-mini-fab class="btnadd" *ngIf="crudList.c" autofocus (click)="add()"><mat-icon>add</mat-icon></button> -->
+
+        <mat-form-field class="col-md-10 matSmall" appearance="outline">
+            <mat-label>Search.....</mat-label>
+            <input matInput #search type="text" #input>
+        </mat-form-field>
+     
+    </div>
+
+    <div class="p-2">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Date</th>
+                    <th>Voucher #</th>
+                    <th>Title</th>
+                    <th>Amount</th>
+                    <th>Remarks</th>
+                    <th>Entered By</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of savedDataList |filter:search.value |paginate:{
+                    itemsPerPage : tableSize,
+                    currentPage : page,
+                    totalItems :    count,
+                }  ; index as index">
+
+                    <td>{{index + 1}}</td>
+                    <td>{{item.invoiceDate | date:'dd-MM-yyyy'}}</td>
+                    <td>{{item.invoiceNo}}</td>
+                    <td>{{item.coaTitle}}</td>
+                    <td>{{item.amount |number:'1.0-1'}}</td>
+                    <td>{{item.invoiceRemarks}}</td>
+                    <td>{{item.entryUser}}</td>
+                    <td class="cursorPointer">
+                        <mat-icon class="text-success" *ngIf="crudList.u && item.approvedStatus == false"
+                            (click)="edit(item)">edit</mat-icon>
+                        <mat-icon class="text-primary" *ngIf="crudList.r" (click)="printBill(item)">print</mat-icon>
+                        <mat-icon class="text-success" *ngIf="item.approvedStatus == false && crudList.u"
+                            (click)="approveBill(item)">check</mat-icon>
+                        <mat-icon *ngIf="item.approvedStatus" aria-label="Approved"
+                            class="text-success">done_all</mat-icon>
+                        <mat-icon class="text-danger" *ngIf="crudList.d && item.approvedStatus == false"
+                            (click)="delete(item)">delete</mat-icon>
+                        <mat-icon class="text-success" (click)="VoucherDetails(item)">receipt</mat-icon>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+        <div class="d-flex">
+            <!-- <mat-hint class="me-1 text-secondary">Total Rows : ({{SavedVoucherData.length || 0}})    </mat-hint> -->
+            <pagination-controls previousLabel="Prev" nextLabel="Next"
+                (pageChange)="onTableDataChange($event)"></pagination-controls>
+
+
+            <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+            <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);"
+                [(ngModel)]="tableSize" (change)="onTableSizeChange($event)">
+                <option *ngFor=" let item of tableSizes">{{item}}</option>
+            </select>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<!--------------------- Add Party --------------->
+
+<div class="modal" id="addAdjustmentModal" tabindex="-1" data-bs-backdrop="true" aria-labelledby="DocumentModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+
+
+            <app-add-adjustment (updateEmitter)="closeModal($event)"></app-add-adjustment>
+        </div>
+    </div>
+</div>
+
+
+<app-voucher-print class="d-none"> </app-voucher-print>

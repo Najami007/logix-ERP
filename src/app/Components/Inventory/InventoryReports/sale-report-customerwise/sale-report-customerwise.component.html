@@ -19,7 +19,7 @@
                 <mat-option><ngx-mat-select-search #partySearch [placeholderLabel]="'Search...'"
                         [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
                 <mat-option *ngFor="let item of partyList | filter:partySearch.value"
-                    [value]="item.partyID">{{item.partyName}}</mat-option>
+                    [value]="item.partyID">{{item.partyName}} <small *ngIf="SaleSupplierFeature">({{item.partyType}})</small></mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline" class="col-md-2 matSmall">

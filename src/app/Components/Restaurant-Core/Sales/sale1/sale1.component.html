@@ -28,9 +28,9 @@
         </div>
 
         <div>
-            <input matInput id="recSearch" accesskey="f" autocomplete="off" class="w-100 p-1 border"
+            <input matInput id="recSearch" [(ngModel)]="recipeCode" accesskey="f" autocomplete="off" class="w-100 p-1 border"
                 style="height: 40px;" [autofocus]="!tabletPrintFeature" placeholder="Search Recipe (ALT + f)"
-                #recipeSearch (keyup)="searchByCode($event,recipeSearch.value)">
+                #recipeSearch (keyup)="searchByCode($event,recipeCode)">
 
         </div>
         <br>
@@ -114,6 +114,7 @@
                                 {{item.quantity}}</td>
                             <td class="text-center" *ngIf="RestSimpleSaleFeature">
                                 <input type="number" min="0" [(ngModel)]="item.quantity" (click)="rowFocused = index"
+                                    (input)="getTotal()"
                                     (keydown)="handleUpdown(item,$event,'.qty',index);this.global.handleNumKeys($event)"
                                     (keyup)="getTotal();this.global.handleNumKeys($event)"
                                     class="qty{{index}} text-center w-75">
@@ -167,9 +168,13 @@
                         <p class="fw-bold" style="font-size: 12px;">SUB TOTAL</p>
                         <p class="text-center font-digit" style="font-size: 30px;">{{subTotal |number:'1.0-1'}}</p>
                     </div>
+                     <div class="d-flex justify-content-between  w-100" *ngIf="gstFeature">
+                        <p class="fw-bold" style="font-size: 12px;">GST <small *ngIf="GstAmount > 0">({{gstValue|number:'1.0-1'}}%)</small></p>
+                        <p class="text-center font-digit" style="font-size: 30px;"> {{GstAmount |number:'1.0-1'}} </p>
+                    </div>
                     <div class="d-flex justify-content-between  w-100">
                         <p class="fw-bold" style="font-size: 12px;">NET TOTAL</p>
-                        <p class="text-center font-digit" style="font-size: 30px;">{{netTotal |number:'1.0-1'}}</p>
+                        <p class="text-center font-digit" style="font-size: 30px;">{{netTotal + GstAmount |number:'1.0-1'}}</p>
                     </div>
                     <div class="d-flex justify-content-between w-100 pt-1 pb-1" *ngIf="buzzerNoFeature">
                         <p class="w-75 fw-bold" style="font-size: 12px;"><u>B</u>uzzer No</p>
@@ -206,7 +211,7 @@
 
 
 
-                    <button *ngIf="RestSimpleSaleFeature" class="m-1 btn btn-success col-lg-5 fs-12px" id="save"
+                    <button *ngIf="RestSimpleSaleFeature" [disabled]="isProcessing" class="m-1 btn btn-success col-lg-5 fs-12px" id="save"
                         (click)="save('sale',true);paymentType == 'Cash'" accesskey="P"><u>S</u>ave</button>
 
 
@@ -942,7 +947,9 @@
                         </div>
                         <div class="d-flex justify-content-between text-center mb-2 " *ngIf="gstFeature">
                             <mat-label style="font-size: 25px;">GST:</mat-label>
-                            <span class="fw-bold" style="font-size: 25px;">({{gstValue | number:'1.0-1'}}%)</span>
+                            <span class="fw-bold" >
+                                <small>({{gstValue | number:'1.0-1'}}%)</small> 
+                                <b style="font-size: 25px;"> {{GstAmount| number:'1.0-1'}}</b></span>
                         </div>
 
                         <div class="d-flex justify-content-between text-center mb-2 "
@@ -981,7 +988,7 @@
             <div class="modal-footer bg-mf-blue">
                 <button class="btn btn-success" [disabled]="isProcessing" id="save1" ondblclick="return false"
                     (click)="save('sale',true)">Save</button>
-                <button class="btn btn-success d-none" id="save2" accesskey="."
+                <button class="btn btn-success d-none" *ngIf="NonFBRFeature" id="save2" accesskey="."
                     (click)="save('sale',false)">Save</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                     (click)="paymentType = 'Cash';cash = 0; bankCash = 0">Close</button>
@@ -1139,7 +1146,7 @@
 <div class="modal fade" id="SavedBillModal" tabindex="-1" aria-labelledby="SavedBillModalLabel">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered  modal-xl">
         <div class="modal-content">
-            <app-sale-saved-bill (sendToFbrEmitter)="sendToFbr($event)"
+            <app-sale-saved-bill (sendToFbrEmitter)="sendToFbr($event)" (changePaymentEmitter)="changePayment($event)"
                 (printDuplicateEmitter)="printDuplicateBill($event)" (billDetailEmitter)="billDetails($event)"
                 (postBillEmitter)="postSaleBill($event)" [savedbillList]="savedbillList" (editSaleBill)="validateEditSale($event)"
                 (deleteSaleBill)="validateDeleteBill($event)"></app-sale-saved-bill>

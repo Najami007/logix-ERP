@@ -207,25 +207,30 @@ export class DayopencloseComponent implements OnInit {
 
 
 
+  unPostedBillList:any = [];
 
   postBills() {
-    if (this.postingRemarks == '' || this.postingRemarks == undefined) {
-      this.msg.WarnNotify('Enter Posting Remarks')
-    } else {
+    
       this.global.openPinCode().subscribe(pin => {
         if (pin !== '') {
           this.app.startLoaderDark();
           this.http.post(environment.mainApi + this.global.userLink + 'PostBills', {
-            Remarks: this.postingRemarks,
+            Remarks: this.postingRemarks || '-',
             ProjectID: this.projectID,
             PinCode: pin,
             UserID: this.global.getUserID()
           }).subscribe(
             (Response: any) => {
+              this.unPostedBillList = [];
               if (Response.msg == 'Data Posted Successfully') {
                 this.msg.SuccessNotify(Response.msg);
                 this.postingRemarks = '';
-              } else {
+              }else if(Response.msg == 'Holded Invoices Exist!'){
+                this.msg.WarnNotify(Response.msg);
+                this.unPostedBillList = Response.data;
+                this.global.openBootstrapModal('#holdedList',true);
+              } 
+              else {
                 this.msg.WarnNotify(Response.msg);
               }
 
@@ -234,7 +239,7 @@ export class DayopencloseComponent implements OnInit {
           )
         }
       })
-    }
+    
   }
 
 

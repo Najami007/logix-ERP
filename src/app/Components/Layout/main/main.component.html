@@ -3,18 +3,20 @@
         <app-side-navbar></app-side-navbar>
     </mat-drawer>
 
-       <div class="layout-sideNav-content">
-         <app-top-nav-bar *ngIf="hideFlag == false" class="topBar" id="menubar"
+    <mat-drawer-content class="layout-content">
+        
+    <div>
+        <app-top-nav-bar *ngIf="hideFlag == false" class="topBar" id="menubar"
             (toggleMySideBar)="sideBarToggler()"></app-top-nav-bar>
-        <!-- <mat-icon  style="position: fixed;right: 0;z-index: 101;top: 35px;" class="mt-2 text-danger" (click)="hideUnhide()">{{hideFlag ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}}</mat-icon> -->
-
-        <section class="main-content">
-            <router-outlet></router-outlet>
-        </section>
-       </div>
-        <div class="header">
-            <app-header></app-header>
-        </div>
+    </div>
+    <!-- <mat-icon  style="position: fixed;right: 0;z-index: 101;top: 35px;" class="mt-2 text-danger" (click)="hideUnhide()">{{hideFlag ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}}</mat-icon> -->
+    <section class="main-content">
+        <router-outlet></router-outlet>
+    </section>
+    <div class="footer">
+        <app-header></app-header>
+    </div>
+    </mat-drawer-content>
 
 
 

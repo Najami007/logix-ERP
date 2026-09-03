@@ -176,22 +176,7 @@ export class CustomerIssuanceComponent implements OnInit {
     if (this.PBarcode !== '') {
       if (e.keyCode == 13) {
 
-        // /// Seperating by / and coverting to Qty
-        // if (this.PBarcode.split("/")[1] != undefined) {
-        //   barcode = this.PBarcode.split("/")[0];
-        //   qty = parseFloat(this.PBarcode.split("/")[1]);
-        //   BType = 'price';
-
-
-        // }
-        // /// Seperating by - and coverting to Qty 
-        // if (this.PBarcode.split("-")[1] != undefined) {
-        //   barcode = this.PBarcode.split("-")[0];
-        //   qty = parseFloat(this.PBarcode.split("-")[1]);
-        //   BType = 'qty';
-
-        // }
-
+      
         // this.app.startLoaderDark();
         this.global.getProdDetail(0, barcode).subscribe(
           (Response: any) => {
@@ -597,11 +582,16 @@ export class CustomerIssuanceComponent implements OnInit {
       $('#searchProduct').trigger('focus');
     }
 
-    if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
-      // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
-    }
-    else {
+      // Allowed keys
+    const allowedKeys = [
+      'Backspace', 'Tab', 'Enter', 'Shift', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown',
+      'Delete', '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Numpad0', 'Numpad1', 'Numpad2', 'Numpad3', 'Numpad4', 'Numpad5', 'Numpad6', 'Numpad7', 'Numpad8', 'Numpad9', 'Decimal'
+    ];
+
+    // Block keys not allowed
+    if (!allowedKeys.includes(e.key)) {
       e.preventDefault();
+      return;
     }
 
     /////move down

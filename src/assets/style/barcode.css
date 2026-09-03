@@ -1,130 +1,280 @@
-
-/* @font-face {
-    font-family: 'barcode128';
-    font-style: normal;
-    src: url('./assets/fonts/barcode/code128.ttf');
+/* @media screen {
+  .print-only {
+    display: none;
   }
-  
-  @font-face {
-    font-family: 'barcode39';
-    src: url('./assets/fonts/barcode/BarCode39Lesbar-3yDM.ttf ');
-  } */
+}
 
+@media print {
 
-  .cmpName{
-    /* margin-top: 10px !important; */
-        
- margin-bottom: -3px;
-    font-size: 15px !important;
-    display:flex  ;
-    text-align: center !important;
-    justify-content: center !important  ;
-    text-transform: uppercase !important;
-    font-weight: bold !important;
-    font-family: Arial, Helvetica, sans-serif !important;
-    
-  }
-  
-  .barcode{
- 
-    font-size: 10px;
-    display: flex;
-    justify-content: center;
-     /*font-family:'code 128' !important;*/
-    /*font-size: 35px;*/
-    
-    /* padding-top: 10px; */
-    /* border: 1px solid red; */
-    /* height: 40px; */
-    /* overflow: hidden; */
+  img {
+    display: block !important;
+    visibility: visible !important;
   }
 
+} */
 
-  .bcodep{
+@media print {
 
-    font-weight: bold;
-    font-size: 12px;
-    text-align: center !important;
-    display: flex;
-    justify-content: center;
-    line-height: 13px;
+  body {
+    -webkit-print-color-adjust: exact !important;
+    overflow: visible !important;
+    height: auto !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
 
-   
   }
 
-  .mb-8px{
-    margin-bottom: -8px !important;
+  .whiteText {
+    -webkit-text-fill-color: white !important;
+    color: white !important;
   }
-  
-  .bcodet {
-    /* padding-left: 1px;
+
+}
+
+
+
+
+
+
+.rptTable {
+  width: 100%;
+  /* margin-left: 15px; */
+  background-color: rgb(252, 242, 242);
+}
+
+
+.rptTable th {
+  border: 1px solid black;
+  font-size: 15px;
+  font-weight: bold;
+
+}
+
+.rptTable td {
+  border: 1px solid black;
+  font-size: 12px;
+}
+
+
+
+/* * {
+  color: black !important;
+  border-color: black !important;
+
+}
+ */
+
+
+/*# sourceMappingURL=bootstrap.css.map */
+
+/****  logix Table Design****/
+
+
+
+.attTable {
+  width: 100%;
+
+
+}
+
+.cmpName {
+  /* margin-top: 10px !important; */
+
+  margin-bottom: -3px;
+  font-size: 15px !important;
+  display: flex;
+  text-align: center !important;
+  justify-content: center !important;
+  text-transform: uppercase !important;
+  font-weight: bold !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+
+}
+
+.barcode {
+
+  font-size: 10px;
+  display: flex;
+  justify-content: center;
+  /*font-family:'code 128' !important;*/
+  /*font-size: 35px;*/
+
+  /* padding-top: 10px; */
+  /* border: 1px solid red; */
+  /* height: 40px; */
+  /* overflow: hidden; */
+}
+
+
+.bcodep {
+
+  font-weight: bold;
+  font-size: 12px;
+  text-align: center !important;
+  display: flex;
+  justify-content: center;
+  line-height: 13px;
+
+
+}
+
+.mb-8px {
+  margin-bottom: -8px !important;
+}
+
+.bcodet {
+  /* padding-left: 1px;
     padding-right: 1px; */
-    /* margin-top: -3px; */
-    display: flex;
-    justify-content: center;
-    text-align: center !important;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 10px;
-    line-height: 11px !important;
-  }
+  /* margin-top: -3px; */
+  display: flex;
+  justify-content: center;
+  text-align: center !important;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 10px;
+  line-height: 11px !important;
+}
 
-  .barcodeText{
-    font-size: 8px;
-    font-weight: bold;
-    display: flex;
-    justify-content: end;
-    
-  }
+.barcodeText {
+  font-size: 8px;
+  font-weight: bold;
+  display: flex;
+  justify-content: end;
 
-  .expiry{
-    font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
-    display: flex !important;
-    justify-content: center !important;
-    flex-direction: column !important;
-    line-height: 10px;
-    font-size: 8px;
-  }
-   .expiry span{
-    line-height: 15px;
-    text-align: center !important;
-  }
-  .bcodeC{
-    margin-top: -10px;
-    font-weight: bold;
-    font-size: 10px;
-  }
+}
 
-  .barcodeName{
-    margin-top: -5px;
+.expiry {
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex !important;
+  justify-content: center !important;
+  flex-direction: column !important;
+  line-height: 10px;
+  font-size: 8px;
+}
 
-  }
-  
+.expiry span {
+  line-height: 15px;
+  text-align: center !important;
+}
 
-  .w-50{
-    width: 50% !important;
-  }
-  .w-25{
-    width: 25% !important;
-  }
+.bcodeC {
+  margin-top: -10px;
+  font-weight: bold;
+  font-size: 10px;
+}
 
-  .w-75{
-    width: 75% !important;
-  }
+.barcodeName {
+  margin-top: -5px;
 
-  .w-60{
-    width: 60% !important;
-  }
-
-  .w-40{
-    width: 30% !important;
-  }
-  .w-80{
-    width: 80% !important;
-  }
+}
 
 
+.w-50 {
+  width: 50% !important;
+}
+
+.w-25 {
+  width: 25% !important;
+}
+
+.w-75 {
+  width: 75% !important;
+}
+
+.w-60 {
+  width: 60% !important;
+}
+
+.w-40 {
+  width: 30% !important;
+}
+
+.w-80 {
+  width: 80% !important;
+}
 
 
- 
+.retail-price {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  font-weight: bold;
+  font-size: 18px;
+  margin: 4px 0;
+  white-space: nowrap;
+}
+
+.retail-price .label {
+  font-size: 12px;
+}
+
+.cross-text {
+  position: relative;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  color: #000;
+  padding: 2px 8px;
+}
+
+/* Diagonal lines */
+.cross-text::before,
+.cross-text::after {
+  content: '';
+  position: absolute;
+  left: 3%;
+  top: 50%;
+  width: 90%;
+  height: 1px;
+  background: #000;
+  transform-origin: center;
+}
+
+.cross-text::before {
+  transform: translateY(-50%) rotate(26deg);
+}
+
+.cross-text::after {
+  transform: translateY(-50%) rotate(-26deg);
+}
+
+/* Horizontal line */
+/* .cross-text span{
+    position:relative;
+    z-index:2;
+} */
+
+/* .cross-text span::after {
+  content: '';
+  position: absolute;
+  left: -5%;
+  top: 50%;
+  width: 110%;
+  height: 3px;
+  background: #000;
+  transform: translateY(-50%);
+} */
+
+/* Our Price */
+.our-price {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 0.5;
+  margin-top: 6px;
+}
+
+.product-title {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 6px;
+}

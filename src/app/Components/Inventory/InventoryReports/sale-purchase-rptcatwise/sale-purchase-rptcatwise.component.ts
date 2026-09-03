@@ -158,6 +158,8 @@ formateType =1;
             (Response: any) => {
               this.SaleDetailList = [];
               this.summaryNetTotal = 0;
+              this.qtyTotal= 0;
+              
 
               if (Response.length == 0 || Response == null) {
                 this.global.popupAlert('Data Not Found!');
@@ -185,6 +187,7 @@ formateType =1;
 
 
                 this.summaryNetTotal += e.total;
+                this.qtyTotal += e.quantity;
 
               });
               this.app.stopLoaderDark();

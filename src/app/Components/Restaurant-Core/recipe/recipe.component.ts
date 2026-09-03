@@ -308,7 +308,6 @@ export class RecipeComponent implements OnInit {
 
             this.global.getProdDetail(0, this.PBarcode).subscribe(
               (Response: any) => {
-                console.log(Response);  
                 if (this.recipeType == 'Dine In') {
                   this.menuProdList.push({
                     productID: Response[0].productID,
@@ -955,7 +954,6 @@ export class RecipeComponent implements OnInit {
 
     this.http.get(environment.mainApi + this.global.restaurentLink + 'GetSingleRecipeDetail?recipeid=' + item.recipeID).subscribe(
       (Response: any) => {
-        console.log(Response);
         this.menuProdList = [];
         Response.forEach((e: any) => {
           this.menuProdList.push({

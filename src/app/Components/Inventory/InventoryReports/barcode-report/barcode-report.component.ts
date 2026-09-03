@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
@@ -52,6 +53,10 @@ export class BarcodeReportComponent implements OnInit {
   }
 
 
+  formateList:any = [{id:1,title:'Formate 1'},{id:2,title:'Formate 2'}];
+  formateID:any = 1;
+
+
   manufactureDate = new Date();
   expiryDate = new Date();
   showLess = false;
@@ -60,7 +65,9 @@ export class BarcodeReportComponent implements OnInit {
   hideBarcode = false;
   hideName = false;
   hideCmp = false;
+  hideDisc = true;
   productList: any = [];
+  mrp:any = '';
 
 
   PBarcode: any;

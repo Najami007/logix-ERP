@@ -1,22 +1,298 @@
+.card {
+    border-radius: 18px;
+}
+
+
+.form-control,
+.form-select {
+
+    border-radius: 10px;
+
+    height: 46px;
+
+    box-shadow: none;
+
+    border: 1px solid #d8dbe5;
+}
+
+textarea.form-control {
+    height: auto;
+    resize: vertical;
+}
+
+
+.summary-card {
+
+    // position:sticky;
+    background: #F5F8FF;
+
+    border: 1px solid #dfe7f7;
+
+    border-radius: 12px;
+
+    padding: 10px;
+
+}
+
+.discount-area {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+}
+
+.discount-area select {
+
+    width: 70px;
+}
+
+.discount-area input {
+    height: 30px;
+    width: 130px;
+}
+
+.payment-select {
+
+    width: 210px;
+}
+
+.summary-card hr {
+
+    border-style: dashed;
+
+    opacity: .4;
+}
 
 
 
-  #psearchProduct{
-    font-size: 18px;
-    font-weight: 400;
-    height: 40px;
-    background-color:transparent;
-    border: 1px solid rgb(13, 110, 253);
-    border-radius: 5px 0px 0px 5px;
-    width: 100%;
-    color: white;
 
-    &:focus{
-      outline: none;
+
+
+
+
+
+
+
+
+
+/*================ PRODUCT TABLE ================*/
+
+
+
+
+
+@media(max-width:992px) {
+
+    .product-table {
+
+        min-width: 1400px;
+
     }
-  }
-  
-  ::ng-deep .cdk-overlay-container{
-    z-index:2000;
-  }
-  
+
+}
+
+
+.table-search-icon {
+
+    position: absolute;
+
+    right: 16px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #8d96aa;
+
+    pointer-events: none;
+}
+
+.table-wrapper {
+
+    max-height: 45vh;
+    overflow-y: auto;
+    overflow-x: auto;
+    border-radius: 12px;
+
+}
+
+.product-table {
+
+    margin-bottom: 0;
+
+}
+
+.product-table thead {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 10;
+
+}
+
+.product-table thead th {
+
+    background: #1e293b;
+
+    color: #fff;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    border: none;
+
+    padding: 14px;
+
+}
+
+.product-table tbody td {
+
+    vertical-align: middle;
+
+    white-space: nowrap;
+
+}
+
+
+
+.summary-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin: 18px 0;
+
+}
+
+.summary-row h4 {
+
+    font-size: 17px;
+
+    font-weight: 600;
+
+    margin: 0;
+
+}
+
+.summary-row h3 {
+
+    margin: 0;
+
+    font-weight: 700;
+
+    font-size: 30px;
+    font-family: 'digital' !important;
+
+}
+
+
+.net-total {
+
+    font-size: 38px;
+
+    font-weight: 700;
+    font-family: 'digital';
+    color: #10b981;
+
+}
+
+
+
+.product-preview {
+
+    border-radius: 18px;
+
+    // box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    height: 230px;
+
+    background: white;
+
+}
+
+.product-preview img {
+
+    max-width: 100%;
+
+    max-height: 180px;
+
+    object-fit: contain;
+
+}
+
+
+.payment-Card {
+
+    // position:sticky;
+    background: #ecf2ff;
+
+    border: 1px solid #dfe7f7;
+
+    border-radius: 12px;
+
+    padding: 10px;
+
+    height: 225px;
+
+}
+
+.SearchConatiner {
+    background: #fff;
+    z-index: 1000;
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+
+    .card {
+        background: rgb(247, 242, 242);
+        border: none;
+        border-bottom: 1px solid #ddd;
+        border-radius: 0;
+        margin: 0;
+    }
+
+    p {
+        padding: 10px;
+        margin: 0;
+        height: auto;
+    }
+}
+
+.prodBtn {
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: left;
+    padding: 10px;
+}
+
+.prodBtn:hover,
+.prodBtn:focus {
+    background: #1E293B !important;
+    color: #fff !important;
+    outline: none;
+}
+
+.prodBtn:hover p,
+.prodBtn:focus p {
+    color: #fff;
+}

@@ -29,6 +29,7 @@ export class PurchaseOrderComponent implements OnInit {
   ImageUrlFeature = this.global.ImageUrlFeature;
   PONewCostFeature = this.global.PONewCostFeature;
   insertLocalStorageFeature = this.global.insertLocalStorageFeature;
+  DisablePoPartyFeature = this.global.DisablePoPartyFeature;
 
 
 

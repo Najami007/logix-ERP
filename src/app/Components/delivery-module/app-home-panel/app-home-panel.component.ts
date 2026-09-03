@@ -73,7 +73,6 @@ export class AppHomePanelComponent {
     this.http.get(this.apiReq + 'GetHomePageImage').subscribe(
       {
         next: (Response: any) => {
-
           this.homePageDataList = Response;
 
         },

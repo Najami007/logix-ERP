@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Chart } from 'angular-highcharts';
 import { Highcharts } from 'highcharts/highcharts-more.src';
+import { interval, Subscription } from 'rxjs';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { environment } from 'src/environments/environment.development';
 
@@ -11,12 +12,21 @@ import { environment } from 'src/environments/environment.development';
   styleUrls: ['./inv-dashboard.component.scss']
 })
 export class InvDashboardComponent {
+  mySubscription: Subscription;
 
 
   constructor(private globalData: GlobalDataModule,
     private http: HttpClient,
 
   ) {
+
+    this.mySubscription = interval(100000).subscribe((x => {
+            this.getCardsData();
+            this.getMonthlySales();
+            this.GetSalePurchaseData();
+            this.getsubCategorySale();
+
+        }));
 
   }
 
@@ -47,9 +57,11 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
 
 
   getCardsData() {
+    
     this.http.get(environment.mainApi + this.globalData.inventoryLink + 'GetTotals').subscribe(
       (Response: any) => {
         if (Response != '') {
+          this.cardDataList = '';
           this.cardDataList = Response;
         }
 
@@ -69,6 +81,9 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
   getMonthlySales() {
     this.http.get(environment.mainApi + this.globalData.inventoryLink + 'GetSoldInvoicesQty').subscribe(
       (Response: any) => {
+
+        this.dayList = [];
+        this.saleList = [];
         Response.forEach((e: any) => {
           this.dayList.push(e.day);
           this.saleList.push(e.saleQty)
@@ -159,7 +174,6 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
   GetSalePurchaseData() {
   this.http.get(environment.mainApi + this.globalData.inventoryLink + 'GetSalePurchaseData')
     .subscribe((Response: any ) => {
-
       this.saleAmountList = [];
       this.purchaseAmountList = [];
       this.salePurchaseMonthList = [];
@@ -167,7 +181,7 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
       if (Response.length > 0) {
 
         // 1️⃣ Get unique & sorted months
-        const uniqueMonths = [...new Set(Response.map(x => x.month))].sort((a:any, b:any) => a - b);
+        const uniqueMonths = [...new Set(Response.map(x => x.month))];
 
         // 2️⃣ Loop through each month in correct order
         uniqueMonths.forEach((month:any) => {
@@ -260,10 +274,20 @@ MonthNameList: any = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 
   subCategoryList: any = [];
   subCatSaleAmountList: any = [];
 
+  tmpCategoryData:any = []
   getsubCategorySale() {
     this.http.get(environment.mainApi + this.globalData.inventoryLink + 'GetSubCatTotals').subscribe(
       (Response: any) => {
+
+        if(Response == this.tmpCategoryData) return;
+
+        this.tmpCategoryData = Response;
+
       if(Response.length > 0  ){
+
+        this.subCatSaleAmountList = [];
+         this.subCategoryList = [];
+
           Response.forEach((e: any) => {
           this.subCategoryList.push(e.catTitle);
           var tmpArry: any = [];

@@ -42,6 +42,10 @@ export class VoidSaleReturnComponent implements OnInit {
   disablePrintPwd = this.global.DisablePrintPwd;
   VehicleSaleFeature = this.global.VehicleSaleFeature;
   RestBillUserwise = this.global.RestBillUserwise;
+  DisableVoidpwdFeature = this.global.DisableVoidpwdFeature;
+
+  disableDiscPwd = this.global.DisableDiscPwd;
+
 
 
 
@@ -647,57 +651,6 @@ export class VoidSaleReturnComponent implements OnInit {
 
 
 
-  ///////////////////////   For Voiding the product row  ///////////////////////////////////////////////////////////
-
-
-  delRow(item: any) {
-
-
-    if (this.invBillNo != '') {
-      Swal.fire({
-        title: 'Alert!',
-        text: 'Confirm to Void Product',
-        position: 'center',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Confirm',
-      }).then((result) => {
-
-        if (result.isConfirmed) {
-          this.global.openPassword('Password').subscribe(pin => {
-            if (pin !== '') {
-              this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
-                RestrictionCodeID: 1,
-                Password: pin,
-                UserID: this.global.getUserID()
-
-              }).subscribe(
-                (Response: any) => {
-                  if (Response.msg == 'Password Matched Successfully') {
-                    this.voidProduct(item);
-                  } else {
-                    this.msg.WarnNotify(Response.msg);
-                  }
-                }
-              )
-
-
-
-            }
-          })
-        }
-
-
-      })
-    }
-
-
-
-
-
-  }
 
 
 
@@ -723,43 +676,60 @@ export class VoidSaleReturnComponent implements OnInit {
   }
 
 
+
   EnterDiscount(amount: any) {
     if (amount > this.netTotal) {
       this.msg.WarnNotify('Discount is not Valid!')
     } else {
-      this.global.openPassword('Password').subscribe(pin => {
-        if (pin !== '') {
-          this.app.startLoaderDark();
-          this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
-            RestrictionCodeID: 2,
-            Password: pin,
-            UserID: this.global.getUserID()
-
-          }).subscribe(
-            (Response: any) => {
-              if (Response.msg == 'Password Matched Successfully') {
-                $('#cash').trigger('focus');
-                if (amount == '' || amount == undefined) {
-                  this.discount = 0;
-                } else {
-                  this.discount = amount;
-                }
-                this.getTotal()
-
-              } else {
-                this.msg.WarnNotify(Response.msg);
-              }
-
-              this.app.stopLoaderDark();
-            }
-          )
 
 
+      if (this.disableDiscPwd == true) {
 
+        $('#cash').trigger('focus');
+        if (amount == '' || amount == undefined) {
+          this.discount = 0;
+        } else {
+          this.discount = amount;
         }
-      })
+        this.getTotal()
+      } else {
+
+        this.global.openPassword('Password').subscribe(pin => {
+          if (pin !== '') {
+            this.app.startLoaderDark();
+            this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+              RestrictionCodeID: 2,
+              Password: pin,
+              UserID: this.global.getUserID()
+
+            }).subscribe(
+              (Response: any) => {
+                if (Response.msg == 'Password Matched Successfully') {
+                  $('#cash').trigger('focus');
+                  if (amount == '' || amount == undefined) {
+                    this.discount = 0;
+                  } else {
+                    this.discount = amount;
+                  }
+                  this.getTotal()
+
+                } else {
+                  this.msg.WarnNotify(Response.msg);
+                }
+
+                this.app.stopLoaderDark();
+              }
+            )
+          }
+        })
+
+      }
+
+
+
     }
   }
+
 
 
 
@@ -788,7 +758,7 @@ export class VoidSaleReturnComponent implements OnInit {
   }
 
   //////////////////////////////// Sale Insert Function //////////////////////////////////////////////////
-  isValidSale = true;
+  isProcessing = false;
   save(paymentType: any, SendToFbr: any) {
 
     var inValidCostProdList = this.tableDataList.filter((p: any) => Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
@@ -901,35 +871,35 @@ export class VoidSaleReturnComponent implements OnInit {
       return;
     }
 
+    if (this.isProcessing) return;
 
-    if (this.isValidSale) {
-      this.app.startLoaderDark();
-      this.isValidSale = false;
-      this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertVoidableSaleRtn', postData).subscribe(
-        (Response: any) => {
-          if (Response.msg == 'Data Saved Successfully') {
-            this.msg.SuccessNotify(Response.msg);
-            this.tmpCash = this.cash;
-            this.tmpChange = this.change;
-            this.PrintAfterSave(Response.invNo);
-            this.getCurrentBill();
-            this.reset();
-            $('#vssearchProduct').trigger('focus');  /// setting focus to prodsearch field
-            this.global.closeBootstrapModal('#paymentMehtod', true);     //// hiding payment Mehtod Modal window
-          } else {
-            this.msg.WarnNotify(Response.msg);
-          }
-          this.app.stopLoaderDark();
-          this.isValidSale = true;
-        },
-        (Error: any) => {
-          this.isValidSale = true;
-          this.msg.WarnNotify(Error);
-          console.log(Error);
-          this.app.stopLoaderDark();
+    this.app.startLoaderDark();
+    this.isProcessing = true;
+    this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertVoidableSaleRtn', postData).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully') {
+          this.msg.SuccessNotify(Response.msg);
+          this.tmpCash = this.cash;
+          this.tmpChange = this.change;
+          this.PrintAfterSave(Response.invNo);
+          this.getCurrentBill();
+          this.reset();
+          $('#vssearchProduct').trigger('focus');  /// setting focus to prodsearch field
+          this.global.closeBootstrapModal('#paymentMehtod', true);     //// hiding payment Mehtod Modal window
+        } else {
+          this.msg.WarnNotify(Response.msg);
         }
-      )
-    }
+        this.app.stopLoaderDark();
+        this.isProcessing = false;
+      },
+      (Error: any) => {
+        this.isProcessing = false;
+        this.msg.WarnNotify(Error);
+        console.log(Error);
+        this.app.stopLoaderDark();
+      }
+    )
+
 
 
 
@@ -1059,15 +1029,24 @@ export class VoidSaleReturnComponent implements OnInit {
 
 
 
-  ///////////////////////////  Void Full Bill ///////////////////////////////////////////////////////
+  ///////////////////////   For Voiding the product row  ///////////////////////////////////////////////////////////
 
 
-  voidBill() {
 
-    if (this.tableDataList.length > 0) {
+  delRow(item: any) {
+
+
+    if (this.invBillNo != '') {
+
+      if (this.tableDataList.length == 1) {
+
+        this.voidBill();
+        return;
+      }
+
       Swal.fire({
         title: 'Alert!',
-        text: 'Confirm to Void Full Bill',
+        text: 'Confirm to Void Product',
         position: 'center',
         icon: 'warning',
         showCancelButton: true,
@@ -1077,60 +1056,36 @@ export class VoidSaleReturnComponent implements OnInit {
       }).then((result) => {
 
         if (result.isConfirmed) {
-          this.global.openPassword('Password').subscribe(pin => {
-            if (pin !== '') {
-              this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
-                RestrictionCodeID: 1,
-                Password: pin,
-                UserID: this.global.getUserID()
 
-              }).subscribe(
-                (Response: any) => {
-                  if (Response.msg == 'Password Matched Successfully') {
+          if (this.DisableVoidpwdFeature) {
+            this.voidProduct(item);
 
-                    this.http.post(environment.mainApi + this.global.inventoryLink + 'VoidAllProducts', {
-                      InvBillNo: this.invBillNo,
-                      SaleDetail: JSON.stringify(this.tableDataList),
-                      UserID: this.global.getUserID(),
-                    }).subscribe(
-                      (Response: any) => {
-                        if (Response.msg == 'Data Saved Successfully') {
-                          this.getCurrentBill();
-                          this.reset();
-                          $('#vssearchProduct').trigger('focus');
-                        } else {
-                          this.msg.WarnNotify(Response.msg);
-                        }
+          } else {
 
-                        $('#vssearchProduct').trigger('focus');
-                      }
-                    )
+            this.global.openPassword('Password').subscribe(pin => {
+              if (pin !== '') {
+                this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+                  RestrictionCodeID: 1,
+                  Password: pin,
+                  UserID: this.global.getUserID()
 
-                  } else {
-                    this.msg.WarnNotify(Response.msg);
+                }).subscribe(
+                  (Response: any) => {
+                    if (Response.msg == 'Password Matched Successfully') {
+
+                      this.voidProduct(item);
+                    } else {
+                      this.msg.WarnNotify(Response.msg);
+                    }
                   }
-                },
-                (Error: any) => {
-                  this.msg.WarnNotify(Error);
-                  this.app.stopLoaderDark();
-                }
-              )
-
-
-
-            }
-          })
+                )
+              }
+            })
+          }
         }
-
-
       })
     }
-
-
   }
-
-
-
 
 
   //////////////////////  Void Single Product  /////////////////////////////////////////////////////////
@@ -1141,8 +1096,8 @@ export class VoidSaleReturnComponent implements OnInit {
       InvBillNo: this.invBillNo,
       ProductID: item.productID,
       ProductTitle: item.productTitle,
-      Quantity: item.quantity / item.multyQty,
       barcode: item.barcode,
+      Quantity: item.quantity / item.multyQty,
       CostPrice: item.costPrice,
       AvgCostPrice: item.avgCostPrice,
       SalePrice: item.salePrice,
@@ -1153,9 +1108,10 @@ export class VoidSaleReturnComponent implements OnInit {
       (Response: any) => {
         if (Response.msg == 'Data Saved Successfully') {
           if (this.tableDataList.length == 1) {
-            this.reset()
+            this.reset();
           }
           this.getCurrentBill();
+
           $('#vssearchProduct').trigger('focus');
           $('.billArea').scrollTop(0);
         } else {
@@ -1169,6 +1125,102 @@ export class VoidSaleReturnComponent implements OnInit {
       }
     )
   }
+
+
+  ///////////////////////////  Void Full Bill ///////////////////////////////////////////////////////
+
+
+  voidBill() {
+
+    if (this.tableDataList.length > 0) {
+
+      Swal.fire({
+        title: 'Alert!',
+        text: 'Confirm to Void Full Bill',
+        position: 'center',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Confirm',
+      }).then((result) => {
+
+        if (result.isConfirmed) {
+          if (this.DisableVoidpwdFeature) {
+
+            this.http.post(environment.mainApi + this.global.inventoryLink + 'VoidAllProducts', {
+              InvBillNo: this.invBillNo,
+              SaleDetail: JSON.stringify(this.tableDataList),
+              UserID: this.global.getUserID(),
+            }).subscribe(
+              (Response: any) => {
+                if (Response.msg == 'Data Saved Successfully') {
+                  this.getCurrentBill();
+                  this.reset();
+                  $('#vssearchProduct').trigger('focus');
+                } else {
+                  this.msg.WarnNotify(Response.msg);
+                }
+
+                $('#vssearchProduct').trigger('focus');
+              }
+            )
+          } else {
+
+            this.global.openPassword('Password').subscribe(pin => {
+              if (pin !== '') {
+                this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+                  RestrictionCodeID: 1,
+                  Password: pin,
+                  UserID: this.global.getUserID()
+
+                }).subscribe(
+                  (Response: any) => {
+                    if (Response.msg == 'Password Matched Successfully') {
+
+                      this.http.post(environment.mainApi + this.global.inventoryLink + 'VoidAllProducts', {
+                        InvBillNo: this.invBillNo,
+                        SaleDetail: JSON.stringify(this.tableDataList),
+                        UserID: this.global.getUserID(),
+                      }).subscribe(
+                        (Response: any) => {
+                          if (Response.msg == 'Data Saved Successfully') {
+                            this.getCurrentBill();
+                            this.reset();
+                            $('#vssearchProduct').trigger('focus');
+                          } else {
+                            this.msg.WarnNotify(Response.msg);
+                          }
+
+                          $('#vssearchProduct').trigger('focus');
+                        }
+                      )
+
+                    } else {
+                      this.msg.WarnNotify(Response.msg);
+                    }
+                  },
+                  (Error: any) => {
+                    this.msg.WarnNotify(Error);
+                    this.app.stopLoaderDark();
+                  }
+                )
+              }
+            })
+
+          }
+        }
+      })
+
+
+
+    }
+
+
+  }
+
+
+
 
 
 

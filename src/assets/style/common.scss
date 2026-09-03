@@ -115,7 +115,7 @@ button {
 /**************** background colors *******************/
 
 .bgSuccessLight{
-  background-color: var(--success-light);
+  background-color: var(--success-light) !important;
 }
 
 .bg-dark-light {
@@ -1666,4 +1666,52 @@ input[type="number"]::-webkit-inner-spin-button {
   padding-left: 10px;
   padding-right: 10px;
   padding: 5px 10px 5px 10px;
+}
+
+
+
+
+.bg-orange{
+  background-color: orange !important;
+  color: white !important;
+}
+
+.bg-beidge{
+  background-color: #CBAA4A !important;
+  color: white !important;
+}
+
+.bg-navyblue{
+  background-color: #060636 !important;
+  color: white !important;
+}
+
+.bg-expense{
+  background-color: #ed4657 !important;
+  color: white !important;
+}
+
+.bg-grey{
+  background-color: #a1a1a1 !important;
+  color: white !important;
+}
+
+.bg-golden{
+    background-color: #6d5d10ea !important;
+  color: white !important;
+}
+
+
+.bg-redish{
+    background-color: #ecababea !important;
+  color: white !important;
+}
+
+.bg-yellow{
+    background-color: #889046ea !important;
+  color: white !important;
+}
+
+.bg-offWhite{
+    background-color: #d3ffc5ea !important;
 }

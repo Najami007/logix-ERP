@@ -59,53 +59,53 @@ export class CommentCardComponent implements OnInit {
 
   }
   ngOnInit(): void {
-  this.getFeedbackCaptions();
+    this.getFeedbackCaptions();
   }
 
   mobileMask = [
-      /\d/,
-      /\d/,
-      /\d/,
-      /\d/,
-      '-',
-      /\d/,
-      /\d/,
-      /\d/,
-      /\d/,
-      /\d/,
-      /\d/,
-      /\d/,
-    ];
+    /\d/,
+    /\d/,
+    /\d/,
+    /\d/,
+    '-',
+    /\d/,
+    /\d/,
+    /\d/,
+    /\d/,
+    /\d/,
+    /\d/,
+    /\d/,
+  ];
 
-  @Input() invBillNo:any = '';
+  @Input() invBillNo: any = '';
 
-CusContactNo:any = ''
-CusName:any = '';
-Comments:any = '';
-Suggestions:any = '';
+  CusContactNo: any = ''
+  CusName: any = '';
+  Comments: any = '';
+  Suggestions: any = '';
 
 
   FeedBackDetail: any = []
 
-  getSavedData(invBillNo:any){
-    this.http.get(environment.mainApi+this.global.restaurentLink+'GetComments?reqType=Holded'+'&BillNo='+invBillNo).subscribe(
-      (Response:any)=>{
+  getSavedData(invBillNo: any) {
+    this.http.get(environment.mainApi + this.global.restaurentLink + 'GetComments?reqType=Holded' + '&BillNo=' + invBillNo).subscribe(
+      (Response: any) => {
 
-        if(Response.length > 0){
-        this.CusName = Response[0].cusName;
-        this.CusContactNo = Response[0].cusContactNo;
-        this.Comments = Response[0].comments;
-        this.Suggestions = Response[0].suggestions;
-        this.getSavedComments(invBillNo);
+        if (Response.length > 0) {
+          this.CusName = Response[0].cusName;
+          this.CusContactNo = Response[0].cusContactNo;
+          this.Comments = Response[0].comments;
+          this.Suggestions = Response[0].suggestions;
+          this.getSavedComments(invBillNo);
         }
 
       }
     )
   }
 
-  getSavedComments(invBillNo:any){
-     this.http.get(environment.mainApi+this.global.restaurentLink+'GetCommentsDetail?BillNo='+invBillNo).subscribe(
-      (Response:any)=>{
+  getSavedComments(invBillNo: any) {
+    this.http.get(environment.mainApi + this.global.restaurentLink + 'GetCommentsDetail?BillNo=' + invBillNo).subscribe(
+      (Response: any) => {
         this.FeedBackDetail = Response;
 
       }
@@ -113,9 +113,9 @@ Suggestions:any = '';
   }
 
 
-  getFeedbackCaptions(){
-    this.http.get(environment.mainApi+this.global.restaurentLink+'GetFeedBackCaption').subscribe(
-      (Response:any)=>{
+  getFeedbackCaptions() {
+    this.http.get(environment.mainApi + this.global.restaurentLink + 'GetFeedBackCaption').subscribe(
+      (Response: any) => {
         this.FeedBackDetail = Response;
 
       }
@@ -159,7 +159,7 @@ Suggestions:any = '';
   }
 
 
-  reset(){
+  reset() {
 
     this.CusName = '';
     this.CusContactNo = '';
@@ -170,47 +170,47 @@ Suggestions:any = '';
 
 
 
-  save(){
+  save() {
 
 
     var postData = {
-      HoldInvNo:this.invBillNo,
-      CusContactNo:this.CusContactNo,
-      CusName:this.CusName,
-      Comments:this.Comments,
-      Suggestions:this.Suggestions || '-',
-      FeedBackDetail:JSON.stringify(this.FeedBackDetail),
-      UserID:this.global.getUserID()
+      HoldInvNo: this.invBillNo,
+      CusContactNo: this.CusContactNo,
+      CusName: this.CusName,
+      Comments: this.Comments,
+      Suggestions: this.Suggestions || '-',
+      FeedBackDetail: JSON.stringify(this.FeedBackDetail),
+      UserID: this.global.getUserID()
     }
 
 
-    if(this.invBillNo == ''){
+    if (this.invBillNo == '') {
       this.msg.WarnNotify('Bill No Required');
       return;
     }
 
-    if(this.CusName == ''){
+    if (this.CusName == '') {
       this.msg.WarnNotify('Enter Customer Name');
       return;
     }
-    if(this.CusContactNo == ''){
+    if (this.CusContactNo == '') {
       this.msg.WarnNotify('Enter Customer Contact No');
       return;
     }
 
-    if(this.Comments == ''){
+    if (this.Comments == '') {
       this.msg.WarnNotify('Enter Comments')
       return;
     }
 
 
-    this.http.post(environment.mainApi+this.global.restaurentLink+'InsertComments',postData).subscribe(
-      (Response:any)=>{
-        if(Response.msg == 'Data Saved Successfully'){
+    this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertComments', postData).subscribe(
+      (Response: any) => {
+        if (Response.msg == 'Data Saved Successfully') {
 
           this.msg.SuccessNotify(Response.msg);
           this.saveEmitter.emit();
-        }else{
+        } else {
           this.msg.WarnNotify(Response.msg);
         }
 
@@ -219,7 +219,10 @@ Suggestions:any = '';
   }
 
 
-  
+
+
+
+
 
 
 }

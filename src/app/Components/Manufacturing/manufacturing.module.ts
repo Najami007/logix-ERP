@@ -42,7 +42,11 @@ import { ProductionAuditInvPrintComponent } from './production-audit/production-
 import { ProductionPrintComponent } from './production-item-receiving/production-print/production-print.component';
 import { ProductionReportComponent } from './ManufacturingReports/production-report/production-report.component';
 import { ManufacturingStockRegisterComponent } from './ManufacturingReports/manufacturing-stock-register/manufacturing-stock-register.component';
+import { TransporterProfileComponent } from '../Inventory/Configurations/transporter-profile/transporter-profile.component';
 
+
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { ManufacturingSaleTransporterwiseComponent } from './ManufacturingReports/manufacturing-sale-transporterwise/manufacturing-sale-transporterwise.component';
 
 
 export const MY_DATE_FORMAT = {
@@ -64,7 +68,7 @@ export const manufacturingRoutes: Route[] = [
 
   { path: 'marbleSale', component: MarbleSaleComponent, data: { title: 'Sale' }, canActivate: [AuthGuard] },
   { path: 'itemproduction', component: ItemProductionComponent, data: { title: 'Item Production' }, canActivate: [AuthGuard] },
-  { path: 'shipmentCompany', component: ShippingCompanyComponent, data: { title: 'Shipment Company' }, canActivate: [AuthGuard] },
+  { path: 'shipmentCompany', component: TransporterProfileComponent, data: { title: 'Shipment Company' }, canActivate: [AuthGuard] },
   { path: 'itemcategory', component: ItemCategoriesComponent, data: { title: 'Item Category' }, canActivate: [AuthGuard] },
   { path: 'contractorProfile', component: ContractorProfileComponent, data: { title: 'Contractor Profile' }, canActivate: [AuthGuard] },
   { path: 'itemReceiving', component: ProductionItemReceivingComponent, data: { title: 'Item Receiving' }, canActivate: [AuthGuard] },
@@ -79,9 +83,9 @@ export const manufacturingRoutes: Route[] = [
   { path: 'categorysalerpt', component: ManufacturingSaleCategoryComponent, data: { title: 'Sale Report Category' }, canActivate: [AuthGuard] },
   { path: 'productionRpt', component: ProductionReportComponent, data: { title: 'Production Report' }, canActivate: [AuthGuard] },
   { path: 'mnuStockRegister', component: ManufacturingStockRegisterComponent, data: { title: 'Stock Register' }, canActivate: [AuthGuard] },
-
-
   { path: 'materialconsumption', component: MaterialConsumptionRptComponent, data: { title: 'Material Consumption' }, canActivate: [AuthGuard] },
+    { path: 'transportersalerpt', component: ManufacturingSaleTransporterwiseComponent, data: { title: 'Sale Report Transporter' }, canActivate: [AuthGuard] },
+
 
 
 ]
@@ -113,6 +117,7 @@ export const manufacturingRoutes: Route[] = [
     ProductionPrintComponent,
     ProductionReportComponent,
     ManufacturingStockRegisterComponent,
+    ManufacturingSaleTransporterwiseComponent,
 
 
   ],
@@ -136,11 +141,13 @@ export const manufacturingRoutes: Route[] = [
     NgSelectModule,
     SharedComponentsModule,
     CompanyModule,
-    DirectivesModule
+    DirectivesModule,
+    NgxMaskDirective
   ],
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
+      provideNgxMask()
   ]
 })
 export class ManufacturingModule { }

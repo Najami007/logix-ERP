@@ -58,6 +58,7 @@ export class SavedBillComponent {
   @Output() postBillEmitter = new EventEmitter();
   @Output() editInvSaleBill = new EventEmitter();
   @Output() delInvSaleBill = new EventEmitter();
+  @Output() copyBillEmitter = new EventEmitter();
 
   @Input() savedbillList: any = [];
   crudList: any = { c: true, r: true, u: true, d: true };
@@ -90,6 +91,10 @@ export class SavedBillComponent {
 
   deleteSaleBill(item: any) {
     this.delInvSaleBill.emit(item);
+  }
+
+  copyBill(item:any){
+    this.copyBillEmitter.emit(item);
   }
 
 }

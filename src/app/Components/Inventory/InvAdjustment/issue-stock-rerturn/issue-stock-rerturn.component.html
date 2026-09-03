@@ -6,7 +6,7 @@
         <!-------------------- Top Date and location section --------------->
 
         <div class="row ps-1 pe-1 pt-1 justify-content-between">
-            <mat-form-field appearance="outline" *ngIf="!disableDateFeature"  class="col-lg-3 matSmall">
+            <mat-form-field appearance="outline" *ngIf="!disableDateFeature"  class="col-md-3 matSmall">
                 <mat-label>Invoice Date</mat-label>
                 <input [(ngModel)]="invoiceDate"  readonly="true" matInput type="text"
                     name="invDate" [matDatepicker]="iDate">
@@ -14,7 +14,7 @@
                 <mat-datepicker #iDate></mat-datepicker>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="col-lg-3 matSmall">
+            <mat-form-field appearance="outline" class="col-md-3 matSmall">
                 <mat-label>Location</mat-label>
                 <mat-select [(ngModel)]="locationID" name="location" (selectionChange)="onLocationSelected('l1')">
                     <mat-option><ngx-mat-select-search #locationSearch [placeholderLabel]="'Search...'"
@@ -43,7 +43,15 @@
                 </mat-select>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="matSmall" [ngClass]="disableDateFeature ? 'col-lg-6' :'col-lg-3'">
+              <mat-form-field class="col-md-3 matSmall" appearance="outline">
+                        <mat-label>Project </mat-label>
+                        <mat-select [(ngModel)]="projectID" name="Project" [disabled]="!ProjectwiseFeature">
+                            <mat-option *ngFor="let item of projectList "
+                                [value]="item.projectID">{{item.projectTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+            <mat-form-field appearance="outline" class="matSmall" [ngClass]="disableDateFeature ? 'col-md-3' :'col-md-12'">
                 <mat-label>Remarks</mat-label>
                 <input matInput type="text" [(ngModel)]="invRemarks">
             </mat-form-field>

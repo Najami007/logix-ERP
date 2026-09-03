@@ -61,7 +61,7 @@ export class MnuInvoicePrintComponent {
   logoWidth: any = 0;
   companyAddress: any = '';
   CompanyMobile: any = '';
-  companyPhone:any = '';
+  companyPhone: any = '';
   companyName: any = '';
   companyProfile: any = [];
   companyLogo: any = '';
@@ -93,7 +93,11 @@ export class MnuInvoicePrintComponent {
   myBillTotal = 0;
   myBillDiscount = 0;
   myNetTotal = 0;
-  myRemarks:any = '';
+  myRemarks: any = '';
+
+  myShippingCharges = 0;
+  myLabourCharges = 0;
+  myTransportCharges = 0;
 
   tableDataList: any = [];
   printChallan(orderNo: any) {
@@ -103,10 +107,14 @@ export class MnuInvoicePrintComponent {
           this.tableDataList = [];
           if (Response.length > 0) {
             Response.forEach((e: any) => {
+              
               this.tableDataList.push({
                 mnuItemID: e.mnuItemID, productTitle: e.productTitle, quantity: e.quantity, costPrice: e.costPrice, salePrice: e.salePrice
               })
-               this.myCounterName = Response[0].entryUser;
+              this.myTransportCharges = Response[0].transportCharges;
+              this.myLabourCharges = Response[0].labourCharges;
+
+              this.myCounterName = Response[0].entryUser;
               this.tmpInvBillNo = Response[0].invBillNo;
               this.tmpInvDate = Response[0].invDate;
               this.tmpDeliveryDate = new Date(Response[0].deliveryDate);

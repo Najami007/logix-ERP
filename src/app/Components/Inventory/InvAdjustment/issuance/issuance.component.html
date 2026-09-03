@@ -46,8 +46,16 @@
                     </mat-select>
                 </mat-form-field>
 
+                 <mat-form-field class="col-md-4 matSmall" appearance="outline">
+                        <mat-label>Project </mat-label>
+                        <mat-select [(ngModel)]="projectID" name="Project" [disabled]="!ProjectwiseFeature">
+                            <mat-option *ngFor="let item of projectList "
+                                [value]="item.projectID">{{item.projectTitle}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
                 <mat-form-field appearance="outline" class="matSmall"
-                    [ngClass]="disableDateFeature ? 'col-lg-6' :'col-lg-4'">
+                    [ngClass]="disableDateFeature ? 'col-md-2' :'col-md-12'">
                     <mat-label>Remarks</mat-label>
                     <input matInput type="text" [(ngModel)]="invRemarks">
                 </mat-form-field>

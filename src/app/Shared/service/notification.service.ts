@@ -34,22 +34,17 @@ export class NotificationService {
   WarnNotify =(Text:string)=> Swal.mixin({
     toast: true,
     position: 'top',
-    showConfirmButton: false,
-    timer: 2000,
+    timer: 4000,
     timerProgressBar: true,
-    showLoaderOnConfirm:true,
-     target: '.cdk-overlay-container',
-     customClass: {
-    popup: 'swal-top-z'
-  },
-   
-   
-    
-   willOpen : (toast)=> {
-    toast.addEventListener('mouseenter', Swal.stopTimer)
-    toast.addEventListener('mouseleave', Swal.resumeTimer)
-   },
-    
+    showConfirmButton: false,
+    target: '.cdk-overlay-container',
+    customClass: {
+      popup: 'swal-top-z'
+    },
+    didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  }
   }).fire({
     showConfirmButton:true,
     width:500,
@@ -70,21 +65,18 @@ export class NotificationService {
 
   SuccessNotify =(Text:string)=> Swal.mixin({
     toast: true,
-    position: 'center',
-    showConfirmButton: false,
-    timer: 1500,
+    position: 'top',
+    timer: 4000,
     timerProgressBar: true,
-    showLoaderOnConfirm:true,
-     target: '.cdk-overlay-container',
-     customClass: {
-    popup: 'swal-top-z'
-  },
-
-   willOpen : (toast)=> {
-    toast.addEventListener('mouseenter', Swal.stopTimer)
-    toast.addEventListener('mouseleave', Swal.resumeTimer)
-   },
-    
+    showConfirmButton: false,
+    target: '.cdk-overlay-container',
+    customClass: {
+      popup: 'swal-top-z'
+    },
+    didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  }
   }).fire({
     showConfirmButton:true,
     confirmButtonColor:"green",

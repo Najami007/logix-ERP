@@ -147,7 +147,7 @@
                     <th *ngIf="myInvType !== 'PO' "></th>
                     <th class="text-end">{{myCPTotal | number:'1.0-2'}}</th>
                     <th class="text-end" *ngIf="myInvType !== 'PO' ">{{mySPTotal | number:'1.0-2'}}</th>
-                    <th class="text-end" *ngIf="myInvType !== 'PO' ">{{ ((mySPTotal - myCPTotal) / mySPTotal) * 100 |
+                    <th class="text-end" *ngIf="myInvType !== 'PO' ">{{ ((mySPTotal - myCPTotal) / myCPTotal) * 100 |
                         number:'1.0-2'}}%</th>
                     <!-- <th></th>
                         <th></th> -->

@@ -41,6 +41,8 @@ import { AddVehicleComponent } from './vehicle/add-vehicle/add-vehicle.component
 import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
 import { AddDiscProfileComponent } from './add-disc-profile/add-disc-profile.component';
 import { AddProfileComponent } from './add-disc-profile/add-profile/add-profile.component';
+import { PartyPaymentScheduleComponent } from './party-payment-schedule/party-payment-schedule.component';
+import { AddScheduleComponent } from './party-payment-schedule/add-schedule/add-schedule.component';
 
 
 export const MY_DATE_FORMAT = {
@@ -71,7 +73,9 @@ export const companyRoutes: Route[] = [
   { path: 'root', component: RootComponent, data: { title: 'Root' }, canActivate: [AuthGuard] },
   { path: 'area', component: AreaComponent, data: { title: 'Area' }, canActivate: [AuthGuard] },
   { path: 'vehicle', component: VehicleComponent, data: { title: 'Vehicle' }, canActivate: [AuthGuard] },
-   { path: 'addDiscProfile', component: AddDiscProfileComponent, data: { title: 'ADD Disc Profile' }, canActivate: [AuthGuard] },
+  { path: 'addDiscProfile', component: AddDiscProfileComponent, data: { title: 'ADD Disc Profile' }, canActivate: [AuthGuard] },
+  { path: 'partyPaymentSchedule', component: PartyPaymentScheduleComponent, data: { title: 'Party Payment Schedule' }, canActivate: [AuthGuard] },
+
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 
 
@@ -80,7 +84,7 @@ export const companyRoutes: Route[] = [
 
 @NgModule({
   declarations: [
-       
+
     CompanyProfileComponent,
     PartnersComponent,
     CityComponent,
@@ -102,7 +106,9 @@ export const companyRoutes: Route[] = [
     VehicleComponent,
     AddVehicleComponent,
     AddDiscProfileComponent,
-    AddProfileComponent
+    AddProfileComponent,
+    PartyPaymentScheduleComponent,
+    AddScheduleComponent
 
 
   ],
@@ -128,7 +134,8 @@ export const companyRoutes: Route[] = [
   exports: [
     RouterModule,
     VehicleComponent,
-    AddVehicleComponent
+    AddVehicleComponent,
+    AddpartyComponent
   ],
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },

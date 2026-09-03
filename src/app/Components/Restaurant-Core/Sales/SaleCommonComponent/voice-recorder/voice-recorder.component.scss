@@ -1,0 +1,330 @@
+// body{
+//     background:#f3f6fa;
+// }
+
+// .card{
+//     max-width:600px;
+//     margin:auto;
+// }
+
+// .display-5{
+//     color:#0d6efd;
+// }
+
+// button{
+//     min-width:170px;
+// }
+
+
+body{
+    font-family: "Segoe UI", sans-serif;
+}
+
+
+
+.voice-card{
+
+    background:rgba(255,255,255,.75);
+
+    backdrop-filter:blur(18px);
+
+    border-radius:22px;
+
+    padding:22px 30px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.08);
+
+    gap:25px;
+
+}
+
+.voice-info{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.mic-circle{
+
+    width:70px;
+
+    height:70px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:linear-gradient(135deg,#5B7FFF,#8F6BFF);
+
+    color:#fff;
+
+    font-size:28px;
+
+    box-shadow:0 10px 25px rgba(91,127,255,.35);
+
+}
+
+.timer-section{
+
+    font-size:38px;
+
+    font-weight:700;
+
+    color:#1b2430;
+
+    letter-spacing:3px;
+
+    min-width:140px;
+
+    text-align:center;
+
+}
+
+.button-section{
+
+    display:flex;
+
+    gap:15px;
+
+}
+
+.start-btn{
+
+    background:#29c76f;
+
+    color:white;
+
+    border:none;
+
+    padding:12px 28px;
+
+    border-radius:50px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.start-btn:hover{
+
+    background:#20b060;
+
+    transform:translateY(-2px);
+
+}
+
+.stop-btn{
+
+    background:#ff5d6c;
+
+    color:white;
+
+    border:none;
+
+    padding:12px 28px;
+
+    border-radius:50px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.stop-btn:hover{
+
+    background:#ea4456;
+
+    transform:translateY(-2px);
+
+}
+
+.player-card{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:20px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+audio{
+
+    width:75%;
+
+}
+
+button:disabled{
+
+    opacity:.5;
+
+    cursor:not-allowed;
+
+}
+
+@media(max-width:992px){
+
+.voice-card{
+
+    flex-direction:column;
+
+    text-align:center;
+
+}
+
+.voice-info{
+
+    flex-direction:column;
+
+}
+
+.button-section{
+
+    width:100%;
+
+    justify-content:center;
+
+}
+
+.player-card{
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+
+audio{
+
+    width:100%;
+
+}
+
+/* Floating Mic */
+
+.mic-fab{
+
+    width:70px;
+    height:70px;
+
+    border-radius:50%;
+
+    background:linear-gradient(135deg,#6C63FF,#4A90E2);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    cursor:pointer;
+
+    color:#fff;
+
+    font-size:30px;
+
+    margin:auto;
+
+    box-shadow:0 15px 35px rgba(76,110,245,.35);
+
+    transition:.35s;
+
+}
+
+.mic-fab:hover{
+
+    transform:scale(1.08);
+
+    box-shadow:0 20px 45px rgba(76,110,245,.45);
+
+}
+
+.mic-fab:active{
+
+    transform:scale(.95);
+
+}
+
+/* Recording animation */
+
+.recording{
+
+    animation:pulse 1.2s infinite;
+
+}
+
+@keyframes pulse{
+
+    0%{
+
+        box-shadow:0 0 0 0 rgba(255,59,92,.6);
+
+    }
+
+    70%{
+
+        box-shadow:0 0 0 22px rgba(255,59,92,0);
+
+    }
+
+    100%{
+
+        box-shadow:0 0 0 0 rgba(255,59,92,0);
+
+    }
+
+}
+
+/* Smooth panel animation */
+
+.voice-card{
+
+    margin-top:30px;
+
+    animation:slideDown .35s ease;
+
+}
+
+@keyframes slideDown{
+
+    from{
+
+        opacity:0;
+        transform:translateY(-15px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+}
+
+
+
+}

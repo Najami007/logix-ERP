@@ -36,6 +36,7 @@ export class PurchaseReturnComponent implements OnInit {
   ImageUrlFeature = this.global.ImageUrlFeature;
   insertLocalStorageFeature = this.global.insertLocalStorageFeature;
   ProjectwiseFeature = this.global.ProjectwiseFeature;
+  uomPurchaseFeature = this.global.uomPurchaseFeature;
 
 
 
@@ -260,7 +261,7 @@ export class PurchaseReturnComponent implements OnInit {
   pushProdData(data: any, qty: any) {
     /////// check already present in the table or not
     var condition = this.tableDataList.find(
-      (x: any) => x.ProductID == data.productID
+      (x: any) => x.productID == data.productID
     );
 
     var index = this.tableDataList.indexOf(condition);
@@ -272,7 +273,7 @@ export class PurchaseReturnComponent implements OnInit {
         rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
           : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
             : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
-        ProductID: data.productID,
+        productID: data.productID,
         ProductTitle: data.productTitle,
         barcode: data.barcode,
         productImage: this.ImageUrlFeature ? data.imagesPath : data.productImage,
@@ -286,7 +287,8 @@ export class PurchaseReturnComponent implements OnInit {
         BatchNo: '-',
         BatchStatus: '-',
         UomID: data.uomID,
-        Packing: 1,
+        Packing: data.packing,
+        uomTitle: data.uomTitle,
         discInP: 0,
         discInR: 0,
         AQ: data.aq,
@@ -366,7 +368,7 @@ export class PurchaseReturnComponent implements OnInit {
         }
 
         var condition = this.tableDataList.find(
-          (x: any) => x.ProductID == Response[0].productID
+          (x: any) => x.productID == Response[0].productID
         );
         var index = this.tableDataList.indexOf(condition);
         if (condition == undefined) {
@@ -412,7 +414,7 @@ export class PurchaseReturnComponent implements OnInit {
   //       /////// check already present in the table or not
   //       if (row !== undefined) {
   //         var condition = this.tableDataList.find(
-  //           (x: any) => x.ProductID == row.productID
+  //           (x: any) => x.productID == row.productID
   //         );
 
   //         var index = this.tableDataList.indexOf(condition);
@@ -429,7 +431,7 @@ export class PurchaseReturnComponent implements OnInit {
   //                 rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
   //                   : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
   //                     : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
-  //                 ProductID: Response[0].productID,
+  //                 productID: Response[0].productID,
   //                 ProductTitle: Response[0].productTitle,
   //                 barcode: Response[0].barcode,
   //                 productImage: Response[0].productImage,
@@ -487,7 +489,7 @@ export class PurchaseReturnComponent implements OnInit {
 
 
   //   var condition = this.tableDataList.find(
-  //     (x: any) => x.ProductID == data.productID
+  //     (x: any) => x.productID == data.productID
   //   );
 
   //   var index = this.tableDataList.indexOf(condition);
@@ -505,7 +507,7 @@ export class PurchaseReturnComponent implements OnInit {
   //           rowIndex: this.tableDataList.length == 0 ? this.tableDataList.length + 1
   //             : this.sortType == 'desc' ? this.tableDataList[0].rowIndex + 1
   //               : this.tableDataList[this.tableDataList.length - 1].rowIndex + 1,
-  //           ProductID: Response[0].productID,
+  //           productID: Response[0].productID,
   //           ProductTitle: Response[0].productTitle,
   //           barcode: Response[0].barcode,
   //           productImage: Response[0].productImage,
@@ -613,7 +615,7 @@ export class PurchaseReturnComponent implements OnInit {
 
 
   showImg(item: any) {
-    var index = this.tableDataList.findIndex((e: any) => e.ProductID == item.ProductID);
+    var index = this.tableDataList.findIndex((e: any) => e.productID == item.productID);
     this.productImage = this.tableDataList[index].productImage;
   }
 
@@ -765,14 +767,17 @@ export class PurchaseReturnComponent implements OnInit {
       $('#searchProduct').trigger('select');
       $('#searchProduct').trigger('focus');
     }
+    // Allowed keys
+    const allowedKeys = [
+      'Backspace', 'Tab', 'Enter', 'Shift', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown',
+      'Delete', '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Numpad0', 'Numpad1', 'Numpad2', 'Numpad3', 'Numpad4', 'Numpad5', 'Numpad6', 'Numpad7', 'Numpad8', 'Numpad9', 'Decimal'
+    ];
 
-    if ((e.keyCode == 13 || e.keyCode == 8 || e.keyCode == 9 || e.keyCode == 16 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 110 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 48 || e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53 || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 96 || e.keyCode == 97 || e.keyCode == 98 || e.keyCode == 99 || e.keyCode == 100 || e.keyCode == 101 || e.keyCode == 102 || e.keyCode == 103 || e.keyCode == 104 || e.keyCode == 105)) {
-      // 13 Enter ///////// 8 Back/remve ////////9 tab ////////////16 shift ///////////46 del  /////////37 left //////////////110 dot
-    }
-    else {
+    // Block keys not allowed
+    if (!allowedKeys.includes(e.key)) {
       e.preventDefault();
+      return;
     }
-
 
 
     /////move down
@@ -828,19 +833,18 @@ export class PurchaseReturnComponent implements OnInit {
   }
 
   @ViewChild('supplier') myParty: any;
-  addParty() {
-    setTimeout(() => {
+  addParty(status:any) {
+   if(status == 'open'){
+   setTimeout(() => {
       this.myParty.close()
     }, 200);
-    this.dialogue.open(AddpartyComponent, {
-      width: "50%"
-    }).afterClosed().subscribe(value => {
-      if (value == 'Update') {
-        this.getSuppliers();
-      }
-    });
+     this.global.openBootstrapModal('#addPartyModal',true);
+   } 
+   if(status == 'close') {
+    this.global.closeBootstrapModal('#addPartyModal',true);
+     this.getSuppliers();
+   }
   }
-
 
 
 
@@ -869,93 +873,93 @@ export class PurchaseReturnComponent implements OnInit {
       this.msg.WarnNotify('Atleast One Product Must Be Selected');
       return;
     }
-     if (this.locationID == '' || this.locationID == undefined || this.locationID == 0) {
+    if (this.locationID == '' || this.locationID == undefined || this.locationID == 0) {
       this.msg.WarnNotify('Select Warehouse Location');
       return;
-    } 
-     if (this.bookerID == 0 || this.bookerID == undefined) {
+    }
+    if (this.bookerID == 0 || this.bookerID == undefined) {
       this.msg.WarnNotify("Select Purchaser");
       return;
-    } 
-     if (this.refInvNo == '' || this.refInvNo == undefined) {
+    }
+    if (this.refInvNo == '' || this.refInvNo == undefined) {
       this.msg.WarnNotify('Enter Reference Invoice No');
       return;
-    } 
-     if (this.partyID == '' || this.partyID == 0 || this.partyID == undefined) {
+    }
+    if (this.partyID == '' || this.partyID == 0 || this.partyID == undefined) {
       this.msg.WarnNotify('Select Supplier Party');
       return;
-    } 
+    }
 
 
-     if(this.ProjectwiseFeature && this.projectID == 0){
+    if (this.ProjectwiseFeature && this.projectID == 0) {
       this.msg.WarnNotify('Select Project');
       return;
     }
 
 
 
-      this.sortType == 'desc'
-        ? this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex)
-        : this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex);
+    this.sortType == 'desc'
+      ? this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex)
+      : this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex);
 
 
-      var postData = {
-        InvBillNo: this.holdInvNo,
-        InvType: "PR",
-        InvDate: this.global.dateFormater(this.invoiceDate, '-'),
-        RefInvoiceNo: this.refInvNo,
-        PartyID: this.partyID,
-        LocationID: this.locationID,
-        ProjectID: this.projectID == 0 ? this.global.getProjectID() : this.projectID,
-        BookerID: this.bookerID,
-        BillTotal: this.subTotal,
-        BillDiscount: this.discount || 0,
-        OverHeadAmount: this.overHead || 0,
-        NetTotal: this.subTotal - this.discount,
-        Remarks: this.invRemarks || '-',
-        InvoiceDocument: "-",
-        HoldInvNo: this.holdInvNo,
-        InvDetail: JSON.stringify(this.tableDataList),
-        UserID: this.global.getUserID()
-      };
+    var postData = {
+      InvBillNo: this.holdInvNo,
+      InvType: "PR",
+      InvDate: this.global.dateFormater(this.invoiceDate, '-'),
+      RefInvoiceNo: this.refInvNo,
+      PartyID: this.partyID,
+      LocationID: this.locationID,
+      ProjectID: this.projectID == 0 ? this.global.getProjectID() : this.projectID,
+      BookerID: this.bookerID,
+      BillTotal: this.subTotal,
+      BillDiscount: this.discount || 0,
+      OverHeadAmount: this.overHead || 0,
+      NetTotal: this.subTotal - this.discount,
+      Remarks: this.invRemarks || '-',
+      InvoiceDocument: "-",
+      HoldInvNo: this.holdInvNo,
+      InvDetail: JSON.stringify(this.tableDataList),
+      UserID: this.global.getUserID()
+    };
 
 
 
-      if (type == 'hold') {
-        if (this.holdBtnType == 'Hold') {
-          this.insert('hold', postData)
-        } else if (this.holdBtnType == 'ReHold') {
-          this.global.openPinCode().subscribe(pin => {
-            if (pin != '') {
-              this.app.startLoaderDark();
-              postData['PinCode'] = pin;
-              this.insert('rehold', postData);
-            } else {
-              this.sortType == 'desc'
-                ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex)
-                : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
+    if (type == 'hold') {
+      if (this.holdBtnType == 'Hold') {
+        this.insert('hold', postData)
+      } else if (this.holdBtnType == 'ReHold') {
+        this.global.openPinCode().subscribe(pin => {
+          if (pin != '') {
+            this.app.startLoaderDark();
+            postData['PinCode'] = pin;
+            this.insert('rehold', postData);
+          } else {
+            this.sortType == 'desc'
+              ? this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex)
+              : this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex);
 
-            }
-          })
-        }
-
-      } else if (type == 'purchase') {
-
-        this.global.confirmAlert().subscribe(
-          (Response: any) => {
-            if (Response == true) {
-
-              this.insert('purchaseReturn', postData);
-            }
           }
-        )
-
-
-
+        })
       }
 
+    } else if (type == 'purchase') {
 
-    
+      this.global.confirmAlert().subscribe(
+        (Response: any) => {
+          if (Response == true) {
+
+            this.insert('purchaseReturn', postData);
+          }
+        }
+      )
+
+
+
+    }
+
+
+
 
 
 
@@ -1095,7 +1099,7 @@ export class PurchaseReturnComponent implements OnInit {
           this.myTotalQty += e.quantity;
           this.tableDataList.push({
             rowIndex: this.tableDataList.length + 1,
-            ProductID: e.productID,
+            productID: e.productID,
             ProductTitle: e.productTitle,
             barcode: e.barcode,
             productImage: e.productImage,
@@ -1178,7 +1182,7 @@ export class PurchaseReturnComponent implements OnInit {
           this.myTotalQty += e.quantity;
           this.tableDataList.push({
             rowIndex: this.tableDataList.length + 1,
-            ProductID: e.productID,
+            productID: e.productID,
             ProductTitle: e.productTitle,
             barcode: e.barcode,
             productImage: e.productImage,

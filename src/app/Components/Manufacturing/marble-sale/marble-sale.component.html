@@ -90,6 +90,7 @@
                                     <th>Title</th>
                                     <th>Qty</th>
                                     <th>Price</th>
+                                    <th>Labour</th>
                                     <th>Total</th>
                                     <th>Action</th>
                                 </tr>
@@ -103,10 +104,24 @@
                                             (keyup)="getTotal();" (click)="rowFocused = index"
                                             class="qty{{index}} text-center" style="width: 80px;"></td>
                                     <td class="text-end">{{item.salePrice | number:'1.0-0'}}</td>
-                                    <td class="text-end">{{item.salePrice * item.quantity | number:'1.0-0'}}</td>
+                                     <td class="text-center">
+                                        <input type="number" [(ngModel)]="item.loadingLabourCharges" min="0"
+                                            (input)="getTotal();"
+                                            (keydown)="this.handleUpdown(item,$event,'.lbc',index);getTotal();"
+                                            (keyup)="getTotal();" (click)="rowFocused = index"
+                                            class="lbc{{index}} text-center" style="width: 80px;">
+                                        </td>
+                                    <td class="text-end">{{(item.salePrice +  item.loadingLabourCharges) * item.quantity | number:'1.0-0'}}</td>
                                     <td class="text-center"><mat-icon (click)="delRow(item)"
                                             class="text-danger">delete</mat-icon></td>
 
+                                </tr>
+                                <tr>
+                                    <td colspan="2"></td>
+                                    <td class="fw-bold text-center">{{totalQty| number:'1.0-0'}}</td>
+                                    <td></td>
+                                    <td class="fw-bold text-center">{{labourCharges| number:'1.0-0'}}</td>
+                                    <td class="fw-bold text-end">{{totalBill| number:'1.0-0'}}</td>
                                 </tr>
 
                             </tbody>
@@ -156,30 +171,43 @@
 
                 </div>
 
-                <div class="col-md-4 d-flex flex-column pt-1">
-                    <mat-form-field appearance="outline" class="col-md-12 matSmall">
+                <div class="col-md-4 d-flex flex-wrap pt-1">
+                   <div class="col-md-12">
+                     <mat-form-field appearance="outline" class="w-100 matSmall">
                         <mat-label>Shipping Company</mat-label>
-                        <mat-select [(ngModel)]="scAutoID">
+                        <mat-select [(ngModel)]="transportPartyID">
                             <mat-option><ngx-mat-select-search #scSearch [placeholderLabel]="'Search...'"
                                     [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
                             <mat-option [value]="0">None</mat-option>
-                            <mat-option *ngFor="let item of shippingCompanyList | filter:scSearch.value"
-                                [value]="item.scAutoID">{{item.shpCmpName}}</mat-option>
+                            <mat-option *ngFor="let item of transporterList | filter:scSearch.value"
+                                [value]="item.partyID">{{item.partyName}}</mat-option>
                         </mat-select>
                     </mat-form-field>
+                   </div>
 
-                    <mat-form-field class="col-md-12 matSmall" appearance="outline">
+                    <div class="col-md-6 pe-2">
+                          <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <mat-label>Transport Charges</mat-label>
+                            <input type="text" (input)="getTotal()" matInput [(ngModel)]="transportCharges" />
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-6 ">
+                        <mat-form-field class="matSmall"w-100 appearance="outline">
                         <mat-label>Project </mat-label>
                         <mat-select [(ngModel)]="projectID" name="mbsProject" [disabled]="!ProjectwiseFeature">
                             <mat-option *ngFor="let item of projectList "
                                 [value]="item.projectID">{{item.projectTitle}}</mat-option>
                         </mat-select>
                     </mat-form-field>
+                    </div>
 
-                    <mat-form-field appearance="outline" class="col-md-12  matSmall">
+                    <div class="col-md-12">
+                        <mat-form-field appearance="outline" class="w-100  matSmall">
                         <mat-label>Remarks</mat-label>
                         <textarea type="text" rows="2" matInput [(ngModel)]="deliveryRemarks"></textarea>
                     </mat-form-field>
+                    </div>
 
                 </div>
 
@@ -399,7 +427,7 @@
 
         </div>
 
-    
+
     </mat-tab>
 
 
@@ -409,27 +437,27 @@
 
 
 
-        <div class="d-flex" *ngIf="tabIndex == 1 || tabIndex == 2"
-            style="position: fixed; bottom: 32px !important; width: 100%; background-color: #fff; z-index: 2;">
+<div class="d-flex" *ngIf="tabIndex == 1 || tabIndex == 2"
+    style="position: fixed; bottom: 32px !important; width: 100%; background-color: #fff; z-index: 2;">
 
-            <pagination-controls previousLabel="Prev" nextLabel="Next"
-                (pageChange)="onTableDataChange($event)"></pagination-controls>
+    <pagination-controls previousLabel="Prev" nextLabel="Next"
+        (pageChange)="onTableDataChange($event)"></pagination-controls>
 
 
-            <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
-            <select class="text-white" style="height: 25px;background-color: rgb(75, 164, 248);"
-                (change)="onTableSizeChange($event)" [(ngModel)]="tableSize">
-                <option *ngFor=" let item of tableSizes" [selected]="tableSize == item">{{item}}</option>
-            </select>
+    <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+    <select class="text-white" style="height: 25px;background-color: rgb(75, 164, 248);"
+        (change)="onTableSizeChange($event)" [(ngModel)]="tableSize">
+        <option *ngFor=" let item of tableSizes" [selected]="tableSize == item">{{item}}</option>
+    </select>
 
-            <div class="jump-to-page">
-                <input type="text" class="w-25" (keydown)="global.handleNumKeys($event)" [(ngModel)]="jumpPage"
-                    placeholder="Page #" min="1" [max]="count" />
-                <button (click)="goToPage()" class="text-white"
-                    style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
-            </div>
+    <div class="jump-to-page">
+        <input type="text" class="w-25" (keydown)="global.handleNumKeys($event)" [(ngModel)]="jumpPage"
+            placeholder="Page #" min="1" [max]="count" />
+        <button (click)="goToPage()" class="text-white"
+            style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
+    </div>
 
-        </div>
+</div>
 
 
 

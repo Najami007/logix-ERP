@@ -16,7 +16,7 @@ import { environment } from 'src/environments/environment.development';
 export class ManufacturingSaleRptComponent implements OnInit {
 
 
-    ProjectwiseFeature = this.global.ProjectwiseFeature;
+  ProjectwiseFeature = this.global.ProjectwiseFeature;
 
   apiReq = environment.mainApi + this.global.manufacturingLink;
   companyProfile: any = [];
@@ -47,6 +47,9 @@ export class ManufacturingSaleRptComponent implements OnInit {
 
   rptType: any = 'ORDER';
 
+  formateTypeID = 1;
+  formateTypeList = [{ id: 1, title: 'Summary' }, { id: 2, title: 'Detail' },]
+
   userList: any = [];
   userID = 0;
   userName = '';
@@ -60,13 +63,14 @@ export class ManufacturingSaleRptComponent implements OnInit {
 
   reportType: any;
 
+
   getUsers() {
     this.global.getUserList().subscribe((data: any) => { this.userList = data; });
   }
 
 
-  
-  projectTitle:any = '';
+
+  projectTitle: any = '';
   projectID: any = this.global.getProjectID();
   projectList: any = [];
   getProject() {
@@ -97,15 +101,24 @@ export class ManufacturingSaleRptComponent implements OnInit {
     var fromTime = this.fromTime;
     var toDate = this.global.dateFormater(this.toDate, '');
     var toTime = this.toTime;
-     var projectID = this.projectID;
+    var projectID = this.projectID;
 
     this.projectTitle = '';
-    if(projectID > 0){
-      this.projectTitle = this.projectList.filter((e:any)=> e.projectID == this.projectID)[0].projectTitle;
+    if (projectID > 0) {
+      this.projectTitle = this.projectList.filter((e: any) => e.projectID == this.projectID)[0].projectTitle;
     }
 
-    var url = `${this.apiReq}ManufacturingSaleSummaryRpt?reqUID=${userID}&FromDate=${fromDate}
+    var url = '';
+    if (this.formateTypeID == 1) {
+      var url = `${this.apiReq}ManufacturingSaleSummaryRpt?reqUID=${userID}&FromDate=${fromDate}
       &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&projectID=${projectID}`;
+    }
+
+    if (this.formateTypeID == 2) {
+      var url = `${this.apiReq}SaleDetailRpt?reqUID=${userID}&FromDate=${fromDate}
+      &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&projectID=${projectID}`;
+    }
+
 
     this.app.startLoaderDark();
     this.http.get(url).subscribe(
@@ -130,11 +143,24 @@ export class ManufacturingSaleRptComponent implements OnInit {
 
             }
 
+
+
+
             this.DataList.forEach((e: any) => {
-              this.billTotal += e.billTotal;
-              this.billDiscountTotal += e.billDiscount;
-              this.netTotal += e.netTotal;
+              if (this.formateTypeID == 1) {
+                this.billTotal += e.billTotal;
+                this.billDiscountTotal += e.billDiscount;
+                this.netTotal += e.netTotal;
+              }
+              if (this.formateTypeID == 2) {
+                this.netTotal += e.quantity * (e.salePrice + e.loadingLabourCharges);
+              }
             });
+
+
+
+
+
           }
 
           this.app.stopLoaderDark();

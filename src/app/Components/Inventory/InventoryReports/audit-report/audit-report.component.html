@@ -1,0 +1,268 @@
+<mat-sidenav-container hasBackdrop="true" (backdropClick)="filterPanel.close()">
+
+    <mat-sidenav #filterPanel mode="over" style="width:30%;position: fixed;z-index: 100000;" position="end"
+        class="order-panel bg-white container pt-4 mt-5">
+
+
+        <div class="container-fluid pt-3 pb-5 mb-5">
+            <div class="d-flex justify-content-between ">
+                <div class="d-flex flex-column">
+                    <span>Filter Product List</span>
+                </div>
+                <div class="d-flex gap-3">
+                    <div class="d-flex cursorPointer border-bottom" (click)="AdvanceFilter()"><mat-icon
+                            class="fs-15px mt-1">filter_list</mat-icon><span>Filter</span></div>
+
+                    <div class="d-flex cursorPointer border-bottom" (click)="clearFilter()"><mat-icon
+                            class="fs-15px mt-1">cancel_presentation</mat-icon><span>Clear Filter</span></div>
+                    <div class="d-flex cursorPointer border-bottom" (click)="filterPanel.close()"><mat-icon
+                            class="fs-15px mt-1">clear</mat-icon><span>Close</span></div>
+
+                </div>
+            </div>
+            <hr>
+
+
+            <div>
+                <div class="d-flex justify-content-between">
+                    <mat-label class="fw-bold">Sub Categories</mat-label>
+                    <mat-label *ngIf="subCategoryFilterList!.length > 10"
+                        class="fs-10px text-secondary border-bottom cursorPointer"
+                        (click)="showAllFilterSubCategories = !showAllFilterSubCategories">{{showAllFilterSubCategories
+                        ? 'Show Less' : 'Show all'}}</mat-label>
+                </div>
+
+                <div class="d-flex flex-wrap" *ngIf="!showAllFilterSubCategories">
+                    <div *ngFor="let item of subCategoryFilterList | filter:tmpSearch  | slice:0:10">
+                        <mat-checkbox [(ngModel)]="item.isChecked"> {{item.subCategoryTitle}}</mat-checkbox>
+                    </div>
+
+                </div>
+                <div class="d-flex flex-wrap" *ngIf="showAllFilterSubCategories">
+
+                    <div *ngFor="let item of subCategoryFilterList ">
+                        <mat-checkbox [(ngModel)]="item.isChecked"> {{item.subCategoryTitle}}</mat-checkbox>
+                    </div>
+                </div>
+
+
+            </div>
+            <hr>
+
+
+            <div>
+                <div class="d-flex justify-content-between">
+                    <mat-label class="fw-bold">Brands</mat-label>
+                    <mat-label *ngIf="BrandList!.length > 10" class="fs-10px text-secondary border-bottom cursorPointer"
+                        (click)="showAllFilterBrandList = !showAllFilterBrandList">{{showAllFilterBrandList
+                        ? 'Show Less' : 'Show all'}}</mat-label>
+                </div>
+
+
+                <div class="d-flex flex-wrap" *ngIf="!showAllFilterBrandList">
+                    <div *ngFor="let item of BrandList| filter:tmpSearch  | slice:0:10 ">
+                        <mat-checkbox [(ngModel)]="item.isChecked"> {{item.brandTitle}}</mat-checkbox>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap" *ngIf="showAllFilterBrandList">
+                    <div *ngFor="let item of BrandList">
+                        <mat-checkbox [(ngModel)]="item.isChecked"> {{item.brandTitle}}</mat-checkbox>
+                    </div>
+                </div>
+
+
+            </div>
+            <hr>
+
+
+
+        </div>
+
+
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <div class="body container-fluid">
+
+
+            <div class="row justify-content-center p-2">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" class="matSmall w-100">
+                        <mat-label>Audit List</mat-label>
+                        <mat-select [(ngModel)]="auditId">
+                            <mat-option *ngFor="let item of auditList" [value]="item.auditID">{{item.auditID}}
+                                <small> ({{item.auditStartDate|date:'dd-MM-yyyy hh:mm a'}} -
+                                    {{item.auditEndDate|date:'dd-MM-yyyy hh:mm a'}})</small> </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-2">
+                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Format</mat-label>
+                        <mat-select [(ngModel)]="formateType" (selectionChange)="reset()">
+
+                            <mat-option [value]="1">Unscanned Products</mat-option>
+                            <!-- <mat-option [value]="2">Detail</mat-option>
+                            <mat-option [value]="3">Ledger</mat-option> -->
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6 d-flex flex-wrap" *ngIf="crudList.r">
+
+                    <!-- <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('summary')">Summary</button>
+            <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('detail')">Detail</button> -->
+                    <div class="col-md-2 pe-1"><button class="btn-rpt-success w-100" (click)="getReport()">Get
+                            Report</button>
+                    </div>
+                    <div class="col-md-2 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button>
+                    </div>
+                    <!-- <div class="col-md-2 pe-1"> <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button></div> -->
+                    <div class=" col-md-2 pe-1"><button class="btn-rpt-export w-100 " (click)="export()">Export</button>
+                    </div>
+                    <div class="col-md-2">
+                        <button style="height: 40px;" class="btn-rpt-export w-100"
+                            (click)="filterPanel.toggle()">Filter</button>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div id="PrintDiv">
+
+                <!-------------------------    Top Logo Section -------------------->
+
+                <div class="hide">
+                    <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                        <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                            <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset=""
+                                [height]="item.logo1Height" [width]="item.logo1Width">
+                        </span>
+                        <div class="d-flex flex-column">
+
+
+                            <span class="companyName">{{item.companyName}}</span>
+                            <span class="rptTitle">Audit Report </span>
+                            <span></span>
+
+
+
+                        </div>
+                        <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                            <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                                height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                        </span>
+
+
+                    </div>
+                </div>
+
+
+                <div class="hide" id="PrintDiv">
+
+                    <table class="table-logix" id="unScannedDetail">
+
+                        <thead>
+                            <tr>
+                                <th>S#</th>
+                                <th>Product</th>
+                                <th>Barcode</th>
+                                <th>AQ</th>
+                                <th>Cost</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of DataList  index as index">
+                                <td class="text-center">{{index +1}}</td>
+                                <td>{{item.productTitle}}</td>
+                                <td>{{item.barcode}}</td>
+                                <td class="text-center">{{item.quantity |number:'1.0-1'}}</td>
+                                <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
+                                <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-1'}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"></td>
+                                <th class="text-end fw-bold">{{netTotal | number:'1.0-1'}}</th>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+
+
+
+
+
+                </div>
+
+
+            </div>
+
+
+            <div style="min-height:500px;">
+
+                    <table class="table-logix" >
+
+                        <thead>
+                            <tr>
+                                <th>S#</th>
+                                <th>Product</th>
+                                <th>Barcode</th>
+                                <th>AQ</th>
+                                <th>Cost</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of DataList |paginate:{
+                        itemsPerPage : global.tableSize,
+                        currentPage :  global.page,
+                        totalItems :     global.count,
+                    }; index as index">
+                                <td class="text-center">{{index +1}}</td>
+                                <td>{{item.productTitle}}</td>
+                                <td>{{item.barcode}}</td>
+                                <td class="text-center">{{item.quantity |number:'1.0-1'}}</td>
+                                <td class="text-end">{{item.costPrice |number:'1.0-1'}}</td>
+                                <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-1'}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"></td>
+                                <th class="text-end fw-bold">{{netTotal | number:'1.0-1'}}</th>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+
+
+
+
+
+                </div>
+
+
+            <div class="d-flex mt-3">
+                <!-- <mat-hint class="me-1 text-secondary">Total: ({{inventoryList.length || 0}})    </mat-hint> -->
+                <pagination-controls previousLabel="Prev" nextLabel="Next"
+                    (pageChange)=" global.onTableDataChange($event,getReport())"></pagination-controls>
+
+
+                <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+                <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);"
+                    (change)="global.onTableSizeChange($event,getReport())" [(ngModel)]="global.tableSize">
+                    <option *ngFor=" let item of global.tableSizes">{{item}}</option>
+                </select>
+                <div class="jump-to-page">
+                    <input type="number" [(ngModel)]="global.jumpPage" placeholder="Page #" min="1"
+                        [max]="global.count" />
+                    <button (click)="global.goToPage(DataList,getReport())" class="text-white"
+                        style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
+                </div>
+
+            </div>
+        </div>
+    </mat-sidenav-content>
+
+</mat-sidenav-container>

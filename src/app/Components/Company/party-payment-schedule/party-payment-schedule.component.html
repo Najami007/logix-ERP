@@ -1,0 +1,155 @@
+<div class="body container-fluid">
+
+    <div class="p-2 row justify-content-center">
+        <div class="col-md-2 pb-1" *ngIf="crudList.c">
+            <button autofocus (click)="add()" style="height: 42px;" class="btnsave w-100">Add Schedule</button>
+        </div>
+        <!-- <button type="button" mat-mini-fab class="btnadd" *ngIf="crudList.c" (click)="add()"><mat-icon>add</mat-icon></button> -->
+        <div [ngClass]="crudList.c == false ? 'col-md-4' : 'col-lg-2' ">
+            <mat-form-field appearance="outline" class="matSmall w-100">
+                <mat-label>Search....</mat-label>
+                <input matInput #search />
+            </mat-form-field>
+        </div>
+        <div class="col-md-2">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label>Party Nature</mat-label>
+                <mat-select [(ngModel)]="partyNatureID" (selectionChange)=" this.filterByNature()">
+                    <mat-option><ngx-mat-select-search #natureSearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option [value]="0">ALL</mat-option>
+                    <mat-option *ngFor="let item of partyNatureList | filter:natureSearch.value"
+                        [value]="item.partyNatureID">{{item.partyNatureTitle}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="col-md-2">
+
+            <mat-form-field appearance="outline" class="w-100 matSmall">
+                <mat-label>From Date</mat-label>
+                <input [(ngModel)]="fromDate" (dateChange)="getSavedData()" readonly="true" matInput type="text"
+                    name="fromDate" [matDatepicker]="fDate">
+                <mat-datepicker-toggle matSuffix [for]="fDate"></mat-datepicker-toggle>
+                <mat-datepicker #fDate></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="col-md-2">
+
+            <mat-form-field appearance="outline" class="w-100 matSmall">
+                <mat-label>To Date</mat-label>
+                <input [(ngModel)]="toDate" (dateChange)="getSavedData()" readonly="true" matInput type="text"
+                    name="toDate" [matDatepicker]="tDate">
+                <mat-datepicker-toggle matSuffix [for]="tDate"></mat-datepicker-toggle>
+                <mat-datepicker #tDate></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="col-md-2">
+            <button style="height: 42px;" class="btn-rpt-primary w-100" (click)="print()">Print</button>
+        </div>
+    </div>
+
+    <div class="p-2" id="printRpt">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Nature</th>
+                    <th>Amount</th>
+                    <th>Paid</th>
+                    <th>Remaining</th>
+                    <th class="hide-in-print">Action</th>
+                </tr>
+            </thead>
+            <tbody class="hide-in-print">
+                <tr *ngFor="let item of savedDataList |filter:search.value |paginate:{
+                    itemsPerPage : tableSize,
+                    currentPage : page,
+                    totalItems :    count,
+                }  ;  index as index">
+
+                    <td>{{index + 1}}</td>
+                    <td>{{item.paymentDate | date:'dd-MM-yyyy'}}</td>
+                    <td>{{item.partyName}}</td>
+                    <td>{{item.partyNatureTitle}}</td>
+                    <td>{{item.amount | number}}</td>
+                    <td>
+                        <span *ngIf="item.partyType == 'Supplier' || item.partyType == 'Transporter'">{{item.debit
+                            |number}}</span>
+                        <span *ngIf="item.partyType == 'Customer'">{{item.credit |number}}</span>
+
+
+                    </td>
+                    <td>{{item.amount - (item.credit + item.debit) |number}} </td>
+                    <td class="cursorPointer">
+                        <mat-icon class="text-success " *ngIf="crudList.u" (click)="edit(item)">edit</mat-icon>
+                        <mat-icon class="text-danger" *ngIf="crudList.d" (click)="delete(item)">delete</mat-icon>
+                    </td>
+
+
+                </tr>
+            </tbody>
+
+            <tbody class="hide">
+                <tr *ngFor="let item of savedDataList |filter:search.value  index as index">
+
+                    <td>{{index + 1}}</td>
+                    <td>{{item.paymentDate | date:'dd-MM-yyyy'}}</td>
+                    <td>{{item.partyName}}</td>
+                    <td>{{item.partyNatureTitle}}</td>
+
+                    <td>{{item.amount | number}}</td>
+                    <td>
+                        <span *ngIf="item.partyType == 'Supplier' || item.partyType == 'Transporter'">{{item.debit
+                            |number}}</span>
+                        <span *ngIf="item.partyType == 'Customer'">{{item.credit |number}}</span>
+
+
+                    </td>
+                    <td>{{item.amount - (item.credit + item.debit) |number}} </td>
+                    <td class="cursorPointer hide-in-print">
+                        <mat-icon class="text-success " *ngIf="crudList.u" (click)="edit(item)">edit</mat-icon>
+                        <mat-icon class="text-danger" *ngIf="crudList.d" (click)="delete(item)">delete</mat-icon>
+                    </td>
+
+
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<div class="d-flex" style="position: fixed; bottom: 32px !important; width: 100%; background-color: #fff; z-index: 2;">
+    <!-- <mat-hint class="me-1 text-secondary">Total Rows : ({{SavedVoucherData.length || 0}})    </mat-hint> -->
+    <pagination-controls previousLabel="Prev" nextLabel="Next"
+        (pageChange)="onTableDataChange($event)"></pagination-controls>
+
+
+    <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+    <select class="text-white" style="width: 50px; height: 25px;background-color: rgb(75, 164, 248);"
+        [(ngModel)]="tableSize" (change)="onTableSizeChange($event)">
+        <option *ngFor=" let item of tableSizes">{{item}}</option>
+    </select>
+
+</div>
+
+
+<div class="modal" id="addScheduleModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="true"
+    aria-labelledby="addScheduleModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="DocumentModalLabel">Schedule Detail's</h2>
+
+            </div>
+            <div>
+
+                <app-add-schedule (updateEmitter)="closeModal($event)"></app-add-schedule>
+            </div>
+        </div>
+    </div>
+</div>

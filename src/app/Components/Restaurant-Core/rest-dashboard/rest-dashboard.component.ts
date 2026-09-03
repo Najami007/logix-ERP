@@ -26,7 +26,7 @@ export class RestDashboardComponent  {
 
   ngOnInit(): void {
  
-    this.globalData.setHeaderTitle('Playtorium DashBoard');
+    this.globalData.setHeaderTitle('DashBoard');
   
     this.getSwingSale();
  

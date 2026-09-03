@@ -3,12 +3,70 @@
 //     height:80% !important;
 // }
 
+// html, body {
+//   height: 100%;
+//   margin: 0;
+//   overflow: hidden; /* disable full page scroll */
+// }
 
-.header{
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    z-index: 2;
+
+// .footer {
+//   position: fixed;
+//   bottom: 0;
+//   left: 0;
+//  height: 50px;           /* adjust if needed */
+//   width: 100%;
+//   z-index: 1000;
+//   background: #ffffff;
+//   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+// }
+
+
+// .topBar {
+//   position: fixed;
+//   top:0;              /* same as header height */
+//   left: 0;
+//   height: 50px;           /* adjust if needed */
+//   width: 100%;
+//   z-index: 999;
+//   background: #f8f9fa;
+//   box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+// }
+
+
+.layout-content {
+  position: relative;
+  height: 100vh !important;
+  padding-top: 65px; /* header (60) + topbar (50) */
+}
+
+// .main-content {
+//   height:  calc(100% - 100px); /* header + topbar */
+//   overflow-y: auto;
+//   overflow-x: hidden;
+
+//   border: 1px solid red !important;
+// //   padding: 16px;
+// //   background: #f4f6f8;
+// }
+
+// .main-content {
+//   scroll-behavior: smooth;
+// }
+
+
+.main-content{
+    max-height: 80%;
+}
+
+
+.footer{
+     position: fixed;
+  bottom: 0;
+  left: 0;
+ height: 50px;           /* adjust if needed */
+  width: 100%;
+  z-index: 1000;
     
 }
 
@@ -19,9 +77,12 @@
 }
 
  .topBar{
-    position: fixed  ;
-    width: 100%;
-    z-index: 20 !important;
+     position: fixed;
+  top:0;              /* same as header height */
+  left: 0;
+  height: 50px;           /* adjust if needed */
+  width: 100%;
+  z-index: 999;
 }
 // .main-content{
 //     top: 10% !important;

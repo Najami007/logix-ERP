@@ -6,6 +6,15 @@
 
 @media print {
 
+  img {
+    display: block !important;
+    visibility: visible !important;
+  }
+
+}
+
+@media print {
+
 
 
   body {
@@ -217,6 +226,7 @@
 
 .urdu {
   font-family: Arial, Helvetica, sans-serif;
+  
 }
 
 
@@ -324,6 +334,7 @@
 
 .table-garment-sale {
   width: 100%;
+  font-weight: bold !important;
   text-align: center;
   font-family: Arial, Helvetica, sans-serif;
   border: 1px solid black !important;
@@ -389,6 +400,10 @@
 .fs-8px {
   font-size: 8px !important;
 }
+.fs-9px {
+  font-size: 9px !important;
+}
+
 
 .fs-9 {
   font-size: 9px !important;
@@ -438,6 +453,10 @@
 
 .fs-20 {
   font-size: 20px !important;
+}
+
+.fs-24 {
+  font-size: 24px !important;
 }
 
 
@@ -554,7 +573,8 @@
 .table-sale-Furniture>tbody>tr>td {
   padding: 5px;
   border: none !important;
-  font-size: 12px !important;
+  border-bottom: 1px solid black !important;
+  font-size: 14px !important;
 
 
 }
@@ -565,6 +585,74 @@
 
 
 }
+
+
+
+
+
+.table-Digital-invoice {
+  width: 100%;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  /* border: 1px solid black !important; */
+}
+
+.table-Digital-invoice>thead>tr>th {
+  padding: 5px;
+  /* border: 1px solid rgb(148, 146, 146); */
+  text-transform: uppercase;
+  background-color: #06366f !important;
+  border: 1px solid rgb(186, 185, 185) !important;
+
+}
+
+.table-Digital-invoice>tbody>tr>td {
+  padding: 5px;
+  border: none !important;
+  border: 1px solid  rgb(186, 185, 185) !important;
+  /* font-size: 14px !important; */
+
+
+}
+
+.table-Digital-invoice>tbody>tr {
+  padding: 5px;
+  /* border-bottom: 1px solid black !important; */
+}
+
+
+
+
+.table-Digital-invoice2 {
+  width: 100%;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  /* border: 1px solid black !important; */
+}
+
+.table-Digital-invoice2>thead>tr>th {
+  padding: 15px;
+  /* border: 1px solid rgb(148, 146, 146); */
+  text-transform: uppercase;
+  background-color: #06366f !important;
+  border: 1px solid rgb(186, 185, 185) !important;
+
+}
+
+.table-Digital-invoice2>tbody>tr>td {
+  padding: 15px;
+  border: none !important;
+  border: 1px solid  rgb(186, 185, 185) !important;
+  /* font-size: 14px !important; */
+
+
+}
+
+.table-Digital-invoice2>tbody>tr {
+  padding: 5px;
+  /* border-bottom: 1px solid black !important; */
+}
+
 
 .invoice-title {
   display: flex;
@@ -788,6 +876,12 @@
   color: black !important;
   font-size: 20px !important;
   font-weight: bold !important;
+}
+
+
+
+.font-noori {
+  font-family: 'noori' !important;
 }
 
 

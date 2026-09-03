@@ -12,6 +12,8 @@ import { environment } from 'src/environments/environment.development';
 import { EditQtyModalComponent } from '../garment-sale/edit-qty-modal/edit-qty-modal.component';
 import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-mehtod.component';
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
+import { DigitalInvoicePrintComponent } from '../SaleComFiles/digital-invoice-print/digital-invoice-print.component';
+import { ASSETS } from 'src/assets/Constants/assets';
 
 @Component({
   selector: 'app-sale-furniture',
@@ -20,7 +22,7 @@ import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sale
 })
 export class SaleFurnitureComponent implements OnInit {
 
-  @ViewChild(SaleBillPrintComponent) billPrint: any;
+  @ViewChild(DigitalInvoicePrintComponent) billPrint: any;
   disableDate = this.global.DisableDateSale;
   discFeature = this.global.discFeature;
   BookerFeature = this.global.BookerFeature;
@@ -145,7 +147,7 @@ export class SaleFurnitureComponent implements OnInit {
     this.getTotal();
 
   }
-
+  fbrLogo = ASSETS.fbrLogo;
 
   tempProdData: any = [];
 
@@ -220,17 +222,17 @@ export class SaleFurnitureComponent implements OnInit {
 
 
   @ViewChild('supplier') myParty: any;
-  addParty() {
-    setTimeout(() => {
-      this.myParty.close()
-    }, 200);
-    this.dialog.open(AddpartyComponent, {
-      width: "50%"
-    }).afterClosed().subscribe(value => {
-      if (value == 'Update') {
-        this.getPartyList();
-      }
-    });
+  addParty(status: any) {
+    if (status == 'open') {
+      setTimeout(() => {
+        this.myParty.close()
+      }, 200);
+      this.global.openBootstrapModal('#addPartyModal', true);
+    }
+    if (status == 'close') {
+      this.global.closeBootstrapModal('#addPartyModal', true);
+      this.getPartyList();
+    }
   }
 
 
@@ -365,11 +367,13 @@ export class SaleFurnitureComponent implements OnInit {
         batchNo: '-',
         batchStatus: '-',
         uomID: data.uomID,
-        gst: this.gstFeature ? data.gst : 0,
+        gst: data.gst,
         et: data.et,
         packing: data.packing,
         discInP: discPerc,
         discInR: discRupee,
+        pctCode: data.pctCode,
+        uomTitle: data.uomTitle,
         aq: data.aq,
         total: (data.salePrice * qty) - (discRupee * qty),
         productDetail: '',
@@ -609,6 +613,7 @@ export class SaleFurnitureComponent implements OnInit {
       this.qtyTotal += parseFloat(e.quantity);
       this.subTotal += parseFloat(e.quantity) * parseFloat(e.salePrice);
       this.offerDiscount += parseFloat(e.discInR) * parseFloat(e.quantity);
+      this.AdvTaxAmount += (parseFloat(e.salePrice) * (parseFloat(e.gst) / 100)) * parseFloat(e.quantity);
 
 
     });
@@ -625,7 +630,7 @@ export class SaleFurnitureComponent implements OnInit {
     if (this.gstFeature) {
       this.subTotal = this.subTotal + this.PosFee;
     }
-    this.AdvTaxAmount = (Number(this.subTotal) * Number(this.AdvTaxValue)) / 100;
+    // this.AdvTaxAmount = (Number(this.subTotal) * Number(this.AdvTaxValue)) / 100;
 
     this.netTotal = this.subTotal + this.AdvTaxAmount - parseFloat(this.discount) - parseFloat(this.offerDiscount);
 
@@ -810,13 +815,13 @@ export class SaleFurnitureComponent implements OnInit {
 
 
   editDiscProdQty(item: any) {
-    if(item.packing <= 1) return;
+    if (item.packing <= 1) return;
     this.dialog.open(EditQtyModalComponent, {
       width: '30%',
       data: item
     }).afterClosed().subscribe(value => {
-      if(Number(value) > 0){
-        var index = this.tableDataList.findIndex((e:any)=> e.barcode == item.barcode);
+      if (Number(value) > 0) {
+        var index = this.tableDataList.findIndex((e: any) => e.barcode == item.barcode);
         this.tableDataList[index].quantity = Number(value) * item.packing;
         this.getTotal();
 
@@ -908,6 +913,38 @@ export class SaleFurnitureComponent implements OnInit {
         }
       })
     }
+  }
+
+
+  editGst(item: any) {
+    Swal.fire({
+      title: "Enter Gst %",
+      input: "text",
+      showCancelButton: true,
+      confirmButtonText: 'Save',
+      showLoaderOnConfirm: true,
+      preConfirm: (value) => {
+
+        if (!value || isNaN(value) || value <= 0) {
+          return Swal.showValidationMessage("Enter Valid Amount");
+        }
+        const index = this.tableDataList.indexOf(item);
+        if (value < 0 || value > 100) {
+          return Swal.showValidationMessage("Invalid Percentage");
+        }
+
+        this.tableDataList[index].gst = value;
+        this.getTotal();
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Sale Price Updated",
+          timer: 500,
+        });
+      }
+    })
+
   }
 
 
@@ -1061,12 +1098,12 @@ export class SaleFurnitureComponent implements OnInit {
     if (this.isValidSale == true) {
 
 
-      if (this.tableDataList == '') {
-        this.msg.WarnNotify('No Product Seleted');
+      if (!this.tableDataList || this.tableDataList.length === 0) {
+        this.msg.WarnNotify('No Product Selected');
         return;
       }
 
-      if(this.partyID == 0){
+      if (this.partyID == 0) {
         this.msg.WarnNotify('Select Customer');
         return;
       }
@@ -1167,7 +1204,7 @@ export class SaleFurnitureComponent implements OnInit {
       }
       this.isValidSale = false;
       this.app.startLoaderDark();
-      this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', postData).subscribe(
+      this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertDISale', postData).subscribe(
         (Response: any) => {
           if (Response.msg == 'Data Saved Successfully') {
             this.tmpCash = this.cash;
@@ -1233,7 +1270,7 @@ export class SaleFurnitureComponent implements OnInit {
     this.bankCoaID = 0;
     this.vehicleID = 0;
     this.meterReading = '';
-     this.AdvTaxAmount = 0;
+    this.AdvTaxAmount = 0;
     this.AdvTaxValue = 0;
 
 
@@ -1294,7 +1331,6 @@ export class SaleFurnitureComponent implements OnInit {
 
 
     $('#SavedBillModal').hide();
-
     if (this.disablePrintPwd) {
       this.billPrint.PrintBill(item.invBillNo);
       this.billPrint.billType = 'Duplicate';
@@ -1464,7 +1500,7 @@ export class SaleFurnitureComponent implements OnInit {
     this.bankCoaID = 0;
     this.cash = 0;
     this.bankCash = 0
-    this.partyID = 0;
+    // this.partyID = 0;
   }
 
 

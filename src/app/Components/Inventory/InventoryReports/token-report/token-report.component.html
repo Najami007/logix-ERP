@@ -1,0 +1,163 @@
+<div class="body container-fluid">
+
+    <div class="row mt-2">
+
+
+        <mat-form-field appearance="outline" class="col-md-3 matSmall">
+            <mat-label>From Date</mat-label>
+            <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
+            <mat-datepicker-toggle matSuffix [for]="sDate"></mat-datepicker-toggle>
+            <mat-datepicker #sDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="col-md-3 matSmall" appearance="outline">
+            <mat-label>From Time</mat-label>
+            <input matInput [(ngModel)]="fromTime" [ngxTimepicker]="fTime" [disableClick]="true" readonly>
+            <ngx-material-timepicker-toggle [for]="fTime" matSuffix></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #fTime></ngx-material-timepicker>
+        </mat-form-field>
+
+
+        <mat-form-field class="col-md-3 matSmall" appearance="outline">
+            <mat-label>To Date</mat-label>
+            <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
+            <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+            <mat-datepicker #eDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="col-md-3 matSmall" appearance="outline">
+            <mat-label>To Time</mat-label>
+            <input matInput [(ngModel)]="toTime" [ngxTimepicker]="tTime" [disableClick]="true" readonly>
+            <ngx-material-timepicker-toggle [for]="tTime" matSuffix></ngx-material-timepicker-toggle>
+            <ngx-material-timepicker #tTime></ngx-material-timepicker>
+        </mat-form-field>
+
+    </div>
+
+    <div class="row">
+
+
+        <mat-form-field appearance="outline" class="col-md-3 matSmall">
+            <mat-label>Search Data</mat-label>
+            <input matInput type="text" [(ngModel)]="searchTable">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-3 matSmall">
+            <mat-label>Search....</mat-label>
+            <input matInput type="text" [disabled]="reqType == 'All' || reqType == 'Sum'"
+                [mask]="reqType == 'Mob'? mobilMask : reqType == 'Cnic' ? cnicMask : ''" [(ngModel)]="reqFilterValue">
+        </mat-form-field>
+
+        <div class="col-md-3 d-flex">
+
+            <mat-radio-group [(ngModel)]="reqType">
+                <mat-radio-button *ngFor="let item of reqTypeList" [value]="item.id">{{item.value}}</mat-radio-button>
+            </mat-radio-group>
+
+        </div>
+
+
+        <div class="col-md-3 d-flex flex-wrap" *ngIf="crudList.r">
+
+            <!-- <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('summary')">Summary</button>
+            <button class="btn-rpt-success col-lg-2 me-1" (click)="getReport('detail')">Detail</button> -->
+            <div class="col-md-3 pe-1"><button class="btn-rpt-success w-100" (click)="getReport()">Get Report</button>
+            </div>
+            <div class="col-md-3 pe-1"><button class="btn-rpt-primary w-100" (click)="print()">Print</button></div>
+            <!-- <div class="col-lg-2 pe-1"> <button mat-icon-button (click)="export()"> <i class="bi bi-filetype-xlsx"></i></button></div> -->
+            <div class=" col-md-3 pe-1"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
+
+        </div>
+
+    </div>
+
+
+
+    <div id="PrintDiv">
+
+        <!-------------------------    Top Logo Section -------------------->
+
+        <div class="hide">
+            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
+                        [width]="item.logo1Width">
+                </span>
+                <div class="d-flex flex-column">
+
+
+                    <span class="companyName">{{item.companyName}}</span>
+                    <span class="rptTitle">Token Report</span>
+                    <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
+                        {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
+
+
+                </div>
+                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                        height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                </span>
+
+
+            </div>
+        </div>
+
+        <div>
+            <table class="table-logix" id="tokenList">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Name</th>
+                        <th>Mobile</th>
+                        <th>CNIC</th>
+                        <th>Remarks</th>
+                        <th>Created Date</th>
+                        <th *ngIf="rptType !== 'Sum'">Token #</th>
+                        <th *ngIf="rptType !== 'Sum'">Inv Date</th>
+                        <th *ngIf="rptType !== 'Sum'">Bill</th>
+                        <th *ngIf="rptType !== 'Sum'">Bill Total</th>
+                        <!-- <th *ngIf="rptType !== 'Sum'">Disc</th> -->
+                        <!-- <th *ngIf="rptType !== 'Sum'">Net Total</th> -->
+                        <th *ngIf="rptType == 'Sum'">Token Qty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of TableData |filter:searchTable; index as index">
+                        <td>{{index + 1}}</td>
+                        <td>{{item.cusName}}</td>
+                        <td>{{item.cusContactNo}}</td>
+                        <td>{{item.cusCNIC}}</td>
+                        <td>{{item.remarks}}</td>
+                        <td>{{item.createdOn|date:'dd-MM-YYYY hh:mm:a'}}</td>
+                        <td *ngIf="rptType !== 'Sum'" class="text-center">{{item.tokenNo}}</td>
+                        <td *ngIf="rptType !== 'Sum'">{{item.invDate|date:'dd-MM-YYYY'}}</td>
+                        <td *ngIf="rptType !== 'Sum'">
+                            <div class="d-flex ">
+                                <span>{{item.invBillNo}},</span>
+                                <span>{{item.invBillNo2}},</span>
+                                <span>{{item.invBillNo3}}</span>
+
+
+
+                            </div>
+                        </td>
+                        <td *ngIf="rptType !== 'Sum'" class="text-end">{{item.billTotal | number:'1.0-1'}}</td>
+                        <!-- <td *ngIf="rptType !== 'Sum'" class="text-end">{{item.billDiscount | number:'1.0-1'}}</td> -->
+                        <!-- <td *ngIf="rptType !== 'Sum'"  class="text-end">{{item.netTotal | number:'1.0-1'}}</td> -->
+                        <th *ngIf="rptType == 'Sum'">{{item.tokenQty}}</th>
+
+                    </tr>
+                    <tr *ngIf="rptType !== 'Sum'">
+                        <td colspan="9"></td>
+                        <td class="fw-bold text-end">{{billTotal| number:'1.0-1'}}</td>
+                        <!-- <td  class="fw-bold text-end">{{billDiscTotal| number:'1.0-1'}}</td> -->
+                        <!-- <td  class="fw-bold text-end">{{netTotal| number:'1.0-1'}}</td> -->
+
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+
+    </div>
+
+</div>

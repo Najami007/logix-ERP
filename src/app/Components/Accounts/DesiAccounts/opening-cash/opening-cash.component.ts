@@ -64,7 +64,7 @@ export class OpeningCashComponent {
 
   
   getSavedData(){
-    this.http.get(environment.mainApi+this.globaldata.accountLink+'GetPayRec?reqType=opn').subscribe(
+    this.http.get(environment.mainApi+this.globaldata.accountLink+'GetPayRec?reqType=OPN').subscribe(
       (Response:any)=>{
         this.savedDataList = Response;
       },

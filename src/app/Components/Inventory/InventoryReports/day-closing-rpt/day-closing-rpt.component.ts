@@ -81,7 +81,7 @@ export class DayClosingRptComponent {
         this.rptData = Response.map((e: any) => {
           if (e.billDetail != '-') {
             e.billDetails = JSON.parse(e.billDetail);
-          }else{
+          } else {
             e.billDetails = '';
           }
 
@@ -133,18 +133,75 @@ export class DayClosingRptComponent {
   }
 
 
-  filter(type:any) {
+  filter(type: any) {
 
     if (this.cashSaleOnly && type == 'cash') {
-      this.creditSaleOnly  = false;
+      this.creditSaleOnly = false;
       this.rptData = this.tmpRptData.filter((e: any) => e.invoiceType == 'Cash Sale');
     }
     if (this.creditSaleOnly && type == 'credit') {
-      this.cashSaleOnly  = false;
+      this.cashSaleOnly = false;
       this.rptData = this.tmpRptData.filter((e: any) => e.invoiceType == 'Credit Sale');
     }
 
   }
 
+
+
+
+
+  formateReport(item: any) {
+
+    if (item.invoiceType == 'Credit Sale') {
+      return 'bg-warning text-white'
+    }
+    if (item.invoiceType == 'Bank Sale') {
+      return 'bg-primary text-white'
+    }
+    if (item.invoiceType == 'Credit Sale Return') {
+      return 'bg-orange';
+    }
+    if (item.invoiceType == 'Cash Sale Return') {
+      return 'bg-beidge';
+    }
+
+
+    if (item.subType == 'Expense') {
+      return 'bg-expense';
+    }
+    if (item.subType == 'Deposit') {
+      return 'bg-navyblue';
+    }
+    if (item.subType == 'Withdrawal') {
+      return 'bg-golden';
+    }
+
+     if (item.invoiceType == 'Credit Purchase') {
+      return 'bg-redish';
+    }
+
+    if (item.invoiceType == 'Cash Sale') {
+      return 'bg-offWhite';
+    }
+
+
+     if (item.invoiceType == 'Credit Purchase Return') {
+      return 'bg-yellow';
+    }
+    // if (item.subType == null) {
+    //   return 'bg-grey';
+    // }
+
+
+    if (item.invoiceType == 'Cash Payment' || item.invoiceType == 'Bank Payment') {
+      return 'bg-danger text-white'
+    }
+    if (item.invoiceType == 'Cash Receipt' || item.invoiceType == 'Bank Receipt') {
+      return 'bg-success text-white'
+    }
+
+
+    return '';
+  }
 
 }

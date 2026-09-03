@@ -74,6 +74,9 @@ export class GarmentSaleComponent implements OnInit {
   ImageUrlFeature = this.global.ImageUrlFeature;
   hideNetTotalFeature = this.global.hideNetTotalFeature;
   showUomTitleFeature = this.global.showUomTitleFeature;
+  disableOtherDiscFeature = this.global.disableOtherDiscFeature;
+  TransporterFeature = this.global.TransporterFeature;
+  NonFBRFeature = this.global.NonFBRFeature;
 
 
   companyProfile: any = [];
@@ -141,6 +144,7 @@ export class GarmentSaleComponent implements OnInit {
     this.global.setHeaderTitle('Sale');
     this.getBankList();
     this.getPartyList();
+    this.getTransporterList();
     this.getBooker();
     this.getVehicles();
 
@@ -178,7 +182,7 @@ export class GarmentSaleComponent implements OnInit {
 
   tempProdData: any = [];
 
-
+  invBillNo: any = '';
   sortType = 'desc';
   invoiceDate = new Date();
   partyID = 0;
@@ -216,6 +220,10 @@ export class GarmentSaleComponent implements OnInit {
 
   bankCoaList: any = [];
   partyList: any = [];
+  transporterList: any = [];
+  transporterID = 0;
+  labourCharges: any = 0;
+  transportCharges: any = 0;
   bookerList: any = [];
 
   tmpCash = 0;
@@ -228,6 +236,20 @@ export class GarmentSaleComponent implements OnInit {
 
   getBooker() {
     this.global.getBookerList().subscribe((data: any) => { this.bookerList = data; });
+  }
+
+
+
+  getTransporterList() {
+
+    this.global.getPartyList().subscribe((data: any) => {
+      if (data.length > 0) {
+        this.transporterList = data.filter((e: any) => e.partyType == 'Transporter');
+      }
+    })
+
+
+
   }
 
   getPartyList() {
@@ -259,17 +281,17 @@ export class GarmentSaleComponent implements OnInit {
 
 
   @ViewChild('supplier') myParty: any;
-  addParty() {
-    setTimeout(() => {
-      this.myParty.close()
-    }, 200);
-    this.dialog.open(AddpartyComponent, {
-      width: "50%"
-    }).afterClosed().subscribe(value => {
-      if (value == 'Update') {
-        this.getPartyList();
-      }
-    });
+  addParty(status: any) {
+    if (status == 'open') {
+      setTimeout(() => {
+        this.myParty.close()
+      }, 200);
+      this.global.openBootstrapModal('#addPartyModal', true);
+    }
+    if (status == 'close') {
+      this.global.closeBootstrapModal('#addPartyModal', true);
+      this.getPartyList();
+    }
   }
 
 
@@ -412,7 +434,7 @@ export class GarmentSaleComponent implements OnInit {
         et: data.et,
         packing: data.packing,
         multyQty: data.multyQty,
-        uomTitle:data.uomTitle,
+        uomTitle: data.uomTitle,
         discInP: this.discFeature ? discPerc : 0,
         discInR: this.discFeature ? discRupee : 0,
         aq: data.aq,
@@ -471,8 +493,8 @@ export class GarmentSaleComponent implements OnInit {
           return;
         }
 
-            if (Response[0].barcodeType !== 'Special') {
-           this.msg.WarnNotify('Product Not Found');
+        if (Response[0].barcodeType !== 'Special') {
+          this.msg.WarnNotify('Product Not Found');
           return;
         }
 
@@ -609,57 +631,87 @@ export class GarmentSaleComponent implements OnInit {
 
   getTotal() {
 
-
     this.qtyTotal = 0;
     this.subTotal = 0;
     this.netTotal = 0;
     this.offerDiscount = 0;
     this.AdvTaxAmount = 0;
 
-
     this.tableDataList.forEach((e: any) => {
-      // if (this.billDiscount > 0) {
-      //   e.discInP = this.billDiscount;
-      //   e.discInR = (e.salePrice * this.billDiscount) / 100
-      // }
-      this.qtyTotal += parseFloat(e.quantity);
-      this.subTotal += parseFloat(e.quantity) * parseFloat(e.salePrice);
-      this.offerDiscount += parseFloat(e.discInR) * parseFloat(e.quantity);
 
+      const quantity = Number(e.quantity) || 0;
+      const salePrice = Number(e.salePrice) || 0;
+      const discInR = Number(e.discInR) || 0;
 
+      this.qtyTotal += quantity;
+
+      // Line total
+      this.subTotal += Math.round(quantity * salePrice * 100) / 100;
+
+      // Discount
+      this.offerDiscount += Math.round(quantity * discInR * 100) / 100;
     });
 
-    if (this.discount == '') {
+    // Round subtotal and discount
+    this.subTotal = Math.round(this.subTotal * 100) / 100;
+    this.offerDiscount = Math.round(this.offerDiscount * 100) / 100;
+
+    // Empty values
+    if (this.discount === '') {
       this.discount = 0;
     }
 
-    if (this.cash == '') {
+    if (this.cash === '') {
       this.cash = 0;
     }
 
-
+    // POS Fee
     if (this.gstFeature) {
-      this.subTotal = this.subTotal + this.PosFee;
+      this.subTotal += Number(this.PosFee) || 0;
     }
-    this.AdvTaxAmount = (Number(this.subTotal) * Number(this.AdvTaxValue)) / 100;
 
-    this.netTotal = this.subTotal + this.AdvTaxAmount - parseFloat(this.discount) - parseFloat(this.offerDiscount);
-
-    if (this.paymentType == 'Split') {
-      this.bankCash = this.netTotal - parseFloat(this.cash);
+    // Labour + Transport
+    if (this.TransporterFeature) {
+      this.subTotal +=
+        (Number(this.labourCharges) || 0) +
+        (Number(this.transportCharges) || 0);
     }
-    if (this.paymentType == 'Bank') {
+
+    // Round subtotal again
+    this.subTotal = Math.round(this.subTotal * 100) / 100;
+
+    // Advanced Tax
+    this.AdvTaxAmount =
+      Math.round(
+        (this.subTotal * (Number(this.AdvTaxValue) || 0)) / 100 * 100
+      ) / 100;
+
+    // console.log(
+    //   'Subtotal:', this.subTotal,
+    //   'Adv Tax:', this.AdvTaxAmount,
+    //   'Discount:', Number(this.discount),
+    //   'Offer Discount:', this.offerDiscount
+    // );
+
+    // Net Total
+    this.netTotal = Math.round((this.subTotal + this.AdvTaxAmount - (Number(this.discount) || 0) - this.offerDiscount) * 100) / 100;
+
+    // Payment
+    if (this.paymentType === 'Split') {
+      this.bankCash =
+        Math.round((this.netTotal - (Number(this.cash) || 0)) * 100) / 100;
+    }
+
+    if (this.paymentType === 'Bank') {
       this.bankCash = this.netTotal;
     }
-
-
 
     if (this.paymentType !== 'Credit') {
       this.partyID = 0;
     }
 
-    this.change = (parseFloat(this.cash) + parseFloat(this.bankCash)) - this.netTotal;
-
+    // Change
+    this.change = Math.round(((Number(this.cash) || 0) + (Number(this.bankCash) || 0) - this.netTotal) * 100) / 100;
 
   }
 
@@ -813,17 +865,92 @@ export class GarmentSaleComponent implements OnInit {
       return;
     }
 
-    // Allowable keys (numbers, arrows, delete, tab, enter, etc.)
+    // Allowed keys
     const allowedKeys = [
-      8, 9, 13, 16, 37, 38, 39, 40, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
-      96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 110
+      'Backspace', 'Tab', 'Enter', 'Shift', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown',
+      'Delete', '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Numpad0', 'Numpad1', 'Numpad2', 'Numpad3', 'Numpad4', 'Numpad5', 'Numpad6', 'Numpad7', 'Numpad8', 'Numpad9', 'Decimal'
     ];
 
-    // Block any key not in allowedKeys
-    if (!allowedKeys.includes(key)) {
+    // Block keys not allowed
+    if (!allowedKeys.includes(e.key)) {
       e.preventDefault();
+      return;
     }
   }
+
+
+  // handleUpdown(item: any, e: KeyboardEvent, cls: string, index: number): void {
+  //   const container = document.querySelector(".table-logix");
+  //   const rowCount = this.tableDataList.length;
+
+  //   // Helper to focus a row
+  //   const focusRow = (rowIndex: number) => {
+  //     const rowEl = container?.querySelector(`.${cls}${rowIndex}`) as HTMLElement;
+  //     if (rowEl) {
+  //       rowEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  //       rowEl.focus();
+  //     }
+  //   };
+
+  //   // Allowed keys
+  //   const allowedKeys = [
+  //     'Backspace', 'Tab', 'Enter', 'Shift', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown',
+  //     'Delete', '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Numpad0', 'Numpad1', 'Numpad2', 'Numpad3', 'Numpad4', 'Numpad5', 'Numpad6', 'Numpad7', 'Numpad8', 'Numpad9', 'Decimal'
+  //   ];
+
+  //   // Block keys not allowed
+  //   if (!allowedKeys.includes(e.key)) {
+  //     e.preventDefault();
+  //     return;
+  //   }
+
+  //   switch (e.key) {
+  //     case 'Tab':
+  //       e.preventDefault();
+  //       if (e.shiftKey) {
+  //         this.rowFocused = Math.max(index - 1, 0);
+  //       } else {
+  //         this.rowFocused = Math.min(index + 1, rowCount - 1);
+  //       }
+  //       focusRow(this.rowFocused);
+  //       break;
+
+  //     case 'Enter':
+  //       e.preventDefault();
+  //       if (item.multyQty > 1) {
+  //         this.editDiscProdQty(item);
+  //       } else {
+  //         const searchInput = document.querySelector('#psearchProduct') as HTMLElement;
+  //         searchInput?.focus();
+  //       }
+  //       break;
+
+  //     case 'Delete':
+  //       e.preventDefault();
+  //       this.delRow(item);
+  //       this.rowFocused = 0;
+  //       break;
+
+  //     case 'ArrowDown':
+  //       e.preventDefault();
+  //       if (rowCount > 1) {
+  //         this.rowFocused = Math.min(this.rowFocused + 1, rowCount - 1);
+  //         focusRow(this.rowFocused);
+  //       }
+  //       break;
+
+  //     case 'ArrowUp':
+  //       e.preventDefault();
+  //       if (this.rowFocused > 0) {
+  //         this.rowFocused = Math.max(this.rowFocused - 1, 0);
+  //         focusRow(this.rowFocused);
+  //       } else {
+  //         const searchInput = document.querySelector('.searchProduct') as HTMLElement;
+  //         searchInput?.focus();
+  //       }
+  //       break;
+  //   }
+  // }
 
 
   editDiscProdQty(item: any) {
@@ -913,7 +1040,7 @@ export class GarmentSaleComponent implements OnInit {
             return Swal.showValidationMessage("Sale Price Is Less Then Cost Price");
           }
 
-          this.tableDataList[index].salePrice = value;
+          this.tableDataList[index].salePrice = Number(value);
           this.getTotal();
         }
       }).then((result) => {
@@ -947,8 +1074,8 @@ export class GarmentSaleComponent implements OnInit {
             return Swal.showValidationMessage("Discount Price Not Valid");
           }
           const index = this.tableDataList.indexOf(item);
-          this.tableDataList[index].discInR = value;
-          this.tableDataList[index].discInP = (value / item.salePrice) * 100;
+          this.tableDataList[index].discInR = Number(value);
+          this.tableDataList[index].discInP = (Number(value) / item.salePrice) * 100;
           this.getTotal();
         }
       }).then((result) => {
@@ -981,8 +1108,8 @@ export class GarmentSaleComponent implements OnInit {
             return Swal.showValidationMessage("Discount % Not Valid");
           }
           const index = this.tableDataList.indexOf(item);
-          this.tableDataList[index].discInP = value;
-          this.tableDataList[index].discInR = (item.salePrice * value) / 100;
+          this.tableDataList[index].discInP = Number(value);
+          this.tableDataList[index].discInR = (item.salePrice * Number(value)) / 100;
           this.getTotal();
           this.tempProdData = [];
         }
@@ -1018,7 +1145,7 @@ export class GarmentSaleComponent implements OnInit {
         const index = this.tableDataList.indexOf(item);
 
 
-        this.tableDataList[index].quantity = value / (this.tableDataList[index].salePrice - this.tableDataList[index].discInR);
+        this.tableDataList[index].quantity = Number(value) / (this.tableDataList[index].salePrice - this.tableDataList[index].discInR);
         this.getTotal();
       }
     }).then((result) => {
@@ -1047,11 +1174,8 @@ export class GarmentSaleComponent implements OnInit {
   isProcessing = false;
   save(paymentType: any, SendToFbr: any, printFlag: any) {
 
-
-
-
     var inValidCostProdList = this.tableDataList.filter((p: any) => isNaN(p.costPrice) || Number(p.costPrice) > Number(p.salePrice) || p.costPrice == 0 || p.costPrice == '0' || p.costPrice == '' || p.costPrice == undefined || p.costPrice == null);
-    var inValidSaleProdList = this.tableDataList.filter((p: any) => isNaN(p.salePrice) ||  p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
+    var inValidSaleProdList = this.tableDataList.filter((p: any) => isNaN(p.salePrice) || p.salePrice == 0 || p.salePrice == '0' || p.salePrice == '' || p.salePrice == undefined || p.salePrice == null);
     var inValidQtyProdList = this.tableDataList.filter((p: any) => isNaN(p.quantity) || p.quantity == 0 || p.quantity == '0' || p.quantity == null || p.quantity == undefined || p.quantity == '')
     var inValidDiscProdList = this.tableDataList.filter((p: any) => isNaN(p.discInR) || Number(p.costPrice) > (Number(p.salePrice) - (Number(p.discInR))));
 
@@ -1082,6 +1206,12 @@ export class GarmentSaleComponent implements OnInit {
       this.msg.WarnNotify('No Product Seleted');
       return;
     }
+
+    if (this.transporterID > 0 && (this.transportCharges == 0 || this.transportCharges == '')) {
+      this.msg.WarnNotify('Enter Transport Charges');
+      return;
+    }
+
     if (paymentType == 'Cash' && this.partyID == 0 && (this.cash == 0 || this.cash == undefined || this.cash == null)) {
       this.msg.WarnNotify('Enter Cash');
       return;
@@ -1132,8 +1262,13 @@ export class GarmentSaleComponent implements OnInit {
     }
 
 
+
+
+
     var postData: any = {
       InvDate: this.global.dateFormater(this.InvDate, '-'),
+      InvInsertType: this.invBillNo == '' ? 'Insert' : 'Update',
+      InvBillNo: this.invBillNo,
       PartyID: this.partyID,
       InvType: "S",
       ProjectID: this.projectID,
@@ -1158,6 +1293,9 @@ export class GarmentSaleComponent implements OnInit {
       SaleDetail: JSON.stringify(this.tableDataList),
       VehicleID: this.vehicleID,
       MeterReading: this.meterReading || '0',
+      TransportPartyID: this.transporterID,
+      LabourCharges: this.labourCharges || 0,
+      TransportCharges: this.transportCharges || 0,
       UserID: this.global.getUserID()
     }
 
@@ -1220,6 +1358,7 @@ export class GarmentSaleComponent implements OnInit {
 
 
   reset() {
+    this.invBillNo = '';
     this.partyID = 0;
     this.invoiceDate = new Date();
     this.PBarcode = '';
@@ -1247,6 +1386,9 @@ export class GarmentSaleComponent implements OnInit {
     this.meterReading = '';
     this.AdvTaxAmount = 0;
     this.AdvTaxValue = 0;
+    this.transporterID = 0;
+    this.labourCharges = 0;
+    this.transportCharges = 0;
 
 
   }
@@ -1609,7 +1751,7 @@ export class GarmentSaleComponent implements OnInit {
           }
 
           this.getTotal();
-          this.discount = this.offerDiscount - Response[0].billDiscount ;
+          this.discount = this.offerDiscount - Response[0].billDiscount;
 
         },
         error: (error: any) => {

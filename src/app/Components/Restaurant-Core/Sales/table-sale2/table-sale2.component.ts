@@ -10,8 +10,6 @@ import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 import { RestKotPrintComponent } from '../SaleCommonComponent/rest-kot-print/rest-kot-print.component';
 import { RestSaleBillPrintComponent } from '../SaleCommonComponent/rest-sale-bill-print/rest-sale-bill-print.component';
-import { exec } from 'child_process';
-import * as bootstrap from 'bootstrap';
 import { SaleBillDetailComponent } from '../sale1/sale-bill-detail/sale-bill-detail.component';
 import * as $ from 'jquery';
 import { CommentCardComponent } from '../SaleCommonComponent/comment-card/comment-card.component';
@@ -1367,9 +1365,9 @@ export class TableSale2Component implements OnInit {
 
   
  openCommentCard(item:any){
-      this.commentCard.reset();
-      this.commentCard.getSavedData(item.invBillNo);
-      this.commentCard.invBillNo = item.invBillNo;
+      // this.commentCard.reset();
+      // this.commentCard.getSavedData(item.invBillNo);
+      // this.commentCard.invBillNo = item.invBillNo;
       
       this.global.closeBootstrapModal('#holdedBillModal',true)
       this.global.openBootstrapModal('#commentCardModal',true)

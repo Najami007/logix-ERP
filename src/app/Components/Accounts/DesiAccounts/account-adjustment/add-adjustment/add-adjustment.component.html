@@ -1,1 +1,51 @@
-<p>add-adjustment works!</p>
+<div class="p-4">
+
+    <div class="row">
+
+
+        <mat-form-field appearance="outline" class="col-lg-12 matSmall">
+            <mat-label>Invoice Date</mat-label>
+            <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="invDate"
+                [matDatepicker]="iDate">
+            <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
+            <mat-datepicker #iDate></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-lg-6 matSmall">
+            <mat-label>Debit</mat-label>
+            <mat-select [(ngModel)]="debitCoaID" (selectionChange)="onCoaChange('debit')">
+                <mat-option><ngx-mat-select-search #debitSearch [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="searchDebit"></ngx-mat-select-search></mat-option>
+                <mat-option [disabled]="item.coaID == creditCoaID" *ngFor="let item of debitCoaList | filter:debitSearch.value "
+                    [value]="item.coaID">{{item.coaTitle}} - ({{item.accountCode}})</mat-option> </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" class="col-lg-6 matSmall">
+            <mat-label>Credit</mat-label>
+            <mat-select [(ngModel)]="creditCoaID"  (selectionChange)="onCoaChange('credit')"> 
+                <mat-option><ngx-mat-select-search #creditSearch [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="searchCredit"></ngx-mat-select-search></mat-option>
+                <mat-option [disabled]="item.coaID == debitCoaID" *ngFor="let item of creditCoaList | filter:creditSearch.value "
+                    [value]="item.coaID">{{item.coaTitle}} - ({{item.accountCode}})</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-lg-12 matSmall">
+            <mat-label>Amount</mat-label>
+            <input matInput [(ngModel)]="amount" (keydown)="global.handleNumKeys($event);" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-lg-12 matSmall">
+            <mat-label>Remarks</mat-label>
+            <textarea matInput [(ngModel)]="remarks"></textarea>
+        </mat-form-field>
+    </div>
+
+
+</div>
+
+<div class="bg-mf text-end p-3">
+    <button class="btnsave me-1" (click)="save()">{{btnType}}</button>
+    <button class="btnclose" (click)="closeDialog('')">Close</button>
+</div>

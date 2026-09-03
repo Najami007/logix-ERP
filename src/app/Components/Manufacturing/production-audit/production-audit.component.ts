@@ -21,7 +21,7 @@ export class ProductionAuditComponent implements OnInit {
 
   @ViewChild(ProductionAuditInvPrintComponent) billPrint: any;
 
-  @HostListener('document:visibilitychange', ['$event'])
+  @HostListener('document:visibilitychange', [])
 
   appVisibility() {
     if (document.hidden) { } else { this.importFromLocalStorage(); }
@@ -30,6 +30,8 @@ export class ProductionAuditComponent implements OnInit {
   crudList: any = { c: true, r: true, u: true, d: true };
   companyProfile: any = [];
   disableDateFeature = this.global.DisableInvDate;
+  ProjectwiseFeature = this.global.ProjectwiseFeature;
+
   constructor(
     private http: HttpClient,
     private msg: NotificationService,
@@ -61,6 +63,7 @@ export class ProductionAuditComponent implements OnInit {
 
     this.importFromLocalStorage();
     this.getItemList();
+    this.getProject();
 
 
 
@@ -103,6 +106,17 @@ export class ProductionAuditComponent implements OnInit {
 
   BrandList: any = [];
 
+
+
+
+  projectList: any = [];
+  getProject() {
+    this.http.get(environment.mainApi + 'cmp/getproject').subscribe(
+      (Response: any) => {
+        this.projectList = Response;
+      }
+    )
+  }
 
 
   ///////////////////////////////////////////
@@ -172,7 +186,7 @@ export class ProductionAuditComponent implements OnInit {
 
         var row = this.itemList.filter((e: any) => e.mnuItemCode == barcode);
 
-        if (row.length > 0) { 
+        if (row.length > 0) {
           this.tempProdRow = row[0];
           if (this.autoInsert) {
             this.addMenuItem(this.tempProdRow, 1);
@@ -247,6 +261,8 @@ export class ProductionAuditComponent implements OnInit {
 
     var prodData = JSON.stringify(this.tableDataList);
     var locationID = JSON.stringify(this.locationID);
+    var projectID = JSON.stringify(this.projectID);
+
     var AuditInventoryID = JSON.stringify(this.AuditInventoryID);
     var autMerge = JSON.stringify(this.autoMerge);
     var AuditID = JSON.stringify(this.auditID);
@@ -254,6 +270,7 @@ export class ProductionAuditComponent implements OnInit {
 
     localStorage.removeItem('tmpAuditData');
     localStorage.removeItem('tmpAuditLocation');
+    localStorage.removeItem('tmpAuditProjectID');
     localStorage.removeItem('tmpAuditInventoryID');
     localStorage.removeItem('tmpAuditID');
     localStorage.removeItem('tmpAutoMerge');
@@ -261,6 +278,7 @@ export class ProductionAuditComponent implements OnInit {
 
     localStorage.setItem('tmpAuditData', prodData);
     localStorage.setItem('tmpAuditLocation', locationID);
+    localStorage.setItem('tmpAuditProjectID', projectID);
     localStorage.setItem('tmpAuditInventoryID', AuditInventoryID);
     localStorage.setItem('tmpAuditID', AuditID);
     localStorage.setItem('tmpAutoMerge', autMerge);
@@ -291,6 +309,8 @@ export class ProductionAuditComponent implements OnInit {
     this.auditID = JSON.parse(localStorage.getItem('tmpAuditID') || '0');
     this.AuditInventoryID = JSON.parse(localStorage.getItem('tmpAuditInventoryID') || '0');
     this.locationID = JSON.parse(localStorage.getItem('tmpAuditLocation') || '0');
+    this.projectID = JSON.parse(localStorage.getItem('tmpAuditProjectID') || '0');
+
     this.tableDataList = data;
     this.getTotal();
 
@@ -742,6 +762,8 @@ export class ProductionAuditComponent implements OnInit {
         InvDetail: JSON.stringify(this.tableDataList),
         UserID: this.global.getUserID()
       }
+
+
       if (isValidFlag == true) {
 
         if (type == 'hold') {
@@ -844,7 +866,7 @@ export class ProductionAuditComponent implements OnInit {
     this.holdBtnType = 'ReHold'
     this.invoiceDate = new Date(item.auditInvDate);
     this.locationID = item.locationID;
-
+    this.projectID = item.projectID;
 
     this.invRemarks = item.remarks;
     this.auditID = item.auditID;

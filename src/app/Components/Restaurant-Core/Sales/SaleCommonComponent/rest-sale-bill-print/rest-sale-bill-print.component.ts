@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
+import { ASSETS } from 'src/assets/Constants/assets';
 import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 declare var $: any;
@@ -25,7 +26,9 @@ export class RestSaleBillPrintComponent {
   FBRFeature = this.global.FBRFeature;
   showOrderNo = this.global.showOrderNo;
   customerFeature = this.global.customerFeature;
-     buzzerNoFeature = this.global.buzzerNoFeature;
+  buzzerNoFeature = this.global.buzzerNoFeature;
+  showLogixDetailFeature = this.global.showLogixDetailFeature;
+
 
   crudList: any = [];
   companyProfile: any = [];
@@ -58,7 +61,7 @@ export class RestSaleBillPrintComponent {
       this.logoWidth = data[0].logo1Width;
       this.CompanyNTN = data[0].ntn;
       this.CompanySTRN = data[0].strn;
-
+      this.footerText = data[0].footerText;
     });
 
     this.global.getMenuList().subscribe((data) => {
@@ -70,9 +73,9 @@ export class RestSaleBillPrintComponent {
   }
 
 
+  praLogo = ASSETS.PraLogo;
 
-
-
+  footerText = '';
 
   cardGst = this.global.ResCardGst;
   cashGst = this.global.ResCashGst;
@@ -144,7 +147,7 @@ export class RestSaleBillPrintComponent {
         this.myPartyName = Response[0].partyName;
         this.myPartyBalance = Response[0].cusBalance;
         this.myInvType = Response[0].invType;
-         this.myBuzzerNo  = Response[0].buzzerNo;
+        this.myBuzzerNo = Response[0].buzzerNo;
 
 
         if (this.myPaymentType == 'Bank') {

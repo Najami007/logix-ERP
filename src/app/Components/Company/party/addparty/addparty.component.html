@@ -1,94 +1,230 @@
-<div class="text-center">
+<div class="w-100 mt-2 ">
+    <div class="border-bottom">
+        <h2>Party Information</h2>
+    </div>
 
-    <div class="row m-3">
-      
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline">
-                <mat-label>Party Type</mat-label>
-                <mat-select [(ngModel)]="partyType" id="partyType" [autofocus]="true">
+    <div class="row mt-3 col-md-12">
+
+
+
+        <div [ngClass]="fields.partyName.size">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.partyName.show">Party Name</mat-label>
+                <input [disabled]="!fields.partyName.show" [(ngModel)]="partyName" id="partyName" matInput type="text">
+            </mat-form-field>
+        </div>
+
+        <div [ngClass]="fields.partyNameUrdu.size">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.partyNameUrdu.show">Party Name Urdu</mat-label>
+                <input [disabled]="!fields.partyNameUrdu.show" [(ngModel)]="partyNameUrdu" id="partyNameUrdu" matInput
+                    type="text">
+            </mat-form-field>
+        </div>
+
+        <div [ngClass]="fields.businessName.size">
+
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.businessName.show">Business Name</mat-label>
+                <input [disabled]="!fields.businessName.show" [(ngModel)]="businessName" id="partyName" matInput
+                    type="text">
+            </mat-form-field>
+        </div>
+
+        <div [ngClass]="fields.partyType.size">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.partyType.show">Party Type</mat-label>
+                <mat-select [(ngModel)]="partyType" [disabled]="!fields.partyType.show">
                     <mat-option value="Customer">Customer</mat-option>
                     <mat-option value="Supplier">Supplier</mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline">
-                <mat-label>Party Name</mat-label>
-                <input [(ngModel)]="partyName"  matInput type="text">
-            </mat-form-field>
-            
-            
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">
-                <mat-label>Party CNIC</mat-label>
-                <input [(ngModel)]="partyCNIC" (keydown)="global.handleNumKeysandMinut($event)" [textMask]="{mask:cnicMask}" maxlength="15"     matInput type="text">
-                <mat-hint>{{partyCNIC.length}} / 15</mat-hint>
-            </mat-form-field>
-            
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">
-                <mat-label>Passport no.</mat-label>
-                <input [(ngModel)]="passportNo"   matInput type="text">
-            </mat-form-field>
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">
-                <mat-label>Mobile no.</mat-label>
-                <input [(ngModel)]="partyMobileno" (keydown)="global.handleNumKeysandMinut($event)" [textMask]="{mask:mobileMask}" maxlength="12"   matInput type="text">
-                <mat-hint>{{partyMobileno.length}} / 12</mat-hint>
-            </mat-form-field>
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">
-                <mat-label>Telephone no.</mat-label>
-                <input  [(ngModel)]="partyTelephoneno" (keydown)="global.handleNumKeysandMinut($event)" maxlength="11" [textMask]="{mask:telephoneMask}"  matInput type="text">
-                <mat-hint>{{partyTelephoneno.length}} / 11</mat-hint>
-            </mat-form-field>
+        </div>
 
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">
-                <mat-label>Bank Name</mat-label>
-                <input  [(ngModel)]="bankName"   matInput type="text">
-            </mat-form-field>
-
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">
-                <mat-label>Account Title</mat-label>
-                <input  [(ngModel)]="accountTitle"   matInput type="text">
-            </mat-form-field>
-
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">
-                <mat-label>Account No.</mat-label>
-                <input  [(ngModel)]="accountNo"   matInput type="text">
-            </mat-form-field>
-
-                  <mat-form-field class="col-lg-6 matSmall" appearance="outline"  >
-                <mat-label>NTN / FTN</mat-label>
-                <input [(ngModel)]="ntn" matInput type="text">
-            </mat-form-field>
-
-                  <mat-form-field class="col-lg-6 matSmall" appearance="outline"  *ngIf="!FurnitureSaleFeature">
-                <mat-label>STRN </mat-label>
-                <input [(ngModel)]="strn" matInput type="text">
-            </mat-form-field>
-
-         
-            <mat-form-field  class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">  
-                <mat-label>City</mat-label>
-                <mat-select [(ngModel)]="City" #city>
-                    <mat-option><ngx-mat-select-search #citySearch
-                        [placeholderLabel]="'Search...'" [noEntriesFoundLabel]="'Not found'"
-                        name="search"></ngx-mat-select-search></mat-option>
-                    <mat-option *ngFor="let item of CitiesNames |filter:citySearch.value" value="{{item.cityID}}">{{item.cityName}}</mat-option>
+        <div [ngClass]="fields.partyNature.size">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.partyNature.show">Party Nature</mat-label>
+                <mat-select [(ngModel)]="partyNatureID" [disabled]="!fields.partyNature.show">
+                    <mat-option [value]="0">None</mat-option>
+                    <mat-option *ngFor="let item of partyNatureList" [value]="item.partyNatureID">{{item.partyNatureTitle}}</mat-option>
                 </mat-select>
-                <mat-icon matSuffix (click)="addCity()">add</mat-icon>
             </mat-form-field>
-        
-           
-            
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline" *ngIf="!FurnitureSaleFeature">
-                <mat-label>Address</mat-label>
-                <textarea rows="1" [(ngModel)]="partyAddress" matInput type="text"></textarea>
-            </mat-form-field>
-            
-            <mat-form-field class="col-lg-6 matsmall" appearance="outline">
-                <mat-label>Description</mat-label>
-                <textarea rows="1" [(ngModel)]="description" matInput type="text"></textarea>
+        </div>
+
+        <div [ngClass]="fields.registrationType.size">
+
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.registrationType.show">Registeration</mat-label>
+                <mat-select [disabled]="!fields.registrationType.show" [(ngModel)]="registrationType" #registration>
+                    <mat-option *ngFor="let item of registerationTypeList"
+                        [value]="item.title">{{item.title}}</mat-option>
+                </mat-select>
             </mat-form-field>
         </div>
 
 
-   <div class="text-end bg-mf p-3">
-    <Button class="btnsave m-2 w-25" (click)="saveParty()">{{btnType}}</Button>
-    <Button class="btnreset m-2 w-25" (click)="reset()">Close</Button>
-   </div>
+
+        <div [ngClass]="fields.province.size">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.province.show">Province</mat-label>
+                <mat-select [disabled]="!fields.province.show" [(ngModel)]="province">
+                    <mat-option *ngFor="let item of provinceList" [value]="item.title">{{item.title}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+
+
+        <div [ngClass]="fields.cnic.size">
+
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.cnic.show">CNIC / Registeration No.</mat-label>
+                <input [disabled]="!fields.cnic.show" [(ngModel)]="partyCNIC"
+                    (keydown)="global.handleNumKeysandMinut($event)" [textMask]="{mask:cnicMask}" maxlength="13"
+                    matInput type="text">
+                <mat-hint>{{partyCNIC.length}} / 13</mat-hint>
+            </mat-form-field>
+        </div>
+
+
+        <div [ngClass]="fields.mobileNo.size">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.mobileNo.show">Mobile no.</mat-label>
+                <input [disabled]="!fields.mobileNo.show" [(ngModel)]="partyMobileno" maxlength="11"
+                    (keydown)="global.handleNumKeysandMinut($event)" [textMask]="{mask:mobileMask}" matInput
+                    type="text">
+                <mat-hint>{{partyMobileno.length}} / 11</mat-hint>
+            </mat-form-field>
+
+        </div>
+
+        <div [ngClass]="fields.telephoneNo.size">
+
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.telephoneNo.show">Telephone no.</mat-label>
+                <input [disabled]="!fields.telephoneNo.show" [(ngModel)]="partyTelephoneno" maxlength="10"
+                    (keydown)="global.handleNumKeysandMinut($event)" [textMask]="{mask:telephoneMask}" matInput
+                    type="text">
+                <mat-hint>{{partyTelephoneno.length}} / 10</mat-hint>
+            </mat-form-field>
+        </div>
+
+        <div [ngClass]="fields.passport.size">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.passport.show">Passport no.</mat-label>
+                <input [disabled]="!fields.passport.show" [(ngModel)]="passportNo" matInput type="text">
+            </mat-form-field>
+        </div>
+
+
+        <div [ngClass]="fields.bankName.size">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.bankName.show">Bank Name</mat-label>
+                <input [disabled]="!fields.bankName.show" [(ngModel)]="bankName" matInput type="text">
+            </mat-form-field>
+        </div>
+
+        <div [ngClass]="fields.accountTitle.size">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.accountTitle.show">Account Title</mat-label>
+                <input [disabled]="!fields.accountTitle.show" [(ngModel)]="accountTitle" matInput type="text">
+            </mat-form-field>
+        </div>
+
+        <div [ngClass]="fields.accountNo.size">
+
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.accountNo.show">Account No.</mat-label>
+                <input [disabled]="!fields.accountNo.show" [(ngModel)]="accountNo" matInput type="text">
+            </mat-form-field>
+        </div>
+
+        <div [ngClass]="fields.ntn.size">
+
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.ntn.show">NTN / FTN</mat-label>
+                <input [disabled]="!fields.ntn.show" [(ngModel)]="ntn" matInput type="text">
+            </mat-form-field>
+        </div>
+
+        <div [ngClass]="fields.strn.size">
+
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.strn.show">STRN</mat-label>
+                <input [disabled]="!fields.strn.show" [(ngModel)]="strn" matInput type="text">
+            </mat-form-field>
+        </div>
+
+
+        <div [ngClass]="fields.city.size">
+
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.city.show">City</mat-label>
+                <mat-select [disabled]="!fields.city.show" [(ngModel)]="City" #city>
+                    <mat-option><ngx-mat-select-search #citySearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of CitiesNames |filter:citySearch.value"
+                        value="{{item.cityID}}">{{item.cityName}}</mat-option>
+                </mat-select>
+                <!-- <mat-icon matSuffix (click)="addCity()">add</mat-icon> -->
+            </mat-form-field>
+        </div>
+
+
+        <div [ngClass]="fields.route.size">
+
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.route.show">Route</mat-label>
+                <mat-select [disabled]="!fields.route.show" [(ngModel)]="routeID" #route>
+                    <mat-option><ngx-mat-select-search #routeSearch [placeholderLabel]="'Search...'"
+                            [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                    <mat-option *ngFor="let item of routeList |filter:routeSearch.value"
+                        [value]="item.routeID">{{item.routeTitle}}</mat-option>
+                </mat-select>
+                <!-- <mat-icon matSuffix (click)="addCity()">add</mat-icon> -->
+            </mat-form-field>
+        </div>
+
+        <div [ngClass]="fields.address.size">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.address.show">Address</mat-label>
+                <textarea [disabled]="!fields.address.show" rows="1" [(ngModel)]="partyAddress" matInput
+                    type="text"></textarea>
+            </mat-form-field>
+        </div>
+
+        <div [ngClass]="fields.addressUrdu.size">
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.addressUrdu.show">Address Urdu</mat-label>
+                <textarea [disabled]="!fields.addressUrdu.show" rows="1" [(ngModel)]="partyAddressUrdu" matInput
+                    type="text"></textarea>
+            </mat-form-field>
+        </div>
+
+        <div [ngClass]="fields.description.size">
+
+            <mat-form-field class="w-100 matSmall" appearance="outline">
+                <mat-label *ngIf="fields.description.show">Description</mat-label>
+                <textarea [disabled]="!fields.description.show" rows="1" [(ngModel)]="description" matInput
+                    type="text"></textarea>
+            </mat-form-field>
+        </div>
+
+
+
+
+
+
+
+    </div>
+
+
+    <div class="d-flex justify-content-center">
+        <Button class="btnsave m-2 w-25" *ngIf="crudList.c && btnType == 'Save'"
+            (click)="saveParty()">{{btnType}}</Button>
+        <Button class="btnsave m-2 w-25" *ngIf="crudList.u && btnType == 'Update'"
+            (click)="saveParty()">{{btnType}}</Button>
+        <Button class="btnreset m-2 w-25" (click)="reset()">Reset</Button>
+        <mat-checkbox [(ngModel)]="autoEmpty">Auto Empty</mat-checkbox>
+    </div>
 </div>

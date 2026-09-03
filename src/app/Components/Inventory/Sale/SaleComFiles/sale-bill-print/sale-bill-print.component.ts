@@ -9,6 +9,7 @@ declare var $: any;
 // import * as $ from 'jquery-qrcode';
 import html2canvas from 'html2canvas';
 import { KOTPrintComponent } from '../kotprint/kotprint.component';
+import { ASSETS } from 'src/assets/Constants/assets';
 
 
 @Component({
@@ -36,12 +37,17 @@ export class SaleBillPrintComponent implements OnInit {
   CusDiscFeature = this.global.CusDiscFeature;
   showLogixDetailFeature = this.global.showLogixDetailFeature;
   showTotalQtyFeature = this.global.showTotalQtyFeature;
-    showUomTitleFeature = this.global.showUomTitleFeature;
+  showUomTitleFeature = this.global.showUomTitleFeature;
+  TransporterFeature = this.global.TransporterFeature;
+  SteelTypeFeature = this.global.SteelTypeFeature;
 
 
 
 
-  billPrintType: any = '';;
+
+
+  billPrintType: any = '';
+  printSize: any = '';
   companyProfile: any = [];
   companyLogo: any = '';
   CompanyNTN = '';
@@ -106,11 +112,23 @@ export class SaleBillPrintComponent implements OnInit {
 
   billType: any = '';
 
+
+  fbrLogo = ASSETS.fbrLogo;
+
   myPrintTableData: any = [];
   myInvoiceNo = '';
   mytableNo = '';
   myCounterName = '';
   myCustomerName = '';
+  myCustomerNameUrdu = '';
+  myCustomerAddress = '';
+  myCustomerAddressUrdu = '';
+  myCustomerMobile = '';
+  myCustomerBusinessName = '';
+  myCustomerNtn = '';
+  myCustomerCnic = '';
+  myCustomerRegisterationType = '';
+
   myInvDate: any = new Date();
   myCreatedDate: any = new Date();
   myOrderType = '';
@@ -140,21 +158,36 @@ export class SaleBillPrintComponent implements OnInit {
   myFbrResponse = '';
   myPOSFee = 0;
   myInvTime = new Date();
+  myTransporterID = 0;
+  myTransportPartyName = '';
+  myLabourCharges = 0;
+  myTransportCharges = 0;
 
   myCusDiscAmount: any = 0;
+  mySupBalance: any = 0;
 
   myVehicleNo = '';
   myMeterReading = '';
   myVehicleName = '';
   partyNtn = '';
 
+
+  myAmountInWords = '';
+
+
   PrintBill(InvNo: any) {
     this.billPrintType = this.global.getBillPrintType();
+    this.printSize = this.global.getPrintSize()
     this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
       (Response: any) => {
+        if (Response == null) {
+          this.msg.WarnNotify('Null Returned');
+          return;
+        }
+
         this.myPrintTableData = Response;
         this.myInvoiceNo = InvNo;
-        this.myInvDate = Response[0].invDate;
+        this.myInvDate = new Date(Response[0].invDate);
         this.myCreatedDate = Response[0].createdOn;
         this.myCounterName = Response[0].entryUser;
         this.mySubTotal = Response[0].billTotal;
@@ -167,6 +200,8 @@ export class SaleBillPrintComponent implements OnInit {
         this.myChange = Response[0].change;
         this.myPaymentType = Response[0].paymentType;
         this.myCustomerName = Response[0].partyName;
+        this.myCustomerNameUrdu = Response[0].partyNameUrdu;
+
         this.myBookerName = Response[0].bookerName;
         this.myInvType = Response[0].invType;
         this.myAdvTaxAmount = Response[0].advTaxAmount;
@@ -177,11 +212,26 @@ export class SaleBillPrintComponent implements OnInit {
         this.myFbrResponse = Response[0].fbrResponse;
         this.myPOSFee = Response[0].posFee;
         this.myCusBalance = Response[0].cusBalance;
+        this.mySupBalance = Response[0].supBalance;
         this.myVehicleNo = Response[0].vehicleNo;
         this.myMeterReading = Response[0].meterReading;
         this.myVehicleName = Response[0].vehicleName;
+        this.myTransportPartyName = Response[0].transportPartyName;
+        this.myTransporterID = Response[0].transportPartyID;
+        this.myLabourCharges = Response[0].labourCharges;
+        this.myTransportCharges = Response[0].transportCharges;
         this.partyNtn = Response[0].ntn;
         this.myInvTime = new Date();
+        this.myAmountInWords = this.global.convertAmountToWords(Response[0].netTotal);
+        this.myCustomerAddress = Response[0].partyAddress;
+        this.myCustomerAddressUrdu = Response[0].partyAddressUrdu;
+
+        this.myCustomerBusinessName = Response[0].businessName;
+        this.myCustomerMobile = Response[0].partyMobileNo;
+        this.myCustomerNtn = Response[0].ntn;
+        this.myCustomerCnic = Response[0].partyCNIC;
+        this.myCustomerRegisterationType = Response[0].registrationType;
+
 
 
         this.myQtyTotal = 0;
@@ -206,11 +256,13 @@ export class SaleBillPrintComponent implements OnInit {
           } else {
 
             if (this.billPrintType == 'english') {
-              this.global.printBill('#billEnglish', '.searchProduct');
+              if (this.printSize == 'thermal') this.global.printBill('#thermalBillEnglish', '.searchProduct');
+              if (this.printSize == 'a4') this.global.printBill('#A4BillEnglish', '.searchProduct');
 
             }
             if (this.billPrintType == 'urdu') {
-              this.global.printBill('#BillUrdu', '.searchProduct');
+              if (this.printSize == 'thermal') this.global.printBill('#thermalBillUrdu', '.searchProduct');
+              if (this.printSize == 'a4') this.global.printBill('#A4BillEnglish', '.searchProduct');
             }
             this.qrCodeContainer;
 

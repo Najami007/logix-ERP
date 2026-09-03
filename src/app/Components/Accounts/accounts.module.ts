@@ -70,6 +70,8 @@ import { AddNoteComponent } from './coa-notes/add-note/add-note.component';
 import { JournelComponent } from './AccountReports/journel/journel.component';
 import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
 import { DayTransactionComponent } from './AccountReports/day-transaction/day-transaction.component';
+import { ParentLedgerReportComponent } from './AccountReports/parent-ledger-report/parent-ledger-report.component';
+import { AddAdjustmentComponent } from './DesiAccounts/account-adjustment/add-adjustment/add-adjustment.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -100,8 +102,8 @@ export const accountRountes: Route[] = [
   { path: 'cbrpt', component: CashbookComponent, data: { title: 'Cash Book' }, canActivate: [AuthGuard] },
   { path: 'plrpt', component: PLStatComponent, data: { title: 'Profit & Loss' }, canActivate: [AuthGuard] },
   { path: 'tbrpt', component: TrialBalanceComponent, data: { title: 'Trial Balance' }, canActivate: [AuthGuard] },
-   { path: 'accSmryrpt', component: AccountSummaryReportComponent, data: { title: 'Account Summary' }, canActivate: [AuthGuard] },
-   { path: 'journel', component: JournelComponent, data: { title: 'Journel' }, canActivate: [AuthGuard] },
+  { path: 'accSmryrpt', component: AccountSummaryReportComponent, data: { title: 'Account Summary' }, canActivate: [AuthGuard] },
+  { path: 'journel', component: JournelComponent, data: { title: 'Journel' }, canActivate: [AuthGuard] },
 
   /// Desi Accounts Imports
   { path: 'pmt', component: PaymentComponent, data: { title: 'Payment' }, canActivate: [AuthGuard] },
@@ -115,6 +117,7 @@ export const accountRountes: Route[] = [
   { path: 'opc', component: OpeningCashComponent, data: { title: 'Opening Balance' }, canActivate: [AuthGuard] },
   { path: 'accadj', component: AccountAdjustmentComponent, data: { title: 'Account Adjustment' }, canActivate: [AuthGuard] },
   { path: 'pob', component: PartyOpeningBalanceComponent, data: { title: 'Party Opening Balance' }, canActivate: [AuthGuard] },
+  { path: 'parent-ledger', component: ParentLedgerReportComponent, data: { title: 'Parent Ledger Report' }, canActivate: [AuthGuard] },
 
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 
@@ -163,7 +166,9 @@ export const accountRountes: Route[] = [
     VoucherPrintComponent,
     AddChartOfAccountComponent,
     AccountSummaryReportComponent,
-    JournelComponent
+    JournelComponent,
+    ParentLedgerReportComponent,
+    AddAdjustmentComponent
 
 
 

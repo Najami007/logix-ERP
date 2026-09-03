@@ -18,6 +18,7 @@
                     {{companyAddress}}</span>
                 <span *ngIf="CompanyMobile != '-'"><b>Mobile:</b> {{CompanyMobile}}</span>
                 <span *ngIf="companyPhone != '-'"><b>Phone:</b> {{companyPhone}}</span>
+                <span><b>Project:</b> {{tmpProjectTitle}}</span>
 
                 <span *ngIf="gstFeature && CompanyNTN != '-'"><b>NTN: </b>{{CompanyNTN}} </span>
                 <span *ngIf="gstFeature && CompanySTRN != '-'"><b>STRN: </b> {{CompanySTRN}}</span>
@@ -86,7 +87,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of tableDataList index as index">
-                            <td>{{index + 1}}</td>
+                            <td class="text-center">{{index + 1}}</td>
                             <td>{{item.productTitle}}</td>
                             <td class="text-center">{{item.quantity}}</td>
 

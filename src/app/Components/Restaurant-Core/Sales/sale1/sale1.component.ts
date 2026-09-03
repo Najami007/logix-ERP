@@ -11,12 +11,11 @@ import Swal from 'sweetalert2';
 import { RestKotPrintComponent } from '../SaleCommonComponent/rest-kot-print/rest-kot-print.component';
 import { SaleBillDetailComponent } from './sale-bill-detail/sale-bill-detail.component';
 import { RestSaleBillPrintComponent } from '../SaleCommonComponent/rest-sale-bill-print/rest-sale-bill-print.component';
-import { exec } from 'child_process';
-import * as bootstrap from 'bootstrap';
 
 import * as $ from 'jquery';
 import { SaleSavedBillComponent } from '../SaleCommonComponent/sale-saved-bill/sale-saved-bill.component';
 import { retry } from 'rxjs';
+import { PaymentMehtodComponent } from 'src/app/Components/Inventory/Sale/SaleComFiles/payment-mehtod/payment-mehtod.component';
 
 
 
@@ -56,10 +55,14 @@ export class Sale1Component implements OnInit {
 
   editRestSaleFeature = this.global.editRestSaleFeature;
   buzzerNoFeature = this.global.buzzerNoFeature;
+  NonFBRFeature = this.global.NonFBRFeature;
 
 
   roleType = this.global.getRoleTypeID();
 
+
+  cashGSTValue = this.global.GetGSTValue('Cash');
+  cardGstValue = this.global.GetGSTValue('Bank');
 
   appVisibility() {
     if (document.hidden) {
@@ -70,6 +73,9 @@ export class Sale1Component implements OnInit {
 
     }
   }
+
+
+
 
   holdbtnType = 'hold';
 
@@ -260,15 +266,27 @@ export class Sale1Component implements OnInit {
   }
 
 
+  recipeCode = '';
+
   searchByCode(event: any, value: any) {
 
-    if (event.keyCode == 13) {
+
+    if (event.keyCode == 13 && value == '') {
+      event.preventDefault();
+      $('#cash2').trigger('select');
+      $('#cash2').trigger('focus');
+    }
+
+    if (event.keyCode == 13 && value != '') {
       var RecipeRow = this.tempRecipeList.filter((e: any) => e.recipeCode == value);
       if (RecipeRow.length > 0) {
         this.productSelected(RecipeRow[0], 1);
+        this.recipeCode = '';
+
       } else {
         this.msg.WarnNotify('Recipe Not Found');
-        $('#recSearch').val('');
+        this.recipeCode = '';
+
       }
     }
 
@@ -572,39 +590,88 @@ export class Sale1Component implements OnInit {
 
   ///////////////////////////////////////////////////////////////
   getTotal() {
+
     this.subTotal = 0;
+
     this.tableData.forEach((e: any) => {
       this.subTotal += Number(e.salePrice) * Number(e.quantity);
     });
-    if (this.OtherCharges == '' || this.OtherCharges == undefined) {
+
+    this.OtherCharges = Number(this.OtherCharges || 0);
+    this.billDiscount = Number(this.billDiscount || 0);
+
+    if (this.orderType === 'Dine In') {
       this.OtherCharges = 0;
-    }
-    if (this.billDiscount == '' || this.billDiscount == undefined) {
-      this.billDiscount = 0;
-    }
-    if (this.orderType == 'Dine In') {
-      this.OtherCharges = 0;
+
       if (this.global.validCharges(this.subTotal) && this.serviceChargesFeature) {
-        this.OtherCharges = Number(this.subTotal) * (Number(this.serviceCharges) / 100);
+        this.OtherCharges = this.subTotal * (Number(this.serviceCharges) / 100);
       }
     }
 
-
-
-    this.netTotal = (this.subTotal + Number(this.OtherCharges)) - Number(this.billDiscount);
-
-    if (this.paymentType == 'Split') {
-      this.bankCash = (this.netTotal + this.GstAmount) - Number(this.cash);
+    // Calculate GST only
+    if (this.FBRFeature) {
+      this.generateGst();
+    } else {
+      this.GstAmount = 0;
     }
-    if (this.paymentType == 'Bank') {
+
+    this.netTotal = (this.subTotal + this.OtherCharges) - this.billDiscount;
+
+    if (this.paymentType === 'Split') {
+      this.bankCash = (this.netTotal + this.GstAmount) - Number(this.cash);
+    } else if (this.paymentType === 'Bank') {
       this.bankCash = this.netTotal + this.GstAmount;
     }
-    this.change = (Number(this.cash) + Number(this.bankCash)) - (this.netTotal + this.GstAmount);
 
+    this.change =
+      (Number(this.cash) + Number(this.bankCash)) -
+      (this.netTotal + this.GstAmount);
+  }
 
+  /////////////////////////////////////////////////////////////////
+  generateGst() {
 
+    this.gstValue = 0;
+    this.GstAmount = 0;
+
+    if (!this.gstFeature) {
+      return;
+    }
+
+    switch (this.paymentType) {
+
+      case 'Cash':
+      case 'Split':
+        this.gstValue = this.cashGSTValue;
+        break;
+
+      case 'Bank':
+
+        if (this.bankCoaID > 0) {
+
+          const coa = this.bankCoaList.find((e: any) => e.coaID == this.bankCoaID);
+
+          this.gstValue = coa?.coaTitle === 'Card'
+            ? this.cardGstValue
+            : this.cashGSTValue;
+
+        } else {
+
+          this.gstValue = this.cardGstValue;
+
+        }
+
+        break;
+
+      case 'Complimentary':
+        this.gstValue = 0;
+        break;
+    }
+
+    this.GstAmount = this.subTotal * this.gstValue / 100;
 
   }
+
 
 
   ///////////////////////////////////////////////////////////////
@@ -748,41 +815,6 @@ export class Sale1Component implements OnInit {
   }
 
 
-  /////////////////////////////////////////////////////////////////
-
-  generateGst() {
-
-
-    if (this.gstFeature && (this.paymentType == 'Cash' || this.paymentType == 'Split')) {
-      this.gstValue = this.global.ResCashGst;
-      this.GstAmount = (this.subTotal * this.gstValue) / 100;
-    }
-    if (this.gstFeature && this.paymentType == 'Bank') {
-      if (this.bankCoaID > 0) {
-        var coaTitle = this.bankCoaList.filter((e: any) => e.coaID == this.bankCoaID)[0].coaTitle;
-
-        if (coaTitle == 'Card') {
-          this.gstValue = this.global.ResCardGst;
-        } else {
-          this.gstValue = this.global.ResCashGst;
-        }
-      } else {
-        this.gstValue = this.global.ResCardGst;
-      }
-
-      this.GstAmount = (this.subTotal * this.gstValue) / 100;
-
-    }
-
-
-    if (this.gstFeature && this.paymentType == 'Complimentary') {
-      this.gstValue = 0;
-      this.GstAmount = 0;
-    }
-
-    this.getTotal();
-
-  }
 
   save(type: any, SendToFbr: any, printFlag?: any) {
 
@@ -1153,8 +1185,9 @@ export class Sale1Component implements OnInit {
         } else {
           this.msg.WarnNotify(Response.msg);
         }
-        this.app.stopLoaderDark();
         this.isProcessing = false;
+
+        this.app.stopLoaderDark();
       },
       (Error: any) => {
         console.log(Error);
@@ -1486,7 +1519,7 @@ export class Sale1Component implements OnInit {
     this.paymentType = 'Cash';
     this.cash = 0;
     this.bankCash = 0;
-
+    this.bankCoaID = 0;
     this.tableID = 0;
     this.tempTableID = 0;
     this.prevTableID = 0;
@@ -1509,6 +1542,9 @@ export class Sale1Component implements OnInit {
     this.buzzerNo = 0;
     this.disableHoldButton = false;
     this.tmpHoldInvNo = '';
+
+    this.GstAmount = 0;
+
   }
 
   resetPrint() {
@@ -1762,34 +1798,34 @@ export class Sale1Component implements OnInit {
     }
 
 
-   if(!this.disablePrintPwd){
-     this.global.openPassword('Password').subscribe(pin => {
-      if (pin !== '') {
-        this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
-          RestrictionCodeID: 5,
-          Password: pin,
-          UserID: this.global.getUserID()
+    if (!this.disablePrintPwd) {
+      this.global.openPassword('Password').subscribe(pin => {
+        if (pin !== '') {
+          this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+            RestrictionCodeID: 5,
+            Password: pin,
+            UserID: this.global.getUserID()
 
-        }).subscribe(
-          (Response: any) => {
-            if (Response.msg == 'Password Matched Successfully') {
-              $('#SavedBillModal').show();
+          }).subscribe(
+            (Response: any) => {
+              if (Response.msg == 'Password Matched Successfully') {
+                $('#SavedBillModal').show();
 
-              this.dialogue.open(SaleBillDetailComponent, {
-                width: '50%',
-                data: item,
-                disableClose: true,
-              }).afterClosed().subscribe(value => {
+                this.dialogue.open(SaleBillDetailComponent, {
+                  width: '50%',
+                  data: item,
+                  disableClose: true,
+                }).afterClosed().subscribe(value => {
 
-              })
-            } else {
-              this.msg.WarnNotify(Response.msg);
+                })
+              } else {
+                this.msg.WarnNotify(Response.msg);
+              }
             }
-          }
-        )
-      }
-    })
-   }
+          )
+        }
+      })
+    }
 
 
   }
@@ -2032,6 +2068,19 @@ export class Sale1Component implements OnInit {
   getDetails(item: any) {
 
     return this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + item.invBillNo).pipe(retry(3));
+
+  }
+
+
+  changePayment(data: any) {
+    $('#SavedBillModal').hide();
+    this.dialogue.open(PaymentMehtodComponent, {
+      width: '30%',
+      data: data
+    }).afterClosed().subscribe(val => {
+      this.getSavedBill();
+      $('#SavedBillModal').show();
+    })
 
   }
 

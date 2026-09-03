@@ -56,6 +56,8 @@ import { SaleHoldedBillComponent } from './Sales/SaleCommonComponent/sale-holded
 import { CommentCardComponent } from './Sales/SaleCommonComponent/comment-card/comment-card.component';
 import { CashierClosingRptComponent } from '../Inventory/InventoryReports/cashier-closing-rpt/cashier-closing-rpt.component';
 import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
+import { VoiceRecorderComponent } from './Sales/SaleCommonComponent/voice-recorder/voice-recorder.component';
+import { CommentCardNewComponent } from './Sales/SaleCommonComponent/comment-card-new/comment-card-new.component';
 
 export const MY_DATE_FORMAT  = {
   parse: {
@@ -147,6 +149,8 @@ export const restCore: Route[] = [
     TableSale2Component,
     SaleHoldedBillComponent,
     CommentCardComponent,
+    VoiceRecorderComponent,
+    CommentCardNewComponent,
    
     
    

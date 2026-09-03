@@ -264,7 +264,7 @@ export class Voucher2Component implements OnInit {
   /////////////////////////////////////////////////////////////////////
 
   getSavedVoucher() {
-
+    
     var fromDate = this.globalData.dateFormater(this.startDate, '-');
     var toDate = this.globalData.dateFormater(this.endDate, '-');
 
@@ -333,6 +333,7 @@ export class Voucher2Component implements OnInit {
     this.http.get(environment.mainApi + this.globalData.accountLink + 'GetVoucherCBCOA?type=' + this.vType).subscribe(
       (Response) => {
         this.refCoaList = Response;
+        this.refrenceCOA = 0;
       },
       (Error) => {
         console.log(Error);

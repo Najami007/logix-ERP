@@ -134,6 +134,7 @@ export class MarbleSaleComponent implements OnInit {
     this.getItemList();
     this.getShippingCompany();
     this.getPartyList();
+    this.getTransporterList();
 
     this.tableSize = this.global.paginationDefaultTalbeSize;
     this.tableSizes = this.global.paginationTableSizes;
@@ -169,6 +170,12 @@ export class MarbleSaleComponent implements OnInit {
 
   soSearchProjectID = 0;
   siSearchProjectID = 0;
+
+  shippingCharges = 0;
+
+  transportPartyID = 0;
+  labourCharges: any = 0;
+  transportCharges: any = 0;
 
 
   onProjectSearch(type: any) {
@@ -230,6 +237,22 @@ export class MarbleSaleComponent implements OnInit {
     )
   }
 
+
+
+
+  transporterList: any = [];
+
+  getTransporterList() {
+
+    this.global.getPartyList().subscribe((data: any) => {
+      if (data.length > 0) {
+        this.transporterList = data.filter((e: any) => e.partyType == 'Transporter');
+      }
+    })
+
+
+
+  }
 
 
 
@@ -484,7 +507,8 @@ export class MarbleSaleComponent implements OnInit {
               productTitle: item.mnuItemTitle,
               quantity: 1,
               costPrice: item.mnuItemCostPrice,
-              salePrice: item.mnuItemSalePrice
+              salePrice: item.mnuItemSalePrice,
+              loadingLabourCharges: item.loadingLabourCharges,
             })
 
 
@@ -511,12 +535,22 @@ export class MarbleSaleComponent implements OnInit {
   }
 
 
+  totalQty = 0;
+  totalBill = 0;
+
   getTotal() {
 
     this.netTotal = 0;
+    this.netTotal = Number(this.transportCharges);
+    this.totalQty = 0;
+    this.totalBill = 0;
+    this.labourCharges = 0;
 
     this.tableDataList.forEach((e: any) => {
-      this.netTotal += e.salePrice * e.quantity;
+      this.totalQty += Number(e.quantity);
+      this.labourCharges += Number(e.loadingLabourCharges) * Number(e.quantity);
+      this.totalBill += (e.salePrice + Number(e.loadingLabourCharges)) * Number(e.quantity);
+      this.netTotal += (e.salePrice + Number(e.loadingLabourCharges)) * Number(e.quantity);
     });
 
   }
@@ -559,6 +593,15 @@ export class MarbleSaleComponent implements OnInit {
     }
 
 
+    if (this.transportPartyID > 0 && ((this.transportCharges == 0 || this.transportCharges == '') && (this.labourCharges == 0 || this.labourCharges == ''))) {
+      this.msg.WarnNotify('Enter Transport / Labour Charges');
+      return;
+    }
+
+    if((this.transportCharges > 0 || this.labourCharges > 0) && this.transportPartyID == 0 ){
+      this.msg.WarnNotify('Select Shipping Company');
+      return;
+    }
 
 
     var postData = {
@@ -578,9 +621,15 @@ export class MarbleSaleComponent implements OnInit {
       DeliveryRemarks: this.deliveryRemarks || '-',
 
       SaleDetail: JSON.stringify(this.tableDataList),
-      UserID: this.global.getUserID()
+      UserID: this.global.getUserID(),
+      ShippingCharges: this.shippingCharges,
+
+      TransportPartyID: this.transportPartyID,
+      LabourCharges: this.labourCharges,
+      TransportCharges: this.transportCharges,
 
     }
+
 
     if (this.btnType == 'Save') {
       this.insert('insert', postData);
@@ -647,6 +696,7 @@ export class MarbleSaleComponent implements OnInit {
   reset() {
     this.invoiceDate = new Date();
     this.partyID = 0;
+    this.shippingCharges = 0;
     this.remarks = '';
     this.netTotal = 0;
     this.scAutoID = 0;
@@ -661,12 +711,18 @@ export class MarbleSaleComponent implements OnInit {
     this.customerPreviousBalance = 0;
     this.btnType = 'Save';
     this.PBarcode = '';
+    this.transportPartyID = 0;
+    this.transportCharges = 0;
+    this.labourCharges = 0;
+    this.totalQty = 0;
+    this.totalBill = 0;
 
 
   }
 
 
   edit(item: any) {
+
     this.reset();
     this.invBillNo = item.invBillNo;
     this.invoiceDate = new Date(item.invDate);
@@ -675,7 +731,20 @@ export class MarbleSaleComponent implements OnInit {
     this.remarks = item.remarks;
     this.netTotal = item.netTotal;
     this.scAutoID = item.scAutoID;
+    this.transportPartyID = item.transportPartyID;
+    this.transportCharges = item.transportCharges;
+    this.labourCharges = item.labourCharges;
     this.btnType = 'Update';
+    this.shippingCharges = item.shippingCharges;
+
+    this.totalQty = 0;
+    this.totalBill = 0;
+
+
+
+
+
+
     this.getInvDetail(item.invBillNo);
     this.changeTab(0)
 
@@ -690,16 +759,27 @@ export class MarbleSaleComponent implements OnInit {
           if (Response.length > 0) {
             Response.forEach((e: any) => {
               this.tableDataList.push({
-                mnuItemID: e.mnuItemID, productTitle: e.productTitle, quantity: e.quantity, costPrice: e.costPrice, salePrice: e.salePrice
+                mnuItemID: e.mnuItemID,
+                productTitle: e.productTitle,
+                quantity: e.quantity,
+                costPrice: e.costPrice,
+                salePrice: e.salePrice,
+                loadingLabourCharges: e.loadingLabourCharges,
               })
 
-              this.deliveryDate = new Date(Response[0].deliveryDate);
-              this.deliverTo = Response[0].deliverTo;
-              this.deliveryContactNo = Response[0].deliveryContactNo;
-              this.deliveryAddress = Response[0].deliveryAddress;
-              this.deliveryRemarks = Response[0].deliveryRemarks;
-              this.scAutoID = Response[0].scAutoID;
+
             })
+
+
+
+            this.deliveryDate = new Date(Response[0].deliveryDate);
+            this.deliverTo = Response[0].deliverTo;
+            this.deliveryContactNo = Response[0].deliveryContactNo;
+            this.deliveryAddress = Response[0].deliveryAddress;
+            this.deliveryRemarks = Response[0].deliveryRemarks;
+            this.scAutoID = Response[0].scAutoID;
+
+            this.getTotal();
           }
         },
         error: error => {
@@ -777,6 +857,9 @@ export class MarbleSaleComponent implements OnInit {
     this.billTotal = item.netTotal;
     this.netTotal = item.netTotal;
     this.scAutoID = item.scAutoID;
+    this.transportPartyID = item.transportPartyID;
+    this.transportCharges = item.transportCharges;
+    this.labourCharges = item.labourCharges;
     this.getInvDetail(item.invBillNo);
 
     this.global.openBootstrapModal('#saleModal', true);
@@ -821,8 +904,12 @@ export class MarbleSaleComponent implements OnInit {
       BankCash: 0,
       InvoiceDocument: "-",
       SaleDetail: JSON.stringify(this.tableDataList),
-      UserID: this.global.getUserID()
+      UserID: this.global.getUserID(),
+      TransportPartyID: this.transportPartyID,
+      LabourCharges: this.labourCharges,
+      TransportCharges: this.transportCharges,
     }
+
 
     this.global.closeBootstrapModal('#saleModal', true);
 

@@ -8,7 +8,7 @@
 
         <div class="d-flex justify-content-center">
 
-            <div class="avatar-upload " (click)="globaldata.showProductImage(catImage,0)">
+            <div class="avatar-upload " >
                 <div class="avatar-edit" >
                     <input type="file" accesskey="g" id="prodimg" accept="" #prodimg (change)="onImgSelected($event)" />
                     <label for="prodimg"><mat-icon class=" mt-1">edit</mat-icon></label>
@@ -16,7 +16,7 @@
                 <div class="avatar-del">
                     <label (click)="catImage = ''"><mat-icon class=" mt-1">delete</mat-icon></label>
                 </div>
-                <div class="avatar-preview">
+                <div class="avatar-preview" (click)="globaldata.showProductImage(catImage,0)">
                     <div accesskey="i" id="imagePreview" [ngStyle]="{ 'background-image': 'url(' + catImage + ')' }">
                     </div>
                 </div>

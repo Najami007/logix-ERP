@@ -115,4 +115,51 @@
     <!-------------------------------------------------------------------->
 
 
+    <!---------------------- Modal Window for holded Bill List ------------->
+
+
+    <div class="modal fade" id="holdedList" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="postLabel">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content " style="background-color: rgb(248, 247, 247);">
+                <div class="modal-body p-2">
+                    <div class="text-center">
+                        <h1>Holded Bill List</h1>
+                    </div>
+
+                    <div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>S#</th>
+                                    <th>Inv #</th>
+                                    <th>User</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of unPostedBillList index as index">
+                                    <td>{{index +1}}</td>
+                                    <td>{{item.invBillNo}}</td>
+                                    <td>{{item.userName}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer p-3 bg-mf">
+         
+                    <button type="button" class="bg-secondary text-white" mat-raised-button
+                        data-bs-dismiss="modal">Close</button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-------------------------------------------------------------------->
+
+
 </div>

@@ -17,6 +17,12 @@ import { Observable, retry } from 'rxjs';
 export class TokenGeneratorComponent implements OnInit {
 
 
+  cnicMask = '00000-0000000-0';
+  mobilMask = '0000-0000000'
+
+  dataopen(){
+    // console.log(this.CusContactNo,this.CusCNIC);
+  }
 
 
   @ViewChild(TokenPrintComponent) tokenPrint: any;

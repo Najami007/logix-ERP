@@ -55,7 +55,7 @@
                     <div class="d-flex fs-11px mt-1">
                         <span class="fs-10px fw-bold me-1">Payment Method:</span>
                         <span>{{tmpOrderRow!.paymentMethod}}</span>
-                        <span *ngIf="tmpOrderRow!.paymentMethod == 'IBFT'"> <mat-icon class="fs-16px"
+                        <span *ngIf="tmpOrderRow!.paymentMethod == 'IBFT'"> <mat-icon class="fs-16px cursorPointer"
                                 (click)="openImage(tmpOrderRow!.paymentReceiptDoc)">attachment</mat-icon></span>
                     </div>
 

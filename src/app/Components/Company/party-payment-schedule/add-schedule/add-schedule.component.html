@@ -1,0 +1,43 @@
+<div>
+    <div class="p-2 ">
+
+
+          <mat-form-field appearance="outline" class="col-lg-12 matSmall">
+            <mat-label>Date</mat-label>
+            <input [(ngModel)]="paymentDate" readonly="true" matInput type="text" name="scheduleDate"
+                [matDatepicker]="iDate">
+            <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
+            <mat-datepicker #iDate></mat-datepicker>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="col-lg-12 matSmall">
+            <mat-label>Party</mat-label>
+            <mat-select id="supplier" [(ngModel)]="partyID" >
+                <mat-option><ngx-mat-select-search #supSerach [placeholderLabel]="'Search...'"
+                        [noEntriesFoundLabel]="'Not found'" name="search"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let item of partyList |filter:supSerach.value"
+                    [value]="item.partyID">{{item.partyName}} ({{item.cityName}}) ({{item.partyType}})</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-100 matSmall" appearance="outline">
+            <mat-label>Amount</mat-label>
+            <input matInput type="text" [(ngModel)]="amount">
+        </mat-form-field>
+
+        <mat-form-field class="w-100 matSmall" appearance="outline">
+            <mat-label>Remarks</mat-label>
+            <textarea matInput type="text" [(ngModel)]="remarks"></textarea>
+        </mat-form-field>
+    </div>
+
+
+
+    <div class="text-end bg-mf p-3">
+        <mat-checkbox  [(ngModel)]="autoClose"><b class="text-white pe-2">Auto Close</b></mat-checkbox>
+        <button class="btnsave w-25 me-1" *ngIf="crudList.c || crudList.u" (click)="save()">{{btnType}}</button>
+        <button class="btnclose w-25" (click)="closeEmitter(true)">Close</button>
+    </div>
+
+
+</div>

@@ -1,0 +1,86 @@
+     <div class="modal-body">
+
+                <div class="ps-1 d-flex ">
+
+                    <div class="col-lg-9  d-flex flex-column">
+                        <input type="text" #pbarcode [(ngModel)]="PBarcode"
+                            (keydown)="searchByCode($event);this.changeFocus($event,'.fintProd');" id="searchProduct"
+                            class="p-1 mb-2 searchProduct bg-transparent" placeholder="Product Name / Code (Alt + s)"
+                            autofocus autocomplete="off" accesskey="s">
+
+                        <div class="w-100 d-flex flex-column SearchConatinerBox cursorPointer"
+                            *ngIf="PBarcode != '' && PBarcode != undefined">
+                            <div class="card " *ngFor="let item of RawProductList| filter:PBarcode index as index"
+                                (click)="holdDataFunction(item)">
+                                <button
+                                    (keydown)="this.handleProdFocus(item,$event,'.prodRow','.searchProduct',RawProductList)"
+                                    class="prodRow{{index}} prodBtn border-0 border-bottom border-dark"
+                                    style="height: 40px; background: none;text-align: left;">{{item.productTitle}}
+                                    (<b>{{item.barcode}}</b> )</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 text-center">
+                        <button mat-raised-button class="bg-primary text-white w-50 btn-rpt"
+                            (click)="reloadProductEmitter.emit()">Load</button>
+                    </div>
+
+                </div>
+
+                <div class="card"
+                    style="max-height: 400px;height: 400px;overflow-y:scroll; background-color: rgba(225, 244, 236, 0.816);">
+
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>S#</th>
+                                <th>Product Name</th>
+                                <th>Quantity</th>
+                                <th>Avg Cost</th>
+                                <th>Cost</th>
+
+                                <th>Cost Total</th>
+                                <th>Avg Cost Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of recipeProductList index as index">
+                                <td>{{index+1}}</td>
+                                <td>{{item.productTitle}}</td>
+                                <td class="text-center"><input type="text" [disabled]="item.lockedStatus"
+                                        [(ngModel)]="item.quantity" min="0"
+                                        (keydown)="this.handleNumKeys(item,$event,'.qty',index);getTotal();"
+                                        (keyup)="getTotal();" (click)="rowFocused = index"
+                                        class="qty{{index}} text-center" style="width: 80px;"></td>
+
+                                <td>{{item.avgCostPrice | number:'1.0-2'}}</td>
+                                <td>{{item.costPrice | number:'1.0-2'}}</td>
+
+                                <td class="text-center">{{item.costPrice * item.quantity |number:'1.0-2'}}</td>
+                                <td class="text-center">{{item.avgCostPrice * item.quantity |number:'1.0-2'}}</td>
+
+                                <td class="cursorPointer"><mat-icon 
+                                        (click)="delRow(item)">delete</mat-icon></td>
+                            </tr>
+                            <tr>
+                                <th colspan="5"> </th>
+                                <th class="fw-bold text-center">{{this.recipeCostTotal|number:'1.0-2'}}</th>
+                                <th class="fw-bold text-center">{{this.recipeAvgCostTotal|number:'1.0-2'}}</th>
+                                <td class="cursorPointer"><mat-icon 
+                                      (click)="resetRecipeList()">delete</mat-icon></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+            <div class="modal-footer bg-mf">
+                <!-- <button type="button" class="btn btn-danger" *ngIf="recipeBtnType == 'Update'"
+                    (click)="DeleteProductRecipe()">Delete</button> -->
+                <button type="button" class="btn btn-success" (click)="saveProductRecipe()">{{recipeBtnType}}</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    (click)="resetEmitter.emit()">Close</button>
+            </div>

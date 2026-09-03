@@ -50,12 +50,12 @@
         </div>
 
         <div>
-              <table>
+            <table>
                 <tr>
                     <th class="fs-12">Bill To:-</th>
                     <td class="ms-2 fs-11 fw-bold">{{tmpCustomerName}}</td>
                 </tr>
-               
+
 
                 <tr class="fs-11" *ngIf="myRemarks">
                     <th class="fs-12">Remarks:- </th>
@@ -100,11 +100,15 @@
 
                 <div class="row w-75">
                     <label class="fw-bold text-end">Total</label>
+                    <label class="fw-bold text-end">labour Charges</label>
+                    <label class="fw-bold text-end">Shipping Charges</label>
                     <label class="fw-bold text-end">Discount</label>
                     <label class="fw-bold text-end">Net Total</label>
                 </div>
                 <div class="row w-25">
-                    <label class="fw-bold text-end">{{myBillTotal |number:'1.0-2'}}</label>
+                    <label class="fw-bold text-end">{{myBillTotal - myLabourCharges - myTransportCharges |number:'1.0-2'}}</label>
+                      <label class="fw-bold text-end">{{myLabourCharges |number:'1.0-2'}}</label>
+                    <label class="fw-bold text-end">{{myTransportCharges |number:'1.0-2'}}</label>
                     <label class="fw-bold text-end">{{myBillDiscount|number:'1.0-2'}}</label>
                     <label class="fw-bold text-end">{{myNetTotal|number:'1.0-2'}}</label>
                 </div>
