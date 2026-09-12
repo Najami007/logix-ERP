@@ -40,6 +40,8 @@ export class RestSaleBillPrintComponent {
   logoWidth: any = 100;
   CompanyNTN = '';
   CompanySTRN = '';
+  companyPNTN = '';
+
 
   mobileMask = this.global.mobileMask;
 
@@ -62,6 +64,8 @@ export class RestSaleBillPrintComponent {
       this.CompanyNTN = data[0].ntn;
       this.CompanySTRN = data[0].strn;
       this.footerText = data[0].footerText;
+      this.companyPNTN = data[0].pntn;
+
     });
 
     this.global.getMenuList().subscribe((data) => {

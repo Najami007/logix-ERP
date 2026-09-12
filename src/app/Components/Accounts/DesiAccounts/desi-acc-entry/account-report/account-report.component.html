@@ -1,0 +1,132 @@
+<div class="btp-ledger-sheet " id="printRpt">
+
+  <!-- Header bar -->
+  <div class="btp-ledger-header">
+    <div class="btp-ledger-title">{{ reportMeta.storeName }}</div>
+    <div class="btp-ledger-meta">
+      <span class="hide-in-print">
+        <mat-form-field class="w-100 matSmall" appearance="outline">
+          <mat-label>from Date</mat-label>
+          <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="fDate">
+          <mat-datepicker-toggle matSuffix [for]="fDate"></mat-datepicker-toggle>
+          <mat-datepicker #fDate></mat-datepicker>
+        </mat-form-field>
+        <!-- <strong>Date:</strong> {{ reportMeta.date }} -->
+      </span>
+      <span class="hide-in-print">
+        <mat-form-field class="w-100 matSmall" appearance="outline">
+          <mat-label>To Date</mat-label>
+          <input matInput type="text" readonly="true" [(ngModel)]="toDate" [matDatepicker]="eDate">
+          <mat-datepicker-toggle matSuffix [for]="eDate"></mat-datepicker-toggle>
+          <mat-datepicker #eDate></mat-datepicker>
+        </mat-form-field>
+        <!-- <strong>Date:</strong> {{ reportMeta.date }} -->
+      </span>
+      <div class=" pe-1 hide-in-print"><button class="w-100 btn-rpt-primary" (click)="getreport()">
+          Get Report</button></div>
+      <div class="pe-1 hide-in-print"><button class="w-100 btn-rpt-primary" (click)="PrintTable()">
+          Print</button></div>
+      <span class="hide"><strong>Date:</strong> {{ toDate | date:'dd-MM-yyyy' }}</span>
+      <span class="hide"><strong>Day:</strong> {{ currentDay }}</span>
+    </div>
+  </div>
+
+
+  <div class="row">
+
+
+
+    <div class="col-md-10">
+
+      <!-- ============ Vertical Ledger Blocks ============ -->
+      <div class="btp-ledger-blocks">
+        <div class="btp-ledger-block" *ngFor="let col of paymentColumn">
+          <div class="btp-block-header whiteText">{{ col.title }}</div>
+          <table class="btp-block-table">
+            <tbody>
+              <tr *ngFor="let entry of col.entries">
+                <td class="btp-entry-label">{{ entry.label }}</td>
+                <td class="btp-entry-amount">{{ entry.amount | number }}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="btp-block-total-row">
+                <td>Total</td>
+                <td>{{ columnTotal(col.entries) | number }}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+
+
+      </div>
+
+
+
+      <div class="d-flex btp-summary-row">
+        <div class="btp-expense-blocks">
+          <div class="btp-ledger-block btp-expenses-block" *ngFor="let col of expenseColumn">
+            <div class="btp-block-header whiteText">{{ col.title }}</div>
+            <table class="btp-block-table">
+              <tbody>
+                <tr *ngFor="let entry of col.entries">
+                  <td class="btp-entry-label">{{ entry.label }}</td>
+                  <td class="btp-entry-amount">{{ entry.amount | number }}</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr class="btp-block-total-row">
+                  <td>Total</td>
+                  <td>{{ columnTotal(col.entries) | number }}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- ============ Sales column ============ -->
+        <div class="btp-sales-blocks">
+          <div class="btp-ledger-block" *ngFor="let col of salesColumn">
+            <div class="btp-block-header whiteText">{{ col.title }}</div>
+            <table class="btp-block-table">
+              <tbody>
+                <tr *ngFor="let entry of col.entries">
+                  <td class="btp-entry-label">{{ entry.label }}</td>
+                  <td class="btp-entry-amount">{{ entry.amount | number }}</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr class="btp-block-total-row">
+                  <td>Total</td>
+                  <td>{{ columnTotal(col.entries) | number }}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="col-md-2">
+      <!-- Quick stats strip -->
+      <div class="btp-quick-stats">
+        <div class="btp-stat-box" *ngFor="let stat of quickStats">
+          <div class="btp-stat-label" [ngClass]="stat.type == 'pb' || stat.type == 'total' ? 'fw-bold' : ''">{{ stat.label }}</div>
+          <div class="btp-stat-value">{{ stat.value | number }}</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Grand total box -->
+  <!-- <div class="btp-grand-total-box">
+    <span>Grand Total</span>
+    <span class="btp-grand-total-value">Rs. {{ grandTotal() | number }}</span>
+  </div> -->
+
+</div>

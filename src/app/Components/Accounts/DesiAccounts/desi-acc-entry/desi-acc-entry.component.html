@@ -1,0 +1,49 @@
+<div class="tabs-container">
+  <!-- Tab Headers -->
+  <div class="tab-headers">
+    <button
+      *ngFor="let tab of tabs; let i = index"
+      class="tab-button"
+      [class.active]="activeTab === tab.id"
+      (click)="selectTab(tab.id, i)">
+      {{ tab.label }}
+    </button>
+
+    <!-- Sliding underline indicator -->
+    <div
+      class="tab-indicator"
+      [style.width.%]="100 / tabs.length"
+      [style.transform]="'translateX(' + (activeIndex * 100) + '%)'">
+    </div>
+  </div>
+
+  <!-- Animated Tab Content -->
+  <div class="tab-content-wrapper" [@tabSlide]="activeTab">
+    <div [ngSwitch]="activeTab" class="tab-content">
+      <div *ngSwitchCase="'payment'">
+        <app-payment></app-payment>
+      </div>
+
+      <div *ngSwitchCase="'receipt'">
+        <app-receipt></app-receipt>
+      </div>
+
+      <div *ngSwitchCase="'sales'">
+       <app-sales-entry></app-sales-entry>
+      </div>
+
+
+      <div *ngSwitchCase="'income'">
+        <app-income></app-income>
+      </div>
+
+      <div *ngSwitchCase="'expense'">
+       <app-expense></app-expense>
+      </div>
+
+       <div *ngSwitchCase="'report'">
+        <app-account-report></app-account-report>
+      </div>
+    </div>
+  </div>
+</div>

@@ -48,6 +48,8 @@ export class GarmentSaleReturnComponent implements OnInit {
   ImageUrlFeature = this.global.ImageUrlFeature;
   disableOtherDiscFeature = this.global.disableOtherDiscFeature;
   SaleSupplierFeature = this.global.SaleSupplierFeature;
+    SteelTypeFeature = this.global.SteelTypeFeature;
+
 
 
 
@@ -376,8 +378,10 @@ export class GarmentSaleReturnComponent implements OnInit {
         batchNo: '-',
         batchStatus: '-',
         uomID: data.uomID,
+        uomTitle:data.uomTitle,
         gst: this.gstFeature ? data.gst : 0,
         et: data.et,
+        itemWeight:data.itemWeight,
         packing: data.packing,
         multyQty: data.multyQty,
         discInP: this.discFeature ? discPerc : 0,

@@ -439,6 +439,7 @@
                             <th width="140" *ngIf="SteelTypeFeature">Type</th>
 
                             <th class="text-center" width="140">Qty</th>
+                            <th *ngIf="SteelTypeFeature">Weight</th>
 
                             <th>Price</th>
 
@@ -484,6 +485,8 @@
                                     (keyup)="getTotal();changeValue(item)"
                                     (click)="rowFocused = index;editDiscProdQty(item,'disc')" [accessKey]="index +1 "
                                     class="form-control qty{{index}} text-center" style="width: 80px;"></td>
+
+                            <td class="text-center" *ngIf="SteelTypeFeature">{{item.itemWeight * item.quantity | number:'1.0-3'}} {{item.uomTitle}}</td>      
 
 
                             <td class=" cursorPointer">
@@ -551,6 +554,7 @@
                             <td colspan="2"></td>
                             <td *ngIf="SteelTypeFeature"></td>
                             <th class="text-center">{{qtyTotal|number:'1.0-3'}}</th>
+                            <td *ngIf="SteelTypeFeature"></td>
                             <td></td>
                             <td *ngIf="gstFeature"></td>
                             <td *ngIf="gstFeature"></td>

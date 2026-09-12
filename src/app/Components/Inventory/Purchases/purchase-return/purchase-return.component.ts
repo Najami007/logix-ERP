@@ -37,6 +37,8 @@ export class PurchaseReturnComponent implements OnInit {
   insertLocalStorageFeature = this.global.insertLocalStorageFeature;
   ProjectwiseFeature = this.global.ProjectwiseFeature;
   uomPurchaseFeature = this.global.uomPurchaseFeature;
+    SteelTypeFeature = this.global.SteelTypeFeature;
+
 
 
 
@@ -287,6 +289,7 @@ export class PurchaseReturnComponent implements OnInit {
         BatchNo: '-',
         BatchStatus: '-',
         UomID: data.uomID,
+        itemWeight:data.itemWeight,
         Packing: data.packing,
         uomTitle: data.uomTitle,
         discInP: 0,
@@ -564,11 +567,12 @@ export class PurchaseReturnComponent implements OnInit {
 
 
   netTotal = 0;
+  myTotalWeight = 0;
   getTotal() {
     this.subTotal = 0;
     this.myTotalQty = 0;
     this.netTotal = 0;
-
+    this.myTotalWeight = 0;
     if (this.discount == '') {
       this.discount = 0;
     }
@@ -578,6 +582,7 @@ export class PurchaseReturnComponent implements OnInit {
     for (var i = 0; i < this.tableDataList.length; i++) {
       this.subTotal += (parseFloat(this.tableDataList[i].Quantity) * parseFloat(this.tableDataList[i].CostPrice));
       this.myTotalQty += parseFloat(this.tableDataList[i].Quantity);
+      this.myTotalWeight += Number(this.tableDataList[i].itemWeight * this.tableDataList[i].Quantity)
     }
     this.netTotal = (this.subTotal + parseFloat(this.overHead)) - parseFloat(this.discount)
 
@@ -1111,6 +1116,8 @@ export class PurchaseReturnComponent implements OnInit {
             BatchNo: e.batchNo,
             BatchStatus: e.batchStatus,
             UomID: e.uomID,
+            uomTitle:e.uomTitle,
+            itemWeight:e.itemWeight,
             Packing: e.packing,
             discInP: e.discInP,
             discInR: e.discInR,

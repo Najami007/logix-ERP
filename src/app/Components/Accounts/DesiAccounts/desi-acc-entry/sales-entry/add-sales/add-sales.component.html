@@ -1,0 +1,121 @@
+<div class="p-4 sales-form-container">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0 fw-semibold">
+      <mat-icon class="align-middle me-1">receipt_long</mat-icon>
+      {{ btnType === 'Save' ? 'New Sales Invoice' : 'Edit Sales Invoice' }}
+    </h5>
+    <span class="text-muted small" *ngIf="invoiceNo">Invoice # {{ invoiceNo }}</span>
+  </div>
+
+  <mat-divider class="mb-3"></mat-divider>
+
+  <!-- Invoice Info Card -->
+  <mat-card appearance="outlined" class="section-card mb-3">
+    <div class="row">
+      <mat-form-field appearance="outline" class="col-md-6 matSmall">
+        <mat-label>Invoice Date</mat-label>
+        <mat-icon matPrefix class="me-1 text-muted">calendar_today</mat-icon>
+        <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="invDate" [matDatepicker]="iDate">
+        <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
+        <mat-datepicker #iDate></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="col-md-6 matSmall">
+        <mat-label>Net Sales</mat-label>
+        <mat-icon matPrefix class="me-1 text-muted">payments</mat-icon>
+        <input matInput type="number" (keydown)="global.handleNumKeys($event);" min="0" [(ngModel)]="netSales" />
+      </mat-form-field>
+    </div>
+  </mat-card>
+
+  <!-- Sales Accounts -->
+  <mat-card appearance="outlined" class="section-card mb-3" *ngIf="salesList.length">
+  
+
+      <div class=" d-flex justify-content-between totals-bar p-1 pt-2 mb-2">
+      <div class="section-title">
+              <mat-icon class="text-success me-1">trending_up</mat-icon> Sales Accounts
+      </div>
+
+      <div class="d-flex   gap-4">
+        <span class="text-muted small">Net Sales: <b>{{ netSales | number:'1.2-2' }}</b></span>
+        <span class="text-muted small">Total Sales: <b>{{ salesTotal | number:'1.2-2' }}</b></span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div *ngFor="let item of salesList" class="col-md-3">
+        <mat-form-field appearance="outline" class="w-100 matSmall">
+          <mat-label>{{ item.coaTitle }}</mat-label>
+          <input (keydown)="global.handleNumKeys($event);" min="0" (input)="getTotal()" matInput type="number"
+            [(ngModel)]="item.creditAmount" />
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- Inventory & CGS -->
+  <mat-card appearance="outlined" class="section-card mb-3" *ngIf="inventoryList.length || CGSList.length">
+    <div class="section-title">
+      <mat-icon class="text-warning me-1">inventory_2</mat-icon> Inventory &amp; Cost of Goods Sold
+    </div>
+    <div class="row">
+      <div *ngFor="let item of inventoryList" class="col-md-3">
+        <mat-form-field appearance="outline" class="w-100 matSmall">
+          <mat-label>{{ item.coaTitle }}</mat-label>
+          <input matInput type="number" (keydown)="global.handleNumKeys($event);" (input)="getTotal()" min="0"
+            [(ngModel)]="item.creditAmount" />
+        </mat-form-field>
+      </div>
+      <div *ngFor="let item of CGSList" class="col-md-3">
+        <mat-form-field appearance="outline" class="w-100 matSmall">
+          <mat-label>{{ item.coaTitle }}</mat-label>
+          <input [disabled]="true" (keydown)="global.handleNumKeys($event);" (input)="getTotal()" min="0" matInput
+            type="number" [(ngModel)]="item.debitAmount" />
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- Cash / Bank -->
+  <mat-card appearance="outlined" class="section-card mb-3" *ngIf="CashBankList.length">
+    <div class=" d-flex justify-content-between totals-bar p-1 pt-2 mb-2">
+      <div class="section-title">
+        <mat-icon class="text-primary me-1">account_balance</mat-icon> Cash / Bank
+      </div>
+
+      <div class="d-flex   gap-4">
+        <span class="text-muted small">Net Sales: <b>{{ netSales | number:'1.2-2' }}</b></span>
+        <span class="text-muted small">Total Cash/Bank: <b>{{ cashBankTotal | number:'1.2-2' }}</b></span>
+      </div>
+    </div>
+    <div class="row">
+      <div *ngFor="let item of CashBankList" class="col-md-3">
+        <mat-form-field appearance="outline" class="w-100 matSmall">
+          <mat-label>{{ item.coaTitle }}</mat-label>
+          <input (input)="getTotal()" (keydown)="global.handleNumKeys($event);" min="0" matInput type="number"
+            [(ngModel)]="item.debitAmount" />
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- Remarks -->
+  <mat-form-field appearance="outline" class="w-100 matSmall mb-2">
+    <mat-label>Remarks</mat-label>
+    <mat-icon matPrefix class="me-1 text-muted">notes</mat-icon>
+    <textarea matInput rows="2" [(ngModel)]="remarks"></textarea>
+  </mat-form-field>
+
+
+
+</div>
+
+<div class="bg-mf text-end p-3 sticky-footer">
+  <button class="btnsave me-1" [disabled]="isSubmitting" (click)="save()">
+    <mat-icon class="align-middle me-1" style="font-size:18px;">save</mat-icon>{{ btnType }}
+  </button>
+  <button class="btnclose" (click)="closeDialog()">Close</button>
+</div>

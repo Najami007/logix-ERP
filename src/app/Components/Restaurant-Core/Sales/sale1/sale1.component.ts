@@ -667,9 +667,7 @@ export class Sale1Component implements OnInit {
         this.gstValue = 0;
         break;
     }
-
-    this.GstAmount = this.subTotal * this.gstValue / 100;
-
+    this.GstAmount = (this.subTotal+this.OtherCharges - this.billDiscount) * this.gstValue / 100;
   }
 
 

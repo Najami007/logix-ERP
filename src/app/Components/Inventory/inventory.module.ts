@@ -149,6 +149,7 @@ import { ProdQtyModalComponent } from './Sale/SaleComFiles/prod-qty-modal/prod-q
 import { ExpiryItemReportComponent } from './InventoryReports/expiry-item-report/expiry-item-report.component';
 import { MarqueeSaleComponent } from './Sale/marquee-sale/marquee-sale.component';
 import { MrqSaleBillPrintComponent } from './Sale/SaleComFiles/mrq-sale-bill-print/mrq-sale-bill-print.component';
+import { VoidSale2Component } from './Sale/void-sale2/void-sale2.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -192,7 +193,7 @@ export const inventoryRoutes: Route[] = [
   { path: 'whslrtn', component: WholeSaleReturnComponent, data: { title: 'Whole Sale Return' }, canActivate: [AuthGuard] },
   { path: 'gmsale', component: GarmentSaleComponent, data: { title: 'Sale GS' }, canActivate: [AuthGuard] },
   { path: 'gmslrtn', component: GarmentSaleReturnComponent, data: { title: 'Sale Return GS' }, canActivate: [AuthGuard] },
-  { path: 'vblsale', component: VoidSaleComponent, data: { title: 'VB Sale' }, canActivate: [AuthGuard] },
+  { path: 'vblsale', component: VoidSale2Component, data: { title: 'VB Sale' }, canActivate: [AuthGuard] },
   { path: 'vblsalertn', component: VoidSaleReturnComponent, data: { title: 'VB Sale Return' }, canActivate: [AuthGuard] },
   { path: 'retsl', component: RetailerSaleComponent, data: { title: 'Rt Sale' }, canActivate: [AuthGuard] },
   { path: 'retslrtn', component: RetailerSaleReturnComponent, data: { title: 'RT Sale Return' }, canActivate: [AuthGuard] },
@@ -401,6 +402,7 @@ export const inventoryRoutes: Route[] = [
     ExpiryItemReportComponent,
     MarqueeSaleComponent,
     MrqSaleBillPrintComponent,
+    VoidSale2Component,
     
 
 

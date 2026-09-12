@@ -225,7 +225,8 @@
         <span *ngIf="showCmpNameFeature" style="font-family:Arial, Helvetica, sans-serif">{{companyName}}</span>
         <span *ngIf="companyAddress != '-'" class="fs-12 text-uppercase">{{companyAddress}}</span>
         <span *ngIf="CompanyMobile != '-'" class="fs-12">{{CompanyMobile}}</span>
-        <span *ngIf="gstFeature && CompanyNTN != '-'" class="fs-11"><b>PNTN:</b>{{CompanyNTN}} </span>
+        <span *ngIf="gstFeature && CompanyNTN != '-'" class="fs-11"><b>NTN:</b>{{CompanyNTN}} </span>
+        <span *ngIf="gstFeature && companyPNTN != '-'" class="fs-11"><b>PNTN:</b>{{companyPNTN}} </span>
         <span *ngIf="gstFeature && CompanySTRN != '-'" class="fs-11"><b>STRN:</b> {{CompanySTRN}}</span>
 
     </div>
@@ -415,7 +416,8 @@
         </div>
         <br>
 
-        <div class="d-flex flex-column text-center pt-2" style="border-top:1px dotted !important;" *ngIf="type != 'hold'">
+        <div class="d-flex flex-column text-center pt-2" style="border-top:1px dotted !important;"
+            *ngIf="type != 'hold'">
 
             <!-- <span style="font-size: 10px;">As per Pakistan Govt. Regulations {{cashGst}}% GST applied on Cash Payment,
                 While {{cardGst}}% GST
@@ -434,11 +436,11 @@
             <span style="font-size: 10px;">**This is not a Bill Please ask for the Bill**</span>
         </div>
 
-        <div class="border-top border-dark fw-bold "  style="border-top:1px dotted !important;" >
+        <div class="border-top border-dark fw-bold " style="border-top:1px dotted !important;">
             <span style="white-space: pre-line;font-size: 12px;">{{footerText}}</span>
 
         </div>
-        <div class="border-top border-dark" *ngIf="showLogixDetailFeature"  style="border-top:1px dotted !important;" >
+        <div class="border-top border-dark" *ngIf="showLogixDetailFeature" style="border-top:1px dotted !important;">
             <div style="font-size: 12px;" class="text-center">
                 <span><small>Powered By :</small><b>Logix Solutionz | 0313-5300471</b></span>
             </div>

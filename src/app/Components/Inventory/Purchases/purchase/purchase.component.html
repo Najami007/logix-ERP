@@ -170,6 +170,7 @@
                             <th style="min-width: 150px;">Brand</th>
                             <th>Expiry</th>
                             <th>Qty</th>
+                            <th *ngIf="SteelTypeFeature">Weight</th>
                             <th *ngIf="uomPurchaseFeature">Packing</th>
                             <th *ngIf="uomPurchaseFeature">UOM</th>
                             <th *ngIf="DetailedPurchaseFeature">Cost Price</th>
@@ -256,6 +257,9 @@
                                     class="packing{{index}} text-center amtInput" style="width: 80px;">
 
                             </td>
+
+                            <td class="text-center" *ngIf="SteelTypeFeature">{{item.itemWeight * item.quantity |number:'1.0-1'}} {{item.uomTitle}} </td>
+
                             <td *ngIf="uomPurchaseFeature">{{item.uomTitle}}</td>
 
                             <td class="text-center" *ngIf="DetailedPurchaseFeature"><input type="text"
@@ -345,6 +349,7 @@
                             <td></td>
                             <td></td>
                             <td class="text-center fw-bold">{{myTotalQty|number:'1.0-3' }}</td>
+                            <td *ngIf="SteelTypeFeature" class="text-center fw-bold">{{myTotalWeight|number:'1.0-1'}}</td>
                             <td *ngIf="uomPurchaseFeature"></td>
                             <td *ngIf="uomPurchaseFeature"></td>
                             <td></td>

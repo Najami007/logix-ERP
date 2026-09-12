@@ -40,6 +40,7 @@ export class AddReceiptComponent implements OnInit {
       this.remarks = this.editData.invoiceRemarks;
       this.bankReceiptNo = this.editData.bankReceiptNo;
       this.projectID = this.editData.projectID;
+      this.editData.type == 'JV' ? this.transactionType =  'Sale': this.transactionType = 'Receipt' ;
 
       setTimeout(() => {
         this.getCoaList();
@@ -48,6 +49,12 @@ export class AddReceiptComponent implements OnInit {
     }
     this.getCoaList();
   }
+
+
+
+  transactionType: any = 'Receipt';
+
+  transactionTypeList: any = [{ title: 'Receipt' }, { title: 'Sale' }]
 
 
   btnType = 'Save';
@@ -124,52 +131,53 @@ export class AddReceiptComponent implements OnInit {
     if (this.partyID == 0 || this.partyID == undefined) {
       this.msg.WarnNotify('Select Supplier');
       return;
-    } 
-     if (this.paymentType == '' || this.paymentType == undefined) {
+    }
+    if (this.paymentType == '' || this.paymentType == undefined) {
       this.msg.WarnNotify('Select Payment Type');
-       return;
-    } 
-     if (this.coaID == 0 || this.coaID == undefined) {
+      return;
+    }
+    if (this.coaID == 0 || this.coaID == undefined && this.transactionType == 'Receipt') {
       this.msg.WarnNotify('Select COA');
-       return;
-    } 
-     if (this.amount == 0 || this.amount == undefined || this.amount == null) {
+      return;
+    }
+    if (this.amount == 0 || this.amount == undefined || this.amount == null) {
       this.msg.WarnNotify('Enter Amount');
-       return;
-    } 
+      return;
+    }
 
 
 
 
 
-        ////////////////// will verify selected COA is in Cash and ban COA list or not
-      var verifyCoaList = this.coaList.filter((e: any) => e.coaID == this.coaID);
-      if (verifyCoaList.length == 0) {
-        this.msg.WarnNotify('Select Chart of Account');
-        return;
-      }
+    ////////////////// will verify selected COA is in Cash and ban COA list or not
+    var verifyCoaList = this.coaList.filter((e: any) => e.coaID == this.coaID);
+    if (verifyCoaList.length == 0 && this.transactionType == 'Receipt') {
+      this.msg.WarnNotify('Select Chart of Account');
+      return;
+    }
 
-      var postData = {
-        InvoiceNo: this.invoiceNo,
-        InvoiceDate: this.global.dateFormater(this.invoiceDate, '-'),
-        PartyID: this.partyID,
-        Type: this.paymentType,
-        InvoiceRemarks: this.remarks || '-',
-        BankReceiptNo: this.bankReceiptNo || '-',
-        COAID: this.coaID,
-        Amount: this.amount,
-        ProjectID: this.projectID,
-        Discount: this.discount || 0,
-        UserID: this.global.getUserID()
-      }
+    var postData = {
+      InvoiceNo: this.invoiceNo,
+      InvoiceDate: this.global.dateFormater(this.invoiceDate, '-'),
+      PartyID: this.partyID,
+      Type: this.paymentType,
+      InvoiceRemarks: this.remarks || '-',
+      BankReceiptNo: this.bankReceiptNo || '-',
+      COAID: this.coaID,
+      Amount: this.amount,
+      ProjectID: this.projectID,
+      Discount: this.discount || 0,
+      UserID: this.global.getUserID(),
+      TransactionType: this.transactionType,
+    }
 
-      if (this.btnType == 'Save') {
-        this.insert(postData)
-      }
+    if (this.btnType == 'Save') {
+      this.insert(postData)
+    }
 
-      if (this.btnType == 'Update') {
-        this.Update(postData);
-      }
+    if (this.btnType == 'Update') {
+      this.Update(postData);
+    }
   }
 
 

@@ -40,6 +40,7 @@ export class SaleBillPrintComponent implements OnInit {
   showUomTitleFeature = this.global.showUomTitleFeature;
   TransporterFeature = this.global.TransporterFeature;
   SteelTypeFeature = this.global.SteelTypeFeature;
+  
 
 
 
@@ -173,6 +174,7 @@ export class SaleBillPrintComponent implements OnInit {
 
 
   myAmountInWords = '';
+  myTotalWeight = 0;
 
 
   PrintBill(InvNo: any) {
@@ -184,7 +186,6 @@ export class SaleBillPrintComponent implements OnInit {
           this.msg.WarnNotify('Null Returned');
           return;
         }
-
         this.myPrintTableData = Response;
         this.myInvoiceNo = InvNo;
         this.myInvDate = new Date(Response[0].invDate);
@@ -231,6 +232,7 @@ export class SaleBillPrintComponent implements OnInit {
         this.myCustomerNtn = Response[0].ntn;
         this.myCustomerCnic = Response[0].partyCNIC;
         this.myCustomerRegisterationType = Response[0].registrationType;
+        
 
 
 
@@ -238,11 +240,13 @@ export class SaleBillPrintComponent implements OnInit {
         this.myOfferDiscount = 0;
         this.myGstTotal = 0;
         this.myCusDiscAmount = 0;
+        this.myTotalWeight = 0;
         Response.forEach((e: any) => {
           this.myQtyTotal += e.quantity;
           this.myOfferDiscount += e.discInR * e.quantity;
           this.myGstTotal += (e.salePrice - (e.salePrice / ((e.gst + 100) / 100))) * e.quantity;
           this.myCusDiscAmount += e.cusDiscAmount * e.quantity;
+          this.myTotalWeight += e.itemWeight * e.quantity;
         });
 
         if (this.gstFeature) {

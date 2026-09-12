@@ -13,14 +13,14 @@ export const environment = {
 
   //mainApi: 'http://192.168.100.37:1000/',
   // mainApi: 'http://localhost:5000/', 
-  // mainApi: 'http://localhost:8060/',         /////////// system own published API
+   mainApi: 'http://localhost:8060/',         /////////// system own published API
   // mainApi: 'http://localhost:8070/',        
   //mainApi: 'http://10.73.14.19:8060/',    
   // mainApi: 'http://192.168.160.98:8060/',  ////////// live Server Dani System
   //mainApi: 'http://192.168.100.250:1007/',  ////////// live Server Dani System
   //mainApi: 'http://192.168.10.100:1003/',    /////////// Local Server Office
   // mainApi: 'http://192.168.18.206:8060/',
-  // mainApi: 'http://159.69.174.21:1000/', /////// Logix Solutionz Published Accounts
+  // mainApi: 'https://api.logixerpsoft.com/', /////// Logix Solutionz Published Accounts
   //mainApi: 'http://159.69.174.21:2016/',   /////// Erp Demo Live For Clients
 
 
@@ -38,7 +38,7 @@ export const environment = {
   // mainApi: 'http://192.168.10.100:8060/',           /////////// Imran & Co Attock
 
   //mainApi: 'http://192.168.100.100:8060/',           /////////// Crave & bake Rwp
-   mainApi: 'https://apicraveandbake.logixerpsoft.com/',             ///////////////// Crave & Bake Live
+  // mainApi: 'https://apicraveandbake.logixerpsoft.com/',             ///////////////// Crave & Bake Live
   //  mainApi: 'https://apicbfastfood.logixerpsoft.com/',   ////////////// Crave & Bake FAst Food Live
    // mainApi: 'https://apicbwarehouse.logixerpsoft.com/',   ////////////// Crave & Bake Warehouse Live
 
@@ -81,7 +81,7 @@ export const environment = {
   //mainApi: 'http://192.168.10.100:2001/', /////// Shama Royal City Server
   //mainApi: 'http://159.69.174.21:2006/',  ////////// live Server Mehria Brands
   //mainApi: 'http://159.69.174.21:2007/',  ////////// live Server Balck Gold Restaurant
-  //mainApi: 'http://192.168.1.100:8081/',   ///Alsheikh Mall Wahcant
+ // mainApi: 'http://192.168.1.100:8081/',   ///Alsheikh Mall Wahcant
  // mainApi: 'http://159.69.174.21:2010/',    ////////// live Server for Alsheikh
   // mainApi: 'https://apialsheikhhasanabdal.logixerpsoft.com/',  ////////// live Server for Alsheikh HassanAbdal
   //mainApi: 'http://192.168.18.100:8081/',   ///Stylish Garment Wahcant
@@ -158,7 +158,7 @@ export const environment = {
 
  // mainApi: 'https://weighlinksapi.logixsolutionz.com/',    /////// Weigh Links Rwp Raja Mubashir
 
- // mainApi: 'http://159.69.174.21:2025/',   /////// Mian Ijaz and Sons
+ // mainApi: 'https://apimianejazsonspipe.logixerpsoft.com/',   /////// Mian Ijaz and Sons
 
  // mainApi: 'https://apiass.logixerpsoft.com/',   /////// Abdul Salam Sarya Cemenet
 

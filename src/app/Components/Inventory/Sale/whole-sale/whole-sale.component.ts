@@ -504,6 +504,7 @@ export class WholeSaleComponent implements OnInit {
         uomID: data.uomID,
         gst: this.gstFeature ? data.gst : 0,
         et: data.et,
+        itemWeight:data.itemWeight,
         packing: data.packing,
         multyQty: data.multyQty,
         uomTitle: data.uomTitle,
@@ -1933,6 +1934,7 @@ export class WholeSaleComponent implements OnInit {
                 uomID: data.uomID,
                 gst: this.gstFeature ? data.gst : 0,
                 et: data.et,
+                itemWeight:data.itemWeight,
                 packing: data.packing,
                 multyQty: data.multyQty,
 

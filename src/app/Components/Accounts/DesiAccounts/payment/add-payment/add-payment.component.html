@@ -7,22 +7,16 @@
     </div>
     <hr>
     <div class="row">
-        <mat-form-field appearance="outline" class="col-lg-12 matSmall">
-            <mat-label>Invoice Date</mat-label>
-            <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="invDate"
-                [matDatepicker]="iDate">
-            <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
-            <mat-datepicker #iDate></mat-datepicker>
-        </mat-form-field>
-        <!-- <mat-form-field class="col-lg-12 matSmall" appearance="outline">
-            <mat-label>Project </mat-label>
-            <mat-select [(ngModel)]="projectID">
-                <mat-option *ngFor="let item of projectList "
-                    value="{{item.projectID}}">{{item.projectTitle}}</mat-option>
+        
+        <mat-form-field class="col-lg-12 matSmall" appearance="outline">
+            <mat-label>Type </mat-label>
+            <mat-select   [disabled]="btnType == 'Update'" [(ngModel)]="transactionType">
+                <mat-option *ngFor="let item of transactionTypeList "
+                    value="{{item.title}}">{{item.title}}</mat-option>
             </mat-select>
-        </mat-form-field> -->
+        </mat-form-field>
 
-        <mat-form-field appearance="outline" class="col-lg-12 matSmall">
+        <mat-form-field appearance="outline" class="col-lg-6 matSmall">
             <mat-label>Supplier</mat-label>
             <mat-select id="supplier" [(ngModel)]="partyID" (selectionChange)="getSupplierBalance()">
                 <mat-option><ngx-mat-select-search #supSerach [placeholderLabel]="'Search...'"
@@ -30,6 +24,14 @@
                 <mat-option *ngFor="let item of supplierList |filter:supSerach.value"
                     [value]="item.partyID">{{item.partyName}} ({{item.cityName}}) ({{item.partyType}})</mat-option>
             </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-lg-6 matSmall">
+            <mat-label>Invoice Date</mat-label>
+            <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="invDate"
+                [matDatepicker]="iDate">
+            <mat-datepicker-toggle matSuffix [for]="iDate"></mat-datepicker-toggle>
+            <mat-datepicker #iDate></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="col-lg-6 matSmall">
@@ -53,7 +55,7 @@
 
         <mat-form-field appearance="outline" class="col-lg-6 matSmall">
             <mat-label>Discount</mat-label>
-            <input matInput [(ngModel)]="discount" (keydown)="global.handleNumKeys($event)" />
+            <input matInput  [(ngModel)]="discount" (keydown)="global.handleNumKeys($event)" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="col-lg-12 matSmall">

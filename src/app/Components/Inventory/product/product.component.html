@@ -348,6 +348,14 @@
                             </mat-form-field>
                         </div>
 
+                        <div [ngClass]="fields.itemWeight.size" *ngIf="fields.itemWeight.show">
+                            <mat-form-field appearance="outline" class="w-100 matSmall">
+                                <mat-label>Weight</mat-label>
+                                <input matInput type="number" [(ngModel)]="itemWeight"
+                                    (change)="global.avoidMinus($event)">
+                            </mat-form-field>
+                        </div>
+
                         <div [ngClass]="fields.packing.size" *ngIf="fields.packing.show">
                             <mat-form-field appearance="outline" class="w-100 matSmall">
                                 <mat-label>Packing</mat-label>
@@ -357,13 +365,20 @@
                         </div>
 
 
-                        <div class="row" [ngClass]="fields.generatePrice.size" *ngIf="fields.generatePrice.show">
-                            <mat-form-field appearance="outline" class="col-md-10 matSmall">
-                                <mat-label>Generate Price</mat-label>
-                                <input matInput type="number" [(ngModel)]="salePercent" (keyup)="generatePrice($event)">
-                            </mat-form-field>
-                            <button mat-raised-button color="primary" style="height: 44px;" class="col-md-2"
-                                (click)="generatePrice('generate')">Generate</button>
+                        <div [ngClass]="fields.generatePrice.size" *ngIf="fields.generatePrice.show">
+                            <div class="row w-100" >
+                                <div class="col-md-10">
+                                    <mat-form-field appearance="outline" class="w-100 matSmall">
+                                    <mat-label>Generate Price</mat-label>
+                                    <input matInput type="number" [(ngModel)]="salePercent"
+                                        (keyup)="generatePrice($event)">
+                                </mat-form-field>
+                                </div>
+                                <div  class="col-md-2 ">
+                                    <button mat-raised-button color="primary" style="height: 44px;" class="w-100"
+                                    (click)="generatePrice('generate')">Generate</button>
+                                </div>
+                            </div>
 
                         </div>
 
@@ -547,8 +562,10 @@
 
                                 <th class="cursorPointer" (click)="sortProds('costPrice')">Cost Price</th>
                                 <th class="cursorPointer" (click)="sortProds('avgCost')">Avg Cost</th>
-                                <th class="cursorPointer" (click)="sortProds('ctoCPrice')" *ngIf="MutliplePricesFeature">CTC Price</th>
-                                <th class="cursorPointer" (click)="sortProds('wholeSalePrice')" *ngIf="MutliplePricesFeature">WS Price</th>
+                                <th class="cursorPointer" (click)="sortProds('ctoCPrice')"
+                                    *ngIf="MutliplePricesFeature">CTC Price</th>
+                                <th class="cursorPointer" (click)="sortProds('wholeSalePrice')"
+                                    *ngIf="MutliplePricesFeature">WS Price</th>
                                 <th class="cursorPointer" (click)="sortProds('salePrice')">Sale Price</th>
                                 <th class="cursorPointer">Margin</th>
                                 <th class="cursorPointer" (click)="sortProds('discPercentage')"

@@ -18,6 +18,8 @@ export class PurchaseBillPrintComponent {
 
 
   DetailedPurchaseFeature = this.global.DetailedPurchase;
+  SteelTypeFeature = this.global.SteelTypeFeature;
+
 
 
   billPrintType: any = '';;
@@ -32,7 +34,7 @@ export class PurchaseBillPrintComponent {
   constructor(
     private http: HttpClient,
     public global: GlobalDataModule,
-    private msg:NotificationService
+    private msg: NotificationService
   ) {
 
 
@@ -78,6 +80,7 @@ export class PurchaseBillPrintComponent {
   myEtTotal = 0;
   myDiscTotal = 0;
   myTmpCostTotal = 0;
+  myTotalWeight = 0;
 
   printBill(item: any) {
 
@@ -97,8 +100,7 @@ export class PurchaseBillPrintComponent {
     this.myBillStatus = item.approvedStatus;
     this.getBillDetail(item.invBillNo).subscribe(
       (Response: any) => {
-
-        if(Response == null){
+        if (Response == null) {
           this.msg.WarnNotify('Null Returned');
         };
 
@@ -121,16 +123,20 @@ export class PurchaseBillPrintComponent {
 
         }
 
+        this.myTableDataList = Response;
+
 
         this.myGstTotal = 0;
         this.myEtTotal = 0;
         this.myDiscTotal = 0;
         this.myTmpCostTotal = 0;
+        this.myTotalWeight = 0;
         Response.forEach((e: any) => {
           this.myBillTotalQty += e.quantity;
           this.mywohCPTotal += (e.costPrice - overhead) * e.quantity;
           this.myCPTotal += e.costPrice * e.quantity;
           this.mySPTotal += e.salePrice * e.quantity;
+          this.myTotalWeight += e.itemWeight * e.quantity;
 
           if (this.myDiscType == 'ad') {
             this.myTmpCostTotal += e.tempCostPrice * e.quantity;
@@ -148,28 +154,30 @@ export class PurchaseBillPrintComponent {
               Number(((e.tempCostPrice * e.gst) / 100)) - this.myDiscTotal) * item.et) / 100)
           }
 
-          this.myTableDataList.push({
-            ProductID: e.productID,
-            ProductTitle: e.productTitle,
-            barcode: e.barcode,
-            productImage: e.productImage,
-            Quantity: e.quantity,
-            wohCP: (e.costPrice - overhead),
-            tempCostPrice: e.tempCostPrice,
-            CostPrice: e.costPrice,
-            SalePrice: e.salePrice,
-            ExpiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
-            BatchNo: e.batchNo,
-            BatchStatus: e.batchStatus,
-            UomID: e.uomID,
-            Packing: e.packing,
-            discInP: e.discInP,
-            discInR: e.discInR,
-            gst: e.gst,
-            et: e.et,
-            aq: e.aq,
+          
 
-          })
+          // this.myTableDataList.push({
+          //   ProductID: e.productID,
+          //   ProductTitle: e.productTitle,
+          //   barcode: e.barcode,
+          //   productImage: e.productImage,
+          //   Quantity: e.quantity,
+          //   wohCP: (e.costPrice - overhead),
+          //   tempCostPrice: e.tempCostPrice,
+          //   CostPrice: e.costPrice,
+          //   SalePrice: e.salePrice,
+          //   ExpiryDate: this.global.dateFormater(new Date(e.expiryDate), '-'),
+          //   BatchNo: e.batchNo,
+          //   BatchStatus: e.batchStatus,
+          //   UomID: e.uomID,
+          //   Packing: e.packing,
+          //   discInP: e.discInP,
+          //   discInR: e.discInR,
+          //   gst: e.gst,
+          //   et: e.et,
+          //   aq: e.aq,
+
+          // })
         });
 
 

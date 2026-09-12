@@ -39,6 +39,44 @@ import { ConfirmationModalComponent } from 'src/app/Components/User/confirmation
 
 export class GlobalDataModule implements OnInit {
 
+
+
+
+  public subject = new Subject<any>();
+  public comapnayProfile = [];
+  public currentUserSubject: BehaviorSubject<userInterface>;
+  public currentUser: Observable<userInterface>;
+  curUserID: any;
+
+
+  constructor(
+    private http: HttpClient,
+    private rout: Router,
+    private msg: NotificationService,
+    private dialog: MatDialog,
+    private cookie: CookieService,
+    public ExportExcel: ExcelExportService,
+    public datePipe: DatePipe
+
+    // public app: AppComponent,
+
+  ) {
+
+
+
+    this.currentUserSubject = new BehaviorSubject<userInterface>(
+      JSON.parse(localStorage.getItem('curVal') || '{}')
+    );
+    this.currentUser = this.currentUserSubject.asObservable();
+
+  }
+
+
+  ngOnInit(): void {
+
+
+  }
+
   thankyouImage = '../../assets/Images/thankyou.png';
   DisableDate = false;
   disableSaleDate = true;
@@ -60,8 +98,8 @@ export class GlobalDataModule implements OnInit {
   ////////////////////////
 
 
-  ResCardGst = this.GetGSTValue('Bank');  // 5; // this.getCardGst();
-  ResCashGst = this.GetGSTValue('Cash'); //16; // this.getCashGst();
+  ResCardGst = this.GetGSTValue('Bank');
+  ResCashGst = this.GetGSTValue('Cash');
   POSFee = this.getPosFee();
   InvProjectID = 1;
   parkProjectID = 6;
@@ -97,39 +135,6 @@ export class GlobalDataModule implements OnInit {
 
 
 
-  public subject = new Subject<any>();
-  public comapnayProfile = [];
-  public currentUserSubject: BehaviorSubject<userInterface>;
-  public currentUser: Observable<userInterface>;
-  curUserID: any;
-
-
-  constructor(
-    private http: HttpClient,
-    private rout: Router,
-    private msg: NotificationService,
-    private dialog: MatDialog,
-    private cookie: CookieService,
-    public ExportExcel: ExcelExportService,
-    public datePipe: DatePipe
-
-    // public app: AppComponent,
-
-  ) {
-
-
-
-    this.currentUserSubject = new BehaviorSubject<userInterface>(
-      JSON.parse(localStorage.getItem('curVal') || '{}')
-    );
-    this.currentUser = this.currentUserSubject.asObservable();
-  }
-
-
-  ngOnInit(): void {
-
-
-  }
 
 
   private _headerTitleSource = new Subject<string>();
@@ -212,6 +217,8 @@ export class GlobalDataModule implements OnInit {
           )
           this.getCompany();
           this.refreshFeatures();
+          this.ResCardGst = this.GetGSTValue('Bank');
+          this.ResCashGst = this.GetGSTValue('Cash');
           this.GetGSTValue('Cash');
 
 
@@ -587,20 +594,20 @@ export class GlobalDataModule implements OnInit {
 
 
 
-GetGSTValue(type: 'Cash' | 'Bank'): number {
-  const credentials = JSON.parse(localStorage.getItem('curVal') || '0');
+  GetGSTValue(type: 'Cash' | 'Bank'): number {
+    const credentials = JSON.parse(localStorage.getItem('curVal') || '0');
 
-  if (!credentials) {
-    return 0;
+    if (!credentials) {
+      return 0;
+    }
+
+    const key = type === 'Cash' ? '_reqCsG' : '_reqCrG';
+    const value = credentials?.value?.[key];
+
+    return value ? parseInt(atob(atob(value)), 10) : 0;
   }
 
-  const key = type === 'Cash' ? '_reqCsG' : '_reqCrG';
-  const value = credentials?.value?.[key];
 
-  return value ? parseInt(atob(atob(value)), 10) : 0;
-}
-
- 
 
 
   getPosFee() {
@@ -1577,9 +1584,9 @@ GetGSTValue(type: 'Cash' | 'Bank'): number {
     return result;
   }
 
-  openBootstrapModal(modalID: any, condition: any, keyboard?: any,focus?:any) {
+  openBootstrapModal(modalID: any, condition: any, keyboard?: any, focus?: any) {
     if (condition) {
-      const myModal = new bootstrap.Modal(modalID, { keyboard: keyboard || false,  focus: keyboard || false, backdrop: keyboard || false });
+      const myModal = new bootstrap.Modal(modalID, { keyboard: keyboard || false, focus: keyboard || false, backdrop: keyboard || false });
       myModal.show();
 
     }
@@ -1963,6 +1970,22 @@ GetGSTValue(type: 'Cash' | 'Bank'): number {
     return convert(amount) + ' Only';
 
   }
+
+
+  getDayName(date: Date | string): string {
+  const days = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday'
+  ];
+
+  const d = new Date(date);
+  return days[d.getDay()];
+}
 
 
 }

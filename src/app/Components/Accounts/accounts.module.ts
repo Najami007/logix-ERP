@@ -72,6 +72,10 @@ import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
 import { DayTransactionComponent } from './AccountReports/day-transaction/day-transaction.component';
 import { ParentLedgerReportComponent } from './AccountReports/parent-ledger-report/parent-ledger-report.component';
 import { AddAdjustmentComponent } from './DesiAccounts/account-adjustment/add-adjustment/add-adjustment.component';
+import { DesiAccEntryComponent } from './DesiAccounts/desi-acc-entry/desi-acc-entry.component';
+import { AccountReportComponent } from './DesiAccounts/desi-acc-entry/account-report/account-report.component';
+import { SalesEntryComponent } from './DesiAccounts/desi-acc-entry/sales-entry/sales-entry.component';
+import { AddSalesComponent } from './DesiAccounts/desi-acc-entry/sales-entry/add-sales/add-sales.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -118,6 +122,8 @@ export const accountRountes: Route[] = [
   { path: 'accadj', component: AccountAdjustmentComponent, data: { title: 'Account Adjustment' }, canActivate: [AuthGuard] },
   { path: 'pob', component: PartyOpeningBalanceComponent, data: { title: 'Party Opening Balance' }, canActivate: [AuthGuard] },
   { path: 'parent-ledger', component: ParentLedgerReportComponent, data: { title: 'Parent Ledger Report' }, canActivate: [AuthGuard] },
+  { path: 'accentry', component: DesiAccEntryComponent, data: { title: 'Account Entry' }, canActivate: [AuthGuard] },
+   { path: 'salesentry', component: SalesEntryComponent, data: { title: 'Sales Entry' }, canActivate: [AuthGuard] },
 
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 
@@ -168,7 +174,11 @@ export const accountRountes: Route[] = [
     AccountSummaryReportComponent,
     JournelComponent,
     ParentLedgerReportComponent,
-    AddAdjustmentComponent
+    AddAdjustmentComponent,
+    DesiAccEntryComponent,
+    AccountReportComponent,
+    SalesEntryComponent,
+    AddSalesComponent
 
 
 

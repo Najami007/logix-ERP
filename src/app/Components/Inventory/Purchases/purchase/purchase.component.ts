@@ -47,6 +47,8 @@ export class PurchaseComponent implements OnInit {
   ImageUrlFeature = this.global.ImageUrlFeature;
   ProjectwiseFeature = this.global.ProjectwiseFeature;
   uomPurchaseFeature = this.global.uomPurchaseFeature;
+  SteelTypeFeature = this.global.SteelTypeFeature;
+
 
 
   cmpBranchID: any = 0;
@@ -186,7 +188,7 @@ export class PurchaseComponent implements OnInit {
 
   onFieldsUpdate(type: any, item: any) {
 
-  // if (this.DetailedPurchaseFeature && type !== 'tcp') { item.tempCostPrice = item.costPrice; }
+    // if (this.DetailedPurchaseFeature && type !== 'tcp') { item.tempCostPrice = item.costPrice; }
     if (!this.DetailedPurchaseFeature) return;
     if (this.discType == 'ad') {
       var tempCostPrice = Number(item.tempCostPrice);
@@ -392,8 +394,9 @@ export class PurchaseComponent implements OnInit {
         batchNo: '-',
         batchStatus: '-',
         uomID: data.uomID,
+        uomTitle:data.uomTitle,
+        itemWeight: data.itemWeight,
         packing: data.packing,
-        uomTitle: data.uomTitle,
         discInP: 0,
         discInR: 0,
         aq: data.aq,
@@ -785,21 +788,21 @@ export class PurchaseComponent implements OnInit {
 
   @ViewChild('supplier') myParty: any;
 
-  addParty(status:any) {
-   if(status == 'open'){
-   setTimeout(() => {
-      this.myParty.close()
-    }, 200);
-     this.global.openBootstrapModal('#addPartyModal',true);
-   } 
-   if(status == 'close') {
-    this.global.closeBootstrapModal('#addPartyModal',true);
-     this.getSuppliers();
-   }
+  addParty(status: any) {
+    if (status == 'open') {
+      setTimeout(() => {
+        this.myParty.close()
+      }, 200);
+      this.global.openBootstrapModal('#addPartyModal', true);
+    }
+    if (status == 'close') {
+      this.global.closeBootstrapModal('#addPartyModal', true);
+      this.getSuppliers();
+    }
   }
 
 
-  
+
 
 
 
@@ -1115,6 +1118,7 @@ export class PurchaseComponent implements OnInit {
     this.projectID = this.global.getProjectID();
     this.removeLocalStorage();
     this.costTotal = 0;
+    this.myTotalWeight = 0;
 
 
   }
@@ -1128,7 +1132,7 @@ export class PurchaseComponent implements OnInit {
   gstTotal = 0;
   advTaxTotal = 0;
   salePriceTotal = 0;
-
+  myTotalWeight = 0;
 
   getTotal() {
     this.subTotal = 0;
@@ -1140,6 +1144,7 @@ export class PurchaseComponent implements OnInit {
     this.gstTotal = 0;
     this.advTaxTotal = 0;
     this.salePriceTotal = 0;
+    this.myTotalWeight = 0;
 
     if (this.discount == '') {
       this.discount = 0;
@@ -1159,14 +1164,16 @@ export class PurchaseComponent implements OnInit {
       var et = Number(this.tableDataList[i].et);
       var costPrice = Number(this.tableDataList[i].costPrice);
       var salePrice = Number(this.tableDataList[i].salePrice);
+      var itemWeight = Number(this.tableDataList[i].itemWeight)
 
       this.subTotal += quantity * costPrice;
       this.myTotalQty += quantity;
-      this.costTotal += quantity * (this.DetailedPurchaseFeature  ? tmpCostPrice  : costPrice);
+      this.costTotal += quantity * (this.DetailedPurchaseFeature ? tmpCostPrice : costPrice);
       this.DiscPTotal += quantity * ((tmpCostPrice * discInP) / 100);
       this.gstTotal += quantity * ((tmpCostPrice * gst) / 100);
       this.DiscRTotal += discInR;
-      this.advTaxTotal += quantity * ((tmpCostPrice * et) / 100)
+      this.advTaxTotal += quantity * ((tmpCostPrice * et) / 100);
+      this.myTotalWeight += itemWeight * quantity;
     }
     this.netTotal = (this.subTotal + Number(this.overHead)) - Number(this.discount)
 
@@ -1244,6 +1251,7 @@ export class PurchaseComponent implements OnInit {
             batchStatus: original.batchStatus,
             uomID: original.uomID,
             uomTitle: original.uomTitle,
+            itemWeight:original.itemWeight,
             packing: original.packing,
             discInP: original.discInP,
             discInR: original.discInR,
@@ -1746,26 +1754,26 @@ export class PurchaseComponent implements OnInit {
 
       if (type == 'discPerc') {
 
-          this.tableDataList.forEach((e:any) => {
-            e.discInP = this.detDiscPerc;
-            this.onFieldsUpdate('dp',e);
+        this.tableDataList.forEach((e: any) => {
+          e.discInP = this.detDiscPerc;
+          this.onFieldsUpdate('dp', e);
         });
 
       }
 
       if (type == 'gst') {
-         this.tableDataList.forEach((e:any) => {
-            e.gst = this.detGst;
-            this.onFieldsUpdate('gst',e);
+        this.tableDataList.forEach((e: any) => {
+          e.gst = this.detGst;
+          this.onFieldsUpdate('gst', e);
         });
 
       }
 
       if (type == 'at') {
 
-           this.tableDataList.forEach((e:any) => {
-            e.et = this.detAT;
-            this.onFieldsUpdate('et',e);
+        this.tableDataList.forEach((e: any) => {
+          e.et = this.detAT;
+          this.onFieldsUpdate('et', e);
         });
 
       }

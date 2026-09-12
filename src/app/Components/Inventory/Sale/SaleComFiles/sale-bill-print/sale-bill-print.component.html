@@ -98,6 +98,7 @@
                 <thead>
                     <tr class="fs-12">
                         <th style="width:10% !important;">Qty</th>
+                        <th style="width:10% !important;" *ngIf="SteelTypeFeature">Weight</th>
                         <th style="width:20% !important;" *ngIf="gstFeature">Gst</th>
                         <th style="width:20% !important;">Price</th>
                         <th style="width:10% !important;" *ngIf="discFeature">Disc</th>
@@ -105,6 +106,7 @@
                         <th style="width:10% !important;" *ngIf="CusDiscFeature">Cus Disc</th> -->
 
                         <th style="width:20% !important;">Total</th>
+
 
                     </tr>
                 </thead>
@@ -116,7 +118,10 @@
                             <table class="table-garment-sale-2">
                                 <tr>
                                     <td class="text-center" style="width:10% !important;">{{item.quantity
-                                        |number:'1.0-2'}} <small class="fw-semibold"> {{item.uomTitle}}</small></td>
+                                        |number:'1.0-2'}} <small class="fw-semibold" *ngIf="showUomTitleFeature">
+                                            {{item.uomTitle}}</small></td>
+                                    <td *ngIf="SteelTypeFeature">{{item.itemWeight * item.quantity}} {{item.uomTitle}}
+                                    </td>
                                     <td class="text-end" *ngIf="gstFeature" style="width:20% !important;">
                                         {{item.salePrice - (item.salePrice / ((item.gst + 100) / 100)) |number:'1.0-1'}}
                                     </td>
@@ -157,6 +162,7 @@
                         <th>Item</th>
                         <th>Price</th>
                         <th>Qty</th>
+                        <th *ngIf="SteelTypeFeature">Weight</th>
 
                         <th style="width:10% !important;" *ngIf="discFeature">D Rs</th>
                         <!-- <th style="width:10% !important;" *ngIf="discFeature">D %</th>
@@ -174,6 +180,8 @@
 
                         <td class="text-center">{{item.quantity |number:'1.0-2'}} <small *ngIf="showUomTitleFeature"
                                 class="fw-semibold"> {{item.uomTitle}}</small></td>
+                        <td *ngIf="SteelTypeFeature">{{item.itemWeight * item.quantity |number:'1.0-2'}}
+                            {{item.uomTitle}}</td>
                         <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
                             {{(item.discInR + item.cusDiscAmount) * item.quantity|number:'1.0-1'}}<small
                                 class="fs-8px fw-semibold">({{item.discInP|number:'1.0-1'}}%)</small></td>
@@ -187,10 +195,11 @@
                     </tr>
 
                 </tbody>
-                <tfoot *ngIf="showTotalQtyFeature">
+                <tfoot >
                     <tr>
                         <td colspan="3" style="border:none !important; "></td>
-                        <td class="fw-bold fs-11" style="border: 1px solid black;">{{myQtyTotal | number:'1.0-2'}}</td>
+                        <td class="fw-bold fs-11" style="border: 1px solid black;" *ngIf="showTotalQtyFeature">{{myQtyTotal | number:'1.0-2'}}</td>
+                         <td class="fw-bold fs-11" style="border: 1px solid black;" *ngIf="SteelTypeFeature">{{myTotalWeight | number:'1.0-2'}}</td>
 
                     </tr>
                 </tfoot>
@@ -533,6 +542,7 @@
                         <th> نمبر </th>
                         <th> ائٹم </th>
                         <th>تعداد</th>
+                        <th *ngIf="SteelTypeFeature">وزن</th>
                         <th>قیمت</th>
                         <th *ngIf="discFeature">ڈسکاؤنٹ</th>
                         <th *ngIf="discFeature">% ڈسکاؤنٹ</th>
@@ -546,6 +556,7 @@
                         <td>{{index +1}}</td>
                         <td class="text-end">{{item.productTitleOtherLang}}</td>
                         <td class="text-center">{{item.quantity |number:'1.0-2'}}</td>
+                        <td class="text-center"  *ngIf="SteelTypeFeature">{{item.itemWeight * item.quantity |number:'1.0-2'}} {{item.uomTitle}}</td>
                         <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
                         <td class="text-end" *ngIf="discFeature" style="width:10% !important;">
                             {{item.discInR|number:'1.0-1'}}</td>
@@ -558,6 +569,7 @@
                     <tr>
                         <td colspan="2"></td>
                         <td class="fw-bold">{{myQtyTotal | number:'1.0-2'}}</td>
+                        <td *ngIf="SteelTypeFeature">{{myTotalWeight| number:'1.0-2'}}</td>
                         <td></td>
                         <td colspan="2" *ngIf="discFeature"></td>
                         <td></td>

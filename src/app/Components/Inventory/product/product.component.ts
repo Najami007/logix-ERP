@@ -56,6 +56,8 @@ export class ProductComponent implements OnInit {
   productRecipeFeature = this.global.productRecipeFeature;
   DigitalInvoicesFeature = this.global.DigitalInvoicesFeature;
   MutliplePricesFeature = this.global.MutliplePricesFeature;
+    SteelTypeFeature = this.global.SteelTypeFeature;
+
 
 
 
@@ -335,6 +337,7 @@ export class ProductComponent implements OnInit {
   productType: any = 0;
   productImg: any = '-';
   packing: any = 1;
+  itemWeight:any = '';
 
   BrandID: any = 0;
   rackID: any = 0;
@@ -699,6 +702,7 @@ export class ProductComponent implements OnInit {
       ProductImage: this.productImg || '-',
       ProductTypeID: this.prodTypeID,
       mrp: this.mrp || 0,
+      ItemWeight:this.itemWeight || 0,
       Packing: this.packing,
       UserID: this.global.getUserID(),
       ProductNature: this.ProductNature,
@@ -828,7 +832,8 @@ export class ProductComponent implements OnInit {
       this.prodBarcodeType = 'auto'
       this.barcodeType = 'Basic';
       this.packing = 1;
-      this.ProductNature = 'General'
+      this.ProductNature = 'General';
+      this.itemWeight = '';
       // this.prodTypeID = 0;
 
       //this.btnType = 'Save';
@@ -876,7 +881,7 @@ export class ProductComponent implements OnInit {
     this.Description = row.productDescription;
 
     this.prodTypeID = row.productTypeID;
-
+    this.itemWeight = row.itemWeight;
     this.packing = row.packing;
     this.ProductNature = row.productNature;
     if (this.AddNewProductRestrictionFeature) {
@@ -1386,7 +1391,9 @@ export class ProductComponent implements OnInit {
     discPercentage: { show: true, size: 'col-md-3' },
     discRupee: { show: true, size: 'col-md-3' },
     mrp: { show: true, size: 'col-md-3' },
+    itemWeight: { show: true, size: 'col-md-3' },
     packing: { show: true, size: 'col-md-3' },
+
     generatePrice: { show: true, size: 'col-md-6' },
     minRol: { show: true, size: 'col-md-3' },
     maxRol: { show: true, size: 'col-md-3' },
@@ -1472,6 +1479,10 @@ export class ProductComponent implements OnInit {
 
 
       this.fields.pctCode.size = 'col-md-6';
+    }
+
+    if(!this.SteelTypeFeature){
+         this.fields.itemWeight.show = false;
     }
 
   }
