@@ -11,61 +11,61 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 })
 export class EditQtyModalComponent {
 
-    
-    constructor(
-      private http:HttpClient,
-      private dialogRef: MatDialogRef<EditQtyModalComponent>,
-      public global:GlobalDataModule,
-      private msg:NotificationService,
-      @Inject(MAT_DIALOG_DATA) public data : any,
-    ){}
-    ngOnInit(): void {
-      this.tempQty = this.data.quantity / this.data.multyQty;
-       this.tempPacking = this.data.multyQty;
-  
-     setTimeout(() => {
-       $('#qty').trigger('select');
+
+  constructor(
+    private http: HttpClient,
+    private dialogRef: MatDialogRef<EditQtyModalComponent>,
+    public global: GlobalDataModule,
+    private msg: NotificationService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) { }
+  ngOnInit(): void {
+    this.tempQty = this.data.quantity / this.data.multyQty;
+    this.tempPacking = this.data.multyQty;
+
+    setTimeout(() => {
+      $('#qty').trigger('select');
       $('#qty').trigger('focus');
-     }, 200);
+    }, 200);
+  }
+
+
+
+
+  tempQty = 1;
+  tempPacking = 0;
+
+
+
+  changeQty(e: any) {
+    if (e.target.value == '') {
+      e.target.value = 0;
     }
-  
-  
-  
-    
-    tempQty = 1;
-    tempPacking = 0;
-  
-  
-  
-    changeQty(e:any){
-      if(e.target.value == ''){
-        e.target.value = 0;
-      }
-      this.tempQty = parseFloat(e.target.value);
-      if(e.keyCode == 40){
-        this.increment('minus',this.tempQty)
-      }
-      if(e.keyCode == 38){
-        this.increment('add',this.tempQty)
+    this.tempQty = parseFloat(e.target.value);
+    if (e.keyCode == 40) {
+      this.increment('minus', this.tempQty)
+    }
+    if (e.keyCode == 38) {
+      this.increment('add', this.tempQty)
+    }
+  }
+  increment(type: any, value: any) {
+
+    const qty = Number(this.tempQty) || 0;
+
+    if (type === 'add') {
+      this.tempQty = qty + 1;
+    }
+
+    if (type === 'minus') {
+      if (qty > 0) {
+        this.tempQty = qty - 1;
       }
     }
-    
-    increment(type:any,value:any){
-      if(type == 'add'){
-        this.tempQty += 1;
-      }
-  
-      if(type == 'minus'){
-        if(this.tempQty > 0){
-          this.tempQty -= 1;
-        }
-       
-      }
-    }
-  
-    closeDialog(value:any){
-      this.dialogRef.close(value);
-    }
-  
+  }
+  closeDialog(value: any) {
+    this.dialogRef.close(value);
+  }
+
 
 }

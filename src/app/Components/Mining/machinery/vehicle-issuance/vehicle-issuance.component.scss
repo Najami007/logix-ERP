@@ -1,0 +1,492 @@
+// Optional: add to index.html <head> for the heading font
+// <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+
+:host {
+  --ink: #1d2a33;
+  --muted: #5d6b75;
+  --line: #d9dfe3;
+  --surface: #ffffff;
+  --page: #f3f5f6;
+  --accent: #f2b705; // safety yellow: used once, on the card's top rule
+  --danger: #b3261e;
+
+  display: block;
+  color: var(--ink);
+}
+
+.page {
+  box-sizing: border-box;
+  padding: 16px;
+  background: var(--page);
+  // Set --issuance-offset globally to the height of anything above this component (navbar, etc.)
+//   min-height: calc(100vh - var(--issuance-offset, 0px) - 49px);
+//   min-height: calc(100dvh - var(--issuance-offset, 0px) - 49px);
+}
+
+.page-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  width: 100%;
+//   max-width: 1180px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 6px solid var(--accent);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 14px 24px 12px;
+  border-bottom: 1px solid var(--line);
+
+  h1 {
+    margin: 0;
+    font-family: 'Barlow Condensed', 'Roboto', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+  }
+
+  p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+}
+
+h2 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+// ---------- Form: details on the left, products on the right ----------
+.split {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+}
+
+.details {
+  padding: 16px 24px 4px;
+  border-right: 1px solid var(--line);
+}
+
+.products {
+  padding: 16px 24px 16px;
+  min-height: 420px; // keeps the suggestion list inside the card
+}
+
+.search-box {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  max-height: 300px;
+  margin: 0;
+  padding: 4px 0;
+  overflow-y: auto;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(29, 42, 51, 0.16);
+
+  li {
+    padding: 8px 14px;
+    cursor: pointer;
+
+    &.active {
+      background: #fff8dc;
+    }
+
+    &.no-result {
+      color: var(--muted);
+      cursor: default;
+    }
+  }
+
+  .s-title {
+    font-weight: 500;
+  }
+
+  .s-meta {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  .badge {
+    margin-left: 8px;
+    padding: 1px 6px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--page);
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+}
+
+.lines-wrap {
+  // Only the product list scrolls, so the rest of the form stays on screen
+  max-height: max(170px, calc(100vh - var(--issuance-offset, 0px) - 560px));
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.lines-table,
+.records-table,
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  thead th {
+    background: var(--page);
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .muted {
+    color: var(--muted);
+  }
+}
+
+.lines-table {
+  min-width: 700px;
+
+  thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  tr.flash {
+    animation: flash 1.2s ease-out;
+  }
+}
+
+.cell-input {
+  width: 92px;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  text-align: right;
+
+  &:focus {
+    outline: 2px solid var(--ink);
+    outline-offset: 1px;
+  }
+
+  &.ng-invalid.ng-touched {
+    border-color: var(--danger);
+  }
+}
+
+.submitted .cell-input.ng-invalid {
+  border-color: var(--danger);
+}
+
+.lines-empty {
+  padding: 32px 16px;
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+  text-align: center;
+  color: var(--muted);
+
+  mat-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 32px;
+  }
+
+  p {
+    margin: 4px 0 0;
+  }
+
+  .empty-title {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  &.error {
+    border-color: var(--danger);
+
+    .empty-title {
+      color: var(--danger);
+    }
+  }
+}
+
+.totals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  background: var(--page);
+  border-radius: 6px;
+
+  dt {
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .loss dd {
+    color: var(--danger);
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 10px 24px;
+  border-top: 1px solid var(--line);
+  background: var(--page);
+}
+
+// ---------- Saved records ----------
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px 14px;
+  border-bottom: 1px solid var(--line);
+
+  .search {
+    flex: 1 1 260px;
+  }
+
+  .vehicle-filter {
+    width: 220px;
+  }
+
+  .range {
+    width: 270px;
+  }
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.records-table {
+  min-width: 940px;
+
+  th,
+  td {
+    padding: 10px 14px;
+  }
+
+  tbody tr:hover {
+    background: #fafbfb;
+  }
+
+  tbody tr.editing {
+    background: #fff8dc;
+  }
+
+  tfoot th,
+  tfoot td {
+    background: var(--page);
+    font-weight: 600;
+    border-bottom: 0;
+  }
+
+  .nowrap {
+    white-space: nowrap;
+  }
+
+  .detail-row > td {
+    padding: 4px 14px 16px;
+    background: #fbfaf3;
+  }
+}
+
+.detail-description {
+  margin: 8px 0 12px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.detail-table {
+  background: var(--surface);
+  border: 1px solid var(--line);
+
+  th,
+  td {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+}
+
+.expand-col {
+  width: 48px;
+  padding-right: 0 !important;
+}
+
+.actions-col {
+  width: 112px;
+  text-align: right !important;
+  white-space: nowrap;
+}
+
+.sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+
+  mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+}
+
+.primary {
+  font-weight: 500;
+}
+
+.secondary {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.plate {
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--page);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.empty {
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--muted);
+
+  p {
+    margin: 0 0 8px;
+  }
+
+  .empty-title {
+    color: var(--ink);
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+}
+
+@keyframes flash {
+  from { background: #fff1b8; }
+  to   { background: transparent; }
+}
+
+// ---------- Narrow screens: stack the two panels and let the page scroll ----------
+@media (max-width: 899px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+
+  .details {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .page-center {
+    align-items: flex-start;
+  }
+
+  .lines-wrap {
+    max-height: none;
+  }
+
+  .card-header,
+  .filters,
+  .actions,
+  .details,
+  .products {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .filters .vehicle-filter,
+  .filters .range {
+    flex: 1 1 100%;
+    width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lines-table tr.flash {
+    animation: none;
+  }
+}

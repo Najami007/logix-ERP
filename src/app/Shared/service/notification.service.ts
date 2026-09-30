@@ -66,10 +66,10 @@ export class NotificationService {
   SuccessNotify =(Text:string)=> Swal.mixin({
     toast: true,
     position: 'top',
-    timer: 4000,
+    timer: 3000,
     timerProgressBar: true,
     showConfirmButton: false,
-    target: '.cdk-overlay-container',
+    // target: '.cdk-overlay-container',
     customClass: {
       popup: 'swal-top-z'
     },

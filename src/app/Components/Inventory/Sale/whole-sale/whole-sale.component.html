@@ -75,6 +75,10 @@
                             </mat-form-field>
                         </div>
 
+
+
+
+
                         <div class="col-2">
                             <mat-form-field class="w-100 matSmall">
                                 <mat-label *ngIf="editDiscFeature">Disc</mat-label>
@@ -439,7 +443,7 @@
                             <th width="140" *ngIf="SteelTypeFeature">Type</th>
 
                             <th class="text-center" width="140">Qty</th>
-                            <th *ngIf="SteelTypeFeature">Weight</th>
+                            <th *ngIf="SteelTypeFeature">Weight (KG)</th>
 
                             <th>Price</th>
 
@@ -479,14 +483,21 @@
                                         {{item.productSteelTypeTitle}}</option>
                                 </select>
                             </td>
-                            <td class="d-flex justify-content-center"><input type="text" [(ngModel)]="item.quantity"
-                                    min="0" (input)="global.handleInputChange($event)" [readonly]="item.multyQty > 1"
-                                    (keydown)="handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item)"
-                                    (keyup)="getTotal();changeValue(item)"
-                                    (click)="rowFocused = index;editDiscProdQty(item,'disc')" [accessKey]="index +1 "
-                                    class="form-control qty{{index}} text-center" style="width: 80px;"></td>
+                            <td class="d-flex justify-content-center gap-2">
+                                <span>
+                                    <input type="text" [(ngModel)]="item.quantity" min="0"
+                                        (input)="global.handleInputChange($event)" [readonly]="item.multyQty > 1"
+                                        (keydown)="handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item)"
+                                        (keyup)="getTotal();changeValue(item)"
+                                        (click)="rowFocused = index;editDiscProdQty(item,'disc')"
+                                        [accessKey]="index +1 " class="form-control qty{{index}} text-center"
+                                        style="width: 80px;">
+                                </span>
+                                <span class="mt-3" *ngIf="showUomTitleFeature">{{item.uomTitle}}</span>
+                            </td>
 
-                            <td class="text-center" *ngIf="SteelTypeFeature">{{item.itemWeight * item.quantity | number:'1.0-3'}} {{item.uomTitle}}</td>      
+                            <td class="text-center" *ngIf="SteelTypeFeature">{{item.itemWeight * item.quantity |
+                                number:'1.0-3'}} </td>
 
 
                             <td class=" cursorPointer">
@@ -554,7 +565,7 @@
                             <td colspan="2"></td>
                             <td *ngIf="SteelTypeFeature"></td>
                             <th class="text-center">{{qtyTotal|number:'1.0-3'}}</th>
-                            <td *ngIf="SteelTypeFeature"></td>
+                            <th *ngIf="SteelTypeFeature" class="text-center">{{weightTotal|number:'1.0-3'}}</th>
                             <td></td>
                             <td *ngIf="gstFeature"></td>
                             <td *ngIf="gstFeature"></td>

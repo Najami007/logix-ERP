@@ -10,6 +10,10 @@ import * as $ from 'jquery';
 })
 export class MainComponent {
 
+    moduleWiseNavigationFeature = this.global.moduleWiseNavigationFeature;
+
+
+
   constructor(private global:GlobalDataModule,
     private route:Router){
     

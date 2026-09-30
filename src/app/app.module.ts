@@ -36,6 +36,9 @@ import { SharedServicesDataModule } from './Shared/helper/shared-services-data/s
 import { SharedFieldValidationModule } from './Shared/helper/shared-field-validation/shared-field-validation.module';
 import { CommonModule, DatePipe } from '@angular/common';
 import { DirectivesModule } from './Shared/directives/directives.module';
+import { NavigationMenuBarComponent } from './Components/Layout/navigation-menu-bar/navigation-menu-bar.component';
+import { NavigationMenuBar2Component } from './Components/Layout/navigation-menu-bar2/navigation-menu-bar2.component';
+import { SideNavigationBar2Component } from './Components/Layout/side-navigation-bar2/side-navigation-bar2.component';
 
 
 
@@ -60,6 +63,9 @@ import { DirectivesModule } from './Shared/directives/directives.module';
     NumberInputComponent,
     SideNavbarComponent,
     ConfirmationAlertComponent,
+    NavigationMenuBarComponent,
+    NavigationMenuBar2Component,
+    SideNavigationBar2Component,
  
     
    

@@ -1,0 +1,198 @@
+<mat-tab-group [(selectedIndex)]="selectedTab" animationDuration="0ms">
+  <!-- ================= Form ================= -->
+  <mat-tab label="Form">
+    <div class="page page-center">
+      <form class="card" #entryForm="ngForm" (ngSubmit)="onSubmit(entryForm)" novalidate>
+        <header class="card-header">
+          <h1>{{ isEditing ? 'Edit entry' : 'Add workbook entry' }}</h1>
+          <p>Log the hours a vehicle worked on a given day.</p>
+        </header>
+
+        <div class="grid">
+          <mat-form-field appearance="outline" class="matSmall">
+            <mat-label>Vehicle</mat-label>
+            <mat-select name="vehicleId" [(ngModel)]="model.vehicleId" required #vehicleCtrl="ngModel">
+              <mat-option *ngFor="let option of vehicleOptions; trackBy: trackById" [value]="option.id">
+                {{ option.name }} ({{ option.no }})
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="vehicleCtrl.hasError('required')">Select a vehicle.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="matSmall">
+            <mat-label>Date</mat-label>
+            <input matInput [matDatepicker]="datePicker" name="date" [(ngModel)]="model.date" required #dateCtrl="ngModel" />
+            <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+            <mat-datepicker #datePicker></mat-datepicker>
+            <mat-error *ngIf="dateCtrl.hasError('required')">Pick a date.</mat-error>
+            <mat-error *ngIf="dateCtrl.hasError('matDatepickerParse')">Enter a valid date.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="matSmall">
+            <mat-label>Working hour</mat-label>
+            <input
+              matInput
+              type="number"
+              name="workingHour"
+              [(ngModel)]="model.workingHour"
+              required
+              min="0.25"
+              max="24"
+              step="0.25"
+              #hoursCtrl="ngModel"
+            />
+            <span matTextSuffix>hrs</span>
+            <mat-hint>Use decimals, e.g. 7.5 for 7 h 30 min.</mat-hint>
+            <mat-error *ngIf="hoursCtrl.hasError('required')">Enter the working hours.</mat-error>
+            <mat-error *ngIf="hoursCtrl.hasError('min')">Must be at least 0.25 hours.</mat-error>
+            <mat-error *ngIf="hoursCtrl.hasError('max')">A day has 24 hours at most.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full matSmall">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              rows="6"
+              maxlength="1000"
+              name="description"
+              [(ngModel)]="model.description"
+              placeholder="Site, task, driver, anything worth recording"
+            ></textarea>
+            <mat-hint align="end">{{ model.description.length || 0 }} / 1000</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <footer class="actions">
+          <button mat-stroked-button type="button" (click)="onCancel(entryForm)">
+            {{ isEditing ? 'Cancel edit' : 'Clear' }}
+          </button>
+          <button mat-flat-button color="primary" type="submit">{{ isEditing ? 'Update entry' : 'Save entry' }}</button>
+        </footer>
+      </form>
+    </div>
+  </mat-tab>
+
+  <!-- ================= Saved records ================= -->
+  <mat-tab label="Saved Record">
+    <div class="page">
+      <section class="card">
+        <header class="card-header">
+          <h1>Saved entries</h1>
+          <p aria-live="polite">Showing {{ visibleEntries.length }} of {{ entries.length }} {{ entries.length === 1 ? 'entry' : 'entries' }}</p>
+        </header>
+
+        <div class="filters">
+          <mat-form-field appearance="outline" class="search matSmall" subscriptSizing="dynamic">
+            <mat-label>Search entries</mat-label>
+            <input
+              matInput
+              [ngModel]="search"
+              (ngModelChange)="search = $event; applyFilters()"
+              placeholder="Vehicle, number, description"
+              autocomplete="off"
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              *ngIf="search"
+              (click)="search = ''; applyFilters()"
+              aria-label="Clear search"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="vehicle-filter matSmall" subscriptSizing="dynamic">
+            <mat-label>Vehicle</mat-label>
+            <mat-select [ngModel]="vehicleFilter" (ngModelChange)="vehicleFilter = $event; applyFilters()">
+              <mat-option value="all">All vehicles</mat-option>
+              <mat-option *ngFor="let option of vehicleFilterOptions" [value]="option.id">{{ option.label }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="range matSmall" subscriptSizing="dynamic">
+            <mat-label>Date range</mat-label>
+            <mat-date-range-input [rangePicker]="rangePicker">
+              <input matStartDate placeholder="From" [ngModel]="fromDate" (ngModelChange)="fromDate = $event; applyFilters()" />
+              <input matEndDate placeholder="To" [ngModel]="toDate" (ngModelChange)="toDate = $event; applyFilters()" />
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #rangePicker></mat-date-range-picker>
+          </mat-form-field>
+
+          <button mat-stroked-button type="button" (click)="clearFilters()" [disabled]="!hasFilters">Clear filters</button>
+        </div>
+
+        <div class="table-wrap">
+          <table class="records-table">
+            <thead>
+              <tr>
+                <th scope="col" [attr.aria-sort]="ariaSort('date')">
+                  <button type="button" class="sort" (click)="sortBy('date')">
+                    Date
+                    <mat-icon *ngIf="sortKey === 'date'">{{ sortDir === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+                  </button>
+                </th>
+                <th scope="col" [attr.aria-sort]="ariaSort('vehicle')">
+                  <button type="button" class="sort" (click)="sortBy('vehicle')">
+                    Vehicle
+                    <mat-icon *ngIf="sortKey === 'vehicle'">{{ sortDir === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+                  </button>
+                </th>
+                <th scope="col" class="num" [attr.aria-sort]="ariaSort('hours')">
+                  <button type="button" class="sort" (click)="sortBy('hours')">
+                    Working hour
+                    <mat-icon *ngIf="sortKey === 'hours'">{{ sortDir === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+                  </button>
+                </th>
+                <th scope="col">Description</th>
+                <th scope="col" class="actions-col">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let entry of visibleEntries; trackBy: trackById" [class.editing]="entry.id === editingId">
+                <td class="nowrap">{{ entry.date | date: 'dd MMM yyyy' }}</td>
+                <td>
+                  <div class="primary">{{ entry.vehicleName }}</div>
+                  <span class="plate">{{ entry.vehicleNo }}</span>
+                </td>
+                <td class="num">{{ entry.workingHour | number: '1.0-2' }}</td>
+                <td class="description">{{ entry.description || '—' }}</td>
+                <td class="actions-col">
+                  <button mat-icon-button type="button" matTooltip="Edit entry" [attr.aria-label]="'Edit entry for ' + entry.vehicleName" (click)="onEdit(entry)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button type="button" matTooltip="Delete entry" [attr.aria-label]="'Delete entry for ' + entry.vehicleName" (click)="confirmDelete(entry)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+
+            <tfoot *ngIf="visibleEntries.length">
+              <tr>
+                <th scope="row" colspan="2">Total{{ hasFilters ? ' (filtered)' : '' }}</th>
+                <td class="num">{{ totalHours | number: '1.0-2' }}</td>
+                <td colspan="2"></td>
+              </tr>
+            </tfoot>
+          </table>
+
+          <div class="empty" *ngIf="visibleEntries.length === 0">
+            <ng-container *ngIf="entries.length === 0; else noMatches">
+              <p class="empty-title">No entries saved yet</p>
+              <p>Add one in the Form tab and it will appear here.</p>
+            </ng-container>
+            <ng-template #noMatches>
+              <p class="empty-title">No entries match your search</p>
+              <p>Try a different word or date range, or clear the filters.</p>
+              <button mat-stroked-button type="button" (click)="clearFilters()">Clear filters</button>
+            </ng-template>
+          </div>
+        </div>
+      </section>
+    </div>
+  </mat-tab>
+</mat-tab-group>

@@ -1320,19 +1320,19 @@ export class GarmentSaleComponent implements OnInit {
     this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', postData).subscribe(
       (Response: any) => {
         if (Response.msg == 'Data Saved Successfully') {
+           if (printFlag) {
+            this.PrintAfterSave(Response.invNo);
+          }
           this.tmpCash = this.cash;
           this.tmpChange = this.change;
           this.reset();
           this.msg.SuccessNotify(Response.msg);
 
-          if (printFlag) {
-            this.PrintAfterSave(Response.invNo);
-          }
+         
 
           if (paymentType != 'Cash') {
             $('#searchProduct').trigger('focus');
             this.global.closeBootstrapModal('#paymentMehtod', true);
-
           }
 
         } else {

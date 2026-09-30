@@ -1,0 +1,18 @@
+<mat-tab-group  [(selectedIndex)]="selectedTab">
+    <mat-tab label="Form">
+        <app-add-vehicle
+        (saveVehicle)="saveVehicle($event.type,$event.load)"
+        ></app-add-vehicle>
+    </mat-tab>
+     <mat-tab label="Saved Record">
+
+        <app-saved-vehicles 
+        
+        [vehicles]="vehicleList"
+        (remove)="saveVehicle($event.type,$event.load)"
+        (edit)="editVehicle($event)"
+
+        ></app-saved-vehicles>
+
+    </mat-tab>
+</mat-tab-group>

@@ -1,0 +1,129 @@
+<section class="records">
+    <header class="records-header">
+        <div>
+            <h1>Saved vehicles</h1>
+            <!-- <p class="count" aria-live="polite">Showing {{ shown }} of {{ total }} {{ total === 1 ? 'vehicle' :
+                'vehicles' }}</p> -->
+        </div>
+    </header>
+
+    <div class="filters">
+        <mat-form-field appearance="outline" class="search matSmall" subscriptSizing="dynamic">
+            <mat-label>Search vehicles</mat-label>
+            <input matInput #searchVehicle [(ngModel)]="searchVehicleText"
+                placeholder="Name, number, brand, rental company" autocomplete="off" />
+            <!-- <mat-icon matPrefix>search</mat-icon> -->
+            <button mat-icon-button matSuffix *ngIf="searchVehicle.value" type="button" aria-label="Clear search">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter matSmall" subscriptSizing="dynamic">
+            <mat-label>Status</mat-label>
+            <mat-select [(ngModel)]="activeStatus" (selectionChange)="applyFilters()">
+                <mat-option value="all">All</mat-option>
+                <mat-option [value]="true">Active</mat-option>
+                <mat-option [value]="false">Inactive</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter matSmall" subscriptSizing="dynamic">
+            <mat-label>Ownership</mat-label>
+            <mat-select [(ngModel)]="rentalType" (selectionChange)="applyFilters()">
+                <mat-option value="all">All</mat-option>
+                <mat-option value="Owner">Owner</mat-option>
+                <mat-option value="Rental">Rental</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <button mat-stroked-button type="button" (click)="clearFilters()" [disabled]="!hasFilters">Clear
+            filters</button>
+    </div>
+
+
+    <div>
+        <table class="table table-hover" style="font-size: 12px;">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Vehicle Name</th>
+                    <th>VehicleNo</th>
+                    <th>Vehicle Brand</th>
+                    <th>Ownership Type</th>
+                    <th>Wages Amount</th>
+                    <th>Avg Per Liter</th>
+                    <th>Rental Company Name</th>
+                    <th>Vehicle Active Status</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr *ngFor="let item of vehicleList | filter:searchVehicleText  |paginate:{
+                        itemsPerPage : tableSize,
+                        currentPage : page,
+                        totalItems :    count,
+                    }   index as i">
+                    <td>{{i+1}}</td>
+                    <td>{{item.vehicleName}}</td>
+                    <td>{{item.vehicleNo}}</td>
+                    <td>{{item.vehicleBrand}}</td>
+                    <td>{{item.ownershipType}}</td>
+                    <td>{{item.wagesAmount}}</td>
+                    <td>{{item.avgPerLiter}}</td>
+                    <td>{{item.rentalCompanyName}}</td>
+                    <td >
+                        <mat-slide-toggle [checked]="item.vehicleActiveStatus"
+                            (change)="statusChange.emit({ vehicle: item, active: $event.checked })"
+                            [aria-label]="'Set ' + item.vehicleName + ' active or inactive'">
+                            {{ item.vehicleActiveStatus ? 'Active' : 'Inactive' }}
+                        </mat-slide-toggle>
+                    </td>
+                    <td class="cursorPointer">
+                        <mat-icon class="text-success" matTooltip="Edit vehicle"
+                            (click)="edit.emit(item)">edit</mat-icon>
+
+                        <mat-icon class="text-danger" matTooltip="Delete vehicle"
+                            (click)="confirmDelete(item)">delete</mat-icon>
+
+                    </td>
+
+                </tr>
+
+                <tr *ngIf="vehicleList.lenght == 0">
+                    <ng-template>
+                        <p class="empty-title">No vehicles match your search</p>
+                        <p>Try a different word, or clear the filters.</p>
+                        <button mat-stroked-button type="button" (click)="clearFilters()">Clear filters</button>
+                    </ng-template>
+                </tr>
+
+            </tbody>
+
+        </table>
+    </div>
+
+
+    <div class="d-flex">
+
+    <pagination-controls previousLabel="Prev" nextLabel="Next"
+        (pageChange)="onTableDataChange($event)"></pagination-controls>
+
+
+    <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+    <select class="text-white" style="height: 25px;background-color: rgb(75, 164, 248);"
+        (change)="onTableSizeChange($event)" [(ngModel)]="tableSize">
+        <option *ngFor=" let item of tableSizes" [selected]="tableSize == item">{{item}}</option>
+    </select>
+
+    <!-- <div class="jump-to-page">
+        <input type="text" class="w-25" (keydown)="global.handleNumKeys($event)" [(ngModel)]="jumpPage"
+            placeholder="Page #" min="1" [max]="count" />
+        <button (click)="goToPage()" class="text-white"
+            style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
+    </div> -->
+
+</div>
+
+</section>

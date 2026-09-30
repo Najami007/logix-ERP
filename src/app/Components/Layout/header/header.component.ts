@@ -14,6 +14,9 @@ import { ASSETS } from 'src/assets/Constants/assets';
 })
 export class HeaderComponent implements OnInit {
 
+    moduleWiseNavigationFeature = this.globalData.moduleWiseNavigationFeature;
+
+
   
   @Output() toggleMySideBar : EventEmitter<any> = new EventEmitter();
   constructor(private app:AppComponent,

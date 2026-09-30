@@ -1,0 +1,151 @@
+:host {
+  --ink: #1d2a33;
+  --muted: #5d6b75;
+  --line: #d9dfe3;
+  --surface: #ffffff;
+  --page: #f3f5f6;
+  --accent: #f2b705;
+
+  display: block;
+  min-height: calc(100vh - var(--page-offset, 49px));
+  min-height: calc(100dvh - var(--page-offset, 49px));
+  padding: 12px 16px;
+  box-sizing: border-box;
+  background: var(--page);
+  color: var(--ink);
+}
+
+.records {
+  max-width: 1180px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 6px solid var(--accent);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.records-header {
+  padding: 14px 24px 6px;
+
+  h1 {
+    margin: 0;
+    font-family: 'Barlow Condensed', 'Roboto', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+  }
+
+  .count {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 24px 14px;
+  border-bottom: 1px solid var(--line);
+
+  .search {
+    flex: 1 1 320px;
+  }
+
+  .filter {
+    width: 150px;
+  }
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.records-table {
+  width: 100%;
+  min-width: 980px;
+
+  th.mat-mdc-header-cell {
+    background: var(--page);
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  td.mat-mdc-cell {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  tr.mat-mdc-row:hover {
+    background: #fafbfb;
+  }
+
+  tr.inactive-row td {
+    color: var(--muted);
+  }
+}
+
+.primary {
+  font-weight: 500;
+}
+
+.secondary {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.clip {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plate {
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--page);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.actions-col {
+  width: 112px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.empty {
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--muted);
+
+  p {
+    margin: 0 0 8px;
+  }
+
+  .empty-title {
+    color: var(--ink);
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 640px) {
+  .records-header,
+  .filters {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .filters .filter {
+    flex: 1 1 140px;
+  }
+}

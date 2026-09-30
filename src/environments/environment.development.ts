@@ -91,7 +91,7 @@ export const environment = {
   // mainApi : 'http://localhost:8081/'        ///Food Mood /// Prime BBQ\
 
 
-  //mainApi: 'http://192.168.1.100:8081/',      /////////// Cake Corner Rwp Gujjar Khan
+  // mainApi: 'http://192.168.1.100:8081/',      /////////// Cake Corner Rwp Gujjar Khan
   //mainApi: 'http://192.168.2.100:8060/',      /////////// Cake Corner Rwp Rawat
 
 

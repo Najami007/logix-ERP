@@ -1,0 +1,181 @@
+// Optional: add to index.html <head> for the heading font
+// <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+
+:host {
+  --ink: #1d2a33;
+  --muted: #5d6b75;
+  --line: #d9dfe3;
+  --surface: #ffffff;
+  --page: #f3f5f6;
+  --accent: #f2b705; // safety yellow: used once, on the header rule
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 90vh;
+  min-height: 90dvh;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  background: var(--page);
+  color: var(--ink);
+}
+
+.vehicle-form {
+  width: 100%;
+  max-width: 1500px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+//   overflow: hidden;
+}
+
+.form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 24px;
+  border-top: 6px solid var(--accent);
+  border-bottom: 1px solid var(--line);
+
+  h1 {
+    margin: 0;
+    font-family: 'Barlow Condensed', 'Roboto', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+  }
+
+  p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+}
+
+// Three columns side by side, so every input is visible at once
+.columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 24px 4px;
+
+  & + .column {
+    border-left: 1px solid var(--line);
+  }
+
+  h2 {
+    margin: 0 0 12px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
+
+.column-note {
+  margin: -6px 0 10px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.rental {
+  background: #fbfaf3;
+  transition: opacity 150ms ease;
+
+  &.inactive {
+    opacity: 0.65;
+  }
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.plate {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.toggle-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.toggle-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.toggle-group {
+  width: 100%;
+
+  mat-button-toggle {
+    flex: 1;
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 10px 24px;
+  border-top: 1px solid var(--line);
+  background: var(--page);
+}
+
+// Short landscape screens (small laptops): tighten spacing so nothing scrolls
+@media (max-height: 700px) {
+  :host {
+    padding: 6px 12px;
+  }
+
+  .form-header {
+    padding: 8px 20px;
+
+    p {
+      display: none;
+    }
+  }
+
+  .column {
+    padding: 10px 20px 0;
+
+    h2 {
+      margin-bottom: 8px;
+    }
+  }
+
+  .toggle-field {
+    margin-bottom: 10px;
+  }
+
+  .form-actions {
+    padding: 8px 20px;
+  }
+}
+
+// Portrait tablets and phones: stack the columns and allow scrolling
+@media (max-width: 899px) {
+  :host {
+    align-items: flex-start;
+  }
+
+  .columns {
+    grid-template-columns: 1fr;
+  }
+
+  .column + .column {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .form-header {
+    flex-wrap: wrap;
+  }
+}

@@ -1,0 +1,202 @@
+<div class="body text-center">
+
+  <div class="tab-bar">
+    <button class="tab-btn" [class.active]="activeTab === 'new'" (click)="setTab('new')">
+      <span class="tab-label">New</span>
+      <span class="tab-count">{{newCount}}</span>
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'pending'" (click)="setTab('pending')">
+      <span class="tab-label">Pending</span>
+      <span class="tab-count">{{pendingCount}}</span>
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'delivered'" (click)="setTab('delivered')">
+      <span class="tab-label">Delivered</span>
+      <span class="tab-count">{{deliveredCount}}</span>
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'canceled'" (click)="setTab('canceled')">
+      <span class="tab-label">Canceled</span>
+      <span class="tab-count">{{canceledCount}}</span>
+    </button>
+
+    <input placeholder="search.." type="text" [(ngModel)]="searchText" class="tab-search">
+
+    <button class="tab-approve-all" *ngIf="activeTab === 'new'" (click)="approveAllNewOrder()">
+      <mat-icon>done_outline</mat-icon> Approve all
+    </button>
+    <button class="tab-approve-all" *ngIf="activeTab === 'pending'" (click)="approveAllPending()">
+      <mat-icon>done_outline</mat-icon> Approve all
+    </button>
+    <button class="tab-approve-all" *ngIf="activeTab === 'canceled'" (click)="approveAllvoid()">
+      <mat-icon>done_outline</mat-icon> Approve all
+    </button>
+  </div>
+
+  <!-- ============ NON-ORDERWISE MODE (one ticket per item line) ============ -->
+  <ng-container *ngIf="!orderwiseDashboardFeature">
+
+    <div class="ticket-grid" *ngIf="activeTab === 'new'">
+      <div class="ticket" *ngFor="let item of newOrderList | filter:searchText">
+        <div class="ticket-perf"></div>
+        <div class="ticket-head">
+          <span class="ticket-table">{{item.tableTitle}}</span>
+          <span class="ticket-order">#{{item.orderNo}}</span>
+        </div>
+        <div class="ticket-item" [ngClass]="item.reqStatus ? '' : 'text-danger'">
+          <span class="ticket-item-name">{{item.productTitle}} {{item.createdOn| date:'hh:mm a'}}</span>
+          <span class="ticket-item-qty">×{{item.quantity}}</span>
+        </div>
+        <div class="ticket-foot">
+          <span class="ticket-time">{{item.createdOn | date:'hh:mm a'}}</span>
+          <button mat-mini-fab class="ticket-action" (click)="approveOrderSingle(item)">
+            <mat-icon>done_outline</mat-icon>
+          </button>
+        </div>
+        <div class="ticket-tear"></div>
+      </div>
+    </div>
+
+    <div class="ticket-grid" *ngIf="activeTab === 'pending'">
+      <div class="ticket" *ngFor="let item of PendingOrderList | filter:searchText">
+        <div class="ticket-perf"></div>
+        <div class="ticket-head">
+          <span class="ticket-table">{{item.tableTitle}}</span>
+          <span class="ticket-order">#{{item.orderNo}}</span>
+        </div>
+        <div class="ticket-item">
+          <span class="ticket-item-name">{{item.productTitle}}</span>
+          <span class="ticket-item-qty">×{{item.quantity}}</span>
+        </div>
+        <div class="ticket-foot">
+          <span class="ticket-time">{{item.reqConfirmationTime | date:'hh:mm a'}}</span>
+          <button mat-mini-fab class="ticket-action" (click)="ApproveDelivery(item)">
+            <mat-icon>done_outline</mat-icon>
+          </button>
+        </div>
+        <div class="ticket-tear"></div>
+      </div>
+    </div>
+
+    <div class="ticket-grid" *ngIf="activeTab === 'canceled'">
+      <div class="ticket ticket--void" *ngFor="let item of voidOrderList | filter:searchText">
+        <div class="ticket-perf"></div>
+        <div class="ticket-head">
+          <span class="ticket-table">{{item.tableTitle}}</span>
+          <span class="ticket-order">#{{item.orderNo}}</span>
+        </div>
+        <div class="ticket-item">
+          <span class="ticket-item-name">{{item.productTitle}}</span>
+          <span class="ticket-item-qty">×{{item.quantity}}</span>
+        </div>
+        <div class="ticket-foot">
+          <span class="ticket-time">{{item.createdOn | date:'hh:mm a'}}</span>
+          <button mat-mini-fab class="ticket-action" *ngIf="item.reqStatus == false"
+                  (click)="approveOrderSingle(item)">
+            <mat-icon>done_outline</mat-icon>
+          </button>
+          <span class="ticket-stamp ticket-stamp--void" *ngIf="item.reqStatus != false">Void</span>
+        </div>
+        <div class="ticket-tear"></div>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <!-- ============ ORDERWISE MODE (one ticket per order, all items shown) ============ -->
+  <ng-container *ngIf="orderwiseDashboardFeature">
+
+    <div class="ticket-grid" *ngIf="activeTab === 'new'">
+      <div class="ticket" *ngFor="let order of newOrderGrouped | filter:searchText">
+        <div class="ticket-perf"></div>
+        <div class="ticket-head">
+          <span class="ticket-table">{{order.tableTitle}}</span>
+          <span class="ticket-order">#{{order.orderNo}}</span>
+        </div>
+        <div class="ticket-items">
+          <div class="ticket-item" *ngFor="let line of order.items">
+            <span class="ticket-item-name">{{line.productTitle}} <small style="font-size: 8px !important;">{{line.createdOn| date:'hh:mm a'}}</small> </span>
+            <span class="ticket-item-qty">×{{line.quantity}}</span>
+          </div>
+        </div>
+        <div class="ticket-foot">
+          <span class="ticket-time">{{order.createdOn | date:'hh:mm a'}}</span>
+          <button mat-mini-fab class="ticket-action" (click)="approveNewOrderFull(order)">
+            <mat-icon>done_outline</mat-icon>
+          </button>
+        </div>
+        <div class="ticket-tear"></div>
+      </div>
+    </div>
+
+    <div class="ticket-grid" *ngIf="activeTab === 'pending'">
+      <div class="ticket" *ngFor="let order of pendingOrderGrouped | filter:searchText">
+        <div class="ticket-perf"></div>
+        <div class="ticket-head">
+          <span class="ticket-table">{{order.tableTitle}} </span>
+          <span class="ticket-order">#{{order.orderNo}}</span>
+        </div>
+        <div class="ticket-items">
+          <div class="ticket-item" *ngFor="let line of order.items">
+            <span class="ticket-item-name">{{line.productTitle}} <small style="font-size: 8px !important;">{{line.createdOn| date:'hh:mm a'}}</small></span>
+            <span class="ticket-item-qty">×{{line.quantity}}</span>
+          </div>
+        </div>
+        <div class="ticket-foot">
+          <span class="ticket-time">{{order.reqConfirmationTime | date:'hh:mm a'}}</span>
+          <button mat-mini-fab class="ticket-action" (click)="approvePendingFull(order)">
+            <mat-icon>done_outline</mat-icon>
+          </button>
+        </div>
+        <div class="ticket-tear"></div>
+      </div>
+    </div>
+
+    <div class="ticket-grid" *ngIf="activeTab === 'canceled'">
+      <div class="ticket ticket--void" *ngFor="let order of voidOrderGrouped | filter:searchText">
+        <div class="ticket-perf"></div>
+        <div class="ticket-head">
+          <span class="ticket-table">{{order.tableTitle}}</span>
+          <span class="ticket-order">#{{order.orderNo}}</span>
+        </div>
+        <div class="ticket-items">
+          <div class="ticket-item" *ngFor="let line of order.items">
+            <span class="ticket-item-name">{{line.productTitle}} <small style="font-size: 8px !important;">{{line.createdOn| date:'hh:mm a'}}</small></span>
+            <span class="ticket-item-qty">×{{line.quantity}}</span>
+          </div>
+        </div>
+        <div class="ticket-foot">
+          <span class="ticket-time">{{order.createdOn | date:'hh:mm a'}}</span>
+          <button mat-mini-fab class="ticket-action" *ngIf="order.reqStatus == false"
+                  (click)="approveVoidFull(order)">
+            <mat-icon>done_outline</mat-icon>
+          </button>
+          <span class="ticket-stamp ticket-stamp--void" *ngIf="order.reqStatus != false">Void</span>
+        </div>
+        <div class="ticket-tear"></div>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <!-- ============ DELIVERED (shared across both modes, all items shown) ============ -->
+  <div class="ticket-grid" *ngIf="activeTab === 'delivered'">
+    <div class="ticket ticket--served" *ngFor="let order of deliveredOrderGrouped | filter:searchText">
+      <div class="ticket-perf"></div>
+      <div class="ticket-head">
+        <span class="ticket-table">{{order.tableTitle}}</span>
+        <span class="ticket-order">#{{order.orderNo}}</span>
+      </div>
+      <div class="ticket-items">
+        <div class="ticket-item" *ngFor="let line of order.items">
+          <span class="ticket-item-name">{{line.productTitle}} <small style="font-size: 8px !important;">{{line.createdOn| date:'hh:mm a'}}</small></span>
+          <span class="ticket-item-qty">×{{line.quantity}}</span>
+        </div>
+      </div>
+      <div class="ticket-foot">
+        <span class="ticket-time">{{order.dTime | date:'hh:mm a'}}</span>
+        <span class="ticket-stamp ticket-stamp--served">Served</span>
+      </div>
+      <div class="ticket-tear"></div>
+    </div>
+  </div>
+
+</div>

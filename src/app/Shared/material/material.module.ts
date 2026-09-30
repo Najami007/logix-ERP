@@ -42,6 +42,7 @@ import {
   MatBottomSheetModule,
   MatBottomSheetRef,
 } from '@angular/material/bottom-sheet';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 
@@ -86,7 +87,8 @@ import {
       applyLabel: 'Okay',
   }),
   MatChipsModule,
-  MatBottomSheetModule
+  MatBottomSheetModule,
+  MatSnackBarModule
   
     
 

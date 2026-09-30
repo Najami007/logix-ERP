@@ -38,7 +38,7 @@ export class AddPaymentComponent {
       this.remarks = this.editData.invoiceRemarks;
       this.bankReceiptNo = this.editData.bankReceiptNo;
       this.projectID = this.editData.projectID;
-      this.editData.type == 'JV' ? this.transactionType =  'Purchase': this.transactionType = 'Payment' ;
+      this.editData.type == 'JV' ? this.transactionType = 'Purchase' : this.transactionType = 'Payment';
       setTimeout(() => {
         this.getCoaList();
       }, 200);
@@ -50,9 +50,9 @@ export class AddPaymentComponent {
   }
 
 
-  transactionType:any = 'Payment';
+  transactionType: any = 'Payment';
 
-  transactionTypeList:any = [{title:'Payment'},{title:'Purchase'}]
+  transactionTypeList: any = [{ title: 'Payment' }, { title: 'Purchase' }]
 
   btnType = 'Save';
   invoiceNo = '';
@@ -115,6 +115,8 @@ export class AddPaymentComponent {
       (Response: any) => {
         this.coaList = Response;
         if (this.invoiceNo == '' && Response.length > 0) {
+          this.coaID = 0;
+
           this.coaID = Response[0].coaID;
         }
       },
@@ -149,10 +151,10 @@ export class AddPaymentComponent {
     }
 
 
-     ////////////////// will verify selected COA is in Cash and ban COA list or not
-    
-    var verifyCoaList = this.coaList.filter((e:any)=> e.coaID == this.coaID);
-    if(verifyCoaList.length == 0 && this.transactionType == 'Payment'){
+    ////////////////// will verify selected COA is in Cash and ban COA list or not
+
+    var verifyCoaList = this.coaList.filter((e: any) => e.coaID == this.coaID);
+    if (verifyCoaList.length == 0 && this.transactionType == 'Payment') {
       this.msg.WarnNotify('Select Chart of Account');
       return;
     }
@@ -170,7 +172,7 @@ export class AddPaymentComponent {
       Discount: this.discount || 0,
       ProjectID: this.projectID,
       UserID: this.global.getUserID(),
-      TransactionType:this.transactionType,
+      TransactionType: this.transactionType,
     }
 
     if (this.btnType == 'Save') {

@@ -98,6 +98,13 @@ export const routes: Route[] = [
       import('./Components/delivery-module/delivery-module.module').then((m) => m.DeliveryModuleModule),
 
   },
+   {
+    path: 'min',
+    component: MainComponent,
+    loadChildren: () =>
+      import('./Components/Mining/mining.module').then((m) => m.MiningModule),
+
+  },
   { path: '**', redirectTo: 'login', pathMatch: 'full' },
 
 

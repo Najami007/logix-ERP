@@ -118,6 +118,7 @@ export class GlobalDataModule implements OnInit {
   propertyLink = 'prp/';
   manufacturingLink = 'mnu/';
   mobileLink = 'mob/';
+  miningLink = 'min/';
 
   ////////////////////// API Module Start Points//////////////////
   Currency = 'AED';
@@ -153,6 +154,38 @@ export class GlobalDataModule implements OnInit {
   setModuleTitle(title: string) {
     this._moduleTitleSource.next(title.toUpperCase());
   }
+
+
+  ///////////////////////////////////////////////
+
+
+  private moduleMenuSubject =
+    new BehaviorSubject<any[]>([]);
+
+  moduleMenuList$ =
+    this.moduleMenuSubject.asObservable();
+
+  setModuleMenuList(data: any[]) {
+
+    this.moduleMenuList = data;
+
+    this.moduleMenuSubject.next(data);
+
+  }
+
+
+  moduleMenuList: any[] = [];
+
+
+ 
+  getModuleMenuList() {
+    return this.moduleMenuList;
+  }
+
+
+
+
+  /////////////////////////////////////////////////////
 
 
 
@@ -375,6 +408,8 @@ export class GlobalDataModule implements OnInit {
   DisableVoidpwdFeature = this.getFeature('DisableVoidpwd');
   MutliplePricesFeature = this.getFeature('MutliplePrices');
   AutoEnterCashFeature = this.getFeature('AutoEnterCash');
+  MinusDiscountFeature = this.getFeature('MinusDiscount');
+  moduleWiseNavigationFeature = this.getFeature('moduleWiseNavigation');
   refreshFeatures() {
     this.discFeature = this.getFeature('Discount');
     this.BookerFeature = this.getFeature('Booker');
@@ -462,6 +497,8 @@ export class GlobalDataModule implements OnInit {
     this.DisableVoidpwdFeature = this.getFeature('DisableVoidpwd');
     this.MutliplePricesFeature = this.getFeature('MutliplePrices');
     this.AutoEnterCashFeature = this.getFeature('AutoEnterCash');
+    this.MinusDiscountFeature = this.getFeature('MinusDiscount');
+    this.moduleWiseNavigationFeature = this.getFeature('moduleWiseNavigation');
   }
 
 
@@ -1275,15 +1312,28 @@ export class GlobalDataModule implements OnInit {
 
   }
 
-  handleNumKeys(e: KeyboardEvent) {
+  handleNumKeys(e: KeyboardEvent, allowMinus: boolean = false) {
+
     const allowedKeys = [
-      'Enter', 'Backspace', 'Tab', 'Shift', 'Delete',
-      'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown',
-      '.', // Dot
+      'Enter',
+      'Backspace',
+      'Tab',
+      'Shift',
+      'Delete',
+      'ArrowLeft',
+      'ArrowUp',
+      'ArrowRight',
+      'ArrowDown',
+      '.',
       '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
     ];
 
-    // Allow numpad keys (Numpad0-Numpad9)
+    // Allow minus only when allowMinus = true
+    if (allowMinus) {
+      allowedKeys.push('-');
+    }
+
+    // Numpad 0-9
     const isNumpad = e.code.startsWith('Numpad') && /^[0-9]$/.test(e.key);
 
     if (!allowedKeys.includes(e.key) && !isNumpad) {
@@ -1291,12 +1341,14 @@ export class GlobalDataModule implements OnInit {
     }
   }
 
-  handleNumKeysandMinut(e: KeyboardEvent) {
+  handleNumKeysandMinut(e: KeyboardEvent, allowMinus?: any) {
+
+
+
     const allowedKeys = [
-      'Enter', 'Backspace', 'Tab', 'Shift', 'Delete',
-      'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown',
-      '.', // Dot
-      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-'
+      'Backspace', 'Tab', 'Enter', 'Shift', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown',
+      'Delete', '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+      'Numpad0', 'Numpad1', 'Numpad2', 'Numpad3', 'Numpad4', 'Numpad5', 'Numpad6', 'Numpad7', 'Numpad8', 'Numpad9', 'Decimal'
     ];
 
     // Allow numpad keys (Numpad0-Numpad9)
@@ -1902,14 +1954,14 @@ export class GlobalDataModule implements OnInit {
 
 
   ////////////////// will auto change start zero value on input click//////////////////
-  handleInputChange(event: Event): void {
+  handleInputChange(event: Event, callback?: any): void {
     const input = event.target as HTMLInputElement;
-    // if (input.value.length > 1 && input.value.startsWith('0')) {
-    //   input.value = input.value.replace(/^0+/, '');
-    // }
+
     if (input.value === '') {
       input.value = '0';
     }
+
+    callback?.(input.value);
   }
 
 
@@ -1973,19 +2025,19 @@ export class GlobalDataModule implements OnInit {
 
 
   getDayName(date: Date | string): string {
-  const days = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday'
-  ];
+    const days = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+    ];
 
-  const d = new Date(date);
-  return days[d.getDay()];
-}
+    const d = new Date(date);
+    return days[d.getDay()];
+  }
 
 
 }

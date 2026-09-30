@@ -40,7 +40,9 @@ export class SaleBillPrintComponent implements OnInit {
   showUomTitleFeature = this.global.showUomTitleFeature;
   TransporterFeature = this.global.TransporterFeature;
   SteelTypeFeature = this.global.SteelTypeFeature;
-  
+  MinusDiscountFeature = this.global.MinusDiscountFeature;
+
+
 
 
 
@@ -177,121 +179,402 @@ export class SaleBillPrintComponent implements OnInit {
   myTotalWeight = 0;
 
 
+  // PrintBill(InvNo: any) {
+  //   this.billPrintType = this.global.getBillPrintType();
+  //   this.printSize = this.global.getPrintSize()
+  //   this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
+  //     (Response: any) => {
+  //       if (Response == null) {
+  //         this.msg.WarnNotify('Null Returned');
+  //         return;
+  //       }
+  //       this.myPrintTableData = this.MinusDiscountFeature
+  //         ? Response.map((e: any) => {
+  //           if (e.discInP < 0) {
+  //             e.discInR = 0;
+  //             e.discInP = 0;
+  //           }
+  //           return e;
+  //           })
+  //         : Response;
+
+
+  //       this.myInvoiceNo = InvNo;
+  //       this.myInvDate = new Date(Response[0].invDate);
+  //       this.myCreatedDate = Response[0].createdOn;
+  //       this.myCounterName = Response[0].entryUser;
+  //       this.mySubTotal = Response[0].billTotal;
+  //       this.myNetTotal = Response[0].netTotal;
+  //       this.myOtherCharges = Response[0].otherCharges;
+  //       this.myRemarks = Response[0].remarks;
+  //       this.myCash = Response[0].cashRec;
+  //       this.myBank = Response[0].invType == 'S' ? Response[0].bankCash : -1 * Response[0].bankCash; //Response[0].netTotal - Response[0].cashRec;
+  //       this.myDiscount = Response[0].billDiscount;
+  //       this.myChange = Response[0].change;
+  //       this.myPaymentType = Response[0].paymentType;
+  //       this.myCustomerName = Response[0].partyName;
+  //       this.myCustomerNameUrdu = Response[0].partyNameUrdu;
+
+  //       this.myBookerName = Response[0].bookerName;
+  //       this.myInvType = Response[0].invType;
+  //       this.myAdvTaxAmount = Response[0].advTaxAmount;
+  //       this.myAdvTaxValue = Response[0].advTaxValue;
+  //       this.myFbrInvoiceNo = Response[0].fbrInvoiceNo;
+  //       this.myFbrStatus = Response[0].fbrStatus;
+  //       this.myFbrCode = Response[0].fbrCode;
+  //       this.myFbrResponse = Response[0].fbrResponse;
+  //       this.myPOSFee = Response[0].posFee;
+  //       this.myCusBalance = Response[0].cusBalance;
+  //       this.mySupBalance = Response[0].supBalance;
+  //       this.myVehicleNo = Response[0].vehicleNo;
+  //       this.myMeterReading = Response[0].meterReading;
+  //       this.myVehicleName = Response[0].vehicleName;
+  //       this.myTransportPartyName = Response[0].transportPartyName;
+  //       this.myTransporterID = Response[0].transportPartyID;
+  //       this.myLabourCharges = Response[0].labourCharges;
+  //       this.myTransportCharges = Response[0].transportCharges;
+  //       this.partyNtn = Response[0].ntn;
+  //       this.myInvTime = new Date();
+  //       this.myAmountInWords = this.global.convertAmountToWords(Response[0].netTotal);
+  //       this.myCustomerAddress = Response[0].partyAddress;
+  //       this.myCustomerAddressUrdu = Response[0].partyAddressUrdu;
+
+  //       this.myCustomerBusinessName = Response[0].businessName;
+  //       this.myCustomerMobile = Response[0].partyMobileNo;
+  //       this.myCustomerNtn = Response[0].ntn;
+  //       this.myCustomerCnic = Response[0].partyCNIC;
+  //       this.myCustomerRegisterationType = Response[0].registrationType;
+
+
+
+
+  //       this.myQtyTotal = 0;
+  //       this.myOfferDiscount = 0;
+  //       this.myGstTotal = 0;
+  //       this.myCusDiscAmount = 0;
+  //       this.myTotalWeight = 0;
+  //       this.myPrintTableData.forEach((e: any) => {
+  //         this.myQtyTotal += e.quantity;
+  //         this.myOfferDiscount += e.discInR * e.quantity;
+  //         this.myGstTotal += (e.salePrice - (e.salePrice / ((e.gst + 100) / 100))) * e.quantity;
+  //         this.myCusDiscAmount += e.cusDiscAmount * e.quantity;
+  //         this.myTotalWeight += e.itemWeight * e.quantity;
+  //       });
+
+  //       if (this.gstFeature) {
+  //         this.generateQRCode();
+  //       }
+  //       setTimeout(() => {
+
+  //         if (this.northEdgeEnterPriseBillFeature) {
+  //           this.global.printBill('#northedgeEnterprises', '.searchProduct');
+  //           return;
+  //         } else {
+
+  //           if (this.billPrintType == 'english') {
+  //             if (this.printSize == 'thermal') this.global.printBill('#thermalBillEnglish', '.searchProduct');
+  //             if (this.printSize == 'a4') this.global.printBill('#A4BillEnglish', '.searchProduct');
+
+  //           }
+  //           if (this.billPrintType == 'urdu') {
+  //             if (this.printSize == 'thermal') this.global.printBill('#thermalBillUrdu', '.searchProduct');
+  //             if (this.printSize == 'a4') this.global.printBill('#A4BillEnglish', '.searchProduct');
+  //           }
+  //           this.qrCodeContainer;
+
+
+  //           if (this.printKotFeature) {
+  //             var FastFoodProducts = Response.filter((e: any) => e.subCategoryID == this.fastFoodSCID);
+  //             this.PrintPartialKot(FastFoodProducts);
+  //             // this.kotPrint.PrintPartialKot(FastFoodProducts);
+  //           }
+
+  //         }
+
+
+
+  //       }, 100);
+
+
+
+
+
+
+  //     }
+  //   )
+
+  // }
+
+
   PrintBill(InvNo: any) {
-    this.billPrintType = this.global.getBillPrintType();
-    this.printSize = this.global.getPrintSize()
-    this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + InvNo).subscribe(
-      (Response: any) => {
-        if (Response == null) {
-          this.msg.WarnNotify('Null Returned');
+
+  this.billPrintType = this.global.getBillPrintType();
+  this.printSize = this.global.getPrintSize();
+
+  const url =
+    environment.mainApi +
+    this.global.inventoryLink +
+    'PrintBill?BillNo=' +
+    InvNo;
+
+  this.http.get<any[]>(url).subscribe({
+    next: (Response: any[]) => {
+
+      // Validate response
+      if (!Response || Response.length === 0) {
+        this.msg.WarnNotify('No bill data returned');
+        return;
+      }
+
+      // Prepare print data
+      this.myPrintTableData = this.MinusDiscountFeature
+        ? Response.map((e: any) => {
+
+            if (e.discInP < 0) {
+              e.discInR = 0;
+              e.discInP = 0;
+            }
+
+            return e;
+          })
+        : Response;
+
+      const bill = Response[0];
+
+      // -----------------------------
+      // Bill Information
+      // -----------------------------
+
+      this.myInvoiceNo = InvNo;
+      this.myInvDate = new Date(bill.invDate);
+      this.myCreatedDate = bill.createdOn;
+      this.myCounterName = bill.entryUser;
+
+      this.mySubTotal = bill.billTotal;
+      this.myNetTotal = bill.netTotal;
+      this.myOtherCharges = bill.otherCharges;
+
+      this.myRemarks = bill.remarks;
+
+      this.myCash = bill.cashRec;
+
+      this.myBank =
+        bill.invType === 'S'
+          ? bill.bankCash
+          : -1 * bill.bankCash;
+
+      this.myDiscount = bill.billDiscount;
+      this.myChange = bill.change;
+      this.myPaymentType = bill.paymentType;
+
+      // -----------------------------
+      // Customer
+      // -----------------------------
+
+      this.myCustomerName = bill.partyName;
+      this.myCustomerNameUrdu = bill.partyNameUrdu;
+
+      this.myCustomerAddress = bill.partyAddress;
+      this.myCustomerAddressUrdu = bill.partyAddressUrdu;
+
+      this.myCustomerBusinessName = bill.businessName;
+      this.myCustomerMobile = bill.partyMobileNo;
+      this.myCustomerNtn = bill.ntn;
+      this.myCustomerCnic = bill.partyCNIC;
+      this.myCustomerRegisterationType = bill.registrationType;
+
+      // -----------------------------
+      // Booker / Invoice
+      // -----------------------------
+
+      this.myBookerName = bill.bookerName;
+      this.myInvType = bill.invType;
+
+      // -----------------------------
+      // Tax / FBR
+      // -----------------------------
+
+      this.myAdvTaxAmount = bill.advTaxAmount;
+      this.myAdvTaxValue = bill.advTaxValue;
+
+      this.myFbrInvoiceNo = bill.fbrInvoiceNo;
+      this.myFbrStatus = bill.fbrStatus;
+      this.myFbrCode = bill.fbrCode;
+      this.myFbrResponse = bill.fbrResponse;
+
+      this.myPOSFee = bill.posFee;
+
+      // -----------------------------
+      // Balances
+      // -----------------------------
+
+      this.myCusBalance = bill.cusBalance;
+      this.mySupBalance = bill.supBalance;
+
+      // -----------------------------
+      // Vehicle
+      // -----------------------------
+
+      this.myVehicleNo = bill.vehicleNo;
+      this.myMeterReading = bill.meterReading;
+      this.myVehicleName = bill.vehicleName;
+
+      // -----------------------------
+      // Transport
+      // -----------------------------
+
+      this.myTransportPartyName = bill.transportPartyName;
+      this.myTransporterID = bill.transportPartyID;
+
+      this.myLabourCharges = bill.labourCharges;
+      this.myTransportCharges = bill.transportCharges;
+
+      this.partyNtn = bill.ntn;
+
+      // -----------------------------
+      // Time / Amount
+      // -----------------------------
+
+      this.myInvTime = new Date();
+
+      this.myAmountInWords =
+        this.global.convertAmountToWords(bill.netTotal);
+
+      // -----------------------------
+      // Calculate Totals
+      // -----------------------------
+
+      this.myQtyTotal = 0;
+      this.myOfferDiscount = 0;
+      this.myGstTotal = 0;
+      this.myCusDiscAmount = 0;
+      this.myTotalWeight = 0;
+
+      this.myPrintTableData.forEach((e: any) => {
+
+        const quantity = Number(e.quantity) || 0;
+        const salePrice = Number(e.salePrice) || 0;
+        const gst = Number(e.gst) || 0;
+        const discInR = Number(e.discInR) || 0;
+        const cusDiscAmount = Number(e.cusDiscAmount) || 0;
+        const itemWeight = Number(e.itemWeight) || 0;
+
+        this.myQtyTotal += quantity;
+
+        this.myOfferDiscount += discInR * quantity;
+
+        this.myGstTotal +=
+          (
+            salePrice -
+            (salePrice / ((gst + 100) / 100))
+          ) * quantity;
+
+        this.myCusDiscAmount +=
+          cusDiscAmount * quantity;
+
+        this.myTotalWeight +=
+          itemWeight * quantity;
+      });
+
+      // -----------------------------
+      // Generate QR
+      // -----------------------------
+
+      if (this.gstFeature) {
+        this.generateQRCode();
+      }
+
+      // Wait for Angular DOM update
+      setTimeout(() => {
+
+        // -----------------------------
+        // North Edge Bill
+        // -----------------------------
+
+        if (this.northEdgeEnterPriseBillFeature) {
+
+          this.global.printBill(
+            '#northedgeEnterprises',
+            '.searchProduct'
+          );
+
           return;
         }
-        this.myPrintTableData = Response;
-        this.myInvoiceNo = InvNo;
-        this.myInvDate = new Date(Response[0].invDate);
-        this.myCreatedDate = Response[0].createdOn;
-        this.myCounterName = Response[0].entryUser;
-        this.mySubTotal = Response[0].billTotal;
-        this.myNetTotal = Response[0].netTotal;
-        this.myOtherCharges = Response[0].otherCharges;
-        this.myRemarks = Response[0].remarks;
-        this.myCash = Response[0].cashRec;
-        this.myBank = Response[0].invType == 'S' ? Response[0].bankCash : -1 * Response[0].bankCash; //Response[0].netTotal - Response[0].cashRec;
-        this.myDiscount = Response[0].billDiscount;
-        this.myChange = Response[0].change;
-        this.myPaymentType = Response[0].paymentType;
-        this.myCustomerName = Response[0].partyName;
-        this.myCustomerNameUrdu = Response[0].partyNameUrdu;
 
-        this.myBookerName = Response[0].bookerName;
-        this.myInvType = Response[0].invType;
-        this.myAdvTaxAmount = Response[0].advTaxAmount;
-        this.myAdvTaxValue = Response[0].advTaxValue;
-        this.myFbrInvoiceNo = Response[0].fbrInvoiceNo;
-        this.myFbrStatus = Response[0].fbrStatus;
-        this.myFbrCode = Response[0].fbrCode;
-        this.myFbrResponse = Response[0].fbrResponse;
-        this.myPOSFee = Response[0].posFee;
-        this.myCusBalance = Response[0].cusBalance;
-        this.mySupBalance = Response[0].supBalance;
-        this.myVehicleNo = Response[0].vehicleNo;
-        this.myMeterReading = Response[0].meterReading;
-        this.myVehicleName = Response[0].vehicleName;
-        this.myTransportPartyName = Response[0].transportPartyName;
-        this.myTransporterID = Response[0].transportPartyID;
-        this.myLabourCharges = Response[0].labourCharges;
-        this.myTransportCharges = Response[0].transportCharges;
-        this.partyNtn = Response[0].ntn;
-        this.myInvTime = new Date();
-        this.myAmountInWords = this.global.convertAmountToWords(Response[0].netTotal);
-        this.myCustomerAddress = Response[0].partyAddress;
-        this.myCustomerAddressUrdu = Response[0].partyAddressUrdu;
+        // -----------------------------
+        // Normal Bill
+        // -----------------------------
 
-        this.myCustomerBusinessName = Response[0].businessName;
-        this.myCustomerMobile = Response[0].partyMobileNo;
-        this.myCustomerNtn = Response[0].ntn;
-        this.myCustomerCnic = Response[0].partyCNIC;
-        this.myCustomerRegisterationType = Response[0].registrationType;
-        
+        if (this.billPrintType === 'english') {
 
+          if (this.printSize === 'thermal') {
 
-
-        this.myQtyTotal = 0;
-        this.myOfferDiscount = 0;
-        this.myGstTotal = 0;
-        this.myCusDiscAmount = 0;
-        this.myTotalWeight = 0;
-        Response.forEach((e: any) => {
-          this.myQtyTotal += e.quantity;
-          this.myOfferDiscount += e.discInR * e.quantity;
-          this.myGstTotal += (e.salePrice - (e.salePrice / ((e.gst + 100) / 100))) * e.quantity;
-          this.myCusDiscAmount += e.cusDiscAmount * e.quantity;
-          this.myTotalWeight += e.itemWeight * e.quantity;
-        });
-
-        if (this.gstFeature) {
-          this.generateQRCode();
-        }
-        setTimeout(() => {
-
-          if (this.northEdgeEnterPriseBillFeature) {
-            this.global.printBill('#northedgeEnterprises', '.searchProduct');
-            return;
-          } else {
-
-            if (this.billPrintType == 'english') {
-              if (this.printSize == 'thermal') this.global.printBill('#thermalBillEnglish', '.searchProduct');
-              if (this.printSize == 'a4') this.global.printBill('#A4BillEnglish', '.searchProduct');
-
-            }
-            if (this.billPrintType == 'urdu') {
-              if (this.printSize == 'thermal') this.global.printBill('#thermalBillUrdu', '.searchProduct');
-              if (this.printSize == 'a4') this.global.printBill('#A4BillEnglish', '.searchProduct');
-            }
-            this.qrCodeContainer;
-
-
-            if (this.printKotFeature) {
-              var FastFoodProducts = Response.filter((e: any) => e.subCategoryID == this.fastFoodSCID);
-              this.PrintPartialKot(FastFoodProducts);
-              // this.kotPrint.PrintPartialKot(FastFoodProducts);
-            }
+            this.global.printBill(
+              '#thermalBillEnglish',
+              '.searchProduct'
+            );
 
           }
 
+          if (this.printSize === 'a4') {
 
+            this.global.printBill(
+              '#A4BillEnglish',
+              '.searchProduct'
+            );
+          }
+        }
 
-        }, 100);
+        if (this.billPrintType === 'urdu') {
 
+          if (this.printSize === 'thermal') {
 
+            this.global.printBill(
+              '#thermalBillUrdu',
+              '.searchProduct'
+            );
 
+          }
 
+          if (this.printSize === 'a4') {
 
+            this.global.printBill(
+              '#A4BillEnglish',
+              '.searchProduct'
+            );
+          }
+        }
 
-      }
-    )
+        // -----------------------------
+        // KOT
+        // -----------------------------
 
-  }
+        if (this.printKotFeature) {
+
+          const fastFoodProducts =
+            Response.filter(
+              (e: any) =>
+                e.subCategoryID === this.fastFoodSCID
+            );
+
+          if (fastFoodProducts.length > 0) {
+            this.PrintPartialKot(fastFoodProducts);
+          }
+        }
+
+      }, 100);
+    },
+
+    error: (error) => {
+
+      console.error('PrintBill Error:', error);
+
+      this.msg.WarnNotify(
+        'Unable to load bill information'
+      );
+    }
+  });
+}
 
 
   generateQRCode(): void {

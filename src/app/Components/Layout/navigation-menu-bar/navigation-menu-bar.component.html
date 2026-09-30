@@ -1,0 +1,65 @@
+<div class="d-flex topNavMenuList border-start nav">
+
+    <ng-container *ngFor="let module of moduleMenuList">
+
+        <!-- MODULE -->
+        <div class="nav-item dropdown cursorPointer">
+
+            <a class="list-itm" [matMenuTriggerFor]="moduleMenu">
+
+                {{ module.moduleTitle }}
+
+                <mat-icon class="sideicon mb-1">
+                    arrow_drop_down
+                </mat-icon>
+
+            </a>
+
+            <mat-menu #moduleMenu="matMenu">
+
+                <!-- MENU -->
+                <ng-container *ngFor="let menu of module.menus">
+
+                    <!-- MENU WITH SUBMENUS -->
+                    <ng-container *ngIf="menu.menus.length > 0">
+
+                        <button mat-menu-item [matMenuTriggerFor]="subMenu">
+
+                            {{ menu.menuTitle }}
+
+                        </button>
+
+                        <mat-menu #subMenu="matMenu">
+
+                            <!-- SUB MENU -->
+                            <a mat-menu-item *ngFor="let sub of menu.menus" [routerLink]="['/',sub.moduleLink,sub.menuLink]">
+
+                                {{ sub.menuTitle }}
+
+                            </a>
+
+                        </mat-menu>
+
+                    </ng-container>
+
+
+                    <!-- MENU WITHOUT SUBMENU -->
+                    <a mat-menu-item *ngIf="menu.menus.length === 0" [routerLink]="[
+              '/',
+              menu.moduleLink,
+              menu.menuLink
+            ]">
+
+                        {{ menu.menuTitle }}
+
+                    </a>
+
+                </ng-container>
+
+            </mat-menu>
+
+        </div>
+
+    </ng-container>
+
+</div>

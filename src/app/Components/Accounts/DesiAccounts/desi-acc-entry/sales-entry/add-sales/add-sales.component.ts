@@ -96,8 +96,6 @@ export class AddSalesComponent implements OnInit {
   GetChartOfAccount() {
     this.http.get(environment.mainApi + this.global.accountLink + 'GetChartOfAccount').subscribe({
       next: (value: any) => {
-        console.log(value);
-
         const mapCoa = (list: any[]) =>
           list.map((e: any) => ({
             coaID: e.coaID,
@@ -113,7 +111,7 @@ export class AddSalesComponent implements OnInit {
         this.salesList = mapCoa(value.filter((e: any) => e.alias == 'sales'));
 
 
-        this.btnType == 'Update' ? this.extractEditDetail(this.invoiceNo):''
+        this.btnType == 'Update' ? this.extractEditDetail(this.invoiceNo) : ''
 
       },
       error: error => {
@@ -144,6 +142,11 @@ export class AddSalesComponent implements OnInit {
 
     if (this.cashBankTotal <= 0) {
       this.msg.WarnNotify('Enter Cash or Bank');
+      return;
+    }
+
+    if (this.cashBankTotal != this.netSales) {
+      this.msg.WarnNotify('Cash/Bank And Net Sales are not Equal');
       return;
     }
 
@@ -198,7 +201,7 @@ export class AddSalesComponent implements OnInit {
       this.insert(PostData)
     }
     if (this.btnType == 'Update') {
-    
+
       this.global.openPinCode().subscribe(pin => {
         if (pin) {
 
@@ -215,7 +218,6 @@ export class AddSalesComponent implements OnInit {
 
   insert(PostData: any) {
     $('.loaderDark').show();
-    console.log(PostData);
     this.http.post(environment.mainApi + this.global.accountLink + 'InsertBtpClosingJV', PostData)
       .subscribe({
         next: (Response: any) => {

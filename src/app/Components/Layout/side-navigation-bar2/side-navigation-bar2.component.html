@@ -1,0 +1,129 @@
+<mat-nav-list
+  class="h-100 sideNav"
+  style="overflow-y: auto !important; overflow-x: hidden !important;">
+
+  <div class="py-2 d-flex flex-column nav">
+
+    <!-- CURRENT MODULE -->
+
+    <ng-container *ngIf="currentModule">
+
+      <!-- MENU -->
+
+      <div
+        class="side-menu"
+        *ngFor="let menu of currentModule.menus; let i = index">
+
+
+        <!-- ================================= -->
+        <!-- MENU WITHOUT SUB MENU -->
+        <!-- ================================= -->
+
+        <ng-container *ngIf="menu.menus.length === 0">
+
+          <a
+            class="list-item nav-link text-truncate"
+            [routerLink]="[
+              '/',
+              menu.moduleLink,
+              menu.menuLink
+            ]"
+            routerLinkActive="active">
+
+            <span>
+              {{ menu.menuTitle }}
+            </span>
+
+          </a>
+
+        </ng-container>
+
+
+        <!-- ================================= -->
+        <!-- MENU WITH SUB MENU -->
+        <!-- ================================= -->
+
+        <ng-container *ngIf="menu.menus.length > 0">
+
+          <a
+            class="list-item nav-link text-truncate menu-parent"
+            href="javascript:void(0)"
+            (click)="toggleMenu(menu.menuID)">
+
+            <span>
+              {{ menu.menuTitle }}
+            </span>
+
+            <mat-icon
+              class="menu-arrow"
+              [class.rotate]="isExpanded(menu.menuID)">
+
+              arrow_drop_down
+
+            </mat-icon>
+
+          </a>
+
+
+          <!-- ================================= -->
+          <!-- SUB MENU -->
+          <!-- ================================= -->
+
+          <div
+            class="submenu"
+            *ngIf="isExpanded(menu.menuID)">
+
+            <a
+              *ngFor="let sub of menu.menus"
+
+              class="list-item nav-link text-truncate submenu-item"
+
+              [routerLink]="[
+                '/',
+                sub.moduleLink,
+                sub.menuLink
+              ]"
+
+              routerLinkActive="active">
+
+              <span>
+
+                {{ sub.menuTitle | slice:0:25 }}
+
+                <ng-container
+                  *ngIf="sub.menuTitle.length > 25">
+
+                  ...
+
+                </ng-container>
+
+              </span>
+
+            </a>
+
+          </div>
+
+        </ng-container>
+
+
+      </div>
+
+    </ng-container>
+
+
+    <!-- ================================= -->
+    <!-- NO MODULE -->
+    <!-- ================================= -->
+
+    <div
+      *ngIf="!currentModule"
+      class="text-center p-3 text-muted">
+
+      No menu available
+
+    </div>
+
+
+  </div>
+
+</mat-nav-list>

@@ -59,7 +59,7 @@ export class SalesEntryComponent {
 
     }
   ngOnInit(): void {
-    this.globaldata.setHeaderTitle('Expense');
+    this.globaldata.setHeaderTitle('Sales');
     this.getSavedData();
 
     this.tableSize = this.globaldata.paginationDefaultTalbeSize;
@@ -99,7 +99,6 @@ export class SalesEntryComponent {
 
       this.http.get(environment.mainApi+this.globaldata.accountLink+'GetPayRec?reqType=CLS').subscribe(
         (Response:any)=>{
-          console.log(Response);
           this.savedDataList = Response;
          
         }

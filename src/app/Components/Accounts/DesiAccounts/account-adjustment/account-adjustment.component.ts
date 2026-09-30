@@ -100,6 +100,7 @@ export class AccountAdjustmentComponent implements OnInit {
 
 
   add() {
+
     this.global.openBootstrapModal('#addAdjustmentModal', true)
   }
 
@@ -107,13 +108,13 @@ export class AccountAdjustmentComponent implements OnInit {
     this.global.closeBootstrapModal('#addAdjustmentModal', true);
     if (type == 'update') {
       this.getSavedData();
+      this.addAdjustment.reset();
     }
   }
 
 
   edit(item: any) {
-
-
+    this.addAdjustment.reset();
     this.addAdjustment.invoiceNo = item.invoiceNo;
     this.addAdjustment.invoiceDate = new Date(item.invoiceDate);
     this.addAdjustment.debitCoaID = item.coaid;

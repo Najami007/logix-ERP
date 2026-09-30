@@ -11,6 +11,13 @@
         </div>
       </div>
 
+
+      <section >
+        <app-navigation-menu-bar *ngIf="!moduleWiseNavigationFeature"></app-navigation-menu-bar>
+         <app-navigation-menu-bar2 *ngIf="moduleWiseNavigationFeature"></app-navigation-menu-bar2>
+      </section>
+
+      <!-- 
       <div class="d-flex topNavMenuList border-start nav">
         <ul class="nav " *ngFor="let item of menuList; let i = index">
           <li class="nav-item" *ngIf="item.parentMenuID == 0 && item.isParentMenu == false">
@@ -44,7 +51,7 @@
 
 
 
-      </div>
+      </div> -->
 
     </div>
 

@@ -937,7 +937,9 @@
 }
 
 .btp-stat-box {
-  flex: 1 1 60px;
+  display: flex;
+  justify-content: space-between;
+  // flex: 1 1 60px;
   border: 1px solid #b0bec5;
   border-radius: 6px;
   padding: 6px 8px;
@@ -946,9 +948,157 @@
 }
 
 .btp-stat-label {
-  font-size: 11px;
+  font-size: 12px;
   color: #607d8b;
+  // font-weight: 700;
+}
+
+.btp-stat-value {
+  font-size: 14px;
   font-weight: 700;
+  color: #1a237e;
+}
+
+/* ===================== Vertical Ledger Blocks ===================== */
+
+.btp-ledger-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.btp-ledger-block {
+  border: 1px solid #2c3e50;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.btp-block-header {
+  background: #1a237e;
+  color: #fff;
+  padding: 8px 12px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+.btp-block-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.btp-block-table tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.btp-block-table tbody tr:hover {
+  background: #f4f6f8;
+}
+
+.btp-block-table td {
+  padding: 7px 12px;
+}
+
+.btp-entry-label {
+  color: #37474f;
+}
+
+.btp-entry-amount {
+  text-align: right;
+  font-weight: 700;
+  color: #1565c0;
+  width: 120px;
+}
+
+.btp-block-total-row td {
+  background: #e8eaf6;
+  font-weight: 700;
+  color: #1a237e;
+  border-top: 2px solid #2c3e50;
+  padding: 8px 12px;
+}
+
+.btp-block-total-row td:last-child {
+  text-align: right;
+}
+
+.btp-sales-blocks .btp-block-header {
+  background: #038d28;
+}
+
+.btp-expenses-block .btp-block-header {
+  background: #6d4c41;
+}
+
+.btp-salaries-block .btp-block-total-row td {
+  background: #efebe9;
+  color: #4e342e;
+}
+
+/* ===================== Breakdown blocks ===================== */
+
+.btp-sales-blocks {
+  margin-bottom: 20px;
+}
+
+/* ===================== Grand Total ===================== */
+.btp-ledger-sheet {
+  border: 2px solid #2c3e50;
+  border-radius: 10px;
+  padding: 18px;
+  background: #fffdf7;
+}
+
+.btp-ledger-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #2c3e50;
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.btp-ledger-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #1a237e;
+}
+
+.btp-ledger-meta {
+  display: flex;
+  gap: 18px;
+  font-size: 14px;
+  color: #333;
+}
+
+.btp-quick-stats {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.btp-stat-box {
+  display: flex;
+  justify-content: space-between;
+  
+  border: 1px solid #b0bec5;
+  border-radius: 6px;
+  padding: 6px 8px;
+  text-align: center;
+  background: #f4f6f8;
+}
+
+.btp-stat-label {
+  font-size: 12px;
+  color: #607d8b;
 }
 
 .btp-stat-value {
@@ -1086,7 +1236,7 @@
   display: flex;
   flex-direction: row;
   gap: 16px;
-  min-width: 0; // prevents flex children from overflowing their share
+  min-width: 0; 
 }
 
 .btp-sales-blocks {
@@ -1102,7 +1252,6 @@
   flex: 1 1 0;
   min-width: 0;
 }
-
 
 
 /****************************************************************************

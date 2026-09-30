@@ -48,6 +48,8 @@ export class PurchaseComponent implements OnInit {
   ProjectwiseFeature = this.global.ProjectwiseFeature;
   uomPurchaseFeature = this.global.uomPurchaseFeature;
   SteelTypeFeature = this.global.SteelTypeFeature;
+  MinusDiscountFeature = this.global.MinusDiscountFeature;
+
 
 
 
@@ -196,13 +198,7 @@ export class PurchaseComponent implements OnInit {
       var discP = ((item.tempCostPrice * item.discInP) / 100);
       var discR = (item.discInR / item.quantity);
       var etAmount = ((item.tempCostPrice * item.et) / 100);
-      //var etAmount = (((Number(item.tempCostPrice) + Number(gstAmount) - discP - discR) * item.et) / 100);
-      // var totalCost = item.tempCostPrice * item.quantity;
-      // var costWithDiscP = item.tempCostPrice - discP;
-      // var costWithDiscR = costWithDiscP - discR;
-      // var costWithGst = costWithDiscR + ((costWithDiscR * item.gst) / 100);
-      // var costWithEt = costWithGst + etAmount;
-      //item.costPrice = costWithEt;
+
 
       item.costPrice = (Number(tempCostPrice) - Number(discP) - Number(discR)) + Number(gstAmount) + Number(etAmount);
     }
@@ -394,7 +390,7 @@ export class PurchaseComponent implements OnInit {
         batchNo: '-',
         batchStatus: '-',
         uomID: data.uomID,
-        uomTitle:data.uomTitle,
+        uomTitle: data.uomTitle,
         itemWeight: data.itemWeight,
         packing: data.packing,
         discInP: 0,
@@ -708,7 +704,7 @@ export class PurchaseComponent implements OnInit {
     }
 
 
-    item.margin = ((Number(item.salePrice) - Number(item.costPrice)) / Number(item.costPrice)) * 100
+
 
   }
 
@@ -722,10 +718,18 @@ export class PurchaseComponent implements OnInit {
     }
 
     // Allowed keys
-    const allowedKeys = [
+    const baseKeys = [
       'Backspace', 'Tab', 'Enter', 'Shift', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown',
-      'Delete', '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Numpad0', 'Numpad1', 'Numpad2', 'Numpad3', 'Numpad4', 'Numpad5', 'Numpad6', 'Numpad7', 'Numpad8', 'Numpad9', 'Decimal'
+      'Delete', '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+      'Numpad0', 'Numpad1', 'Numpad2', 'Numpad3', 'Numpad4', 'Numpad5', 'Numpad6', 'Numpad7', 'Numpad8', 'Numpad9', 'Decimal'
     ];
+
+    const allowedKeys =
+      this.MinusDiscountFeature && (cls == '.discP' || cls == '.discR')
+        ? [...baseKeys, '-']
+        : baseKeys;
+
+
 
     // Block keys not allowed
     if (!allowedKeys.includes(e.key)) {
@@ -802,6 +806,27 @@ export class PurchaseComponent implements OnInit {
   }
 
 
+
+
+  updateCostPricewithMinusDisc(type: any) {
+    return this.tableDataList.map((e: any) => {
+
+      if (e.discInP < 0 && type == 'change') {
+        e.tmpCostPrice = e.costPrice;
+        e.costPrice = e.costPrice + (e.discInR * -1);
+        e.discInR = 0;
+
+        this.getTotal();
+      }
+      if (e.discInP < 0 && type == 'reset') {
+        e.salePrice = e.tmpSalePrice;
+        e.discInR = e.salePrice * (e.discInP / 100);
+        this.getTotal();
+      }
+      return e;
+
+    })
+  }
 
 
 
@@ -924,6 +949,8 @@ export class PurchaseComponent implements OnInit {
       this.tableDataList = changeTableDataList;
 
     }
+
+    // var pushTableDataList = this.updateCostPricewithMinusDisc('change');
 
 
     var postData = {
@@ -1120,6 +1147,14 @@ export class PurchaseComponent implements OnInit {
     this.costTotal = 0;
     this.myTotalWeight = 0;
 
+    this.detDiscPerc = 0;
+    this.detGst = 0;
+    this.detAT = 0;
+    this.DiscPTotal = 0;
+    this.DiscRTotal = 0;
+    this.gstTotal = 0;
+    this.advTaxTotal = 0;
+
 
   }
 
@@ -1174,8 +1209,13 @@ export class PurchaseComponent implements OnInit {
       this.DiscRTotal += discInR;
       this.advTaxTotal += quantity * ((tmpCostPrice * et) / 100);
       this.myTotalWeight += itemWeight * quantity;
+
+
+      this.tableDataList[i].margin = ((Number(this.tableDataList[i].salePrice) - Number(this.tableDataList[i].costPrice)) / Number(this.tableDataList[i].costPrice)) * 100
+
     }
-    this.netTotal = (this.subTotal + Number(this.overHead)) - Number(this.discount)
+    this.netTotal = (this.subTotal + Number(this.overHead)) - Number(this.discount);
+
 
 
     ////////////// restrict to save in localstorage///////
@@ -1251,7 +1291,7 @@ export class PurchaseComponent implements OnInit {
             batchStatus: original.batchStatus,
             uomID: original.uomID,
             uomTitle: original.uomTitle,
-            itemWeight:original.itemWeight,
+            itemWeight: original.itemWeight,
             packing: original.packing,
             discInP: original.discInP,
             discInR: original.discInR,

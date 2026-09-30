@@ -2,7 +2,7 @@
 
   <!-- Header bar -->
   <div class="btp-ledger-header">
-    <div class="btp-ledger-title">{{ reportMeta.storeName }}</div>
+    <div class="btp-ledger-title">{{ companyName }}</div>
     <div class="btp-ledger-meta">
       <span class="hide-in-print">
         <mat-form-field class="w-100 matSmall" appearance="outline">
@@ -113,8 +113,8 @@
     <div class="col-md-2">
       <!-- Quick stats strip -->
       <div class="btp-quick-stats">
-        <div class="btp-stat-box" *ngFor="let stat of quickStats">
-          <div class="btp-stat-label" [ngClass]="stat.type == 'pb' || stat.type == 'total' ? 'fw-bold' : ''">{{ stat.label }}</div>
+        <div class="btp-stat-box" [ngStyle]="{backgroundColor: getBackgroundColor(stat.type)}"  *ngFor="let stat of quickStats">
+          <div class="btp-stat-label"  [ngClass]="stat.type == 'pb' || stat.type == 'dif'  ? 'fw-bold' : ''" >{{ stat.label }}</div>
           <div class="btp-stat-value">{{ stat.value | number }}</div>
         </div>
       </div>

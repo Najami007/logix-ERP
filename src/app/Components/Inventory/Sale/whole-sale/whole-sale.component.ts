@@ -81,6 +81,7 @@ export class WholeSaleComponent implements OnInit {
   NonFBRFeature = this.global.NonFBRFeature;
   qtyPopupFeature = this.global.qtyPopupFeature;
   MutliplePricesFeature = this.global.MutliplePricesFeature;
+  MinusDiscountFeature = this.global.MinusDiscountFeature;
 
 
 
@@ -161,10 +162,9 @@ export class WholeSaleComponent implements OnInit {
 
 
     this.getProducts();
-    for (let i = 0; i <= 100; i++) { this.discountList.push({ value: i }); }
-
-
-
+    // for (let i = -1; i >= -100; i--) { this.discountList.push({ value: i }); }
+  
+    for (let i = this.MinusDiscountFeature ? -100 : 0; i <= 100; i++) { this.discountList.push({ value: i }); }
   }
 
   getProducts() {
@@ -172,6 +172,7 @@ export class WholeSaleComponent implements OnInit {
       (data: any) => { this.productList = data; });
   }
 
+  discountListMinus: any = [];
   discountList: any = [];
   billDiscount: any = 0;
 
@@ -504,7 +505,7 @@ export class WholeSaleComponent implements OnInit {
         uomID: data.uomID,
         gst: this.gstFeature ? data.gst : 0,
         et: data.et,
-        itemWeight:data.itemWeight,
+        itemWeight: data.itemWeight,
         packing: data.packing,
         multyQty: data.multyQty,
         uomTitle: data.uomTitle,
@@ -729,6 +730,9 @@ export class WholeSaleComponent implements OnInit {
           : 0;
   }
 
+
+  weightTotal:any = 0;
+
   getTotal() {
 
 
@@ -738,7 +742,7 @@ export class WholeSaleComponent implements OnInit {
     this.offerDiscount = 0;
     this.AdvTaxAmount = 0;
     this.tableTotal = 0;
-
+    this.weightTotal = 0;
 
     this.tableDataList.forEach((e: any) => {
       // if (this.billDiscount > 0) {
@@ -750,7 +754,7 @@ export class WholeSaleComponent implements OnInit {
       this.subTotal += Number(e.quantity) * this.getItemPrice(e);
       this.offerDiscount += Number(e.discInR) * Number(e.quantity);
       this.tableTotal += (Number(e.quantity) * this.getItemPrice(e)) - (Number(e.discInR) * Number(e.quantity));
-
+      this.weightTotal += Number(e.quantity) * Number(e.itemWeight);
 
     });
 
@@ -1166,7 +1170,11 @@ export class WholeSaleComponent implements OnInit {
         confirmButtonText: 'Save',
         showLoaderOnConfirm: true,
         preConfirm: (value) => {
-          if (!value || isNaN(value) || value < 0) {
+
+          if(value < 0 && !this.MinusDiscountFeature){
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
+          if (!value || isNaN(value) ) {
             return Swal.showValidationMessage("Enter Valid Amount");
           }
 
@@ -1204,7 +1212,11 @@ export class WholeSaleComponent implements OnInit {
         confirmButtonText: 'Save',
         showLoaderOnConfirm: true,
         preConfirm: (value) => {
-          if (!value || isNaN(value) || value < 0) {
+
+          if(value < 0 && !this.MinusDiscountFeature){
+            return Swal.showValidationMessage("Enter Valid Amount");
+          }
+          if (!value || isNaN(value) ) {
             return Swal.showValidationMessage("Enter Valid Amount");
           }
 
@@ -1280,6 +1292,27 @@ export class WholeSaleComponent implements OnInit {
       }
     })
 
+  }
+
+  updateSalePricewithMinusDisc(type: any) {
+    return this.tableDataList.map((e: any) => {
+
+      if ( type == 'change' ) {
+        e.tmpsalePrice = e.salePrice;
+        this.billDiscount = Number(this.billDiscount) - (Number(e.discInR) * Number(e.quantity));
+        e.salePrice = Number(e.salePrice) + (Number(e.discInR) * -1);
+        e.discInR = 0;
+
+        this.getTotal();
+      }
+      if ( type == 'reset') {
+        e.salePrice = e.tmpSalePrice;
+        e.discInR =Number( e.salePrice) * (Number(e.discInP) / 100);
+        this.getTotal();
+      }
+      return e;
+
+    })
   }
 
 
@@ -1390,6 +1423,7 @@ export class WholeSaleComponent implements OnInit {
     }
 
 
+    var pushTableDataList = this.MinusDiscountFeature ?  this.updateSalePricewithMinusDisc('change') : this.tableDataList;
 
 
 
@@ -1419,7 +1453,7 @@ export class WholeSaleComponent implements OnInit {
       BankCash: this.bankCash,
       CusContactNo: this.customerMobileno || '-',
       CusName: this.customerName || '-',
-      SaleDetail: JSON.stringify(this.tableDataList),
+      SaleDetail: JSON.stringify(pushTableDataList),
       VehicleID: this.vehicleID,
       MeterReading: this.meterReading || '0',
       TransportPartyID: this.transporterID,
@@ -1443,9 +1477,12 @@ export class WholeSaleComponent implements OnInit {
       return;
     }
 
+    console.log(postData)
+
     if (this.isProcessing == true) return;
     this.isProcessing = true;
     this.app.startLoaderDark();
+    console.log(postData);
     this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', postData).subscribe(
       (Response: any) => {
         if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
@@ -1466,6 +1503,7 @@ export class WholeSaleComponent implements OnInit {
 
         } else {
           this.msg.WarnNotify(Response.msg);
+         this.MinusDiscountFeature ?  this.updateSalePricewithMinusDisc('reset') : '';
         }
         this.isProcessing = false;
         this.app.stopLoaderDark();
@@ -1475,6 +1513,8 @@ export class WholeSaleComponent implements OnInit {
         this.isProcessing = false;
         console.log(error);
         this.msg.WarnNotify('Unable to Save Check Connection');
+        this.MinusDiscountFeature ?  this.updateSalePricewithMinusDisc('reset') : '';
+
 
         this.app.stopLoaderDark();
       }
@@ -1934,7 +1974,7 @@ export class WholeSaleComponent implements OnInit {
                 uomID: data.uomID,
                 gst: this.gstFeature ? data.gst : 0,
                 et: data.et,
-                itemWeight:data.itemWeight,
+                itemWeight: data.itemWeight,
                 packing: data.packing,
                 multyQty: data.multyQty,
 

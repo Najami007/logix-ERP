@@ -20,12 +20,11 @@ import { UpdateSubscriptionComponent } from '../../User/update-subscription/upda
   styleUrls: ['./top-nav-bar.component.scss']
 })
 export class TopNavBarComponent implements OnInit {
-  clickEventSubscription: Subscription;
 
-  public menuList?: any = [];
-  moduleID?: string | null;
+
 
   NotificationFeature = this.globalData.NotificationFeature;
+  moduleWiseNavigationFeature = this.globalData.moduleWiseNavigationFeature;
 
 
   subscriptionFeature = this.globalData.getFeature('')
@@ -45,38 +44,20 @@ export class TopNavBarComponent implements OnInit {
     private render: Renderer2,
   ) {
 
-    this.clickEventSubscription = this.globalData
-      .getMenuItem()
-      .subscribe((value: any) => {
-        this.moduleID = this.globalData.getModuleID() || value; // value;
-        this.getMenu();
-
-      });
-
-    // this.moduleID = this.globalData.getModuleID();
-    // this.getMenu();
+    
 
   }
 
 
   ngOnInit(): void {
 
-    this.moduleID = this.globalData.getModuleID();
     this.UserName = this.globalData.getUserName();
-    this.getMenu();
     this.getCompany();
 
 
   }
 
   changeThemeFlag = false;
-
-
-
-
-
-
-
 
 
   Menu = "menu";
@@ -125,70 +106,11 @@ export class TopNavBarComponent implements OnInit {
 
   hideFlag = true;
 
-  // hideUnhide(){
-  //  this.hideFlag != this.hideFlag;
-  //  if(this.hideFlag == true){
-  //   $('#menubar').fadeOut(500);
-  //   // $('#menuBar2').fadeOut(500);
-  //  }
-
-  //  if(this.hideFlag == false){
-  //   $('#menubar').show();
-  //   // $('#menuBar2').show();
-  //  }
-
-  // }
-
-
-  tmpMenuList:any = [];
-
-  getMenu() {
-
-    if (
-      this.moduleID != null &&
-      (typeof this.moduleID == 'string' || typeof this.moduleID == 'number')
-    ) {
-
-
-
-      this.http.get(environment.mainApi + this.globalData.userLink + 'getusermenu?userid=' + this.globalData.getUserID() + '&moduleid=' + this.moduleID).subscribe(
-        (Response: any) => {
-
-          this.tmpMenuList = Response;
-          this.menuList = Response.map((e: any) => {
-            if (e.isParentMenu) {
-              e.childCount =  this.haveChildMenu(e);
-            }
-            return e;
-          })
-          this.globalData.glbMenulist = Response;
-
-        }
-      )
-
-    }
-
-
-  }
-
-
-  haveChildMenu(item: any) {
-    var checkMenuList = this.tmpMenuList.filter((e: any) => e.parentMenuID == item.menuID);
-    return checkMenuList.length;
-  }
-
-
-
 
   setSidebarMenu(module: any) {
 
     this.route.navigate([module]);
   }
-
-  // setMenuID(item:any){
-  //   this.globalData.setMenuList(item);
-
-  // }
 
 
   logout() {

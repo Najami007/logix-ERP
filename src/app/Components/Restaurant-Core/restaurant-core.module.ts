@@ -58,6 +58,8 @@ import { CashierClosingRptComponent } from '../Inventory/InventoryReports/cashie
 import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
 import { VoiceRecorderComponent } from './Sales/SaleCommonComponent/voice-recorder/voice-recorder.component';
 import { CommentCardNewComponent } from './Sales/SaleCommonComponent/comment-card-new/comment-card-new.component';
+import { OrderDashboard2Component } from './order-dashboard2/order-dashboard2.component';
+import { Sale3Component } from './Sales/sale3/sale3.component';
 
 export const MY_DATE_FORMAT  = {
   parse: {
@@ -85,7 +87,7 @@ export const restCore: Route[] = [
   {path:'rcp', component:RecipeComponent,data: { title: 'Recipe' }, canActivate:[AuthGuard] },
   {path:'recCat', component:RecipeCategoryComponent,data: { title: 'Recipe Category' }, canActivate:[AuthGuard] },
   {path:'ckar', component:CookingareaComponent,data: { title: 'Cooking Area' }, canActivate:[AuthGuard] },
-  {path:'ordrdb', component:OrderDashboardComponent,data: { title: 'Ord Dashboard' }, canActivate:[AuthGuard] },
+  {path:'ordrdb', component:OrderDashboard2Component,data: { title: 'Ord Dashboard' }, canActivate:[AuthGuard] },
   {path:'slrpt', component:SaleReportComponent,data: { title: 'Sale Rpt Datewise' }, canActivate:[AuthGuard] },
   {path:'srptrw', component:SaleRptRecipewiseComponent,data: { title: 'Sale Rpt Recipewise' }, canActivate:[AuthGuard] },
   {path:'srptcw', component:SaleRptRecipeCatwiseComponent,data: { title: 'Sale Rpt Categorywise' }, canActivate:[AuthGuard] },
@@ -151,6 +153,8 @@ export const restCore: Route[] = [
     CommentCardComponent,
     VoiceRecorderComponent,
     CommentCardNewComponent,
+    OrderDashboard2Component,
+    Sale3Component,
    
     
    
