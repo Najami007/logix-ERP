@@ -7,6 +7,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { environment } from 'src/environments/environment.development';
 import { SavedVehiclesComponent } from './saved-vehicles/saved-vehicles.component';
 import { AddVehicleComponent } from './add-vehicle/add-vehicle.component';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-vehicle',
@@ -16,8 +17,8 @@ import { AddVehicleComponent } from './add-vehicle/add-vehicle.component';
 export class VehicleComponent implements OnInit {
 
   @ViewChild(SavedVehiclesComponent) savedVehicleComp: any;
-  @ViewChild(AddVehicleComponent)    addVehicleForm:any;
-
+  @ViewChild(AddVehicleComponent) addVehicleForm: any;
+    @ViewChild('drawer') drawer!: MatSidenav;
 
 
   page: number = 1;
@@ -57,6 +58,16 @@ export class VehicleComponent implements OnInit {
     this.getVehileList();
   }
 
+
+
+  drawerOpen = false;
+  editingVehicle: any = null;
+  searchText = '';
+
+  newVehicle() { this.editingVehicle = null; }
+  editsVehicle(v) { this.editingVehicle = v; }
+  onDrawerClose() { this.editingVehicle = null; }
+
   selectedTab = 0;
 
   vehicleList: any = [];
@@ -91,7 +102,7 @@ export class VehicleComponent implements OnInit {
 
     var url = `${environment.mainApi + this.global.miningLink}${insertType}`;
 
-    console.log(url,payload);
+    console.log(url, payload);
 
     this.http.post(url, payload).subscribe(
       {
@@ -101,7 +112,8 @@ export class VehicleComponent implements OnInit {
             || Response.msg == 'Data Deleted Successfully') {
             this.msg.SuccessNotify(Response.msg);
             this.getVehileList();
-            this.addVehicleForm.onCancel()
+            this.addVehicleForm.onCancel();
+            this.drawer.close()
           } else {
             this.msg.WarnNotify(Response.msg);
           }
@@ -112,8 +124,7 @@ export class VehicleComponent implements OnInit {
   }
 
 
-  editVehicle(item:any){
-
+  editVehicle(item: any) {
     this.addVehicleForm.editVehicle(item);
     this.changeTab(0)
 

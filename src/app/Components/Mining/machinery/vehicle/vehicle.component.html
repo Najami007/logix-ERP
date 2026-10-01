@@ -1,4 +1,43 @@
-<mat-tab-group  [(selectedIndex)]="selectedTab">
+<mat-sidenav-container class="body">
+    <mat-sidenav #drawer mode="over" position="end" class="form-drawer" width="80%" [(opened)]="drawerOpen"
+        (closedStart)="onDrawerClose()">
+        <div class="drawer-header">
+            <h2>{{ editingVehicle ? 'Edit Vehicle' : 'Add Vehicle' }}</h2>
+            <button mat-icon-button (click)="drawer.close()"><mat-icon>close</mat-icon></button>
+        </div>
+        <app-add-vehicle (saveVehicle)="saveVehicle($event.type, $event.load); ">
+        </app-add-vehicle>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <!-- <header class="hero">
+      <div>
+        <h1>Vehicle Management</h1>
+        <p>{{ vehicleList.length }} vehicles registered</p>
+      </div>
+      <mat-form-field appearance="outline" class="search">
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput placeholder="Search vehicles..." [(ngModel)]="searchText">
+      </mat-form-field>
+    </header> -->
+        <button mat-fab extended color="primary" class="fab" (click)="newVehicle(); drawer.open()">
+            <mat-icon>add</mat-icon> Add Vehicle
+        </button>
+        <app-saved-vehicles [vehicles]="vehicleList | filter:searchText"
+            (remove)="saveVehicle($event.type, $event.load)" (edit)="editVehicle($event); drawer.open()">
+        </app-saved-vehicles>
+
+
+    </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+
+
+
+
+
+<!-- <mat-tab-group  [(selectedIndex)]="selectedTab">
     <mat-tab label="Form">
         <app-add-vehicle
         (saveVehicle)="saveVehicle($event.type,$event.load)"
@@ -15,4 +54,4 @@
         ></app-saved-vehicles>
 
     </mat-tab>
-</mat-tab-group>
+</mat-tab-group> -->

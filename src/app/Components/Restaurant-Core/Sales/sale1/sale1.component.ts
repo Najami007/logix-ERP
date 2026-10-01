@@ -651,9 +651,11 @@ export class Sale1Component implements OnInit {
 
           const coa = this.bankCoaList.find((e: any) => e.coaID == this.bankCoaID);
 
-          this.gstValue = coa?.coaTitle === 'Card'
-            ? this.cardGstValue
-            : this.cashGSTValue;
+          this.gstValue = this.cardGstValue;
+
+          // this.gstValue = coa?.coaTitle === 'Card'
+          //   ? this.cardGstValue
+          //   : this.cashGSTValue;
 
         } else {
 
