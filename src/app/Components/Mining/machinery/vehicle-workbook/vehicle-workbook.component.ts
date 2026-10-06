@@ -1,46 +1,13 @@
-import { Component, ViewChild, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { environment } from 'src/environments/environment.development';
+import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
+import { HttpClient } from '@angular/common/http';
+import { NotificationService } from 'src/app/Shared/service/notification.service';
+import { AppComponent } from 'src/app/app.component';
 
-
-interface VehicleOption {
-  id: number;
-  name: string;
-  no: string;
-}
-
-interface EntryModel {
-  vehicleId: number | null;
-  workingHour: any;
-  description: string;
-  date: Date | null;
-}
-
-type SortKey = 'date' | 'vehicle' | 'hours';
-type SortDir = 'asc' | 'desc';
-
-/** Local date -> "yyyy-MM-dd" (avoids the time-zone shift toISOString() causes). */
-function toIsoDate(date: Date): string {
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-}
-
-function fromIsoDate(iso: string): Date {
-  const [y, m, d] = iso.split('-').map(Number);
-  return new Date(y, m - 1, d);
-}
 
 @Component({
   selector: 'app-vehicle-workbook',
@@ -48,48 +15,135 @@ function fromIsoDate(iso: string): Date {
   templateUrl: './vehicle-workbook.component.html',
   styleUrls: ['./vehicle-workbook.component.scss'],
 })
-export class VehicleWorkbookComponent {
+export class VehicleWorkbookComponent implements OnInit {
 
   private readonly snackBar = inject(MatSnackBar);
-  private readonly dialog = inject(MatDialog);
+
+  public readonly global = inject(GlobalDataModule);
+  public readonly http = inject(HttpClient);
+  public readonly msg = inject(NotificationService);
+  public readonly app = inject(AppComponent)
+
 
   @ViewChild('entryForm') entryForm?: NgForm;
 
   selectedTab = 0;
-
   // ---- Form (template-driven, bound with [(ngModel)]) ----
-  model: EntryModel = this.blankModel();
-  editingId: number | null = null;
-  private editingEntry: any | null = null;
-  vehicleOptions: VehicleOption[] = [];
-  private vehicles: any[] = [];
+  model = this.blankModel();
+  vehicleOptions: any = [];
+  vehicles: any[] = [];
 
   // ---- Saved records ----
-  entries: any[] = [];
-  visibleEntries: any[] = [];
-  vehicleFilterOptions: { id: number; label: string }[] = [];
-  totalHours = 0;
-
+  vehicleFilterOptions: any = [];
   search = '';
-  vehicleFilter: number | 'all' = 'all';
-  fromDate: Date | null = null;
-  toDate: Date | null = null;
-  sortKey: SortKey = 'date';
-  sortDir: SortDir = 'desc';
+  FilterVehicleID: number = 0;
+  // fromDate: Date | null = null;
+  // toDate: Date | null = null;
+  curDate = new Date();
+  fromDate: any =  this.setDates('start');
+  toDate: any =this.setDates('end');
 
-  constructor() {
-    
+
+  setDates(type: 'start' | 'end'): Date {
+    const y = this.curDate.getFullYear();
+    const m = this.curDate.getMonth();
+
+    return type === 'start'
+      ? new Date(y, m, 1)        // first day of the month
+      : new Date(y, m + 1, 0);   // day 0 of next month = last day of this month
   }
 
+  constructor() {
+
+  }
+  ngOnInit(): void {
+
+    this.global.setHeaderTitle("Work Book")
+    this.getVehileList();
+    this.getWorkbookList();
+    this.tableSize = this.global.paginationDefaultTalbeSize;
+    this.tableSizes = this.global.paginationTableSizes;
+  }
+
+
+  ////////////////// Pagination Configurations ///////////////////
+
+
+  page: number = 1;
+  count: number = 0;
+
+  tableSize: number = 0;
+  tableSizes: any = [];
+  jumpPage: any = 0;
+  tmpPage: number = 0;
+
+  onTableDataChange(event: any) {
+
+    this.page = event;
+    this.getWorkbookList();
+    setTimeout(() => {
+      this.applyFilters();
+    }, 500);
+  }
+
+  onTableSizeChange(event: any): void {
+    this.tableSize = event.target.value;
+    this.page = 1;
+    this.getWorkbookList();
+    setTimeout(() => {
+      this.applyFilters();
+    }, 500);
+  }
+
+  goToPage(): void {
+    var count = this.workBookList.length / this.tableSize;
+    if (parseFloat(this.jumpPage) > count) {
+      this.msg.WarnNotify('Invalid Value')
+      return;
+    }
+
+    if (this.jumpPage >= 1) {
+      this.page = this.jumpPage;
+      this.getWorkbookList();
+      setTimeout(() => {
+        this.applyFilters();
+      }, 500);
+    }
+  }
+
+  onProdSearchKeyup(e: any, value: any) {
+
+    if (e.target.value.length == 0 && this.tmpPage == 0) {
+      this.tmpPage = this.page;
+      this.page = 1;
+    }
+    if (e.key == 'Backspace') {
+      if (value.length == 1) {
+        this.page = this.tmpPage;
+        this.tmpPage = 0;
+      }
+    }
+
+
+  }
+
+
+
+  //////////////////// Pagination Configuration End ////////////////////////
+
+
+
+
+
   get isEditing(): boolean {
-    return this.editingId !== null;
+    return this.model.VehicleWorkBookID > 0;
   }
 
   get hasFilters(): boolean {
-    return this.search.trim() !== '' || this.vehicleFilter !== 'all' || !!this.fromDate || !!this.toDate;
+    return this.search.trim() !== '' || this.FilterVehicleID !== 0 ;
   }
 
-  trackById = (_: number, item: { id?: number }) => item.id;
+
 
   // ================= Form =================
 
@@ -99,25 +153,92 @@ export class VehicleWorkbookComponent {
       return;
     }
 
-    const vehicle = this.vehicleOptions.find((o) => o.id === this.model.vehicleId);
-    if (!vehicle || !this.model.date) {
+
+
+    var data: any = this.model;
+
+    if (!data.vehicleID) {
+      this.msg.WarnNotify('Select Vehicle');
       return;
     }
 
-    var payLoad ={
-      id: this.editingId ?? undefined,
-      vehicleId: vehicle.id,
-      vehicleName: vehicle.name,
-      vehicleNo: vehicle.no,
-      workingHour: Number(this.model.workingHour),
-      description: this.model.description.trim(),
-      date: toIsoDate(this.model.date),
+    const workingHour = Number(data.workingHour);
+    if (data.workingHour === '' || data.workingHour == null || isNaN(workingHour) || workingHour <= 0) {
+      this.msg.WarnNotify('Enter valid working hours');
+      return;
+    }
+
+    if (!data.workDate) {
+      this.msg.WarnNotify('Select work date');
+      return;
+    }
+
+
+    var payLoad = {
+      VehicleWorkBookID: data.vehicleWorkBookID ?? 0,
+      VehicleID: data.vehicleID,
+      WorkingHour: workingHour,
+      Description: (data.description ?? '').trim(),
+      PinCode: '',
+      workDate: this.global.dateFormater(data.workDate, ''),
+      userID: this.global.getUserID()
     };
 
-    this.snackBar.open(this.isEditing ? 'Entry updated.' : 'Entry saved.', undefined, { duration: 3000 });
-    this.leaveForm(form);
-    this.selectedTab = 1; // show the saved list
+    if (data.vehicleWorkBookID > 0) {
+      this.global.openPinCode().subscribe(pin => {
+        if (pin != '') {
+          payLoad.PinCode = pin;
+          this.saveWorkBook('update', payLoad);
+        }
+      })
+    } else {
+      this.saveWorkBook('insert', payLoad)
+    }
+
+
+    // this.snackBar.open(this.isEditing ? 'Entry updated.' : 'Entry saved.', undefined, { duration: 3000 });
+
   }
+
+
+
+  saveWorkBook(type: any, payload: any) {
+    this.app.startLoaderDark();
+    const insertType = {
+      insert: 'InsertVehicleWorkBook',
+      update: 'UpdateVehicleWorkBook',
+      delete: 'DeleteVehicleWorkBook',
+    }[type];
+
+
+    var url = `${environment.mainApi + this.global.miningLink}${insertType}`;
+
+    console.log(url, payload);
+
+    this.http.post(url, payload).subscribe(
+      {
+        next: (Response: any) => {
+          if (Response.msg == 'Data Saved Successfully'
+            || Response.msg == 'Data Updated Successfully'
+            || Response.msg == 'Data Deleted Successfully') {
+            this.msg.SuccessNotify(Response.msg);
+            this.getWorkbookList();
+            this.selectedTab = 1; // show the saved list
+
+          } else {
+            this.msg.WarnNotify(Response.msg);
+          }
+          this.app.stopLoaderDark();
+        },
+        error: (error) => {
+          console.log(error);
+          this.app.stopLoaderDark();
+
+        }
+      }
+    )
+  }
+
 
   onCancel(form: NgForm): void {
     const wasEditing = this.isEditing;
@@ -127,103 +248,123 @@ export class VehicleWorkbookComponent {
     }
   }
 
-  onEdit(entry: any): void {
-   
+  onEdit(item: any): void {
+    this.model.vehicleWorkBookID = item.vehicleWorkBookID;
+    this.model.vehicleID = item.vehicleID;
+    this.model.workDate = new Date(item.workDate);
+    this.model.workingHour = item.workingHour;
+    this.model.description = item.description;
+    this.selectedTab = 0;
+
+    console.log(this.model);
+
   }
 
   private leaveForm(form: NgForm): void {
-    this.editingId = null;
-    this.editingEntry = null;
+
     this.model = this.blankModel();
-    this.refreshVehicleOptions();
     form.resetForm();
   }
 
-  private blankModel(): EntryModel {
-    return { vehicleId: 0, workingHour: '', description: '', date: new Date() };
+  private blankModel(): any {
+    return { vehicleWorkBookID: 0, vehicleID: 0, workingHour: '', description: '', workDate: new Date() };
   }
 
-  /** Only active vehicles can be picked, plus the vehicle of the entry being edited (it may be inactive or deleted by now). */
-  private refreshVehicleOptions(): void {
-    const options: VehicleOption[] = this.vehicles
-      .filter((v) => v.id != null && v.vehicleActiveStatus)
-      .map((v) => ({ id: v.id!, name: v.vehicleName, no: v.vehicleNo }));
 
-    const entry = this.editingEntry;
-    if (entry && !options.some((o) => o.id === entry.vehicleId)) {
-      options.push({ id: entry.vehicleId, name: entry.vehicleName, no: entry.vehicleNo });
-    }
-
-    this.vehicleOptions = options;
-  }
 
   // ================= Saved records =================
 
-  private refreshFilterOptions(): void {
-    const seen = new Map<number, string>();
-    this.entries.forEach((e) => seen.set(e.vehicleId, `${e.vehicleName} (${e.vehicleNo})`));
-    this.vehicleFilterOptions = [...seen.entries()]
-      .map(([id, label]) => ({ id, label }))
-      .sort((a, b) => a.label.localeCompare(b.label));
 
-    if (this.vehicleFilter !== 'all' && !seen.has(this.vehicleFilter)) {
-      this.vehicleFilter = 'all';
-    }
+  getVehileList() {
+
+    var url = `${environment.mainApi + this.global.miningLink}GetVehicle?VehicleID=0`
+
+    this.http.get(url).subscribe(
+      {
+        next: (Response: any) => {
+          this.vehicles = Response.filter((e: any) => e.vehicleActiveStatus);
+          this.vehicleFilterOptions = this.vehicles;
+        },
+        error: (error: any) => {
+          console.log('error occured while loading vehicle list' + error);
+        }
+      }
+    )
+
   }
 
+  workBookList: any = [];
+  tmpWorkBookList: any = [];
+
+  getWorkbookList() {
+    // var url = `${environment.mainApi + this.global.miningLink}GetVehicleWorkBook?VehicleWorkBookID=0`;
+
+    var fromDate = this.global.dateFormater(this.fromDate,'')
+    var toDate = this.global.dateFormater(this.toDate,'')
+
+    var url = `${environment.mainApi + this.global.miningLink}GetWorkBookReport?VehicleID=0
+    &ReportType=Detail&FromDate=${fromDate}&ToDate=${toDate}&FromTime=00:00&ToTime=23:59:59`;
+
+
+    this.http.get(url).subscribe(
+      {
+        next: (Response: any) => {
+          console.log(Response);
+          this.tmpWorkBookList = Response;
+          this.workBookList = Response;
+        }
+      }
+    )
+
+  }
   applyFilters(): void {
-    const words = this.search.trim().toLowerCase().split(/\s+/).filter(Boolean);
-    const from = this.fromDate ? toIsoDate(this.fromDate) : null;
-    const to = this.toDate ? toIsoDate(this.toDate) : null;
 
-    const list = this.entries.filter((e) => {
-      if (this.vehicleFilter !== 'all' && e.vehicleId !== this.vehicleFilter) return false;
-      if (from && e.date < from) return false;
-      if (to && e.date > to) return false;
-      if (!words.length) return true;
+    const from = this.toDate_(this.fromDate);
+    const to = this.toDate_(this.toDate);
+    if (from) from.setHours(0, 0, 0, 0);
+    if (to) to.setHours(23, 59, 59, 999);
 
-      const haystack = [e.vehicleName, e.vehicleNo, e.description, e.date].join(' ').toLowerCase();
-      return words.every((w) => haystack.includes(w));
+    this.workBookList = this.tmpWorkBookList.filter((e: any) => {
+      const vehicleMatch = !this.FilterVehicleID || e.vehicleID === this.FilterVehicleID;
+
+      const workDate = this.toDate_(e.workDate);
+      const dateMatch =
+        (!from || (!!workDate && workDate >= from)) &&
+        (!to || (!!workDate && workDate <= to));
+
+      return vehicleMatch && dateMatch;
     });
-
-    const dir = this.sortDir === 'asc' ? 1 : -1;
-    list.sort((a, b) => {
-      let result = 0;
-      if (this.sortKey === 'date') result = a.date.localeCompare(b.date);
-      else if (this.sortKey === 'vehicle') result = a.vehicleName.localeCompare(b.vehicleName);
-      else result = a.workingHour - b.workingHour;
-
-      return result * dir || (b.id ?? 0) - (a.id ?? 0);
-    });
-
-    this.visibleEntries = list;
-    this.totalHours = Math.round(list.reduce((sum, e) => sum + e.workingHour, 0) * 100) / 100;
   }
 
-  sortBy(key: SortKey): void {
-    if (this.sortKey === key) {
-      this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.sortKey = key;
-      this.sortDir = key === 'date' ? 'desc' : 'asc';
-    }
-    this.applyFilters();
+  private toDate_(value: any): Date | null {
+    if (!value) return null;
+    const d = new Date(value);
+    return isNaN(d.getTime()) ? null : d;
   }
 
-  ariaSort(key: SortKey): 'ascending' | 'descending' | 'none' {
-    if (this.sortKey !== key) return 'none';
-    return this.sortDir === 'asc' ? 'ascending' : 'descending';
-  }
 
   clearFilters(): void {
     this.search = '';
-    this.vehicleFilter = 'all';
-    this.fromDate = null;
-    this.toDate = null;
+    this.FilterVehicleID = 0;
+    this.fromDate =  this.setDates('start');
+    this.toDate =this.setDates('end');
     this.applyFilters();
   }
 
-  confirmDelete(entry: any): void {
-    
+  confirmDelete(item: any): void {
+
+    var payload = {
+      VehicleWorkBookID: item.vehicleWorkBookID,
+      PinCode: "",
+      UserID: this.global.getUserID()
+    }
+
+    this.global.openPinCode().subscribe(pin => {
+      if (pin != '') {
+        payload.PinCode = pin;
+        this.saveWorkBook('delete', payload);
+      }
+    })
+
   }
 }

@@ -16,6 +16,7 @@ import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-m
 import { EditQtyModalComponent } from './edit-qty-modal/edit-qty-modal.component';
 import { MatRadioButton } from '@angular/material/radio';
 import { retry } from 'rxjs';
+import { NgIf } from '@angular/common';
 
 
 
@@ -44,6 +45,14 @@ export class GarmentSaleComponent implements OnInit {
   }
 
 
+
+  @HostListener('document:visibilitychange', [])
+
+  appVisibility() {
+    ////////////// restrict to save in localstorage///////
+    if (!this.insertLocalStorageFeature) return;
+    if (document.hidden) { } else { this.importFromLocalStorage(); }
+  }
 
   @ViewChild(SaleBillPrintComponent) billPrint: any;
   disableDate = this.global.DisableDateSale;
@@ -77,6 +86,8 @@ export class GarmentSaleComponent implements OnInit {
   disableOtherDiscFeature = this.global.disableOtherDiscFeature;
   TransporterFeature = this.global.TransporterFeature;
   NonFBRFeature = this.global.NonFBRFeature;
+  insertLocalStorageFeature = this.global.insertLocalStorageFeature;
+
 
 
   companyProfile: any = [];
@@ -147,6 +158,8 @@ export class GarmentSaleComponent implements OnInit {
     this.getTransporterList();
     this.getBooker();
     this.getVehicles();
+    this.importFromLocalStorage();
+
 
 
     setTimeout(() => {
@@ -712,6 +725,12 @@ export class GarmentSaleComponent implements OnInit {
 
     // Change
     this.change = Math.round(((Number(this.cash) || 0) + (Number(this.bankCash) || 0) - this.netTotal) * 100) / 100;
+
+
+
+    ////////////// restrict to save in localstorage///////
+    if (!this.insertLocalStorageFeature) return;
+    this.insertToLocalStorage();
 
   }
 
@@ -1320,7 +1339,7 @@ export class GarmentSaleComponent implements OnInit {
     this.http.post(environment.mainApi + this.global.inventoryLink + 'InsertCashAndCarrySale', postData).subscribe(
       (Response: any) => {
         if (Response.msg == 'Data Saved Successfully') {
-           if (printFlag) {
+          if (printFlag) {
             this.PrintAfterSave(Response.invNo);
           }
           this.tmpCash = this.cash;
@@ -1328,7 +1347,7 @@ export class GarmentSaleComponent implements OnInit {
           this.reset();
           this.msg.SuccessNotify(Response.msg);
 
-         
+
 
           if (paymentType != 'Cash') {
             $('#searchProduct').trigger('focus');
@@ -1766,5 +1785,51 @@ export class GarmentSaleComponent implements OnInit {
   getBillDetail(invBillNo: any) {
     return this.http.get(environment.mainApi + this.global.inventoryLink + 'PrintBill?BillNo=' + invBillNo).pipe(retry(3));
   }
+
+
+
+
+
+  private readonly STORAGE_KEY = 'tmpgsaleData';
+
+  removeLocalStorage() {
+    if (!this.insertLocalStorageFeature) return;
+    localStorage.removeItem(this.STORAGE_KEY);
+  }
+
+  insertToLocalStorage() {
+    if (!this.insertLocalStorageFeature) return;
+
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.tableDataList));
+    } catch (e) {
+      // Most likely QuotaExceededError
+      Swal.fire({
+        title: 'Storage Limit Exceeded',
+        text: 'Please hold the bill, otherwise data will be lost on reload.',
+        icon: 'warning'
+      });
+    }
+  }
+
+  importFromLocalStorage() {
+    if (!this.insertLocalStorageFeature) return;
+
+    let data: any[] = [];
+    try {
+      data = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '[]');
+    } catch {
+      data = [];
+    }
+
+    if (!Array.isArray(data) || data.length === 0) {
+      // Keep whatever is currently in the table
+      return;
+    }
+
+    this.tableDataList = data;
+    this.getTotal();
+  }
+
 
 }

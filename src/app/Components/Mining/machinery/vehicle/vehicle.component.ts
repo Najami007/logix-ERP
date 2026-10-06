@@ -96,7 +96,8 @@ export class VehicleComponent implements OnInit {
     const insertType = {
       insert: 'InsertVehicle',
       update: 'UpdateVehicle',
-      delete: 'DeleteVehicle'
+      delete: 'DeleteVehicle',
+      status: 'ActiveVehicle'
     }[type];
 
 

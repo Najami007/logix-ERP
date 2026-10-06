@@ -1,5 +1,3 @@
-// Optional: add to index.html <head> for the heading font
-// <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
 
 :host {
   --ink: #1d2a33;
@@ -7,7 +5,7 @@
   --line: #d9dfe3;
   --surface: #ffffff;
   --page: #f3f5f6;
-  --accent: #efa21d; // safety yellow: used once, on the card's top rule
+  --accent: #efa21d; /* safety yellow: used once, on the card's top rule*/
 
   display: block;
   color: var(--ink);
@@ -17,7 +15,7 @@
   box-sizing: border-box;
   padding: 16px;
   background: var(--page);
-  // Set --workbook-offset globally to the height of anything above this component (navbar, etc.)
+  /* Set --workbook-offset globally to the height of anything above this component (navbar, etc.)*/
   min-height: calc(90vh - var(--workbook-offset, 0px) - 49px);
   min-height: calc(90dvh - var(--workbook-offset, 0px) - 49px);
 }
@@ -39,7 +37,7 @@
   overflow: hidden;
 }
 
-// The form card is narrower so three fields on a row stay comfortable
+/* The form card is narrower so three fields on a row stay comfortable*/
 .page-center .card {
   max-width: 900px;
 }
@@ -89,7 +87,7 @@ mat-form-field {
   background: var(--page);
 }
 
-// ---------- Saved records ----------
+/* ---------- Saved records ----------*/
 .filters {
   display: flex;
   flex-wrap: wrap;
@@ -229,7 +227,7 @@ mat-form-field {
   }
 }
 
-// ---------- Small screens ----------
+/* ---------- Small screens ----------*/
 @media (max-width: 720px) {
   .grid {
     grid-template-columns: 1fr;

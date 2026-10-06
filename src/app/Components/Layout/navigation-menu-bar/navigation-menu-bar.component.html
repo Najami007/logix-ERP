@@ -1,11 +1,11 @@
 <div class="d-flex topNavMenuList border-start nav">
 
-    <ng-container *ngFor="let module of moduleMenuList">
+    <ng-container *ngFor="let module of moduleMenuList" >
 
         <!-- MODULE -->
         <div class="nav-item dropdown cursorPointer">
 
-            <a class="list-itm" [matMenuTriggerFor]="moduleMenu">
+            <a class="list-itm" [matMenuTriggerFor]="moduleMenu" (click)="setModuleID(module)">
 
                 {{ module.moduleTitle }}
 

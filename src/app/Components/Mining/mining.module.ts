@@ -15,6 +15,8 @@ import { ChartModule } from 'angular-highcharts';
 import { PipesModule } from 'src/app/Shared/pipes/pipes.module';
 import { DirectivesModule } from 'src/app/Shared/directives/directives.module';
 import { SavedVehiclesComponent } from './machinery/vehicle/saved-vehicles/saved-vehicles.component';
+import { WorkBookReportComponent } from './machinery/work-book-report/work-book-report.component';
+import { VehicleIssuanceReportComponent } from './machinery/vehicle-issuance-report/vehicle-issuance-report.component';
 
 
 
@@ -23,6 +25,8 @@ export const miningRoutes: Route[] = [
   { path: 'addvehicle', component: VehicleComponent, data: { title: 'Vehicle' }, canActivate: [AuthGuard] },
   { path: 'vehworkbook', component: VehicleWorkbookComponent, data: { title: 'Vehicle Workbook' }, canActivate: [AuthGuard] },
   { path: 'vehissuance', component: VehicleIssuanceComponent, data: { title: 'Vehicle Issuance' }, canActivate: [AuthGuard] },
+    { path: 'workrpt', component: WorkBookReportComponent, data: { title: 'WorkBook Report' }, canActivate: [AuthGuard] },
+    { path: 'issuerpt', component: VehicleIssuanceReportComponent, data: { title: 'Vehicle Issuance Report' }, canActivate: [AuthGuard] },
 
 
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
@@ -37,7 +41,9 @@ export const miningRoutes: Route[] = [
     VehicleIssuanceComponent,
     VehicleWorkbookComponent,
     AddVehicleComponent,
-    SavedVehiclesComponent
+    SavedVehiclesComponent,
+    WorkBookReportComponent,
+    VehicleIssuanceReportComponent
   ],
   imports: [
     CommonModule,

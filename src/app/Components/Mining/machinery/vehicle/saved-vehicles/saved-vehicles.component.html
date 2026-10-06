@@ -74,8 +74,9 @@
                     <td>{{item.avgPerLiter}}</td>
                     <td>{{item.rentalCompanyName}}</td>
                     <td >
-                        <mat-slide-toggle [checked]="item.vehicleActiveStatus"
-                            (change)="statusChange.emit({ vehicle: item, active: $event.checked })"
+                        <mat-slide-toggle 
+                            [(ngModel)]="item.vehicleActiveStatus"
+                            (change)="confirmAcitve(item)"
                             [aria-label]="'Set ' + item.vehicleName + ' active or inactive'">
                             {{ item.vehicleActiveStatus ? 'Active' : 'Inactive' }}
                         </mat-slide-toggle>

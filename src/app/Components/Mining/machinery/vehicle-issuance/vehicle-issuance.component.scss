@@ -14,13 +14,15 @@
   color: var(--ink);
 }
 
+
+
 .page {
   box-sizing: border-box;
   padding: 16px;
   background: var(--page);
   // Set --issuance-offset globally to the height of anything above this component (navbar, etc.)
-//   min-height: calc(100vh - var(--issuance-offset, 0px) - 49px);
-//   min-height: calc(100dvh - var(--issuance-offset, 0px) - 49px);
+  //   min-height: calc(100vh - var(--issuance-offset, 0px) - 49px);
+  //   min-height: calc(100dvh - var(--issuance-offset, 0px) - 49px);
 }
 
 .page-center {
@@ -31,7 +33,7 @@
 
 .card {
   width: 100%;
-//   max-width: 1180px;
+  //   max-width: 1180px;
   margin: 0 auto;
   background: var(--surface);
   border: 1px solid var(--line);
@@ -350,7 +352,7 @@ mat-form-field {
     white-space: nowrap;
   }
 
-  .detail-row > td {
+  .detail-row>td {
     padding: 4px 14px 16px;
     background: #fbfaf3;
   }
@@ -446,8 +448,13 @@ mat-form-field {
 }
 
 @keyframes flash {
-  from { background: #fff1b8; }
-  to   { background: transparent; }
+  from {
+    background: #fff1b8;
+  }
+
+  to {
+    background: transparent;
+  }
 }
 
 // ---------- Narrow screens: stack the two panels and let the page scroll ----------
@@ -490,3 +497,58 @@ mat-form-field {
     animation: none;
   }
 }
+
+
+
+
+
+.SearchConatiner {
+  background: #fff;
+  z-index: 1000;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: absolute;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+
+  .card {
+    background: rgb(247, 242, 242);
+    border: none;
+    border-bottom: 1px solid #ddd;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  p {
+    padding: 10px;
+    margin: 0;
+    height: auto;
+  }
+}
+
+
+.prodBtn {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 10px;
+}
+
+.prodBtn:hover,
+.prodBtn:focus {
+  background: #1E293B !important;
+  color: #fff !important;
+  outline: none;
+}
+
+.prodBtn:hover p,
+.prodBtn:focus p {
+  color: #fff;
+}
+
+
+

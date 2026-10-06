@@ -315,6 +315,14 @@ export class NavigationMenuBarComponent {
   }
 
 
+  setModuleID(item:any){
+     localStorage.setItem('mid',JSON.stringify(item.moduleID));
+    sessionStorage.setItem('mid',JSON.stringify(item.moduleID));
+    this.globalData.setMenuItem(item.moduleID);
+    this.globalData.setModuleTitle(item.moduleTitle.split(" ")[0]);
+  }
+
+
 
 
 }

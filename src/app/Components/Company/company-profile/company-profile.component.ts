@@ -30,9 +30,10 @@ export class CompanyProfileComponent implements OnInit {
     private route: Router
 
   ) {
-
+    console.log(this.route.url.split("/").pop());
     this.global.getMenuList().subscribe((data) => {
-      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
+          this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
+          console.log(data);
     })
 
 

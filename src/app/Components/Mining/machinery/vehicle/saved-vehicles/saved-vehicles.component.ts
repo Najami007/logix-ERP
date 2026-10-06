@@ -42,7 +42,7 @@ export class SavedVehiclesComponent implements OnInit {
 
   @Output() edit = new EventEmitter<any>();
   @Output() remove = new EventEmitter<any>();
-  @Output() statusChange = new EventEmitter<{ vehicle: any; active: boolean }>();
+  @Output() statusChange = new EventEmitter();
   @Output() refreshList = new EventEmitter();
 
 
@@ -111,6 +111,30 @@ export class SavedVehiclesComponent implements OnInit {
       if (pin !== '') {
         payLoad.PinCode = pin;
         this.remove.emit({ type: 'delete', load: payLoad });
+      }
+    })
+
+  }
+
+
+    confirmAcitve(vehicle: any): void {
+
+      console.log(vehicle);
+      
+    var payLoad = {
+      VehicleID: vehicle.vehicleID,
+      VehicleActiveStatus:vehicle.vehicleActiveStatus,
+      PinCode: '',
+      UserID: this.global.getUserID(),
+
+    }
+
+    this.global.openPinCode().subscribe(pin => {
+      if (pin !== '') {
+        payLoad.PinCode = pin;
+        this.statusChange.emit({ type: 'status', load: payLoad });
+      }else{
+        this.refreshList.emit();
       }
     })
 

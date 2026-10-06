@@ -24,6 +24,7 @@
             <mat-icon>add</mat-icon> Add Vehicle
         </button>
         <app-saved-vehicles [vehicles]="vehicleList | filter:searchText"
+            (statusChange)="saveVehicle($event.type, $event.load)"
             (remove)="saveVehicle($event.type, $event.load)" (edit)="editVehicle($event); drawer.open()">
         </app-saved-vehicles>
 
