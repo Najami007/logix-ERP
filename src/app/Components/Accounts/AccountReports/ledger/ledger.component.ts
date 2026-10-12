@@ -202,8 +202,9 @@ export class LedgerComponent {
 
       this.tableData = [];
       this.app.startLoaderDark();
-      this.http.get(environment.mainApi + this.globalData.accountLink + 'GetLedgerRpt?coaid=' + this.coaID + '&fromdate='
-        + startDate+ '&todate=' + endDate + '&projectID=' + this.projectID).subscribe(
+      var url = `${environment.mainApi + this.globalData.accountLink}GetLedgerRpt?coaid=${this.coaID}&fromdate=
+        ${startDate}&todate=${endDate}&projectID=${this.projectID}`;
+      this.http.get(url).subscribe(
           (Response: any) => {
 
             if (Response.length == 0 || Response == null) {

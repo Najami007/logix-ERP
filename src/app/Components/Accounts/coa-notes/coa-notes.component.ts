@@ -121,6 +121,7 @@ export class CoaNotesComponent implements OnInit{
               }
             },
             (Error)=>{
+              console.log(Error);
               this.app.stopLoaderDark();
             }
           )

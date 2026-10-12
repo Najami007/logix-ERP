@@ -86,7 +86,7 @@
                 </span>
                 <div class="d-flex flex-column">
                     <span class="companyName">{{item.companyName}}</span>
-                    <span class="rptTitle">Work Book Report </span>
+                    <span class="rptTitle">Vehicle Issuance Report </span>
                     <span><b>From:</b> {{fromDate | date:'dd-MM-yyyy'}}({{fromTime}}) <b>To:</b>
                         {{toDate | date:'dd-MM-yyyy'}}({{toTime}})</span>
                 </div>
@@ -100,17 +100,22 @@
         </div>
 
 
-        <table class="table-logix" id="detailTable" *ngIf="formateType == 2">
+         <table class="table-logix" id="detailTable" *ngIf="formateType == 2">
             <thead>
                 <tr>
                     <th>S#</th>
                     <th>Bill #</th>
                     <th>Date</th>
                     <th>Vehicle Name</th>
-                    <th>Vehicle No</th>
-                    <th>Remarks</th>
-                    <th>Entered By</th>
+                    <th>Vehicle #</th>
+                    <th>Location</th>
+                    <th>Product Title</th>
+                    <th>Quantity</th>
+                    <th>Cost</th>
+
+
                     <th>Total</th>
+                    <th>Entered By</th>
                 </tr>
 
 
@@ -118,14 +123,21 @@
             <tbody>
                 <tr *ngFor="let item of dataList index as index">
                     <td>{{index +1 }}</td>
-                    <td>{{item.invBillNo}}</td>
+                    <td class="text-center">{{item.invBillNo}}</td>
                     <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
-
                     <td>{{item.vehicleName}}</td>
                     <td>{{item.vehicleNo}}</td>
-                    <td>{{item.remarks}}</td>
+                    <td>{{item.locationTitle}}</td>
+                    <td>{{item.productTitle}}</td>
+                    <td class="text-center">{{item.quantity | number: '1.0-2'}}</td>
+                    <td class="text-end">{{item.avgCostPrice | number: '1.0-2'}}</td>
+                    <td class="text-end">{{item.avgCostPrice * item.quantity | number: '1.0-2'}}</td>
                     <td>{{item.entryUser}}</td>
-                    <td class="text-end">{{item.billTotal | number: '1.0-2'}}</td>
+                </tr>
+                <tr>
+                    <td colspan="9"></td>
+                    <td class="fw-bold text-end">{{totals.avgCostTotal}}</td>
+                    <td></td>
                 </tr>
 
             </tbody>
@@ -138,9 +150,13 @@
             <thead>
                 <tr>
                     <th>S#</th>
+                    <th>Inv #</th>
                     <th>Date</th>
-                    <th>Total Invoices</th>
+                    <th>Vehicle</th>
+                    <th>Vehicle #</th>
+                    <th>Location</th>
                     <th>Bill Total</th>
+                    <th>Entered By</th>
 
                 </tr>
 
@@ -149,11 +165,19 @@
             <tbody>
                 <tr *ngFor="let item of dataList index as index">
                     <td>{{index +1 }}</td>
+                    <td>{{item.invBillNo}}</td>
                     <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
-
-                    <td>{{item.totalInvoices}}</td>
-
+                    <td>{{item.vehicleName}}</td>
+                    <td>{{item.vehicleNo}}</td>
+                    <td>{{item.locationTitle}}</td>
                     <td class="text-end">{{item.billTotal | number: '1.0-2'}}</td>
+                    <td>{{item.entryUser}}</td>
+
+                </tr>
+                <tr>
+                    <td colspan="6"></td>
+                    <td class="fw-bold text-end">{{totals.grandBillTotal| number: '1.0-2'}}</td>
+                    <td></td>
                 </tr>
 
             </tbody>

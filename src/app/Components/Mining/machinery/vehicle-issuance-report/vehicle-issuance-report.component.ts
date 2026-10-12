@@ -39,7 +39,7 @@ export class VehicleIssuanceReportComponent {
     })
   }
   ngOnInit(): void {
-    this.global.setHeaderTitle('Work Book Report');
+    this.global.setHeaderTitle('Vehicle Issuance Report');
     this.getVehileList();
 
   }
@@ -117,6 +117,24 @@ export class VehicleIssuanceReportComponent {
     )
 
   }
+
+  ReportTotals(List:any){
+     var round2 = (n: number) => Math.round(n * 100) / 100;
+    return  {
+      items: List.length,
+      grandBillTotal: round2(List.reduce((sum, l) => sum + (Number(l.billTotal) || 0), 0)),
+      costTotal: round2(List.reduce((sum, l) => sum + (Number(l.quantity) || 0) * (Number(l.costPrice) || 0), 0)),
+      saleTotal: round2(List.reduce((sum, l) => sum + (Number(l.quantity) || 0) * (Number(l.salePrice) || 0), 0)),
+      avgCostTotal: round2(List.reduce((sum, l) => sum + (Number(l.quantity) || 0) * (Number(l.avgCostPrice) || 0), 0)),
+    };
+  }
+
+
+  get  totals():any{
+    var row = this.ReportTotals(this.dataList);
+    return {...row}
+  }
+
 
 
 

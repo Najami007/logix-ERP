@@ -1,0 +1,351 @@
+<mat-tab-group [(selectedIndex)]="selectedTab" animationDuration="0ms">
+  <!-- ================= Form ================= -->
+  <mat-tab label="Form">
+    <div class="page page-center">
+      <form class="card wide" #issuanceForm="ngForm" [class.submitted]="issuanceForm.submitted"
+        (ngSubmit)="onSubmit(issuanceForm)" novalidate>
+        <header class="card-header">
+          <h1>{{ isEditing ? 'Edit issuance' : 'Mine issuance' }}</h1>
+          <p>Issue products to a Mine.Search by name to add them.</p>
+        </header>
+
+        <div class="split">
+          <!-- Left: issuance details -->
+          <section class="details">
+            <h2>Details</h2>
+
+            <mat-form-field appearance="outline" class="matSmall">
+              <mat-label>Mine</mat-label>
+              <mat-select name="mineID" [(ngModel)]="model.mineID" required #mineCtrl="ngModel">
+                <mat-option><ngx-mat-select-search #mineSearch [placeholderLabel]="'Search...'"
+                    [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                <mat-option *ngFor="let option of mines | filter:mineSearch.value" [value]="option.mineID">
+                  {{ option.mineName }} </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="matSmall">
+              <mat-label>Location</mat-label>
+              <mat-select matInput name="location" [(ngModel)]="model.locationID" required #locationCtrl="ngModel">
+                <mat-option *ngFor="let item of locationList"
+                  [value]="item.locationID">{{item.locationTitle}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="matSmall">
+              <mat-label>Date</mat-label>
+              <input matInput [matDatepicker]="datePicker" name="date" [(ngModel)]="model.invDate" required
+                #dateCtrl="ngModel" />
+              <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+              <mat-datepicker #datePicker></mat-datepicker>
+              <mat-error *ngIf="dateCtrl.hasError('required')">Pick a date.</mat-error>
+              <mat-error *ngIf="dateCtrl.hasError('matDatepickerParse')">Enter a valid date.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="matSmall">
+              <mat-label>Description</mat-label>
+              <textarea matInput rows="3" maxlength="500" name="description" [(ngModel)]="model.remarks"
+                placeholder="Reason, job or work order"></textarea>
+              <mat-hint align="end">{{ model.remarks.length || 0 }} / 500</mat-hint>
+            </mat-form-field>
+          </section>
+
+          <!-- Right: product detail -->
+          <section class="products">
+            <h2>Products</h2>
+
+            <div class="search-box">
+              <mat-form-field appearance="outline" subscriptSizing="dynamic" class="matSmall">
+                <mat-label>Search product</mat-label>
+                <input matInput id="searchInput" type="text" autocomplete="off" role="combobox" aria-autocomplete="list"
+                  aria-controls="product-suggestions" [attr.aria-expanded]="showSuggestions"
+                  [attr.aria-activedescendant]="activeIndex >= 0 ? 'suggestion-' + activeIndex : null"
+                  placeholder="Type product name" [ngModel]="searchText" [ngModelOptions]="{ standalone: true }"
+                  (ngModelChange)="onSearchChange($event)" (keydown.arrowdown)="moveActive(1, $event)"
+                  (keydown.arrowup)="moveActive(-1, $event)" (keydown.enter)="selectActive($event)"
+                  (keydown.escape)="clearSearch()" (focus)="searchFocused = true" (blur)="searchFocused = false" />
+                <mat-icon matPrefix>qr_code_scanner</mat-icon>
+                <button mat-icon-button matSuffix type="button" *ngIf="searchText"
+                  (click)="clearSearch(); focusSearch()" aria-label="Clear search">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+
+              <ul class="suggestions" id="product-suggestions" role="listbox" *ngIf="showSuggestions">
+                <li *ngFor="let product of suggestions; let i = index" role="option" [id]="'suggestion-' + i"
+                  [class.active]="i === activeIndex" [attr.aria-selected]="i === activeIndex"
+                  (mousedown)="$event.preventDefault()" (click)="addProduct(product)" (mouseenter)="activeIndex = i">
+                  <div>
+                    <span class="s-title">{{ product.productTitle }}</span>
+                    <!-- <span class="badge" *ngIf="inList(product)">In list</span> -->
+                  </div>
+                  <div class="s-meta">
+                    Barcode {{ product.barcode }} · ID {{ product.productID }} · Sale {{ product.salePrice |
+                    number:'1.2-2' }}
+                  </div>
+                </li>
+                <li class="no-result" role="presentation" *ngIf="suggestions.length === 0">
+                  No product found for "{{ searchText.trim() }}"
+                </li>
+              </ul>
+            </div>
+
+            <!-- <div class="search-box">
+              <mat-form-field appearance="outline" subscriptSizing="dynamic" class="matSmall">
+                <mat-label>Search product</mat-label>
+                <input matInput #searchInput type="text" autocomplete="off" role="combobox" aria-autocomplete="list"
+                  aria-controls="product-suggestions" [attr.aria-expanded]="showSuggestions"
+                  [attr.aria-activedescendant]="activeIndex >= 0 ? 'suggestion-' + activeIndex : null"
+                  placeholder="Type product name" [ngModel]="searchText"
+                  [ngModelOptions]="{ standalone: true }" (ngModelChange)="onSearchChange($event)"
+                  (keydown.arrowdown)="moveActive(1, $event)" (keydown.arrowup)="moveActive(-1, $event)"
+                   (keydown.escape)="clearSearch()"
+                  (focus)="searchFocused = true" (blur)="searchFocused = false" />
+                <mat-icon matPrefix>qr_code_scanner</mat-icon>
+                <button mat-icon-button matSuffix type="button" *ngIf="searchText"
+                  (click)="clearSearch(); focusSearch()" aria-label="Clear search">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+
+              <ul class="suggestions" id="product-suggestions" role="listbox" *ngIf="searchText">
+                <li *ngFor="let product of productList | filter:searchText; let i = index" role="option" [id]="'suggestion-' + i"
+                  [class.active]="i === activeIndex" [attr.aria-selected]="i === activeIndex"
+                  (mousedown)="$event.preventDefault()" (click)="addProduct(product)" (mouseenter)="activeIndex = i">
+                  <div>
+                    <span class="s-title">{{ product.productTitle }}</span>
+                    <span class="badge" *ngIf="inList(product)">In list</span>
+                  </div>
+                  <div class="s-meta">
+                    Barcode {{ product.barcode }} · ID {{ product.productID }} · Sale {{ product.salePrice | number:
+                    '1.2-2' }}
+                  </div>
+                </li>
+                <li class="no-result" role="presentation" *ngIf="suggestions.length === 0">
+                  No product found for "{{ searchText.trim() }}"
+                </li>
+              </ul>
+            </div> -->
+
+            <div class="lines-wrap" *ngIf="tableDataList.length > 0">
+              <table class="lines-table ">
+                <thead>
+                  <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col" class="num">Quantity</th>
+                    <th scope="col" class="num">Cost price</th>
+                    <th scope="col" class="num">Sale price</th>
+                    <th scope="col" class="num">Avg cost price</th>
+                    <th scope="col" class="num">Line total</th>
+                    <th scope="col" class="actions-col"><span class="sr-only">Remove</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of tableDataList index as index" [class.flash]="item.productID === lastAddedId">
+                    <td>
+                      <div class="primary">{{ item.productTitle }}</div>
+                      <div class="secondary">ID {{ item.productID }}</div>
+                    </td>
+                    <td class="num">
+                      <input class="cell-input qty{{index}} text-center" type="text" step="any" min="0.01" required
+                        [name]="'quantity-' + item.productID"
+                        (keydown)="handleUpdown(item,$event,'.qty',index);"  [(ngModel)]="item.quantity"
+                        [attr.aria-label]="'Quantity of ' + item.productTitle" />
+                    </td>
+                    <td class="num"> {{item.costPrice | number: '1.2-2'}} </td>
+                    <td class="num">{{item.salePrice | number: '1.2-2'}}</td>
+                    <td class="num muted">{{ item.avgCostPrice | number: '1.2-2' }}</td>
+                    <td class="num">{{ (item.quantity || 0) * (item.avgCostPrice || 0) | number: '1.2-2' }}</td>
+                    <td class="actions-col">
+                      <button mat-icon-button type="button" matTooltip="Remove product"
+                        [attr.aria-label]="'Remove ' + item.productTitle" (click)="removeLine(item); focusSearch()">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="lines-empty" [class.error]="issuanceForm.submitted" *ngIf="tableDataList.length === 0">
+              <mat-icon>inventory_2</mat-icon>
+              <p class="empty-title">
+                {{ issuanceForm.submitted ? 'Add at least one product' : 'No products added yet' }}
+              </p>
+              <p>Scan a barcode and press Enter, or search by name and pick a product.</p>
+            </div>
+
+            <dl class="totals " *ngIf="tableDataList.length > 0">
+              <div>
+                <dt>Products</dt>
+                <dd>{{ formTotals.items }}</dd>
+              </div>
+              <div>
+                <dt>Total quantity</dt>
+                <dd>{{ formTotals.quantity | number: '1.0-2' }}</dd>
+              </div>
+              <div>
+                <dt>Bill Total</dt>
+                <dd>{{ formTotals.avgCostTotal | number: '1.0-2' }}</dd>
+              </div>
+            </dl>
+          </section>
+        </div>
+
+        <footer class="actions">
+          <button mat-stroked-button type="button" (click)="onCancel()">
+            {{ isEditing ? 'Cancel edit' : 'Clear' }}
+          </button>
+          <button mat-flat-button color="primary" type="submit">{{ isEditing ? 'Update' : 'Save'
+            }}</button>
+        </footer>
+      </form>
+    </div>
+  </mat-tab>
+
+  <!-- ================= Saved records ================= -->
+  <mat-tab label="Saved Record">
+    <div class="page">
+      <section class="card">
+        <header class="card-header">
+          <h1>Saved issuances</h1>
+
+        </header>
+
+        <div class="filters">
+          <mat-form-field appearance="outline" class="search matSmall" subscriptSizing="dynamic">
+            <mat-label>Search issuances</mat-label>
+            <input matInput [ngModel]="search" (ngModelChange)="search = $event; applyFilters()"
+              placeholder="Mine, location, product, issue no." autocomplete="off" />
+            <button mat-icon-button matSuffix type="button" *ngIf="search" (click)="search = ''; applyFilters()"
+              aria-label="Clear search">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+
+
+          <mat-form-field appearance="outline" class="vehicle-filter matSmall" subscriptSizing="dynamic">
+            <mat-label>Mine</mat-label>
+            <mat-select [ngModel]="filterMineID" (ngModelChange)="filterMineID = $event; applyFilters()">
+              <mat-option><ngx-mat-select-search #mineFilterSearch [placeholderLabel]="'Search...'"
+                  [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+              <mat-option [value]="0">All Mines</mat-option>
+              <mat-option *ngFor="let option of mineFilterOptions | filter:mineFilterSearch.value"
+                [value]="option.mineID">
+                {{ option.mineName }} 
+              </mat-option> </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="range matSmall" subscriptSizing="dynamic">
+            <mat-label>Date range</mat-label>
+            <mat-date-range-input [rangePicker]="rangePicker">
+              <input matStartDate placeholder="From" [ngModel]="fromDate"
+                (ngModelChange)="fromDate = $event; getSavedIssuance()" />
+              <input matEndDate placeholder="To" [ngModel]="toDate"
+                (ngModelChange)="toDate = $event; getSavedIssuance()" />
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #rangePicker></mat-date-range-picker>
+          </mat-form-field>
+
+          <button mat-stroked-button type="button" (click)="clearFilters()" [disabled]="!hasFilters">Clear
+            filters</button>
+        </div>
+
+        <div class="table-wrap">
+          <table class="records-table">
+            <thead>
+              <tr>
+                <th scope="col" class="expand-col"><span class="sr-only">Details</span></th>
+                <th scope="col">Issue no.</th>
+                <th scope="col"> Date </th>
+                <th scope="col"> Mine </th>
+                <th scope="col">Location</th>
+                <th scope="col" class="num">Total </th>
+                <th scope="col">Remarks</th>
+
+                <th scope="col">Entered By</th>
+                <th scope="col" class="actions-col">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody *ngFor="let record of savedDataList | filter:search">
+              <tr [class.editing]="record.invBillNo === editingId" [class.open]="record.invBillNo === expandedId">
+                <td class="expand-col">
+                  <button mat-icon-button type="button" (click)="toggleExpanded(record)"
+                    [attr.aria-expanded]="record.invBillNo === expandedId">
+                    <mat-icon>{{ record.invBillNo === expandedId ? 'expand_less' : 'expand_more' }}</mat-icon>
+                  </button>
+                </td>
+                <td class="nowrap"><span class="plate">{{record.invBillNo }}</span></td>
+                <td class="nowrap">{{ record.invDate | date: 'dd MMM yyyy' }}</td>
+                <td  class="nowrap">{{ record.mineName }}</td>
+                <td>{{ record.locationTitle }}</td>
+                <td class="num">{{ record.billTotal | number: '1.2-2' }}</td>
+                <td>{{record.remarks}}</td>
+                <td>{{record.entryUser}}</td>
+                <td class="actions-col">
+
+                  <button mat-icon-button type="button" matTooltip="Approve issuance" (click)="confirmApproval(record)">
+                    <mat-icon>{{record.approvedStatus ? 'check_box' : 'check_box_outline_blank'}} </mat-icon>
+                  </button>
+
+                  <button mat-icon-button type="button" matTooltip="Edit issuance" *ngIf="!record.approvedStatus" (click)="onEdit(record)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button type="button" matTooltip="Delete issuance" (click)="confirmDelete(record)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </tr>
+
+              <tr class="detail-row" *ngIf="record.invBillNo === expandedId">
+                <td></td>
+                <td colspan="8">
+                  <p class="detail-description" *ngIf="record.remarks">{{ record.remarks }}</p>
+                  <table class="detail-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">S#</th>
+                        <th scope="col">Product title</th>
+                        <th scope="col" class="num">Quantity</th>
+                        <th scope="col" class="num">Cost price</th>
+                        <th scope="col" class="num">Sale price</th>
+                        <th scope="col" class="num">Avg cost price</th>
+                        <th scope="col" class="num">Line total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let line of tmpProductDetailList index as index">
+                        <td>{{ index +1 }}</td>
+                        <td>{{ line.productTitle }}</td>
+                        <td class="num">{{ line.quantity | number: '1.0-2' }}</td>
+                        <td class="num">{{ line.costPrice | number: '1.2-2' }}</td>
+                        <td class="num">{{ line.salePrice | number: '1.2-2' }}</td>
+                        <td class="num">{{ line.avgCostPrice | number: '1.2-2' }}</td>
+                        <td class="num">{{ line.quantity * line.salePrice | number: '1.2-2' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+
+          <div class="empty" *ngIf="savedDataList?.length === 0">
+            <ng-container *ngIf="savedDataList?.length === 0; else noMatches">
+              <p class="empty-title">No issuances saved yet</p>
+              <p>Create one in the Form tab and it will appear here.</p>
+            </ng-container>
+            <ng-template #noMatches>
+              <p class="empty-title">No issuances match your search</p>
+              <p>Try a different word or date range, or clear the filters.</p>
+              <button mat-stroked-button type="button" (click)="clearFilters()">Clear filters</button>
+            </ng-template>
+          </div>
+        </div>
+      </section>
+    </div>
+  </mat-tab>
+</mat-tab-group>

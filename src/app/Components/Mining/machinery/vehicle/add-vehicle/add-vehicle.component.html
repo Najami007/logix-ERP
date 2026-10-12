@@ -7,11 +7,11 @@
       <p>Register a vehicle and set how it is paid and fuelled.</p>
     </div>
 
-    <mat-slide-toggle name="vehicleActiveStatus" [(ngModel)]="formFields.vehicleActiveStatus">
+    <!-- <mat-slide-toggle name="vehicleActiveStatus" [(ngModel)]="formFields.vehicleActiveStatus">
 
       {{ formFields.vehicleActiveStatus ? 'Active' : 'Inactive' }}
 
-    </mat-slide-toggle>
+    </mat-slide-toggle> -->
 
   </header>
 
@@ -68,10 +68,10 @@
           Ownership type
         </span>
 
-        <mat-button-toggle-group name="ownershipType" [(ngModel)]="formFields.ownershipType"
+        <mat-button-toggle-group name="ownershipType" [(ngModel)]="formFields.ownershipType" (ngModelChange)="this.resetRentalFields()"
           aria-labelledby="ownership-label" class="toggle-group">
 
-          <mat-button-toggle *ngFor="let type of ownershipTypes" [value]="type">
+          <mat-button-toggle *ngFor="let type of ownershipTypes"  [value]="type">
 
             {{ type }}
 
@@ -175,7 +175,7 @@
     </button>
 
     <button mat-flat-button color="primary" type="submit">
-      Save vehicle
+      Save
     </button>
 
   </footer>

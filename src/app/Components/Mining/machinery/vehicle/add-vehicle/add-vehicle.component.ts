@@ -37,7 +37,12 @@ export class AddVehicleComponent implements OnInit {
   readonly ownershipTypes: OwnershipType[] = ['Owner', 'Rental'];
   readonly wagesTypes: WagesType[] = ['Hourly', 'Daily', 'Weekly', 'Monthly'];
 
-
+  resetRentalFields(){
+    this.formFields.rentalCompanyAddress = '';
+    this.formFields.rentalCompanyContactNo = '';
+    this.formFields.rentalCompanyName = '';
+    this.formFields.wagesAmount = '';
+  }
 
 
   getDefaultFormFields() {

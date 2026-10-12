@@ -6,7 +6,7 @@
         (ngSubmit)="onSubmit(issuanceForm)" novalidate>
         <header class="card-header">
           <h1>{{ isEditing ? 'Edit issuance' : 'Vehicle issuance' }}</h1>
-          <p>Issue products to a vehicle. Scan a barcode or search by name to add them.</p>
+          <p>Issue products to a vehicle.Search by name to add them.</p>
         </header>
 
         <div class="split">
@@ -57,7 +57,7 @@
             <div class="search-box">
               <mat-form-field appearance="outline" subscriptSizing="dynamic" class="matSmall">
                 <mat-label>Search product</mat-label>
-                <input matInput #searchInput type="text" autocomplete="off" role="combobox" aria-autocomplete="list"
+                <input matInput id="searchInput" type="text" autocomplete="off" role="combobox" aria-autocomplete="list"
                   aria-controls="product-suggestions" [attr.aria-expanded]="showSuggestions"
                   [attr.aria-activedescendant]="activeIndex >= 0 ? 'suggestion-' + activeIndex : null"
                   placeholder="Type product name" [ngModel]="searchText" [ngModelOptions]="{ standalone: true }"
@@ -128,7 +128,7 @@
             </div> -->
 
             <div class="lines-wrap" *ngIf="tableDataList.length > 0">
-              <table class="lines-table">
+              <table class="lines-table ">
                 <thead>
                   <tr>
                     <th scope="col">Product</th>
@@ -141,14 +141,15 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of tableDataList" [class.flash]="item.productID === lastAddedId">
+                  <tr *ngFor="let item of tableDataList index as index" [class.flash]="item.productID === lastAddedId">
                     <td>
                       <div class="primary">{{ item.productTitle }}</div>
                       <div class="secondary">ID {{ item.productID }}</div>
                     </td>
                     <td class="num">
-                      <input class="cell-input" type="number" step="any" min="0.01" required
-                        [name]="'quantity-' + item.productID" [(ngModel)]="item.quantity"
+                      <input class="cell-input qty{{index}} text-center" type="text" step="any" min="0.01" required
+                        [name]="'quantity-' + item.productID"
+                        (keydown)="handleUpdown(item,$event,'.qty',index);"  [(ngModel)]="item.quantity"
                         [attr.aria-label]="'Quantity of ' + item.productTitle" />
                     </td>
                     <td class="num"> {{item.costPrice | number: '1.2-2'}} </td>
@@ -195,7 +196,7 @@
           <button mat-stroked-button type="button" (click)="onCancel(issuanceForm)">
             {{ isEditing ? 'Cancel edit' : 'Clear' }}
           </button>
-          <button mat-flat-button color="primary" type="submit">{{ isEditing ? 'Update issuance' : 'Save issuance'
+          <button mat-flat-button color="primary" type="submit">{{ isEditing ? 'Update' : 'Save'
             }}</button>
         </footer>
       </form>
@@ -288,11 +289,11 @@
                 <td>{{record.entryUser}}</td>
                 <td class="actions-col">
 
-                  <button mat-icon-button type="button" matTooltip="Edit issuance" (click)="confirmApproval(record)">
+                  <button mat-icon-button type="button" matTooltip="Approve issuance" (click)="confirmApproval(record)">
                     <mat-icon>{{record.approvedStatus ? 'check_box' : 'check_box_outline_blank'}} </mat-icon>
                   </button>
 
-                  <button mat-icon-button type="button" matTooltip="Edit issuance" (click)="onEdit(record)">
+                  <button mat-icon-button type="button" matTooltip="Edit issuance" *ngIf="!record.approvedStatus" (click)="onEdit(record)">
                     <mat-icon>edit</mat-icon>
                   </button>
                   <button mat-icon-button type="button" matTooltip="Delete issuance" (click)="confirmDelete(record)">

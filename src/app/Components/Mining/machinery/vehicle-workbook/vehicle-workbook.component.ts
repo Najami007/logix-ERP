@@ -242,10 +242,12 @@ export class VehicleWorkbookComponent implements OnInit {
 
   onCancel(form: NgForm): void {
     const wasEditing = this.isEditing;
-    this.leaveForm(form);
-    if (wasEditing) {
-      this.selectedTab = 1;
-    }
+    // this.leaveForm(form);
+    this.model =  this.blankModel();
+    
+    // if (wasEditing) {
+    //   this.selectedTab = 1;
+    // }
   }
 
   onEdit(item: any): void {

@@ -134,6 +134,7 @@ export class SavedVehiclesComponent implements OnInit {
         payLoad.PinCode = pin;
         this.statusChange.emit({ type: 'status', load: payLoad });
       }else{
+        vehicle.vehicleActiveStatus = !vehicle.vehicleActiveStatus;
         this.refreshList.emit();
       }
     })

@@ -42,7 +42,7 @@
 
 
     <div>
-        <table class="table table-hover" style="font-size: 12px;">
+        <table class="table table-hover table-logix" style="font-size: 12px;">
             <thead>
                 <tr>
                     <th>S#</th>
@@ -70,10 +70,10 @@
                     <td>{{item.vehicleNo}}</td>
                     <td>{{item.vehicleBrand}}</td>
                     <td>{{item.ownershipType}}</td>
-                    <td>{{item.wagesAmount}}</td>
-                    <td>{{item.avgPerLiter}}</td>
+                    <td class="text-end">{{item.wagesAmount |number:'1.0-0'}}</td>
+                    <td class="text-end">{{item.avgPerLiter}}</td>
                     <td>{{item.rentalCompanyName}}</td>
-                    <td >
+                    <td class="text-center">
                         <mat-slide-toggle 
                             [(ngModel)]="item.vehicleActiveStatus"
                             (change)="confirmAcitve(item)"
@@ -81,7 +81,7 @@
                             {{ item.vehicleActiveStatus ? 'Active' : 'Inactive' }}
                         </mat-slide-toggle>
                     </td>
-                    <td class="cursorPointer">
+                    <td class="cursorPointer text-center">
                         <mat-icon class="text-success" matTooltip="Edit vehicle"
                             (click)="edit.emit(item)">edit</mat-icon>
 
@@ -92,7 +92,7 @@
 
                 </tr>
 
-                <tr *ngIf="vehicleList.lenght == 0">
+                <tr *ngIf="vehicleList.length == 0">
                     <ng-template>
                         <p class="empty-title">No vehicles match your search</p>
                         <p>Try a different word, or clear the filters.</p>

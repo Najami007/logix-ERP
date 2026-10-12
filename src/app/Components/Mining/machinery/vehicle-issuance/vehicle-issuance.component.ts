@@ -9,6 +9,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { environment } from 'src/environments/environment.development';
 import { AppComponent } from 'src/app/app.component';
 import { Observable, retry } from 'rxjs';
+import * as $ from 'jquery';
 
 
 interface VehicleOption {
@@ -27,36 +28,6 @@ interface LineModel {
   avgCostPrice: number;
 }
 
-interface IssuanceModel {
-  vehicleId: number | null;
-  location: string;
-  date: Date | null;
-  description: string;
-}
-
-
-interface IssuanceTotals {
-  items: number;
-  quantity: number;
-  cost: number;
-  sale: number;
-}
-
-type SortKey = 'date' | 'vehicle' | 'sale';
-type SortDir = 'asc' | 'desc';
-
-const MAX_SUGGESTIONS = 8;
-
-/** Local date -> "yyyy-MM-dd" (avoids the time-zone shift toISOString() causes). */
-function toIsoDate(date: Date): string {
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-}
-
-function fromIsoDate(iso: string): Date {
-  const [y, m, d] = iso.split('-').map(Number);
-  return new Date(y, m - 1, d);
-}
 
 
 @Component({
@@ -131,6 +102,7 @@ export class VehicleIssuanceComponent implements OnInit {
 
   }
   ngOnInit(): void {
+    this.global.setHeaderTitle('Vehicle Issuance')
     this.getLocation();
     this.getVehileList();
     this.getSavedIssuance();
@@ -162,7 +134,7 @@ export class VehicleIssuanceComponent implements OnInit {
 
 
   get isEditing(): boolean {
-    return this.editingId !== null;
+    return this.model.invBillNo != '';
   }
 
   get hasFilters(): boolean {
@@ -208,7 +180,14 @@ export class VehicleIssuanceComponent implements OnInit {
   moveActive(step: number, event: Event): void {
     event.preventDefault();
     const count = this.suggestions.length;
-    if (!count) return;
+    if (!count) {
+      this.rowFocused = 0;
+      event.preventDefault();
+      $('.qty0').trigger('select');
+      $('.qty0').trigger('focus');
+
+      return
+    }
 
     if (this.activeIndex === -1) {
       // first press: down -> first item, up -> last item
@@ -366,7 +345,7 @@ export class VehicleIssuanceComponent implements OnInit {
     var toDate = this.global.dateFormater(this.toDate, '')
 
     var url = `${environment.mainApi + this.global.miningLink}GetVehicleIssuanceReport?VehicleID=0
-    &ReportType=Detail&FromDate=${fromDate}&ToDate=${toDate}&FromTime=00:00&ToTime=23:59:59`;
+    &ReportType=Summary&FromDate=${fromDate}&ToDate=${toDate}&FromTime=00:00&ToTime=23:59:59`;
 
 
     this.http.get(url).subscribe(
@@ -445,7 +424,6 @@ export class VehicleIssuanceComponent implements OnInit {
         }
       })
     } else {
-      return;
       this.saveIssuance('insert', payLoad);
     }
 
@@ -472,7 +450,8 @@ export class VehicleIssuanceComponent implements OnInit {
         next: (Response: any) => {
           if (Response.msg == 'Data Saved Successfully'
             || Response.msg == 'Data Updated Successfully'
-            || Response.msg == 'Data Deleted Successfully') {
+            || Response.msg == 'Data Deleted Successfully'
+            || Response.msg == 'Data Posted Successfully') {
             this.msg.SuccessNotify(Response.msg);
             this.getSavedIssuance();
             this.selectedTab = 1; // show the saved list
@@ -514,14 +493,16 @@ export class VehicleIssuanceComponent implements OnInit {
 
   onCancel(form: NgForm): void {
     const wasEditing = this.isEditing;
-    this.leaveForm(form);
-    if (wasEditing) {
-      this.selectedTab = 1;
-    }
+    // this.leaveForm(form);
+    this.model = this.blankModel();
+    this.tableDataList = [];
+    // if (wasEditing) {
+    //   this.selectedTab = 1;
+    // }
   }
 
   onEdit(item: any): void {
-    this.editingId = item.invBillNo;
+    // this.editingId = item.invBillNo;
     this.model.invBillNo = item.invBillNo;
     this.model.vehicleID = item.vehicleID;
     this.model.locationID = item.locationID;
@@ -643,7 +624,7 @@ export class VehicleIssuanceComponent implements OnInit {
 
   rowFocused = -1;
   prodFocusedRow = 0;
-  changeFocus(e: any, cls: any) {
+  changeFocusToQty(e: any, cls: any) {
 
     if (e.target.value == '') {
       if (e.keyCode == 40) {
@@ -653,17 +634,6 @@ export class VehicleIssuanceComponent implements OnInit {
           e.preventDefault();
           $('.qty0').trigger('select');
           $('.qty0').trigger('focus');
-
-        }
-      }
-    } else {
-      this.prodFocusedRow = 0;
-      /////move down
-      if (e.keyCode == 40) {
-        if (this.productList.length >= 1) {
-          e.preventDefault();
-          $('.prodRow0').trigger('focus');
-
 
         }
       }
@@ -729,7 +699,7 @@ export class VehicleIssuanceComponent implements OnInit {
 
   }
   handleUpdown(item: any, e: KeyboardEvent, cls: string, index: number): void {
-    const container = $(".table-logix");
+    const container = $(".lines-table");
     const key = e.keyCode;
     const isShiftTab = e.shiftKey && key === 9;
 
@@ -749,7 +719,7 @@ export class VehicleIssuanceComponent implements OnInit {
     if (key === 13) {
       e.preventDefault();
 
-      $('#psearchProduct').trigger('select').trigger('focus');
+      $('#searchInput').trigger('select').trigger('focus');
 
 
       return;
@@ -785,7 +755,7 @@ export class VehicleIssuanceComponent implements OnInit {
         $(clsName).trigger('select').trigger('focus');
       } else {
         e.preventDefault();
-        $(".searchProduct").trigger('select').trigger('focus');
+        $("#searchInput").trigger('select').trigger('focus');
       }
       return;
     }

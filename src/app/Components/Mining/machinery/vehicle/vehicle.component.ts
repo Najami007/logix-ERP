@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment.development';
 import { SavedVehiclesComponent } from './saved-vehicles/saved-vehicles.component';
 import { AddVehicleComponent } from './add-vehicle/add-vehicle.component';
 import { MatSidenav } from '@angular/material/sidenav';
+import { error } from 'jquery';
 
 @Component({
   selector: 'app-vehicle',
@@ -93,6 +94,7 @@ export class VehicleComponent implements OnInit {
 
   saveVehicle(type: any, payload: any) {
 
+
     const insertType = {
       insert: 'InsertVehicle',
       update: 'UpdateVehicle',
@@ -104,7 +106,7 @@ export class VehicleComponent implements OnInit {
     var url = `${environment.mainApi + this.global.miningLink}${insertType}`;
 
     console.log(url, payload);
-
+    this.app.startLoaderDark();
     this.http.post(url, payload).subscribe(
       {
         next: (Response: any) => {
@@ -118,6 +120,11 @@ export class VehicleComponent implements OnInit {
           } else {
             this.msg.WarnNotify(Response.msg);
           }
+            this.app.stopLoaderDark();
+        },
+        error:(error)=>{
+          console.log(error);
+          this.app.stopLoaderDark();
         }
       }
     )
