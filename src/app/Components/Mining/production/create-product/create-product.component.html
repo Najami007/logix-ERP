@@ -1,0 +1,174 @@
+<div class="d-flex flex-column justify-content-center container">
+    <form class="mine-form " >
+
+        <header class="form-header">
+
+            <div class="titles">
+                <h1>{{editMode ? 'Edit' : 'Add'}} Product</h1>
+            </div>
+
+
+        </header>
+
+
+
+        <section class="container p-2 row">
+
+            <mat-form-field appearance="outline" class="matSmall col-md-4">
+                <mat-label>Product Name</mat-label>
+                <input matInput name="productName" [(ngModel)]="model.ProductTitle" autocomplete="off" />
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline" class="matSmall col-md-4">
+                <mat-label>Category</mat-label>
+                <mat-select name="CategoryID" [(ngModel)]="model.CategoryID" required>
+                    <mat-option *ngFor="let c of categories" [value]="c.mnuItemCatID">{{ c.mnuItemCatTitle
+                        }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="matSmall col-md-4">
+                <mat-label>Code</mat-label>
+                <input matInput name="Code" [(ngModel)]="model.Code" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="matSmall col-md-4">
+                <mat-label>Labour Charges</mat-label>
+                <input matInput type="number" min="0" name="LabourCharges" [(ngModel)]="model.LabourCharges" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="matSmall col-md-4">
+                <mat-label>Cost Price</mat-label>
+                <input matInput type="number" min="0" name="CostPrice" [(ngModel)]="model.CostPrice" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="matSmall col-md-4">
+                <mat-label>Sale Price</mat-label>
+                <input matInput type="number" min="0" name="SalePrice" [(ngModel)]="model.SalePrice" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="span-2 matSmall col-md-12">
+                <mat-label>Description</mat-label>
+                <textarea matInput name="Description" [(ngModel)]="model.Description"></textarea>
+            </mat-form-field>
+        </section>
+
+
+        <footer class="form-actions">
+
+            <button mat-stroked-button type="button" (click)="reset()">
+                Cancel
+            </button>
+
+            <button mat-flat-button color="primary" type="submit" (click)="save()" accesskey="s">
+                {{editMode ? 'Update' : 'Save'}}
+            </button>
+
+        </footer>
+
+    </form>
+
+
+    <div>
+
+        <div class="filters">
+            <mat-form-field appearance="outline" class="w-100 matSmall" subscriptSizing="dynamic">
+                <mat-label>Search</mat-label>
+                <input matInput #search placeholder="Product Title" autocomplete="off" />
+                <!-- <mat-icon matPrefix>search</mat-icon> -->
+                <button mat-icon-button matSuffix *ngIf="search.value" type="button" aria-label="Clear search">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+
+        </div>
+
+
+        <div>
+            <table class="table table-hover table-logix" style="font-size: 12px;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Code</th>
+                        <th>Cost Price</th>
+                        <th>Sale Price</th>
+                        <th>Labour Charges</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr *ngFor="let item of productsList | filter:search.value  |paginate:{
+                        itemsPerPage : tableSize,
+                        currentPage : page,
+                        totalItems :    count,
+                    }   index as i">
+                        <td class="text-center">{{i+1}}</td>
+                        <td>{{ item.mnuItemTitle }}</td>
+                        <td>{{ item.mnuItemCatTitle }}</td>
+                        <td>{{ item.mnuItemCode }}</td>
+                        <td class="text-end">{{ item.mnuItemCostPrice | number: '1.0-2' }}</td>
+                        <td class="text-end">{{ item.mnuItemSalePrice | number: '1.0-2' }}</td>
+                        <td class="text-end">{{ item.mnuLabourCharges | number: '1.0-2' }}</td>
+                        <td>{{ item.mnuItemDescription }}</td>
+
+                        <td class="cursorPointer text-center">
+                            <button mat-icon-button type="button" matTooltip="Approve issuance"
+                                (click)="confirmApproval(item)">
+                                <mat-icon>{{item.activeStatus ? 'check_box' : 'check_box_outline_blank'}}
+                                </mat-icon>
+                            </button>
+
+
+
+                            <mat-icon class="text-success" matTooltip="Edit" (click)="edit(item)">edit</mat-icon>
+
+                            <mat-icon class="text-danger" matTooltip="Delete" (click)="delete(item)">delete</mat-icon>
+
+                        </td>
+
+                    </tr>
+
+                    <tr *ngIf="productsList?.length == 0">
+                        <ng-template>
+                            <p class="empty-title">No Product match your search</p>
+                            <p>Try a different word, or clear the filters.</p>
+                        </ng-template>
+                    </tr>
+
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="d-flex">
+
+            <pagination-controls previousLabel="Prev" nextLabel="Next"
+                (pageChange)="onTableDataChange($event)"></pagination-controls>
+
+
+            <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+            <select class="text-white" style="height: 25px;background-color: rgb(75, 164, 248);"
+                (change)="onTableSizeChange($event)" [(ngModel)]="tableSize">
+                <option *ngFor=" let item of tableSizes" [selected]="tableSize == item">{{item}}</option>
+            </select>
+
+            <!-- <div class="jump-to-page">
+        <input type="text" class="w-25" (keydown)="global.handleNumKeys($event)" [(ngModel)]="jumpPage"
+            placeholder="Page #" min="1" [max]="count" />
+        <button (click)="goToPage()" class="text-white"
+            style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
+    </div> -->
+
+        </div>
+
+
+
+
+    </div>
+</div>

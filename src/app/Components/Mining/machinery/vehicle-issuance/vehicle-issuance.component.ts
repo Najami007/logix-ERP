@@ -472,6 +472,8 @@ export class VehicleIssuanceComponent implements OnInit {
 
   confirmApproval(item: any) {
 
+    if(item.approvedStatus) return;
+
     var payLoad = {
       InvBillNo: item.invBillNo,
       Remarks: '-',
@@ -623,81 +625,7 @@ export class VehicleIssuanceComponent implements OnInit {
 
 
   rowFocused = -1;
-  prodFocusedRow = 0;
-  changeFocusToQty(e: any, cls: any) {
-
-    if (e.target.value == '') {
-      if (e.keyCode == 40) {
-
-        if (this.tableDataList.length >= 1) {
-          this.rowFocused = 0;
-          e.preventDefault();
-          $('.qty0').trigger('select');
-          $('.qty0').trigger('focus');
-
-        }
-      }
-    }
-  }
-
-  handleProdFocus(item: any, e: any, cls: any, endFocus: any, prodList: []) {
-
-
-    /////// increment in prodfocus on tab click
-    if (e.keyCode == 9 && !e.shiftKey) {
-      this.prodFocusedRow += 1;
-
-    }
-    /////// decrement in prodfocus on shift tab click
-    if (e.shiftKey && e.keyCode == 9) {
-      this.prodFocusedRow -= 1;
-
-    }
-    /////move down
-    if (e.keyCode == 40) {
-
-
-      if (prodList.length > 1) {
-        this.prodFocusedRow += 1;
-        if (this.prodFocusedRow >= prodList.length) {
-          this.prodFocusedRow -= 1
-        } else {
-          var clsName = cls + this.prodFocusedRow;
-          //  alert(clsName);
-          e.preventDefault();
-          $(clsName).trigger('focus');
-          //  e.which = 9;   
-          //  $(clsName).trigger(e)       
-        }
-      }
-    }
-
-
-    //Move up
-    if (e.keyCode == 38) {
-
-      if (this.prodFocusedRow == 0) {
-        e.preventDefault();
-        $(endFocus).trigger('focus');
-        this.prodFocusedRow = 0;
-
-      }
-
-      if (prodList.length > 1) {
-
-        this.prodFocusedRow -= 1;
-
-        var clsName = cls + this.prodFocusedRow;
-        //  alert(clsName);
-        e.preventDefault();
-        $(clsName).trigger('focus');
-
-
-      }
-
-    }
-
-  }
+ 
   handleUpdown(item: any, e: KeyboardEvent, cls: string, index: number): void {
     const container = $(".lines-table");
     const key = e.keyCode;
@@ -771,52 +699,6 @@ export class VehicleIssuanceComponent implements OnInit {
       e.preventDefault();
       return;
     }
-  }
-
-  focusto(cls: any, e: any) {
-
-    // setTimeout(() => {
-    //  $(cls).trigger('focus');
-    // }, 500);
-
-    if (cls == '#prodName') {
-      setTimeout(() => {
-        $(cls).trigger('focus');
-      }, 500);
-    }
-
-    if (cls == '#disc' && e.keyCode == 13 && e.target.value == '') {
-      e.preventDefault();
-      $(cls).trigger('select');
-      $(cls).trigger('focus');
-    }
-    if (cls == '#charges' && e.keyCode == 13) {
-      e.preventDefault();
-      $(cls).trigger('select');
-      $(cls).trigger('focus');
-    }
-    if (cls == '#cash' && e.keyCode == 13 && e.target.value == '') {
-      e.preventDefault();
-      $(cls).trigger('select');
-      $(cls).trigger('focus');
-
-    }
-
-    if (cls == '#save' && e.keyCode == 13) {
-      e.preventDefault();
-      // $(cls).trigger('select');
-      $(cls).trigger('focus');
-
-    }
-
-    if (cls == '#vsrtnsearchProduct' && e.keyCode == 13) {
-      e.preventDefault();
-      $(cls).trigger('select');
-      $(cls).trigger('focus');
-    }
-
-
-
   }
 
 

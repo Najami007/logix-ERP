@@ -249,9 +249,6 @@ export class MarbleSaleComponent implements OnInit {
         this.transporterList = data.filter((e: any) => e.partyType == 'Transporter');
       }
     })
-
-
-
   }
 
 

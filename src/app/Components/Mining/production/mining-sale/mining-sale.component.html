@@ -1,0 +1,471 @@
+<div class="sale-page body">
+
+    <!-- ===== Header banner ===== -->
+    <!-- <div class="hero">
+    <div class="hero-text">
+      <mat-icon class="hero-icon">local_shipping</mat-icon>
+      <div>
+        <h1>Mining Sale</h1>
+        <p>Create invoices, plan deliveries and keep every sale in one cosy place.</p>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span>{{ invoices.length }}</span><small>Invoices</small></div>
+      <div class="stat"><span>{{ totalSales | number:'1.0-0' }}</span><small>Total Sales</small></div>
+    </div>
+  </div> -->
+
+    <mat-tab-group [(selectedIndex)]="selectedTab" animationDuration="0ms" class="sale-tabs">
+
+        <!-- ===================== NEW SALE TAB ===================== -->
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon>receipt_long</mat-icon>&nbsp;{{ editIndex >= 0 ? 'Edit Invoice' : 'New Sale' }}
+            </ng-template>
+
+            <form #saleForm="ngForm" (ngSubmit)="save()" class="sale-form">
+
+                <div class="d-flex">
+                    <!-- Invoice details -->
+                    <section class="card col-9">
+                        <!-- <h2 class="card-title"><mat-icon>description</mat-icon> Invoice Details</h2> -->
+                        <div class="grid">
+                            <mat-form-field appearance="outline" class="matSmall">
+                                <mat-label>Invoice Date</mat-label>
+                                <input [(ngModel)]="model.invoiceDate" readonly="true" matInput type="text"
+                                    name="voucherDate" [matDatepicker]="voucherDate">
+                                <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
+                                <mat-datepicker #voucherDate></mat-datepicker>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="matSmall">
+                                <mat-label>Party</mat-label>
+                                <mat-select name="partyID" [(ngModel)]="model.partyID" required>
+                                    <mat-option><ngx-mat-select-search #customerSearch [placeholderLabel]="'Search...'"
+                                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                    <mat-option [value]="0">Cash Customer</mat-option>
+                                    <mat-option *ngFor="let item of parties |filter:customerSearch.value "
+                                        [value]="item.partyID">{{item.partyName}}</mat-option> </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="matSmall">
+                                <mat-label>Vehicle Detail</mat-label>
+                                <input matInput name="vehicleDetail" [(ngModel)]="model.vehicleDetail" />
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="matSmall">
+                                <mat-label>Remarks</mat-label>
+                                <input matInput name="remarks" [(ngModel)]="model.remarks" />
+                            </mat-form-field>
+                        </div>
+
+                        <div class="grid">
+                            <mat-form-field appearance="outline" class="matSmall">
+                                <mat-label>Delivery Date</mat-label>
+                                <input [(ngModel)]="model.deliveryDate" readonly="true" matInput type="text"
+                                    name="deliverDate" [matDatepicker]="deliverDate">
+                                <mat-datepicker-toggle matSuffix [for]="deliverDate"></mat-datepicker-toggle>
+                                <mat-datepicker #deliverDate></mat-datepicker>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="matSmall">
+                                <mat-label>Deliver To</mat-label>
+                                <input matInput name="deliverTo" [(ngModel)]="model.deliverTo" />
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="matSmall">
+                                <mat-label>Contact No</mat-label>
+                                <input matInput name="contactNo" [(ngModel)]="model.contactNo" />
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="matSmall">
+                                <mat-label>Transporter</mat-label>
+                                <mat-select name="shippingCompanyID" [(ngModel)]="model.transportPartyID">
+                                    <mat-option><ngx-mat-select-search #scSearch [placeholderLabel]="'Search...'"
+                                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                    <mat-option [value]="0">None</mat-option>
+                                    <mat-option *ngFor="let item of shippingCompanies | filter:scSearch.value"
+                                        [value]="item.partyID">{{item.partyName}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="matSmall">
+                                <mat-label>Delivery Address</mat-label>
+                                <input matInput name="deliveryAddress" [(ngModel)]="model.deliveryAddress" />
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="matSmall">
+                                <mat-label>Delivery Charges</mat-label>
+                                <input matInput type="number" min="0" name="deliveryCharges"
+                                    (keyup)="onPaymentTypeChange()" (keydown)="global.handleNumKeys($event)"
+                                    [(ngModel)]="model.transportCharges" />
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="matSmall">
+                                <mat-label>Labour Charges</mat-label>
+                                <input matInput type="number" min="0" name="labourCharges"
+                                    (keyup)="onPaymentTypeChange()" (keydown)="global.handleNumKeys($event)"
+                                    [(ngModel)]="model.labourCharges" />
+                            </mat-form-field>
+                        </div>
+                    </section>
+                    <section class="card col-3">
+
+                        <div class="col-12  ">
+                            <div>
+                                <mat-form-field appearance="outline" class="w-100 matSmall">
+                                    <mat-label>Payment Type</mat-label>
+                                    <mat-select #pType name="paymentType" [(ngModel)]="model.paymentType"
+                                        (selectionChange)="onPaymentTypeChange()">
+                                        <mat-option value="Credit">Credit</mat-option>
+                                        <mat-option value="Cash">Cash</mat-option>
+                                        <mat-option value="Bank">Bank</mat-option>
+                                        <!-- <mat-option value="Split">Split</mat-option> -->
+                                    </mat-select>
+                                </mat-form-field>
+
+
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <mat-form-field class="w-100 matSmall">
+                                            <mat-label>Discount</mat-label>
+                                            <input matInput name="billdiscount" id="disc" accesskey="t" type="number"
+                                                min="0" [(ngModel)]="model.billDiscount" autocomplete="off" />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-6">
+                                        <mat-form-field class="w-100 matSmall">
+                                            <mat-label>Cash Amount</mat-label>
+                                            <input matInput name="CashAmount" type="number" min="0" id="cash"
+                                                accesskey="c" [disabled]="model.paymentType == 'Bank' "
+                                                (keydown)="this.global.handleNumKeys($event);"
+                                                [(ngModel)]="model.cashAmount" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-6">
+                                        <mat-form-field class="w-100 matSmall">
+                                            <mat-label>Bank</mat-label>
+                                            <mat-select name="BankCoa" [(ngModel)]="model.bankCoaID" name="bankCoa"
+                                                [disabled]="model.paymentType == 'Cash' ">
+                                                <mat-option *ngFor="let item of bankCoaList"
+                                                    [value]="item.coaID">{{item.coaTitle}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+
+                                    </div>
+                                    <div class="col-6">
+                                        <mat-form-field class="w-100 matSmall">
+                                            <mat-label>Bank Amount</mat-label>
+                                            <input matInput name="bankAmount" type="number" min="0"
+                                                [disabled]="model.paymentType == 'Bank' || model.paymentType == 'Split' || model.paymentType == 'Cash'"
+                                                (keydown)="this.global.handleNumKeys($event);"
+                                                [(ngModel)]="model.bankAmount">
+                                        </mat-form-field>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </section>
+                </div>
+
+                <!-- Items -->
+                <section class="card">
+                    <!-- <h2 class="card-title"><mat-icon>inventory_2</mat-icon> Product Detail</h2> -->
+
+                    <div class="picker">
+                        <mat-form-field appearance="outline" class="picker-field matSmall">
+                            <mat-label>Search item by title or code</mat-label>
+                            <input matInput id="searchItem" name="itemSearch" [(ngModel)]="itemSearch"
+                                autocomplete="off" />
+                            <mat-icon matSuffix>search</mat-icon>
+                        </mat-form-field>
+
+                        <div class="suggestions" *ngIf="itemSearch.length">
+                            <button type="button" class="suggestion" *ngFor="let i of menuItems | filter:itemSearch"
+                                (click)="addItem(i)">
+                                <span class="s-title">{{ i.mnuItemTitle }}</span>
+                                <span class="s-code">{{ i.mnuItemCode }}</span>
+                                <span class="s-price">{{ i.salePrice }}</span>
+                                <mat-icon>add_circle</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-scroll">
+                        <table class="items-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Item</th>
+                                    <!-- <th>Code</th> -->
+                                    <th>Qty</th>
+                                    <!-- <th>Cost Price</th>
+                                    <th>Avg Cost</th> -->
+                                    <th>Sale Price</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let p of model.productDetail; let i = index">
+                                    <td>{{ i + 1 }}</td>
+                                    <td class="item-title">{{ p.mnuItemTitle }}</td>
+                                    <!-- <td><span class="chip">{{ p.mnuItemCode }}</span></td> -->
+                                    <td><input class="cell  qty{{i}} text-center" type="number" min="1"
+                                            (keydown)="handleUpdown(p,$event,'.qty',i);" [(ngModel)]="p.quantity"
+                                            [ngModelOptions]="{standalone: true}" /></td>
+                                    <!-- <td><input class="cell" type="number" min="0" [(ngModel)]="p.mnuItemCostPrice"
+                                            [ngModelOptions]="{standalone: true}" /></td>
+                                    <td><input class="cell" type="number" min="0" [(ngModel)]="p.mnuItemAvgCostPrice"
+                                            [ngModelOptions]="{standalone: true}" /></td> -->
+                                    <td><input class="cell text-en sp{{i}} text-center" type="number" min="0"
+                                            (keydown)="handleUpdown(p,$event,'.sp',i);global.handleNumKeys($event)"
+                                            [(ngModel)]="p.mnuItemSalePrice" [ngModelOptions]="{standalone: true}" />
+                                    </td>
+                                    <td class="line-total text-end">{{ lineTotal(p) | number:'1.0-2' }}</td>
+                                    <td class="text-end">
+                                        <button mat-icon-button color="warn" type="button" (click)="removeItem(i)"
+                                            title="Remove">
+                                            <mat-icon>close</mat-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="model.productDetail.length === 0">
+                                    <td colspan="9" class="empty">Search above and tap an item to add it to this sale
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Totals -->
+                    <div class="totals">
+                        <div><small>Items Qty</small><strong>{{ totalQty }}</strong></div>
+                        <div><small>Sub Total</small><strong>{{ invoiceSubTotal(model) | number:'1.0-2' }}</strong>
+                        </div>
+                        <div><small>Discount</small><strong>{{ model.billDiscount | number:'1.0-2' }}</strong>
+                        </div>
+                        <div><small>Delivery + Labour</small><strong>{{ model.transportCharges + model.labourCharges ||
+                                0 | number:'1.0-2' }}</strong>
+                        </div>
+                        <div class="grand"><small>Grand Total</small><strong>{{ invoiceGrandTotal(model) |
+                                number:'1.0-2' }}</strong></div>
+                        <div>
+                            <small>Paid</small><strong>{{ (model.cashAmount ||0 )+ (model.bankAmount || 0) |
+                                number:'1.0-2' }}</strong>
+                        </div>
+                        <div><small>Change</small><strong>{{ ((model.cashAmount ||0 )+ (model.bankAmount || 0))
+                                -invoiceGrandTotal(model) | number:'1.0-2' }}</strong>
+
+                        </div>
+                    </div>
+                </section>
+
+                <div class="actions">
+                    <button mat-flat-button class="btn-save" type="submit" [disabled]="!saleForm.valid">
+                        <mat-icon>save</mat-icon> {{ editIndex >= 0 ? 'Update Invoice' : 'Save Invoice' }}
+                    </button>
+                    <button mat-stroked-button type="button" (click)="reset()">
+                        <mat-icon>refresh</mat-icon> Clear
+                    </button>
+                </div>
+            </form>
+        </mat-tab>
+
+        <!-- ===================== SAVED INVOICES TAB ===================== -->
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon>folder_open</mat-icon>&nbsp;Saved Invoices
+            </ng-template>
+
+            <div class="page">
+                <section class="card">
+                    <!-- <header class="card-header">
+                        <h1>Saved issuances</h1>
+
+                    </header> -->
+
+                    <div class="filters">
+                        <mat-form-field appearance="outline" class="search matSmall" subscriptSizing="dynamic">
+
+                            <mat-label>Search</mat-label>
+
+                            <input matInput [ngModel]="invoiceSearch"
+                                (ngModelChange)="invoiceSearch = $event; applyFilters()"
+                                placeholder="Party, location, product, Bill No." autocomplete="off">
+
+                            <button mat-icon-button matSuffix type="button" *ngIf="invoiceSearch"
+                                (click)="invoiceSearch = ''; applyFilters()">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="party-filter matSmall" subscriptSizing="dynamic">
+                            <mat-label>Party</mat-label>
+                            <mat-select [ngModel]="filterPartyID"
+                                (ngModelChange)="filterPartyID = $event; applyFilters()">
+                                <mat-option><ngx-mat-select-search #partyFilterSearch [placeholderLabel]="'Search...'"
+                                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                <mat-option [value]="0">All</mat-option>
+                                <mat-option *ngFor="let option of parties | filter:partyFilterSearch.value"
+                                    [value]="option.partyID">
+                                    {{ option.partyName }}
+                                </mat-option> </mat-select>
+                        </mat-form-field>
+
+
+                        <mat-form-field appearance="outline" class="range matSmall" subscriptSizing="dynamic">
+
+                            <mat-label>Date range</mat-label>
+
+                            <mat-date-range-input [rangePicker]="rangePicker">
+                                <input matStartDate placeholder="From" [ngModel]="fromDate"
+                                    (ngModelChange)="fromDate = $event; getSavedInvoices()" name="fromDate">
+
+                                <input matEndDate placeholder="To" [ngModel]="toDate"
+                                    (ngModelChange)="toDate = $event; getSavedInvoices()" name="toDate">
+                            </mat-date-range-input>
+
+                            <mat-datepicker-toggle matSuffix [for]="rangePicker">
+                            </mat-datepicker-toggle>
+
+                            <mat-date-range-picker #rangePicker></mat-date-range-picker>
+                        </mat-form-field>
+
+                        <button mat-stroked-button type="button" (click)="clearFilters()" [disabled]="!hasFilters">
+                            Clear filters
+                        </button>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="records-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="expand-col"><span class="sr-only">Details</span></th>
+                                    <th scope="col">Issue no.</th>
+                                    <th scope="col"> Date </th>
+                                    <th scope="col"> Party </th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col" class="num">Bill Total </th>
+                                    <th scope="col" class="num">Labour </th>
+                                    <th scope="col" class="num">Transport </th>
+                                    <th scope="col" class="num">Total </th>
+                                    <th scope="col">Vehicle Detail </th>
+                                    <th scope="col">Remarks</th>
+
+                                    <th scope="col">Entered By</th>
+                                    <th scope="col" class="actions-col">Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody *ngFor="let record of savedDataList | filter:invoiceSearch">
+                                <tr [class.editing]="record.invBillNo === editingId"
+                                    [class.open]="record.invBillNo === expandedId">
+                                    <td class="expand-col">
+                                        <button mat-icon-button type="button" (click)="toggleExpanded(record)"
+                                            [attr.aria-expanded]="record.invBillNo === expandedId">
+                                            <mat-icon>{{ record.invBillNo === expandedId ? 'expand_less' : 'expand_more'
+                                                }}</mat-icon>
+                                        </button>
+                                    </td>
+                                    <td class="nowrap"><span class="plate">{{record.invBillNo }}</span></td>
+                                    <td class="nowrap">{{ record.invDate | date: 'dd MMM yyyy' }}</td>
+                                    <td class="nowrap">{{ record.partyName }}</td>
+                                    <td>{{ record.paymentType }}</td>
+                                    <td class="num">{{ record.billTotal | number: '1.0-2' }}</td>
+                                    <td class="num">{{ record.labourCharges | number: '1.0-2' }}</td>
+                                    <td class="num">{{ record.transportCharges | number: '1.0-2' }}</td>
+                                    <td class="num">{{ record.netTotal | number: '1.0-2' }}</td>
+                                    <td>{{record.remarks}}</td>
+                                    <td>{{record.vehicleDetail}}</td>
+                                    <td>{{record.entryUser}}</td>
+                                    <td class="actions-col">
+
+                                        <button mat-icon-button type="button" matTooltip="Approve"
+                                            (click)="postSaleBill(record)">
+                                            <mat-icon>{{record.approvedStatus ? 'check_box' :
+                                                'check_box_outline_blank'}} </mat-icon>
+                                        </button>
+
+                                        <button mat-icon-button type="button" matTooltip="Edit "
+                                            *ngIf="!record.approvedStatus" (click)="edit(record)">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+
+                                        <button mat-icon-button type="button" matTooltip="Print"
+                                            (click)="printSaleInvoice(record)">
+                                            <mat-icon>print</mat-icon>
+                                        </button>
+                                        <!-- <button mat-icon-button type="button" matTooltip="Delete issuance"
+                                            (click)="delete(record)">
+                                            <mat-icon>delete</mat-icon>
+                                        </button> -->
+                                    </td>
+                                </tr>
+
+                                <tr class="detail-row" *ngIf="record.invBillNo === expandedId">
+                                    <td></td>
+                                    <td colspan="12">
+                                        <p class="detail-description" *ngIf="record.remarks">{{ record.remarks }}</p>
+                                        <table class="detail-table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">S#</th>
+                                                    <th scope="col">Product title</th>
+                                                    <th scope="col" class="num">Quantity</th>
+                                                    <!-- <th scope="col" class="num">Cost price</th> -->
+                                                    <th scope="col" class="num">Sale price</th>
+                                                    <!-- <th scope="col" class="num">Avg cost price</th> -->
+                                                    <th scope="col" class="num">Line total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let line of tmpProductDetailList index as index">
+                                                    <td>{{ index +1 }}</td>
+                                                    <td>{{ line.productTitle }}</td>
+                                                    <td class="num">{{ line.quantity | number: '1.0-2' }}</td>
+                                                    <!-- <td class="num">{{ line.costPrice | number: '1.2-2' }}</td> -->
+                                                    <td class="num">{{ line.salePrice | number: '1.0-2' }}</td>
+                                                    <!-- <td class="num">{{ line.avgCostPrice | number: '1.2-2' }}</td> -->
+                                                    <td class="num">{{ line.quantity * line.salePrice | number: '1.0-2'
+                                                        }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+
+                            <app-print-minig-bill class="d-none"></app-print-minig-bill>
+
+                        </table>
+
+                        <div class="empty" *ngIf="savedDataList?.length === 0">
+                            <ng-container *ngIf="savedDataList?.length === 0; else noMatches">
+                                <p class="empty-title">No issuances saved yet</p>
+                                <p>Create one in the Form tab and it will appear here.</p>
+                            </ng-container>
+                            <ng-template #noMatches>
+                                <p class="empty-title">No issuances match your search</p>
+                                <p>Try a different word or date range, or clear the filters.</p>
+                                <button mat-stroked-button type="button" (click)="clearFilters()">Clear filters</button>
+                            </ng-template>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+
+        </mat-tab>
+
+    </mat-tab-group>
+</div>

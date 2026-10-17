@@ -20,6 +20,14 @@ import { VehicleIssuanceReportComponent } from './machinery/vehicle-issuance-rep
 import { AddMineComponent } from './mine/add-mine/add-mine.component';
 import { MineIssuanceComponent } from './mine/mine-issuance/mine-issuance.component';
 import { MineIssuanceReportComponent } from './mine/mine-issuance-report/mine-issuance-report.component';
+import { CreateProductComponent } from './production/create-product/create-product.component';
+import { MiningSaleComponent } from './production/mining-sale/mining-sale.component';
+import { PrintMinigBillComponent } from './production/mining-sale/print-minig-bill/print-minig-bill.component';
+import { MiningSaleReportComponent } from './production/mining-sale-report/mining-sale-report.component';
+import { MiningItemSaleReportComponent } from './production/mining-item-sale-report/mining-item-sale-report.component';
+import { MiningCategorySaleReportComponent } from './production/mining-category-sale-report/mining-category-sale-report.component';
+import { MiningCustomerSaleReportComponent } from './production/mining-customer-sale-report/mining-customer-sale-report.component';
+import { MiningTransporterSaleReportComponent } from './production/mining-transporter-sale-report/mining-transporter-sale-report.component';
 
 
 
@@ -36,6 +44,16 @@ export const miningRoutes: Route[] = [
   { path: 'addmine', component: AddMineComponent, data: { title: 'Add Mine' }, canActivate: [AuthGuard] },
   { path: 'mineissue', component: MineIssuanceComponent, data: { title: 'Mine Issuance' }, canActivate: [AuthGuard] },
   { path: 'mineissuancerpt', component: MineIssuanceReportComponent, data: { title: 'Mine Issuance Report' }, canActivate: [AuthGuard] },
+
+  //////////////////////////    ////////////////////////////////////////
+
+  { path: 'createproduct', component: CreateProductComponent, data: { title: 'Create Product' }, canActivate: [AuthGuard] },
+  { path: 'minesale', component: MiningSaleComponent, data: { title: 'Mining Sale' }, canActivate: [AuthGuard] },
+  { path: 'minesalerpt', component: MiningSaleReportComponent, data: { title: 'Sale Report' }, canActivate: [AuthGuard] },
+  { path: 'mineitemsalerpt', component: MiningItemSaleReportComponent, data: { title: 'Sale Report Itemwise' }, canActivate: [AuthGuard] },
+  { path: 'minecategorysalerpt', component: MiningCategorySaleReportComponent, data: { title: 'Sale Report Category' }, canActivate: [AuthGuard] },
+  { path: 'minecustomersalerpt', component: MiningCustomerSaleReportComponent, data: { title: 'Sale Report Customer' }, canActivate: [AuthGuard] },
+  { path: 'minetransportersalerpt', component: MiningTransporterSaleReportComponent, data: { title: 'Sale Report Transporter' }, canActivate: [AuthGuard] },
 
 
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
@@ -55,7 +73,15 @@ export const miningRoutes: Route[] = [
     VehicleIssuanceReportComponent,
     AddMineComponent,
     MineIssuanceComponent,
-    MineIssuanceReportComponent
+    MineIssuanceReportComponent,
+    CreateProductComponent,
+    MiningSaleComponent,
+    PrintMinigBillComponent,
+    MiningSaleReportComponent,
+    MiningItemSaleReportComponent,
+    MiningCategorySaleReportComponent,
+    MiningCustomerSaleReportComponent,
+    MiningTransporterSaleReportComponent
   ],
   imports: [
     CommonModule,

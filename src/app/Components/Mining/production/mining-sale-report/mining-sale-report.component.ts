@@ -1,0 +1,204 @@
+import { DatePipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { error } from 'jquery';
+import { AppComponent } from 'src/app/app.component';
+import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
+import { NotificationService } from 'src/app/Shared/service/notification.service';
+import { environment } from 'src/environments/environment.development';
+
+@Component({
+  selector: 'app-mining-sale-report',
+  templateUrl: './mining-sale-report.component.html',
+  styleUrls: ['./mining-sale-report.component.scss']
+})
+export class MiningSaleReportComponent implements OnInit {
+
+
+  ProjectwiseFeature = this.global.ProjectwiseFeature;
+
+  apiReq = environment.mainApi + this.global.manufacturingLink;
+  companyProfile: any = [];
+  crudList: any = { c: true, r: true, u: true, d: true };
+  constructor(
+    private http: HttpClient,
+    private msg: NotificationService,
+    private app: AppComponent,
+    public global: GlobalDataModule,
+    private route: Router,
+    private datePipe: DatePipe
+  ) {
+
+    this.global.getCompany().subscribe((data) => {
+      this.companyProfile = data;
+    });
+
+    this.global.getMenuList().subscribe((data) => {
+      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
+    })
+  }
+  ngOnInit(): void {
+    this.global.setHeaderTitle('Sale Report');
+    this.getUsers();
+    this.getProject();
+  }
+
+
+  rptType: any = 'ORDER';
+
+  formateTypeID = 1;
+  formateTypeList = [{ id: 1, title: 'Summary' }, { id: 2, title: 'Detail' },]
+
+  userList: any = [];
+  userID = 0;
+  userName = '';
+
+  fromDate: Date = new Date();
+  fromTime: any = '00:00';
+  toDate: Date = new Date();
+  toTime: any = '23:59';
+
+  SaleDetailList: any = [];
+
+  reportType: any;
+
+
+  getUsers() {
+    this.global.getUserList().subscribe((data: any) => { this.userList = data; });
+  }
+
+
+
+  projectTitle: any = '';
+  projectID: any = this.global.getProjectID();
+  projectList: any = [];
+  getProject() {
+    this.http.get(environment.mainApi + 'cmp/getproject').subscribe(
+      (Response: any) => {
+        this.projectList = Response;
+      }
+    )
+  }
+
+
+  onUserSelected() {
+    var curUser = this.userList.find((e: any) => e.userID == this.userID);
+    this.userName = curUser.userName;
+  }
+
+
+  DataList: any = [];
+
+  billTotal = 0;
+  billDiscountTotal = 0;
+  netTotal = 0;
+
+  getReport() {
+
+    var userID = this.userID;
+    var fromDate = this.global.dateFormater(this.fromDate, '');
+    var fromTime = this.fromTime;
+    var toDate = this.global.dateFormater(this.toDate, '');
+    var toTime = this.toTime;
+    var projectID = this.projectID;
+
+    this.projectTitle = '';
+    if (projectID > 0) {
+      this.projectTitle = this.projectList.filter((e: any) => e.projectID == this.projectID)[0].projectTitle;
+    }
+
+    var url = '';
+    if (this.formateTypeID == 1) {
+      var url = `${this.apiReq}ManufacturingSaleSummaryRpt?reqUID=${userID}&FromDate=${fromDate}
+      &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&projectID=${projectID}`;
+    }
+
+    if (this.formateTypeID == 2) {
+      var url = `${this.apiReq}SaleDetailRpt?reqUID=${userID}&FromDate=${fromDate}
+      &ToDate=${toDate}&FromTime=${fromTime}&ToTime=${toTime}&projectID=${projectID}`;
+    }
+
+
+    this.app.startLoaderDark();
+    this.http.get(url).subscribe(
+      {
+        next: (Response: any) => {
+          this.reset();
+          if (Response.length == 0 || Response == null) {
+            this.global.popupAlert('Data Not Found!');
+            this.app.stopLoaderDark();
+            return;
+
+          }
+
+          if (Response.length > 0) {
+
+            this.DataList = Response
+
+            if (this.DataList.length == 0 || this.DataList == null) {
+              this.global.popupAlert('Data Not Found!');
+              this.app.stopLoaderDark();
+              return;
+
+            }
+
+
+
+
+            this.DataList.forEach((e: any) => {
+              if (this.formateTypeID == 1) {
+                this.billTotal += e.billTotal;
+                this.billDiscountTotal += e.billDiscount;
+                this.netTotal += e.netTotal;
+              }
+              if (this.formateTypeID == 2) {
+                this.netTotal += e.quantity * (e.salePrice + e.loadingLabourCharges);
+              }
+            });
+
+
+
+
+
+          }
+
+          this.app.stopLoaderDark();
+
+        },
+        error: error => {
+          console.log(error);
+          this.app.stopLoaderDark();
+        }
+      }
+    )
+
+  }
+
+
+  print() {
+    this.global.printData('#PrintDiv')
+  }
+
+  export() {
+
+    var startDate = this.datePipe.transform(this.fromDate, 'dd/MM/yyyy');
+    var endDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
+
+
+    this.global.ExportHTMLTabletoExcel('printContainer', `Sale Report ${startDate} - ${endDate}`);
+  }
+
+
+  reset() {
+
+    this.billTotal = 0;
+    this.billDiscountTotal = 0;
+    this.netTotal = 0;
+
+    this.DataList = [];
+
+  }
+
+}
+

@@ -1260,5 +1260,58 @@
 
 
 
+.bill-copy {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: white;
+}
+
+
+.watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-35deg);
+
+  font-size: 65px;
+  font-weight: 900;
+  letter-spacing: 5px;
+
+  white-space: nowrap;
+  opacity: 0.12;
+  pointer-events: none;
+  user-select: none;
+  z-index: -1;
+}
+
+
+.bill-copy.posted .watermark {
+  color: #16803c;
+}
+
+
+.bill-copy.unposted .watermark {
+  color: #dc2626;
+}
+
+
+.invoice-content {
+  position: relative;
+  z-index: 1;
+}
+
+@media print {
+  .bill-copy {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .watermark {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
 
 

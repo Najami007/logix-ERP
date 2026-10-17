@@ -170,6 +170,12 @@ export const environment = {
  // mainApi: 'http://159.69.174.21:2055/',   /////// Lasani Traders
 
 
+ // mainApi: 'http://apimehriacrushplant.logixerpsoft.com/'   ///// Mehria Crush PPlant
+  
+ 
+ // mainApi: 'https://apimhmenclave.logixerpsoft.com/'   ///// Mehria Enclave Live
+
+
 
 
 

@@ -186,9 +186,9 @@ export class AddMineComponent implements OnInit {
     this.model = { mineID: mine.mineID, mineName: mine.mineName, description: mine.description };
   }
 
-  deleteMine(id: number): void {
+  deleteMine(item:any): void {
     var payload = {
-      MineID: this.model.mineID,
+      MineID: item.mineID,
       PinCode: '',
       UserId: this.global.getUserID(),
     }

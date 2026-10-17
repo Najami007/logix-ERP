@@ -395,6 +395,8 @@ export class MineIssuanceComponent implements OnInit {
 
   confirmApproval(item: any) {
 
+    if(item.approvedStatus) return;
+
     var payLoad = {
       InvBillNo: item.invBillNo,
       Remarks: '-',
