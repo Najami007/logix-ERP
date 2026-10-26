@@ -19,7 +19,7 @@ export class VehicleComponent implements OnInit {
 
   @ViewChild(SavedVehiclesComponent) savedVehicleComp: any;
   @ViewChild(AddVehicleComponent) addVehicleForm: any;
-    @ViewChild('drawer') drawer!: MatSidenav;
+  @ViewChild('drawer') drawer!: MatSidenav;
 
 
   page: number = 1;
@@ -81,6 +81,10 @@ export class VehicleComponent implements OnInit {
       {
         next: (Response: any) => {
           this.vehicleList = Response;
+
+          setTimeout(() => {
+              this.savedVehicleComp.applyFilters();
+          }, 200);
         },
         error: (error: any) => {
           console.log('error occured while loading vehicle list' + error);
@@ -116,13 +120,14 @@ export class VehicleComponent implements OnInit {
             this.msg.SuccessNotify(Response.msg);
             this.getVehileList();
             this.addVehicleForm.onCancel();
-            this.drawer.close()
+
+            this.drawer.close();
           } else {
             this.msg.WarnNotify(Response.msg);
           }
-            this.app.stopLoaderDark();
+          this.app.stopLoaderDark();
         },
-        error:(error)=>{
+        error: (error) => {
           console.log(error);
           this.app.stopLoaderDark();
         }

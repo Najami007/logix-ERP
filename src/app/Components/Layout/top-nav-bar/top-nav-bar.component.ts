@@ -44,7 +44,7 @@ export class TopNavBarComponent implements OnInit {
     private render: Renderer2,
   ) {
 
-    
+
 
   }
 
@@ -60,20 +60,13 @@ export class TopNavBarComponent implements OnInit {
   changeThemeFlag = false;
 
 
-  Menu = "menu";
+  Menu = 'menu';
 
-  toggleSideBar() {
-    this.toggleMySideBar.emit();
+  toggleSideBar(): void {
+    this.m.sideBarToggler();
 
-    if (this.m.sideBarOpen) {
-      this.Menu = "menu_open";
-
-    } else {
-      this.Menu = "menu";
-
-    }
+    this.Menu = this.m.sideBarOpen ? 'menu_open' : 'menu';
   }
-
 
 
 

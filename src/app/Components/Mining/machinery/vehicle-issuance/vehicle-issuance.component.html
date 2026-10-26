@@ -133,10 +133,10 @@
                   <tr>
                     <th scope="col">Product</th>
                     <th scope="col" class="num">Quantity</th>
-                    <th scope="col" class="num">Cost price</th>
-                    <th scope="col" class="num">Sale price</th>
-                    <th scope="col" class="num">Avg cost price</th>
-                    <th scope="col" class="num">Line total</th>
+                    <!-- <th scope="col" class="num">Cost price</th>
+                    <th scope="col" class="num">Sale price</th> -->
+                    <th scope="col" class="num">Price</th>
+                    <th scope="col" class="num">Total</th>
                     <th scope="col" class="actions-col"><span class="sr-only">Remove</span></th>
                   </tr>
                 </thead>
@@ -152,8 +152,8 @@
                         (keydown)="handleUpdown(item,$event,'.qty',index);"  [(ngModel)]="item.quantity"
                         [attr.aria-label]="'Quantity of ' + item.productTitle" />
                     </td>
-                    <td class="num"> {{item.costPrice | number: '1.2-2'}} </td>
-                    <td class="num">{{item.salePrice | number: '1.2-2'}}</td>
+                    <!-- <td class="num"> {{item.costPrice | number: '1.2-2'}} </td>
+                    <td class="num">{{item.salePrice | number: '1.2-2'}}</td> -->
                     <td class="num muted">{{ item.avgCostPrice | number: '1.2-2' }}</td>
                     <td class="num">{{ (item.quantity || 0) * (item.avgCostPrice || 0) | number: '1.2-2' }}</td>
                     <td class="actions-col">
@@ -193,7 +193,7 @@
         </div>
 
         <footer class="actions">
-          <button mat-stroked-button type="button" (click)="onCancel(issuanceForm)">
+          <button mat-stroked-button type="button" (click)="onCancel()">
             {{ isEditing ? 'Cancel edit' : 'Clear' }}
           </button>
           <button mat-flat-button color="primary" type="submit">{{ isEditing ? 'Update' : 'Save'
@@ -312,10 +312,10 @@
                         <th scope="col">S#</th>
                         <th scope="col">Product title</th>
                         <th scope="col" class="num">Quantity</th>
-                        <th scope="col" class="num">Cost price</th>
-                        <th scope="col" class="num">Sale price</th>
-                        <th scope="col" class="num">Avg cost price</th>
-                        <th scope="col" class="num">Line total</th>
+                        <!-- <th scope="col" class="num">Cost price</th>
+                        <th scope="col" class="num">Sale price</th> -->
+                        <th scope="col" class="num">Price</th>
+                        <th scope="col" class="num">Total</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -323,10 +323,10 @@
                         <td>{{ index +1 }}</td>
                         <td>{{ line.productTitle }}</td>
                         <td class="num">{{ line.quantity | number: '1.0-2' }}</td>
-                        <td class="num">{{ line.costPrice | number: '1.2-2' }}</td>
-                        <td class="num">{{ line.salePrice | number: '1.2-2' }}</td>
+                        <!-- <td class="num">{{ line.costPrice | number: '1.2-2' }}</td> -->
+                        <!-- <td class="num">{{ line.salePrice | number: '1.2-2' }}</td> -->
                         <td class="num">{{ line.avgCostPrice | number: '1.2-2' }}</td>
-                        <td class="num">{{ line.quantity * line.salePrice | number: '1.2-2' }}</td>
+                        <td class="num">{{ line.quantity * line.avgCostPrice | number: '1.2-2' }}</td>
                       </tr>
                     </tbody>
                   </table>

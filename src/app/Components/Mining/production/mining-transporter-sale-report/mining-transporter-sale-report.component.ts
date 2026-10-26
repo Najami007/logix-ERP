@@ -173,7 +173,7 @@ export class MiningTransporterSaleReportComponent {
           }
 
           if (Response.length > 0) {
-            this.DataList = Response
+            this.DataList = Response.filter((e:any)=> e.approvedStatus)
 
             if (this.DataList.length == 0 || this.DataList == null) {
               this.global.popupAlert('Data Not Found!');

@@ -112,6 +112,7 @@ export class PrintMinigBillComponent {
       this.apiReq + `PrintMiningBill?InvBillNo=${invBillNo}`
     ).subscribe({
       next: (response) => {
+        console.log(response,'Print Data');
         this.tableDataList = [];
         this.printDataList = [];
 
@@ -136,7 +137,7 @@ export class PrintMinigBillComponent {
           tmpDeliveryContactNo: first.deliveryContactNo,
           tmpDeliveryAddress: first.deliveryAddress,
           tmpDeliveryRemarks: first.deliveryRemarks,
-          tmpShippingCompany: first.shpCmpName,
+          tmpShippingCompany: first.transportPartyName,
           tmpCustomerName: first.partyName,
 
           myBillTotal: first.billTotal,

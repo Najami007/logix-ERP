@@ -8,15 +8,12 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 
-import * as $ from 'jquery';
-import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/addparty.component';
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bill-print.component';
 import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-mehtod.component';
 import { EditQtyModalComponent } from './edit-qty-modal/edit-qty-modal.component';
 import { MatRadioButton } from '@angular/material/radio';
 import { retry } from 'rxjs';
-import { NgIf } from '@angular/common';
 
 
 
@@ -86,7 +83,7 @@ export class GarmentSaleComponent implements OnInit {
   disableOtherDiscFeature = this.global.disableOtherDiscFeature;
   TransporterFeature = this.global.TransporterFeature;
   NonFBRFeature = this.global.NonFBRFeature;
-  insertLocalStorageFeature = this.global.insertLocalStorageFeature;
+  insertLocalStorageFeature = false;
 
 
 
@@ -360,8 +357,8 @@ export class GarmentSaleComponent implements OnInit {
 
 
         this.PBarcode = '';
-        this.getTotal();
-        $('#psearchProduct').trigger('focus');
+        // this.getTotal();
+        // $('#psearchProduct').trigger('focus');
 
       }
     }

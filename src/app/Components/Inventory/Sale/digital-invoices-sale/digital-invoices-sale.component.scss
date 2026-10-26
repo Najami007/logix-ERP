@@ -233,3 +233,66 @@ textarea.form-control {
     object-fit: contain;
 
 }
+
+
+.payment-Card {
+
+    // position:sticky;
+    background: #ecf2ff;
+
+    border: 1px solid #dfe7f7;
+
+    border-radius: 12px;
+
+    padding: 10px;
+
+    height: 225px;
+
+}
+
+.SearchConatiner {
+    background: #fff;
+    z-index: 1000;
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+
+    .card {
+        background: rgb(247, 242, 242);
+        border: none;
+        border-bottom: 1px solid #ddd;
+        border-radius: 0;
+        margin: 0;
+    }
+
+    p {
+        padding: 10px;
+        margin: 0;
+        height: auto;
+    }
+}
+
+.prodBtn {
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: left;
+    padding: 10px;
+}
+
+.prodBtn:hover,
+.prodBtn:focus {
+    background: #1E293B !important;
+    color: #fff !important;
+    outline: none;
+}
+
+.prodBtn:hover p,
+.prodBtn:focus p {
+    color: #fff;
+}

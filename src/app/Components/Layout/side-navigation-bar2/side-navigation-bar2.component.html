@@ -1,129 +1,120 @@
-<mat-nav-list
-  class="h-100 sideNav"
-  style="overflow-y: auto !important; overflow-x: hidden !important;">
+<div class="sidebar-container">
 
-  <div class="py-2 d-flex flex-column nav">
+  <!-- SIDEBAR HEADER -->
+  <div class="sidebar-header">
+    <div class="brand-icon">
+      <mat-icon>dashboard</mat-icon>
+    </div>
 
-    <!-- CURRENT MODULE -->
+    <div class="brand-text">
+      <h3>ERP SYSTEM</h3>
+      <span>Management Portal</span>
+    </div>
+  </div>
 
-    <ng-container *ngIf="currentModule">
+  <!-- NAVIGATION -->
+  <div class="sidebar-content">
 
-      <!-- MENU -->
+    <div class="nav-section-title">MAIN MENU</div>
 
-      <div
-        class="side-menu"
-        *ngFor="let menu of currentModule.menus; let i = index">
+    <ng-container *ngFor="let module of moduleMenuList; let i = index">
 
+      <!-- MODULE -->
+      <div class="module-container">
 
-        <!-- ================================= -->
-        <!-- MENU WITHOUT SUB MENU -->
-        <!-- ================================= -->
+        <button type="button" class="module-link" [class.module-active]="expandedModule === i"
+          (click)="toggleModule(i, module)">
 
-        <ng-container *ngIf="menu.menus.length === 0">
+          <!-- <mat-icon class="module-icon">
+            {{ getModuleIcon(module.moduleTitle) }}
+          </mat-icon> -->
 
-          <a
-            class="list-item nav-link text-truncate"
-            [routerLink]="[
-              '/',
-              menu.moduleLink,
-              menu.menuLink
-            ]"
-            routerLinkActive="active">
+          <span class="module-title">
+            {{ module.moduleTitle }}
+          </span>
 
-            <span>
-              {{ menu.menuTitle }}
-            </span>
+          <mat-icon class="expand-icon">
+            {{ expandedModule === i ? 'expand_less' : 'expand_more' }}
+          </mat-icon>
 
-          </a>
+        </button>
 
-        </ng-container>
+        <!-- MODULE MENUS -->
+        <div class="module-menus" *ngIf="expandedModule === i">
 
+          <ng-container *ngFor="let menu of module.menus">
 
-        <!-- ================================= -->
-        <!-- MENU WITH SUB MENU -->
-        <!-- ================================= -->
+            <!-- MENU WITH SUBMENUS -->
+            <ng-container *ngIf="(menu.menus?.length ?? 0) > 0; else singleMenu">
 
-        <ng-container *ngIf="menu.menus.length > 0">
+              <button type="button" class="menu-link" [class.menu-expanded]="expandedMenus[menu.menuID]"
+                (click)="toggleMenu(menu.menuID)">
 
-          <a
-            class="list-item nav-link text-truncate menu-parent"
-            href="javascript:void(0)"
-            (click)="toggleMenu(menu.menuID)">
+                <span class="menu-dot"></span>
 
-            <span>
-              {{ menu.menuTitle }}
-            </span>
+                <span class="menu-title">
+                  {{ menu.menuTitle }}
+                </span>
 
-            <mat-icon
-              class="menu-arrow"
-              [class.rotate]="isExpanded(menu.menuID)">
+                <mat-icon class="submenu-arrow">
+                  {{
+                  expandedMenus[menu.menuID]
+                  ? 'keyboard_arrow_up'
+                  : 'keyboard_arrow_down'
+                  }}
+                </mat-icon>
 
-              arrow_drop_down
+              </button>
 
-            </mat-icon>
+              <!-- SUBMENUS -->
+              <div class="submenu-container" *ngIf="expandedMenus[menu.menuID]">
 
-          </a>
+                <a *ngFor="let sub of menu.menus" class="submenu-link"
+                  [routerLink]="['/', sub.moduleLink, sub.menuLink]" routerLinkActive="active-submenu"
+                  [routerLinkActiveOptions]="{ exact: true }">
 
+                  <span class="submenu-line"></span>
+                  <span>{{ sub.menuTitle }}</span>
 
-          <!-- ================================= -->
-          <!-- SUB MENU -->
-          <!-- ================================= -->
+                </a>
 
-          <div
-            class="submenu"
-            *ngIf="isExpanded(menu.menuID)">
+              </div>
 
-            <a
-              *ngFor="let sub of menu.menus"
+            </ng-container>
 
-              class="list-item nav-link text-truncate submenu-item"
+            <!-- MENU WITHOUT SUBMENUS -->
+            <ng-template #singleMenu>
 
-              [routerLink]="[
-                '/',
-                sub.moduleLink,
-                sub.menuLink
-              ]"
+              <a class="menu-link single-menu" [routerLink]="['/', menu.moduleLink, menu.menuLink]"
+                routerLinkActive="active-menu" [routerLinkActiveOptions]="{ exact: true }">
 
-              routerLinkActive="active">
+                <span class="menu-dot"></span>
 
-              <span>
+                <span class="menu-title">
+                  {{ menu.menuTitle }}
+                </span>
 
-                {{ sub.menuTitle | slice:0:25 }}
+              </a>
 
-                <ng-container
-                  *ngIf="sub.menuTitle.length > 25">
+            </ng-template>
 
-                  ...
+          </ng-container>
 
-                </ng-container>
-
-              </span>
-
-            </a>
-
-          </div>
-
-        </ng-container>
-
+        </div>
 
       </div>
 
     </ng-container>
 
-
-    <!-- ================================= -->
-    <!-- NO MODULE -->
-    <!-- ================================= -->
-
-    <div
-      *ngIf="!currentModule"
-      class="text-center p-3 text-muted">
-
-      No menu available
-
-    </div>
-
-
   </div>
 
-</mat-nav-list>
+  <!-- SIDEBAR FOOTER -->
+  <div class="sidebar-footer">
+    <mat-icon>verified_user</mat-icon>
+    <div>
+      <strong>Developed By:</strong>
+      <span>LOGIX SOLUTIONZ</span>
+    </div>
+  </div>
+
+</div>

@@ -223,6 +223,7 @@ export class VehicleWorkbookComponent implements OnInit {
             || Response.msg == 'Data Deleted Successfully') {
             this.msg.SuccessNotify(Response.msg);
             this.getWorkbookList();
+            this.onCancel();
             this.selectedTab = 1; // show the saved list
 
           } else {
@@ -240,9 +241,8 @@ export class VehicleWorkbookComponent implements OnInit {
   }
 
 
-  onCancel(form: NgForm): void {
-    const wasEditing = this.isEditing;
-    // this.leaveForm(form);
+  onCancel(): void {
+ // this.leaveForm(form);
     this.model =  this.blankModel();
     
     // if (wasEditing) {

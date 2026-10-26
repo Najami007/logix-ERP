@@ -8,8 +8,6 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 
-import * as $ from 'jquery';
-
 import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bill-print.component';
 import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-mehtod.component';
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
@@ -839,6 +837,8 @@ export class VoidSaleReturnComponent implements OnInit {
       ProjectID: this.projectID,
       BookerID: 0,
       PaymentType: paymentType,
+      SendToFbr: SendToFbr,
+
       Remarks: this.billRemarks || '-',
       OrderType: "Take Away",
       BillTotal: this.subTotal,

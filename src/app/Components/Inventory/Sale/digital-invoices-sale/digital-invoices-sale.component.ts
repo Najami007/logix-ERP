@@ -14,6 +14,7 @@ import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-m
 import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 import { DigitalInvoicePrintComponent } from '../SaleComFiles/digital-invoice-print/digital-invoice-print.component';
 import { ASSETS } from 'src/assets/Constants/assets';
+import { error } from 'jquery';
 
 @Component({
   selector: 'app-digital-invoices-sale',
@@ -116,6 +117,7 @@ export class DigitalInvoicesSaleComponent implements OnInit {
     this.getPartyList();
     this.getBooker();
     this.getVehicles();
+    this.getDiScenarioList();
 
 
     setTimeout(() => {
@@ -150,6 +152,16 @@ export class DigitalInvoicesSaleComponent implements OnInit {
   fbrLogo = ASSETS.fbrLogo;
 
   tempProdData: any = [];
+
+  diScenarioList: any = [];
+  scenarioID: any = '';
+  scenarioSaleType: any = 0;
+
+  onScenarioSelect() {
+    if (this.diScenarioList.length > 0) {
+      this.scenarioSaleType = this.diScenarioList.filter((e: any) => e.scenarioId == this.scenarioID)[0].saleType;
+    }
+  }
 
 
   sortType = 'desc';
@@ -299,13 +311,32 @@ export class DigitalInvoicesSaleComponent implements OnInit {
     )
 
     this.app.stopLoaderDark();
-    this.productName = '';
+    this.PBarcode = '';
     this.getTotal();
-    this.global.closeBootstrapModal('#prodModal', true);
+    // this.global.closeBootstrapModal('#prodModal', true);
     setTimeout(() => {
       $('#psearchProduct').trigger('focus');
     }, 500);
 
+  }
+
+  getDiScenarioList() {
+    var url = `${environment.mainApi + this.global.inventoryLink}GetDiScenario`;
+
+    this.http.get(url).subscribe(
+      {
+        next: (Response: any) => {
+          this.diScenarioList = Response;
+          if(Response.length == 1){
+            this.scenarioID = Response[0].scenarioId;
+          }
+        },
+        error: (error) => {
+          console.log(error);
+
+        }
+      }
+    )
   }
 
   pushProdData(data: any, qty: any) {
@@ -373,6 +404,7 @@ export class DigitalInvoicesSaleComponent implements OnInit {
         discInP: discPerc,
         discInR: discRupee,
         pctCode: data.pctCode,
+        saleType: this.scenarioSaleType,
         uomTitle: data.uomTitle,
         aq: data.aq,
         total: (data.salePrice * qty) - (discRupee * qty),
@@ -882,7 +914,7 @@ export class DigitalInvoicesSaleComponent implements OnInit {
 
   }
 
-  editSP(item: any) {
+  editSP(item: any,type:any) {
     if (this.editSpFeature && this.crudList.u) {
       Swal.fire({
         title: "Enter Total Amount",
@@ -900,7 +932,15 @@ export class DigitalInvoicesSaleComponent implements OnInit {
             return Swal.showValidationMessage("Sale Price Is Less Then Cost Price");
           }
 
-          this.tableDataList[index].salePrice = Number(value);
+          var gst = this.tableDataList[index].gst;
+          var priceBeforTax = value / (1 + gst / 100);
+          if(type == 'at'){
+            this.tableDataList[index].salePrice = Number(priceBeforTax);
+          }
+          if(type == 'bt'){
+            this.tableDataList[index].salePrice = Number(value);
+          }
+          
           this.getTotal();
         }
       }).then((result) => {
@@ -913,6 +953,7 @@ export class DigitalInvoicesSaleComponent implements OnInit {
       })
     }
   }
+
 
 
   editGst(item: any) {
@@ -932,7 +973,11 @@ export class DigitalInvoicesSaleComponent implements OnInit {
           return Swal.showValidationMessage("Invalid Percentage");
         }
 
+
+
+
         this.tableDataList[index].gst = Number(value);
+
         this.getTotal();
       }
     }).then((result) => {
@@ -1184,9 +1229,12 @@ export class DigitalInvoicesSaleComponent implements OnInit {
         SaleDetail: JSON.stringify(this.tableDataList),
         VehicleID: this.vehicleID,
         MeterReading: this.meterReading || '0',
-        UserID: this.global.getUserID()
+        UserID: this.global.getUserID(),
+        ScenarioId: this.scenarioID
       }
 
+
+      console.log(postData);
 
       if (this.global.SubscriptionExpired()) {
         Swal.fire({

@@ -327,7 +327,7 @@
 }
 
 .totals .grand {
-  background: linear-gradient(120deg, var(--brand), #14b8a6);
+  background: linear-gradient(120deg, #49711d, #0a472b);
   color: #fff;
 }
 
@@ -349,7 +349,6 @@
 .btn-save {
   background: var(--brand) !important;
   color: #fff !important;
-  border-radius: 12px !important;
   padding: 0 24px;
   height: 44px;
 }
@@ -562,4 +561,27 @@
     flex: 1 1 100%;
     width: auto;
   }
+}
+
+
+
+
+.prodBtn {
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: left;
+    padding: 10px;
+}
+
+.prodBtn:hover,
+.prodBtn:focus {
+    background: #1E293B !important;
+    color: #fff !important;
+    outline: none;
+}
+
+.prodBtn:hover p,
+.prodBtn:focus p {
+    color: #fff;
 }

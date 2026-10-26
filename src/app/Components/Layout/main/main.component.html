@@ -1,26 +1,55 @@
-<mat-drawer-container class="mat-drawer-container displayMainPage" autosize>
-    <mat-drawer mode="side" [opened]="sideBarOpen" class="mat-drawer" position="start">
-        <app-side-navbar *ngIf="moduleWiseNavigationFeature"></app-side-navbar>
-        <app-side-navigation-bar2 *ngIf="!moduleWiseNavigationFeature"></app-side-navigation-bar2>
 
-    </mat-drawer>
+<mat-drawer-container
+  class="displayMainPage"
+  autosize>
 
-    <mat-drawer-content class="layout-content">
+  <!-- SIDEBAR -->
+  <mat-drawer
+    #drawer
+    mode="side"
+    position="start"
+    [opened]="sideBarOpen"
+    class="app-sidebar">
 
-        <div>
-            <app-top-nav-bar *ngIf="hideFlag == false " class="topBar" id="menubar"
-                (toggleMySideBar)="sideBarToggler()"></app-top-nav-bar>
+    <app-side-navbar
+      *ngIf="moduleWiseNavigationFeature">
+    </app-side-navbar>
 
-        </div>
-        <!-- <mat-icon  style="position: fixed;right: 0;z-index: 101;top: 35px;" class="mt-2 text-danger" (click)="hideUnhide()">{{hideFlag ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}}</mat-icon> -->
-        <section class="main-content">
-            <router-outlet></router-outlet>
-        </section>
-        <div class="footer">
-            <app-header></app-header>
-        </div>
-    </mat-drawer-content>
+    <app-side-navigation-bar2
+      *ngIf="!moduleWiseNavigationFeature">
+    </app-side-navigation-bar2>
 
+  </mat-drawer>
 
+  <!-- MAIN APPLICATION AREA -->
+  <mat-drawer-content class="layout-content">
+
+    <!-- TOP NAVIGATION -->
+    <header
+      class="topBar"
+      id="menubar"
+      *ngIf="hideFlag === false">
+
+      <app-top-nav-bar
+        (toggleMySideBar)="sideBarToggler()">
+      </app-top-nav-bar>
+
+    </header>
+
+    <!-- PAGE CONTENT -->
+    <main class="main-content">
+
+      <div class="bodyContainer">
+        <router-outlet></router-outlet>
+      </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <app-header></app-header>
+    </footer>
+
+  </mat-drawer-content>
 
 </mat-drawer-container>

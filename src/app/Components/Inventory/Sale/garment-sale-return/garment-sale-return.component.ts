@@ -8,14 +8,10 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 
-import * as $ from 'jquery';
-
-import { Observable, retry } from 'rxjs';
-
-import { dateFormat } from 'highcharts';
-import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/addparty.component'; import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
+import { retry } from 'rxjs';
+import { AddpartyComponent } from 'src/app/Components/Company/party/addparty/addparty.component'; 
+import { SaleBillDetailComponent } from 'src/app/Components/Restaurant-Core/Sales/sale1/sale-bill-detail/sale-bill-detail.component';
 import { SaleBillPrintComponent } from '../SaleComFiles/sale-bill-print/sale-bill-print.component';
-import { ProductModalComponent } from '../SaleComFiles/product-modal/product-modal.component';
 import { PaymentMehtodComponent } from '../SaleComFiles/payment-mehtod/payment-mehtod.component';
 import { EditQtyModalComponent } from '../garment-sale/edit-qty-modal/edit-qty-modal.component';
 

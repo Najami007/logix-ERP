@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
-import * as $ from 'jquery';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
@@ -266,8 +265,25 @@ getNoteLedger(projectID: any, type: any, noteID = 0) {
 
   export() {
     if (this.rptType != '') {
+
+      var type = '';
+      
+      switch(this.formateId){
+        case 1:
+          type = 'balanceSheet1'
+          break;
+          
+             case 2:
+          type = 'balanceSheet2'
+          break;
+          
+             case 3:
+          type = 'balanceSheet3'
+          
+      }
+      
       var toDate = this.datePipe.transform(this.toDate, 'dd/MM/yyyy');
-      this.globalData.ExportHTMLTabletoExcel(this.rptType, 'Balance Sheet ' + '(' + toDate + ')')
+      this.globalData.ExportHTMLTabletoExcel(type, 'Balance Sheet ' + '(' + toDate + ')')
     }
 
 

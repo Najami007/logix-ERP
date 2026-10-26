@@ -8,8 +8,6 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 
-import * as $ from 'jquery';
-
 import { Observable, retry } from 'rxjs';
 import { VsenterqtyComponent } from './vsenterqty/vsenterqty.component';
 import { VssavedbillComponent } from './vssavedbill/vssavedbill.component';

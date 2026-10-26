@@ -65,6 +65,9 @@ export class SaleBillPrintComponent implements OnInit {
   companyRegistrationNo = '';
   footerText: any = '';
 
+
+  cashGst = this.global.GetGSTValue('Cash');
+
   logoHeight: any = 0;
   logoWidth: any = 0;
   companyAddress: any = '';

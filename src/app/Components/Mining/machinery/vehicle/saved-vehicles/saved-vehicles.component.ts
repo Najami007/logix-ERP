@@ -44,6 +44,7 @@ export class SavedVehiclesComponent implements OnInit {
   @Output() remove = new EventEmitter<any>();
   @Output() statusChange = new EventEmitter();
   @Output() refreshList = new EventEmitter();
+  @Output() applyFilter = new EventEmitter();
 
 
 

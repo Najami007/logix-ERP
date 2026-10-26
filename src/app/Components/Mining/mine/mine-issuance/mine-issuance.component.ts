@@ -359,7 +359,7 @@ export class MineIssuanceComponent implements OnInit {
       insert: 'InsertMineIssuance',
       update: 'UpdateMineIssuance',
       delete: 'DeleteMineIssuance',
-      post: 'PostMineIssuance',
+      post: 'PostVehicleIssuance',
     }[type];
 
 

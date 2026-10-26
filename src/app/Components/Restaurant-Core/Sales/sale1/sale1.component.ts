@@ -12,7 +12,6 @@ import { RestKotPrintComponent } from '../SaleCommonComponent/rest-kot-print/res
 import { SaleBillDetailComponent } from './sale-bill-detail/sale-bill-detail.component';
 import { RestSaleBillPrintComponent } from '../SaleCommonComponent/rest-sale-bill-print/rest-sale-bill-print.component';
 
-import * as $ from 'jquery';
 import { SaleSavedBillComponent } from '../SaleCommonComponent/sale-saved-bill/sale-saved-bill.component';
 import { retry } from 'rxjs';
 import { PaymentMehtodComponent } from 'src/app/Components/Inventory/Sale/SaleComFiles/payment-mehtod/payment-mehtod.component';
@@ -669,7 +668,7 @@ export class Sale1Component implements OnInit {
         this.gstValue = 0;
         break;
     }
-    this.GstAmount = (this.subTotal+this.OtherCharges - this.billDiscount) * this.gstValue / 100;
+    this.GstAmount = (this.subTotal) * this.gstValue / 100;
   }
 
 

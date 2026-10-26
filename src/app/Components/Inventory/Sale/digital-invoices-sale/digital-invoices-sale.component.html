@@ -18,56 +18,70 @@
 
                 <div class="col-12 col-md-6 col-xl-4 mb-3">
 
-                    <div class="row">
 
 
-                        <div class="col-12">
+                    <div class="col-12">
 
-                            <mat-form-field appearance="outline" *ngIf="disableDate" class="w-100 matSmall">
-                                <mat-label>Invoice Date</mat-label>
-                                <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
-                                    [matDatepicker]="voucherDate">
-                                <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
-                                <mat-datepicker #voucherDate></mat-datepicker>
-                            </mat-form-field>
-
-                        </div>
-                        <!-- Customer -->
-
-                        <div class="col-12">
-
-                            <mat-form-field appearance="outline" class="w-100 matSmall">
-                                <mat-label>Customer</mat-label>
-                                <mat-select [(ngModel)]="partyID" (selectionChange)="partySelect()" #supplier
-                                    name="customer">
-                                    <mat-option><ngx-mat-select-search #customerSearch [placeholderLabel]="'Search...'"
-                                            [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
-                                    <mat-option *ngFor="let item of partyList |filter:customerSearch.value "
-                                        [value]="item.partyID">{{item.partyName}} <small
-                                            class="fs-10px">({{item.businessName}}) NTN/FTN -
-                                            {{item.ntn}}</small></mat-option>
-
-                                </mat-select>
-                                <mat-icon class="cursorPointer" (click)="addParty('open')" matSuffix>add</mat-icon>
-                            </mat-form-field>
-
-                        </div>
-
-
-
-                        <!-- Remarks -->
-
-                        <div class="col-12">
-
-                            <mat-form-field appearance="outline" class="w-100 matSmall">
-                                <mat-label>Remarks</mat-label>
-                                <textarea matInput [rows]="!disableDate? 6 : 3" [(ngModel)]="billRemarks"></textarea>
-                            </mat-form-field>
-
-
-                        </div>
+                        <mat-form-field appearance="outline" *ngIf="disableDate" class="w-100 matSmall">
+                            <mat-label>Invoice Date</mat-label>
+                            <input [(ngModel)]="invoiceDate" readonly="true" matInput type="text" name="voucherDate"
+                                [matDatepicker]="voucherDate">
+                            <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
+                            <mat-datepicker #voucherDate></mat-datepicker>
+                        </mat-form-field>
 
                     </div>
+                    <!-- Customer -->
+
+                    <div class="col-12">
+
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <mat-label>Customer</mat-label>
+                            <mat-select [(ngModel)]="partyID" (selectionChange)="partySelect()" #supplier
+                                name="customer">
+                                <mat-option><ngx-mat-select-search #customerSearch [placeholderLabel]="'Search...'"
+                                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                <mat-option *ngFor="let item of partyList |filter:customerSearch.value "
+                                    [value]="item.partyID">{{item.partyName}} <small
+                                        class="fs-10px">({{item.businessName}}) NTN/FTN -
+                                        {{item.ntn}}</small></mat-option>
+
+                            </mat-select>
+                            <mat-icon class="cursorPointer" (click)="addParty('open')" matSuffix>add</mat-icon>
+                        </mat-form-field>
+
+                    </div>
+
+                    <div class="col-12">
+
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <mat-label>Scenario</mat-label>
+                            <mat-select [disabled]="tableDataList.length > 0" [(ngModel)]="scenarioID" (selectionChange)="onScenarioSelect()" #Scenario
+                                name="scenario">
+                                <mat-option><ngx-mat-select-search #scenarioSearch [placeholderLabel]="'Search...'"
+                                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                <mat-option *ngFor="let item of diScenarioList |filter:scenarioSearch.value "
+                                    [value]="item.scenarioId">{{item.scenarioId}} -- {{item.saleType}}</mat-option>
+
+                            </mat-select>
+                        </mat-form-field>
+
+                    </div>
+
+
+
+                    <!-- Remarks -->
+
+                    <div class="col-12">
+
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <mat-label>Remarks</mat-label>
+                            <textarea matInput [rows]="!disableDate? 4 : 1" [(ngModel)]="billRemarks"></textarea>
+                        </mat-form-field>
+
+
+                    </div>
+
 
                 </div>
 
@@ -100,7 +114,8 @@
 
                                 <h4> Total </h4>
 
-                                <h3 class="font-digit" style="font-size:30px !important;">{{subTotal |number:'1.0-1'}}</h3>
+                                <h3 class="font-digit" style="font-size:30px !important;">{{subTotal |number:'1.0-1'}}
+                                </h3>
 
                             </div>
 
@@ -125,7 +140,8 @@
 
                                 <h4>NET TOTAL</h4>
 
-                                <h2 class=" font-digit net-total" style="font-size:40px !important;">{{netTotal || 0|number:'1.0-1'}}</h2>
+                                <h2 class=" font-digit net-total" style="font-size:40px !important;">{{netTotal ||
+                                    0|number:'1.0-1'}}</h2>
 
                             </div>
                         </div>
@@ -136,7 +152,8 @@
                             <div class="summary-row" style="line-height: 45px !important;">
 
                                 <h4>GST</h4>
-                                <h3 class="font-digit" style="font-size:30px !important;">{{AdvTaxAmount|number:'1.0-1'}}</h3>
+                                <h3 class="font-digit" style="font-size:30px !important;">
+                                    {{AdvTaxAmount|number:'1.0-1'}}</h3>
 
                             </div>
 
@@ -161,7 +178,8 @@
 
                                 <h4>Change</h4>
 
-                                <h3 class="net-total font-digit" style="font-size:40px !important;">{{change || 0|number:'1.0-1'}}</h3>
+                                <h3 class="net-total font-digit" style="font-size:40px !important;">{{change ||
+                                    0|number:'1.0-1'}}</h3>
 
                             </div>
                         </div>
@@ -199,16 +217,32 @@
                         1. Search (Code / Search with Name)
                     </label> -->
 
-                    <div class="input-group">
-                        <input class="form-control form-control-lg searchProduct" placeholder="Search by code or name..."
-                            [(ngModel)]="PBarcode"
-                            (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event);focusto('#cash',$event);"
-                            (focus)="rowFocused = -1" autofocus autocomplete="off" accesskey="b">
+                     <div class="position-relative">
+                        <div class="input-group">
+                            <input class="form-control form-control-lg searchProduct" [disabled]="!scenarioID" id="psearchProduct"
+                                placeholder="Search by code or name..." [(ngModel)]="PBarcode"
+                                (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event);focusto('#cash',$event);"
+                                (focus)="rowFocused = -1" autofocus autocomplete="off" accesskey="b">
 
 
-                        <span class="input-group-text bg-white" matTooltip="Search Product By Name (alt + n)">
+                            <!-- <span class="input-group-text bg-white" matTooltip="Search Product By Name (alt + n)">
                             <mat-icon accesskey="n" (click)="searchProductByName()">search</mat-icon>
-                        </span>
+                        </span> -->
+                        </div>
+
+                        <div class="w-100 d-flex flex-column SearchConatiner cursorPointer"
+                            *ngIf="PBarcode != '' && PBarcode != undefined">
+                            <mat-card class="card "
+                                *ngFor="let item of productList| filter:PBarcode | slice:0:25 index as index"
+                                (click)="holdDataFunction(item)">
+                                <button style="height: 40px; background: none;border: none;text-align: left;" #prodRow
+                                    class="prodRow{{index}} prodBtn justify-content-between d-flex"
+                                    (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',productList)">
+                                    <p>{{item.productTitle}}</p>
+                                    <p><strong>({{item.barcode}})</strong></p>
+                                </button>
+                            </mat-card>
+                        </div>
                     </div>
 
                 </div>
@@ -252,7 +286,7 @@
                             <th width="120">UOM</th>
 
                             <th width="170">HS Code</th>
-
+                            <th>Type</th>
                             <th width="140">Qty</th>
 
                             <th width="150">Price</th>
@@ -289,6 +323,10 @@
                             <td>{{item.uomTitle}}</td>
 
                             <td>{{item.pctCode}}</td>
+
+                            <td>{{item.saleType}}
+                            </td>
+
                             <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
                                     [readonly]="item.packing > 1"
                                     (keydown)="handleUpdown(item,$event,'.qty',index);getTotal();changeValue(item)"
@@ -297,22 +335,22 @@
                                     class="form-control qty{{index}} text-center" style="width: 80px;"></td>
 
 
-                            <td class=" cursorPointer" (click)="editSP(item)">{{item.salePrice
+                            <td class=" cursorPointer" (click)="editSP(item,'bt')">{{item.salePrice
                                 |number:'1.0-3'}}
                             </td>
                             <td class=" cursorPointer" (click)="editGst(item)">{{item.gst}}</td>
-                            <td class=" cursorPointer" (click)="editSP(item)">{{item.salePrice +
+                            <td class=" cursorPointer" (click)="editSP(item,'at')">{{item.salePrice +
                                 (item.salePrice
                                 * (item.gst / 100)) |number:'1.0-3'}}</td>
 
-                            <td *ngIf="discFeature" class=" cursorPointer"
-                                (click)="tempProdData = item;editDR(item)">{{item.discInR
+                            <td *ngIf="discFeature" class=" cursorPointer" (click)="tempProdData = item;editDR(item)">
+                                {{item.discInR
                                 |number:'1.0-3'}}</td>
-                            <td *ngIf="discFeature" class=" cursorPointer"
-                                (click)="tempProdData = item;editDP(item)">{{item.discInP
+                            <td *ngIf="discFeature" class=" cursorPointer" (click)="tempProdData = item;editDP(item)">
+                                {{item.discInP
                                 |number:'1.0-3'}}</td>
 
-                            <td class=" cursorPointer" (click)="EditTotal(item)">{{((item.salePrice +
+                            <td class=" cursorPointer" >{{((item.salePrice +
                                 (item.salePrice * (item.gst / 100)) ) *
                                 item.quantity)-(item.discInR * item.quantity)|number:'1.0-3'}}</td>
                             <!-- <td class="text-end">{{item.quantity * item.salePrice |number:'1.0-3'}}</td> -->
@@ -321,8 +359,8 @@
                                 *ngIf="showSaleAQFeature">
                                 {{item.aq |number:'1.0-3'}}</td>
 
-                            <td class="cursorPointer text-danger "><mat-icon
-                                    (click)="delRow(item)">close</mat-icon></td>
+                            <td class="cursorPointer text-danger "><mat-icon (click)="delRow(item)">close</mat-icon>
+                            </td>
 
                         </tr>
 

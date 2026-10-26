@@ -1,14 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
+import { Subscription, filter } from 'rxjs';
 
-import { NotificationService } from 'src/app/Shared/service/notification.service';
-import { AppComponent } from 'src/app/app.component';
-import { MainComponent } from '../main/main.component';
-import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
-
+import { GlobalDataModule } from
+  'src/app/Shared/global-data/global-data.module';
 
 interface SubMenu {
   menuID: number;
@@ -20,18 +16,9 @@ interface SubMenu {
   isParentMenu: boolean;
 }
 
-
-interface MainMenu {
-  menuID: number;
-  parentMenuID: number;
-  menuTitle: string;
-  menuLink: string;
-  moduleID: number;
-  moduleLink: string;
-  isParentMenu: boolean;
+interface MainMenu extends SubMenu {
   menus: SubMenu[];
 }
-
 
 interface ModuleMenu {
   moduleID: number;
@@ -40,365 +27,193 @@ interface ModuleMenu {
   menus: MainMenu[];
 }
 
-
 @Component({
   selector: 'app-side-navigation-bar2',
   templateUrl: './side-navigation-bar2.component.html',
   styleUrls: ['./side-navigation-bar2.component.scss']
 })
-export class SideNavigationBar2Component implements OnInit, OnDestroy {
+export class SideNavigationBar2Component
+  implements OnInit, OnDestroy {
 
-  clickEventSubscription!: Subscription;
-
-  // Complete tree
   moduleMenuList: ModuleMenu[] = [];
 
-  // Currently selected module
-  currentModule!: ModuleMenu | undefined;
+  currentModule: ModuleMenu | undefined;
 
   moduleID: string | null = null;
 
-  // Track opened menus
   expandedMenus: { [key: number]: boolean } = {};
 
+  private subscriptions: Subscription[] = [];
+
   constructor(
-    private msg: NotificationService,
-    private http: HttpClient,
-    private route: Router,
-    private dialogue: MatDialog,
-    private app: AppComponent,
-    private m: MainComponent,
-    private global: GlobalDataModule
-  ) {
-
-    /*
-     * Whenever module changes from Top Navigation
-     */
-    this.clickEventSubscription = this.global
-      .getMenuItem()
-      .subscribe((value: any) => {
-
-        this.moduleID = value;
-
-        this.moduleMenuList =
-          this.global.getModuleMenuList();
-
-        this.setCurrentModule();
-
-      });
-
-  }
-
+    private global: GlobalDataModule,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
 
     this.moduleID = localStorage.getItem('mid');
 
-    this.clickEventSubscription =
-      this.global.moduleMenuList$
-        .subscribe((menus: any[]) => {
+    // Load the menu tree already created by top navigation
+    this.loadNavigation();
 
-          this.moduleMenuList = menus;
-
+    // Listen for menu-tree changes
+    this.subscriptions.push(
+      this.global.moduleMenuList$.subscribe(
+        (menus: ModuleMenu[]) => {
+          this.moduleMenuList = menus || [];
           this.setCurrentModule();
-
-        });
-
-  }
-
-
-
-  loadNavigation() {
-
-    this.moduleMenuList =
-      this.global.getModuleMenuList();
-
-    this.setCurrentModule();
-
-  }
-
-  /*
-   * ============================================================
-   * GET MODULES
-   * ============================================================
-   */
-
-  getModules(): void {
-
-    const userID = this.global.getUserID();
-
-    this.http.get(
-      this.global.userLink +
-      'getusermodule?userid=' +
-      userID
-    ).subscribe({
-
-      next: (response: any) => {
-
-        const modules = response || [];
-
-        this.getAllMenus(modules);
-
-      },
-
-      error: (error) => {
-
-        console.error(
-          'Error loading modules:',
-          error
-        );
-
-      }
-
-    });
-
-  }
-
-
-  /*
-   * ============================================================
-   * GET MENU FOR ALL MODULES
-   * ============================================================
-   */
-
-  getAllMenus(modules: any[]): void {
-
-    this.moduleMenuList = [];
-
-    modules.forEach((module: any) => {
-
-      this.getMenu(module);
-
-    });
-
-  }
-
-
-  /*
-   * ============================================================
-   * GET MENU
-   * ============================================================
-   */
-
-  getMenu(module: any): void {
-
-    const userID = this.global.getUserID();
-
-    const moduleID = module.moduleID;
-
-    this.http.get(
-      this.global.userLink +
-      'getusermenu?userid=' +
-      userID +
-      '&moduleid=' +
-      moduleID
-    ).subscribe({
-
-      next: (response: any) => {
-
-        const menuList = response || [];
-
-        const moduleTree: ModuleMenu = {
-
-          moduleID: module.moduleID,
-
-          moduleTitle:
-            module.moduleTitle ||
-            module.moduleName ||
-            module.title,
-
-          moduleLink:
-            module.moduleLink ||
-            module.link ||
-            '',
-
-          menus: this.buildMenuTree(menuList)
-
-        };
-
-
-        this.moduleMenuList.push(moduleTree);
-
-
-        /*
-         * Keep global menu list updated
-         */
-        this.global.glbMenulist = [
-          ...(this.global.glbMenulist || []),
-          ...menuList
-        ];
-
-
-        /*
-         * Set selected module
-         */
-        this.setCurrentModule();
-
-      },
-
-      error: (error) => {
-
-        console.error(
-          'Error loading menu:',
-          error
-        );
-
-      }
-
-    });
-
-  }
-
-
-  /*
-   * ============================================================
-   * BUILD MENU TREE
-   * ============================================================
-   */
-
-  buildMenuTree(menuList: any[]): MainMenu[] {
-
-    const result: MainMenu[] = [];
-
-
-    /*
-     * Main menus
-     */
-    const parentMenus = menuList.filter(
-      (item: any) =>
-        item.parentMenuID === 0
+        }
+      )
     );
 
+    // Listen for module changes from top navigation
+    this.subscriptions.push(
+      this.global.getMenuItem().subscribe((value: any) => {
+        this.moduleID = String(value);
+        this.setCurrentModule();
+      })
+    );
 
-    parentMenus.forEach((parent: any) => {
-
-      const children: SubMenu[] = menuList
-        .filter(
-          (item: any) =>
-            item.parentMenuID === parent.menuID
-        );
-
-
-      result.push({
-
-        menuID: parent.menuID,
-
-        parentMenuID:
-          parent.parentMenuID,
-
-        menuTitle:
-          parent.menuTitle,
-
-        menuLink:
-          parent.menuLink,
-
-        moduleID:
-          parent.moduleID,
-
-        moduleLink:
-          parent.moduleLink,
-
-        isParentMenu:
-          parent.isParentMenu,
-
-        menus: children
-
-      });
-
-    });
-
-
-    return result;
-
+    // Update expanded parent when route changes
+    this.subscriptions.push(
+      this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd)
+      ).subscribe(() => {
+        this.expandActiveMenu();
+      })
+    );
   }
 
+  loadNavigation(): void {
+    this.moduleMenuList =
+      this.global.getModuleMenuList() || [];
 
-  /*
-   * ============================================================
-   * SET CURRENT MODULE
-   * ============================================================
-   */
+    this.setCurrentModule();
+  }
 
   setCurrentModule(): void {
 
-    if (!this.moduleID) {
+    if (!this.moduleMenuList.length) {
       this.currentModule = undefined;
       return;
     }
 
-    const id = Number(this.moduleID);
+    const storedID =
+      this.moduleID || localStorage.getItem('mid');
 
-    this.currentModule =
-      this.moduleMenuList.find(
-        (module: any) =>
-          Number(module.moduleID) === id
-      );
+    const id = Number(storedID);
 
-    // console.log('Selected Module ID:', id);
-    // console.log('Available Modules:', this.moduleMenuList);
-    // console.log('Current Module:', this.currentModule);
+    this.currentModule = this.moduleMenuList.find(
+      module => Number(module.moduleID) === id
+    );
 
+    // Fallback if no selected module matches
+    if (!this.currentModule && !storedID) {
+      this.currentModule = this.moduleMenuList[0];
+      this.moduleID = String(this.currentModule.moduleID);
+    }
+
+    this.expandActiveMenu();
   }
 
-
-  /*
-   * ============================================================
-   * TOGGLE MENU
-   * ============================================================
-   */
-
-  toggleMenu(menuID: number): void {
-
-    this.expandedMenus[menuID] =
-      !this.expandedMenus[menuID];
-
-  }
-
-
-  /*
-   * ============================================================
-   * CHECK MENU
-   * ============================================================
-   */
+ 
 
   isExpanded(menuID: number): boolean {
-
     return !!this.expandedMenus[menuID];
-
   }
 
-
-  /*
-   * ============================================================
-   * NAVIGATION
-   * ============================================================
-   */
-
-  navigate(menu: any): void {
-
-    this.route.navigate([
+  navigate(menu: SubMenu): void {
+    this.router.navigate([
       '/',
       menu.moduleLink,
       menu.menuLink
     ]);
-
   }
 
+  expandActiveMenu(): void {
 
-  /*
-   * ============================================================
-   * CLEANUP
-   * ============================================================
-   */
+    const module = this.currentModule;
 
-  ngOnDestroy(): void {
-
-    if (this.clickEventSubscription) {
-
-      this.clickEventSubscription.unsubscribe();
-
+    if (!module) {
+      return;
     }
 
+    const currentUrl = this.router.url;
+
+    for (const menu of module.menus || []) {
+
+      if (!menu.menus?.length) {
+        continue;
+      }
+
+      const activeChild = menu.menus.some(sub => {
+        const targetUrl =
+          `/${sub.moduleLink}/${sub.menuLink}`;
+
+        return currentUrl === targetUrl ||
+          currentUrl.startsWith(targetUrl + '/');
+      });
+
+      if (activeChild) {
+        this.expandedMenus[menu.menuID] = true;
+      }
+    }
   }
+
+  getModuleIcon(title: string): string {
+
+    const value = (title || '').toLowerCase();
+
+    if (value.includes('inventory')) return 'inventory_2';
+    if (value.includes('sale')) return 'point_of_sale';
+    if (value.includes('purchase')) return 'shopping_cart';
+    if (value.includes('account')) return 'account_balance';
+    if (value.includes('report')) return 'analytics';
+    if (value.includes('setting')) return 'settings';
+    if (value.includes('user')) return 'people';
+    if (value.includes('vehicle')) return 'local_shipping';
+    if (value.includes('restaurant')) return 'restaurant';
+
+    return 'apps';
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription =>
+      subscription.unsubscribe()
+    );
+  }
+
+
+
+
+
+
+  
+expandedModule: number | null = null;
+
+
+toggleModule(index: number, module: ModuleMenu): void {
+  if (this.expandedModule === index) {
+    this.expandedModule = null;
+    return;
+  }
+
+  this.expandedModule = index;
+
+  // Update the selected module across the application
+  localStorage.setItem('mid', String(module.moduleID));
+  sessionStorage.setItem('mid', String(module.moduleID));
+
+  this.global.setMenuItem(module.moduleID);
+  this.global.setModuleTitle(module.moduleTitle.split(' ')[0]);
+}
+
+toggleMenu(menuID: number): void {
+  this.expandedMenus[menuID] = !this.expandedMenus[menuID];
+}
+
+
+
 
 }

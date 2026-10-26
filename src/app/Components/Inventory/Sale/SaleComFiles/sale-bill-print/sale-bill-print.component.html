@@ -128,7 +128,8 @@
                                     </td>
                                     <td class="text-end" style="width:20% !important;">{{(item.salePrice / ((item.gst +
                                         100) / 100))|number:'1.0-1'}}</td>
-                                    <td class="text-end" *ngIf="discFeature && !MinusDiscountFeature" style="width:10% !important;">
+                                    <td class="text-end" *ngIf="discFeature && !MinusDiscountFeature"
+                                        style="width:10% !important;">
                                         {{(item.discInR + item.cusDiscAmount) * item.quantity|number:'1.0-1'}}<small
                                             *ngIf="showUomTitleFeature"
                                             class="fs-8px fw-semibold">({{item.discInP|number:'1.0-1'}}%)</small></td>
@@ -282,7 +283,9 @@
                                 <!-- <td colspan="2"><small class="fs-10">Total Includes Tax of 18%</small></td> -->
 
                                 <td></td>
-                                <td colspan="2">{{myGstTotal |number:'1.0-0'}}</td>
+                                <td colspan="2" *ngIf="cashGst == 0">{{myGstTotal |number:'1.0-0'}}</td>
+                                <td colspan="2" *ngIf="cashGst > 0">{{cashGst |number:'1.0-0'}}%</td>
+
 
                             </tr>
                             <tr class="text-end fs-14" *ngIf="myAdvTaxValue > 0">
@@ -394,7 +397,7 @@
 
             <div class="d-flex gap-4 border-top border-dark fw-bold" *ngIf="SteelTypeFeature">
                 <span>Total Weight</span>
-                <span class="fw-bold" >{{myTotalWeight | number:'1.0-2'}} KG</span>
+                <span class="fw-bold">{{myTotalWeight | number:'1.0-2'}} KG</span>
 
             </div>
 

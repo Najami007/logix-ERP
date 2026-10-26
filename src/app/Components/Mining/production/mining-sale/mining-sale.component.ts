@@ -78,7 +78,7 @@ export class MiningSaleComponent implements OnInit {
       {
         next: (Response: any) => {
           console.log(Response);
-          this.menuItems = Response;
+          this.menuItems = Response.filter((e:any)=> e.activeStatus);
         },
         error: (error) => {
           console.log(error);
@@ -152,7 +152,7 @@ export class MiningSaleComponent implements OnInit {
       partyID: 0,
       vehicleDetail: '',
       remarks: '',
-      deliveryDate:  this.today(),
+      deliveryDate: this.today(),
       deliverTo: '',
       contactNo: '',
       deliveryAddress: '',
@@ -296,7 +296,10 @@ export class MiningSaleComponent implements OnInit {
   // ---------- save / edit / delete ----------
   save(): void {
     var data: any = this.model;
-
+    var billTotal = this.invoiceSubTotal(this.model);
+    var billDiscount = 0;
+    var tmpNetTotal = this.invoiceGrandTotal(this.model);
+    var tmpChange = tmpNetTotal - ((data.cashAmount || 0) + (data.bankAmount || 0));
 
 
 
@@ -334,6 +337,13 @@ export class MiningSaleComponent implements OnInit {
       return;
     }
 
+    if (data.paymentType == 'Cash' && data.cashAmount < data.tmpNetTotal) {
+      this.msg.WarnNotify('Cash Amount Not valid');
+      return;
+    }
+
+
+
     if (data.paymentType == 'Bank' && (data.bankAmount == 0 || data.bankAmount == null || data.bankAmount == '')) {
       this.msg.WarnNotify('Enter Bank Amount');
       return;
@@ -341,7 +351,7 @@ export class MiningSaleComponent implements OnInit {
 
 
 
-    if (data.paymentType == 'Bank' && (data.bankCoaID == 0)) {
+    if (data.paymentType == 'Bank' && (data.bankCoaID == 0 || data.bankCoaID == null || data.bankCoaID == undefined)) {
       this.msg.WarnNotify('Select Bank');
       return;
     }
@@ -352,11 +362,21 @@ export class MiningSaleComponent implements OnInit {
     }
 
 
+    if (data.paymentType == 'Credit' && (data.cashAmount + data.bankAmount) > data.tmpNetTotal) {
+      this.msg.WarnNotify('Amounts Not valid');
+      return;
+    }
 
-    var billTotal = this.invoiceSubTotal(this.model);
-    var billDiscount = 0;
-    var tmpNetTotal = this.invoiceGrandTotal(this.model);
-    var tmpChange = tmpNetTotal - ((data.cashAmount || 0) + (data.bankAmount || 0));
+    if (data.bankAmount > 0 &&  (data.bankCoaID == 0 || data.bankCoaID == null || data.bankCoaID == undefined)) {
+      this.msg.WarnNotify('Select Bank');
+      return;
+    }
+
+
+
+
+
+
 
 
     var miningSaleDetail: any = this.model.productDetail.map((e: any) => {
@@ -374,23 +394,23 @@ export class MiningSaleComponent implements OnInit {
     var postData = {
       InvBillNo: data.invoiceNo,
       InvDate: this.global.dateFormater(data.invoiceDate, '-'),
-      PartyID: data.partyID,
+      PartyID: data.partyID || 0,
       InvType: "S",
       ProjectID: this.global.getProjectID(),
       PaymentType: data.paymentType,
       BookerID: 1,
       VehicleDetail: data.vehicleDetail || '-',
-      Remarks: data.remarks || '-' ,
+      Remarks: data.remarks || '-',
       GstAmount: 0,
       GstValue: 0,
       BillTotal: billTotal,
-      BillDiscount: data.billDiscount,
+      BillDiscount: data.billDiscount || 0,
       OtherCharges: 0,
       NetTotal: tmpNetTotal,
-      CashRec: data.cashAmount,
-      Change: tmpChange,
-      BankCoaID: data.bankCoaID,
-      BankCash: data.bankAmount,
+      CashRec: data.cashAmount || 0,
+      Change: tmpChange || 0,
+      BankCoaID: data.bankCoaID || 0,
+      BankCash: data.bankAmount || 0,
       InvoiceDocument: "-",
       TransportPartyID: data.transportPartyID || 0,
       LabourCharges: data.labourCharges || 0,
@@ -534,15 +554,17 @@ export class MiningSaleComponent implements OnInit {
 
   postSaleBill(item: any) {
 
+    if (item.approvedStatus) return;
+
     Swal.fire({
-      title: `Do you really want to ${item.postedStatus ? 'Unpost' : 'Post'}?`,
+      title: `Do you really want to ${item.approvedStatus ? 'Unpost' : 'Post'}?`,
       showCancelButton: true,
       confirmButtonText: "Confirm",
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
 
-        if (!item.postedStatus) {
+        if (!item.approvedStatus) {
           this.global.postSaleInvoice(item).subscribe(
             (Response: any) => {
               if (Response.msg == 'Posted Successfully') {
@@ -653,6 +675,59 @@ export class MiningSaleComponent implements OnInit {
     }
   }
 
+  prodFocusedRow = 0;
+  changeFocus(e: any, cls: any) {
+
+    if (e.target.value == '') {
+      if (e.keyCode == 40) {
+
+        if (this.menuItems.length >= 1) {
+          this.rowFocused = 0;
+          e.preventDefault();
+          $('.qty0').trigger('select');
+          $('.qty0').trigger('focus');
+
+        }
+      }
+    } else {
+      this.prodFocusedRow = 0;
+      /////move down
+      if (e.keyCode == 40) {
+        if (this.menuItems.length >= 1) {
+          e.preventDefault();
+          $('.prodRow0').trigger('focus');
+
+
+        }
+      }
+    }
+  }
+
+  handleProdFocus(item: any, e: any, cls: any, endFocus: any, prodList: any[]) {
+    const key = e.keyCode;
+
+    if (key === 9) {
+      this.prodFocusedRow += e.shiftKey ? -1 : 1;
+      return;
+    }
+
+    if (key === 40 && this.prodFocusedRow < prodList.length - 1) {
+      this.prodFocusedRow++;
+    } else if (key === 38) {
+      if (this.prodFocusedRow === 0) {
+        e.preventDefault();
+        $(endFocus).trigger('focus');
+        return;
+      }
+      this.prodFocusedRow--;
+    } else {
+      return;
+    }
+
+    e.preventDefault();
+    $(cls + this.prodFocusedRow).trigger('focus');
+  }
+
 
 
 
@@ -660,6 +735,13 @@ export class MiningSaleComponent implements OnInit {
 
     this.invoicePrint.printInvoice(item.invBillNo);
 
+  }
+
+  onTransporterChange() {
+    if (this.model.transportPartyID == 0) {
+      this.model.labourCharges = 0;
+      this.model.transportCharges = 0;
+    }
   }
 
 

@@ -9,7 +9,6 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { environment } from 'src/environments/environment.development';
 import { AppComponent } from 'src/app/app.component';
 import { Observable, retry } from 'rxjs';
-import * as $ from 'jquery';
 
 
 interface VehicleOption {
@@ -351,9 +350,12 @@ export class VehicleIssuanceComponent implements OnInit {
     this.http.get(url).subscribe(
       {
         next: (Response: any) => {
-          // console.log(Response, 'Issuance');
+          console.log(Response, 'Issuance');
           this.tmpSavedDataList = Response;
           this.savedDataList = Response;
+          setTimeout(() => {
+            this.applyFilters();
+          }, 100);
         }
       }
     )
@@ -454,6 +456,8 @@ export class VehicleIssuanceComponent implements OnInit {
             || Response.msg == 'Data Posted Successfully') {
             this.msg.SuccessNotify(Response.msg);
             this.getSavedIssuance();
+            
+            this.onCancel();
             this.selectedTab = 1; // show the saved list
 
           } else {
@@ -493,7 +497,7 @@ export class VehicleIssuanceComponent implements OnInit {
 
 
 
-  onCancel(form: NgForm): void {
+  onCancel(): void {
     const wasEditing = this.isEditing;
     // this.leaveForm(form);
     this.model = this.blankModel();

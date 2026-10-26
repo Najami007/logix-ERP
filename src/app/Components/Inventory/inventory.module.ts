@@ -193,7 +193,7 @@ export const inventoryRoutes: Route[] = [
   { path: 'whslrtn', component: WholeSaleReturnComponent, data: { title: 'Whole Sale Return' }, canActivate: [AuthGuard] },
   { path: 'gmsale', component: GarmentSaleComponent, data: { title: 'Sale GS' }, canActivate: [AuthGuard] },
   { path: 'gmslrtn', component: GarmentSaleReturnComponent, data: { title: 'Sale Return GS' }, canActivate: [AuthGuard] },
-  { path: 'vblsale', component: VoidSale2Component, data: { title: 'VB Sale' }, canActivate: [AuthGuard] },
+  { path: 'vblsale', component: VoidSaleComponent, data: { title: 'VB Sale' }, canActivate: [AuthGuard] },
   { path: 'vblsalertn', component: VoidSaleReturnComponent, data: { title: 'VB Sale Return' }, canActivate: [AuthGuard] },
   { path: 'retsl', component: RetailerSaleComponent, data: { title: 'Rt Sale' }, canActivate: [AuthGuard] },
   { path: 'retslrtn', component: RetailerSaleReturnComponent, data: { title: 'RT Sale Return' }, canActivate: [AuthGuard] },

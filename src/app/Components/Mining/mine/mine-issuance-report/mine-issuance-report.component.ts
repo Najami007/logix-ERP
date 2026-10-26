@@ -104,7 +104,7 @@ export class MineIssuanceReportComponent {
             return;
 
           }
-          this.dataList = Response;
+          this.dataList = Response.filter((e:any)=>e.approvedStatus);
 
           this.app.stopLoaderDark();
         },
