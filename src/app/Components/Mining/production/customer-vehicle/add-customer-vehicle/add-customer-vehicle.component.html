@@ -1,0 +1,56 @@
+<form class="mine-form " (ngSubmit)="onSubmit()">
+
+        <header class="form-header">
+
+            <div class="titles">
+                <h1>{{editMode ? 'Edit' : 'Add'}} Vehicle</h1>
+            </div>
+
+
+        </header>
+
+
+
+        <section class="container p-2 row">
+
+            <mat-form-field appearance="outline" class="matSmall col-md-6">
+                <mat-label>Vehicle name</mat-label>
+                <input matInput name="vehicle Name" [(ngModel)]="model.cusVehName" placeholder="e.g. Mitsubishi , Hino , Volvo  "
+                    autocomplete="off" />
+            </mat-form-field>
+               <mat-form-field appearance="outline" class="matSmall col-md-6">
+                <mat-label>Vehicle No</mat-label>
+                <input matInput name="vehicle No" [(ngModel)]="model.cusVehNo" placeholder="e.g. Veh 1234"
+                    autocomplete="off" />
+            </mat-form-field>
+
+               <mat-form-field appearance="outline" class="matSmall col-md-6">
+                <mat-label>Vehicle Size</mat-label>
+                <input matInput name="vehicle Size" [(ngModel)]="model.cusVehSize" placeholder="e.g. 15 x 12 x 20"
+                    autocomplete="off" />
+            </mat-form-field>
+
+               <mat-form-field appearance="outline" class="matSmall col-md-6">
+                <mat-label>Vehicle Capacity</mat-label>
+                <input matInput name="vehicle Capacity" type="number" [(ngModel)]="model.cusVehCapacity" placeholder="e.g. 100 CFT"
+                    autocomplete="off" />
+            </mat-form-field>
+
+
+      
+        </section>
+
+
+        <footer class="form-actions">
+
+            <button mat-stroked-button type="button" (click)="resetForm()">
+                Cancel
+            </button>
+
+            <button mat-flat-button color="primary" type="submit" accesskey="s">
+                Save
+            </button>
+
+        </footer>
+
+    </form>

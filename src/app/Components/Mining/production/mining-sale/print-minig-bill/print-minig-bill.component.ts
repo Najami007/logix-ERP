@@ -104,80 +104,126 @@ export class PrintMinigBillComponent {
   tableDataList: any = [];
 
 
-  
 
 
-  printInvoice(invBillNo: any): void {
+  printSaleBill(invBillNo: any): void {
     this.http.get<any[]>(
       this.apiReq + `PrintMiningBill?InvBillNo=${invBillNo}`
     ).subscribe({
-      next: (response) => {
-        console.log(response,'Print Data');
+      next: (Response: any) => {
+        console.log(Response, 'Print Data');
         this.tableDataList = [];
-        this.printDataList = [];
+        if (Response.length > 0) {
+          Response.forEach((e: any) => {
 
-        if (!response || response.length === 0) {
-          console.warn('No invoice data found.');
-          return;
-        }
+            this.tableDataList.push({
+              mnuItemID: e.mnuItemID, productTitle: e.productTitle, quantity: e.quantity, costPrice: e.costPrice, salePrice: e.salePrice
+            })
+            this.myTransportCharges = Response[0].transportCharges;
+            this.myLabourCharges = Response[0].labourCharges;
 
-        const first = response[0];
+            this.myCounterName = Response[0].entryUser;
+            this.tmpInvBillNo = Response[0].invBillNo;
+            this.tmpInvDate = Response[0].invDate;
+            this.tmpDeliveryDate = new Date(Response[0].deliveryDate);
+            this.tmpDeliveryTo = Response[0].deliverTo;
+            this.tmpDeliveryContactNo = Response[0].deliveryContactNo;
+            this.tmpDeliveryAddress = Response[0].deliveryAddress;
+            this.tmpDeliveryRemarks = Response[0].deliveryRemarks;
+            this.tmpShippingCompany = Response[0].shpCmpName;
+            this.tmpCustomerName = Response[0].partyName;
 
-        const tmpList: any = {
-          myTransportCharges: first.transportCharges,
-          myLabourCharges: first.labourCharges,
-
-          myCounterName: first.entryUser,
-          tmpInvBillNo: first.invBillNo,
-          tmpInvDate: first.invDate,
-          tmpDeliveryDate: first.deliveryDate
-            ? new Date(first.deliveryDate)
-            : null,
-          tmpDeliveryTo: first.deliverTo,
-          tmpDeliveryContactNo: first.deliveryContactNo,
-          tmpDeliveryAddress: first.deliveryAddress,
-          tmpDeliveryRemarks: first.deliveryRemarks,
-          tmpShippingCompany: first.transportPartyName,
-          tmpCustomerName: first.partyName,
-
-          myBillTotal: first.billTotal,
-          myBillDiscount: first.billDiscount,
-          myNetTotal: first.netTotal,
-          myRemarks: first.remarks,
-          myApprovedStatus:first.approvedStatus,
-
-          tableDataList: response.map((e: any) => ({
-            mnuItemID: e.mnuItemID,
-            productTitle: e.productTitle,
-            quantity: e.quantity,
-            costPrice: e.costPrice,
-            salePrice: e.salePrice
-          }))
-        };
-
-        // Create three print copies.
-        this.printDataList = Array.from(
-          { length: 3 },
-          () => ({
-            ...tmpList,
-            
-            tableDataList: tmpList.tableDataList.map((item: any) => ({
-              ...item
-            }))
+            this.myBillTotal = Response[0].billTotal;
+            this.myBillDiscount = Response[0].billDiscount;
+            this.myNetTotal = Response[0].netTotal;
+            this.myRemarks = Response[0].remarks;
           })
-        );
 
-        console.log(this.printDataList, 'Print Data List');
 
-        setTimeout(() => {
-          this.global.printData('#printInvoice');
-        }, 200);
+          setTimeout(() => {
+            this.global.printData('#printMineSaleBill');
+          }, 200);
+
+        }
       },
       error: (error) => {
         console.error('Error fetching mining bill:', error);
       }
     });
   }
+
+
+  // printSaleBill(invBillNo: any): void {
+  //   this.http.get<any[]>(
+  //     this.apiReq + `PrintMiningBill?InvBillNo=${invBillNo}`
+  //   ).subscribe({
+  //     next: (response) => {
+  //       console.log(response,'Print Data');
+  //       this.tableDataList = [];
+  //       this.printDataList = [];
+
+  //       if (!response || response.length === 0) {
+  //         console.warn('No invoice data found.');
+  //         return;
+  //       }
+
+  //       const first = response[0];
+
+  //       const tmpList: any = {
+  //         myTransportCharges: first.transportCharges,
+  //         myLabourCharges: first.labourCharges,
+
+  //         myCounterName: first.entryUser,
+  //         tmpInvBillNo: first.invBillNo,
+  //         tmpInvDate: first.invDate,
+  //         tmpDeliveryDate: first.deliveryDate
+  //           ? new Date(first.deliveryDate)
+  //           : null,
+  //         tmpDeliveryTo: first.deliverTo,
+  //         tmpDeliveryContactNo: first.deliveryContactNo,
+  //         tmpDeliveryAddress: first.deliveryAddress,
+  //         tmpDeliveryRemarks: first.deliveryRemarks,
+  //         tmpShippingCompany: first.transportPartyName,
+  //         tmpCustomerName: first.partyName,
+
+  //         myBillTotal: first.billTotal,
+  //         myBillDiscount: first.billDiscount,
+  //         myNetTotal: first.netTotal,
+  //         myRemarks: first.remarks,
+  //         myApprovedStatus:first.approvedStatus,
+
+  //         tableDataList: response.map((e: any) => ({
+  //           mnuItemID: e.mnuItemID,
+  //           productTitle: e.productTitle,
+  //           quantity: e.quantity,
+  //           costPrice: e.costPrice,
+  //           salePrice: e.salePrice
+  //         }))
+  //       };
+
+  //       // Create three print copies.
+  //       this.printDataList = Array.from(
+  //         { length: 3 },
+  //         () => ({
+  //           ...tmpList,
+
+  //           tableDataList: tmpList.tableDataList.map((item: any) => ({
+  //             ...item
+  //           }))
+  //         })
+  //       );
+
+  //       console.log(this.printDataList, 'Print Data List');
+
+  //       setTimeout(() => {
+  //         this.global.printData('#printMineSaleBill');
+  //       }, 200);
+  //     },
+  //     error: (error) => {
+  //       console.error('Error fetching mining bill:', error);
+  //     }
+  //   });
+  // }
 
 
 

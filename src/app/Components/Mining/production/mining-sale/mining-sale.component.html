@@ -48,10 +48,23 @@
                                         [value]="item.partyID">{{item.partyName}}</mat-option> </mat-select>
                             </mat-form-field>
 
-                            <mat-form-field appearance="outline" class="matSmall">
+                            <!-- <mat-form-field appearance="outline" class="matSmall">
                                 <mat-label>Vehicle Detail</mat-label>
                                 <input matInput name="vehicleDetail" [(ngModel)]="model.vehicleDetail" />
-                            </mat-form-field>
+                            </mat-form-field> -->
+
+                            <mat-form-field appearance="outline" class="w-100 matSmall">
+                        <mat-label>Supplier</mat-label>
+                        <mat-select [(ngModel)]="model.vehicleDetail" #customerVehicle name="Vehicle">
+                            <mat-option><ngx-mat-select-search #customerVehicleSearch [placeholderLabel]="'Search...'"
+                                    [noEntriesFoundLabel]="'Not found'"
+                                    name="search"></ngx-mat-select-search></mat-option>
+                            <mat-option *ngFor="let item of customerVehicleList | filter:customerVehicleSearch.value"
+                                [value]="item.vehicleID">{{item.vehicleName}}</mat-option>
+
+                        </mat-select>
+                        <mat-icon class="cursorPointer" (click)="addCustomerVehicle('open')" matSuffix>add</mat-icon>
+                    </mat-form-field>
 
                             <mat-form-field appearance="outline" class="matSmall">
                                 <mat-label>Remarks</mat-label>
@@ -408,9 +421,13 @@
                                             <mat-icon>edit</mat-icon>
                                         </button>
 
-                                        <button mat-icon-button type="button" matTooltip="Print"
-                                            (click)="printSaleInvoice(record)">
+                                        <button mat-icon-button type="button" matTooltip="Print Token"
+                                            (click)="printToken(record)">
                                             <mat-icon>print</mat-icon>
+                                        </button>
+                                        <button mat-icon-button type="button" matTooltip="Print Sale Bill"
+                                            (click)="printSaleInvoice(record)">
+                                            <mat-icon class="text-primary">print</mat-icon>
                                         </button>
                                    
                                     </td>
@@ -451,6 +468,7 @@
 
 
                             <app-print-minig-bill class="d-none"></app-print-minig-bill>
+                            <app-print-bill-token class="d-none"></app-print-bill-token>
 
                         </table>
 
@@ -473,4 +491,24 @@
         </mat-tab>
 
     </mat-tab-group>
+</div>
+
+
+
+<!--------------------- Add Customer Vehicle --------------->
+
+<div class="modal" id="addCustomerVehicleModal" tabindex="-1" data-bs-backdrop="true" aria-labelledby="DocumentModalLabel">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="DocumentModalLabel">Vehicle Configuration</h2>
+                <button type="button" class="btn-close" (click)="addCustomerVehicle('close')"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                   <app-add-customer-vehicle (updateEmitter)="getCustomerVehicleList()"></app-add-customer-vehicle>
+            </div>
+        </div>
+    </div>
 </div>

@@ -174,6 +174,7 @@ export const environment = {
   
  
  // mainApi: 'https://apimhmenclave.logixerpsoft.com/'   ///// Mehria Enclave Live
+ // mainApi: 'https://apipunjabmeatshop.logixerpsoft.com/'   ///// Mehria Enclave Live
 
 
 

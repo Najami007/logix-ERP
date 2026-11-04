@@ -1,0 +1,92 @@
+<div class="d-flex flex-column justify-content-center container">
+
+    <app-add-customer-vehicle (updateEmitter)="getSavedData()"></app-add-customer-vehicle>
+
+
+    <div>
+
+        <div class="filters">
+            <mat-form-field appearance="outline" class="w-100 matSmall" subscriptSizing="dynamic">
+                <mat-label>Search </mat-label>
+                <input matInput #searchList placeholder="Name,No,Capacity" autocomplete="off" />
+                <!-- <mat-icon matPrefix>search</mat-icon> -->
+                <button mat-icon-button matSuffix *ngIf="searchList.value" type="button" aria-label="Clear search">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+
+        </div>
+
+
+        <div>
+            <table class="table table-hover table-logix" style="font-size: 12px;">
+                <thead>
+                    <tr>
+                        <th>S#</th>
+                        <th>Vehicle Name</th>
+                        <th>Vehicle No</th>
+                        <th>Vehicle Size</th>
+                        <th>Vehicle Capacity (CFT)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr *ngFor="let item of savedDataList | filter:searchList.value  |paginate:{
+                        itemsPerPage : tableSize,
+                        currentPage : page,
+                        totalItems :    count,
+                    }   index as i">
+                        <td class="text-center">{{i+1}}</td>
+                        <td>{{item.cusVehName}}</td>
+                        <td>{{item.cusVehNo}}</td>
+                         <td>{{item.cusVehSize}}</td>
+                          <td>{{item.cusVehCapacity}}</td>
+                        <td class="cursorPointer text-center">
+                            <mat-icon class="text-success" matTooltip="Edit"
+                                (click)="edit(item)">edit</mat-icon>
+
+                            <mat-icon class="text-danger" matTooltip="Delete"
+                                (click)="delete(item)">delete</mat-icon>
+
+                        </td>
+
+                    </tr>
+                    <tr *ngIf="savedDataList?.length === 0">
+                        <td colspan="4" class="text-center text-muted py-4">
+                            No Data available.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="d-flex">
+
+            <pagination-controls previousLabel="Prev" nextLabel="Next"
+                (pageChange)="onTableDataChange($event)"></pagination-controls>
+
+
+            <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+            <select class="text-white" style="height: 25px;background-color: rgb(75, 164, 248);"
+                (change)="onTableSizeChange($event)" [(ngModel)]="tableSize">
+                <option *ngFor=" let item of tableSizes" [selected]="tableSize == item">{{item}}</option>
+            </select>
+
+            <!-- <div class="jump-to-page">
+        <input type="text" class="w-25" (keydown)="global.handleNumKeys($event)" [(ngModel)]="jumpPage"
+            placeholder="Page #" min="1" [max]="count" />
+        <button (click)="goToPage()" class="text-white"
+            style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
+    </div> -->
+
+        </div>
+
+
+
+
+    </div>
+</div>

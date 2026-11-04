@@ -143,6 +143,7 @@ export class InvAuditComponent implements OnInit {
   getProject() {
     this.http.get(environment.mainApi + 'cmp/getproject').subscribe(
       (Response: any) => {
+        console.log(Response, 'Project');
         this.projectList = Response;
       }
     )
@@ -330,76 +331,180 @@ export class InvAuditComponent implements OnInit {
     }
   }
 
+
   insertToLocalStorage() {
 
-    var invDate = JSON.stringify(this.global.dateFormater(this.invoiceDate, '-'))
-    var prodData = JSON.stringify(this.tableDataList);
-    var locationID = JSON.stringify(this.locationID);
-    var projectID = JSON.stringify(this.projectID);
-    var AuditInventoryID = JSON.stringify(this.AuditInventoryID);
-    var autMerge = JSON.stringify(this.autoMerge);
-    var AuditID = JSON.stringify(this.auditID);
-    var remarks = JSON.stringify(this.invRemarks ? this.invRemarks : '-');
+    const auditData = {
+      tmpAuditDate: this.global.dateFormater(this.invoiceDate, '-'),
+      tmpAuditData: this.tableDataList,
+      tmpAuditLocation: this.locationID,
+      tmpAuditProjectID: this.projectID,
+      tmpAuditInventoryID: this.AuditInventoryID,
+      tmpAuditID: this.auditID,
+      tmpAutoMerge: this.autoMerge,
+      tmpRemarks: this.invRemarks || '-'
+    };
 
-    localStorage.removeItem('tmpAuditDate');
-    localStorage.removeItem('tmpAuditData');
-    localStorage.removeItem('tmpAuditLocation');
-    localStorage.removeItem('tmpAuditProjectID');
+    try {
 
-    localStorage.removeItem('tmpAuditInventoryID');
-    localStorage.removeItem('tmpAuditID');
-    localStorage.removeItem('tmpAutoMerge');
-    localStorage.removeItem('tmpRemarks');
+      localStorage.setItem('tmpAuditDataStorage', JSON.stringify(auditData));
 
-    localStorage.setItem('tmpAuditDate', invDate);
-    localStorage.setItem('tmpAuditData', prodData);
-    localStorage.setItem('tmpAuditLocation', locationID);
-    localStorage.setItem('tmpAuditProjectID', projectID);
-    localStorage.setItem('tmpAuditInventoryID', AuditInventoryID);
-    localStorage.setItem('tmpAuditID', AuditID);
-    localStorage.setItem('tmpAutoMerge', autMerge);
-    localStorage.setItem('tmpRemarks', remarks);
+    } catch (error: any) {
 
+      if (error.name === 'QuotaExceededError') {
 
+        Swal.fire({
+          title: "Storage Limit Exceeded",
+          text: "Unable to hold audit data. Please reduce the number of products or save the bill.",
+          icon: "warning"
+        });
+
+      } else {
+        console.error('LocalStorage Error:', error);
+      }
+
+    }
 
   }
 
   importFromLocalStorage() {
 
-    var data = JSON.parse(localStorage.getItem('tmpAuditData') || '[]');
+    try {
 
-    if (this.tableDataList.length > 0) {
-      if (data == '0' || data == '') {
-        Swal.fire({
-          title: "No Data Found",
-          text: "Storage Limit Exceed Please Hold the Bill Else Data will be Lost on Reload?",
-          icon: "warning"
-        });
-        // this.msg.WarnNotify('Storage Limit Exceed Please Hold the Bill Else Data will be vanished on Reload?')
+      const storage = localStorage.getItem('tmpAuditDataStorage');
+
+      if (!storage) {
         return;
       }
+
+      const data = JSON.parse(storage);
+
+      if (!data || !Array.isArray(data.tmpAuditData)) {
+        Swal.fire({
+          title: "Invalid Data",
+          text: "Stored audit data is corrupted or unavailable.",
+          icon: "warning"
+        });
+        return;
+      }
+
+      if (this.tableDataList.length > 0 && data.tmpAuditData.length === 0) {
+
+        Swal.fire({
+          title: "No Data Found",
+          text: "No audit products found in local storage.",
+          icon: "warning"
+        });
+
+        return;
+      }
+
+      this.invoiceDate = new Date(data.tmpAuditDate || new Date());
+
+      this.invRemarks = data.tmpRemarks || '-';
+
+      this.autoMerge = data.tmpAutoMerge ?? false;
+
+      this.auditID = data.tmpAuditID ?? 0;
+
+      this.AuditInventoryID = data.tmpAuditInventoryID ?? 0;
+
+      this.locationID = data.tmpAuditLocation ?? 0;
+
+      this.projectID = data.tmpAuditProjectID ?? 0;
+
+      this.tableDataList = data.tmpAuditData;
+
+      this.getTotal();
+
+      if (this.AuditInventoryID > 0) {
+        this.holdBtnType = 'Rehold';
+      }
+
+    } catch (error) {
+
+      console.error('Import Audit Error:', error);
+
+      Swal.fire({
+        title: "Import Failed",
+        text: "Unable to restore audit data from local storage.",
+        icon: "error"
+      });
+
     }
-
-    var tmpDate: any = JSON.parse(localStorage.getItem('tmpAuditDate') || '');
-
-    this.invoiceDate = new Date(tmpDate ? tmpDate : new Date());
-    this.invRemarks = JSON.parse(localStorage.getItem('tmpRemarks') || '');
-    this.autoMerge = JSON.parse(localStorage.getItem('tmpAutoMerge') || 'false');
-    this.auditID = JSON.parse(localStorage.getItem('tmpAuditID') || '0');
-    this.AuditInventoryID = JSON.parse(localStorage.getItem('tmpAuditInventoryID') || '0');
-    this.locationID = JSON.parse(localStorage.getItem('tmpAuditLocation') || '0');
-    this.projectID = JSON.parse(localStorage.getItem('tmpAuditProjectID') || '0');
-
-    this.tableDataList = data;
-    this.getTotal();
-
-    if (this.AuditInventoryID > 0) {
-      this.holdBtnType = 'Rehold'
-    }
-
-
 
   }
+
+  // insertToLocalStorage() {
+
+  //   var invDate = JSON.stringify(this.global.dateFormater(this.invoiceDate, '-'))
+  //   var prodData = JSON.stringify(this.tableDataList);
+  //   var locationID = JSON.stringify(this.locationID);
+  //   var projectID = JSON.stringify(this.projectID);
+  //   var AuditInventoryID = JSON.stringify(this.AuditInventoryID);
+  //   var autMerge = JSON.stringify(this.autoMerge);
+  //   var AuditID = JSON.stringify(this.auditID);
+  //   var remarks = JSON.stringify(this.invRemarks ? this.invRemarks : '-');
+
+  //   localStorage.removeItem('tmpAuditDate');
+  //   localStorage.removeItem('tmpAuditData');
+  //   localStorage.removeItem('tmpAuditLocation');
+  //   localStorage.removeItem('tmpAuditProjectID');
+
+  //   localStorage.removeItem('tmpAuditInventoryID');
+  //   localStorage.removeItem('tmpAuditID');
+  //   localStorage.removeItem('tmpAutoMerge');
+  //   localStorage.removeItem('tmpRemarks');
+
+  //   localStorage.setItem('tmpAuditDate', invDate);
+  //   localStorage.setItem('tmpAuditData', prodData);
+  //   localStorage.setItem('tmpAuditLocation', locationID);
+  //   localStorage.setItem('tmpAuditProjectID', projectID);
+  //   localStorage.setItem('tmpAuditInventoryID', AuditInventoryID);
+  //   localStorage.setItem('tmpAuditID', AuditID);
+  //   localStorage.setItem('tmpAutoMerge', autMerge);
+  //   localStorage.setItem('tmpRemarks', remarks);
+
+
+
+  // }
+
+  // importFromLocalStorage() {
+
+  //   var data = JSON.parse(localStorage.getItem('tmpAuditData') || '[]');
+
+  //   if (this.tableDataList.length > 0) {
+  //     if (data == '0' || data == '') {
+  //       Swal.fire({
+  //         title: "No Data Found",
+  //         text: "Storage Limit Exceed Please Hold the Bill Else Data will be Lost on Reload?",
+  //         icon: "warning"
+  //       });
+  //       // this.msg.WarnNotify('Storage Limit Exceed Please Hold the Bill Else Data will be vanished on Reload?')
+  //       return;
+  //     }
+  //   }
+
+  //   var tmpDate: any = JSON.parse(localStorage.getItem('tmpAuditDate') || '');
+
+  //   this.invoiceDate = new Date(tmpDate ? tmpDate : new Date());
+  //   this.invRemarks = JSON.parse(localStorage.getItem('tmpRemarks') || '');
+  //   this.autoMerge = JSON.parse(localStorage.getItem('tmpAutoMerge') || 'false');
+  //   this.auditID = JSON.parse(localStorage.getItem('tmpAuditID') || '0');
+  //   this.AuditInventoryID = JSON.parse(localStorage.getItem('tmpAuditInventoryID') || '0');
+  //   this.locationID = JSON.parse(localStorage.getItem('tmpAuditLocation') || '0');
+  //   this.projectID = JSON.parse(localStorage.getItem('tmpAuditProjectID') || '0');
+
+  //   this.tableDataList = data;
+  //   this.getTotal();
+
+  //   if (this.AuditInventoryID > 0) {
+  //     this.holdBtnType = 'Rehold'
+  //   }
+
+
+
+  // }
 
 
 
@@ -859,7 +964,7 @@ export class InvAuditComponent implements OnInit {
       ? this.tableDataList.sort((a: any, b: any) => a.rowIndex - b.rowIndex)
       : this.tableDataList.sort((a: any, b: any) => b.rowIndex - a.rowIndex);
 
-    
+
     var postData = {
       AuditInventoryID: this.AuditInventoryID,
       AuditID: this.auditID,

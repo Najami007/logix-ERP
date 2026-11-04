@@ -8,7 +8,6 @@ import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment.development';
 
 import { Observable, retry } from 'rxjs';
-import * as $ from 'jquery';
 import Swal from 'sweetalert2';
 import { AddpartyComponent } from '../../../Company/party/addparty/addparty.component';
 import { PurchaseBillPrintComponent } from '../purchase-bill-print/purchase-bill-print.component';

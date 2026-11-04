@@ -7,7 +7,6 @@ import { AppComponent } from 'src/app/app.component';
 import { AddcityComponent } from '../../settings/city/addcity/addcity.component';
 import { environment } from 'src/environments/environment.development';
 
-import * as $ from 'jquery';
 
 @Component({
   selector: 'app-addparty',

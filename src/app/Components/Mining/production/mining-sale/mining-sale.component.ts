@@ -8,6 +8,7 @@ import { NotificationService } from 'src/app/Shared/service/notification.service
 import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 import { PrintMinigBillComponent } from './print-minig-bill/print-minig-bill.component';
+import { PrintBillTokenComponent } from './print-bill-token/print-bill-token.component';
 
 export interface ProductDetail {
   mnuItemID: number;
@@ -48,6 +49,7 @@ export interface SaleInvoice {
 export class MiningSaleComponent implements OnInit {
 
   @ViewChild(PrintMinigBillComponent) invoicePrint!: PrintMinigBillComponent;
+   @ViewChild(PrintBillTokenComponent) tokenPrint!: PrintBillTokenComponent; 
 
   ngOnInit(): void {
     this.global.setHeaderTitle('Mining Sale');
@@ -71,6 +73,39 @@ export class MiningSaleComponent implements OnInit {
   shippingCompanies: any = [];
   menuItems: any = [];
   // -------------------------------------------------------
+
+
+  customerVehicleList:any = [];
+  
+  getCustomerVehicleList() {
+    var url = `${environment.mainApi + this.global.miningLink}GetMine`;
+    this.http.get(url).subscribe(
+      {
+        next: (Response: any) => {
+          this.customerVehicleList = Response;
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      }
+    )
+  }
+
+
+  @ViewChild('customerVehicle') myAddVehicle: any;
+
+  addCustomerVehicle(status: any) {
+    if (status == 'open') {
+      setTimeout(() => {
+        this.myAddVehicle.close()
+      }, 200);
+      this.global.openBootstrapModal('#addCustomerVehicleModal', true);
+    }
+    if (status == 'close') {
+      this.global.closeBootstrapModal('#addCustomerVehicleModal', true);
+      this.getCustomerVehicleList();
+    }
+  }
 
 
   getProductList() {
@@ -733,7 +768,12 @@ export class MiningSaleComponent implements OnInit {
 
   printSaleInvoice(item: any) {
 
-    this.invoicePrint.printInvoice(item.invBillNo);
+    this.invoicePrint.printSaleBill(item.invBillNo);
+
+  }
+
+  printToken(item:any){
+        this.tokenPrint.printInvoice(item.invBillNo);
 
   }
 

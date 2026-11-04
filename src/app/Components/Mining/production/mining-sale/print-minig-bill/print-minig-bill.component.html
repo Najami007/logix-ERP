@@ -1,173 +1,74 @@
-<div class="p-1" id="printInvoice">
+<div id="printMineSaleBill">
 
 
-    <div *ngFor="let item of printDataList index as i" class="bill-copy">
 
 
-        <!-- Watermark -->
-        <div class="watermark">
-            {{ item.myApprovedStatus ? 'POSTED' : 'UNPOSTED' }}
-        </div>
+    <div class="p-1">
 
 
         <!--------------------- Company Detail Section Start------------------ -->
-        <!-- <div class="d-flex justify-content-between mb-1">
-            <div class=" d-flex justify-content-between pe-1 border-end dashed">
-                <div>
-                    <span> <img *ngIf="companyLogo && showCompanyLogo" [src]="companyLogo" [height]="logoHeight"
-                            [width]="logoWidth"></span>
-                </div>
-                <div class="d-flex flex-column">
-                    <span class="text-uppercase fw-bold" style="font-size:18px;"
-                        *ngIf="showCompanyName">{{companyName}}</span>
-                    <span class="fs-11 text-uppercase fw-bold" *ngIf="companyAddress != '-'">{{companyAddress}}</span>
-                    <span *ngIf="CompanyMobile != '-'" class="fs-11 fw-bold">{{CompanyMobile}}</span>
+        <div class="text-center d-flex flex-column ">
+            <span class="d-flex justify-content-center"> <img *ngIf="companyLogo && showCompanyLogo" [src]="companyLogo" [height]="logoHeight"
+                    [width]="logoWidth"></span>
+            <span class="text-uppercase fw-bold" style="font-size:18px;" *ngIf="showCompanyName">{{companyName}}</span>
+            <span class="fs-11 text-uppercase fw-bold" *ngIf="companyAddress != '-'">{{companyAddress}}</span>
+            <span *ngIf="CompanyMobile != '-'" class="fs-11 fw-bold">{{CompanyMobile}}</span>
 
-                    <span *ngIf="gstFeature && CompanyNTN != '-'" class="fs-11 "><b>NTN: </b>{{CompanyNTN}} </span>
-                    <span *ngIf="gstFeature && CompanySTRN != '-'" class="fs-11"><b>STRN: </b> {{CompanySTRN}}</span>
-                </div>
-            </div>
+            <span *ngIf="gstFeature && CompanyNTN != '-'" class="fs-11 "><b>NTN: </b>{{CompanyNTN}} </span>
+            <span *ngIf="gstFeature && CompanySTRN != '-'" class="fs-11"><b>STRN: </b> {{CompanySTRN}}</span>
 
-            <div class=" col-md-8 fs-13 p-2">
-                <div class="w-100">
-                    <span class="col-md-3 fw-bold"> Inv No:-</span>
-                    <span class="col-md-3"> {{item.tmpInvBillNo}}</span>
-
-                    <span class="col-md-3 fw-bold">Date:-</span>
-                    <span class="col-md-3">{{item.tmpInvDate | date:'dd-MM-yyyy hh:mm:a'}}</span>
-                </div>
-
-
-                <div class="d-flex justify-content-between">
-                    <span class="col-md-3 fw-bold"> Bill To:-</span>
-                    <span class="col-md-3"> {{item.tmpCustomerName}}</span>
-
-                    <span class="col-md-3 fw-bold"> Delivery To:-</span>
-                    <span class="col-md-3"> {{item.tmpDeliveryTo}}</span>
-                </div>
-
-                <div class="d-flex justify-content-between">
-                    <span class="col-md-3 fw-bold">Delivery Contact:-</span>
-                    <span class="col-md-3">{{item.tmpDeliveryContactNo}}</span>
-                    <span class="col-md-3 fw-bold">Delivery Address:-</span>
-                    <span class="col-md-3"> {{item.tmpDeliveryAddress}}</span>
-                </div>
-
-                <div class="d-flex justify-content-between">
-                    <span class="col-md-3 fw-bold">Transporter:-</span>
-                    <span class="col-md-3">{{item.shpCmpName }}</span>
-
-                    <span class="col-md-3 fw-bold">Remarks:-</span>
-                    <span class="col-md-3">{{item.myRemarks }}</span>
-                </div>
-
-            </div>
-
-
-
-        </div> -->
-
-
-
-        <div class="d-flex mb-1">
-
-            <!-- Company Details -->
-            <div class="col-md-4 d-flex justify-content-between pe-1 border-end dashed">
-
-                <div>
-                    <img *ngIf="companyLogo && showCompanyLogo" [src]="companyLogo" [height]="logoHeight"
-                        [width]="logoWidth">
-                </div>
-
-                <div class="d-flex flex-column">
-                    <span *ngIf="showCompanyName" class="text-uppercase fw-bold" style="font-size: 18px;">
-                        {{ companyName }}
-                    </span>
-
-                    <span *ngIf="companyAddress != '-'" class="fs-11 text-uppercase fw-bold">
-                        {{ companyAddress }}
-                    </span>
-
-                    <span *ngIf="CompanyMobile != '-'" class="fs-11 fw-bold">
-                        {{ CompanyMobile }}
-                    </span>
-
-                    <span *ngIf="gstFeature && CompanyNTN != '-'" class="fs-11">
-                        <b>NTN:</b> {{ CompanyNTN }}
-                    </span>
-
-                    <span *ngIf="gstFeature && CompanySTRN != '-'" class="fs-11">
-                        <b>STRN:</b> {{ CompanySTRN }}
-                    </span>
-                </div>
-
-            </div>
-
-            <!-- Invoice and Delivery Details -->
-
-            <div class="col-md-8 fs-13 p-2">
-
-                <!-- Invoice Number and Date -->
-                <div class="d-flex align-items-start mb-2">
-                    <div class="d-flex w-50 pe-2">
-                        <span class="fw-bold flex-shrink-0 me-2">Inv No:-</span>
-                        <span class="text-break">{{ item.tmpInvBillNo }}</span>
-                    </div>
-
-                    <div class="d-flex w-50">
-                        <span class="fw-bold flex-shrink-0 me-2">Date:-</span>
-                        <span class="text-break">
-                            {{ item.tmpInvDate | date:'dd-MM-yyyy hh:mm a' }}
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Customer and Delivery -->
-                <div class="d-flex align-items-start mb-2">
-                    <div class="d-flex w-50 pe-2">
-                        <span class="fw-bold flex-shrink-0 me-2">Bill To:-</span>
-                        <span class="text-break">{{ item.tmpCustomerName }}</span>
-                    </div>
-
-                    <div class="d-flex w-50">
-                        <span class="fw-bold flex-shrink-0 me-2">Delivery To:-</span>
-                        <span class="text-break">{{ item.tmpDeliveryTo }}</span>
-                    </div>
-                </div>
-
-                <!-- Contact and Address -->
-                <div class="d-flex align-items-start mb-2">
-                    <div class="d-flex w-50 pe-2">
-                        <span class="fw-bold flex-shrink-0 me-2">Delivery Contact:-</span>
-                        <span class="text-break">{{ item.tmpDeliveryContactNo }}</span>
-                    </div>
-
-                    <div class="d-flex w-50">
-                        <span class="fw-bold flex-shrink-0 me-2">Delivery Address:-</span>
-                        <span class="text-break">{{ item.tmpDeliveryAddress }}</span>
-                    </div>
-                </div>
-
-                <!-- Transporter and Remarks -->
-                <div class="d-flex align-items-start">
-                    <div class="d-flex w-50 pe-2">
-                        <span class="fw-bold flex-shrink-0 me-2">Transporter:-</span>
-                        <span class="text-break">{{ item.tmpShippingCompany }}</span>
-                    </div>
-
-                    <div class="d-flex w-50">
-                        <span class="fw-bold flex-shrink-0 me-2">Remarks:-</span>
-                        <span class="text-break">{{ item.myRemarks }}</span>
-                    </div>
-                </div>
-
-            </div>
 
 
         </div>
 
 
+        <br>
 
+        <div class="mt-2">
+            <table class="table-logix2 fs-13">
+                <thead>
+                    <tr>
+                        <th>Inv #</th>
+                        <th>Date</th>
+                        <th>Counter</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <tr>
+                        <td>{{tmpInvBillNo}}</td>
+                        <td>
+                            <span>{{tmpInvDate | date:'dd-MM-yyyy hh:mm:a'}}</span>
+                        </td>
+                        <td>{{myCounterName}}</td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+        <div>
+            <table>
+                <tr>
+                    <th class="fs-12">Bill To:-</th>
+                    <td class="ms-2 fs-11 fw-bold">{{tmpCustomerName}}</td>
+                </tr>
+
+
+                <tr class="fs-11" *ngIf="myRemarks">
+                    <th class="fs-12">Remarks:- </th>
+                    <td class="ms-2 fs-11">{{myRemarks}}</td>
+                </tr>
+
+
+
+
+            </table>
+        </div>
+
+        <br>
 
         <div>
             <div>
@@ -182,12 +83,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let p of item.tableDataList index as index">
+                        <tr *ngFor="let item of tableDataList index as index">
                             <td>{{index + 1}}</td>
-                            <td>{{p.productTitle}}</td>
-                            <td class="text-center">{{p.quantity |number:'1.0-0'}}</td>
-                            <td class="text-end">{{p.salePrice |number:'1.0-0'}}</td>
-                            <td class="text-end">{{p.salePrice * p.quantity |number:'1.0-0'}}</td>
+                            <td>{{item.productTitle}}</td>
+                            <td class="text-center">{{item.quantity |number:'1.0-0'}}</td>
+                            <td class="text-end">{{item.salePrice |number:'1.0-0'}}</td>
+                            <td class="text-end">{{item.salePrice * item.quantity |number:'1.0-0'}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -199,39 +100,33 @@
 
                 <div class="row w-75">
                     <label class="fw-bold text-end">Total</label>
-                    <label class="fw-bold text-end" *ngIf="item.myLabourCharges > 0">labour Charges</label>
-                    <label class="fw-bold text-end" *ngIf="item.myTransportCharges > 0">Transport Charges</label>
-                    <label class="fw-bold text-end" *ngIf="item.myBillDiscount > 0">Discount</label>
+                    <label class="fw-bold text-end">labour Charges</label>
+                    <label class="fw-bold text-end">Shipping Charges</label>
+                    <label class="fw-bold text-end">Discount</label>
                     <label class="fw-bold text-end">Net Total</label>
                 </div>
                 <div class="row w-25">
-                    <label class="fw-bold text-end">{{item.myBillTotal - item.myLabourCharges - item.myTransportCharges
-                        |number:'1.0-2'}}</label>
-                    <label class="fw-bold text-end" *ngIf="item.myLabourCharges > 0">{{item.myLabourCharges
-                        |number:'1.0-2'}}</label>
-                    <label class="fw-bold text-end" *ngIf="item.myTransportCharges > 0">{{item.myTransportCharges
-                        |number:'1.0-2'}}</label>
-                    <label class="fw-bold text-end"
-                        *ngIf="item.myBillDiscount > 0">{{item.myBillDiscount|number:'1.0-2'}}</label>
-                    <label class="fw-bold text-end">{{item.myNetTotal|number:'1.0-2'}}</label>
+                    <label class="fw-bold text-end">{{myBillTotal - myLabourCharges - myTransportCharges |number:'1.0-2'}}</label>
+                      <label class="fw-bold text-end">{{myLabourCharges |number:'1.0-2'}}</label>
+                    <label class="fw-bold text-end">{{myTransportCharges |number:'1.0-2'}}</label>
+                    <label class="fw-bold text-end">{{myBillDiscount|number:'1.0-2'}}</label>
+                    <label class="fw-bold text-end">{{myNetTotal|number:'1.0-2'}}</label>
                 </div>
 
             </div>
 
-            <hr>
 
-            <!-- <div class="d-flex justify-content-around mt-5">
+            <div class="d-flex justify-content-around mt-5">
                 <label class="border-0 border-top border-dark fw-bold">Created By</label>
                 <label class="border-0 border-top border-dark fw-bold">Checked By</label>
                 <label class="border-0 border-top border-dark fw-bold">Approved By</label>
-            </div> -->
+            </div>
 
 
 
 
         </div>
 
+
+
     </div>
-
-
-</div>

@@ -1,0 +1,61 @@
+:host {
+  display: block;
+  padding: 12px 16px;
+  color: #1d2a33;
+}
+
+.filters {
+  width: 100%;
+//   max-width: 400px;
+  margin-bottom: 12px;
+}
+
+.table-logix {
+  width: 100%;
+  border: 1px solid black !important;
+  font-size: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+
+  th {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  td,
+  th {
+    padding: 10px 12px;
+    vertical-align: middle;
+  }
+
+  td:last-child {
+    white-space: nowrap;
+  }
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+// .pagination-controls {
+//   margin: 0;
+// }
+
+/* Mobile responsive */
+@media (max-width: 576px) {
+  :host {
+    padding: 8px;
+  }
+
+  .filters {
+    max-width: 100%;
+  }
+
+  .table-logix {
+    min-width: 550px;
+  }
+
+  .container {
+    padding: 0;
+  }
+}
