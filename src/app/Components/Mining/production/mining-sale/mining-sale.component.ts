@@ -25,6 +25,8 @@ export interface SaleInvoice {
   invoiceDate: any;
   partyID: number | null;
   vehicleDetail: string;
+  cusVehID:number;
+
   remarks: string;
   deliveryDate: any;
   deliverTo: string;
@@ -58,6 +60,7 @@ export class MiningSaleComponent implements OnInit {
     this.getTransporterList();
     this.getBankList();
     this.getSavedInvoices();
+    this.getCustomerVehicleList();
   }
 
 
@@ -78,7 +81,7 @@ export class MiningSaleComponent implements OnInit {
   customerVehicleList:any = [];
   
   getCustomerVehicleList() {
-    var url = `${environment.mainApi + this.global.miningLink}GetMine`;
+    var url = `${environment.mainApi + this.global.miningLink}GetCusVehicle`;
     this.http.get(url).subscribe(
       {
         next: (Response: any) => {
@@ -89,6 +92,15 @@ export class MiningSaleComponent implements OnInit {
         }
       }
     )
+  }
+
+  tmpVehCapacity:any = '';
+  onVehicleSelection(){
+  
+    var selectedVehicle = this.customerVehicleList.filter((e:any)=> e.cusVehID == this.model.cusVehID)[0];
+    this.tmpVehCapacity = selectedVehicle.cusVehCapacity;
+    this.model.vehicleDetail = `${selectedVehicle.cusVehName} ${selectedVehicle.cusVehNo}` ;
+    console.log(this.model);
   }
 
 
@@ -186,6 +198,8 @@ export class MiningSaleComponent implements OnInit {
       invoiceDate: this.today(),
       partyID: 0,
       vehicleDetail: '',
+      cusVehID:0,
+
       remarks: '',
       deliveryDate: this.today(),
       deliverTo: '',
@@ -227,11 +241,17 @@ export class MiningSaleComponent implements OnInit {
 
 
   addItem(item: any): void {
+    
+    if(this.model.cusVehID == 0){
+      this.msg.WarnNotify('Select Vehicle First');
+      return;
+    }
+
     const existing = this.model.productDetail.find(p => p.mnuItemID === item.mnuItemID);
     if (existing) {
       existing.quantity++;
     } else {
-      this.model.productDetail.push({ ...item, quantity: 1 });
+      this.model.productDetail.push({ ...item, quantity: 1,vehCapacity:this.tmpVehCapacity });
     }
     this.itemSearch = '';
     $('#searchItem').trigger('focus');
@@ -419,6 +439,7 @@ export class MiningSaleComponent implements OnInit {
         ProductID: e.mnuItemID,
         MnuItemID: e.mnuItemID,
         ProductTitle: e.mnuItemTitle,
+        VehCapacity:e.vehCapacity,
         Quantity: e.quantity,
         CostPrice: e.mnuItemCostPrice,
         AvgCostPrice: e.mnuItemAvgCostPrice,
@@ -459,6 +480,7 @@ export class MiningSaleComponent implements OnInit {
       MiningSaleDetail: JSON.stringify(miningSaleDetail),
       LocationID: 1,
       UserID: this.global.getUserID(),
+      cusVehID:data.cusVehID
     }
 
 
@@ -531,6 +553,7 @@ export class MiningSaleComponent implements OnInit {
       invoiceDate: new Date(item.invDate),
       partyID: item.partyID,
       vehicleDetail: item.vehicleDetail,
+      cusVehID:item.cusVehID,
       remarks: item.remarks,
       deliveryDate: new Date(item.deliveryDate),
       deliverTo: item.deliverTo,
@@ -546,6 +569,7 @@ export class MiningSaleComponent implements OnInit {
       bankAmount: item.bankCash,
       bankCoaID: item.banCoaID,
     }
+    this.onVehicleSelection();
 
     this.getBillDetail(item.invBillNo).subscribe(
       {
@@ -562,6 +586,7 @@ export class MiningSaleComponent implements OnInit {
                 quantity: e.quantity,
                 mnuItemCostPrice: e.costPrice,
                 mnuItemSalePrice: e.salePrice,
+                vehCapacity:e.vehCapacity,
                 mnuItemAvgCostPrice: e.avgCostPrice,
               }
             })

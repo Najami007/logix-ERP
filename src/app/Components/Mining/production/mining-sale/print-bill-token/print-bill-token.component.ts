@@ -103,6 +103,7 @@ export class PrintBillTokenComponent {
   printDataList: any = [];
 
   tableDataList: any = [];
+  tmpVehicleDetail:any = [];
 
 
   
@@ -146,11 +147,13 @@ export class PrintBillTokenComponent {
           myNetTotal: first.netTotal,
           myRemarks: first.remarks,
           myApprovedStatus:first.approvedStatus,
+          tmpVehicleDetail:first.vehicleDetail,
 
           tableDataList: response.map((e: any) => ({
             mnuItemID: e.mnuItemID,
             productTitle: e.productTitle,
             quantity: e.quantity,
+            vehCapacity:e.vehCapacity,
             costPrice: e.costPrice,
             salePrice: e.salePrice
           }))

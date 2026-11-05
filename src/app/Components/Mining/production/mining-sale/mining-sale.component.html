@@ -44,7 +44,7 @@
                                     <mat-option><ngx-mat-select-search #customerSearch [placeholderLabel]="'Search...'"
                                             [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
                                     <mat-option [value]="0">Cash Customer</mat-option>
-                                    <mat-option *ngFor="let item of parties |filter:customerSearch.value "
+                                    <mat-option *ngFor="let item of parties |filter:customerSearch.value | slice:0:25 "
                                         [value]="item.partyID">{{item.partyName}}</mat-option> </mat-select>
                             </mat-form-field>
 
@@ -54,13 +54,13 @@
                             </mat-form-field> -->
 
                             <mat-form-field appearance="outline" class="w-100 matSmall">
-                        <mat-label>Supplier</mat-label>
-                        <mat-select [(ngModel)]="model.vehicleDetail" #customerVehicle name="Vehicle">
+                        <mat-label>Vehicle</mat-label>
+                        <mat-select [(ngModel)]="model.cusVehID" [disabled]="model.productDetail.length > 0" #customerVehicle name="Vehicle" (selectionChange)="onVehicleSelection()">
                             <mat-option><ngx-mat-select-search #customerVehicleSearch [placeholderLabel]="'Search...'"
                                     [noEntriesFoundLabel]="'Not found'"
                                     name="search"></ngx-mat-select-search></mat-option>
                             <mat-option *ngFor="let item of customerVehicleList | filter:customerVehicleSearch.value"
-                                [value]="item.vehicleID">{{item.vehicleName}}</mat-option>
+                                [value]="item.cusVehID">{{item.cusVehName}} <small class="fs-10px">({{item.cusVehNo}})</small> </mat-option>
 
                         </mat-select>
                         <mat-icon class="cursorPointer" (click)="addCustomerVehicle('open')" matSuffix>add</mat-icon>
@@ -239,6 +239,7 @@
                                     <th>Item</th>
                                     <!-- <th>Code</th> -->
                                     <th>Qty</th>
+                                    <th>Capacity (CFT)</th>
                                     <!-- <th>Cost Price</th>
                                     <th>Avg Cost</th> -->
                                     <th>Sale Price</th>
@@ -254,6 +255,7 @@
                                     <td><input class="cell  qty{{i}} text-center" type="number" min="1"
                                             (keydown)="handleUpdown(p,$event,'.qty',i);" [(ngModel)]="p.quantity"
                                             [ngModelOptions]="{standalone: true}" /></td>
+                                      <td >{{ p.vehCapacity | number:'1.0-2' }}</td>      
                                     <!-- <td><input class="cell" type="number" min="0" [(ngModel)]="p.mnuItemCostPrice"
                                             [ngModelOptions]="{standalone: true}" /></td>
                                     <td><input class="cell" type="number" min="0" [(ngModel)]="p.mnuItemAvgCostPrice"
@@ -507,7 +509,7 @@
             </div>
             <div class="modal-body">
 
-                   <app-add-customer-vehicle (updateEmitter)="getCustomerVehicleList()"></app-add-customer-vehicle>
+                   <app-add-customer-vehicle (updateEmitter)="getCustomerVehicleList();addCustomerVehicle('close')"></app-add-customer-vehicle>
             </div>
         </div>
     </div>

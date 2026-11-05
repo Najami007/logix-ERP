@@ -1,0 +1,80 @@
+<div class="body p-2">
+
+    <div class="row ">
+
+        <div class="col-md-10">
+            <mat-form-field appearance="outline" class="w-100 matSmall" subscriptSizing="dynamic">
+                <mat-label>Search vehicles</mat-label>
+                <input matInput #searchVehicle placeholder="Name, number, Capacity" autocomplete="off" />
+                <!-- <mat-icon matPrefix>search</mat-icon> -->
+                <button mat-icon-button matSuffix *ngIf="searchVehicle.value" type="button" aria-label="Clear search">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        <div class="col-md-2">
+            <button class="btn-rpt-primary w-100" (click)="print()">Print</button>
+        </div>
+
+    </div>
+
+    <div id="PrintDiv" >
+
+
+
+        <!-------------------------    Top Logo Section -------------------->
+
+        <div class="hide">
+            <div class="text-center  d-flex justify-content-between" *ngFor="let item of companyProfile">
+                <span *ngIf="item.companyLogo1 != '' || item.companyLogo1 !== null">
+                    <img src="{{item.companyLogo1}}" style="color: black;" alt="" srcset="" [height]="item.logo1Height"
+                        [width]="item.logo1Width">
+                </span>
+                <div class="d-flex flex-column">
+
+
+                    <span class="companyName">{{item.companyName}}</span>
+
+                    <span class="rptTitle">Customer Vehicle List</span>
+
+                </div>
+                <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
+                    <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset=""
+                        height="{{item.logo2Height}}" width="{{item.logo2Width}}">
+                </span>
+
+
+            </div>
+        </div>
+
+        <br>
+
+        <table class="table-logix ">
+            <thead>
+                <tr>
+                    <th>S#</th>
+                    <th>Name</th>
+                    <th>Vehicle No</th>
+                    <th>Vehicle Size</th>
+                    <th>Vehicle Capacity</th>
+                    <th>Registeration</th>
+                    <th>Visits</th>
+                    <th>Entered By</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of vehicleList | filter:searchVehicle.value; index as index">
+                    <td class="text-center">{{index + 1}}</td>
+                    <td> {{item.cusVehName}}</td>
+                    <td>{{item.cusVehNo}}</td>
+                    <td>{{item.cusVehSize}}</td>
+                    <td>{{item.cusVehCapacity }} CFT</td>
+                    <td>{{item.registrationDate | date:'dd-MM-yyyy' }}</td>
+                    <td>{{item.totalVisit }}</td>
+                    <td>{{item.entryUser }}</td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

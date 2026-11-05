@@ -103,6 +103,8 @@ export class PrintMinigBillComponent {
 
   tableDataList: any = [];
 
+  tmpVehicleDetail:any = [];
+
 
 
 
@@ -137,6 +139,7 @@ export class PrintMinigBillComponent {
             this.myBillDiscount = Response[0].billDiscount;
             this.myNetTotal = Response[0].netTotal;
             this.myRemarks = Response[0].remarks;
+            this.tmpVehicleDetail = Response[0].vehicleDetail;
           })
 
 
