@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "postinstall": "npx --package @angular/compiler-cli@15.2.0 --yes ngcc"
+
   },
   "private": true,
   "dependencies": {

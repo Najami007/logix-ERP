@@ -77,7 +77,7 @@ export const environment = {
   //mainApi: 'http://159.69.174.21:2008/', /////// Live Serve Testing API General
   //  mainApi: 'http://159.69.174.21:2019/', /////// Live Serve Testing API Property
 
-  // mainApi: 'http://159.69.174.21:2018/', /////// Fix Prized Mobile Shop
+  // mainApi: 'http://159.69.174.21:2018/', /////// Fix Priced Mobile Shop
   //mainApi: 'http://192.168.10.100:2001/', /////// Shama Royal City Server
   //mainApi: 'http://159.69.174.21:2006/',  ////////// live Server Mehria Brands
   //mainApi: 'http://159.69.174.21:2007/',  ////////// live Server Balck Gold Restaurant
@@ -170,13 +170,13 @@ export const environment = {
  // mainApi: 'http://159.69.174.21:2055/',   /////// Lasani Traders
 
 
- // mainApi: 'https://apimehriacrushplant.logixerpsoft.com/'   ///// Mehria Crush PPlant
+ // mainApi: 'https://apimehriaStoneCrusher.logixerpsoft.com/'   ///// Mehria Crush PPlant
   
  
  // mainApi: 'https://apimhmenclave.logixerpsoft.com/'   ///// Mehria Enclave Live
  // mainApi: 'https://apipunjabmeatshop.logixerpsoft.com/'   ///// Mehria Enclave Live
 
-
+ // mainApi: 'https://apimehriacrushplant.logixerpsoft.com/'   ///// Mehria Crush Plant
 
 
 

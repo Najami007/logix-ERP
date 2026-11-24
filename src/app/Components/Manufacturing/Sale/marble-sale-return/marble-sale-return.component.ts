@@ -7,19 +7,17 @@ import { AddpartyComponent } from "src/app/Components/Company/party/addparty/add
 import { GlobalDataModule } from "src/app/Shared/global-data/global-data.module";
 import { NotificationService } from "src/app/Shared/service/notification.service";
 import { environment } from "src/environments/environment.development";
-import { DeliveryChallanComponent } from "../ManufacturingComFiles/delivery-challan/delivery-challan.component";
-import { OrderPrintComponent } from "../ManufacturingComFiles/order-print/order-print.component";
-import { MnuInvoicePrintComponent } from "../ManufacturingComFiles/mnu-invoice-print/mnu-invoice-print.component";
 import { Observable, retry } from "rxjs";
-
-
+import { DeliveryChallanComponent } from "../../ManufacturingComFiles/delivery-challan/delivery-challan.component";
+import { OrderPrintComponent } from "../../ManufacturingComFiles/order-print/order-print.component";
+import { MnuInvoicePrintComponent } from "../../ManufacturingComFiles/mnu-invoice-print/mnu-invoice-print.component";
 
 @Component({
-  selector: 'app-marble-sale',
-  templateUrl: './marble-sale.component.html',
-  styleUrls: ['./marble-sale.component.scss']
+  selector: 'app-marble-sale-return',
+  templateUrl: './marble-sale-return.component.html',
+  styleUrls: ['./marble-sale-return.component.scss']
 })
-export class MarbleSaleComponent implements OnInit {
+export class MarbleSaleReturnComponent implements OnInit {
 
   ProjectwiseFeature = this.global.ProjectwiseFeature;
 
@@ -57,14 +55,12 @@ export class MarbleSaleComponent implements OnInit {
   onTableDataChange(event: any) {
 
     this.page = event;
-    this.getSavedOrder();
     this.getSavedSale();
   }
 
   onTableSizeChange(event: any): void {
     this.tableSize = event.target.value;
     this.page = 1;
-    this.getSavedOrder();
     this.getSavedSale();
   }
 
@@ -77,7 +73,6 @@ export class MarbleSaleComponent implements OnInit {
 
     if (this.jumpPage >= 1) {
       this.page = this.jumpPage;
-      this.getSavedOrder();
       this.getSavedSale();
 
     }
@@ -127,7 +122,6 @@ export class MarbleSaleComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.getSavedOrder();
     this.getSavedSale();
     this.getProject();
     this.global.setHeaderTitle('Sale');
@@ -156,8 +150,14 @@ export class MarbleSaleComponent implements OnInit {
   customerPreviousBalance: any = [];
   orderRefrence: any = '';
   partyID: any = 0;
-  invoiceDate: any = new Date();
   partyList: any = [];
+
+  billTotal = 0;
+  billDiscount = 0;
+
+  invoiceDate: any = new Date();
+  originalInvBillNo = '';
+
   deliverTo: any = '';
   deliveryContactNo: any = '';
   deliveryAddress: any = ''
@@ -167,6 +167,8 @@ export class MarbleSaleComponent implements OnInit {
   remarks: any = '';
   netTotal = 0;
   projectID = this.global.getProjectID();
+  projectList: any = [];
+
 
   soSearchProjectID = 0;
   siSearchProjectID = 0;
@@ -228,7 +230,6 @@ export class MarbleSaleComponent implements OnInit {
   }
 
 
-  projectList: any = [];
   getProject() {
     this.http.get(environment.mainApi + 'cmp/getproject').subscribe(
       (Response: any) => {
@@ -574,53 +575,41 @@ export class MarbleSaleComponent implements OnInit {
       this.msg.WarnNotify('Select Customer');
       return;
     }
-
-    if (this.deliverTo == '' || this.deliverTo == undefined) {
-      this.msg.WarnNotify('Select Enter Delivery To');
-      return;
-    }
-    if (this.deliveryContactNo == '' || this.deliveryContactNo == undefined) {
-      this.msg.WarnNotify('Select Enter Delivery To Contact No');
-      return;
-    }
-
-    if (this.deliveryAddress == '' || this.deliveryAddress == undefined) {
-      this.msg.WarnNotify('Select Enter Delivery Address');
-      return;
-    }
-
-
+    
     if (this.transportPartyID > 0 && ((this.transportCharges == 0 || this.transportCharges == '') && (this.labourCharges == 0 || this.labourCharges == ''))) {
       this.msg.WarnNotify('Enter Transport / Labour Charges');
       return;
     }
 
-    if((this.transportCharges > 0 || this.labourCharges > 0) && this.transportPartyID == 0 ){
+    if ((this.transportCharges > 0 || this.labourCharges > 0) && this.transportPartyID == 0) {
       this.msg.WarnNotify('Select Shipping Company');
       return;
     }
 
 
+
     var postData = {
-      InvBillNo: this.invBillNo,
-      InvDate: this.global.dateFormater(this.invoiceDate, ''),
+      HoldInvNo: this.invBillNo,
+      InvDate: this.global.dateFormater(this.invoiceDate, '-'),
       PartyID: this.partyID,
-      InvType: "ORDER",
+      InvType: "SR",
       ProjectID: this.projectID,
-      Remarks: this.remarks || '-',
-      NetTotal: this.netTotal,
-
-      SCAutoID: this.scAutoID,
-      DeliveryDate: this.global.dateFormater(this.deliveryDate, ''),
-      DeliverTo: this.deliverTo,
-      DeliveryContactNo: this.deliveryContactNo,
-      DeliveryAddress: this.deliveryAddress,
-      DeliveryRemarks: this.deliveryRemarks || '-',
-
+      BookerID: 1,
+      PaymentType: "Credit",
+      Remarks: this.remarks,
+      GstAmount: 0,
+      GstValue: 0,
+      BillTotal: this.netTotal,
+      BillDiscount: this.billDiscount,
+      OtherCharges: 0,
+      NetTotal: this.netTotal - this.billDiscount ,
+      CashRec: 0,
+      Change: 0,
+      BankCoaID: 0,
+      BankCash: 0,
+      InvoiceDocument: "-",
       SaleDetail: JSON.stringify(this.tableDataList),
       UserID: this.global.getUserID(),
-      ShippingCharges: this.shippingCharges,
-
       TransportPartyID: this.transportPartyID,
       LabourCharges: this.labourCharges,
       TransportCharges: this.transportCharges,
@@ -629,48 +618,33 @@ export class MarbleSaleComponent implements OnInit {
 
 
     if (this.btnType == 'Save') {
-      this.insert('insert', postData);
+      this.insertSale(postData);
     }
 
-    if (this.btnType == 'Update') {
 
-      this.global.openPinCode().subscribe(pin => {
-        if (pin != '') {
-          postData['PinCode'] = pin;
-          this.insert('update', postData);
-        }
-      })
-
-
-    }
 
   }
 
   isProcessing = false;
 
-  insert(type: any, postData: any) {
+  
 
-    var url = '';
+  insertSale(postData: any) {
 
-    if (type == 'insert') {
-      url = 'InsertOrder';
-    }
-    if (type == 'update') {
-      url = 'UpdateOrder';
-    }
-
-    if (this.isProcessing) return;
-    this.app.startLoaderDark();
+    if(this.isProcessing) return;
     this.isProcessing = true;
-    this.http.post(this.apiReq + url, postData).subscribe(
+    this.app.startLoaderDark();
+    this.http.post(this.apiReq + 'InsertMnuSaleRtn', postData).subscribe(
       {
         next: (Response: any) => {
           if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
             this.msg.SuccessNotify(Response.msg);
             this.reset();
-            this.getSavedOrder();
+            this.getSavedSale();
+            this.global.closeBootstrapModal('#saleModal', true);
           } else {
             this.msg.WarnNotify(Response.msg);
+            this.global.openBootstrapModal('#saleModal', true);
           }
           this.app.stopLoaderDark();
           this.isProcessing = false;
@@ -684,11 +658,7 @@ export class MarbleSaleComponent implements OnInit {
         }
       }
     )
-
-
   }
-
-
 
   reset() {
     this.invoiceDate = new Date();
@@ -787,28 +757,6 @@ export class MarbleSaleComponent implements OnInit {
   }
 
 
-  savedDataList: any = [];
-
-  getSavedOrder() {
-
-    var fromDate = this.global.dateFormater(this.startDate, '');
-    var toDate = this.global.dateFormater(this.endDate, '');
-    this.http.get(this.apiReq + `GetOrder?reqUID=0&FromDate=${fromDate}&ToDate=${toDate}&FromTime=00:00&ToTime=23:59:59`).subscribe(
-      {
-        next: (Response: any) => {
-          this.savedDataList = [];
-          if (Response.length > 0) {
-            this.savedDataList = this.soSearchProjectID == 0 ? Response : Response.filter((e: any) => e.projectID == this.soSearchProjectID);
-          }
-
-        },
-        error: error => {
-          console.log(error);
-        }
-      }
-    )
-  }
-
   saleSavedDataList: any = [];
   getSavedSale() {
 
@@ -819,7 +767,8 @@ export class MarbleSaleComponent implements OnInit {
         next: (Response: any) => {
           this.saleSavedDataList = [];
           if (Response.length > 0) {
-            this.saleSavedDataList = this.siSearchProjectID == 0 ? Response : Response.filter((e: any) => e.projectID == this.siSearchProjectID);
+            var dataList = Response.filter((e:any)=> e.invType == 'SR')
+            this.saleSavedDataList = this.siSearchProjectID == 0 ? dataList : dataList.filter((e: any) => e.projectID == this.siSearchProjectID );
           }
         },
         error: error => {
@@ -839,118 +788,6 @@ export class MarbleSaleComponent implements OnInit {
   }
 
 
-  billTotal = 0;
-  billDiscount = 0;
-
-
-  approveOrder(item: any) {
-
-    if (item.approvedStatus) return;
-
-
-    this.invBillNo = item.invBillNo;
-    this.partyID = item.partyID;
-    this.projectID = item.projectID;
-    this.billTotal = item.netTotal;
-    this.netTotal = item.netTotal;
-    this.scAutoID = item.scAutoID;
-    this.transportPartyID = item.transportPartyID;
-    this.transportCharges = item.transportCharges;
-    this.labourCharges = item.labourCharges;
-    this.getInvDetail(item.invBillNo);
-
-    this.global.openBootstrapModal('#saleModal', true);
-
-
-  }
-
-
-
-  saveSale() {
-
-
-    if (this.tableDataList.length == 0) {
-      this.msg.WarnNotify('No Item Entered');
-      return;
-    }
-
-    if (this.partyID == 0 || this.partyID == undefined) {
-      this.msg.WarnNotify('Select Customer');
-      return;
-    }
-
-
-    var postData = {
-      HoldInvNo: this.invBillNo,
-      InvDate: this.global.dateFormater(this.invoiceDate, '-'),
-      PartyID: this.partyID,
-      InvType: "S",
-      ProjectID: this.projectID,
-      BookerID: 1,
-      PaymentType: "Credit",
-      Remarks: this.remarks,
-      GstAmount: 0,
-      GstValue: 0,
-      BillTotal: this.billTotal,
-      BillDiscount: this.billDiscount,
-      OtherCharges: 0,
-      NetTotal: this.billTotal - Number(this.billDiscount),
-      CashRec: 0,
-      Change: 0,
-      BankCoaID: 0,
-      BankCash: 0,
-      InvoiceDocument: "-",
-      SaleDetail: JSON.stringify(this.tableDataList),
-      UserID: this.global.getUserID(),
-      TransportPartyID: this.transportPartyID,
-      LabourCharges: this.labourCharges,
-      TransportCharges: this.transportCharges,
-    }
-
-
-    this.global.closeBootstrapModal('#saleModal', true);
-
-    this.global.openPinCode().subscribe(pin => {
-      if (pin != '') {
-        postData['PinCode'] = pin;
-        this.insertSale(postData);
-      }
-    })
-
-
-
-  }
-
-
-  insertSale(postData: any) {
-    this.http.post(this.apiReq + 'InsertMnuSale', postData).subscribe(
-      {
-        next: (Response: any) => {
-          if (Response.msg == 'Data Saved Successfully' || Response.msg == 'Data Updated Successfully') {
-            this.msg.SuccessNotify(Response.msg);
-            this.reset();
-            this.getSavedOrder();
-            this.getSavedSale();
-            this.global.closeBootstrapModal('#saleModal', true);
-          } else {
-            this.msg.WarnNotify(Response.msg);
-            this.global.openBootstrapModal('#saleModal', true);
-          }
-          this.app.stopLoaderDark();
-          this.isProcessing = false;
-        },
-        error: error => {
-          console.log(error);
-          this.app.stopLoaderDark();
-          this.isProcessing = false;
-
-
-        }
-      }
-    )
-  }
-
-
 
   print(id: any) {
     this.global.printData(id);
@@ -965,12 +802,6 @@ export class MarbleSaleComponent implements OnInit {
   }
 
 
-  printOrder(item: any) {
-
-    this.orderPrint.printChallan(item.invBillNo);
-
-  }
-
   printSaleInvoice(item: any) {
 
     this.saleInvoicePrint.printChallan(item.invBillNo);
@@ -980,4 +811,5 @@ export class MarbleSaleComponent implements OnInit {
 
 
 }
+
 

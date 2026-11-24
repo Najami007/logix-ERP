@@ -7,10 +7,11 @@ import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@a
 import { NotificationService } from '../service/notification.service';
 import { userInterface } from '../Interfaces/login-user-interface';
 import { BehaviorSubject, Observable, Observer, from, map, of, retry, switchMap } from 'rxjs';
-import * as $ from 'jquery';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductImgComponent } from 'src/app/Components/Inventory/product/product-img/product-img.component';
 import { PincodeComponent } from 'src/app/Components/User/pincode/pincode.component';
+
+import * as $ from 'jquery';
 
 import { CookieService } from 'ngx-cookie-service';
 import { ConfirmationAlertComponent } from 'src/app/Components/Common/confirmation-alert/confirmation-alert.component';

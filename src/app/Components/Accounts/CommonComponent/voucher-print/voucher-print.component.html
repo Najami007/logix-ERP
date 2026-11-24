@@ -1,4 +1,4 @@
-<div class="d-none InvociePrint" id="InvociePrint">
+<div class="d-none InvociePrint" id="VoucherPrint">
 
     <div class="mt-2 p-2">
 
@@ -10,10 +10,11 @@
 
             </span>
             <span class="mt-3">
-                <h3 class="companyName">{{item.companyName}}</h3>
-                <p style="margin-top: -15px;">{{item.companyAddress}}</p>
-                <p style="margin-top: -20px;">{{item.companyMobile}} </p> <!--051-5551631, 051-5555008-->
-                <p style="margin-top: -20px;">{{item.companyEmail}}</p>
+                <h3 class="companyName" *ngIf="item.companyName != '-'">{{item.companyName}}</h3>
+                <p style="margin-top: -15px;" *ngIf="item.companyAddress != '-'">{{item.companyAddress}}</p>
+                <p style="margin-top: -20px;" *ngIf="item.companyMobile != '-'">{{item.companyMobile}} </p>
+                <!--051-5551631, 051-5555008-->
+                <p style="margin-top: -20px;" *ngIf="item.companyEmail != '-'">{{item.companyEmail}}</p>
             </span>
             <span *ngIf="item.companyLogo2 != '' || item.companyLogo2 !== null">
                 <img src="{{item.companyLogo2}}" style="color: black;" alt="" srcset="" [height]="item.logo2Height"
@@ -26,7 +27,41 @@
 
 
         <!-------------------------- Headers Area   ----------------------->
-        <div class="d-flex">
+
+        <div class="d-flex flex-column gap-3 pt-2 pb-2">
+
+            <div class="row">
+
+                <span class="col-3 fw-bold">Invoice No:</span>
+                <span class="col-3">{{lblInvoiceNo}}</span>
+
+                <span class="col-3 fw-bold">Invoice Date:</span>
+                <span class="col-3">{{lblInvoiceDate | date:'yyyy-MM-dd'}}</span>
+
+
+            </div>
+
+            <div class="row">
+
+                <span class="col-3 fw-bold">Project:</span>
+                <span class="col-3">{{lblProjectName}}</span>
+
+                <span class="col-3 fw-bold">Refrence No:</span>
+                <span class="col-3">{{lblBankReceiptNo }}</span>
+
+
+            </div>
+            <div class="row">
+                 <span class="col-3 fw-bold">Party:</span>
+                <span class="col-3">{{lblPartyName}}</span>
+             
+            </div>
+             <div class="row">
+                <span class="col-3 fw-bold">Narration:</span>
+                <span class="col-9">{{lblRemarks}}</span>
+            </div>
+        </div>
+        <!-- <div class="d-flex">
             <div class="row mt-5">
 
                 <b class="row">
@@ -46,7 +81,7 @@
 
 
             </div>
-        </div>
+        </div> -->
 
         <!-----------------------   Print Table Area --------------------->
 

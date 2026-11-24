@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
 import { environment } from 'src/environments/environment.development';
-import * as $ from 'jquery';
 
 
 
@@ -50,14 +49,10 @@ export class VoucherPrintComponent {
   lblDebitTotal: any;
   lblCreditTotal: any;
   lblVoucherPrintDate = new Date();
-
+  lblPartyName:any = '';
+  lblBankReceiptNo:any = '';
 
   invoiceDetails: any = [];
-
-
-
-
-
 
 
   printBill(row: any) {
@@ -71,17 +66,12 @@ export class VoucherPrintComponent {
     this.lblProjectName = row.projectTitle;
     this.getInvoiceDetail(row.invoiceNo);
 
-
   }
-
-
-
 
 
   getInvoiceDetail(invoiceNo: any) {
 
     $('.loaderDark').show();
-
     this.lblDebitTotal = 0;
     this.lblCreditTotal = 0;
     this.invoiceDetails = [];
@@ -89,7 +79,10 @@ export class VoucherPrintComponent {
 
     this.http.get(environment.mainApi + this.globalData.accountLink + 'GetSpecificVocherDetail?InvoiceNo=' + invoiceNo).subscribe(
       (Response: any) => {
+        console.log(Response);
         this.invoiceDetails = Response;
+        this.lblPartyName = Response[0].partyName;
+        this.lblBankReceiptNo = Response[0].bankReceiptNo;
 
         this.lblRemarks = Response[0].invoiceRemarks;
         // this.lblInvoiceNo = Response[0].invoiceNo;
@@ -97,7 +90,7 @@ export class VoucherPrintComponent {
         // this.lblVoucherType = Response[0].type;
         // this.lblProjectName = Response[0].projectTitle; 
         // this.invoiceDetails = Response;
-        if (Response != '') {
+        if (Response.length > 0) {
 
           Response.forEach((e: any) => {
             this.lblDebitTotal += e.debit;
@@ -107,8 +100,7 @@ export class VoucherPrintComponent {
 
         setTimeout(() => {
           $('.loaderDark').fadeOut(200);
-          this.globalData.printData('#InvociePrint');
-
+          this.globalData.printData('#VoucherPrint');
         }, 200);
       },
       (error: any) => {

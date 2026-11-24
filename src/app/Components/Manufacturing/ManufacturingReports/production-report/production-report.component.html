@@ -13,16 +13,16 @@
             </mat-select>
         </mat-form-field>
 
-         
-            <mat-form-field class="col-md-2 matSmall" appearance="outline">
-                <mat-label>Project </mat-label>
-                <mat-select [(ngModel)]="projectID" name="mbsProject" [disabled]="!ProjectwiseFeature">
-                    <mat-option [value]="0">All</mat-option>
-                    <mat-option *ngFor="let item of projectList "
-                        [value]="item.projectID">{{item.projectTitle}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-     
+
+        <mat-form-field class="col-md-2 matSmall" appearance="outline">
+            <mat-label>Project </mat-label>
+            <mat-select [(ngModel)]="projectID" name="mbsProject" [disabled]="!ProjectwiseFeature">
+                <mat-option [value]="0">All</mat-option>
+                <mat-option *ngFor="let item of projectList "
+                    [value]="item.projectID">{{item.projectTitle}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
         <mat-form-field class="col-lg-2 matSmall" appearance="outline">
             <mat-label>From Date</mat-label>
             <input matInput type="text" readonly="true" [(ngModel)]="fromDate" [matDatepicker]="sDate">
@@ -113,6 +113,11 @@
         </div>
     </div>
 
+    <div *ngIf="rptType > 1">
+        <mat-radio-group [(ngModel)]="formateType">
+            <mat-radio-button *ngFor="let item of formateList" [value]="item.value">{{item.title}}</mat-radio-button>
+        </mat-radio-group>
+    </div>
 
 
 
@@ -197,8 +202,14 @@
                         <th>Contractor</th>
                         <th>Item</th>
                         <th>Quantity</th>
-                        <th>Labour Charges</th>
-                        <th>Total</th>
+                        <th *ngIf="formateType !== 2">Labour Charges</th>
+                        <th *ngIf="formateType !== 2">Total</th>
+
+                        <th *ngIf="formateType > 1">Cost Price</th>
+                        <th *ngIf="formateType > 1">Sale Price</th>
+                        <th *ngIf="formateType > 1">Cost Total</th>
+                        <th *ngIf="formateType > 1">Sale Total</th>
+                        <th *ngIf="formateType > 1">Margin</th>
 
                     </tr>
                 </thead>
@@ -211,14 +222,35 @@
                         <td>{{item.partyName}}</td>
                         <td>{{item.mnuItemTitle}}</td>
                         <td class="text-center">{{item.quantity| number:'1.0-0'}}</td>
-                        <td class="text-end">{{item.mnuLabourCharges| number:'1.0-0'}}</td>
-                        <td class="text-end">{{item.mnuLabourCharges * item.quantity| number:'1.0-0'}}</td>
+                        <td class="text-end" *ngIf="formateType !== 2">{{item.mnuLabourCharges| number:'1.0-0'}}</td>
+                        <td class="text-end" *ngIf="formateType !== 2">{{item.mnuLabourCharges * item.quantity|
+                            number:'1.0-0'}}</td>
+
+                        <td class="text-end" *ngIf="formateType > 1">{{item.avgCostPrice| number:'1.0-0'}}</td>
+                        <td class="text-end" *ngIf="formateType > 1">{{item.salePrice| number:'1.0-0'}}</td>
+                        <td class="text-end" *ngIf="formateType > 1">{{item.avgCostPrice * item.quantity|
+                            number:'1.0-0'}}</td>
+                        <td class="text-end" *ngIf="formateType > 1">{{item.salePrice * item.quantity| number:'1.0-0'}}
+                        </td>
+                        <td class="text-end" *ngIf="formateType > 1">{{calculateProfit(item,'amount')| number:'1.0-0'}}
+                            <small>({{calculateProfit(item,'percent')| number:'1.0-0'}}%)</small>
+                        </td>
+
 
                     </tr>
                     <tr>
-                        <td colspan="8" class="fw-bold text-center">Total</td>
-
-                        <td class="text-end fw-bold">{{netTotal | number:'1.0-0'}}</td>
+                        <td colspan="7" class="fw-bold text-center">Total</td>
+                        <td *ngIf="formateType !== 2"></td>
+                        <td class="text-end fw-bold" *ngIf="formateType !== 2">{{netTotal | number:'1.0-0'}}</td>
+                        <td colspan="2" *ngIf="formateType > 1"></td>
+                        <td class="text-end fw-bold" *ngIf="formateType > 1">{{costTotal | number:'1.0-0'}}</td>
+                        <td class="text-end fw-bold" *ngIf="formateType > 1">{{saleTotal | number:'1.0-0'}}</td>
+                        <td class="text-end fw-bold" *ngIf="formateType > 1">
+                            {{ (formateType == 2 ? saleTotal - costTotal : saleTotal - (costTotal + netTotal)) |
+                            number:'1.0-0'}}
+                            <small>({{(((formateType == 2 ? saleTotal - costTotal : saleTotal - (costTotal + netTotal))
+                                / saleTotal) * 100) | number:'1.0-0'}}%)</small>
+                        </td>
                     </tr>
                 </tbody>
 
@@ -231,7 +263,11 @@
                         <th *ngIf="projectID > 0">Project</th>
                         <th>Item</th>
                         <th>Quantity</th>
-                        <th>Labour Charges</th>
+                        <th *ngIf="formateType !== 2">Labour Charges</th>
+
+                        <th *ngIf="formateType > 1">Cost</th>
+                        <th *ngIf="formateType > 1">Sale</th>
+                        <th *ngIf="formateType > 1">Margin</th>
 
                     </tr>
                 </thead>
@@ -241,14 +277,34 @@
                         <td *ngIf="projectID > 0">{{item.projectTitle}}</td>
                         <td>{{item.mnuItemTitle}}</td>
                         <td class="text-center">{{item.quantity| number:'1.0-0'}}</td>
-                        <td class="text-end">{{item.mnuLabourCharges| number:'1.0-0'}}</td>
+                        <td class="text-end" *ngIf="formateType !== 2">{{item.mnuLabourCharges| number:'1.0-0'}}</td>
+
+                        <td class="text-end" *ngIf="formateType > 1">{{ item.avgCostPrice| number:'1.0-0'}}</td>
+                        <td class="text-end" *ngIf="formateType > 1">{{item.salePrice| number:'1.0-0'}}</td>
+                        <td class="text-end" *ngIf="formateType > 1">
+                            {{(formateType == 2 ? item.salePrice - item.avgCostPrice : item.salePrice -
+                            (item.avgCostPrice + item.mnuLabourCharges))| number:'1.0-0'}}
+                            <small>({{(((formateType == 2 ? item.salePrice - item.avgCostPrice : item.salePrice -
+                                (item.avgCostPrice + item.mnuLabourCharges))) / item.salePrice) * 100|
+                                number:'1.0-0'}}%)</small>
+                        </td>
+
 
                     </tr>
                     <tr>
                         <td *ngIf="projectID > 0"></td>
                         <td colspan="3" class="fw-bold text-center">Total</td>
+                        <td class="text-end fw-bold" *ngIf="formateType !== 2">{{netTotal | number:'1.0-0'}}</td>
+                        <td class="text-end fw-bold" *ngIf="formateType > 1">{{costTotal | number:'1.0-0'}}</td>
+                        <td class="text-end fw-bold" *ngIf="formateType > 1">{{saleTotal | number:'1.0-0'}}</td>
+                        <td class="text-end fw-bold" *ngIf="formateType > 1">
+                            {{ (formateType == 2 ? saleTotal - costTotal : saleTotal - (costTotal + netTotal)) |
+                            number:'1.0-0'}}
+                            <small>({{(((formateType == 2 ? saleTotal - costTotal : saleTotal - (costTotal + netTotal)))
+                                / saleTotal) * 100 | number:'1.0-0'}}% )</small>
+                        </td>
 
-                        <td class="text-end fw-bold">{{netTotal | number:'1.0-0'}}</td>
+
                     </tr>
                 </tbody>
 

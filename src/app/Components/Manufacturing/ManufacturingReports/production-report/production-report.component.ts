@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { error } from 'jquery';
 import { AppComponent } from 'src/app/app.component';
@@ -16,7 +17,7 @@ import { environment } from 'src/environments/environment.development';
 })
 export class ProductionReportComponent implements OnInit {
 
-      ProjectwiseFeature = this.global.ProjectwiseFeature;
+  ProjectwiseFeature = this.global.ProjectwiseFeature;
 
 
   apiReq = environment.mainApi + this.global.manufacturingLink;
@@ -49,6 +50,8 @@ export class ProductionReportComponent implements OnInit {
   }
 
 
+  formateList = [{ value: 1, title: 'Labour Only' }, { value: 2, title: 'Costing Only' }, { value: 3, title: 'Labour & Costing' },];
+  formateType = 1;
 
   rptType: any = 1;
 
@@ -142,11 +145,27 @@ export class ProductionReportComponent implements OnInit {
   }
 
 
+  calculateProfit(item: any, type: any) {
+
+    var costTotal = item.avgCostPrice * item.quantity;
+    var saleTotal = item.salePrice * item.quantity;
+    var labourTotal = item.mnuLabourCharges * item.quantity;
+
+    var profit = this.formateType == 2 ? saleTotal - costTotal : saleTotal - (costTotal + labourTotal);
+    var profitPercentage = (profit / saleTotal) * 100;
+
+    return type == 'amount' ? profit : profitPercentage;
+  }
+
+
   DataList: any = [];
 
   billTotal = 0;
   billDiscountTotal = 0;
   netTotal = 0;
+
+  costTotal = 0;
+  saleTotal = 0;
 
   getReport() {
 
@@ -155,11 +174,11 @@ export class ProductionReportComponent implements OnInit {
     var fromTime = this.fromTime;
     var toDate = this.global.dateFormater(this.toDate, '');
     var toTime = this.toTime;
-      var projectID = this.projectID;
+    var projectID = this.projectID;
 
     this.projectTitle = '';
-    if(projectID > 0){
-      this.projectTitle = this.projectList.filter((e:any)=> e.projectID == this.projectID)[0].projectTitle;
+    if (projectID > 0) {
+      this.projectTitle = this.projectList.filter((e: any) => e.projectID == this.projectID)[0].projectTitle;
     }
 
     var url = '';
@@ -250,8 +269,12 @@ export class ProductionReportComponent implements OnInit {
           if (this.rptType == 3) {
             this.DataList = Response;
           }
+          this.DataList.sort((a, b) =>
+            new Date(a.invDate).getTime() - new Date(b.invDate).getTime()
+          );
 
-
+          this.costTotal = 0;
+          this.saleTotal = 0;
           this.DataList.forEach((e: any) => {
             if (this.rptType == 1) {
               this.netTotal += e.netTotal;
@@ -259,9 +282,14 @@ export class ProductionReportComponent implements OnInit {
 
             if (this.rptType == 2) {
               this.netTotal += e.mnuLabourCharges * e.quantity;
+              this.costTotal += e.avgCostPrice * e.quantity;
+              this.saleTotal += e.salePrice * e.quantity;
+
             }
             if (this.rptType == 3) {
               this.netTotal += e.mnuLabourCharges;
+              this.costTotal += e.avgCostPrice;
+              this.saleTotal += e.salePrice;
             }
 
           });
@@ -300,6 +328,8 @@ export class ProductionReportComponent implements OnInit {
     this.billTotal = 0;
     this.billDiscountTotal = 0;
     this.netTotal = 0;
+    this.costTotal = 0;
+    this.saleTotal = 0
 
     this.DataList = [];
 

@@ -32,6 +32,7 @@ import { PrintBillTokenComponent } from './production/mining-sale/print-bill-tok
 import { CustomerVehicleComponent } from './production/customer-vehicle/customer-vehicle.component';
 import { AddCustomerVehicleComponent } from './production/customer-vehicle/add-customer-vehicle/add-customer-vehicle.component';
 import { CustomerVehicleReportComponent } from './production/customer-vehicle-report/customer-vehicle-report.component';
+import { MiningProductionComponent } from './production/mining-production/mining-production.component';
 
 
 
@@ -61,6 +62,7 @@ export const miningRoutes: Route[] = [
   { path: 'minecategorysalerpt', component: MiningCategorySaleReportComponent, data: { title: 'Sale Report Category' }, canActivate: [AuthGuard] },
   { path: 'minecustomersalerpt', component: MiningCustomerSaleReportComponent, data: { title: 'Sale Report Customer' }, canActivate: [AuthGuard] },
   { path: 'minetransportersalerpt', component: MiningTransporterSaleReportComponent, data: { title: 'Sale Report Transporter' }, canActivate: [AuthGuard] },
+  { path: 'miningproduction', component: MiningProductionComponent, data: { title: 'Mining Production' }, canActivate: [AuthGuard] },
 
 
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
@@ -92,7 +94,8 @@ export const miningRoutes: Route[] = [
     PrintBillTokenComponent,
     CustomerVehicleComponent,
     AddCustomerVehicleComponent,
-    CustomerVehicleReportComponent
+    CustomerVehicleReportComponent,
+    MiningProductionComponent
   ],
   imports: [
     CommonModule,

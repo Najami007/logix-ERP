@@ -85,36 +85,58 @@ export class PartyComponent implements OnInit {
 
 
   getParty() {
-    if (this.srPartyType == 'Customer') {
-      this.http.get(environment.mainApi + this.globalData.companyLink + 'getcustomer').subscribe(
-        {
-          next: value => {
-            this.partyData = value;
-            this.loadingBar = 'Stop';
-          },
-          error: error => {
-            this.msg.WarnNotify('Error Occured While Loading Data');
-          }
+
+
+
+    this.globalData.getPartyList().subscribe(
+      (Response) => {
+        this.partyData = [];
+        if (Response == null) {
+          this.msg.WarnNotify('Null Returned!')
+          this.loadingBar = 'Stop';
+          return;
         }
-      )
-    } else if (this.srPartyType == 'Supplier') {
-      this.http.get(environment.mainApi + this.globalData.companyLink + 'getsupplier').subscribe(
-        {
-          next: value => {
-            this.partyData = value;
-            this.loadingBar = 'Stop';
-
-
-          },
-          error: error => {
-            this.msg.WarnNotify('Error Occured While Loading Data')
-
-          }
-
-
+        if (Response.length == 0){
+           this.msg.WarnNotify('No Data Found')
+          this.loadingBar = 'Stop';
+          return;
         }
-      )
-    }
+          this.partyData = Response.filter((e: any) => e.partyType == this.srPartyType);
+        this.loadingBar = 'Stop';
+
+      }
+    )
+
+    // if (this.srPartyType == 'Customer') {
+    //   this.http.get(environment.mainApi + this.globalData.companyLink + 'getcustomer').subscribe(
+    //     {
+    //       next: value => {
+    //         this.partyData = value;
+    //         this.loadingBar = 'Stop';
+    //       },
+    //       error: error => {
+    //         this.msg.WarnNotify('Error Occured While Loading Data');
+    //       }
+    //     }
+    //   )
+    // } else if (this.srPartyType == 'Supplier') {
+    //   this.http.get(environment.mainApi + this.globalData.companyLink + 'getsupplier').subscribe(
+    //     {
+    //       next: value => {
+    //         this.partyData = value;
+    //         this.loadingBar = 'Stop';
+
+
+    //       },
+    //       error: error => {
+    //         this.msg.WarnNotify('Error Occured While Loading Data')
+
+    //       }
+
+
+    //     }
+    //   )
+    // }
   }
 
 

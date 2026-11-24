@@ -1,0 +1,366 @@
+<mat-tab-group mat-align-tabs="center" class="body h-100" [selectedIndex]="tabIndex"
+    (selectedIndexChange)="changeTab($event)">
+
+
+    <mat-tab label="Sale">
+        <div class="container-fluid sale-return-page">
+
+
+            <!-- Main Information -->
+            <div class="return-card">
+
+                <div class="section-title">
+                    <span class="section-icon"><mat-icon>insert_drive_file</mat-icon></span>
+                    <div>
+                        <h5>Return Information</h5>
+                        <small>Enter customer and invoice details</small>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+
+                    <!-- Return Date -->
+                    <div class="col-lg-2 col-md-6">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <mat-label>Return Date</mat-label>
+                            <input matInput readonly [(ngModel)]="invoiceDate" [matDatepicker]="returnDate">
+                            <mat-datepicker-toggle matSuffix [for]="returnDate"></mat-datepicker-toggle>
+                            <mat-datepicker #returnDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Original Invoice -->
+                    <!-- <div class="col-lg-3 col-md-6">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <mat-label>Original Invoice #</mat-label>
+                            <input matInput [(ngModel)]="originalInvBillNo" placeholder="Enter invoice number">
+                        </mat-form-field>
+                    </div> -->
+
+                    <!-- Project -->
+                    <div class="col-lg-2 col-md-6" *ngIf="ProjectwiseFeature">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <mat-label>Project</mat-label>
+                            <mat-select [(ngModel)]="projectID">
+                                <mat-option [value]="0">All Projects</mat-option>
+                                <mat-option *ngFor="let item of projectList" [value]="item.projectID">
+                                    {{item.projectTitle}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <!-- Customer -->
+                    <div class="col-lg-3 col-md-6">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <mat-label>Customer</mat-label>
+                            <mat-select [(ngModel)]="partyID">
+                                <mat-option>
+                                    <ngx-mat-select-search #customerSearch [placeholderLabel]="'Search Customer...'"
+                                        [noEntriesFoundLabel]="'No Customer Found'">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+
+                                <mat-option *ngFor="let item of partyList | filter:customerSearch.value"
+                                    [value]="item.partyID">
+                                    {{item.partyName}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+
+                    <div class="col-lg-5 col-md-6">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <mat-label>Return Remarks</mat-label>
+                            <textarea matInput rows="1" [(ngModel)]="remarks"
+                                placeholder="Reason for return..."></textarea>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+
+
+                <div class="section-title">
+                    <span class="section-icon search-icon">
+                        <mat-icon>search</mat-icon>
+                    </span>
+                    <div>
+                        <h5>Find Product</h5>
+                        <small>Search product or scan barcode to add items</small>
+                    </div>
+                    <div class="item-count">
+                        {{tableDataList.length}} Items
+                    </div>
+                </div>
+
+
+
+                <div class="d-flex">
+
+                    <!-------------------- Product Search Bar --------------->
+
+                    <div class="col-md-10  d-flex flex-column">
+
+                        <input type="text" (keydown)="this.changeFocus($event,'.prodRow');searchByCode($event)"
+                            [(ngModel)]="PBarcode" id="mbsearchProduct" class="p-1 ps-2 mb-2 searchProduct w-100"
+                            placeholder="Search (Alt + b)" autocomplete="off" accesskey="b">
+
+                        <div class="d-flex flex-column SearchConatiner cursorPointer"
+                            *ngIf="PBarcode != '' && PBarcode != undefined ">
+                            <mat-card class="card "
+                                *ngFor="let item of itemList| filter:PBarcode | slice:0:25 index as index"
+                                (click)="addMenuItem(item)">
+
+                                <button style="height: 40px; background: none;border: none;text-align: left;"
+                                    class="prodRow{{index}} prodBtn justify-content-between d-flex"
+                                    (keydown)="handleProdFocus(item,$event,'.prodRow','.searchProduct',itemList)">
+                                    <p>{{item.mnuItemTitle}}</p>
+                                    <p><strong>({{item.mnuItemCode}})</strong></p>
+                                </button>
+
+                            </mat-card>
+                        </div>
+                    </div>
+                    <div class="col-md-2 ps-1  text-start">
+                        <button class="btnload w-100 " style="height: 40px;" (click)="ngOnInit()">Load</button>
+                    </div>
+
+                </div>
+
+
+
+                <div class="table-responsive return-table-container">
+
+                    <table class="table-logix">
+                        <thead>
+                            <tr>
+                                <th class="cursorPointer">S#</th>
+                                <th>Title</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th>Labour</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of tableDataList index as index">
+                                <td class="text-center">{{index +1}}</td>
+                                <td>{{item.productTitle}}</td>
+                                <td class="text-center"><input type="text" [(ngModel)]="item.quantity" min="0"
+                                        (keydown)="this.handleUpdown(item,$event,'.qty',index);getTotal();"
+                                        (keyup)="getTotal();" (click)="rowFocused = index"
+                                        class="qty{{index}} text-center" style="width: 80px;"></td>
+                                <td class="text-end">{{item.salePrice | number:'1.0-0'}}</td>
+                                <td class="text-center">
+                                    <input type="number" [(ngModel)]="item.loadingLabourCharges" min="0"
+                                        (input)="getTotal();"
+                                        (keydown)="this.handleUpdown(item,$event,'.lbc',index);getTotal();"
+                                        (keyup)="getTotal();" (click)="rowFocused = index"
+                                        class="lbc{{index}} text-center" style="width: 80px;">
+                                </td>
+                                <td class="text-end">{{(item.salePrice + item.loadingLabourCharges) * item.quantity |
+                                    number:'1.0-0'}}</td>
+                                <td class="text-center"><mat-icon (click)="delRow(item)"
+                                        class="text-danger">delete</mat-icon></td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td class="fw-bold text-center">{{totalQty| number:'1.0-0'}}</td>
+                                <td></td>
+                                <td class="fw-bold text-center">{{labourCharges| number:'1.0-0'}}</td>
+                                <td class="fw-bold text-end">{{totalBill| number:'1.0-0'}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+            <!-- Bottom Summary -->
+            <div class="return-summary-card">
+
+                <div class="summary-left">
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <mat-label>Shipping Company</mat-label>
+                            <mat-select [(ngModel)]="transportPartyID">
+                                <mat-option><ngx-mat-select-search #scSearch [placeholderLabel]="'Search...'"
+                                        [noEntriesFoundLabel]="'Not found'"></ngx-mat-select-search></mat-option>
+                                <mat-option [value]="0">None</mat-option>
+                                <mat-option *ngFor="let item of transporterList | filter:scSearch.value"
+                                    [value]="item.partyID">{{item.partyName}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <mat-label>Transport Charges</mat-label>
+                            <input type="text" (input)="getTotal()" matInput [(ngModel)]="transportCharges" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline" class="w-100 matSmall">
+                            <mat-label>Discount</mat-label>
+                            <input type="text" matInput [(ngModel)]="billDiscount" />
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+                <div class="summary-right">
+
+                        <!-- <div class="summary-stat">
+                            <span>Total Items</span>
+                            <strong>{{tableDataList.length}}</strong>
+                        </div>
+
+                        <div class="summary-stat">
+                            <span>Total Quantity</span>
+                            <strong>{{totalQty}}</strong>
+                        </div> -->
+
+                    <div class="total-label">
+                        <span>Return Total</span>
+                        <small>Refund / Credit Amount</small>
+                    </div>
+
+                    <div class="return-total">
+                        {{netTotal | number:'1.0-0'}}
+                    </div>
+
+                    <button class="save-return-btn" (click)="save()">
+                        Save Return
+                    </button>
+
+                    <button class="reset-return-btn" (click)="reset()">
+                        Reset
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </mat-tab>
+
+    <mat-tab label="Saved Invoices">
+
+
+        <div class="container">
+
+
+            <div class="row mt-2">
+                <mat-form-field class="col-md-4 matSmall" appearance="outline">
+                    <mat-label>Search.....</mat-label>
+                    <input matInput type="text" #searchSaleInv>
+                </mat-form-field>
+                <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                    <mat-label>Project </mat-label>
+                    <mat-select [(ngModel)]="siSearchProjectID" name="mbsProject" (selectionChange)="getSavedSale()"
+                        [disabled]="!ProjectwiseFeature">
+                        <mat-option [value]="0">All</mat-option>
+                        <mat-option *ngFor="let item of projectList "
+                            [value]="item.projectID">{{item.projectTitle}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                    <mat-label>From Date</mat-label>
+                    <input (dateChange)="getSavedSale()" matInput [(ngModel)]="saleStartDate" [matDatepicker]="picker4">
+                    <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                    <mat-datepicker #picker4></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="col-md-2 matSmall" appearance="outline">
+                    <mat-label>To Date</mat-label>
+                    <input (dateChange)="getSavedSale()" matInput [(ngModel)]="saleEndDate" [matDatepicker]="picker5">
+                    <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                    <mat-datepicker #picker5></mat-datepicker>
+                </mat-form-field>
+                <div class="col-md-2 pe-1"><button class="btn-rpt-primary w-100"
+                        (click)="print('#saleList')">Print</button></div>
+            </div>
+
+
+            <div id="saleList">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>S#</th>
+                            <th>Inv No</th>
+                            <th>Date</th>
+                            <th>Customer</th>
+                        
+                            <th>Bill Total</th>
+                            <th>Bill Discount</th>
+                            <th>Net Total</th>
+                            <th>Project</th>
+                            <th class="hide-in-print">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of saleSavedDataList | filter:searchSaleInv.value|paginate:{
+                        itemsPerPage : tableSize,
+                        currentPage : page,
+                        totalItems :    count,
+                    };  index as index ">
+                            <td>{{index + 1}}</td>
+                            <td>{{item.invBillNo}}</td>
+                            <td>{{item.invDate | date:'dd-MM-yyyy'}}</td>
+                            <td>{{item.partyName}}</td>
+                            <td>{{item.billTotal | number:'1.0-0'}}</td>
+                            <td>{{item.billDiscount | number:'1.0-0'}}</td>
+                            <td>{{item.netTotal | number:'1.0-0'}}</td>
+                            <td>{{item.projectTitle}}</td>
+                            <td class="hide-in-print">
+                                <mat-icon class="cursorPointer text-primary"
+                                    (click)="printSaleInvoice(item)">print</mat-icon>
+                            </td>
+
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <app-mnu-invoice-print class="d-none"></app-mnu-invoice-print>
+
+
+        </div>
+
+
+    </mat-tab>
+
+
+
+
+</mat-tab-group>
+
+
+
+<div class="d-flex" *ngIf="tabIndex == 1 "
+    style="position: fixed; bottom: 32px !important; width: 100%; background-color: #fff; z-index: 2;">
+
+    <pagination-controls previousLabel="Prev" nextLabel="Next"
+        (pageChange)="onTableDataChange($event)"></pagination-controls>
+
+
+    <mat-hint class=" me-1 text-secondary">Rows Per Page </mat-hint>
+    <select class="text-white" style="height: 25px;background-color: rgb(75, 164, 248);"
+        (change)="onTableSizeChange($event)" [(ngModel)]="tableSize">
+        <option *ngFor=" let item of tableSizes" [selected]="tableSize == item">{{item}}</option>
+    </select>
+
+    <div class="jump-to-page">
+        <input type="text" class="w-25" (keydown)="global.handleNumKeys($event)" [(ngModel)]="jumpPage"
+            placeholder="Page #" min="1" [max]="count" />
+        <button (click)="goToPage()" class="text-white"
+            style="height: 25px;background-color: rgb(75, 164, 248);border: 1px solid black;">Go</button>
+    </div>
+
+</div>

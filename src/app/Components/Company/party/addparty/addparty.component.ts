@@ -394,6 +394,7 @@ export class AddpartyComponent implements OnInit {
 
     if (!this.urduBillFeature) {
       this.fields.partyNameUrdu.show = false;
+      this.fields.addressUrdu.show = false;
     }
 
     if (!this.RouteFeature) {

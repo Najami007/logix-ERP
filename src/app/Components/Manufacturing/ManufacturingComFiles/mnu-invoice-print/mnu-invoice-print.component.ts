@@ -98,6 +98,7 @@ export class MnuInvoicePrintComponent {
   myShippingCharges = 0;
   myLabourCharges = 0;
   myTransportCharges = 0;
+  myInvType = '';
 
   tableDataList: any = [];
   printChallan(orderNo: any) {
@@ -129,6 +130,7 @@ export class MnuInvoicePrintComponent {
               this.myBillDiscount = Response[0].billDiscount;
               this.myNetTotal = Response[0].netTotal;
               this.myRemarks = Response[0].remarks;
+              this.myInvType = Response[0].myInvType;
             })
 
 

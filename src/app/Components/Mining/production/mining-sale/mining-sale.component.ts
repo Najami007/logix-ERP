@@ -63,6 +63,8 @@ export class MiningSaleComponent implements OnInit {
     this.getCustomerVehicleList();
   }
 
+  
+
 
 
   public http = inject(HttpClient);
@@ -70,6 +72,9 @@ export class MiningSaleComponent implements OnInit {
   public msg = inject(NotificationService);
   public app = inject(AppComponent);
 
+
+
+  DisableDateSale = this.global.DisableDateSale;
 
   // ---- Replace these with data loaded from your API ----
   parties: any = [];

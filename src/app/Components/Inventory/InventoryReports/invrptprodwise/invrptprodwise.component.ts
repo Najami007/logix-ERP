@@ -122,6 +122,7 @@ export class InvrptprodwiseComponent implements OnInit {
   QtyTotal = 0;
   saleTotal = 0;
   costTotal = 0;
+  avgCostTotal = 0;
 
   getReport(type: any) {
     this.reportType = this.reportsList.filter((e: any) => e.invType == this.rptType)[0].invTypeTitle;
@@ -140,6 +141,7 @@ export class InvrptprodwiseComponent implements OnInit {
           this.QtyTotal = 0;
           this.saleTotal = 0;
           this.costTotal = 0;
+          this.avgCostTotal = 0;
           if (Response.length == 0 || Response == null) {
             this.global.popupAlert('Data Not Found!');
             this.app.stopLoaderDark();
@@ -155,6 +157,7 @@ export class InvrptprodwiseComponent implements OnInit {
                 this.QtyTotal += e.quantity;
                 this.saleTotal += e.salePrice * e.quantity;
                 this.costTotal += e.costPrice * e.quantity;
+                this.avgCostTotal += e.avgCostPrice * e.quantity;
 
               }
             });
@@ -164,6 +167,7 @@ export class InvrptprodwiseComponent implements OnInit {
               this.QtyTotal += e.quantity;
               this.saleTotal += e.salePrice * e.quantity;
               this.costTotal += e.costPrice * e.quantity;
+              this.avgCostTotal += e.avgCostPrice * e.quantity;
             });
           }
 

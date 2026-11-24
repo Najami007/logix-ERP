@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NotificationService } from 'src/app/Shared/service/notification.service';
-import * as $ from 'jquery';
 import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.development';
@@ -8,7 +7,6 @@ import Swal from 'sweetalert2';
 import { AppComponent } from 'src/app/app.component';
 import { MatDialog } from '@angular/material/dialog';
 
-import { PincodeComponent } from '../../User/pincode/pincode.component';
 import { Router } from '@angular/router';
 import { VoucherDetailsComponent } from '../CommonComponent/voucher-details/voucher-details.component';
 import { VoucherPrintComponent } from '../CommonComponent/voucher-print/voucher-print.component';
@@ -81,6 +79,7 @@ export class Voucher2Component implements OnInit {
     this.getSavedVoucher();
     this.getProject();
     this.getCoa();
+    this.getSupplier();
 
     // this.logo = this.globalData.Logo;
     // this.logo1 = this.globalData.Logo1;
@@ -173,6 +172,14 @@ export class Voucher2Component implements OnInit {
   refCoaList: any;
   projectList: any = [];
 
+
+    getSupplier() {
+    this.globalData.getPartyList().subscribe(
+      (Response) => {
+        this.partyList = Response;
+      }
+    )
+  }
 
 
 
@@ -287,16 +294,16 @@ export class Voucher2Component implements OnInit {
 
   ///////////////////////////////////////////////////////////
 
-  getParty() {
-    this.http.get(environment.mainApi + this.globalData.accountLink + 'GetVoucherParty').subscribe(
-      (Response) => {
-        this.partyList = Response;
-      },
-      (Error) => {
-        console.log(Error);
-      }
-    )
-  }
+  // getParty() {
+  //   this.http.get(environment.mainApi + this.globalData.accountLink + 'GetVoucherParty').subscribe(
+  //     (Response) => {
+  //       this.partyList = Response;
+  //     },
+  //     (Error) => {
+  //       console.log(Error);
+  //     }
+  //   )
+  // }
 
 
   ////////////////////////////////////////////////////////////
@@ -371,6 +378,7 @@ export class Voucher2Component implements OnInit {
         VoucherDocument: this.VoucherDocument || '-',
         InvoiceDetail: JSON.stringify(this.VoucherData),
         UserID: this.globalData.getUserID(),
+        PartyID:this.partyID,
       };
 
       this.app.startLoaderDark();  ///////////// will start the loader
@@ -579,6 +587,7 @@ export class Voucher2Component implements OnInit {
   ///////////////////////////////////////////////////
 
   printBill(row: any) {
+    console.log(row,'saved Row')
     this.printVoucher.printBill(row);
     // this.lblInvoiceNo = row.invoiceNo;
     // this.lblInvoiceDate = row.invoiceDate;
@@ -686,6 +695,7 @@ export class Voucher2Component implements OnInit {
     this.narration = '';
     this.invoiceNo = '';
     this.VoucherDocument = '';
+    this.partyID = 0;
     $('#vDoc').val('');
   }
 

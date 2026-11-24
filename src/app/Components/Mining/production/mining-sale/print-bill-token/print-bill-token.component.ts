@@ -114,7 +114,6 @@ export class PrintBillTokenComponent {
       this.apiReq + `PrintMiningBill?InvBillNo=${invBillNo}`
     ).subscribe({
       next: (response) => {
-        console.log(response,'Print Data');
         this.tableDataList = [];
         this.printDataList = [];
 
@@ -170,8 +169,6 @@ export class PrintBillTokenComponent {
             }))
           })
         );
-
-        console.log(this.printDataList, 'Print Data List');
 
         setTimeout(() => {
           this.global.printData('#printToken');

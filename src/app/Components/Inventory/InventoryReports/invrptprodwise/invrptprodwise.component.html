@@ -69,13 +69,15 @@
 
         <div class="col-lg-4 d-flex flex-wrap" *ngIf="crudList.r">
 
-            <div class="col-md-3 pe-1"> <button class=" btn-rpt-success w-100"(click)="getSummary();formateType = 1">Get Summary</button></div>
-            <div class="col-md-3 pe-1"><button class=" btn-rpt-success w-100" (click)="getReport(rptType);formateType = 2">Get Detail</button></div>
+            <div class="col-md-3 pe-1"> <button class=" btn-rpt-success w-100"
+                    (click)="getSummary();formateType = 1">Get Summary</button></div>
+            <div class="col-md-3 pe-1"><button class=" btn-rpt-success w-100"
+                    (click)="getReport(rptType);formateType = 2">Get Detail</button></div>
             <div class="col-md-3 pe-1"><button class="  btn-rpt-primary w-100" (click)="print()">Print</button></div>
             <!-- <div class="col-md-3"> <button mat-icon-button (click)="export()"> <i
                         class="bi bi-filetype-xlsx"></i></button></div> -->
-           <div class=" col-md-3"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
-            
+            <div class=" col-md-3"><button class="btn-rpt-export w-100 " (click)="export()">Export</button></div>
+
         </div>
 
     </div>
@@ -135,6 +137,7 @@
                     <th>Avg Cost</th>
                     <th>Sale</th>
                     <th>Cost Total</th>
+                    <th>AvgCost Total</th>
                     <th>Sale Total</th>
                     <th>Entered By</th>
 
@@ -161,6 +164,8 @@
                     <td class="text-end">{{item.avgCostPrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.salePrice |number:'1.0-1'}}</td>
                     <td class="text-end">{{item.costPrice * item.quantity |number:'1.0-1'}}</td>
+                    <td class="text-end">{{item.avgCostPrice * item.quantity |number:'1.0-1'}}</td>
+
                     <td class="text-end">{{item.salePrice * item.quantity |number:'1.0-1'}}</td>
                     <td>{{item.entryUser}}</td>
                 </tr>
@@ -176,6 +181,7 @@
                     <td></td>
                     <td></td>
                     <td class="text-end fw-bold">{{costTotal |number:'1.0-0'}}</td>
+                    <td class="text-end fw-bold">{{avgCostTotal |number:'1.0-0'}}</td>
                     <td class="text-end fw-bold">{{saleTotal |number:'1.0-0'}}</td>
                     <td></td>
                 </tr>
@@ -212,7 +218,8 @@
                             [ngClass]="item.invType == 'S' || item.invType == 'SR' || item.invType == 'P'|| item.invType == 'PR' ? 'text-primary' : '' ">{{item.invBillNo}}</span>
                     </td>
                     <td>{{item.invDate | date:'dd-MM-yyyy'}} ({{item.createdOn | date:'hh:mm:a'}})</td>
-                    <td>{{item.productTitle}} <b *ngIf="item.barcode !== null || item.invBillNo !='-'">({{item.barcode}})</b></td>
+                    <td>{{item.productTitle}} <b
+                            *ngIf="item.barcode !== null || item.invBillNo !='-'">({{item.barcode}})</b></td>
                     <td><span>{{item.locationTitle }}</span></td>
                     <td><span *ngIf="item.partyID > 0">{{item.partyName }}</span></td>
                     <td class="text-center"><span *ngIf="item.invSubType == 'IN'">{{item.quantity

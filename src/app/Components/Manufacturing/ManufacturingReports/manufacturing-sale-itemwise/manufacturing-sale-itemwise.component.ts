@@ -98,7 +98,14 @@ export class ManufacturingSaleItemwiseComponent {
 
   }
 
+ CalculateProfit(item:any,type:any):any{
+  var saleTotal = item.salePrice * item.quantity;
+  var avgCostTotal = item.avgCostPrice * item.quantity
+  var profit = saleTotal - avgCostTotal ;
+  var percentage = (profit / saleTotal) * 100 || 0;
+    return type == 'amount' ? profit : percentage;
 
+  }
 
 
   DataList: any = [];
@@ -131,6 +138,7 @@ export class ManufacturingSaleItemwiseComponent {
     this.http.get(url).subscribe(
       {
         next: (Response: any) => {
+          console.log(Response);
           this.reset();
           if (Response.length == 0 || Response == null) {
             this.global.popupAlert('Data Not Found!');
@@ -150,7 +158,7 @@ export class ManufacturingSaleItemwiseComponent {
 
             }
             this.DataList.forEach((e: any) => {
-              this.costTotal += e.costPrice * e.quantity;
+              this.costTotal += e.avgCostPrice * e.quantity;
               this.saleTotal += e.salePrice * e.quantity;
             });
           }

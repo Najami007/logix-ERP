@@ -1,0 +1,272 @@
+import { animate } from '@angular/animations';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { GlobalDataModule } from 'src/app/Shared/global-data/global-data.module';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment.development';
+import { NotificationService } from 'src/app/Shared/service/notification.service';
+import { DatePipe, formatDate } from '@angular/common';
+import { AppComponent } from 'src/app/app.component';
+import { MatDialog } from '@angular/material/dialog';
+import { VoucherDetailsComponent } from '../../CommonComponent/voucher-details/voucher-details.component';
+import { Router } from '@angular/router';
+
+
+@Component({
+  selector: 'app-party-ledger-report',
+  templateUrl: './party-ledger-report.component.html',
+  styleUrls: ['./party-ledger-report.component.scss']
+})
+export class PartyLedgerReportComponent {
+
+
+  date = new FormControl(new Date());
+
+  CoaList: any;
+  crudList: any = { c: true, r: true, u: true, d: true };
+  companyProfile: any = [];
+
+
+
+
+  constructor(public globalData: GlobalDataModule,
+    private http: HttpClient,
+    private msg: NotificationService,
+    private app: AppComponent,
+    private dialogue: MatDialog,
+    private route: Router,
+    private datePipe: DatePipe
+
+  ) {
+
+
+    this.globalData.getCompany().subscribe((data) => {
+      this.companyProfile = data;
+    });
+
+    this.globalData.getMenuList().subscribe((data) => {
+      this.crudList = data.find((e: any) => e.menuLink == this.route.url.split("/").pop());
+    })
+  }
+
+  ngOnInit(): void {
+
+    this.globalData.setHeaderTitle('Ledger');
+    this.getProject();
+    this.getCoa();
+    this.getPartyList();
+
+
+  }
+
+  projectSearch: any;
+  coaID: any;
+  projectID: number = 0;
+  projectName: any;
+  startDate = new Date();
+  EndDate = new Date();
+  debitTotal = 0;
+  creditTotal = 0;
+  curCOATitle: any;
+
+
+  searchTypeID = 0;
+
+
+  tableData: any = [];
+  placholder = 'Search...';
+  txtSearch = '';
+  curDate = new Date();
+
+
+
+
+  //////////////// print Variables/////////////////////
+
+  lblInvoiceNo: any;
+  lblInvoiceDate: any;
+  lblRemarks: any;
+  lblVoucherType: any;
+  lblVoucherTable: any;
+  lblDebitTotal: any;
+  lblCreditTotal: any;
+  lblVoucherPrintDate = new Date();
+  invoiceDetails: any;
+  partyID = 0;
+
+  projectList: any = [];
+  partyList: any = [];
+
+
+  getPartyList() {
+    this.globalData.getPartyList().subscribe(
+      (Response) => {
+        this.partyList = Response;
+      }
+    )
+  }
+
+
+  getProject() {
+
+    this.globalData.getProjectList().subscribe((data: any) => { this.projectList = data; });
+
+  }
+
+
+  sortData(type: any) {
+
+    if (type == 'date') {
+      this.tableData.sort((a: any, b: any) => a.invoiceDate - b.invoiceDate);
+    }
+
+    if (type == 'invNo') {
+
+      this.tableData.sort((a: any, b: any) => a.voucherNo - b.voucherNo);
+      //a.voucherNo - b.voucherNo
+    }
+
+  }
+
+
+  ////////////////////////getting total of debit and credit Sides///////////
+
+
+
+  getTotal() {
+    this.debitTotal = 0;
+    this.creditTotal = 0;
+    for (var i = 0; i < this.tableData.length; i++) {
+      this.debitTotal += this.tableData[i].debit;
+      this.creditTotal += this.tableData[i].credit;
+    }
+  }
+
+
+  PrintTable() {
+    this.globalData.printData('#printRpt');
+
+  }
+
+
+  /////////////////////////////////////////////
+
+
+  onCoaChange() {
+    //  this.CoaList[this.CoaList.length].index + 1;
+    var index = this.CoaList.findIndex((e: any) => e.coaID == this.coaID);
+    this.CoaList[index].indexNo = this.CoaList[0].indexNo + 1;
+    this.CoaList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+  }
+
+  getCoa() {
+    this.app.startLoaderDark();
+    this.http.get(environment.mainApi + this.globalData.accountLink + 'GetVoucherCOA').subscribe(
+      (Response: any) => {
+        if (Response.length > 0) {
+          this.CoaList = Response.map((e: any, index: any) => {
+            (e.indexNo = index + 1);
+            return e;
+          })
+
+          this.CoaList.sort((a: any, b: any) => b.indexNo - a.indexNo);
+        }
+        this.app.stopLoaderDark();
+      }
+    )
+  }
+
+
+
+  ///////////////////////////////////////////////////////
+  tmpTableData: any = [];
+
+  getLedgerReport(param: any) {
+
+    if (this.coaID == '' || this.coaID == undefined) {
+      this.msg.WarnNotify('Select Chart Of Account Title');
+      return;
+    }
+    if(this.partyID == 0 || this.partyID == undefined){
+      this.msg.WarnNotify('Select Party');
+      return;
+    }
+
+    var startDate = this.globalData.dateFormater(this.startDate, '-');
+    var endDate = this.globalData.dateFormater(this.EndDate, '-');
+
+    if (this.searchTypeID == 1) {
+      var date = new Date('01-01-1917');
+      startDate = this.globalData.dateFormater(date, '-');
+      var endDate = this.globalData.dateFormater(new Date(), '-')
+    }
+
+    this.projectName = '';
+
+    if (this.projectID != 0) {
+      this.projectName = this.projectList.find((e: any) => e.projectID == this.projectID).projectTitle;
+    }
+
+    /////////////////// finding the coaTitle from coalist by coaID////////
+    var curRow = this.CoaList.find((e: any) => e.coaID == this.coaID);
+    this.curCOATitle = curRow.coaTitle;
+    /////////////////////////////////////////////////
+
+    this.tableData = [];
+    this.app.startLoaderDark();
+    var url = `${environment.mainApi + this.globalData.accountLink}GetPartyLedgerRpt?coaid=${this.coaID}&fromdate=
+        ${startDate}&todate=${endDate}&projectID=${this.projectID}&PartyID=${this.partyID}`;
+    this.http.get(url).subscribe(
+      (Response: any) => {
+        console.log(Response);
+        if (Response.length == 0 || Response == null) {
+          this.globalData.popupAlert('Data Not Found!');
+          this.app.stopLoaderDark();
+          return;
+        }
+
+        this.tableData = Response.map((e: any) => {
+          (e.invoiceDate = new Date(e.invoiceDate));
+          return e;
+        }
+
+        );
+        this.tmpTableData = this.tableData;
+        this.getTotal();
+        this.app.stopLoaderDark();
+      },
+      (Error: any) => {
+        console.log(Error);
+        this.app.stopLoaderDark();
+      }
+
+    )
+  }
+
+
+
+
+  ///////////////////////////////////////////////////
+
+
+
+
+  /////////////////////////////////////////////
+
+
+
+
+  VoucherDetails(row: any) {
+
+    this.dialogue.open(VoucherDetailsComponent, { width: "40%", data: row, }).afterClosed().subscribe(val => { });
+  }
+
+
+  export() {
+    var startDate = this.datePipe.transform(this.startDate, 'dd/MM/yyyy');
+    var endDate = this.datePipe.transform(this.EndDate, 'dd/MM/yyyy');
+    this.globalData.ExportHTMLTabletoExcel('printRpt', 'Ledger' + this.curCOATitle + '(' + startDate + ' - ' + endDate + ')')
+  }
+
+}
+

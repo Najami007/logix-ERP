@@ -8,7 +8,7 @@
 
         <!--------------------- Company Detail Section Start------------------ -->
         <div class="text-center d-flex flex-column">
-            <span> <img *ngIf="companyLogo && showCompanyLogo" [src]="companyLogo" [height]="logoHeight"
+            <span class="d-flex justify-content-center"> <img *ngIf="companyLogo && showCompanyLogo" [src]="companyLogo" [height]="logoHeight"
                     [width]="logoWidth"></span>
             <span class="text-uppercase fw-bold" style="font-size:18px;" *ngIf="showCompanyName">{{companyName}}</span>
             <span class="fs-11 text-uppercase fw-bold" *ngIf="companyAddress != '-'">{{companyAddress}}</span>
@@ -102,14 +102,14 @@
                     <label class="fw-bold text-end">Total</label>
                     <label class="fw-bold text-end">labour Charges</label>
                     <label class="fw-bold text-end">Shipping Charges</label>
-                    <label class="fw-bold text-end">Discount</label>
+                    <label class="fw-bold text-end" *ngIf="myBillDiscount > 0">Discount</label>
                     <label class="fw-bold text-end">Net Total</label>
                 </div>
                 <div class="row w-25">
                     <label class="fw-bold text-end">{{myBillTotal - myLabourCharges - myTransportCharges |number:'1.0-2'}}</label>
                       <label class="fw-bold text-end">{{myLabourCharges |number:'1.0-2'}}</label>
                     <label class="fw-bold text-end">{{myTransportCharges |number:'1.0-2'}}</label>
-                    <label class="fw-bold text-end">{{myBillDiscount|number:'1.0-2'}}</label>
+                    <label class="fw-bold text-end" *ngIf="myBillDiscount > 0">{{myBillDiscount|number:'1.0-2'}}</label>
                     <label class="fw-bold text-end">{{myNetTotal|number:'1.0-2'}}</label>
                 </div>
 

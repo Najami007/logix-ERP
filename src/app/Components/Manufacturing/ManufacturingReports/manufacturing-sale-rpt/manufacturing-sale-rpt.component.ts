@@ -89,6 +89,7 @@ export class ManufacturingSaleRptComponent implements OnInit {
 
 
   DataList: any = [];
+  saleReturnDataList:any = [];
 
   billTotal = 0;
   billDiscountTotal = 0;
@@ -134,7 +135,9 @@ export class ManufacturingSaleRptComponent implements OnInit {
 
           if (Response.length > 0) {
 
-            this.DataList = Response.filter((e: any) => e.invType == this.rptType);
+           
+
+            this.DataList =  Response.filter((e: any) => e.invType == this.rptType);
 
             if (this.DataList.length == 0 || this.DataList == null) {
               this.global.popupAlert('Data Not Found!');

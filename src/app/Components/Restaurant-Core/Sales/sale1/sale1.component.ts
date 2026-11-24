@@ -24,10 +24,20 @@ import { PaymentMehtodComponent } from 'src/app/Components/Inventory/Sale/SaleCo
   styleUrls: ['./sale1.component.scss']
 })
 export class Sale1Component implements OnInit {
-  @HostListener('document:visibilitychange', ['$event'])
 
   @ViewChild(RestSaleBillPrintComponent) billPrint: any;
   @ViewChild(RestKotPrintComponent) KotPrint: any;
+
+  @HostListener('document:visibilitychange')
+  appVisibility() {
+    if (document.hidden) {
+
+    }
+    else {
+      this.getHoldBills();
+
+    }
+  }
 
   showCmpNameFeature: any = this.global.showCmpNameFeature;
   waiterFeature = this.global.waiterFeature;
@@ -63,15 +73,7 @@ export class Sale1Component implements OnInit {
   cashGSTValue = this.global.GetGSTValue('Cash');
   cardGstValue = this.global.GetGSTValue('Bank');
 
-  appVisibility() {
-    if (document.hidden) {
 
-    }
-    else {
-      this.getHoldBills();
-
-    }
-  }
 
 
 
@@ -815,6 +817,7 @@ export class Sale1Component implements OnInit {
 
 
 
+
   save(type: any, SendToFbr: any, printFlag?: any) {
 
 
@@ -940,115 +943,136 @@ export class Sale1Component implements OnInit {
       return;
     }
 
-    if (type == 'hold') {
-      this.app.startLoaderDark()
-      this.http.post(environment.mainApi + this.global.restaurentLink + 'InsertHold', holdPostData).subscribe(
-        (Response: any) => {
 
-          if (Response.msg == 'Data Saved Successfully') {
-            // this.tmpInvBillNO = Response.invNo;
-            if (printFlag) {
-              this.billPrint.HOldandPrint(this.orderType, Response.invNo);
-            }
-            this.printKOT(Response.invNo);   /////// Will Print KOT ////////////////
-            this.msg.SuccessNotify(Response.msg);
-            this.getTable()
-            this.getRecipeList({ recipeCatID: 0, prodFlag: false });
+    if (type === 'hold' || type === 'rehold') {
+
+      this.app.startLoaderDark();
+
+      const isHold = type === 'hold';
+      const apiUrl = environment.mainApi +
+        this.global.restaurentLink +
+        (isHold ? 'InsertHold' : 'UpdateHold');
+
+      this.http.post(apiUrl, holdPostData).subscribe({
+
+        next: (response: any) => {
+
+          const successMsg = isHold
+            ? 'Data Saved Successfully'
+            : 'Data Updated Successfully';
+
+          if (response.msg === successMsg) {
+
+            const orderType = this.orderType;
+            const invoiceNo = response.invNo;
+
             this.reset();
+
+
+            if (printFlag) {
+              this.billPrint.HOldandPrint(
+                orderType,
+                invoiceNo
+              );
+            }
+
+            // Print KOT
+            this.printKOT(invoiceNo);
+
+            this.msg.SuccessNotify(response.msg);
+
+            this.getTable();
+
+            if (isHold) {
+              this.getRecipeList({
+                recipeCatID: 0,
+                prodFlag: false
+              });
+            }
+
             this.getHoldBills();
 
-
           } else {
-            this.msg.WarnNotify(Response.msg);
+            this.msg.WarnNotify(response.msg);
           }
+
           this.app.stopLoaderDark();
-          if (!this.tabletPrintFeature) this.global.focusTo('#recSearch');
-        },
-        (Error: any) => {
-          console.log(Error);
-          this.msg.WarnNotify(Error);
-          this.app.stopLoaderDark();
-        }
-      )
-    }
 
-
-    if (type == 'rehold') {
-
-      this.app.startLoaderDark()
-      this.http.post(environment.mainApi + this.global.restaurentLink + 'UpdateHold', holdPostData).subscribe(
-        (Response: any) => {
-
-          if (Response.msg == 'Data Updated Successfully') {
-            if (printFlag) {
-              this.billPrint.HOldandPrint(this.orderType, Response.invNo);
-            }
-            this.printKOT(Response.invNo); /////// Will Print KOT ////////////////
-            this.msg.SuccessNotify(Response.msg);
-            this.getTable()
-            this.reset();
-            this.getHoldBills();
-
-          } else {
-            this.msg.WarnNotify(Response.msg);
+          if (!this.tabletPrintFeature) {
+            this.global.focusTo('#recSearch');
           }
-          this.app.stopLoaderDark();
-          if (!this.tabletPrintFeature) this.global.focusTo('#recSearch');
         },
-        (Error: any) => {
-          console.log(Error);
-          this.msg.WarnNotify(Error);
+
+        error: (error: any) => {
+
+          console.log(error);
+          this.msg.WarnNotify(error);
           this.app.stopLoaderDark();
+
         }
-      )
 
+      });
+    } else if (type === 'sale') {
 
-    }
+      if (this.paymentType === 'Complimentary') {
 
-    if (type == 'sale') {
-
-      if (this.paymentType == 'Complimentary') {
         this.global.closeBootstrapModal('#paymentMehtod', true);
 
         this.global.openPassword('Password').subscribe(pin => {
-          if (pin !== '') {
-            this.http.post(environment.mainApi + this.global.userLink + 'MatchPassword', {
+
+          if (!pin) return;
+
+          this.http.post(
+            environment.mainApi + this.global.userLink + 'MatchPassword',
+            {
               RestrictionCodeID: 3,
               Password: pin,
               UserID: this.global.getUserID()
+            }
+          ).subscribe({
 
-            }).subscribe(
-              (Response: any) => {
-                if (Response.msg == 'Password Matched Successfully') {
+            next: (response: any) => {
 
-                  this.cash = 0;
-                  this.bankCash = 0;
-                  this.change = 0;
-                  this.billDiscount = 0;
-                  this.OtherCharges = 0;
-                  this.bankCoaID = 0;
-                  this.getTotal();
-                  this.InsertSale(false);
-                } else {
-                  this.msg.WarnNotify(Response.msg);
-                }
-                if (!this.tabletPrintFeature) this.global.focusTo('#recSearch');
-              },
-              (Error: any) => {
-                console.log(Error);
-                this.msg.WarnNotify(Error);
-                this.app.stopLoaderDark();
+              if (response.msg === 'Password Matched Successfully') {
+
+                this.cash = 0;
+                this.bankCash = 0;
+                this.change = 0;
+                this.billDiscount = 0;
+                this.OtherCharges = 0;
+                this.bankCoaID = 0;
+
+                this.getTotal();
+                this.InsertSale(false);
+
+              } else {
+                this.msg.WarnNotify(response.msg);
               }
-            )
-          }
-        })
 
+              if (!this.tabletPrintFeature) {
+                this.global.focusTo('#recSearch');
+              }
 
+            },
+
+            error: (error: any) => {
+              console.log(error);
+              this.msg.WarnNotify(error);
+              this.app.stopLoaderDark();
+            }
+
+          });
+
+        });
 
       } else {
-        this.InsertSale(SendToFbr)
+
+        this.InsertSale(SendToFbr);
+
       }
+
     }
+
 
 
   }

@@ -113,7 +113,6 @@ export class PrintMinigBillComponent {
       this.apiReq + `PrintMiningBill?InvBillNo=${invBillNo}`
     ).subscribe({
       next: (Response: any) => {
-        console.log(Response, 'Print Data');
         this.tableDataList = [];
         if (Response.length > 0) {
           Response.forEach((e: any) => {

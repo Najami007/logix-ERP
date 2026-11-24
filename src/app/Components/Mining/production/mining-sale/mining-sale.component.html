@@ -32,7 +32,7 @@
                         <div class="grid">
                             <mat-form-field appearance="outline" class="matSmall">
                                 <mat-label>Invoice Date</mat-label>
-                                <input [(ngModel)]="model.invoiceDate" readonly="true" matInput type="text"
+                                <input [(ngModel)]="model.invoiceDate" [disabled]="!DisableDateSale" readonly="true" matInput type="text"
                                     name="voucherDate" [matDatepicker]="voucherDate">
                                 <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
                                 <mat-datepicker #voucherDate></mat-datepicker>

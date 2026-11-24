@@ -118,7 +118,7 @@
                             <table class="table-garment-sale-2">
                                 <tr>
                                     <td class="text-center" style="width:10% !important;">{{item.quantity
-                                        |number:'1.0-2'}} <small class="fw-semibold" *ngIf="showUomTitleFeature">
+                                        |number:'1.0-3'}} <small class="fw-semibold" *ngIf="showUomTitleFeature">
                                             {{item.uomTitle}}</small></td>
 
                                     <td *ngIf="SteelTypeFeature"> {{item.uomTitle}} </td>
@@ -180,9 +180,9 @@
                         <td>{{index +1}}</td>
                         <td class="text-start">{{item.productTitle}} <small>{{item.flavourTitle}}</small></td>
                         <td *ngIf="SteelTypeFeature">{{item.productSteelTypeTitle}}</td>
-                        <td class="text-end">{{item.salePrice |number:'1.0-2'}}</td>
+                        <td class="text-end">{{item.salePrice |number:'1.0-3'}}</td>
 
-                        <td class="text-center">{{item.quantity |number:'1.0-2'}} <small *ngIf="showUomTitleFeature"
+                        <td class="text-center">{{item.quantity |number:'1.0-3'}} <small *ngIf="showUomTitleFeature"
                                 class="fw-semibold"> {{item.uomTitle}}</small></td>
 
                         <td *ngIf="SteelTypeFeature"> {{item.uomTitle}}</td>
@@ -259,7 +259,7 @@
                             <tr class="text-end fw-bold fs-15">
                                 <td colspan="2">Sub Total</td>
                                 <td></td>
-                                <td colspan="2">{{mySubTotal - myLabourCharges - myTransportCharges |number:'1.0-0'}}
+                                <td colspan="2">{{mySubTotal - myLabourCharges - myTransportCharges - myGstTotal |number:'1.0-0'}}
                                 </td>
 
                             </tr>
@@ -681,15 +681,18 @@
                                 <td class="text-start">{{myChange|number:'1.0-1'}}</td>
                             </tr>
 
-                            <tr style="text-align:right; " *ngIf="myCusBalance !== 0">
+                            <tr style="text-align:right; " *ngIf="myCusBalance !== 0 || mySupBalance !== 0">
                                 <td></td>
                                 <td class="urdu fw-bold">سابقا بقایا</td>
-                                <td class="fw-bold text-start" *ngIf="myChange <= 0 && myInvType == 'S'">{{myCusBalance
-                                    - ( -1 *
-                                    myChange) | number:'1.0-1'}}
-                                <td *ngIf="myChange <= 0 && myInvType == 'SR'">{{myCusBalance + ( -1 * myChange) |
-                                    number:'1.0-1'}}
-                                <td class="fw-bold text-start" *ngIf="myChange > 0">{{myCusBalance | number:'1.0-1'}}
+                                <td class="fw-bold text-start" *ngIf="myChange <= 0 && myInvType == 'S'">{{
+                                    mySupBalance != 0 ?
+                                    mySupBalance + ( -1 * myChange)
+                                    :myCusBalance - ( -1 * myChange) |
+                                    number:'1.0-0'}}
+                                <td *ngIf="myChange <= 0 && myInvType == 'SR'">{{myCusBalance + ( -1 *
+                                    myChange) |
+                                    number:'1.0-0'}}
+                                <td class="fw-bold text-start" *ngIf="myChange > 0">{{mySupBalance != 0 ? mySupBalance : myCusBalance | number:'1.0-1'}}
                                 </td>
 
 
@@ -698,7 +701,7 @@
                             <tr style="text-align:right;" *ngIf="myCusBalance !== 0">
                                 <td></td>
                                 <td class="urdu fw-bold">ٹوٹل بقایا</td>
-                                <td class="fw-bold text-start">{{myCusBalance | number:'1.0-1'}}</td>
+                                <td class="fw-bold text-start">{{mySupBalance != 0 ? mySupBalance : myCusBalance | number:'1.0-1'}}</td>
 
 
                             </tr>

@@ -76,6 +76,8 @@ import { DesiAccEntryComponent } from './DesiAccounts/desi-acc-entry/desi-acc-en
 import { AccountReportComponent } from './DesiAccounts/desi-acc-entry/account-report/account-report.component';
 import { SalesEntryComponent } from './DesiAccounts/desi-acc-entry/sales-entry/sales-entry.component';
 import { AddSalesComponent } from './DesiAccounts/desi-acc-entry/sales-entry/add-sales/add-sales.component';
+import { PartyLedgerReportComponent } from './AccountReports/party-ledger-report/party-ledger-report.component';
+import { DashboardMiningComponent } from './dashboard-mining/dashboard-mining.component';
 
 export const MY_DATE_FORMAT = {
   parse: {
@@ -94,6 +96,8 @@ export const MY_DATE_FORMAT = {
 export const accountRountes: Route[] = [
 
   { path: 'dashboard', component: DashboardComponent, data: { title: 'Finance Dashboard' }, canActivate: [AuthGuard] },
+  { path: 'dashboardmining', component: DashboardMiningComponent, data: { title: 'Finance Dashboard' }, canActivate: [AuthGuard] },
+
   { path: 'coa', component: COAComponent, data: { title: 'Chart Of Account' }, canActivate: [AuthGuard] },
   { path: 'voucher', component: Voucher2Component, data: { title: 'Voucher' }, canActivate: [AuthGuard] },
   { path: 'bdgtng', component: BudgettingComponent, data: { title: 'Budgeting' }, canActivate: [AuthGuard] },
@@ -108,6 +112,8 @@ export const accountRountes: Route[] = [
   { path: 'tbrpt', component: TrialBalanceComponent, data: { title: 'Trial Balance' }, canActivate: [AuthGuard] },
   { path: 'accSmryrpt', component: AccountSummaryReportComponent, data: { title: 'Account Summary' }, canActivate: [AuthGuard] },
   { path: 'journel', component: JournelComponent, data: { title: 'Journel' }, canActivate: [AuthGuard] },
+  { path: 'partyledgerreport', component: PartyLedgerReportComponent, data: { title: 'Party Ledger' }, canActivate: [AuthGuard] },
+
 
   /// Desi Accounts Imports
   { path: 'pmt', component: PaymentComponent, data: { title: 'Payment' }, canActivate: [AuthGuard] },
@@ -123,7 +129,7 @@ export const accountRountes: Route[] = [
   { path: 'pob', component: PartyOpeningBalanceComponent, data: { title: 'Party Opening Balance' }, canActivate: [AuthGuard] },
   { path: 'parent-ledger', component: ParentLedgerReportComponent, data: { title: 'Parent Ledger Report' }, canActivate: [AuthGuard] },
   { path: 'accentry', component: DesiAccEntryComponent, data: { title: 'Account Entry' }, canActivate: [AuthGuard] },
-   { path: 'salesentry', component: SalesEntryComponent, data: { title: 'Sales Entry' }, canActivate: [AuthGuard] },
+  { path: 'salesentry', component: SalesEntryComponent, data: { title: 'Sales Entry' }, canActivate: [AuthGuard] },
 
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 
@@ -178,7 +184,9 @@ export const accountRountes: Route[] = [
     DesiAccEntryComponent,
     AccountReportComponent,
     SalesEntryComponent,
-    AddSalesComponent
+    AddSalesComponent,
+    PartyLedgerReportComponent,
+    DashboardMiningComponent
 
 
 

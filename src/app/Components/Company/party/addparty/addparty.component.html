@@ -37,6 +37,8 @@
                 <mat-select [(ngModel)]="partyType" [disabled]="!fields.partyType.show">
                     <mat-option value="Customer">Customer</mat-option>
                     <mat-option value="Supplier">Supplier</mat-option>
+                    <mat-option value="Employee">Employee</mat-option>
+
                 </mat-select>
             </mat-form-field>
         </div>
@@ -46,7 +48,8 @@
                 <mat-label *ngIf="fields.partyNature.show">Party Nature</mat-label>
                 <mat-select [(ngModel)]="partyNatureID" [disabled]="!fields.partyNature.show">
                     <mat-option [value]="0">None</mat-option>
-                    <mat-option *ngFor="let item of partyNatureList" [value]="item.partyNatureID">{{item.partyNatureTitle}}</mat-option>
+                    <mat-option *ngFor="let item of partyNatureList"
+                        [value]="item.partyNatureID">{{item.partyNatureTitle}}</mat-option>
                 </mat-select>
             </mat-form-field>
         </div>

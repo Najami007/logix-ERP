@@ -393,19 +393,19 @@
 
                     <tr>
                         <td>Tax ({{cardGst}}%):</td>
-                        <td>{{((mySubTotal + myOtherCharges - myDiscount) * cardGst) / 100 |number:'1.0-0'}}</td>
+                        <td>{{(mySubTotal * cardGst) / 100 |number:'1.0-0'}}</td>
 
                         <td>Tax ({{cashGst}}%): </td>
-                        <td>{{((mySubTotal + myOtherCharges - myDiscount) * cashGst) / 100 |number:'1.0-0'}}</td>
+                        <td>{{(mySubTotal * cashGst) / 100 |number:'1.0-0'}}</td>
                     </tr>
 
                     <tr>
                         <th>Amnt With Tax:</th>
-                        <th>{{(mySubTotal + myOtherCharges - myDiscount) +((mySubTotal + myOtherCharges - myDiscount) *
+                        <th>{{(mySubTotal + myOtherCharges - myDiscount) +((mySubTotal  ) *
                             cardGst) / 100 |number:'1.0-0'}}</th>
 
                         <th>Amnt With Tax:</th>
-                        <th>{{(mySubTotal + myOtherCharges - myDiscount) +((mySubTotal + myOtherCharges - myDiscount) *
+                        <th>{{(mySubTotal + myOtherCharges - myDiscount) +((mySubTotal ) *
                             cashGst) / 100 |number:'1.0-0'}}</th>
                     </tr>
                 </table>

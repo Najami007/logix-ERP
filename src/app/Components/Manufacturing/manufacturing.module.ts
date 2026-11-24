@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Route, RouterModule } from '@angular/router';
-import { MarbleSaleComponent } from './marble-sale/marble-sale.component';
 import { AuthGuard } from 'src/app/auth.guard';
 import { ItemProductionComponent } from './item-production/item-production.component';
 import { AddFinishedItemComponent } from './item-production/add-finished-item/add-finished-item.component';
@@ -47,6 +46,8 @@ import { TransporterProfileComponent } from '../Inventory/Configurations/transpo
 
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { ManufacturingSaleTransporterwiseComponent } from './ManufacturingReports/manufacturing-sale-transporterwise/manufacturing-sale-transporterwise.component';
+import { MarbleSaleReturnComponent } from './Sale/marble-sale-return/marble-sale-return.component';
+import { MarbleSaleComponent } from './Sale/marble-sale/marble-sale.component';
 
 
 export const MY_DATE_FORMAT = {
@@ -67,6 +68,8 @@ export const manufacturingRoutes: Route[] = [
 
 
   { path: 'marbleSale', component: MarbleSaleComponent, data: { title: 'Sale' }, canActivate: [AuthGuard] },
+    { path: 'marbleSaleReturn', component: MarbleSaleReturnComponent, data: { title: 'Sale Return' }, canActivate: [AuthGuard] },
+
   { path: 'itemproduction', component: ItemProductionComponent, data: { title: 'Item Production' }, canActivate: [AuthGuard] },
   { path: 'shipmentCompany', component: TransporterProfileComponent, data: { title: 'Shipment Company' }, canActivate: [AuthGuard] },
   { path: 'itemcategory', component: ItemCategoriesComponent, data: { title: 'Item Category' }, canActivate: [AuthGuard] },
@@ -118,6 +121,7 @@ export const manufacturingRoutes: Route[] = [
     ProductionReportComponent,
     ManufacturingStockRegisterComponent,
     ManufacturingSaleTransporterwiseComponent,
+    MarbleSaleReturnComponent,
 
 
   ],
